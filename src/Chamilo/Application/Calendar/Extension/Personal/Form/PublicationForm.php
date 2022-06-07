@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Personal\Form
@@ -54,11 +54,11 @@ class PublicationForm extends BasePublicationForm
     public function addFooter()
     {
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Publish', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

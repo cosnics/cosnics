@@ -6,7 +6,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class AssessmentResultViewerForm extends FormValidator
 {
@@ -59,7 +59,7 @@ class AssessmentResultViewerForm extends FormValidator
             ($this->get_page_number() < $this->assessment_result_processor->get_assessment_viewer()->get_total_pages()))
         {
             $buttons[] = $this->createElement(
-                'style_button', 'next', Translation::get('Next', null, Utilities::COMMON_LIBRARIES), null, null,
+                'style_button', 'next', Translation::get('Next', null, StringUtilities::LIBRARIES), null, null,
                 new FontAwesomeGlyph('chevron-right')
             );
         }

@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This form can let the user select the sections and publications of a course for deleting them.
@@ -120,10 +120,10 @@ class CourseTruncaterForm extends FormValidator
         $this->setDefaults($defaults);
         
         $this->addElement('category', Translation::get('EmptyThisCourseInformation'));
-        $this->addElement('checkbox', 'confirm', Translation::get('Confirm', null, Utilities::COMMON_LIBRARIES));
+        $this->addElement('checkbox', 'confirm', Translation::get('Confirm', null, StringUtilities::LIBRARIES));
         $this->addRule(
             'confirm', 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+            Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required');
         $prevnext = [];
         $prevnext[] = $this->createElement('style_submit_button', self::PARAM_SUBMIT, Translation::get('Truncate'));

@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -122,7 +122,7 @@ class ForumTopicCreatorComponent extends Manager implements ViewerInterface,
             Translation::get(
                 ($success ? 'ObjectCreated' : 'ObjectNotCreated'),
                 array('OBJECT' => Translation::get('ForumTopic')),
-                Utilities::COMMON_LIBRARIES));
+                StringUtilities::LIBRARIES));
 
         $params = [];
         $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;

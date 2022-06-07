@@ -52,7 +52,7 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -230,7 +230,7 @@ abstract class Manager extends Application
         $breadcrumbTrail->add(
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE), array(self::PARAM_PUBLICATION_ID)),
-                Translation::getInstance()->getTranslation('BrowserComponent', [], $this->context())
+                Translation::getInstance()->getTranslation('BrowserComponent', [], __NAMESPACE__)
             )
         );
     }
@@ -293,7 +293,7 @@ abstract class Manager extends Application
             {
                 $buttonGroup->addButton(
                     new Button(
-                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                        Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_UPDATE_CONTENT_OBJECT,
@@ -308,7 +308,7 @@ abstract class Manager extends Application
             {
                 $buttonGroup->addButton(
                     new Button(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_DELETE,
@@ -989,7 +989,7 @@ abstract class Manager extends Application
 
                     $buttonToolbar->addItem(
                         $actionSelector->getActionButton(
-                            Translation::get('PublishIntroductionText', null, Utilities::COMMON_LIBRARIES),
+                            Translation::get('PublishIntroductionText', null, StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('book')
                         )
                     );

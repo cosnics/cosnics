@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRe
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ExportTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -22,7 +22,7 @@ class ExportTableCellRenderer extends DataClassTableCellRenderer implements Tabl
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Export', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('download'),
+                Translation::get('Export', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('download'),
                 $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_EXPORT_EXTERNAL_REPOSITORY,

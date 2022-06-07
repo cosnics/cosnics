@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Task\Common\Rendition\HtmlRenditionImp
 use Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
 {
@@ -13,15 +13,15 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
     public function render()
     {
         $object = $this->get_content_object();
-        $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+        $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
         
         $prepend = [];
         $prepend[] = '<div class="task_range" style="font-weight: bold;">';
         $prepend[] = Translation::get(
             'TaskDate', 
             array(
-                'START' => DatetimeUtilities::format_locale_date($date_format, $object->get_start_date()), 
-                'END' => DatetimeUtilities::format_locale_date($date_format, $object->get_due_date())));
+                'START' => DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $object->get_start_date()),
+                'END' => DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $object->get_due_date())));
         $prepend[] = '</div>';
         $repeats = $object->has_frequency();
         
@@ -206,7 +206,7 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
                 {
                     $prepend[] = Translation::get(
                         'RepeatUntilDate', 
-                        array('DATE' => DatetimeUtilities::format_locale_date($date_format, $object->get_until())));
+                        array('DATE' => DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $object->get_until())));
                 }
                 $prepend[] = '</div>';
             }

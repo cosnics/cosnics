@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -59,7 +59,7 @@ abstract class CalendarEventVisibilityComponent extends Manager
                     500, $translator->trans(
                     'ObjectNotDeleted',
                     array('OBJECT' => $translator->trans('Visibility', [], 'Chamilo\Libraries\Calendar')),
-                    Utilities::COMMON_LIBRARIES
+                    StringUtilities::LIBRARIES
                 )
                 );
             }
@@ -80,7 +80,7 @@ abstract class CalendarEventVisibilityComponent extends Manager
                     500, $translator->trans(
                     'ObjectNotCreated',
                     array('OBJECT' => $translator->trans('Visibility', [], 'Chamilo\Libraries\Calendar')),
-                    Utilities::COMMON_LIBRARIES
+                    StringUtilities::LIBRARIES
                 )
                 );
             }

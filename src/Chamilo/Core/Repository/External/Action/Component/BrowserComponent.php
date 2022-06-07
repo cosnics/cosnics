@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
@@ -104,7 +104,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 }
 
                 $viewActions = new DropdownButton(
-                    Translation::get($currentRenderer . 'View', null, Utilities::COMMON_LIBRARIES), $glyph->render()
+                    Translation::get($currentRenderer . 'View', null, StringUtilities::LIBRARIES), $glyph->render()
                 );
                 $buttonToolbar->addItem($viewActions);
 
@@ -127,7 +127,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         new SubButton(
                             Translation::get(
                                 (string) StringUtilities::getInstance()->createString($renderer)->upperCamelize() .
-                                'View', null, Utilities::COMMON_LIBRARIES
+                                'View', null, StringUtilities::LIBRARIES
                             ), null, $action, Button::DISPLAY_LABEL, false, [], null, $isActive
                         )
                     );

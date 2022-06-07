@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -38,14 +38,14 @@ class DeleterComponent extends Manager
                 $message = Translation::get(
                     'ObjectDeleted',
                     array('OBJECT' => Translation::get('Publication')),
-                    Utilities::COMMON_LIBRARIES);
+                    StringUtilities::LIBRARIES);
             }
             else
             {
                 $message = Translation::get(
                     'ObjectNotDeleted',
                     array('OBJECT' => Translation::get('Publication')),
-                    Utilities::COMMON_LIBRARIES);
+                    StringUtilities::LIBRARIES);
             }
 
             $this->redirect($message, ! $succes, array(self::PARAM_ACTION => self::ACTION_BROWSE));
@@ -57,7 +57,7 @@ class DeleterComponent extends Manager
                     Translation::get(
                         'NoObjectSelected',
                         array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES)));
+                        StringUtilities::LIBRARIES)));
         }
     }
 }

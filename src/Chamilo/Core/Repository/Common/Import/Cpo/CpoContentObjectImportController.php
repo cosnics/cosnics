@@ -29,7 +29,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
 use DOMXPath;
 use InvalidArgumentException;
@@ -86,7 +86,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
     {
         if (empty($this->get_parameters()->get_file()))
         {
-            throw new NoObjectSelectedException(Translation::get('FileName', null, Utilities::COMMON_LIBRARIES));
+            throw new NoObjectSelectedException(Translation::get('FileName', null, StringUtilities::LIBRARIES));
         }
 
         if (in_array($this->get_parameters()->get_file()->get_extension(), self::get_allowed_extensions()))

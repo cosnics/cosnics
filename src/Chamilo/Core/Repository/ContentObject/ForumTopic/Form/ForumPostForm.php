@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /*
  * @author Mattias De Pauw - Hogeschool Gent @author Maarten Volckaert - Hogeschool Gent
@@ -152,27 +152,27 @@ class ForumPostForm extends FormValidator
             case self::TYPE_EDIT :
                 $buttons[] = $this->createElement(
                     'style_submit_button', 'submit_button',
-                    Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null,
+                    Translation::get('Update', null, StringUtilities::LIBRARIES), null, null,
                     new FontAwesomeGlyph('arrow-right')
                 );
                 break;
             case self::TYPE_QUOTE :
                 $buttons[] = $this->createElement(
                     'style_submit_button', 'submit_button',
-                    Translation::get('Quote', null, Utilities::COMMON_LIBRARIES), null, null,
+                    Translation::get('Quote', null, StringUtilities::LIBRARIES), null, null,
                     new FontAwesomeGlyph('envelope')
                 );
                 break;
             default :
                 $buttons[] = $this->createElement(
                     'style_submit_button', 'submit_button',
-                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+                    Translation::get('Create', null, StringUtilities::LIBRARIES)
                 );
                 break;
         }
 
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
@@ -194,7 +194,7 @@ class ForumPostForm extends FormValidator
      */
     public function build_basic_form()
     {
-        $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
+        $this->addElement('category', Translation::get('Properties', null, StringUtilities::LIBRARIES));
 
         // title field
         $this->add_textfield(ForumPost::PROPERTY_TITLE, Translation::get('Title'), false, array("size" => "50"));

@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\UserView\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -47,7 +47,7 @@ class UpdaterComponent extends Manager
                 $message = Translation::get(
                     $success ? 'ObjectUpdated' : 'ObjectNotUpdated', 
                     array('OBJECT' => Translation::get('UserView')), 
-                    Utilities::COMMON_LIBRARIES);
+                    StringUtilities::LIBRARIES);
                 
                 if (! $success)
                 {
@@ -76,7 +76,7 @@ class UpdaterComponent extends Manager
                     Translation::get(
                         'NoObjectSelected', 
                         array('OBJECT' => Translation::get('UserView')), 
-                        Utilities::COMMON_LIBRARIES)));
+                        StringUtilities::LIBRARIES)));
         }
     }
 }

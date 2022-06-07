@@ -33,7 +33,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -284,7 +284,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         {
             // users tab
             $link = $this->get_url(array(self::PARAM_TAB => self::TAB_PLATFORM_GROUPS_USERS));
-            $tab_name = Translation::get('Users', null, Utilities::COMMON_LIBRARIES);
+            $tab_name = Translation::get('Users', null, StringUtilities::LIBRARIES);
 
             $tabs->add_tab(
                 new DynamicVisualTab(

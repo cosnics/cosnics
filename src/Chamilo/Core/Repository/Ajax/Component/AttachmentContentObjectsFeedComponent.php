@@ -21,7 +21,7 @@ use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use stdClass;
 
 /**
@@ -451,7 +451,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
             $category = new RepositoryCategory();
             $category->setId($repositoryCategoryByIdentifier);
             $category->set_name(
-                $this->getTranslator()->trans('MyRepository', [], Utilities::COMMON_LIBRARIES)
+                $this->getTranslator()->trans('MyRepository', [], StringUtilities::LIBRARIES)
             );
         }
 

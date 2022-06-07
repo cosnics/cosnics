@@ -20,7 +20,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -94,7 +94,7 @@ class FormFilterRenderer extends FilterRenderer
         )
         );
         $this->form_validator->addElement(
-            'style_button', 'submit', Translation::get('Search', [], Utilities::COMMON_LIBRARIES), null, null,
+            'style_button', 'submit', Translation::get('Search', [], StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('search')
         );
     }

@@ -13,7 +13,7 @@ use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -48,15 +48,6 @@ class InvitationRegistrationForm extends FormValidator
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    public function getHashingUtilities()
-    {
-        return $this->getService(HashingUtilities::class);
-    }
-
-    /**
      * Creates a new basic form
      */
     public function build_basic_form()
@@ -69,7 +60,7 @@ class InvitationRegistrationForm extends FormValidator
 
         $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_USERNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            User::PROPERTY_USERNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
         $this->addRule(User::PROPERTY_USERNAME, Translation::get('UsernameNotAvailable'), 'username_available');
@@ -86,35 +77,32 @@ class InvitationRegistrationForm extends FormValidator
         );
         $this->addRule(array(self::PASSWORD, self::PASSWORD_CONFIRMATION), Translation::get('PassTwo'), 'compare');
         $this->addRule(
-            self::PASSWORD, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            self::PASSWORD, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
         $this->addRule(
-            self::PASSWORD_CONFIRMATION, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            self::PASSWORD_CONFIRMATION, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
-
 
         $this->addElement('category', Translation::get('BasicProfile'));
 
         $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
         $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
         // Email
         $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), array("size" => "50"));
-        // $this->addRule(User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, Utilities ::
-        // COMMON_LIBRARIES), 'required');
+        // $this->addRule(User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required');
         // $this->addRule(User::PROPERTY_EMAIL, Translation::get('WrongEmail'), 'email');
         $this->freeze(User::PROPERTY_EMAIL);
-
 
         if (Configuration::getInstance()->get_setting(array(Manager::context(), 'enable_terms_and_conditions')))
         {
@@ -125,14 +113,14 @@ class InvitationRegistrationForm extends FormValidator
             );
             $this->addElement('checkbox', 'conditions_accept', '', Translation::get('IAccept'));
             $this->addRule(
-                'conditions_accept', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                'conditions_accept', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
                 'required'
             );
         }
 
         $buttons[] = $this->createElement('style_submit_button', 'submit', Translation::get('CreateAccount'));
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -180,16 +168,12 @@ class InvitationRegistrationForm extends FormValidator
     }
 
     /**
-     * Sets default values.
      *
-     * @param array $defaults Default values for this form's parameters.
+     * @return \Chamilo\Libraries\Hashing\HashingUtilities
      */
-    public function setDefaults($defaults = [], $filter = null)
+    public function getHashingUtilities()
     {
-        $invitation = $this->invitation;
-        $defaults[User::PROPERTY_EMAIL] = $invitation->get_email();
-        $defaults['conditions'] = Manager::get_terms_and_conditions();
-        parent::setDefaults($defaults);
+        return $this->getService(HashingUtilities::class);
     }
 
     /**
@@ -237,5 +221,18 @@ class InvitationRegistrationForm extends FormValidator
         catch (Exception $ex)
         {
         }
+    }
+
+    /**
+     * Sets default values.
+     *
+     * @param array $defaults Default values for this form's parameters.
+     */
+    public function setDefaults($defaults = [], $filter = null)
+    {
+        $invitation = $this->invitation;
+        $defaults[User::PROPERTY_EMAIL] = $invitation->get_email();
+        $defaults['conditions'] = Manager::get_terms_and_conditions();
+        parent::setDefaults($defaults);
     }
 }

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Notification;
-use Chamilo\Libraries\Utilities\UUID;
+use Ramsey\Uuid\Uuid;
 
 /**
  * A dummy Notification class which allows the preview to emulate the Notification functionality
@@ -21,7 +21,7 @@ class DummyNotification extends Notification
      */
     public function create(): bool
     {
-        $this->set_id(UUID::v4());
+        $this->set_id(Uuid::uuid4());
 
         return PreviewStorage::getInstance()->create_notification($this);
     }

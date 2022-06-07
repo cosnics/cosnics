@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -140,7 +140,7 @@ class EntityTable extends RecordTable implements TableFormActionsSupport
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         $actions->add_form_action(
             new TableFormAction(
-                $deleteUrl->getUrl(), $this->getTranslator()->trans('RemoveSelected', [], Utilities::COMMON_LIBRARIES)
+                $deleteUrl->getUrl(), $this->getTranslator()->trans('RemoveSelected', [], StringUtilities::LIBRARIES)
             )
         );
 

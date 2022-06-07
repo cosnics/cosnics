@@ -17,7 +17,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -65,7 +65,7 @@ class RepositoryMenu
 
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
+                    Translation::get('Create', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                     $repositoryManager->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_CREATE_CONTENT_OBJECTS

@@ -7,7 +7,7 @@ use Chamilo\Core\Metadata\Vocabulary\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -50,7 +50,7 @@ class DeleterComponent extends Manager
                         Translation::get(
                             'ObjectNotDeleted', 
                             array('OBJECT' => Translation::get('Vocabulary')), 
-                            Utilities::COMMON_LIBRARIES));
+                            StringUtilities::LIBRARIES));
                 }
             }
             
@@ -58,7 +58,7 @@ class DeleterComponent extends Manager
             $message = Translation::get(
                 'ObjectDeleted', 
                 array('OBJECT' => Translation::get('Vocabulary')), 
-                Utilities::COMMON_LIBRARIES);
+                StringUtilities::LIBRARIES);
         }
         catch (Exception $ex)
         {

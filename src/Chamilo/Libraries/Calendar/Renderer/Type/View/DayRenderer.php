@@ -221,6 +221,6 @@ class DayRenderer extends FullTableRenderer
      */
     public function renderTitle()
     {
-        return DatetimeUtilities::format_locale_date('%A %d %B %Y', $this->getDisplayTime());
+        return DatetimeUtilities::getInstance()->formatLocaleDate('%A %d %B %Y', $this->getDisplayTime());
     }
 }

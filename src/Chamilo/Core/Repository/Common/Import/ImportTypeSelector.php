@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -149,7 +149,7 @@ class ImportTypeSelector
     public function getTypeSelectorDropdownButton()
     {
         $dropdownButton = new DropdownButton(
-            Translation::get('Import', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('download'),
+            Translation::get('Import', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('download'),
             Button::DISPLAY_ICON_AND_LABEL
         );
 

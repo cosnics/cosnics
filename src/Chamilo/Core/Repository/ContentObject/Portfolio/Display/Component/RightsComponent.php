@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Rights configuration of portfolio items and/or folders
@@ -49,7 +49,7 @@ class RightsComponent extends ItemComponent
                     Translation::get(
                         'NoObjectsToConfigureRightsFor', 
                         array('OBJECTS' => Translation::get('ComplexContentObjectItems')), 
-                        Utilities::COMMON_LIBRARIES), 
+                        StringUtilities::LIBRARIES),
                     true, 
                     $parameters);
             }

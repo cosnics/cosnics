@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -65,7 +65,7 @@ class SidebarHomeRenderer extends HomeRenderer
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                        Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                         $this->getHomeTool()->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_UPDATE_CONTENT_OBJECT,
@@ -80,7 +80,7 @@ class SidebarHomeRenderer extends HomeRenderer
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $this->getHomeTool()->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_DELETE,

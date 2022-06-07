@@ -48,7 +48,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 class ComplexDisplayComponent extends Manager
@@ -97,7 +97,7 @@ class ComplexDisplayComponent extends Manager
         if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
             $this->redirect(
-                Translation::getInstance()->getTranslation("NotAllowed", null, Utilities::COMMON_LIBRARIES), true, [],
+                Translation::getInstance()->getTranslation("NotAllowed", null, StringUtilities::LIBRARIES), true, [],
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID

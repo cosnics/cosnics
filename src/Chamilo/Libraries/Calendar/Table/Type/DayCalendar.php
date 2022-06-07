@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Calendar\Table\Type;
 
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -124,7 +124,7 @@ class DayCalendar extends Calendar
 
         $header->setHeaderContents(
             0, 1,
-            Translation::get(date('l', $this->getDisplayTime()) . 'Short', null, Utilities::COMMON_LIBRARIES) . ' ' .
+            Translation::get(date('l', $this->getDisplayTime()) . 'Short', null, StringUtilities::LIBRARIES) . ' ' .
             date('d/m', $this->getDisplayTime())
         );
 

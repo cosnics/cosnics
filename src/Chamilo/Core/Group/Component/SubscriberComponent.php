@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -106,7 +106,7 @@ class SubscriberComponent extends Manager
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES)));
+                htmlentities(Translation::get('NoObjectSelected', null, StringUtilities::LIBRARIES)));
         }
     }
 

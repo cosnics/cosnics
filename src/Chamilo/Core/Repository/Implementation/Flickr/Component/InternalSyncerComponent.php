@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Implementation\Flickr\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class InternalSyncerComponent extends Manager
 {
@@ -42,7 +42,7 @@ class InternalSyncerComponent extends Manager
                     Translation::get(
                         'ObjectUpdated', 
                         array('OBJECT' => Translation::get('ContentObject')), 
-                        Utilities::COMMON_LIBRARIES), 
+                        StringUtilities::LIBRARIES),
                     false, 
                     $parameters, 
                     array(Manager::PARAM_EXTERNAL_REPOSITORY, Manager::PARAM_ACTION));
@@ -56,7 +56,7 @@ class InternalSyncerComponent extends Manager
                     Translation::get(
                         'ObjectFailedUpdated', 
                         array('OBJECT' => Translation::get('ContentObject')), 
-                        Utilities::COMMON_LIBRARIES), 
+                        StringUtilities::LIBRARIES),
                     true, 
                     $parameters);
             }
@@ -70,7 +70,7 @@ class InternalSyncerComponent extends Manager
                 Translation::get(
                     'ObjectUpdated', 
                     array('OBJECT' => Translation::get('ContentObject')), 
-                    Utilities::COMMON_LIBRARIES), 
+                    StringUtilities::LIBRARIES),
                 true, 
                 $parameters);
         }

@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -126,7 +126,7 @@ class CategoryForm extends FormValidator
                 );
                 $this->addRule(
                     PlatformCategory::PROPERTY_NAME . $category_number,
-                    Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+                    Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
                 );
             }
         }
@@ -157,7 +157,7 @@ class CategoryForm extends FormValidator
 
         $buttons[] = $this->createElement('style_submit_button', 'create', Translation::get($action_name));
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -172,7 +172,7 @@ class CategoryForm extends FormValidator
     {
         $this->addElement('html', '<fieldset>');
         $this->addElement(
-            'html', '<legend>' . Translation::get('Required', null, Utilities::COMMON_LIBRARIES) . '</legend>'
+            'html', '<legend>' . Translation::get('Required', null, StringUtilities::LIBRARIES) . '</legend>'
         );
     }
 

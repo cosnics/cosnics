@@ -10,7 +10,7 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class NoOfCoursesByLanguageBlock extends CourseBlock
 {
@@ -29,7 +29,7 @@ class NoOfCoursesByLanguageBlock extends CourseBlock
                 $course, 
                 CourseSettingsConnector::LANGUAGE);
             
-            $categories[$lang] = Translation::get($lang, null, Utilities::COMMON_LIBRARIES);
+            $categories[$lang] = Translation::get($lang, null, StringUtilities::LIBRARIES);
             
             if ($arr[$lang])
             {

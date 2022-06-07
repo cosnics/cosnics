@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Calendar\Table\Type;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -286,13 +286,13 @@ class MonthCalendar extends Calendar
         {
             $header->addRow(
                 array(
-                    Translation::get('SundayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('MondayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('TuesdayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('WednesdayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('ThursdayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('FridayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('SaturdayShort', null, Utilities::COMMON_LIBRARIES)
+                    Translation::get('SundayShort', null, StringUtilities::LIBRARIES),
+                    Translation::get('MondayShort', null, StringUtilities::LIBRARIES),
+                    Translation::get('TuesdayShort', null, StringUtilities::LIBRARIES),
+                    Translation::get('WednesdayShort', null, StringUtilities::LIBRARIES),
+                    Translation::get('ThursdayShort', null, StringUtilities::LIBRARIES),
+                    Translation::get('FridayShort', null, StringUtilities::LIBRARIES),
+                    Translation::get('SaturdayShort', null, StringUtilities::LIBRARIES)
                 )
             );
         }
@@ -300,13 +300,13 @@ class MonthCalendar extends Calendar
         {
             $header->addRow(
                 array(
-                    Translation::get('MondayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('TuesdayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('WednesdayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('ThursdayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('FridayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('SaturdayShort', null, Utilities::COMMON_LIBRARIES),
-                    Translation::get('SundayShort', null, Utilities::COMMON_LIBRARIES)
+                    Translation::get('MondayShort', null, StringUtilities::LIBRARIES),
+                    Translation::get('TuesdayShort', null, StringUtilities::LIBRARIES),
+                    Translation::get('WednesdayShort', null, StringUtilities::LIBRARIES),
+                    Translation::get('ThursdayShort', null, StringUtilities::LIBRARIES),
+                    Translation::get('FridayShort', null, StringUtilities::LIBRARIES),
+                    Translation::get('SaturdayShort', null, StringUtilities::LIBRARIES),
+                    Translation::get('SundayShort', null, StringUtilities::LIBRARIES)
                 )
             );
         }

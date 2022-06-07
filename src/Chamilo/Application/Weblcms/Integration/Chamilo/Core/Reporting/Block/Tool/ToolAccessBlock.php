@@ -85,7 +85,7 @@ abstract class ToolAccessBlock extends ToolBlock
             $reporting_data->add_data_category_row(
                 $tool_name, 
                 Translation::get('TotalTime'), 
-                $this->convert_seconds_to_hours($course_tool_summary_data[CourseVisit::PROPERTY_TOTAL_TIME]));
+                $this->convertSecondsToHours($course_tool_summary_data[CourseVisit::PROPERTY_TOTAL_TIME]));
             
             $reporting_data->add_data_category_row(
                 $tool_name, 

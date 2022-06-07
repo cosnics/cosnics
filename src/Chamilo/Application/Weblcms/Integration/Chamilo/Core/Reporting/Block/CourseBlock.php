@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 abstract class CourseBlock extends ReportingBlock
 {
@@ -76,22 +76,19 @@ abstract class CourseBlock extends ReportingBlock
     {
         if (! is_null($timestamp))
         {
-            return DatetimeUtilities::format_locale_date(
-                Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                     Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES), 
+            return DatetimeUtilities::getInstance()->formatLocaleDate(
+                Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' .
+                     Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES),
                     $timestamp);
         }
     }
 
     /**
      * Converts from a seconds based time to an hours based time
-     * 
-     * @param $seconds
-     * @return string
      */
-    public function convert_seconds_to_hours($seconds)
+    public function convertSecondsToHours(int $seconds): string
     {
-        return $seconds ? DatetimeUtilities::convert_seconds_to_hours($seconds) : '000h 00m 00s';
+        return $seconds ? DatetimeUtilities::getInstance()->convertSecondsToHours($seconds) : '000h 00m 00s';
     }
 
     /**
@@ -226,10 +223,10 @@ abstract class CourseBlock extends ReportingBlock
             $total_time = $course_visit[CourseVisit::PROPERTY_TOTAL_TIME];
         }
         
-        $total_time = $total_time ? DatetimeUtilities::convert_seconds_to_hours($total_time) : '000h 00m 00s';
+        $total_time = $total_time ? DatetimeUtilities::getInstance()->convertSecondsToHours($total_time) : '000h 00m 00s';
         
-        $first_access_date = $first_access_date ? DatetimeUtilities::format_locale_date(null, $first_access_date) : '-';
-        $last_access_date = $last_access_date ? DatetimeUtilities::format_locale_date(null, $last_access_date) : '-';
+        $first_access_date = $first_access_date ? DatetimeUtilities::getInstance()->formatLocaleDate(null, $first_access_date) : '-';
+        $last_access_date = $last_access_date ? DatetimeUtilities::getInstance()->formatLocaleDate(null, $last_access_date) : '-';
         
         return array(
             Translation::get('FirstAccess') => $first_access_date, 

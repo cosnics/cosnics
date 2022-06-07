@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface;
 use Chamilo\Libraries\Format\Table\Table;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -87,7 +87,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
         $this->addElement('html', '<div class="action-bar input-group pull-right">');
 
         $this->addElement(
-            'text', self::PARAM_SIMPLE_SEARCH_QUERY, Translation::get('Search', null, Utilities::COMMON_LIBRARIES),
+            'text', self::PARAM_SIMPLE_SEARCH_QUERY, Translation::get('Search', null, StringUtilities::LIBRARIES),
             array('class' => 'form-group form-control action-bar-search')
         );
 

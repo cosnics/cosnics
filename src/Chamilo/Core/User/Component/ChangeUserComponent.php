@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -56,7 +56,7 @@ class ChangeUserComponent extends Manager
                     Translation::get(
                         'NoObjectSelected',
                         array('OBJECT' => Translation::get('User')),
-                        Utilities::COMMON_LIBRARIES)));
+                        StringUtilities::LIBRARIES)));
         }
     }
 

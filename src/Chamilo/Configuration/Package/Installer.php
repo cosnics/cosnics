@@ -5,7 +5,7 @@ use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
 use DOMXPath;
 
@@ -37,7 +37,7 @@ class Installer extends Action\Installer
                 Translation::get(
                     'ObjectsAdded',
                     array('OBJECTS' => Translation::get('Languages')),
-                    Utilities::COMMON_LIBRARIES));
+                    StringUtilities::LIBRARIES));
         }
 
         return true;
@@ -75,7 +75,7 @@ class Installer extends Action\Installer
                         Translation::get(
                             'ObjectAdded',
                             array('OBJECT' => Translation::get('Language')),
-                            Utilities::COMMON_LIBRARIES) . ' ' . $language->get_english_name());
+                            StringUtilities::LIBRARIES) . ' ' . $language->get_english_name());
                 }
                 else
                 {

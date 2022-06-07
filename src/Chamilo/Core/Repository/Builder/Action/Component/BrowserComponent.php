@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -105,7 +105,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
         $commonActions->addButton(
             new Button(
-                Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('desktop'),
+                Translation::get('Preview', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('desktop'),
                 $this->get_parent()->get_preview_content_object_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL, false,
                 $onclick, '_blank'
             )

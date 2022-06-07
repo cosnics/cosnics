@@ -12,7 +12,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -212,7 +212,7 @@ class MiniMonthRenderer extends ViewRenderer
      */
     public function renderTitle()
     {
-        return Translation::get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities::COMMON_LIBRARIES) . ' ' .
+        return Translation::get(date('F', $this->getDisplayTime()) . 'Long', null, StringUtilities::LIBRARIES) . ' ' .
             date('Y', $this->getDisplayTime());
     }
 }

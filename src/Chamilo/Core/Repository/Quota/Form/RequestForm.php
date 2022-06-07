@@ -8,7 +8,7 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class RequestForm extends FormValidator
 {
@@ -43,11 +43,11 @@ class RequestForm extends FormValidator
 
         $this->addElement('text', Request::PROPERTY_QUOTA, Translation::get('QuotaStep'), array("size" => "7"));
         $this->addRule(
-            Request::PROPERTY_QUOTA, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Request::PROPERTY_QUOTA, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
         $this->addRule(
-            Request::PROPERTY_QUOTA, Translation::get('ThisFieldMustBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            Request::PROPERTY_QUOTA, Translation::get('ThisFieldMustBeNumeric', null, StringUtilities::LIBRARIES),
             'numeric'
         );
 
@@ -55,7 +55,7 @@ class RequestForm extends FormValidator
             'textarea', Request::PROPERTY_MOTIVATION, Translation::get('Motivation'), array("cols" => 50, "rows" => 6)
         );
         $this->addRule(
-            Request::PROPERTY_MOTIVATION, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Request::PROPERTY_MOTIVATION, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
@@ -67,24 +67,24 @@ class RequestForm extends FormValidator
             );
             $this->addRule(
                 Request::PROPERTY_DECISION_MOTIVATION,
-                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+                Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
             );
 
             $buttons[] = $this->createElement(
-                'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null,
+                'style_submit_button', 'submit', Translation::get('Update', null, StringUtilities::LIBRARIES), null,
                 null, new FontAwesomeGlyph('arrow-right')
             );
         }
         else
         {
             $buttons[] = $this->createElement(
-                'style_submit_button', 'submit', Translation::get('Send', null, Utilities::COMMON_LIBRARIES), null,
+                'style_submit_button', 'submit', Translation::get('Send', null, StringUtilities::LIBRARIES), null,
                 null, new FontAwesomeGlyph('envelope')
             );
         }
 
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

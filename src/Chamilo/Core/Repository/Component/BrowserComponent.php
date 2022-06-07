@@ -32,7 +32,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -78,7 +78,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $trail->add(
                 new Breadcrumb(
                     $this->get_url(),
-                    Translation::get('SearchResultsFor', null, Utilities::COMMON_LIBRARIES) . ' ' . $query
+                    Translation::get('SearchResultsFor', null, StringUtilities::LIBRARIES) . ' ' . $query
                 )
             );
         }
@@ -175,7 +175,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 }
 
                 $viewActions = new DropdownButton(
-                    Translation::get($this->get_renderer() . 'View', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get($this->get_renderer() . 'View', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph($glyph)
                 );
                 $buttonToolbar->addItem($viewActions);
@@ -197,7 +197,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         new SubButton(
                             Translation::get(
                                 (string) StringUtilities::getInstance()->createString($renderer)->upperCamelize() .
-                                'View', null, Utilities::COMMON_LIBRARIES
+                                'View', null, StringUtilities::LIBRARIES
                             ), null, $action, Button::DISPLAY_LABEL, false, [], null, $isActive
                         )
                     );

@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -157,18 +157,18 @@ class JumpForm
         $translator = Translation::getInstance();
 
         $monthNames = array(
-            $translator->getTranslation("JanuaryLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("FebruaryLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("MarchLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("AprilLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("MayLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("JuneLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("JulyLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("AugustLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("SeptemberLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("OctoberLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("NovemberLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("DecemberLong", [], Utilities::COMMON_LIBRARIES)
+            $translator->getTranslation("JanuaryLong", [], StringUtilities::LIBRARIES),
+            $translator->getTranslation("FebruaryLong", [], StringUtilities::LIBRARIES),
+            $translator->getTranslation("MarchLong", [], StringUtilities::LIBRARIES),
+            $translator->getTranslation("AprilLong", [], StringUtilities::LIBRARIES),
+            $translator->getTranslation("MayLong", [], StringUtilities::LIBRARIES),
+            $translator->getTranslation("JuneLong", [], StringUtilities::LIBRARIES),
+            $translator->getTranslation("JulyLong", [], StringUtilities::LIBRARIES),
+            $translator->getTranslation("AugustLong", [], StringUtilities::LIBRARIES),
+            $translator->getTranslation("SeptemberLong", [], StringUtilities::LIBRARIES),
+            $translator->getTranslation("OctoberLong", [], StringUtilities::LIBRARIES),
+            $translator->getTranslation("NovemberLong", [], StringUtilities::LIBRARIES),
+            $translator->getTranslation("DecemberLong", [], StringUtilities::LIBRARIES)
         );
         $months = [];
 

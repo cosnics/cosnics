@@ -604,14 +604,14 @@ class ImportUserData extends ImportData
         $activationDate = $this->getActivationDate();
         if (!empty($activationDate))
         {
-            $activationDate = DatetimeUtilities::time_from_datepicker($activationDate);
+            $activationDate = DatetimeUtilities::getInstance()->timeFromDatepicker($activationDate);
             $user->set_activation_date($activationDate);
         }
 
         $expirationDate = $this->getExpirationDate();
         if (!empty($expirationDate))
         {
-            $expirationDate = DatetimeUtilities::time_from_datepicker($expirationDate);
+            $expirationDate = DatetimeUtilities::getInstance()->timeFromDatepicker($expirationDate);
             $user->set_expiration_date($expirationDate);
         }
     }

@@ -9,7 +9,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -75,10 +75,10 @@ class PictureForm extends FormValidator
             $this->addElement('hidden', User::PROPERTY_ID);
 
             $buttons[] = $this->createElement(
-                'style_submit_button', 'submit', Translation::get('Save', null, Utilities::COMMON_LIBRARIES)
+                'style_submit_button', 'submit', Translation::get('Save', null, StringUtilities::LIBRARIES)
             );
             $buttons[] = $this->createElement(
-                'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+                'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
             );
 
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

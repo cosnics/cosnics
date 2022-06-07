@@ -11,7 +11,7 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * A personal blog layout with the user picture on the side
@@ -41,9 +41,9 @@ class PersonalBlogLayout extends BlogLayout
      */
     public function formatDate($date)
     {
-        $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+        $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
-        return DatetimeUtilities::format_locale_date($date_format, $date);
+        return DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $date);
     }
 
     /**

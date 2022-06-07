@@ -26,7 +26,7 @@ class DefaultExternalTableCellRenderer extends DataClassTableCellRenderer implem
             case ExternalObject::PROPERTY_DESCRIPTION :
                 return StringUtilities::getInstance()->truncate($object->get_description(), 50);
             case ExternalObject::PROPERTY_CREATED :
-                return DatetimeUtilities::format_locale_date(null, $object->get_created());
+                return DatetimeUtilities::getInstance()->formatLocaleDate(null, $object->get_created());
         }
         return parent::render_cell($column, $object);
     }

@@ -90,7 +90,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return $object->getOptionalProperty(User::PROPERTY_FIRSTNAME) . ' ' .
                     $object->getOptionalProperty(User::PROPERTY_LASTNAME);
             case Request::PROPERTY_REQUEST_TIME :
-                return DatetimeUtilities::format_locale_date(
+                return DatetimeUtilities::getInstance()->formatLocaleDate(
                     null, $object->getOptionalProperty(Request::PROPERTY_REQUEST_TIME)
                 );
             case Request::PROPERTY_STATUS :

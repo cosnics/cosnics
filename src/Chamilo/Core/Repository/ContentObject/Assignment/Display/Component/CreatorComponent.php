@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -133,9 +133,9 @@ class CreatorComponent extends Manager
 
         if ($assignment->get_start_time() > time())
         {
-            $date = DatetimeUtilities::format_locale_date(
-                Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
+            $date = DatetimeUtilities::getInstance()->formatLocaleDate(
+                Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' .
+                Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES),
                 $assignment->get_start_time()
             );
 
@@ -146,9 +146,9 @@ class CreatorComponent extends Manager
 
         if ($assignment->get_end_time() < time() && $assignment->get_allow_late_submissions() == 0)
         {
-            $date = DatetimeUtilities::format_locale_date(
-                Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
+            $date = DatetimeUtilities::getInstance()->formatLocaleDate(
+                Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' .
+                Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES),
                 $assignment->get_end_time()
             );
 

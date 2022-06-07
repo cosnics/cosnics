@@ -19,7 +19,7 @@ use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -155,7 +155,7 @@ abstract class BlogLayout
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                    Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_parent()->get_complex_content_object_item_update_url($complexBlogItem),
                     ToolbarItem::DISPLAY_ICON, false, 'btn-link'
                 )
@@ -166,7 +166,7 @@ abstract class BlogLayout
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_parent()->get_complex_content_object_item_delete_url($complexBlogItem),
                     ToolbarItem::DISPLAY_ICON, true, 'btn-link'
                 )

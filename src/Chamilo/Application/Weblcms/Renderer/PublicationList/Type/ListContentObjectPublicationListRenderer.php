@@ -28,7 +28,7 @@ use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\PagerRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -89,7 +89,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         if (count($publications) == 0)
         {
-            return Display::normal_message(Translation::get('NoPublications', null, Utilities::COMMON_LIBRARIES), true);
+            return Display::normal_message(Translation::get('NoPublications', null, StringUtilities::LIBRARIES), true);
         }
 
         $html[] = $this->renderHeader();
@@ -322,7 +322,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES),
+                Translation::get('SelectAll', null, StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
                 'btn-sm select-all'
             )
@@ -330,7 +330,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES),
+                Translation::get('UnselectAll', null, StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('check-square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
                 'btn-sm select-none'
             )
@@ -579,7 +579,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('EditContentObject', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('EditContentObject', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('pencil-alt'), $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_CONTENT_OBJECT,
@@ -594,7 +594,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         {
             $dropdownButton->addSubButton(
                 new SubButton(
-                    Translation::get('EditPublicationDetails', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('EditPublicationDetails', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('edit', [], null, 'fas'), $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
@@ -611,14 +611,14 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                 {
                     $dropdownButton->addSubButton(
                         new SubButton(
-                            Translation::get('BuildComplexObject', null, Utilities::COMMON_LIBRARIES), null,
+                            Translation::get('BuildComplexObject', null, StringUtilities::LIBRARIES), null,
                             $this->get_complex_builder_url($publication_id), SubButton::DISPLAY_LABEL
                         )
                     );
 
                     $dropdownButton->addSubButton(
                         new SubButton(
-                            Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), null,
+                            Translation::get('Preview', null, StringUtilities::LIBRARIES), null,
                             $this->get_complex_display_url($publication_id), SubButton::DISPLAY_LABEL
                         )
                     );
@@ -627,7 +627,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                 {
                     $dropdownButton->addSubButton(
                         new SubButton(
-                            Translation::get('BuildPreview', null, Utilities::COMMON_LIBRARIES), null,
+                            Translation::get('BuildPreview', null, StringUtilities::LIBRARIES), null,
                             $this->get_complex_display_url($publication_id), SubButton::DISPLAY_LABEL
                         )
                     );
@@ -647,7 +647,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                 {
                     $dropdownButton->addSubButton(
                         new SubButton(
-                            Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+                            Translation::get('MoveUp', null, StringUtilities::LIBRARIES), null, $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
@@ -663,7 +663,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                 {
                     $dropdownButton->addSubButton(
                         new SubButton(
-                            Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+                            Translation::get('MoveDown', null, StringUtilities::LIBRARIES), null, $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
@@ -724,7 +724,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         {
             $dropdownButton->addSubButton(
                 new SubButton(
-                    Translation::get('ManageRights', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+                    Translation::get('ManageRights', null, StringUtilities::LIBRARIES), null, $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
@@ -738,7 +738,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE,

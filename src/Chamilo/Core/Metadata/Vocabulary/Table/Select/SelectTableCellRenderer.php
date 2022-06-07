@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Table cell renderer for the schema
@@ -31,7 +31,7 @@ class SelectTableCellRenderer extends DataClassTableCellRenderer implements Tabl
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Add', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
+                Translation::get('Add', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                 $this->get_component()->get_url(
                     array(
                         \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID => $this->get_component()

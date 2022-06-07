@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -68,7 +68,7 @@ class SorterComponent extends Manager implements DelegateComponent
                 Translation::get(
                     ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'), 
                     array('OBJECT' => Translation::get('ContentObject')), 
-                    Utilities::COMMON_LIBRARIES));
+                    StringUtilities::LIBRARIES));
             
             $parameters = [];
             

@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -120,7 +120,7 @@ class ConfigurerComponent extends Manager
             $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
 
             $message = Translation::get(
-                $translation, array('OBJECT' => Translation::get('ProviderLink')), Utilities::COMMON_LIBRARIES
+                $translation, array('OBJECT' => Translation::get('ProviderLink')), StringUtilities::LIBRARIES
             );
 
             $this->redirect($message, !$success, array(self::PARAM_ACTION => self::ACTION_BROWSE));

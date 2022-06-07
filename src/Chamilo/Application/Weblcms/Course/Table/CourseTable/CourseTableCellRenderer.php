@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class describes the default cell renderer for the course table
@@ -50,14 +50,14 @@ class CourseTableCellRenderer extends RecordTableCellRenderer implements TableCe
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_component()->get_update_course_url($course[Course::PROPERTY_ID]), ToolbarItem::DISPLAY_ICON
             )
         );
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->get_component()->get_delete_course_url($course[Course::PROPERTY_ID]), ToolbarItem::DISPLAY_ICON,
                 true
             )

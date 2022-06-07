@@ -38,7 +38,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use InvalidArgumentException;
 
 /**
@@ -303,7 +303,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     $recycle_url = $this->get_content_object_recycling_url($contentObject);
                     $stateActions->addButton(
                         new Button(
-                            $translator->trans('Remove', [], Utilities::COMMON_LIBRARIES),
+                            $translator->trans('Remove', [], StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('trash-alt'), $recycle_url, Button::DISPLAY_ICON_AND_LABEL
                         )
                     );
@@ -315,9 +315,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     $delete_url = $this->get_content_object_deletion_url($contentObject);
                     $stateActions->addButton(
                         new Button(
-                            $translator->trans('Delete', [], Utilities::COMMON_LIBRARIES),
+                            $translator->trans('Delete', [], StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('times'), $delete_url, Button::DISPLAY_ICON_AND_LABEL,
-                            $translator->trans('ConfirmDelete', [], Utilities::COMMON_LIBRARIES)
+                            $translator->trans('ConfirmDelete', [], StringUtilities::LIBRARIES)
                         )
                     );
                 }
@@ -334,7 +334,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
                     $stateActions->addButton(
                         new Button(
-                            $translator->trans('Unlink', [], Utilities::COMMON_LIBRARIES),
+                            $translator->trans('Unlink', [], StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('unlink', [], null, 'fas'), $unlink_url,
                             Button::DISPLAY_ICON_AND_LABEL, true
                         )
@@ -347,7 +347,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     $restore_url = $this->get_content_object_restoring_url($contentObject);
                     $stateActions->addButton(
                         new Button(
-                            $translator->trans('Restore', [], Utilities::COMMON_LIBRARIES),
+                            $translator->trans('Restore', [], StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('undo'), $restore_url, Button::DISPLAY_ICON_AND_LABEL, true
                         )
                     );
@@ -364,7 +364,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $edit_url = $this->get_content_object_editing_url($contentObject);
                         $baseActions->addButton(
                             new Button(
-                                $translator->trans('Edit', [], Utilities::COMMON_LIBRARIES),
+                                $translator->trans('Edit', [], StringUtilities::LIBRARIES),
                                 new FontAwesomeGlyph('pencil-alt'), $edit_url, Button::DISPLAY_ICON_AND_LABEL
                             )
                         );
@@ -376,7 +376,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $move_url = $this->get_content_object_moving_url($contentObject);
                         $baseActions->addButton(
                             new Button(
-                                $translator->trans('Move', [], Utilities::COMMON_LIBRARIES),
+                                $translator->trans('Move', [], StringUtilities::LIBRARIES),
                                 new FontAwesomeGlyph('folder-open'), $move_url, Button::DISPLAY_ICON_AND_LABEL
                             )
                         );
@@ -386,7 +386,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     {
                         $baseActions->addButton(
                             new Button(
-                                $translator->trans('BuildComplexObject', [], Utilities::COMMON_LIBRARIES),
+                                $translator->trans('BuildComplexObject', [], StringUtilities::LIBRARIES),
                                 new FontAwesomeGlyph('cubes'),
                                 $this->get_browse_complex_content_object_url($contentObject),
                                 Button::DISPLAY_ICON_AND_LABEL
@@ -398,7 +398,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
                         $baseActions->addButton(
                             new Button(
-                                $translator->trans('Preview', [], Utilities::COMMON_LIBRARIES),
+                                $translator->trans('Preview', [], StringUtilities::LIBRARIES),
                                 new FontAwesomeGlyph('desktop'), $preview_url, Button::DISPLAY_ICON_AND_LABEL, false,
                                 $onclick, '_blank'
                             )
@@ -421,7 +421,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
                         $baseActions->addButton(
                             new Button(
-                                $translator->trans($variable, [], Utilities::COMMON_LIBRARIES), $image,
+                                $translator->trans($variable, [], StringUtilities::LIBRARIES), $image,
                                 $preview_url, Button::DISPLAY_ICON_AND_LABEL, false, $onclick, '_blank'
                             )
                         );
@@ -434,7 +434,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             {
                 $baseActions->addButton(
                     new Button(
-                        $translator->trans('Duplicate', [], Utilities::COMMON_LIBRARIES),
+                        $translator->trans('Duplicate', [], StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('copy'), $this->get_copy_content_object_url($contentObject->getId())
                     )
                 );
@@ -445,7 +445,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             {
                 $publishActions->addButton(
                     new Button(
-                        $translator->trans('Publish', [], Utilities::COMMON_LIBRARIES),
+                        $translator->trans('Publish', [], StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('share-square'), $this->get_publish_content_object_url($contentObject)
                     )
                 );
@@ -456,7 +456,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             {
                 $publishActions->addButton(
                     new Button(
-                        $translator->trans('Share', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('lock'),
+                        $translator->trans('Share', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
                         $this->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
@@ -481,7 +481,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
                     $stateActions->addButton(
                         new Button(
-                            $translator->trans('Unshare', [], Utilities::COMMON_LIBRARIES),
+                            $translator->trans('Unshare', [], StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('unlock'), $url, Button::DISPLAY_ICON_AND_LABEL, true
                         )
                     );
@@ -496,7 +496,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 $revert_url = $this->get_content_object_revert_url($contentObject);
                 $stateActions->addButton(
                     new Button(
-                        $translator->trans('Revert', [], Utilities::COMMON_LIBRARIES),
+                        $translator->trans('Revert', [], StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('undo'), $revert_url, Button::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -508,7 +508,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 $deleteUrl = $this->get_content_object_deletion_url($contentObject, 'version');
                 $stateActions->addButton(
                     new Button(
-                        $translator->trans('Delete', [], Utilities::COMMON_LIBRARIES),
+                        $translator->trans('Delete', [], StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('times'), $deleteUrl, Button::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -548,7 +548,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         {
             throw new InvalidArgumentException(
                 $this->getTranslator()->trans(
-                    'NoObjectSelected', [], Utilities::COMMON_LIBRARIES
+                    'NoObjectSelected', [], StringUtilities::LIBRARIES
                 )
             );
         }
@@ -602,7 +602,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         if (count($types) > 1)
         {
             $dropdownButton = new DropdownButton(
-                $this->getTranslator()->trans('Export', [], Utilities::COMMON_LIBRARIES),
+                $this->getTranslator()->trans('Export', [], StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('download')
             );
 

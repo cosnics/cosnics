@@ -15,7 +15,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -26,7 +26,6 @@ class AccountForm extends FormValidator
     use DependencyInjectionContainerTrait;
 
     const NEW_PASSWORD = 'new_password';
-
     const NEW_PASSWORD_CONFIRMATION = 'new_password_confirmation';
 
     const RESULT_ERROR = 'UserUpdateFailed';
@@ -106,7 +105,7 @@ class AccountForm extends FormValidator
                     $configurationConsulter->get_setting(array(Manager::context(), 'personal_data_placeholder')))))
         {
             $this->addRule(
-                User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
                 'required'
             );
         }
@@ -117,7 +116,7 @@ class AccountForm extends FormValidator
                     $configurationConsulter->get_setting(array(Manager::context(), 'personal_data_placeholder')))))
         {
             $this->addRule(
-                User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
                 'required'
             );
         }
@@ -139,7 +138,7 @@ class AccountForm extends FormValidator
         {
             $this->addRule(
                 User::PROPERTY_OFFICIAL_CODE,
-                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+                Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
             );
         }
 
@@ -164,7 +163,7 @@ class AccountForm extends FormValidator
                         $configurationConsulter->get_setting(array(Manager::context(), 'personal_data_placeholder')))))
             {
                 $this->addRule(
-                    User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                    User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
                     'required'
                 );
                 $this->addRule(User::PROPERTY_EMAIL, Translation::get('EmailWrong'), 'email');
@@ -189,7 +188,7 @@ class AccountForm extends FormValidator
             $this->applyFilter(User::PROPERTY_USERNAME, 'stripslashes');
             $this->applyFilter(User::PROPERTY_USERNAME, 'trim');
             $this->addRule(
-                User::PROPERTY_USERNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                User::PROPERTY_USERNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
                 'required'
             );
             $this->addRule(User::PROPERTY_USERNAME, Translation::get('UsernameWrong'), 'username');
@@ -266,10 +265,10 @@ class AccountForm extends FormValidator
         if ($this->canUserChangeAnything())
         {
             $buttons[] = $this->createElement(
-                'style_submit_button', 'submit', Translation::get('Save', null, Utilities::COMMON_LIBRARIES)
+                'style_submit_button', 'submit', Translation::get('Save', null, StringUtilities::LIBRARIES)
             );
             $buttons[] = $this->createElement(
-                'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+                'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
             );
 
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
 
 /**
@@ -127,7 +127,7 @@ class GroupImportForm extends FormValidator
         if ($action != 'A' && $action != 'U' && $action != 'D')
         {
             $this->failed_elements[] =
-                Translation::get('Invalid', null, Utilities::COMMON_LIBRARIES) . ': ' . $this->display_group($group);
+                Translation::get('Invalid', null, StringUtilities::LIBRARIES) . ': ' . $this->display_group($group);
 
             return $this->validate_children($group['children']);
         }
@@ -136,7 +136,7 @@ class GroupImportForm extends FormValidator
         if (!$group['name'] || $group['name'] == '' || !$group['code'] || $group['code'] == '')
         {
             $this->failed_elements[] =
-                Translation::get('Invalid', null, Utilities::COMMON_LIBRARIES) . ': ' . $this->display_group($group);
+                Translation::get('Invalid', null, StringUtilities::LIBRARIES) . ': ' . $this->display_group($group);
 
             return $this->validate_children($group['children']);
         }
@@ -146,7 +146,7 @@ class GroupImportForm extends FormValidator
             ($action != 'A' && !$this->group_code_exists($group['code'])))
         {
             $this->failed_elements[] =
-                Translation::get('Invalid', null, Utilities::COMMON_LIBRARIES) . ': ' . $this->display_group($group);
+                Translation::get('Invalid', null, StringUtilities::LIBRARIES) . ': ' . $this->display_group($group);
 
             return $this->validate_children($group['children']);
         }

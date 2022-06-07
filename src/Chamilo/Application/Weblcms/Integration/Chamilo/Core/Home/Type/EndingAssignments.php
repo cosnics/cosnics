@@ -23,7 +23,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * A notificationblock for new assignment submissions (assignmenttool)
@@ -121,9 +121,9 @@ class EndingAssignments extends Block
         $html = [];
         foreach ($items as $item)
         {
-            $end_date = DatetimeUtilities::format_locale_date(
-                Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' . Translation::get(
-                    'TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES
+            $end_date = DatetimeUtilities::getInstance()->formatLocaleDate(
+                Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' . Translation::get(
+                    'TimeNoSecFormat', null, StringUtilities::LIBRARIES
                 ), $item['end_time']
             );
 

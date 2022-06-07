@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Description of impact_view_cell_renderer
@@ -35,7 +35,7 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
         $toolbar = new Toolbar();
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('desktop'),
+                Translation::get('Preview', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('desktop'),
                 $this->get_content_object_preview_url($object), ToolbarItem::DISPLAY_ICON, false, null, null, null,
                 array(
                     'onclick' => 'javascript:openPopup(\'' . $this->get_content_object_preview_url($object) .

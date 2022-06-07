@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class SharedInTableCellRenderer extends ShareTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -33,7 +33,7 @@ class SharedInTableCellRenderer extends ShareTableCellRenderer implements TableC
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Unshare', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('unlock'), $url,
+                Translation::get('Unshare', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('unlock'), $url,
                 ToolbarItem::DISPLAY_ICON, true
             )
         );

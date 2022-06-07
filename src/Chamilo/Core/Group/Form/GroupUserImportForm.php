@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -45,7 +45,7 @@ class GroupUserImportForm extends FormValidator
         $this->addRule('file', Translation::get('OnlyCSVAllowed'), 'filetype', $allowed_upload_types);
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Import', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Import', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('import')
         );
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -81,7 +81,7 @@ class GroupUserImportForm extends FormValidator
             else
             {
                 $this->failed_elements[] =
-                    Translation::get('Invalid', null, Utilities::COMMON_LIBRARIES) . ': ' . implode(";", $group_user);
+                    Translation::get('Invalid', null, StringUtilities::LIBRARIES) . ': ' . implode(";", $group_user);
             }
         }
 

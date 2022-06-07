@@ -20,7 +20,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Abstract class to render the tabs of the different
@@ -143,7 +143,7 @@ abstract class TabComponent extends Manager
 
             if (!$this->introduction_text && $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
             {
-                $label = Translation::get('PublishIntroductionText', null, Utilities::COMMON_LIBRARIES);
+                $label = Translation::get('PublishIntroductionText', null, StringUtilities::LIBRARIES);
                 $glyph = new FontAwesomeGlyph('info-circle');
                 $allowedContentObjectTypes = array(Introduction::class);
 

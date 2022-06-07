@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Admin\Announcement\Component
@@ -75,7 +75,7 @@ class EditorComponent extends Manager
                         Translation::get(
                             $success ? 'ObjectUpdated' : 'ObjectNotUpdated',
                             array('OBJECT' => Translation::get('SystemAnnouncementPublication')),
-                            Utilities::COMMON_LIBRARIES
+                            StringUtilities::LIBRARIES
                         ), !$success, array(self::PARAM_ACTION => self::ACTION_BROWSE)
                     );
                 }
@@ -107,7 +107,7 @@ class EditorComponent extends Manager
                 htmlentities(
                     Translation::get(
                         'NoObjectSelected', array('OBJECT' => Translation::get('SystemAnnouncement')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     )
                 )
             );

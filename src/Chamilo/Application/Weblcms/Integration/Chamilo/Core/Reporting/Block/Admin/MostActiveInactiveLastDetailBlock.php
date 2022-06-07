@@ -39,7 +39,7 @@ class MostActiveInactiveLastDetailBlock extends CourseBlock
             
             foreach($publications as $publication)
             {
-                $last_publication = DatetimeUtilities::format_locale_date(
+                $last_publication = DatetimeUtilities::getInstance()->formatLocaleDate(
                     null, 
                     $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE]);
             }

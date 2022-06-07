@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ImporterComponent extends Manager
 {
@@ -201,7 +201,7 @@ class ImporterComponent extends Manager
         $form = new FormValidator('translations', FormValidator::FORM_METHOD_POST, $this->get_url());
         $form->addElement('file', self::PARAM_SOURCE_FILE, Translation::get('SourceFile'));
         $form->addElement(
-            'style_submit_button', 'import_button', Translation::get('Import', null, Utilities::COMMON_LIBRARIES),
+            'style_submit_button', 'import_button', Translation::get('Import', null, StringUtilities::LIBRARIES),
             array('id' => 'import_button'), null, new FontAwesomeGlyph('import')
         );
 

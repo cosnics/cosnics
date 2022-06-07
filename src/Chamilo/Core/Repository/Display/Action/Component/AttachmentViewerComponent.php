@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -79,7 +79,7 @@ class AttachmentViewerComponent extends Manager
         
         $html[] = $this->render_header();
         $html[] = '<a href="javascript:history.go(-1)">' .
-             Translation::get('Back', null, Utilities::COMMON_LIBRARIES) . '</a><br /><br />';
+             Translation::get('Back', null, StringUtilities::LIBRARIES) . '</a><br /><br />';
         $html[] = ContentObjectRenditionImplementation::launch(
             $attachment, 
             ContentObjectRendition::FORMAT_HTML, 

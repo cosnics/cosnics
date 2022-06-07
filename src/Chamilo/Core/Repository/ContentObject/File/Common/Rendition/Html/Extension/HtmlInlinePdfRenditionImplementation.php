@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineR
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -27,7 +27,7 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
             $object->get_id(), 
             $object->calculate_security_code()) . '&display=1&saveName=' . urlencode($object->get_filename());
         
-        $viewerPath = Path::getInstance()->getPluginPath(Utilities::COMMON_LIBRARIES, true) .
+        $viewerPath = Path::getInstance()->getPluginPath(StringUtilities::LIBRARIES, true) .
              'PDFJS/web/viewer.html';
         
         $url = $viewerPath . '?file=' . urlencode($url);

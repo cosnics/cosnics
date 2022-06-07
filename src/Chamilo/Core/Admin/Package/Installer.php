@@ -8,7 +8,7 @@ use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocation;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -35,7 +35,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         {
             $this->add_message(
                 self::TYPE_NORMAL, Translation::get(
-                'ObjectsAdded', array('OBJECTS' => Translation::get('DefaultSettings')), Utilities::COMMON_LIBRARIES
+                'ObjectsAdded', array('OBJECTS' => Translation::get('DefaultSettings')), StringUtilities::LIBRARIES
             )
             );
         }
@@ -50,7 +50,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         {
             $this->add_message(
                 self::TYPE_NORMAL, Translation::get(
-                'ObjectCreated', array('OBJECT' => Translation::get('RightsTree')), Utilities::COMMON_LIBRARIES
+                'ObjectCreated', array('OBJECT' => Translation::get('RightsTree')), StringUtilities::LIBRARIES
             )
             );
         }

@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Component\Cal
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\Type\ContentObjectPublicationDetailsRenderer;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -22,11 +22,11 @@ class CalendarDetailsRenderer extends ContentObjectPublicationDetailsRenderer
         $event = $publication->get_content_object();
         $html[] = '<em>';
         // TODO: date formatting
-        $html[] = htmlentities(Translation::get('From', null, Utilities::COMMON_LIBRARIES)) . ': ' .
+        $html[] = htmlentities(Translation::get('From', null, StringUtilities::LIBRARIES)) . ': ' .
              date('r', $event->get_start_date());
         $html[] = '<br />';
         // TODO: date formatting
-        $html[] = htmlentities(Translation::get('To', null, Utilities::COMMON_LIBRARIES)) . ': ' .
+        $html[] = htmlentities(Translation::get('To', null, StringUtilities::LIBRARIES)) . ': ' .
              date('r', $event->get_end_date());
         $html[] = '</em>';
         $html[] = '<br />';

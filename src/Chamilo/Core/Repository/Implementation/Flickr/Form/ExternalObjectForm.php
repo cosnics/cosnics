@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ExternalObjectForm extends FormValidator
 {
@@ -70,11 +70,11 @@ class ExternalObjectForm extends FormValidator
     public function build_basic_form()
     {
         $this->addElement(
-            'text', ExternalObject::PROPERTY_TITLE, Translation::get('Title', null, Utilities::COMMON_LIBRARIES),
+            'text', ExternalObject::PROPERTY_TITLE, Translation::get('Title', null, StringUtilities::LIBRARIES),
             array('size' => '50')
         );
         $this->addRule(
-            ExternalObject::PROPERTY_TITLE, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            ExternalObject::PROPERTY_TITLE, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
@@ -84,7 +84,7 @@ class ExternalObjectForm extends FormValidator
 
         $this->addElement(
             'textarea', ExternalObject::PROPERTY_DESCRIPTION,
-            Translation::get('Description', null, Utilities::COMMON_LIBRARIES), array('rows' => '7', 'cols' => '80')
+            Translation::get('Description', null, StringUtilities::LIBRARIES), array('rows' => '7', 'cols' => '80')
         );
     }
 
@@ -97,11 +97,11 @@ class ExternalObjectForm extends FormValidator
         $this->addElement('hidden', ExternalObject::PROPERTY_ID);
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Edit', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -136,10 +136,10 @@ class ExternalObjectForm extends FormValidator
         $this->addElement('file', self::FILE, Translation::get('FileName'));
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+            'style_submit_button', 'submit', Translation::get('Create', null, StringUtilities::LIBRARIES)
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

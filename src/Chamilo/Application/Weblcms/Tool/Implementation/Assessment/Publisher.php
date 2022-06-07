@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Modified version of the default Publisher to allow for the feedback-functionality
@@ -138,7 +138,7 @@ class Publisher
 
             $html[] = '<div class="panel-heading">';
             $html[] = '<h3 class="panel-title">';
-            $html[] = Translation::get('SelectedContentObjects', null, Utilities::COMMON_LIBRARIES);
+            $html[] = Translation::get('SelectedContentObjects', null, StringUtilities::LIBRARIES);
             $html[] = '</h3>';
             $html[] = '</div>';
 

@@ -17,7 +17,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
 
 /**
@@ -92,10 +92,10 @@ class InstanceForm extends FormValidator
         $this->build_basic_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+            'style_submit_button', 'submit', Translation::get('Create', null, StringUtilities::LIBRARIES)
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -108,11 +108,11 @@ class InstanceForm extends FormValidator
         $this->addElement('hidden', Instance::PROPERTY_ID);
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Update', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -130,11 +130,11 @@ class InstanceForm extends FormValidator
             array("size" => "50")
         );
         $this->addRule(
-            Instance::PROPERTY_TITLE, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Instance::PROPERTY_TITLE, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
         $this->addElement(
-            'checkbox', Instance::PROPERTY_ENABLED, Translation::get('Enabled', null, Utilities::COMMON_LIBRARIES)
+            'checkbox', Instance::PROPERTY_ENABLED, Translation::get('Enabled', null, StringUtilities::LIBRARIES)
         );
 
         if ($this->application->get_user()->is_platform_admin())

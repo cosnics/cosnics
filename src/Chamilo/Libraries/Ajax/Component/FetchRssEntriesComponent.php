@@ -5,7 +5,7 @@ use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\File\Rss\Parser\RssFeedParserFactory;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 
@@ -35,7 +35,7 @@ class FetchRssEntriesComponent extends Manager implements NoAuthenticationSuppor
         $purifier_config = HTMLPurifier_Config::createDefault();
         $purifier_config->set(
             'Cache.SerializerPath',
-            $this->getConfigurablePathBuilder()->getCachePath(Utilities::COMMON_LIBRARIES . '\Rss')
+            $this->getConfigurablePathBuilder()->getCachePath(StringUtilities::LIBRARIES . '\Rss')
         );
         $purifier_config->set('Cache.SerializerPermissions', 06770);
 

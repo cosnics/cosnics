@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocation;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -30,7 +30,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         {
             $this->add_message(
                 self::TYPE_NORMAL, Translation::get(
-                'ObjectCreated', array('OBJECT' => Translation::get('RightsTree')), Utilities::COMMON_LIBRARIES
+                'ObjectCreated', array('OBJECT' => Translation::get('RightsTree')), StringUtilities::LIBRARIES
             )
             );
         }

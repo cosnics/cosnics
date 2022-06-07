@@ -1,7 +1,7 @@
 <?php
 
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -36,7 +36,7 @@ class HTML_QuickForm_stylefile extends HTML_QuickForm_file
             $html[] = $glyph->render();
             $html[] = ' ';
             $html[] = Chamilo\Libraries\Translation\Translation::getInstance()->getTranslation(
-                'ChooseFileInputLabel', [], Utilities::COMMON_LIBRARIES
+                'ChooseFileInputLabel', [], StringUtilities::LIBRARIES
             );
             $html[] = ' ';
 

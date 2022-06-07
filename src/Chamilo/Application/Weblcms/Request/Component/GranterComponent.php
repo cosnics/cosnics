@@ -14,7 +14,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 class GranterComponent extends Manager
@@ -146,7 +146,7 @@ class GranterComponent extends Manager
             }
             
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), (bool) $failures,
+                Translation::get($message, $parameter, StringUtilities::LIBRARIES), (bool) $failures,
                 array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
@@ -156,7 +156,7 @@ class GranterComponent extends Manager
                     Translation::get(
                         'NoObjectSelected', 
                         array('OBJECT' => Translation::get('Request')), 
-                        Utilities::COMMON_LIBRARIES)));
+                        StringUtilities::LIBRARIES)));
         }
     }
 

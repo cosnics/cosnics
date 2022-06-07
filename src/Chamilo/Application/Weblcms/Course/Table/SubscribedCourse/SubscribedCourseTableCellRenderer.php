@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class describes the default cell renderer for the subscribed course table
@@ -47,7 +47,7 @@ class SubscribedCourseTableCellRenderer extends CourseTableCellRenderer
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Unsubscribe', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('Unsubscribe', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('minus-square'),
                     $this->get_component()->get_unsubscribe_from_course_url($course[Course::PROPERTY_ID]),
                     ToolbarItem::DISPLAY_ICON

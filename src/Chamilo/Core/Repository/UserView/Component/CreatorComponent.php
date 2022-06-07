@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\UserView\Form\UserViewForm;
 use Chamilo\Core\Repository\UserView\Manager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -33,10 +33,10 @@ class CreatorComponent extends Manager
             $message = $success ? Translation::get(
                 'ObjectCreated', 
                 array('OBJECT' => Translation::get('UserView')), 
-                Utilities::COMMON_LIBRARIES) : Translation::get(
+                StringUtilities::LIBRARIES) : Translation::get(
                 'ObjectNotCreated', 
                 array('OBJECT' => Translation::get('UserView')), 
-                Utilities::COMMON_LIBRARIES);
+                StringUtilities::LIBRARIES);
             
             if (! $success)
             {

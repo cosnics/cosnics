@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -96,10 +96,10 @@ class EditorComponent extends Manager implements DelegateComponent
 
                     $message = $success ? Translation::get(
                         'ObjectUpdated', array('OBJECT' => Translation::get('PersonalCalendar')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     ) : Translation::get(
                         'ObjectNotUpdated', array('OBJECT' => Translation::get('PersonalCalendar')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     );
 
                     $this->redirect(
@@ -134,7 +134,7 @@ class EditorComponent extends Manager implements DelegateComponent
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectsSelected', null, Utilities::COMMON_LIBRARIES))
+                htmlentities(Translation::get('NoObjectsSelected', null, StringUtilities::LIBRARIES))
             );
         }
     }

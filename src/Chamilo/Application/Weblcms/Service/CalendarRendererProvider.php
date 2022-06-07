@@ -14,7 +14,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -100,7 +100,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         if ($event->getContext() == \Chamilo\Application\Weblcms\Manager::package())
         {
             $actions[] = new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->getRenderer()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_UPDATE_PUBLICATION,
@@ -110,7 +110,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
             );
 
             $actions[] = new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->getRenderer()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_DELETE,

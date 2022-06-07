@@ -22,7 +22,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
 
 /**
@@ -93,7 +93,7 @@ class UserDetailComponent extends Manager
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected', array('OBJECT' => Translation::get('User')), Utilities::COMMON_LIBRARIES
+                        'NoObjectSelected', array('OBJECT' => Translation::get('User')), StringUtilities::LIBRARIES
                     )
                 )
             );
@@ -240,14 +240,14 @@ class UserDetailComponent extends Manager
         switch ($attribute)
         {
             case User::PROPERTY_ACTIVE :
-                return $value ? Translation::get('ConfirmTrue', null, Utilities::COMMON_LIBRARIES) : Translation::get(
-                    'ConfirmFalse', null, Utilities::COMMON_LIBRARIES
+                return $value ? Translation::get('ConfirmTrue', null, StringUtilities::LIBRARIES) : Translation::get(
+                    'ConfirmFalse', null, StringUtilities::LIBRARIES
                 );
             case User::PROPERTY_ACTIVATION_DATE :
             case User::PROPERTY_EXPIRATION_DATE :
-                return $value == 0 ? Translation::get('Forever') : DatetimeUtilities::format_locale_date(null, $value);
+                return $value == 0 ? Translation::get('Forever') : DatetimeUtilities::getInstance()->formatLocaleDate(null, $value);
             case User:: PROPERTY_REGISTRATION_DATE :
-                return DatetimeUtilities::format_locale_date(null, $value);
+                return DatetimeUtilities::getInstance()->formatLocaleDate(null, $value);
             default :
                 return $value;
         }
@@ -263,14 +263,14 @@ class UserDetailComponent extends Manager
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                    Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_user_editing_url($user), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_user_delete_url($user), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );

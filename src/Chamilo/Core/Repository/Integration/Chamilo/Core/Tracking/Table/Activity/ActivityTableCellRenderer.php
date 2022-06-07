@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Table cell renderer for the schema
@@ -34,9 +34,9 @@ class ActivityTableCellRenderer extends DataClassTableCellRenderer
                 return $result->get_type_string();
                 break;
             case Activity::PROPERTY_DATE :
-                $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+                $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
-                return DatetimeUtilities::format_locale_date($date_format, $result->get_date());
+                return DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $result->get_date());
                 break;
             case ActivityTableColumnModel::PROPERTY_USER :
                 return $result->get_user()->get_fullname();

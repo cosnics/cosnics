@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -40,7 +40,7 @@ class CreatorComponent extends TabComponent
                 $message = Translation::get(
                     $translation, 
                     array('OBJECT' => Translation::get('Workspace')), 
-                    Utilities::COMMON_LIBRARIES);
+                    StringUtilities::LIBRARIES);
                 
                 if (! $success)
                 {

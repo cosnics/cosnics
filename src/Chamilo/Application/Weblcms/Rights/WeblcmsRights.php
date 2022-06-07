@@ -16,7 +16,7 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -178,7 +178,7 @@ class WeblcmsRights extends RightsUtil
         // "everybody"
         if (array_key_exists(0, $entities[0]))
         {
-            $target_list[] = Translation::get('Everybody', null, Utilities::COMMON_LIBRARIES);
+            $target_list[] = Translation::get('Everybody', null, StringUtilities::LIBRARIES);
         }
         else
         {
@@ -222,7 +222,7 @@ class WeblcmsRights extends RightsUtil
                         break;
 
                     case 0 :
-                        $target_list[] = '<option>' . Translation::get('Everybody', null, Utilities::COMMON_LIBRARIES) .
+                        $target_list[] = '<option>' . Translation::get('Everybody', null, StringUtilities::LIBRARIES) .
                              '</option>';
                         break;
                 }

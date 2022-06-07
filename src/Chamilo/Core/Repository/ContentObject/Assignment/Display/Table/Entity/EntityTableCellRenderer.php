@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -45,8 +45,8 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
      */
     protected function formatDate($date)
     {
-        $formatted_date = DatetimeUtilities::format_locale_date(
-            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), $date
+        $formatted_date = DatetimeUtilities::getInstance()->formatLocaleDate(
+            Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES), $date
         );
 
         if ($this->getAssignmentDataProvider()->isDateAfterAssignmentEndTime($date))

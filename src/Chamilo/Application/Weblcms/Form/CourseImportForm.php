@@ -15,7 +15,7 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -46,9 +46,9 @@ class CourseImportForm extends FormValidator
     {
         $this->addElement('file', 'file', Translation::get('FileName'));
         // $this->addElement('submit', 'course_import', Translation::get('Ok',
-        // null ,Utilities:: COMMON_LIBRARIES));
+        // null ,StringUtilities::LIBRARIES));
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Import', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Import', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('import')
         );
 
@@ -66,7 +66,7 @@ class CourseImportForm extends FormValidator
             {
                 $failures ++;
                 $this->failedcsv[] =
-                    Translation::get('Invalid', null, Utilities::COMMON_LIBRARIES) . ': ' . implode($csvcourse, ';');
+                    Translation::get('Invalid', null, StringUtilities::LIBRARIES) . ': ' . implode($csvcourse, ';');
             }
         }
 

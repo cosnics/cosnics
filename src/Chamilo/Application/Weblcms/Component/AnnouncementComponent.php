@@ -180,7 +180,7 @@ class AnnouncementComponent extends Manager
 
             $row = [];
 
-            $row[] = DatetimeUtilities::format_locale_date(
+            $row[] = DatetimeUtilities::getInstance()->formatLocaleDate(
                 null, $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE]
             );
             $row[] = $this->get_course_by_id($course_id)->get_title();

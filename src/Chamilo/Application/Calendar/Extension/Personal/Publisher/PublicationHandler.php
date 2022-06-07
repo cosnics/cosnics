@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerI
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * The publication handler for the personal calendar extension
@@ -102,7 +102,7 @@ class PublicationHandler implements PublicationHandlerInterface
             $message = $translator->getTranslation(
                 'ObjectNotPublished',
                 array('OBJECT' => $translator->getTranslation('PersonalCalendar', null, Manager::context())),
-                Utilities::COMMON_LIBRARIES
+                StringUtilities::LIBRARIES
             );
         }
         else
@@ -110,7 +110,7 @@ class PublicationHandler implements PublicationHandlerInterface
             $message = $translator->getTranslation(
                 'ObjectPublished',
                 array('OBJECT' => $translator->getTranslation('PersonalCalendar', null, Manager::context())),
-                Utilities::COMMON_LIBRARIES
+                StringUtilities::LIBRARIES
             );
         }
 

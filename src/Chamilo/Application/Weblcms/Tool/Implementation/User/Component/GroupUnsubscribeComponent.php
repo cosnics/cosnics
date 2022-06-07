@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -105,7 +105,7 @@ class GroupUnsubscribeComponent extends Manager
                         Translation::get(
                             'NoObjectsSelected',
                             array('OBJECT' => Translation::get('Group')),
-                            Utilities::COMMON_LIBRARIES)));
+                            StringUtilities::LIBRARIES)));
             }
         }
         else
@@ -115,7 +115,7 @@ class GroupUnsubscribeComponent extends Manager
                     Translation::get(
                         'NoObjectSelected',
                         array('OBJECT' => Translation::get('Course')),
-                        Utilities::COMMON_LIBRARIES)));
+                        StringUtilities::LIBRARIES)));
         }
     }
 }

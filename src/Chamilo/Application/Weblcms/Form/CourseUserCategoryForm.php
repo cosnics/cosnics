@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class CourseUserCategoryForm extends FormValidator
 {
@@ -60,12 +60,12 @@ class CourseUserCategoryForm extends FormValidator
     public function build_basic_form()
     {
         $this->add_textfield(
-            CourseUserCategory::PROPERTY_TITLE, Translation::get('Title', null, Utilities::COMMON_LIBRARIES), true,
+            CourseUserCategory::PROPERTY_TITLE, Translation::get('Title', null, StringUtilities::LIBRARIES), true,
             array("maxlength" => 50, "size" => 50)
         );
         $this->addRule(
             CourseUserCategory::PROPERTY_TITLE,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
 
         $types = new AdvancedElementFinderElementTypes();
@@ -86,10 +86,10 @@ class CourseUserCategoryForm extends FormValidator
         $this->build_basic_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+            'style_submit_button', 'submit', Translation::get('Create', null, StringUtilities::LIBRARIES)
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -102,11 +102,11 @@ class CourseUserCategoryForm extends FormValidator
         $this->addElement('hidden', CourseUserCategory::PROPERTY_ID);
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Update', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

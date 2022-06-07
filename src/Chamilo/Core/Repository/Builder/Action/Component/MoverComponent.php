@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -85,10 +85,10 @@ class MoverComponent extends Manager
                 $succes ? Translation::get(
                     'ObjectsMoved',
                     array('OBJECTS' => Translation::get('ComplexContentObjectItems')),
-                    Utilities::COMMON_LIBRARIES) : Translation::get(
+                    StringUtilities::LIBRARIES) : Translation::get(
                     'ObjectsNotMoved',
                     array('OBJECTS' => Translation::get('ComplexContentObjectItems')),
-                    Utilities::COMMON_LIBRARIES),
+                    StringUtilities::LIBRARIES),
                 false,
                 array(
                     \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE,
@@ -101,7 +101,7 @@ class MoverComponent extends Manager
                     Translation::get(
                         'NoObjectsSelected',
                         array('OBJECTS' => Translation::get('ContentObjectItems')),
-                        Utilities::COMMON_LIBRARIES)));
+                        StringUtilities::LIBRARIES)));
         }
     }
 }

@@ -8,7 +8,7 @@ use Chamilo\Core\Metadata\Vocabulary\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -75,7 +75,7 @@ class CreatorComponent extends Manager
                 $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
 
                 $message = Translation::get(
-                    $translation, array('OBJECT' => Translation::get('Vocabulary')), Utilities::COMMON_LIBRARIES
+                    $translation, array('OBJECT' => Translation::get('Vocabulary')), StringUtilities::LIBRARIES
                 );
             }
             catch (Exception $ex)

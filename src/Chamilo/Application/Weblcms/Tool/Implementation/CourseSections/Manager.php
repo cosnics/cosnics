@@ -36,7 +36,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         $breadcrumbTrail->add(
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS)),
-                Translation::getInstance()->getTranslation('ViewerComponent', [], $this->context())
+                Translation::getInstance()->getTranslation('ViewerComponent', [], __NAMESPACE__)
             )
         );
     }

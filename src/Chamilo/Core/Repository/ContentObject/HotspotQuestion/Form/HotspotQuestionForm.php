@@ -19,7 +19,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -274,7 +274,7 @@ class HotspotQuestionForm extends ContentObjectForm
                     'option_' . $option_number, array(
                         "option_weight[$option_number]" => array(
                             array(
-                                Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+                                Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES),
                                 'numeric'
                             )
                         )

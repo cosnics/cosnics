@@ -15,7 +15,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 class CreatorComponent extends Manager
@@ -102,7 +102,7 @@ class CreatorComponent extends Manager
             $this->redirect(
                 Translation::get(
                     $success ? 'ObjectCreated' : 'ObjectNotCreated', array('OBJECT' => Translation::get('Request')),
-                    Utilities::COMMON_LIBRARIES
+                    StringUtilities::LIBRARIES
                 ), !$success, $parameters
             );
         }

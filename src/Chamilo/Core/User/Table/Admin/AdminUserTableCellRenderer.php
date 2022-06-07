@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRe
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Cell renderer for the user object browser table
@@ -35,7 +35,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                    Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_component()->get_user_editing_url($user), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -90,7 +90,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
             {
                 $toolbar->add_item(
                     new ToolBarItem(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $this->get_component()->get_user_delete_url($user), ToolbarItem::DISPLAY_ICON, true
                     )
                 );
@@ -99,7 +99,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
             {
                 $toolbar->add_item(
                     new ToolBarItem(
-                        Translation::get('DeleteNA', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('DeleteNA', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('times', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -119,7 +119,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
         {
             $toolbar->add_item(
                 new ToolBarItem(
-                    Translation::get('DeleteNA', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('DeleteNA', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('times', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );

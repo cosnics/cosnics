@@ -3,7 +3,7 @@ namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Xml;
 
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Xml;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -30,7 +30,7 @@ class Basic extends Xml
                 $category_array[str_replace(
                     ' ', 
                     '_', 
-                    strtolower(Translation::get('Category', null, Utilities::COMMON_LIBRARIES)))] = $category_name;
+                    strtolower(Translation::get('Category', null, StringUtilities::LIBRARIES)))] = $category_name;
             }
             
             foreach ($data->get_rows() as $row_id => $row_name)

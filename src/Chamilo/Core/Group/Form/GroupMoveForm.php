@@ -6,7 +6,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -36,7 +36,7 @@ class GroupMoveForm extends FormValidator
     {
         $this->addElement('select', self::PROPERTY_LOCATION, Translation::get('NewLocation'), $this->get_groups());
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Move', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Move', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('move')
         );
 

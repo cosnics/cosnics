@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -54,24 +54,24 @@ class GroupForm extends FormValidator
     {
         $this->addElement('text', Group::PROPERTY_NAME, Translation::get('Name'), array("size" => "50"));
         $this->addRule(
-            Group::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            Group::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
 
         $this->addElement('text', Group::PROPERTY_CODE, Translation::get('Code'), array("size" => "50"));
         $this->addRule(
-            Group::PROPERTY_CODE, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            Group::PROPERTY_CODE, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
 
         $this->addElement('select', Group::PROPERTY_PARENT_ID, Translation::get('Location'), $this->get_groups());
         $this->addRule(
-            Group::PROPERTY_PARENT_ID, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Group::PROPERTY_PARENT_ID, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
         // Disk Quota
         $this->addElement('text', Group::PROPERTY_DISK_QUOTA, Translation::get('DiskQuota'), array("size" => "50"));
         $this->addRule(
-            Group::PROPERTY_DISK_QUOTA, Translation::get('ThisFieldMustBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            Group::PROPERTY_DISK_QUOTA, Translation::get('ThisFieldMustBeNumeric', null, StringUtilities::LIBRARIES),
             'numeric'
         );
         // Database Quota
@@ -80,11 +80,11 @@ class GroupForm extends FormValidator
         );
         $this->addRule(
             Group::PROPERTY_DATABASE_QUOTA,
-            Translation::get('ThisFieldMustBeNumeric', null, Utilities::COMMON_LIBRARIES), 'numeric'
+            Translation::get('ThisFieldMustBeNumeric', null, StringUtilities::LIBRARIES), 'numeric'
         );
 
         $this->add_html_editor(
-            Group::PROPERTY_DESCRIPTION, Translation::get('Description', null, Utilities::COMMON_LIBRARIES), false
+            Group::PROPERTY_DESCRIPTION, Translation::get('Description', null, StringUtilities::LIBRARIES), false
         );
     }
 
@@ -98,11 +98,11 @@ class GroupForm extends FormValidator
         $this->addElement('hidden', Group::PROPERTY_ID);
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Update', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -113,10 +113,10 @@ class GroupForm extends FormValidator
         $this->build_basic_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+            'style_submit_button', 'submit', Translation::get('Create', null, StringUtilities::LIBRARIES)
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

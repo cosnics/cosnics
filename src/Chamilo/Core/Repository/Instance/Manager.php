@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -117,7 +117,7 @@ abstract class Manager extends Application
                     \Chamilo\Core\Repository\Manager::PARAM_EXTERNAL_INSTANCE . '=' . $instance->get_id() . '&' .
                     \Chamilo\Core\Repository\External\Manager::PARAM_EMBEDDED . '=1';
                 $title = Translation::get(
-                    'BrowseObject', array('OBJECT' => $instance->get_title()), Utilities::COMMON_LIBRARIES
+                    'BrowseObject', array('OBJECT' => $instance->get_title()), StringUtilities::LIBRARIES
                 );
 
                 $glyph = new FontAwesomeGlyph('upload', [], null, 'fas');

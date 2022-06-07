@@ -17,7 +17,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRe
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -81,7 +81,7 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                    Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
@@ -121,7 +121,7 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_DELETE,
@@ -177,10 +177,10 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
                     return $workspace->getCreator()->get_fullname();
                 }
 
-                return Translation::getInstance()->getTranslation('Unknown', null, Utilities::COMMON_LIBRARIES);
+                return Translation::getInstance()->getTranslation('Unknown', null, StringUtilities::LIBRARIES);
             case Workspace::PROPERTY_CREATION_DATE:
-                return DatetimeUtilities::format_locale_date(
-                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+                return DatetimeUtilities::getInstance()->formatLocaleDate(
+                    Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES),
                     $workspace->getCreationDate()
                 );
             case Workspace::PROPERTY_NAME:

@@ -14,7 +14,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -143,7 +143,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
             $this->redirect(
                 Translation::get(
                     $message, array('OBJECT' => Translation::get('Item'), 'OBJECTS' => Translation::get('Items')),
-                    Utilities::COMMON_LIBRARIES
+                    StringUtilities::LIBRARIES
                 ), (bool) $failures,
                 array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, self::PARAM_CHILD_ID => $nextStep)
             );

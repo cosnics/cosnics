@@ -127,8 +127,8 @@ class TaskForm extends RecurringContentObjectForm
         $task->set_category($values[Task::PROPERTY_CATEGORY]);
         $task->set_priority($values[Task::PROPERTY_PRIORITY]);
 
-        $task->set_start_date(DatetimeUtilities::time_from_datepicker($values[Task::PROPERTY_START_DATE]));
-        $task->set_due_date(DatetimeUtilities::time_from_datepicker($values[Task::PROPERTY_DUE_DATE]));
+        $task->set_start_date(DatetimeUtilities::getInstance()->timeFromDatepicker($values[Task::PROPERTY_START_DATE]));
+        $task->set_due_date(DatetimeUtilities::getInstance()->timeFromDatepicker($values[Task::PROPERTY_DUE_DATE]));
     }
 
     /**

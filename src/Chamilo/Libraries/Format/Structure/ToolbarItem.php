@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Format\Structure;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonRenderer;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -97,7 +97,7 @@ class ToolbarItem
 
         if ($confirmationMessage == null)
         {
-            $this->confirmationMessage = Translation::get('Confirm', null, Utilities::COMMON_LIBRARIES);
+            $this->confirmationMessage = Translation::get('Confirm', null, StringUtilities::LIBRARIES);
         }
         else
         {

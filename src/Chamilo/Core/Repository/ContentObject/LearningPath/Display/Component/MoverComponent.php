@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -75,7 +75,7 @@ class MoverComponent extends BaseHtmlTreeComponent
         {
             throw new UserException(
                 Translation::get(
-                    'NoObjectsToMove', array('OBJECTS' => Translation::get('Steps')), Utilities::COMMON_LIBRARIES
+                    'NoObjectsToMove', array('OBJECTS' => Translation::get('Steps')), StringUtilities::LIBRARIES
                 )
             );
         }
@@ -100,7 +100,7 @@ class MoverComponent extends BaseHtmlTreeComponent
             $attributes = $parent[1] ? 'disabled' : '';
             $parents_element->addOption($parent[0], $key, $attributes);
         }
-        $form->addElement('submit', 'submit', Translation::get('Move', null, Utilities::COMMON_LIBRARIES));
+        $form->addElement('submit', 'submit', Translation::get('Move', null, StringUtilities::LIBRARIES));
 
         if ($form->validate())
         {
@@ -156,7 +156,7 @@ class MoverComponent extends BaseHtmlTreeComponent
             $this->redirect(
                 Translation::get(
                     $failures > 0 ? 'ObjectsNotMoved' : 'ObjectsMoved', array('OBJECTS' => Translation::get('Steps')),
-                    Utilities::COMMON_LIBRARIES
+                    StringUtilities::LIBRARIES
                 ), $failures > 0, $parameters
             );
         }

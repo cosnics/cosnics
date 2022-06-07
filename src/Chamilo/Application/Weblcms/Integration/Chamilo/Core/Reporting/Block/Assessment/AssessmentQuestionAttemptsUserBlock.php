@@ -46,7 +46,7 @@ class AssessmentQuestionAttemptsUserBlock extends AssessmentBlock
             $assessment_attempt = $question_attempt->getOptionalProperty(self::PROPERTY_ASSESSMENT_ATTEMPT);
             
             $date = $assessment_attempt->get_start_time();
-            $date = DatetimeUtilities::format_locale_date(null, $date);
+            $date = DatetimeUtilities::getInstance()->formatLocaleDate(null, $date);
             
             $reporting_data->add_category($counter);
             

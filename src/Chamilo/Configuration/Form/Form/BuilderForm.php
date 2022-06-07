@@ -7,7 +7,7 @@ use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -51,12 +51,12 @@ class BuilderForm extends FormValidator
 
         $this->addElement('text', Element::PROPERTY_NAME, Translation::get('Name'));
         $this->addRule(
-            Element::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Element::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
         $this->addElement(
-            'checkbox', Element::PROPERTY_REQUIRED, Translation::get('Required', null, Utilities::COMMON_LIBRARIES)
+            'checkbox', Element::PROPERTY_REQUIRED, Translation::get('Required', null, StringUtilities::LIBRARIES)
         );
 
         if ($this->element->getType() >= Element::TYPE_RADIO_BUTTONS)
@@ -72,10 +72,10 @@ class BuilderForm extends FormValidator
         $this->build_basic_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+            'style_submit_button', 'submit', Translation::get('Create', null, StringUtilities::LIBRARIES)
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -86,10 +86,10 @@ class BuilderForm extends FormValidator
         $this->build_basic_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES)
+            'style_submit_button', 'submit', Translation::get('Update', null, StringUtilities::LIBRARIES)
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -154,7 +154,7 @@ class BuilderForm extends FormValidator
                 );
                 $this->addRule(
                     'option_' . Option::PROPERTY_NAME . '[' . $option_number . ']',
-                    Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+                    Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
                 );
             }
         }

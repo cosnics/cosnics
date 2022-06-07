@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Format\Menu;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -80,7 +80,7 @@ abstract class BootstrapTreeMenu
         </script>";
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
+            Path::getInstance()->getJavascriptPath(StringUtilities::LIBRARIES, true) .
             'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.js'
         );
 

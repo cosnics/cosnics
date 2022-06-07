@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\External\Action\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ExternalSyncerComponent extends Manager
 {
@@ -29,11 +29,11 @@ class ExternalSyncerComponent extends Manager
                 
                 if ($succes)
                 {
-                    $this->redirect(Translation::get('Succes', null, Utilities::COMMON_LIBRARIES), false, $params);
+                    $this->redirect(Translation::get('Succes', null, StringUtilities::LIBRARIES), false, $params);
                 }
                 else
                 {
-                    $this->redirect(Translation::get('Failed', null, Utilities::COMMON_LIBRARIES), true, $params);
+                    $this->redirect(Translation::get('Failed', null, StringUtilities::LIBRARIES), true, $params);
                 }
             }
         }

@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -105,13 +105,13 @@ class UnlinkerComponent extends Manager
             }
 
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), (bool) $failures,
+                Translation::get($message, $parameter, StringUtilities::LIBRARIES), (bool) $failures,
                 $parameters);
         }
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES)));
+                htmlentities(Translation::get('NoObjectSelected', null, StringUtilities::LIBRARIES)));
         }
     }
 

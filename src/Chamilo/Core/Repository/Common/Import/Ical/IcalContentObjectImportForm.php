@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Common\Import\Ical;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\Form\ContentObjectImportForm;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class IcalContentObjectImportForm extends ContentObjectImportForm
 {
@@ -16,7 +16,7 @@ class IcalContentObjectImportForm extends ContentObjectImportForm
         $this->addElement(
             'file', 
             self::IMPORT_FILE_NAME, 
-            Translation::get('FileName', null, Utilities::COMMON_LIBRARIES), 
+            Translation::get('FileName', null, StringUtilities::LIBRARIES), 
             'accept=".ics"');
     }
 

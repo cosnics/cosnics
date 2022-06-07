@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -43,10 +43,10 @@ class MoverComponent extends Manager
             $message = $success ? Translation::get(
                 'ObjectMoved',
                 array('OBJECT' => Translation::get('Group')),
-                Utilities::COMMON_LIBRARIES) : Translation::get(
+                StringUtilities::LIBRARIES) : Translation::get(
                 'ObjectNotMoved',
                 array('OBJECT' => Translation::get('Group')),
-                Utilities::COMMON_LIBRARIES);
+                StringUtilities::LIBRARIES);
             $this->redirect(
                 $message, !$success || false,
                 array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS, self::PARAM_GROUP_ID => $parent));

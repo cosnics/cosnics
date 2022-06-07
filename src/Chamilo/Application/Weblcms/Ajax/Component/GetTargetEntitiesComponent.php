@@ -11,7 +11,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Returns the entities that have a given right on a given publication, publication category or tool
@@ -97,7 +97,7 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
             $targetEntityNames[self::TARGET_ENTITY_EVERYONE] = $translator->getTranslation(
                 'Everybody', 
                 null, 
-                Utilities::COMMON_LIBRARIES);
+                StringUtilities::LIBRARIES);
         }
         else
         {
@@ -142,7 +142,7 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
                         $targetEntityNames[self::TARGET_ENTITY_EVERYONE] = Translation::get(
                             'Everybody', 
                             null, 
-                            Utilities::COMMON_LIBRARIES);
+                            StringUtilities::LIBRARIES);
                         break;
                 }
             }

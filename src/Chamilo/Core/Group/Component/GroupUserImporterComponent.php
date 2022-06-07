@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -63,8 +63,8 @@ class GroupUserImporterComponent extends Manager
         $html[] = '<p>' . Translation::get('Details') . '</p>';
         $html[] = '<blockquote>';
         $html[] = '<u><b>' . Translation::get('Action') . '</u></b>';
-        $html[] = '<br />A: ' . Translation::get('Add', null, Utilities::COMMON_LIBRARIES);
-        $html[] = '<br />D: ' . Translation::get('Delete', null, Utilities::COMMON_LIBRARIES);
+        $html[] = '<br />A: ' . Translation::get('Add', null, StringUtilities::LIBRARIES);
+        $html[] = '<br />D: ' . Translation::get('Delete', null, StringUtilities::LIBRARIES);
         $html[] = '</blockquote>';
 
         return implode(PHP_EOL, $html);

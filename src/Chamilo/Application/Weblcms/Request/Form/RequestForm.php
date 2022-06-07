@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class RequestForm extends FormValidator
 {
@@ -47,26 +47,26 @@ class RequestForm extends FormValidator
         );
         $this->addRule(
             Request::PROPERTY_COURSE_TYPE_ID,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
 
         $this->addElement(
             'select', Request::PROPERTY_CATEGORY_ID, Translation::get('CategoryId'), $this->get_course_categories()
         );
         $this->addRule(
-            Request::PROPERTY_CATEGORY_ID, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Request::PROPERTY_CATEGORY_ID, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
         $this->addElement('text', Request::PROPERTY_NAME, Translation::get('Name'));
         $this->addRule(
-            Request::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Request::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
         $this->addElement('text', Request::PROPERTY_SUBJECT, Translation::get('Subject'));
         $this->addRule(
-            Request::PROPERTY_SUBJECT, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Request::PROPERTY_SUBJECT, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
@@ -74,7 +74,7 @@ class RequestForm extends FormValidator
             'textarea', Request::PROPERTY_MOTIVATION, Translation::get('Motivation'), array("cols" => 50, "rows" => 6)
         );
         $this->addRule(
-            Request::PROPERTY_MOTIVATION, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Request::PROPERTY_MOTIVATION, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
@@ -86,24 +86,24 @@ class RequestForm extends FormValidator
             );
             $this->addRule(
                 Request::PROPERTY_DECISION_MOTIVATION,
-                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+                Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
             );
 
             $buttons[] = $this->createElement(
-                'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null,
+                'style_submit_button', 'submit', Translation::get('Update', null, StringUtilities::LIBRARIES), null,
                 null, new FontAwesomeGlyph('arrow-right')
             );
         }
         else
         {
             $buttons[] = $this->createElement(
-                'style_submit_button', 'submit', Translation::get('Send', null, Utilities::COMMON_LIBRARIES), null,
+                'style_submit_button', 'submit', Translation::get('Send', null, StringUtilities::LIBRARIES), null,
                 null, new FontAwesomeGlyph('envelope')
             );
         }
 
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

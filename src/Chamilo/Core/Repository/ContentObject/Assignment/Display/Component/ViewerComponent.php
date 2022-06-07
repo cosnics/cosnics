@@ -19,7 +19,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -118,12 +118,12 @@ class ViewerComponent extends Manager implements TableSupport
         /** @var Assignment $assignment */
         $assignment = $this->get_root_content_object();
 
-        $startTime = DatetimeUtilities::format_locale_date(
-            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), $assignment->get_start_time()
+        $startTime = DatetimeUtilities::getInstance()->formatLocaleDate(
+            Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES), $assignment->get_start_time()
         );
 
-        $endTime = DatetimeUtilities::format_locale_date(
-            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), $assignment->get_end_time()
+        $endTime = DatetimeUtilities::getInstance()->formatLocaleDate(
+            Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES), $assignment->get_end_time()
         );
 
         $notificationsUrl = $this->get_url(

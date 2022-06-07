@@ -27,7 +27,7 @@ use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class SubscriptionsOverviewerComponent extends Manager implements TableSupport
 {
@@ -115,7 +115,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Export', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('download'),
+                        Translation::get('Export', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('download'),
                         $this->get_url($param_export_subscriptions_overview), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );

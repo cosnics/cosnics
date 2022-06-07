@@ -29,7 +29,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -390,7 +390,7 @@ class SorterComponent extends Manager
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-up'),
+                        Translation::get('MoveUp', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-up'),
                         $this->get_course_user_move_url($course_type_user_category, $course, 'up'),
                         ToolbarItem::DISPLAY_ICON
                     )
@@ -400,7 +400,7 @@ class SorterComponent extends Manager
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('MoveUpNA', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('MoveUpNA', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('sort-up', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -410,7 +410,7 @@ class SorterComponent extends Manager
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('MoveDown', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('sort-down'),
                         $this->get_course_user_move_url($course_type_user_category, $course, 'down'),
                         ToolbarItem::DISPLAY_ICON
@@ -421,7 +421,7 @@ class SorterComponent extends Manager
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('MoveDownNA', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('MoveDownNA', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('sort-down', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -429,7 +429,7 @@ class SorterComponent extends Manager
         }
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Move', null, Utilities::COMMON_LIBRARIES),
+                Translation::get('Move', null, StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('window-restore', array('fa-flip-horizontal'), null, 'fas'),
                 $this->get_course_user_edit_url($course_type_user_category, $course), ToolbarItem::DISPLAY_ICON
             )
@@ -451,7 +451,7 @@ class SorterComponent extends Manager
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-up'),
+                    Translation::get('MoveUp', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-up'),
                     $this->get_course_user_category_move_url($course_type_user_category, 'up'),
                     ToolbarItem::DISPLAY_ICON
                 )
@@ -461,7 +461,7 @@ class SorterComponent extends Manager
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveUpNA', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('MoveUpNA', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('sort-up', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -471,7 +471,7 @@ class SorterComponent extends Manager
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-down'),
+                    Translation::get('MoveDown', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-down'),
                     $this->get_course_user_category_move_url($course_type_user_category, 'down'),
                     ToolbarItem::DISPLAY_ICON
                 )
@@ -481,7 +481,7 @@ class SorterComponent extends Manager
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveDownNA', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('MoveDownNA', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('sort-down', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -489,14 +489,14 @@ class SorterComponent extends Manager
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_course_user_category_edit_url($course_type_user_category), ToolbarItem::DISPLAY_ICON
             )
         );
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->get_course_user_category_delete_url($course_type_user_category), ToolbarItem::DISPLAY_ICON, true
             )
         );

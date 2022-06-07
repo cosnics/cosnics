@@ -40,7 +40,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class describes a form for the course object
@@ -111,11 +111,11 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $buttons = [];
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Save', [], Utilities::COMMON_LIBRARIES)
+            'style_submit_button', 'submit', Translation::get('Save', [], StringUtilities::LIBRARIES)
         );
 
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', [], Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', [], StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

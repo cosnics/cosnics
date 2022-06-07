@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -59,7 +59,7 @@ class AttachmentViewerComponent extends Manager
             else
             {
                 $html[] = $this->render_header();
-                $html[] = $this->display_error_message('WhatsUpDoc', null, Utilities::COMMON_LIBRARIES);
+                $html[] = $this->display_error_message('WhatsUpDoc', null, StringUtilities::LIBRARIES);
                 $html[] = $this->render_footer();
             }
 
@@ -70,7 +70,7 @@ class AttachmentViewerComponent extends Manager
             $html = [];
 
             $html[] = $this->render_header();
-            $html[] = $this->display_error_message('NoObjectSelected', null, Utilities::COMMON_LIBRARIES);
+            $html[] = $this->display_error_message('NoObjectSelected', null, StringUtilities::LIBRARIES);
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);

@@ -24,7 +24,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -108,7 +108,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                     $this->redirect(
                         Translation::get(
                             'ObjectNotCreated', array('OBJECT' => Translation::get('ContentObject')),
-                            Utilities::COMMON_LIBRARIES
+                            StringUtilities::LIBRARIES
                         ), true, array(self::PARAM_ACTION => self::ACTION_CREATE_CONTENT_OBJECTS, 'type' => $this->type)
                     );
                 }
@@ -160,7 +160,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                 $this->redirect(
                     Translation::get(
                         'ObjectCreated', array('OBJECT' => Translation::get('TypeName', null, $typeContext)),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     ), false, $parameters
                 );
             }

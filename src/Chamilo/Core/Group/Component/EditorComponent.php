@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -52,10 +52,10 @@ class EditorComponent extends Manager
                 $message = $success ? Translation::get(
                     'ObjectUpdated',
                     array('OBJECT' => Translation::get('Group')),
-                    Utilities::COMMON_LIBRARIES) : Translation::get(
+                    StringUtilities::LIBRARIES) : Translation::get(
                     'ObjectNotUpdated',
                     array('OBJECT' => Translation::get('Group')),
-                    Utilities::COMMON_LIBRARIES);
+                    StringUtilities::LIBRARIES);
 
                 $this->redirect(
                     $message, !$success,
@@ -77,7 +77,7 @@ class EditorComponent extends Manager
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES)));
+                htmlentities(Translation::get('NoObjectSelected', null, StringUtilities::LIBRARIES)));
         }
     }
 

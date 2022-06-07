@@ -4,7 +4,7 @@ namespace Chamilo\Core\Menu\Form\Item;
 use Chamilo\Core\Menu\Form\ItemForm;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\LinkItem;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -31,7 +31,7 @@ class LinkItemForm extends ItemForm
         );
         $this->addRule(
             LinkItem::PROPERTY_TARGET,
-            $this->getTranslator()->trans('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
+            $this->getTranslator()->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
         );
     }
 

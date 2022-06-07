@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Ajax\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseModule;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -49,7 +49,7 @@ class BlockSortComponent extends Manager
         $json_result['message'] = Translation::get(
             'ObjectAdded', 
             array('OBJECT' => Translation::get('Block')), 
-            Utilities::COMMON_LIBRARIES);
+            StringUtilities::LIBRARIES);
         
         // Return a JSON object
         echo json_encode($json_result);

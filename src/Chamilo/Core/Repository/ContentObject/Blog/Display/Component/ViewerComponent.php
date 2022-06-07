@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -53,7 +53,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('CreateItem', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
+                        Translation::get('CreateItem', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,

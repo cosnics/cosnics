@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Format\Table\FormAction;
 
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class represents a table form action
@@ -63,7 +63,7 @@ class TableFormAction
         if ($this->get_confirm())
         {
             $confirmation = $this->getConfirmationMessage() ?: Translation::get(
-                'ConfirmYourSelectionAndAction', null, Utilities::COMMON_LIBRARIES
+                'ConfirmYourSelectionAndAction', null, StringUtilities::LIBRARIES
             );
         }
 

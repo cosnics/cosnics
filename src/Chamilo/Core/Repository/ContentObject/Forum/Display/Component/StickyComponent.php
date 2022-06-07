@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -33,7 +33,7 @@ class StickyComponent extends Manager
             $message = Translation::get(
                 'ObjectNotUpdated',
                 array('OBJECT' => Translation::get('ForumTopic')),
-                Utilities::COMMON_LIBRARIES);
+                StringUtilities::LIBRARIES);
         }
 
         $params = [];

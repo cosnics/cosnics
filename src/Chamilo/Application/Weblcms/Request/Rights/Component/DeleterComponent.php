@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Request\Rights\Storage\DataClass\RightsLocationE
 use Chamilo\Application\Weblcms\Request\Rights\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class DeleterComponent extends Manager
 {
@@ -73,7 +73,7 @@ class DeleterComponent extends Manager
             }
             
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), (bool) $failures,
+                Translation::get($message, $parameter, StringUtilities::LIBRARIES), (bool) $failures,
                 array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE));
         }
         else
@@ -83,7 +83,7 @@ class DeleterComponent extends Manager
                     Translation::get(
                         'NoObjectSelected', 
                         array('OBJECT' => Translation::get('RightsLocationEntityRightGroup')), 
-                        Utilities::COMMON_LIBRARIES)));
+                        StringUtilities::LIBRARIES)));
         }
     }
 }

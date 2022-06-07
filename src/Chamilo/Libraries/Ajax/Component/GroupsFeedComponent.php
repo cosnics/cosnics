@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Feed to return the course groups of this course
@@ -82,8 +82,8 @@ abstract class GroupsFeedComponent extends Manager
             $translator = $this->getTranslator();
             // Add group category
             $group_category = new AdvancedElementFinderElement(
-                'groups', $glyph->getClassNamesString(), $translator->trans('Groups', [], Utilities::COMMON_LIBRARIES),
-                $translator->trans('Groups', [], Utilities::COMMON_LIBRARIES)
+                'groups', $glyph->getClassNamesString(), $translator->trans('Groups', [], StringUtilities::LIBRARIES),
+                $translator->trans('Groups', [], StringUtilities::LIBRARIES)
             );
             $elements->add_element($group_category);
 

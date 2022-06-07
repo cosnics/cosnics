@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -92,7 +92,7 @@ class UpdaterComponent extends Manager
                 $message = htmlentities(
                     Translation::get(
                         ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                        array('OBJECT' => Translation::get('ContentObject')), Utilities::COMMON_LIBRARIES
+                        array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
                     )
                 );
 
@@ -116,7 +116,7 @@ class UpdaterComponent extends Manager
                                 \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(
                                 )
                             )
-                        ), Translation::get('Edit', null, Utilities::COMMON_LIBRARIES)
+                        ), Translation::get('Edit', null, StringUtilities::LIBRARIES)
                     )
                 );
 

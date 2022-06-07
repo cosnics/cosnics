@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class UpdaterComponent extends Manager
 {
@@ -37,7 +37,7 @@ class UpdaterComponent extends Manager
                     Translation::get(
                         $success ? 'ObjectUpdated' : 'ObjectNotUpdated', 
                         array('OBJECT' => Translation::get('ExternalInstance')), 
-                        Utilities::COMMON_LIBRARIES), !$success,
+                        StringUtilities::LIBRARIES), !$success,
                     array(self::PARAM_ACTION => self::ACTION_BROWSE));
             }
             else
@@ -57,7 +57,7 @@ class UpdaterComponent extends Manager
                 Translation::get(
                     'NoObjectSelected', 
                     array('OBJECT' => Translation::get('ExternalInstance')), 
-                    Utilities::COMMON_LIBRARIES));
+                    StringUtilities::LIBRARIES));
         }
     }
 

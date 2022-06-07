@@ -7,7 +7,7 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -57,7 +57,7 @@ class DeleterComponent extends Manager
         {
             throw new UserException(
                 Translation::get(
-                    'NoObjectsToDelete', array('OBJECTS' => Translation::get('Steps')), Utilities::COMMON_LIBRARIES
+                    'NoObjectsToDelete', array('OBJECTS' => Translation::get('Steps')), StringUtilities::LIBRARIES
                 )
             );
         }
@@ -117,7 +117,7 @@ class DeleterComponent extends Manager
         $this->redirect(
             Translation::get(
                 $failures > 0 ? 'ObjectsNotDeleted' : 'ObjectsDeleted', array('OBJECTS' => Translation::get('Steps')),
-                Utilities::COMMON_LIBRARIES
+                StringUtilities::LIBRARIES
             ), $failures > 0, array(
             self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
             self::PARAM_CHILD_ID => $new_node->getId()

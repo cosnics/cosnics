@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -27,7 +27,7 @@ class CreatorComponent extends Manager
             new Breadcrumb(
                 $this->get_url(
                     array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_CREATE_COURSE_SECTION)),
-                Translation::get('Create', null, Utilities::COMMON_LIBRARIES)));
+                Translation::get('Create', null, StringUtilities::LIBRARIES)));
 
         if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
@@ -54,7 +54,7 @@ class CreatorComponent extends Manager
                     Translation::get(
                         'ObjectCreated',
                         array('OBJECT' => Translation::get('CourseSection')),
-                        Utilities::COMMON_LIBRARIES),
+                        StringUtilities::LIBRARIES),
                     (false),
                     array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS));
             }
@@ -64,7 +64,7 @@ class CreatorComponent extends Manager
                     Translation::get(
                         'ObjectNotCreated',
                         array('OBJECT' => Translation::get('CourseSection')),
-                        Utilities::COMMON_LIBRARIES),
+                        StringUtilities::LIBRARIES),
                     (true),
                     array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS));
             }

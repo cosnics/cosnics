@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -29,7 +29,7 @@ class CategoryTable extends DataClassTable implements TableFormActionsSupport
             $actions->add_form_action(
                 new TableFormAction(
                     $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_IMPACT_VIEW)),
-                    Translation::get('RemoveSelected', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES),
                     false));
         }
         else
@@ -37,7 +37,7 @@ class CategoryTable extends DataClassTable implements TableFormActionsSupport
             $actions->add_form_action(
                 new TableFormAction(
                     $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_CATEGORY)),
-                    Translation::get('RemoveSelected', null, Utilities::COMMON_LIBRARIES)));
+                    Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES)));
         }
 
         if ($this->get_component()->get_subcategories_allowed())
@@ -46,7 +46,7 @@ class CategoryTable extends DataClassTable implements TableFormActionsSupport
                 new TableFormAction(
                     $this->get_component()->get_url(
                         array(Manager::PARAM_ACTION => Manager::ACTION_CHANGE_CATEGORY_PARENT)),
-                    Translation::get('MoveSelected', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('MoveSelected', null, StringUtilities::LIBRARIES),
                     false));
         }
 
@@ -57,7 +57,7 @@ class CategoryTable extends DataClassTable implements TableFormActionsSupport
                 new TableFormAction(
                     $this->get_component()->get_url(
                         array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_CATEGORY_VISIBILITY)),
-                    Translation::get('ToggleVisibility', null, Utilities::COMMON_LIBRARIES)));
+                    Translation::get('ToggleVisibility', null, StringUtilities::LIBRARIES)));
         }
 
         return $actions;

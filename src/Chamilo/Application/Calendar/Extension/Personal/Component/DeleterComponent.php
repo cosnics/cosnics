@@ -7,7 +7,7 @@ use Chamilo\Application\Calendar\Extension\Personal\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -53,14 +53,14 @@ class DeleterComponent extends Manager
                 {
                     $message = Translation::get(
                         'ObjectNotDeleted', array('OBJECT' => Translation::get('Publication')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     );
                 }
                 else
                 {
                     $message = Translation::get(
                         'ObjectsNotDeleted', array('OBJECT' => Translation::get('Publications')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     );
                 }
             }
@@ -69,14 +69,14 @@ class DeleterComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = Translation::get(
-                        'ObjectDeleted', array('OBJECT' => Translation::get('Publication')), Utilities::COMMON_LIBRARIES
+                        'ObjectDeleted', array('OBJECT' => Translation::get('Publication')), StringUtilities::LIBRARIES
                     );
                 }
                 else
                 {
                     $message = Translation::get(
                         'ObjectsDeleted', array('OBJECT' => Translation::get('Publications')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     );
                 }
             }
@@ -92,7 +92,7 @@ class DeleterComponent extends Manager
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectsSelected', null, Utilities::COMMON_LIBRARIES))
+                htmlentities(Translation::get('NoObjectsSelected', null, StringUtilities::LIBRARIES))
             );
         }
     }

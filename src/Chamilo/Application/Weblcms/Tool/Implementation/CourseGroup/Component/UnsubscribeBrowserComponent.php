@@ -23,7 +23,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -118,16 +118,16 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             '<br /><b>' . Translation::get('MaximumMembers') . ':</b> ' . $course_group->get_max_number_of_members();
         $html[] = '<br /><b>' . Translation::get('SelfRegistrationAllowed') . ':</b> ' .
             ($course_group->is_self_registration_allowed() ? Translation::get(
-                'ConfirmYes', null, Utilities::COMMON_LIBRARIES
-            ) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
+                'ConfirmYes', null, StringUtilities::LIBRARIES
+            ) : Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES));
         $html[] = '<br /><b>' . Translation::get('SelfUnRegistrationAllowed') . ':</b> ' .
             ($course_group->is_self_unregistration_allowed() ? Translation::get(
-                'ConfirmYes', null, Utilities::COMMON_LIBRARIES
-            ) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
+                'ConfirmYes', null, StringUtilities::LIBRARIES
+            ) : Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES));
         $html[] = '<br /><b>' . Translation::get('RandomlySubscribed') . ':</b> ' .
             ($course_group->is_random_registration_done() ? Translation::get(
-                'ConfirmYes', null, Utilities::COMMON_LIBRARIES
-            ) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
+                'ConfirmYes', null, StringUtilities::LIBRARIES
+            ) : Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES));
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -174,7 +174,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
+                    Translation::get('ShowAll', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
                     $this->get_url($parameters), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -237,7 +237,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
                 $parameters_export_subscriptions_overview[self::PARAM_COURSE_GROUP] = $course_group->get_id();
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Export', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('download'),
+                        Translation::get('Export', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('download'),
                         $this->get_url($parameters_export_subscriptions_overview), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );

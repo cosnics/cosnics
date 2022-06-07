@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -75,7 +75,7 @@ class UpdaterComponent extends Manager
                 $translation = $success ? 'ObjectUpdated' : 'ObjectNotUpdated';
 
                 $message = Translation::get(
-                    $translation, array('OBJECT' => Translation::get('Schema')), Utilities::COMMON_LIBRARIES
+                    $translation, array('OBJECT' => Translation::get('Schema')), StringUtilities::LIBRARIES
                 );
             }
             catch (Exception $ex)

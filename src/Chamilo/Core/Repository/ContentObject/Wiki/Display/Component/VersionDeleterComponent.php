@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
@@ -45,7 +45,7 @@ class VersionDeleterComponent extends Manager
                         $this->redirect(
                             Translation::get(
                                 'ObjectDeleted', array('OBJECT' => Translation::get('WikiPageVersion')),
-                                Utilities::COMMON_LIBRARIES
+                                StringUtilities::LIBRARIES
                             ), false, array(
                                 self::PARAM_ACTION => self::ACTION_HISTORY,
                                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
@@ -57,7 +57,7 @@ class VersionDeleterComponent extends Manager
                         $this->redirect(
                             Translation::get(
                                 'ObjectNotDeleted', array('OBJECT' => Translation::get('WikiPageVersion')),
-                                Utilities::COMMON_LIBRARIES
+                                StringUtilities::LIBRARIES
                             ), true, array(
                                 self::PARAM_ACTION => self::ACTION_HISTORY,
                                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
@@ -70,7 +70,7 @@ class VersionDeleterComponent extends Manager
                     $this->redirect(
                         Translation::get(
                             'ObjectNotDeleted', array('OBJECT' => Translation::get('WikiPageVersion')),
-                            Utilities::COMMON_LIBRARIES
+                            StringUtilities::LIBRARIES
                         ), true, array(
                             self::PARAM_ACTION => self::ACTION_HISTORY,
                             self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
@@ -83,7 +83,7 @@ class VersionDeleterComponent extends Manager
                 $this->redirect(
                     Translation::get(
                         'ObjectNotDeleted', array('OBJECT' => Translation::get('WikiPageVersion')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     ), true, array(
                         self::PARAM_ACTION => self::ACTION_HISTORY,
                         self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id

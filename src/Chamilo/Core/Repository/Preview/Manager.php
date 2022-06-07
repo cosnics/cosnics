@@ -21,7 +21,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 abstract class Manager extends Application
 {
@@ -196,7 +196,7 @@ abstract class Manager extends Application
 
         if ($translation == 'PreviewModeWarning')
         {
-            $translation = $translator->trans('PreviewModeWarning', [], Utilities::COMMON_LIBRARIES);
+            $translation = $translator->trans('PreviewModeWarning', [], StringUtilities::LIBRARIES);
         }
 
         return $translation;

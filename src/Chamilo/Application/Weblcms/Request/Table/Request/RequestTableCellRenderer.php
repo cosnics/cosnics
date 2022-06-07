@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRe
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class RequestTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -60,7 +60,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_DELETE,
@@ -81,9 +81,9 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             case Translation::get('User') :
                 return $object->get_user()->get_fullname();
             case Request::PROPERTY_CREATION_DATE :
-                return DatetimeUtilities::format_locale_date(null, $object->get_creation_date());
+                return DatetimeUtilities::getInstance()->formatLocaleDate(null, $object->get_creation_date());
             case Request::PROPERTY_DECISION_DATE :
-                return DatetimeUtilities::format_locale_date(null, $object->get_decision_date());
+                return DatetimeUtilities::getInstance()->formatLocaleDate(null, $object->get_decision_date());
             case Request::PROPERTY_DECISION :
                 return $object->get_decision_icon();
             case Request::PROPERTY_CATEGORY_ID :

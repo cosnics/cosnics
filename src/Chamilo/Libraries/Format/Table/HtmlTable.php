@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
 
 /**
@@ -524,7 +524,7 @@ abstract class HtmlTable extends HTML_Table
         $cols = $this->getHeader()->getColCount();
 
         $this->setCellAttributes(0, 0, 'style="font-style: italic;text-align:center;" colspan=' . $cols);
-        $this->setCellContents(0, 0, Translation::get('NoSearchResults', null, Utilities::COMMON_LIBRARIES));
+        $this->setCellContents(0, 0, Translation::get('NoSearchResults', null, StringUtilities::LIBRARIES));
 
         $html = [];
 

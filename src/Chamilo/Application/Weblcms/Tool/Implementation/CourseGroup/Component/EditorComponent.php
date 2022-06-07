@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -63,7 +63,7 @@ class EditorComponent extends TabComponent
                 $message = Translation::get(
                     'ObjectUpdated',
                     array('OBJECT' => Translation::get('CourseGroup')),
-                    Utilities::COMMON_LIBRARIES
+                    StringUtilities::LIBRARIES
                 );
             }
             else
@@ -71,7 +71,7 @@ class EditorComponent extends TabComponent
                 $message = Translation::get(
                         'ObjectNotUpdated',
                         array('OBJECT' => Translation::get('CourseGroup')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     ) . '<br />' . implode('<br />', $course_group->getErrors());
             }
 

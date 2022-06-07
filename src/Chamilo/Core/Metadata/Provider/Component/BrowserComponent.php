@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -86,7 +86,7 @@ class BrowserComponent extends Manager implements TableSupport
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Configure', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('cog'),
+                    Translation::get('Configure', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('cog'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_CONFIGURE))
                 )
             );

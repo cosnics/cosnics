@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -86,7 +86,7 @@ class DeleterComponent extends Manager
             }
 
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES),
+                Translation::get($message, $parameter, StringUtilities::LIBRARIES),
                 $failures > 0,
                 array(
                     \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE,
@@ -100,7 +100,7 @@ class DeleterComponent extends Manager
                     Translation::get(
                         'NoObjectSelected',
                         array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES)));
+                        StringUtilities::LIBRARIES)));
         }
     }
 }

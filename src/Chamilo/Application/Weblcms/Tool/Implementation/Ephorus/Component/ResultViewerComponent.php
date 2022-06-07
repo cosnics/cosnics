@@ -59,7 +59,7 @@ class ResultViewerComponent extends Manager
             $commonActions->addButton(
                 new Button(
                     Translation::get(
-                        'PrintReport', [], ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
+                        'PrintReport', [], $this::context()
                     ), new FontAwesomeGlyph('item'), '#', ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'print_button'
                 )
             );
@@ -67,7 +67,7 @@ class ResultViewerComponent extends Manager
             $commonActions->addButton(
                 new Button(
                     Translation::get(
-                        'ExportReport', [], ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
+                        'ExportReport', [], $this::context()
                     ), new FontAwesomeGlyph('download'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT_RESULT)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, false

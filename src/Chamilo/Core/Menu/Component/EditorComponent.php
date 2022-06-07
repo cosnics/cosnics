@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -58,7 +58,7 @@ class EditorComponent extends Manager implements DelegateComponent
             $message = $this->getTranslator()->trans(
                 $success ? 'ObjectCreated' : 'ObjectNotCreated',
                 array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')),
-                Utilities::COMMON_LIBRARIES
+                StringUtilities::LIBRARIES
             );
 
             $this->redirect(

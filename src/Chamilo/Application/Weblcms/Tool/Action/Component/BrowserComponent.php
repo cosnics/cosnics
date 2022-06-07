@@ -46,7 +46,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -160,7 +160,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                 $publishActions->addButton(
                     $this->getPublicationButton(
-                        Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
+                        Translation::get('Publish', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                         $this->get_allowed_content_object_types(), $parameters, [], 'btn-primary'
                     )
                 );
@@ -178,7 +178,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                     $publishActions->addButton(
                         $this->getPublicationButton(
-                            Translation::get('PublishIntroductionText', null, Utilities::COMMON_LIBRARIES),
+                            Translation::get('PublishIntroductionText', null, StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('book'),  // new FontAwesomeGlyph('info-circle'),
                             array(Introduction::class), $parameters
                         )
@@ -199,7 +199,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                 $manageActions->addButton(
                     new Button(
-                        Translation::get('ManageRights', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('ManageRights', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('lock'), $link, Button::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -210,7 +210,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $manageActions->addButton(
                     new Button(
-                        Translation::get('ManageCategories', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('ManageCategories', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('folder'), $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MANAGE_CATEGORIES
@@ -258,7 +258,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $filterActions[] = new SubButton(
                         Translation::get(
                             (string) StringUtilities::getInstance()->createString($browser_type)->upperCamelize() .
-                            'View', null, Utilities::COMMON_LIBRARIES
+                            'View', null, StringUtilities::LIBRARIES
                         ), null, $action, Button::DISPLAY_LABEL, false, [], null, $isActive
                     );
                 }
@@ -753,7 +753,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE
                         )
-                    ), Translation::get('RemoveSelected', null, Utilities::COMMON_LIBRARIES)
+                    ), Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES)
                 )
             );
 
@@ -776,7 +776,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_TO_CATEGORY
                         )
-                    ), Translation::get('MoveSelected', null, Utilities::COMMON_LIBRARIES), false
+                    ), Translation::get('MoveSelected', null, StringUtilities::LIBRARIES), false
                 )
             );
         }

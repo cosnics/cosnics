@@ -69,7 +69,7 @@ class UploadEntryAttachmentComponent extends Manager
             'attachment_id' => $entryAttachment->getId(),
             'filename' => $file->get_filename(),
             'user' => $this->getUser()->get_fullname(),
-            'date' => DatetimeUtilities::format_locale_date(null, $file->get_creation_date())
+            'date' => DatetimeUtilities::getInstance()->formatLocaleDate(null, $file->get_creation_date())
         ];
 
         if ($entryAttachment instanceof

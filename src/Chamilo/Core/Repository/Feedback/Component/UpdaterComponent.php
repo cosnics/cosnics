@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -55,7 +55,7 @@ class UpdaterComponent extends Manager
                 $message = Translation::get(
                     'ObjectUpdated',
                     array('OBJECT' => Translation::get('Feedback')),
-                    Utilities::COMMON_LIBRARIES
+                    StringUtilities::LIBRARIES
                 );
 
                 $success = true;

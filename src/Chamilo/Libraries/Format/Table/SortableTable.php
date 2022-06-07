@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Format\Table;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -75,7 +75,7 @@ class SortableTable extends HtmlTable
     public function getTableActionsJavascript()
     {
         return ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'SortableTable.js'
+            Path::getInstance()->getJavascriptPath(StringUtilities::LIBRARIES, true) . 'SortableTable.js'
         );
     }
 

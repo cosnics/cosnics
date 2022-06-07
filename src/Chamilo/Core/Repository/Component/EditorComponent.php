@@ -20,7 +20,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -48,7 +48,7 @@ class EditorComponent extends Manager implements DelegateComponent
             if (!$object)
             {
                 return $this->display_error_page(
-                    Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES)
+                    Translation::get('NoObjectSelected', null, StringUtilities::LIBRARIES)
                 );
             }
 
@@ -134,7 +134,7 @@ class EditorComponent extends Manager implements DelegateComponent
                 $this->redirect(
                     Translation::get(
                         $success == ContentObjectForm::RESULT_SUCCESS ? 'ObjectUpdated' : 'ObjectNotUpdated',
-                        array('OBJECT' => Translation::get('ContentObject')), Utilities::COMMON_LIBRARIES
+                        array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
                     ), !($success == ContentObjectForm::RESULT_SUCCESS), $parameters
                 );
             }
@@ -155,7 +155,7 @@ class EditorComponent extends Manager implements DelegateComponent
                 htmlentities(
                     Translation::get(
                         'NoObjectSelected', array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     )
                 )
             );

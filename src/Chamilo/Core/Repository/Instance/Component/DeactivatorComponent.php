@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class DeactivatorComponent extends Manager
 {
@@ -68,7 +68,7 @@ class DeactivatorComponent extends Manager
             }
             
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), (bool) $failures,
+                Translation::get($message, $parameter, StringUtilities::LIBRARIES), (bool) $failures,
                 array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else

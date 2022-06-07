@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -82,7 +82,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                 $message = htmlentities(
                     Translation::get(
                         ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                        array('OBJECT' => Translation::get('ContentObject')), Utilities::COMMON_LIBRARIES
+                        array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
                     )
                 );
 

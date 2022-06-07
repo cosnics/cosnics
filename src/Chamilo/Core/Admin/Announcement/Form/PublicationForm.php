@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Admin\Announcement\Form
@@ -81,12 +81,12 @@ class PublicationForm extends FormValidator
         $this->build_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button', self::PARAM_SUBMIT, Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
+            'style_submit_button', self::PARAM_SUBMIT, Translation::get('Publish', null, StringUtilities::LIBRARIES),
             null, null, new FontAwesomeGlyph('arrow-right')
         );
 
         $buttons[] = $this->createElement(
-            'style_reset_button', self::PARAM_RESET, Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', self::PARAM_RESET, Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -104,7 +104,7 @@ class PublicationForm extends FormValidator
         );
 
         $this->addElement(
-            'checkbox', Publication::PROPERTY_HIDDEN, Translation::get('Hidden', null, Utilities::COMMON_LIBRARIES)
+            'checkbox', Publication::PROPERTY_HIDDEN, Translation::get('Hidden', null, StringUtilities::LIBRARIES)
         );
     }
 
@@ -130,7 +130,7 @@ class PublicationForm extends FormValidator
         );
 
         $this->addGroup(
-            $group, self::PROPERTY_RIGHT_OPTION, Translation::get('PublishFor', null, Utilities::COMMON_LIBRARIES), ''
+            $group, self::PROPERTY_RIGHT_OPTION, Translation::get('PublishFor', null, StringUtilities::LIBRARIES), ''
         );
 
         // Add the advanced element finder
@@ -161,11 +161,11 @@ class PublicationForm extends FormValidator
         $this->build_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button', self::PARAM_SUBMIT, Translation::get('Update', null, Utilities::COMMON_LIBRARIES),
+            'style_submit_button', self::PARAM_SUBMIT, Translation::get('Update', null, StringUtilities::LIBRARIES),
             null, null, new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', self::PARAM_RESET, Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', self::PARAM_RESET, Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

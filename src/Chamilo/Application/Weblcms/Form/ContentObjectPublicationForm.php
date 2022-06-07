@@ -44,7 +44,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
 use Exception;
 
@@ -255,7 +255,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             // More than one category -> let user select one
             $this->addElement(
                 'select', ContentObjectPublication::PROPERTY_CATEGORY_ID,
-                Translation::get('Category', null, Utilities::COMMON_LIBRARIES), $this->categories
+                Translation::get('Category', null, StringUtilities::LIBRARIES), $this->categories
             );
         }
         else
@@ -273,7 +273,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $this->addElement(
             'checkbox', ContentObjectPublication::PROPERTY_HIDDEN,
-            Translation::get('Hidden', null, Utilities::COMMON_LIBRARIES), null, array('class' => 'hidden_publication')
+            Translation::get('Hidden', null, StringUtilities::LIBRARIES), null, array('class' => 'hidden_publication')
         );
 
         $force_collaborate =
@@ -318,7 +318,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         // TODO: check email rights
         $buttons[] = $this->createElement(
-            'style_submit_button', self::PARAM_SUBMIT, Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
+            'style_submit_button', self::PARAM_SUBMIT, Translation::get('Publish', null, StringUtilities::LIBRARIES),
             null, null, new FontAwesomeGlyph('arrow-right')
         );
 
@@ -344,14 +344,14 @@ class ContentObjectPublicationForm extends BasePublicationForm
                     {
                         $buttons[] = $this->createElement(
                             'style_submit_button', self::PROPERTY_PUBLISH_AND_BUILD,
-                            Translation::get('PublishAndBuild', null, Utilities::COMMON_LIBRARIES), null, null,
+                            Translation::get('PublishAndBuild', null, StringUtilities::LIBRARIES), null, null,
                             new FontAwesomeGlyph('pencil-alt')
                         );
                     }
 
                     $buttons[] = $this->createElement(
                         'style_submit_button', self::PROPERTY_PUBLISH_AND_VIEW,
-                        Translation::get('PublishAndView', null, Utilities::COMMON_LIBRARIES), null, null,
+                        Translation::get('PublishAndView', null, StringUtilities::LIBRARIES), null, null,
                         new FontAwesomeGlyph('search')
                     );
                 }
@@ -359,7 +359,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         }
 
         $buttons[] = $this->createElement(
-            'style_reset_button', self::PARAM_RESET, Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', self::PARAM_RESET, Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -390,7 +390,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         // ':</h5>';
         $html[] = '<div class="panel panel-default target-entities-list">';
         $html[] = '<div class="panel-heading">';
-        $html[] = $translator->getTranslation('Users', null, Utilities::COMMON_LIBRARIES);
+        $html[] = $translator->getTranslation('Users', null, StringUtilities::LIBRARIES);
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
         $html[] = '<ul class="list-group target-entities-user-list">';
@@ -406,7 +406,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $html[] = '<div class="panel panel-default target-entities-list">';
         $html[] = '<div class="panel-heading">';
-        $html[] = $translator->getTranslation('PlatformGroups', null, Utilities::COMMON_LIBRARIES);
+        $html[] = $translator->getTranslation('PlatformGroups', null, StringUtilities::LIBRARIES);
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
         $html[] = '<ul class="list-group target-entities-platform-groups-list">';
@@ -495,11 +495,11 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $this->build_basic_update_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button', self::PARAM_SUBMIT, Translation::get('Update', null, Utilities::COMMON_LIBRARIES),
+            'style_submit_button', self::PARAM_SUBMIT, Translation::get('Update', null, StringUtilities::LIBRARIES),
             array('class' => 'positive update')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', self::PARAM_RESET, Translation::get('Reset', null, Utilities::COMMON_LIBRARIES),
+            'style_reset_button', self::PARAM_RESET, Translation::get('Reset', null, StringUtilities::LIBRARIES),
             array('class' => 'normal empty')
         );
 
@@ -992,8 +992,8 @@ class ContentObjectPublicationForm extends BasePublicationForm
         }
         else
         {
-            $from = DatetimeUtilities::time_from_datepicker($values[self::PROPERTY_FROM_DATE]);
-            $to = DatetimeUtilities::time_from_datepicker($values[self::PROPERTY_TO_DATE]);
+            $from = DatetimeUtilities::getInstance()->timeFromDatepicker($values[self::PROPERTY_FROM_DATE]);
+            $to = DatetimeUtilities::getInstance()->timeFromDatepicker($values[self::PROPERTY_TO_DATE]);
         }
 
         $publication->set_category_id($category);

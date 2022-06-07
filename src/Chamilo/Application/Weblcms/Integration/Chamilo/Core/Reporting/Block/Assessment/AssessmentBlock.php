@@ -112,11 +112,11 @@ abstract class AssessmentBlock extends ToolBlock
 
         $assessment_information[Translation::get('AssessmentDescription')] = $assessment->get_description();
 
-        $assessment_information[Translation::get('Published')] = DatetimeUtilities::format_locale_date(
+        $assessment_information[Translation::get('Published')] = DatetimeUtilities::getInstance()->formatLocaleDate(
             null, $assessment_publication->get_publication_date()
         );
 
-        $assessment_information[Translation::get('LastModified')] = DatetimeUtilities::format_locale_date(
+        $assessment_information[Translation::get('LastModified')] = DatetimeUtilities::getInstance()->formatLocaleDate(
             null, $assessment_publication->get_modified_date()
         );
 

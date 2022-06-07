@@ -8,7 +8,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -154,7 +154,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                 // $this->addGroupRule('match_' . $match_number, array(
                 // 'match[' . $match_number . ']' => array(
                 // array(
-                // Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                // Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
                 // 'required'))));
             }
         }
@@ -278,7 +278,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                     AssessmentMatchingQuestionOption::PROPERTY_VALUE . '_' . $option_number, array(
                         AssessmentMatchingQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' => array(
                             array(
-                                Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+                                Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES),
                                 'numeric'
                             )
                         )

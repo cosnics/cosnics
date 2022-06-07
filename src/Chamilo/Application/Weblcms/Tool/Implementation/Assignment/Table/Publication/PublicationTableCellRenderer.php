@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Extension on the content object publication table cell renderer for this tool
@@ -49,8 +49,8 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                 return $this->generate_title_link($publication);
             case Assignment::PROPERTY_END_TIME :
                 $time = $content_object->get_end_time();
-                $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
-                $time = DatetimeUtilities::format_locale_date($date_format, $time);
+                $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
+                $time = DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $time);
                 if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
                 {
                     return '<span style="color: gray">' . $time . '</span>';

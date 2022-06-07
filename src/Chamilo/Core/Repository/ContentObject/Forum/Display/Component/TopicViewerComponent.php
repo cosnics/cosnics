@@ -25,7 +25,7 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -354,7 +354,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                        Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                         $this->get_url($parameters), Button::DISPLAY_ICON, false, 'btn-link'
                     )
                 );
@@ -372,7 +372,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
                     $buttonToolBar->addItem(
                         new Button(
-                            Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
+                            Translation::get('Delete', null, StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('times'), $this->get_url($parameters), Button::DISPLAY_ICON, true,
                             'btn-link'
                         )
@@ -409,14 +409,14 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
     public function renderPostDate($glyphType, $textClass, $date)
     {
-        $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+        $dateFormat = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
         $fontAwesomeGlyph = new FontAwesomeGlyph($glyphType);
 
         $html = [];
 
         $html[] = '<span class="' . $textClass . '">';
         $html[] = $fontAwesomeGlyph->render();
-        $html[] = DatetimeUtilities::format_locale_date($dateFormat, $date);
+        $html[] = DatetimeUtilities::getInstance()->formatLocaleDate($dateFormat, $date);
         $html[] = '</span>';
 
         return implode(PHP_EOL, $html);

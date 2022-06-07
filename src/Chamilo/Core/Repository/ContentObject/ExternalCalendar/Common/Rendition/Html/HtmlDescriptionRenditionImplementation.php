@@ -11,7 +11,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
@@ -30,19 +30,19 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         {
             $event = $object->get_event($event_id);
 
-            $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+            $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
             $html[] = '<div class="calendar_event_range" style="font-weight: bold;">';
-            $html[] = Translation::get('From', null, Utilities::COMMON_LIBRARIES);
+            $html[] = Translation::get('From', null, StringUtilities::LIBRARIES);
             $html[] = ' ';
-            $html[] = DatetimeUtilities::format_locale_date(
+            $html[] = DatetimeUtilities::getInstance()->formatLocaleDate(
                 $date_format,
                 $event->DTSTART->getDateTime()->getTimeStamp()
             );
             $html[] = ' ';
-            $html[] = Translation::get('Until', null, Utilities::COMMON_LIBRARIES);
+            $html[] = Translation::get('Until', null, StringUtilities::LIBRARIES);
             $html[] = ' ';
-            $html[] = DatetimeUtilities::format_locale_date($date_format, $event->DTEND->getDateTime()->getTimeStamp());
+            $html[] = DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $event->DTEND->getDateTime()->getTimeStamp());
             $html[] = '</div>';
 
             if ($event->RRULE)

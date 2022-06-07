@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -72,14 +72,14 @@ class GalleryTable extends DataClassGalleryTable implements TableFormActionsSupp
                 new TableFormAction(
                     $this->get_component()->get_url(
                         array(Manager::PARAM_ACTION => Manager::ACTION_IMPACT_VIEW_RECYCLE)
-                    ), Translation::get('RemoveSelected', null, Utilities::COMMON_LIBRARIES), false
+                    ), Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES), false
                 )
             );
             $actions->add_form_action(
                 new TableFormAction(
                     $this->get_component()->get_url(
                         array(Manager::PARAM_ACTION => Manager::ACTION_UNLINK_CONTENT_OBJECTS)
-                    ), Translation::get('UnlinkSelected', null, Utilities::COMMON_LIBRARIES)
+                    ), Translation::get('UnlinkSelected', null, StringUtilities::LIBRARIES)
                 )
             );
         }
@@ -88,7 +88,7 @@ class GalleryTable extends DataClassGalleryTable implements TableFormActionsSupp
             new TableFormAction(
                 $this->get_component()->get_url(
                     array(Manager::PARAM_ACTION => Manager::ACTION_MOVE_CONTENT_OBJECTS)
-                ), Translation::get('MoveSelected', null, Utilities::COMMON_LIBRARIES), false
+                ), Translation::get('MoveSelected', null, StringUtilities::LIBRARIES), false
             )
         );
         $actions->add_form_action(
@@ -98,14 +98,14 @@ class GalleryTable extends DataClassGalleryTable implements TableFormActionsSupp
                         Manager::PARAM_ACTION => Manager::ACTION_PUBLICATION,
                         \Chamilo\Core\Repository\Publication\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Publication\Manager::ACTION_PUBLISH
                     )
-                ), Translation::get('PublishSelected', null, Utilities::COMMON_LIBRARIES), false
+                ), Translation::get('PublishSelected', null, StringUtilities::LIBRARIES), false
             )
         );
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url(
                     array(Manager::PARAM_ACTION => Manager::ACTION_EXPORT_CONTENT_OBJECTS)
-                ), Translation::get('ExportSelected', null, Utilities::COMMON_LIBRARIES), false
+                ), Translation::get('ExportSelected', null, StringUtilities::LIBRARIES), false
             )
         );
 

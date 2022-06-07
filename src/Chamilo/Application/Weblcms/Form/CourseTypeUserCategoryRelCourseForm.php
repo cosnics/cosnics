@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -54,17 +54,17 @@ class CourseTypeUserCategoryRelCourseForm extends FormValidator
         $this->addElement(
             'select',
             CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID,
-            Translation::get('Category', null, Utilities::COMMON_LIBRARIES),
+            Translation::get('Category', null, StringUtilities::LIBRARIES),
             $cat_options);
 
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
-            Translation::get('Save', null, Utilities::COMMON_LIBRARIES));
+            Translation::get('Save', null, StringUtilities::LIBRARIES));
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+            Translation::get('Reset', null, StringUtilities::LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

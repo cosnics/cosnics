@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Feedback\Component;
 use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -36,14 +36,14 @@ class UnsubscriberComponent extends Manager
                     Translation::get(
                         'ObjectNotDeleted', 
                         array('OBJECT' => Translation::get('Notification')), 
-                        Utilities::COMMON_LIBRARIES));
+                        StringUtilities::LIBRARIES));
             }
             
             $success = true;
             $message = Translation::get(
                 'ObjectDeleted', 
                 array('OBJECT' => Translation::get('Notification')), 
-                Utilities::COMMON_LIBRARIES);
+                StringUtilities::LIBRARIES);
         }
         catch (Exception $ex)
         {

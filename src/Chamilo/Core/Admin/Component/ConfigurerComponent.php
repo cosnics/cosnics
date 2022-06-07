@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -52,7 +52,7 @@ class ConfigurerComponent extends Manager
             $this->redirect(
                 Translation::get(
                     $success ? 'ObjectUpdated' : 'ObjectNotUpdated', array('OBJECT' => Translation::get('Setting')),
-                    Utilities::COMMON_LIBRARIES
+                    StringUtilities::LIBRARIES
                 ), !$success, array(
                     Application::PARAM_ACTION => self::ACTION_CONFIGURE_PLATFORM,
                     self::PARAM_CONTEXT => $this->get_context(),

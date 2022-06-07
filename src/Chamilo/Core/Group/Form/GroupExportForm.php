@@ -5,7 +5,7 @@ use Chamilo\Libraries\File\Export\Export;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -42,12 +42,12 @@ class GroupExportForm extends FormValidator
     public function build_exporting_form()
     {
         $this->addElement(
-            'select', 'file_type', Translation::get('OutputFileType', null, Utilities::COMMON_LIBRARIES),
+            'select', 'file_type', Translation::get('OutputFileType', null, StringUtilities::LIBRARIES),
             Export::get_supported_filetypes(array('Ical', 'Csv', 'Pdf', 'Excel'))
         );
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Export', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Export', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('download')
         );
 

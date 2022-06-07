@@ -12,24 +12,13 @@ use Stringy\Stringy;
  */
 class StringUtilities
 {
+    public const LIBRARIES = 'Chamilo\Libraries';
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    protected static $instance = null;
+    protected static ?StringUtilities $instance = null;
 
-    /**
-     *
-     * @var string
-     */
-    private $encoding;
+    private string $encoding;
 
-    /**
-     *
-     * @param string $encoding
-     */
-    public function __construct($encoding = 'UTF-8')
+    public function __construct(string $encoding = 'UTF-8')
     {
         $this->encoding = $encoding;
     }
@@ -41,20 +30,12 @@ class StringUtilities
      *
      * @return \Stringy\Stringy
      */
-    public function createString($string)
+    public function createString(string $string): Stringy
     {
-        return Stringy::create($string, $this->encoding);
+        return Stringy::create($string, $this->getEncoding());
     }
 
-    /**
-     *
-     * @param string $email
-     * @param string $clickableText
-     * @param string $styleClass
-     *
-     * @return string
-     */
-    public function encryptMailLink($email, $clickableText = null, $styleClass = '')
+    public function encryptMailLink(string $email, ?string $clickableText = null, string $styleClass = ''): string
     {
         if (is_null($clickableText))
         {
@@ -103,30 +84,12 @@ class StringUtilities
         return '<a href="' . $hmail . '"' . $styleClass . '>' . $hclickable_text . '</a>';
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getEncoding()
+    public function getEncoding(): string
     {
         return $this->encoding;
     }
 
-    /**
-     *
-     * @param string $encoding
-     */
-    public function setEncoding($encoding)
-    {
-        $this->encoding = $encoding;
-    }
-
-    /**
-     * Get an instance of StringUtilities
-     *
-     * @return \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    public static function getInstance()
+    public static function getInstance(): StringUtilities
     {
         if (is_null(static::$instance))
         {
@@ -138,24 +101,18 @@ class StringUtilities
 
     /**
      *
-     * @param string $string
-     * @param boolean $forHumans
-     *
-     * @return boolean
+     * @param ?mixed $string
      */
-    public function hasValue($string, $forHumans = false)
+    public function hasValue($string, bool $forHumans = false): bool
     {
         return !$this->isNullOrEmpty($string, $forHumans);
     }
 
     /**
      *
-     * @param string $string
-     * @param boolean $forHumans
-     *
-     * @return boolean
+     * @param ?mixed $string
      */
-    public function isNullOrEmpty($string, $forHumans = false)
+    public function isNullOrEmpty($string, bool $forHumans = false): bool
     {
         if (is_null($string))
         {
@@ -180,16 +137,9 @@ class StringUtilities
         return false;
     }
 
-    /**
-     *
-     * @param string $string
-     * @param integer $length
-     * @param boolean $stripTags
-     * @param string $character
-     *
-     * @return string
-     */
-    public function truncate($string, $length = 200, $stripTags = true, $character = "\xE2\x80\xA6")
+    public function truncate(
+        string $string, int $length = 200, bool $stripTags = true, string $character = "\xE2\x80\xA6"
+    ): string
     {
         if ($stripTags)
         {

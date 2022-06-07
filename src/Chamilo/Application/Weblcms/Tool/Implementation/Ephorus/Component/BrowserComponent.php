@@ -111,7 +111,7 @@ class BrowserComponent extends Manager implements TableSupport
                 new Button(
                     Translation::get(
                         'AddDocument', [],
-                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
+                        $this::context()
                     ), new FontAwesomeGlyph('plus'), $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_PUBLISH_DOCUMENT

@@ -14,7 +14,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -40,7 +40,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
@@ -55,7 +55,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                    Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
@@ -141,7 +141,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
 
                         return StringUtilities::getInstance()->truncate($description, 50);
                     case ContentObject::PROPERTY_MODIFICATION_DATE :
-                        return DatetimeUtilities::format_locale_date(null, $this->wikiPage->get_modification_date());
+                        return DatetimeUtilities::getInstance()->formatLocaleDate(null, $this->wikiPage->get_modification_date());
                 }
             }
 

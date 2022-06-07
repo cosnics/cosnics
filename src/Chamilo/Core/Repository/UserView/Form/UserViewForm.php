@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -66,15 +66,15 @@ class UserViewForm extends FormValidator
     public function build_basic_form()
     {
         $this->addElement(
-            'text', UserView::PROPERTY_NAME, Translation::get('Name', null, Utilities::COMMON_LIBRARIES),
+            'text', UserView::PROPERTY_NAME, Translation::get('Name', null, StringUtilities::LIBRARIES),
             array("size" => "50")
         );
         $this->addRule(
-            UserView::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            UserView::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
         $this->add_html_editor(
-            UserView::PROPERTY_DESCRIPTION, Translation::get('Description', null, Utilities::COMMON_LIBRARIES), false
+            UserView::PROPERTY_DESCRIPTION, Translation::get('Description', null, StringUtilities::LIBRARIES), false
         );
 
         $registrations = \Chamilo\Core\Repository\Storage\DataManager::get_registered_types();
@@ -130,11 +130,11 @@ class UserViewForm extends FormValidator
         $this->addElement('hidden', UserView::PROPERTY_ID);
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Update', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -145,10 +145,10 @@ class UserViewForm extends FormValidator
         $this->build_basic_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+            'style_submit_button', 'submit', Translation::get('Create', null, StringUtilities::LIBRARIES)
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -27,7 +27,7 @@ class HotpotatoesForm extends ContentObjectForm
         $this->add_textfield(Assessment::PROPERTY_MAXIMUM_ATTEMPTS, Translation::get('MaximumAttempts'));
         $this->addElement('static', null, null, Translation::get('NoMaximumAttemptsFillIn0'));
         $this->addElement('file', 'file', Translation::get('UploadHotpotatoes'));
-        $this->addRule('file', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
+        $this->addRule('file', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required');
     }
 
     protected function build_editing_form($htmleditor_options = [], $in_tab = false)
@@ -37,7 +37,7 @@ class HotpotatoesForm extends ContentObjectForm
         $this->add_textfield(Hotpotatoes::PROPERTY_MAXIMUM_ATTEMPTS, Translation::get('MaximumAttempts'));
         $this->addElement('static', null, null, Translation::get('NoMaximumAttemptsFillIn0'));
         $this->addElement('file', 'file', Translation::get('ChangeHotpotatoes'));
-        $this->addRule('file', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
+        $this->addRule('file', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required');
     }
 
     // Inherited

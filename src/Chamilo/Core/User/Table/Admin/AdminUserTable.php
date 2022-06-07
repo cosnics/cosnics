@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Table to display a set of users.
@@ -24,16 +24,16 @@ class AdminUserTable extends DataClassTable implements TableFormActionsSupport
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_USER)), 
-                Translation::get('RemoveSelected', null, Utilities::COMMON_LIBRARIES)));
+                Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES)));
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_ACTIVATE)), 
-                Translation::get('ActivateSelected', null, Utilities::COMMON_LIBRARIES), 
+                Translation::get('ActivateSelected', null, StringUtilities::LIBRARIES),
                 false));
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DEACTIVATE)), 
-                Translation::get('DeactivateSelected', null, Utilities::COMMON_LIBRARIES)));
+                Translation::get('DeactivateSelected', null, StringUtilities::LIBRARIES)));
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD_MULTI)), 

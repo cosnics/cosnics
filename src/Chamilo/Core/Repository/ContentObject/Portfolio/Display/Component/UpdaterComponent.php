@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Component that allows the user to update the content of a portfolio item or folder
@@ -100,7 +100,7 @@ class UpdaterComponent extends ItemComponent
                 $message = htmlentities(
                     Translation::get(
                         ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                        array('OBJECT' => Translation::get('ContentObject')), Utilities::COMMON_LIBRARIES
+                        array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
                     )
                 );
 

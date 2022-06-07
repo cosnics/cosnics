@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\Service;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
 use Chamilo\Libraries\Storage\DataManager\Repository\DisplayOrderRepository;
 use Chamilo\Libraries\Storage\Exception\DisplayOrderException;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -252,7 +252,7 @@ class DisplayOrderHandler
                     '{CONTEXT}' => $this->getDisplayOrderContextAsString($dataClass),
                     '{DISPLAY_ORDER}' => $displayOrder,
                     '{COUNT}' => $numberOfOtherDisplayOrdersInContext
-                ], Utilities::COMMON_LIBRARIES
+                ], StringUtilities::LIBRARIES
                 )
             );
         }

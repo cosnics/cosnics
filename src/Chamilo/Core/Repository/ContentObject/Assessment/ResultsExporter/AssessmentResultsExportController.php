@@ -307,13 +307,13 @@ class AssessmentResultsExportController
 
         $question = $complex_question->get_ref_object();
 
-        $start_time = DatetimeUtilities::format_locale_date(null, $assessment_result->get_start_time());
+        $start_time = DatetimeUtilities::getInstance()->formatLocaleDate(null, $assessment_result->get_start_time());
 
-        $end_time = is_null($assessment_result->get_end_time()) ? '-' : DateTimeUtilities::format_locale_date(
+        $end_time = is_null($assessment_result->get_end_time()) ? '-' : DateTimeUtilities::getInstance()->formatLocaleDate(
             null,
             $assessment_result->get_end_time());
 
-        $total_time = DateTimeUtilities::convert_seconds_to_hours($assessment_result->get_total_time());
+        $total_time = DateTimeUtilities::getInstance()->convertSecondsToHours($assessment_result->get_total_time());
 
         $this->add_data_to_current_row(self::COLUMN_OFFICIAL_CODE, $official_code);
         $this->add_data_to_current_row(self::COLUMN_FIRSTNAME, $first_name);

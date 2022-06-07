@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRe
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Portfolio item table cell renderer
@@ -123,13 +123,13 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
             case ContentObject::PROPERTY_TITLE :
                 return $content_object->get_title();
             case ContentObject::PROPERTY_CREATION_DATE :
-                return DatetimeUtilities::format_locale_date(
-                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+                return DatetimeUtilities::getInstance()->formatLocaleDate(
+                    Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES),
                     $content_object->get_creation_date()
                 );
             case ContentObject::PROPERTY_MODIFICATION_DATE :
-                return DatetimeUtilities::format_locale_date(
-                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+                return DatetimeUtilities::getInstance()->formatLocaleDate(
+                    Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES),
                     $content_object->get_modification_date()
                 );
         }

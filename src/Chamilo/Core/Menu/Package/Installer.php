@@ -8,7 +8,7 @@ use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Menu\Storage\DataClass\LanguageCategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\RightsLocation;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -40,7 +40,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
                 self::TYPE_NORMAL, $this->getTranslator()->trans(
                 'ObjectCreated',
                 array('OBJECT' => $this->getTranslator()->trans('RightsTree', [], 'Chamilo\Core\Menu')),
-                Utilities::COMMON_LIBRARIES
+                StringUtilities::LIBRARIES
             )
             );
         }

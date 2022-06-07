@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter\Forms;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This form can be used to delete a course
@@ -34,16 +34,16 @@ class CourseDeleterForm extends FormValidator
     public function buildForm()
     {
         $this->addElement('static', '', '', Translation::get('DeleteWarningMessage'));
-        $this->addElement('checkbox', 'confirm', Translation::get('Confirm', null, Utilities::COMMON_LIBRARIES));
+        $this->addElement('checkbox', 'confirm', Translation::get('Confirm', null, StringUtilities::LIBRARIES));
         $this->addRule(
             'confirm', 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+            Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required');
         
         $prevnext[] = $this->createElement(
             'submit', 
             $this->parent->get_url(), 
-            Translation::get('Submit', null, Utilities::COMMON_LIBRARIES));
+            Translation::get('Submit', null, StringUtilities::LIBRARIES));
         $this->addGroup($prevnext, 'buttons', '', '&nbsp;', false);
         $this->updateAttributes(array('action' => $this->parent->get_url()));
     }

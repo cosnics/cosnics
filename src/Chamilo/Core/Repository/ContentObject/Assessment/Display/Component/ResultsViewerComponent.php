@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -138,10 +138,10 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
         }
 
         $buttons[] = $form->createElement(
-            'style_submit_button', 'submit', Translation::get('Save', null, Utilities::COMMON_LIBRARIES)
+            'style_submit_button', 'submit', Translation::get('Save', null, StringUtilities::LIBRARIES)
         );
         $buttons[] = $form->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         if ($this->get_parent()->can_change_answer_data())

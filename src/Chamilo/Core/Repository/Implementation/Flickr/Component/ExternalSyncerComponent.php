@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Implementation\Flickr\ExternalObject;
 use Chamilo\Core\Repository\Implementation\Flickr\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ExternalSyncerComponent extends Manager
 {
@@ -38,7 +38,7 @@ class ExternalSyncerComponent extends Manager
                     Translation::get(
                         'ObjectUpdated', 
                         array('OBJECT' => Translation::get('ContentObject')), 
-                        Utilities::COMMON_LIBRARIES), 
+                        StringUtilities::LIBRARIES),
                     false, 
                     $parameters, 
                     array(Manager::PARAM_EXTERNAL_REPOSITORY, Manager::PARAM_ACTION));
@@ -52,7 +52,7 @@ class ExternalSyncerComponent extends Manager
                     Translation::get(
                         'ObjectFailedUpdated', 
                         array('OBJECT' => Translation::get('ContentObject')), 
-                        Utilities::COMMON_LIBRARIES), 
+                        StringUtilities::LIBRARIES),
                     true, 
                     $parameters);
             }
@@ -66,7 +66,7 @@ class ExternalSyncerComponent extends Manager
                 Translation::get(
                     'ObjectFailedUpdated', 
                     array('OBJECT' => Translation::get('ExternalRepository')), 
-                    Utilities::COMMON_LIBRARIES), 
+                    StringUtilities::LIBRARIES),
                 true, 
                 $parameters);
         }

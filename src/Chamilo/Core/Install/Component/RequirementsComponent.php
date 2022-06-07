@@ -13,7 +13,7 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Support\Diagnoser;
 use Chamilo\Libraries\Support\DiagnoserCellRenderer;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -56,14 +56,14 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('Previous', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('chevron-left'),
+                Translation::get('Previous', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-left'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_INTRODUCTION))
             )
         );
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('Refresh', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sync'),
+                Translation::get('Refresh', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('sync'),
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_REQUIREMENTS,
@@ -75,7 +75,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('Next', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('chevron-right'),
+                Translation::get('Next', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-right'),
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_LICENSE,
@@ -117,10 +117,10 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
 
         $array[] = $diagnoser->build_setting(
             $status, '[FILES]',
-            Translation::get($exists ? 'IsWritable' : 'DirectoryExists', null, Utilities::COMMON_LIBRARIES) . ': ' .
+            Translation::get($exists ? 'IsWritable' : 'DirectoryExists', null, StringUtilities::LIBRARIES) . ': ' .
             $files_folder, $exists ? 'http://php.net/manual/en/function.is-writable.php' :
             'http://php.net/manual/en/function.file-exists.php', $writable, 1, 'yes_no', Translation::get(
-            $exists ? 'DirectoryMustBeWritable' : 'DirectoryMustExist', null, Utilities::COMMON_LIBRARIES
+            $exists ? 'DirectoryMustBeWritable' : 'DirectoryMustExist', null, StringUtilities::LIBRARIES
         )
         );
 
@@ -134,7 +134,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
 
         $array[] = $diagnoser->build_setting(
             $status, '[PHP]', 'phpversion()', 'http://www.php.net/manual/en/function.phpversion.php', phpversion(),
-            '>= 5.4', null, Translation::get('PHPVersionInfo', null, Utilities::COMMON_LIBRARIES)
+            '>= 5.4', null, Translation::get('PHPVersionInfo', null, StringUtilities::LIBRARIES)
         );
 
         $setting = ini_get('magic_quotes_gpc');
@@ -149,7 +149,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
         $array[] = $diagnoser->build_setting(
             $status, '[PHP-INI]', 'magic_quotes_gpc',
             'http://www.php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc', $setting, $req_setting,
-            'on_off', Translation::get('MagicQuotesGpcInfo', null, Utilities::COMMON_LIBRARIES)
+            'on_off', Translation::get('MagicQuotesGpcInfo', null, StringUtilities::LIBRARIES)
         );
 
         $extensions = array(
@@ -178,8 +178,8 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
 
             $array[] = $diagnoser->build_setting(
                 $status, '[PHP-EXTENSION]',
-                Translation::get('ExtensionLoaded', null, Utilities::COMMON_LIBRARIES) . ': ' . $extension, $url,
-                $loaded, 1, 'yes_no', Translation::get('ExtensionMustBeLoaded', null, Utilities::COMMON_LIBRARIES)
+                Translation::get('ExtensionLoaded', null, StringUtilities::LIBRARIES) . ': ' . $extension, $url,
+                $loaded, 1, 'yes_no', Translation::get('ExtensionMustBeLoaded', null, StringUtilities::LIBRARIES)
             );
         }
 
@@ -198,9 +198,9 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
 
         $array[] = $diagnoser->build_setting(
             $status, '[PHP-EXTENSION]',
-            Translation::get('ExtensionLoaded', null, Utilities::COMMON_LIBRARIES) . ': ' . 'ZipArchive',
+            Translation::get('ExtensionLoaded', null, StringUtilities::LIBRARIES) . ': ' . 'ZipArchive',
             'http://php.net/manual/en/class.ziparchive.php', $loaded, 1, 'yes_no',
-            Translation::get('ExtensionMustBeLoaded', null, Utilities::COMMON_LIBRARIES)
+            Translation::get('ExtensionMustBeLoaded', null, StringUtilities::LIBRARIES)
         );
 
         return $array;

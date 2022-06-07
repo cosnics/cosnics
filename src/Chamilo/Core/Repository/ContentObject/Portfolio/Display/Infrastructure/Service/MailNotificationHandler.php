@@ -105,7 +105,7 @@ class MailNotificationHandler extends \Chamilo\Core\Repository\Feedback\Infrastr
             'FeedbackWrittenBy', 
             array(
                 'USER' => $feedback->get_user()->get_fullname(), 
-                'DATE' => DatetimeUtilities::format_locale_date(null, $feedback->get_creation_date())));
+                'DATE' => DatetimeUtilities::getInstance()->formatLocaleDate(null, $feedback->get_creation_date())));
         
         $html[] = '<pre>';
         $html[] = $feedback->get_comment();

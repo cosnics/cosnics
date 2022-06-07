@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -201,13 +201,13 @@ class DeleterComponent extends Manager
                 ($permanent ? self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS : self::ACTION_BROWSE_CONTENT_OBJECTS);
 
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), $failures > 0, $parameters
+                Translation::get($message, $parameter, StringUtilities::LIBRARIES), $failures > 0, $parameters
             );
         }
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES))
+                htmlentities(Translation::get('NoObjectSelected', null, StringUtilities::LIBRARIES))
             );
         }
     }

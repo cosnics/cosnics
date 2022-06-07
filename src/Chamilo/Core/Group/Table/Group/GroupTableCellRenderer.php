@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class GroupTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -25,7 +25,7 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_component()->get_group_editing_url($group), ToolbarItem::DISPLAY_ICON
             )
         );
@@ -66,14 +66,14 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->get_component()->get_group_delete_url($group), ToolbarItem::DISPLAY_ICON, true
             )
         );
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Move', null, Utilities::COMMON_LIBRARIES),
+                Translation::get('Move', null, StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('window-restore', array('fa-flip-horizontal'), null, 'fas'),
                 $this->get_component()->get_move_group_url($group), ToolbarItem::DISPLAY_ICON
             )

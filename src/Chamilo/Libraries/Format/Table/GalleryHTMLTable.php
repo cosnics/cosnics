@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -121,7 +121,7 @@ class GalleryHTMLTable extends HtmlTable
 
         $buttonToolBar->prependItem(
             new Button(
-                Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES),
+                Translation::get('SelectAll', null, StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('check-square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
                 'btn-sm select-all'
             )
@@ -129,7 +129,7 @@ class GalleryHTMLTable extends HtmlTable
 
         $buttonToolBar->prependItem(
             new Button(
-                Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES),
+                Translation::get('UnselectAll', null, StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
                 'btn-sm select-none'
             )
@@ -191,7 +191,7 @@ class GalleryHTMLTable extends HtmlTable
     public function getTableActionsJavascript()
     {
         return ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'GalleryTable.js'
+            Path::getInstance()->getJavascriptPath(StringUtilities::LIBRARIES, true) . 'GalleryTable.js'
         );
     }
 

@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -75,9 +75,9 @@ class AssessmentOverviewBlock extends ToolBlock
                 }
                 
                 $score = $this->get_score($pub_attempts);
-                $date = DatetimeUtilities::format_locale_date(
-                    Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                         Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES), 
+                $date = DatetimeUtilities::getInstance()->formatLocaleDate(
+                    Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' .
+                         Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES),
                         $score['date']);
                 $score = $score['score'];
                 
@@ -104,7 +104,7 @@ class AssessmentOverviewBlock extends ToolBlock
                 
                 $reporting_data->add_data_category_row(
                     $count, 
-                    Translation::get('Title', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('Title', null, StringUtilities::LIBRARIES),
                     $pub->get_content_object()->get_title());
                 
                 $reporting_data->add_data_category_row($count, Translation::get('Date'), $date);

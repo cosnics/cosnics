@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\User
@@ -147,7 +147,7 @@ class PlatformgroupMenuRenderer extends GenericTree
 
     public function get_root_node_title()
     {
-        return Translation::get('Course', null, Utilities::COMMON_LIBRARIES);
+        return Translation::get('Course', null, StringUtilities::LIBRARIES);
     }
 
     /**

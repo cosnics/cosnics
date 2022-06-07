@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -211,7 +211,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
 
         $toolbar->add_item(
             new ToolbarItem(
-                $translator->trans('Edit', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->getItemEditingUrl($item), ToolbarItem::DISPLAY_ICON
             )
         );
@@ -220,7 +220,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->trans('Rights', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('lock'),
+                    $translator->trans('Rights', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
                     $this->getItemRightsUrl($item), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -230,7 +230,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->trans('MoveUpNA', [], Utilities::COMMON_LIBRARIES),
+                    $translator->trans('MoveUpNA', [], StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('sort-up', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -239,7 +239,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->trans('MoveUp', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-up'),
+                    $translator->trans('MoveUp', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-up'),
                     $this->getItemMovingUrl($item, ItemService::PARAM_DIRECTION_UP), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -249,7 +249,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->trans('MoveDownNA', [], Utilities::COMMON_LIBRARIES),
+                    $translator->trans('MoveDownNA', [], StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('sort-down', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -258,7 +258,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->trans('MoveDown', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-down'),
+                    $translator->trans('MoveDown', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-down'),
                     $this->getItemMovingUrl($item, ItemService::PARAM_DIRECTION_DOWN), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -266,7 +266,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
 
         $toolbar->add_item(
             new ToolbarItem(
-                $translator->trans('Delete', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->getItemDeletingUrl($item), ToolbarItem::DISPLAY_ICON, true
             )
         );

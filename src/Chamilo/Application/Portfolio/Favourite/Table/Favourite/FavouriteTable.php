@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Table to render the favourite users
@@ -33,7 +33,7 @@ class FavouriteTable extends RecordTable implements TableFormActionsSupport
                         Manager::PARAM_ACTION => Manager::ACTION_DELETE,
                         Manager::PARAM_SOURCE => Manager::SOURCE_FAVOURITES_BROWSER
                     )
-                ), Translation::getInstance()->getTranslation('DeleteSelected', null, Utilities::COMMON_LIBRARIES), true
+                ), Translation::getInstance()->getTranslation('DeleteSelected', null, StringUtilities::LIBRARIES), true
             )
         );
 

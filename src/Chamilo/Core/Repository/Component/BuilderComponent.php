@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -84,7 +84,7 @@ class BuilderComponent extends Manager implements ApplicationSupport
                 Translation::get(
                     'NoObjectSelected',
                     array('OBJECT' => Translation::get('ContentObject')),
-                    Utilities::COMMON_LIBRARIES));
+                    StringUtilities::LIBRARIES));
         }
     }
 

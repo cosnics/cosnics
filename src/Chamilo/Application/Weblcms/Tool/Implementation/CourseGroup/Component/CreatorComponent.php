@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -88,7 +88,7 @@ class CreatorComponent extends Manager
                     $message = Translation::get(
                         'ObjectCreated',
                         array('OBJECT' => Translation::get('CourseGroup')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     );
                 }
                 else
@@ -96,7 +96,7 @@ class CreatorComponent extends Manager
                     $message = Translation::get(
                             'ObjectNotCreated',
                             array('OBJECT' => Translation::get('CourseGroup')),
-                            Utilities::COMMON_LIBRARIES
+                            StringUtilities::LIBRARIES
                         ) . '<br />' . implode('<br />', $course_group->getErrors());
                 }
                 $this->redirect(

@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class describes a viewer for a given course type
@@ -75,7 +75,7 @@ class ViewComponent extends Manager
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                    Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_update_course_type_url($course_type->get_id()), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -84,7 +84,7 @@ class ViewComponent extends Manager
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $this->get_delete_course_type_url($course_type->get_id()), ToolbarItem::DISPLAY_ICON_AND_LABEL,
                         true
                     )
@@ -94,7 +94,7 @@ class ViewComponent extends Manager
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('DeleteNA', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('DeleteNA', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('times', array('text-muted')), null, ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -159,7 +159,7 @@ class ViewComponent extends Manager
 
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">' . $glyph->render() . ' ' .
-            Translation::get('Description', null, Utilities::COMMON_LIBRARIES) . '</h3>';
+            Translation::get('Description', null, StringUtilities::LIBRARIES) . '</h3>';
         $html[] = '</div>';
 
         $html[] = '<div class="panel-body">';

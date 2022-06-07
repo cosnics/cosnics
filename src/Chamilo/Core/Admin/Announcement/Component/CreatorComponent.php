@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Admin\Announcement\Component
@@ -62,7 +62,7 @@ class CreatorComponent extends Manager implements ViewerInterface
 
                 $message = Translation::get(
                     ($success ? 'ObjectPublished' : 'ObjectNotPublished'),
-                    array('OBJECT' => Translation::get('Object')), Utilities::COMMON_LIBRARIES
+                    array('OBJECT' => Translation::get('Object')), StringUtilities::LIBRARIES
                 );
 
                 $parameters = array(self::PARAM_ACTION => self::ACTION_BROWSE);
@@ -130,7 +130,7 @@ class CreatorComponent extends Manager implements ViewerInterface
             $html[] = '<div class="panel panel-default">';
             $html[] = '<div class="panel-heading">';
             $html[] = '<h3 class="panel-title">' . Translation::get(
-                    'SelectedContentObjects', null, Utilities::COMMON_LIBRARIES
+                    'SelectedContentObjects', null, StringUtilities::LIBRARIES
                 ) . '</h3>';
             $html[] = '</div>';
             $html[] = '<ul class="list-group">';

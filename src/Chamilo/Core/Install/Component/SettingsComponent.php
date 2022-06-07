@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -79,7 +79,7 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('Previous', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('chevron-left'),
+                Translation::get('Previous', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-left'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_SETTINGS))
             )
         );

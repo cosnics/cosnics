@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ViewerComponent extends Manager implements NoContextComponent
 {
@@ -56,7 +56,7 @@ class ViewerComponent extends Manager implements NoContextComponent
                 htmlentities(
                     Translation::get(
                         'NoObjectSelected', array('OBJECT' => Translation::get('SystemAnnouncement')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     )
                 )
             );
@@ -75,7 +75,7 @@ class ViewerComponent extends Manager implements NoContextComponent
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Edit', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                        Translation::get('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_EDIT,
@@ -87,7 +87,7 @@ class ViewerComponent extends Manager implements NoContextComponent
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Delete', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        Translation::get('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_DELETE,
@@ -112,7 +112,7 @@ class ViewerComponent extends Manager implements NoContextComponent
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Hide', [], Utilities::COMMON_LIBRARIES), $glyph, $this->get_url(
+                        Translation::get('Hide', [], StringUtilities::LIBRARIES), $glyph, $this->get_url(
                         array(
                             self::PARAM_ACTION => self::ACTION_HIDE,
                             self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()

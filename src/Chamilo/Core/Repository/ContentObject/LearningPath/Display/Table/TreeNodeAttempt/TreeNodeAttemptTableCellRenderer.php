@@ -125,7 +125,7 @@ class TreeNodeAttemptTableCellRenderer extends TableCellRenderer implements Tabl
         switch ($column->get_name())
         {
             case 'last_start_time':
-                return DatetimeUtilities::format_locale_date(null, $treeNodeAttempt->get_start_time());
+                return DatetimeUtilities::getInstance()->formatLocaleDate(null, $treeNodeAttempt->get_start_time());
             case 'status':
                 return $translator->getTranslation(
                     $treeNodeAttempt->isCompleted() ? 'Completed' : 'Incomplete'
@@ -138,7 +138,7 @@ class TreeNodeAttemptTableCellRenderer extends TableCellRenderer implements Tabl
                 );
 
             case 'time':
-                return DatetimeUtilities::format_seconds_to_hours($treeNodeAttempt->get_total_time());
+                return DatetimeUtilities::getInstance()->formatSecondsToHours($treeNodeAttempt->get_total_time());
         }
 
         return parent::render_cell($column, $treeNodeAttempt);

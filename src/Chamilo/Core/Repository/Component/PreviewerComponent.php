@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class PreviewerComponent extends Manager
 {
@@ -38,7 +38,7 @@ class PreviewerComponent extends Manager
         }
         else
         {
-            return $this->display_error_page(Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES));
+            return $this->display_error_page(Translation::get('NoObjectSelected', null, StringUtilities::LIBRARIES));
         }
     }
 

@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -74,7 +74,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
                 Path::getInstance()->getJavascriptPath(File::package(), true) . 'OfficeViewer.js'
             );
             $html[] = ResourceManager::getInstance()->getResourceHtml(
-                Path::getInstance()->getPluginPath(Utilities::COMMON_LIBRARIES, true) .
+                Path::getInstance()->getPluginPath(StringUtilities::LIBRARIES, true) .
                 'Jquery/jquery.fullscreen.min.js'
             );
         }

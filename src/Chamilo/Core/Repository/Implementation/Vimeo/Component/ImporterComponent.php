@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ImporterComponent extends Manager
 {
@@ -28,7 +28,7 @@ class ImporterComponent extends Manager
             $parameters[Application::PARAM_ACTION] = \Chamilo\Core\Repository\Manager::ACTION_VIEW_CONTENT_OBJECTS;
             $parameters[\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID] = $vimeo->get_id();
             
-            $this->redirect(Translation::get('ObjectImported', null, Utilities::COMMON_LIBRARIES), false, $parameters);
+            $this->redirect(Translation::get('ObjectImported', null, StringUtilities::LIBRARIES), false, $parameters);
         }
         else
         {
@@ -36,7 +36,7 @@ class ImporterComponent extends Manager
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_EXTERNAL_REPOSITORY;
             $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
             $this->redirect(
-                Translation::get('ObjectFailedImported', null, Utilities::COMMON_LIBRARIES), 
+                Translation::get('ObjectFailedImported', null, StringUtilities::LIBRARIES),
                 true, 
                 $parameters);
         }

@@ -18,7 +18,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -128,7 +128,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                 $toolActions->addButton(
                     new Button(
 
-                        $translator->trans('Rights', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('lock'),
+                        $translator->trans('Rights', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS)),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )

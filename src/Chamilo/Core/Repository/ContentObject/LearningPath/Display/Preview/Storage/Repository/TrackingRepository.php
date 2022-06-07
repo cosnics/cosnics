@@ -14,7 +14,7 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Utilities\UUID;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -265,7 +265,7 @@ class TrackingRepository implements TrackingRepositoryInterface
     {
         if (!$dummyTreeNodeAttempt->isIdentified())
         {
-            $dummyTreeNodeAttempt->setId(UUID::v4());
+            $dummyTreeNodeAttempt->setId(Uuid::uuid4());
         }
 
         $treeNodeAttempts = $this->getFromStorage(DummyTreeNodeAttempt::class);
@@ -308,7 +308,7 @@ class TrackingRepository implements TrackingRepositoryInterface
     {
         if (!$dummyQuestionAttempt->isIdentified())
         {
-            $dummyQuestionAttempt->setId(UUID::v4());
+            $dummyQuestionAttempt->setId(Uuid::uuid4());
         }
 
         $questionAttempts = $this->getFromStorage(DummyQuestionAttempt::class);

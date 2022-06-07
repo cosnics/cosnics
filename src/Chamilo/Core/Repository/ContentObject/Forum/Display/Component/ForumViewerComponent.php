@@ -33,7 +33,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use HTML_Table;
 
@@ -311,7 +311,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     {
         if ($lastPost instanceof ForumPost)
         {
-            $html[] = DatetimeUtilities::format_locale_date(null, $lastPost->get_creation_date());
+            $html[] = DatetimeUtilities::getInstance()->formatLocaleDate(null, $lastPost->get_creation_date());
 
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
                 User::class, $lastPost->get_user_id()
@@ -379,7 +379,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                        Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                         $this->get_url($parameters), Button::DISPLAY_ICON, false, 'btn-link'
                     )
                 );
@@ -475,7 +475,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $this->get_url($parameters), Button::DISPLAY_ICON, true, 'btn-link'
                     )
                 );
@@ -677,7 +677,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $this->get_url($parameters), Button::DISPLAY_ICON, true, 'btn-link'
                     )
                 );

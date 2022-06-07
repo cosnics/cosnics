@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -28,7 +28,7 @@ class AdminRequestTable extends DataClassTable implements TableFormActionsSuppor
             new TableFormAction(
                 $this->get_component()->get_url(
                     array(Manager::PARAM_ACTION => Manager::ACTION_COURSE_USER_SUBSCRIPTION_REQUEST_GRANT)),
-                Translation::getInstance()->getTranslation('GrantSelected', null, Utilities::COMMON_LIBRARIES),
+                Translation::getInstance()->getTranslation('GrantSelected', null, StringUtilities::LIBRARIES),
                 false));
 
         return $actions;

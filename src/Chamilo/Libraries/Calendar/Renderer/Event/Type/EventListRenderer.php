@@ -6,7 +6,7 @@ use Chamilo\Libraries\Calendar\Renderer\Event\EventRenderer;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -102,23 +102,23 @@ class EventListRenderer extends EventRenderer
     {
         $html = [];
 
-        $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+        $dateFormat = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
         if ($this->getEvent()->getEndDate() != '')
         {
             if (date('Y m d', $this->getEvent()->getStartDate()) == date('Y m d', $this->getEvent()->getEndDate()))
             {
-                $dateFormat = Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES);
+                $dateFormat = Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES);
             }
 
             $html[] = '<div class="calendar-event-range">' . htmlentities(
-                    DatetimeUtilities::format_locale_date($dateFormat, $this->getEvent()->getStartDate()) . ' - ' .
-                    DatetimeUtilities::format_locale_date($dateFormat, $this->getEvent()->getEndDate())
+                    DatetimeUtilities::getInstance()->formatLocaleDate($dateFormat, $this->getEvent()->getStartDate()) . ' - ' .
+                    DatetimeUtilities::getInstance()->formatLocaleDate($dateFormat, $this->getEvent()->getEndDate())
                 ) . '</div>';
         }
         else
         {
-            $html[] = '<div class="calendar-event-range">' . DatetimeUtilities::format_locale_date(
+            $html[] = '<div class="calendar-event-range">' . DatetimeUtilities::getInstance()->formatLocaleDate(
                     $dateFormat, $this->getEvent()->getStartDate()
                 ) . '</div>';
         }

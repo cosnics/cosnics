@@ -11,7 +11,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class Login extends BlockRenderer
 {
@@ -90,10 +90,10 @@ class Login extends BlockRenderer
         $html = '<script>$(document).ready(function(){document.formLogin.login.focus();});</script>';
         $form->addElement('html', $html);
         $form->addElement('text', 'login', Translation::get('UserName'), array('style' => 'width: 90%;'));
-        $form->addRule('login', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
+        $form->addRule('login', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required');
         $form->addElement('password', 'password', Translation::get('Password'), array('style' => 'width: 90%;'));
         $form->addRule(
-            'password', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            'password', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
 
         $buttons = [];

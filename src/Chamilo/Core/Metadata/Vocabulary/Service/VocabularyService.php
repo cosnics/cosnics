@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -59,7 +59,7 @@ class VocabularyService
         if (!$vocabulary->create())
         {
             throw new Exception(
-                Translation::get('ObjectCreationFailed', array('OBJECT' => 'Vocabulary'), Utilities::COMMON_LIBRARIES)
+                Translation::get('ObjectCreationFailed', array('OBJECT' => 'Vocabulary'), StringUtilities::LIBRARIES)
             );
         }
 

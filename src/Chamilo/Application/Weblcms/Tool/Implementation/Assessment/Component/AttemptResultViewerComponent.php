@@ -22,7 +22,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class displays the result of a single attempt
@@ -83,7 +83,7 @@ class AttemptResultViewerComponent extends Manager
         if (!$this->assessment_attempt)
         {
             $this->redirect(
-                Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES), true, [], array(
+                Translation::get("NotAllowed", null, StringUtilities::LIBRARIES), true, [], array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
                 )

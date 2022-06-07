@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ViewerComponent extends Manager implements DelegateComponent
 {
@@ -79,7 +79,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                     {
                         $commonActions->addButton(
                             new Button(
-                                Translation::get('Deactivate', [], Utilities::COMMON_LIBRARIES),
+                                Translation::get('Deactivate', [], StringUtilities::LIBRARIES),
                                 new FontAwesomeGlyph('pause-circle', [], null, 'fas'), $this->get_url(
                                 array(
                                     self::PARAM_ACTION => self::ACTION_DEACTIVATE, self::PARAM_CONTEXT => $this->context
@@ -98,7 +98,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                     {
                         $commonActions->addButton(
                             new Button(
-                                Translation::get('Activate', [], Utilities::COMMON_LIBRARIES),
+                                Translation::get('Activate', [], StringUtilities::LIBRARIES),
                                 new FontAwesomeGlyph('play-circle', [], null, 'fas'), $this->get_url(
                                 array(
                                     self::PARAM_ACTION => self::ACTION_ACTIVATE, self::PARAM_CONTEXT => $this->context
@@ -113,7 +113,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Install', [], Utilities::COMMON_LIBRARIES),
+                        Translation::get('Install', [], StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('box', [], null, 'fas'), $this->get_url(
                         array(self::PARAM_ACTION => self::ACTION_INSTALL, self::PARAM_CONTEXT => $this->context)
                     ), ToolbarItem::DISPLAY_ICON_AND_LABEL, true

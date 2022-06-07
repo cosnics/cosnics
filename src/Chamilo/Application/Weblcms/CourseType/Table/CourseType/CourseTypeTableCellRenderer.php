@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class describes the default cell renderer for the course type table
@@ -41,12 +41,12 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
 
         if ($course_type->is_active())
         {
-            $activation_translation = Translation::get('Deactivate', null, Utilities::COMMON_LIBRARIES);
+            $activation_translation = Translation::get('Deactivate', null, StringUtilities::LIBRARIES);
             $glyph = new FontAwesomeGlyph('eye');
         }
         else
         {
-            $activation_translation = Translation::get('Activate', null, Utilities::COMMON_LIBRARIES);
+            $activation_translation = Translation::get('Activate', null, StringUtilities::LIBRARIES);
             $glyph = new FontAwesomeGlyph('eye', array('text-muted'));
         }
 
@@ -60,7 +60,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_component()->get_update_course_type_url($course_type->get_id()), ToolbarItem::DISPLAY_ICON
             )
         );
@@ -69,7 +69,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_component()->get_delete_course_type_url($course_type->get_id()),
                     ToolbarItem::DISPLAY_ICON, true
                 )
@@ -79,7 +79,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('DeleteNA', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('DeleteNA', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('times', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -91,7 +91,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-up'),
+                    Translation::get('MoveUp', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-up'),
                     $this->get_component()->get_move_course_type_url(
                         $course_type->get_id(), Manager::MOVE_DIRECTION_UP
                     ), ToolbarItem::DISPLAY_ICON
@@ -102,7 +102,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveUpNA', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('MoveUpNA', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('sort-up', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -114,7 +114,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-down'),
+                    Translation::get('MoveDown', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-down'),
                     $this->get_component()->get_move_course_type_url(
                         $course_type->get_id(), Manager::MOVE_DIRECTION_DOWN
                     ), ToolbarItem::DISPLAY_ICON
@@ -125,7 +125,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveDownNA', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('MoveDownNA', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('sort-down', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -174,7 +174,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
                 {
                     $glyph = new FontAwesomeGlyph(
                         'circle', array('text-success'),
-                        Translation::get('ConfirmTrue', null, Utilities::COMMON_LIBRARIES), 'fas'
+                        Translation::get('ConfirmTrue', null, StringUtilities::LIBRARIES), 'fas'
                     );
                 }
                 else
@@ -182,7 +182,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
                 {
                     $glyph = new FontAwesomeGlyph(
                         'circle', array('text-danger'),
-                        Translation::get('ConfirmFalse', null, Utilities::COMMON_LIBRARIES), 'fas'
+                        Translation::get('ConfirmFalse', null, StringUtilities::LIBRARIES), 'fas'
                     );
                 }
 

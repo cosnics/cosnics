@@ -20,7 +20,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Repository manager component to move objects between categories in the repository.
@@ -73,7 +73,7 @@ class MoverComponent extends Manager
             $form->addElement(
                 'select', self::PARAM_DESTINATION_CONTENT_OBJECT_ID, Translation::get('NewCategory'), $this->tree
             );
-            $form->addElement('submit', 'submit', Translation::get('Move', null, Utilities::COMMON_LIBRARIES));
+            $form->addElement('submit', 'submit', Translation::get('Move', null, StringUtilities::LIBRARIES));
 
             if ($form->validate())
             {
@@ -148,14 +148,14 @@ class MoverComponent extends Manager
                     {
                         $message = Translation::get(
                             'ObjectNotMoved', array('OBJECT' => Translation::get('ContentObject')),
-                            Utilities::COMMON_LIBRARIES
+                            StringUtilities::LIBRARIES
                         );
                     }
                     else
                     {
                         $message = Translation::get(
                             'ObjectsNotMoved', array('OBJECTS' => Translation::get('ContentObjects')),
-                            Utilities::COMMON_LIBRARIES
+                            StringUtilities::LIBRARIES
                         );
                     }
                 }
@@ -165,14 +165,14 @@ class MoverComponent extends Manager
                     {
                         $message = Translation::get(
                             'ObjectMoved', array('OBJECT' => Translation::get('ContentObject')),
-                            Utilities::COMMON_LIBRARIES
+                            StringUtilities::LIBRARIES
                         );
                     }
                     else
                     {
                         $message = Translation::get(
                             'ObjectsMoved', array('OBJECTS' => Translation::get('ContentObjects')),
-                            Utilities::COMMON_LIBRARIES
+                            StringUtilities::LIBRARIES
                         );
                     }
                 }
@@ -199,7 +199,7 @@ class MoverComponent extends Manager
                 htmlentities(
                     Translation::get(
                         'NoObjectSelected', array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     )
                 )
             );
@@ -243,7 +243,7 @@ class MoverComponent extends Manager
 
             if ($current_parent == $cat->get_id())
             {
-                $this->tree[$cat->get_id()] .= ' (' . Translation::get('Current', null, Utilities::COMMON_LIBRARIES) .
+                $this->tree[$cat->get_id()] .= ' (' . Translation::get('Current', null, StringUtilities::LIBRARIES) .
                     ')';
             }
 

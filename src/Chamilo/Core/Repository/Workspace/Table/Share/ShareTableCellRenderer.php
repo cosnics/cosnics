@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRe
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ShareTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -21,7 +21,7 @@ class ShareTableCellRenderer extends DataClassTableCellRenderer implements Table
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Share', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('lock'),
+                Translation::get('Share', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
                 $this->get_component()->get_url(array(Manager::PARAM_SELECTED_WORKSPACE_ID => $workspace->get_id())),
                 ToolbarItem::DISPLAY_ICON
             )
@@ -37,8 +37,8 @@ class ShareTableCellRenderer extends DataClassTableCellRenderer implements Table
             case Workspace::PROPERTY_CREATOR_ID :
                 return $workspace->getCreator()->get_fullname();
             case Workspace::PROPERTY_CREATION_DATE :
-                return DatetimeUtilities::format_locale_date(
-                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+                return DatetimeUtilities::getInstance()->formatLocaleDate(
+                    Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES),
                     $workspace->getCreationDate()
                 );
         }

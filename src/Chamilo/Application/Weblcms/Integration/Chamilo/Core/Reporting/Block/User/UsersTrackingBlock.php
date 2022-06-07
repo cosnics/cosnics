@@ -47,7 +47,7 @@ class UsersTrackingBlock extends CourseBlock
             $first_date = $this->format_date($course_summary_data[CourseVisit::PROPERTY_FIRST_ACCESS_DATE]);
             $last_date = $this->format_date($course_summary_data[CourseVisit::PROPERTY_LAST_ACCESS_DATE]);
 
-            $time_spent_on_course = $this->convert_seconds_to_hours(
+            $time_spent_on_course = $this->convertSecondsToHours(
                 $course_summary_data[CourseVisit::PROPERTY_TOTAL_TIME]
             );
 

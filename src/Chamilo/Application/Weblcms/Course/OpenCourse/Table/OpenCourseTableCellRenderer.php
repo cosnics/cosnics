@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Cell renderer for the open courses table
@@ -56,7 +56,7 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->getTranslation('Edit', null, Utilities::COMMON_LIBRARIES),
+                    $translator->getTranslation('Edit', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('pencil-alt'),
                     $this->get_component()->getUpdateOpenCourseUrl($course[Course::PROPERTY_ID]),
                     ToolbarItem::DISPLAY_ICON
@@ -65,7 +65,7 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->getTranslation('Delete', null, Utilities::COMMON_LIBRARIES),
+                    $translator->getTranslation('Delete', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('times'),
                     $this->get_component()->getDeleteOpenCourseUrl($course[Course::PROPERTY_ID]),
                     ToolbarItem::DISPLAY_ICON, true

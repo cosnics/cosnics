@@ -4,7 +4,7 @@ namespace Chamilo\Core\Help\Form;
 use Chamilo\Core\Help\Storage\DataClass\HelpItem;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -30,21 +30,21 @@ class HelpItemForm extends FormValidator
         $this->addElement(
             'text',
             HelpItem::PROPERTY_URL,
-            Translation::get('URL', null, Utilities::COMMON_LIBRARIES),
+            Translation::get('URL', null, StringUtilities::LIBRARIES),
             array('size' => '100'));
         $this->addRule(
             HelpItem::PROPERTY_URL,
-            Translation::get('Required', null, Utilities::COMMON_LIBRARIES),
+            Translation::get('Required', null, StringUtilities::LIBRARIES),
             'required');
 
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
-            Translation::get('Save', null, Utilities::COMMON_LIBRARIES));
+            Translation::get('Save', null, StringUtilities::LIBRARIES));
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+            Translation::get('Reset', null, StringUtilities::LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

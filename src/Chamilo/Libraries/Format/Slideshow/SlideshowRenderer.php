@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -358,7 +358,7 @@ class SlideshowRenderer
         {
             $actionsToolBar->add_item(
                 new ToolbarItem(
-                    Translation::get('Stop', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('stop'),
+                    Translation::get('Stop', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('stop'),
                     $this->determineUrl($slideshowIndex, 0), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -367,7 +367,7 @@ class SlideshowRenderer
         {
             $actionsToolBar->add_item(
                 new ToolbarItem(
-                    Translation::get('Play', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('play'),
+                    Translation::get('Play', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('play'),
                     $this->determineUrl($slideshowIndex, 1), ToolbarItem::DISPLAY_ICON
                 )
             );

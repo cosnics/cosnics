@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class AssessmentViewerForm extends FormValidator
 {
@@ -114,7 +114,7 @@ class AssessmentViewerForm extends FormValidator
         if (count($this->questions) > 0)
         {
             $submit_button = $this->createElement(
-                'style_submit_button', 'submit', Translation::get('Submit', null, Utilities::COMMON_LIBRARIES),
+                'style_submit_button', 'submit', Translation::get('Submit', null, StringUtilities::LIBRARIES),
                 array('style' => 'display: none;')
             );
         }
@@ -122,7 +122,7 @@ class AssessmentViewerForm extends FormValidator
         if ($this->assessment_viewer->showFeedbackAfterEveryPage())
         {
             $buttons[] = $this->createElement(
-                'style_button', 'next', Translation::get('Check', null, Utilities::COMMON_LIBRARIES), null, null,
+                'style_button', 'next', Translation::get('Check', null, StringUtilities::LIBRARIES), null, null,
                 new FontAwesomeGlyph('chevron-right')
             );
         }
@@ -131,7 +131,7 @@ class AssessmentViewerForm extends FormValidator
             if ($this->get_page_number() > 1)
             {
                 $buttons[] = $this->createElement(
-                    'style_button', 'back', Translation::get('Previous', null, Utilities::COMMON_LIBRARIES), null, null,
+                    'style_button', 'back', Translation::get('Previous', null, StringUtilities::LIBRARIES), null, null,
                     new FontAwesomeGlyph('chevron-left')
                 );
             }
@@ -139,7 +139,7 @@ class AssessmentViewerForm extends FormValidator
             if ($this->get_page_number() < $this->get_total_pages())
             {
                 $buttons[] = $this->createElement(
-                    'style_button', 'next', Translation::get('Next', null, Utilities::COMMON_LIBRARIES), null, null,
+                    'style_button', 'next', Translation::get('Next', null, StringUtilities::LIBRARIES), null, null,
                     new FontAwesomeGlyph('chevron-right')
                 );
             }

@@ -20,7 +20,7 @@ class StreamingMediaExternalObjectGalleryTableCellRenderer extends DefaultExtern
 
     public function renderTitle($object)
     {
-        StringUtilities::getInstance()->truncate($object->get_title(), 25) . ' (' . DatetimeUtilities::format_seconds_to_minutes(
+        StringUtilities::getInstance()->truncate($object->get_title(), 25) . ' (' . DatetimeUtilities::getInstance()->formatSecondsToMinutes(
             $object->get_duration()) . ')';
     }
 }

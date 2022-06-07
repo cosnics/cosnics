@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\ForumTopic\Form;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopic;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -35,7 +35,7 @@ class ForumTopicForm extends ContentObjectForm
     protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_editing_form($htmleditor_options, $in_tab);
-        $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
+        $this->addElement('category', Translation::get('Properties', null, StringUtilities::LIBRARIES));
         $this->addElement(
             'checkbox', 'locked', Translation::get('Locked', null, 'Chamilo\Core\Repository\ContentObject\Forum')
         );

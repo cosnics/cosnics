@@ -18,7 +18,7 @@ class ExportTable extends DataClassTable implements TableFormActionsSupport
         // new TableFormAction(
         // $this->get_component()->get_url( array(
         // Manager::PARAM_EXTERNAL_REPOSITORY_MANAGER_ACTION => Manager::ACTION_EXPORT_EXTERNAL_REPOSITORY)),
-        // Translation::get('ExportSelected', null, Utilities::COMMON_LIBRARIES)));
+        // Translation::get('ExportSelected', null, StringUtilities::LIBRARIES)));
         
         return $actions;
     }

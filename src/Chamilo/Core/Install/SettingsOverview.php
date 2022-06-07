@@ -3,7 +3,7 @@ namespace Chamilo\Core\Install;
 
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -88,8 +88,8 @@ class SettingsOverview
 
         $html[] = $this->renderSetting(
             Translation::get('DatabaseExists'), $this->getSettingValue('database_exists') ? Translation::get(
-            'ConfirmYes', null, Utilities::COMMON_LIBRARIES
-        ) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES)
+            'ConfirmYes', null, StringUtilities::LIBRARIES
+        ) : Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES)
         );
 
         return implode(PHP_EOL, $html);

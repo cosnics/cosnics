@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -143,7 +143,7 @@ class ParentChangerComponent extends Manager
             $html = [];
 
             $html[] = $this->render_header();
-            $html[] = Display::error_message(Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES));
+            $html[] = Display::error_message(Translation::get('NoObjectSelected', null, StringUtilities::LIBRARIES));
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
@@ -232,14 +232,14 @@ class ParentChangerComponent extends Manager
             'static', null, Translation::get(
             'ObjectSelected',
             array('OBJECT' => Translation::get(count($selected_categories) > 1 ? 'Categories' : 'Category')),
-            Utilities::COMMON_LIBRARIES
+            StringUtilities::LIBRARIES
         ), implode('<br>', $category_names)
         );
 
         $form->addElement(
-            'select', 'category', Translation::get('Category', null, Utilities::COMMON_LIBRARIES), $this->tree
+            'select', 'category', Translation::get('Category', null, StringUtilities::LIBRARIES), $this->tree
         );
-        $form->addElement('submit', 'submit', Translation::get('Ok', null, Utilities::COMMON_LIBRARIES));
+        $form->addElement('submit', 'submit', Translation::get('Ok', null, StringUtilities::LIBRARIES));
 
         return $form;
     }

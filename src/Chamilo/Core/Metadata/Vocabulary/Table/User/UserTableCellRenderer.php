@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Table cell renderer for the schema
@@ -32,7 +32,7 @@ class UserTableCellRenderer extends RecordTableCellRenderer implements TableCell
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Vocabulary', null, Utilities::COMMON_LIBRARIES),
+                Translation::get('Vocabulary', null, StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('language', [], null, 'fas'), $this->get_component()->get_url(
                 array(
                     Manager::PARAM_ACTION => Manager::ACTION_BROWSE,

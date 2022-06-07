@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\ForumTopic\Form;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ComplexForumTopic;
 use Chamilo\Core\Repository\Form\ComplexContentObjectItemForm;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -28,7 +28,7 @@ class ComplexForumTopicForm extends ComplexContentObjectItemForm
         $elements[] = $this->createElement(
             'radio', 
             ComplexForumTopic::PROPERTY_FORUM_TYPE, 
-            Translation::get('Nothing', null, Utilities::COMMON_LIBRARIES), 
+            Translation::get('Nothing', null, StringUtilities::LIBRARIES),
             '', 
             0);
         $elements[] = $this->createElement(

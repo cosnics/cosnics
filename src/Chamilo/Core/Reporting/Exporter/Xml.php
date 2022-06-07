@@ -3,7 +3,7 @@ namespace Chamilo\Core\Reporting\Exporter;
 
 use Chamilo\Libraries\File\Export\Export;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class Xml extends Csv
 {
@@ -41,7 +41,7 @@ class Xml extends Csv
                 $category_array[str_replace(
                     ' ', 
                     '_', 
-                    strtolower(Translation::get('Category', null, Utilities::COMMON_LIBRARIES)))] = $category_name;
+                    strtolower(Translation::get('Category', null, StringUtilities::LIBRARIES)))] = $category_name;
             }
             foreach ($data->get_rows() as $row_id => $row_name)
             {

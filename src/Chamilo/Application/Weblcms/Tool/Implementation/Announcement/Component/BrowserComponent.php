@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserComponent extends Manager
 {
@@ -86,13 +86,13 @@ class BrowserComponent extends Manager
         $showActions[] = new SubButtonHeader(Translation::get('ViewPeriodHeader'));
 
         $showActions[] = new SubButton(
-            Translation::get('PeriodAll', null, Utilities::COMMON_LIBRARIES), null,
+            Translation::get('PeriodAll', null, StringUtilities::LIBRARIES), null,
             $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null)),
             Button::DISPLAY_LABEL, false, [], null, $filter == ''
         );
 
         $showActions[] = new SubButton(
-            Translation::get('PeriodToday', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+            Translation::get('PeriodToday', null, StringUtilities::LIBRARIES), null, $this->get_url(
             array(
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_TODAY
@@ -101,7 +101,7 @@ class BrowserComponent extends Manager
         );
 
         $showActions[] = new SubButton(
-            Translation::get('PeriodWeek', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+            Translation::get('PeriodWeek', null, StringUtilities::LIBRARIES), null, $this->get_url(
             array(
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_THIS_WEEK
@@ -110,7 +110,7 @@ class BrowserComponent extends Manager
         );
 
         $showActions[] = new SubButton(
-            Translation::get('PeriodMonth', null, Utilities::COMMON_LIBRARIES), null, $this->get_url(
+            Translation::get('PeriodMonth', null, StringUtilities::LIBRARIES), null, $this->get_url(
             array(
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_THIS_MONTH

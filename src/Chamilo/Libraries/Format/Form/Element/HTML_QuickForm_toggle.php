@@ -2,7 +2,7 @@
 
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -48,7 +48,7 @@ class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
 
         $html[] = parent::toHtml();
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'Toggle.js'
+            Path::getInstance()->getJavascriptPath(StringUtilities::LIBRARIES, true) . 'Toggle.js'
         );
 
         return implode(PHP_EOL, $html);

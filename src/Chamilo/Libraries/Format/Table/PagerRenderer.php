@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -86,7 +86,7 @@ class PagerRenderer
         $variables['END'] = $this->getPager()->getCurrentRangeEnd();
         $variables['TOTAL'] = $this->getPager()->getNumberOfItems();
 
-        return Translation::get('ShowingStartToEndOfTotalEntries', $variables, Utilities::COMMON_LIBRARIES);
+        return Translation::get('ShowingStartToEndOfTotalEntries', $variables, StringUtilities::LIBRARIES);
     }
 
     /**
@@ -142,7 +142,7 @@ class PagerRenderer
         $buttonToolBar->addButtonGroup($buttonGroup);
         $pager = $this->getPager();
 
-        $defaultTranslationVariables[Application::PARAM_CONTEXT] = Utilities::COMMON_LIBRARIES;
+        $defaultTranslationVariables[Application::PARAM_CONTEXT] = StringUtilities::LIBRARIES;
         $defaultTranslationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE] = 'ShowNumberOfItemsPerPage';
         $defaultTranslationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW] = 'ShowNumberOfItemsPerPage';
         $defaultTranslationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL] = 'ShowAllItems';

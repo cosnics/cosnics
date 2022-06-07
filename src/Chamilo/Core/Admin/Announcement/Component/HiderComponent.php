@@ -5,7 +5,7 @@ use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class HiderComponent extends Manager
 {
@@ -68,7 +68,7 @@ class HiderComponent extends Manager
             }
 
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), (bool) $failures,
+                Translation::get($message, $parameter, StringUtilities::LIBRARIES), (bool) $failures,
                 array(self::PARAM_ACTION => self::ACTION_BROWSE)
             );
         }
@@ -77,7 +77,7 @@ class HiderComponent extends Manager
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected', array('OBJECT' => 'Publication'), Utilities::COMMON_LIBRARIES
+                        'NoObjectSelected', array('OBJECT' => 'Publication'), StringUtilities::LIBRARIES
                     )
                 )
             );

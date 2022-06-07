@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
 
 /**
@@ -121,7 +121,7 @@ class LogViewerComponent extends Manager
         $form->addElement('select', 'lines', '', $lines);
 
         $form->addElement(
-            'submit', 'submit', Translation::get('Ok', [], Utilities::COMMON_LIBRARIES),
+            'submit', 'submit', Translation::get('Ok', [], StringUtilities::LIBRARIES),
             array('class' => 'positive finish')
         );
         $form->addElement(

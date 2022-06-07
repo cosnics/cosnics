@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Class CourseUserSubscriptionRequestGranterComponent
@@ -30,7 +30,7 @@ class CourseUserSubscriptionRequestGranterComponent extends Manager
                     Translation::get(
                         'NoObjectSelected', 
                         array('OBJECT' => Translation::get('Request')), 
-                        Utilities::COMMON_LIBRARIES)));
+                        StringUtilities::LIBRARIES)));
         }
         
         if (! is_array($requestIds))
@@ -75,7 +75,7 @@ class CourseUserSubscriptionRequestGranterComponent extends Manager
         }
         
         $this->redirect(
-            Translation::getInstance()->getTranslation($message, $parameter, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation($message, $parameter, StringUtilities::LIBRARIES),
             (bool) $failures,
             array(self::PARAM_ACTION => self::ACTION_ADMIN_REQUEST_BROWSER));
     }

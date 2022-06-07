@@ -28,7 +28,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -164,7 +164,7 @@ class ExporterComponent extends Manager
             $html[] = $this->display_error_message(
                 Translation::get(
                     'NoObjectsSelected', array('OBJECT' => Translation::get('ContentObject')),
-                    Utilities::COMMON_LIBRARIES
+                    StringUtilities::LIBRARIES
                 )
             );
             $html[] = $this->render_footer();

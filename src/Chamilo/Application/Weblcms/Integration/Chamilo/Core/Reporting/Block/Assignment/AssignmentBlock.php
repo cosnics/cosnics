@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -68,9 +68,9 @@ class AssignmentBlock extends AssignmentReportingManager
 
             if ($last_submission > 0)
             {
-                $last_submission = DatetimeUtilities::format_locale_date(
-                    Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                    Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES), $last_submission
+                $last_submission = DatetimeUtilities::getInstance()->formatLocaleDate(
+                    Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' .
+                    Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES), $last_submission
                 );
             }
 

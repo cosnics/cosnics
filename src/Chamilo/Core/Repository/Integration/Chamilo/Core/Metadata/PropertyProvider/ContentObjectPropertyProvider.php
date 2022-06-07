@@ -68,9 +68,9 @@ abstract class ContentObjectPropertyProvider implements PropertyProviderInterfac
                 
                 return Translation::get('UserUnknown', null, Manager::context());
             case self::PROPERTY_CREATION_DATE :
-                return DatetimeUtilities::format_locale_date(null, $contentObject->get_creation_date());
+                return DatetimeUtilities::getInstance()->formatLocaleDate(null, $contentObject->get_creation_date());
             case self::PROPERTY_MODIFICATION_DATE :
-                return DatetimeUtilities::format_locale_date(null, $contentObject->get_modification_date());
+                return DatetimeUtilities::getInstance()->formatLocaleDate(null, $contentObject->get_modification_date());
             case self::PROPERTY_IDENTIFIER :
                 return '\Chamilo\Core\Repository\ContentObject:' . $contentObject->get_id();
         }

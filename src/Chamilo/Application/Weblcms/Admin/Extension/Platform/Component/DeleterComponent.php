@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -72,7 +72,7 @@ class DeleterComponent extends Manager
                         $message = Translation::get(
                             'ObjectNotDeleted', 
                             array('OBJECT' => Translation::get('Target')), 
-                            Utilities::COMMON_LIBRARIES);
+                            StringUtilities::LIBRARIES);
                     }
                     else
                     {
@@ -126,7 +126,7 @@ class DeleterComponent extends Manager
                         $message = Translation::get(
                             'ObjectNotDeleted', 
                             array('OBJECT' => Translation::get('Target')), 
-                            Utilities::COMMON_LIBRARIES);
+                            StringUtilities::LIBRARIES);
                         break;
                     }
                 }
@@ -210,7 +210,7 @@ class DeleterComponent extends Manager
         $message = Translation::get(
             'ObjectDeleted', 
             array('OBJECT' => Translation::get('Target')), 
-            Utilities::COMMON_LIBRARIES);
+            StringUtilities::LIBRARIES);
         
         $this->redirect($message, ! $success, $parameters);
     }

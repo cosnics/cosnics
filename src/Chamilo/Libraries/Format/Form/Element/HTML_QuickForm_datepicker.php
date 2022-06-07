@@ -4,7 +4,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Form element to select a date and hour (with popup datepicker)
@@ -153,7 +153,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
             '<a class="btn btn-default" href="javascript:openCalendar(\'' . $js_form_name . '\',\'' . $elementName .
             '\')">' . $glyph->render() . '</a>';
         $specialCharacters = array('D', 'l', 'd', 'M', 'F', 'm', 'y', 'H', 'a', 'A', 's', 'i', 'h', 'g', 'W', '.', ' ');
-        $hourMinuteDivider = Translation::get('HourMinuteDivider', null, Utilities::COMMON_LIBRARIES);
+        $hourMinuteDivider = Translation::get('HourMinuteDivider', null, StringUtilities::LIBRARIES);
 
         foreach ($specialCharacters as $index => $char)
         {

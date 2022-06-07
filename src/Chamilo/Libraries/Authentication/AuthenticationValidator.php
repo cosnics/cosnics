@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -221,7 +221,7 @@ class AuthenticationValidator
         if (($accountHasExpired || $accountNotActivated || !$user->get_active()) && !$user->is_platform_admin())
         {
             throw new AuthenticationException(
-                $this->translator->trans('AccountNotActive', [], Utilities::COMMON_LIBRARIES)
+                $this->translator->trans('AccountNotActive', [], StringUtilities::LIBRARIES)
             );
         }
     }

@@ -23,7 +23,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserComponent extends Manager implements TableSupport, DelegateComponent
 {
@@ -85,7 +85,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             {
                 $commonActions->addButton(
                     new Button(
-                        $translator->trans('Publish', [], Utilities::COMMON_LIBRARIES),
+                        $translator->trans('Publish', [], StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('share-square'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -95,14 +95,14 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
             $commonActions->addButton(
                 new Button(
-                    $translator->trans('ShowAll', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
+                    $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
                     $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $toolActions->addButton(
                 new Button(
-                    $translator->trans('ShowToday', [], Utilities::COMMON_LIBRARIES),
+                    $translator->trans('ShowToday', [], StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('calendar-day', [], null, 'fas'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_TODAY)), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
@@ -110,7 +110,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
             $toolActions->addButton(
                 new Button(
-                    $translator->trans('ShowThisWeek', [], Utilities::COMMON_LIBRARIES),
+                    $translator->trans('ShowThisWeek', [], StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('calendar-week', [], null, 'fas'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_THIS_WEEK)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -119,7 +119,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
             $toolActions->addButton(
                 new Button(
-                    $translator->trans('ShowThisMonth', [], Utilities::COMMON_LIBRARIES),
+                    $translator->trans('ShowThisMonth', [], StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('calendar-alt', [], null, 'fas'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_THIS_MONTH)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL

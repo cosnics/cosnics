@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -100,14 +100,14 @@ class RestorerComponent extends Manager
                     $message = Translation::get(
                         'ObjectNotRestored',
                         array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES);
+                        StringUtilities::LIBRARIES);
                 }
                 else
                 {
                     $message = Translation::get(
                         'ObjectNotRestored',
                         array('OBJECTS' => Translation::get('ContentObjects')),
-                        Utilities::COMMON_LIBRARIES);
+                        StringUtilities::LIBRARIES);
                 }
             }
             else
@@ -117,14 +117,14 @@ class RestorerComponent extends Manager
                     $message = Translation::get(
                         'ObjectRestored',
                         array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES);
+                        StringUtilities::LIBRARIES);
                 }
                 else
                 {
                     $message = Translation::get(
                         'ObjectsRestored',
                         array('OBJECTS' => Translation::get('ContentObjects')),
-                        Utilities::COMMON_LIBRARIES);
+                        StringUtilities::LIBRARIES);
                 }
             }
 
@@ -139,7 +139,7 @@ class RestorerComponent extends Manager
                     Translation::get(
                         'NoObjectSelected',
                         array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES)));
+                        StringUtilities::LIBRARIES)));
         }
     }
 

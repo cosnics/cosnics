@@ -7,7 +7,7 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use RuntimeException;
 
@@ -83,7 +83,7 @@ class DirectMoverComponent extends Manager
         $message = htmlentities(
             Translation::get(
                 ($success ? 'ObjectUpdated' : 'ObjectNotUpdated'), array('OBJECT' => Translation::get('ContentObject')),
-                Utilities::COMMON_LIBRARIES
+                StringUtilities::LIBRARIES
             )
         );
 

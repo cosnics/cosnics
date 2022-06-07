@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Workspace\Favourite\Service\FavouriteService;
 use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use RuntimeException;
 
@@ -65,7 +65,7 @@ class CreatorComponent extends Manager
                 Translation::get(
                     'ObjectNotCreated', 
                     array('OBJECT' => Translation::get('WorkspaceUserFavourite')), 
-                    Utilities::COMMON_LIBRARIES), 
+                    StringUtilities::LIBRARIES),
                 true, 
                 array(\Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => $action), 
                 array(self::PARAM_ACTION));
@@ -75,7 +75,7 @@ class CreatorComponent extends Manager
             Translation::get(
                 'ObjectCreated', 
                 array('OBJECT' => Translation::get('WorkspaceUserFavourite', null, Manager::context())), 
-                Utilities::COMMON_LIBRARIES), 
+                StringUtilities::LIBRARIES),
             false, 
             array(\Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => $action), 
             array(self::PARAM_ACTION));

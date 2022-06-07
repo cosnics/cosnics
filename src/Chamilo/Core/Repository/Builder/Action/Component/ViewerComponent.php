@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -52,7 +52,7 @@ class ViewerComponent extends Manager
             $trail->add(
                 new Breadcrumb(
                     $this->get_url($parameters),
-                    Translation::get('View', null, Utilities::COMMON_LIBRARIES) . ' ' . $content_object->get_title()));
+                    Translation::get('View', null, StringUtilities::LIBRARIES) . ' ' . $content_object->get_title()));
 
             $html = [];
 
@@ -73,7 +73,7 @@ class ViewerComponent extends Manager
                     Translation::get(
                         'NoObjectSelected',
                         array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES)));
+                        StringUtilities::LIBRARIES)));
         }
     }
 }

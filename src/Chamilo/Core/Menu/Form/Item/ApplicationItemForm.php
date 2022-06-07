@@ -5,7 +5,7 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Menu\Form\ItemForm;
 use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -35,7 +35,7 @@ class ApplicationItemForm extends ItemForm
 
         $this->addRule(
             ApplicationItem::PROPERTY_APPLICATION,
-            $translator->trans('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
+            $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
         );
 
         $this->add_textfield(

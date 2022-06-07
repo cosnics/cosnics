@@ -17,7 +17,7 @@ use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -65,13 +65,13 @@ class RegisterForm extends FormValidator
         // Lastname
         $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
         // Firstname
         $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
         // Email
@@ -80,7 +80,7 @@ class RegisterForm extends FormValidator
         if (Configuration::getInstance()->get_setting(array(Manager::context(), 'require_email')))
         {
             $this->addRule(
-                User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
                 'required'
             );
         }
@@ -89,7 +89,7 @@ class RegisterForm extends FormValidator
         // Username
         $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_USERNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            User::PROPERTY_USERNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
         // pw
@@ -110,7 +110,7 @@ class RegisterForm extends FormValidator
         {
             $this->addRule(
                 User::PROPERTY_OFFICIAL_CODE,
-                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+                Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
             );
         }
 
@@ -137,10 +137,10 @@ class RegisterForm extends FormValidator
         // Send email
         $group = [];
         $group[] = &$this->createElement(
-            'radio', 'send_mail', null, Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 1
+            'radio', 'send_mail', null, Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
         );
         $group[] = &$this->createElement(
-            'radio', 'send_mail', null, Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES), 0
+            'radio', 'send_mail', null, Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
         );
         $this->addGroup($group, 'mail', Translation::get('SendMailToNewUser'), '&nbsp;');
         // Submit button
@@ -155,7 +155,7 @@ class RegisterForm extends FormValidator
             );
             $this->addElement('checkbox', 'conditions_accept', '', Translation::get('IAccept'));
             $this->addRule(
-                'conditions_accept', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                'conditions_accept', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
                 'required'
             );
         }
@@ -164,7 +164,7 @@ class RegisterForm extends FormValidator
             'style_submit_button', 'submit', Translation::get('Register'), null, null, new FontAwesomeGlyph('user')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

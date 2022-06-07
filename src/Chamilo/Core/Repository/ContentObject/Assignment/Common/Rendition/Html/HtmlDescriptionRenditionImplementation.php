@@ -20,13 +20,13 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 //
 //        $properties = [];
 //        $properties[Translation::get('StartTime')] =
-//            DatetimeUtilities::format_locale_date(
-//                Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+//            DatetimeUtilities::getInstance()->formatLocaleDate(
+//                Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES),
 //                $this->get_content_object()->get_start_time()
 //            ) . '</div>';
 //        $properties[Translation::get('EndTime')] =
-//            DatetimeUtilities::format_locale_date(
-//                Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+//            DatetimeUtilities::getInstance()->formatLocaleDate(
+//                Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES),
 //                $this->get_content_object()->get_end_time()
 //            );
 //

@@ -18,7 +18,7 @@ use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponent
 {
@@ -209,7 +209,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'LearningPathMenu.js'
         );
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getPluginPath(Utilities::COMMON_LIBRARIES, true) . 'Jquery/jquery.fullscreen.min.js'
+            Path::getInstance()->getPluginPath(StringUtilities::LIBRARIES, true) . 'Jquery/jquery.fullscreen.min.js'
         );
 
         $html[] = parent::render_footer();
@@ -308,7 +308,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         foreach ($commonTranslationVariables as $commonTranslationVariable)
         {
             $translations[$commonTranslationVariable] =
-                $translator->getTranslation($commonTranslationVariable, null, Utilities::COMMON_LIBRARIES);
+                $translator->getTranslation($commonTranslationVariable, null, StringUtilities::LIBRARIES);
         }
 
         $parameters = array(

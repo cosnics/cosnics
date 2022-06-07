@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 class DefaultComponent extends Manager
@@ -57,7 +57,7 @@ class DefaultComponent extends Manager
                         Translation::get(
                             'ObjectNotUpdated', 
                             array('OBJECT' => Translation::get('VocabularyDefault')), 
-                            Utilities::COMMON_LIBRARIES));
+                            StringUtilities::LIBRARIES));
                 }
             }
             
@@ -65,7 +65,7 @@ class DefaultComponent extends Manager
             $message = Translation::get(
                 'ObjectUpdated', 
                 array('OBJECT' => Translation::get('VocabularyDefault')), 
-                Utilities::COMMON_LIBRARIES);
+                StringUtilities::LIBRARIES);
         }
         catch (Exception $ex)
         {

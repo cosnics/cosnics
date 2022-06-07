@@ -178,7 +178,7 @@ class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements Tab
                     $learningPath, $user, $record
                 );
 
-                return DatetimeUtilities::format_seconds_to_hours($totalTimeSpent);
+                return DatetimeUtilities::getInstance()->formatSecondsToHours($totalTimeSpent);
         }
 
         return parent::render_cell($column, $record);

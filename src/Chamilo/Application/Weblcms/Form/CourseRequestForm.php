@@ -18,7 +18,7 @@ use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -85,11 +85,11 @@ class CourseRequestForm extends FormValidator
         $this->build_request_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Create', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -176,24 +176,24 @@ class CourseRequestForm extends FormValidator
             $motivation = $this->request->get_motivation();
             $this->addElement('static', 'request', Translation::get('Motivation'), $motivation);
 
-            $creation_date = DatetimeUtilities::format_locale_date(null, $this->request->get_creation_date());
+            $creation_date = DatetimeUtilities::getInstance()->formatLocaleDate(null, $this->request->get_creation_date());
             $this->addElement('static', 'request', Translation::get('CreationDate'), $creation_date);
 
             $decision = $this->request->get_decision();
-            $decision_date = DatetimeUtilities::format_locale_date(null, $this->request->get_decision_date());
+            $decision_date = DatetimeUtilities::getInstance()->formatLocaleDate(null, $this->request->get_decision_date());
             switch ($decision)
             {
                 case CommonRequest::ALLOWED_DECISION :
                     $this->addElement('static', 'request', Translation::get('Decision'), Translation::get('Allowed'));
                     $this->addElement(
-                        'static', 'request', Translation::get('ConfirmOn', null, Utilities::COMMON_LIBRARIES),
+                        'static', 'request', Translation::get('ConfirmOn', null, StringUtilities::LIBRARIES),
                         $decision_date
                     );
                     break;
                 case CommonRequest::DENIED_DECISION :
                     $this->addElement('static', 'request', Translation::get('Decision'), Translation::get('Denied'));
                     $this->addElement(
-                        'static', 'request', Translation::get('ConfirmOn', null, Utilities::COMMON_LIBRARIES),
+                        'static', 'request', Translation::get('ConfirmOn', null, StringUtilities::LIBRARIES),
                         $decision_date
                     );
                     break;

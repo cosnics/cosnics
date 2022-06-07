@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Table cell renderer for the schema
@@ -36,14 +36,14 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $update_url, ToolbarItem::DISPLAY_ICON
             )
         );
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                 $delete_url, ToolbarItem::DISPLAY_ICON, true
             )
         );
@@ -68,11 +68,11 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
             case Element::PROPERTY_REQUIRED :
                 if ($result->get_required())
                 {
-                    return Translation::get('ConfirmTrue', null, Utilities::COMMON_LIBRARIES);
+                    return Translation::get('ConfirmTrue', null, StringUtilities::LIBRARIES);
                 }
                 else
                 {
-                    return Translation::get('ConfirmFalse', null, Utilities::COMMON_LIBRARIES);
+                    return Translation::get('ConfirmFalse', null, StringUtilities::LIBRARIES);
                 }
         }
 

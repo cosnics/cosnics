@@ -21,7 +21,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -84,7 +84,7 @@ class BrowserComponent extends Manager implements TableSupport
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Add', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
+                        Translation::get('Add', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                         $this->get_create_category_url($this->get_category_id()), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );

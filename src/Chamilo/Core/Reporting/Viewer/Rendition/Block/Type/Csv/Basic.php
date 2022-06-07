@@ -3,7 +3,7 @@ namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Csv;
 
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Csv;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -25,7 +25,7 @@ class Basic extends Csv
             
             if ($data->is_categories_visible())
             {
-                $category_array[Translation::get('Category', null, Utilities::COMMON_LIBRARIES)] = $category_name;
+                $category_array[Translation::get('Category', null, StringUtilities::LIBRARIES)] = $category_name;
             }
             
             foreach ($data->get_rows() as $row_id => $row_name)

@@ -5,7 +5,7 @@ use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -80,14 +80,14 @@ abstract class ConfigurationForm extends FormValidator
         $this->addElement('hidden', Block::PROPERTY_ID, $this->getBlock()->get_id());
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Save', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Save', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('save')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
         $buttons[] = $this->createElement(
-            'style_submit_button', 'cancel', Translation::get('Cancel', null, Utilities::COMMON_LIBRARIES),
+            'style_submit_button', 'cancel', Translation::get('Cancel', null, StringUtilities::LIBRARIES),
             array('class' => 'btn-danger'), null, new FontAwesomeGlyph('times')
         );
 

@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Diff;
 
 /**
@@ -131,8 +131,8 @@ abstract class ContentObjectDifference
                 $content = $this->processHtmlPropertyValue($contentObject->get_description());
                 break;
             case ContentObject::PROPERTY_MODIFICATION_DATE:
-                $content = DatetimeUtilities::format_locale_date(
-                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+                $content = DatetimeUtilities::getInstance()->formatLocaleDate(
+                    Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES),
                     $contentObject->get_modification_date()
                 );
                 break;

@@ -31,7 +31,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 abstract class Manager extends Application implements NoContextComponent
 {
@@ -253,7 +253,7 @@ abstract class Manager extends Application implements NoContextComponent
         if ($object->is_editable())
         {
             $toolbar_items[self::ACTION_EDIT_EXTERNAL_REPOSITORY] = new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_EDIT_EXTERNAL_REPOSITORY,
@@ -266,7 +266,7 @@ abstract class Manager extends Application implements NoContextComponent
         if ($object->is_deletable())
         {
             $toolbar_items[self::ACTION_DELETE_EXTERNAL_REPOSITORY] = new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_DELETE_EXTERNAL_REPOSITORY,
@@ -281,7 +281,7 @@ abstract class Manager extends Application implements NoContextComponent
             if (!$this->is_stand_alone())
             {
                 $toolbar_items[] = new ToolbarItem(
-                    Translation::get('Select', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('share-square'),
+                    Translation::get('Select', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('share-square'),
                     $this->get_url(
                         array(
                             self::PARAM_ACTION => self::ACTION_SELECT_EXTERNAL_REPOSITORY,
@@ -295,7 +295,7 @@ abstract class Manager extends Application implements NoContextComponent
                 if ($object->is_importable())
                 {
                     $toolbar_items[self::ACTION_IMPORT_EXTERNAL_REPOSITORY] = new ToolbarItem(
-                        Translation::get('Import', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('upload'),
+                        Translation::get('Import', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('upload'),
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_IMPORT_EXTERNAL_REPOSITORY,

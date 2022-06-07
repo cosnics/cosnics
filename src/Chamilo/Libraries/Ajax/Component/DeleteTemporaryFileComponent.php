@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Ajax\Component;
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -33,11 +33,11 @@ class DeleteTemporaryFileComponent extends Manager
 
         if (!$result)
         {
-            JsonAjaxResult::general_error($translator->trans('FileNotRemoved', [], Utilities::COMMON_LIBRARIES));
+            JsonAjaxResult::general_error($translator->trans('FileNotRemoved', [], StringUtilities::LIBRARIES));
         }
         else
         {
-            JsonAjaxResult::success($translator->trans('FileRemoved', [], Utilities::COMMON_LIBRARIES));
+            JsonAjaxResult::success($translator->trans('FileRemoved', [], StringUtilities::LIBRARIES));
         }
     }
 

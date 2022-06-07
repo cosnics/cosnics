@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -95,7 +95,7 @@ class DeleterComponent extends Manager
         {
             $message = htmlentities(
                 Translation::get(
-                    'ObjectsDeleted', array('OBJECT' => Translation::get('LearningPath')), Utilities::COMMON_LIBRARIES
+                    'ObjectsDeleted', array('OBJECT' => Translation::get('LearningPath')), StringUtilities::LIBRARIES
                 )
             );
         }
@@ -103,7 +103,7 @@ class DeleterComponent extends Manager
         {
             $message = htmlentities(
                 Translation::get(
-                    'ObjectDeleted', array('OBJECT' => Translation::get('LearningPath')), Utilities::COMMON_LIBRARIES
+                    'ObjectDeleted', array('OBJECT' => Translation::get('LearningPath')), StringUtilities::LIBRARIES
                 )
             );
         }

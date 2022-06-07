@@ -8,7 +8,7 @@ use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -83,7 +83,7 @@ class ItemForm extends FormValidator
             $this->getParentItems(), array('class' => 'form-control')
         );
         $this->addRule(
-            Item::PROPERTY_PARENT, $translator->trans('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES),
+            Item::PROPERTY_PARENT, $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
             'required'
         );
 
@@ -116,7 +116,7 @@ class ItemForm extends FormValidator
             {
                 $this->addRule(
                     ItemTitle::PROPERTY_TITLE . '[' . $isocode . ']',
-                    $translator->trans('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
+                    $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
                 );
             }
         }
@@ -209,7 +209,7 @@ class ItemForm extends FormValidator
      */
     public function getRootParentItem()
     {
-        return array(0 => $this->getTranslator()->trans('Root', [], Utilities::COMMON_LIBRARIES));
+        return array(0 => $this->getTranslator()->trans('Root', [], StringUtilities::LIBRARIES));
     }
 
     /**

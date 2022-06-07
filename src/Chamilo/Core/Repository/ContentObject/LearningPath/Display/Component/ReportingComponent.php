@@ -23,7 +23,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Shows the progress of a user in the learning path
@@ -131,7 +131,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
         $buttonToolbar->addItem(
             new Button(
-                $translator->getTranslation('Export', null, Utilities::COMMON_LIBRARIES),
+                $translator->getTranslation('Export', null, StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('download'),
                 $this->get_url(
                     [
@@ -158,7 +158,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
         $buttonToolbar->addItem(
             new Button(
-                $translator->getTranslation('Export', null, Utilities::COMMON_LIBRARIES),
+                $translator->getTranslation('Export', null, StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('download'),
                 $this->get_url(
                     [
@@ -239,7 +239,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
         $informationValues[$translator->getTranslation('User')] = $this->getReportingUser()->get_fullname();
 
-        $informationValues[$translator->getTranslation('TotalTime')] = DatetimeUtilities::format_seconds_to_hours(
+        $informationValues[$translator->getTranslation('TotalTime')] = DatetimeUtilities::getInstance()->formatSecondsToHours(
             $trackingService->getTotalTimeSpentInTreeNode(
                 $this->learningPath,
                 $this->getReportingUser(),
@@ -385,7 +385,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
                 continue;
             }
 
-            $labels[] = DatetimeUtilities::format_locale_date(null, $treeNodeAttempt->get_start_time());
+            $labels[] = DatetimeUtilities::getInstance()->formatLocaleDate(null, $treeNodeAttempt->get_start_time());
             $scores[] = (int) $treeNodeAttempt->get_score();
         }
 

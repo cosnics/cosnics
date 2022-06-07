@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableCellRenderer
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -27,7 +27,7 @@ class FavouriteTableCellRenderer extends WorkspaceTableCellRenderer
         $toolbar = $this->getToolbar($workspace);
 
         $unfavouriteItem = new ToolbarItem(
-            Translation::get('Unfavourite', null, Utilities::COMMON_LIBRARIES),
+            Translation::get('Unfavourite', null, StringUtilities::LIBRARIES),
             new FontAwesomeGlyph('times', [], null, 'fas'), $this->get_component()->get_url(
             array(
                 Manager::PARAM_ACTION => Manager::ACTION_DELETE,

@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -53,7 +53,7 @@ class DeleterComponent extends Manager
                     Translation::get(
                         ($succes ? 'ObjectsDeleted' : 'ObjectsNotDeleted'), 
                         array('OBJECTS' => Translation::get('ComplexContentObjectItems')), 
-                        Utilities::COMMON_LIBRARIES));
+                        StringUtilities::LIBRARIES));
             }
             else
             {
@@ -61,7 +61,7 @@ class DeleterComponent extends Manager
                     Translation::get(
                         ($succes ? 'ObjectDeleted' : 'ObjectNotDeleted'), 
                         array('OBJECT' => Translation::get('ComplexContentObjectItem')), 
-                        Utilities::COMMON_LIBRARIES));
+                        StringUtilities::LIBRARIES));
             }
             
             $this->redirect(

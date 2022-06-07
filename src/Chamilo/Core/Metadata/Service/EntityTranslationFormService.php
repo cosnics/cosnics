@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -48,7 +48,7 @@ class EntityTranslationFormService
             if ($language->get_isocode() == $platformLanguage)
             {
                 $formValidator->addRule(
-                    $fieldName, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+                    $fieldName, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
                 );
             }
         }

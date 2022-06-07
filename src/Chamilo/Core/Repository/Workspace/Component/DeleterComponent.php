@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -53,7 +53,7 @@ class DeleterComponent extends Manager
                             Translation::get(
                                 'ObjectNotDeleted',
                                 array('OBJECT' => Translation::get('Workspace')),
-                                Utilities::COMMON_LIBRARIES));
+                                StringUtilities::LIBRARIES));
                     }
                     else
                     {
@@ -66,7 +66,7 @@ class DeleterComponent extends Manager
             $message = Translation::get(
                 'ObjectDeleted',
                 array('OBJECT' => Translation::get('Workspace')),
-                Utilities::COMMON_LIBRARIES);
+                StringUtilities::LIBRARIES);
         }
         catch (Exception $ex)
         {

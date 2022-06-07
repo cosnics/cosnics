@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
 
 /**
@@ -226,10 +226,10 @@ class ConfigurationForm extends FormValidator
 
             $buttons = [];
             $buttons[] = $this->createElement(
-                'style_submit_button', 'submit', Translation::get('Save', [], Utilities::COMMON_LIBRARIES)
+                'style_submit_button', 'submit', Translation::get('Save', [], StringUtilities::LIBRARIES)
             );
             $buttons[] = $this->createElement(
-                'style_reset_button', 'reset', Translation::get('Reset', [], Utilities::COMMON_LIBRARIES)
+                'style_reset_button', 'reset', Translation::get('Reset', [], StringUtilities::LIBRARIES)
             );
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
@@ -237,7 +237,7 @@ class ConfigurationForm extends FormValidator
         {
             $this->addElement(
                 'html', '<div class="warning-message">' .
-                Translation::get('NoConfigurableSettings', [], Utilities::COMMON_LIBRARIES) . '</div>'
+                Translation::get('NoConfigurableSettings', [], StringUtilities::LIBRARIES) . '</div>'
             );
         }
     }

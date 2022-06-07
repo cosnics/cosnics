@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Form for the feedback
@@ -56,13 +56,13 @@ class FeedbackForm extends FormValidator
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
-            Translation::get('Save', null, Utilities::COMMON_LIBRARIES)
+            Translation::get('Save', null, StringUtilities::LIBRARIES)
         );
 
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

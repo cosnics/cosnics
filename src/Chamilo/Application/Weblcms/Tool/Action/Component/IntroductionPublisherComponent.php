@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -71,7 +71,7 @@ class IntroductionPublisherComponent extends Manager implements ViewerInterface,
                 Translation::get(
                     'ObjectPublished',
                     array('OBJECT' => Translation::get('Introduction')),
-                    Utilities::COMMON_LIBRARIES),
+                    StringUtilities::LIBRARIES),
                 (false),
                 $parameters);
         }

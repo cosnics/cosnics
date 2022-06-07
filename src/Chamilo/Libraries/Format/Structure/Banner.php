@@ -7,7 +7,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -110,7 +110,7 @@ class Banner
             $html[] = $userFullName;
             $html[] = ' ';
             $html[] =
-                '<a href="' . $link . '">' . $translator->trans('Back', [], Utilities::COMMON_LIBRARIES) . '</a>';
+                '<a href="' . $link . '">' . $translator->trans('Back', [], StringUtilities::LIBRARIES) . '</a>';
             $html[] = '</div>';
         }
 

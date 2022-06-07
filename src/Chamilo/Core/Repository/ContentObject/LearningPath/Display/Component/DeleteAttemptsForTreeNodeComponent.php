@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -64,7 +64,7 @@ class DeleteAttemptsForTreeNodeComponent extends BaseReportingComponent
 
             $message = Translation::get(
                 'ObjectsDeleted',
-                array('OBJECT' => Translation::get('LearningPathItemAttempt'), Utilities::COMMON_LIBRARIES)
+                array('OBJECT' => Translation::get('LearningPathItemAttempt'), StringUtilities::LIBRARIES)
             );
         }
         catch (Exception $ex)
@@ -73,7 +73,7 @@ class DeleteAttemptsForTreeNodeComponent extends BaseReportingComponent
 
             $message = Translation::get(
                 'ObjectsNotDeleted',
-                array('OBJECT' => Translation::get('LearningPathItemAttempt'), Utilities::COMMON_LIBRARIES)
+                array('OBJECT' => Translation::get('LearningPathItemAttempt'), StringUtilities::LIBRARIES)
             );
         }
 

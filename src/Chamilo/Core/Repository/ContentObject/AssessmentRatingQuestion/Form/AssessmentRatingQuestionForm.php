@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -46,7 +46,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
             'radio', 'ratingtype', null, Translation::get('Rating'), 1,
             array('onclick' => 'javascript:show_controls(\'buttons\')')
         );
-        $this->addGroup($elem, 'type', Translation::get('Type', null, Utilities::COMMON_LIBRARIES), '', false);
+        $this->addGroup($elem, 'type', Translation::get('Type', null, StringUtilities::LIBRARIES), '', false);
 
         $this->addElement('html', '<div id="buttons" class="form-group clearfix">');
 
@@ -125,17 +125,17 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
 
         $this->addRule(
             AssessmentRatingQuestion::PROPERTY_LOW,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 'numeric'
+            Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES), 'numeric'
         );
 
         $this->addRule(
             AssessmentRatingQuestion::PROPERTY_HIGH,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 'numeric'
+            Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES), 'numeric'
         );
 
         $this->addRule(
             AssessmentRatingQuestion::PROPERTY_CORRECT,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 'numeric'
+            Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES), 'numeric'
         );
 
         $this->addElement(

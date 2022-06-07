@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class LogoutComponent extends Manager
 {
@@ -37,13 +37,13 @@ class LogoutComponent extends Manager
         {
             $parameters = $this->get_parameters();
             $parameters[self::PARAM_ACTION] = self::ACTION_BROWSE_EXTERNAL_REPOSITORY;
-            $this->redirect(Translation::get('LogoutSuccessful', null, Utilities::COMMON_LIBRARIES), false, $parameters);
+            $this->redirect(Translation::get('LogoutSuccessful', null, StringUtilities::LIBRARIES), false, $parameters);
         }
         else
         {
             $parameters = $this->get_parameters();
             $parameters[self::PARAM_ACTION] = self::ACTION_BROWSE_EXTERNAL_REPOSITORY;
-            $this->redirect(Translation::get('LogoutFailed', null, Utilities::COMMON_LIBRARIES), true, $parameters);
+            $this->redirect(Translation::get('LogoutFailed', null, StringUtilities::LIBRARIES), true, $parameters);
         }
     }
 }

@@ -13,7 +13,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
 {
@@ -38,14 +38,14 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
         if (!$file)
         {
             JsonAjaxResult::bad_request(
-                Translation::getInstance()->getTranslation('NoFileUploaded', null, Utilities::COMMON_LIBRARIES)
+                Translation::getInstance()->getTranslation('NoFileUploaded', null, StringUtilities::LIBRARIES)
             );
         }
 
         if (!$file->isValid())
         {
             JsonAjaxResult::bad_request(
-                Translation::getInstance()->getTranslation('NoValidFileUploaded', null, Utilities::COMMON_LIBRARIES)
+                Translation::getInstance()->getTranslation('NoValidFileUploaded', null, StringUtilities::LIBRARIES)
             );
         }
 

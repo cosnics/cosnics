@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class PublicationTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -28,7 +28,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_DELETE,
@@ -44,7 +44,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Update', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('undo'),
+                    Translation::get('Update', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('undo'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
@@ -66,9 +66,9 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
         switch ($column->get_name())
         {
             case Attributes::PROPERTY_DATE :
-                return DatetimeUtilities::format_locale_date(
-                    Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                    Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
+                return DatetimeUtilities::getInstance()->formatLocaleDate(
+                    Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' .
+                    Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES),
                     $publication_attributes->get_date()
                 );
             case Attributes::PROPERTY_APPLICATION :

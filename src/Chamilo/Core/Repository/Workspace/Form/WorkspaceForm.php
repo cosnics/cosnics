@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Workspace\Form;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -47,7 +47,7 @@ class WorkspaceForm extends FormValidator
         
         $this->addRule(
             Workspace::PROPERTY_NAME, 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+            Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 
             'required');
         
         $this->add_html_editor(Workspace::PROPERTY_DESCRIPTION, Translation::get('Description'));

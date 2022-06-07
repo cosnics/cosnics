@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -67,7 +67,7 @@ trait ActionButtonTrait
     {
         if ($confirmation === true)
         {
-            $this->confirmation = Translation::get('ConfirmChosenAction', null, Utilities::COMMON_LIBRARIES);
+            $this->confirmation = Translation::get('ConfirmChosenAction', null, StringUtilities::LIBRARIES);
         }
         else
         {

@@ -8,7 +8,7 @@ use Chamilo\Core\Metadata\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -79,10 +79,10 @@ class VocabularyForm extends FormValidator
         $this->addElement('static', null, Translation::get('User', null, 'Chamilo\Core\Metadata'), $displayUser);
 
         $this->addElement(
-            'text', Vocabulary::PROPERTY_VALUE, Translation::get('Value', null, Utilities::COMMON_LIBRARIES)
+            'text', Vocabulary::PROPERTY_VALUE, Translation::get('Value', null, StringUtilities::LIBRARIES)
         );
         $this->addRule(
-            Vocabulary::PROPERTY_VALUE, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Vocabulary::PROPERTY_VALUE, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 

@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Builds the table for the BlockTypeTargetEntity data class
@@ -62,7 +62,7 @@ class BlockTypeTargetEntityTableCellRenderer extends RecordTableCellRenderer
 
         if (empty($targetEntities))
         {
-            return $translator->getTranslation('Everybody', null, Utilities::COMMON_LIBRARIES);
+            return $translator->getTranslation('Everybody', null, StringUtilities::LIBRARIES);
         }
 
         $targetEntitiesHtml = [];

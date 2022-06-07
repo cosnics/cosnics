@@ -9,6 +9,7 @@
         "google/recaptcha": "1.2.*",
         "phpmailer/phpmailer": "6.6.*",
         "phpoffice/phpspreadsheet": "1.22.*",
+        "ramsey/uuid": "4.2.*",
         "sentry/sdk": "3.1.*",
         "simplepie/simplepie": "1.*",
         "spipu/html2pdf": "5.2.*",

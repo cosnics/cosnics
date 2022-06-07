@@ -15,7 +15,7 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -177,7 +177,7 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
             Translation::get(
                 ($success ? 'ObjectCreated' : 'ObjectNotCreated'),
                 array('OBJECT' => Translation::get('Subforum')),
-                Utilities::COMMON_LIBRARIES));
+                StringUtilities::LIBRARIES));
 
         $params = [];
         $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;

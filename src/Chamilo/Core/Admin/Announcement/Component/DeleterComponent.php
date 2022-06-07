@@ -3,7 +3,7 @@ namespace Chamilo\Core\Admin\Announcement\Component;
 
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class DeleterComponent extends Manager
 {
@@ -64,7 +64,7 @@ class DeleterComponent extends Manager
             }
 
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), (bool) $failures,
+                Translation::get($message, $parameter, StringUtilities::LIBRARIES), (bool) $failures,
                 array(self::PARAM_ACTION => self::ACTION_BROWSE)
             );
         }
@@ -74,7 +74,7 @@ class DeleterComponent extends Manager
                 htmlentities(
                     Translation::get(
                         'NoObjectSelected', array('OBJECTS' => Translation::get('Publication')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     )
                 )
             );

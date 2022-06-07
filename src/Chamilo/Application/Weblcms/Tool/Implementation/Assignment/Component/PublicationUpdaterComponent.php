@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -76,7 +76,7 @@ class PublicationUpdaterComponent extends Manager
             $message = htmlentities(
                 Translation::get(
                     ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                    array('OBJECT' => Translation::get('Publication')), Utilities::COMMON_LIBRARIES
+                    array('OBJECT' => Translation::get('Publication')), StringUtilities::LIBRARIES
                 ), ENT_COMPAT | ENT_HTML401, 'UTF-8'
             );
 

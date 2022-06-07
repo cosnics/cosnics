@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -114,7 +114,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         );
         $this->addRule(
             FillInBlanksQuestion::PROPERTY_ANSWER_TEXT,
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(

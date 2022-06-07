@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\DropdownButtonRenderer
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Tool list renderer to display a navigation menu.
@@ -38,7 +38,7 @@ class ShortcutToolListRenderer extends ToolListRenderer
         $course = $parent->get_course();
 
         $toolsButton = new DropdownButton(
-            Translation::get('NavigateTo', null, Utilities::COMMON_LIBRARIES), null, Button::DISPLAY_LABEL
+            Translation::get('NavigateTo', null, StringUtilities::LIBRARIES), null, Button::DISPLAY_LABEL
         );
 
         $toolsButton->setDropdownClasses('dropdown-menu-right');

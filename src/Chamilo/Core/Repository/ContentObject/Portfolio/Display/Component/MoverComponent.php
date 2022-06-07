@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Component that allows the user to move an item or folder to another parent folder
@@ -83,7 +83,7 @@ class MoverComponent extends ItemComponent
             $this->redirect(
                 Translation::get(
                     'NoObjectsToMove', array('OBJECTS' => Translation::get('ComplexContentObjectItems')),
-                    Utilities::COMMON_LIBRARIES
+                    StringUtilities::LIBRARIES
                 ), true, $parameters
             );
         }
@@ -107,7 +107,7 @@ class MoverComponent extends ItemComponent
             $attributes = $parent[1] ? 'disabled' : '';
             $parents_element->addOption($parent[0], $key, $attributes);
         }
-        $form->addElement('submit', 'submit', Translation::get('Move', null, Utilities::COMMON_LIBRARIES));
+        $form->addElement('submit', 'submit', Translation::get('Move', null, StringUtilities::LIBRARIES));
 
         if ($form->validate())
         {
@@ -205,7 +205,7 @@ class MoverComponent extends ItemComponent
             $this->redirect(
                 Translation::get(
                     $failures > 0 ? 'ObjectsNotMoved' : 'ObjectsMoved',
-                    array('OBJECTS' => Translation::get('ComplexContentObjectItems')), Utilities::COMMON_LIBRARIES
+                    array('OBJECTS' => Translation::get('ComplexContentObjectItems')), StringUtilities::LIBRARIES
                 ), $failures > 0, $parameters
             );
         }

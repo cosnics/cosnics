@@ -18,7 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class CreatorComponent extends Manager
 {
@@ -46,7 +46,7 @@ class CreatorComponent extends Manager
                 $this->redirect(
                     Translation::get(
                         $success ? 'ObjectAdded' : 'ObjectNotAdded',
-                        array('OBJECT' => Translation::get('ExternalInstance')), Utilities::COMMON_LIBRARIES
+                        array('OBJECT' => Translation::get('ExternalInstance')), StringUtilities::LIBRARIES
                     ), !$success, array(self::PARAM_ACTION => self::ACTION_BROWSE)
                 );
             }

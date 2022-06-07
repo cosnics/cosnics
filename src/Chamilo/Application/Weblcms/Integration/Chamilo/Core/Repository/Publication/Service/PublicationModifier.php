@@ -205,10 +205,10 @@ class PublicationModifier implements PublicationModifierInterface
         if ($options[FormValidator::PROPERTY_TIME_PERIOD_FOREVER] == 0)
         {
             $publication->set_from_date(
-                DatetimeUtilities::time_from_datepicker($options[ContentObjectPublication::PROPERTY_FROM_DATE])
+                DatetimeUtilities::getInstance()->timeFromDatepicker($options[ContentObjectPublication::PROPERTY_FROM_DATE])
             );
             $publication->set_to_date(
-                DatetimeUtilities::time_from_datepicker($options[ContentObjectPublication::PROPERTY_TO_DATE])
+                DatetimeUtilities::getInstance()->timeFromDatepicker($options[ContentObjectPublication::PROPERTY_TO_DATE])
             );
         }
 

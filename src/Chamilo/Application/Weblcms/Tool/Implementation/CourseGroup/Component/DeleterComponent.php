@@ -10,7 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataMana
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -78,7 +78,7 @@ class DeleterComponent extends Manager
             $message = Translation::get(
                 'ObjectDeleted',
                 array('OBJECT' => Translation::get('CourseGroup')),
-                Utilities::COMMON_LIBRARIES
+                StringUtilities::LIBRARIES
             );
             $this->redirect($message, '', array('course_group' => null, self::PARAM_ACTION => null));
         }

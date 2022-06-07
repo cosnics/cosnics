@@ -21,7 +21,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -94,12 +94,12 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
             $form = new FormValidator('lost_password', FormValidator::FORM_METHOD_POST, $this->get_url());
             $form->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'));
             $form->addRule(
-                User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
                 'required'
             );
             $form->addRule(User::PROPERTY_EMAIL, Translation::get('WrongEmail'), 'email');
             $form->addElement(
-                'style_submit_button', 'submit', Translation::get('Ok', null, Utilities::COMMON_LIBRARIES)
+                'style_submit_button', 'submit', Translation::get('Ok', null, StringUtilities::LIBRARIES)
             );
             if ($form->validate())
             {

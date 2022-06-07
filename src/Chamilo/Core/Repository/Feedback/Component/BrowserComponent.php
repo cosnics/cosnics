@@ -20,7 +20,7 @@ use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\PagerRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
@@ -60,7 +60,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 Translation::get(
                     $success ? 'ObjectCreated' : 'ObjectNotCreated',
                     array('OBJECT' => Translation::get('Feedback')),
-                    Utilities::COMMON_LIBRARIES
+                    StringUtilities::LIBRARIES
                 ),
                 !$success
             );
@@ -276,9 +276,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         $bootstrapGlyph = new FontAwesomeGlyph('times');
-        $title = Translation::get('Delete', null, Utilities::COMMON_LIBRARIES);
+        $title = Translation::get('Delete', null, StringUtilities::LIBRARIES);
         $delete_link = '<a title="' . htmlentities($title) . '" href="' . $delete_url . '" onclick="return confirm(\'' .
-            addslashes(Translation::get('Confirm', null, Utilities::COMMON_LIBRARIES)) . '\');">' .
+            addslashes(Translation::get('Confirm', null, StringUtilities::LIBRARIES)) . '\');">' .
             $bootstrapGlyph->render() . '</a>';
 
         return $delete_link;
@@ -300,7 +300,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         $bootstrapGlyph = new FontAwesomeGlyph('pencil-alt');
-        $title = Translation::get('Edit', null, Utilities::COMMON_LIBRARIES);
+        $title = Translation::get('Edit', null, StringUtilities::LIBRARIES);
         $update_link =
             '<a title="' . htmlentities($title) . '" href="' . $update_url . '">' . $bootstrapGlyph->render() .
             '</a>';
@@ -316,9 +316,9 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function format_date($date)
     {
-        $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+        $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
-        return DatetimeUtilities::format_locale_date($date_format, $date);
+        return DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $date);
     }
 
     /**

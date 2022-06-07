@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRe
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -26,7 +26,7 @@ class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implement
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('View', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('info-circle'),
+                    Translation::get('View', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('info-circle'),
                     $this->get_external_instance_viewing_url($object), ToolbarItem::DISPLAY_ICON
                 )
             );

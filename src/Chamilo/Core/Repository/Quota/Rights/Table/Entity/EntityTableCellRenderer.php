@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -90,7 +90,7 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $this->getTranslator()->trans('Delete', [], Utilities::COMMON_LIBRARIES),
+                    $this->getTranslator()->trans('Delete', [], StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('times'), $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_DELETE,

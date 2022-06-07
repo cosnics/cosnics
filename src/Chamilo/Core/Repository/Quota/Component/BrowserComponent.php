@@ -399,7 +399,7 @@ class BrowserComponent extends Manager implements TableSupport
             $properties[Translation::get('OldestContentObject')] =
                 '<a href="' . $this->get_parent()->get_content_object_viewing_url($oldest_object) . '">' .
                 $oldest_object->get_title() . '</a> - ' .
-                DatetimeUtilities::format_locale_date(null, $oldest_object->get_creation_date());
+                DatetimeUtilities::getInstance()->formatLocaleDate(null, $oldest_object->get_creation_date());
         }
 
         $table = new PropertiesTable($properties);

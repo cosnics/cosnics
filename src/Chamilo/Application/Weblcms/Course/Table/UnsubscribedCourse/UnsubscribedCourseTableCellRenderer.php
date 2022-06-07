@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class describes the default cell renderer for the unsubscribed course table
@@ -108,7 +108,7 @@ class UnsubscribedCourseTableCellRenderer extends CourseTableCellRenderer
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Subscribe', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('Subscribe', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('plus-circle'),
                     $this->get_component()->get_subscribe_to_course_url($course[Course::PROPERTY_ID]),
                     ToolbarItem::DISPLAY_ICON

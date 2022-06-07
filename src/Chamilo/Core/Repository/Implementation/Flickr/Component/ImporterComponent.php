@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ImporterComponent extends Manager
 {
@@ -48,7 +48,7 @@ class ImporterComponent extends Manager
                 $parameters[\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID] = $image->get_id();
                 
                 $this->redirect(
-                    Translation::get('ObjectImported', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('ObjectImported', null, StringUtilities::LIBRARIES),
                     false, 
                     $parameters);
             }
@@ -59,7 +59,7 @@ class ImporterComponent extends Manager
                 $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_ID] = $external_object->get_id();
                 
                 $this->redirect(
-                    Translation::get('ObjectFailedImported', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('ObjectFailedImported', null, StringUtilities::LIBRARIES),
                     true, 
                     $parameters);
             }

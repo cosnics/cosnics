@@ -19,7 +19,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -187,11 +187,11 @@ class PublicationTargetForm extends FormValidator
         $html = [];
         $html[] = '<div style="padding: 5px 0px;">';
         $html[] = '<a href="#" class="select-all-checkboxes">';
-        $html[] = Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES);
+        $html[] = Translation::get('SelectAll', null, StringUtilities::LIBRARIES);
         $html[] = '</a>';
         $html[] = ' - ';
         $html[] = '<a href="#" class="select-no-checkboxes">';
-        $html[] = Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES);
+        $html[] = Translation::get('UnselectAll', null, StringUtilities::LIBRARIES);
         $html[] = '</a>';
         $html[] = '</div>';
 
@@ -200,7 +200,7 @@ class PublicationTargetForm extends FormValidator
         $this->addElement('html', '<br /><br />');
 
         $this->addElement(
-            'style_submit_button', 'publish', Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), null,
+            'style_submit_button', 'publish', Translation::get('Publish', null, StringUtilities::LIBRARIES), null,
             null, new FontAwesomeGlyph('ok-sign')
         );
 

@@ -28,7 +28,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserComponent extends Manager implements TableSupport
 {
@@ -273,7 +273,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('Publish', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('share-square'), $this->get_url(
                     array_merge($this->get_parameters(), array(self::PARAM_ID => $content_object->get_id())), false
                 ), ToolbarItem::DISPLAY_ICON
@@ -324,7 +324,7 @@ class BrowserComponent extends Manager implements TableSupport
             $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('desktop'),
+                    Translation::get('Preview', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('desktop'),
                     $preview_url, ToolbarItem::DISPLAY_ICON, false, $onclick, '_blank'
                 )
             );

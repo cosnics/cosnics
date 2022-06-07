@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -33,7 +33,7 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
                 Translation::get(
                     'NoObjectSelected',
                     array('OBJECT' => Translation::get('ContentObject')),
-                    Utilities::COMMON_LIBRARIES));
+                    StringUtilities::LIBRARIES));
         }
 
         $object = DataManager::retrieve_by_id(ContentObject::class, $object_id);
@@ -51,7 +51,7 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
         $security_code = Request::get(ContentObject::PARAM_SECURITY_CODE);
         if ($security_code != $object->calculate_security_code())
         {
-            throw new UserException(Translation::get('SecurityCodeNotValid', null, Utilities::COMMON_LIBRARIES));
+            throw new UserException(Translation::get('SecurityCodeNotValid', null, StringUtilities::LIBRARIES));
         }
 
         if (Request::get('display') == 1)

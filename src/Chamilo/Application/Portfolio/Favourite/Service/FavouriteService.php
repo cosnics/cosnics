@@ -8,7 +8,7 @@ use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\Translation\Translator;
@@ -109,7 +109,7 @@ class FavouriteService
                 $this->translator->trans(
                     'ObjectNotCreated',
                     array('OBJECT' => $objectTranslation),
-                    Utilities::COMMON_LIBRARIES));
+                    StringUtilities::LIBRARIES));
         }
 
         return $userFavourite;
@@ -158,7 +158,7 @@ class FavouriteService
                 $this->translator->trans(
                     'ObjectNotCreated',
                     array('OBJECT' => $objectTranslation),
-                    Utilities::COMMON_LIBRARIES));
+                    StringUtilities::LIBRARIES));
         }
     }
 

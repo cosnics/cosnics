@@ -20,7 +20,7 @@ use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Exception;
 
@@ -78,15 +78,15 @@ class UserImportForm extends FormValidator
 
         $group = [];
         $group[] = &$this->createElement(
-            'radio', 'send_mail', null, Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 1
+            'radio', 'send_mail', null, Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
         );
         $group[] = &$this->createElement(
-            'radio', 'send_mail', null, Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES), 0
+            'radio', 'send_mail', null, Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
         );
         $this->addGroup($group, 'mail', Translation::get('SendMailToNewUser'), '');
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Import', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Import', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('import')
         );
 
@@ -263,7 +263,7 @@ class UserImportForm extends FormValidator
                 $act_date = $csvuser[User::PROPERTY_ACTIVATION_DATE];
                 if ($act_date != 0)
                 {
-                    $act_date = DatetimeUtilities::time_from_datepicker($act_date);
+                    $act_date = DatetimeUtilities::getInstance()->timeFromDatepicker($act_date);
                 }
 
                 $user->set_activation_date($act_date);
@@ -271,7 +271,7 @@ class UserImportForm extends FormValidator
                 $exp_date = $csvuser[User::PROPERTY_EXPIRATION_DATE];
                 if ($exp_date != 0)
                 {
-                    $exp_date = DatetimeUtilities::time_from_datepicker($exp_date);
+                    $exp_date = DatetimeUtilities::getInstance()->timeFromDatepicker($exp_date);
                 }
 
                 $user->set_expiration_date($exp_date);
@@ -344,7 +344,7 @@ class UserImportForm extends FormValidator
                 $act_date = $csvuser[User::PROPERTY_ACTIVATION_DATE];
                 if ($act_date != 0)
                 {
-                    $act_date = DatetimeUtilities::time_from_datepicker($act_date);
+                    $act_date = DatetimeUtilities::getInstance()->timeFromDatepicker($act_date);
                 }
 
                 $user->set_activation_date($act_date);
@@ -352,7 +352,7 @@ class UserImportForm extends FormValidator
                 $exp_date = $csvuser[User::PROPERTY_EXPIRATION_DATE];
                 if ($exp_date != 0)
                 {
-                    $exp_date = DatetimeUtilities::time_from_datepicker($exp_date);
+                    $exp_date = DatetimeUtilities::getInstance()->timeFromDatepicker($exp_date);
                 }
 
                 $user->set_expiration_date($exp_date);
@@ -425,7 +425,7 @@ class UserImportForm extends FormValidator
         {
             throw new UserException(
                 Translation::getInstance()->getTranslation(
-                    'InvalidImportFormat', array('FILE_TYPE' => $file_type), Utilities::COMMON_LIBRARIES
+                    'InvalidImportFormat', array('FILE_TYPE' => $file_type), StringUtilities::LIBRARIES
                 )
             );
         }

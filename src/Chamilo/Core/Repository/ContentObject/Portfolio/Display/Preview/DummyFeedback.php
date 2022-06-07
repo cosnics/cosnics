@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Feedback;
-use Chamilo\Libraries\Utilities\UUID;
+use Ramsey\Uuid\Uuid;
 
 /**
  * A dummy Feedback class which allows the preview to emulate the Feedback functionality
@@ -21,7 +21,7 @@ class DummyFeedback extends Feedback
      */
     public function create(): bool
     {
-        $this->set_id(UUID::v4());
+        $this->set_id(Uuid::uuid4());
 
         return PreviewStorage::getInstance()->create_feedback($this);
     }

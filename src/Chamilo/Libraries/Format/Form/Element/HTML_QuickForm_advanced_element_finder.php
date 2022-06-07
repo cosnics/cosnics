@@ -4,7 +4,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Advanced ajax based element finder.
@@ -119,7 +119,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
         $element_types_array = [];
         $element_types_array[- 1] =
-            '-- ' . Translation::get('SelectElementType', null, Utilities::COMMON_LIBRARIES) . ' --';
+            '-- ' . Translation::get('SelectElementType', null, StringUtilities::LIBRARIES) . ' --';
         foreach ($this->element_types->get_types() as $element_type)
         {
             $element_types_array[$element_type->get_id()] = $element_type->get_name();
@@ -139,14 +139,14 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         );
 
         $this->_elements[] = new HTML_QuickForm_stylebutton(
-            'activate_' . $this->getName(), Translation::get('AddToSelection', [], Utilities::COMMON_LIBRARIES),
+            'activate_' . $this->getName(), Translation::get('AddToSelection', [], StringUtilities::LIBRARIES),
             array('id' => $activate_button_id, 'class' => 'btn-primary activate_elements form-control'), '',
             new FontAwesomeGlyph('arrow-alt-circle-right', [], null, 'fas')
         );
 
         $this->_elements[] = new HTML_QuickForm_stylebutton(
             'deactivate_' . $this->getName(),
-            Translation::get('RemoveFromSelection', [], Utilities::COMMON_LIBRARIES),
+            Translation::get('RemoveFromSelection', [], StringUtilities::LIBRARIES),
             array('id' => $deactivate_button_id, 'class' => 'btn-danger deactivate_elements form-control'), '',
             new FontAwesomeGlyph('arrow-alt-circle-left', [], null, 'fas')
         );

@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class describes a category for content objects in the repository
@@ -64,7 +64,7 @@ class RepositoryCategory extends PlatformCategory
                     $this->addError(
                         Translation::get(
                             'CouldNotCreateObjectInDatabase',
-                            array('OBJECT' => Translation::get('Category'), Utilities::COMMON_LIBRARIES)
+                            array('OBJECT' => Translation::get('Category'), StringUtilities::LIBRARIES)
                         )
                     );
 
@@ -190,7 +190,7 @@ class RepositoryCategory extends PlatformCategory
                     $category->addError(
                         Translation::get(
                             'CouldNotUpdateObjectInDatabase',
-                            array('OBJECT' => Translation::get('Category'), Utilities::COMMON_LIBRARIES)
+                            array('OBJECT' => Translation::get('Category'), StringUtilities::LIBRARIES)
                         )
                     );
                 }

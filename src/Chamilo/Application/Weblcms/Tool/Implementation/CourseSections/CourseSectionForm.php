@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -51,10 +51,10 @@ class CourseSectionForm extends FormValidator
     {
         $this->addElement('text', CourseSection::PROPERTY_NAME, Translation::get('Name'), array("size" => "50"));
         $this->addRule(
-            CourseSection::PROPERTY_NAME, Translation::get('Required', null, Utilities::COMMON_LIBRARIES), 'required'
+            CourseSection::PROPERTY_NAME, Translation::get('Required', null, StringUtilities::LIBRARIES), 'required'
         );
         $this->addElement(
-            'checkbox', CourseSection::PROPERTY_VISIBLE, Translation::get('Visible', null, Utilities::COMMON_LIBRARIES)
+            'checkbox', CourseSection::PROPERTY_VISIBLE, Translation::get('Visible', null, StringUtilities::LIBRARIES)
         );
         // $this->addElement('submit', 'course_section_sections', 'OK');
     }
@@ -68,11 +68,11 @@ class CourseSectionForm extends FormValidator
         $this->addElement('hidden', CourseSection::PROPERTY_ID);
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Update', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -83,10 +83,10 @@ class CourseSectionForm extends FormValidator
         $this->build_basic_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+            'style_submit_button', 'submit', Translation::get('Create', null, StringUtilities::LIBRARIES)
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

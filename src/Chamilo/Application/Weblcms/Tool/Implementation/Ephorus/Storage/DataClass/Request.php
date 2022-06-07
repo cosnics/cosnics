@@ -95,16 +95,16 @@ class Request extends EphorusDataClass
         if ($string_utilities_class::getInstance()->isNullOrEmpty($this->get_request_user_id()))
         {
             $this->addError(
-                Translation::get('RequestUserIdIsRequired'), [],
-                ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
+                Translation::get('RequestUserIdIsRequired', [],
+                    $this::context())
             );
         }
 
         if ($string_utilities_class::getInstance()->isNullOrEmpty($this->get_guid()))
         {
             $this->addError(
-                Translation::get('GuidIsRequired'), [],
-                ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
+                Translation::get('GuidIsRequired', [],
+                    $this::context())
             );
         }
 

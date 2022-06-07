@@ -18,7 +18,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -90,50 +90,50 @@ class SettingsForm extends FormValidator
         $this->addElement('category', Translation::get('Administrator'));
         $this->addElement('text', 'admin_email', Translation::get("AdminEmail"), array('size' => '40'));
         $this->addRule(
-            'admin_email', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            'admin_email', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
         $this->addRule('admin_email', Translation::get('WrongEmail'), 'email');
         $this->addElement('text', 'admin_surname', Translation::get("AdminLastName"), array('size' => '40'));
         $this->addRule(
-            'admin_surname', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            'admin_surname', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
         $this->addElement('text', 'admin_firstname', Translation::get("AdminFirstName"), array('size' => '40'));
         $this->addRule(
-            'admin_firstname', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            'admin_firstname', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
         $this->addElement('text', 'admin_phone', Translation::get("AdminPhone"), array('size' => '40'));
         $this->addElement('text', 'admin_username', Translation::get("AdminLogin"), array('size' => '40'));
         $this->addRule(
-            'admin_username', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            'admin_username', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
         $this->addElement('text', 'admin_password', Translation::get("AdminPass"), array('size' => '40'));
         $this->addRule(
-            'admin_password', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            'admin_password', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
 
         $this->addElement('category', Translation::get('Platform'));
         $this->addElement('text', 'site_name', Translation::get("CampusName"), array('size' => '40'));
         $this->addRule(
-            'site_name', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            'site_name', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
         $this->addElement('text', 'organization_name', Translation::get("InstituteShortName"), array('size' => '40'));
         $this->addRule(
-            'organization_name', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            'organization_name', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
         $this->addElement('text', 'organization_url', Translation::get("InstituteURL"), array('size' => '40'));
         $this->addRule(
-            'organization_url', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            'organization_url', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
 
         $this->addElement('category', Translation::get('Security'));
 
         $selfRegistration = [];
         $selfRegistration[] = $this->createElement(
-            'radio', 'self_reg', null, Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 1
+            'radio', 'self_reg', null, Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
         );
         $selfRegistration[] = $this->createElement('radio', 'self_reg', null, Translation::get('AfterApproval'), 2);
         $selfRegistration[] = $this->createElement(
-            'radio', 'self_reg', null, Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES), 0
+            'radio', 'self_reg', null, Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
         );
         $this->addGroup($selfRegistration, 'self_reg', Translation::get("AllowSelfReg"), '&nbsp;', false);
 
@@ -160,11 +160,11 @@ class SettingsForm extends FormValidator
         $html[] = '&nbsp;';
         $html[] = '<small>';
         $html[] = '<a class="label label-success package-list-select-all">';
-        $html[] = Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES);
+        $html[] = Translation::get('SelectAll', null, StringUtilities::LIBRARIES);
         $html[] = '</a>';
         $html[] = '&nbsp;';
         $html[] = '<a class="label label-default package-list-select-none">';
-        $html[] = Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES);
+        $html[] = Translation::get('UnselectAll', null, StringUtilities::LIBRARIES);
         $html[] = '</a>';
         $html[] = '</small>';
 
@@ -220,11 +220,11 @@ class SettingsForm extends FormValidator
             'static', null, null,
             '<a href="' . $this->getApplication()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_LICENSE)) .
             '" class="btn btn-default">' . $glyph->render() .
-            Translation::get('Previous', null, Utilities::COMMON_LIBRARIES) . '</a>'
+            Translation::get('Previous', null, StringUtilities::LIBRARIES) . '</a>'
         );
 
         $buttons[] = $this->createElement(
-            'style_button', 'next', Translation::get('Next', null, Utilities::COMMON_LIBRARIES),
+            'style_button', 'next', Translation::get('Next', null, StringUtilities::LIBRARIES),
             array('class' => 'btn-primary'), null, new FontAwesomeGlyph('chevron-right')
         );
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

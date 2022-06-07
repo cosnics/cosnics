@@ -27,7 +27,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -88,7 +88,7 @@ class ViewerComponent extends Manager implements TableSupport
 
             $html[] = '<div class="panel-body">';
             $html[] = '<b>' . Translation::get('Code') . '</b>: ' . $group->get_code();
-            $html[] = '<br /><b>' . Translation::get('Description', null, Utilities::COMMON_LIBRARIES) . '</b>: ' .
+            $html[] = '<br /><b>' . Translation::get('Description', null, StringUtilities::LIBRARIES) . '</b>: ' .
                 $group->get_description();
             $html[] = '</div>';
 
@@ -119,7 +119,7 @@ class ViewerComponent extends Manager implements TableSupport
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES))
+                htmlentities(Translation::get('NoObjectSelected', null, StringUtilities::LIBRARIES))
             );
         }
     }
@@ -146,14 +146,14 @@ class ViewerComponent extends Manager implements TableSupport
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
+                    Translation::get('ShowAll', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
                     $this->get_url(array(self::PARAM_GROUP_ID => $group->get_id())), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                    Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_group_editing_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -162,7 +162,7 @@ class ViewerComponent extends Manager implements TableSupport
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $this->get_group_delete_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -204,7 +204,7 @@ class ViewerComponent extends Manager implements TableSupport
 
             $toolActions->addButton(
                 new Button(
-                    Translation::get('Metadata', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('Metadata', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('info-circle'), $this->get_group_metadata_url($group),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )

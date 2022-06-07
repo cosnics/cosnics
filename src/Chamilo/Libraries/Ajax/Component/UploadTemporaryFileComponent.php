@@ -4,8 +4,8 @@ namespace Chamilo\Libraries\Ajax\Component;
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Utilities\UUID;
+use Chamilo\Libraries\Utilities\StringUtilities;
+use Ramsey\Uuid\Uuid;
 use Exception;
 
 /**
@@ -28,14 +28,14 @@ class UploadTemporaryFileComponent extends Manager
         if (!$file->isValid())
         {
             JsonAjaxResult::bad_request(
-                $this->getTranslator()->trans('NoValidFileUploaded', [], Utilities::COMMON_LIBRARIES)
+                $this->getTranslator()->trans('NoValidFileUploaded', [], StringUtilities::LIBRARIES)
             );
         }
         $temporaryPath = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__);
 
         Filesystem::create_dir($temporaryPath);
 
-        $fileName = md5(UUID::v4());
+        $fileName = md5(Uuid::uuid4());
         $temporaryFilePath = $temporaryPath . $fileName;
 
         $result = move_uploaded_file($file->getRealPath(), $temporaryFilePath);
@@ -43,7 +43,7 @@ class UploadTemporaryFileComponent extends Manager
         if (!$result)
         {
             JsonAjaxResult::general_error(
-                $this->getTranslator()->trans('FileNotUploaded', [], Utilities::COMMON_LIBRARIES)
+                $this->getTranslator()->trans('FileNotUploaded', [], StringUtilities::LIBRARIES)
             );
         }
         else

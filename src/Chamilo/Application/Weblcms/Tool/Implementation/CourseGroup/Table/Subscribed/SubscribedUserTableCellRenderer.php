@@ -77,7 +77,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
 
                 if ($subscriptionTime)
                 {
-                    return DatetimeUtilities::format_locale_date(
+                    return DatetimeUtilities::getInstance()->formatLocaleDate(
                         Translation::getInstance()->getTranslation('SubscriptionTimeFormat', null, Manager::context()),
                         $subscriptionTime
                     );

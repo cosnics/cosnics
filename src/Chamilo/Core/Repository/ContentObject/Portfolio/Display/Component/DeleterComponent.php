@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -67,7 +67,7 @@ class DeleterComponent extends Manager
                 Translation::get(
                     'NoObjectsToDelete', 
                     array('OBJECTS' => Translation::get('ComplexContentObjectItems')), 
-                    Utilities::COMMON_LIBRARIES), 
+                    StringUtilities::LIBRARIES),
                 true, 
                 $parameters);
         }
@@ -136,7 +136,7 @@ class DeleterComponent extends Manager
             Translation::get(
                 $failures > 0 ? 'ObjectsNotDeleted' : 'ObjectsDeleted', 
                 array('OBJECTS' => Translation::get('ComplexContentObjectItems')), 
-                Utilities::COMMON_LIBRARIES), 
+                StringUtilities::LIBRARIES),
             $failures > 0, 
             array(
                 self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, 

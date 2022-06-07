@@ -29,7 +29,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -113,9 +113,9 @@ abstract class ContentObjectPublicationListRenderer
      */
     public function format_date($date)
     {
-        $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+        $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
-        return DatetimeUtilities::format_locale_date($date_format, $date);
+        return DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $date);
     }
 
     /**
@@ -229,7 +229,7 @@ abstract class ContentObjectPublicationListRenderer
         );
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Details', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('info-circle'),
+                Translation::get('Details', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('info-circle'),
                 $details_url, ToolbarItem::DISPLAY_ICON
             )
         );
@@ -257,7 +257,7 @@ abstract class ContentObjectPublicationListRenderer
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('EditContentObject', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('EditContentObject', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('pencil-alt'), $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_CONTENT_OBJECT,
@@ -273,7 +273,7 @@ abstract class ContentObjectPublicationListRenderer
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('BuildComplexObject', null, Utilities::COMMON_LIBRARIES),
+                            Translation::get('BuildComplexObject', null, StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('cubes'), $this->get_complex_builder_url($publication_id),
                             ToolbarItem::DISPLAY_ICON
                         )
@@ -281,7 +281,7 @@ abstract class ContentObjectPublicationListRenderer
 
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('Preview', null, Utilities::COMMON_LIBRARIES),
+                            Translation::get('Preview', null, StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('desktop'), $this->get_complex_display_url($publication_id),
                             ToolbarItem::DISPLAY_ICON
                         )
@@ -291,7 +291,7 @@ abstract class ContentObjectPublicationListRenderer
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('BuildPreview', null, Utilities::COMMON_LIBRARIES),
+                            Translation::get('BuildPreview', null, StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('cubes'), $this->get_complex_display_url($publication_id),
                             ToolbarItem::DISPLAY_ICON
                         )
@@ -304,7 +304,7 @@ abstract class ContentObjectPublicationListRenderer
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('EditPublicationDetails', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('EditPublicationDetails', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('edit', [], null, 'fas'), $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
@@ -338,7 +338,7 @@ abstract class ContentObjectPublicationListRenderer
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES),
+                            Translation::get('MoveUp', null, StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('sort-up'), $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
@@ -354,7 +354,7 @@ abstract class ContentObjectPublicationListRenderer
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('MoveUpNA', null, Utilities::COMMON_LIBRARIES),
+                            Translation::get('MoveUpNA', null, StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('sort-up', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                         )
                     );
@@ -364,7 +364,7 @@ abstract class ContentObjectPublicationListRenderer
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES),
+                            Translation::get('MoveDown', null, StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('sort-down'), $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
@@ -380,7 +380,7 @@ abstract class ContentObjectPublicationListRenderer
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('MoveDownNA', null, Utilities::COMMON_LIBRARIES),
+                            Translation::get('MoveDownNA', null, StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('sort-down', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                         )
                     );
@@ -424,7 +424,7 @@ abstract class ContentObjectPublicationListRenderer
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get($variable, null, Utilities::COMMON_LIBRARIES), $glyph, $this->get_url(
+                    Translation::get($variable, null, StringUtilities::LIBRARIES), $glyph, $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
@@ -473,7 +473,7 @@ abstract class ContentObjectPublicationListRenderer
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ManageRights', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('lock'),
+                    Translation::get('ManageRights', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
@@ -488,7 +488,7 @@ abstract class ContentObjectPublicationListRenderer
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE,
@@ -814,7 +814,7 @@ abstract class ContentObjectPublicationListRenderer
         if ($publication[ContentObjectPublication::PROPERTY_FROM_DATE] == 0 &&
             $publication[ContentObjectPublication::PROPERTY_TO_DATE] == 0)
         {
-            return htmlentities(Translation::get('Forever', null, Utilities::COMMON_LIBRARIES));
+            return htmlentities(Translation::get('Forever', null, StringUtilities::LIBRARIES));
         }
 
         return htmlentities(
@@ -822,7 +822,7 @@ abstract class ContentObjectPublicationListRenderer
                 'VisibleFromUntil', array(
                 'FROM' => $this->format_date($publication[ContentObjectPublication::PROPERTY_FROM_DATE]),
                 'UNTIL' => $this->format_date($publication[ContentObjectPublication::PROPERTY_TO_DATE])
-            ), Utilities::COMMON_LIBRARIES
+            ), StringUtilities::LIBRARIES
             )
         );
     }

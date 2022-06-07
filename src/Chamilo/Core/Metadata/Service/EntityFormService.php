@@ -18,7 +18,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\UUID;
+use Ramsey\Uuid\Uuid;
 use stdClass;
 
 /**
@@ -157,7 +157,7 @@ class EntityFormService
                 if ($element->usesVocabulary())
                 {
 
-                    $uniqueIdentifier = UUID::v4();
+                    $uniqueIdentifier = Uuid::uuid4();
 
                     $class = 'metadata-input';
                     if ($element->isVocabularyUserDefined())

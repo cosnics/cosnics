@@ -28,7 +28,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -61,7 +61,7 @@ class AssignmentForm extends ContentObjectForm
 
     private function build_form()
     {
-        $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
+        $this->addElement('category', Translation::get('Properties', null, StringUtilities::LIBRARIES));
 
         // Start and end time
         $this->add_timewindow(
@@ -173,8 +173,8 @@ class AssignmentForm extends ContentObjectForm
     {
         $object = new Assignment();
         $values = $this->exportValues();
-        $object->set_start_time(DatetimeUtilities::time_from_datepicker($values[Assignment::PROPERTY_START_TIME]));
-        $object->set_end_time(DatetimeUtilities::time_from_datepicker($values[Assignment::PROPERTY_END_TIME]));
+        $object->set_start_time(DatetimeUtilities::getInstance()->timeFromDatepicker($values[Assignment::PROPERTY_START_TIME]));
+        $object->set_end_time(DatetimeUtilities::getInstance()->timeFromDatepicker($values[Assignment::PROPERTY_END_TIME]));
         $object->set_visibility_submissions($values[Assignment::PROPERTY_VISIBILITY_SUBMISSIONS]);
         $object->set_allow_late_submissions($values[Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS]);
 
@@ -363,8 +363,8 @@ class AssignmentForm extends ContentObjectForm
 
         $object = $this->get_content_object();
         $values = $this->exportValues();
-        $object->set_start_time(DatetimeUtilities::time_from_datepicker($values[Assignment::PROPERTY_START_TIME]));
-        $object->set_end_time(DatetimeUtilities::time_from_datepicker($values[Assignment::PROPERTY_END_TIME]));
+        $object->set_start_time(DatetimeUtilities::getInstance()->timeFromDatepicker($values[Assignment::PROPERTY_START_TIME]));
+        $object->set_end_time(DatetimeUtilities::getInstance()->timeFromDatepicker($values[Assignment::PROPERTY_END_TIME]));
         $object->set_visibility_submissions($values[Assignment::PROPERTY_VISIBILITY_SUBMISSIONS]);
         $object->set_allow_late_submissions($values[Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS]);
 

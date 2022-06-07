@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Form;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Enhancement form to select publications with JSTree
@@ -66,9 +66,9 @@ class PublicationSelectorForm
 
         $html[] = '<div id="checkboxes_action" style="margin-left: 20%; padding-top: 5px;">';
         $html[] = '<a id="selectAll" href="#">' .
-            $translator->getTranslation('SelectAll', null, Utilities::COMMON_LIBRARIES) . '</a>';
+            $translator->getTranslation('SelectAll', null, StringUtilities::LIBRARIES) . '</a>';
         $html[] = '<a id="deselectAll" href="#" style="padding-left: 20px;">' .
-            $translator->getTranslation('UnselectAll', null, Utilities::COMMON_LIBRARIES) . '</a>';
+            $translator->getTranslation('UnselectAll', null, StringUtilities::LIBRARIES) . '</a>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Description of glossary_item_creator
@@ -81,7 +81,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
             Translation::get(
                 ($success ? 'ObjectCreated' : 'ObjectNotCreated'),
                 array('OBJECT' => Translation::get('GlossaryItem')),
-                Utilities::COMMON_LIBRARIES));
+                StringUtilities::LIBRARIES));
 
         $parameters = [];
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;

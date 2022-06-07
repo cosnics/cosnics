@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 abstract class ContentObjectRenderer implements TableSupport
@@ -95,7 +95,7 @@ abstract class ContentObjectRenderer implements TableSupport
         if ($canEditContentObject)
         {
             $actions[] = new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_repository_browser()->get_content_object_editing_url($content_object),
                 ToolbarItem::DISPLAY_ICON
             );
@@ -115,14 +115,14 @@ abstract class ContentObjectRenderer implements TableSupport
             if ($url = $this->get_repository_browser()->get_content_object_recycling_url($content_object))
             {
                 $actions[] = new ToolbarItem(
-                    Translation::get('Remove', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('trash-alt'), $url,
+                    Translation::get('Remove', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('trash-alt'), $url,
                     ToolbarItem::DISPLAY_ICON, true
                 );
             }
             else
             {
                 $actions[] = new ToolbarItem(
-                    Translation::get('RemoveNotAvailable', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('RemoveNotAvailable', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('trash-alt', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 );
             }
@@ -133,7 +133,7 @@ abstract class ContentObjectRenderer implements TableSupport
             if ($canEditContentObject)
             {
                 $actions[] = new ToolbarItem(
-                    Translation::get('Move', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder-open'),
+                    Translation::get('Move', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder-open'),
                     $this->get_repository_browser()->get_content_object_moving_url($content_object),
                     ToolbarItem::DISPLAY_ICON
                 );
@@ -143,7 +143,7 @@ abstract class ContentObjectRenderer implements TableSupport
         if ($this->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
         {
             $actions[] = new ToolbarItem(
-                Translation::get('Share', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('lock'),
+                Translation::get('Share', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
                 $this->get_repository_browser()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
@@ -166,7 +166,7 @@ abstract class ContentObjectRenderer implements TableSupport
                 );
 
                 $actions[] = new ToolbarItem(
-                    Translation::get('Unshare', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('unlock'),
+                    Translation::get('Unshare', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('unlock'),
                     $url, ToolbarItem::DISPLAY_ICON, true
                 );
             }
@@ -175,7 +175,7 @@ abstract class ContentObjectRenderer implements TableSupport
         if ($canCopyContentObject)
         {
             $actions[] = new ToolbarItem(
-                Translation::get('Export', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('download'),
+                Translation::get('Export', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('download'),
                 $this->get_repository_browser()->get_content_object_exporting_url($content_object),
                 ToolbarItem::DISPLAY_ICON
             );
@@ -184,7 +184,7 @@ abstract class ContentObjectRenderer implements TableSupport
         if ($canUseContentObject)
         {
             $actions[] = new ToolbarItem(
-                Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('share-square'),
+                Translation::get('Publish', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('share-square'),
                 $this->get_repository_browser()->get_publish_content_object_url($content_object),
                 ToolbarItem::DISPLAY_ICON
             );
@@ -200,7 +200,7 @@ abstract class ContentObjectRenderer implements TableSupport
                 if ($canEditContentObject)
                 {
                     $actions[] = new ToolbarItem(
-                        Translation::get('BuildComplexObject', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('BuildComplexObject', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('cubes'),
                         $this->get_repository_browser()->get_browse_complex_content_object_url($content_object),
                         ToolbarItem::DISPLAY_ICON
@@ -208,7 +208,7 @@ abstract class ContentObjectRenderer implements TableSupport
                 }
 
                 $actions[] = new ToolbarItem(
-                    Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('desktop'),
+                    Translation::get('Preview', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('desktop'),
                     $preview_url, ToolbarItem::DISPLAY_ICON, false, $onclick, '_blank'
                 );
             }
@@ -217,7 +217,7 @@ abstract class ContentObjectRenderer implements TableSupport
                 if ($canEditContentObject)
                 {
                     $actions[] = new ToolbarItem(
-                        Translation::get('BuildPreview', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('BuildPreview', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('cubes'), $preview_url, ToolbarItem::DISPLAY_ICON, false, $onclick,
                         '_blank'
                     );
@@ -225,7 +225,7 @@ abstract class ContentObjectRenderer implements TableSupport
                 else
                 {
                     $actions[] = new ToolbarItem(
-                        Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('desktop'),
+                        Translation::get('Preview', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('desktop'),
                         $preview_url, ToolbarItem::DISPLAY_ICON, false, $onclick, '_blank'
                     );
                 }
@@ -234,7 +234,7 @@ abstract class ContentObjectRenderer implements TableSupport
         else
         {
             $actions[] = new ToolbarItem(
-                Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('desktop'),
+                Translation::get('Preview', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('desktop'),
                 $preview_url, ToolbarItem::DISPLAY_ICON, false, $onclick, '_blank'
             );
         }
@@ -242,7 +242,7 @@ abstract class ContentObjectRenderer implements TableSupport
         if ($content_object->getType() == 'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File')
         {
             $actions[] = new ToolbarItem(
-                Translation::get('Download', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('download'),
+                Translation::get('Download', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('download'),
                 $this->get_repository_browser()->get_document_downloader_url(
                     $content_object->get_id(), $content_object->calculate_security_code()
                 ), ToolbarItem::DISPLAY_ICON

@@ -17,7 +17,7 @@ use Chamilo\Libraries\Format\Structure\PanelRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Lists the users for this learning path with their progress
@@ -203,7 +203,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
             $buttonToolbar->addItem(
                 new Button(
-                    Translation::getInstance()->getTranslation('Export', null, Utilities::COMMON_LIBRARIES),
+                    Translation::getInstance()->getTranslation('Export', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('download'),
                     $this->get_url(
                         [

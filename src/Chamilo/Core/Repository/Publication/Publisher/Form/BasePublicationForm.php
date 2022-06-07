@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * A base form which can be extended by publication forms
@@ -61,7 +61,7 @@ abstract class BasePublicationForm extends FormValidator
         $html[] = '</ul>';
 
         $this->addElement(
-            'static', '', Translation::get('SelectedContentObjects', null, Utilities::COMMON_LIBRARIES),
+            'static', '', Translation::get('SelectedContentObjects', null, StringUtilities::LIBRARIES),
             implode(PHP_EOL, $html)
         );
     }

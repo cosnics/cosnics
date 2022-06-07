@@ -12,7 +12,7 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
     {
         $object = $this->get_object();
         return '<h3>' . $object->get_title() . ' (' .
-             DatetimeUtilities::format_seconds_to_minutes($object->get_duration()) . ')</h3>';
+             DatetimeUtilities::getInstance()->formatSecondsToMinutes($object->get_duration()) . ')</h3>';
     }
 
     public function get_display_properties()

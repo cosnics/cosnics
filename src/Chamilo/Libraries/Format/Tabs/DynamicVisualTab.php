@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Tabs;
 
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -232,7 +232,7 @@ class DynamicVisualTab extends DynamicTab
                 $link[] = 'onclick="return confirm(\'' . addslashes(
                         htmlentities(
                             $this->get_confirmation() === true ? Translation::get(
-                                'Confirm', null, Utilities::COMMON_LIBRARIES
+                                'Confirm', null, StringUtilities::LIBRARIES
                             ) : $this->get_confirmation()
                         )
                     ) . '\');"';

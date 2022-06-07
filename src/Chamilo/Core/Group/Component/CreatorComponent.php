@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -48,7 +48,7 @@ class CreatorComponent extends Manager
                     Translation::get(
                         'ObjectCreated',
                         array('OBJECT' => Translation::get('Group')),
-                        Utilities::COMMON_LIBRARIES),
+                        StringUtilities::LIBRARIES),
                     (false),
                     array(
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
@@ -60,7 +60,7 @@ class CreatorComponent extends Manager
                     Translation::get(
                         'ObjectNotCreated',
                         array('OBJECT' => Translation::get('Group')),
-                        Utilities::COMMON_LIBRARIES),
+                        StringUtilities::LIBRARIES),
                     (true),
                     array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS));
             }

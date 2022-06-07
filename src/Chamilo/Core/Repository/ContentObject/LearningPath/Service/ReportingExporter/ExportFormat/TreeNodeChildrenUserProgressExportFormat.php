@@ -92,7 +92,7 @@ class TreeNodeChildrenUserProgressExportFormat implements ExportFormatInterface
             'minimum_score' => $this->minimumScore . '%',
             'maximum_score' => $this->maximumScore . '%',
             'last_score' => $this->lastScore . '%',
-            'time' => DatetimeUtilities::format_seconds_to_hours($this->time),
+            'time' => DatetimeUtilities::getInstance()->formatSecondsToHours($this->time),
         ];
     }
 }

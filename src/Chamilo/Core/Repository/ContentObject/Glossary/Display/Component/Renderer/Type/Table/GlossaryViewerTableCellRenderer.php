@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer
     implements TableCellRendererActionsColumnSupport
@@ -30,7 +30,7 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                    Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $component->get_complex_content_object_item_update_url($glossary_item), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -40,7 +40,7 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $component->get_complex_content_object_item_delete_url($glossary_item), ToolbarItem::DISPLAY_ICON,
                     true
                 )

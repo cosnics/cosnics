@@ -70,7 +70,7 @@ class ProgressDetailsBlock extends ReportingBlock
             $reporting_data->add_category($category);
             $reporting_data->add_data_category_row(
                 $category, Translation::get('LastStartTime'),
-                DatetimeUtilities::format_locale_date(null, $treeNodeAttempt->get_start_time())
+                DatetimeUtilities::getInstance()->formatLocaleDate(null, $treeNodeAttempt->get_start_time())
             );
             $reporting_data->add_data_category_row(
                 $category, Translation::get('Status'),
@@ -86,7 +86,7 @@ class ProgressDetailsBlock extends ReportingBlock
 
             $reporting_data->add_data_category_row(
                 $category, Translation::get('Time'),
-                DatetimeUtilities::format_seconds_to_hours($treeNodeAttempt->get_total_time())
+                DatetimeUtilities::getInstance()->formatSecondsToHours($treeNodeAttempt->get_total_time())
             );
 
             if ($this->get_parent()->get_parent()->is_allowed_to_edit_attempt_data())
@@ -119,7 +119,7 @@ class ProgressDetailsBlock extends ReportingBlock
 
         $reporting_data->add_data_category_row(
             $category, Translation::get('Time'),
-            '<span style="font-weight: bold;">' . DatetimeUtilities::format_seconds_to_hours(
+            '<span style="font-weight: bold;">' . DatetimeUtilities::getInstance()->formatSecondsToHours(
                 $trackingService->getTotalTimeSpentInTreeNode(
                     $learningPath, $user, $treeNode
                 )

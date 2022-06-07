@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class describes an form action for the course
@@ -61,7 +61,7 @@ abstract class CourseFormActionComponent extends Manager
             $message = Translation::get(
                 $message, 
                 array('OBJECT' => Translation::get('Course')), 
-                Utilities::COMMON_LIBRARIES);
+                StringUtilities::LIBRARIES);
             
             $this->redirect_after_form_handling($succes, $message);
         }

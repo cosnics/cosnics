@@ -5,7 +5,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use HTML_Table;
 
@@ -68,7 +68,7 @@ class MiniWeekCalendar extends Calendar
 
         $navigation->setCellContents(
             0, 1,
-            htmlentities(Translation::get('Week', null, Utilities::COMMON_LIBRARIES)) . ' ' . $weekNumber . ' : ' .
+            htmlentities(Translation::get('Week', null, StringUtilities::LIBRARIES)) . ' ' . $weekNumber . ' : ' .
             date('l d M Y', $this->getStartTime()) . ' - ' .
             date('l d M Y', strtotime('+6 Days', $this->getStartTime()))
         );
@@ -126,7 +126,7 @@ class MiniWeekCalendar extends Calendar
         {
             $weekDay = strtotime('+' . $day . ' days', $firstDay);
             $this->setCellContents(
-                $day + 1, 0, Translation::get(date('l', $weekDay) . 'Long', null, Utilities::COMMON_LIBRARIES)
+                $day + 1, 0, Translation::get(date('l', $weekDay) . 'Long', null, StringUtilities::LIBRARIES)
             );
         }
 

@@ -307,7 +307,7 @@ class ExporterComponent extends Manager
             );
 
             $table[$index][User::PROPERTY_EMAIL] = $block_data[User::PROPERTY_EMAIL];
-            $table[$index][CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME] = DatetimeUtilities::format_locale_date(
+            $table[$index][CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME] = DatetimeUtilities::getInstance()->formatLocaleDate(
                 Translation::getInstance()->getTranslation('SubscriptionTimeFormat', null, Manager::context()),
                 $block_data[CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME]
             );

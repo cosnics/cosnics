@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class LoginMonthBlock extends Block
 {
@@ -42,18 +42,18 @@ class LoginMonthBlock extends Block
             $condition);
         
         $months_names = array(
-            Translation::get('JanuaryLong', null, Utilities::COMMON_LIBRARIES), 
-            Translation::get('FebruaryLong', null, Utilities::COMMON_LIBRARIES), 
-            Translation::get('MarchLong', null, Utilities::COMMON_LIBRARIES), 
-            Translation::get('AprilLong', null, Utilities::COMMON_LIBRARIES), 
-            Translation::get('MayLong', null, Utilities::COMMON_LIBRARIES), 
-            Translation::get('JuneLong', null, Utilities::COMMON_LIBRARIES), 
-            Translation::get('JulyLong', null, Utilities::COMMON_LIBRARIES), 
-            Translation::get('AugustLong', null, Utilities::COMMON_LIBRARIES), 
-            Translation::get('SeptemberLong', null, Utilities::COMMON_LIBRARIES), 
-            Translation::get('OctoberLong', null, Utilities::COMMON_LIBRARIES), 
-            Translation::get('NovemberLong', null, Utilities::COMMON_LIBRARIES), 
-            Translation::get('DecemberLong', null, Utilities::COMMON_LIBRARIES));
+            Translation::get('JanuaryLong', null, StringUtilities::LIBRARIES),
+            Translation::get('FebruaryLong', null, StringUtilities::LIBRARIES),
+            Translation::get('MarchLong', null, StringUtilities::LIBRARIES),
+            Translation::get('AprilLong', null, StringUtilities::LIBRARIES),
+            Translation::get('MayLong', null, StringUtilities::LIBRARIES),
+            Translation::get('JuneLong', null, StringUtilities::LIBRARIES),
+            Translation::get('JulyLong', null, StringUtilities::LIBRARIES),
+            Translation::get('AugustLong', null, StringUtilities::LIBRARIES),
+            Translation::get('SeptemberLong', null, StringUtilities::LIBRARIES),
+            Translation::get('OctoberLong', null, StringUtilities::LIBRARIES),
+            Translation::get('NovemberLong', null, StringUtilities::LIBRARIES),
+            Translation::get('DecemberLong', null, StringUtilities::LIBRARIES));
         $months = Block::getDateArray($data, 'n');
         
         $reporting_data->set_categories($months_names);

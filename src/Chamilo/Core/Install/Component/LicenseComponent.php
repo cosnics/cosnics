@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -56,7 +56,7 @@ class LicenseComponent extends Manager implements NoAuthenticationSupport
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('Previous', null, Utilities::COMMON_LIBRARIES),
+                Translation::get('Previous', null, StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('chevron-left'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_REQUIREMENTS))));
 

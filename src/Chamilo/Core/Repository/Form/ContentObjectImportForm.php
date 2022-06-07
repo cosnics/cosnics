@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -60,7 +60,7 @@ abstract class ContentObjectImportForm extends FormValidator
         $buttons = [];
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'import_button', Translation::get('Import', null, Utilities::COMMON_LIBRARIES),
+            'style_submit_button', 'import_button', Translation::get('Import', null, StringUtilities::LIBRARIES),
             array('id' => 'import_button'), null, new FontAwesomeGlyph('import')
         );
 

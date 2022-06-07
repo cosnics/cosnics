@@ -52,7 +52,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\Form
@@ -367,12 +367,12 @@ abstract class ContentObjectForm extends FormValidator
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit_button',
-            Translation::get($buttonVariable, null, Utilities::COMMON_LIBRARIES), null, null,
+            Translation::get($buttonVariable, null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph($glyphName)
         );
 
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

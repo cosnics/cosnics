@@ -18,7 +18,7 @@ use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\String\Text;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -79,13 +79,13 @@ class UserForm extends FormValidator
         // Lastname
         $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
         // Firstname
         $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
         // Email
@@ -93,7 +93,7 @@ class UserForm extends FormValidator
         if (Configuration::getInstance()->get_setting(array(Manager::context(), 'require_email')))
         {
             $this->addRule(
-                User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
                 'required'
             );
         }
@@ -101,16 +101,16 @@ class UserForm extends FormValidator
         // Username
         $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_USERNAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            User::PROPERTY_USERNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
         $group = [];
         $group[] = &$this->createElement(
-            'radio', User::PROPERTY_ACTIVE, null, Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 1
+            'radio', User::PROPERTY_ACTIVE, null, Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
         );
         $group[] = &$this->createElement(
-            'radio', User::PROPERTY_ACTIVE, null, Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES), 0
+            'radio', User::PROPERTY_ACTIVE, null, Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
         );
         $this->addGroup($group, 'active', Translation::get('Active'), '&nbsp;');
 
@@ -152,7 +152,7 @@ class UserForm extends FormValidator
         {
             $this->addRule(
                 User::PROPERTY_OFFICIAL_CODE,
-                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+                Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
             );
         }
 
@@ -179,7 +179,7 @@ class UserForm extends FormValidator
         // Disk Quota
         $this->addElement('text', User::PROPERTY_DISK_QUOTA, Translation::get('DiskQuota'), array("size" => "50"));
         $this->addRule(
-            User::PROPERTY_DISK_QUOTA, Translation::get('ThisFieldMustBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            User::PROPERTY_DISK_QUOTA, Translation::get('ThisFieldMustBeNumeric', null, StringUtilities::LIBRARIES),
             'numeric'
         );
         // Database Quota
@@ -188,7 +188,7 @@ class UserForm extends FormValidator
         );
         $this->addRule(
             User::PROPERTY_DATABASE_QUOTA,
-            Translation::get('ThisFieldMustBeNumeric', null, Utilities::COMMON_LIBRARIES), 'numeric'
+            Translation::get('ThisFieldMustBeNumeric', null, StringUtilities::LIBRARIES), 'numeric'
         );
 
         // Status
@@ -205,21 +205,21 @@ class UserForm extends FormValidator
         $group = [];
         $group[] = &$this->createElement(
             'radio', User::PROPERTY_PLATFORMADMIN, null,
-            Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 1
+            Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
         );
         $group[] = &$this->createElement(
             'radio', User::PROPERTY_PLATFORMADMIN, null,
-            Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES), 0
+            Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
         );
         $this->addGroup($group, 'admin', Translation::get('PlatformAdministrator'), '&nbsp;');
 
         // Send email
         $group = [];
         $group[] = &$this->createElement(
-            'radio', 'send_mail', null, Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 1
+            'radio', 'send_mail', null, Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
         );
         $group[] = &$this->createElement(
-            'radio', 'send_mail', null, Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES), 0
+            'radio', 'send_mail', null, Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
         );
         $this->addGroup($group, 'mail', Translation::get('SendMailToNewUser'), '&nbsp;');
     }
@@ -232,10 +232,10 @@ class UserForm extends FormValidator
         $this->build_basic_form();
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Create', null, Utilities::COMMON_LIBRARIES)
+            'style_submit_button', 'submit', Translation::get('Create', null, StringUtilities::LIBRARIES)
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -251,11 +251,11 @@ class UserForm extends FormValidator
         $this->addElement('hidden', User::PROPERTY_ID);
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Update', null, Utilities::COMMON_LIBRARIES), null, null,
+            'style_submit_button', 'submit', Translation::get('Update', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -315,8 +315,8 @@ class UserForm extends FormValidator
             }
             else
             {
-                $act_date = DatetimeUtilities::time_from_datepicker($values[User::PROPERTY_ACTIVATION_DATE]);
-                $exp_date = DatetimeUtilities::time_from_datepicker($values[User::PROPERTY_EXPIRATION_DATE]);
+                $act_date = DatetimeUtilities::getInstance()->timeFromDatepicker($values[User::PROPERTY_ACTIVATION_DATE]);
+                $exp_date = DatetimeUtilities::getInstance()->timeFromDatepicker($values[User::PROPERTY_EXPIRATION_DATE]);
                 $user->set_activation_date($act_date);
                 $user->set_expiration_date($exp_date);
             }
@@ -545,8 +545,8 @@ class UserForm extends FormValidator
         }
         else
         {
-            $act_date = DatetimeUtilities::time_from_datepicker($values[User::PROPERTY_ACTIVATION_DATE]);
-            $exp_date = DatetimeUtilities::time_from_datepicker($values[User::PROPERTY_EXPIRATION_DATE]);
+            $act_date = DatetimeUtilities::getInstance()->timeFromDatepicker($values[User::PROPERTY_ACTIVATION_DATE]);
+            $exp_date = DatetimeUtilities::getInstance()->timeFromDatepicker($values[User::PROPERTY_EXPIRATION_DATE]);
             $user->set_activation_date($act_date);
             $user->set_expiration_date($exp_date);
         }

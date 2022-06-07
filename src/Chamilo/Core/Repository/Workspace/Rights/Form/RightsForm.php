@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -174,13 +174,13 @@ class RightsForm extends FormValidator
         $buttons[] = $this->createElement(
             'style_submit_button', 
             'submit', 
-            Translation::get('Save', null, Utilities::COMMON_LIBRARIES), 
+            Translation::get('Save', null, StringUtilities::LIBRARIES),
             array('class' => 'positive'));
         
         $buttons[] = $this->createElement(
             'style_reset_button', 
             'reset', 
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES), 
+            Translation::get('Reset', null, StringUtilities::LIBRARIES),
             array('class' => 'normal empty'));
         
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

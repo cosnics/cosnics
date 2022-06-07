@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -49,7 +49,7 @@ class ContentObjectUpdaterComponent extends Manager
                 $message = htmlentities(
                     Translation::get(
                         ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                        array('OBJECT' => Translation::get('ContentObject')), Utilities::COMMON_LIBRARIES
+                        array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
                     )
                 );
 

@@ -18,7 +18,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -109,14 +109,14 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                 if (count($publication_ids) == 1)
                 {
                     $message = Translation::get(
-                        'ObjectMoved', array('OBJECT' => Translation::get('Publication')), Utilities::COMMON_LIBRARIES
+                        'ObjectMoved', array('OBJECT' => Translation::get('Publication')), StringUtilities::LIBRARIES
                     );
                 }
                 else
                 {
                     $message = Translation::get(
                         'ObjectsMoved', array('OBJECTS' => Translation::get('Publications')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     );
                 }
                 $this->redirect(
@@ -268,12 +268,12 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                     'static', null, Translation::get(
                     'ObjectSelected', array(
                         'OBJECT' => Translation::get(count($publication_ids) > 1 ? 'Publications' : 'Publication')
-                    ), Utilities::COMMON_LIBRARIES
+                    ), StringUtilities::LIBRARIES
                 ), implode('<br>', $publications)
                 );
 
                 $select = $form->addElement(
-                    'select', 'category', Translation::get('Category', null, Utilities::COMMON_LIBRARIES)/*,
+                    'select', 'category', Translation::get('Category', null, StringUtilities::LIBRARIES)/*,
                     $this->tree*/
                 );
 
@@ -290,13 +290,13 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                 }
 
                 // $form->addElement('submit', 'submit', Translation ::
-                // get('Ok', null ,Utilities:: COMMON_LIBRARIES));
+                // get('Ok', null ,StringUtilities::LIBRARIES));
                 $buttons[] = $form->createElement(
-                    'style_submit_button', 'submit', Translation::get('Move', null, Utilities::COMMON_LIBRARIES), null,
+                    'style_submit_button', 'submit', Translation::get('Move', null, StringUtilities::LIBRARIES), null,
                     null, new FontAwesomeGlyph('move')
                 );
                 $buttons[] = $form->createElement(
-                    'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+                    'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
                 );
 
                 $form->addGroup($buttons, 'buttons', null, '&nbsp;', false);

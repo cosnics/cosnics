@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Vimeo\Component;
 
 use Chamilo\Core\Repository\Implementation\Vimeo\Manager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class DeleterComponent extends Manager
 {
@@ -15,7 +15,7 @@ class DeleterComponent extends Manager
         {
             $parameters = $this->get_parameters();
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
-            $this->redirect(Translation::get('ObjectDeleted', null, Utilities::COMMON_LIBRARIES), false, $parameters);
+            $this->redirect(Translation::get('ObjectDeleted', null, StringUtilities::LIBRARIES), false, $parameters);
         }
         else
         {
@@ -23,7 +23,7 @@ class DeleterComponent extends Manager
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_EXTERNAL_REPOSITORY;
             $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_ID] = $id;
             $this->redirect(
-                Translation::get('ObjectFailedDeleted', null, Utilities::COMMON_LIBRARIES), 
+                Translation::get('ObjectFailedDeleted', null, StringUtilities::LIBRARIES),
                 true, 
                 $parameters);
         }

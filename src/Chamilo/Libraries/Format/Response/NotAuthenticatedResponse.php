@@ -6,7 +6,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -88,7 +88,7 @@ class NotAuthenticatedResponse extends Response
 
         $form->addRule('password', $translator->getTranslation('ThisFieldIsRequired'), 'required');
         $form->addRule(
-            'login', $translator->getTranslation('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES),
+            'login', $translator->getTranslation('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
             'required'
         );
 
@@ -111,7 +111,7 @@ class NotAuthenticatedResponse extends Response
         $html[] = '<div class="col-xs-12 col-md-8 col-lg-6">';
         $html[] = '<div class="panel panel-danger">';
         $html[] = '<div class="panel-heading">';
-        $html[] = Translation::get('NotAuthenticated', [], Utilities::COMMON_LIBRARIES);
+        $html[] = Translation::get('NotAuthenticated', [], StringUtilities::LIBRARIES);
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
         $html[] = $this->displayLoginForm();

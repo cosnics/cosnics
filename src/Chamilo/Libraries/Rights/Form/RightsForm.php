@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Libraries\Rights\Form
@@ -99,12 +99,12 @@ class RightsForm extends FormValidator
         $buttons = [];
 
         $buttons[] = $this->createElement(
-            'style_submit_button', self::PROPERTY_SUBMIT, $translator->trans('Submit', [], Utilities::COMMON_LIBRARIES),
+            'style_submit_button', self::PROPERTY_SUBMIT, $translator->trans('Submit', [], StringUtilities::LIBRARIES),
             null, null, new FontAwesomeGlyph('arrow-right')
         );
 
         $buttons[] = $this->createElement(
-            'style_reset_button', self::PROPERTY_RESET, $translator->trans('Reset', [], Utilities::COMMON_LIBRARIES)
+            'style_reset_button', self::PROPERTY_RESET, $translator->trans('Reset', [], StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, self::PROPERTY_BUTTONS, null, '&nbsp;', false);

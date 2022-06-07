@@ -15,7 +15,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -329,7 +329,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
                 $actionButtons[] = '<span title="' . $translator->getTranslation('Score') . '" data-option-id="' .
                      $option_number . '" class="option-action option-score fas fa-percent text-primary"></span>';
                 $actionButtons[] = '<span title="' .
-                     $translator->getTranslation('Delete', null, Utilities::COMMON_LIBRARIES) . '" data-option-id="' .
+                     $translator->getTranslation('Delete', null, StringUtilities::LIBRARIES) . '" data-option-id="' .
                      $option_number . '" class="option-action option-remove fas fa-trash-alt ' . $removeClass . '"></span>';
 
                 $this->addElement('html', implode('<br />' . PHP_EOL, $actionButtons));

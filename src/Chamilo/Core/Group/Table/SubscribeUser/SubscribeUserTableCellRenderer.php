@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -65,11 +65,11 @@ class SubscribeUserTableCellRenderer extends DataClassTableCellRenderer implemen
             case User::PROPERTY_PLATFORMADMIN :
                 if ($user->get_platformadmin() == '1')
                 {
-                    return Translation::get('ConfirmTrue', null, Utilities::COMMON_LIBRARIES);
+                    return Translation::get('ConfirmTrue', null, StringUtilities::LIBRARIES);
                 }
                 else
                 {
-                    return Translation::get('ConfirmFalse', null, Utilities::COMMON_LIBRARIES);
+                    return Translation::get('ConfirmFalse', null, StringUtilities::LIBRARIES);
                 }
             case User::PROPERTY_EMAIL :
                 return '<a href="mailto:' . $user->get_email() . '">' . $user->get_email() . '</a>';

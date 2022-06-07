@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -52,7 +52,7 @@ class ForumPostDeleterComponent extends Manager
             Translation::get(
                 ($success ? 'ObjectDeleted' : 'ObjectNotdeleted'),
                 array('OBJECT' => Translation::get('ForumPost')),
-                Utilities::COMMON_LIBRARIES));
+                StringUtilities::LIBRARIES));
 
         $params = [];
         $params[self::PARAM_ACTION] = self::ACTION_VIEW_TOPIC;

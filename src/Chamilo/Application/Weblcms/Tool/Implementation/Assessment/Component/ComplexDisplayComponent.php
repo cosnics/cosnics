@@ -23,7 +23,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -77,7 +77,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
             if (! $this->publication || ! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
             {
                 $this->redirect(
-                    Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES),
+                    Translation::get("NotAllowed", null, StringUtilities::LIBRARIES),
                     true,
                     [],
                     array(

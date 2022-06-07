@@ -20,7 +20,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\UUID;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @package Chamilo\Core\Repository\Service
@@ -245,7 +245,7 @@ class ContentObjectSaver
         }
         else
         {
-            $contentObject->set_object_number(UUID::v4());
+            $contentObject->set_object_number(Uuid::uuid4());
             $contentObject->set_current(ContentObject::CURRENT_SINGLE);
         }
 

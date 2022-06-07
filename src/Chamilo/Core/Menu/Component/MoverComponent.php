@@ -5,7 +5,7 @@ use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -48,7 +48,7 @@ class MoverComponent extends Manager
         $message = $this->getTranslator()->trans(
             $success ? 'ObjectMoved' : 'ObjectNotMoved',
             array('{OBJECT}' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')),
-            Utilities::COMMON_LIBRARIES
+            StringUtilities::LIBRARIES
         );
 
         $this->redirect(

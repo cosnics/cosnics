@@ -5,7 +5,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class UserGroups
 {
@@ -68,7 +68,7 @@ class UserGroups
         $html[] = '<h3 class="panel-title">';
 
         $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
-        $html[] = $glyph->render() . '&nbsp;' . Translation::get('PlatformGroups', null, Utilities::COMMON_LIBRARIES);
+        $html[] = $glyph->render() . '&nbsp;' . Translation::get('PlatformGroups', null, StringUtilities::LIBRARIES);
 
         $html[] = '</h3>';
         $html[] = '</div>';
@@ -104,12 +104,12 @@ class UserGroups
             }
             else
             {
-                $html[] = Translation::get('NoPlatformGroupSubscriptions', null, Utilities::COMMON_LIBRARIES);
+                $html[] = Translation::get('NoPlatformGroupSubscriptions', null, StringUtilities::LIBRARIES);
             }
         }
         else
         {
-            $html[] = Translation::get('NoPlatformGroupSubscriptions', null, Utilities::COMMON_LIBRARIES);
+            $html[] = Translation::get('NoPlatformGroupSubscriptions', null, StringUtilities::LIBRARIES);
         }
 
         $html[] = '</div>';

@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -43,7 +43,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
                 Translation::get(
                     'ObjectCreated', 
                     array('OBJECT' => Translation::get('CoursesTree')), 
-                    Utilities::COMMON_LIBRARIES));
+                    StringUtilities::LIBRARIES));
         }
         if (! $this->create_default_categories_in_weblcms())
         {

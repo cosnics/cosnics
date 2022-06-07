@@ -190,7 +190,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
                 $row ++;
 
-                $info = DatetimeUtilities::format_locale_date(null, $post->get_creation_date());
+                $info = DatetimeUtilities::getInstance()->formatLocaleDate(null, $post->get_creation_date());
 
                 $message = $this->format_message($html);
                 $attachments = $post->get_attached_content_objects();

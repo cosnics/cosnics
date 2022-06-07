@@ -11,7 +11,7 @@ use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -77,7 +77,7 @@ class ExternalCalendarForm extends ContentObjectForm
         $this->addElement('file', ExternalCalendar::PROPERTY_PATH . '[' . ExternalCalendar::PATH_TYPE_LOCAL . ']');
         $this->addRule(
             ExternalCalendar::PROPERTY_PATH . '[' . ExternalCalendar::PATH_TYPE_LOCAL . ']',
-            Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES), 'disk_quota'
+            Translation::get('DiskQuotaExceeded', null, StringUtilities::LIBRARIES), 'disk_quota'
         );
 
         // $this->addFormRule(array($this, 'check_document_form'));

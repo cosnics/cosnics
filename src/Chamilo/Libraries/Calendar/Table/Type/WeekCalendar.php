@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Calendar\Table\Type;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -314,7 +314,7 @@ class WeekCalendar extends Calendar
      */
     protected function getHeaderContent($weekDayTime)
     {
-        $dayLabel = Translation::get(date('l', $weekDayTime) . 'Short', null, Utilities::COMMON_LIBRARIES) . ' ' .
+        $dayLabel = Translation::get(date('l', $weekDayTime) . 'Short', null, StringUtilities::LIBRARIES) . ' ' .
             date('d/m', $weekDayTime);
 
         $dayUrlTemplate = $this->getDayUrlTemplate();

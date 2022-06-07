@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -46,7 +46,7 @@ class UpdaterComponent extends Manager
                 Translation::get(
                     $success ? 'ObjectUpdated' : 'ObjectNotUpdated',
                     array('OBJECT' => Translation::get('Publication')),
-                    Utilities::COMMON_LIBRARIES), !$success,
+                    StringUtilities::LIBRARIES), !$success,
                 array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
@@ -56,7 +56,7 @@ class UpdaterComponent extends Manager
                     Translation::get(
                         'NoObjectSelected',
                         array('OBJECT' => Translation::get('Publication')),
-                        Utilities::COMMON_LIBRARIES)));
+                        StringUtilities::LIBRARIES)));
         }
     }
 }

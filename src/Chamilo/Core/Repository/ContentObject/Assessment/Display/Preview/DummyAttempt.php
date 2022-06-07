@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractAttempt;
-use Chamilo\Libraries\Utilities\UUID;
+use Ramsey\Uuid\Uuid;
 
 /**
  *
@@ -21,7 +21,7 @@ class DummyAttempt extends AbstractAttempt
      */
     public function create(): bool
     {
-        $this->set_id(UUID::v4());
+        $this->set_id(Uuid::uuid4());
 
         return PreviewStorage::getInstance()->create_assessment_attempt($this);
     }

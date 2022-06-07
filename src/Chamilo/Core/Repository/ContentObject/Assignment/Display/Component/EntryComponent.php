@@ -36,7 +36,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
@@ -180,7 +180,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
                     'id' => $contentObject->getId(),
                     'title' => $contentObject->get_title(),
                     'user' => $owner,
-                    'date' => DatetimeUtilities::format_locale_date(null, $contentObject->get_creation_date())
+                    'date' => DatetimeUtilities::getInstance()->formatLocaleDate(null, $contentObject->get_creation_date())
                 ]
             ];
         }
@@ -606,8 +606,8 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
             return $baseParameters;
         }
 
-        $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
-        $submittedDate = DatetimeUtilities::format_locale_date($dateFormat, $this->getEntry()->getSubmitted());
+        $dateFormat = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
+        $submittedDate = DatetimeUtilities::getInstance()->formatLocaleDate($dateFormat, $this->getEntry()->getSubmitted());
 
         $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
         $configuration->set(\Chamilo\Core\Repository\Feedback\Manager::CONFIGURATION_SHOW_FEEDBACK_HEADER, false);

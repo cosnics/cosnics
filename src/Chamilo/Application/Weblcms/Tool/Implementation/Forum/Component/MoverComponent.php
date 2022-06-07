@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * this is the component for moving a forum in the list
@@ -37,7 +37,7 @@ class MoverComponent extends Manager
                 $message = Translation::get(
                     'ObjectMoved', 
                     array('OBJECT' => Translation::get('Forum', null, 'Chamilo\Core\Repository\ContentObject\Forum')), 
-                    Utilities::COMMON_LIBRARIES);
+                    StringUtilities::LIBRARIES);
             }
             else
             {
@@ -45,7 +45,7 @@ class MoverComponent extends Manager
                 $message = Translation::get(
                     'ObjectNotMoved', 
                     array('OBJECT' => Translation::get('Forum', null, 'Chamilo\Core\Repository\ContentObject\Forum')), 
-                    Utilities::COMMON_LIBRARIES);
+                    StringUtilities::LIBRARIES);
             }
             
             $this->redirect($message, $failure, array(self::PARAM_ACTION => self::ACTION_BROWSE));

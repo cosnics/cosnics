@@ -9,7 +9,7 @@ use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -65,7 +65,7 @@ class UpdaterComponent extends Manager
                 $translation = $success ? 'ObjectUpdated' : 'ObjectNotUpdated';
 
                 $message = Translation::get(
-                    $translation, array('OBJECT' => Translation::get('Relation')), Utilities::COMMON_LIBRARIES
+                    $translation, array('OBJECT' => Translation::get('Relation')), StringUtilities::LIBRARIES
                 );
             }
             catch (Exception $ex)

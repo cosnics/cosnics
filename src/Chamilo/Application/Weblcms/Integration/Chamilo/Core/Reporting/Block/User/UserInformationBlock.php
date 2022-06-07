@@ -8,7 +8,7 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class UserInformationBlock extends ToolBlock
 {
@@ -26,7 +26,7 @@ class UserInformationBlock extends ToolBlock
         $userFullName = $userEmail = $userName = Translation::getInstance()->getTranslation(
             'Unknown',
             null,
-            Utilities::COMMON_LIBRARIES);
+            StringUtilities::LIBRARIES);
 
         if ($user instanceof User)
         {

@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -61,13 +61,13 @@ class PlatformStatisticsBlock extends Block
             }
         }
 
-        $arr[Translation::get('FirstConnection')][] = DatetimeUtilities::format_locale_date(
-            Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-            Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES), $firstconnection
+        $arr[Translation::get('FirstConnection')][] = DatetimeUtilities::getInstance()->formatLocaleDate(
+            Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' .
+            Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES), $firstconnection
         );
-        $arr[Translation::get('LastConnection')][] = DatetimeUtilities::format_locale_date(
-            Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-            Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES), $lastconnection
+        $arr[Translation::get('LastConnection')][] = DatetimeUtilities::getInstance()->formatLocaleDate(
+            Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' .
+            Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES), $lastconnection
         );
 
         $keys = array_keys($arr);

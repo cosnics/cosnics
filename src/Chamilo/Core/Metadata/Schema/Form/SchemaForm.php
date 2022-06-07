@@ -5,7 +5,7 @@ use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Form for the schema
@@ -54,21 +54,21 @@ class SchemaForm extends FormValidator
         $this->addElement('text', Schema::PROPERTY_NAMESPACE, Translation::get('Namespace'), array("size" => "50"));
 
         $this->addRule(
-            Schema::PROPERTY_NAMESPACE, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Schema::PROPERTY_NAMESPACE, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
         $this->addElement('text', Schema::PROPERTY_NAME, Translation::get('Name'), array("size" => "50"));
 
         $this->addRule(
-            Schema::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Schema::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
         $this->addElement('text', Schema::PROPERTY_URL, Translation::get('Url'), array("size" => "50"));
 
         $this->addRule(
-            Schema::PROPERTY_URL, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
+            Schema::PROPERTY_URL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
 
         $this->getEntityTranslationFormService()->addFieldsToForm($this);

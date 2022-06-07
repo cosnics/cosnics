@@ -21,7 +21,7 @@ use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -68,7 +68,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         {
             $managementButtonGroup->addButton(
                 new Button(
-                    $translator->getTranslation('Export', null, Utilities::COMMON_LIBRARIES),
+                    $translator->getTranslation('Export', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('download'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -77,7 +77,7 @@ class DetailsComponent extends TabComponent implements TableSupport
 
             $managementButtonGroup->addButton(
                 new Button(
-                    $translator->getTranslation('Delete', [], Utilities::COMMON_LIBRARIES),
+                    $translator->getTranslation('Delete', [], StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('times'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_DELETE_COURSE_GROUP)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, $translator->getTranslation(
@@ -194,16 +194,16 @@ class DetailsComponent extends TabComponent implements TableSupport
             $currentCourseGroup->get_max_number_of_members();
         $html[] = '<br /><b>' . Translation::get('SelfRegistrationAllowed') . ':</b> ' .
             ($currentCourseGroup->is_self_registration_allowed() ? Translation::get(
-                'ConfirmYes', null, Utilities::COMMON_LIBRARIES
-            ) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
+                'ConfirmYes', null, StringUtilities::LIBRARIES
+            ) : Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES));
         $html[] = '<br /><b>' . Translation::get('SelfUnRegistrationAllowed') . ':</b> ' .
             ($currentCourseGroup->is_self_unregistration_allowed() ? Translation::get(
-                'ConfirmYes', null, Utilities::COMMON_LIBRARIES
-            ) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
+                'ConfirmYes', null, StringUtilities::LIBRARIES
+            ) : Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES));
         $html[] = '<br /><b>' . Translation::get('RandomlySubscribed') . ':</b> ' .
             ($currentCourseGroup->is_random_registration_done() ? Translation::get(
-                'ConfirmYes', null, Utilities::COMMON_LIBRARIES
-            ) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
+                'ConfirmYes', null, StringUtilities::LIBRARIES
+            ) : Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES));
 
         $html[] = '</div>';
         $html[] = '</div>';

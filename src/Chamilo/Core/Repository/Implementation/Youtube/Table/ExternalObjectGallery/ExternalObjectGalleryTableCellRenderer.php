@@ -25,7 +25,7 @@ class ExternalObjectGalleryTableCellRenderer extends DefaultExternalObjectGaller
      */
     public function renderTitle($content_object)
     {
-        return StringUtilities::getInstance()->truncate($content_object->get_title(), 25) . ' (' . DatetimeUtilities::format_seconds_to_minutes(
+        return StringUtilities::getInstance()->truncate($content_object->get_title(), 25) . ' (' . DatetimeUtilities::getInstance()->formatSecondsToMinutes(
             $content_object->get_duration()) . ')';
     }
 }

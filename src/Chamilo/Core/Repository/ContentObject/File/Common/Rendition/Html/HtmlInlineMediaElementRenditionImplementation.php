@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -25,12 +25,12 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
         $html = [];
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getPluginPath(Utilities::COMMON_LIBRARIES, true) .
+            Path::getInstance()->getPluginPath(StringUtilities::LIBRARIES, true) .
             'MediaElementJS/build/mediaelement-and-player.min.js'
         );
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getPluginPath(Utilities::COMMON_LIBRARIES, true) .
+            Path::getInstance()->getPluginPath(StringUtilities::LIBRARIES, true) .
             'MediaElementJS/build/mediaelementplayer.min.css'
         );
 

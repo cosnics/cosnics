@@ -21,7 +21,7 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -69,14 +69,14 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Add', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
+                    Translation::get('Add', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
+                    Translation::get('ShowAll', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
                     $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );

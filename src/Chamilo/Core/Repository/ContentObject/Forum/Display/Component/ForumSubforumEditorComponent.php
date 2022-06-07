@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -146,7 +146,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
         $message = htmlentities(
             Translation::get(
                 ($success ? 'ObjectUpdated' : 'ObjectNotUpdated'), array('OBJECT' => Translation::get('Subforum')),
-                Utilities::COMMON_LIBRARIES
+                StringUtilities::LIBRARIES
             )
         );
 

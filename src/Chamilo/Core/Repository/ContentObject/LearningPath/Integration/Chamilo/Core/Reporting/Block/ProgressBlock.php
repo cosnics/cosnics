@@ -85,7 +85,7 @@ class ProgressBlock extends ReportingBlock
                 $category, Translation::get('Score'), !is_null($averageScore) ? $averageScore . '%' : null
             );
             $reporting_data->add_data_category_row(
-                $category, Translation::get('Time'), DatetimeUtilities::format_seconds_to_hours($totalTimeSpent)
+                $category, Translation::get('Time'), DatetimeUtilities::getInstance()->formatSecondsToHours($totalTimeSpent)
             );
 
             $actions = [];
@@ -138,7 +138,7 @@ class ProgressBlock extends ReportingBlock
         $reporting_data->add_data_category_row($category_name, Translation::get('Score'), '');
         $reporting_data->add_data_category_row(
             $category_name, Translation::get('Time'),
-            '<span style="font-weight: bold;">' . DatetimeUtilities::format_seconds_to_hours($total_time) . '</span>'
+            '<span style="font-weight: bold;">' . DatetimeUtilities::getInstance()->formatSecondsToHours($total_time) . '</span>'
         );
 
         if ($this->get_parent()->get_parent()->is_allowed_to_edit_attempt_data() && $attempt_count > 0)

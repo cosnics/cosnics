@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Implementation\Youtube\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class LoginComponent extends Manager
 {
@@ -24,7 +24,7 @@ class LoginComponent extends Manager
                 $parameters = $this->get_parameters();
                 $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
                 $this->redirect(
-                    Translation::get('LoginSuccessful', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('LoginSuccessful', null, StringUtilities::LIBRARIES),
                     false, 
                     $parameters);
             }
@@ -33,7 +33,7 @@ class LoginComponent extends Manager
                 
                 $parameters = $this->get_parameters();
                 $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
-                $this->redirect(Translation::get('LoginFailed', null, Utilities::COMMON_LIBRARIES), true, $parameters);
+                $this->redirect(Translation::get('LoginFailed', null, StringUtilities::LIBRARIES), true, $parameters);
             }
         }
         else

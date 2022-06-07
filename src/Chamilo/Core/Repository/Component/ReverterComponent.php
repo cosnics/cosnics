@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -66,14 +66,14 @@ class ReverterComponent extends Manager
                 $message = Translation::get(
                     'ObjectNotReverted', 
                     array('OBJECT' => Translation::get('ContentObject')), 
-                    Utilities::COMMON_LIBRARIES);
+                    StringUtilities::LIBRARIES);
             }
             else
             {
                 $message = Translation::get(
                     'ObjectReverted', 
                     array('OBJECT' => Translation::get('ContentObject')), 
-                    Utilities::COMMON_LIBRARIES);
+                    StringUtilities::LIBRARIES);
             }
             $this->redirect(
                 $message, (bool) $failures,
@@ -86,7 +86,7 @@ class ReverterComponent extends Manager
                     Translation::get(
                         'NoObjectSelected', 
                         array('OBJECT' => Translation::get('ContentObject')), 
-                        Utilities::COMMON_LIBRARIES)));
+                        StringUtilities::LIBRARIES)));
         }
     }
 

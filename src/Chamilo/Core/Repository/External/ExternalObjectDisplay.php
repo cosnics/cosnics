@@ -5,7 +5,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\PropertiesTable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 abstract class ExternalObjectDisplay
 {
@@ -65,20 +65,20 @@ abstract class ExternalObjectDisplay
 
         if ($object->get_description())
         {
-            $properties[Translation::get('Description', null, Utilities::COMMON_LIBRARIES)] =
+            $properties[Translation::get('Description', null, StringUtilities::LIBRARIES)] =
                 $object->get_description();
         }
 
         if ($object->get_created() > 0)
         {
-            $properties[Translation::get('UploadedOn')] = DatetimeUtilities::format_locale_date(
+            $properties[Translation::get('UploadedOn')] = DatetimeUtilities::getInstance()->formatLocaleDate(
                 null, $object->get_created()
             );
         }
 
         if ($object->get_created() != $object->get_modified())
         {
-            $properties[Translation::get('ModifiedOn')] = DatetimeUtilities::format_locale_date(
+            $properties[Translation::get('ModifiedOn')] = DatetimeUtilities::getInstance()->formatLocaleDate(
                 null, $object->get_modified()
             );
         }

@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -60,13 +60,13 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
 
                 return $user->get_fullname();
             case ContentObject::PROPERTY_CREATION_DATE :
-                return DatetimeUtilities::format_locale_date(
-                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+                return DatetimeUtilities::getInstance()->formatLocaleDate(
+                    Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES),
                     $content_object->get_creation_date()
                 );
             case ContentObject::PROPERTY_MODIFICATION_DATE :
-                return DatetimeUtilities::format_locale_date(
-                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+                return DatetimeUtilities::getInstance()->formatLocaleDate(
+                    Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES),
                     $content_object->get_modification_date()
                 );
             case RepositoryTableColumnModel::PROPERTY_VERSION :

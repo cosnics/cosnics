@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use InvalidArgumentException;
 
@@ -143,7 +143,7 @@ class CopierComponent extends Manager
                     Translation::get(
                         'ObjectCopied', 
                         array('OBJECT' => Translation::get('ContentObject')), 
-                        Utilities::COMMON_LIBRARIES), 
+                        StringUtilities::LIBRARIES),
                     false, 
                     array(
                         \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE, 
@@ -155,7 +155,7 @@ class CopierComponent extends Manager
                     Translation::get(
                         'ObjectCopied', 
                         array('OBJECT' => Translation::get('ContentObject')), 
-                        Utilities::COMMON_LIBRARIES), 
+                        StringUtilities::LIBRARIES),
                     false, 
                     array(
                         \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM, 

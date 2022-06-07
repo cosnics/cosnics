@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 class DenierComponent extends Manager
@@ -43,7 +43,7 @@ class DenierComponent extends Manager
                 Translation::get(
                     'NoObjectSelected', 
                     array('OBJECT' => Translation::get('Request')), 
-                    Utilities::COMMON_LIBRARIES)));
+                    StringUtilities::LIBRARIES)));
     }
 
     function single_deny($id)

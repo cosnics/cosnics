@@ -15,7 +15,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -36,8 +36,8 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
      */
     protected function formatDate($date)
     {
-        $formatted_date = DatetimeUtilities::format_locale_date(
-            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), $date
+        $formatted_date = DatetimeUtilities::getInstance()->formatLocaleDate(
+            Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES), $date
         );
 
         if ($this->get_table()->getAssignmentDataProvider()->isDateAfterAssignmentEndTime($date))

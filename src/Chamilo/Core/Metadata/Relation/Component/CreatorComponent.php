@@ -8,7 +8,7 @@ use Chamilo\Core\Metadata\Service\EntityTranslationService;
 use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -57,7 +57,7 @@ class CreatorComponent extends Manager
                 $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
 
                 $message = Translation::get(
-                    $translation, array('OBJECT' => Translation::get('Relation')), Utilities::COMMON_LIBRARIES
+                    $translation, array('OBJECT' => Translation::get('Relation')), StringUtilities::LIBRARIES
                 );
             }
             catch (Exception $ex)

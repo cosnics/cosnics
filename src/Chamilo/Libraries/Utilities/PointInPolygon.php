@@ -25,14 +25,14 @@ class PointInPolygon
      *
      * @var string[][]
      */
-    private $vertices;
+    private array $vertices;
 
     /**
      * PointInPolygon constructor
      *
      * @param string[][] $vertices The vertices that form the polygon.
      */
-    function __construct($vertices)
+    function __construct(array $vertices)
     {
         $this->vertices = $vertices;
     }
@@ -45,7 +45,7 @@ class PointInPolygon
      *
      * @return int The point type.
      */
-    function is_inside($point, $vertex_check = true)
+    function is_inside(array $point, bool $vertex_check = true): int
     {
         $vertices = $this->vertices;
 
@@ -115,7 +115,7 @@ class PointInPolygon
      *
      * @return boolean True if the point is a vertex, false otherwise.
      */
-    function point_is_on_vertex($point)
+    function point_is_on_vertex(array $point): bool
     {
         $vertices = $this->vertices;
 

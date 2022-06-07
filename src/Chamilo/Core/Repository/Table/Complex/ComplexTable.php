@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -27,7 +27,7 @@ class ComplexTable extends DataClassTable implements TableFormActionsSupport
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url($action),
-                Translation::get('CopySelected', null, Utilities::COMMON_LIBRARIES)),
+                Translation::get('CopySelected', null, StringUtilities::LIBRARIES)),
             true);
 
         $action = array(
@@ -36,7 +36,7 @@ class ComplexTable extends DataClassTable implements TableFormActionsSupport
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url($action),
-                Translation::get('RemoveSelected', null, Utilities::COMMON_LIBRARIES)),
+                Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES)),
             true);
 
         $action = array(
@@ -45,7 +45,7 @@ class ComplexTable extends DataClassTable implements TableFormActionsSupport
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url($action),
-                Translation::get('MoveSelected', null, Utilities::COMMON_LIBRARIES),
+                Translation::get('MoveSelected', null, StringUtilities::LIBRARIES),
                 false));
 
         return $actions;

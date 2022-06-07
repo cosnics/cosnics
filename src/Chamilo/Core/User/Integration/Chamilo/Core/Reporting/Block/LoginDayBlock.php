@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class LoginDayBlock extends Block
 {
@@ -59,13 +59,13 @@ class LoginDayBlock extends Block
         $new_days = [];
 
         $day_names = array(
-            Translation::get('MondayLong', null, Utilities::COMMON_LIBRARIES),
-            Translation::get('TuesdayLong', null, Utilities::COMMON_LIBRARIES),
-            Translation::get('WednesdayLong', null, Utilities::COMMON_LIBRARIES),
-            Translation::get('ThursdayLong', null, Utilities::COMMON_LIBRARIES),
-            Translation::get('FridayLong', null, Utilities::COMMON_LIBRARIES),
-            Translation::get('SaturdayLong', null, Utilities::COMMON_LIBRARIES),
-            Translation::get('SundayLong', null, Utilities::COMMON_LIBRARIES)
+            Translation::get('MondayLong', null, StringUtilities::LIBRARIES),
+            Translation::get('TuesdayLong', null, StringUtilities::LIBRARIES),
+            Translation::get('WednesdayLong', null, StringUtilities::LIBRARIES),
+            Translation::get('ThursdayLong', null, StringUtilities::LIBRARIES),
+            Translation::get('FridayLong', null, StringUtilities::LIBRARIES),
+            Translation::get('SaturdayLong', null, StringUtilities::LIBRARIES),
+            Translation::get('SundayLong', null, StringUtilities::LIBRARIES)
         );
 
         $reporting_data->set_categories($day_names);

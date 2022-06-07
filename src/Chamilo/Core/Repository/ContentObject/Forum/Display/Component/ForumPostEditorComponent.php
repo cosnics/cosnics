@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -136,7 +136,7 @@ class ForumPostEditorComponent extends ForumPostFormAction
         $message = htmlentities(
             Translation::get(
                 ($success ? 'ObjectUpdated' : 'ObjectNotUpdated'), array('OBJECT' => Translation::get('ForumPost')),
-                Utilities::COMMON_LIBRARIES
+                StringUtilities::LIBRARIES
             )
         );
         $params = [];

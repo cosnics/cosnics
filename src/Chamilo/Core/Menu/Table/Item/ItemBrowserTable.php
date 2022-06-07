@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -192,7 +192,7 @@ class ItemBrowserTable extends DataClassTable implements TableFormActionsSupport
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)),
-                $this->getTranslator()->trans('RemoveSelected', [], Utilities::COMMON_LIBRARIES)
+                $this->getTranslator()->trans('RemoveSelected', [], StringUtilities::LIBRARIES)
             )
         );
 

@@ -22,7 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -137,9 +137,9 @@ class CourseUserExerciseInformationBlock extends ToolBlock
                 $time = mktime(0, 0, $value['total_time'], 0, 0, 0);
                 $time = date('G:i:s', $time);
                 $score = $this->get_score_bar($value['score'] / $value['score_count']);
-                $last = DatetimeUtilities::format_locale_date(
-                    Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                    Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES), $value['last']
+                $last = DatetimeUtilities::getInstance()->formatLocaleDate(
+                    Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' .
+                    Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES), $value['last']
                 );
                 $params_detail[Manager::PARAM_PUBLICATION] =
                     $publication[ContentObjectPublication::PROPERTY_ID];

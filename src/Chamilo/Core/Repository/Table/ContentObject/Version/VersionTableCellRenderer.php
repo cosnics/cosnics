@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class VersionTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -29,7 +29,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $remove_url, ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -38,7 +38,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('DeleteNotAvailable', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('DeleteNotAvailable', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('times', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -53,7 +53,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Revert', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('undo'),
+                        Translation::get('Revert', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('undo'),
                         $revert_url, ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -62,7 +62,7 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('RevertNotAvailable', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('RevertNotAvailable', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('undo', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -93,8 +93,8 @@ class VersionTableCellRenderer extends DataClassTableCellRenderer implements Tab
                     StringUtilities::getInstance()->truncate($content_object->get_description(), 50)
                 );
             case ContentObject::PROPERTY_MODIFICATION_DATE :
-                return DatetimeUtilities::format_locale_date(
-                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),
+                return DatetimeUtilities::getInstance()->formatLocaleDate(
+                    Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES),
                     $content_object->get_modification_date()
                 );
         }

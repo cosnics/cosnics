@@ -27,7 +27,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
@@ -228,7 +228,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('Deactivate', [], Utilities::COMMON_LIBRARIES),
+                            Translation::get('Deactivate', [], StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('pause-circle', [], null, 'fas'), $this->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_DEACTIVATE,
@@ -247,7 +247,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('Activate', [], Utilities::COMMON_LIBRARIES),
+                            Translation::get('Activate', [], StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('play-circle', [], null, 'fas'), $this->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_ACTIVATE,
@@ -263,7 +263,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Remove', [], Utilities::COMMON_LIBRARIES),
+                        Translation::get('Remove', [], StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('trash-alt', [], null, 'fas'), $this->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_REMOVE,

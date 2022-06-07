@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -54,7 +54,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
 
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get($text, null, Utilities::COMMON_LIBRARIES), $glyph,
+                        Translation::get($text, null, StringUtilities::LIBRARIES), $glyph,
                         $this->get_component()->get_toggle_visibility_category_url($category->get_id()),
                         ToolbarItem::DISPLAY_ICON
                     )
@@ -64,7 +64,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('VisibleNA', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('VisibleNA', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('eye', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -75,7 +75,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                    Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_component()->get_update_category_url($category->get_id()), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -84,7 +84,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('EditNA', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('EditNA', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('pencil-alt', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -94,7 +94,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_component()->get_impact_view_url($category->get_id()), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -105,7 +105,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $this->get_component()->get_delete_category_url($category->get_id()), ToolbarItem::DISPLAY_ICON,
                         true
                     )
@@ -115,7 +115,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('Delete', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('times', array('text-muted')), null, ToolbarItem::DISPLAY_ICON, true
                     )
                 );
@@ -126,7 +126,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-up'),
+                    Translation::get('MoveUp', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-up'),
                     $this->get_component()->get_move_category_url($category->get_id(), - 1), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -135,7 +135,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveUpNA', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('MoveUpNA', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('sort-up', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -145,7 +145,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-down'),
+                    Translation::get('MoveDown', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-down'),
                     $this->get_component()->get_move_category_url($category->get_id()), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -154,7 +154,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveDownNA', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('MoveDownNA', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('sort-down', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -166,7 +166,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Move', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('Move', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('window-restore', array('fa-flip-horizontal'), null, 'fas'),
                         $this->get_component()->get_change_category_parent_url($category->get_id()),
                         ToolbarItem::DISPLAY_ICON
@@ -177,7 +177,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('MoveNA', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('MoveNA', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('window-restore', array('fa-flip-horizontal', 'text-muted'), null, 'fas'),
                         null, ToolbarItem::DISPLAY_ICON
                     )

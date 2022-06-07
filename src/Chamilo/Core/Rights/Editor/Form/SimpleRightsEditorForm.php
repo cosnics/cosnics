@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Form to display the rights on a more usable way with radio buttons.
@@ -112,12 +112,12 @@ class SimpleRightsEditorForm extends FormValidator
         $buttons = [];
 
         $buttons[] = $this->createElement(
-            'style_submit_button', self::PROPERTY_SUBMIT, Translation::get('Submit', null, Utilities::COMMON_LIBRARIES),
+            'style_submit_button', self::PROPERTY_SUBMIT, Translation::get('Submit', null, StringUtilities::LIBRARIES),
             null, null, new FontAwesomeGlyph('arrow-right')
         );
 
         $buttons[] = $this->createElement(
-            'style_reset_button', self::PROPERTY_RESET, Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', self::PROPERTY_RESET, Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, self::PROPERTY_BUTTONS, null, '&nbsp;', false);

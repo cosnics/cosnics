@@ -8,7 +8,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicAction;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class Manager implements ActionsSupportInterface
 {
@@ -24,7 +24,7 @@ class Manager implements ActionsSupportInterface
             )
         );
         $links[] = new DynamicAction(
-            Translation::get('List', null, Utilities::COMMON_LIBRARIES), Translation::get('ListDescription'),
+            Translation::get('List', null, StringUtilities::LIBRARIES), Translation::get('ListDescription'),
             new FontAwesomeGlyph('list', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -36,7 +36,7 @@ class Manager implements ActionsSupportInterface
             )
         );
         $links[] = new DynamicAction(
-            Translation::get('Create', null, Utilities::COMMON_LIBRARIES), Translation::get('CreateDescription'),
+            Translation::get('Create', null, StringUtilities::LIBRARIES), Translation::get('CreateDescription'),
             new FontAwesomeGlyph('plus', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl(), $redirect->getUrl()
         );
 
@@ -47,7 +47,7 @@ class Manager implements ActionsSupportInterface
             )
         );
         $links[] = new DynamicAction(
-            Translation::get('Export', null, Utilities::COMMON_LIBRARIES), Translation::get('ExportDescription'),
+            Translation::get('Export', null, StringUtilities::LIBRARIES), Translation::get('ExportDescription'),
             new FontAwesomeGlyph('download', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl(),
             $redirect->getUrl()
         );
@@ -59,7 +59,7 @@ class Manager implements ActionsSupportInterface
             )
         );
         $links[] = new DynamicAction(
-            Translation::get('Import', null, Utilities::COMMON_LIBRARIES), Translation::get('ImportDescription'),
+            Translation::get('Import', null, StringUtilities::LIBRARIES), Translation::get('ImportDescription'),
             new FontAwesomeGlyph('upload', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl(),
             $redirect->getUrl()
         );

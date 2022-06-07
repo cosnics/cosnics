@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -164,14 +164,14 @@ class AssessmentUsersBlock extends AssessmentBlock
                 $user_attempt_summary_data['total_score'] / $user_attempt_summary_data['score_count']
             );
 
-            $first = DatetimeUtilities::format_locale_date(
-                Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
+            $first = DatetimeUtilities::getInstance()->formatLocaleDate(
+                Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' .
+                Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES),
                 $user_attempt_summary_data['first']
             );
-            $last = DatetimeUtilities::format_locale_date(
-                Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
+            $last = DatetimeUtilities::getInstance()->formatLocaleDate(
+                Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' .
+                Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES),
                 $user_attempt_summary_data['last']
             );
 
@@ -179,7 +179,7 @@ class AssessmentUsersBlock extends AssessmentBlock
             $max_score = $this->get_score_bar($user_attempt_summary_data['max_score']);
         }
 
-        $time = DatetimeUtilities::format_seconds_to_hours($user_attempt_summary_data['time']);
+        $time = DatetimeUtilities::getInstance()->formatSecondsToHours($user_attempt_summary_data['time']);
 
         if ($user_attempt_summary_data['count'] > 0)
         {

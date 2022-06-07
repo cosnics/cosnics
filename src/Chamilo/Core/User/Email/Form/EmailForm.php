@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -40,7 +40,7 @@ class EmailForm extends FormValidator
         $this->addElement('category', Translation::get('Email'));
 
         $this->addElement('text', 'title', Translation::get('EmailTitle'), array('size' => '50'));
-        $this->addRule('title', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
+        $this->addRule('title', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required');
 
         $this->add_html_editor(
             'message', Translation::get('EmailMessage'), true, array('height' => 500, 'width' => 750)
@@ -50,7 +50,7 @@ class EmailForm extends FormValidator
             'style_submit_button', 'submit', Translation::get('Email'), null, null, new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
         );
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

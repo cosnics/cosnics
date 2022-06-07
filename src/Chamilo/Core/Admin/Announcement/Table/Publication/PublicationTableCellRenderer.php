@@ -19,7 +19,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class PublicationTableCellRenderer extends RecordTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
@@ -119,7 +119,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                    Translation::get('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_EDIT,
@@ -131,7 +131,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_DELETE,
@@ -157,7 +157,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Hide', [], Utilities::COMMON_LIBRARIES), $glyph,
+                    Translation::get('Hide', [], StringUtilities::LIBRARIES), $glyph,
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_HIDE,
@@ -201,8 +201,8 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
                     ) . '" title="' . htmlentities($content_object->get_title()) . '">' . $title_short . '</a>';
                 break;
             case Publication::PROPERTY_PUBLICATION_DATE :
-                $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
-                $data = DatetimeUtilities::format_locale_date(
+                $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
+                $data = DatetimeUtilities::getInstance()->formatLocaleDate(
                     $date_format, $publication[Publication::PROPERTY_PUBLICATION_DATE]
                 );
                 break;
@@ -268,7 +268,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
 
         if (array_key_exists(0, $targetEntities[0]))
         {
-            $target_list[] = Translation::get('Everybody', null, Utilities::COMMON_LIBRARIES);
+            $target_list[] = Translation::get('Everybody', null, StringUtilities::LIBRARIES);
         }
         else
         {

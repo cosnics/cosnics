@@ -143,12 +143,12 @@ class AssessmentsBlock extends AssessmentBlock
 
         if (!is_null($last_attempt))
         {
-            $last_attempt = DatetimeUtilities::format_locale_date(null, $last_attempt);
+            $last_attempt = DatetimeUtilities::getInstance()->formatLocaleDate(null, $last_attempt);
         }
 
         if (!is_null($first_attempt))
         {
-            $first_attempt = DatetimeUtilities::format_locale_date(null, $first_attempt);
+            $first_attempt = DatetimeUtilities::getInstance()->formatLocaleDate(null, $first_attempt);
         }
 
         if (!is_null($score))

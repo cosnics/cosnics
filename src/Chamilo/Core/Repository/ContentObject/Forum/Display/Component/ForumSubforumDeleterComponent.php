@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -42,7 +42,7 @@ class ForumSubforumDeleterComponent extends Manager
                 Translation::get(
                     ($success ? 'ObjectDeleted' : 'ObjectNotDeleted'),
                     array('OBJECT' => Translation::get('Subforum')),
-                    Utilities::COMMON_LIBRARIES));
+                    StringUtilities::LIBRARIES));
 
             $this->redirect($message, !$success, $params);
         }

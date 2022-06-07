@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -52,11 +52,11 @@ class CourseSectionToolSelectorForm extends FormValidator
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
-            Translation::get('Save', null, Utilities::COMMON_LIBRARIES));
+            Translation::get('Save', null, StringUtilities::LIBRARIES));
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+            Translation::get('Reset', null, StringUtilities::LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

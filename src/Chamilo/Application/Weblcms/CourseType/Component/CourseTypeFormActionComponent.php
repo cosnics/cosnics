@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\CourseType\Manager;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class describes an form action for the course type
@@ -47,7 +47,7 @@ abstract class CourseTypeFormActionComponent extends Manager
             $message = Translation::get(
                 $message, 
                 array('OBJECT' => Translation::get('CourseType')), 
-                Utilities::COMMON_LIBRARIES);
+                StringUtilities::LIBRARIES);
             
             $this->redirect($message, ! $succes, array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }

@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use RuntimeException;
 
@@ -105,7 +105,7 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
         $message = Translation::getInstance()->getTranslation(
             ($success ? 'ObjectPublished' : 'ObjectNotPublished'), 
             array('OBJECT' => Translation::get('Object')), 
-            Utilities::COMMON_LIBRARIES);
+            StringUtilities::LIBRARIES);
         
         $parameters = array(
             Manager::PARAM_ACTION => Manager::ACTION_BROWSE);

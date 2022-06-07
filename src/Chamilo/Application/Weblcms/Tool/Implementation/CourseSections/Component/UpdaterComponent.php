@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -67,7 +67,7 @@ class UpdaterComponent extends Manager
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UPDATE_COURSE_SECTION,
                                 self::PARAM_COURSE_SECTION_ID => $id)),
-                        Translation::get('Update', null, Utilities::COMMON_LIBRARIES)));
+                        Translation::get('Update', null, StringUtilities::LIBRARIES)));
 
                 $html = [];
 

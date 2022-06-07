@@ -32,7 +32,7 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 class ImporterComponent extends Manager implements DelegateComponent
@@ -211,7 +211,7 @@ class ImporterComponent extends Manager implements DelegateComponent
 
         $buttonElements = $buttons->getElements();
         $buttonElements[] = $importForm->createElement(
-            'style_submit_button', 'publish', Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
+            'style_submit_button', 'publish', Translation::get('Publish', null, StringUtilities::LIBRARIES),
             array('id' => 'publish-button', 'class' => 'hidden'), null, new FontAwesomeGlyph('plus')
         );
 

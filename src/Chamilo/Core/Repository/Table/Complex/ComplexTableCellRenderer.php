@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -75,7 +75,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_component()->get_complex_content_object_item_edit_url($cloi->get_id()),
                 ToolbarItem::DISPLAY_ICON
             )
@@ -83,7 +83,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('CopyEdit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('copy'),
+                Translation::get('CopyEdit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('copy'),
                 $this->get_component()->get_complex_content_object_item_copy_url($cloi->get_id()),
                 ToolbarItem::DISPLAY_ICON, true
             )
@@ -91,7 +91,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->get_component()->get_complex_content_object_item_delete_url($cloi->get_id()),
                 ToolbarItem::DISPLAY_ICON, true
             )
@@ -99,7 +99,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('ChangeParent', null, Utilities::COMMON_LIBRARIES),
+                Translation::get('ChangeParent', null, StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('window-restore', array('fa-flip-horizontal'), null, 'fas'),
                 $this->get_component()->get_complex_content_object_parent_changer_url($cloi->get_id()),
                 ToolbarItem::DISPLAY_ICON
@@ -112,7 +112,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-up'),
+                    Translation::get('MoveUp', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-up'),
                     $this->get_component()->get_complex_content_object_item_move_url(
                         $cloi->get_id(), Manager::PARAM_DIRECTION_UP
                     ), ToolbarItem::DISPLAY_ICON
@@ -123,7 +123,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveUpNotAvailable', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('MoveUpNotAvailable', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('sort-up', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -133,7 +133,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-down'),
+                    Translation::get('MoveDown', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-down'),
                     $this->get_component()->get_complex_content_object_item_move_url(
                         $cloi->get_id(), Manager::PARAM_DIRECTION_DOWN
                     ), ToolbarItem::DISPLAY_ICON
@@ -144,7 +144,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('MoveDownNotAvailable', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('MoveDownNotAvailable', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('sort-up', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
                 )
             );

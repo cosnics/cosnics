@@ -130,13 +130,13 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
                     switch ($column->get_name())
                     {
                         case AssessmentAttempt::PROPERTY_START_TIME :
-                            return DatetimeUtilities::format_locale_date(
+                            return DatetimeUtilities::getInstance()->formatLocaleDate(
                                 null, $assessment_attempt[AssessmentAttempt::PROPERTY_START_TIME]
                             );
                         case AssessmentAttempt::PROPERTY_END_TIME :
                             if ($assessment_attempt[AssessmentAttempt::PROPERTY_END_TIME])
                             {
-                                return DatetimeUtilities::format_locale_date(
+                                return DatetimeUtilities::getInstance()->formatLocaleDate(
                                     null, $assessment_attempt[AssessmentAttempt::PROPERTY_END_TIME]
                                 );
                             }
@@ -146,7 +146,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
                             if ($assessment_attempt[AssessmentAttempt::PROPERTY_STATUS] ==
                                 AssessmentAttempt::STATUS_COMPLETED)
                             {
-                                return DatetimeUtilities::convert_seconds_to_hours(
+                                return DatetimeUtilities::getInstance()->convertSecondsToHours(
                                     $assessment_attempt[AssessmentAttempt::PROPERTY_TOTAL_TIME]
                                 );
                             }

@@ -14,7 +14,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -36,7 +36,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Wiki
         if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
             $this->redirect(
-                Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES),
+                Translation::get("NotAllowed", null, StringUtilities::LIBRARIES),
                 true,
                 [],
                 array(

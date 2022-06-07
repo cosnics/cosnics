@@ -45,7 +45,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\UUID;
+use Ramsey\Uuid\Uuid;
 use Exception;
 
 /**
@@ -387,7 +387,7 @@ class ContentObject extends CompositeDataClass
                 }
                 else
                 {
-                    $content_object->set_object_number(UUID::v4());
+                    $content_object->set_object_number(Uuid::uuid4());
                     $content_object->set_current(ContentObject::CURRENT_SINGLE);
                 }
 
@@ -444,7 +444,7 @@ class ContentObject extends CompositeDataClass
             $this->set_modification_date($now);
         }
 
-        $this->set_object_number(UUID::v4());
+        $this->set_object_number(Uuid::uuid4());
 
         if (!parent::create())
         {
@@ -1322,7 +1322,7 @@ class ContentObject extends CompositeDataClass
     /**
      * Returns the version number.
      *
-     * @return int The version number.
+     * @return string The version number.
      */
     public function get_object_number()
     {
@@ -1922,7 +1922,7 @@ class ContentObject extends CompositeDataClass
     /**
      * Sets the object number of this object.
      *
-     * @param $object_number int The Object Number.
+     * @param $object_number string The Object Number.
      */
     public function set_object_number($object_number)
     {

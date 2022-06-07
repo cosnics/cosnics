@@ -7,7 +7,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -155,19 +155,19 @@ class AssessmentForm extends ContentObjectForm
 
         $this->addRule(
             Assessment::PROPERTY_MAXIMUM_ATTEMPTS,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 'regex', '/^[0-9]*$/'
+            Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES), 'regex', '/^[0-9]*$/'
         );
         $this->addRule(
             Assessment::PROPERTY_QUESTIONS_PER_PAGE,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 'regex', '/^[0-9]*$/'
+            Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES), 'regex', '/^[0-9]*$/'
         );
         $this->addRule(
             Assessment::PROPERTY_MAXIMUM_TIME,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 'regex', '/^[0-9]*$/'
+            Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES), 'regex', '/^[0-9]*$/'
         );
         $this->addRule(
             Assessment::PROPERTY_RANDOM_QUESTIONS,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 'regex', '/^[0-9]*$/'
+            Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES), 'regex', '/^[0-9]*$/'
         );
 
         $this->addElement(
@@ -302,19 +302,19 @@ class AssessmentForm extends ContentObjectForm
 
         $this->addRule(
             Assessment::PROPERTY_MAXIMUM_ATTEMPTS,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 'regex', '/^[0-9]*$/'
+            Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES), 'regex', '/^[0-9]*$/'
         );
         $this->addRule(
             Assessment::PROPERTY_QUESTIONS_PER_PAGE,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 'regex', '/^[0-9]*$/'
+            Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES), 'regex', '/^[0-9]*$/'
         );
         $this->addRule(
             Assessment::PROPERTY_MAXIMUM_TIME,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 'regex', '/^[0-9]*$/'
+            Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES), 'regex', '/^[0-9]*$/'
         );
         $this->addRule(
             Assessment::PROPERTY_RANDOM_QUESTIONS,
-            Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES), 'regex', '/^[0-9]*$/'
+            Translation::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES), 'regex', '/^[0-9]*$/'
         );
 
         $this->addElement(

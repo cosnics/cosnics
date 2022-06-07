@@ -31,7 +31,7 @@ use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Default viewer component that handles the visualization of the portfolio item or folder
@@ -100,9 +100,9 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
      */
     public function format_date($date)
     {
-        $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+        $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
-        return DatetimeUtilities::format_locale_date($date_format, $date);
+        return DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $date);
     }
 
     /**
@@ -631,11 +631,11 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
             $html[] = '<div class="panel panel-default">';
             $html[] = '<div class="panel-body">';
 
-            $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+            $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
             $html[] = Translation::get(
                 'LastEditedOn',
-                array('DATE' => DatetimeUtilities::format_locale_date($date_format, $last_activity->get_date()))
+                array('DATE' => DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $last_activity->get_date()))
             );
 
             $html[] = '<br />';

@@ -6,7 +6,7 @@ use Chamilo\Core\Metadata\Relation\Instance\Manager;
 use Chamilo\Core\Metadata\Relation\Instance\Service\RelationInstanceService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -45,7 +45,7 @@ class CreatorComponent extends Manager
             $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
 
             $message = Translation::get(
-                $translation, array('OBJECT' => Translation::get('RelationInstance')), Utilities::COMMON_LIBRARIES
+                $translation, array('OBJECT' => Translation::get('RelationInstance')), StringUtilities::LIBRARIES
             );
 
             $this->redirect($message, !$success, array(self::PARAM_ACTION => self::ACTION_BROWSE));

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\CalendarEvent\Form;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
 use Chamilo\Libraries\Calendar\Event\Recurrence\RecurringContentObjectForm;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\CalendarEvent\Form
@@ -37,12 +37,12 @@ class CalendarEventForm extends RecurringContentObjectForm
 
         $this->addRule(
             CalendarEvent::PROPERTY_START_DATE,
-            $translator->trans('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
+            $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
         );
 
         $this->addRule(
             CalendarEvent::PROPERTY_END_DATE,
-            $translator->trans('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
+            $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
         );
 
         $this->addFrequencyPropertiesToForm();
@@ -102,10 +102,10 @@ class CalendarEventForm extends RecurringContentObjectForm
 
         $calendarEvent->set_location($values[CalendarEvent::PROPERTY_LOCATION]);
         $calendarEvent->set_start_date(
-            DatetimeUtilities::time_from_datepicker($values[CalendarEvent::PROPERTY_START_DATE])
+            DatetimeUtilities::getInstance()->timeFromDatepicker($values[CalendarEvent::PROPERTY_START_DATE])
         );
         $calendarEvent->set_end_date(
-            DatetimeUtilities::time_from_datepicker($values[CalendarEvent::PROPERTY_END_DATE])
+            DatetimeUtilities::getInstance()->timeFromDatepicker($values[CalendarEvent::PROPERTY_END_DATE])
         );
     }
 

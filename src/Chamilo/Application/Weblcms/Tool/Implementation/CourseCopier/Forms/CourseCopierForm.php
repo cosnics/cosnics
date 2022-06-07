@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This form can let the user select the sections and publications of a course for copying them to another course them.
@@ -135,7 +135,7 @@ class CourseCopierForm extends FormValidator
             $options,
             array('multiple' => 'multiple', 'style' => 'min-height: 250px; max-height: 400px; min-width: 250px;')
         );
-        $this->addRule('course', $this->getTranslation('Required', null, Utilities::COMMON_LIBRARIES), 'required');
+        $this->addRule('course', $this->getTranslation('Required', null, StringUtilities::LIBRARIES), 'required');
 
         $this->addElement('category', $this->getTranslation('CopyThisCourseInformation'));
 
@@ -143,10 +143,10 @@ class CourseCopierForm extends FormValidator
             'static', '', '', '<div class="alert alert-info">' . $this->getTranslation('ConfirmInformationMessage') . '</div>'
         );
 
-        $this->addElement('checkbox', 'confirm', $this->getTranslation('Confirm', null, Utilities::COMMON_LIBRARIES));
+        $this->addElement('checkbox', 'confirm', $this->getTranslation('Confirm', null, StringUtilities::LIBRARIES));
         $this->addRule(
             'confirm',
-            $this->getTranslation('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            $this->getTranslation('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
         $prevnext = [];

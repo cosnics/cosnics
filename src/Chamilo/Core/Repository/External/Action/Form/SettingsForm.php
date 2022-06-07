@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
 
 /**
@@ -296,18 +296,18 @@ class SettingsForm extends FormValidator
             $buttons[] = $this->createElement(
                 'style_submit_button',
                 'submit',
-                Translation::get('Save', null, Utilities::COMMON_LIBRARIES)
+                Translation::get('Save', null, StringUtilities::LIBRARIES)
             );
             $buttons[] = $this->createElement(
                 'style_reset_button',
                 'reset',
-                Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+                Translation::get('Reset', null, StringUtilities::LIBRARIES)
             );
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
         else
         {
-            $this->addElement('html', Translation::get('NoConfigurableSettings', null, Utilities::COMMON_LIBRARIES));
+            $this->addElement('html', Translation::get('NoConfigurableSettings', null, StringUtilities::LIBRARIES));
         }
     }
 

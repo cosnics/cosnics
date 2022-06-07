@@ -18,7 +18,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Personal\Component
@@ -108,7 +108,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                        Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                         $editUrl
                     )
                 );
@@ -125,7 +125,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $deleteUrl
                     )
                 );
@@ -246,9 +246,9 @@ class ViewerComponent extends Manager implements DelegateComponent
      */
     public function render_publication_date()
     {
-        $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+        $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
-        return DatetimeUtilities::format_locale_date($date_format, $this->getPublication()->get_published());
+        return DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $this->getPublication()->get_published());
     }
 
     /**

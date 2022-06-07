@@ -55,12 +55,12 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
                 return $request->get_subject();
 
             case CommonRequest::PROPERTY_CREATION_DATE :
-                return DatetimeUtilities::format_locale_date(null, $request->get_creation_date());
+                return DatetimeUtilities::getInstance()->formatLocaleDate(null, $request->get_creation_date());
 
             case CommonRequest::PROPERTY_DECISION_DATE :
                 if ($request->get_decision_date() != null)
                 {
-                    return DatetimeUtilities::format_locale_date(null, $request->get_decision_date());
+                    return DatetimeUtilities::getInstance()->formatLocaleDate(null, $request->get_decision_date());
                 }
                 else
                 {

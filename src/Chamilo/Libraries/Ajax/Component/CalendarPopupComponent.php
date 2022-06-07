@@ -6,7 +6,7 @@ use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -31,22 +31,22 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupport
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
         $DaysShort = array(
-            $translator->trans("MondayShort", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("TuesdayShort", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("WednesdayShort", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("ThursdayShort", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("FridayShort", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("SaturdayShort", [], Utilities::COMMON_LIBRARIES)
+            $translator->trans("MondayShort", [], StringUtilities::LIBRARIES),
+            $translator->trans("TuesdayShort", [], StringUtilities::LIBRARIES),
+            $translator->trans("WednesdayShort", [], StringUtilities::LIBRARIES),
+            $translator->trans("ThursdayShort", [], StringUtilities::LIBRARIES),
+            $translator->trans("FridayShort", [], StringUtilities::LIBRARIES),
+            $translator->trans("SaturdayShort", [], StringUtilities::LIBRARIES)
         );
 
         // Defining the days of the week to allow translation of the days
         $DaysLong = array(
-            $translator->trans("MondayLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("TuesdayLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("WednesdayLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("ThursdayLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("FridayLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("SaturdayLong", [], Utilities::COMMON_LIBRARIES)
+            $translator->trans("MondayLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("TuesdayLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("WednesdayLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("ThursdayLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("FridayLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("SaturdayLong", [], StringUtilities::LIBRARIES)
         );
 
         $start_of_week =
@@ -54,32 +54,32 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupport
         
         if ($start_of_week == 'sunday')
         {
-            array_unshift($DaysShort, $translator->trans("SundayShort", [], Utilities::COMMON_LIBRARIES));
-            array_unshift($DaysLong, $translator->trans("SundayLong", [], Utilities::COMMON_LIBRARIES));
+            array_unshift($DaysShort, $translator->trans("SundayShort", [], StringUtilities::LIBRARIES));
+            array_unshift($DaysLong, $translator->trans("SundayLong", [], StringUtilities::LIBRARIES));
 
             $start_of_week_identifier = 1;
         }
         else
         {
-            $DaysShort[] = $translator->trans("SundayShort", [], Utilities::COMMON_LIBRARIES);
-            $DaysLong[] = $translator->trans("SundayLong", [], Utilities::COMMON_LIBRARIES);
+            $DaysShort[] = $translator->trans("SundayShort", [], StringUtilities::LIBRARIES);
+            $DaysLong[] = $translator->trans("SundayLong", [], StringUtilities::LIBRARIES);
 
             $start_of_week_identifier = 0;
         }
         // Defining the months of the year to allow translation of the months
         $MonthsLong = array(
-            $translator->trans("JanuaryLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("FebruaryLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("MarchLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("AprilLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("MayLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("JuneLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("JulyLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("AugustLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("SeptemberLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("OctoberLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("NovemberLong", [], Utilities::COMMON_LIBRARIES),
-            $translator->trans("DecemberLong", [], Utilities::COMMON_LIBRARIES)
+            $translator->trans("JanuaryLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("FebruaryLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("MarchLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("AprilLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("MayLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("JuneLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("JulyLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("AugustLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("SeptemberLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("OctoberLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("NovemberLong", [], StringUtilities::LIBRARIES),
+            $translator->trans("DecemberLong", [], StringUtilities::LIBRARIES)
         );
 
         $html[] = $this->render_header();

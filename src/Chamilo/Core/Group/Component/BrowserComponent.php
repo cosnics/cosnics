@@ -29,7 +29,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -93,21 +93,21 @@ class BrowserComponent extends Manager implements TableSupport
 
             $commonActions->addButton(
                 new Button(
-                    $translator->trans('Add', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
+                    $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                     $this->get_create_group_url($this->getGroupIdentifier()), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $commonActions->addButton(
                 new Button(
-                    $translator->trans('Root', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('home'),
+                    $translator->trans('Root', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'),
                     $this->get_group_viewing_url($this->getRootGroup()), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $commonActions->addButton(
                 new Button(
-                    $translator->trans('ShowAll', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
+                    $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
                     $this->get_url(array(self::PARAM_GROUP_ID => $this->getGroupIdentifier())),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
@@ -223,7 +223,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         $toolbar->add_item(
             new ToolbarItem(
-                $translator->trans('Edit', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_group_editing_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
             )
         );
@@ -232,7 +232,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->trans('Delete', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_group_delete_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -273,7 +273,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         $toolbar->add_item(
             new ToolbarItem(
-                $translator->trans('Metadata', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('info-circle'),
+                $translator->trans('Metadata', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('info-circle'),
                 $this->get_group_metadata_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
             )
         );
@@ -285,7 +285,7 @@ class BrowserComponent extends Manager implements TableSupport
         if ($description)
         {
             $html[] =
-                '<b>' . $translator->trans('Description', [], Utilities::COMMON_LIBRARIES) . '</b>: ' . $description .
+                '<b>' . $translator->trans('Description', [], StringUtilities::LIBRARIES) . '</b>: ' . $description .
                 '<br />';
         }
 

@@ -6,7 +6,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Security;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm;
 
 /**
@@ -842,7 +842,7 @@ EOT;
      *
      * @return string
      */
-    protected function getTranslation($variable, $parameters = [], $context = Utilities::COMMON_LIBRARIES)
+    protected function getTranslation($variable, $parameters = [], $context = StringUtilities::LIBRARIES)
     {
         return $this->getTranslator()->trans($variable, $parameters, $context);
     }

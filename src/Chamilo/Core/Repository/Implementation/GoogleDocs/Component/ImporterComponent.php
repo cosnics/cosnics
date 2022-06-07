@@ -12,7 +12,7 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use RuntimeException;
 
 class ImporterComponent extends Manager
@@ -65,7 +65,7 @@ class ImporterComponent extends Manager
                 $parameters[\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID] = $document->get_id();
                 
                 $this->redirect(
-                    Translation::get('ObjectImported', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('ObjectImported', null, StringUtilities::LIBRARIES),
                     false, 
                     $parameters);
             }
@@ -75,7 +75,7 @@ class ImporterComponent extends Manager
                 $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_EXTERNAL_REPOSITORY;
                 $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_ID] = $external_object->get_id();
                 $this->redirect(
-                    Translation::get('ObjectFailedImported', null, Utilities::COMMON_LIBRARIES), 
+                    Translation::get('ObjectFailedImported', null, StringUtilities::LIBRARIES),
                     true, 
                     $parameters);
             }

@@ -5,7 +5,7 @@ use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
 use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Form for the element
@@ -45,10 +45,10 @@ class RelationForm extends FormValidator
         $this->addElement('category', Translation::get('General'));
 
         $this->addElement(
-            'text', Relation::PROPERTY_NAME, Translation::get('Name', null, Utilities::COMMON_LIBRARIES)
+            'text', Relation::PROPERTY_NAME, Translation::get('Name', null, StringUtilities::LIBRARIES)
         );
         $this->addRule(
-            Relation::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Relation::PROPERTY_NAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 

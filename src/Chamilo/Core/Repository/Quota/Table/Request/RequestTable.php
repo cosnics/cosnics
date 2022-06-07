@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 class RequestTable extends DataClassTable implements TableFormActionsSupport
@@ -108,7 +108,7 @@ class RequestTable extends DataClassTable implements TableFormActionsSupport
                 $actions->add_form_action(
                     new TableFormAction(
                         $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_GRANT)),
-                        Translation::get('GrantSelected', null, Utilities::COMMON_LIBRARIES)
+                        Translation::get('GrantSelected', null, StringUtilities::LIBRARIES)
                     )
                 );
             }
@@ -118,7 +118,7 @@ class RequestTable extends DataClassTable implements TableFormActionsSupport
                 $actions->add_form_action(
                     new TableFormAction(
                         $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DENY)),
-                        Translation::get('DenySelected', null, Utilities::COMMON_LIBRARIES)
+                        Translation::get('DenySelected', null, StringUtilities::LIBRARIES)
                     )
                 );
             }
@@ -127,7 +127,7 @@ class RequestTable extends DataClassTable implements TableFormActionsSupport
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)),
-                Translation::get('RemoveSelected', null, Utilities::COMMON_LIBRARIES)
+                Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES)
             )
         );
 

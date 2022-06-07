@@ -16,7 +16,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ViewerComponent extends Manager
 {
@@ -43,7 +43,7 @@ class ViewerComponent extends Manager
             {
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('Publish', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('share-square'), $this->get_url(
                         array_merge($this->get_parameters(), array(self::PARAM_ID => $content_object->get_id())), false
                     ), Button::DISPLAY_ICON_AND_LABEL, false, 'btn-primary'

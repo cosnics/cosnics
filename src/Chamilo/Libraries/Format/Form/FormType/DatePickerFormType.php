@@ -53,9 +53,9 @@ class DatePickerFormType extends AbstractType
                 StringUtilities::getInstance()->createString($translation_variable)->upperCamelize());
         }
 
-        $translations['month_names'] = json_encode(DatetimeUtilities::get_month_long());
-        $translations['day_names'] = json_encode(DatetimeUtilities::get_days_long());
-        $translations['day_names_short'] = json_encode(DatetimeUtilities::get_days_short());
+        $translations['month_names'] = json_encode(DatetimeUtilities::getInstance()->getMonthslong());
+        $translations['day_names'] = json_encode(DatetimeUtilities::getInstance()->getDaysLong());
+        $translations['day_names_short'] = json_encode(DatetimeUtilities::getInstance()->getDaysShort());
 
         $view->vars['translations'] = $translations;
     }

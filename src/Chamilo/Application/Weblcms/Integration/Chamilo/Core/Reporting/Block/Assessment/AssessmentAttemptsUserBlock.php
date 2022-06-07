@@ -36,9 +36,9 @@ class AssessmentAttemptsUserBlock extends AssessmentBlock
         $assessment_attempts = $this->get_assessment_attempts($this->getPublicationId(), $this->get_user_id());
         foreach($assessment_attempts as $assessment_attempt)
         {
-            $start_time = DatetimeUtilities::format_locale_date(null, $assessment_attempt->get_start_time());
-            $end_time = DatetimeUtilities::format_locale_date(null, $assessment_attempt->get_end_time());
-            $time = DatetimeUtilities::format_seconds_to_hours($assessment_attempt->get_total_time());
+            $start_time = DatetimeUtilities::getInstance()->formatLocaleDate(null, $assessment_attempt->get_start_time());
+            $end_time = DatetimeUtilities::getInstance()->formatLocaleDate(null, $assessment_attempt->get_end_time());
+            $time = DatetimeUtilities::getInstance()->formatSecondsToHours($assessment_attempt->get_total_time());
             $score = $this->get_score_bar($assessment_attempt->get_total_score());
             
             $reporting_data->add_category($counter);

@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -53,7 +53,7 @@ class ParentChangerComponent extends Manager
 
             $form = new FormValidator('move', FormValidator::FORM_METHOD_POST, $this->get_url($parameters));
             $form->addElement('select', self::PARAM_NEW_PARENT, Translation::get('NewParent'), $parents);
-            $form->addElement('submit', 'submit', Translation::get('Move', null, Utilities::COMMON_LIBRARIES));
+            $form->addElement('submit', 'submit', Translation::get('Move', null, StringUtilities::LIBRARIES));
             if ($form->validate())
             {
                 $selected_parent = $form->exportValue(self::PARAM_NEW_PARENT);
@@ -142,7 +142,7 @@ class ParentChangerComponent extends Manager
                 $this->redirect(
                     Translation::get(
                         $message, array('OBJECTS' => Translation::get('ComplexContentObjectItems')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     ), ($failures > 0), $parameters
                 );
             }
@@ -151,7 +151,7 @@ class ParentChangerComponent extends Manager
                 $menu_trail = $this->get_complex_content_object_breadcrumbs();
                 $menu_trail->add(
                     new Breadcrumb(
-                        $this->get_url($parameters), Translation::get('Move', null, Utilities::COMMON_LIBRARIES)
+                        $this->get_url($parameters), Translation::get('Move', null, StringUtilities::LIBRARIES)
                     )
                 );
 
@@ -170,7 +170,7 @@ class ParentChangerComponent extends Manager
                 htmlentities(
                     Translation::get(
                         'NoObjectSelected', array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     )
                 )
             );
@@ -251,7 +251,7 @@ class ParentChangerComponent extends Manager
     {
         if (!$parent_complex_content_object_item)
         {
-            $current = ' (' . Translation::get('Current', null, Utilities::COMMON_LIBRARIES) . ')';
+            $current = ' (' . Translation::get('Current', null, StringUtilities::LIBRARIES) . ')';
         }
 
         $parents = array(0 => $root_content_object->get_title() . $current);

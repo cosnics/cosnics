@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Class to render the glossary as a list
@@ -34,7 +34,7 @@ class ListGlossaryRenderer extends GlossaryRenderer
 
             $html[] = '<div class="title" style="background-color: #e6e6e6; border: 1px solid grey; padding: 5px;
                    font-weight: bold; color: #666666; text-align: center">';
-            $html[] = Translation::get('NoSearchResults', null, Utilities::COMMON_LIBRARIES);
+            $html[] = Translation::get('NoSearchResults', null, StringUtilities::LIBRARIES);
             $html[] = '</div>';
         }
 

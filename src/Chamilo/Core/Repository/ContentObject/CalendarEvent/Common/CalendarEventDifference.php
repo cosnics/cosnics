@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\Calend
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\CalendarEvent\Common
@@ -37,12 +37,12 @@ class CalendarEventDifference extends ContentObjectDifference
      */
     public function getDatesString(ContentObject $contentObject)
     {
-        $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+        $dateFormat = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
         return Translation::get(
             'CalendarEventDate', array(
-                'START' => DatetimeUtilities::format_locale_date($dateFormat, $contentObject->get_start_date()),
-                'END' => DatetimeUtilities::format_locale_date($dateFormat, $contentObject->get_end_date())
+                'START' => DatetimeUtilities::getInstance()->formatLocaleDate($dateFormat, $contentObject->get_start_date()),
+                'END' => DatetimeUtilities::getInstance()->formatLocaleDate($dateFormat, $contentObject->get_end_date())
             )
         );
     }
@@ -239,7 +239,7 @@ class CalendarEventDifference extends ContentObjectDifference
             if ($contentObject->get_frequency_count() || $contentObject->get_until())
             {
                 $content[] = PHP_EOL;
-                $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+                $dateFormat = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
                 if ($contentObject->get_frequency_count())
                 {
@@ -250,7 +250,7 @@ class CalendarEventDifference extends ContentObjectDifference
                 {
                     $content[] = Translation::get(
                         'RepeatUntilDate', array(
-                            'DATE' => DatetimeUtilities::format_locale_date(
+                            'DATE' => DatetimeUtilities::getInstance()->formatLocaleDate(
                                 $dateFormat, $contentObject->get_until()
                             )
                         )

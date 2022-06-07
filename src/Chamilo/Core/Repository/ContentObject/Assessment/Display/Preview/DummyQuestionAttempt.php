@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractQuestionAttempt;
-use Chamilo\Libraries\Utilities\UUID;
+use Ramsey\Uuid\Uuid;
 
 /**
  *
@@ -59,7 +59,7 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function create(): bool
     {
-        $this->set_id(UUID::v4());
+        $this->set_id(Uuid::uuid4());
         return PreviewStorage::getInstance()->create_assessment_question_attempt($this);
     }
 

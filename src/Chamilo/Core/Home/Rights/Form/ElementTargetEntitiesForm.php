@@ -5,7 +5,7 @@ use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Target Entities Form
@@ -57,7 +57,7 @@ class ElementTargetEntitiesForm extends TargetEntitiesForm
         $buttons[] = $this->createElement(
             'style_submit_button', 
             'cancel', 
-            Translation::get('Cancel', null, Utilities::COMMON_LIBRARIES), 
+            Translation::get('Cancel', null, StringUtilities::LIBRARIES),
             array('class' => 'btn-danger'), 
             null,
             new FontAwesomeGlyph('times'));

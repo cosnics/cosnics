@@ -829,7 +829,7 @@ class RecurringContentObjectForm extends ContentObjectForm
                 case 3 :
                     $calendarEvent->set_frequency_count(0);
                     $calendarEvent->set_until(
-                        DatetimeUtilities::time_from_datepicker($values[RecurringContentObject::PROPERTY_UNTIL])
+                        DatetimeUtilities::getInstance()->timeFromDatepicker($values[RecurringContentObject::PROPERTY_UNTIL])
                     );
             }
         }

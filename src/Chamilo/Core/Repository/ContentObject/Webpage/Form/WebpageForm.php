@@ -12,7 +12,7 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm_Rule_Required;
 
 /**
@@ -35,7 +35,7 @@ class WebpageForm extends ContentObjectForm
         $description_options['collapse_toolbar'] = true;
         parent::build_creation_form($description_options);
 
-        $this->addElement('category', Translation::get('Content', null, Utilities::COMMON_LIBRARIES));
+        $this->addElement('category', Translation::get('Content', null, StringUtilities::LIBRARIES));
 
         $this->addMessage(
             'warning', 'webpage_information', '', Translation::getInstance()->getTranslation(
@@ -64,7 +64,7 @@ class WebpageForm extends ContentObjectForm
         $description_options['collapse_toolbar'] = true;
         parent::build_editing_form($description_options);
 
-        $this->addElement('category', Translation::get('Content', null, Utilities::COMMON_LIBRARIES));
+        $this->addElement('category', Translation::get('Content', null, StringUtilities::LIBRARIES));
         $object = $this->get_content_object();
 
         $this->addMessage(
@@ -82,7 +82,7 @@ class WebpageForm extends ContentObjectForm
             )
         );
         $this->addRule(
-            'html_content', Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES), 'disk_quota'
+            'html_content', Translation::get('DiskQuotaExceeded', null, StringUtilities::LIBRARIES), 'disk_quota'
         );
 
         $renderer = $this->get_renderer();
@@ -105,7 +105,7 @@ class WebpageForm extends ContentObjectForm
 
         if (!$calculator->canUpload($file['size']))
         {
-            $errors['upload_or_create'] = Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES);
+            $errors['upload_or_create'] = Translation::get('DiskQuotaExceeded', null, StringUtilities::LIBRARIES);
         }
         else
         {

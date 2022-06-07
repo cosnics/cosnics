@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class describes an action to update a course
@@ -115,7 +115,7 @@ class UpdateComponent extends CourseFormActionComponent
     {
         $message = $succes ? 'ObjectUpdated' : 'ObjectNotUpdated';
 
-        return Translation::get($message, array('OBJECT' => Translation::get('Course')), Utilities::COMMON_LIBRARIES);
+        return Translation::get($message, array('OBJECT' => Translation::get('Course')), StringUtilities::LIBRARIES);
     }
 
     /**

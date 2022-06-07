@@ -137,7 +137,7 @@ class NotificationManager
             $notificationsData[] = new NotificationDTO(
                 $notification->getId(),
                 $this->notificationTranslator->getTranslationFromNotification($notification, $viewingContext),
-                DatetimeUtilities::format_locale_date(null, $notification->getDate()->getTimestamp()),
+                DatetimeUtilities::getInstance()->formatLocaleDate(null, $notification->getDate()->getTimestamp()),
                 $notification->getUsers()[0]->isRead(),
                 !$notification->getUsers()[0]->isViewed(),
                 $filters

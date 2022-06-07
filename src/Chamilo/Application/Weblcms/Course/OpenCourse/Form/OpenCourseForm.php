@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Builds the open course form
@@ -63,11 +63,11 @@ class OpenCourseForm extends FormValidator
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit',
-            $this->translator->getTranslation('Save', null, Utilities::COMMON_LIBRARIES)
+            $this->translator->getTranslation('Save', null, StringUtilities::LIBRARIES)
         );
 
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', $this->translator->getTranslation('Reset', null, Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', $this->translator->getTranslation('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);

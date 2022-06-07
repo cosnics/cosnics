@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -43,7 +43,7 @@ class CreatorComponent extends Manager
                 $message = Translation::get(
                     $translation, 
                     array('OBJECT' => Translation::get('Feedback')), 
-                    Utilities::COMMON_LIBRARIES);
+                    StringUtilities::LIBRARIES);
             }
             catch (Exception $ex)
             {

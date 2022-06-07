@@ -8,7 +8,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Composer\Semver\Semver;
 use Exception;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -109,13 +109,13 @@ class Dependency
         $parameters['REQUIREMENT'] = $this->as_html();
 
         $message = Translation::get('DependencyCheckRegistration') . ': ' . $this->as_html() . ' ' . Translation::get(
-                'Found', [], Utilities::COMMON_LIBRARIES
+                'Found', [], StringUtilities::LIBRARIES
             ) . ': ';
         $registration = Configuration::registration($this->get_id());
 
         if (empty($registration))
         {
-            $parameters['CURRENT'] = '--' . Translation::get('Nothing', [], Utilities::COMMON_LIBRARIES) . '--';
+            $parameters['CURRENT'] = '--' . Translation::get('Nothing', [], StringUtilities::LIBRARIES) . '--';
             $this->logger->add_message(Translation::get('CurrentDependency', $parameters), MessageLogger::TYPE_ERROR);
 
             return false;
@@ -129,7 +129,7 @@ class Dependency
             if (!$target_version)
             {
                 $parameters['CURRENT'] =
-                    '--' . Translation::get('WrongVersion', [], Utilities::COMMON_LIBRARIES) . '--';
+                    '--' . Translation::get('WrongVersion', [], StringUtilities::LIBRARIES) . '--';
                 $this->logger->add_message(
                     Translation::get('CurrentDependency', $parameters), MessageLogger::TYPE_ERROR
                 );
@@ -141,7 +141,7 @@ class Dependency
                 if (!$registration[Registration::PROPERTY_STATUS])
                 {
                     $parameters['CURRENT'] =
-                        '--' . Translation::get('InactiveObject', [], Utilities::COMMON_LIBRARIES) . '--';
+                        '--' . Translation::get('InactiveObject', [], StringUtilities::LIBRARIES) . '--';
                     $this->logger->add_message(
                         Translation::get('CurrentDependency', $parameters), MessageLogger::TYPE_ERROR
                     );

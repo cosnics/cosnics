@@ -20,7 +20,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -119,7 +119,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
 
             $this->redirect(
                 Translation::get(
-                    'ObjectUpdated', array('OBJECT' => Translation::get('ContentObject')), Utilities::COMMON_LIBRARIES
+                    'ObjectUpdated', array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
                 ), false, array_merge(
                     $parameters, array(
                         \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Common\Re
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Common\Rendition\HtmlRenditionImplementation;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 {
@@ -42,7 +42,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</thead>';
         $html[] = '<tbody>';
         $html[] = '<tr class="row_even">';
-        $html[] = '<td>' . Translation::get('Type', null, Utilities::COMMON_LIBRARIES) . '</td>';
+        $html[] = '<td>' . Translation::get('Type', null, StringUtilities::LIBRARIES) . '</td>';
         $html[] = '<td>' . $type . '</td>';
         $html[] = '</tr>';
         $html[] = '<tr class="row_odd">';

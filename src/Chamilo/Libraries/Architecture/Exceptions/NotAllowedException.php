@@ -6,7 +6,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class represents a parameter not defined exception.
@@ -28,7 +28,7 @@ class NotAllowedException extends UserException
 
         $html = [];
 
-        $html[] = Translation::get('NotAllowed', null, Utilities::COMMON_LIBRARIES);
+        $html[] = Translation::get('NotAllowed', null, StringUtilities::LIBRARIES);
 
         parent::__construct(implode(PHP_EOL, $html));
     }
@@ -87,7 +87,7 @@ class NotAllowedException extends UserException
 
         $form->addRule('password', Translation::get('ThisFieldIsRequired'), 'required');
 
-        $form->addRule('login', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
+        $form->addRule('login', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required');
 
         return $form;
     }

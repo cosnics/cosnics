@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
@@ -67,7 +67,7 @@ class ReportingTemplateViewerComponent extends Manager implements DelegateCompon
             $html[] = '<div class="wiki-pane-content-title">' . Translation::get('Statistics') . ' ' .
                 $wiki_page->get_title() . '</div>';
             $html[] = '<div class="wiki-pane-content-subtitle">' . Translation::get(
-                    'From', null, Utilities::COMMON_LIBRARIES
+                    'From', null, StringUtilities::LIBRARIES
                 ) . ' ' . $this->get_root_content_object()->get_title() . '</div>';
 
             return implode(PHP_EOL, $html);

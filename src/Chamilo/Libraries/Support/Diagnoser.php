@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Connection;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -148,9 +148,9 @@ class Diagnoser
      *
      * @return string
      */
-    public function getTranslation($variable, $parameters = [], $context = Utilities::COMMON_LIBRARIES)
+    public function getTranslation($variable, $parameters = [], $context = StringUtilities::LIBRARIES)
     {
-        return Translation::get($variable, [], Utilities::COMMON_LIBRARIES);
+        return Translation::get($variable, [], StringUtilities::LIBRARIES);
     }
 
     /**
@@ -191,7 +191,7 @@ class Diagnoser
         );
 
         $date = Configuration::get('Chamilo\Configuration', 'general', 'install_date');
-        $date = DatetimeUtilities::format_locale_date(
+        $date = DatetimeUtilities::getInstance()->formatLocaleDate(
             $this->getTranslation('DateFormatShort', []) . ', ' .
             $this->getTranslation('TimeNoSecFormat', []), $date
         );

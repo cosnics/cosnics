@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -53,7 +53,7 @@ class DeleterComponent extends Manager
                         Translation::get(
                             'ObjectNotDeleted', 
                             array('OBJECT' => Translation::get('Element')), 
-                            Utilities::COMMON_LIBRARIES));
+                            StringUtilities::LIBRARIES));
                 }
             }
             
@@ -61,7 +61,7 @@ class DeleterComponent extends Manager
             $message = Translation::get(
                 'ObjectDeleted', 
                 array('OBJECT' => Translation::get('Element')), 
-                Utilities::COMMON_LIBRARIES);
+                StringUtilities::LIBRARIES);
         }
         catch (Exception $ex)
         {

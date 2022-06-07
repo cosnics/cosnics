@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
@@ -44,7 +44,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
         $html = [];
 
         $html[] = parent::render_header($pageTitle, $complex_wiki_page);
-        $html[] = '<h3 id="page-title">' . Translation::get('Edit', null, Utilities::COMMON_LIBRARIES) . ' ' .
+        $html[] = '<h3 id="page-title">' . Translation::get('Edit', null, StringUtilities::LIBRARIES) . ' ' .
             $wiki_page->get_title() . '</h3>';
 
         return implode(PHP_EOL, $html);

@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Portfolio\Favourite\Component;
 
 use Chamilo\Application\Portfolio\Favourite\Manager;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -31,7 +31,7 @@ class CreatorComponent extends Manager
             $message = $this->getTranslator()->trans(
                 'ObjectCreated',
                 array('OBJECT' => $objectTranslation),
-                Utilities::COMMON_LIBRARIES);
+                StringUtilities::LIBRARIES);
         }
         catch (Exception $ex)
         {

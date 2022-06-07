@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -25,7 +25,7 @@ class WikiPageTable extends DataClassTable implements TableFormActionsSupport
             new TableFormAction(
                 $this->get_component()->get_url(
                     array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM)),
-                Translation::get('RemoveSelected', null, Utilities::COMMON_LIBRARIES)));
+                Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES)));
         return $actions;
     }
 }

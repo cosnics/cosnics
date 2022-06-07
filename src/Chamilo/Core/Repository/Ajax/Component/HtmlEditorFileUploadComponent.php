@@ -6,7 +6,7 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\DTO\HtmlEditorContentObjectPlaceholder;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -92,7 +92,7 @@ class HtmlEditorFileUploadComponent extends Manager
         $result = array(
             "uploaded" => 0, "error" => array(
                 "message" => Translation::getInstance()->getTranslation(
-                    'FileCreationFailed', null, Utilities::COMMON_LIBRARIES
+                    'FileCreationFailed', null, StringUtilities::LIBRARIES
                 )
             )
         );
@@ -110,7 +110,7 @@ class HtmlEditorFileUploadComponent extends Manager
         $result = array(
             "uploaded" => 0, "error" => array(
                 "message" => Translation::getInstance()->getTranslation(
-                    'NoValidFileUploaded', null, Utilities::COMMON_LIBRARIES
+                    'NoValidFileUploaded', null, StringUtilities::LIBRARIES
                 )
             )
         );
@@ -125,7 +125,7 @@ class HtmlEditorFileUploadComponent extends Manager
         $result = array(
             "uploaded" => 0, "error" => array(
                 "message" => Translation::getInstance()->getTranslation(
-                    'NoFileUploaded', null, Utilities::COMMON_LIBRARIES
+                    'NoFileUploaded', null, StringUtilities::LIBRARIES
                 )
             )
         );

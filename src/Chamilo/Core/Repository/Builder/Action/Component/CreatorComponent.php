@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -95,7 +95,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
 
             $this->redirect(
                 Translation::get(
-                    'ObjectAdded', array('OBJECT' => Translation::get('ContentObject')), Utilities::COMMON_LIBRARIES
+                    'ObjectAdded', array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
                 ), false, array(
                     \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE,
                     \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_parent(

@@ -25,7 +25,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This manager creates a new level between the reporting responsible for the Assignment Tool and the Weblcms reporting
@@ -107,8 +107,8 @@ abstract class AssignmentReportingManager extends ToolBlock
             return null;
         }
 
-        $formatted_date = DatetimeUtilities::format_locale_date(
-            Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), $date
+        $formatted_date = DatetimeUtilities::getInstance()->formatLocaleDate(
+            Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES), $date
         );
 
         if ($date > $critical_date)

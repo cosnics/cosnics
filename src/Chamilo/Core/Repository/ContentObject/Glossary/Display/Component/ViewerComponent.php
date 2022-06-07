@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -77,14 +77,14 @@ class ViewerComponent extends Manager implements DelegateComponent
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('TableView', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('table'),
+                    Translation::get('TableView', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('table'),
                     $this->get_url(array(self::PARAM_VIEW => GlossaryRendererFactory::TYPE_TABLE)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ListView', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('list'),
+                    Translation::get('ListView', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('list'),
                     $this->get_url(array(self::PARAM_VIEW => GlossaryRendererFactory::TYPE_LIST)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )

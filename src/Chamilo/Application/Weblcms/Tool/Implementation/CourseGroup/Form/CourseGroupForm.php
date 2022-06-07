@@ -24,7 +24,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -120,7 +120,7 @@ class CourseGroupForm extends FormValidator
     {
         $element = $this->createElement(
             'text', CourseGroup::PROPERTY_NAME . $number,
-            Translation::getInstance()->getTranslation('Title', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('Title', null, StringUtilities::LIBRARIES),
             array("size" => "50")
         );
 
@@ -157,7 +157,7 @@ class CourseGroupForm extends FormValidator
         // $this->build_header(Translation::get("NewCourseGroup"));
         // $group = [];
         // $this->addRule(CourseGroupForm::COURSE_GROUP_QUANTITY, Translation
-        // ::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+        // ::get('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES),
         // 'regex', '/^[0-9]*$/');
     }
 
@@ -166,7 +166,7 @@ class CourseGroupForm extends FormValidator
         $this->build_header($this->course_group->get_name());
         $this->addElement(
             'text', CourseGroup::PROPERTY_NAME,
-            Translation::getInstance()->getTranslation('Title', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('Title', null, StringUtilities::LIBRARIES),
             array("size" => "50")
         );
 
@@ -176,7 +176,7 @@ class CourseGroupForm extends FormValidator
         );
         $this->addRule(
             CourseGroup::PROPERTY_PARENT_ID,
-            Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
@@ -186,7 +186,7 @@ class CourseGroupForm extends FormValidator
         );
         $this->addRule(
             CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS,
-            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES),
             'regex', '/^[0-9]*$/'
         );
 
@@ -222,7 +222,7 @@ class CourseGroupForm extends FormValidator
         );
         $this->addRule(
             CourseGroup::PROPERTY_PARENT_ID . $counter,
-            Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
@@ -235,7 +235,7 @@ class CourseGroupForm extends FormValidator
 
         $this->addRule(
             CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER . $counter,
-            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES),
             'regex', '/^[0-9]*$/'
         );
 
@@ -245,7 +245,7 @@ class CourseGroupForm extends FormValidator
         );
         $this->addRule(
             CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS . $counter,
-            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES),
             'regex', '/^[0-9]*$/'
         );
 
@@ -321,7 +321,7 @@ class CourseGroupForm extends FormValidator
         );
 
         $this->addElement(
-            'category', Translation::getInstance()->getTranslation('General', null, Utilities::COMMON_LIBRARIES)
+            'category', Translation::getInstance()->getTranslation('General', null, StringUtilities::LIBRARIES)
         );
 
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
@@ -353,7 +353,7 @@ class CourseGroupForm extends FormValidator
                 parent::setDefaults($defaults);
                 $this->addRule(
                     CourseGroup::PROPERTY_NAME . $option_number, Translation::getInstance()->getTranslation(
-                    'ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES
+                    'ThisFieldIsRequired', null, StringUtilities::LIBRARIES
                 ), 'required'
                 );
             }
@@ -383,11 +383,11 @@ class CourseGroupForm extends FormValidator
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit',
-            Translation::getInstance()->getTranslation('Create', null, Utilities::COMMON_LIBRARIES)
+            Translation::getInstance()->getTranslation('Create', null, StringUtilities::LIBRARIES)
         );
         $buttons[] = $this->createElement(
             'style_reset_button', 'reset',
-            Translation::getInstance()->getTranslation('Reset', null, Utilities::COMMON_LIBRARIES)
+            Translation::getInstance()->getTranslation('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -421,13 +421,13 @@ class CourseGroupForm extends FormValidator
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit',
-            Translation::getInstance()->getTranslation('Update', null, Utilities::COMMON_LIBRARIES), null, null,
+            Translation::getInstance()->getTranslation('Update', null, StringUtilities::LIBRARIES), null, null,
             new FontAwesomeGlyph('arrow-right')
         );
 
         $buttons[] = $this->createElement(
             'style_reset_button', 'reset',
-            Translation::getInstance()->getTranslation('Reset', null, Utilities::COMMON_LIBRARIES)
+            Translation::getInstance()->getTranslation('Reset', null, StringUtilities::LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -449,7 +449,7 @@ class CourseGroupForm extends FormValidator
 
             $this->addElement(
                 'text', CourseGroup::PROPERTY_NAME . $counter,
-                Translation::getInstance()->getTranslation('Title', null, Utilities::COMMON_LIBRARIES),
+                Translation::getInstance()->getTranslation('Title', null, StringUtilities::LIBRARIES),
                 array("size" => "50")
             );
 
@@ -459,7 +459,7 @@ class CourseGroupForm extends FormValidator
             );
             $this->addRule(
                 CourseGroup::PROPERTY_PARENT_ID . $counter,
-                Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
                 'required'
             );
 
@@ -469,7 +469,7 @@ class CourseGroupForm extends FormValidator
             );
             $this->addRule(
                 CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS . $counter, Translation::getInstance()->getTranslation(
-                'ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES
+                'ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES
             ), 'regex', '/^[0-9]*$/'
             );
 
@@ -526,7 +526,7 @@ class CourseGroupForm extends FormValidator
         );
         $this->addRule(
             CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS . $counter,
-            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES),
             'regex', '/^[0-9]*$/'
         );
 
@@ -586,7 +586,7 @@ class CourseGroupForm extends FormValidator
         );
         $this->addRule(
             'parent_' . CourseGroup::PROPERTY_NAME,
-            Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
         $this->addElement('html', '</div>');
@@ -599,12 +599,12 @@ class CourseGroupForm extends FormValidator
         );
         $this->addRule(
             'parent_' . CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER,
-            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldShouldBeNumeric', null, StringUtilities::LIBRARIES),
             'regex', '/^[0-9]*$/'
         );
         $this->addRule(
             'parent_' . CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER,
-            Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
         $this->addElement('html', '</div>');
@@ -622,12 +622,12 @@ class CourseGroupForm extends FormValidator
         );
 
         $this->addElement(
-            'category', Translation::getInstance()->getTranslation('General', null, Utilities::COMMON_LIBRARIES)
+            'category', Translation::getInstance()->getTranslation('General', null, StringUtilities::LIBRARIES)
         );
 
         $this->addElement(
             'text', CourseGroup::PROPERTY_NAME . $counter,
-            Translation::getInstance()->getTranslation('Title', null, Utilities::COMMON_LIBRARIES),
+            Translation::getInstance()->getTranslation('Title', null, StringUtilities::LIBRARIES),
             array("size" => "50")
         );
 

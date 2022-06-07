@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -37,14 +37,14 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Restore', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('undo'),
+                Translation::get('Restore', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('undo'),
                 $this->get_component()->get_content_object_restoring_url($content_object), ToolbarItem::DISPLAY_ICON
             )
         );
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->get_component()->get_content_object_deletion_url($content_object), ToolbarItem::DISPLAY_ICON,
                 true
             )
@@ -89,7 +89,7 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
                             )
                         ) . '" title="' . htmlentities(Translation::get('BrowseThisCategory')) . '">' .
                         ($category ? $category->get_name() : Translation::get(
-                            'Root', null, Utilities::COMMON_LIBRARIES
+                            'Root', null, StringUtilities::LIBRARIES
                         )) . '</a>';
                 }
 

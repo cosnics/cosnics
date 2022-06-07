@@ -14,7 +14,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -77,9 +77,9 @@ class CourseUserAssignmentInformationBlock extends AssignmentReportingManager
                 $publicationObject, Entry::ENTITY_TYPE_USER, $userId
             );
 
-            $last = DatetimeUtilities::format_locale_date(
-                Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' .
-                Translation::get('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES),
+            $last = DatetimeUtilities::getInstance()->formatLocaleDate(
+                Translation::get('DateFormatShort', null, StringUtilities::LIBRARIES) . ', ' .
+                Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES),
                 $entryStatistics[AssignmentRepository::LAST_ENTRY_SUBMITTED_DATE]
             );
 

@@ -6,7 +6,7 @@ use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Core\Metadata\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Form for the element
@@ -47,16 +47,16 @@ class ElementForm extends FormValidator
 
         //$this->addRule(
           //  Element::PROPERTY_SCHEMA_ID,
-           // Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+           // Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
            // 'required');
         
         $this->addElement(
             'text', 
             Element::PROPERTY_NAME, 
-            Translation::get('Name', null, Utilities::COMMON_LIBRARIES));
+            Translation::get('Name', null, StringUtilities::LIBRARIES));
         $this->addRule(
             Element::PROPERTY_NAME, 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+            Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 
             'required');
         
         $this->addElement(
@@ -65,7 +65,7 @@ class ElementForm extends FormValidator
             Translation::get('DisplayName', null, 'Chamilo\Core\Metadata'));
         $this->addRule(
             Element::PROPERTY_DISPLAY_NAME, 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+            Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 
             'required');
         
         $this->addElement(
@@ -92,12 +92,12 @@ class ElementForm extends FormValidator
         $buttons[] = $this->createElement(
             'style_submit_button', 
             'submit', 
-            Translation::get('Save', null, Utilities::COMMON_LIBRARIES));
+            Translation::get('Save', null, StringUtilities::LIBRARIES));
         
         $buttons[] = $this->createElement(
             'style_reset_button', 
             'reset', 
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+            Translation::get('Reset', null, StringUtilities::LIBRARIES));
         
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

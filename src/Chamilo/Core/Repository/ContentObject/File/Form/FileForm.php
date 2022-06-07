@@ -11,7 +11,7 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -63,7 +63,7 @@ class FileForm extends ContentObjectForm
         $description_options['collapse_toolbar'] = true;
         parent::build_creation_form($description_options);
 
-        $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
+        $this->addElement('category', Translation::get('Properties', null, StringUtilities::LIBRARIES));
 
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
@@ -78,7 +78,7 @@ class FileForm extends ContentObjectForm
             )
         );
 
-        $this->addRule('file', Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES), 'disk_quota');
+        $this->addRule('file', Translation::get('DiskQuotaExceeded', null, StringUtilities::LIBRARIES), 'disk_quota');
 
         $calculator->addUploadWarningToForm($this);
 
@@ -99,7 +99,7 @@ class FileForm extends ContentObjectForm
         $description_options['collapse_toolbar'] = true;
         parent::build_editing_form($description_options);
 
-        $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
+        $this->addElement('category', Translation::get('Properties', null, StringUtilities::LIBRARIES));
 
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
@@ -137,7 +137,7 @@ class FileForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
 
         $this->addRule(
-            'file', Translation:: get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES), 'disk_quota'
+            'file', Translation:: get('DiskQuotaExceeded', null, StringUtilities::LIBRARIES), 'disk_quota'
         );
 
         $calculator->addUploadWarningToForm($this);
@@ -185,7 +185,7 @@ class FileForm extends ContentObjectForm
 
             if (!$calculator->canUpload($size))
             {
-                $errors['file'] = Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES);
+                $errors['file'] = Translation::get('DiskQuotaExceeded', null, StringUtilities::LIBRARIES);
             }
 
             $array = explode('.', $_FILES['file']['name']);
@@ -222,7 +222,7 @@ class FileForm extends ContentObjectForm
 
             if (!$calculator->canUpload($size))
             {
-                $errors['file_upload_data'] = Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES);
+                $errors['file_upload_data'] = Translation::get('DiskQuotaExceeded', null, StringUtilities::LIBRARIES);
             }
         }
         else

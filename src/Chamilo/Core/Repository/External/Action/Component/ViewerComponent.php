@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ViewerComponent extends Manager implements DelegateComponent
 {
@@ -64,7 +64,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
             $toolbar = new Toolbar();
             $toolbar_item = new ToolbarItem(
-                Translation::get('Back', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('backward'),
+                Translation::get('Back', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('backward'),
                 'javascript:history.back();'
             );
             $toolbar->add_item($toolbar_item);
@@ -92,7 +92,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                 htmlentities(
                     Translation::get(
                         'NoObjectSelected', array('OBJECT' => Translation::get('ExternalObject')),
-                        Utilities::COMMON_LIBRARIES
+                        StringUtilities::LIBRARIES
                     )
                 )
             );

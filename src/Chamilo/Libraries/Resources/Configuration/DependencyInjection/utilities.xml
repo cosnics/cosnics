@@ -8,6 +8,7 @@
                   public="true"/>
 
         <service id="Chamilo\Libraries\Utilities\StringUtilities"/>
+        <service id="Chamilo\Libraries\Utilities\DatetimeUtilities"/>
 
     </services>
 </container>

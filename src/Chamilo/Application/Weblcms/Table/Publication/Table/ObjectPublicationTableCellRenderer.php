@@ -21,7 +21,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -129,14 +129,14 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
 
                 break;
             case ContentObjectPublication::PROPERTY_PUBLICATION_DATE :
-                $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
-                $data = DatetimeUtilities::format_locale_date(
+                $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
+                $data = DatetimeUtilities::getInstance()->formatLocaleDate(
                     $date_format, $publication[ContentObjectPublication::PROPERTY_PUBLICATION_DATE]
                 );
                 break;
             case ContentObjectPublication::PROPERTY_MODIFIED_DATE :
-                $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
-                $data = DatetimeUtilities::format_locale_date(
+                $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
+                $data = DatetimeUtilities::getInstance()->formatLocaleDate(
                     $date_format, $publication[ContentObjectPublication::CONTENT_OBJECT_MODIFICATION_DATE_ALIAS]
                 );
                 break;
@@ -213,7 +213,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
 
         if (array_key_exists(0, $target_entities[0]))
         {
-            $target_list[] = Translation::get('Everybody', null, Utilities::COMMON_LIBRARIES);
+            $target_list[] = Translation::get('Everybody', null, StringUtilities::LIBRARIES);
         }
         else
         {

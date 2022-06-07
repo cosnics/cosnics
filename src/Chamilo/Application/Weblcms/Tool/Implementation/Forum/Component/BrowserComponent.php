@@ -39,7 +39,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
 
 class BrowserComponent extends Manager implements DelegateComponent
@@ -131,7 +131,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $publishActions->addButton(
                     $this->getPublicationButton(
-                        Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
+                        Translation::get('Publish', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                         $this->get_allowed_types(), $publishParameters, [], 'btn-primary'
                     )
                 );
@@ -149,7 +149,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $publishActions->addButton(
                     $this->getPublicationButton(
-                        Translation::get('PublishIntroductionText', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('PublishIntroductionText', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('book'), array(Introduction::class), $publishParameters
                     )
                 );
@@ -159,7 +159,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('ManageCategories', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('ManageCategories', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('folder'), $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_MANAGE_CATEGORIES
@@ -173,7 +173,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('ManageRights', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('ManageRights', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('lock'), $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS
@@ -253,7 +253,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $buttonToolBar->addItem(
                 new Button(
-                    Translation::get('EditContentObject', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('EditContentObject', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('pencil-alt'), $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
@@ -265,7 +265,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $dropdownButton->addSubButton(
                 new SubButton(
-                    Translation::get('EditPublicationDetails', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('EditPublicationDetails', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('cog'), $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
@@ -281,7 +281,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $dropdownButton->addSubButton(
                     new SubButton(
-                        Translation::get('Show', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('eye-slash'),
+                        Translation::get('Show', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('eye-slash'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
@@ -295,7 +295,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $dropdownButton->addSubButton(
                     new SubButton(
-                        Translation::get('Hide', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('eye'),
+                        Translation::get('Hide', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('eye'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
@@ -335,7 +335,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $dropdownButton->addSubButton(
                 new SubButton(
-                    Translation::get('Move', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('Move', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('window-restore', array('fa-flip-horizontal'), null, 'fas'), $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
@@ -349,7 +349,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $dropdownButton->addSubButton(
                     new SubButton(
-                        Translation::get('MoveUp', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('MoveUp', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('chevron-up'), $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
@@ -365,7 +365,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $dropdownButton->addSubButton(
                     new SubButton(
-                        Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES),
+                        Translation::get('MoveDown', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('chevron-down'), $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
@@ -382,7 +382,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $buttonToolBar->addItem(
                 new Button(
-                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
@@ -536,7 +536,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 )
             );
 
-            $html[] = DatetimeUtilities::format_locale_date(null, $lastPost->get_creation_date());
+            $html[] = DatetimeUtilities::getInstance()->formatLocaleDate(null, $lastPost->get_creation_date());
 
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
                 User::class, $lastPost->get_user_id()
@@ -610,7 +610,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             );
 
             $button = new Button(
-                Translation::get('ManageRights', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('lock'),
+                Translation::get('ManageRights', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
                 $rightsUrl, Button::DISPLAY_ICON, false, 'btn-link'
             );
 

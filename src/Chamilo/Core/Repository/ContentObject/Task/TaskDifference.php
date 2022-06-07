@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class can be used to get the difference between tasks
@@ -35,12 +35,12 @@ class TaskDifference extends ContentObjectDifference
      */
     public function getDatesString(ContentObject $contentObject)
     {
-        $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+        $dateFormat = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
         return Translation::get(
             'TaskDate', array(
-                'START' => DatetimeUtilities::format_locale_date($dateFormat, $contentObject->get_start_date()),
-                'END' => DatetimeUtilities::format_locale_date($dateFormat, $contentObject->get_due_date())
+                'START' => DatetimeUtilities::getInstance()->formatLocaleDate($dateFormat, $contentObject->get_start_date()),
+                'END' => DatetimeUtilities::getInstance()->formatLocaleDate($dateFormat, $contentObject->get_due_date())
             )
         );
     }
@@ -237,7 +237,7 @@ class TaskDifference extends ContentObjectDifference
             if ($contentObject->get_frequency_count() || $contentObject->get_until())
             {
                 $content[] = PHP_EOL;
-                $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+                $dateFormat = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
                 if ($contentObject->get_frequency_count())
                 {
@@ -248,7 +248,7 @@ class TaskDifference extends ContentObjectDifference
                 {
                     $content[] = Translation::get(
                         'RepeatUntilDate', array(
-                            'DATE' => DatetimeUtilities::format_locale_date(
+                            'DATE' => DatetimeUtilities::getInstance()->formatLocaleDate(
                                 $dateFormat, $contentObject->get_until()
                             )
                         )

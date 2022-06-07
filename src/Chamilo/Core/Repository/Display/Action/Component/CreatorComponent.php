@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -83,7 +83,7 @@ class CreatorComponent extends Manager implements ViewerInterface
             Translation::get(
                 ($succes ? 'ObjectCreated' : 'ObjectNotCreated'),
                 array('OBJECT' => Translation::get('ContentObject')),
-                Utilities::COMMON_LIBRARIES));
+                StringUtilities::LIBRARIES));
 
         $params = [];
         $params['cid'] = $complex_content_object_item_id;

@@ -22,7 +22,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use MediawikiParser;
 use MediawikiParserContext;
 
@@ -255,7 +255,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPDATE_CONTENT_OBJECT)),
-                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES)
+                        Translation::get('Edit', null, StringUtilities::LIBRARIES)
                     )
                 );
                 break;

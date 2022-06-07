@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Common\Import\Cpo;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Utilities\UUID;
+use Ramsey\Uuid\Uuid;
 use DOMDocument;
 use DOMNode;
 use DOMXPath;
@@ -54,7 +54,7 @@ class CpoContentObjectImport extends ContentObjectImport
         ))
         {
             $this->get_import_implementation()->get_controller()->set_content_object_object_number_cache_id(
-                $version_number, UUID::v4()
+                $version_number, Uuid::uuid4()
             );
         }
         $content_object->set_object_number(

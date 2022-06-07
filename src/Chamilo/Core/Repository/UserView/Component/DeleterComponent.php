@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\UserView\Component;
 use Chamilo\Core\Repository\UserView\Manager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -51,14 +51,14 @@ class DeleterComponent extends Manager
                     $message = Translation::get(
                         'ObjectNotDeleted', 
                         array('OBJECT' => Translation::get('UserView')), 
-                        Utilities::COMMON_LIBRARIES);
+                        StringUtilities::LIBRARIES);
                 }
                 else
                 {
                     $message = Translation::get(
                         'ObjectsNotDeleted', 
                         array('OBJECT' => Translation::get('UserViews')), 
-                        Utilities::COMMON_LIBRARIES);
+                        StringUtilities::LIBRARIES);
                 }
             }
             else
@@ -68,14 +68,14 @@ class DeleterComponent extends Manager
                     $message = Translation::get(
                         'ObjectDeleted', 
                         array('OBJECT' => Translation::get('UserView')), 
-                        Utilities::COMMON_LIBRARIES);
+                        StringUtilities::LIBRARIES);
                 }
                 else
                 {
                     $message = Translation::get(
                         'ObjectsDeleted', 
                         array('OBJECT' => Translation::get('UserViews')), 
-                        Utilities::COMMON_LIBRARIES);
+                        StringUtilities::LIBRARIES);
                 }
             }
             
@@ -88,7 +88,7 @@ class DeleterComponent extends Manager
                     Translation::get(
                         'NoObjectSelected', 
                         array('OBJECT' => Translation::get('UserView')), 
-                        Utilities::COMMON_LIBRARIES)));
+                        StringUtilities::LIBRARIES)));
         }
     }
 }

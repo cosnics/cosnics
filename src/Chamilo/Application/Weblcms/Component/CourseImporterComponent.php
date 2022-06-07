@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -68,9 +68,9 @@ class CourseImporterComponent extends Manager
         $html[] = '<u><b>Action</u></b>'; // NO translation! This field is
                                           // always plain 'action' in each CSV,
                                           // regardless the language!
-        $html[] = '<br />A: ' . Translation::get('Add', null, Utilities::COMMON_LIBRARIES);
-        $html[] = '<br />U: ' . Translation::get('Update', null, Utilities::COMMON_LIBRARIES);
-        $html[] = '<br />D: ' . Translation::get('Delete', null, Utilities::COMMON_LIBRARIES);
+        $html[] = '<br />A: ' . Translation::get('Add', null, StringUtilities::LIBRARIES);
+        $html[] = '<br />U: ' . Translation::get('Update', null, StringUtilities::LIBRARIES);
+        $html[] = '<br />D: ' . Translation::get('Delete', null, StringUtilities::LIBRARIES);
         $html[] = '</blockquote>';
 
         return implode(PHP_EOL, $html);
