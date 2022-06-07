@@ -39,7 +39,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
 
 class BrowserComponent extends Manager implements DelegateComponent

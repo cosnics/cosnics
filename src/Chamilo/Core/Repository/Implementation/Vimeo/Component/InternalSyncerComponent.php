@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Implementation\Vimeo\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\StringUtilities;
+
 
 class InternalSyncerComponent extends Manager
 {

@@ -14,7 +14,7 @@ class DiagnoserCellRenderer implements SimpleTableCellRendererInterface
      *
      * @see \Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface::get_prefix()
      */
-    public function get_prefix()
+    public function getPrefix(): string
     {
         return '';
     }
@@ -23,20 +23,14 @@ class DiagnoserCellRenderer implements SimpleTableCellRendererInterface
      *
      * @see \Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface::get_properties()
      */
-    public function get_properties()
+    public function getProperties(): array
     {
         return array('', 'Section', 'Setting', 'Current', 'Expected', 'Comment');
     }
 
-    /**
-     * @param string $default_property
-     * @param string[] $data
-     *
-     * @return string
-     */
-    public function render_cell($default_property, $data)
+    public function renderCell(string $defaultProperty, array $data): string
     {
-        $data = $data[$default_property];
+        $data = $data[$defaultProperty];
 
         if (is_null($data))
         {

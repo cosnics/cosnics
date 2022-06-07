@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Translation;
 
 use Chamilo\Libraries\Cache\FileBasedCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Path;
 
 /**
  * Manages the cache for the symfony translations
@@ -14,35 +13,19 @@ use Chamilo\Libraries\File\Path;
  */
 class TranslationCacheService extends FileBasedCacheService
 {
-    /**
-     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
-     */
-    protected $configurablePathBuilder;
+    protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    /**
-     * TranslationCacheService constructor.
-     *
-     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     */
     public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\FileBasedCacheService::getCachePath()
-     */
-    function getCachePath()
+    function getCachePath(): string
     {
-        return Path::getInstance()->getCachePath(__NAMESPACE__);
+        return $this->configurablePathBuilder->getCachePath(__NAMESPACE__);
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\FileBasedCacheService::warmUp()
-     */
-    public function warmUp()
+    public function warmUp(): TranslationCacheService
     {
         $translatorFactory = new TranslatorFactory($this->configurablePathBuilder);
         $translatorFactory->createTranslator('en_EN');

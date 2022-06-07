@@ -14,36 +14,14 @@ use Symfony\Component\Translation\Translator;
 class Translation
 {
 
-    /**
-     * Instance of this class for the singleton pattern
-     *
-     * @var \Chamilo\Libraries\Translation\Translation
-     */
-    private static $instance;
+    private static string $calledClass;
 
-    /**
-     *
-     * @var string
-     */
-    private static $calledClass;
+    private static ?Translation $instance = null;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    private $classnameUtilities;
+    private ClassnameUtilities $classnameUtilities;
 
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
+    private Translator $translator;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
     public function __construct(ClassnameUtilities $classnameUtilities, Translator $translator)
     {
         $this->classnameUtilities = $classnameUtilities;
@@ -68,18 +46,11 @@ class Translation
         self::$calledClass = $class;
     }
 
-    /**
-     *
-     * @param string $variable
-     * @param string[] $parameters
-     * @param string $context
-     * @param string $isocode
-     *
-     * @return string
-     */
-    protected function doTranslation($variable, $parameters = [], $context = null, $isocode = null)
+    protected function doTranslation(
+        string $variable, ?array $parameters = [], ?string $context = null, ?string $isocode = null
+    ): string
     {
-        $translation = $this->getTranslator()->trans($variable, (array) $parameters, $context, $isocode);
+        $translation = $this->getTranslator()->trans($variable, $parameters, $context, $isocode);
 
         if ($translation == $variable)
         {
@@ -99,43 +70,31 @@ class Translation
     }
 
     /**
-     *
-     * @param string $variable
-     * @param string[] $parameters
-     *
-     * @return string
-     *
+     * @throws \ReflectionException
+     * @throws \Exception
      * @deprecated Use getTranslation() now
      */
-    public static function get($variable, $parameters = [], $context = null, $isocode = null)
+    public static function get(
+        string $variable, ?array $parameters = [], ?string $context = null, ?string $isocode = null
+    ): string
     {
         return self::getInstance()->getTranslation($variable, (array) $parameters, $context, $isocode);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    public function getClassnameUtilities()
+    public function getClassnameUtilities(): ClassnameUtilities
     {
         return $this->classnameUtilities;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     */
-    public function setClassnameUtilities($classnameUtilities)
+    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities)
     {
         $this->classnameUtilities = $classnameUtilities;
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Translation\Translation
      * @throws \Exception
      */
-    static public function getInstance()
+    static public function getInstance(): Translation
     {
         if (is_null(static::$instance))
         {
@@ -154,26 +113,19 @@ class Translation
     }
 
     /**
-     *
-     * @return string
      * @deprecated Use Translator->getLocale() now
      */
-    public function getLanguageIsocode()
+    public function getLanguageIsocode(): string
     {
         return $this->getTranslator()->getLocale();
     }
 
     /**
-     *
-     * @param string $variable
-     * @param string[] $parameters
-     * @param string $context
-     * @param string $isocode
-     *
-     * @return string
      * @throws \ReflectionException
      */
-    public function getTranslation($variable, $parameters = [], $context = null, $isocode = null)
+    public function getTranslation(
+        string $variable, array $parameters = [], ?string $context = null, ?string $isocode = null
+    ): string
     {
         $this->determineDefaultTranslationContext();
 
@@ -195,29 +147,17 @@ class Translation
         return $this->doTranslation($variable, $parsedParameters, $context, $isocode);
     }
 
-    /**
-     *
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator()
+    public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    /**
-     *
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
     public function setTranslator(Translator $translator)
     {
         $this->translator = $translator;
     }
 
-    /**
-     *
-     * @param string $languageIsoCode
-     */
-    public function setLanguageIsocode($languageIsoCode)
+    public function setLanguageIsocode(string $languageIsoCode)
     {
         $this->getTranslator()->setLocale($languageIsoCode);
     }

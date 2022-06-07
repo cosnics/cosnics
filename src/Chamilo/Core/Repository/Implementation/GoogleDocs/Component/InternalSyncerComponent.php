@@ -9,7 +9,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use RuntimeException;
 
 class InternalSyncerComponent extends Manager

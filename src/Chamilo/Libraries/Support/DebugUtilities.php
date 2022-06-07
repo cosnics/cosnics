@@ -11,14 +11,10 @@ class DebugUtilities
 {
 
     /**
-     *
-     * @param object $object
-     * @param string $title
-     * @param integer $backtrace_index
-     *
-     * @return string
+     * @param object|array|string $object
+     * @throws \DOMException
      */
-    public static function show($object, $title = null, $backtrace_index = 0)
+    public static function show($object, ?string $title = null, int $backtrace_index = 0): string
     {
         $html = [];
 

@@ -1,18 +1,19 @@
 <?php
 namespace Chamilo\Libraries\Support;
 
-use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\SimpleTable;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Connection;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
+use Chamilo\Libraries\Format\Tabs\DynamicTab;
+use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\DBAL\Connection;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -21,46 +22,71 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class Diagnoser
 {
-    use DependencyInjectionContainerTrait;
-
     const STATUS_ERROR = 3;
     const STATUS_INFORMATION = 4;
     const STATUS_OK = 1;
     const STATUS_WARNING = 2;
 
-    /**
-     * The manager where this diagnoser runs on
-     *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    private $manager;
+    protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $manager
-     */
-    public function __construct($manager = null)
+    protected ConfigurationConsulter $configurationConsulter;
+
+    protected Connection $connection;
+
+    protected DatetimeUtilities $datetimeUtilities;
+
+    protected PathBuilder $pathBuilder;
+
+    protected ChamiloRequest $request;
+
+    protected Translator $translator;
+
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter, Connection $connection, ChamiloRequest $request,
+        PathBuilder $pathBuilder, ConfigurablePathBuilder $configurablePathBuilder, Translator $translator,
+        DatetimeUtilities $datetimeUtilities
+    )
     {
-        $this->manager = $manager;
-        $this->initializeContainer();
+        $this->configurationConsulter = $configurationConsulter;
+        $this->connection = $connection;
+        $this->request = $request;
+        $this->pathBuilder = $pathBuilder;
+        $this->configurablePathBuilder = $configurablePathBuilder;
+        $this->translator = $translator;
+        $this->datetimeUtilities = $datetimeUtilities;
+    }
+
+    public function render(): string
+    {
+        $sections = array('Chamilo', 'Php', 'Database', 'Webserver');
+
+        $tabs = new DynamicTabsRenderer('diagnoser');
+
+        foreach ($sections as $section)
+        {
+            $data = call_user_func(array($this, 'get' . $section . 'Data'));
+            $table = new SimpleTable($data, new DiagnoserCellRenderer(), 'diagnoser');
+
+            $tabs->add_tab(
+                new DynamicContentTab(
+                    $section, $this->getTranslation(ucfirst($section) . 'Title'), null, $table->render(),
+                    DynamicTab::DISPLAY_TITLE
+                )
+            );
+        }
+
+        return $tabs->render();
     }
 
     /**
-     * @param $status
-     * @param $section
-     * @param $title
-     * @param $url
-     * @param $current_value
-     * @param $expected_value
-     * @param $formatter
-     * @param $comment
-     * @param null $img_path
-     *
-     * @return array
+     * @param mixed $current_value
+     * @param mixed $expected_value
+     * @param mixed $formatter
      */
     public function build_setting(
-        $status, $section, $title, $url, $current_value, $expected_value, $formatter, $comment, $img_path = null
-    )
+        int $status, string $section, string $title, string $url, $current_value, $expected_value, $formatter,
+        string $comment
+    ): array
     {
         switch ($status)
         {
@@ -113,64 +139,34 @@ class Diagnoser
         return array($image, $section, $url, $formatted_current_value, $formatted_expected_value, $comment);
     }
 
-    /**
-     *
-     * @param string $value
-     *
-     * @return string
-     */
-    public function format_on_off($value)
+    public function formatOnOff(string $value): string
     {
-        return $value ? $this->getTranslation('ConfirmOn', []) :
-            $this->getTranslation(
-                'ConfirmOff', []
-            );
+        return $value ? $this->getTranslation('ConfirmOn', []) : $this->getTranslation(
+            'ConfirmOff', []
+        );
+    }
+
+    public function formatYesNo(string $value): string
+    {
+        return $value ? $this->getTranslation('ConfirmYes', []) : $this->getTranslation(
+            'ConfirmNo', []
+        );
     }
 
     /**
-     *
-     * @param string $value
-     *
-     * @return string
-     */
-    public function format_yes_no($value)
-    {
-        return $value ? $this->getTranslation('ConfirmYes', []) :
-            $this->getTranslation(
-                'ConfirmNo', []
-            );
-    }
-
-    /**
-     * @param string $variable
-     * @param string[] $parameters
-     * @param string $context
-     *
-     * @return string
-     */
-    public function getTranslation($variable, $parameters = [], $context = StringUtilities::LIBRARIES)
-    {
-        return Translation::get($variable, [], StringUtilities::LIBRARIES);
-    }
-
-    /**
-     * Functions to get the data for the chamilo diagnostics
-     *
      * @return string[]
-     * @throws \ReflectionException
+     * @throws \Exception
      */
-    public function get_chamilo_data()
+    public function getChamiloData(): array
     {
         $array = [];
 
-        $pathRenderer = Path::getInstance();
-
         $writable_folders = [];
-        $writable_folders[] = $pathRenderer->getStoragePath();
-        $writable_folders[] = $pathRenderer->getRepositoryPath();
-        $writable_folders[] = $pathRenderer->getTemporaryPath();
+        $writable_folders[] = $this->pathBuilder->getPublicStoragePath();
+        $writable_folders[] = $this->configurablePathBuilder->getRepositoryPath();
+        $writable_folders[] = $this->configurablePathBuilder->getTemporaryPath();
 
-        foreach ($writable_folders as $index => $folder)
+        foreach ($writable_folders as $folder)
         {
             $writable = is_writable($folder);
             $status = $writable ? self::STATUS_OK : self::STATUS_ERROR;
@@ -181,7 +177,7 @@ class Diagnoser
             );
         }
 
-        $installationPath = $pathRenderer->namespaceToFullPath('Chamilo\Core\Install');
+        $installationPath = $this->pathBuilder->namespaceToFullPath('Chamilo\Core\Install');
 
         $exists = !file_exists($installationPath);
         $status = $exists ? self::STATUS_OK : self::STATUS_WARNING;
@@ -190,10 +186,9 @@ class Diagnoser
             'http://be2.php.net/file_exists', $writable, 0, 'yes_no', $this->getTranslation('DirectoryShouldBeRemoved')
         );
 
-        $date = Configuration::get('Chamilo\Configuration', 'general', 'install_date');
-        $date = DatetimeUtilities::getInstance()->formatLocaleDate(
-            $this->getTranslation('DateFormatShort', []) . ', ' .
-            $this->getTranslation('TimeNoSecFormat', []), $date
+        $date = $this->configurationConsulter->getSetting(['Chamilo\Configuration', 'general', 'install_date']);
+        $date = $this->datetimeUtilities->formatLocaleDate(
+            $this->getTranslation('DateFormatShort', []) . ', ' . $this->getTranslation('TimeNoSecFormat', []), $date
         );
         $array[] = $this->build_setting(
             1, '[INFORMATION]', $this->getTranslation('InstallDate'), '', $date, '', null,
@@ -204,74 +199,39 @@ class Diagnoser
     }
 
     /**
-     * Functions to get the data for the mysql diagnostics
-     *
      * @return string[]
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function get_database_data()
+    public function getDatabaseData(): array
     {
-        // Direct use of mysql_* functions without specifying
-        // a connection is not reliable here. See Bug #2499.
-        // $host_info = mysql_get_host_info();
-        // $server_info = mysql_get_server_info();
-        // $proto_info = mysql_get_proto_info();
-        // $client_info = mysql_get_client_info();
-        // due to abstraction of storage we can not rely on the mysql settings anymore
-        $connection = $this->getService('Doctrine\DBAL\Connection');
-
-        $host_info = $connection->host_info;
-        $server_info = $connection->server_info;
-        $proto_info = $connection->protocol_version;
-        $client_info = $connection->client_info;
+        $databaseName = $this->connection->getDatabase();
+        $driverClass = get_class($this->connection->getDriver());
+        $databasePlatformClass = get_class($this->connection->getDatabasePlatform());
 
         $array = [];
 
         $array[] = $this->build_setting(
-            self::STATUS_INFORMATION, '[Database]', 'host_info',
-            'http://www.php.net/manual/en/function.mysql-get-host-info.php', $host_info, null, null,
-            $this->getTranslation('HostInfo')
+            self::STATUS_INFORMATION, '[Database]', 'databaseName', '', $databaseName, null, null,
+            $this->getTranslation('DatabaseName')
         );
 
         $array[] = $this->build_setting(
-            self::STATUS_INFORMATION, '[Database]', 'server_info',
-            'http://www.php.net/manual/en/function.mysql-get-server-info.php', $server_info, null, null,
-            $this->getTranslation('ServerInfo')
+            self::STATUS_INFORMATION, '[Database]', 'driverClass', '', $driverClass, null, null,
+            $this->getTranslation('DriverClass')
         );
 
         $array[] = $this->build_setting(
-            self::STATUS_INFORMATION, '[Database]', 'client_info',
-            'http://www.php.net/manual/en/function.mysql-get-client-info.php', $client_info, null, null,
-            $this->getTranslation('ClientInfo')
-        );
-
-        $array[] = $this->build_setting(
-            self::STATUS_INFORMATION, '[Database]', 'protocol_version',
-            'http://www.php.net/manual/en/function.mysql-get-proto-info.php', $proto_info, null, null,
-            $this->getTranslation('ProtoInfo')
+            self::STATUS_INFORMATION, '[Database]', 'databasePlatformClass', '', $databasePlatformClass, null, null,
+            $this->getTranslation('DatabasePlatformClass')
         );
 
         return $array;
     }
 
     /**
-     * Create a link with a url and a title
-     *
-     * @param $title
-     * @param $url
-     *
-     * @return string the url
-     */
-    public function get_link($title, $url)
-    {
-        return '<a href="' . $url . '" target="about:bank">' . $title . '</a>';
-    }
-
-    /**
-     * Functions to get the data for the php diagnostics
-     *
      * @return string[]
      */
-    public function get_php_data()
+    public function getPhpData(): array
     {
         $array = [];
 
@@ -301,8 +261,9 @@ class Diagnoser
             $req_setting, 'on_off', $this->getTranslation('FileUploadsInfo')
         );
 
-        $setting = ini_get('magic_quotes_runtime');
         $req_setting = 0;
+
+        $setting = ini_get('magic_quotes_runtime');
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
             $status, '[INI]', 'magic_quotes_runtime',
@@ -311,7 +272,6 @@ class Diagnoser
         );
 
         $setting = ini_get('safe_mode');
-        $req_setting = 0;
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting(
             $status, '[INI]', 'safe_mode', 'http://www.php.net/manual/en/ini.core.php#ini.safe-mode', $setting,
@@ -319,7 +279,6 @@ class Diagnoser
         );
 
         $setting = ini_get('register_globals');
-        $req_setting = 0;
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
             $status, '[INI]', 'register_globals', 'http://www.php.net/manual/en/ini.core.php#ini.register-globals',
@@ -327,7 +286,6 @@ class Diagnoser
         );
 
         $setting = ini_get('short_open_tag');
-        $req_setting = 0;
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting(
             $status, '[INI]', 'short_open_tag', 'http://www.php.net/manual/en/ini.core.php#ini.short-open-tag',
@@ -335,7 +293,6 @@ class Diagnoser
         );
 
         $setting = ini_get('magic_quotes_gpc');
-        $req_setting = 0;
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
             $status, '[INI]', 'magic_quotes_gpc', 'http://www.php.net/manual/en/ini.core.php#ini.magic_quotes_gpc',
@@ -343,7 +300,6 @@ class Diagnoser
         );
 
         $setting = ini_get('display_errors');
-        $req_setting = 0;
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting(
             $status, '[INI]', 'display_errors', 'http://www.php.net/manual/en/ini.core.php#ini.display_errors',
@@ -398,8 +354,9 @@ class Diagnoser
             $setting, $req_setting, null, $this->getTranslation('MaxInputTimeInfo')
         );
 
-        $setting = ini_get('memory_limit');
         $req_setting = '10M - 100M - ...';
+
+        $setting = ini_get('memory_limit');
         if ($setting < 10)
         {
             $status = self::STATUS_ERROR;
@@ -418,7 +375,6 @@ class Diagnoser
         );
 
         $setting = ini_get('post_max_size');
-        $req_setting = '10M - 100M - ...';
         if ($setting < 10)
         {
             $status = self::STATUS_ERROR;
@@ -477,12 +433,17 @@ class Diagnoser
         return $array;
     }
 
+    public function getTranslation(
+        string $variable, array $parameters = [], string $context = StringUtilities::LIBRARIES
+    ): string
+    {
+        return $this->translator->trans($variable, $parameters, $context);
+    }
+
     /**
-     * Functions to get the data for the webserver diagnostics
-     *
      * @return string[]
      */
-    public function get_webserver_data()
+    public function getWebserverData(): array
     {
         $array = [];
 
@@ -510,7 +471,7 @@ class Diagnoser
             $this->getTranslation('ServerRemoteInfo')
         );
 
-        $path = $this->manager->get_url(array('section' => Request::get('section')));
+        $path = $this->request->getUri();
         $request = $_SERVER["REQUEST_URI"];
         $status = $request != $path ? self::STATUS_ERROR : self::STATUS_OK;
         $array[] = $this->build_setting(
@@ -532,39 +493,8 @@ class Diagnoser
         return $array;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function to_html()
+    public function get_link(string $title, string $url): string
     {
-        $sections = array('chamilo', 'php', 'database', 'webserver');
-
-        $current_section = Request::get('section');
-        $current_section = $current_section ?: 'chamilo';
-
-        $tabs = new DynamicVisualTabsRenderer('diagnoser');
-
-        foreach ($sections as $section)
-        {
-            $params = $this->manager->get_parameters();
-            $params['section'] = $section;
-
-            $tabs->add_tab(
-                new DynamicVisualTab(
-                    $section, $this->getTranslation(ucfirst($section) . 'Title'), null,
-                    $this->manager->get_url($params), $current_section == $section, false,
-                    DynamicVisualTab::POSITION_LEFT, DynamicVisualTab::DISPLAY_TEXT
-                )
-            );
-        }
-
-        $data = call_user_func(array($this, 'get_' . $current_section . '_data'));
-
-        $table = new SimpleTable($data, new DiagnoserCellRenderer(), 'diagnoser');
-
-        $tabs->set_content($table->render());
-
-        return $tabs->render();
+        return '<a href="' . $url . '" target="about:bank">' . $title . '</a>';
     }
 }

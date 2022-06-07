@@ -29,7 +29,7 @@ class OptimizedTranslationsPhpFileLoader implements LoaderInterface
      * @throws \Symfony\Component\Translation\Exception\NotFoundResourceException when the resource cannot be found
      * @throws \Symfony\Component\Translation\Exception\InvalidResourceException when the resource cannot be loaded
      */
-    public function load($resource, $locale, $domain = 'messages')
+    public function load($resource, string $locale, string $domain = 'messages')
     {
         if (!stream_is_local($resource))
         {

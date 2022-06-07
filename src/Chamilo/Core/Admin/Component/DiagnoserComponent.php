@@ -25,10 +25,9 @@ class DiagnoserComponent extends Manager
         $this->checkAuthorization(Manager::context(), 'ManageChamilo');
 
         $html = [];
-        $diagnoser = new Diagnoser($this);
 
         $html[] = $this->render_header();
-        $html[] = $diagnoser->to_html();
+        $html[] = $this->getDiagnoser()->render();
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
@@ -40,11 +39,14 @@ class DiagnoserComponent extends Manager
     }
 
     /**
-     * Returns the admin breadcrumb generator
-     *
-     * @return \libraries\format\BreadcrumbGeneratorInterface
+     * @return \Chamilo\Libraries\Support\Diagnoser
      */
-    public function get_breadcrumb_generator()
+    protected function getDiagnoser()
+    {
+        return $this->getService(Diagnoser::class);
+    }
+
+    public function get_breadcrumb_generator(): BreadcrumbGenerator
     {
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }

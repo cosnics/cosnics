@@ -20,26 +20,13 @@ use Symfony\Component\Translation\Translator;
  */
 class TranslatorFactory
 {
-    /**
-     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
-     */
-    protected $configurablePathBuilder;
+    protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    /**
-     * TranslatorFactory constructor.
-     *
-     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     */
     public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
     }
-
-    /**
-     * Adds the optimized translation resources to the translator
-     *
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
+    
     protected function addOptimizedTranslationResources(Translator $translator)
     {
         $translationCachePath = $this->configurablePathBuilder->getCachePath(__NAMESPACE__);
@@ -68,14 +55,7 @@ class TranslatorFactory
         }
     }
 
-    /**
-     * Builds and returns the Symfony Translator
-     *
-     * @param string $locale
-     *
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function createTranslator($locale = null)
+    public function createTranslator(?string $locale = null): Translator
     {
         $translator = new Translator($locale);
 

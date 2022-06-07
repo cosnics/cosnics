@@ -14,14 +14,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 interface PropertyProviderInterface
 {
-
-    /**
-     * @throws \ReflectionException
-     *
-     * @deprecated Use ClassName::class or static::class now
-     */
-    public static function class_name(bool $fullyQualified = true, bool $camelCase = true): string;
-
     /**
      * @throws \ReflectionException
      */

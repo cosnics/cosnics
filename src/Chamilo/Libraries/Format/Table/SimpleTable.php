@@ -19,12 +19,11 @@ class SimpleTable extends HTML_Table
 {
 
     /**
-     * Properties that will be showed
+     * Cellrenderer for the table
      *
-     * @var
-     *
+     * @var \Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface
      */
-    private $defaultProperties;
+    private $cellRenderer;
 
     /**
      * Data for the properties
@@ -34,11 +33,12 @@ class SimpleTable extends HTML_Table
     private $dataArray;
 
     /**
-     * Cellrenderer for the table
+     * Properties that will be showed
      *
-     * @var \Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface
+     * @var
+     *
      */
-    private $cellRenderer;
+    private $defaultProperties;
 
     /**
      * Used for unique formname
@@ -57,7 +57,7 @@ class SimpleTable extends HTML_Table
     {
         parent::__construct(array('class' => 'table table-striped table-bordered table-hover table-responsive'));
 
-        $this->defaultProperties = $cellrenderer->get_properties();
+        $this->defaultProperties = $cellrenderer->getProperties();
         $this->dataArray = $dataArray;
         $this->cellRenderer = $cellrenderer;
         $this->tablename = $tablename;
@@ -100,7 +100,7 @@ class SimpleTable extends HTML_Table
 
                 foreach ($this->defaultProperties as $index => $defaultproperty)
                 {
-                    $contents[] = $this->cellRenderer->render_cell($index, $data);
+                    $contents[] = $this->cellRenderer->renderCell($index, $data);
                 }
 
                 if (method_exists($this->cellRenderer, 'get_modification_links'))
@@ -120,7 +120,7 @@ class SimpleTable extends HTML_Table
             $row = $this->addRow($contents);
             $this->setCellAttributes(
                 $row, 0,
-                'style="font-style: italic;text-align:center;" colspan=' . count($this->cellRenderer->get_properties())
+                'style="font-style: italic;text-align:center;" colspan=' . count($this->cellRenderer->getProperties())
             );
         }
     }
@@ -134,9 +134,9 @@ class SimpleTable extends HTML_Table
 
         foreach ($this->defaultProperties as $defaultproperty)
         {
-            if (method_exists($this->cellRenderer, 'get_prefix'))
+            if (method_exists($this->cellRenderer, 'getPrefix'))
             {
-                $prefix = $this->cellRenderer->get_prefix();
+                $prefix = $this->cellRenderer->getPrefix();
             }
             else
             {

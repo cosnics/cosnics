@@ -2,13 +2,12 @@
 namespace Chamilo\Configuration\Package\Properties\Dependencies\Dependency;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Format\MessageLogger;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Composer\Semver\Semver;
 use Exception;
-use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -21,10 +20,15 @@ class Dependency
 {
     const PROPERTY_ID = 'id';
     const PROPERTY_VERSION = 'version';
-    const TYPE_PACKAGE = 'package';
+
     const TYPE_EXTENSIONS = 'extensions';
+
+    const TYPE_PACKAGE = 'package';
+
     const TYPE_SERVER = 'server';
     const TYPE_SETTINGS = 'settings';
+
+    protected $logger;
 
     private $id;
 
@@ -34,68 +38,23 @@ class Dependency
      */
     private $version;
 
-    protected $logger;
-
     public function __construct()
     {
         $this->logger = MessageLogger::getInstance($this);
     }
 
-    public function get_id()
-    {
-        return $this->id;
-    }
-
     /**
+     * Creates a dependency information string as html
      *
-     * @param string $id
+     * @return String
      */
-    public function set_id($id)
+    public function as_html()
     {
-        $this->id = $id;
-    }
+        $parameters = [];
+        $parameters['ID'] = $this->get_id();
+        $parameters['VERSION'] = $this->get_version();
 
-    /**
-     *
-     * @return string
-     */
-    public function get_version()
-    {
-        return $this->version;
-    }
-
-    /**
-     *
-     * @param string $version
-     */
-    public function set_version($version)
-    {
-        $this->version = $version;
-    }
-
-    /**
-     *
-     * @param string $type
-     *
-     * @return Dependency
-     * @throws Exception
-     */
-    public static function factory($type)
-    {
-        $class =
-            __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() . 'Dependency';
-
-        if (!class_exists($class))
-        {
-            throw new Exception(Translation::get('TypeDoesNotExist', array('type' => $type)));
-        }
-
-        return new $class();
-    }
-
-    public function get_logger()
-    {
-        return $this->logger;
+        return Translation::get('Dependency', $parameters);
     }
 
     /**
@@ -128,8 +87,7 @@ class Dependency
 
             if (!$target_version)
             {
-                $parameters['CURRENT'] =
-                    '--' . Translation::get('WrongVersion', [], StringUtilities::LIBRARIES) . '--';
+                $parameters['CURRENT'] = '--' . Translation::get('WrongVersion', [], StringUtilities::LIBRARIES) . '--';
                 $this->logger->add_message(
                     Translation::get('CurrentDependency', $parameters), MessageLogger::TYPE_ERROR
                 );
@@ -158,27 +116,6 @@ class Dependency
         }
     }
 
-    /**
-     * Creates a dependency information string as html
-     *
-     * @return String
-     */
-    public function as_html()
-    {
-        $parameters = [];
-        $parameters['ID'] = $this->get_id();
-        $parameters['VERSION'] = $this->get_version();
-
-        return Translation::get('Dependency', $parameters);
-    }
-
-    public static function from_dom_node($dom_xpath, $dom_node)
-    {
-        $class = self::type($dom_node->getAttribute('type'));
-
-        return $class::dom_node($dom_xpath, $dom_node);
-    }
-
     public static function dom_node($dom_xpath, $dom_node)
     {
         $dependency = self::factory($dom_node->getAttribute('type'));
@@ -191,10 +128,68 @@ class Dependency
         return $dependency;
     }
 
-    public static function type($type)
+    /**
+     *
+     * @param string $type
+     *
+     * @return Dependency
+     * @throws Exception
+     */
+    public static function factory($type)
     {
-        return __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
-            'Dependency';
+        $class =
+            __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() . 'Dependency';
+
+        if (!class_exists($class))
+        {
+            throw new Exception(Translation::get('TypeDoesNotExist', array('type' => $type)));
+        }
+
+        return new $class();
+    }
+
+    public static function from_dom_node($dom_xpath, $dom_node)
+    {
+        $class = self::type($dom_node->getAttribute('type'));
+
+        return $class::dom_node($dom_xpath, $dom_node);
+    }
+
+    public function get_id()
+    {
+        return $this->id;
+    }
+
+    /**
+     *
+     * @param string $id
+     */
+    public function set_id($id)
+    {
+        $this->id = $id;
+    }
+
+    public function get_logger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function get_version()
+    {
+        return $this->version;
+    }
+
+    /**
+     *
+     * @param string $version
+     */
+    public function set_version($version)
+    {
+        $this->version = $version;
     }
 
     /**
@@ -206,5 +201,11 @@ class Dependency
     public function needs($context)
     {
         return $this->get_id() == $context;
+    }
+
+    public static function type($type)
+    {
+        return __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
+            'Dependency';
     }
 }

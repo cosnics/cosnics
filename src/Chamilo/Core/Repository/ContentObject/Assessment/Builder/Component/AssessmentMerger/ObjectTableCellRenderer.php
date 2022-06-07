@@ -10,7 +10,6 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRe
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ObjectTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {

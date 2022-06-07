@@ -11,7 +11,6 @@ use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *

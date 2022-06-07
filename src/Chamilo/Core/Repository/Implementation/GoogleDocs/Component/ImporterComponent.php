@@ -12,7 +12,6 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use RuntimeException;
 
 class ImporterComponent extends Manager

@@ -14,7 +14,6 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {

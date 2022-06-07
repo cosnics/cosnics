@@ -15,37 +15,21 @@ use Symfony\Component\Translation\MessageCatalogue;
 class TranslationResourcesOptimizer
 {
 
+    private string $optimizedTranslationsCachePath;
+
     /**
-     * The translation loaders
-     *
      * @var \Symfony\Component\Translation\Loader\LoaderInterface[]
      */
-    private $translationLoaders;
+    private array $translationLoaders;
+
+    private TranslationResourcesFinderInterface $translationResourcesFinder;
 
     /**
-     * The translation resources finder
-     *
-     * @var \Chamilo\Libraries\Translation\TranslationResourcesFinderInterface
-     */
-    private $translationResourcesFinder;
-
-    /**
-     * The optimized translations cache path
-     *
-     * @var string
-     */
-    private $optimizedTranslationsCachePath;
-
-    /**
-     * Constructor
-     *
      * @param \Symfony\Component\Translation\Loader\LoaderInterface[] $translationLoaders
-     * @param \Chamilo\Libraries\Translation\TranslationResourcesFinderInterface $translationResourcesFinder
-     * @param string $optimizedTranslationsCachePath
      */
     public function __construct(
         array $translationLoaders, TranslationResourcesFinderInterface $translationResourcesFinder,
-        $optimizedTranslationsCachePath = ''
+        string $optimizedTranslationsCachePath = ''
     )
     {
         $this->setTranslationLoaders($translationLoaders);
@@ -54,14 +38,9 @@ class TranslationResourcesOptimizer
     }
 
     /**
-     * Determines a loader by a given type
-     *
-     * @param string $type
-     *
-     * @return \Symfony\Component\Translation\Loader\LoaderInterface
      * @throws \InvalidArgumentException
      */
-    protected function determineLoaderByType($type)
+    protected function determineLoaderByType(string $type): LoaderInterface
     {
         if (!array_key_exists($type, $this->translationLoaders))
         {
@@ -77,8 +56,10 @@ class TranslationResourcesOptimizer
 
     /**
      * Optimizes the translation resources and returns the paths to the optimized translation resources
+     *
+     * @return string[]
      */
-    public function getOptimizedTranslationResources()
+    public function getOptimizedTranslationResources(): array
     {
         $cachePath = $this->optimizedTranslationsCachePath;
         $optimizedTranslationsCache = $cachePath . '/locale.php';
@@ -94,14 +75,9 @@ class TranslationResourcesOptimizer
     }
 
     /**
-     * Optimizes the resources and returns the paths to the optimized resources
-     *
-     * @param string $cachePath
-     * @param string $optimizedTranslationsCache
-     *
      * @return string[]
      */
-    protected function optimizeResources($cachePath, $optimizedTranslationsCache)
+    protected function optimizeResources(string $cachePath, string $optimizedTranslationsCache): array
     {
         $resources = [];
 
@@ -134,14 +110,9 @@ class TranslationResourcesOptimizer
     }
 
     /**
-     * Retrieves the optimized resources from the cache
-     *
-     * @param string $cachePath
-     * @param string $optimizedTranslationsCache
-     *
      * @return string[]
      */
-    protected function retrieveOptimizedResources($cachePath, $optimizedTranslationsCache)
+    protected function retrieveOptimizedResources(string $cachePath, string $optimizedTranslationsCache): array
     {
         $resources = [];
 
@@ -155,12 +126,9 @@ class TranslationResourcesOptimizer
     }
 
     /**
-     *
-     * @param string $optimizedTranslationsCachePath
-     *
      * @throws \InvalidArgumentException
      */
-    public function setOptimizedTranslationsCachePath($optimizedTranslationsCachePath)
+    public function setOptimizedTranslationsCachePath(string $optimizedTranslationsCachePath)
     {
         if (empty($optimizedTranslationsCachePath))
         {
@@ -171,12 +139,11 @@ class TranslationResourcesOptimizer
     }
 
     /**
-     *
      * @param \Symfony\Component\Translation\Loader\LoaderInterface[] $translationLoaders
      *
      * @throws \InvalidArgumentException
      */
-    public function setTranslationLoaders($translationLoaders)
+    public function setTranslationLoaders(array $translationLoaders)
     {
         if (empty($translationLoaders))
         {
@@ -197,13 +164,7 @@ class TranslationResourcesOptimizer
         $this->translationLoaders = $translationLoaders;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Translation\TranslationResourcesFinderInterface $translationResourcesFinder
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function setTranslationResourcesFinder($translationResourcesFinder)
+    public function setTranslationResourcesFinder(TranslationResourcesFinderInterface $translationResourcesFinder)
     {
         $this->translationResourcesFinder = $translationResourcesFinder;
     }

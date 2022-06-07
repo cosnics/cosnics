@@ -25,7 +25,7 @@ class Timer
      */
     public function getDurationInSeconds(): int
     {
-        return (int) ($this->stopTime - $this->startTime);
+        return $this->stopTime - $this->startTime;
     }
 
     /**

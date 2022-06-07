@@ -3,28 +3,22 @@ namespace Chamilo\Libraries\Format\Table\Interfaces;
 
 /**
  *
- * @package Chamilo\Libraries\Format\Table
+ * @package Chamilo\Libraries\Format\Table\Interfaces
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 interface SimpleTableCellRendererInterface
 {
 
-    /**
-     *
-     * @return string
-     */
-    public function get_prefix();
+    public function getPrefix(): string;
 
     /**
-     *
      * @return string[]
      */
-    public function get_properties();
+    public function getProperties(): array;
 
     /**
-     *
-     * @param string $defaultProperty
      * @param string[] $data
      */
-    public function render_cell($defaultProperty, $data);
+    public function renderCell(string $defaultProperty, array $data): string;
 }
