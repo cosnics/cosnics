@@ -19,6 +19,7 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
@@ -421,7 +422,13 @@ class DependencyInjectionContainerBuilder
                 )
             );
 
-            $exceptionLoggerFactory = new ExceptionLoggerFactory($this->getFileConfigurationConsulter());
+            $exceptionLoggerFactory = new ExceptionLoggerFactory(
+                $this->getFileConfigurationConsulter(), new SessionUtilities(
+                $this->getFileConfigurationConsulter()->getSetting(
+                    array('Chamilo\Configuration', 'general', 'security_key')
+                )
+            )
+            );
 
             $dataClassRepositoryCache = new DataClassRepositoryCache();
 

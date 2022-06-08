@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\Bootstrap;
 
 use Chamilo\Configuration\Service\FileConfigurationLocator;
+use Chamilo\Core\User\Service\SessionHandler;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
 use Chamilo\Libraries\Platform\ChamiloRequest;
@@ -23,18 +24,21 @@ class Bootstrap
 
     private ChamiloRequest $request;
 
+    private ?SessionHandler $sessionHandler;
+
     private SessionUtilities $sessionUtilities;
 
     private bool $showErrors;
 
     public function __construct(
         ChamiloRequest $request, FileConfigurationLocator $fileConfigurationLocator, SessionUtilities $sessionUtilities,
-        ErrorHandler $errorHandler, bool $showErrors = false
+        ErrorHandler $errorHandler, ?SessionHandler $sessionHandler = null, bool $showErrors = false
     )
     {
         $this->request = $request;
         $this->fileConfigurationLocator = $fileConfigurationLocator;
         $this->sessionUtilities = $sessionUtilities;
+        $this->sessionHandler = $sessionHandler;
         $this->errorHandler = $errorHandler;
         $this->showErrors = $showErrors;
     }
@@ -84,6 +88,11 @@ class Bootstrap
         $this->request = $request;
 
         return $this;
+    }
+
+    public function getSessionHandler(): ?SessionHandler
+    {
+        return $this->sessionHandler;
     }
 
     public function getSessionUtilities(): SessionUtilities
@@ -138,6 +147,11 @@ class Bootstrap
 
     protected function startSession(): Bootstrap
     {
+        if ($this->getSessionHandler() instanceof SessionHandler)
+        {
+            $this->getSessionHandler()->setSaveHandler();
+        }
+
         $this->getSessionUtilities()->start();
 
         return $this;

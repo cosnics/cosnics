@@ -1,10 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Platform\Session;
 
-use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Core\User\Service\SessionHandler;
-use Exception;
-
 /**
  *
  * @package Chamilo\Libraries\Platform\Session
@@ -13,20 +9,10 @@ use Exception;
  */
 class SessionUtilities
 {
-
-    private FileConfigurationLocator $fileConfigurationLocator;
-
     private ?string $securityKey;
 
-    private ?SessionHandler $sessionHandler;
-
-    public function __construct(
-        FileConfigurationLocator $fileConfigurationLocator, SessionHandler $sessionHandler = null,
-        ?string $securityKey = null
-    )
+    public function __construct(?string $securityKey = null)
     {
-        $this->fileConfigurationLocator = $fileConfigurationLocator;
-        $this->sessionHandler = $sessionHandler;
         $this->securityKey = $securityKey;
     }
 
@@ -55,16 +41,6 @@ class SessionUtilities
         }
     }
 
-    public function getFileConfigurationLocator(): FileConfigurationLocator
-    {
-        return $this->fileConfigurationLocator;
-    }
-
-    public function setFileConfigurationLocator(FileConfigurationLocator $fileConfigurationLocator)
-    {
-        $this->fileConfigurationLocator = $fileConfigurationLocator;
-    }
-
     public function getSecurityKey(): ?string
     {
         return $this->securityKey;
@@ -73,16 +49,6 @@ class SessionUtilities
     public function setSecurityKey(?string $securityKey)
     {
         $this->securityKey = $securityKey;
-    }
-
-    public function getSessionHandler(): ?SessionHandler
-    {
-        return $this->sessionHandler;
-    }
-
-    public function setSessionHandler(?SessionHandler $sessionHandler = null)
-    {
-        $this->sessionHandler = $sessionHandler;
     }
 
     public function getUserId(): ?int
@@ -133,38 +99,15 @@ class SessionUtilities
          */
         session_cache_limiter('');
 
-        if ($this->getFileConfigurationLocator()->isAvailable())
+        $sessionKey = $this->getSecurityKey();
+
+        if (is_null($sessionKey))
         {
-            try
-            {
-                if ($this->getSessionHandler() instanceof SessionHandler)
-                {
-                    session_set_save_handler(
-                        array($this->getSessionHandler(), 'open'), array($this->getSessionHandler(), 'close'),
-                        array($this->getSessionHandler(), 'read'), array($this->getSessionHandler(), 'write'),
-                        array($this->getSessionHandler(), 'destroy'), array($this->getSessionHandler(), 'gc')
-                    );
-                }
-
-                $sessionKey = $this->getSecurityKey();
-
-                if (is_null($sessionKey))
-                {
-                    $sessionKey = 'dk_sid';
-                }
-
-                session_name($sessionKey);
-                session_start();
-            }
-            catch (Exception $exception)
-            {
-                session_start();
-            }
+            $sessionKey = 'dk_sid';
         }
-        else
-        {
-            session_start();
-        }
+
+        session_name($sessionKey);
+        session_start();
     }
 
     public function unregister(string $variable)

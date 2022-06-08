@@ -118,6 +118,12 @@ class SessionHandler implements SessionHandlerInterface
         return '';
     }
 
+    public function setSaveHandler()
+    {
+        session_set_save_handler(array($this, 'open'), array($this, 'close'), array($this, 'read'),
+            array($this, 'write'), array($this, 'destroy'), array($this, 'gc'));
+    }
+
     public function write($id, $data): bool
     {
         $data = base64_encode($data);
