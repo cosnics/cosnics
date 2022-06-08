@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Libraries\Format\Structure\BaseHeader;
 use Exception;
+use Throwable;
 
 /**
  * Exception Logger that chains other exception loggers
@@ -57,7 +58,7 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
     }
 
     public function logException(
-        Exception $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
+        Throwable $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
     )
     {
         foreach ($this->exceptionLoggers as $exceptionLogger)

@@ -397,8 +397,6 @@ class DependencyInjectionContainerBuilder
                 )
             );
 
-            $exceptionLoggerFactory = new ExceptionLoggerFactory($this->getFileConfigurationConsulter());
-
             $storageAliasGenerator = new StorageAliasGenerator($this->getClassnameUtilities());
 
             $conditionPartTranslatorService = new ConditionPartTranslatorService(
@@ -423,20 +421,23 @@ class DependencyInjectionContainerBuilder
                 )
             );
 
-            $storageAliasGenerator = new StorageAliasGenerator($this->getClassnameUtilities());
+            $exceptionLoggerFactory = new ExceptionLoggerFactory($this->getFileConfigurationConsulter());
+
+            $dataClassRepositoryCache = new DataClassRepositoryCache();
+
+            $dataClassRepository = new DataClassRepository(
+                $dataClassRepositoryCache, new DataClassDatabase(
+                $connectionFactory->getConnection(), $storageAliasGenerator,
+                $exceptionLoggerFactory->createExceptionLogger(), $conditionPartTranslatorService,
+                new ParametersProcessor($conditionPartTranslatorService, $storageAliasGenerator), new RecordProcessor()
+            ), new DataClassFactory(), new ParametersHandler()
+            );
 
             $this->registrationConsulter = new RegistrationConsulter(
                 $this->getStringUtilities(), new DataCacheLoader(
                     new RegistrationLoader(
                         $this->getStringUtilities(), new RegistrationRepository(
-                            new DataClassRepository(
-                                new DataClassRepositoryCache(), new DataClassDatabase(
-                                $connectionFactory->getConnection(), $storageAliasGenerator,
-                                $exceptionLoggerFactory->createExceptionLogger(), $conditionPartTranslatorService,
-                                new ParametersProcessor($conditionPartTranslatorService, $storageAliasGenerator),
-                                new RecordProcessor()
-                            ), new DataClassFactory(), new ParametersHandler()
-                            )
+                            $dataClassRepository
                         )
                     ), $this->getConfigurablePathBuilder()
                 )

@@ -14,116 +14,20 @@ use SessionHandlerInterface;
 class SessionHandler implements SessionHandlerInterface
 {
 
-    /**
-     *
-     * @var \Chamilo\Core\User\Storage\Repository\SessionRepository
-     */
-    private $sessionRepository;
+    private int $lifetime = 43200;
 
-    /**
-     *
-     * @var string
-     */
-    private $savePath;
+    private string $name;
 
-    /**
-     *
-     * @var string
-     */
-    private $name;
+    private string $savePath;
 
-    /**
-     *
-     * @var integer
-     */
-    private $lifetime = 43200;
+    private SessionRepository $sessionRepository;
 
     public function __construct(SessionRepository $sessionRepository)
     {
         $this->sessionRepository = $sessionRepository;
-        
+
         // see warning for php < 5.4: http://www.php.net/manual/en/function.session-set-save-handler.php
         register_shutdown_function('session_write_close');
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\Repository\SessionRepository
-     */
-    public function getSessionRepository()
-    {
-        return $this->sessionRepository;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\Repository\SessionRepository $sessionRepository
-     */
-    public function setSessionRepository($sessionRepository)
-    {
-        $this->sessionRepository = $sessionRepository;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getSavePath()
-    {
-        return $this->savePath;
-    }
-
-    /**
-     *
-     * @param string $savePath
-     */
-    public function setSavePath($savePath)
-    {
-        $this->savePath = $savePath;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     *
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getLifetime()
-    {
-        return $this->lifetime;
-    }
-
-    /**
-     *
-     * @param integer $lifetime
-     */
-    public function setLifetime($lifetime)
-    {
-        $this->lifetime = $lifetime;
-    }
-
-    public function open($path, $name): bool
-    {
-        $this->savePath = $path;
-        $this->name = $name;
-        
-        return true;
     }
 
     public function close(): bool
@@ -131,17 +35,74 @@ class SessionHandler implements SessionHandlerInterface
         return true;
     }
 
-    /**
-     *
-     * @see SessionHandlerInterface::read()
-     */
-    public function read($sessionIdentifier)
+    public function destroy($id): bool
+    {
+        return $this->getSessionRepository()->deleteSessionForIdentifierNameAndSavePath(
+            $id, $this->getName(), $this->getSavePath()
+        );
+    }
+
+    public function gc($max_lifetime)
+    {
+        $border = time() - $this->getLifetime();
+
+        return $this->getSessionRepository()->deleteSessionsOlderThanTimestamp($border);
+    }
+
+    public function getLifetime(): int
+    {
+        return $this->lifetime;
+    }
+
+    public function setLifetime(int $lifetime)
+    {
+        $this->lifetime = $lifetime;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
+    public function getSavePath(): string
+    {
+        return $this->savePath;
+    }
+
+    public function setSavePath(string $savePath)
+    {
+        $this->savePath = $savePath;
+    }
+
+    public function getSessionRepository(): SessionRepository
+    {
+        return $this->sessionRepository;
+    }
+
+    public function setSessionRepository(SessionRepository $sessionRepository)
+    {
+        $this->sessionRepository = $sessionRepository;
+    }
+
+    public function open($path, $name): bool
+    {
+        $this->savePath = $path;
+        $this->name = $name;
+
+        return true;
+    }
+
+    public function read($id)
     {
         $session = $this->getSessionRepository()->getSessionForIdentifierNameAndSavePath(
-            $sessionIdentifier,
-            $this->getName(), 
-            $this->getSavePath());
-        
+            $id, $this->getName(), $this->getSavePath()
+        );
+
         if ($session instanceof Session)
         {
             if ($session->is_valid())
@@ -150,32 +111,27 @@ class SessionHandler implements SessionHandlerInterface
             }
             else
             {
-                $this->destroy($sessionIdentifier);
+                $this->destroy($id);
             }
         }
-        
+
         return '';
     }
 
-    /**
-     *
-     * @see SessionHandlerInterface::write()
-     */
-    public function write($sessionIdentifier, $data): bool
+    public function write($id, $data): bool
     {
         $data = base64_encode($data);
-        
+
         $session = $this->getSessionRepository()->getSessionForIdentifierNameAndSavePath(
-            $sessionIdentifier, 
-            $this->getName(), 
-            $this->getSavePath());
-        
+            $id, $this->getName(), $this->getSavePath()
+        );
+
         if ($session instanceof Session)
         {
             $session->set_data($data);
             $session->set_modified(time());
-            
-            return $session->update();
+
+            return $this->getSessionRepository()->updateSession($session);
         }
         else
         {
@@ -185,42 +141,9 @@ class SessionHandler implements SessionHandlerInterface
             $session->set_data($data);
             $session->set_name($this->getName());
             $session->set_save_path($this->getSavePath());
-            $session->set_session_id($sessionIdentifier);
-            
-            return $session->create();
+            $session->set_session_id($id);
+
+            return $this->getSessionRepository()->createSession($session);
         }
-    }
-
-    /**
-     *
-     * @see SessionHandlerInterface::destroy()
-     */
-    public function destroy($id): bool
-    {
-        return $this->getSessionRepository()->deleteSessionForIdentifierNameAndSavePath(
-            $id,
-            $this->getName(), 
-            $this->getSavePath());
-    }
-
-    /**
-     *
-     * @param integer $maxLifetime
-     * @return boolean
-     */
-    public function garbage($maxLifetime)
-    {
-        $border = time() - $this->getLifetime();
-        
-        return $this->getSessionRepository()->deleteSessionsOlderThanTimestamp($border);
-    }
-
-    /**
-     *
-     * @see SessionHandlerInterface::gc()
-     */
-    public function gc($maxlifetime)
-    {
-        $this->garbage($maxlifetime);
     }
 }

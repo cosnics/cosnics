@@ -10,6 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Exception;
 
 /**
  *
@@ -20,131 +21,96 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class SessionRepository
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
-     */
-    private $dataClassRepositoryCache;
+    private DataClassRepository $dataClassRepository;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
-    private $dataClassRepository;
+    private DataClassRepositoryCache $dataClassRepositoryCache;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
-    public function __construct(DataClassRepositoryCache $dataClassRepositoryCache, 
-        DataClassRepository $dataClassRepository)
+    public function __construct(
+        DataClassRepositoryCache $dataClassRepositoryCache, DataClassRepository $dataClassRepository
+    )
     {
         $this->dataClassRepositoryCache = $dataClassRepositoryCache;
         $this->dataClassRepository = $dataClassRepository;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
-     */
-    public function getDataClassRepositoryCache()
+    public function createSession(Session $session): bool
     {
-        return $this->dataClassRepositoryCache;
+        try
+        {
+            return $this->getDataClassRepository()->create($session);
+        }
+        catch (Exception $exception)
+        {
+            return false;
+        }
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
-     */
-    public function setDataClassRepositoryCache(DataClassRepositoryCache $dataClassRepositoryCache)
+    public function deleteSessionForIdentifierNameAndSavePath(string $sessionIdentifier, string $name, string $savePath
+    ): bool
     {
-        $this->dataClassRepositoryCache = $dataClassRepositoryCache;
+        return $this->getDataClassRepository()->deletes(
+            Session::class, $this->getSessionCondition($sessionIdentifier, $name, $savePath)
+        );
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
-    public function getDataClassRepository()
+    public function deleteSessionsOlderThanTimestamp(int $timetamp): bool
+    {
+        $condition = new ComparisonCondition(
+            new PropertyConditionVariable(Session::class, Session::PROPERTY_MODIFIED), ComparisonCondition::LESS_THAN,
+            new StaticConditionVariable($timetamp)
+        );
+
+        return $this->getDataClassRepository()->deletes(Session::class, $condition);
+    }
+
+    public function getDataClassRepository(): DataClassRepository
     {
         return $this->dataClassRepository;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
-    public function setDataClassRepository(DataClassRepository $dataClassRepository)
+    public function getDataClassRepositoryCache(): DataClassRepositoryCache
     {
-        $this->dataClassRepository = $dataClassRepository;
+        return $this->dataClassRepositoryCache;
     }
 
-    /**
-     *
-     * @param string $sessionIdentifier
-     * @param string $name
-     * @param string $savePath
-     * @return \Chamilo\Core\User\Storage\DataClass\Session
-     */
-    public function getSessionForIdentifierNameAndSavePath($sessionIdentifier, $name, $savePath)
-    {
-        $this->getDataClassRepositoryCache()->truncate(Session::class);
-        
-        return $this->getDataClassRepository()->retrieve(
-            Session::class,
-            new DataClassRetrieveParameters($this->getSessionCondition($sessionIdentifier, $name, $savePath)));
-    }
-
-    /**
-     *
-     * @param string $sessionIdentifier
-     * @param string $name
-     * @param string $savePath
-     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
-     */
-    protected function getSessionCondition($sessionIdentifier, $name, $savePath)
+    protected function getSessionCondition(string $sessionIdentifier, string $name, string $savePath): AndCondition
     {
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Session::class, Session::PROPERTY_SESSION_ID),
-            new StaticConditionVariable($sessionIdentifier));
+            new StaticConditionVariable($sessionIdentifier)
+        );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Session::class, Session::PROPERTY_NAME),
-            new StaticConditionVariable($name));
+            new PropertyConditionVariable(Session::class, Session::PROPERTY_NAME), new StaticConditionVariable($name)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Session::class, Session::PROPERTY_SAVE_PATH),
-            new StaticConditionVariable($savePath));
-        
+            new StaticConditionVariable($savePath)
+        );
+
         return new AndCondition($conditions);
     }
 
-    /**
-     *
-     * @param string $sessionIdentifier
-     * @param string $name
-     * @param string $savePath
-     * @return boolean
-     */
-    public function deleteSessionForIdentifierNameAndSavePath($sessionIdentifier, $name, $savePath)
+    public function getSessionForIdentifierNameAndSavePath(string $sessionIdentifier, string $name, string $savePath
+    ): ?Session
     {
-        return $this->getDataClassRepository()->deletes(
+        $this->getDataClassRepositoryCache()->truncate(Session::class);
+
+        return $this->getDataClassRepository()->retrieve(
             Session::class,
-            $this->getSessionCondition($sessionIdentifier, $name, $savePath));
+            new DataClassRetrieveParameters($this->getSessionCondition($sessionIdentifier, $name, $savePath))
+        );
     }
 
-    /**
-     *
-     * @param integer $timetamp
-     * @return boolean
-     */
-    public function deleteSessionsOlderThanTimestamp($timetamp)
+    public function updateSession(Session $session): bool
     {
-        $condition = new ComparisonCondition(
-            new PropertyConditionVariable(Session::class, Session::PROPERTY_MODIFIED),
-            ComparisonCondition::LESS_THAN, 
-            new StaticConditionVariable($timetamp));
-        
-        return $this->getDataClassRepository()->deletes(Session::class, $condition);
+        try
+        {
+            return $this->getDataClassRepository()->update($session);
+        }
+        catch (Exception $exception)
+        {
+            return false;
+        }
     }
 }

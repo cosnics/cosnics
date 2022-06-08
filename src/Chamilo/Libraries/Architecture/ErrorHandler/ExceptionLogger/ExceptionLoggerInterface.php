@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Libraries\Format\Structure\BaseHeader;
-use Exception;
+use Throwable;
 
 /**
  * Interface for services that can handle errors
@@ -24,6 +24,6 @@ interface ExceptionLoggerInterface
      * Logs an exception
      */
     public function logException(
-        Exception $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
+        Throwable $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
     );
 }

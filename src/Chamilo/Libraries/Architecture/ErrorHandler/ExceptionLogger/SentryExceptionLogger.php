@@ -19,12 +19,10 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
 
     protected string $sentryConnectionString;
 
-    protected SessionUtilities $sessionUtilities;
-
     /**
      * @throws \Exception
      */
-    public function __construct(SessionUtilities $sessionUtilities, string $sentryConnectionString)
+    public function __construct(string $sentryConnectionString)
     {
         if (!class_exists('\Sentry\SentrySdk'))
         {
@@ -37,12 +35,11 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         }
 
         $this->sentryConnectionString = $sentryConnectionString;
-        $this->sessionUtilities = $sessionUtilities;
 
         init(
             [
                 'dsn' => $sentryConnectionString,
-                'traces_sample_rate' => 0.01,
+                'traces_sample_rate' => 0.01 /*,
                 'before_send' => function (Event $event) use ($sessionUtilities): ?Event {
                     $userId = $sessionUtilities->getUserId();
 
@@ -53,7 +50,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
                     $event->setContext('user', ['id' => $userId, 'profile_page' => $profilePage]);
 
                     return $event;
-                }
+                }*/
             ]
         );
     }
@@ -63,6 +60,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
      */
     public function addJavascriptExceptionLogger(BaseHeader $header)
     {
+        /*
         $matches = [];
         preg_match("/https:\/\/(.*)@/", $this->getSentryConnectionString(), $matches);
 
@@ -97,6 +95,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         $html[] = '</script>';
 
         $header->addHtmlHeader(implode(PHP_EOL, $html));
+        */
     }
 
     public function getSentryConnectionString(): string
@@ -104,13 +103,8 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         return $this->sentryConnectionString;
     }
 
-    public function getSessionUtilities(): SessionUtilities
-    {
-        return $this->sessionUtilities;
-    }
-
     public function logException(
-        Exception $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
+        \Throwable $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
     )
     {
         if ($exceptionLevel != self::EXCEPTION_LEVEL_FATAL_ERROR)

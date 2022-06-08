@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
  * Builds the FileExceptionLogger class
@@ -15,12 +14,9 @@ class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 {
     protected ConfigurationConsulter $configurationConsulter;
 
-    protected SessionUtilities $sessionUtilities;
-
-    public function __construct(ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities)
+    public function __construct(ConfigurationConsulter $configurationConsulter)
     {
         $this->configurationConsulter = $configurationConsulter;
-        $this->sessionUtilities = $sessionUtilities;
     }
 
     /**
@@ -39,11 +35,6 @@ class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
-    }
-
-    public function getSessionUtilities(): SessionUtilities
-    {
-        return $this->sessionUtilities;
     }
 
 }

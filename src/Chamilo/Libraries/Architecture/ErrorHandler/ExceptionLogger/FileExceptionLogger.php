@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Libraries\Format\Structure\BaseHeader;
 use Exception;
+use Throwable;
 
 /**
  * Logs errors to a file
@@ -54,7 +55,7 @@ class FileExceptionLogger implements ExceptionLoggerInterface
     }
 
     public function logException(
-        Exception $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
+        Throwable $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
     )
     {
         if ($exceptionLevel == self::EXCEPTION_LEVEL_WARNING)

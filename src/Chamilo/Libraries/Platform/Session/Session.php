@@ -42,12 +42,12 @@ class Session
 
     public static function getUserId(): ?int
     {
-        self::getSessionUtilities()->getUserId();
+        return self::getSessionUtilities()->getUserId();
     }
 
     public static function get_user_id(): ?int
     {
-        self::getSessionUtilities()->getUserId();
+        return self::getSessionUtilities()->getUserId();
     }
 
     public static function register(string $variable, $value)

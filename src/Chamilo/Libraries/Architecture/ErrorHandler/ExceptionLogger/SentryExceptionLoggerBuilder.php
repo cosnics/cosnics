@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
 
 /**
@@ -16,12 +15,9 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 
     protected ConfigurationConsulter $configurationConsulter;
 
-    protected SessionUtilities $sessionUtilities;
-
-    public function __construct(ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities)
+    public function __construct(ConfigurationConsulter $configurationConsulter)
     {
         $this->configurationConsulter = $configurationConsulter;
-        $this->sessionUtilities = $sessionUtilities;
     }
 
     /**
@@ -42,16 +38,11 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
             );
         }
 
-        return new SentryExceptionLogger($this->getSessionUtilities(), $clientDSNKey);
+        return new SentryExceptionLogger($clientDSNKey);
     }
 
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
-    }
-
-    public function getSessionUtilities(): SessionUtilities
-    {
-        return $this->sessionUtilities;
     }
 }

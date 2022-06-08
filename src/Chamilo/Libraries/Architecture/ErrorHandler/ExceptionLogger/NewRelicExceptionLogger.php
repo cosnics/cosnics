@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Libraries\Format\Structure\BaseHeader;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
+use Throwable;
 
 /**
  * Logs errors to New Relic
@@ -14,19 +14,16 @@ use Exception;
 class NewRelicExceptionLogger implements ExceptionLoggerInterface
 {
 
-    protected SessionUtilities $sessionUtilities;
-
     /**
      * @throws \Exception
      */
-    public function __construct(SessionUtilities $sessionUtilities)
+    public function __construct()
     {
         if (!extension_loaded('newrelic'))
         {
             throw new Exception('Can not use the NewRelicExceptionLogger when the newrelic extension is not loaded');
         }
 
-        $this->sessionUtilities = $sessionUtilities;
         $this->configureChamiloParameters();
     }
 
@@ -48,21 +45,10 @@ class NewRelicExceptionLogger implements ExceptionLoggerInterface
 
         newrelic_add_custom_parameter($prefix . 'url', $_SERVER['REQUEST_URI']);
         newrelic_add_custom_parameter($prefix . 'http_method', $_SERVER['REQUEST_METHOD']);
-
-        $user_id = $this->getSessionUtilities()->getUserId();
-        if (!empty($user_id))
-        {
-            newrelic_add_custom_parameter($prefix . 'user_id', $user_id);
-        }
-    }
-
-    public function getSessionUtilities(): SessionUtilities
-    {
-        return $this->sessionUtilities;
     }
 
     public function logException(
-        Exception $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
+        Throwable $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
     )
     {
         if ($exceptionLevel == self::EXCEPTION_LEVEL_WARNING)

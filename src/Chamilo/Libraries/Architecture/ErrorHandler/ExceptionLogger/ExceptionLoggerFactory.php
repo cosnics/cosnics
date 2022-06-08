@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
 
 /**
@@ -16,12 +15,9 @@ class ExceptionLoggerFactory
 
     protected ConfigurationConsulter $configurationConsulter;
 
-    protected SessionUtilities $sessionUtilities;
-
-    public function __construct(ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities)
+    public function __construct(ConfigurationConsulter $configurationConsulter)
     {
         $this->configurationConsulter = $configurationConsulter;
-        $this->sessionUtilities = $sessionUtilities;
     }
 
     /**
@@ -29,8 +25,7 @@ class ExceptionLoggerFactory
      */
     protected function createDefaultExceptionLogger(): FileExceptionLogger
     {
-        $fileExceptionLoggerBuilder =
-            new FileExceptionLoggerBuilder($this->getConfigurationConsulter(), $this->getSessionUtilities());
+        $fileExceptionLoggerBuilder = new FileExceptionLoggerBuilder($this->getConfigurationConsulter());
 
         return $fileExceptionLoggerBuilder->createExceptionLogger();
     }
@@ -91,8 +86,7 @@ class ExceptionLoggerFactory
                     );
                 }
 
-                $exceptionLoggerBuilder =
-                    new $exceptionLoggerBuilderClass($this->getConfigurationConsulter(), $this->getSessionUtilities());
+                $exceptionLoggerBuilder = new $exceptionLoggerBuilderClass($this->getConfigurationConsulter());
 
                 if (!$exceptionLoggerBuilder instanceof ExceptionLoggerBuilderInterface)
                 {
@@ -135,10 +129,5 @@ class ExceptionLoggerFactory
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
-    }
-
-    public function getSessionUtilities(): SessionUtilities
-    {
-        return $this->sessionUtilities;
     }
 }
