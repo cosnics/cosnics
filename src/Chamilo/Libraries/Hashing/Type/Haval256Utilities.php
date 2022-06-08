@@ -12,23 +12,13 @@ use Chamilo\Libraries\Hashing\HashingUtilities;
 class Haval256Utilities extends HashingUtilities
 {
 
-    /**
-     * @param string $filePath
-     *
-     * @return string
-     */
-    public function hashFile($filePath)
+    public function hashFile(string $filePath): string
     {
         return hash_file('haval256,5', $$filePath);
     }
 
-    /**
-     * @param string $string
-     *
-     * @return string
-     */
-    public function hashString($string)
+    public function hashString(string $value): string
     {
-        return hash('haval256,5', $string);
+        return hash('haval256,5', $value);
     }
 }

@@ -14,31 +14,18 @@ class ChamiloRequest extends Request
     /**
      * Returns a parameter from the POST BODY and if it does not exist fallback on the URL QUERY.
      *
-     * @param string $key
-     * @param mixed $default
-     * @param boolean $deep
-     *
-     * @return mixed
-     * @deprecated
-     *
-     * @see getFromUrl
-     * @see getFromPost
-     * @see getFromPostOrUrl
+     * @deprecated Use ChamiloRequest::getFromUrl() or ChamiloRequest::getFromPost() or
+     *     ChamiloRequest::getFromPostOrUrl()
      */
-    public function get($key, $default = null, $deep = false)
+    public function get(string $key, $default = null)
     {
         return $this->getFromPOSTOrURL($key, $default);
     }
 
     /**
      * Returns a parameter from the post body (request) or fallback to the default value
-     *
-     * @param string $key
-     * @param mixed $default
-     *
-     * @return mixed
      */
-    public function getFromPost($key, $default = null)
+    public function getFromPost(string $key, $default = null)
     {
         if ($this !== $result = $this->request->get($key, $this))
         {
@@ -50,13 +37,8 @@ class ChamiloRequest extends Request
 
     /**
      * Returns a parameter from the POST BODY and if it does not exist fallback on the URL QUERY.
-     *
-     * @param string $key
-     * @param mixed $default
-     *
-     * @return mixed
      */
-    public function getFromPostOrUrl($key, $default = null)
+    public function getFromPostOrUrl(string $key, $default = null)
     {
         if (null !== $result = $this->getFromPost($key))
         {
@@ -73,13 +55,8 @@ class ChamiloRequest extends Request
 
     /**
      * Returns a parameter from the url (query) or fallback to the default value
-     *
-     * @param string $key
-     * @param mixed $default
-     *
-     * @return mixed
      */
-    public function getFromUrl($key, $default = null)
+    public function getFromUrl(string $key, $default = null)
     {
         if ($this !== $result = $this->query->get($key, $this))
         {

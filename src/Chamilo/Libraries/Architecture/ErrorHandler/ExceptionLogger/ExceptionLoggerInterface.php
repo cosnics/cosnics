@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Libraries\Format\Structure\BaseHeader;
+use Exception;
 
 /**
  * Interface for services that can handle errors
@@ -16,18 +17,13 @@ interface ExceptionLoggerInterface
 
     /**
      * Adds an exception logger for javascript to the header
-     *
-     * @param \Chamilo\Libraries\Format\Structure\BaseHeader $header
      */
     public function addJavascriptExceptionLogger(BaseHeader $header);
 
     /**
      * Logs an exception
-     *
-     * @param \Exception $exception
-     * @param integer $exceptionLevel
-     * @param string $file
-     * @param integer $line
      */
-    public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0);
+    public function logException(
+        Exception $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
+    );
 }

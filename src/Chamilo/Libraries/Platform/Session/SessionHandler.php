@@ -1,15 +1,17 @@
 <?php
 namespace Chamilo\Libraries\Platform\Session;
 
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Exception;
 use SessionHandlerInterface;
 
 /**
@@ -21,23 +23,11 @@ use SessionHandlerInterface;
 class SessionHandler implements SessionHandlerInterface
 {
 
-    /**
-     *
-     * @var string
-     */
-    private $savePath;
+    private int $lifetime = 43200;
 
-    /**
-     *
-     * @var string
-     */
-    private $name;
+    private string $name;
 
-    /**
-     *
-     * @var integer
-     */
-    private $lifetime = 43200;
+    private string $savePath;
 
     public function __construct()
     {
@@ -45,35 +35,39 @@ class SessionHandler implements SessionHandlerInterface
         register_shutdown_function('session_write_close');
     }
 
-    /**
-     *
-     * @return boolean
-     */
     public function close(): bool
     {
         return true;
     }
 
-    /**
-     *
-     * @param string $session_id
-     *
-     * @return boolean
-     */
-    public function destroy($session_id): bool
+    protected function createSession(\Chamilo\Core\User\Storage\DataClass\Session $session): bool
     {
-        return DataManager::deletes(
-            \Chamilo\Core\User\Storage\DataClass\Session::class, $this->getCondition($session_id)
+        try
+        {
+            return $this->getDataClassRepository()->create($session);
+        }
+        catch (Exception $exception)
+        {
+            return false;
+        }
+    }
+
+    protected function deleteSessionByCondition(Condition $condition): bool
+    {
+        return $this->getDataClassRepository()->deletes(
+            \Chamilo\Core\User\Storage\DataClass\Session::class, $condition
         );
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function garbage()
+    public function destroy($id): bool
+    {
+        return $this->deleteSessionByCondition($this->getCondition($id));
+    }
+
+    public function gc($max_lifetime)
     {
         $border = time() - $this->lifetime;
+
         $condition = new ComparisonCondition(
             new PropertyConditionVariable(
                 \Chamilo\Core\User\Storage\DataClass\Session::class,
@@ -81,28 +75,10 @@ class SessionHandler implements SessionHandlerInterface
             ), ComparisonCondition::LESS_THAN, new StaticConditionVariable($border)
         );
 
-        return DataManager::deletes(
-            \Chamilo\Core\User\Storage\DataClass\Session::class, $condition
-        );
+        return $this->deleteSessionByCondition($condition);
     }
 
-    /**
-     * @param int $maxlifetime
-     *
-     * @return bool|void
-     */
-    public function gc($maxlifetime)
-    {
-        $this->garbage();
-    }
-
-    /**
-     *
-     * @param integer $sessionId
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
-     */
-    public function getCondition($sessionId)
+    public function getCondition(int $sessionId): AndCondition
     {
         $conditions = [];
         $conditions[] = new EqualityCondition(
@@ -127,10 +103,14 @@ class SessionHandler implements SessionHandlerInterface
         return new AndCondition($conditions);
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
-     */
-    protected function getDataClassRepositoryCache()
+    protected function getDataClassRepository(): DataClassRepository
+    {
+        return $this->getService(
+            'Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository'
+        );
+    }
+
+    protected function getDataClassRepositoryCache(): DataClassRepositoryCache
     {
         return $this->getService(
             DataClassRepositoryCache::class
@@ -138,47 +118,41 @@ class SessionHandler implements SessionHandlerInterface
     }
 
     /**
-     * @param string $serviceName
+     * @template getServiceName
      *
-     * @return object
+     * @param class-string<getServiceName> $serviceName
+     *
+     * @return getServiceName
      * @throws \Exception
      */
-    protected function getService(string $serviceName)
+    protected function getService(string $serviceName): ?object
     {
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
             $serviceName
         );
     }
 
-    /**
-     *
-     * @param string $save_path
-     * @param string $name
-     *
-     * @return boolean
-     */
-    public function open($save_path, $name): bool
+    protected function getSessionById(int $sessionId)
     {
-        $this->savePath = $save_path;
+        $this->getDataClassRepositoryCache()->truncate(\Chamilo\Core\User\Storage\DataClass\Session::class);
+
+        return $this->getDataClassRepository()->retrieve(
+            \Chamilo\Core\User\Storage\DataClass\Session::class,
+            new DataClassRetrieveParameters($this->getCondition($sessionId))
+        );
+    }
+
+    public function open($path, $name): bool
+    {
+        $this->savePath = $path;
         $this->name = $name;
 
         return true;
     }
 
-    /**
-     *
-     * @param string $session_id
-     *
-     * @return boolean|string
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     */
-    public function read($session_id): bool
+    public function read($id)
     {
-        $this->getDataClassRepositoryCache()->truncate(\Chamilo\Core\User\Storage\DataClass\Session::class);
-        $session = DataManager::retrieve(
-            \Chamilo\Core\User\Storage\DataClass\Session::class,
-            new DataClassRetrieveParameters($this->getCondition($session_id))
-        );
+        $session = $this->getSessionById($id);
 
         if ($session instanceof \Chamilo\Core\User\Storage\DataClass\Session)
         {
@@ -188,39 +162,36 @@ class SessionHandler implements SessionHandlerInterface
             }
             else
             {
-                $this->destroy($session_id);
+                $this->destroy($id);
             }
         }
 
-        return '';
+        return false;
     }
 
-    /**
-     *
-     * @param string $session_id
-     * @param string $data
-     *
-     * @return boolean
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \Exception
-     */
-    public function write($session_id, $data): bool
+    protected function updateSession(\Chamilo\Core\User\Storage\DataClass\Session $session): bool
+    {
+        try
+        {
+            return $this->getDataClassRepository()->update($session);
+        }
+        catch (Exception $exception)
+        {
+            return false;
+        }
+    }
+
+    public function write($id, $data): bool
     {
         $data = base64_encode($data);
-
-        $this->getDataClassRepositoryCache()->truncate(\Chamilo\Core\User\Storage\DataClass\Session::class);
-
-        $session = DataManager::retrieve(
-            \Chamilo\Core\User\Storage\DataClass\Session::class,
-            new DataClassRetrieveParameters($this->getCondition($session_id))
-        );
+        $session = $this->getSessionById($id);
 
         if ($session instanceof \Chamilo\Core\User\Storage\DataClass\Session)
         {
             $session->set_data($data);
             $session->set_modified(time());
 
-            return $session->update();
+            return $this->updateSession($session);
         }
         else
         {
@@ -230,9 +201,9 @@ class SessionHandler implements SessionHandlerInterface
             $session->set_data($data);
             $session->set_name($this->name);
             $session->set_save_path($this->savePath);
-            $session->set_session_id($session_id);
+            $session->set_session_id($id);
 
-            return $session->create();
+            return $this->createSession($session);
         }
     }
 }

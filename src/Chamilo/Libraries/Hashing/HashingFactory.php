@@ -7,53 +7,30 @@ use Exception;
 class HashingFactory
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    private $stringUtilities;
+    private string $configuredHashingAlgorithm;
 
-    /**
-     *
-     * @var string
-     */
-    private $configuredHashingAlgorithm;
+    private StringUtilities $stringUtilities;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     * @param string $configuredHashingAlgorithm
-     */
-    public function __construct(StringUtilities $stringUtilities, $configuredHashingAlgorithm)
+    public function __construct(StringUtilities $stringUtilities, string $configuredHashingAlgorithm)
     {
         $this->stringUtilities = $stringUtilities;
         $this->configuredHashingAlgorithm = $configuredHashingAlgorithm;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getConfiguredHashingAlgorithm()
+    public function getConfiguredHashingAlgorithm(): string
     {
         return $this->configuredHashingAlgorithm;
     }
 
-    /**
-     *
-     * @param string $configuredHashingAlgorithm
-     */
-    public function setConfiguredHashingAlgorithm($configuredHashingAlgorithm)
+    public function setConfiguredHashingAlgorithm(string $configuredHashingAlgorithm)
     {
         $this->configuredHashingAlgorithm = $configuredHashingAlgorithm;
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
      * @throws \Exception
      */
-    public function getHashingUtilities()
+    public function getHashingUtilities(): HashingUtilities
     {
         $className = __NAMESPACE__ . '\Type\\' .
             $this->getStringUtilities()->createString($this->getConfiguredHashingAlgorithm())->upperCamelize() .
@@ -69,19 +46,11 @@ class HashingFactory
         }
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    public function getStringUtilities()
+    public function getStringUtilities(): StringUtilities
     {
         return $this->stringUtilities;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
     public function setStringUtilities(StringUtilities $stringUtilities)
     {
         $this->stringUtilities = $stringUtilities;

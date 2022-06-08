@@ -33,6 +33,13 @@ class FormValidator extends HTML_QuickForm
     const PROPERTY_TIME_PERIOD_TO_DATE = 'to_date';
 
     /**
+     * The HTML-editors in this form
+     *
+     * @var string[]
+     */
+    private $html_editors;
+
+    /**
      *
      * @var boolean
      */
@@ -43,13 +50,6 @@ class FormValidator extends HTML_QuickForm
      * @var \HTML_QuickForm_Renderer_Default
      */
     private $renderer;
-
-    /**
-     * The HTML-editors in this form
-     *
-     * @var string[]
-     */
-    private $html_editors;
 
     /**
      * Constructor
@@ -84,7 +84,7 @@ class FormValidator extends HTML_QuickForm
 
         foreach ($this->_submitValues as $index => & $value)
         {
-            $value = Security::removeXSS($value);
+            $value = $this->getSecurity()->removeXSS($value);
         }
 
         $this->setDefaultTemplates();
@@ -391,13 +391,11 @@ EOT;
         $buttons = [];
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', $this->getTranslation('Save', []),
-            array('class' => 'positive')
+            'style_submit_button', 'submit', $this->getTranslation('Save', []), array('class' => 'positive')
         );
 
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', $this->getTranslation('Reset', []),
-            array('class' => 'normal empty')
+            'style_reset_button', 'reset', $this->getTranslation('Reset', []), array('class' => 'normal empty')
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -831,6 +829,14 @@ EOT;
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Platform\Security
+     */
+    private function getSecurity(): Security
+    {
+        return $this->getService(Security::class);
     }
 
     /**

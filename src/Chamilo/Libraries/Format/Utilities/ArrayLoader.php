@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Utilities;
 
+use Composer\Package\BasePackage;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Utilities
@@ -8,13 +10,7 @@ namespace Chamilo\Libraries\Format\Utilities;
 class ArrayLoader extends \Composer\Package\Loader\ArrayLoader
 {
 
-    /**
-     * @param array $config
-     * @param string $class
-     *
-     * @return \Composer\Package\AliasPackage|\Composer\Package\CompletePackageInterface|\Composer\Package\PackageInterface|\Composer\Package\RootAliasPackage|mixed
-     */
-    public function load(array $config, $class = 'Composer\Package\CompletePackage')
+    public function load(array $config, string $class = 'Composer\Package\CompletePackage'): BasePackage
     {
         $package = parent::load($config, $class);
 

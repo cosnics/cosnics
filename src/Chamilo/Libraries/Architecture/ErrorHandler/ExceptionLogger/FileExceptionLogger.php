@@ -12,22 +12,12 @@ use Exception;
  */
 class FileExceptionLogger implements ExceptionLoggerInterface
 {
+    protected string $logPath;
 
     /**
-     * The path to the log directory
-     *
-     * @var string
-     */
-    protected $logPath;
-
-    /**
-     * FileLoggerErrorHandler constructor.
-     *
-     * @param $logPath
-     *
      * @throws \Exception
      */
-    public function __construct($logPath)
+    public function __construct(string $logPath)
     {
         if (empty($logPath))
         {
@@ -44,23 +34,11 @@ class FileExceptionLogger implements ExceptionLoggerInterface
         $this->logPath = $logPath;
     }
 
-    /**
-     * Adds an exception logger for javascript to the header
-     *
-     * @param \Chamilo\Libraries\Format\Structure\BaseHeader $header
-     */
     public function addJavascriptExceptionLogger(BaseHeader $header)
     {
     }
 
-    /**
-     * Determines the exception level string
-     *
-     * @param integer $exceptionLevel
-     *
-     * @return string
-     */
-    protected function determineExceptionLevelString($exceptionLevel = self::EXCEPTION_LEVEL_ERROR)
+    protected function determineExceptionLevelString(int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR): string
     {
         switch ($exceptionLevel)
         {
@@ -75,15 +53,9 @@ class FileExceptionLogger implements ExceptionLoggerInterface
         }
     }
 
-    /**
-     * Logs an exception
-     *
-     * @param \Exception $exception
-     * @param integer $exceptionLevel
-     * @param string $file
-     * @param integer $line
-     */
-    public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0)
+    public function logException(
+        Exception $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
+    )
     {
         if ($exceptionLevel == self::EXCEPTION_LEVEL_WARNING)
         {

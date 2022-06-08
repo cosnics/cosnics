@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
 
 /**
@@ -13,33 +14,22 @@ use Exception;
 class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 {
 
-    /**
-     *
-     * @var \Chamilo\Configuration\Configuration
-     */
-    protected $configurationConsulter;
+    protected ConfigurationConsulter $configurationConsulter;
 
-    /**
-     *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     *
-     * @see \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerBuilderInterface::__construct()
-     *
-     */
-    public function __construct(ConfigurationConsulter $configurationConsulter)
+    protected SessionUtilities $sessionUtilities;
+
+    public function __construct(ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities)
     {
         $this->configurationConsulter = $configurationConsulter;
+        $this->sessionUtilities = $sessionUtilities;
     }
 
     /**
-     * Creates the exception logger
-     *
-     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\SentryExceptionLogger
      * @throws \Exception
      */
-    public function createExceptionLogger()
+    public function createExceptionLogger(): SentryExceptionLogger
     {
-        $clientDSNKey = $this->configurationConsulter->getSetting(
+        $clientDSNKey = $this->getConfigurationConsulter()->getSetting(
             array('Chamilo\Configuration', 'error_handling', 'sentry_error_logger', 'DSN')
         );
 
@@ -52,6 +42,16 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
             );
         }
 
-        return new SentryExceptionLogger($clientDSNKey);
+        return new SentryExceptionLogger($this->getSessionUtilities(), $clientDSNKey);
+    }
+
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
+    }
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return $this->sessionUtilities;
     }
 }

@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Platform;
 
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Hashing\HashingUtilities;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
  *
@@ -10,65 +10,58 @@ use Chamilo\Libraries\Hashing\HashingUtilities;
  */
 class Security
 {
-    use DependencyInjectionContainerTrait;
+    private ChamiloRequest $chamiloRequest;
 
-    public function __construct()
+    private HashingUtilities $hashingUtilities;
+
+    private SessionUtilities $sessionUtilities;
+
+    public function __construct(
+        SessionUtilities $sessionUtilities, ChamiloRequest $chamiloRequest, HashingUtilities $hashingUtilities
+    )
     {
-        $this->initializeContainer();
+        $this->sessionUtilities = $sessionUtilities;
+        $this->chamiloRequest = $chamiloRequest;
+        $this->hashingUtilities = $hashingUtilities;
     }
 
     /**
      * This function checks that the token generated in get_token() has been kept (prevents Cross-Site Request Forgeries
      * attacks)
-     *
-     * @param string $array
-     *
-     * @return boolean if it's the right token, false otherwise
      */
-    public function checkToken($array = 'post')
+    public function checkToken(string $tokenType = 'post'): bool
     {
         $sessionUtilities = $this->getSessionUtilities();
-        $request = $this->getRequest();
+        $request = $this->getChamiloRequest();
 
-        $session_token = $sessionUtilities->retrieve('sec_token');
+        $sessionToken = $sessionUtilities->retrieve('sec_token');
+        $tokenTypeValue = $tokenType;
 
-        switch ($array)
+        if ($tokenType == 'get')
         {
-            case 'get' :
-                $get_token = $request->query->get('sec_token');
-                if (isset($session_token) && isset($get_token) && $session_token === $get_token)
-                {
-                    return true;
-                }
-
-                return false;
-            case 'post' :
-                $post_token = $request->request->get('sec_token');
-                if (isset($session_token) && isset($post_token) && $session_token === $post_token)
-                {
-                    return true;
-                }
-
-                return false;
-            default :
-                if (isset($session_token) && isset($array) && $session_token === $array)
-                {
-                    return true;
-                }
-
-                return false;
+            $tokenTypeValue = $request->query->get('sec_token');
         }
+
+        if ($tokenType == 'post')
+        {
+            $tokenTypeValue = $request->request->get('sec_token');
+        }
+
+        if (isset($sessionToken) && isset($tokenTypeValue) && $sessionToken === $tokenTypeValue)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /**
      * Checks the user agent of the client as recorder by get_ua() to prevent most session hijacking attacks.
-     *
-     * @return boolean
      */
-    public function checkUa()
+    public function checkUa(): bool
     {
         $sessionUtilities = $this->getSessionUtilities();
-        $request = $this->getRequest();
+        $request = $this->getChamiloRequest();
 
         $session_agent = $sessionUtilities->retrieve('sec_ua');
         $current_agent = $request->server->get('HTTP_USER_AGENT') . $sessionUtilities->retrieve('sec_ua_seed');
@@ -82,54 +75,43 @@ class Security
     }
 
     /**
-     * This function checks that the token generated in get_token() has been kept (prevents Cross-Site Request Forgeries
-     * attacks)
-     *
-     * @param string $array
-     *
-     * @return boolean if it's the right token, false otherwise
-     * @deprecated
-     *
-     * @see checkToken
+     * @deprecated Use Security::checkToken() now
      */
-    public function check_token($array = 'post')
+    public function check_token(string $tokenType = 'post'): bool
     {
-        return self::checkToken($array);
+        return self::checkToken($tokenType);
     }
 
     /**
-     * Checks the user agent of the client as recorder by get_ua() to prevent most session hijacking attacks.
-     *
-     * @return boolean
-     *
-     * @deprecated
-     *
-     * @see checkUa
+     * @deprecated Use Security::checkUa() now
      */
-    public function check_ua()
+    public function check_ua(): bool
     {
         return self::checkUa();
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities|object
-     */
-    public function getHashingUtilities()
+    public function getChamiloRequest(): ChamiloRequest
     {
-        return $this->getService(HashingUtilities::class);
+        return $this->chamiloRequest;
+    }
+
+    public function getHashingUtilities(): HashingUtilities
+    {
+        return $this->hashingUtilities;
+    }
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return $this->sessionUtilities;
     }
 
     /**
      * This function sets a random token to be included in a form as a hidden field and saves it into the user's
-     * session.
-     * This later prevents Cross-Site Request Forgeries by checking that the user is really the one that sent
+     * session. This later prevents Cross-Site Request Forgeries by checking that the user is really the one that sent
      * this form in knowingly (this form hasn't been generated from another website visited by the user at the same
      * time). Check the token with check_token()
-     *
-     * @return string
      */
-    public function getToken()
+    public function getToken(): string
     {
         $token = $this->getHashingUtilities()->hashString(uniqid(rand(), true));
         $this->getSessionUtilities()->register('sec_token', $token);
@@ -145,34 +127,21 @@ class Security
         $sessionUtilities = $this->getSessionUtilities();
         $sessionUtilities->register('sec_ua_seed', uniqid(rand(), true));
         $sessionUtilities->register(
-            'sec_ua', $this->getRequest()->server->get('HTTP_USER_AGENT') . $sessionUtilities->retrieve('sec_ua_seed')
+            'sec_ua',
+            $this->getChamiloRequest()->server->get('HTTP_USER_AGENT') . $sessionUtilities->retrieve('sec_ua_seed')
         );
     }
 
     /**
-     * This function sets a random token to be included in a form as a hidden field and saves it into the user's
-     * session.
-     * This later prevents Cross-Site Request Forgeries by checking that the user is really the one that sent
-     * this form in knowingly (this form hasn't been generated from another website visited by the user at the same
-     * time). Check the token with check_token()
-     *
-     * @return string
-     *
-     * @deprecated
-     *
-     * @see getToken
+     * @deprecated Use Security::getToken() now
      */
-    public function get_token()
+    public function get_token(): string
     {
         return $this->getToken();
     }
 
     /**
-     * Gets the user agent in the session to later check it with check_ua() to prevent most cases of session hijacking.
-     *
-     * @deprecated
-     *
-     * @see getUa
+     * @deprecated Use Security::getUa() now
      */
     public function get_ua()
     {
@@ -184,16 +153,15 @@ class Security
      * Filtering for XSS is very easily done by using the htmlentities()
      * function. This kind of filtering prevents JavaScript snippets to be understood as such.
      *
-     * @param string $variable
-     * @param boolean $isAdmin
+     * @param string|array $variable
      *
-     * @return string string
+     * @return string|array
      */
-    public static function removeXSS($variable)
+    public function removeXSS($variable)
     {
         if (is_array($variable))
         {
-            return self::removeXSSRecursive($variable);
+            return $this->removeXSSRecursive($variable);
         }
 
         // from: http://stackoverflow.com/questions/1336776/xss-filtering-function-in-php
@@ -245,17 +213,16 @@ class Security
     }
 
     /**
-     *
      * @param string[] $array
      *
      * @return string[]
      */
-    public static function removeXSSRecursive($array)
+    public function removeXSSRecursive(array $array): array
     {
         foreach ($array as $key => $value)
         {
-            $key2 = self::removeXSS($key);
-            $value2 = (is_array($value)) ? self::removeXSSRecursive($value) : self::removeXSS(
+            $key2 = $this->removeXSS($key);
+            $value2 = (is_array($value)) ? $this->removeXSSRecursive($value) : $this->removeXSS(
                 $value
             );
 
@@ -267,34 +234,21 @@ class Security
     }
 
     /**
-     * This function tackles the XSS injections.
-     * Filtering for XSS is very easily done by using the htmlentities()
-     * function. This kind of filtering prevents JavaScript snippets to be understood as such.
-     *
-     * @param string $variable
-     *
-     * @return string string
-     * @deprecated
-     *
-     * @see removeXSS
+     * @deprecated Use Security::removeXSS() now
      */
-    public static function remove_XSS($variable)
+    public function remove_XSS(string $variable): string
     {
-        return self::removeXSS($variable);
+        return $this->removeXSS($variable);
     }
 
     /**
-     *
      * @param string[] $array
      *
      * @return string[]
-     *
-     * @deprecated
-     *
-     * @see removeXSSRecursive
+     * @deprecated Use Security::removeXSSRecursive() now
      */
-    public static function remove_XSS_recursive($array)
+    public function remove_XSS_recursive(array $array): array
     {
-        return self::removeXSSRecursive($array);
+        return $this->removeXSSRecursive($array);
     }
 }

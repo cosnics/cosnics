@@ -236,6 +236,14 @@ abstract class Table
     }
 
     /**
+     * @return \Chamilo\Libraries\Platform\Security
+     */
+    private function getSecurity()
+    {
+        return $this->component->getService(Security::class);
+    }
+
+    /**
      * Gets the table's cell renderer or builds one if it is not set
      *
      * @return \Chamilo\Libraries\Format\Table\TableCellRenderer
@@ -513,7 +521,7 @@ abstract class Table
             }
 
             $this->table->setColumnHeader(
-                ($this->has_form_actions() ? $i + 1 : $i), Security::remove_XSS($column->get_title()),
+                ($this->has_form_actions() ? $i + 1 : $i), $this->getSecurity()->removeXSS($column->get_title()),
                 $column->is_sortable(), $headerAttributes, $contentAttributes
             );
         }

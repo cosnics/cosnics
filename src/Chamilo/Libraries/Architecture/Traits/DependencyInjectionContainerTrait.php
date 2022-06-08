@@ -137,7 +137,11 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
-     * @return mixed
+     * @template getServiceId
+     *
+     * @param class-string<getServiceId> $serviceId
+     *
+     * @return getServiceId
      */
     public function getService(string $serviceId)
     {

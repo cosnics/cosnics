@@ -14,99 +14,125 @@ use Exception;
 class SessionUtilities
 {
 
-    /**
-     *
-     * @var \Chamilo\Configuration\Service\FileConfigurationLocator
-     */
-    private $fileConfigurationLocator;
+    private FileConfigurationLocator $fileConfigurationLocator;
 
-    /**
-     *
-     * @var \Chamilo\Core\User\Service\SessionHandler|NULL
-     */
-    private $sessionHandler;
+    private ?string $securityKey;
 
-    /**
-     *
-     * @var string
-     */
-    private $securityKey;
+    private ?SessionHandler $sessionHandler;
 
-    /**
-     *
-     * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
-     * @param \Chamilo\Core\User\Service\SessionHandler|NULL $sessionHandler
-     * @param string $securityKey
-     */
-    public function __construct(FileConfigurationLocator $fileConfigurationLocator, 
-        SessionHandler $sessionHandler = null, $securityKey = null)
+    public function __construct(
+        FileConfigurationLocator $fileConfigurationLocator, SessionHandler $sessionHandler = null,
+        ?string $securityKey = null
+    )
     {
         $this->fileConfigurationLocator = $fileConfigurationLocator;
         $this->sessionHandler = $sessionHandler;
         $this->securityKey = $securityKey;
     }
 
-    /**
-     *
-     * @return \Chamilo\Configuration\Service\FileConfigurationLocator
-     */
-    public function getFileConfigurationLocator()
+    public function clear()
+    {
+        session_unset();
+        $_SESSION = [];
+    }
+
+    public function destroy()
+    {
+        session_unset();
+        $_SESSION = [];
+        session_destroy();
+    }
+
+    public function get(string $variable, $default = null)
+    {
+        if (array_key_exists($variable, $_SESSION))
+        {
+            return $_SESSION[$variable];
+        }
+        else
+        {
+            return $default;
+        }
+    }
+
+    public function getFileConfigurationLocator(): FileConfigurationLocator
     {
         return $this->fileConfigurationLocator;
     }
 
-    /**
-     *
-     * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
-     */
     public function setFileConfigurationLocator(FileConfigurationLocator $fileConfigurationLocator)
     {
         $this->fileConfigurationLocator = $fileConfigurationLocator;
     }
 
-    /**
-     *
-     * @return \Chamilo\Core\User\Service\SessionHandler|NULL
-     */
-    public function getSessionHandler()
-    {
-        return $this->sessionHandler;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Service\SessionHandler|NULL $sessionHandler
-     */
-    public function setSessionHandler(SessionHandler $sessionHandler = null)
-    {
-        $this->sessionHandler = $sessionHandler;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getSecurityKey()
+    public function getSecurityKey(): ?string
     {
         return $this->securityKey;
     }
 
-    /**
-     *
-     * @param string $securityKey
-     */
-    public function setSecurityKey($securityKey)
+    public function setSecurityKey(?string $securityKey)
     {
         $this->securityKey = $securityKey;
     }
 
+    public function getSessionHandler(): ?SessionHandler
+    {
+        return $this->sessionHandler;
+    }
+
+    public function setSessionHandler(?SessionHandler $sessionHandler = null)
+    {
+        $this->sessionHandler = $sessionHandler;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->retrieve('_uid');
+    }
+
+    /**
+     * @deprecated Use SessionUtilities::getUserId() now
+     */
+    public function get_user_id(): ?int
+    {
+        return $this->getUserId();
+    }
+
+    public function register(string $variable, $value)
+    {
+        $_SESSION[$variable] = $value;
+    }
+
+    public function registerIfNotSet(string $variable, $value)
+    {
+        $sessionValue = $this->retrieve($variable);
+
+        if (is_null($sessionValue))
+        {
+            $this->register($variable, $value);
+        }
+    }
+
+    public function retrieve(string $variable)
+    {
+        if (array_key_exists($variable, $_SESSION))
+        {
+            return $_SESSION[$variable];
+        }
+
+        return null;
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function start()
     {
         /**
          * Disables PHP automatically provided cache headers
          */
         session_cache_limiter('');
-        
+
         if ($this->getFileConfigurationLocator()->isAvailable())
         {
             try
@@ -114,21 +140,19 @@ class SessionUtilities
                 if ($this->getSessionHandler() instanceof SessionHandler)
                 {
                     session_set_save_handler(
-                        array($this->getSessionHandler(), 'open'), 
-                        array($this->getSessionHandler(), 'close'), 
-                        array($this->getSessionHandler(), 'read'), 
-                        array($this->getSessionHandler(), 'write'), 
-                        array($this->getSessionHandler(), 'destroy'), 
-                        array($this->getSessionHandler(), 'garbage'));
+                        array($this->getSessionHandler(), 'open'), array($this->getSessionHandler(), 'close'),
+                        array($this->getSessionHandler(), 'read'), array($this->getSessionHandler(), 'write'),
+                        array($this->getSessionHandler(), 'destroy'), array($this->getSessionHandler(), 'gc')
+                    );
                 }
-                
+
                 $sessionKey = $this->getSecurityKey();
-                
+
                 if (is_null($sessionKey))
                 {
                     $sessionKey = 'dk_sid';
                 }
-                
+
                 session_name($sessionKey);
                 session_start();
             }
@@ -143,105 +167,12 @@ class SessionUtilities
         }
     }
 
-    /**
-     * @param string $variable
-     * @param mixed $value
-     */
-    public function register($variable, $value)
-    {
-        $_SESSION[$variable] = $value;
-    }
-
-    /**
-     * @param string $variable
-     * @param mixed $value
-     */
-    public function registerIfNotSet($variable, $value)
-    {
-        $sessionValue = $this->retrieve($variable);
-        
-        if (is_null($sessionValue))
-        {
-            $this->register($variable, $value);
-        }
-    }
-
-    /**
-     * @param string $variable
-     */
-    public function unregister($variable)
+    public function unregister(string $variable)
     {
         if (array_key_exists($variable, $_SESSION))
         {
             $_SESSION[$variable] = null;
             unset($GLOBALS[$variable]);
         }
-    }
-
-    public function clear()
-    {
-//        session_regenerate_id();
-        session_unset();
-        $_SESSION = [];
-    }
-
-    public function destroy()
-    {
-        session_unset();
-        $_SESSION = [];
-        session_destroy();
-    }
-
-    /**
-     * @param string $variable
-     *
-     * @return mixed
-     */
-    public static function retrieve($variable)
-    {
-        if (array_key_exists($variable, $_SESSION))
-        {
-            return $_SESSION[$variable];
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $variable
-     * @param mixed $default
-     *
-     * @return mixed
-     */
-    public function get($variable, $default = null)
-    {
-        if (array_key_exists($variable, $_SESSION))
-        {
-            return $_SESSION[$variable];
-        }
-        else
-        {
-            return $default;
-        }
-    }
-
-    /**
-     * @return int
-     *
-     * @deprecated
-     *
-     * @see getUserId
-     */
-    public static function get_user_id()
-    {
-        return self::getUserId();
-    }
-
-    /**
-     * @return int
-     */
-    public static function getUserId()
-    {
-        return self::retrieve('_uid');
     }
 }

@@ -1,8 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Exceptions;
 
-use Chamilo\Libraries\Platform\Security;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class represents an object not exists exception.
@@ -14,19 +13,11 @@ use Chamilo\Libraries\Translation\Translation;
 class ObjectNotExistException extends UserException
 {
 
-    /**
-     *
-     * @param string $objectTranslation
-     * @param integer $id
-     */
-    public function __construct($objectTranslation, $id = null)
+    public function __construct(string $objectTranslation, ?int $id = null)
     {
-        // Make sure that the ID is safe for printing
-        $security = new Security();
-        $id = $security->removeXSS($id, false);
-
         parent::__construct(
-            Translation::get('ObjectNotExist', array('OBJECT' => $objectTranslation, 'OBJECT_ID' => $id))
+            $this->getTranslator()->trans('ObjectNotExist', array('OBJECT' => $objectTranslation, 'OBJECT_ID' => $id),
+                StringUtilities::LIBRARIES)
         );
     }
 }

@@ -12,23 +12,13 @@ use Chamilo\Libraries\Hashing\HashingUtilities;
 class Sha512Utilities extends HashingUtilities
 {
 
-    /**
-     * @param string $filePath
-     *
-     * @return string
-     */
-    public function hashFile($filePath)
+    public function hashFile(string $filePath): string
     {
         return hash_file('sha512', $filePath);
     }
 
-    /**
-     * @param string $string
-     *
-     * @return string
-     */
-    public function hashString($string)
+    public function hashString(string $value): string
     {
-        return hash('sha512', $string);
+        return hash('sha512', $value);
     }
 }

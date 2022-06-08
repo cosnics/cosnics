@@ -14,15 +14,11 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
 {
 
     /**
-     * The exception loggers
-     *
      * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface[]
      */
-    protected $exceptionLoggers;
+    protected array $exceptionLoggers;
 
     /**
-     * ExceptionLoggerChain constructor.
-     *
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface[] $exceptionLoggers
      *
      * @throws \Exception
@@ -52,11 +48,6 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
         $this->exceptionLoggers = $exceptionLoggers;
     }
 
-    /**
-     * Adds an exception logger for javascript to the header
-     *
-     * @param \Chamilo\Libraries\Format\Structure\BaseHeader $header
-     */
     public function addJavascriptExceptionLogger(BaseHeader $header)
     {
         foreach ($this->exceptionLoggers as $exceptionLogger)
@@ -65,15 +56,9 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
         }
     }
 
-    /**
-     * Logs an exception
-     *
-     * @param \Exception $exception
-     * @param integer $exceptionLevel
-     * @param string $file
-     * @param integer $line
-     */
-    public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0)
+    public function logException(
+        Exception $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
+    )
     {
         foreach ($this->exceptionLoggers as $exceptionLogger)
         {

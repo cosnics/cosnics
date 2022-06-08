@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Platform\Session;
 
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Platform\Security;
 
 /**
@@ -11,10 +12,7 @@ use Chamilo\Libraries\Platform\Security;
 class Request
 {
 
-    /**
-     * @var \Chamilo\Libraries\Platform\Security
-     */
-    public static $security;
+    public static ?Security $security = null;
 
     /**
      * @param string $variable
@@ -49,20 +47,21 @@ class Request
         if (isset($_GET[$variable]))
         {
             // TODO: Add the necessary security filters if and where necessary
-            return self::get_security()->removeXSS($_GET[$variable]);
+            return self::getSecurity()->removeXSS($_GET[$variable]);
         }
 
         return $default;
     }
 
     /**
-     * @return \Chamilo\Libraries\Platform\Security
+     * @throws \Exception
      */
-    public static function get_security()
+    public static function getSecurity(): Security
     {
         if (self::$security === null)
         {
-            self::$security = new Security();
+            self::$security =
+                DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(Security::class);
         }
 
         return self::$security;
@@ -78,7 +77,7 @@ class Request
         if (isset($_POST[$variable]))
         {
             // TODO: Add the necessary security filters if and where necessary
-            return self::get_security()->removeXSS($_POST[$variable]);
+            return self::getSecurity()->removeXSS($_POST[$variable]);
         }
 
         return null;

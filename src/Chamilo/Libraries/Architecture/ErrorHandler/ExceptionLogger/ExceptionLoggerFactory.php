@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
 
 /**
@@ -13,32 +14,23 @@ use Exception;
 class ExceptionLoggerFactory
 {
 
-    /**
-     * The Chamilo Configuration
-     *
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    protected $configurationConsulter;
+    protected ConfigurationConsulter $configurationConsulter;
 
-    /**
-     * ExceptionLoggerFactory constructor.
-     *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     */
-    public function __construct(ConfigurationConsulter $configurationConsulter)
+    protected SessionUtilities $sessionUtilities;
+
+    public function __construct(ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities)
     {
         $this->configurationConsulter = $configurationConsulter;
+        $this->sessionUtilities = $sessionUtilities;
     }
 
     /**
-     * Creates the default exception logger (file)
-     *
-     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\FileExceptionLogger
      * @throws \Exception
      */
-    protected function createDefaultExceptionLogger()
+    protected function createDefaultExceptionLogger(): FileExceptionLogger
     {
-        $fileExceptionLoggerBuilder = new FileExceptionLoggerBuilder($this->configurationConsulter);
+        $fileExceptionLoggerBuilder =
+            new FileExceptionLoggerBuilder($this->getConfigurationConsulter(), $this->getSessionUtilities());
 
         return $fileExceptionLoggerBuilder->createExceptionLogger();
     }
@@ -46,10 +38,9 @@ class ExceptionLoggerFactory
     /**
      * Creates the exception logger based on the given configuration
      *
-     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      * @throws \Exception
      */
-    public function createExceptionLogger()
+    public function createExceptionLogger(): ExceptionLoggerInterface
     {
         $errorHandlingConfiguration = $this->configurationConsulter->getSetting(
             array('Chamilo\Configuration', 'error_handling')
@@ -72,7 +63,7 @@ class ExceptionLoggerFactory
      * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      * @throws \Exception
      */
-    protected function createExceptionLoggerByConfiguration($errorHandlingConfiguration = [])
+    protected function createExceptionLoggerByConfiguration(array $errorHandlingConfiguration = [])
     {
         $exceptionLoggers = [];
 
@@ -100,7 +91,8 @@ class ExceptionLoggerFactory
                     );
                 }
 
-                $exceptionLoggerBuilder = new $exceptionLoggerBuilderClass($this->configurationConsulter);
+                $exceptionLoggerBuilder =
+                    new $exceptionLoggerBuilderClass($this->getConfigurationConsulter(), $this->getSessionUtilities());
 
                 if (!$exceptionLoggerBuilder instanceof ExceptionLoggerBuilderInterface)
                 {
@@ -138,5 +130,15 @@ class ExceptionLoggerFactory
         }
 
         return new ExceptionLoggerChain($exceptionLoggers);
+    }
+
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
+    }
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return $this->sessionUtilities;
     }
 }

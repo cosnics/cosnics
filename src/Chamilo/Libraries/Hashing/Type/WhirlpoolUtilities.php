@@ -12,23 +12,13 @@ use Chamilo\Libraries\Hashing\HashingUtilities;
 class WhirlpoolUtilities extends HashingUtilities
 {
 
-    /**
-     * @param string $filePath
-     *
-     * @return string
-     */
-    public function hashFile($filePath)
+    public function hashFile(string $filePath): string
     {
         return hash_file('whirlpool', $filePath);
     }
 
-    /**
-     * @param string $string
-     *
-     * @return string
-     */
-    public function hashString($string)
+    public function hashString(string $value): string
     {
-        return hash('whirlpool', $string);
+        return hash('whirlpool', $value);
     }
 }

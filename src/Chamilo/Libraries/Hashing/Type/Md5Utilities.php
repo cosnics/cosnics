@@ -12,23 +12,13 @@ use Chamilo\Libraries\Hashing\HashingUtilities;
 class Md5Utilities extends HashingUtilities
 {
 
-    /**
-     * @param string $filePath
-     *
-     * @return false|string
-     */
-    public function hashFile($filePath)
+    public function hashFile(string $filePath): string
     {
         return md5_file($$filePath);
     }
 
-    /**
-     * @param string $string
-     *
-     * @return string
-     */
-    public function hashString($string)
+    public function hashString(string $value): string
     {
-        return md5($string);
+        return md5($value);
     }
 }

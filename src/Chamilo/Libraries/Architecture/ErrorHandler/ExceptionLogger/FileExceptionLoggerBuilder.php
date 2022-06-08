@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
  * Builds the FileExceptionLogger class
@@ -12,23 +13,20 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
  */
 class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 {
-    private $configurationConsulter;
+    protected ConfigurationConsulter $configurationConsulter;
 
-    /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     */
-    public function __construct(ConfigurationConsulter $configurationConsulter)
+    protected SessionUtilities $sessionUtilities;
+
+    public function __construct(ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities)
     {
         $this->configurationConsulter = $configurationConsulter;
+        $this->sessionUtilities = $sessionUtilities;
     }
 
     /**
-     * Creates the exception logger
-     *
-     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\FileExceptionLogger
      * @throws \Exception
      */
-    public function createExceptionLogger()
+    public function createExceptionLogger(): FileExceptionLogger
     {
 
         $configurablePathBuilder = new ConfigurablePathBuilder(
@@ -38,25 +36,14 @@ class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
         return new FileExceptionLogger($configurablePathBuilder->getLogPath());
     }
 
-    /**
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
     }
 
-    /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     *
-     * @return FileExceptionLoggerBuilder
-     */
-    public function setConfigurationConsulter(
-        ConfigurationConsulter $configurationConsulter
-    ): FileExceptionLoggerBuilder
+    public function getSessionUtilities(): SessionUtilities
     {
-        $this->configurationConsulter = $configurationConsulter;
-
-        return $this;
+        return $this->sessionUtilities;
     }
+
 }

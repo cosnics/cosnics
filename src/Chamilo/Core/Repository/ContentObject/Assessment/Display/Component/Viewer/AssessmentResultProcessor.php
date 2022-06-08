@@ -135,6 +135,14 @@ class AssessmentResultProcessor
     }
 
     /**
+     * @return \Chamilo\Libraries\Platform\Security
+     */
+    private function getSecurity()
+    {
+        return $this->assessment_viewer->getService(Security::class);
+    }
+
+    /**
      *
      * @return AssessmentViewerComponent
      */
@@ -206,7 +214,7 @@ class AssessmentResultProcessor
 
         foreach ($values as $key => $value)
         {
-            $value = Security::remove_XSS($value);
+            $value = $this->getSecurity()->removeXSS($value);
 
             if (!is_array($value))
             {

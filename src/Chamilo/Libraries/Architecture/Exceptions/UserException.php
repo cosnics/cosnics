@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Exceptions;
 
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Platform\Security;
 use Exception;
 
@@ -13,16 +14,19 @@ use Exception;
  */
 class UserException extends Exception
 {
-    /**
-     * UserException constructor.
-     *
-     * @param $message
-     */
+    use DependencyInjectionContainerTrait;
+
     public function __construct($message)
     {
-        $security = new Security();
-        $message = $security->removeXSS($message);
+        $this->initializeContainer();
+        parent::__construct($this->getSecurity()->removeXSS($message));
+    }
 
-        parent::__construct($message);
+    /**
+     * @return \Chamilo\Libraries\Platform\Security
+     */
+    protected function getSecurity(): Security
+    {
+        return $this->getService(Security::class);
     }
 }

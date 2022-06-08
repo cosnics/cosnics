@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Libraries\Format\Structure\BaseHeader;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
 use Sentry\Event;
@@ -18,19 +17,14 @@ use function Sentry\init;
 class SentryExceptionLogger implements ExceptionLoggerInterface
 {
 
-    /**
-     * @var string
-     */
-    protected $sentryConnectionString;
+    protected string $sentryConnectionString;
+
+    protected SessionUtilities $sessionUtilities;
 
     /**
-     * SentryExceptionLogger constructor.
-     *
-     * @param string $sentryConnectionString
-     *
      * @throws \Exception
      */
-    public function __construct($sentryConnectionString = '')
+    public function __construct(SessionUtilities $sessionUtilities, string $sentryConnectionString)
     {
         if (!class_exists('\Sentry\SentrySdk'))
         {
@@ -43,13 +37,14 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         }
 
         $this->sentryConnectionString = $sentryConnectionString;
+        $this->sessionUtilities = $sessionUtilities;
 
         init(
             [
                 'dsn' => $sentryConnectionString,
                 'traces_sample_rate' => 0.01,
-                'before_send' => function (Event $event): ?Event {
-                    $userId = SessionUtilities::getUserId();
+                'before_send' => function (Event $event) use ($sessionUtilities): ?Event {
+                    $userId = $sessionUtilities->getUserId();
 
                     $profilePage =
                         $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_NAME'] .
@@ -65,13 +60,11 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
 
     /**
      * Adds an exception logger for javascript to the header
-     *
-     * @param \Chamilo\Libraries\Format\Structure\BaseHeader $header
      */
     public function addJavascriptExceptionLogger(BaseHeader $header)
     {
         $matches = [];
-        preg_match("/https:\/\/(.*)@/", $this->sentryConnectionString, $matches);
+        preg_match("/https:\/\/(.*)@/", $this->getSentryConnectionString(), $matches);
 
         $sentryKey = $matches[1];
 
@@ -82,8 +75,10 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
                 crossorigin="anonymous"
             ></script>';
 
+        $userId = $this->getSessionUtilities()->getUserId();
+
         $profilePage = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_NAME'] .
-            '?application=Chamilo\\\\Core\\\\User&go=UserDetail&user_id=' . Session::getUserId();
+            '?application=Chamilo\\\\Core\\\\User&go=UserDetail&user_id=' . $userId;
 
         $html[] = '<script>';
 
@@ -91,7 +86,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         
         Sentry.onLoad(function() {
                 Sentry.setContext("user", {
-                    id: ' . Session::getUserId() . ',
+                    id: ' . $userId . ',
                     profile_page: "' . $profilePage . '"
                 })
             });
@@ -104,15 +99,19 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         $header->addHtmlHeader(implode(PHP_EOL, $html));
     }
 
-    /**
-     * Logs an exception
-     *
-     * @param \Exception $exception
-     * @param integer $exceptionLevel
-     * @param string $file
-     * @param integer $line
-     */
-    public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0)
+    public function getSentryConnectionString(): string
+    {
+        return $this->sentryConnectionString;
+    }
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return $this->sessionUtilities;
+    }
+
+    public function logException(
+        Exception $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
+    )
     {
         if ($exceptionLevel != self::EXCEPTION_LEVEL_FATAL_ERROR)
         {

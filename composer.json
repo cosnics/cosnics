@@ -22,6 +22,7 @@
         "ext-gd": "*",
         "ext-pdo": "*",
         "chamilo/pear-libraries": "dev-php8",
+        "composer/composer": "2.3.*",
         "doctrine/cache": "1.13.*",
         "doctrine/collections": "1.6.*",
         "doctrine/dbal": "3.3.*",
@@ -47,7 +48,6 @@
         "twig/twig": "3.*"
     },
     "require-dev": {
-        "composer/composer": "*@dev",
         "phpunit/phpunit": "9.5.*",
         "phpstan/phpstan": "1.5.*"
     },
