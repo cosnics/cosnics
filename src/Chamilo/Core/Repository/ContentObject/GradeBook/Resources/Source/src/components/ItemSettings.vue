@@ -36,30 +36,30 @@
                     <div style="margin-top: 20px">
                         <label style="font-weight: 500; color: #245c55;">Bij gewettigde afwezigheid:</label>
                         <div>
-                            <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model="column.authPresenceEndResult">
+                            <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model.number="column.authPresenceEndResult">
                             <label for="gafw-option1">Score niet meetellen voor het eindresultaat</label>
                         </div>
                         <div>
-                            <input type="radio" name="gafw-option" id="gafw-option2" value="1" v-model="column.authPresenceEndResult">
+                            <input type="radio" name="gafw-option" id="gafw-option2" value="1" v-model.number="column.authPresenceEndResult">
                             <label for="gafw-option2">Maximale score (100%) meetellen voor het eindresultaat</label>
                         </div>
                         <div>
-                            <input type="radio" name="gafw-option" id="gafw-option3" value="2" v-model="column.authPresenceEndResult">
+                            <input type="radio" name="gafw-option" id="gafw-option3" value="2" v-model.number="column.authPresenceEndResult">
                             <label for="gafw-option3">Minimale score (0%) meetellen voor het eindresultaat</label>
                         </div>
                     </div>
                     <div style="margin-top: 20px">
                         <label style="font-weight: 500; color: #245c55;">Bij ontbreken van score (zonder gewettigde afwezigheid):</label>
                         <div>
-                            <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model="column.unauthPresenceEndResult">
+                            <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult">
                             <label for="nogafw-option1">Score niet meetellen voor het eindresultaat</label>
                         </div>
                         <div>
-                            <input type="radio" name="nogafw-option" id="nogafw-option2" value="1" v-model="column.unauthPresenceEndResult">
+                            <input type="radio" name="nogafw-option" id="nogafw-option2" value="1" v-model.number="column.unauthPresenceEndResult">
                             <label for="nogafw-option2">Maximale score (100%) meetellen voor het eindresultaat</label>
                         </div>
                         <div>
-                            <input type="radio" name="nogafw-option" id="nogafw-option3" value="2" v-model="column.unauthPresenceEndResult">
+                            <input type="radio" name="nogafw-option" id="nogafw-option3" value="2" v-model.number="column.unauthPresenceEndResult">
                             <label for="nogafw-option3">Minimale score (0%) meetellen voor het eindresultaat</label>
                         </div>
                     </div>

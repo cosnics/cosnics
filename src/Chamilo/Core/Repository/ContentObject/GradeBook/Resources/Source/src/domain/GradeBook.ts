@@ -46,6 +46,10 @@ const AUTH_PRESENCE_END_RESULT_DEFAULT = 0;
 const UNAUTH_PRESENCE_END_RESULT_DEFAULT = 2;
 
 export default class GradeBook {
+    static readonly NO_SCORE = 0;
+    static readonly MAX_SCORE = 1;
+    static readonly MIN_SCORE = 2;
+
     public gradeItems: GradeItem[] = [];
     public gradeColumns: GradeColumn[] = [];
     public categories: Category[] = [];
@@ -178,17 +182,17 @@ export default class GradeBook {
             if (typeof result === 'number') {
                 maxWeight += weight;
             } else if (result === 'gafw') {
-                if (item.authPresenceEndResult > 0) {
+                if (item.authPresenceEndResult !== GradeBook.NO_SCORE) {
                     maxWeight += weight;
-                    if (item.authPresenceEndResult === 1) {
-                        endResult += (weight * 0.01);
+                    if (item.authPresenceEndResult === GradeBook.MAX_SCORE) {
+                        endResult += weight;
                     }
                 }
             } else if (result === 'afw') {
-                if (item.unauthPresenceEndResult > 0) {
+                if (item.unauthPresenceEndResult !== GradeBook.NO_SCORE) {
                     maxWeight += weight;
-                    if (item.unauthPresenceEndResult === 1) {
-                        endResult += (weight * 0.01);
+                    if (item.unauthPresenceEndResult === GradeBook.MAX_SCORE) {
+                        endResult += weight;
                     }
                 }
             }
@@ -286,6 +290,22 @@ export default class GradeBook {
 
     createNewStandaloneScoreId() {
         return this.createNewIdWithPrefix('sc');
+    }
+
+    createNewScore() {
+        const id = this.createNewStandaloneScoreId();
+        this.gradeColumns.push({id, name: 'Score', type: 'standalone', weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2});
+        this.nullCategory.itemIds.push(id);
+        this.resultsData.forEach(d => {
+            d.results[id] = {value: null, ref: id, overwritten: true};
+        });
+    }
+
+    createNewCategory() {
+        const id = Math.max.apply(null, this.categories.map(cat => cat.id)) + 1;
+        const newCategory = { id, name: 'Categorie', color: '#92eded', itemIds: [] };
+        this.categories.push(newCategory);
+        return newCategory;
     }
 
     addSubItem(item: GradeItem, itemId: ItemId): ItemId|null {

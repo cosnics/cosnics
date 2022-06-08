@@ -47,19 +47,12 @@
         }
 
         createNewCategory() {
-            const id = Math.max.apply(null, this.gradeBook.categories.map(cat => cat.id)) + 1;
-            const newCategory = { id, name: 'Categorie', color: '#92eded', itemIds: [] };
-            this.gradeBook.categories.push(newCategory);
-            this.categorySettings = id;
+            const category = this.gradeBook.createNewCategory();
+            this.categorySettings = category.id;
         }
 
         createNewScore() {
-            const id = this.gradeBook.createNewStandaloneScoreId();
-            this.gradeBook.gradeColumns.push({id, name: 'Score', type: 'standalone', weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2});
-            this.gradeBook.nullCategory.itemIds.push(id);
-            this.gradeBook.resultsData.forEach(d => {
-                d.results[id] = {value: null, ref: id, overwritten: true};
-            });
+            this.gradeBook.createNewScore();
         }
 
         closeSelectedCategory() {
