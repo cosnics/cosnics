@@ -14,8 +14,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -147,12 +147,12 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
         $type = $this->getType();
 
-        $tabs = new DynamicVisualTabsRenderer('browser');
+        $tabs = new LinkTabsRenderer('browser');
 
         if ($this->getUser()->is_platform_admin())
         {
-            $tabs->add_tab(
-                new DynamicVisualTab(
+            $tabs->addTab(
+                new LinkTab(
                     self::TYPE_ALL, $translator->trans('AllPublications', [], self::package()),
                     new FontAwesomeGlyph('globe', array('fa-lg'), null, 'fas'),
                     $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_ALL)), $type == self::TYPE_ALL
@@ -160,16 +160,16 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             );
         }
 
-        $tabs->add_tab(
-            new DynamicVisualTab(
+        $tabs->addTab(
+            new LinkTab(
                 self::TYPE_FROM_ME, $translator->trans('PublishedForMe', [], self::package()),
                 new FontAwesomeGlyph('share-square', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_FOR_ME)), $type == self::TYPE_FOR_ME
             )
         );
 
-        $tabs->add_tab(
-            new DynamicVisualTab(
+        $tabs->addTab(
+            new LinkTab(
                 self::TYPE_FROM_ME, $translator->trans('MyPublications', [], self::package()),
                 new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_FROM_ME)), $type == self::TYPE_FROM_ME

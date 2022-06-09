@@ -16,8 +16,8 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -201,7 +201,7 @@ class Basic extends Html
 
             if ($this->get_template()->count_blocks() > 1)
             {
-                $tabs = new DynamicVisualTabsRenderer(
+                $tabs = new LinkTabsRenderer(
                     ClassnameUtilities::getInstance()->getClassnameFromObject($this->get_template(), true),
                     $rendered_block
                 );
@@ -229,8 +229,8 @@ class Basic extends Html
                         IdentGlyph::SIZE_SMALL, []
                     );
 
-                    $tabs->add_tab(
-                        new DynamicVisualTab(
+                    $tabs->addTab(
+                        new LinkTab(
                             $key, $title, $glyph, $this->get_context()->get_url($block_parameters), $is_current_block
                         )
                     );

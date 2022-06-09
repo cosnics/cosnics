@@ -7,8 +7,8 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Form\FormTab;
+use Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
@@ -58,13 +58,13 @@ class SettingsForm extends FormValidator
      */
     private function build_form()
     {
-        $this->tabs_generator = new DynamicFormTabsRenderer($this->getAttribute('name'), $this);
+        $this->tabs_generator = new FormTabsRenderer($this->getAttribute('name'), $this);
         $has_settings = $this->external_repository->has_settings();
         $is_platform = $this->configurer->get_user()->is_platform_admin();
 
         if ($has_settings)
         {
-            $tab_admin = new DynamicFormTab(
+            $tab_admin = new FormTab(
                 self::TAB_ADMIN,
                 Translation::get(
                     (string) StringUtilities::getInstance()->createString(self::TAB_ADMIN)->upperCamelize() . 'Settings'
@@ -73,7 +73,7 @@ class SettingsForm extends FormValidator
                 'build_configure_form'
             );
 
-            $this->tabs_generator->add_tab($tab_admin);
+            $this->tabs_generator->addTab($tab_admin);
         }
 
         $this->tabs_generator->render();

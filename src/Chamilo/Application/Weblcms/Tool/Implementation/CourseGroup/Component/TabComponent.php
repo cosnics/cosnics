@@ -17,8 +17,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -266,12 +266,12 @@ abstract class TabComponent extends Manager
     {
         $translator = Translation::getInstance();
 
-        $tabs = new DynamicVisualTabsRenderer('course_groups', $this->renderTabContent());
+        $tabs = new LinkTabsRenderer('course_groups', $this->renderTabContent());
 
         if (!$this->isCurrentGroupRoot())
         {
-            $tabs->add_tab(
-                new DynamicVisualTab(
+            $tabs->addTab(
+                new LinkTab(
                     'view_details', $this->getCurrentGroupName(), new FontAwesomeGlyph('info-circle'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS)),
                     get_class($this) == DetailsComponent::class
@@ -279,8 +279,8 @@ abstract class TabComponent extends Manager
             );
         }
 
-        $tabs->add_tab(
-            new DynamicVisualTab(
+        $tabs->addTab(
+            new LinkTab(
                 'view_details', $translator->getTranslation('BrowseChildren', null, Manager::context()),
                 new FontAwesomeGlyph('folder'), $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
                 get_class($this) == BrowserComponent::class
@@ -289,8 +289,8 @@ abstract class TabComponent extends Manager
 
         if (!$this->isCurrentGroupRoot() && $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
-            $tabs->add_tab(
-                new DynamicVisualTab(
+            $tabs->addTab(
+                new LinkTab(
                     'view_details', $translator->getTranslation('EditGroup', null, Manager::context()),
                     new FontAwesomeGlyph('pencil-alt'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_EDIT_COURSE_GROUP)),
@@ -298,8 +298,8 @@ abstract class TabComponent extends Manager
                 )
             );
 
-            $tabs->add_tab(
-                new DynamicVisualTab(
+            $tabs->addTab(
+                new LinkTab(
                     'view_details', $translator->getTranslation('ManageSubscriptions', null, Manager::context()),
                     new FontAwesomeGlyph('plus-circle'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_MANAGE_SUBSCRIPTIONS)),

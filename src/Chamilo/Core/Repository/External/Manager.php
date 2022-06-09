@@ -21,8 +21,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -36,39 +36,39 @@ abstract class Manager extends Application implements NoContextComponent
 {
 
     // Actions
-    const ACTION_BROWSE_EXTERNAL_REPOSITORY = 'Browser';
-    const ACTION_CONFIGURE_EXTERNAL_REPOSITORY = 'Configurer';
-    const ACTION_DELETE_EXTERNAL_REPOSITORY = 'Deleter';
-    const ACTION_DOWNLOAD_EXTERNAL_REPOSITORY = 'Downloader';
-    const ACTION_EDIT_EXTERNAL_REPOSITORY = 'Editor';
-    const ACTION_EXPORT_EXTERNAL_REPOSITORY = 'Exporter';
-    const ACTION_IMPORT_EXTERNAL_REPOSITORY = 'Importer';
-    const ACTION_NEW_FOLDER_EXTERNAL_REPOSITORY = 'NewFolder';
-    const ACTION_SELECT_EXTERNAL_REPOSITORY = 'Selecter';
-    const ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY = 'ExternalSyncer';
-    const ACTION_SYNCHRONIZE_INTERNAL_REPOSITORY = 'InternalSyncer';
-    const ACTION_UPLOAD_EXTERNAL_REPOSITORY = 'Uploader';
-    const ACTION_VIEW_EXTERNAL_REPOSITORY = 'Viewer';
+    public const ACTION_BROWSE_EXTERNAL_REPOSITORY = 'Browser';
+    public const ACTION_CONFIGURE_EXTERNAL_REPOSITORY = 'Configurer';
+    public const ACTION_DELETE_EXTERNAL_REPOSITORY = 'Deleter';
+    public const ACTION_DOWNLOAD_EXTERNAL_REPOSITORY = 'Downloader';
+    public const ACTION_EDIT_EXTERNAL_REPOSITORY = 'Editor';
+    public const ACTION_EXPORT_EXTERNAL_REPOSITORY = 'Exporter';
+    public const ACTION_IMPORT_EXTERNAL_REPOSITORY = 'Importer';
+    public const ACTION_NEW_FOLDER_EXTERNAL_REPOSITORY = 'NewFolder';
+    public const ACTION_SELECT_EXTERNAL_REPOSITORY = 'Selecter';
+    public const ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY = 'ExternalSyncer';
+    public const ACTION_SYNCHRONIZE_INTERNAL_REPOSITORY = 'InternalSyncer';
+    public const ACTION_UPLOAD_EXTERNAL_REPOSITORY = 'Uploader';
+    public const ACTION_VIEW_EXTERNAL_REPOSITORY = 'Viewer';
 
     // Default action
 
-    const DEFAULT_ACTION = self::ACTION_BROWSE_EXTERNAL_REPOSITORY;
+    public const DEFAULT_ACTION = self::ACTION_BROWSE_EXTERNAL_REPOSITORY;
 
     // Parameters
 
-    const PARAM_EMBEDDED = 'embedded';
+    public const PARAM_EMBEDDED = 'embedded';
 
-    const PARAM_EXTERNAL_REPOSITORY = 'external_instance';
+    public const PARAM_EXTERNAL_REPOSITORY = 'external_instance';
 
-    const PARAM_EXTERNAL_REPOSITORY_ID = 'external_repository_id';
+    public const PARAM_EXTERNAL_REPOSITORY_ID = 'external_repository_id';
 
-    const PARAM_FOLDER = 'folder';
+    public const PARAM_FOLDER = 'folder';
 
-    const PARAM_QUERY = 'query';
+    public const PARAM_QUERY = 'query';
 
-    const PARAM_RENDERER = 'renderer';
+    public const PARAM_RENDERER = 'renderer';
 
-    const PARAM_USER_QUOTUM = 'default_user_quotum';
+    public const PARAM_USER_QUOTUM = 'default_user_quotum';
 
     /**
      *
@@ -76,6 +76,9 @@ abstract class Manager extends Application implements NoContextComponent
      */
     private $external_repository;
 
+    /**
+     * @var LinkTabsRenderer
+     */
     private $tabs;
 
     /**
@@ -132,7 +135,7 @@ abstract class Manager extends Application implements NoContextComponent
      *
      * @param $id string
      *
-     * @return boolean
+     * @return bool
      */
     public function delete_external_repository_object($id)
     {
@@ -143,7 +146,7 @@ abstract class Manager extends Application implements NoContextComponent
      *
      * @param $type string
      *
-     * @return boolean
+     * @return bool
      */
     public static function exists($type)
     {
@@ -168,7 +171,7 @@ abstract class Manager extends Application implements NoContextComponent
      *
      * @param $id string
      *
-     * @return boolean
+     * @return bool
      */
     public function export_external_repository_object($id)
     {
@@ -500,7 +503,7 @@ abstract class Manager extends Application implements NoContextComponent
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function is_stand_alone()
     {
@@ -511,7 +514,6 @@ abstract class Manager extends Application implements NoContextComponent
     {
         $html = [];
 
-        $html[] = $this->tabs->body_footer();
         $html[] = $this->tabs->footer();
         $html[] = parent::render_footer();
 
@@ -543,7 +545,7 @@ abstract class Manager extends Application implements NoContextComponent
             $external_repository_actions[] = self::ACTION_VIEW_EXTERNAL_REPOSITORY;
         }
 
-        $this->tabs = new DynamicVisualTabsRenderer(
+        $this->tabs = new LinkTabsRenderer(
             ClassnameUtilities::getInstance()->getClassnameFromObject($this, true)
         );
 
@@ -599,13 +601,12 @@ abstract class Manager extends Application implements NoContextComponent
                     break;
             }
 
-            $this->tabs->add_tab(
-                new DynamicVisualTab($external_repository_action, $label, $glyph, $link, $selected)
+            $this->tabs->addTab(
+                new LinkTab($external_repository_action, $label, $glyph, $link, $selected)
             );
         }
 
         $html[] = $this->tabs->header();
-        $html[] = $this->tabs->body_header();
 
         return implode(PHP_EOL, $html);
     }
@@ -662,7 +663,7 @@ abstract class Manager extends Application implements NoContextComponent
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     abstract public function validate_settings($external_repository);
 }

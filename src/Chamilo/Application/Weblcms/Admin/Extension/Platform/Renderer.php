@@ -9,8 +9,8 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Renderer\CourseList\CourseListRenderer;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -100,7 +100,7 @@ class Renderer extends CourseListRenderer
     protected function display_course_types()
     {
         $renderer_name = ClassnameUtilities::getInstance()->getClassnameFromObject($this, true);
-        $course_tabs = new DynamicVisualTabsRenderer($renderer_name);
+        $course_tabs = new LinkTabsRenderer($renderer_name);
 
         $selected_course_type_id = $this->get_selected_course_type_id();
 
@@ -108,24 +108,24 @@ class Renderer extends CourseListRenderer
 
         foreach ($this->course_types as $course_type)
         {
-            $created_tabs[$course_type[CourseType::PROPERTY_ID]] = new DynamicVisualTab(
+            $created_tabs[$course_type[CourseType::PROPERTY_ID]] = new LinkTab(
                 $course_type[CourseType::PROPERTY_ID], $course_type[CourseType::PROPERTY_TITLE], null,
                 $this->get_course_type_url($course_type[CourseType::PROPERTY_ID])
             );
 
             if ($this->count_courses_for_course_type($course_type[CourseType::PROPERTY_ID]) > 0)
             {
-                $course_tabs->add_tab($created_tabs[$course_type[CourseType::PROPERTY_ID]]);
+                $course_tabs->addTab($created_tabs[$course_type[CourseType::PROPERTY_ID]]);
             }
         }
 
         // Add an extra tab for the no course type
         $created_tabs[0] =
-            new DynamicVisualTab(0, Translation::get('NoCourseType'), null, $this->get_course_type_url(0));
+            new LinkTab(0, Translation::get('NoCourseType'), null, $this->get_course_type_url(0));
 
         if ($this->count_courses_for_course_type(0) > 0)
         {
-            $course_tabs->add_tab($created_tabs[0]);
+            $course_tabs->addTab($created_tabs[0]);
         }
 
         if ($course_tabs->size() > 0)

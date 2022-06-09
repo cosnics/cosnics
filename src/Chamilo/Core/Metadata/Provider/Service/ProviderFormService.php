@@ -11,8 +11,8 @@ use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Form\FormTab;
+use Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -78,12 +78,12 @@ class ProviderFormService
     public function addElements(DataClassEntity $entity, FormValidator $formValidator)
     {
         $availableSchemas = $this->getAvailableSchemas($entity);
-        $tabs_generator = new DynamicFormTabsRenderer('ProviderLinks', $formValidator);
+        $tabs_generator = new FormTabsRenderer('ProviderLinks', $formValidator);
 
         foreach ($availableSchemas as $availableSchema)
         {
-            $tabs_generator->add_tab(
-                new DynamicFormTab(
+            $tabs_generator->addTab(
+                new FormTab(
                     'schema-' . $availableSchema->get_id(), $availableSchema->get_name(),
                     new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas'),
                     array($this, 'addElementsForSchema'), array($entity, $formValidator, $availableSchema)

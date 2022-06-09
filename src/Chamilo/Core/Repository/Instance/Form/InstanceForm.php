@@ -12,8 +12,8 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Form\FormTab;
+use Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -65,9 +65,9 @@ class InstanceForm extends FormValidator
         $external_instance = $this->external_instance;
         $configuration = $this->configuration;
 
-        $tabs_generator = new DynamicFormTabsRenderer($this->getAttribute('name'), $this);
-        $tabs_generator->add_tab(
-            new DynamicFormTab(
+        $tabs_generator = new FormTabsRenderer($this->getAttribute('name'), $this);
+        $tabs_generator->addTab(
+            new FormTab(
                 'general', 'General', new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas'),
                 'build_general_form'
             )
@@ -75,8 +75,8 @@ class InstanceForm extends FormValidator
 
         if (count($configuration['settings']) > 0)
         {
-            $tabs_generator->add_tab(
-                new DynamicFormTab(
+            $tabs_generator->addTab(
+                new FormTab(
                     'settings', 'Settings', new FontAwesomeGlyph('cog', array('fa-lg'), null, 'fas'),
                     'build_settings_form'
                 )

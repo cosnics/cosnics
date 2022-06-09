@@ -287,7 +287,7 @@ class ToolbarItem
      *
      * @return boolean
      */
-    public function needs_confirmation()
+    public function needsConfirmation()
     {
         if ($this->get_confirmation() === false)
         {

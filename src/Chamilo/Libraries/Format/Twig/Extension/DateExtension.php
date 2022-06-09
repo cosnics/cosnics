@@ -16,35 +16,25 @@ use Twig\TwigFilter;
  */
 class DateExtension extends AbstractExtension
 {
-    /**
-     * @param int $timestamp
-     * @param null $dateFormat
-     *
-     * @return string
-     */
-    public function formatDate($timestamp, $dateFormat = null)
+
+    public function formatDate(int $timestamp, ?string $dateFormat = null): string
     {
         return DatetimeUtilities::getInstance()->formatLocaleDate($dateFormat, $timestamp);
     }
 
-    /**
-     * @param int $timestamp
-     *
-     * @return string
-     */
-    public function formatLongDate($timestamp)
+    public function formatLongDate(int $timestamp): string
     {
         return $this->formatDate($timestamp, Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES));
     }
 
     /**
-     * @return array|TwigFilter[]
+     * @return TwigFilter[]
      */
     public function getFilters()
     {
-        return array(
-            new TwigFilter('formatDate', array($this, 'formatDate')),
-            new TwigFilter('formatLongDate', array($this, 'formatLongDate'))
-        );
+        return [
+            new TwigFilter('formatDate', [$this, 'formatDate']),
+            new TwigFilter('formatLongDate', [$this, 'formatLongDate'])
+        ];
     }
 }

@@ -12,8 +12,8 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -86,7 +86,7 @@ class UserSettingsComponent extends ProfileComponent
      */
     public function getContent()
     {
-        $tabs = new DynamicVisualTabsRenderer(
+        $tabs = new LinkTabsRenderer(
             ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true), $this->form->toHtml()
         );
 
@@ -108,12 +108,12 @@ class UserSettingsComponent extends ProfileComponent
                     )
                 );
                 $is_current_tab = ($this->context === $setting_context);
-                $tab = new DynamicVisualTab(
+                $tab = new LinkTab(
                     $setting_context, Translation::get('TypeName', null, $setting_context), new NamespaceIdentGlyph(
                     $setting_context, true, false, false, IdentGlyph::SIZE_SMALL, []
                 ), $package_url, $is_current_tab
                 );
-                $tabs->add_tab($tab);
+                $tabs->addTab($tab);
             }
         }
 

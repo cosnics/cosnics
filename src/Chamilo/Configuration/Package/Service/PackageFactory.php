@@ -27,7 +27,7 @@ class PackageFactory
 
     /**
      *
-     * @var \Chamilo\Libraries\Platform\Translation
+     * @var \Chamilo\Libraries\Translation\Translation
      */
     private $translation;
 
@@ -62,7 +62,7 @@ class PackageFactory
 
     /**
      *
-     * @return \Chamilo\Libraries\Platform\Translation
+     * @return \Chamilo\Libraries\Translation\Translation
      */
     public function getTranslation()
     {

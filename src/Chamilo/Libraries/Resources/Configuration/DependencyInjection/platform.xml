@@ -13,13 +13,6 @@
             <argument key="$securityKey">%chamilo.configuration.general.security_key%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Platform\Translation"
-                 class="Chamilo\Libraries\Translation\Translation">
-            <deprecated>The "%service_id%" service is deprecated</deprecated>
-            <factory class="Chamilo\Libraries\Translation\Translation"
-                     method="getInstance"/>
-        </service>
-
         <service id="Chamilo\Libraries\Translation\Translation">
             <factory class="Chamilo\Libraries\Translation\Translation"
                      method="getInstance"/>

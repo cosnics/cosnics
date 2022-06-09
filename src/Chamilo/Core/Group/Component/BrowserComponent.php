@@ -20,8 +20,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -366,35 +366,35 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_user_html()
     {
         $renderer_name = ClassnameUtilities::getInstance()->getClassnameFromObject($this, true);
-        $tabs = new DynamicTabsRenderer($renderer_name);
+        $tabs = new TabsRenderer($renderer_name);
         $translator = $this->getTranslator();
 
         // Subgroups table tab
         $table = new GroupTable($this);
         $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
-        $tabs->add_tab(
-            new DynamicContentTab(
-                self::TAB_SUBGROUPS, $translator->trans('Subgroups'), new FontAwesomeGlyph(
+        $tabs->addTab(
+            new ContentTab(
+                self::TAB_SUBGROUPS, $translator->trans('Subgroups'), $table->render(), new FontAwesomeGlyph(
                 'users', array('fa-lg'), null, 'fas'
-            ), $table->render()
+            )
             )
         );
 
         $table = new GroupRelUserTable($this);
         $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
-        $tabs->add_tab(
-            new DynamicContentTab(
-                self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::context()),
-                new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $table->render()
+        $tabs->addTab(
+            new ContentTab(
+                self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::context()), $table->render(),
+                new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas')
             )
         );
 
         // Group info tab
-        $tabs->add_tab(
-            new DynamicContentTab(
-                self::TAB_DETAILS, $translator->trans('Details'), new FontAwesomeGlyph(
+        $tabs->addTab(
+            new ContentTab(
+                self::TAB_DETAILS, $translator->trans('Details'), $this->get_group_info(), new FontAwesomeGlyph(
                 'info-circle', array('fa-lg'), null, 'fas'
-            ), $this->get_group_info()
+            )
             )
         );
 

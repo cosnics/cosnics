@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Format\Utilities;
 use Composer\Package\BasePackage;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Utilities
  */
 class ArrayLoader extends \Composer\Package\Loader\ArrayLoader

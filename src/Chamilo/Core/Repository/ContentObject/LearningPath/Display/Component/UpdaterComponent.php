@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -94,7 +94,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                 if (isset($addMetadataSchema))
                 {
                     $params[self::PARAM_ACTION] = self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM;
-                    $params[DynamicTabsRenderer::PARAM_SELECTED_TAB] = array(
+                    $params[TabsRenderer::PARAM_SELECTED_TAB] = array(
                         Manager::TABS_CONTENT_OBJECT => $form->getSelectedTabIdentifier()
                     );
 

@@ -35,7 +35,7 @@ class InstallerComponent extends Manager implements DelegateComponent
         $html = [];
 
         $html[] = $this->render_header();
-        $html[] = $installer->get_result(true);
+        $html[] = $installer->getResult(true);
 
         $toolbar = new Toolbar();
         $toolbar->add_item(

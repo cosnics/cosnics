@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -117,7 +117,7 @@ class UserViewMenu extends HtmlMenu
         $userview['url'] = $this->application->get_url(
             array(
                 \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_USER_VIEW,
-                DynamicTabsRenderer::PARAM_SELECTED_TAB => array(
+                TabsRenderer::PARAM_SELECTED_TAB => array(
                     \Chamilo\Core\Repository\Manager::TABS_FILTER => \Chamilo\Core\Repository\Manager::TAB_USERVIEW
                 ), Manager::PARAM_ACTION => Manager::ACTION_BROWSE
             ), array(\Chamilo\Core\Repository\Manager::PARAM_CATEGORY_ID)

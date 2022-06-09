@@ -58,7 +58,6 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
             $exclude = $this->detemine_excluded_content_object_ids($this->get_current_content_object()->get_id());
 
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
-            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
 
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::context(), $applicationConfiguration

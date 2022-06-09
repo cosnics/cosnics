@@ -22,7 +22,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -134,7 +134,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                         $parameters = [];
                         $parameters[Application::PARAM_ACTION] = self::ACTION_EDIT_CONTENT_OBJECTS;
                         $parameters[self::PARAM_CONTENT_OBJECT_ID] = $contentObject->get_id();
-                        $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = array(
+                        $parameters[TabsRenderer::PARAM_SELECTED_TAB] = array(
                             self::TABS_CONTENT_OBJECT => $selectedTab
                         );
 

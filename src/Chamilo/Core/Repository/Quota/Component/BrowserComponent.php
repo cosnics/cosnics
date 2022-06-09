@@ -16,8 +16,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\PropertiesTable;
-use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -70,12 +70,12 @@ class BrowserComponent extends Manager implements TableSupport
 
         if ($user_requests > 0 || $rightsService->canUserViewQuotaRequests($this->getUser()))
         {
-            $tabs = new DynamicTabsRenderer('quota');
+            $tabs = new TabsRenderer('quota');
 
-            $tabs->add_tab(
-                new DynamicContentTab(
-                    'personal', Translation::get('Personal'),
-                    new FontAwesomeGlyph('comments', array('fa-lg'), null, 'fas'), $this->getUserQuota()
+            $tabs->addTab(
+                new ContentTab(
+                    'personal', Translation::get('Personal'), $this->getUserQuota(),
+                    new FontAwesomeGlyph('comments', array('fa-lg'), null, 'fas')
                 )
             );
 
@@ -85,10 +85,10 @@ class BrowserComponent extends Manager implements TableSupport
                 {
                     $this->table_type = RequestTable::TYPE_PERSONAL;
                     $table = new RequestTable($this, $this->getTranslator(), $rightsService);
-                    $tabs->add_tab(
-                        new DynamicContentTab(
-                            'personal_request', Translation::get('YourRequests'),
-                            new FontAwesomeGlyph('inbox', array('fa-lg'), null, 'fas'), $table->as_html()
+                    $tabs->addTab(
+                        new ContentTab(
+                            'personal_request', Translation::get('YourRequests'), $table->as_html(),
+                            new FontAwesomeGlyph('inbox', array('fa-lg'), null, 'fas')
                         )
                     );
                 }
@@ -129,11 +129,11 @@ class BrowserComponent extends Manager implements TableSupport
                     );
                     $platform_quota[] = '<div style="clear: both;">&nbsp;</div>';
 
-                    $tabs->add_tab(
-                        new DynamicContentTab(
+                    $tabs->addTab(
+                        new ContentTab(
                             'platform', Translation::get('Platform'),
-                            new FontAwesomeGlyph('tools', array('fa-lg'), null, 'fas'),
-                            implode(PHP_EOL, $platform_quota)
+                            implode(PHP_EOL, $platform_quota),
+                            new FontAwesomeGlyph('tools', array('fa-lg'), null, 'fas')
                         )
                     );
                 }
@@ -174,10 +174,10 @@ class BrowserComponent extends Manager implements TableSupport
                     {
                         $this->table_type = RequestTable::TYPE_PENDING;
                         $table = new RequestTable($this, $this->getTranslator(), $rightsService);
-                        $tabs->add_tab(
-                            new DynamicContentTab(
-                                RequestTable::TYPE_PENDING, Translation::get('PendingRequests'),
-                                new FontAwesomeGlyph('hourglass-half', array('fa-lg'), null, 'fas'), $table->as_html()
+                        $tabs->addTab(
+                            new ContentTab(
+                                RequestTable::TYPE_PENDING, Translation::get('PendingRequests'), $table->as_html(),
+                                new FontAwesomeGlyph('hourglass-half', array('fa-lg'), null, 'fas')
                             )
                         );
                     }
@@ -199,10 +199,10 @@ class BrowserComponent extends Manager implements TableSupport
                     {
                         $this->table_type = RequestTable::TYPE_GRANTED;
                         $table = new RequestTable($this, $this->getTranslator(), $rightsService);
-                        $tabs->add_tab(
-                            new DynamicContentTab(
-                                RequestTable::TYPE_GRANTED, Translation::get('GrantedRequests'),
-                                new FontAwesomeGlyph('check-square', array('fa-lg'), null, 'fas'), $table->as_html()
+                        $tabs->addTab(
+                            new ContentTab(
+                                RequestTable::TYPE_GRANTED, Translation::get('GrantedRequests'), $table->as_html(),
+                                new FontAwesomeGlyph('check-square', array('fa-lg'), null, 'fas')
                             )
                         );
                     }
@@ -224,10 +224,10 @@ class BrowserComponent extends Manager implements TableSupport
                     {
                         $this->table_type = RequestTable::TYPE_DENIED;
                         $table = new RequestTable($this, $this->getTranslator(), $rightsService);
-                        $tabs->add_tab(
-                            new DynamicContentTab(
-                                RequestTable::TYPE_DENIED, Translation::get('DeniedRequests'),
-                                new FontAwesomeGlyph('times-circle', array('fa-lg'), null, 'fas'), $table->as_html()
+                        $tabs->addTab(
+                            new ContentTab(
+                                RequestTable::TYPE_DENIED, Translation::get('DeniedRequests'), $table->as_html(),
+                                new FontAwesomeGlyph('times-circle', array('fa-lg'), null, 'fas')
                             )
                         );
                     }

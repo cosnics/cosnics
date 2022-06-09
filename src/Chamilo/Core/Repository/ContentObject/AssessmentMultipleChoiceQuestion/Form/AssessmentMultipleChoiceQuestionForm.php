@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
+use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -419,8 +419,8 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
     public function addHintTab()
     {
-        $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab(
+        $this->getTabsGenerator()->addTab(
+            new FormTab(
                 'add-hint',
                 Translation::get('AddHint'),
                 new FontAwesomeGlyph('magic', array('fa-sm')),

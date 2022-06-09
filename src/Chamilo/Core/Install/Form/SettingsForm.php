@@ -13,8 +13,8 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Form\FormTab;
+use Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
@@ -37,7 +37,7 @@ class SettingsForm extends FormValidator
 
     /**
      *
-     * @var DynamicFormTabsRenderer
+     * @var FormTabsRenderer
      */
     private $tabsGenerator;
 
@@ -138,7 +138,7 @@ class SettingsForm extends FormValidator
         $this->addGroup($selfRegistration, 'self_reg', Translation::get("AllowSelfReg"), '&nbsp;', false);
 
         $this->addElement(
-            'select', 'hashing_algorithm', Translation::get('HashingAlgorithm'), HashingUtilities::get_available_types()
+            'select', 'hashing_algorithm', Translation::get('HashingAlgorithm'), HashingUtilities::getAvailableTypes()
         );
 
         $this->addElement('category', Translation::get('Storage'));
@@ -200,14 +200,14 @@ class SettingsForm extends FormValidator
 
     protected function buildForm()
     {
-        $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab('database', Translation::get('DatabaseComponentTitle'), null, 'addDatabaseSettings')
+        $this->getTabsGenerator()->addTab(
+            new FormTab('database', Translation::get('DatabaseComponentTitle'), null, 'addDatabaseSettings')
         );
-        $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab('general', Translation::get('SettingsComponentTitle'), null, 'addGeneralSettings')
+        $this->getTabsGenerator()->addTab(
+            new FormTab('general', Translation::get('SettingsComponentTitle'), null, 'addGeneralSettings')
         );
-        $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab('package', Translation::get('PackageComponentTitle'), null, 'addPackageSettings')
+        $this->getTabsGenerator()->addTab(
+            new FormTab('package', Translation::get('PackageComponentTitle'), null, 'addPackageSettings')
         );
 
         $this->getTabsGenerator()->render();
@@ -343,13 +343,13 @@ class SettingsForm extends FormValidator
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer
+     * @return \Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer
      */
     public function getTabsGenerator()
     {
         if (!isset($this->tabsGenerator))
         {
-            $this->tabsGenerator = new DynamicFormTabsRenderer('settings', $this);
+            $this->tabsGenerator = new FormTabsRenderer('settings', $this);
         }
 
         return $this->tabsGenerator;

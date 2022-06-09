@@ -11,8 +11,8 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicActionsTab;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\ActionsTab;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -20,7 +20,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ImporterComponent extends Manager
 {
-    const PARAM_TAB = 'tab';
+    public const PARAM_TAB = 'tab';
 
     private $tab;
 
@@ -46,7 +46,7 @@ class ImporterComponent extends Manager
         );
 
         $breadcrumbtrail->add(
-            new Breadcrumb($this->get_url(array(DynamicTabsRenderer::PARAM_SELECTED_TAB => $this->tab)), $tab_name)
+            new Breadcrumb($this->get_url(array(TabsRenderer::PARAM_SELECTED_TAB => $this->tab)), $tab_name)
         );
 
         $html = [];
@@ -74,7 +74,7 @@ class ImporterComponent extends Manager
 
     public function get_tabs()
     {
-        $tabs = new DynamicTabsRenderer('admin');
+        $tabs = new TabsRenderer('admin');
 
         $packages = PlatformPackageBundles::getInstance()->get_type_packages();
 
@@ -119,22 +119,21 @@ class ImporterComponent extends Manager
                 $index = 0;
 
                 $glyph = new NamespaceIdentGlyph(
-                    $package, true, false, false, IdentGlyph::SIZE_SMALL,
-                    []
+                    $package, true, false, false, IdentGlyph::SIZE_SMALL, []
                 );
 
                 $index ++;
-                $actions_tab = new DynamicActionsTab(
+                $actions_tab = new ActionsTab(
                     ClassnameUtilities::getInstance()->getPackageNameFromNamespace($package),
                     Translation::get('TypeName', null, $package), $glyph
                 );
 
                 foreach ($links as $action)
                 {
-                    $actions_tab->add_action($action);
+                    $actions_tab->addAction($action);
                 }
 
-                $tabs->add_tab($actions_tab);
+                $tabs->addTab($actions_tab);
             }
         }
 

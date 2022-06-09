@@ -14,8 +14,8 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Form\FormTab;
+use Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -397,14 +397,14 @@ class CourseGroupForm extends FormValidator
     {
         if ($this->course_group->count_children() > 0)
         {
-            $tabs_renderer = new DynamicFormTabsRenderer('course_groups', $this);
+            $tabs_renderer = new FormTabsRenderer('course_groups', $this);
 
-            $tabs_renderer->add_tab(
-                new DynamicFormTab('parent', $this->course_group->get_name(), null, 'build_parent_tab_form_elements')
+            $tabs_renderer->addTab(
+                new FormTab('parent', $this->course_group->get_name(), null, 'build_parent_tab_form_elements')
             );
 
-            $tabs_renderer->add_tab(
-                new DynamicFormTab(
+            $tabs_renderer->addTab(
+                new FormTab(
                     'children', Translation::getInstance()->getTranslation('CourseGroupChildren'), null,
                     'build_children_tab_form_elements'
                 )

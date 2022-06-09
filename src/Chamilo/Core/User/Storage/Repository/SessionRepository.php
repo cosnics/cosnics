@@ -96,10 +96,12 @@ class SessionRepository
     {
         $this->getDataClassRepositoryCache()->truncate(Session::class);
 
-        return $this->getDataClassRepository()->retrieve(
+        $session = $this->getDataClassRepository()->retrieve(
             Session::class,
             new DataClassRetrieveParameters($this->getSessionCondition($sessionIdentifier, $name, $savePath))
         );
+
+        return $session instanceof Session ? $session : null;
     }
 
     public function updateSession(Session $session): bool

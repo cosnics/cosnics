@@ -22,14 +22,7 @@ use Twig\Loader\ChainLoader;
 class TwigEnvironmentFactory
 {
 
-    /**
-     * Adds the necessary extensions to twig
-     *
-     * @param \Symfony\Contracts\Translation\TranslatorInterface $translator
-     * @param \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $generator
-     * @param Environment $twig
-     */
-    protected function addTwigExtensions(TranslatorInterface $translator, UrlGenerator $generator, $twig)
+    protected function addTwigExtensions(TranslatorInterface $translator, UrlGenerator $generator, Environment $twig)
     {
         $twig->addExtension(new TranslationExtension($translator));
         $twig->addExtension(new ResourceManagementExtension(ResourceManager::getInstance()));
@@ -39,23 +32,16 @@ class TwigEnvironmentFactory
         $twig->addExtension(new DebugExtension());
     }
 
-    /**
-     * Initializes the twig templating for forms
-     *
-     * @param \Symfony\Contracts\Translation\TranslatorInterface $translator
-     * @param \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $generator
-     *
-     * @return Environment
-     */
-    public function createEnvironment(TranslatorInterface $translator = null, UrlGenerator $generator = null)
+    public function createEnvironment(?TranslatorInterface $translator = null, ?UrlGenerator $generator = null
+    ): Environment
     {
-        $loader = new ChainLoader(array(new TwigLoaderChamiloFilesystem()));
+        $loader = new ChainLoader([new TwigLoaderChamiloFilesystem()]);
 
-        $options = array(
+        $options = [
             'debug' => true,
             'auto_reload' => true,
             'cache' => Path::getInstance()->getCachePath() . 'templates/'
-        );
+        ];
 
         $twig = new Environment($loader, $options);
 

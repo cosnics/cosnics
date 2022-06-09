@@ -15,11 +15,7 @@ use Exception;
  */
 class BuildUtilities
 {
-
-    /**
-     *
-     * @param \Composer\Script\Event $event
-     */
+    
     public static function processComposer(Event $event)
     {
         $packageBundles = new BasicBundles(PackageList::ROOT);

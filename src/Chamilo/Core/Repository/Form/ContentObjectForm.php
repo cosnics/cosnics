@@ -41,8 +41,8 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Form\FormTab;
+use Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -109,7 +109,7 @@ abstract class ContentObjectForm extends FormValidator
 
     /**
      *
-     * @var DynamicFormTabsRenderer
+     * @var FormTabsRenderer
      */
     private $tabsGenerator;
 
@@ -169,8 +169,8 @@ abstract class ContentObjectForm extends FormValidator
     {
         $typeName = $this->get_content_object()->get_template_registration()->get_template()->translate('TypeName');
 
-        $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab(
+        $this->getTabsGenerator()->addTab(
+            new FormTab(
                 self::TAB_CONTENT_OBJECT, $typeName, $this->get_content_object()->getGlyph(), 'build_general_form'
             )
         );
@@ -184,8 +184,8 @@ abstract class ContentObjectForm extends FormValidator
 
         if ($instructions != 'InstructionsText')
         {
-            $this->getTabsGenerator()->add_tab(
-                new DynamicFormTab(
+            $this->getTabsGenerator()->addTab(
+                new FormTab(
                     'view-instructions', Translation::get('ViewInstructions'),
                     new FontAwesomeGlyph('question-circle', array('fa-lg'), null, 'fas'), 'buildInstructionsForm'
                 )
@@ -215,8 +215,8 @@ abstract class ContentObjectForm extends FormValidator
             foreach ($schemaInstances as $schemaInstance)
             {
                 $schema = $schemaInstance->getSchema();
-                $this->getTabsGenerator()->add_tab(
-                    new DynamicFormTab(
+                $this->getTabsGenerator()->addTab(
+                    new FormTab(
                         'schema-' . $schemaInstance->get_id(), $schema->get_name(),
                         new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas'), 'build_metadata_form',
                         array($schemaInstance)
@@ -224,8 +224,8 @@ abstract class ContentObjectForm extends FormValidator
                 );
             }
 
-            $this->getTabsGenerator()->add_tab(
-                new DynamicFormTab(
+            $this->getTabsGenerator()->addTab(
+                new FormTab(
                     'add-schema', Translation::get('AddMetadataSchema'),
                     new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas'), 'build_metadata_choice_form'
                 )
@@ -761,13 +761,13 @@ abstract class ContentObjectForm extends FormValidator
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer
+     * @return \Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer
      */
     public function getTabsGenerator()
     {
         if (!isset($this->tabsGenerator))
         {
-            $this->tabsGenerator = new DynamicFormTabsRenderer(Manager::TABS_CONTENT_OBJECT, $this);
+            $this->tabsGenerator = new FormTabsRenderer(Manager::TABS_CONTENT_OBJECT, $this);
         }
 
         return $this->tabsGenerator;

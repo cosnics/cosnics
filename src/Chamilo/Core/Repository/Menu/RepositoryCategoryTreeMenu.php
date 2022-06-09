@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -145,7 +145,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
     public function get_node_url($node_id)
     {
         $url_param[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_CONTENT_OBJECTS;
-        $url_param[DynamicTabsRenderer::PARAM_SELECTED_TAB] = array(Manager::TABS_FILTER => Manager::TAB_CATEGORY);
+        $url_param[TabsRenderer::PARAM_SELECTED_TAB] = array(Manager::TABS_FILTER => Manager::TAB_CATEGORY);
         $url_param[FilterData::FILTER_CATEGORY] = null;
         $url_param[Manager::PARAM_IMPORT_TYPE] = null;
 

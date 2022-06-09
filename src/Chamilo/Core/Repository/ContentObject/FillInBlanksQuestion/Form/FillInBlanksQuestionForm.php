@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
+use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -222,8 +222,8 @@ class FillInBlanksQuestionForm extends ContentObjectForm
     {
         $this->addDefaultTab();
 
-        $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab(
+        $this->getTabsGenerator()->addTab(
+            new FormTab(
                 self::TAB_BLANKS, Translation::get(self::TAB_BLANKS), new FontAwesomeGlyph('edit', array('fa-sm')),
                 'buildBlanksForm'
             )

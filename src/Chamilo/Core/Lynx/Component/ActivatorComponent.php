@@ -43,7 +43,7 @@ class ActivatorComponent extends Manager implements DelegateComponent
         $html = [];
 
         $html[] = $this->render_header();
-        $html[] = $activator->get_result(true);
+        $html[] = $activator->getResult(true);
 
         $toolbar = new Toolbar();
         $toolbar->add_item(

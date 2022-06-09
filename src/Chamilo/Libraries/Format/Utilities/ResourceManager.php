@@ -14,26 +14,16 @@ use Chamilo\Libraries\File\PathBuilder;
 class ResourceManager
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Utilities\ResourceManager
-     */
-    private static $instance;
+    private static ?ResourceManager $instance = null;
+
+    private PathBuilder $pathBuilder;
 
     /**
      *
      * @var string[]
      */
-    private $resources;
+    private array $resources;
 
-    /**
-     * @var \Chamilo\Libraries\File\PathBuilder
-     */
-    private $pathBuilder;
-
-    /**
-     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
-     */
     public function __construct(PathBuilder $pathBuilder)
     {
         $this->pathBuilder = $pathBuilder;
@@ -41,21 +31,15 @@ class ResourceManager
     }
 
     /**
-     * Use this function if you load a resource through another function / class and want to make sure that
-     * the resource manager does not load it again
-     *
-     * @param string $path
+     * Use this function if you load a resource through another function / class and want to make sure that the
+     * resource manager does not load it again
      */
-    public function addPathToLoadedResources($path)
+    public function addPathToLoadedResources(string $path)
     {
         $this->resources[] = $path;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Utilities\ResourceManager
-     */
-    public static function getInstance()
+    public static function getInstance(): ResourceManager
     {
         if (!isset(self::$instance))
         {
@@ -65,13 +49,7 @@ class ResourceManager
         return self::$instance;
     }
 
-    /**
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    public function getResourceHtml($path)
+    public function getResourceHtml(string $path): string
     {
         if ($this->hasResourceAlreadyBeenLoaded($path))
         {
@@ -84,42 +62,28 @@ class ResourceManager
     }
 
     /**
-     *
-     * @return string[]
-     * @deprecated Use getResources() now
-     */
-    public function get_resources()
-    {
-        return $this->getResources();
-    }
-
-    /**
-     *
      * @return string[]
      */
-    public function getResources()
+    public function getResources(): array
     {
         return $this->resources;
     }
 
     /**
-     *
-     * @param string $path
-     *
-     * @return boolean
+     * @return string[]
+     * @deprecated Use ResourceManager::getResources() now
      */
-    public function hasResourceAlreadyBeenLoaded($path)
+    public function get_resources(): array
+    {
+        return $this->getResources();
+    }
+
+    public function hasResourceAlreadyBeenLoaded(string $path): bool
     {
         return in_array($path, $this->resources);
     }
 
-    /**
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    private function renderResourceHtml($path)
+    private function renderResourceHtml(string $path): string
     {
         $webPath = $this->pathBuilder->getBasePath(true);
         $basePath = $this->pathBuilder->getBasePath() . '../web/';
@@ -143,13 +107,9 @@ class ResourceManager
     }
 
     /**
-     *
-     * @param string $path
-     *
-     * @return boolean
      * @deprecated Use hasResourceAlreadyBeenLoaded() now
      */
-    public function resource_loaded($path)
+    public function resource_loaded(string $path): bool
     {
         return $this->hasResourceAlreadyBeenLoaded($path);
     }

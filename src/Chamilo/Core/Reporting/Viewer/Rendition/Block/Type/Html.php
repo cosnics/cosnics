@@ -5,8 +5,8 @@ use Chamilo\Core\Reporting\Viewer\Manager;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\BlockRendition;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -55,7 +55,7 @@ class Html extends BlockRendition
 
         if (count($this->get_block()->get_views()) > 1)
         {
-            $tabs = new DynamicVisualTabsRenderer(
+            $tabs = new LinkTabsRenderer(
                 ClassnameUtilities::getInstance()->getClassnameFromObject($this->get_block(), true), $rendered_block
             );
 
@@ -78,8 +78,8 @@ class Html extends BlockRendition
                     'Chamilo\Core\Reporting\Viewer\Rendition\Block\Html\\' . $view
                 );
 
-                $tabs->add_tab(
-                    new DynamicVisualTab(
+                $tabs->addTab(
+                    new LinkTab(
                         $view, Translation::get(
                         (string) StringUtilities::getInstance()->createString(self::FORMAT . '_' . $view)
                             ->upperCamelize()

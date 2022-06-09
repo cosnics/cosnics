@@ -14,43 +14,19 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class ThemePathBuilder
 {
-    const ICON_BIG = 48;
-    const ICON_MEDIUM = 32;
-    const ICON_MINI = 16;
-    const ICON_SMALL = 22;
+    public const ICON_BIG = 48;
+    public const ICON_MEDIUM = 32;
+    public const ICON_MINI = 16;
+    public const ICON_SMALL = 22;
 
-    /**
-     *
-     * @var string
-     */
-    private $theme;
+    private ClassnameUtilities $classnameUtilities;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    private $stringUtilities;
+    private PathBuilder $pathBuilder;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    private $classnameUtilities;
+    private StringUtilities $stringUtilities;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\File\PathBuilder
-     */
-    private $pathBuilder;
+    private string $theme;
 
-    /**
-     * Constructor
-     *
-     * @param string $theme
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
-     */
     public function __construct(
         StringUtilities $stringUtilities, ClassnameUtilities $classnameUtilities, PathBuilder $pathBuilder,
         string $theme
@@ -63,10 +39,9 @@ class ThemePathBuilder
     }
 
     /**
-     *
      * @return string[]
      */
-    public function getAvailableThemes()
+    public function getAvailableThemes(): array
     {
         $availableThemes = [];
 
@@ -85,52 +60,30 @@ class ThemePathBuilder
         return $availableThemes;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    public function getClassnameUtilities()
+    public function getClassnameUtilities(): ClassnameUtilities
     {
         return $this->classnameUtilities;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     */
-    public function setClassnameUtilities($classnameUtilities)
+    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities)
     {
         $this->classnameUtilities = $classnameUtilities;
     }
 
-    /**
-     *
-     * @param string $image
-     * @param string $extension
-     * @param string $label
-     * @param string $href
-     * @param integer $display
-     * @param boolean $confirmation
-     *
-     * @return string
-     */
     public function getCommonImage(
-        $image, $extension = 'png', $label = null, $href = null, $display = ToolbarItem::DISPLAY_ICON_AND_LABEL,
-        $confirmation = false
-    )
+        string $image, string $extension = 'png', ?string $label = null, ?string $href = null,
+        int $display = ToolbarItem::DISPLAY_ICON_AND_LABEL, bool $confirmation = false
+    ): string
     {
-        return $this->getImage($image, $extension, $label, $href, $display, $confirmation, 'Chamilo\Configuration');
+        return $this->getImage(StringUtilities::LIBRARIES, $image, $extension, $label, $href, $display, $confirmation);
     }
 
     /**
+     * Backwards compatible legacy method to get the a common image
      *
-     * @param string $image
-     * @param string $extension
-     * @param boolean $web
-     *
-     * @return string
+     * @deprecated Use ThemePathBuilder::getImagePath() now in combination with a valid namespace
      */
-    public function getCommonImagePath($image, $extension = 'png', $web = true)
+    public function getCommonImagePath(string $image, string $extension = 'png', bool $web = true): string
     {
         return $this->getImagePath('Chamilo\Configuration', $image, $extension, $web);
     }
@@ -138,27 +91,14 @@ class ThemePathBuilder
     /**
      * Backwards compatible legacy method to get the main stylesheet path
      *
-     * @param boolean $web
-     *
-     * @return string
-     * @deprecated Use getStylesheetPath now in combination with a valid namespace
+     * @deprecated Use ThemePathBuilder::getStylesheetPath() now in combination with a valid namespace
      */
-    public function getCommonStylesheetPath($web = true)
+    public function getCommonStylesheetPath(bool $web = true): string
     {
         return $this->getStylesheetPath('Chamilo\Configuration', $web);
     }
 
-    /**
-     *
-     * @param string $namespace
-     * @param boolean $web
-     * @param boolean $includeTheme If True path will contain the selected theme as well, e.g.
-     *        .../Chamilo/Configuration/Resources/Css/Aqua/.
-     *        Else, selected theme will be ignored, e.g. .../Chamilo/Configuration/Resources/Css/
-     *
-     * @return string
-     */
-    public function getCssPath($namespace = null, $web = true, $includeTheme = true)
+    public function getCssPath(string $namespace, bool $web = true, bool $includeTheme = true): string
     {
         $cssPath = $this->getPathBuilder()->getCssPath($namespace, $web);
 
@@ -170,48 +110,21 @@ class ThemePathBuilder
         return $cssPath;
     }
 
-    /**
-     * @param boolean $web
-     *
-     * @return string
-     */
-    public function getDirectorySeparator(bool $web = true)
+    public function getDirectorySeparator(bool $web = true): string
     {
         return ($web ? '/' : DIRECTORY_SEPARATOR);
     }
 
-    /**
-     * @return string
-     */
-    public function getFavouriteIcon()
+    public function getFavouriteIcon(): string
     {
         return $this->getImagePath('Chamilo\Libraries', 'Favicon', 'ico');
     }
 
-    /**
-     *
-     * @param string $image
-     * @param string $extension
-     * @param string $label
-     * @param string $href
-     * @param integer $display
-     * @param boolean $confirmation
-     * @param string $context
-     *
-     * @return string
-     */
     public function getImage(
-        $image, $extension = 'png', $label = null, $href = null, $display = ToolbarItem::DISPLAY_ICON_AND_LABEL,
-        $confirmation = false, $context = null
-    )
+        string $context, string $image, string $extension = 'png', ?string $label = null, ?string $href = null,
+        int $display = ToolbarItem::DISPLAY_ICON_AND_LABEL, bool $confirmation = false
+    ): string
     {
-        if (!$context)
-        {
-            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-            $calledClass = $backtrace[1]['class'];
-            $context = $this->getClassnameUtilities()->getNamespaceFromClassname($calledClass);
-        }
-
         $icon = new ToolbarItem(
             $label, $this->getImagePath($context, $image, $extension), $href, $display, $confirmation
         );
@@ -219,98 +132,43 @@ class ThemePathBuilder
         return $icon->render();
     }
 
-    /**
-     *
-     * @param string $context
-     * @param string $image
-     * @param string $extension
-     * @param boolean $web
-     *
-     * @return string
-     */
-    public function getImagePath($context, $image, $extension = 'png', $web = true)
+    public function getImagePath(string $context, string $image, string $extension = 'png', bool $web = true): string
     {
         return $this->getImagesPath($context, $web) . $image . '.' . $extension;
     }
 
-    /**
-     *
-     * @param string $context
-     * @param boolean $web
-     *
-     * @return string
-     */
-    public function getImagesPath($context = null, $web = true)
+    public function getImagesPath(string $context, bool $web = true): string
     {
-        if (!$context)
-        {
-            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-            $calledClass = $backtrace[1]['class'];
-            $context = $this->getClassnameUtilities()->getNamespaceFromClassname($calledClass);
-        }
-
         return $this->getPathBuilder()->getImagesPath($context, $web) . $this->getTheme() .
             $this->getDirectorySeparator($web);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\File\PathBuilder
-     */
-    public function getPathBuilder()
+    public function getPathBuilder(): PathBuilder
     {
         return $this->pathBuilder;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
-     */
-    public function setPathBuilder($pathBuilder)
+    public function setPathBuilder(PathBuilder $pathBuilder)
     {
         $this->pathBuilder = $pathBuilder;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    public function getStringUtilities()
+    public function getStringUtilities(): StringUtilities
     {
         return $this->stringUtilities;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
     public function setStringUtilities(StringUtilities $stringUtilities)
     {
         $this->stringUtilities = $stringUtilities;
     }
 
-    /**
-     *
-     * @param string $namespace
-     * @param boolean $web
-     * @param boolean $minified
-     *
-     * @return string
-     */
-    public function getStylesheetPath($namespace = null, $web = true, $minified = false)
+    public function getStylesheetPath(?string $namespace = null, bool $web = true, bool $minified = false): string
     {
         return $this->getCssPath($namespace, $web) . 'Stylesheet' . ($minified ? '.min' : '') . '.css';
     }
 
-    /**
-     *
-     * @param string $namespace
-     * @param boolean $web
-     * @param boolean $includeTheme
-     *
-     * @return string
-     */
-    public function getTemplatePath($namespace = null, $web = true, $includeTheme = true)
+    public function getTemplatePath(string $namespace, bool $web = true, bool $includeTheme = true): string
     {
         $cssPath = $this->getPathBuilder()->getTemplatesPath($namespace, $web);
 
@@ -322,20 +180,12 @@ class ThemePathBuilder
         return $cssPath;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getTheme()
+    public function getTheme(): string
     {
         return $this->theme;
     }
 
-    /**
-     *
-     * @param string $theme
-     */
-    public function setTheme($theme)
+    public function setTheme(string $theme)
     {
         $this->theme = $theme;
     }

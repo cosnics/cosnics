@@ -3,8 +3,8 @@ namespace Chamilo\Application\Portfolio\Component;
 
 use Chamilo\Application\Portfolio\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 
 /**
  * Abstract component for the several portfolio browsers (all, favourite, ..)
@@ -16,7 +16,7 @@ abstract class TabComponent extends Manager
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer
+     * @var \Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer
      */
     private $tabsRenderer;
 
@@ -27,27 +27,27 @@ abstract class TabComponent extends Manager
      */
     public function run()
     {
-        $this->tabsRenderer = new DynamicVisualTabsRenderer('workspace');
+        $this->tabsRenderer = new LinkTabsRenderer('workspace');
 
-        $this->tabsRenderer->add_tab(
-            new DynamicVisualTab(
+        $this->tabsRenderer->addTab(
+            new LinkTab(
                 self::ACTION_BROWSE,
                 $this->getTranslator()->trans(self::ACTION_BROWSE . 'Component', [], Manager::context()),
                 new FontAwesomeGlyph('search', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
-                $this->get_action() == self::ACTION_BROWSE, false, DynamicVisualTab::POSITION_LEFT,
-                DynamicVisualTab::DISPLAY_BOTH
+                $this->get_action() == self::ACTION_BROWSE, false, LinkTab::POSITION_LEFT,
+                LinkTab::DISPLAY_BOTH
             )
         );
 
-        $this->tabsRenderer->add_tab(
-            new DynamicVisualTab(
+        $this->tabsRenderer->addTab(
+            new LinkTab(
                 self::ACTION_BROWSE_FAVOURITES,
                 $this->getTranslator()->trans(self::ACTION_BROWSE_FAVOURITES . 'Component', [], Manager::context()),
                 new FontAwesomeGlyph('star', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_FAVOURITES)),
-                $this->get_action() == self::ACTION_BROWSE_FAVOURITES, false, DynamicVisualTab::POSITION_LEFT,
-                DynamicVisualTab::DISPLAY_BOTH
+                $this->get_action() == self::ACTION_BROWSE_FAVOURITES, false, LinkTab::POSITION_LEFT,
+                LinkTab::DISPLAY_BOTH
             )
         );
 
@@ -59,12 +59,12 @@ abstract class TabComponent extends Manager
      *
      * @return string
      */
-    abstract function build();
+    public abstract function build();
 
     /**
      * Get the TabsRenderer
      *
-     * @return \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer
+     * @return \Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer
      */
     public function getTabsRenderer()
     {
@@ -79,7 +79,7 @@ abstract class TabComponent extends Manager
     {
         $html = [];
 
-        $html[] = $this->getTabsRenderer()->renderFooter();
+        $html[] = $this->getTabsRenderer()->footer();
         $html[] = parent::render_footer();
 
         return implode(PHP_EOL, $html);
@@ -94,7 +94,7 @@ abstract class TabComponent extends Manager
         $html = [];
 
         $html[] = parent::render_header($pageTitle);
-        $html[] = $this->getTabsRenderer()->renderHeader();
+        $html[] = $this->getTabsRenderer()->header();
 
         return implode(PHP_EOL, $html);
     }

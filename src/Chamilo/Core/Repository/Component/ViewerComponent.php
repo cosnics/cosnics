@@ -31,8 +31,8 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -114,11 +114,11 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer $dynamicTabsRenderer
+     * @param \Chamilo\Libraries\Format\Tabs\TabsRenderer $dynamicTabsRenderer
      *
      * @throws \Exception
      */
-    public function addDynamicTabsRendererLinks(DynamicTabsRenderer $dynamicTabsRenderer)
+    public function addDynamicTabsRendererLinks(TabsRenderer $dynamicTabsRenderer)
     {
         $contentObject = $this->getContentObject();
         $translator = $this->getTranslator();
@@ -131,12 +131,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // EXTERNAL INSTANCES
         if ($contentObject->is_external())
         {
-            $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = 'external_instances';
+            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = 'external_instances';
             $browser = new ExternalLinkTable($this);
-            $dynamicTabsRenderer->add_tab(
-                new DynamicContentTab(
-                    'external_instances', $translator->trans('ExternalInstances', [], self::package()),
-                    new FontAwesomeGlyph('globe', array('fa-lg'), null, 'fas'), $browser->render()
+            $dynamicTabsRenderer->addTab(
+                new ContentTab(
+                    'external_instances', $translator->trans('ExternalInstances', [], self::package()), $browser->render(),
+                    new FontAwesomeGlyph('globe', array('fa-lg'), null, 'fas')
                 )
             );
         }
@@ -144,12 +144,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // LINKS | PUBLICATIONS
         if ($contentObject->has_publications())
         {
-            $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_PUBLICATIONS;
+            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_PUBLICATIONS;
             $browser = new LinkTable($this, LinkTable::TYPE_PUBLICATIONS);
-            $dynamicTabsRenderer->add_tab(
-                new DynamicContentTab(
-                    LinkTable::TYPE_PUBLICATIONS, $translator->trans('Publications', [], self::package()),
-                    new FontAwesomeGlyph('share-square', array('fa-lg'), null, 'fas'), $browser->render()
+            $dynamicTabsRenderer->addTab(
+                new ContentTab(
+                    LinkTable::TYPE_PUBLICATIONS, $translator->trans('Publications', [], self::package()), $browser->render(),
+                    new FontAwesomeGlyph('share-square', array('fa-lg'), null, 'fas')
                 )
             );
         }
@@ -163,14 +163,14 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             {
                 $tabName = 'shared_in';
 
-                $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = $tabName;
+                $parameters[TabsRenderer::PARAM_SELECTED_TAB] = $tabName;
 
                 $browser = new SharedInTable($this);
 
-                $dynamicTabsRenderer->add_tab(
-                    new DynamicContentTab(
-                        $tabName, $translator->trans('SharedIn', [], self::package()),
-                        new FontAwesomeGlyph('lock', array('fa-lg'), null, 'fas'), $browser->render()
+                $dynamicTabsRenderer->addTab(
+                    new ContentTab(
+                        $tabName, $translator->trans('SharedIn', [], self::package()), $browser->render(),
+                        new FontAwesomeGlyph('lock', array('fa-lg'), null, 'fas')
                     )
                 );
             }
@@ -179,12 +179,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // LINKS | PARENTS
         if ($contentObject->has_parents())
         {
-            $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_PARENTS;
+            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_PARENTS;
             $browser = new LinkTable($this, LinkTable::TYPE_PARENTS);
-            $dynamicTabsRenderer->add_tab(
-                new DynamicContentTab(
-                    LinkTable::TYPE_PARENTS, $translator->trans('UsedIn', [], self::package()),
-                    new FontAwesomeGlyph('arrow-up', array('fa-lg'), null, 'fas'), $browser->render()
+            $dynamicTabsRenderer->addTab(
+                new ContentTab(
+                    LinkTable::TYPE_PARENTS, $translator->trans('UsedIn', [], self::package()), $browser->render(),
+                    new FontAwesomeGlyph('arrow-up', array('fa-lg'), null, 'fas')
                 )
             );
         }
@@ -192,12 +192,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // LINKS | CHILDREN
         if ($contentObject->has_children())
         {
-            $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_CHILDREN;
+            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_CHILDREN;
             $browser = new LinkTable($this, LinkTable::TYPE_CHILDREN);
-            $dynamicTabsRenderer->add_tab(
-                new DynamicContentTab(
-                    LinkTable::TYPE_CHILDREN, $translator->trans('Uses', [], self::package()),
-                    new FontAwesomeGlyph('arrow-down', array('fa-lg'), null, 'fas'), $browser->render()
+            $dynamicTabsRenderer->addTab(
+                new ContentTab(
+                    LinkTable::TYPE_CHILDREN, $translator->trans('Uses', [], self::package()), $browser->render(),
+                    new FontAwesomeGlyph('arrow-down', array('fa-lg'), null, 'fas')
                 )
             );
         }
@@ -205,12 +205,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // LINKS | ATTACHED TO
         if ($contentObject->has_attachers())
         {
-            $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_ATTACHED_TO;
+            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_ATTACHED_TO;
             $browser = new LinkTable($this, LinkTable::TYPE_ATTACHED_TO);
-            $dynamicTabsRenderer->add_tab(
-                new DynamicContentTab(
-                    LinkTable::TYPE_ATTACHED_TO, $translator->trans('AttachedTo', [], self::package()),
-                    new FontAwesomeGlyph('bookmark', array('fa-lg'), null, 'fas'), $browser->render()
+            $dynamicTabsRenderer->addTab(
+                new ContentTab(
+                    LinkTable::TYPE_ATTACHED_TO, $translator->trans('AttachedTo', [], self::package()), $browser->render(),
+                    new FontAwesomeGlyph('bookmark', array('fa-lg'), null, 'fas')
                 )
             );
         }
@@ -218,12 +218,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // LINKS | ATTACHES
         if ($contentObject->has_attachments())
         {
-            $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_ATTACHES;
+            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_ATTACHES;
             $browser = new LinkTable($this, LinkTable::TYPE_ATTACHES);
-            $dynamicTabsRenderer->add_tab(
-                new DynamicContentTab(
-                    LinkTable::TYPE_ATTACHES, $translator->trans('Attaches', [], self::package()),
-                    new FontAwesomeGlyph('paperclip', array('fa-lg'), null, 'fas'), $browser->render()
+            $dynamicTabsRenderer->addTab(
+                new ContentTab(
+                    LinkTable::TYPE_ATTACHES, $translator->trans('Attaches', [], self::package()), $browser->render(),
+                    new FontAwesomeGlyph('paperclip', array('fa-lg'), null, 'fas')
                 )
             );
         }
@@ -231,12 +231,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // LINKS | INCLUDED IN
         if ($contentObject->has_includers())
         {
-            $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_INCLUDED_IN;
+            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_INCLUDED_IN;
             $browser = new LinkTable($this, LinkTable::TYPE_INCLUDED_IN);
-            $dynamicTabsRenderer->add_tab(
-                new DynamicContentTab(
-                    LinkTable::TYPE_INCLUDED_IN, $translator->trans('IncludedIn', [], self::package()),
-                    new FontAwesomeGlyph('expand-arrows-alt', array('fa-lg'), null, 'fas'), $browser->render()
+            $dynamicTabsRenderer->addTab(
+                new ContentTab(
+                    LinkTable::TYPE_INCLUDED_IN, $translator->trans('IncludedIn', [], self::package()), $browser->render(),
+                    new FontAwesomeGlyph('expand-arrows-alt', array('fa-lg'), null, 'fas')
                 )
             );
         }
@@ -244,12 +244,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // LINKS | INCLUDES
         if ($contentObject->has_includes())
         {
-            $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_INCLUDES;
+            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_INCLUDES;
             $browser = new LinkTable($this, LinkTable::TYPE_INCLUDES);
-            $dynamicTabsRenderer->add_tab(
-                new DynamicContentTab(
-                    LinkTable::TYPE_INCLUDES, $translator->trans('Includes', [], self::package()),
-                    new FontAwesomeGlyph('compress-arrows-alt', array('fa-lg'), null, 'fas'), $browser->render()
+            $dynamicTabsRenderer->addTab(
+                new ContentTab(
+                    LinkTable::TYPE_INCLUDES, $translator->trans('Includes', [], self::package()), $browser->render(),
+                    new FontAwesomeGlyph('compress-arrows-alt', array('fa-lg'), null, 'fas')
                 )
             );
         }
@@ -558,12 +558,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer
+     * @return \Chamilo\Libraries\Format\Tabs\TabsRenderer
      * @throws \Exception
      */
     protected function getDynamicTabsRenderer()
     {
-        $dynamicTabsRenderer = new DynamicTabsRenderer('links');
+        $dynamicTabsRenderer = new TabsRenderer('links');
         $contentObject = $this->getContentObject();
 
         if ($contentObject->get_current() != ContentObject::CURRENT_SINGLE)
@@ -577,10 +577,10 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'VersionTable.js'
             );
 
-            $dynamicTabsRenderer->add_tab(
-                new DynamicContentTab(
-                    'versions', $this->getTranslator()->trans('Versions', [], self::package()),
-                    new FontAwesomeGlyph('undo', array('fa-lg'), null, 'fas'), implode(PHP_EOL, $versionTabContent)
+            $dynamicTabsRenderer->addTab(
+                new ContentTab(
+                    'versions', $this->getTranslator()->trans('Versions', [], self::package()), implode(PHP_EOL, $versionTabContent),
+                    new FontAwesomeGlyph('undo', array('fa-lg'), null, 'fas')
                 )
             );
         }

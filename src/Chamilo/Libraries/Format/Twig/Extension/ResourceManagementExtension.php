@@ -5,6 +5,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -16,36 +17,19 @@ use Twig\TwigFunction;
  */
 class ResourceManagementExtension extends AbstractExtension
 {
-    const DEFAULT_CONTEXT = 'Chamilo\Libraries';
+    protected ResourceManager $resourceManager;
 
     /**
-     * @var \Chamilo\Libraries\Format\Utilities\ResourceManager
-     */
-    protected $resourceManager;
-
-    /**
-     * Helper variable for the getUniquePath function
-     *
      * @var string[]
      */
-    protected $usedPaths;
+    protected array $usedPaths;
 
-    /**
-     * ResourceManagementExtension constructor.
-     *
-     * @param \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
-     */
     public function __construct(ResourceManager $resourceManager)
     {
         $this->resourceManager = $resourceManager;
     }
 
-    /**
-     * @param $resourceWebPath
-     *
-     * @return string
-     */
-    protected function addModificationTimeToResourcePath($resourceWebPath)
+    protected function addModificationTimeToResourcePath(string $resourceWebPath): string
     {
         $pathUtil = Path::getInstance();
         $webPath = $pathUtil->getBasePath(true);
@@ -59,27 +43,15 @@ class ResourceManagementExtension extends AbstractExtension
 
     /**
      * Returns a css link as HTML code for a given css file and a context
-     *
-     * @param string $css
-     * @param string $context
-     *
-     * @return string
      */
-    public function getCss($css, $context)
+    public function getCss(string $css, string $context): string
     {
         $cssPath = $this->getCssPath($css, $context);
 
         return $this->getCssHtml($cssPath);
     }
 
-    /**
-     * Helper function to generate HTML code for css
-     *
-     * @param string $cssPath
-     *
-     * @return string
-     */
-    protected function getCssHtml($cssPath)
+    protected function getCssHtml(string $cssPath): string
     {
         if (!$this->isUniquePath($cssPath))
         {
@@ -94,55 +66,38 @@ class ResourceManagementExtension extends AbstractExtension
 
     /**
      * Returns the path to a css in a given context, depending on the selected theme from the user
-     *
-     * @param string $css
-     * @param string $context
-     *
-     * @return string
      */
-    public function getCssPath($css, $context)
+    public function getCssPath(string $css, string $context = StringUtilities::LIBRARIES): string
     {
-        $context = $context ?: self::DEFAULT_CONTEXT;
-
         return $this->getThemePathBuilder()->getCssPath($context) . $css;
     }
 
     /**
-     *
-     * @see Twig_Extension::getFunctions()
+     * @return \Twig\TwigFunction[]
      */
     public function getFunctions()
     {
-        return array(
-            new TwigFunction('getImagePath', array($this, 'getImagePath')),
-            new TwigFunction('getImage', array($this, 'getImage'), array('is_safe' => array('html'))),
-            new TwigFunction('getCssPath', array($this, 'getCssPath')),
-            new TwigFunction('getCss', array($this, 'getCss'), array('is_safe' => array('html'))),
-            new TwigFunction('getVendorCss', array($this, 'getVendorCss'), array('is_safe' => array('html'))),
-            new TwigFunction('getJavascriptPath', array($this, 'getJavascriptPath')),
-            new TwigFunction('getJavascript', array($this, 'getJavascript'), array('is_safe' => array('html'))),
-            new TwigFunction('getVendorJavascript', array($this, 'getVendorJavascript'),
-                array('is_safe' => array('html'))
-            ),
-            new TwigFunction('isUniquePath', array($this, 'isUniquePath'))
-        );
+        return [
+            new TwigFunction('getImagePath', [$this, 'getImagePath']),
+            new TwigFunction('getImage', [$this, 'getImage'], ['is_safe' => ['html']]),
+            new TwigFunction('getCssPath', [$this, 'getCssPath']),
+            new TwigFunction('getCss', [$this, 'getCss'], ['is_safe' => ['html']]),
+            new TwigFunction('getVendorCss', [$this, 'getVendorCss'], ['is_safe' => ['html']]),
+            new TwigFunction('getJavascriptPath', [$this, 'getJavascriptPath']),
+            new TwigFunction('getJavascript', [$this, 'getJavascript'], ['is_safe' => ['html']]),
+            new TwigFunction('getVendorJavascript', [$this, 'getVendorJavascript'], ['is_safe' => ['html']]),
+            new TwigFunction('isUniquePath', [$this, 'isUniquePath'])
+        ];
     }
 
     /**
-     * Returns an image as HTML code for a given image in a given context with a given extension.
-     * Optionally adding
-     * the possibility to add a label, a class and a style
-     *
-     * @param string $image
-     * @param string $context
-     * @param string $extension
-     * @param string $label
-     * @param string $class
-     * @param string $style
-     *
-     * @return string
+     * Returns an image as HTML code for a given image in a given context with a given extension. Optionally adding the
+     * possibility to add a label, a class and a style
      */
-    public function getImage($image, $context, $extension = 'png', $label = null, $class = null, $style = null)
+    public function getImage(
+        string $image, string $context, string $extension = 'png', ?string $label = null, ?string $class = null,
+        ?string $style = null
+    ): string
     {
         $imagePath = $this->getImagePath($image, $context, $extension);
 
@@ -172,29 +127,16 @@ class ResourceManagementExtension extends AbstractExtension
 
     /**
      * Returns the path to an image in a given context, depending on the selected theme from the user
-     *
-     * @param string $image
-     * @param string $context
-     * @param string $extension
-     *
-     * @return string
      */
-    public function getImagePath($image, $context, $extension = 'png')
+    public function getImagePath(string $image, string $context = StringUtilities::LIBRARIES, string $extension = 'png'): string
     {
-        $context = $context ?: self::DEFAULT_CONTEXT;
-
         return $this->getThemePathBuilder()->getImagePath($context, $image, $extension);
     }
 
     /**
      * Returns a javascript link as HTML code for a given javascript file in a given context
-     *
-     * @param string $javascript
-     * @param string $context
-     *
-     * @return string
      */
-    public function getJavascript($javascript, $context)
+    public function getJavascript(string $javascript, string $context): string
     {
         $javascriptPath = $this->getJavascriptPath($javascript, $context);
 
@@ -203,12 +145,8 @@ class ResourceManagementExtension extends AbstractExtension
 
     /**
      * Returns a javascript link as HTML code for a given javascript file in a given context
-     *
-     * @param string $javascriptPath
-     *
-     * @return string
      */
-    protected function getJavascriptHtml($javascriptPath)
+    protected function getJavascriptHtml(string $javascriptPath): string
     {
         if (!$this->isUniquePath($javascriptPath))
         {
@@ -223,100 +161,49 @@ class ResourceManagementExtension extends AbstractExtension
 
     /**
      * Returns the path to a javascript file in a given context
-     *
-     * @param string $javascript
-     * @param string $context
-     *
-     * @return string
      */
-    public function getJavascriptPath($javascript, $context)
+    public function getJavascriptPath(string $javascript, string $context = StringUtilities::LIBRARIES): string
     {
-        $context = $context ?: self::DEFAULT_CONTEXT;
-
         return Path::getInstance()->getJavascriptPath($context, true) . $javascript;
     }
 
-    /**
-     *
-     * @see Twig_Extension::getName()
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'resource_management';
     }
 
-    /**
-     * @param string $javascript
-     * @param string $context
-     *
-     * @return string
-     */
-    public function getPluginJavascript($javascript, $context)
+    public function getPluginJavascript(string $javascript, string $context): string
     {
         $javascriptPath = $this->getPluginPath($javascript, $context);
 
         return $this->getJavascriptHtml($javascriptPath);
     }
 
-    /**
-     * Returns the path to a plugin file in a given context
-     *
-     * @param string $javascript
-     * @param string $context
-     *
-     * @return string
-     */
-    public function getPluginPath($javascript, $context)
+    public function getPluginPath(string $javascript, string $context = StringUtilities::LIBRARIES): string
     {
-        $context = $context ?: self::DEFAULT_CONTEXT;
-
         return Path::getInstance()->getPluginPath($context, true) . $javascript;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    public function getThemePathBuilder()
+    public function getThemePathBuilder(): ThemePathBuilder
     {
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ThemePathBuilder::class);
     }
 
-    /**
-     * Returns a CSS link as HTML code for a given vendor css file
-     *
-     * @param string $cssPath
-     *
-     * @return string
-     */
-    public function getVendorCss($cssPath)
+    public function getVendorCss(string $cssPath): string
     {
         $vendorCssPath = Path::getInstance()->getBasePath(true) . 'vendor/' . $cssPath;
 
         return $this->getCssHtml($vendorCssPath);
     }
 
-    /**
-     * Returns a javascript link as HTML code for a given vendor javascript file
-     *
-     * @param string $javascriptPath
-     *
-     * @return string
-     */
-    public function getVendorJavascript($javascriptPath)
+    public function getVendorJavascript(string $javascriptPath): string
     {
         $javascriptPath = Path::getInstance()->getBasePath(true) . 'vendor/' . $javascriptPath;
 
         return $this->getJavascriptHtml($javascriptPath);
     }
 
-    /**
-     * Checks if a given path is unique and stores it in the usedPaths variable if it is
-     *
-     * @param string $path
-     *
-     * @return boolean
-     */
-    public function isUniquePath($path)
+    public function isUniquePath(string $path): bool
     {
         if (in_array($path, $this->usedPaths))
         {
@@ -325,7 +212,7 @@ class ResourceManagementExtension extends AbstractExtension
 
         $this->usedPaths[] = $path;
 
-        if ($this->resourceManager->resource_loaded($path))
+        if ($this->resourceManager->hasResourceAlreadyBeenLoaded($path))
         {
             return false;
         }

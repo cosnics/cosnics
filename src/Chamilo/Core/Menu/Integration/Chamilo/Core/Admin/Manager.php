@@ -6,7 +6,7 @@ use Chamilo\Core\Admin\ActionsSupportInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicAction;
+use Chamilo\Libraries\Format\Tabs\Action;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -30,8 +30,8 @@ class Manager implements ActionsSupportInterface
             )
         );
 
-        $links[] = new DynamicAction(
-            Translation::get('Manage'), Translation::get('ManageDescription'),
+        $links[] = new Action(
+            Translation::get('ManageDescription'), Translation::get('Manage'),
             new FontAwesomeGlyph('sort', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 

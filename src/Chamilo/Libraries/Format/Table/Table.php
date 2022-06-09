@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Format\Table;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableAjaxSupport;
@@ -235,12 +236,9 @@ abstract class Table
         return $tableData;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Platform\Security
-     */
-    private function getSecurity()
+    private function getSecurity(): Security
     {
-        return $this->component->getService(Security::class);
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(Security::class);
     }
 
     /**

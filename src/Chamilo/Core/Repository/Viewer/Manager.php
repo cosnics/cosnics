@@ -5,11 +5,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -21,65 +17,37 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 abstract class Manager extends Application
 {
     // Parameters
-    const ACTION_BROWSER = 'Browser';
-    const ACTION_CREATOR = 'Creator';
-    const ACTION_IMPORTER = 'Importer';
-    const ACTION_VIEWER = 'Viewer';
+    public const ACTION_BROWSER = 'Browser';
+    public const ACTION_CREATOR = 'Creator';
+    public const ACTION_IMPORTER = 'Importer';
+    public const ACTION_VIEWER = 'Viewer';
 
-    const DEFAULT_ACTION = self::ACTION_CREATOR;
+    public const DEFAULT_ACTION = self::ACTION_CREATOR;
 
-    const PARAM_ACTION = 'viewer_action';
-    const PARAM_CONTENT_OBJECT_TEMPLATE_REGISTRATION_ID = 'template_id';
-    const PARAM_CONTENT_OBJECT_TYPE = 'content_object_type';
-    const PARAM_EDIT = 'edit';
-    const PARAM_EDIT_ID = 'viewer_edit_id';
-    const PARAM_ID = 'viewer_publish_id';
-    const PARAM_IMPORTED_CONTENT_OBJECT_IDS = 'imported_content_object_ids';
-    const PARAM_IMPORT_TYPE = 'import_type';
-    const PARAM_IN_WORKSPACES = 'in_workspaces';
-    const PARAM_PUBLISH_SELECTED = 'viewer_selected';
-    const PARAM_QUERY = 'query';
-    const PARAM_TAB = 'tab';
-    const PARAM_VIEW_ID = 'viewer_view_id';
-    const PARAM_WORKSPACE_ID = 'workspace_id';
+    public const PARAM_ACTION = 'viewer_action';
+    public const PARAM_CONTENT_OBJECT_TEMPLATE_REGISTRATION_ID = 'template_id';
+    public const PARAM_CONTENT_OBJECT_TYPE = 'content_object_type';
+    public const PARAM_EDIT = 'edit';
+    public const PARAM_EDIT_ID = 'viewer_edit_id';
+    public const PARAM_ID = 'viewer_publish_id';
+    public const PARAM_IMPORTED_CONTENT_OBJECT_IDS = 'imported_content_object_ids';
+    public const PARAM_IMPORT_TYPE = 'import_type';
+    public const PARAM_IN_WORKSPACES = 'in_workspaces';
+    public const PARAM_PUBLISH_SELECTED = 'viewer_selected';
+    public const PARAM_QUERY = 'query';
+    public const PARAM_TAB = 'tab';
+    public const PARAM_VIEW_ID = 'viewer_view_id';
+    public const PARAM_WORKSPACE_ID = 'workspace_id';
 
-    /**
-     * Allow selection of multiple content objects in the viewer
-     *
-     * @var int
-     */
-    const SELECT_MULTIPLE = 0;
+    public const SELECT_MULTIPLE = 0;
+    public const SELECT_SINGLE = 1;
+    public const SETTING_BREADCRUMBS_DISABLED = 'breadcrumbs_disabled';
 
-    /**
-     * Allow selection of just one content object in the viewer
-     *
-     * @var int
-     */
-    const SELECT_SINGLE = 1;
-
-    const SETTING_BREADCRUMBS_DISABLED = 'breadcrumbs_disabled';
-
-    const SETTING_TABS_DISABLED = 'tabs_disabled';
-
-    // Default action
-
-    const TAB_BROWSER = 'Browser';
-
-    // Configuration
-
-    const TAB_CREATOR = 'Creator';
-
-    const TAB_IMPORTER = 'Importer';
-
-    const TAB_VIEWER = 'Viewer';
-
-    const TAB_WORKSPACE_BROWSER = 'WorkspaceBrowser';
-
-    /**
-     *
-     * @var string[]
-     */
-    private $types;
+    public const TAB_BROWSER = 'Browser';
+    public const TAB_CREATOR = 'Creator';
+    public const TAB_IMPORTER = 'Importer';
+    public const TAB_VIEWER = 'Viewer';
+    public const TAB_WORKSPACE_BROWSER = 'WorkspaceBrowser';
 
     /**
      *
@@ -87,18 +55,24 @@ abstract class Manager extends Application
      */
     private $actions;
 
-    private $parameters;
-
-    private $maximum_select;
+    private $creation_defaults;
 
     private $excluded_objects;
 
+    private $maximum_select;
+
+    private $parameters;
+
     /**
-     * @var \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer
+     * @var \Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer
      */
     private $tabs;
 
-    private $creation_defaults;
+    /**
+     *
+     * @var string[]
+     */
+    private $types;
 
     /**
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
@@ -119,7 +93,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public static function any_object_selected()
     {
@@ -128,21 +102,11 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function areBreadcrumbsDisabled()
     {
         return $this->getApplicationConfiguration()->get(self::SETTING_BREADCRUMBS_DISABLED) === true;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function areTabsDisabled()
-    {
-        return $this->getApplicationConfiguration()->get(self::SETTING_TABS_DISABLED) === true ||
-            !$this->isAuthorized(\Chamilo\Core\Repository\Manager::context());
     }
 
     /**
@@ -157,25 +121,30 @@ abstract class Manager extends Application
         $tabs[self::TAB_CREATOR] = array(
             'url' => $this->get_url(
                 array(self::PARAM_TAB => self::TAB_CREATOR, self::PARAM_ACTION => self::ACTION_CREATOR)
-            ), 'glyph' => new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas')
+            ),
+            'glyph' => new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas')
         );
 
         $tabs[self::TAB_BROWSER] = array(
             'url' => $this->get_url(
                 array(
-                    self::PARAM_TAB => self::TAB_BROWSER, self::PARAM_ACTION => self::ACTION_BROWSER,
+                    self::PARAM_TAB => self::TAB_BROWSER,
+                    self::PARAM_ACTION => self::ACTION_BROWSER,
                     self::PARAM_IN_WORKSPACES => false
                 )
-            ), 'glyph' => new FontAwesomeGlyph('folder', array('fa-lg'), null, 'fas')
+            ),
+            'glyph' => new FontAwesomeGlyph('folder', array('fa-lg'), null, 'fas')
         );
 
         $tabs[self::TAB_WORKSPACE_BROWSER] = array(
             'url' => $this->get_url(
                 array(
-                    self::PARAM_TAB => self::TAB_WORKSPACE_BROWSER, self::PARAM_ACTION => self::ACTION_BROWSER,
+                    self::PARAM_TAB => self::TAB_WORKSPACE_BROWSER,
+                    self::PARAM_ACTION => self::ACTION_BROWSER,
                     self::PARAM_IN_WORKSPACES => true
                 )
-            ), 'glyph' => new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas')
+            ),
+            'glyph' => new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas')
         );
 
         if ($this->get_maximum_select() > 1)
@@ -183,7 +152,8 @@ abstract class Manager extends Application
             $tabs[self::TAB_IMPORTER] = array(
                 'url' => $this->get_url(
                     array(self::PARAM_TAB => self::TAB_IMPORTER, self::PARAM_ACTION => self::ACTION_IMPORTER)
-                ), 'glyph' => new FontAwesomeGlyph('upload', array('fa-lg'), null, 'fas')
+                ),
+                'glyph' => new FontAwesomeGlyph('upload', array('fa-lg'), null, 'fas')
             );
         }
 
@@ -192,10 +162,12 @@ abstract class Manager extends Application
             $tabs[self::TAB_VIEWER] = array(
                 'url' => $this->get_url(
                     array(
-                        self::PARAM_TAB => self::TAB_VIEWER, self::PARAM_ACTION => self::ACTION_VIEWER,
+                        self::PARAM_TAB => self::TAB_VIEWER,
+                        self::PARAM_ACTION => self::ACTION_VIEWER,
                         self::PARAM_ID => $this->getRequest()->get(self::PARAM_ID)
                     )
-                ), 'glyph' => new FontAwesomeGlyph('desktop', array('fa-lg'), null, 'fas')
+                ),
+                'glyph' => new FontAwesomeGlyph('desktop', array('fa-lg'), null, 'fas')
             );
         }
 
@@ -232,7 +204,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return integer[]
+     * @return int
      */
     public function get_excluded_objects()
     {
@@ -241,7 +213,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @param integer[] $excluded_objects
+     * @param int $excluded_objects
      */
     public function set_excluded_objects($excluded_objects)
     {
@@ -268,7 +240,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return integer[]
+     * @return int
      */
     public static function get_selected_objects()
     {
@@ -299,77 +271,11 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return boolean
+     * @return bool
      * @deprecated any_object_selected()
      */
     public static function is_ready_to_be_published()
     {
         return (self::any_object_selected());
-    }
-
-    /**
-     * @return string
-     */
-    public function render_footer()
-    {
-        if ($this->areTabsDisabled())
-        {
-            return parent::render_footer();
-        }
-
-        $html = [];
-
-        $html[] = $this->tabs->body_footer();
-        $html[] = $this->tabs->footer();
-        $html[] = parent::render_footer();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @param string $pageTitle
-     *
-     * @return string
-     */
-    public function render_header($pageTitle = '')
-    {
-        if ($this->areTabsDisabled())
-        {
-            return parent::render_header($pageTitle);
-        }
-
-        $html = [];
-
-        $html[] = parent::render_header($pageTitle);
-
-        $currentTab = $this->getRequest()->get(self::PARAM_TAB);
-        if (empty($currentTab))
-        {
-            $currentTab = self::TAB_CREATOR;
-        }
-
-        $tabs = $this->getTabs();
-
-        $this->tabs = new DynamicVisualTabsRenderer('viewer');
-
-        foreach ($tabs as $tabName => $tabProperties)
-        {
-            $selected = $currentTab == $tabName;
-
-            $label = Translation::get(
-                (string) StringUtilities::getInstance()->createString($tabName)->upperCamelize() . 'Title'
-            );
-
-            $this->tabs->add_tab(
-                new DynamicVisualTab(
-                    $tabName, $label, $tabProperties['glyph'], $tabProperties['url'], $selected
-                )
-            );
-        }
-
-        $html[] = $this->tabs->header();
-        $html[] = $this->tabs->body_header();
-
-        return implode(PHP_EOL, $html);
     }
 }

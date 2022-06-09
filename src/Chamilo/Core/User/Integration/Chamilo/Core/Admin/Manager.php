@@ -8,7 +8,7 @@ use Chamilo\Core\Admin\ImportActionsInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicAction;
+use Chamilo\Libraries\Format\Tabs\Action;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -25,8 +25,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 \Chamilo\Core\User\Manager::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_BROWSE_USERS
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('List'), Translation::get('ListDescription'),
+        $links[] = new Action(
+            Translation::get('ListDescription'), Translation::get('List'),
             new FontAwesomeGlyph('list', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -40,8 +40,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                     \Chamilo\Core\User\Manager::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_USER_APPROVAL_BROWSER
                 )
             );
-            $links[] = new DynamicAction(
-                Translation::get('ApproveList'), Translation::get('ApproveListDescription'),
+            $links[] = new Action(
+                Translation::get('ApproveListDescription'), Translation::get('ApproveList'),
                 new FontAwesomeGlyph('list', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
             );
         }
@@ -52,8 +52,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 \Chamilo\Core\User\Manager::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_CREATE_USER
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('Create', null, StringUtilities::LIBRARIES), Translation::get('CreateDescription'),
+        $links[] = new Action(
+            Translation::get('CreateDescription'), Translation::get('Create', null, StringUtilities::LIBRARIES),
             new FontAwesomeGlyph('plus', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -63,8 +63,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 \Chamilo\Core\User\Manager::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_EXPORT_USERS
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('Export', null, StringUtilities::LIBRARIES), Translation::get('ExportDescription'),
+        $links[] = new Action(
+            Translation::get('ExportDescription'), Translation::get('Export', null, StringUtilities::LIBRARIES),
             new FontAwesomeGlyph('download', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -74,8 +74,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 \Chamilo\Core\User\Manager::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_IMPORT_USERS
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('Import', null, StringUtilities::LIBRARIES), Translation::get('ImportDescription'),
+        $links[] = new Action(
+            Translation::get('ImportDescription'), Translation::get('Import', null, StringUtilities::LIBRARIES),
             new FontAwesomeGlyph('upload', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -85,8 +85,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 \Chamilo\Core\User\Manager::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_BUILD_USER_FIELDS
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('BuildUserFields'), Translation::get('BuildUserFieldsDescription'),
+        $links[] = new Action(
+            Translation::get('BuildUserFieldsDescription'), Translation::get('BuildUserFields'),
             new FontAwesomeGlyph('user', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -112,8 +112,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 \Chamilo\Core\User\Manager::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_IMPORT_USERS
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('Import', null, StringUtilities::LIBRARIES), Translation::get('ImportDescription'),
+        $links[] = new Action(
+            Translation::get('ImportDescription'), Translation::get('Import', null, StringUtilities::LIBRARIES),
             new FontAwesomeGlyph('user', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 

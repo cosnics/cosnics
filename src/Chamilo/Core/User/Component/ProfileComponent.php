@@ -7,8 +7,8 @@ use Chamilo\Configuration\Form\Storage\DataManager;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -27,14 +27,14 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
 {
 
     /**
-     * @return \Chamilo\Libraries\Format\Tabs\DynamicVisualTab[]
+     * @return \Chamilo\Libraries\Format\Tabs\Link\LinkTab[]
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function getAvailableTabs()
     {
         $tabs = [];
 
-        $tabs[] = new DynamicVisualTab(
+        $tabs[] = new LinkTab(
             self::ACTION_VIEW_ACCOUNT, htmlentities(Translation::get(self::ACTION_VIEW_ACCOUNT . 'Title')),
             new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'),
             $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT)),
@@ -43,7 +43,7 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
 
         if (Configuration::get(Manager::context(), 'allow_change_user_picture'))
         {
-            $tabs[] = new DynamicVisualTab(
+            $tabs[] = new LinkTab(
                 self::ACTION_CHANGE_PICTURE, htmlentities(Translation::get(self::ACTION_CHANGE_PICTURE . 'Title')),
                 new FontAwesomeGlyph('image', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_CHANGE_PICTURE)),
@@ -51,7 +51,7 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
             );
         }
 
-        $tabs[] = new DynamicVisualTab(
+        $tabs[] = new LinkTab(
             self::ACTION_USER_SETTINGS, htmlentities(Translation::get(self::ACTION_USER_SETTINGS . 'Title')),
             new FontAwesomeGlyph('cog', array('fa-lg'), null, 'fas'),
             $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_SETTINGS)),
@@ -75,7 +75,7 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
 
         if ($extra_form instanceof Instance && count($extra_form->get_elements()) > 0)
         {
-            $tabs[] = new DynamicVisualTab(
+            $tabs[] = new LinkTab(
                 self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION,
                 htmlentities(Translation::get(self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION . 'Title')),
                 new FontAwesomeGlyph('lightbulb', array('fa-lg'), null, 'fas'),
@@ -115,11 +115,11 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
 
         if (count($availableTabs) > 1)
         {
-            $tabs = new DynamicVisualTabsRenderer('account', $this->getContent());
+            $tabs = new LinkTabsRenderer('account', $this->getContent());
 
             foreach ($availableTabs as $availableTab)
             {
-                $tabs->add_tab($availableTab);
+                $tabs->addTab($availableTab);
             }
 
             $html[] = $tabs->render();

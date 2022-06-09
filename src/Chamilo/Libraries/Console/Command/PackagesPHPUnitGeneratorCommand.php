@@ -17,17 +17,8 @@ use Twig\Environment;
 class PackagesPHPUnitGeneratorCommand extends Command
 {
 
-    /**
-     *
-     * @var \Twig\Environment
-     */
-    protected $twig;
+    protected Environment $twig;
 
-    /**
-     * PackagesPHPUnitGeneratorCommand constructor.
-     *
-     * @param \Twig\Environment $twig
-     */
     public function __construct(Environment $twig)
     {
         parent::__construct();
@@ -35,9 +26,6 @@ class PackagesPHPUnitGeneratorCommand extends Command
         $this->twig = $twig;
     }
 
-    /**
-     * Configures the current command.
-     */
     protected function configure()
     {
         $this->setName('chamilo:phpunit:generate-packages-config')->setDescription(
@@ -48,10 +36,6 @@ class PackagesPHPUnitGeneratorCommand extends Command
     /**
      * Executes the current command.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface $input An InputInterface instance
-     * @param \Symfony\Component\Console\Output\OutputInterface $output An OutputInterface instance
-     *
-     * @return null
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
@@ -103,8 +87,10 @@ class PackagesPHPUnitGeneratorCommand extends Command
 
             $phpunitContent = $this->twig->render(
                 'Chamilo\Libraries:PHPUnitGenerator/package_phpunit.xml.twig', [
-                    'SourcePathExists' => $sourcePathExists, 'IntegrationPathExists' => $integrationPathExists,
-                    'UnitPathExists' => $unitPathExists, 'BootstrapPath' => $bootstrapPath
+                    'SourcePathExists' => $sourcePathExists,
+                    'IntegrationPathExists' => $integrationPathExists,
+                    'UnitPathExists' => $unitPathExists,
+                    'BootstrapPath' => $bootstrapPath
                 ]
             );
 

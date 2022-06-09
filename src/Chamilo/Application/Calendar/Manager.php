@@ -30,7 +30,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer
+     * @var \Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer
      */
     private $tabs;
 

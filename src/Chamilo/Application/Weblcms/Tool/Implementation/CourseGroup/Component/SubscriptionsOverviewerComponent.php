@@ -18,16 +18,16 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class SubscriptionsOverviewerComponent extends Manager implements TableSupport
 {
@@ -235,13 +235,13 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
      */
     private function get_tabs()
     {
-        $tabs = new DynamicVisualTabsRenderer('weblcms_course_user_browser');
+        $tabs = new LinkTabsRenderer('weblcms_course_user_browser');
 
         // all tab
         $link = $this->get_url(array(self::PARAM_TAB => self::TAB_USERS));
         $tab_name = Translation::get('User');
-        $tabs->add_tab(
-            new DynamicVisualTab(
+        $tabs->addTab(
+            new LinkTab(
                 self::TAB_USERS, $tab_name, new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas'), $link,
                 $this->current_tab == self::TAB_USERS
             )
@@ -250,8 +250,8 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         // users tab
         $link = $this->get_url(array(self::PARAM_TAB => self::TAB_COURSE_GROUPS));
         $tab_name = Translation::get('CourseGroup');
-        $tabs->add_tab(
-            new DynamicVisualTab(
+        $tabs->addTab(
+            new LinkTab(
                 self::TAB_COURSE_GROUPS, $tab_name, new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $link,
                 $this->current_tab == self::TAB_COURSE_GROUPS
             )

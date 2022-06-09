@@ -42,16 +42,6 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
         {
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
 
-            $tabsSetting = $this->getApplicationConfiguration()->get(
-                \Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED
-            );
-            if (isset($tabsSetting))
-            {
-                $applicationConfiguration->set(
-                    \Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, $tabsSetting
-                );
-            }
-
             $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_BREADCRUMBS_DISABLED, true);
 
             return $this->getApplicationFactory()->getApplication(

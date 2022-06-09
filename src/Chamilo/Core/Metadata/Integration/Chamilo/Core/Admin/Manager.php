@@ -6,7 +6,7 @@ use Chamilo\Core\Admin\ActionsSupportInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicAction;
+use Chamilo\Libraries\Format\Tabs\Action;
 use Chamilo\Libraries\Translation\Translation;
 
 class Manager implements ActionsSupportInterface
@@ -23,8 +23,8 @@ class Manager implements ActionsSupportInterface
             )
         );
 
-        $links[] = new DynamicAction(
-            Translation::get('MetadataNamespacesBrowser'), Translation::get('MetadataNamespacesDescription'),
+        $links[] = new Action(
+            Translation::get('MetadataNamespacesDescription'), Translation::get('MetadataNamespacesBrowser'),
             new FontAwesomeGlyph('list', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 

@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Form;
 use Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataClass\AssessmentOpenQuestion;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Tabs\Form\FormTab;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -124,8 +124,8 @@ class AssessmentOpenQuestionForm extends ContentObjectForm
 
     public function addHintTab()
     {
-        $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab(
+        $this->getTabsGenerator()->addTab(
+            new FormTab(
                 'add-hint',
                 Translation::get('AddHint'),
                 new FontAwesomeGlyph('magic', array('fa-sm')),

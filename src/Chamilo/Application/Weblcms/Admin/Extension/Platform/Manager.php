@@ -13,8 +13,8 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -169,10 +169,10 @@ abstract class Manager extends Application
 
     public function get_tabs($current_tab, $content)
     {
-        $tabs = new DynamicVisualTabsRenderer(__CLASS__, $content);
+        $tabs = new LinkTabsRenderer(__CLASS__, $content);
 
-        $tabs->add_tab(
-            new DynamicVisualTab(
+        $tabs->addTab(
+            new LinkTab(
                 self::ACTION_CREATE, Translation::get(self::ACTION_CREATE . 'Component'),
                 new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)), $current_tab == self::ACTION_CREATE
@@ -183,8 +183,8 @@ abstract class Manager extends Application
 
         if ($count > 0)
         {
-            $tabs->add_tab(
-                new DynamicVisualTab(
+            $tabs->addTab(
+                new LinkTab(
                     self::ACTION_ENTITY, Translation::get(self::ACTION_ENTITY . 'Component'),
                     new FontAwesomeGlyph('chess-pawn', array('fa-lg'), null, 'fas'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_ENTITY)),
@@ -195,8 +195,8 @@ abstract class Manager extends Application
 
         if ($current_tab == self::ACTION_TARGET && $this->get_selected_entity_type() && $this->get_selected_entity_id())
         {
-            $tabs->add_tab(
-                new DynamicVisualTab(
+            $tabs->addTab(
+                new LinkTab(
                     self::ACTION_TARGET, Translation::get(self::ACTION_TARGET . 'Component'),
                     new FontAwesomeGlyph('bullseye', array('fa-lg'), null, 'fas'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_TARGET)),

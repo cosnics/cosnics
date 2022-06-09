@@ -15,26 +15,15 @@ use Symfony\Component\Translation\Translator;
  */
 class GenerateResourcesCommand extends ChamiloCommand
 {
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\Resource\ResourceGenerator
-     */
-    protected $resourceGenerator;
 
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Libraries\Architecture\Resource\ResourceGenerator $resourceGenerator
-     */
+    protected ResourceGenerator $resourceGenerator;
+
     public function __construct(Translator $translator, ResourceGenerator $resourceGenerator)
     {
         $this->resourceGenerator = $resourceGenerator;
-
         parent::__construct($translator);
     }
 
-    /**
-     * Configures this command
-     */
     protected function configure()
     {
         $this->setName('chamilo:generate_resources')->setDescription(
@@ -42,11 +31,6 @@ class GenerateResourcesCommand extends ChamiloCommand
         );
     }
 
-    /**
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->resourceGenerator->generateResources();

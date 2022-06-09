@@ -7,7 +7,7 @@ use Chamilo\Core\Admin\ImportActionsInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicAction;
+use Chamilo\Libraries\Format\Tabs\Action;
 use Chamilo\Libraries\Translation\Translation;
 
 class Manager implements ActionsSupportInterface, ImportActionsInterface
@@ -23,8 +23,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_COURSE_TYPE_MANAGER
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('CourseTypeList'), Translation::get('CourseTypeListDescription'),
+        $links[] = new Action(
+            Translation::get('CourseTypeListDescription'),Translation::get('CourseTypeList'),
             new FontAwesomeGlyph('list', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -34,8 +34,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_ADMIN_COURSE_MANAGER
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('CourseList'), Translation::get('ListDescription'),
+        $links[] = new Action(
+            Translation::get('ListDescription'),Translation::get('CourseList'),
             new FontAwesomeGlyph('chalkboard', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -46,8 +46,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_CREATE
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('CreateCourse'), Translation::get('CreateDescription'),
+        $links[] = new Action(
+             Translation::get('CreateDescription'),Translation::get('CreateCourse'),
             new FontAwesomeGlyph('plus', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -57,8 +57,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_IMPORT_COURSES
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('Import'), Translation::get('ImportDescription'),
+        $links[] = new Action(
+            Translation::get('ImportDescription'),Translation::get('Import'),
             new FontAwesomeGlyph('upload', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -68,8 +68,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_ADMIN_REQUEST_BROWSER
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('RequestList'), Translation::get('RequestDescription'),
+        $links[] = new Action(
+            Translation::get('RequestDescription'),Translation::get('RequestList'),
             new FontAwesomeGlyph('list', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -79,8 +79,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_COURSE_CATEGORY_MANAGER
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('CourseCategoryManagement'), Translation::get('CourseCategoryManagementDescription'),
+        $links[] = new Action(
+            Translation::get('CourseCategoryManagementDescription'),Translation::get('CourseCategoryManagement'),
             new FontAwesomeGlyph('folder', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -90,8 +90,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_IMPORT_COURSE_USERS
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('UserImport'), Translation::get('UserImportDescription'),
+        $links[] = new Action(
+            Translation::get('UserImportDescription'),Translation::get('UserImport'),
             new FontAwesomeGlyph('upload', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -116,8 +116,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_IMPORT_COURSES
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('ImportCourses'), Translation::get('ImportCoursesDescription'),
+        $links[] = new Action(
+            Translation::get('ImportCoursesDescription'), Translation::get('ImportCourses'),
             new FontAwesomeGlyph('chalkboard', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -127,8 +127,8 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
                 Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_IMPORT_COURSE_USERS
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('UserImport'), Translation::get('UserImportDescription'),
+        $links[] = new Action(
+            Translation::get('UserImportDescription'),Translation::get('UserImport'),
             new FontAwesomeGlyph('users', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 

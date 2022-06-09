@@ -5,10 +5,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupFormDecoratorInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Decorates the CourseGroup form with additional items
@@ -19,8 +17,8 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
 {
-    const PROPERTY_USE_GROUP = 'use_group';
-    const PROPERTY_USE_GROUP_AND_TEAM = 'use_group_and_team';
+    public const PROPERTY_USE_GROUP = 'use_group';
+    public const PROPERTY_USE_GROUP_AND_TEAM = 'use_group_and_team';
 
     /**
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService
@@ -67,13 +65,16 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
 
         $defaults = [];
         $office365Reference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
-        if($office365Reference){
-            if($office365Reference->isLinked()) {
+        if ($office365Reference)
+        {
+            if ($office365Reference->isLinked())
+            {
                 $defaults[self::PROPERTY_USE_GROUP . '[' . $courseGroup->getId() . ']'] = true;
             }
 
-            if($office365Reference->hasTeam()) {
-              $defaults[self::PROPERTY_USE_GROUP_AND_TEAM . '[' . $courseGroup->getId() . ']' ] = true;
+            if ($office365Reference->hasTeam())
+            {
+                $defaults[self::PROPERTY_USE_GROUP_AND_TEAM . '[' . $courseGroup->getId() . ']'] = true;
             }
         }
 

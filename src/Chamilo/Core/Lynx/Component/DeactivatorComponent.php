@@ -42,7 +42,7 @@ class DeactivatorComponent extends Manager implements DelegateComponent
         $html = [];
 
         $html[] = $this->render_header();
-        $html[] = $deactivator->get_result(true);
+        $html[] = $deactivator->getResult(true);
 
         $toolbar = new Toolbar();
         $toolbar->add_item(

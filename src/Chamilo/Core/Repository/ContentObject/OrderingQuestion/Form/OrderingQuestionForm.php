@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
+use Chamilo\Libraries\Format\Tabs\Form\FormTab;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -20,8 +20,8 @@ class OrderingQuestionForm extends ContentObjectForm
 
     public function addHintTab()
     {
-        $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab(
+        $this->getTabsGenerator()->addTab(
+            new FormTab(
                 'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', array('fa-sm')), 'buildHintForm'
             )
         );

@@ -9,33 +9,27 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 class MessageLogger
 {
-    const TYPE_CONFIRM = 2;
-    const TYPE_ERROR = 4;
-    const TYPE_NORMAL = 1;
-    const TYPE_WARNING = 3;
+    public const TYPE_CONFIRM = 2;
+    public const TYPE_ERROR = 4;
+    public const TYPE_NORMAL = 1;
+    public const TYPE_WARNING = 3;
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\MessageLogger[]
      */
-    private static $instances;
+    private static array $instances = [];
 
     /**
-     *
      * @var string[]
      */
-    private $messages;
+    private array $messages;
 
     public function __construct()
     {
         $this->messages = [];
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function render()
+    public function render(): string
     {
         $message = implode('<br />' . PHP_EOL, $this->get_messages());
         $this->truncate();
@@ -43,12 +37,7 @@ class MessageLogger
         return $message;
     }
 
-    /**
-     *
-     * @param string $message
-     * @param integer $type
-     */
-    public function add_message($message, $type = self::TYPE_NORMAL)
+    public function add_message(string $message, int $type = self::TYPE_NORMAL)
     {
         switch ($type)
         {
@@ -69,23 +58,14 @@ class MessageLogger
     }
 
     /**
-     *
-     * @param \stdClass $object
-     *
-     * @return \Chamilo\Libraries\Format\MessageLogger
+     * @throws \ReflectionException
      */
-    public static function getInstance($object)
+    public static function getInstance(object $object): MessageLogger
     {
         return self::get_instance_by_name(ClassnameUtilities::getInstance()->getClassnameFromObject($object, true));
     }
 
-    /**
-     *
-     * @param string $instanceName
-     *
-     * @return \Chamilo\Libraries\Format\MessageLogger
-     */
-    public static function get_instance_by_name($instanceName)
+    public static function get_instance_by_name(string $instanceName): MessageLogger
     {
         if (!isset(self::$instances[$instanceName]))
         {
@@ -96,42 +76,19 @@ class MessageLogger
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Format\MessageLogger[]
-     */
-    public static function get_instances()
-    {
-        return self::$instances;
-    }
-
-    /**
-     *
      * @return string[]
      */
-    public function get_messages()
+    public function get_messages(): array
     {
         return $this->messages;
     }
 
     /**
-     *
      * @param string[] $messages
      */
-    public function set_messages($messages)
+    public function set_messages(array $messages)
     {
         $this->messages = $messages;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function render_for_cli()
-    {
-        $message = strip_tags(implode(PHP_EOL, $this->get_messages()));
-        $this->truncate();
-
-        return $message;
     }
 
     public function truncate()

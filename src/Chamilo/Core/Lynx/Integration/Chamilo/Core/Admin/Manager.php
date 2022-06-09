@@ -7,7 +7,7 @@ use Chamilo\Core\Admin\ActionsSupportInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicAction;
+use Chamilo\Libraries\Format\Tabs\Action;
 use Chamilo\Libraries\Translation\Translation;
 
 class Manager implements ActionsSupportInterface
@@ -25,8 +25,8 @@ class Manager implements ActionsSupportInterface
         {
             $redirect = new Redirect(array(Application::PARAM_CONTEXT => \Chamilo\Core\Lynx\Manager::context()));
 
-            $links[] = new DynamicAction(
-                Translation::get('ManagePackages'), Translation::get('ManagePackagesDescription'),
+            $links[] = new Action(
+                Translation::get('ManagePackagesDescription'), Translation::get('ManagePackages'),
                 new FontAwesomeGlyph('hard-hat', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
             );
         }

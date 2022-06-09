@@ -19,14 +19,7 @@ use Twig\Source;
 class TwigLoaderChamiloFilesystem implements LoaderInterface
 {
 
-    /**
-     * Check if we have the source code of a template, given its name.
-     *
-     * @param string $name The name of the template to check if we can load
-     *
-     * @return bool If the template source code is handled by this loader or not
-     */
-    public function exists($name)
+    public function exists(string $name)
     {
         try
         {
@@ -44,12 +37,9 @@ class TwigLoaderChamiloFilesystem implements LoaderInterface
      * Finds a template based on a given template name.
      * The template name is prefixed by a namespace:
      *
-     * @param string $templateName
-     *
-     * @return string
      * @throws LoaderError
      */
-    protected function findTemplate($templateName)
+    protected function findTemplate(string $templateName): string
     {
         if (strpos($templateName, ':') === false)
         {
@@ -105,25 +95,15 @@ class TwigLoaderChamiloFilesystem implements LoaderInterface
         return $fullPath;
     }
 
-    /**
-     *
-     * @see Twig_LoaderInterface::getCacheKey()
-     */
-    public function getCacheKey($name): string
+    public function getCacheKey(string $name): string
     {
         return $this->findTemplate($name);
     }
 
     /**
-     * Returns the source context for a given template logical name.
-     *
-     * @param string $name The template logical name
-     *
-     * @return Source
-     *
-     * @throws LoaderError When $name is not found
+     * @throws LoaderError
      */
-    public function getSourceContext($name): Source
+    public function getSourceContext(string $name): Source
     {
         $path = $this->findTemplate($name);
 
@@ -131,10 +111,9 @@ class TwigLoaderChamiloFilesystem implements LoaderInterface
     }
 
     /**
-     *
-     * @see Twig_LoaderInterface::isFresh()
+     * @throws \Twig\Error\LoaderError
      */
-    public function isFresh($name, $time): bool
+    public function isFresh(string $name, int $time): bool
     {
         return filemtime($this->findTemplate($name)) <= $time;
     }

@@ -17,7 +17,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -510,7 +510,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $html[] = '<div id="coursecode" style="display: none;">' . $this->course->get_id() . '</div>';
 
-        $tabs = new DynamicTabsRenderer('admin');
+        $tabs = new TabsRenderer('admin');
 
         $sections->first();
 

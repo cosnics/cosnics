@@ -11,8 +11,8 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -68,7 +68,7 @@ class TargetComponent extends Manager implements TableSupport
 
         $table = new TargetTable($this);
 
-        $tabs = new DynamicVisualTabsRenderer(
+        $tabs = new LinkTabsRenderer(
             ClassnameUtilities::getInstance()->getClassnameFromNamespace(__CLASS__, true), $table->as_html()
         );
 
@@ -108,8 +108,8 @@ class TargetComponent extends Manager implements TableSupport
 
             if ($count > 0)
             {
-                $tabs->add_tab(
-                    new DynamicVisualTab(
+                $tabs->addTab(
+                    new LinkTab(
                         $target_type::ENTITY_TYPE, Translation::get(
                         StringUtilities::getInstance()->createString($target_type::ENTITY_NAME)->upperCamelize()
                             ->__toString()

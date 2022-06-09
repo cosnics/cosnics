@@ -12,15 +12,15 @@ abstract class HashingUtilities
     /**
      * @return string[]
      */
-    public static function get_available_types(): array
+    public static function getAvailableTypes(): array
     {
-        return array(
+        return [
             'Haval256' => 'HAVAL-256',
             'Md5' => 'MD5',
             'Sha1' => 'SHA-1',
             'Sha512' => 'SHA-512',
             'Whirlpool' => 'Whirlpool'
-        );
+        ];
     }
 
     abstract public function hashFile(string $filePath): string;

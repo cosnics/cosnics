@@ -91,61 +91,6 @@
                  class="Doctrine\ORM\Tools\Console\Command\InfoCommand">
             <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
-        <!--
-                <service id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"
-                         class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\DoctrineMigrationsCommandConfigurator">
-                    <argument type="service"
-                              id="service_container"/>
-                </service>
-
-                <service id="Chamilo\Libraries\Console\Command\Doctrine\Migrations\Diff"
-                         class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\DiffCommand">
-                    <argument type="service"
-                              id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"/>
-                    <tag name="Chamilo\Libraries\Console\Command"/>
-                </service>
-
-                <service id="Chamilo\Libraries\Console\Command\Doctrine\Migrations\Execute"
-                         class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\ExecuteCommand">
-                    <argument type="service"
-                              id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"/>
-                    <tag name="Chamilo\Libraries\Console\Command"/>
-                </service>
-
-                <service id="Chamilo\Libraries\Console\Command\Doctrine\Migrations\Generate"
-                         class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\GenerateCommand">
-                    <argument type="service"
-                              id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"/>
-                    <tag name="Chamilo\Libraries\Console\Command"/>
-                </service>
-
-                <service id="Chamilo\Libraries\Console\Command\Doctrine\Migrations\Latest"
-                         class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\LatestCommand">
-                    <argument type="service"
-                              id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"/>
-                    <tag name="Chamilo\Libraries\Console\Command"/>
-                </service>
-
-                <service id="Chamilo\Libraries\Console\Command\Doctrine\Migrations\Migrate"
-                         class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\MigrateCommand">
-                    <argument type="service"
-                              id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"/>
-                    <tag name="Chamilo\Libraries\Console\Command"/>
-                </service>
-
-                <service id="Chamilo\Libraries\Console\Command\Doctrine\Migrations\Status"
-                         class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\StatusCommand">
-                    <argument type="service"
-                              id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"/>
-                    <tag name="Chamilo\Libraries\Console\Command"/>
-                </service>
-
-                <service id="Chamilo\Libraries\Console\Command\Doctrine\Migrations\Version"
-                         class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\VersionCommand">
-                    <argument type="service"
-                              id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"/>
-                    <tag name="Chamilo\Libraries\Console\Command"/>
-    </service>-->
 
     </services>
 </container>

@@ -9,8 +9,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Search\Manager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Translation\Translation;
@@ -103,7 +103,7 @@ class SearcherComponent extends Manager
             
             $results = 0;
             
-            $tabs = new DynamicTabsRenderer('search');
+            $tabs = new TabsRenderer('search');
             
             foreach ($tools as $tool => $publications)
             {
@@ -175,7 +175,7 @@ class SearcherComponent extends Manager
                     
                     $tabLabel = $toolName . ' <span class="badge">' . $count . '</span>';
                     
-                    $tabs->add_tab(new DynamicContentTab($tool, $tabLabel, null, implode(PHP_EOL, $resultsHtml)));
+                    $tabs->addTab(new ContentTab($tool, $tabLabel, implode(PHP_EOL, $resultsHtml)));
                 }
             }
             

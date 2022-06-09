@@ -31,7 +31,6 @@ class IntroductionPublisherComponent extends Manager implements ViewerInterface,
         if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
-            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
 
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::context(),

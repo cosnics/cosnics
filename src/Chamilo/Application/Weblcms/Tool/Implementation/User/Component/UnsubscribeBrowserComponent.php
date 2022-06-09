@@ -13,7 +13,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\SubscribedPlatformGroup
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
@@ -23,8 +22,8 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -42,15 +41,12 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class UnsubscribeBrowserComponent extends Manager implements TableSupport
 {
-    const PLATFORM_GROUP_ROOT_ID = 0;
+    public const PLATFORM_GROUP_ROOT_ID = 0;
 
-    const TAB_ALL = 1;
-
-    const TAB_PLATFORM_GROUPS_SUBGROUPS = 4;
-
-    const TAB_PLATFORM_GROUPS_USERS = 3;
-
-    const TAB_USERS = 2;
+    public const TAB_ALL = 1;
+    public const TAB_PLATFORM_GROUPS_SUBGROUPS = 4;
+    public const TAB_PLATFORM_GROUPS_USERS = 3;
+    public const TAB_USERS = 2;
 
     /**
      *
@@ -60,6 +56,9 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
 
     private $current_tab;
 
+    /**
+     * @var LinkTabsRenderer
+     */
     private $tabs;
 
     public function run()
@@ -94,6 +93,24 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('weblcms_user_unsubscribe_browser');
+    }
+
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_TAB;
+
+        $current_tab = self::TAB_ALL;
+        if (Request::get(self::PARAM_TAB))
+        {
+            $current_tab = Request::get(self::PARAM_TAB);
+        }
+
+        if ($current_tab != self::TAB_ALL && $current_tab != self::TAB_USERS)
+        {
+            $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
+        }
+
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     public function getButtonToolbarRenderer()
@@ -153,24 +170,6 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         }
 
         return $this->buttonToolbarRenderer;
-    }
-
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_TAB;
-
-        $current_tab = self::TAB_ALL;
-        if (Request::get(self::PARAM_TAB))
-        {
-            $current_tab = Request::get(self::PARAM_TAB);
-        }
-
-        if ($current_tab != self::TAB_ALL && $current_tab != self::TAB_USERS)
-        {
-            $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
-        }
-
-        return parent::getAdditionalParameters($additionalParameters);
     }
 
     private function get_all_users_tab()
@@ -277,7 +276,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
     {
         $html = [];
 
-        $tabs = new DynamicVisualTabsRenderer('weblcms_course_user_platformgroups_browser');
+        $tabs = new LinkTabsRenderer('weblcms_course_user_platformgroups_browser');
 
         // no users tab if the root is selected
         if ($this->get_group() != self::PLATFORM_GROUP_ROOT_ID)
@@ -286,8 +285,8 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             $link = $this->get_url(array(self::PARAM_TAB => self::TAB_PLATFORM_GROUPS_USERS));
             $tab_name = Translation::get('Users', null, StringUtilities::LIBRARIES);
 
-            $tabs->add_tab(
-                new DynamicVisualTab(
+            $tabs->addTab(
+                new LinkTab(
                     self::TAB_PLATFORM_GROUPS_USERS, $tab_name,
                     new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $link,
                     $this->current_tab == self::TAB_PLATFORM_GROUPS_USERS
@@ -315,17 +314,16 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             $tab_name = Translation::get('SubscribedGroups');
             $tab_selected = true;
         }
-        $tabs->add_tab(
-            new DynamicVisualTab(
+        $tabs->addTab(
+            new LinkTab(
                 self::TAB_PLATFORM_GROUPS_SUBGROUPS, $tab_name,
                 new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas'), $link, $tab_selected
             )
         );
 
+        $tabs->setContent($this->get_platformgroup_tabs_content());
         // render
-        $html[] = $tabs->header();
-        $html[] = $this->get_platformgroup_tabs_content();
-        $html[] = $tabs->footer();
+        $html[] = $tabs->render();
 
         return implode(PHP_EOL, $html);
     }
@@ -498,7 +496,6 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
     private function get_tabs_footer()
     {
         $html = [];
-        $html[] = $this->tabs->body_footer();
         $html[] = $this->tabs->footer();
 
         return implode(PHP_EOL, $html);
@@ -513,7 +510,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
     {
         $html = [];
 
-        $this->tabs = new DynamicVisualTabsRenderer('weblcms_course_user_browser');
+        $this->tabs = new LinkTabsRenderer('weblcms_course_user_browser');
 
         // all tab
         $link = $this->get_url(
@@ -521,8 +518,8 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         );
         $tab_name = Translation::get('AllSubscriptions');
 
-        $this->tabs->add_tab(
-            new DynamicVisualTab(
+        $this->tabs->addTab(
+            new LinkTab(
                 self::TAB_ALL, $tab_name, new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $link,
                 $this->current_tab == self::TAB_ALL
             )
@@ -534,8 +531,8 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         );
         $tab_name = Translation::get('DirectSubscriptions');
 
-        $this->tabs->add_tab(
-            new DynamicVisualTab(
+        $this->tabs->addTab(
+            new LinkTab(
                 self::TAB_USERS, $tab_name, new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $link,
                 $this->current_tab == self::TAB_USERS
             )
@@ -547,8 +544,8 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         $selected = $this->current_tab == self::TAB_PLATFORM_GROUPS_SUBGROUPS ||
             $this->current_tab == self::TAB_PLATFORM_GROUPS_USERS;
 
-        $this->tabs->add_tab(
-            new DynamicVisualTab(
+        $this->tabs->addTab(
+            new LinkTab(
                 self::TAB_PLATFORM_GROUPS_SUBGROUPS, $tab_name,
                 new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas'), $link, $selected
             )
@@ -556,7 +553,6 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
 
         // render
         $html[] = $this->tabs->header();
-        $html[] = $this->tabs->body_header();
 
         return implode(PHP_EOL, $html);
     }

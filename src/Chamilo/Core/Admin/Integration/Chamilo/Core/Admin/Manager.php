@@ -6,7 +6,7 @@ use Chamilo\Core\Admin\ActionsSupportInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicAction;
+use Chamilo\Libraries\Format\Tabs\Action;
 use Chamilo\Libraries\Translation\Translation;
 
 class Manager implements ActionsSupportInterface
@@ -23,8 +23,8 @@ class Manager implements ActionsSupportInterface
             )
         );
 
-        $links[] = new DynamicAction(
-            Translation::get('Settings'), Translation::get('SettingsDescription'),
+        $links[] = new Action(
+            Translation::get('SettingsDescription'), Translation::get('Settings'),
             new FontAwesomeGlyph('cog', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -34,8 +34,8 @@ class Manager implements ActionsSupportInterface
                 \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_IMPORTER
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('Importer'), Translation::get('ImporterDescription'),
+        $links[] = new Action(
+            Translation::get('ImporterDescription'), Translation::get('Importer'),
             new FontAwesomeGlyph('upload', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -45,8 +45,8 @@ class Manager implements ActionsSupportInterface
                 \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_SYSTEM_ANNOUNCEMENTS
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('SystemAnnouncements'), Translation::get('SystemAnnouncementsDescription'),
+        $links[] = new Action(
+            Translation::get('SystemAnnouncementsDescription'), Translation::get('SystemAnnouncements'),
             new FontAwesomeGlyph('list', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -57,8 +57,8 @@ class Manager implements ActionsSupportInterface
                 \Chamilo\Core\Admin\Language\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Language\Manager::ACTION_IMPORT
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('TranslationsImport'), Translation::get('TranslationsImportDescription'),
+        $links[] = new Action(
+            Translation::get('TranslationsImportDescription'), Translation::get('TranslationsImport'),
             new FontAwesomeGlyph('language', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -69,8 +69,8 @@ class Manager implements ActionsSupportInterface
                 \Chamilo\Core\Admin\Language\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Language\Manager::ACTION_EXPORT
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('TranslationsExport'), Translation::get('TranslationsExportDescription'),
+        $links[] = new Action(
+            Translation::get('TranslationsExportDescription'), Translation::get('TranslationsExport'),
             new FontAwesomeGlyph('language', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -80,8 +80,8 @@ class Manager implements ActionsSupportInterface
                 \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_DIAGNOSE
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('Diagnose'), Translation::get('DiagnoseDescription'),
+        $links[] = new Action(
+            Translation::get('DiagnoseDescription'), Translation::get('Diagnose'),
             new FontAwesomeGlyph('stethoscope', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 
@@ -91,8 +91,8 @@ class Manager implements ActionsSupportInterface
                 \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_VIEW_LOGS
             )
         );
-        $links[] = new DynamicAction(
-            Translation::get('LogsViewer'), Translation::get('LogsViewerDescription'),
+        $links[] = new Action(
+            Translation::get('LogsViewerDescription'), Translation::get('LogsViewer'),
             new FontAwesomeGlyph('info-circle', array('fa-fw', 'fa-2x'), null, 'fas'), $redirect->getUrl()
         );
 

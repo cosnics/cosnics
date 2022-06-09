@@ -12,8 +12,8 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -56,7 +56,7 @@ class ConfigurerComponent extends Manager
                 ), !$success, array(
                     Application::PARAM_ACTION => self::ACTION_CONFIGURE_PLATFORM,
                     self::PARAM_CONTEXT => $this->get_context(),
-                    DynamicVisualTabsRenderer::PARAM_SELECTED_TAB => $this->get_tab()
+                    LinkTabsRenderer::PARAM_SELECTED_TAB => $this->get_tab()
                 )
             );
         }
@@ -64,7 +64,7 @@ class ConfigurerComponent extends Manager
         {
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
-                    $this->get_url(array(DynamicVisualTabsRenderer::PARAM_SELECTED_TAB => $this->get_context())),
+                    $this->get_url(array(LinkTabsRenderer::PARAM_SELECTED_TAB => $this->get_context())),
                     Translation::get('TypeName', null, $this->get_context())
                 )
             );
@@ -83,13 +83,13 @@ class ConfigurerComponent extends Manager
 
             asort($package_names);
 
-            $tabs = new DynamicVisualTabsRenderer('settings', $form->toHtml());
+            $tabs = new LinkTabsRenderer('settings', $form->toHtml());
             foreach ($package_names as $package => $package_name)
             {
                 if (Configuration::getInstance()->has_settings($package))
                 {
-                    $tabs->add_tab(
-                        new DynamicVisualTab(
+                    $tabs->addTab(
+                        new LinkTab(
                             $package, Translation::get('TypeName', null, $package), new NamespaceIdentGlyph(
                             $package, true, false, false, IdentGlyph::SIZE_SMALL
                         ), $this->get_url(array(self::PARAM_TAB => $this->get_tab(), self::PARAM_CONTEXT => $package)),

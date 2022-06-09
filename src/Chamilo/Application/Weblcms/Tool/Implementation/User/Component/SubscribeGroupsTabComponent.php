@@ -12,8 +12,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -293,18 +293,18 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
      */
     protected function renderTabs()
     {
-        $tabs = new DynamicVisualTabsRenderer('course_groups', $this->renderTabContent());
+        $tabs = new LinkTabsRenderer('course_groups', $this->renderTabContent());
 
-        $tabs->add_tab(
-            new DynamicVisualTab(
+        $tabs->addTab(
+            new LinkTab(
                 'view_details', $this->getCurrentGroup()->get_name(), new FontAwesomeGlyph('info-circle'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS)),
                 get_class($this) == SubscribeGroupsDetailsComponent::class
             )
         );
 
-        $tabs->add_tab(
-            new DynamicVisualTab(
+        $tabs->addTab(
+            new LinkTab(
                 'view_subgroups', $this->getTranslation('BrowseChildren'), new FontAwesomeGlyph('folder'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_SUBGROUP_BROWSER)),
                 get_class($this) == SubscribeGroupsBrowseSubgroupsComponent::class

@@ -34,7 +34,7 @@ class RemoverComponent extends Manager implements DelegateComponent
         $html = [];
 
         $html[] = $this->render_header();
-        $html[] = $remover->get_result(true);
+        $html[] = $remover->getResult(true);
 
         $toolbar = new Toolbar();
         $toolbar->add_item(

@@ -6,8 +6,8 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\PhpFileCache;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ValidatorBuilder;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Builds the Symfony Validator for use with annotaded data-classes
@@ -19,37 +19,18 @@ use Symfony\Component\Validator\ValidatorBuilder;
  */
 class ValidatorFactory
 {
-    /**
-     * @var \Symfony\Contracts\Translation\TranslatorInterface
-     */
-    protected $translator;
 
-    /**
-     * @var ValidatorBuilder
-     */
-    protected $validatorBuilder;
+    protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    /**
-     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
-     */
-    protected $configurablePathBuilder;
+    protected bool $devMode;
 
-    /**
-     * @var bool
-     */
-    protected $devMode;
+    protected TranslatorInterface $translator;
 
-    /**
-     * ValidatorFactory constructor.
-     *
-     * @param \Symfony\Contracts\Translation\TranslatorInterface $translator
-     * @param \Symfony\Component\Validator\ValidatorBuilder $validatorBuilder
-     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     * @param bool $devMode
-     */
+    protected ValidatorBuilder $validatorBuilder;
+
     public function __construct(
         TranslatorInterface $translator, ValidatorBuilder $validatorBuilder,
-        ConfigurablePathBuilder $configurablePathBuilder, $devMode = false
+        ConfigurablePathBuilder $configurablePathBuilder, bool $devMode = false
     )
     {
         $this->translator = $translator;
@@ -58,13 +39,7 @@ class ValidatorFactory
         $this->devMode = $devMode;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Format\Validator\ValidatorDecorator |
-     *     \Symfony\Component\Validator\Validator\ValidatorInterface
-     *
-     * @throws \Exception
-     */
-    public function createValidator()
+    public function createValidator(): ValidatorDecorator
     {
         $cachePath = $this->configurablePathBuilder->getCachePath(__NAMESPACE__);
         $cache = $this->devMode ? new ArrayCache() : new PhpFileCache($cachePath);

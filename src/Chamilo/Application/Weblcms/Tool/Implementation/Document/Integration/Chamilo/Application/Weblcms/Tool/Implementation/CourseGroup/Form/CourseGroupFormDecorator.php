@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\S
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Decorates the CourseGroup form with additional items
@@ -17,7 +17,7 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
 {
-    const PROPERTY_DOCUMENT_CATEGORY_ID = 'document_category_id';
+    public const PROPERTY_DOCUMENT_CATEGORY_ID = 'document_category_id';
 
     /**
      * @var \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupPublicationCategoryService
@@ -53,10 +53,10 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
         );
 
         $defaults = [
-            self::PROPERTY_DOCUMENT_CATEGORY_ID . '[' . $id . ']' =>
-                $this->courseGroupPublicationCategoryService->courseGroupHasPublicationCategories(
-                    $courseGroup, 'Document'
-                )
+            self::PROPERTY_DOCUMENT_CATEGORY_ID . '[' . $id .
+            ']' => $this->courseGroupPublicationCategoryService->courseGroupHasPublicationCategories(
+                $courseGroup, 'Document'
+            )
         ];
 
         $courseGroupForm->setDefaults($defaults);

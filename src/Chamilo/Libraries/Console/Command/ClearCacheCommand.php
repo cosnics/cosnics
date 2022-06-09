@@ -14,29 +14,23 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ClearCacheCommand extends CacheCommand
 {
-    const OPT_WARMUP = 'warmup';
-    const OPT_WARMUP_SHORT = 'w';
+    public const OPT_WARMUP = 'warmup';
+    public const OPT_WARMUP_SHORT = 'w';
 
-    /**
-     * Configures this command
-     */
     protected function configure()
     {
         $this->setName('chamilo:cache:clear')->addOption(
-            self::OPT_WARMUP,
-            self::OPT_WARMUP_SHORT,
-            InputOption::VALUE_NONE,
-            $this->translator->trans('WarmupCache', [], 'Chamilo\Libraries'))->setDescription(
-            $this->translator->trans('ClearCacheDescription', [], 'Chamilo\Libraries'));
+            self::OPT_WARMUP, self::OPT_WARMUP_SHORT, InputOption::VALUE_NONE,
+            $this->translator->trans('WarmupCache', [], 'Chamilo\Libraries')
+        )->setDescription(
+            $this->translator->trans('ClearCacheDescription', [], 'Chamilo\Libraries')
+        );
 
         parent::configure();
     }
 
     /**
      * Executes this command
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function executeCacheCommand(InputInterface $input, OutputInterface $output)
     {

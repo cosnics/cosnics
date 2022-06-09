@@ -4,14 +4,11 @@ namespace Chamilo\Core\Lynx\Action;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Package\Action\Installer;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
-use Chamilo\Core\Lynx\Action;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
-
-set_time_limit(0);
 
 /**
  * Package installation
@@ -20,96 +17,77 @@ set_time_limit(0);
  * @author Magali Gillard - Erasmus Hogeschool Brussel
  * @author Sven Vanpoucke - Hogeschool Gent - Cleanup, code refactoring and bugfixes, comments
  */
-class PackageInstaller extends Action
+class PackageInstaller extends AbstractAction
 {
 
-    private $additional_packages = [];
-
     /**
-     * Runs the package installer
-     *
-     * @return boolean
+     * @var string[] $additionalPackages
      */
-    public function run()
+    private array $additionalPackages = [];
+
+    public function run(): bool
     {
+        set_time_limit(0);
+
         if ($this->initialize() && $this->process())
         {
             $title = Translation::get(
                 'Finished', null, ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 2)
             );
-            $image = new FontAwesomeGlyph('laugh-beam', array('fa-lg'), null, 'fas');
+            $image = new FontAwesomeGlyph('laugh-beam', ['fa-lg'], null, 'fas');
 
-            return $this->action_successful($title, $image, Translation::get('PackageCompletelyInstalled'));
+            return $this->wasSuccessful($title, $image, Translation::get('PackageCompletelyInstalled'));
         }
         else
         {
             $title = Translation::get(
                 'Failed', null, ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 2)
             );
-            $image = new FontAwesomeGlyph('sad-cry', array('fa-lg'), null, 'fas');
+            $image = new FontAwesomeGlyph('sad-cry', ['fa-lg'], null, 'fas');
 
-            return $this->action_failed($title, $image, Translation::get('PackageInstallFailed'));
+            return $this->hasFailed($title, $image, Translation::get('PackageInstallFailed'));
         }
     }
 
-    /**
-     * Adds an additional package to the list of additional packages
-     *
-     * @param string
-     */
-    public function add_additional_package($context)
+    public function addAdditionalPackage(string $context)
     {
-        array_push($this->additional_packages, $context);
+        $this->additionalPackages[] = $context;
     }
 
-    /**
-     * Adds multiple additional packages to the list of additional packages
-     *
-     * @param string[]
-     */
-    public function add_additional_packages($additional_packages)
+    public function addAdditionalPackages(array $additional_packages)
     {
         foreach ($additional_packages as $additional_package)
         {
-            $this->add_additional_package($additional_package);
+            $this->addAdditionalPackage($additional_package);
         }
     }
 
     /**
-     * Returns the additional packages
-     *
      * @return string[]
      */
-    public static function get_additional_packages()
+    public static function getAdditionalPackages(): array
     {
         return [];
     }
 
-    /**
-     * Removes and returns the first package from the list of additional packages
-     *
-     * @return string
-     */
-    public function get_next_additional_package()
+    public function getNextAdditionalPackage(): string
     {
-        return array_shift($this->additional_packages);
+        return array_shift($this->additionalPackages);
     }
 
     /**
      * Initializes the package installer
-     *
-     * @return boolean
      */
-    public function initialize()
+    public function initialize(): bool
     {
         $title = Translation::get(
             'Initialization', null, ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 2)
         );
-        $image = new FontAwesomeGlyph('truck-loading', array('fa-lg'), null, 'fas');
+        $image = new FontAwesomeGlyph('truck-loading', ['fa-lg'], null, 'fas');
 
-        if (!$this->get_package() instanceof Package)
+        if (!$this->getPackage() instanceof Package)
         {
-            return $this->action_failed($title, $image, Translation::get('PackageAttributesNotFound'));
+            return $this->hasFailed($title, $image, Translation::get('PackageAttributesNotFound'));
         }
         else
         {
@@ -117,26 +95,22 @@ class PackageInstaller extends Action
         }
 
         // Check registration
-        if ($this->is_package_registered())
+        if ($this->isPackageRegistered())
         {
-            return $this->action_failed($title, $image, Translation::get('PackageIsAlreadyRegistered'));
+            return $this->hasFailed($title, $image, Translation::get('PackageIsAlreadyRegistered'));
         }
         else
         {
             $this->add_message(Translation::get('PackageNotYetRegistered'));
         }
 
-        return $this->action_successful($title, $image, Translation::get('PackageInstallInitialized'));
+        return $this->wasSuccessful($title, $image, Translation::get('PackageInstallInitialized'));
     }
 
-    /**
-     * Installs an additional package
-     *
-     */
-    private function install_additional_package($context)
+    private function installAdditionalPackage(string $context): bool
     {
         $title = Translation::get(
-            'Installation', array('PACKAGE' => Translation::get('TypeName', null, $context)),
+            'Installation', ['PACKAGE' => Translation::get('TypeName', null, $context)],
             ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 2)
         );
         $image = new NamespaceIdentGlyph(
@@ -149,82 +123,62 @@ class PackageInstaller extends Action
         {
             $this->add_message($installer->retrieve_message());
 
-            return $this->action_failed($title, $image, Translation::get('InitializationFailed'));
+            return $this->hasFailed($title, $image, Translation::get('InitializationFailed'));
         }
         else
         {
             $this->add_message($installer->retrieve_message());
-            $this->action_successful($title, $image);
+            $this->wasSuccessful($title, $image);
         }
 
-        $this->add_additional_packages($installer->get_additional_packages());
+        $this->addAdditionalPackages($installer->get_additional_packages());
 
         return true;
     }
 
-    /**
-     * Checks if the package is registered
-     *
-     * @return boolean
-     */
-    public function is_package_registered()
+    public function isPackageRegistered(): bool
     {
-        return Configuration::is_registered($this->get_package()->get_context());
+        return Configuration::is_registered($this->getPackage()->get_context());
     }
 
-    /**
-     * Installs the package
-     *
-     * @return boolean
-     */
-    public function process()
+    public function process(): bool
     {
         $title = Translation::get(
-            'Installation', array('PACKAGE' => Translation::get('TypeName', null, $this->get_package()->get_context())),
+            'Installation', ['PACKAGE' => Translation::get('TypeName', null, $this->getPackage()->get_context())],
             ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 2)
         );
-        $image = new FontAwesomeGlyph('box', array('fa-lg'), null, 'fas');
+        $image = new FontAwesomeGlyph('box', ['fa-lg'], null, 'fas');
 
         $installer = Installer::factory(
-            $this->get_package()->get_context(), []
+            $this->getPackage()->get_context(), []
         );
         if (!$installer->run())
         {
             $this->add_message($installer->retrieve_message());
 
-            return $this->action_failed($title, $image, Translation::get('InitializationFailed'));
+            return $this->hasFailed($title, $image, Translation::get('InitializationFailed'));
         }
         else
         {
             $this->add_message($installer->retrieve_message());
-            $this->action_successful($title, $image);
+            $this->wasSuccessful($title, $image);
         }
 
-        $this->add_additional_packages($installer->get_additional_packages());
+        $this->addAdditionalPackages($installer->get_additional_packages());
 
         $title = Translation::get(
             'AdditionalPackages', null, ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 2)
         );
-        $image = new FontAwesomeGlyph('link', array('fa-lg'), null, 'fas');
+        $image = new FontAwesomeGlyph('link', ['fa-lg'], null, 'fas');
 
-        while (($additional_package = $this->get_next_additional_package()) != null)
+        while (($additional_package = $this->getNextAdditionalPackage()) != null)
         {
-            if (!$this->install_additional_package($additional_package))
+            if (!$this->installAdditionalPackage($additional_package))
             {
-                return $this->action_failed($title, $image, Translation::get('AdditionalPackagesFailed'));
+                return $this->hasFailed($title, $image, Translation::get('AdditionalPackagesFailed'));
             }
         }
 
         return true;
-    }
-
-    /**
-     * Sets the additional packages
-     *
-     * @param string[]
-     */
-    public function set_additional_packages($additional_packages)
-    {
-        $this->additional_packages = $additional_packages;
     }
 }

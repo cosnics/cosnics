@@ -94,7 +94,7 @@ class Translation
     /**
      * @throws \Exception
      */
-    static public function getInstance(): Translation
+    public static function getInstance(): Translation
     {
         if (is_null(static::$instance))
         {
@@ -124,9 +124,14 @@ class Translation
      * @throws \ReflectionException
      */
     public function getTranslation(
-        string $variable, array $parameters = [], ?string $context = null, ?string $isocode = null
+        string $variable, ?array $parameters = [], ?string $context = null, ?string $isocode = null
     ): string
     {
+        if (is_null($parameters))
+        {
+            $parameters = [];
+        }
+
         $this->determineDefaultTranslationContext();
 
         if (!$context)

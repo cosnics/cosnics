@@ -57,7 +57,6 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
             $exclude = $this->determine_excluded_content_object_ids();
 
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
-            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
 
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::context(), $applicationConfiguration

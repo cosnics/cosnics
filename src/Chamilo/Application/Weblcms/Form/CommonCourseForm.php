@@ -25,8 +25,8 @@ use Chamilo\Libraries\Format\Menu\DynamicContentMenu\FormDynamicContentMenu;
 use Chamilo\Libraries\Format\Menu\DynamicContentMenu\FormDynamicContentMenuItem;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Form\FormTab;
+use Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -549,34 +549,34 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
      */
     private function create_tabs()
     {
-        $tabs_renderer = new DynamicFormTabsRenderer($this->form_name, $this);
+        $tabs_renderer = new FormTabsRenderer($this->form_name, $this);
 
-        $tabs_renderer->add_tab(
-            new DynamicFormTab(
+        $tabs_renderer->addTab(
+            new FormTab(
                 self::TAB_GENERAL,
                 (string) StringUtilities::getInstance()->createString(self::TAB_GENERAL)->upperCamelize(), null,
                 'build_general_tab_form_elements'
             )
         );
 
-        $tabs_renderer->add_tab(
-            new DynamicFormTab(
+        $tabs_renderer->addTab(
+            new FormTab(
                 self::TAB_SETTINGS,
                 (string) StringUtilities::getInstance()->createString(self::TAB_SETTINGS)->upperCamelize(), null,
                 'build_settings_tab_form_elements'
             )
         );
 
-        $tabs_renderer->add_tab(
-            new DynamicFormTab(
+        $tabs_renderer->addTab(
+            new FormTab(
                 self::TAB_TOOLS,
                 (string) StringUtilities::getInstance()->createString(self::TAB_TOOLS)->upperCamelize(), null,
                 'build_tools_tab_form_elements'
             )
         );
 
-        $tabs_renderer->add_tab(
-            new DynamicFormTab(
+        $tabs_renderer->addTab(
+            new FormTab(
                 self::TAB_RIGHTS,
                 (string) StringUtilities::getInstance()->createString(self::TAB_RIGHTS)->upperCamelize(), null,
                 'build_rights_tab_form_elements'

@@ -19,8 +19,8 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
-use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -136,7 +136,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function get_content()
     {
-        $tabs = new DynamicTabsRenderer(ClassnameUtilities::getInstance()->getClassnameFromObject($this, true));
+        $tabs = new TabsRenderer(ClassnameUtilities::getInstance()->getClassnameFromObject($this, true));
 
         $count = DataManager::count(
             Registration::class, new DataClassCountParameters(
@@ -149,11 +149,11 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         if ($count > 0)
         {
-            $tabs->add_tab(
-                new DynamicContentTab(
+            $tabs->addTab(
+                new ContentTab(
                     self::STATUS_INSTALLED, Translation::get('InstalledPackages'),
-                    new FontAwesomeGlyph('check-circle', array('fa-lg', 'fas-ci-va', 'text-success'), null, 'fas'),
-                    $this->get_registered_packages_table()
+                    $this->get_registered_packages_table(),
+                    new FontAwesomeGlyph('check-circle', array('fa-lg', 'fas-ci-va', 'text-success'), null, 'fas')
                 )
             );
         }
@@ -164,11 +164,11 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         if (count($packages[$this->getCurrentType()]) > 0)
         {
-            $tabs->add_tab(
-                new DynamicContentTab(
+            $tabs->addTab(
+                new ContentTab(
                     self::STATUS_AVAILABLE, Translation::get('AvailablePackages'),
-                    new FontAwesomeGlyph('box', array('fa-lg', 'fas-ci-va'), null, 'fas'),
-                    $this->get_available_packages_table()
+                    $this->get_available_packages_table(),
+                    new FontAwesomeGlyph('box', array('fa-lg', 'fas-ci-va'), null, 'fas')
                 )
             );
         }

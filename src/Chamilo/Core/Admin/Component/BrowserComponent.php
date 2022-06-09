@@ -11,13 +11,13 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicAction;
-use Chamilo\Libraries\Format\Tabs\DynamicActionsTab;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Action;
+use Chamilo\Libraries\Format\Tabs\ActionsTab;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
-    const PARAM_TAB = 'tab';
+    public const PARAM_TAB = 'tab';
 
     private $currentTab;
 
@@ -69,7 +69,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function get_tabs()
     {
-        $tabs = new DynamicTabsRenderer('admin');
+        $tabs = new TabsRenderer('admin');
 
         $packages = PlatformPackageBundles::getInstance(PackageList::MODE_INSTALLED)->get_type_packages();
 
@@ -96,7 +96,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $index = 0;
                 $index ++;
 
-                $actions_tab = new DynamicActionsTab(
+                $actions_tab = new ActionsTab(
                     ClassnameUtilities::getInstance()->getNamespaceId($package->get_context()),
                     $this->getTranslator()->trans('TypeName', [], $package->get_context()), new NamespaceIdentGlyph(
                         $package->get_context(), true, false, false, IdentGlyph::SIZE_SMALL
@@ -106,9 +106,9 @@ class BrowserComponent extends Manager implements DelegateComponent
                 if ($links->get_search())
                 {
                     $search_form = new AdminSearchForm($links->get_search(), $index);
-                    $actions_tab->add_action(
-                        new DynamicAction(
-                            null, $search_form->render(), new FontAwesomeGlyph(
+                    $actions_tab->addAction(
+                        new Action(
+                            $search_form->render(), null, new FontAwesomeGlyph(
                                 'search', array('fa-fw', 'fa-2x'), null, 'fas'
                             )
                         )
@@ -117,10 +117,10 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                 foreach ($links->get_links() as $action)
                 {
-                    $actions_tab->add_action($action);
+                    $actions_tab->addAction($action);
                 }
 
-                $tabs->add_tab($actions_tab);
+                $tabs->addTab($actions_tab);
             }
         }
 
@@ -128,7 +128,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function has_menu()
     {

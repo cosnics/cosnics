@@ -38,10 +38,6 @@
             <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
-        <service id="Chamilo\Libraries\Console\Command\PackageDescriberCommand">
-            <tag name="Chamilo\Libraries\Console\Command"/>
-        </service>
-
         <service id="Chamilo\Libraries\Console\Command\PHPUnitGeneratorCommand">
             <tag name="Chamilo\Libraries\Console\Command"/>
             <argument type="service"
@@ -49,10 +45,6 @@
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\PackagesPHPUnitGeneratorCommand">
-            <tag name="Chamilo\Libraries\Console\Command"/>
-        </service>
-
-        <service id="Chamilo\Libraries\Console\Command\Vendor\PHPStan\AnalyseCommand">
             <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 

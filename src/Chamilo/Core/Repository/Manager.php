@@ -27,8 +27,8 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -323,7 +323,7 @@ abstract class Manager extends Application
      */
     private function get_category_menu($force_search = false)
     {
-        $this->set_parameter(DynamicTabsRenderer::PARAM_SELECTED_TAB, array(self::TABS_FILTER => self::TAB_CATEGORY));
+        $this->set_parameter(TabsRenderer::PARAM_SELECTED_TAB, array(self::TABS_FILTER => self::TAB_CATEGORY));
 
         if (!isset($this->category_menu))
         {
@@ -640,13 +640,13 @@ abstract class Manager extends Application
         $html = [];
 
         $html[] = '<div id="repository-tree-container">';
-        $tabs = new DynamicTabsRenderer(self::TABS_FILTER);
+        $tabs = new TabsRenderer(self::TABS_FILTER);
 
-        $tabs->add_tab(
-            new DynamicContentTab(
+        $tabs->addTab(
+            new ContentTab(
                 self::TAB_CATEGORY, $translator->getTranslation('ViewCategoriesTab', null, Manager::context()),
-                new FontAwesomeGlyph('folder', array('fa-lg'), null, 'fas'),
-                $this->get_category_menu()->render_as_tree(), DynamicContentTab::DISPLAY_ICON
+                $this->get_category_menu()->render_as_tree(),
+                new FontAwesomeGlyph('folder', array('fa-lg'), null, 'fas'), ContentTab::DISPLAY_ICON
             )
         );
 
@@ -654,17 +654,17 @@ abstract class Manager extends Application
             FilterData::getInstance($this->getWorkspace()), $this->getWorkspace(), $this->get_user_id(),
             $this->get_allowed_content_object_types(), $this->get_url(
             array(
-                DynamicTabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_SEARCH),
+                TabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_SEARCH),
                 self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS
             ), array(self::PARAM_CATEGORY_ID)
         )
         );
 
-        $tabs->add_tab(
-            new DynamicContentTab(
-                self::TAB_SEARCH, $translator->getTranslation('SearchTab', null, Manager::context()),
-                new FontAwesomeGlyph('search', array('fa-lg'), null, 'fas'), $filter_form->render(),
-                DynamicContentTab::DISPLAY_ICON
+        $tabs->addTab(
+            new ContentTab(
+                self::TAB_SEARCH, $translator->getTranslation('SearchTab', null, Manager::context()), $filter_form->render(),
+                new FontAwesomeGlyph('search', array('fa-lg'), null, 'fas'),
+                ContentTab::DISPLAY_ICON
             )
         );
 
@@ -674,26 +674,26 @@ abstract class Manager extends Application
         $object_type = new ObjectTypeMenu(
             $this, $selected_type, $this->get_url(
             array(
-                DynamicTabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
+                TabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
                 FilterData::FILTER_TYPE => '__SELECTION__',
-                DynamicTabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
+                TabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
                 Application::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS
             ), array(self::PARAM_CATEGORY_ID, self::PARAM_CONTENT_OBJECT_ID)
         ), $selected_category, $this->get_url(
             array(
-                DynamicTabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
+                TabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
                 FilterData::FILTER_TYPE => '__CATEGORY__',
-                DynamicTabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
+                TabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
                 Application::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS
             ), array(self::PARAM_CATEGORY_ID, self::PARAM_CONTENT_OBJECT_ID)
         )
         );
 
-        $tabs->add_tab(
-            new DynamicContentTab(
-                self::TAB_OBJECT_TYPE, $translator->getTranslation('TypeTab', null, Manager::context()),
-                new FontAwesomeGlyph('filter', array('fa-lg'), null, 'fas'), $object_type->render_as_tree(),
-                DynamicContentTab::DISPLAY_ICON
+        $tabs->addTab(
+            new ContentTab(
+                self::TAB_OBJECT_TYPE, $translator->getTranslation('TypeTab', null, Manager::context()), $object_type->render_as_tree(),
+                new FontAwesomeGlyph('filter', array('fa-lg'), null, 'fas'),
+                ContentTab::DISPLAY_ICON
             )
         );
 
@@ -702,15 +702,15 @@ abstract class Manager extends Application
             $this, $current_user_view_id, $this->get_url(
             array(
                 FilterData::FILTER_USER_VIEW => '__VIEW__',
-                DynamicTabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_USERVIEW)
+                TabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_USERVIEW)
             )
         )
         );
-        $tabs->add_tab(
-            new DynamicContentTab(
-                self::TAB_USERVIEW, $translator->getTranslation('UserViewTab', null, Manager::context()),
-                new FontAwesomeGlyph('object-group', array('fa-lg'), null, 'far'), $user_view->render_as_tree(),
-                DynamicContentTab::DISPLAY_ICON
+        $tabs->addTab(
+            new ContentTab(
+                self::TAB_USERVIEW, $translator->getTranslation('UserViewTab', null, Manager::context()), $user_view->render_as_tree(),
+                new FontAwesomeGlyph('object-group', array('fa-lg'), null, 'far'),
+                ContentTab::DISPLAY_ICON
             )
         );
 
@@ -832,7 +832,7 @@ abstract class Manager extends Application
     public function set_optional_parameters()
     {
         $this->set_parameter(
-            DynamicTabsRenderer::PARAM_SELECTED_TAB, Request::get(DynamicTabsRenderer::PARAM_SELECTED_TAB)
+            TabsRenderer::PARAM_SELECTED_TAB, Request::get(TabsRenderer::PARAM_SELECTED_TAB)
         );
     }
 }

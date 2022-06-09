@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\File;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
@@ -163,7 +164,7 @@ class PathBuilder
      *
      * @return string
      */
-    public function getImagesPath($namespace = 'Chamilo\Configuration', $web = false)
+    public function getImagesPath($namespace = StringUtilities::LIBRARIES, $web = false)
     {
         return $this->cache[self::IMAGES][(string) $namespace][(string) $web] =
             $this->getResourcesPath($namespace, $web) . 'Images' . $this->getDirectorySeparator($web);

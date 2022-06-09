@@ -5,8 +5,8 @@ use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -21,13 +21,13 @@ class TabsGenerator extends NavigationGenerator
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer
+     * @var \Chamilo\Libraries\Format\Tabs\TabsRenderer
      */
     private $tabsRenderer;
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer $tabsRenderer
+     * @param \Chamilo\Libraries\Format\Tabs\TabsRenderer $tabsRenderer
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param string[] $baseParameters
      * @param boolean $isAllowedToViewFeedback
@@ -36,7 +36,7 @@ class TabsGenerator extends NavigationGenerator
      * @param boolean $isActive
      */
     public function __construct(
-        DynamicTabsRenderer $tabsRenderer, Application $application, $baseParameters, $isAllowedToViewFeedback = false,
+        TabsRenderer $tabsRenderer, Application $application, $baseParameters, $isAllowedToViewFeedback = false,
         $feedbackCount = 0, $hasNotification = false, $isActive = false
     )
     {
@@ -59,11 +59,11 @@ class TabsGenerator extends NavigationGenerator
             $title .= ' [' . $this->getFeedbackCount() . ']';
         }
 
-        $this->getTabsRenderer()->add_tab(
-            new DynamicVisualTab(
+        $this->getTabsRenderer()->addTab(
+            new LinkTab(
                 $application::ACTION_FEEDBACK, $title, new FontAwesomeGlyph('comments', array('fa-lg'), null, 'fas'),
-                $application->get_url($baseParameters), $this->getIsActive(), false, DynamicVisualTab::POSITION_LEFT,
-                DynamicVisualTab::DISPLAY_BOTH_SELECTED
+                $application->get_url($baseParameters), $this->getIsActive(), false, LinkTab::POSITION_LEFT,
+                LinkTab::DISPLAY_BOTH_SELECTED
             )
         );
 
@@ -76,14 +76,14 @@ class TabsGenerator extends NavigationGenerator
 
                     $baseParameters[Manager::PARAM_ACTION] = Manager::ACTION_UNSUBSCRIBER;
 
-                    $this->getTabsRenderer()->add_tab(
-                        new DynamicVisualTab(
+                    $this->getTabsRenderer()->addTab(
+                        new LinkTab(
                             Manager::ACTION_UNSUBSCRIBER, Translation::get(
                             'StopReceivingNotifications', null,
                             'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback'
                         ), new FontAwesomeGlyph('times', array('fa-lg'), null, 'fas'),
-                            $application->get_url($baseParameters), false, false, DynamicVisualTab::POSITION_LEFT,
-                            DynamicVisualTab::DISPLAY_BOTH_SELECTED
+                            $application->get_url($baseParameters), false, false, LinkTab::POSITION_LEFT,
+                            LinkTab::DISPLAY_BOTH_SELECTED
                         )
                     );
                 }
@@ -92,13 +92,13 @@ class TabsGenerator extends NavigationGenerator
                     $baseParameters = $this->getBaseParameters();
                     $baseParameters[Manager::PARAM_ACTION] = Manager::ACTION_SUBSCRIBER;
 
-                    $this->getTabsRenderer()->add_tab(
-                        new DynamicVisualTab(
+                    $this->getTabsRenderer()->addTab(
+                        new LinkTab(
                             Manager::ACTION_SUBSCRIBER, Translation::get(
                             'ReceiveNotifications', null, 'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback'
                         ), new FontAwesomeGlyph('envelope', array('fa-lg'), null, 'fas'),
-                            $application->get_url($baseParameters), false, false, DynamicVisualTab::POSITION_LEFT,
-                            DynamicVisualTab::DISPLAY_BOTH_SELECTED
+                            $application->get_url($baseParameters), false, false, LinkTab::POSITION_LEFT,
+                            LinkTab::DISPLAY_BOTH_SELECTED
                         )
                     );
                 }
@@ -108,7 +108,7 @@ class TabsGenerator extends NavigationGenerator
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer
+     * @return \Chamilo\Libraries\Format\Tabs\TabsRenderer
      */
     public function getTabsRenderer()
     {
@@ -117,7 +117,7 @@ class TabsGenerator extends NavigationGenerator
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer $tabsRenderer
+     * @param \Chamilo\Libraries\Format\Tabs\TabsRenderer $tabsRenderer
      */
     public function setTabsRenderer($tabsRenderer)
     {

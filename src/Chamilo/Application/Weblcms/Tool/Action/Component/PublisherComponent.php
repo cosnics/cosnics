@@ -45,7 +45,6 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
         }
 
         $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
-        $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
 
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Repository\Publication\Publisher\Manager::context(),

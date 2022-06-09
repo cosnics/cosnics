@@ -4,12 +4,9 @@ namespace Chamilo\Core\Lynx\Action;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Package\Action\Remover;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
-use Chamilo\Core\Lynx\Action;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-
-set_time_limit(0);
 
 /**
  * Package installation
@@ -19,51 +16,43 @@ set_time_limit(0);
  * @author Sven Vanpoucke - Hogeschool Gent - Cleanup, code refactoring and bugfixes, comments
  * @package admin.lib.package_installer
  */
-class PackageRemover extends Action
+class PackageRemover extends AbstractAction
 {
 
-    /**
-     * Runs the package remover
-     *
-     * @return boolean
-     */
-    public function run()
+    public function run(): bool
     {
+        set_time_limit(0);
+
         if ($this->initialize() && $this->process())
         {
             $title = Translation::get(
                 'Finished', null, ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 2)
             );
-            $image = new FontAwesomeGlyph('laugh-beam', array('fa-lg'), null, 'fas');
+            $image = new FontAwesomeGlyph('laugh-beam', ['fa-lg'], null, 'fas');
 
-            return $this->action_successful($title, $image, Translation::get('PackageCompletelyRemoved'));
+            return $this->wasSuccessful($title, $image, Translation::get('PackageCompletelyRemoved'));
         }
         else
         {
             $title = Translation::get(
                 'Failed', null, ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 2)
             );
-            $image = new FontAwesomeGlyph('sad-cry', array('fa-lg'), null, 'fas');
+            $image = new FontAwesomeGlyph('sad-cry', ['fa-lg'], null, 'fas');
 
-            return $this->action_failed($title, $image, Translation::get('PackageRemoveFailed'));
+            return $this->hasFailed($title, $image, Translation::get('PackageRemoveFailed'));
         }
     }
 
-    /**
-     * Initializes the package installer
-     *
-     * @return boolean
-     */
-    public function initialize()
+    public function initialize(): bool
     {
         $title = Translation::get(
             'Initialization', null, ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 2)
         );
-        $image = new FontAwesomeGlyph('compass', array('fa-lg'), null, 'fas');
+        $image = new FontAwesomeGlyph('compass', ['fa-lg'], null, 'fas');
 
-        if (!$this->get_package() instanceof Package)
+        if (!$this->getPackage() instanceof Package)
         {
-            return $this->action_failed($title, $image, Translation::get('PackageAttributesNotFound'));
+            return $this->hasFailed($title, $image, Translation::get('PackageAttributesNotFound'));
         }
         else
         {
@@ -71,67 +60,57 @@ class PackageRemover extends Action
         }
 
         // Check registration
-        if (!$this->is_package_registered())
+        if (!$this->isPackageRegistered())
         {
-            return $this->action_failed($title, $image, Translation::get('PackageIsNotInstalled'));
+            return $this->hasFailed($title, $image, Translation::get('PackageIsNotInstalled'));
         }
         else
         {
             $this->add_message(Translation::get('PackageNotYetRemoved'));
         }
 
-        return $this->action_successful($title, $image, Translation::get('PackageRemoveInitialized'));
+        return $this->wasSuccessful($title, $image, Translation::get('PackageRemoveInitialized'));
     }
 
-    /**
-     * Checks if the package is registered
-     *
-     * @return boolean
-     */
-    public function is_package_registered()
+    public function isPackageRegistered(): bool
     {
-        return Configuration::is_registered($this->get_package()->get_context());
+        return Configuration::is_registered($this->getPackage()->get_context());
     }
 
-    /**
-     * Installs the package
-     *
-     * @return boolean
-     */
-    public function process()
+    public function process(): bool
     {
-        $this->process_additional_packages($this->get_package()->get_context());
+        $this->processAdditionalPackages($this->getPackage()->get_context());
 
         return true;
     }
 
-    public function process_additional_packages($context)
+    public function processAdditionalPackages($context)
     {
         $remover = Remover::factory($context);
 
-        $additional_packages = $remover->get_additional_packages();
+        $additionalPackages = $remover->get_additional_packages();
 
-        foreach ($additional_packages as $additional_package)
+        foreach ($additionalPackages as $additionalPackage)
         {
-            $this->process_additional_packages($additional_package);
+            $this->processAdditionalPackages($additionalPackage);
         }
 
         $title = Translation::get(
-            'Removal', array('PACKAGE' => Translation::get('TypeName', null, $this->get_package()->get_context())),
+            'Removal', ['PACKAGE' => Translation::get('TypeName', null, $this->getPackage()->get_context())],
             ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 2)
         );
-        $image = new FontAwesomeGlyph('trash-alt', array('fa-lg'), null, 'fas');
+        $image = new FontAwesomeGlyph('trash-alt', ['fa-lg'], null, 'fas');
 
         if (!$remover->run())
         {
             $this->add_message($remover->retrieve_message());
 
-            return $this->action_failed($title, $image, Translation::get('InitializationFailed'));
+            return $this->hasFailed($title, $image, Translation::get('InitializationFailed'));
         }
         else
         {
             $this->add_message($remover->retrieve_message());
-            $this->action_successful($title, $image);
+            $this->wasSuccessful($title, $image);
         }
     }
 }

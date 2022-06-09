@@ -6,9 +6,9 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\SimpleTable;
-use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
-use Chamilo\Libraries\Format\Tabs\DynamicTab;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\Tab;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -60,17 +60,17 @@ class Diagnoser
     {
         $sections = array('Chamilo', 'Php', 'Database', 'Webserver');
 
-        $tabs = new DynamicTabsRenderer('diagnoser');
+        $tabs = new TabsRenderer('diagnoser');
 
         foreach ($sections as $section)
         {
             $data = call_user_func(array($this, 'get' . $section . 'Data'));
             $table = new SimpleTable($data, new DiagnoserCellRenderer(), 'diagnoser');
 
-            $tabs->add_tab(
-                new DynamicContentTab(
-                    $section, $this->getTranslation(ucfirst($section) . 'Title'), null, $table->render(),
-                    DynamicTab::DISPLAY_TITLE
+            $tabs->addTab(
+                new ContentTab(
+                    $section, $this->getTranslation(ucfirst($section) . 'Title'), $table->render(), null,
+                    Tab::DISPLAY_TITLE
                 )
             );
         }

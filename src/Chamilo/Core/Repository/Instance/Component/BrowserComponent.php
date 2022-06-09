@@ -15,8 +15,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -48,20 +48,20 @@ class BrowserComponent extends Manager implements TableSupport
         $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
             $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
-        $tabs = new DynamicTabsRenderer('instances');
+        $tabs = new TabsRenderer('instances');
 
-        $tabs->add_tab(
-            new DynamicContentTab(
-                'personal_instance', Translation::get('PersonalInstance'), null,
+        $tabs->addTab(
+            new ContentTab(
+                'personal_instance', Translation::get('PersonalInstance'),
                 $this->get_table(PersonalInstance::class)
             )
         );
 
         if ($this->get_user()->is_platform_admin())
         {
-            $tabs->add_tab(
-                new DynamicContentTab(
-                    'platform_instance', Translation::get('PlatformInstance'), null,
+            $tabs->addTab(
+                new ContentTab(
+                    'platform_instance', Translation::get('PlatformInstance'),
                     $this->get_table(PlatformInstance::class)
                 )
             );

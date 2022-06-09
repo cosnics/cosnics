@@ -13,8 +13,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -38,7 +38,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         );
         $user_requests = DataManager::count(Request::class, new DataClassCountParameters($condition));
 
-        $tabs = new DynamicTabsRenderer('request');
+        $tabs = new TabsRenderer('request');
 
         if ($user_requests > 0 || Rights::getInstance()->request_is_allowed())
         {
@@ -47,10 +47,10 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             {
                 $this->table_type = RequestTable::TYPE_PERSONAL;
                 $table = new RequestTable($this);
-                $tabs->add_tab(
-                    new DynamicContentTab(
-                        'personal_request', Translation::get('YourRequests'),
-                        new FontAwesomeGlyph('inbox', array('fa-lg'), null, 'fas'), $table->as_html()
+                $tabs->addTab(
+                    new ContentTab(
+                        'personal_request', Translation::get('YourRequests'), $table->as_html(),
+                        new FontAwesomeGlyph('inbox', array('fa-lg'), null, 'fas')
                     )
                 );
             }
@@ -90,10 +90,10 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 {
                     $this->table_type = RequestTable::TYPE_PENDING;
                     $table = new RequestTable($this);
-                    $tabs->add_tab(
-                        new DynamicContentTab(
-                            RequestTable::TYPE_PENDING, Translation::get('PendingRequests'),
-                            new FontAwesomeGlyph('pause-circle', array('fa-lg'), null, 'fas'), $table->as_html()
+                    $tabs->addTab(
+                        new ContentTab(
+                            RequestTable::TYPE_PENDING, Translation::get('PendingRequests'), $table->as_html(),
+                            new FontAwesomeGlyph('pause-circle', array('fa-lg'), null, 'fas')
                         )
                     );
                 }
@@ -113,11 +113,11 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 {
                     $this->table_type = RequestTable::TYPE_GRANTED;
                     $table = new RequestTable($this);
-                    $tabs->add_tab(
-                        new DynamicContentTab(
+                    $tabs->addTab(
+                        new ContentTab(
                             RequestTable::TYPE_GRANTED, Translation::get('GrantedRequests'),
-                            new FontAwesomeGlyph('check-circle', array('fa-lg', 'text-success'), null, 'fas'),
-                            $table->as_html()
+                            $table->as_html(),
+                            new FontAwesomeGlyph('check-circle', array('fa-lg', 'text-success'), null, 'fas')
                         )
                     );
                 }
@@ -137,11 +137,11 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 {
                     $this->table_type = RequestTable::TYPE_DENIED;
                     $table = new RequestTable($this);
-                    $tabs->add_tab(
-                        new DynamicContentTab(
+                    $tabs->addTab(
+                        new ContentTab(
                             RequestTable::TYPE_DENIED, Translation::get('DeniedRequests'),
-                            new FontAwesomeGlyph('minus-square', array('fa-lg', 'text-danger'), null, 'fas'),
-                            $table->as_html()
+                            $table->as_html(),
+                            new FontAwesomeGlyph('minus-square', array('fa-lg', 'text-danger'), null, 'fas')
                         )
                     );
                 }

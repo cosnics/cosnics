@@ -24,7 +24,7 @@ class Session
         self::getSessionUtilities()->destroy();
     }
 
-    public function get(string $variable, $default = null)
+    public static function get(string $variable, $default = null)
     {
         return self::getSessionUtilities()->get($variable, $default);
     }
