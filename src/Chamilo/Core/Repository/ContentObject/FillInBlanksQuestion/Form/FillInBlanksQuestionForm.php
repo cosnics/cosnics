@@ -218,11 +218,11 @@ class FillInBlanksQuestionForm extends ContentObjectForm
     /**
      * Prepare all the different tabs
      */
-    public function prepareTabs()
+    public function generateTabs()
     {
         $this->addDefaultTab();
 
-        $this->getTabsGenerator()->addTab(
+        $this->getTabsCollection()->add(
             new FormTab(
                 self::TAB_BLANKS, Translation::get(self::TAB_BLANKS), new FontAwesomeGlyph('edit', array('fa-sm')),
                 'buildBlanksForm'

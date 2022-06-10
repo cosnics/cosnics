@@ -7,12 +7,12 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Table\Entity\EntityTable;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -41,14 +41,17 @@ class EntityComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
+    public function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
+    }
+
     public function get_entity_tabs()
     {
         $table = new EntityTable($this);
         $content = $table->as_html();
 
-        $tabs = new LinkTabsRenderer(
-            ClassnameUtilities::getInstance()->getClassnameFromNamespace(__CLASS__, true), $table->as_html()
-        );
+        $tabs = new TabsCollection();
 
         foreach ($this->get_entity_types() as $entity_type)
         {
@@ -73,7 +76,7 @@ class EntityComponent extends Manager implements TableSupport
                         break;
                 }
 
-                $tabs->addTab(
+                $tabs->add(
                     new LinkTab(
                         $entity_type::ENTITY_TYPE, Translation::get(
                         StringUtilities::getInstance()->createString($entity_type::ENTITY_NAME)->upperCamelize()
@@ -89,7 +92,7 @@ class EntityComponent extends Manager implements TableSupport
             }
         }
 
-        return $tabs->render();
+        return $this->getLinkTabsRenderer()->render($tabs);
     }
 
     public function get_table_condition($table_class_name)

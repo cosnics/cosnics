@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Selector;
 
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
+
 /**
  *
  * @author Hans De Bisschop
@@ -20,4 +22,6 @@ interface TabsTypeSelectorSupport
      * @return int
      */
     public function get_user_id();
+
+    public function getTabsRenderer(): TabsRenderer;
 }

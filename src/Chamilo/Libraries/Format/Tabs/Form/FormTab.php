@@ -29,15 +29,16 @@ class FormTab extends Tab
      * @param string|string[] $method
      */
     public function __construct(
-        string $identifier, string $label, ?InlineGlyph $inlineGlyph, $method, array $parameters = []
+        string $identifier, string $label, ?InlineGlyph $inlineGlyph, $method, array $parameters = [],
+        int $display = self::DISPLAY_ICON_AND_TITLE
     )
     {
-        parent::__construct($identifier, $label, $inlineGlyph);
+        parent::__construct($identifier, $label, $inlineGlyph, $display);
         $this->method = $method;
         $this->parameters = $parameters;
     }
 
-    public function body(bool $isOnlyTab = false): string
+    public function render(bool $isOnlyTab = false): string
     {
         if (!$isOnlyTab)
         {

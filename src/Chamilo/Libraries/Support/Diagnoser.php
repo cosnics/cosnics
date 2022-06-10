@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\SimpleTable;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\Tab;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -22,10 +23,10 @@ use Symfony\Component\Translation\Translator;
  */
 class Diagnoser
 {
-    const STATUS_ERROR = 3;
-    const STATUS_INFORMATION = 4;
-    const STATUS_OK = 1;
-    const STATUS_WARNING = 2;
+    public const STATUS_ERROR = 3;
+    public const STATUS_INFORMATION = 4;
+    public const STATUS_OK = 1;
+    public const STATUS_WARNING = 2;
 
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
@@ -39,12 +40,14 @@ class Diagnoser
 
     protected ChamiloRequest $request;
 
+    protected TabsRenderer $tabsRenderer;
+
     protected Translator $translator;
 
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Connection $connection, ChamiloRequest $request,
         PathBuilder $pathBuilder, ConfigurablePathBuilder $configurablePathBuilder, Translator $translator,
-        DatetimeUtilities $datetimeUtilities
+        DatetimeUtilities $datetimeUtilities, TabsRenderer $tabsRenderer
     )
     {
         $this->configurationConsulter = $configurationConsulter;
@@ -54,20 +57,21 @@ class Diagnoser
         $this->configurablePathBuilder = $configurablePathBuilder;
         $this->translator = $translator;
         $this->datetimeUtilities = $datetimeUtilities;
+        $this->tabsRenderer = $tabsRenderer;
     }
 
     public function render(): string
     {
-        $sections = array('Chamilo', 'Php', 'Database', 'Webserver');
+        $sections = ['Chamilo', 'Php', 'Database', 'Webserver'];
 
-        $tabs = new TabsRenderer('diagnoser');
+        $tabs = new TabsCollection();
 
         foreach ($sections as $section)
         {
-            $data = call_user_func(array($this, 'get' . $section . 'Data'));
+            $data = call_user_func([$this, 'get' . $section . 'Data']);
             $table = new SimpleTable($data, new DiagnoserCellRenderer(), 'diagnoser');
 
-            $tabs->addTab(
+            $tabs->add(
                 new ContentTab(
                     $section, $this->getTranslation(ucfirst($section) . 'Title'), $table->render(), null,
                     Tab::DISPLAY_TITLE
@@ -75,7 +79,7 @@ class Diagnoser
             );
         }
 
-        return $tabs->render();
+        return $this->getTabsRenderer()->render('diagnoser', $tabs);
     }
 
     /**
@@ -92,23 +96,23 @@ class Diagnoser
         {
             case self::STATUS_OK :
                 $glyph = new FontAwesomeGlyph(
-                    'check-circle', array('text-success'), $status, 'fas'
+                    'check-circle', ['text-success'], $status, 'fas'
                 );
                 break;
             case self::STATUS_WARNING :
                 $glyph = new FontAwesomeGlyph(
-                    'exclamation-circle', array('text-warning'), $status, 'fas'
+                    'exclamation-circle', ['text-warning'], $status, 'fas'
                 );
                 break;
             case self::STATUS_ERROR :
                 $glyph = new FontAwesomeGlyph(
-                    'minus-circle', array('text-danger'), $status, 'fas'
+                    'minus-circle', ['text-danger'], $status, 'fas'
                 );
                 break;
             case self::STATUS_INFORMATION :
             default:
                 $glyph = new FontAwesomeGlyph(
-                    'lightbulb', array('text-info'), $status, 'fas'
+                    'lightbulb', ['text-info'], $status, 'fas'
                 );
                 break;
         }
@@ -131,12 +135,12 @@ class Diagnoser
         {
             if (method_exists($this, 'format_' . $formatter))
             {
-                $formatted_current_value = call_user_func(array($this, 'format_' . $formatter), $current_value);
-                $formatted_expected_value = call_user_func(array($this, 'format_' . $formatter), $expected_value);
+                $formatted_current_value = call_user_func([$this, 'format_' . $formatter], $current_value);
+                $formatted_expected_value = call_user_func([$this, 'format_' . $formatter], $expected_value);
             }
         }
 
-        return array($image, $section, $url, $formatted_current_value, $formatted_expected_value, $comment);
+        return [$image, $section, $url, $formatted_current_value, $formatted_expected_value, $comment];
     }
 
     public function formatOnOff(string $value): string
@@ -410,7 +414,7 @@ class Diagnoser
         );
 
         // Extensions
-        $extensions = array(
+        $extensions = [
             'gd' => 'http://www.php.net/gd',
             'mysqli' => 'http://www.php.net/mysqli',
             'pcre' => 'http://www.php.net/pcre',
@@ -418,7 +422,7 @@ class Diagnoser
             'standard' => 'http://www.php.net/spl',
             'zlib' => 'http://www.php.net/zlib',
             'xsl' => 'http://be2.php.net/xsl'
-        );
+        ];
 
         foreach ($extensions as $extension => $url)
         {
@@ -431,6 +435,11 @@ class Diagnoser
         }
 
         return $array;
+    }
+
+    public function getTabsRenderer(): TabsRenderer
+    {
+        return $this->tabsRenderer;
     }
 
     public function getTranslation(
@@ -449,30 +458,30 @@ class Diagnoser
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_ADDR"]',
-            'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_ADDR"], null, null,
+            'http://be.php.net/reserved.variables.server', $_SERVER['SERVER_ADDR'], null, null,
             $this->getTranslation('ServerIPInfo')
         );
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_SOFTWARE"]',
-            'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_SOFTWARE"], null, null,
+            'http://be.php.net/reserved.variables.server', $_SERVER['SERVER_SOFTWARE'], null, null,
             $this->getTranslation('ServerSoftwareInfo')
         );
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["REMOTE_ADDR"]',
-            'http://be.php.net/reserved.variables.server', $_SERVER["REMOTE_ADDR"], null, null,
+            'http://be.php.net/reserved.variables.server', $_SERVER['REMOTE_ADDR'], null, null,
             $this->getTranslation('ServerRemoteInfo')
         );
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["HTTP_USER_AGENT"]',
-            'http://be.php.net/reserved.variables.server', $_SERVER["HTTP_USER_AGENT"], null, null,
+            'http://be.php.net/reserved.variables.server', $_SERVER['HTTP_USER_AGENT'], null, null,
             $this->getTranslation('ServerRemoteInfo')
         );
 
         $path = $this->request->getUri();
-        $request = $_SERVER["REQUEST_URI"];
+        $request = $_SERVER['REQUEST_URI'];
         $status = $request != $path ? self::STATUS_ERROR : self::STATUS_OK;
         $array[] = $this->build_setting(
             $status, '[SERVER]', '$_SERVER["REQUEST_URI"]', 'http://be.php.net/reserved.variables.server', $request,
@@ -481,7 +490,7 @@ class Diagnoser
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_PROTOCOL"]',
-            'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_PROTOCOL"], null, null,
+            'http://be.php.net/reserved.variables.server', $_SERVER['SERVER_PROTOCOL'], null, null,
             $this->getTranslation('ServerProtocolInfo')
         );
 

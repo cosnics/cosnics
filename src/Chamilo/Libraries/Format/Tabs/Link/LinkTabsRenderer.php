@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Tabs\Link;
 
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Tabs
@@ -9,46 +11,23 @@ namespace Chamilo\Libraries\Format\Tabs\Link;
 class LinkTabsRenderer
 {
 
-    private ?string $content;
-
-    private string $name;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Tabs\Link\LinkTab[]
-     */
-    private array $tabs;
-
-    public function __construct(string $name, ?string $content = null)
-    {
-        $this->name = $name;
-        $this->tabs = [];
-        $this->content = $content;
-    }
-
-    public function render(): string
+    public function render(TabsCollection $tabs, ?string $content = null): string
     {
         $html = [];
 
-        $html[] = $this->header();
+        $html[] = $this->renderHeader($tabs);
 
-        if ($this->getContent())
+        if ($content)
         {
-            $html[] = $this->getContent();
+            $html[] = $content;
         }
 
-        $html[] = $this->footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function addTab(LinkTab $tab)
-    {
-        $tab->setIdentifier($this->name . '-' . $tab->getIdentifier());
-        $this->tabs[] = $tab;
-    }
-
-    public function footer(): string
+    public function renderFooter(): string
     {
         $html = [];
 
@@ -58,38 +37,8 @@ class LinkTabsRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function getContent(): ?string
+    public function renderHeader(TabsCollection $tabs): string
     {
-        return $this->content;
-    }
-
-    public function setContent(?string $content)
-    {
-        $this->content = $content;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function set_name(string $name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Tabs\Link\LinkTab[]
-     */
-    public function getTabs(): array
-    {
-        return $this->tabs;
-    }
-
-    public function header(): string
-    {
-        $tabs = $this->getTabs();
-
         $html = [];
 
         $html[] = '<ul class="nav nav-tabs dynamic-visual-tabs">';
@@ -104,10 +53,5 @@ class LinkTabsRenderer
         $html[] = '<div class="list-group-item">';
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function size(): int
-    {
-        return count($this->tabs);
     }
 }

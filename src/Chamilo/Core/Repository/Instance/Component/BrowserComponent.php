@@ -16,11 +16,11 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -48,21 +48,19 @@ class BrowserComponent extends Manager implements TableSupport
         $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
             $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
-        $tabs = new TabsRenderer('instances');
+        $tabs = new TabsCollection();
 
-        $tabs->addTab(
+        $tabs->add(
             new ContentTab(
-                'personal_instance', Translation::get('PersonalInstance'),
-                $this->get_table(PersonalInstance::class)
+                'personal_instance', Translation::get('PersonalInstance'), $this->get_table(PersonalInstance::class)
             )
         );
 
         if ($this->get_user()->is_platform_admin())
         {
-            $tabs->addTab(
+            $tabs->add(
                 new ContentTab(
-                    'platform_instance', Translation::get('PlatformInstance'),
-                    $this->get_table(PlatformInstance::class)
+                    'platform_instance', Translation::get('PlatformInstance'), $this->get_table(PlatformInstance::class)
                 )
             );
         }
@@ -71,7 +69,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = $tabs->render();
+        $html[] = $this->getTabsRenderer()->render('instances', $tabs);
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
@@ -112,6 +110,11 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
+    protected function getTabsRenderer(): TabsRenderer
+    {
+        return $this->getService(TabsRenderer::class);
+    }
+
     public function get_table($type)
     {
         $this->type = $type;
@@ -145,7 +148,7 @@ class BrowserComponent extends Manager implements TableSupport
         if (isset($query) && $query != '')
         {
             $conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(Instance::class, Instance::PROPERTY_TITLE),  $query
+                new PropertyConditionVariable(Instance::class, Instance::PROPERTY_TITLE), $query
             );
         }
 

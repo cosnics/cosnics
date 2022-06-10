@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
-use Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
@@ -29,17 +29,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class SettingsForm extends FormValidator
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    private $application;
-
-    /**
-     *
-     * @var FormTabsRenderer
-     */
-    private $tabsGenerator;
+    private Application $application;
 
     /**
      *
@@ -48,7 +38,7 @@ class SettingsForm extends FormValidator
      */
     public function __construct(Application $application, $action)
     {
-        parent::__construct('install_settings',self::FORM_METHOD_POST, $action);
+        parent::__construct('install_settings', self::FORM_METHOD_POST, $action);
         $this->application = $application;
 
         $this->buildForm();
@@ -84,43 +74,43 @@ class SettingsForm extends FormValidator
     {
         $this->addElement('category', Translation::get('GeneralProperties'));
         $this->addElement(
-            'select', 'platform_language', Translation::get("MainLang"), $this->getApplication()->getLanguages()
+            'select', 'platform_language', Translation::get('MainLang'), $this->getApplication()->getLanguages()
         );
 
         $this->addElement('category', Translation::get('Administrator'));
-        $this->addElement('text', 'admin_email', Translation::get("AdminEmail"), array('size' => '40'));
+        $this->addElement('text', 'admin_email', Translation::get('AdminEmail'), array('size' => '40'));
         $this->addRule(
             'admin_email', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
         $this->addRule('admin_email', Translation::get('WrongEmail'), 'email');
-        $this->addElement('text', 'admin_surname', Translation::get("AdminLastName"), array('size' => '40'));
+        $this->addElement('text', 'admin_surname', Translation::get('AdminLastName'), array('size' => '40'));
         $this->addRule(
             'admin_surname', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
-        $this->addElement('text', 'admin_firstname', Translation::get("AdminFirstName"), array('size' => '40'));
+        $this->addElement('text', 'admin_firstname', Translation::get('AdminFirstName'), array('size' => '40'));
         $this->addRule(
             'admin_firstname', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
-        $this->addElement('text', 'admin_phone', Translation::get("AdminPhone"), array('size' => '40'));
-        $this->addElement('text', 'admin_username', Translation::get("AdminLogin"), array('size' => '40'));
+        $this->addElement('text', 'admin_phone', Translation::get('AdminPhone'), array('size' => '40'));
+        $this->addElement('text', 'admin_username', Translation::get('AdminLogin'), array('size' => '40'));
         $this->addRule(
             'admin_username', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
-        $this->addElement('text', 'admin_password', Translation::get("AdminPass"), array('size' => '40'));
+        $this->addElement('text', 'admin_password', Translation::get('AdminPass'), array('size' => '40'));
         $this->addRule(
             'admin_password', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
 
         $this->addElement('category', Translation::get('Platform'));
-        $this->addElement('text', 'site_name', Translation::get("CampusName"), array('size' => '40'));
+        $this->addElement('text', 'site_name', Translation::get('CampusName'), array('size' => '40'));
         $this->addRule(
             'site_name', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
-        $this->addElement('text', 'organization_name', Translation::get("InstituteShortName"), array('size' => '40'));
+        $this->addElement('text', 'organization_name', Translation::get('InstituteShortName'), array('size' => '40'));
         $this->addRule(
             'organization_name', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
-        $this->addElement('text', 'organization_url', Translation::get("InstituteURL"), array('size' => '40'));
+        $this->addElement('text', 'organization_url', Translation::get('InstituteURL'), array('size' => '40'));
         $this->addRule(
             'organization_url', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required'
         );
@@ -135,22 +125,22 @@ class SettingsForm extends FormValidator
         $selfRegistration[] = $this->createElement(
             'radio', 'self_reg', null, Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
         );
-        $this->addGroup($selfRegistration, 'self_reg', Translation::get("AllowSelfReg"), '&nbsp;', false);
+        $this->addGroup($selfRegistration, 'self_reg', Translation::get('AllowSelfReg'), '&nbsp;', false);
 
         $this->addElement(
             'select', 'hashing_algorithm', Translation::get('HashingAlgorithm'), HashingUtilities::getAvailableTypes()
         );
 
         $this->addElement('category', Translation::get('Storage'));
-        $this->addElement('text', 'archive_path', Translation::get("ArchivePath"), array('size' => '40'));
-        $this->addElement('text', 'cache_path', Translation::get("CachePath"), array('size' => '40'));
-        $this->addElement('text', 'garbage_path', Translation::get("GarbagePath"), array('size' => '40'));
-        $this->addElement('text', 'hotpotatoes_path', Translation::get("HotpotatoesPath"), array('size' => '40'));
-        $this->addElement('text', 'logs_path', Translation::get("LogsPath"), array('size' => '40'));
-        $this->addElement('text', 'repository_path', Translation::get("RepositoryPath"), array('size' => '40'));
-        $this->addElement('text', 'scorm_path', Translation::get("ScormPath"), array('size' => '40'));
-        $this->addElement('text', 'temp_path', Translation::get("TempPath"), array('size' => '40'));
-        $this->addElement('text', 'userpictures_path', Translation::get("UserPicturesPath"), array('size' => '40'));
+        $this->addElement('text', 'archive_path', Translation::get('ArchivePath'), array('size' => '40'));
+        $this->addElement('text', 'cache_path', Translation::get('CachePath'), array('size' => '40'));
+        $this->addElement('text', 'garbage_path', Translation::get('GarbagePath'), array('size' => '40'));
+        $this->addElement('text', 'hotpotatoes_path', Translation::get('HotpotatoesPath'), array('size' => '40'));
+        $this->addElement('text', 'logs_path', Translation::get('LogsPath'), array('size' => '40'));
+        $this->addElement('text', 'repository_path', Translation::get('RepositoryPath'), array('size' => '40'));
+        $this->addElement('text', 'scorm_path', Translation::get('ScormPath'), array('size' => '40'));
+        $this->addElement('text', 'temp_path', Translation::get('TempPath'), array('size' => '40'));
+        $this->addElement('text', 'userpictures_path', Translation::get('UserPicturesPath'), array('size' => '40'));
     }
 
     protected function addPackageSelectionToggle()
@@ -191,8 +181,8 @@ class SettingsForm extends FormValidator
 
         $html = [];
 
-        $html[] = '<script src="' .
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Install', true) . 'Install.js"></script>';
+        $html[] = '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Core\Install', true) .
+            'Install.js"></script>';
         $html[] = '</div>';
 
         $this->addElement('html', implode(PHP_EOL, $html));
@@ -200,17 +190,19 @@ class SettingsForm extends FormValidator
 
     protected function buildForm()
     {
-        $this->getTabsGenerator()->addTab(
+        $tabsCollection = new TabsCollection();
+
+        $tabsCollection->add(
             new FormTab('database', Translation::get('DatabaseComponentTitle'), null, 'addDatabaseSettings')
         );
-        $this->getTabsGenerator()->addTab(
+        $tabsCollection->add(
             new FormTab('general', Translation::get('SettingsComponentTitle'), null, 'addGeneralSettings')
         );
-        $this->getTabsGenerator()->addTab(
+        $tabsCollection->add(
             new FormTab('package', Translation::get('PackageComponentTitle'), null, 'addPackageSettings')
         );
 
-        $this->getTabsGenerator()->render();
+        $this->getFormTabsGenerator()->generate('settings', $this, $tabsCollection);
 
         $buttons = [];
 
@@ -248,7 +240,7 @@ class SettingsForm extends FormValidator
             }
         }
 
-        usort($packages, array($this, "orderPackages"));
+        usort($packages, array($this, 'orderPackages'));
 
         return $packages;
     }
@@ -339,20 +331,6 @@ class SettingsForm extends FormValidator
         }
 
         return $this->sessionSettings;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer
-     */
-    public function getTabsGenerator()
-    {
-        if (!isset($this->tabsGenerator))
-        {
-            $this->tabsGenerator = new FormTabsRenderer('settings', $this);
-        }
-
-        return $this->tabsGenerator;
     }
 
     protected function get_database_drivers()

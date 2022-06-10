@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Action;
 use Chamilo\Libraries\Format\Tabs\ActionsTab;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 
 class BrowserComponent extends Manager implements DelegateComponent
@@ -53,6 +54,11 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->currentTab;
     }
 
+    protected function getTabsRenderer(): TabsRenderer
+    {
+        return $this->getService(TabsRenderer::class);
+    }
+
     /**
      * @return string
      */
@@ -69,7 +75,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function get_tabs()
     {
-        $tabs = new TabsRenderer('admin');
+        $tabs = new TabsCollection();
 
         $packages = PlatformPackageBundles::getInstance(PackageList::MODE_INSTALLED)->get_type_packages();
 
@@ -120,11 +126,11 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $actions_tab->addAction($action);
                 }
 
-                $tabs->addTab($actions_tab);
+                $tabs->add($actions_tab);
             }
         }
 
-        return $tabs->render();
+        return $this->getTabsRenderer()->render('admin', $tabs);
     }
 
     /**

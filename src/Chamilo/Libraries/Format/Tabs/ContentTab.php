@@ -22,7 +22,7 @@ class ContentTab extends Tab
         $this->content = $content;
     }
 
-    public function body(bool $isOnlyTab = false): string
+    public function render(bool $isOnlyTab = false): string
     {
         $html = [];
         $html[] = $this->bodyHeader();

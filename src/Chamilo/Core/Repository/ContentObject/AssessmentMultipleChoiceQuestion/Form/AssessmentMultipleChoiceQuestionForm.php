@@ -409,7 +409,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         return true;
     }
 
-    public function prepareTabs()
+    public function generateTabs()
     {
         $this->addDefaultTab();
         $this->addHintTab();
@@ -419,7 +419,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
     public function addHintTab()
     {
-        $this->getTabsGenerator()->addTab(
+        $this->getTabsCollection()->add(
             new FormTab(
                 'add-hint',
                 Translation::get('AddHint'),

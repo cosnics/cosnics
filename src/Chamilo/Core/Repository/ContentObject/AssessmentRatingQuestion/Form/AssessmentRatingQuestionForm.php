@@ -27,7 +27,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
 
     public function addHintTab()
     {
-        $this->getTabsGenerator()->addTab(
+        $this->getTabsCollection()->add(
             new FormTab(
                 'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', array('fa-sm')), 'buildHintForm'
             )
@@ -192,7 +192,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
         return $htmlEditorOptions;
     }
 
-    public function prepareTabs()
+    public function generateTabs()
     {
         $this->addDefaultTab();
         $this->addHintTab();

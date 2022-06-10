@@ -13,11 +13,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class LinkTab extends Tab
 {
-    public const DISPLAY_BOTH = 3;
-    public const DISPLAY_BOTH_SELECTED = 4;
-    public const DISPLAY_ICON = 1;
-    public const DISPLAY_TEXT = 2;
-
     public const POSITION_LEFT = 'left';
     public const POSITION_RIGHT = 'right';
 
@@ -38,11 +33,11 @@ class LinkTab extends Tab
 
     public function __construct(
         string $identifier, string $label, ?InlineGlyph $inlineGlyph, string $link, bool $isSelected = false,
-        ?string $confirmationMessage = null, $position = self::POSITION_LEFT, $display = self::DISPLAY_BOTH,
-        $target = self::TARGET_WINDOW
+        ?string $confirmationMessage = null, string $position = self::POSITION_LEFT,
+        int $display = self::DISPLAY_ICON_AND_TITLE, $target = self::TARGET_WINDOW
     )
     {
-        parent::__construct($identifier, $label, $inlineGlyph);
+        parent::__construct($identifier, $label, $inlineGlyph, $display);
         $this->link = $link;
         $this->isSelected = $isSelected;
         $this->confirmationMessage = $confirmationMessage;
@@ -51,7 +46,7 @@ class LinkTab extends Tab
         $this->target = $target;
     }
 
-    public function body(bool $isOnlyTab = false): string
+    public function render(bool $isOnlyTab = false): string
     {
         return '';
     }
@@ -106,6 +101,16 @@ class LinkTab extends Tab
         $this->target = $target;
     }
 
+    public function hasConfirmationMessage(): bool
+    {
+        if ($this->getConfirmationMessage())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public function header(): string
     {
         $classes = [];
@@ -151,19 +156,14 @@ class LinkTab extends Tab
 
         $html[] = implode(' ', $link);
 
-        if ($this->getDisplay() != self::DISPLAY_TEXT)
+        if ($this->getInlineGlyph() && $this->isIconVisible())
         {
             $html[] = $this->getInlineGlyph()->render();
         }
 
-        if ($this->getLabel() && (($this->getDisplay() == self::DISPLAY_BOTH_SELECTED && $this->isSelected()) ||
-                $this->getDisplay() == self::DISPLAY_ICON || $this->getDisplay() == self::DISPLAY_BOTH))
+        if ($this->getLabel() && $this->isTextVisible())
         {
             $html[] = '<span class="title">' . $this->getLabel() . '</span>';
-        }
-        else
-        {
-            $html[] = '<span>' . $this->getLabel() . '</span>';
         }
 
         $html[] = '</a>';
@@ -180,15 +180,5 @@ class LinkTab extends Tab
     public function setIsSelected(bool $isSelected)
     {
         $this->isSelected = $isSelected;
-    }
-
-    public function hasConfirmationMessage(): bool
-    {
-        if ($this->getConfirmationMessage())
-        {
-            return true;
-        }
-
-        return false;
     }
 }

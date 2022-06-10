@@ -11,10 +11,16 @@
             <argument key="$theme">%chamilo.configuration.general.theme%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Format\Utilities\ResourceManager"/>
         <service id="Chamilo\Libraries\Format\BreadcrumbTrailRenderer"/>
+
+        <service id="Chamilo\Libraries\Format\Utilities\ResourceManager"/>
         <service id="Chamilo\Libraries\Format\Utilities\ResourceProcessor"/>
         <service id="Chamilo\Libraries\Format\Utilities\PackageDescriber"/>
+
         <service id="Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer"/>
+
+        <service id="Chamilo\Libraries\Format\Tabs\Form\FormTabsGenerator"/>
+        <service id="Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer"/>
+        <service id="Chamilo\Libraries\Format\Tabs\TabsRenderer"/>
     </services>
 </container>

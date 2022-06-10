@@ -24,6 +24,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -172,6 +173,11 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
+    public function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
+    }
+
     private function get_all_users_tab()
     {
         $table = new AllSubscribedUserTable($this);
@@ -241,6 +247,10 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         return $table->as_html();
     }
 
+    // **************************************************************************
+    // PLATFORMGROUP TABS FUNCTIONS
+    // **************************************************************************
+
     public function get_group()
     {
         $group = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
@@ -251,10 +261,6 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
 
         return $group;
     }
-
-    // **************************************************************************
-    // PLATFORMGROUP TABS FUNCTIONS
-    // **************************************************************************
 
     public function get_menu_tree()
     {
@@ -276,7 +282,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
     {
         $html = [];
 
-        $tabs = new LinkTabsRenderer('weblcms_course_user_platformgroups_browser');
+        $tabs = new TabsCollection();
 
         // no users tab if the root is selected
         if ($this->get_group() != self::PLATFORM_GROUP_ROOT_ID)
@@ -285,7 +291,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             $link = $this->get_url(array(self::PARAM_TAB => self::TAB_PLATFORM_GROUPS_USERS));
             $tab_name = Translation::get('Users', null, StringUtilities::LIBRARIES);
 
-            $tabs->addTab(
+            $tabs->add(
                 new LinkTab(
                     self::TAB_PLATFORM_GROUPS_USERS, $tab_name,
                     new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $link,
@@ -314,16 +320,14 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             $tab_name = Translation::get('SubscribedGroups');
             $tab_selected = true;
         }
-        $tabs->addTab(
+        $tabs->add(
             new LinkTab(
                 self::TAB_PLATFORM_GROUPS_SUBGROUPS, $tab_name,
                 new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas'), $link, $tab_selected
             )
         );
 
-        $tabs->setContent($this->get_platformgroup_tabs_content());
-        // render
-        $html[] = $tabs->render();
+        $html[] = $this->getLinkTabsRenderer()->render($tabs, $this->get_platformgroup_tabs_content());
 
         return implode(PHP_EOL, $html);
     }
@@ -352,8 +356,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
     private function get_platformgroup_tabs_footer()
     {
         $html = [];
-        $html[] = $this->tabs->body_footer();
-        $html[] = $this->tabs->footer();
+        $html[] = $this->getLinkTabsRenderer()->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
@@ -496,7 +499,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
     private function get_tabs_footer()
     {
         $html = [];
-        $html[] = $this->tabs->footer();
+        $html[] = $this->getLinkTabsRenderer()->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
@@ -551,8 +554,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             )
         );
 
-        // render
-        $html[] = $this->tabs->header();
+        $html[] = $this->getLinkTabsRenderer()->render($this->tabs);
 
         return implode(PHP_EOL, $html);
     }

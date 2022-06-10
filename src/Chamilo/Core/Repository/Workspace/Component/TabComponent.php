@@ -43,8 +43,7 @@ abstract class TabComponent extends Manager
                 self::ACTION_BROWSE_SHARED, Translation::get(self::ACTION_BROWSE_SHARED . 'Component'),
                 new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_SHARED)),
-                $this->get_action() == self::ACTION_BROWSE_SHARED, false, LinkTab::POSITION_LEFT,
-                LinkTab::DISPLAY_BOTH
+                $this->get_action() == self::ACTION_BROWSE_SHARED, false, LinkTab::POSITION_LEFT, LinkTab::DISPLAY_BOTH
             )
         );
 
@@ -53,8 +52,7 @@ abstract class TabComponent extends Manager
                 self::ACTION_FAVOURITE, Translation::get(self::ACTION_FAVOURITE . 'Component'),
                 new FontAwesomeGlyph('star', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_FAVOURITE)),
-                $this->get_action() == self::ACTION_FAVOURITE, false, LinkTab::POSITION_LEFT,
-                LinkTab::DISPLAY_BOTH
+                $this->get_action() == self::ACTION_FAVOURITE, false, LinkTab::POSITION_LEFT, LinkTab::DISPLAY_BOTH
             )
         );
 
@@ -65,8 +63,7 @@ abstract class TabComponent extends Manager
                     self::ACTION_BROWSE, Translation::get(self::ACTION_BROWSE . 'Component'),
                     new FontAwesomeGlyph('folder', array('fa-lg'), null, 'fas'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
-                    $this->get_action() == self::ACTION_BROWSE, false, LinkTab::POSITION_LEFT,
-                    LinkTab::DISPLAY_BOTH
+                    $this->get_action() == self::ACTION_BROWSE, false, LinkTab::POSITION_LEFT, LinkTab::DISPLAY_BOTH
                 )
             );
         }
@@ -76,8 +73,7 @@ abstract class TabComponent extends Manager
                 self::ACTION_CREATE, Translation::get(self::ACTION_CREATE . 'Component'),
                 new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)),
-                $this->get_action() == self::ACTION_CREATE, false, LinkTab::POSITION_LEFT,
-                LinkTab::DISPLAY_BOTH
+                $this->get_action() == self::ACTION_CREATE, false, LinkTab::POSITION_LEFT, LinkTab::DISPLAY_BOTH
             )
         );
 
@@ -88,8 +84,7 @@ abstract class TabComponent extends Manager
                     self::ACTION_UPDATE, Translation::get(self::ACTION_UPDATE . 'Component'),
                     new FontAwesomeGlyph('pencil-alt', array('fa-lg'), null, 'fas'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPDATE)),
-                    $this->get_action() == self::ACTION_UPDATE, false, LinkTab::POSITION_RIGHT,
-                    LinkTab::DISPLAY_BOTH
+                    $this->get_action() == self::ACTION_UPDATE, false, LinkTab::POSITION_RIGHT, LinkTab::DISPLAY_BOTH
                 )
             );
         }
@@ -112,8 +107,7 @@ abstract class TabComponent extends Manager
                 new LinkTab(
                     self::ACTION_RIGHTS, $translation, $icon,
                     $this->get_url(array(self::ACTION_RIGHTS => self::ACTION_RIGHTS)),
-                    $this->get_action() == self::ACTION_RIGHTS, false, LinkTab::POSITION_RIGHT,
-                    LinkTab::DISPLAY_BOTH
+                    $this->get_action() == self::ACTION_RIGHTS, false, LinkTab::POSITION_RIGHT, LinkTab::DISPLAY_BOTH
                 )
             );
         }
@@ -121,7 +115,12 @@ abstract class TabComponent extends Manager
         return $this->build();
     }
 
-    public abstract function build();
+    abstract public function build();
+
+    public function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
+    }
 
     /**
      * Get the TabsRenderer
@@ -141,7 +140,7 @@ abstract class TabComponent extends Manager
     {
         $html = [];
 
-        $html[] = $this->getTabsRenderer()->footer();
+        $html[] = $this->getTabsRenderer()->renderFooter();
         $html[] = parent::render_footer();
 
         return implode(PHP_EOL, $html);
@@ -156,7 +155,7 @@ abstract class TabComponent extends Manager
         $html = [];
 
         $html[] = parent::render_header($pageTitle);
-        $html[] = $this->getTabsRenderer()->header();
+        $html[] = $this->getTabsRenderer()->renderHeader();
 
         return implode(PHP_EOL, $html);
     }

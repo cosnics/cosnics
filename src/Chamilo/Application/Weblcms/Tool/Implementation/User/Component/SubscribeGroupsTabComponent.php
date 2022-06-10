@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -118,6 +119,19 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
     }
 
     /**
+     * Returns additional parameters that need to be registered
+     *
+     * @return array
+     */
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_TAB;
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
+    /**
      * Retrieves the currently selected group
      *
      * @return Group
@@ -156,6 +170,11 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
         }
 
         return $this->groupId;
+    }
+
+    public function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
     }
 
     /**
@@ -238,19 +257,6 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
     }
 
     /**
-     * Returns additional parameters that need to be registered
-     *
-     * @return array
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_TAB;
-        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
-
-        return parent::getAdditionalParameters($additionalParameters);
-    }
-
-    /**
      * Renders the group menu
      *
      * @return string
@@ -293,9 +299,9 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
      */
     protected function renderTabs()
     {
-        $tabs = new LinkTabsRenderer('course_groups', $this->renderTabContent());
+        $tabs = new TabsCollection();
 
-        $tabs->addTab(
+        $tabs->add(
             new LinkTab(
                 'view_details', $this->getCurrentGroup()->get_name(), new FontAwesomeGlyph('info-circle'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS)),
@@ -303,7 +309,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
             )
         );
 
-        $tabs->addTab(
+        $tabs->add(
             new LinkTab(
                 'view_subgroups', $this->getTranslation('BrowseChildren'), new FontAwesomeGlyph('folder'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_SUBGROUP_BROWSER)),
@@ -311,6 +317,6 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
             )
         );
 
-        return $tabs->render();
+        return $this->getLinkTabsRenderer()->render($tabs, $this->renderTabContent());
     }
 }

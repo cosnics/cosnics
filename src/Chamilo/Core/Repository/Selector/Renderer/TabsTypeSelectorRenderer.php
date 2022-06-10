@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
-use Chamilo\Libraries\Format\Tabs\TabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -32,9 +32,9 @@ use Exception;
 class TabsTypeSelectorRenderer extends TypeSelectorRenderer
 {
     // Type selector tabs
-    const TAB_EXTRA = 'extra';
+    public const TAB_EXTRA = 'extra';
 
-    const TAB_MOST_USED = 'most_used';
+    public const TAB_MOST_USED = 'most_used';
 
     /**
      *
@@ -44,7 +44,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
 
     /**
      *
-     * @var boolean
+     * @var bool
      */
     private $use_general_statistics;
 
@@ -74,7 +74,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
     public function render()
     {
         $renderer_name = ClassnameUtilities::getInstance()->getClassnameFromObject($this, true);
-        $tabs = new TabsRenderer($renderer_name);
+        $tabs = new TabsCollection();
 
         if ($this->get_type_selector()->count_options() > 15)
         {
@@ -86,7 +86,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
                     'bookmark', array('fa-lg', 'fa-fw'), null, 'fas'
                 );
 
-                $tabs->addTab(
+                $tabs->add(
                     new ContentTab(
                         self::TAB_MOST_USED, Translation::get('MostUsed'), $most_used_content, $glyph
                     )
@@ -101,7 +101,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
                 IdentGlyph::SIZE_SMALL, array('fa-fw')
             );
 
-            $tabs->addTab(
+            $tabs->add(
                 new ContentTab(
                     $category->getType(), $category->get_name(), $this->render_category($category), $glyph
                 )
@@ -114,14 +114,14 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
                 'magic', array('fa-lg', 'fa-fw'), null, 'fas'
             );
 
-            $tabs->addTab(
+            $tabs->add(
                 new ContentTab(
                     self::TAB_EXTRA, Translation::get('Extra'), $this->render_additional_links(), $glyph
                 )
             );
         }
 
-        return $tabs->render();
+        return $this->get_parent()->getTabsRenderer()->render($renderer_name, $tabs);
     }
 
     /**
@@ -135,7 +135,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function get_use_general_statistics()
     {
@@ -144,7 +144,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function has_additional_links()
     {

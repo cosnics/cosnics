@@ -19,6 +19,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -37,6 +38,13 @@ abstract class TabComponent extends Manager
     protected $buttonToolbarRenderer;
 
     /**
+     * The current course group
+     *
+     * @var CourseGroup
+     */
+    protected $currentCourseGroup;
+
+    /**
      * The introduction text
      *
      * @var string
@@ -49,13 +57,6 @@ abstract class TabComponent extends Manager
      * @var CourseGroup
      */
     protected $rootCourseGroup;
-
-    /**
-     * The current course group
-     *
-     * @var CourseGroup
-     */
-    protected $currentCourseGroup;
 
     /**
      * Runs this component
@@ -218,6 +219,11 @@ abstract class TabComponent extends Manager
         return $currentCourseGroup->get_name() . $maxMembersString;
     }
 
+    public function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
+    }
+
     /**
      * Returns the group id from the request
      *
@@ -266,11 +272,11 @@ abstract class TabComponent extends Manager
     {
         $translator = Translation::getInstance();
 
-        $tabs = new LinkTabsRenderer('course_groups', $this->renderTabContent());
+        $tabs = new TabsCollection();
 
         if (!$this->isCurrentGroupRoot())
         {
-            $tabs->addTab(
+            $tabs->add(
                 new LinkTab(
                     'view_details', $this->getCurrentGroupName(), new FontAwesomeGlyph('info-circle'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS)),
@@ -279,7 +285,7 @@ abstract class TabComponent extends Manager
             );
         }
 
-        $tabs->addTab(
+        $tabs->add(
             new LinkTab(
                 'view_details', $translator->getTranslation('BrowseChildren', null, Manager::context()),
                 new FontAwesomeGlyph('folder'), $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
@@ -289,7 +295,7 @@ abstract class TabComponent extends Manager
 
         if (!$this->isCurrentGroupRoot() && $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
-            $tabs->addTab(
+            $tabs->add(
                 new LinkTab(
                     'view_details', $translator->getTranslation('EditGroup', null, Manager::context()),
                     new FontAwesomeGlyph('pencil-alt'),
@@ -298,7 +304,7 @@ abstract class TabComponent extends Manager
                 )
             );
 
-            $tabs->addTab(
+            $tabs->add(
                 new LinkTab(
                     'view_details', $translator->getTranslation('ManageSubscriptions', null, Manager::context()),
                     new FontAwesomeGlyph('plus-circle'),
@@ -308,6 +314,6 @@ abstract class TabComponent extends Manager
             );
         }
 
-        return $tabs->render();
+        return $this->getLinkTabsRenderer()->render($tabs, $this->renderTabContent());
     }
 }

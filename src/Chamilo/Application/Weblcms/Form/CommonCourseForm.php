@@ -26,7 +26,8 @@ use Chamilo\Libraries\Format\Menu\DynamicContentMenu\FormDynamicContentMenuItem;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
-use Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Form\FormTabsGenerator;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -50,27 +51,20 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class CommonCourseForm extends FormValidator implements CourseSettingsXmlFormParserSupport
 {
-    const PROPERTY_LOCKED_PREFIX = 'locked_';
+    public const PROPERTY_LOCKED_PREFIX = 'locked_';
 
     /**
      * ***************************************************************************************************************
      * Tabs *
      * **************************************************************************************************************
      */
-    const TAB_GENERAL = 'general';
+    public const TAB_GENERAL = 'general';
 
-    const TAB_RIGHTS = 'rights';
+    public const TAB_RIGHTS = 'rights';
 
-    const TAB_SETTINGS = 'settings';
+    public const TAB_SETTINGS = 'settings';
 
-    const TAB_TOOLS = 'tools';
-
-    /**
-     * The name for this form (used for tabs / menus)
-     *
-     * @var String
-     */
-    private $form_name;
+    public const TAB_TOOLS = 'tools';
 
     /**
      * The base object (course / course type) for this form
@@ -85,6 +79,13 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
      * @var RightsEntity[]
      */
     private $entities;
+
+    /**
+     * The name for this form (used for tabs / menus)
+     *
+     * @var String
+     */
+    private $form_name;
 
     /**
      * ***************************************************************************************************************
@@ -340,8 +341,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
         $tools_condition = new SubselectCondition(
             new PropertyConditionVariable(CourseTool::class, CourseTool::PROPERTY_ID),
-            new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_TOOL_ID),
-            $settings_condition
+            new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_TOOL_ID), $settings_condition
         );
 
         $toolsArray = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters($tools_condition));
@@ -520,7 +520,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
      * @param string $name
      * @param int $tool_id
      *
-     * @return boolean
+     * @return bool
      */
     public function can_change_course_setting($name, $tool_id = 0)
     {
@@ -537,21 +537,15 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
     }
 
     /**
-     * **************************************************************************************************************
-     * Form Generation Helper Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Creates the dynamic tabs for the form
      *
      * @param String $form_name
      */
     private function create_tabs()
     {
-        $tabs_renderer = new FormTabsRenderer($this->form_name, $this);
+        $tabs = new TabsCollection();
 
-        $tabs_renderer->addTab(
+        $tabs->add(
             new FormTab(
                 self::TAB_GENERAL,
                 (string) StringUtilities::getInstance()->createString(self::TAB_GENERAL)->upperCamelize(), null,
@@ -559,7 +553,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             )
         );
 
-        $tabs_renderer->addTab(
+        $tabs->add(
             new FormTab(
                 self::TAB_SETTINGS,
                 (string) StringUtilities::getInstance()->createString(self::TAB_SETTINGS)->upperCamelize(), null,
@@ -567,7 +561,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             )
         );
 
-        $tabs_renderer->addTab(
+        $tabs->add(
             new FormTab(
                 self::TAB_TOOLS,
                 (string) StringUtilities::getInstance()->createString(self::TAB_TOOLS)->upperCamelize(), null,
@@ -575,7 +569,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             )
         );
 
-        $tabs_renderer->addTab(
+        $tabs->add(
             new FormTab(
                 self::TAB_RIGHTS,
                 (string) StringUtilities::getInstance()->createString(self::TAB_RIGHTS)->upperCamelize(), null,
@@ -583,8 +577,15 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             )
         );
 
-        $tabs_renderer->render();
+        $formTabsGenerator = $this->getFormTabsGenerator();
+        $formTabsGenerator->generate($this->form_name, $this, $tabs);
     }
+
+    /**
+     * **************************************************************************************************************
+     * Form Generation Helper Functionality *
+     * **************************************************************************************************************
+     */
 
     /**
      * **************************************************************************************************************
@@ -686,7 +687,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         );
 
         $selected_entities_per_right = [];
-        foreach($selected_entities as $selected_entity)
+        foreach ($selected_entities as $selected_entity)
         {
             $selected_entities_per_right[$selected_entity->get_right_id()][] = $selected_entity;
         }

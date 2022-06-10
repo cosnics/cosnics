@@ -7,13 +7,13 @@ use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Admin\Form\ConfigurationForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -29,19 +29,19 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class UserSettingsComponent extends ProfileComponent
 {
-    const PARAM_CONTEXT = 'context';
-
-    /**
-     *
-     * @var \Chamilo\Core\User\Form\ConfigurationForm
-     */
-    private $form;
+    public const PARAM_CONTEXT = 'context';
 
     /**
      *
      * @var string
      */
     private $context;
+
+    /**
+     *
+     * @var \Chamilo\Core\User\Form\ConfigurationForm
+     */
+    private $form;
 
     /**
      * Runs this component and displays its output.
@@ -86,9 +86,7 @@ class UserSettingsComponent extends ProfileComponent
      */
     public function getContent()
     {
-        $tabs = new LinkTabsRenderer(
-            ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true), $this->form->toHtml()
-        );
+        $tabs = new TabsCollection();
 
         $setting_contexts = DataManager::retrieve_setting_contexts(
             new EqualityCondition(
@@ -113,7 +111,7 @@ class UserSettingsComponent extends ProfileComponent
                     $setting_context, true, false, false, IdentGlyph::SIZE_SMALL, []
                 ), $package_url, $is_current_tab
                 );
-                $tabs->addTab($tab);
+                $tabs->add($tab);
             }
         }
 
@@ -125,9 +123,14 @@ class UserSettingsComponent extends ProfileComponent
                 '<div class="normal-message">' . Translation::get('SelectApplicationToConfigure') . '</div><br />';
         }
 
-        $html[] = $tabs->render();
+        $html[] = $this->getLinkTabsRenderer()->render($tabs, $this->form->render());
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
     }
 
     /**

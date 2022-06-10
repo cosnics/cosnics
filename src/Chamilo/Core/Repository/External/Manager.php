@@ -178,6 +178,11 @@ abstract class Manager extends Application implements NoContextComponent
         return $this->get_external_repository_manager_connector()->export_external_repository_object($id);
     }
 
+    public function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
+    }
+
     /**
      *
      * @return array
@@ -514,7 +519,7 @@ abstract class Manager extends Application implements NoContextComponent
     {
         $html = [];
 
-        $html[] = $this->tabs->footer();
+        $html[] = $this->tabs->renderFooter();
         $html[] = parent::render_footer();
 
         return implode(PHP_EOL, $html);
@@ -606,7 +611,7 @@ abstract class Manager extends Application implements NoContextComponent
             );
         }
 
-        $html[] = $this->tabs->header();
+        $html[] = $this->getLinkTabsRenderer()->render($this->tabs);
 
         return implode(PHP_EOL, $html);
     }

@@ -366,7 +366,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         return parent::create_content_object();
     }
 
-    public function prepareTabs()
+    public function generateTabs()
     {
         $this->addDefaultTab();
         $this->addInstructionsTab();

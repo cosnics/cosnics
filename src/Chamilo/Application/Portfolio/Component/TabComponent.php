@@ -35,8 +35,7 @@ abstract class TabComponent extends Manager
                 $this->getTranslator()->trans(self::ACTION_BROWSE . 'Component', [], Manager::context()),
                 new FontAwesomeGlyph('search', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
-                $this->get_action() == self::ACTION_BROWSE, false, LinkTab::POSITION_LEFT,
-                LinkTab::DISPLAY_BOTH
+                $this->get_action() == self::ACTION_BROWSE, false, LinkTab::POSITION_LEFT, LinkTab::DISPLAY_BOTH
             )
         );
 
@@ -59,7 +58,7 @@ abstract class TabComponent extends Manager
      *
      * @return string
      */
-    public abstract function build();
+    abstract public function build();
 
     /**
      * Get the TabsRenderer
@@ -79,7 +78,7 @@ abstract class TabComponent extends Manager
     {
         $html = [];
 
-        $html[] = $this->getTabsRenderer()->footer();
+        $html[] = $this->getTabsRenderer()->renderFooter();
         $html[] = parent::render_footer();
 
         return implode(PHP_EOL, $html);
@@ -94,7 +93,7 @@ abstract class TabComponent extends Manager
         $html = [];
 
         $html[] = parent::render_header($pageTitle);
-        $html[] = $this->getTabsRenderer()->header();
+        $html[] = $this->getTabsRenderer()->renderHeader();
 
         return implode(PHP_EOL, $html);
     }

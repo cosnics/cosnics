@@ -20,7 +20,7 @@ class OrderingQuestionForm extends ContentObjectForm
 
     public function addHintTab()
     {
-        $this->getTabsGenerator()->addTab(
+        $this->getTabsCollection()->add(
             new FormTab(
                 'add-hint', Translation::get('AddHint'), new FontAwesomeGlyph('magic', array('fa-sm')), 'buildHintForm'
             )
@@ -243,7 +243,7 @@ class OrderingQuestionForm extends ContentObjectForm
         return parent::create_content_object();
     }
 
-    public function prepareTabs()
+    public function generateTabs()
     {
         $this->addDefaultTab();
         $this->addHintTab();

@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -28,7 +29,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class ConfigurerComponent extends Manager
 {
-    const PARAM_TAB = 'tab';
+    public const PARAM_TAB = 'tab';
 
     /**
      * Runs this component and displays its output.
@@ -83,12 +84,13 @@ class ConfigurerComponent extends Manager
 
             asort($package_names);
 
-            $tabs = new LinkTabsRenderer('settings', $form->toHtml());
+            $tabs = new TabsCollection();
+
             foreach ($package_names as $package => $package_name)
             {
                 if (Configuration::getInstance()->has_settings($package))
                 {
-                    $tabs->addTab(
+                    $tabs->add(
                         new LinkTab(
                             $package, Translation::get('TypeName', null, $package), new NamespaceIdentGlyph(
                             $package, true, false, false, IdentGlyph::SIZE_SMALL
@@ -102,11 +104,16 @@ class ConfigurerComponent extends Manager
             $html = [];
 
             $html[] = $this->render_header();
-            $html[] = $tabs->render();
+            $html[] = $this->getLinkTabsRenderer()->render($tabs, $form->render());
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    public function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
     }
 
     public function get_context()
@@ -161,7 +168,7 @@ class ConfigurerComponent extends Manager
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function has_menu()
     {

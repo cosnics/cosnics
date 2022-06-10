@@ -32,7 +32,7 @@ class ActionsTab extends Tab
         $this->actions[] = $action;
     }
 
-    public function body(bool $isOnlyTab = false): string
+    public function render(bool $isOnlyTab = false): string
     {
         $html = [];
 

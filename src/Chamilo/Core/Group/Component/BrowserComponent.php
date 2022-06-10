@@ -21,6 +21,7 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -41,9 +42,9 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class BrowserComponent extends Manager implements TableSupport
 {
-    const TAB_DETAILS = 2;
-    const TAB_SUBGROUPS = 0;
-    const TAB_USERS = 1;
+    public const TAB_DETAILS = 2;
+    public const TAB_SUBGROUPS = 0;
+    public const TAB_USERS = 1;
 
     private ButtonToolBarRenderer $buttonToolbarRenderer;
 
@@ -79,6 +80,16 @@ class BrowserComponent extends Manager implements TableSupport
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('group general');
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_GROUP_ID;
+
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     public function getButtonToolbarRenderer()
@@ -133,7 +144,7 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getGroupIdentifier()
     {
@@ -186,19 +197,15 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->rootGroup;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
+    protected function getTabsRenderer(): TabsRenderer
     {
-        $additionalParameters[] = self::PARAM_GROUP_ID;
-        return parent::getAdditionalParameters($additionalParameters);
+        return $this->getService(TabsRenderer::class);
     }
 
     /**
      * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
      */
-    function get_all_groups_condition()
+    public function get_all_groups_condition()
     {
         $condition = null;
 
@@ -366,39 +373,39 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_user_html()
     {
         $renderer_name = ClassnameUtilities::getInstance()->getClassnameFromObject($this, true);
-        $tabs = new TabsRenderer($renderer_name);
+        $tabs = new TabsCollection();
         $translator = $this->getTranslator();
 
         // Subgroups table tab
         $table = new GroupTable($this);
         $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
-        $tabs->addTab(
+        $tabs->add(
             new ContentTab(
                 self::TAB_SUBGROUPS, $translator->trans('Subgroups'), $table->render(), new FontAwesomeGlyph(
-                'users', array('fa-lg'), null, 'fas'
-            )
+                    'users', array('fa-lg'), null, 'fas'
+                )
             )
         );
 
         $table = new GroupRelUserTable($this);
         $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
-        $tabs->addTab(
+        $tabs->add(
             new ContentTab(
-                self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::context()), $table->render(),
-                new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas')
+                self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::context()),
+                $table->render(), new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas')
             )
         );
 
         // Group info tab
-        $tabs->addTab(
+        $tabs->add(
             new ContentTab(
                 self::TAB_DETAILS, $translator->trans('Details'), $this->get_group_info(), new FontAwesomeGlyph(
-                'info-circle', array('fa-lg'), null, 'fas'
-            )
+                    'info-circle', array('fa-lg'), null, 'fas'
+                )
             )
         );
 
-        return $tabs->render();
+        return $this->getTabsRenderer()->render($renderer_name, $tabs);
     }
 
     public function get_users_condition()
@@ -457,7 +464,7 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function has_menu()
     {

@@ -114,7 +114,7 @@ class AssessmentOpenQuestionForm extends ContentObjectForm
         return parent::update_content_object();
     }
 
-    public function prepareTabs()
+    public function generateTabs()
     {
         $this->addDefaultTab();
         $this->addHintTab();
@@ -124,7 +124,7 @@ class AssessmentOpenQuestionForm extends ContentObjectForm
 
     public function addHintTab()
     {
-        $this->getTabsGenerator()->addTab(
+        $this->getTabsCollection()->add(
             new FormTab(
                 'add-hint',
                 Translation::get('AddHint'),

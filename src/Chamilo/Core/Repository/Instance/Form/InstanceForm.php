@@ -13,7 +13,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
-use Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -25,13 +25,13 @@ use DOMDocument;
  */
 class InstanceForm extends FormValidator
 {
-    const SETTINGS_PREFIX = 'settings';
+    public const SETTINGS_PREFIX = 'settings';
 
-    private $external_instance;
+    private $application;
 
     private $configuration;
 
-    private $application;
+    private $external_instance;
 
     public function __construct(Application $application, $external_instance = null)
     {
@@ -62,11 +62,10 @@ class InstanceForm extends FormValidator
 
     public function build_basic_form()
     {
-        $external_instance = $this->external_instance;
         $configuration = $this->configuration;
 
-        $tabs_generator = new FormTabsRenderer($this->getAttribute('name'), $this);
-        $tabs_generator->addTab(
+        $tabsCollection = new TabsCollection();
+        $tabsCollection->add(
             new FormTab(
                 'general', 'General', new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas'),
                 'build_general_form'
@@ -75,7 +74,7 @@ class InstanceForm extends FormValidator
 
         if (count($configuration['settings']) > 0)
         {
-            $tabs_generator->addTab(
+            $tabsCollection->add(
                 new FormTab(
                     'settings', 'Settings', new FontAwesomeGlyph('cog', array('fa-lg'), null, 'fas'),
                     'build_settings_form'
@@ -83,7 +82,7 @@ class InstanceForm extends FormValidator
             );
         }
 
-        $tabs_generator->render();
+        $this->getFormTabsGenerator()->generate($this->getAttribute('name'), $this, $tabsCollection);
     }
 
     public function build_creation_form()
@@ -126,7 +125,7 @@ class InstanceForm extends FormValidator
         $this->addElement('hidden', Instance::PROPERTY_IMPLEMENTATION, $this->application->get_implementation());
         $this->addElement(
             'text', Instance::PROPERTY_TITLE, Translation::get('Title', null, Manager::get_namespace()),
-            array("size" => "50")
+            array('size' => '50')
         );
         $this->addRule(
             Instance::PROPERTY_TITLE, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
@@ -151,8 +150,8 @@ class InstanceForm extends FormValidator
             else
             {
                 $this->addElement(
-                    'radio', Instance::PROPERTY_TYPE, Translation::get('Type'),
-                    Translation::get('PlatformInstance'), PlatformInstance::class
+                    'radio', Instance::PROPERTY_TYPE, Translation::get('Type'), Translation::get('PlatformInstance'),
+                    PlatformInstance::class
                 );
                 $this->addElement(
                     'radio', Instance::PROPERTY_TYPE, null, Translation::get('PersonalInstance'),

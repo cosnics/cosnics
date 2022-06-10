@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -87,6 +88,11 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
         return $tabs;
     }
 
+    public function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
+    }
+
     /**
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
@@ -115,14 +121,14 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
 
         if (count($availableTabs) > 1)
         {
-            $tabs = new LinkTabsRenderer('account', $this->getContent());
+            $tabs = new TabsCollection();
 
             foreach ($availableTabs as $availableTab)
             {
-                $tabs->addTab($availableTab);
+                $tabs->add($availableTab);
             }
 
-            $html[] = $tabs->render();
+            $html[] = $this->getLinkTabsRenderer()->render($tabs, $this->getContent());
         }
         else
         {

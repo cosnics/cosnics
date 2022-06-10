@@ -12,7 +12,8 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
-use Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\Form\FormTabsGenerator;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -26,47 +27,28 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class ProviderFormService
 {
-    const TAB_METADATA = 'Metadata';
+    public const TAB_METADATA = 'Metadata';
 
-    /**
-     *
-     * @var \Chamilo\Core\Metadata\Service\EntityService
-     */
-    private $entityService;
+    private ElementService $elementService;
 
-    /**
-     *
-     * @var \Chamilo\Core\Metadata\Element\Service\ElementService
-     */
-    private $elementService;
+    private EntityService $entityService;
 
-    /**
-     *
-     * @var \Chamilo\Core\Metadata\Relation\Service\RelationService
-     */
-    private $relationService;
+    private FormTabsGenerator $formTabsGenerator;
 
-    /**
-     * @var \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService
-     */
-    private $propertyProviderService;
+    private PropertyProviderService $propertyProviderService;
 
-    /**
-     *
-     * @param \Chamilo\Core\Metadata\Service\EntityService $entityService
-     * @param \Chamilo\Core\Metadata\Element\Service\ElementService $elementService
-     * @param \Chamilo\Core\Metadata\Relation\Service\RelationService $relationService
-     * @param \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService $propertyProviderService
-     */
+    private RelationService $relationService;
+
     public function __construct(
         EntityService $entityService, ElementService $elementService, RelationService $relationService,
-        PropertyProviderService $propertyProviderService
+        PropertyProviderService $propertyProviderService, FormTabsGenerator $formTabsGenerator
     )
     {
         $this->entityService = $entityService;
         $this->elementService = $elementService;
         $this->relationService = $relationService;
         $this->propertyProviderService = $propertyProviderService;
+        $this->formTabsGenerator = $formTabsGenerator;
     }
 
     /**
@@ -78,11 +60,12 @@ class ProviderFormService
     public function addElements(DataClassEntity $entity, FormValidator $formValidator)
     {
         $availableSchemas = $this->getAvailableSchemas($entity);
-        $tabs_generator = new FormTabsRenderer('ProviderLinks', $formValidator);
+
+        $tabsCollection = new TabsCollection();
 
         foreach ($availableSchemas as $availableSchema)
         {
-            $tabs_generator->addTab(
+            $tabsCollection->add(
                 new FormTab(
                     'schema-' . $availableSchema->get_id(), $availableSchema->get_name(),
                     new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas'),
@@ -91,7 +74,7 @@ class ProviderFormService
             );
         }
 
-        $tabs_generator->render();
+        $this->getFormTabsGenerator()->generate('ProviderLinks', $formValidator, $tabsCollection);
     }
 
     /**
@@ -129,7 +112,7 @@ class ProviderFormService
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
      *
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     public function getDefaultsForSchema(DataClassEntity $entity, Schema $schema)
@@ -176,7 +159,7 @@ class ProviderFormService
 
         $providerRegistrations = $this->getPropertyProviderService()->getProviderRegistrationsForEntity($entity);
 
-        foreach($providerRegistrations as $providerRegistration)
+        foreach ($providerRegistrations as $providerRegistration)
         {
             $translationNamespace = ClassnameUtilities::getInstance()->getNamespaceParent(
                 $providerRegistration->get_provider_class(), 2
@@ -248,7 +231,7 @@ class ProviderFormService
 
         $entityProviderLinksResultSet = $this->getPropertyProviderService()->getProviderLinksForEntity($entity);
 
-        foreach($entityProviderLinksResultSet as $entityProviderLink)
+        foreach ($entityProviderLinksResultSet as $entityProviderLink)
         {
             $entityProviderLinks[$entityProviderLink->get_element_id()] = $entityProviderLink;
         }
@@ -272,6 +255,11 @@ class ProviderFormService
     public function setEntityService($entityService)
     {
         $this->entityService = $entityService;
+    }
+
+    public function getFormTabsGenerator(): FormTabsGenerator
+    {
+        return $this->formTabsGenerator;
     }
 
     /**

@@ -50,6 +50,11 @@ abstract class Manager extends Application
 
     const PARAM_TARGET_TYPE = 'target_type';
 
+    public function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
+    }
+
     public function get_entity_types()
     {
         $types = [];
@@ -171,7 +176,7 @@ abstract class Manager extends Application
     {
         $tabs = new LinkTabsRenderer(__CLASS__, $content);
 
-        $tabs->addTab(
+        $tabs->add(
             new LinkTab(
                 self::ACTION_CREATE, Translation::get(self::ACTION_CREATE . 'Component'),
                 new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas'),
@@ -183,7 +188,7 @@ abstract class Manager extends Application
 
         if ($count > 0)
         {
-            $tabs->addTab(
+            $tabs->add(
                 new LinkTab(
                     self::ACTION_ENTITY, Translation::get(self::ACTION_ENTITY . 'Component'),
                     new FontAwesomeGlyph('chess-pawn', array('fa-lg'), null, 'fas'),
@@ -195,7 +200,7 @@ abstract class Manager extends Application
 
         if ($current_tab == self::ACTION_TARGET && $this->get_selected_entity_type() && $this->get_selected_entity_id())
         {
-            $tabs->addTab(
+            $tabs->add(
                 new LinkTab(
                     self::ACTION_TARGET, Translation::get(self::ACTION_TARGET . 'Component'),
                     new FontAwesomeGlyph('bullseye', array('fa-lg'), null, 'fas'),

@@ -16,6 +16,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -27,21 +28,21 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserComponent extends Manager implements TableSupport, DelegateComponent
 {
-    const FILTER_THIS_MONTH = 'month';
+    public const FILTER_THIS_MONTH = 'month';
 
-    const FILTER_THIS_WEEK = 'week';
+    public const FILTER_THIS_WEEK = 'week';
 
-    const FILTER_TODAY = 'today';
+    public const FILTER_TODAY = 'today';
 
-    const PARAM_FILTER = 'filter';
+    public const PARAM_FILTER = 'filter';
 
-    const PARAM_PUBLICATION_TYPE = 'publication_type';
+    public const PARAM_PUBLICATION_TYPE = 'publication_type';
 
-    const TYPE_ALL = 1;
+    public const TYPE_ALL = 1;
 
-    const TYPE_FOR_ME = 2;
+    public const TYPE_FOR_ME = 2;
 
-    const TYPE_FROM_ME = 3;
+    public const TYPE_FROM_ME = 3;
 
     /**
      * @var \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
@@ -134,6 +135,30 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         return $this->buttonToolbarRenderer;
     }
 
+    public function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
+    }
+
+    public function getType()
+    {
+        $type = $this->getRequest()->query->get(self::PARAM_PUBLICATION_TYPE);
+
+        if (!$type)
+        {
+            if ($this->getUser()->is_platform_admin())
+            {
+                $type = self::TYPE_ALL;
+            }
+            else
+            {
+                $type = self::TYPE_FOR_ME;
+            }
+        }
+
+        return $type;
+    }
+
     /**
      * @return string
      * @throws \Exception
@@ -147,11 +172,11 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
         $type = $this->getType();
 
-        $tabs = new LinkTabsRenderer('browser');
+        $tabs = new TabsCollection();
 
         if ($this->getUser()->is_platform_admin())
         {
-            $tabs->addTab(
+            $tabs->add(
                 new LinkTab(
                     self::TYPE_ALL, $translator->trans('AllPublications', [], self::package()),
                     new FontAwesomeGlyph('globe', array('fa-lg'), null, 'fas'),
@@ -160,7 +185,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             );
         }
 
-        $tabs->addTab(
+        $tabs->add(
             new LinkTab(
                 self::TYPE_FROM_ME, $translator->trans('PublishedForMe', [], self::package()),
                 new FontAwesomeGlyph('share-square', array('fa-lg'), null, 'fas'),
@@ -168,7 +193,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             )
         );
 
-        $tabs->addTab(
+        $tabs->add(
             new LinkTab(
                 self::TYPE_FROM_ME, $translator->trans('MyPublications', [], self::package()),
                 new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'),
@@ -180,9 +205,8 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $this, $this->getPublicationService(), $this->getRightsService(), $this->getUserService(),
             $this->getGroupService()
         );
-        $tabs->set_content($table->render());
 
-        return $tabs->render();
+        return $this->getLinkTabsRenderer()->render($tabs, $table->render());
     }
 
     public function get_search_condition()
@@ -266,24 +290,5 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     public function get_type()
     {
         return $this->getType();
-    }
-
-    public function getType()
-    {
-        $type = $this->getRequest()->query->get(self::PARAM_PUBLICATION_TYPE);
-
-        if (!$type)
-        {
-            if ($this->getUser()->is_platform_admin())
-            {
-                $type = self::TYPE_ALL;
-            }
-            else
-            {
-                $type = self::TYPE_FOR_ME;
-            }
-        }
-
-        return $type;
     }
 }

@@ -208,6 +208,11 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
         return $this->getService(InstanceService::class);
     }
 
+    public function getTabsRenderer(): TabsRenderer
+    {
+        return $this->getService(TabsRenderer::class);
+    }
+
     /**
      * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
      */

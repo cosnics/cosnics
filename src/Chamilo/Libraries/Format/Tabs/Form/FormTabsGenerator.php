@@ -1,6 +1,8 @@
 <?php
-namespace Chamilo\Libraries\Format\Tabs;
+namespace Chamilo\Libraries\Format\Tabs\Form;
 
+use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
@@ -8,7 +10,7 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
  * @package Chamilo\Libraries\Format\Tabs
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class TabsRenderer
+class FormTabsGenerator
 {
     public const PARAM_SELECTED_TAB = 'tab';
 
@@ -22,24 +24,28 @@ class TabsRenderer
         $this->request = $request;
     }
 
-    public function render(string $name, TabsCollection $tabs): string
+    /**
+     * @param string $name
+     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Form\FormTab> $tabs
+     */
+    public function generate(string $name, FormValidator $form, TabsCollection $tabs)
     {
-        $html = [];
-
-        if (!$tabs->isEmpty())
+        if ($tabs->hasMultipleTabs())
         {
-            $html[] = $this->renderHeader($name, $tabs);
-
-            // Tab content
-            foreach ($tabs as $tab)
-            {
-                $html[] = $tab->render($name . '-' . $tab->getIdentifier());
-            }
-
-            $html[] = $this->renderFooter($name, $tabs);
+            $form->addElement('html', $this->renderHeader($name, $tabs));
         }
 
-        return implode(PHP_EOL, $html);
+        foreach ($tabs as $tab)
+        {
+            $tab->setForm($form);
+            $tab->render($tabs->hasOnlyOneTab());
+        }
+
+        if ($tabs->hasMultipleTabs())
+        {
+            $form->addElement('html', $this->renderFooter($name, $tabs));
+        }
     }
 
     public function getRequest(): ChamiloRequest
@@ -64,13 +70,7 @@ class TabsRenderer
         return null;
     }
 
-    /**
-     * @param string $name
-     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Form\FormTab> $tabs
-     *
-     * @return string
-     */
-    public function renderFooter(string $name, TabsCollection $tabs): string
+    protected function renderFooter(string $name, TabsCollection $tabs): string
     {
         $html = [];
 
@@ -78,15 +78,15 @@ class TabsRenderer
         $html[] = '<script>';
 
         $html[] = '$(\'#' . $name . 'Tabs a\').click(function (e) {
-  e.preventDefault()
-  $(this).tab(\'show\')
+    e.preventDefault()
+    $(this).tab(\'show\')
 })';
 
-        $selected_tab = $this->getSelectedTab($name, $tabs);
+        $selectedTab = $this->getSelectedTab($name, $tabs);
 
-        if (isset($selected_tab))
+        if (isset($selectedTab))
         {
-            $html[] = '$(\'#' . $name . 'Tabs a[href="#' . $selected_tab . '"]\').tab(\'show\');';
+            $html[] = '$(\'#' . $name . 'Tabs a[href="#' . $name . '-' . $selectedTab . '"]\').tab(\'show\');';
         }
         else
         {
@@ -98,13 +98,7 @@ class TabsRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @param string $name
-     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Form\FormTab> $tabs
-     *
-     * @return string
-     */
-    public function renderHeader(string $name, TabsCollection $tabs): string
+    protected function renderHeader(string $name, TabsCollection $tabs): string
     {
         $html = [];
 
@@ -125,5 +119,4 @@ class TabsRenderer
 
         return implode(PHP_EOL, $html);
     }
-
 }

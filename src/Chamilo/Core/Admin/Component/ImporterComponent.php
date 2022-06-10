@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\ActionsTab;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -65,6 +66,11 @@ class ImporterComponent extends Manager
         $breadcrumbtrail->add_help('admin_importer');
     }
 
+    protected function getTabsRenderer(): TabsRenderer
+    {
+        return $this->getService(TabsRenderer::class);
+    }
+
     public function get_menu()
     {
         $menu = new PackageTypeImportMenu($this->tab, $this->get_url(array(self::PARAM_TAB => '__type__')));
@@ -74,7 +80,7 @@ class ImporterComponent extends Manager
 
     public function get_tabs()
     {
-        $tabs = new TabsRenderer('admin');
+        $tabs = new TabsCollection();
 
         $packages = PlatformPackageBundles::getInstance()->get_type_packages();
 
@@ -133,11 +139,11 @@ class ImporterComponent extends Manager
                     $actions_tab->addAction($action);
                 }
 
-                $tabs->addTab($actions_tab);
+                $tabs->add($actions_tab);
             }
         }
 
-        return $tabs->render();
+        return $this->getTabsRenderer()->render('admin', $tabs);
     }
 
     public function has_menu()

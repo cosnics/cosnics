@@ -17,7 +17,6 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -41,21 +40,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class FixedLocationToolListRenderer extends ToolListRenderer
 {
-    const PARAM_SELECTED_TAB = 'section';
-
-    /**
-     * The available number of columns
-     *
-     * @var int
-     */
-    private $number_of_columns = 2;
-
-    /**
-     * Determine if the current user is a teacher
-     *
-     * @var boolean
-     */
-    private $is_course_admin;
+    public const PARAM_SELECTED_TAB = 'section';
 
     /**
      * The Course
@@ -63,6 +48,20 @@ class FixedLocationToolListRenderer extends ToolListRenderer
      * @var \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course
      */
     private $course;
+
+    /**
+     * Determine if the current user is a teacher
+     *
+     * @var bool
+     */
+    private $is_course_admin;
+
+    /**
+     * The available number of columns
+     *
+     * @var int
+     */
+    private $number_of_columns = 2;
 
     /**
      * Constructor
@@ -392,8 +391,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
             $title = Translation::get('TypeName', null, $tool_namespace);
 
-            if ($section->getType() == CourseSection::TYPE_TOOL ||
-                $section->getType() == CourseSection::TYPE_DISABLED)
+            if ($section->getType() == CourseSection::TYPE_TOOL || $section->getType() == CourseSection::TYPE_DISABLED)
             {
                 $html[] = '<div id="tool_' . $tool->get_id() . '" class="tool" style="display: block !important">';
                 $id = ' id="drag_' . $tool->get_id() . '"';
@@ -509,8 +507,6 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         }
 
         $html[] = '<div id="coursecode" style="display: none;">' . $this->course->get_id() . '</div>';
-
-        $tabs = new TabsRenderer('admin');
 
         $sections->first();
 

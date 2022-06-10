@@ -20,6 +20,7 @@ use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -32,8 +33,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class BrowserComponent extends Manager implements DelegateComponent
 {
 
-    const STATUS_AVAILABLE = 2;
-    const STATUS_INSTALLED = 1;
+    public const STATUS_AVAILABLE = 2;
+    public const STATUS_INSTALLED = 1;
 
     /**
      * @var string
@@ -85,6 +86,11 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->current_type;
     }
 
+    protected function getTabsRenderer(): TabsRenderer
+    {
+        return $this->getService(TabsRenderer::class);
+    }
+
     public function get_available_packages_table()
     {
         $packages = PlatformPackageBundles::getInstance(
@@ -101,7 +107,8 @@ class BrowserComponent extends Manager implements DelegateComponent
                     Translation::get('ViewPackageDetails'), new FontAwesomeGlyph('desktop', [], null, 'fas'),
                     $this->get_url(
                         array(
-                            self::PARAM_ACTION => self::ACTION_VIEW, self::PARAM_CONTEXT => $package_info->get_context()
+                            self::PARAM_ACTION => self::ACTION_VIEW,
+                            self::PARAM_CONTEXT => $package_info->get_context()
                         )
                     ), ToolbarItem::DISPLAY_ICON
                 )
@@ -110,7 +117,8 @@ class BrowserComponent extends Manager implements DelegateComponent
                 new ToolbarItem(
                     Translation::get('Install'), new FontAwesomeGlyph('box', [], null, 'fas'), $this->get_url(
                     array(
-                        self::PARAM_ACTION => self::ACTION_INSTALL, self::PARAM_CONTEXT => $package_info->get_context()
+                        self::PARAM_ACTION => self::ACTION_INSTALL,
+                        self::PARAM_CONTEXT => $package_info->get_context()
                     )
                 ), ToolbarItem::DISPLAY_ICON
                 )
@@ -136,7 +144,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function get_content()
     {
-        $tabs = new TabsRenderer(ClassnameUtilities::getInstance()->getClassnameFromObject($this, true));
+        $tabs = new TabsCollection();
 
         $count = DataManager::count(
             Registration::class, new DataClassCountParameters(
@@ -149,7 +157,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         if ($count > 0)
         {
-            $tabs->addTab(
+            $tabs->add(
                 new ContentTab(
                     self::STATUS_INSTALLED, Translation::get('InstalledPackages'),
                     $this->get_registered_packages_table(),
@@ -164,7 +172,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         if (count($packages[$this->getCurrentType()]) > 0)
         {
-            $tabs->addTab(
+            $tabs->add(
                 new ContentTab(
                     self::STATUS_AVAILABLE, Translation::get('AvailablePackages'),
                     $this->get_available_packages_table(),
@@ -173,9 +181,11 @@ class BrowserComponent extends Manager implements DelegateComponent
             );
         }
 
-        if ($tabs->size() > 0)
+        if ($tabs->count() > 0)
         {
-            return $tabs->render();
+            return $this->getTabsRenderer()->render(
+                ClassnameUtilities::getInstance()->getClassnameFromObject($this, true), $tabs
+            );
         }
         else
         {
@@ -204,7 +214,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $table_data = [];
 
-        foreach($registrations as $registration)
+        foreach ($registrations as $registration)
         {
             $toolbar = new Toolbar();
 

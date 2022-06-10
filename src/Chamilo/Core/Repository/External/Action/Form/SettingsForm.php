@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
-use Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
@@ -22,12 +22,13 @@ use DOMDocument;
 class SettingsForm extends FormValidator
 {
 
-    private $external_repository;
+    public const TAB_ADMIN = 'admin';
 
     private $configuration;
 
     private $configurer;
-    const TAB_ADMIN = 'admin';
+
+    private $external_repository;
 
     /**
      * Constructor.
@@ -37,46 +38,19 @@ class SettingsForm extends FormValidator
      * @param $method string The method to use (self::FORM_METHOD_POST or self::FORM_METHOD_GET).
      * @param $action string The URL to which the form should be submitted.
      */
-    public function __construct($configurer, $external_repository_id, $form_name, $method = self::FORM_METHOD_POST, $action = null)
+    public function __construct(
+        $configurer, $external_repository_id, $form_name, $method = self::FORM_METHOD_POST, $action = null
+    )
     {
         parent::__construct($form_name, $method, $action);
 
         $this->configurer = $configurer;
         $this->external_repository = DataManager::retrieve_by_id(
-            Instance::class,
-            $external_repository_id
+            Instance::class, $external_repository_id
         );
         $this->configuration = $this->parse_settings();
         $this->build_form();
         $this->setDefaults();
-    }
-
-    /**
-     * Builds a form to create or edit a learning object.
-     * Creates fields for default learning object properties. The
-     * result of this function is equal to build_creation_form()'s, but that one may be overridden to extend the form.
-     */
-    private function build_form()
-    {
-        $this->tabs_generator = new FormTabsRenderer($this->getAttribute('name'), $this);
-        $has_settings = $this->external_repository->has_settings();
-        $is_platform = $this->configurer->get_user()->is_platform_admin();
-
-        if ($has_settings)
-        {
-            $tab_admin = new FormTab(
-                self::TAB_ADMIN,
-                Translation::get(
-                    (string) StringUtilities::getInstance()->createString(self::TAB_ADMIN)->upperCamelize() . 'Settings'
-                ),
-                null,
-                'build_configure_form'
-            );
-
-            $this->tabs_generator->addTab($tab_admin);
-        }
-
-        $this->tabs_generator->render();
     }
 
     public function build_configure_form()
@@ -99,14 +73,10 @@ class SettingsForm extends FormValidator
                     {
                         $this->addElement('html', '<fieldset>');
                         $this->addElement(
-                            'html',
-                            '<legend>' .
-                            Translation::get(
+                            'html', '<legend>' . Translation::get(
                                 (string) StringUtilities::getInstance()->createString($category_name)->upperCamelize(),
-                                null,
-                                $configuration['context']
-                            ) .
-                            '</legend>'
+                                null, $configuration['context']
+                            ) . '</legend>'
                         );
                         $has_settings = true;
                     }
@@ -114,25 +84,18 @@ class SettingsForm extends FormValidator
                     if ($setting['locked'] == 'true')
                     {
                         $this->addElement(
-                            'static',
-                            $name,
-                            Translation::get(
-                                (string) StringUtilities::getInstance()->createString($name)->upperCamelize()
-                            ),
-                            null,
-                            $configuration['context']
+                            'static', $name, Translation::get(
+                            (string) StringUtilities::getInstance()->createString($name)->upperCamelize()
+                        ), null, $configuration['context']
                         );
                     }
                     elseif ($setting['field'] == 'text')
                     {
                         $this->add_textfield(
-                            $name,
-                            Translation::get(
-                                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
-                                null,
-                                $configuration['context']
-                            ),
-                            ($setting['required'] == 'true')
+                            $name, Translation::get(
+                            (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), null,
+                            $configuration['context']
+                        ), ($setting['required'] == 'true')
                         );
 
                         $validations = $setting['validations'];
@@ -148,16 +111,11 @@ class SettingsForm extends FormValidator
                                     }
 
                                     $this->addRule(
-                                        $name,
-                                        Translation::get(
-                                            $validation['message'],
-                                            null,
-                                            Manager::get_namespace(
-                                                $configuration['context']
-                                            )
-                                        ),
-                                        $validation['rule'],
-                                        $validation['format']
+                                        $name, Translation::get(
+                                        $validation['message'], null, Manager::get_namespace(
+                                        $configuration['context']
+                                    )
+                                    ), $validation['rule'], $validation['format']
                                     );
                                 }
                             }
@@ -166,23 +124,19 @@ class SettingsForm extends FormValidator
                     elseif ($setting['field'] == 'html_editor')
                     {
                         $this->add_html_editor(
-                            $name,
-                            Translation::get(
-                                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
-                                $configuration['context']
-                            ),
-                            ($setting['required'] == 'true')
+                            $name, Translation::get(
+                            (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
+                            $configuration['context']
+                        ), ($setting['required'] == 'true')
                         );
                     }
                     elseif ($setting['field'] == 'password')
                     {
                         $this->addElement(
-                            'password',
-                            $name,
-                            Translation::get(
-                                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
-                                $configuration['context']
-                            )
+                            'password', $name, Translation::get(
+                            (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
+                            $configuration['context']
+                        )
                         );
                         $validations = $setting['validations'];
                         if ($validations)
@@ -197,16 +151,11 @@ class SettingsForm extends FormValidator
                                     }
 
                                     $this->addRule(
-                                        $name,
-                                        Translation::get(
-                                            $validation['message'],
-                                            null,
-                                            Manager::get_namespace(
-                                                $configuration['context']
-                                            )
-                                        ),
-                                        $validation['rule'],
-                                        $validation['format']
+                                        $name, Translation::get(
+                                        $validation['message'], null, Manager::get_namespace(
+                                        $configuration['context']
+                                    )
+                                    ), $validation['rule'], $validation['format']
                                     );
                                 }
                             }
@@ -227,8 +176,7 @@ class SettingsForm extends FormValidator
                         }
 
                         if ($setting['field'] == 'radio' || $setting['field'] == 'checkbox' ||
-                            $setting['field'] == 'toggle'
-                        )
+                            $setting['field'] == 'toggle')
                         {
                             $group = [];
                             foreach ($options as $option_value => $option_name)
@@ -236,50 +184,33 @@ class SettingsForm extends FormValidator
                                 if ($setting['field'] == 'checkbox' || $setting['field'] == 'toggle')
                                 {
                                     $group[] = &$this->createElement(
-                                        $setting['field'],
-                                        $name,
-                                        null,
-                                        null,
-                                        $option_value
+                                        $setting['field'], $name, null, null, $option_value
                                     );
                                 }
                                 else
                                 {
                                     $group[] = &$this->createElement(
-                                        $setting['field'],
-                                        $name,
-                                        null,
-                                        Translation::get(
-                                            (string) StringUtilities::getInstance()->createString($option_name)
-                                                ->upperCamelize()
-                                        ),
-                                        $option_value
+                                        $setting['field'], $name, null, Translation::get(
+                                        (string) StringUtilities::getInstance()->createString($option_name)
+                                            ->upperCamelize()
+                                    ), $option_value
                                     );
                                 }
                             }
                             $this->addGroup(
-                                $group,
-                                $name,
-                                Translation::get(
-                                    (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
-                                    null,
-                                    $configuration['context']
-                                ),
-                                '',
-                                false
+                                $group, $name, Translation::get(
+                                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), null,
+                                $configuration['context']
+                            ), '', false
                             );
                         }
                         elseif ($setting['field'] == 'select')
                         {
                             $this->addElement(
-                                'select',
-                                $name,
-                                Translation::get(
-                                    (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
-                                    null,
-                                    $configuration['context']
-                                ),
-                                $options
+                                'select', $name, Translation::get(
+                                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), null,
+                                $configuration['context']
+                            ), $options
                             );
                         }
                     }
@@ -293,14 +224,10 @@ class SettingsForm extends FormValidator
 
             $buttons = [];
             $buttons[] = $this->createElement(
-                'style_submit_button',
-                'submit',
-                Translation::get('Save', null, StringUtilities::LIBRARIES)
+                'style_submit_button', 'submit', Translation::get('Save', null, StringUtilities::LIBRARIES)
             );
             $buttons[] = $this->createElement(
-                'style_reset_button',
-                'reset',
-                Translation::get('Reset', null, StringUtilities::LIBRARIES)
+                'style_reset_button', 'reset', Translation::get('Reset', null, StringUtilities::LIBRARIES)
             );
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
@@ -308,6 +235,38 @@ class SettingsForm extends FormValidator
         {
             $this->addElement('html', Translation::get('NoConfigurableSettings', null, StringUtilities::LIBRARIES));
         }
+    }
+
+    /**
+     * Builds a form to create or edit a learning object.
+     * Creates fields for default learning object properties. The
+     * result of this function is equal to build_creation_form()'s, but that one may be overridden to extend the form.
+     */
+    private function build_form()
+    {
+        $has_settings = $this->external_repository->has_settings();
+
+        $tabsCollection = new TabsCollection();
+
+        if ($has_settings)
+        {
+            $tabsCollection->add(
+                new FormTab(
+                    self::TAB_ADMIN, Translation::get(
+                    (string) StringUtilities::getInstance()->createString(self::TAB_ADMIN)->upperCamelize() . 'Settings'
+                ), null, 'build_configure_form'
+                )
+            );
+        }
+
+        $this->getFormTabsGenerator()->generate($this->getAttribute('name'), $this, $tabsCollection);
+    }
+
+    private function is_valid_validation_method($validation_method)
+    {
+        $available_validation_methods = array('regex', 'email', 'lettersonly', 'alphanumeric', 'numeric', 'required');
+
+        return in_array($validation_method, $available_validation_methods);
     }
 
     public function parse_settings()
@@ -369,8 +328,7 @@ class SettingsForm extends FormValidator
                             }
 
                             if ($property_options->getAttribute('type') == 'static' &&
-                                $property_options->hasChildNodes()
-                            )
+                                $property_options->hasChildNodes())
                             {
                                 $options = $property_options->getElementsByTagname('option');
                                 $options_info = [];
@@ -433,8 +391,7 @@ class SettingsForm extends FormValidator
                 if ($has_settings)
                 {
                     $admin_value = Setting::get(
-                        $name,
-                        $this->configurer->get_external_repository()->get_id()
+                        $name, $this->configurer->get_external_repository()->get_id()
                     );
                     $defaults[$name] = (isset($admin_value) ? $admin_value : $setting['default']);
                 }
@@ -447,7 +404,7 @@ class SettingsForm extends FormValidator
     /**
      * Updates the configuration.
      *
-     * @return boolean True if the update succeeded, false otherwise.
+     * @return bool True if the update succeeded, false otherwise.
      */
     public function update_configuration()
     {
@@ -463,11 +420,9 @@ class SettingsForm extends FormValidator
             {
                 if ($setting['locked'] != 'true')
                 {
-                    $setting =
-                        DataManager::retrieve_setting_from_variable_name(
-                            $name,
-                            $external_repository->get_id()
-                        );
+                    $setting = DataManager::retrieve_setting_from_variable_name(
+                        $name, $external_repository->get_id()
+                    );
                     if ($setting instanceof Setting)
                     {
                         if (isset($values[$name]))
@@ -515,12 +470,5 @@ class SettingsForm extends FormValidator
         {
             return true;
         }
-    }
-
-    private function is_valid_validation_method($validation_method)
-    {
-        $available_validation_methods = array('regex', 'email', 'lettersonly', 'alphanumeric', 'numeric', 'required');
-
-        return in_array($validation_method, $available_validation_methods);
     }
 }

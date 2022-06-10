@@ -440,7 +440,7 @@ class HotspotQuestionForm extends ContentObjectForm
         return $object;
     }
 
-    public function prepareTabs()
+    public function generateTabs()
     {
         $this->addDefaultTab();
         $this->addInstructionsTab();

@@ -16,12 +16,12 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSelectorSupport
 {
-
     public function run($params = [])
     {
         $content_object_id = Request::get(self::PARAM_EDIT_ID);
@@ -87,20 +87,25 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
         $breadcrumbtrail->add_help('repo_viewer_viewer');
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
-     */
-    public function getTemplateRegistrationConsulter()
-    {
-        return $this->getService(TemplateRegistrationConsulter::class);
-    }
-
     public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_EDIT_ID;
         $additionalParameters[] = self::PARAM_CONTENT_OBJECT_TYPE;
 
         return parent::getAdditionalParameters($additionalParameters);
+    }
+
+    public function getTabsRenderer(): TabsRenderer
+    {
+        return $this->getService(TabsRenderer::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     */
+    public function getTemplateRegistrationConsulter()
+    {
+        return $this->getService(TemplateRegistrationConsulter::class);
     }
 
     /**

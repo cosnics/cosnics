@@ -28,6 +28,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -49,112 +50,112 @@ use Chamilo\Libraries\Translation\Translation;
  */
 abstract class Manager extends Application
 {
-    const ACTION_BROWSE_CONTENT_OBJECTS = 'Browser';
-    const ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS = 'RecycleBinBrowser';
-    const ACTION_BROWSE_SHARED_CONTENT_OBJECTS = 'SharedContentObjectsBrowser';
-    const ACTION_BUILD_COMPLEX_CONTENT_OBJECT = 'Builder';
-    const ACTION_COMPARE_CONTENT_OBJECTS = 'Comparer';
-    const ACTION_COPY_CONTENT_OBJECT = 'Copier';
-    const ACTION_CREATE_CONTENT_OBJECTS = 'Creator';
-    const ACTION_DELETE_CONTENT_OBJECTS = 'Deleter';
-    const ACTION_DELETE_LINK = 'LinkDeleter';
-    const ACTION_DELETE_SHARED_CONTENT_OBJECTS = 'SharedContentObjectsDeleter';
-    const ACTION_DOWNLOAD_DOCUMENT = 'DocumentDownloader';
-    const ACTION_EDIT_CONTENT_OBJECTS = 'Editor';
-    const ACTION_EXPORT_CONTENT_OBJECTS = 'Exporter';
-    const ACTION_EXTENSION_LAUNCHER = 'ExtensionLauncher';
-    const ACTION_HTML_EDITOR_FILE = 'HtmlEditorFile';
-    const ACTION_IMPACT_VIEW_RECYCLE = 'ImpactViewRecycler';
-    const ACTION_IMPORT_CONTENT_OBJECTS = 'Importer';
-    const ACTION_LINK_CONTENT_OBJECT_ALTERNATIVE = 'AlternativeLinker';
-    const ACTION_LINK_CONTENT_OBJECT_METADATA_ELEMENT = 'MetadataElementLinker';
-    const ACTION_LINK_CONTENT_OBJECT_PROPERTY_METADATA = 'PropertyMetadataLinker';
-    const ACTION_LINK_PROVIDERS = 'ProviderLinker';
-    const ACTION_LINK_SCHEMAS = 'SchemaLinker';
-    const ACTION_MANAGE_CATEGORIES = 'CategoryManager';
-    const ACTION_MOVE_CONTENT_OBJECTS = 'Mover';
-    const ACTION_MOVE_SHARED_CONTENT_OBJECTS = 'SharedContentObjectsMover';
-    const ACTION_PREVIEW = 'Previewer';
-    const ACTION_PUBLICATION = 'Publication';
-    const ACTION_QUOTA = 'Quota';
-    const ACTION_REPOSITORY_VIEWER = 'RepositoryViewer';
-    const ACTION_RESTORE_CONTENT_OBJECTS = 'Restorer';
-    const ACTION_REVERT_CONTENT_OBJECTS = 'Reverter';
-    const ACTION_UNLINK_CONTENT_OBJECTS = 'Unlinker';
-    const ACTION_USER_VIEW = 'UserView';
-    const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
-    const ACTION_VIEW_CONTENT_OBJECTS = 'Viewer';
-    const ACTION_VIEW_DOUBLES = 'DoublesViewer';
-    const ACTION_VIEW_REPO = 'AttachmentViewer';
-    const ACTION_WORKSPACE = 'Workspace';
+    public const ACTION_BROWSE_CONTENT_OBJECTS = 'Browser';
+    public const ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS = 'RecycleBinBrowser';
+    public const ACTION_BROWSE_SHARED_CONTENT_OBJECTS = 'SharedContentObjectsBrowser';
+    public const ACTION_BUILD_COMPLEX_CONTENT_OBJECT = 'Builder';
+    public const ACTION_COMPARE_CONTENT_OBJECTS = 'Comparer';
+    public const ACTION_COPY_CONTENT_OBJECT = 'Copier';
+    public const ACTION_CREATE_CONTENT_OBJECTS = 'Creator';
+    public const ACTION_DELETE_CONTENT_OBJECTS = 'Deleter';
+    public const ACTION_DELETE_LINK = 'LinkDeleter';
+    public const ACTION_DELETE_SHARED_CONTENT_OBJECTS = 'SharedContentObjectsDeleter';
+    public const ACTION_DOWNLOAD_DOCUMENT = 'DocumentDownloader';
+    public const ACTION_EDIT_CONTENT_OBJECTS = 'Editor';
+    public const ACTION_EXPORT_CONTENT_OBJECTS = 'Exporter';
+    public const ACTION_EXTENSION_LAUNCHER = 'ExtensionLauncher';
+    public const ACTION_HTML_EDITOR_FILE = 'HtmlEditorFile';
+    public const ACTION_IMPACT_VIEW_RECYCLE = 'ImpactViewRecycler';
+    public const ACTION_IMPORT_CONTENT_OBJECTS = 'Importer';
+    public const ACTION_LINK_CONTENT_OBJECT_ALTERNATIVE = 'AlternativeLinker';
+    public const ACTION_LINK_CONTENT_OBJECT_METADATA_ELEMENT = 'MetadataElementLinker';
+    public const ACTION_LINK_CONTENT_OBJECT_PROPERTY_METADATA = 'PropertyMetadataLinker';
+    public const ACTION_LINK_PROVIDERS = 'ProviderLinker';
+    public const ACTION_LINK_SCHEMAS = 'SchemaLinker';
+    public const ACTION_MANAGE_CATEGORIES = 'CategoryManager';
+    public const ACTION_MOVE_CONTENT_OBJECTS = 'Mover';
+    public const ACTION_MOVE_SHARED_CONTENT_OBJECTS = 'SharedContentObjectsMover';
+    public const ACTION_PREVIEW = 'Previewer';
+    public const ACTION_PUBLICATION = 'Publication';
+    public const ACTION_QUOTA = 'Quota';
+    public const ACTION_REPOSITORY_VIEWER = 'RepositoryViewer';
+    public const ACTION_RESTORE_CONTENT_OBJECTS = 'Restorer';
+    public const ACTION_REVERT_CONTENT_OBJECTS = 'Reverter';
+    public const ACTION_UNLINK_CONTENT_OBJECTS = 'Unlinker';
+    public const ACTION_USER_VIEW = 'UserView';
+    public const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
+    public const ACTION_VIEW_CONTENT_OBJECTS = 'Viewer';
+    public const ACTION_VIEW_DOUBLES = 'DoublesViewer';
+    public const ACTION_VIEW_REPO = 'AttachmentViewer';
+    public const ACTION_WORKSPACE = 'Workspace';
 
-    const DEFAULT_ACTION = self::ACTION_BROWSE_CONTENT_OBJECTS;
+    public const DEFAULT_ACTION = self::ACTION_BROWSE_CONTENT_OBJECTS;
 
-    const PARAM_ADD_OBJECTS = 'add_objects';
-    const PARAM_ATTACHMENT_ID = 'attachment';
-    const PARAM_CATEGORY_ID = 'category';
-    const PARAM_CATEGORY_TYPE = 'category_type';
-    const PARAM_CLOI_COMPLEX_REF = 'cloi_complex_ref';
-    const PARAM_CLOI_ID = 'cloi_id';
-    const PARAM_CLOI_REF = 'cloi_ref';
-    const PARAM_CLOI_ROOT_ID = 'cloi_root_id';
-    const PARAM_COMPARE_OBJECT = 'object';
-    const PARAM_COMPARE_VERSION = 'compare';
-    const PARAM_CONTENT_OBJECT_ID = 'object';
-    const PARAM_CONTENT_OBJECT_MANAGER_TYPE = 'manage';
-    const PARAM_CONTENT_OBJECT_TEMPLATE_REGISTRATION_ID = 'template_id';
-    const PARAM_CONTENT_OBJECT_TYPE = 'content_object_type';
-    const PARAM_COPY_TO_TEMPLATES = 'copy_to_template';
-    const PARAM_DELETE_PERMANENTLY = 'delete_permanently';
-    const PARAM_DELETE_RECYCLED = 'delete_recycle';
-    const PARAM_DELETE_SELECTED = 'delete_selected';
-    const PARAM_DELETE_VERSION = 'delete_version';
-    const PARAM_DESTINATION_CONTENT_OBJECT_ID = 'destination';
-    const PARAM_DIRECTION_DOWN = 'down';
-    const PARAM_DIRECTION_UP = 'up';
-    const PARAM_DISPLAY_ORDER = 'display_order';
-    const PARAM_EDIT_SELECTED_RIGHTS = 'rights_selected';
-    const PARAM_EMPTY_RECYCLE_BIN = 'empty';
-    const PARAM_EXPORT_CP_SELECTED = 'export_cp_selected';
-    const PARAM_EXPORT_SELECTED = 'export_selected';
-    const PARAM_EXPORT_TYPE = 'export_type';
-    const PARAM_EXTERNAL_INSTANCE = 'external_instance';
-    const PARAM_EXTERNAL_OBJECT_ID = 'external_object_id';
-    const PARAM_EXTERNAL_REPOSITORY_ID = 'ext_rep_id';
-    const PARAM_IDENTIFIER = 'identifier';
-    const PARAM_IMPORT_TYPE = 'import_type';
-    const PARAM_LINK_ID = 'link_id';
-    const PARAM_LINK_TYPE = 'link_type';
-    const PARAM_MOVE_DIRECTION = 'move_direction';
-    const PARAM_MOVE_SELECTED = 'move_selected';
-    const PARAM_PUBLISH_SELECTED = 'publish_selected';
-    const PARAM_RECYCLE_SELECTED = 'recycle_selected';
-    const PARAM_REMOVE_SELECTED_CLOI = 'cloi_delete_selected';
-    const PARAM_RENAME = 'rename_co';
-    const PARAM_RENDERER = 'renderer';
-    const PARAM_RESTORE_SELECTED = 'restore_selected';
-    const PARAM_SHARED_CATEGORY_ID = 'shared_category_id';
-    const PARAM_SHARED_VIEW = 'shared_view';
-    const PARAM_SHOW_OBJECTS_SHARED_BY_ME = 'show_my_objects';
-    const PARAM_TARGET_GROUP = 'target_group';
-    const PARAM_TARGET_USER = 'target_user';
-    const PARAM_TYPE = 'type';
-    const PARAM_WORKSPACE_ID = 'workspace_id';
+    public const PARAM_ADD_OBJECTS = 'add_objects';
+    public const PARAM_ATTACHMENT_ID = 'attachment';
+    public const PARAM_CATEGORY_ID = 'category';
+    public const PARAM_CATEGORY_TYPE = 'category_type';
+    public const PARAM_CLOI_COMPLEX_REF = 'cloi_complex_ref';
+    public const PARAM_CLOI_ID = 'cloi_id';
+    public const PARAM_CLOI_REF = 'cloi_ref';
+    public const PARAM_CLOI_ROOT_ID = 'cloi_root_id';
+    public const PARAM_COMPARE_OBJECT = 'object';
+    public const PARAM_COMPARE_VERSION = 'compare';
+    public const PARAM_CONTENT_OBJECT_ID = 'object';
+    public const PARAM_CONTENT_OBJECT_MANAGER_TYPE = 'manage';
+    public const PARAM_CONTENT_OBJECT_TEMPLATE_REGISTRATION_ID = 'template_id';
+    public const PARAM_CONTENT_OBJECT_TYPE = 'content_object_type';
+    public const PARAM_COPY_TO_TEMPLATES = 'copy_to_template';
+    public const PARAM_DELETE_PERMANENTLY = 'delete_permanently';
+    public const PARAM_DELETE_RECYCLED = 'delete_recycle';
+    public const PARAM_DELETE_SELECTED = 'delete_selected';
+    public const PARAM_DELETE_VERSION = 'delete_version';
+    public const PARAM_DESTINATION_CONTENT_OBJECT_ID = 'destination';
+    public const PARAM_DIRECTION_DOWN = 'down';
+    public const PARAM_DIRECTION_UP = 'up';
+    public const PARAM_DISPLAY_ORDER = 'display_order';
+    public const PARAM_EDIT_SELECTED_RIGHTS = 'rights_selected';
+    public const PARAM_EMPTY_RECYCLE_BIN = 'empty';
+    public const PARAM_EXPORT_CP_SELECTED = 'export_cp_selected';
+    public const PARAM_EXPORT_SELECTED = 'export_selected';
+    public const PARAM_EXPORT_TYPE = 'export_type';
+    public const PARAM_EXTERNAL_INSTANCE = 'external_instance';
+    public const PARAM_EXTERNAL_OBJECT_ID = 'external_object_id';
+    public const PARAM_EXTERNAL_REPOSITORY_ID = 'ext_rep_id';
+    public const PARAM_IDENTIFIER = 'identifier';
+    public const PARAM_IMPORT_TYPE = 'import_type';
+    public const PARAM_LINK_ID = 'link_id';
+    public const PARAM_LINK_TYPE = 'link_type';
+    public const PARAM_MOVE_DIRECTION = 'move_direction';
+    public const PARAM_MOVE_SELECTED = 'move_selected';
+    public const PARAM_PUBLISH_SELECTED = 'publish_selected';
+    public const PARAM_RECYCLE_SELECTED = 'recycle_selected';
+    public const PARAM_REMOVE_SELECTED_CLOI = 'cloi_delete_selected';
+    public const PARAM_RENAME = 'rename_co';
+    public const PARAM_RENDERER = 'renderer';
+    public const PARAM_RESTORE_SELECTED = 'restore_selected';
+    public const PARAM_SHARED_CATEGORY_ID = 'shared_category_id';
+    public const PARAM_SHARED_VIEW = 'shared_view';
+    public const PARAM_SHOW_OBJECTS_SHARED_BY_ME = 'show_my_objects';
+    public const PARAM_TARGET_GROUP = 'target_group';
+    public const PARAM_TARGET_USER = 'target_user';
+    public const PARAM_TYPE = 'type';
+    public const PARAM_WORKSPACE_ID = 'workspace_id';
 
-    const SHARED_VIEW_ALL_OBJECTS = 2;
+    public const SHARED_VIEW_ALL_OBJECTS = 2;
 
-    const SHARED_VIEW_OTHERS_OBJECTS = 0;
+    public const SHARED_VIEW_OTHERS_OBJECTS = 0;
 
     // Tabs
 
-    const SHARED_VIEW_OWN_OBJECTS = 1;
+    public const SHARED_VIEW_OWN_OBJECTS = 1;
 
-    const TABS_CONTENT_OBJECT = 'content_object';
-    const TABS_FILTER = 'advanced_filter';
-    const TAB_CATEGORY = 'Category';
-    const TAB_OBJECT_TYPE = 'ObjectType';
-    const TAB_SEARCH = 'Search';
-    const TAB_USERVIEW = 'Userview';
+    public const TABS_CONTENT_OBJECT = 'content_object';
+    public const TABS_FILTER = 'advanced_filter';
+    public const TAB_CATEGORY = 'Category';
+    public const TAB_OBJECT_TYPE = 'ObjectType';
+    public const TAB_SEARCH = 'Search';
+    public const TAB_USERVIEW = 'Userview';
 
     private $category_menu;
 
@@ -195,7 +196,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function current_user_has_recycled_objects()
     {
@@ -214,6 +215,13 @@ abstract class Manager extends Application
         $this->get_category_menu()->forceCurrentUrl($url);
     }
 
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_WORKSPACE_ID;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
     /**
      * @return \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
      */
@@ -228,6 +236,11 @@ abstract class Manager extends Application
     public function getPublicationAggregator()
     {
         return $this->getService(PublicationAggregator::class);
+    }
+
+    public function getTabsRenderer(): TabsRenderer
+    {
+        return $this->getService(TabsRenderer::class);
     }
 
     /**
@@ -255,13 +268,6 @@ abstract class Manager extends Application
     public function getWorkspaceExtensionManager()
     {
         return $this->getService(WorkspaceExtensionManager::class);
-    }
-
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_WORKSPACE_ID;
-
-        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**
@@ -316,7 +322,7 @@ abstract class Manager extends Application
      * some menu items are added - Recycle Bin - Create a new object - Quota - Search Results (ony if search is
      * performed)
      *
-     * @param $force_search boolean Whether the user is searching. If true, overrides the default, which is to request
+     * @param $force_search bool Whether the user is searching. If true, overrides the default, which is to request
      *        this information from the search form.
      *
      * @return \Chamilo\Core\Repository\Menu\ContentObjectCategoryMenu The menu
@@ -568,6 +574,11 @@ abstract class Manager extends Application
         );
     }
 
+    /*
+     * Returns the url of the attachment viewer. Used in rendition implementation @param ContentObject $attachment
+     * @return string
+     */
+
     public function get_copy_content_object_url($content_object_id)
     {
         return $this->get_url(
@@ -577,11 +588,6 @@ abstract class Manager extends Application
             )
         );
     }
-
-    /*
-     * Returns the url of the attachment viewer. Used in rendition implementation @param ContentObject $attachment
-     * @return string
-     */
 
     /**
      * Return a condition object that can be used to look for objects of the current logged user that are recycled
@@ -640,9 +646,9 @@ abstract class Manager extends Application
         $html = [];
 
         $html[] = '<div id="repository-tree-container">';
-        $tabs = new TabsRenderer(self::TABS_FILTER);
+        $tabs = new TabsCollection();
 
-        $tabs->addTab(
+        $tabs->add(
             new ContentTab(
                 self::TAB_CATEGORY, $translator->getTranslation('ViewCategoriesTab', null, Manager::context()),
                 $this->get_category_menu()->render_as_tree(),
@@ -660,10 +666,10 @@ abstract class Manager extends Application
         )
         );
 
-        $tabs->addTab(
+        $tabs->add(
             new ContentTab(
-                self::TAB_SEARCH, $translator->getTranslation('SearchTab', null, Manager::context()), $filter_form->render(),
-                new FontAwesomeGlyph('search', array('fa-lg'), null, 'fas'),
+                self::TAB_SEARCH, $translator->getTranslation('SearchTab', null, Manager::context()),
+                $filter_form->render(), new FontAwesomeGlyph('search', array('fa-lg'), null, 'fas'),
                 ContentTab::DISPLAY_ICON
             )
         );
@@ -676,23 +682,21 @@ abstract class Manager extends Application
             array(
                 TabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
                 FilterData::FILTER_TYPE => '__SELECTION__',
-                TabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
                 Application::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS
             ), array(self::PARAM_CATEGORY_ID, self::PARAM_CONTENT_OBJECT_ID)
         ), $selected_category, $this->get_url(
             array(
                 TabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
                 FilterData::FILTER_TYPE => '__CATEGORY__',
-                TabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
                 Application::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS
             ), array(self::PARAM_CATEGORY_ID, self::PARAM_CONTENT_OBJECT_ID)
         )
         );
 
-        $tabs->addTab(
+        $tabs->add(
             new ContentTab(
-                self::TAB_OBJECT_TYPE, $translator->getTranslation('TypeTab', null, Manager::context()), $object_type->render_as_tree(),
-                new FontAwesomeGlyph('filter', array('fa-lg'), null, 'fas'),
+                self::TAB_OBJECT_TYPE, $translator->getTranslation('TypeTab', null, Manager::context()),
+                $object_type->render_as_tree(), new FontAwesomeGlyph('filter', array('fa-lg'), null, 'fas'),
                 ContentTab::DISPLAY_ICON
             )
         );
@@ -706,15 +710,15 @@ abstract class Manager extends Application
             )
         )
         );
-        $tabs->addTab(
+        $tabs->add(
             new ContentTab(
-                self::TAB_USERVIEW, $translator->getTranslation('UserViewTab', null, Manager::context()), $user_view->render_as_tree(),
-                new FontAwesomeGlyph('object-group', array('fa-lg'), null, 'far'),
+                self::TAB_USERVIEW, $translator->getTranslation('UserViewTab', null, Manager::context()),
+                $user_view->render_as_tree(), new FontAwesomeGlyph('object-group', array('fa-lg'), null, 'far'),
                 ContentTab::DISPLAY_ICON
             )
         );
 
-        $html[] = ($tabs->render());
+        $html[] = $this->getTabsRenderer()->render(self::TABS_FILTER, $tabs);
 
         $html[] = '</div>';
 
@@ -733,7 +737,7 @@ abstract class Manager extends Application
     /**
      * Gets the parameter list
      *
-     * @param $include_search boolean Include the search parameters in the returned list?
+     * @param $include_search bool Include the search parameters in the returned list?
      *
      * @return array The list of parameters.
      */

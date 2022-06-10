@@ -5,6 +5,7 @@ use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Tabs\Form\FormTabsGenerator;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm;
@@ -18,19 +19,19 @@ class FormValidator extends HTML_QuickForm
 {
     use DependencyInjectionContainerTrait;
 
-    const FORM_METHOD_GET = 'get';
-    const FORM_METHOD_POST = 'post';
+    public const FORM_METHOD_GET = 'get';
+    public const FORM_METHOD_POST = 'post';
 
-    const PARAM_RESET = 'reset';
-    const PARAM_SUBMIT = 'submit';
+    public const PARAM_RESET = 'reset';
+    public const PARAM_SUBMIT = 'submit';
 
-    const PROPERTY_HTML_EDITORS = 'html_editors';
+    public const PROPERTY_HTML_EDITORS = 'html_editors';
 
-    const PROPERTY_TIME_PERIOD_FOREVER = 'forever';
+    public const PROPERTY_TIME_PERIOD_FOREVER = 'forever';
 
-    const PROPERTY_TIME_PERIOD_FROM_DATE = 'from_date';
+    public const PROPERTY_TIME_PERIOD_FROM_DATE = 'from_date';
 
-    const PROPERTY_TIME_PERIOD_TO_DATE = 'to_date';
+    public const PROPERTY_TIME_PERIOD_TO_DATE = 'to_date';
 
     /**
      * The HTML-editors in this form
@@ -41,7 +42,7 @@ class FormValidator extends HTML_QuickForm
 
     /**
      *
-     * @var boolean
+     * @var bool
      */
     private $no_errors;
 
@@ -59,7 +60,7 @@ class FormValidator extends HTML_QuickForm
      * @param string $action Action (default is $PHP_SELF)
      * @param string $target Form's target defaults to '_self'
      * @param string[] $attributes (optional)Extra attributes for <form> tag
-     * @param boolean $trackSubmit (optional)Whether to track if the form was submitted by adding a special hidden field
+     * @param bool $trackSubmit (optional)Whether to track if the form was submitted by adding a special hidden field
      *        (default = true)
      */
     public function __construct(
@@ -141,8 +142,8 @@ EOT;
      *
      * @param string $elementName
      * @param string[] $dropzoneOptions
-     * @param boolean $includeLabel
-     * @param boolean $markRequired
+     * @param bool $includeLabel
+     * @param bool $markRequired
      *
      * @internal param string $uploadType
      */
@@ -351,7 +352,7 @@ EOT;
      * @param string $name
      * @param string $label
      * @param string $message
-     * @param boolean $noMargin
+     * @param bool $noMargin
      */
     protected function addMessage($type, $name, $label, $message, $noMargin = false)
     {
@@ -405,7 +406,7 @@ EOT;
      *
      * @param string $elementName
      * @param string[] $dropzoneOptions
-     * @param boolean $includeLabel
+     * @param bool $includeLabel
      */
     public function addSingleFileDropzone($elementName, $dropzoneOptions = [], $includeLabel = true)
     {
@@ -484,7 +485,7 @@ EOT;
      *
      * @param string $name The element name
      * @param string $label The label for the form-element
-     * @param boolean $includeTimePicker
+     * @param bool $includeTimePicker
      *
      * @return \HTML_QuickForm_datepicker
      */
@@ -506,9 +507,9 @@ EOT;
      * @param string $name
      * @param string $label
      * @param string $message
-     * @param boolean $noMargin
+     * @param bool $noMargin
      */
-    function add_error_message($name, $label, $message, $noMargin = false)
+    public function add_error_message($name, $label, $message, $noMargin = false)
     {
         return $this->addMessage('danger', $name, $label, $message, $noMargin);
     }
@@ -520,7 +521,7 @@ EOT;
      *
      * @param string $name
      * @param string $label
-     * @param boolean $required
+     * @param bool $required
      * @param string[] $options
      * @param string[] $attributes
      */
@@ -537,9 +538,9 @@ EOT;
      * @param string $name
      * @param string $label
      * @param string $message
-     * @param boolean $noMargin
+     * @param bool $noMargin
      */
-    function add_information_message($name, $label, $message, $noMargin = false)
+    public function add_information_message($name, $label, $message, $noMargin = false)
     {
         return $this->addMessage('info', $name, $label, $message, $noMargin);
     }
@@ -549,7 +550,7 @@ EOT;
      *
      * @param string $name
      * @param string $label
-     * @param boolean $required
+     * @param bool $required
      * @param string[] $attributes
      *
      * @return \HTML_QuickForm_password
@@ -577,7 +578,7 @@ EOT;
      * @param string $name The element name.
      * @param string $label The element label.
      * @param string[] $values Associative array of possible values.
-     * @param boolean $required <code>true</code> if required (default), <code>false</code> otherwise.
+     * @param bool $required <code>true</code> if required (default), <code>false</code> otherwise.
      * @param string[] $attributes Element attributes (optional).
      *
      * @return \HTML_QuickForm_select The element.
@@ -605,7 +606,7 @@ EOT;
      *
      * @param string $name The element name
      * @param string $label The label for the form-element
-     * @param boolean $required Is the form-element required (default=true)
+     * @param bool $required Is the form-element required (default=true)
      * @param string[] $attributes Optional list of attributes for the form-element
      *
      * @return \HTML_QuickForm_text The element.
@@ -639,7 +640,7 @@ EOT;
      * @param string $secondName The element name
      * @param string $firstLabel The label for the form-element
      * @param string $secondLabel The label for the form-element
-     * @param boolean $includeTimePicker
+     * @param bool $includeTimePicker
      *
      * @return \HTML_QuickForm_datepicker[]
      */
@@ -664,9 +665,9 @@ EOT;
      * @param string $name
      * @param string $label
      * @param string $message
-     * @param boolean $noMargin
+     * @param bool $noMargin
      */
-    function add_warning_message($name, $label, $message, $noMargin = false)
+    public function add_warning_message($name, $label, $message, $noMargin = false)
     {
         return $this->addMessage('warning', $name, $label, $message, $noMargin);
     }
@@ -677,11 +678,11 @@ EOT;
      * @param string $name
      * @param string $groupLabel
      * @param string $separator
-     * @param boolean $appendName
+     * @param bool $appendName
      *
      * @return \HTML_QuickForm_group
      */
-    function createGroup($elements, $name = null, $groupLabel = '', $separator = null, $appendName = true)
+    public function createGroup($elements, $name = null, $groupLabel = '', $separator = null, $appendName = true)
     {
         static $anonGroups = 1;
 
@@ -765,7 +766,7 @@ EOT;
         $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
     }
 
-    function exportValues($elementList = null)
+    public function exportValues($elementList = null)
     {
         $values = parent::exportValues($elementList);
         $values[self::PROPERTY_HTML_EDITORS] = $this->get_html_editors();
@@ -802,6 +803,11 @@ EOT;
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    protected function getFormTabsGenerator(): FormTabsGenerator
+    {
+        return $this->getService(FormTabsGenerator::class);
     }
 
     /**
@@ -887,7 +893,7 @@ EOT;
      * for the default values, instead the inner arrays are converted as strings
      *
      * @param string[][] $array
-     * @param integer $level
+     * @param int $level
      *
      * @return string[]
      */
@@ -919,9 +925,9 @@ EOT;
 
     /**
      *
-     * @param integer $value
+     * @param int $value
      *
-     * @return integer
+     * @return int
      */
     public function parse_checkbox_value($value = null)
     {

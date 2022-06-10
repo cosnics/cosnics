@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -26,11 +27,11 @@ use Chamilo\Libraries\Translation\Translation;
 class BrowserComponent extends Manager implements TableSupport, DelegateComponent
 {
 
-    private $table_type;
-
     private $buttonToolbarRenderer;
 
-    function run()
+    private $table_type;
+
+    public function run()
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Request::class, Request::PROPERTY_USER_ID),
@@ -38,7 +39,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         );
         $user_requests = DataManager::count(Request::class, new DataClassCountParameters($condition));
 
-        $tabs = new TabsRenderer('request');
+        $tabs = new TabsCollection();
 
         if ($user_requests > 0 || Rights::getInstance()->request_is_allowed())
         {
@@ -47,7 +48,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             {
                 $this->table_type = RequestTable::TYPE_PERSONAL;
                 $table = new RequestTable($this);
-                $tabs->addTab(
+                $tabs->add(
                     new ContentTab(
                         'personal_request', Translation::get('YourRequests'), $table->as_html(),
                         new FontAwesomeGlyph('inbox', array('fa-lg'), null, 'fas')
@@ -90,7 +91,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 {
                     $this->table_type = RequestTable::TYPE_PENDING;
                     $table = new RequestTable($this);
-                    $tabs->addTab(
+                    $tabs->add(
                         new ContentTab(
                             RequestTable::TYPE_PENDING, Translation::get('PendingRequests'), $table->as_html(),
                             new FontAwesomeGlyph('pause-circle', array('fa-lg'), null, 'fas')
@@ -113,10 +114,9 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 {
                     $this->table_type = RequestTable::TYPE_GRANTED;
                     $table = new RequestTable($this);
-                    $tabs->addTab(
+                    $tabs->add(
                         new ContentTab(
-                            RequestTable::TYPE_GRANTED, Translation::get('GrantedRequests'),
-                            $table->as_html(),
+                            RequestTable::TYPE_GRANTED, Translation::get('GrantedRequests'), $table->as_html(),
                             new FontAwesomeGlyph('check-circle', array('fa-lg', 'text-success'), null, 'fas')
                         )
                     );
@@ -137,10 +137,9 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 {
                     $this->table_type = RequestTable::TYPE_DENIED;
                     $table = new RequestTable($this);
-                    $tabs->addTab(
+                    $tabs->add(
                         new ContentTab(
-                            RequestTable::TYPE_DENIED, Translation::get('DeniedRequests'),
-                            $table->as_html(),
+                            RequestTable::TYPE_DENIED, Translation::get('DeniedRequests'), $table->as_html(),
                             new FontAwesomeGlyph('minus-square', array('fa-lg', 'text-danger'), null, 'fas')
                         )
                     );
@@ -148,7 +147,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             }
         }
 
-        if ($user_requests > 0 || (Rights::getInstance()->request_is_allowed() && $tabs->size() > 0) ||
+        if ($user_requests > 0 || (Rights::getInstance()->request_is_allowed() && $tabs->count() > 0) ||
             $this->get_user()->is_platform_admin())
         {
             $html = [];
@@ -156,7 +155,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
             $html[] = $this->render_header();
             $html[] = $this->buttonToolbarRenderer->render();
-            $html[] = $tabs->render();
+            $html[] = $this->getTabsRenderer()->render('request', $tabs);
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
@@ -169,7 +168,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         }
     }
 
-    function getButtonToolbarRenderer()
+    public function getButtonToolbarRenderer()
     {
         if (!isset($this->buttonToolbarRenderer))
         {
@@ -180,8 +179,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('RequestCourse'),
-                        new FontAwesomeGlyph('question-circle', [], null, 'fas'),
+                        Translation::get('RequestCourse'), new FontAwesomeGlyph('question-circle', [], null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))
                     )
                 );
@@ -191,8 +189,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             {
                 $toolActions->addButton(
                     new Button(
-                        Translation::get('ConfigureManagementRights'),
-                        new FontAwesomeGlyph('lock', [], null, 'fas'),
+                        Translation::get('ConfigureManagementRights'), new FontAwesomeGlyph('lock', [], null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS))
                     )
                 );
@@ -205,6 +202,11 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         }
 
         return $this->buttonToolbarRenderer;
+    }
+
+    protected function getTabsRenderer(): TabsRenderer
+    {
+        return $this->getService(TabsRenderer::class);
     }
 
     /**
@@ -268,7 +270,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         return new AndCondition($conditions);
     }
 
-    function get_table_type()
+    public function get_table_type()
     {
         return $this->table_type;
     }

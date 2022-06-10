@@ -10,17 +10,22 @@ use Chamilo\Libraries\Translation\Translation;
 
 abstract class Manager extends Application
 {
-    const ACTION_ACCESS = 'Accessor';
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_CREATE = 'Creator';
-    const ACTION_DELETE = 'Deleter';
+    public const ACTION_ACCESS = 'Accessor';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_DELETE = 'Deleter';
 
-    const DEFAULT_ACTION = self::ACTION_CREATE;
+    public const DEFAULT_ACTION = self::ACTION_CREATE;
 
-    const PARAM_ACTION = 'request_rights_action';
-    const PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID = 'location_entity_right_group_id';
+    public const PARAM_ACTION = 'request_rights_action';
+    public const PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID = 'location_entity_right_group_id';
 
-    function get_tabs($current_tab, $content)
+    public function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
+    }
+
+    public function get_tabs($current_tab, $content)
     {
         $tabs = new LinkTabsRenderer(
             ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true), $content

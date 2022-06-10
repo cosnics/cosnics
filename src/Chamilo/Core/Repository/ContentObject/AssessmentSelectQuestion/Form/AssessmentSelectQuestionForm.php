@@ -404,7 +404,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
         $this->addElement('html', $buttonToolBarRenderer->render());
     }
 
-    public function prepareTabs()
+    public function generateTabs()
     {
         $this->addDefaultTab();
         $this->addHintTab();
@@ -414,7 +414,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
     public function addHintTab()
     {
-        $this->getTabsGenerator()->addTab(
+        $this->getTabsCollection()->add(
             new FormTab(
                 'add-hint',
                 Translation::get('AddHint'),

@@ -42,7 +42,7 @@ use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTab;
-use Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -58,22 +58,22 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class ContentObjectForm extends FormValidator
 {
-    const NEW_CATEGORY = 'new_category';
-    const PROPERTY_ATTACHMENTS = 'attachments';
-    const PROPERTY_VERSION = 'version';
+    public const NEW_CATEGORY = 'new_category';
+    public const PROPERTY_ATTACHMENTS = 'attachments';
+    public const PROPERTY_VERSION = 'version';
 
-    const RESULT_ERROR = 'ObjectUpdateFailed';
-    const RESULT_SUCCESS = 'ObjectUpdated';
+    public const RESULT_ERROR = 'ObjectUpdateFailed';
+    public const RESULT_SUCCESS = 'ObjectUpdated';
 
-    const TAB_ADD_METADATA = 'AddMetadata';
-    const TAB_CONTENT_OBJECT = 'ContentObject';
-    const TAB_METADATA = 'Metadata';
+    public const TAB_ADD_METADATA = 'AddMetadata';
+    public const TAB_CONTENT_OBJECT = 'ContentObject';
+    public const TAB_METADATA = 'Metadata';
 
-    const TYPE_CREATE = 1;
-    const TYPE_EDIT = 2;
+    public const TYPE_CREATE = 1;
+    public const TYPE_EDIT = 2;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $form_type;
 
@@ -88,7 +88,7 @@ abstract class ContentObjectForm extends FormValidator
     private $additional_elements;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $allow_new_version;
 
@@ -103,15 +103,15 @@ abstract class ContentObjectForm extends FormValidator
     private $extra;
 
     /**
-     * @var integer
+     * @var int
      */
     private $owner_id;
 
     /**
      *
-     * @var FormTabsRenderer
+     * @var \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Form\FormTab>
      */
-    private $tabsGenerator;
+    private $tabsCollection;
 
     /**
      *
@@ -120,7 +120,7 @@ abstract class ContentObjectForm extends FormValidator
     private $workspace;
 
     /**
-     * @param integer $form_type
+     * @param int $form_type
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
      * @param string $form_name
@@ -128,7 +128,7 @@ abstract class ContentObjectForm extends FormValidator
      * @param string $action
      * @param string[] $extra
      * @param \HTML_QuickForm_element[] $additional_elements
-     * @param boolean $allow_new_version
+     * @param bool $allow_new_version
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Exception
@@ -154,8 +154,7 @@ abstract class ContentObjectForm extends FormValidator
             throw new NotAllowedException();
         }
 
-        $this->prepareTabs();
-        $this->getTabsGenerator()->render();
+        $this->generateTabs();
 
         $this->add_footer();
 
@@ -169,7 +168,7 @@ abstract class ContentObjectForm extends FormValidator
     {
         $typeName = $this->get_content_object()->get_template_registration()->get_template()->translate('TypeName');
 
-        $this->getTabsGenerator()->addTab(
+        $this->getTabsCollection()->add(
             new FormTab(
                 self::TAB_CONTENT_OBJECT, $typeName, $this->get_content_object()->getGlyph(), 'build_general_form'
             )
@@ -184,7 +183,7 @@ abstract class ContentObjectForm extends FormValidator
 
         if ($instructions != 'InstructionsText')
         {
-            $this->getTabsGenerator()->addTab(
+            $this->getTabsCollection()->add(
                 new FormTab(
                     'view-instructions', Translation::get('ViewInstructions'),
                     new FontAwesomeGlyph('question-circle', array('fa-lg'), null, 'fas'), 'buildInstructionsForm'
@@ -215,7 +214,7 @@ abstract class ContentObjectForm extends FormValidator
             foreach ($schemaInstances as $schemaInstance)
             {
                 $schema = $schemaInstance->getSchema();
-                $this->getTabsGenerator()->addTab(
+                $this->getTabsCollection()->add(
                     new FormTab(
                         'schema-' . $schemaInstance->get_id(), $schema->get_name(),
                         new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas'), 'build_metadata_form',
@@ -224,7 +223,7 @@ abstract class ContentObjectForm extends FormValidator
                 );
             }
 
-            $this->getTabsGenerator()->addTab(
+            $this->getTabsCollection()->add(
                 new FormTab(
                     'add-schema', Translation::get('AddMetadataSchema'),
                     new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas'), 'build_metadata_choice_form'
@@ -365,9 +364,8 @@ abstract class ContentObjectForm extends FormValidator
         $buttons = [];
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit_button',
-            Translation::get($buttonVariable, null, StringUtilities::LIBRARIES), null, null,
-            new FontAwesomeGlyph($glyphName)
+            'style_submit_button', 'submit_button', Translation::get($buttonVariable, null, StringUtilities::LIBRARIES),
+            null, null, new FontAwesomeGlyph($glyphName)
         );
 
         $buttons[] = $this->createElement(
@@ -378,7 +376,7 @@ abstract class ContentObjectForm extends FormValidator
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     protected function allows_category_selection()
     {
@@ -417,7 +415,7 @@ abstract class ContentObjectForm extends FormValidator
         {
             $this->addElement(
                 'select', ContentObject::PROPERTY_PARENT_ID, Translation::get('CategoryTypeName'),
-                $this->get_categories(), array('class' => 'form-control', 'id' => "parent_id")
+                $this->get_categories(), array('class' => 'form-control', 'id' => 'parent_id')
             );
 
             $category_group = [];
@@ -449,7 +447,7 @@ abstract class ContentObjectForm extends FormValidator
 
     /**
      * @param string[] $htmleditor_options
-     * @param boolean $in_tab
+     * @param bool $in_tab
      *
      * @throws \Exception
      */
@@ -465,7 +463,7 @@ abstract class ContentObjectForm extends FormValidator
 
     /**
      * @param string[] $htmleditor_options
-     * @param boolean $in_tab
+     * @param bool $in_tab
      *
      * @throws \Exception
      */
@@ -610,7 +608,7 @@ abstract class ContentObjectForm extends FormValidator
 
     /**
      * @param string $category_name
-     * @param integer $parent_id
+     * @param int $parent_id
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
@@ -665,7 +663,7 @@ abstract class ContentObjectForm extends FormValidator
     }
 
     /**
-     * @param integer $form_type
+     * @param int $form_type
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
      * @param string $form_name
@@ -673,7 +671,7 @@ abstract class ContentObjectForm extends FormValidator
      * @param string $action
      * @param string[] $extra
      * @param \HTML_QuickForm_element[] $additional_elements
-     * @param boolean $allow_new_version
+     * @param bool $allow_new_version
      * @param string $form_variant
      *
      * @return mixed
@@ -701,6 +699,18 @@ abstract class ContentObjectForm extends FormValidator
             $form_type, $workspace, $content_object, $form_name, $method, $action, $extra, $additional_elements,
             $allow_new_version
         );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    public function generateTabs()
+    {
+        $this->addDefaultTab();
+        $this->addMetadataTabs();
+
+        $this->getFormTabsGenerator()->generate(Manager::TABS_CONTENT_OBJECT, $this, $this->getTabsCollection());
     }
 
     /**
@@ -761,16 +771,16 @@ abstract class ContentObjectForm extends FormValidator
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Tabs\Form\FormTabsRenderer
+     * @return \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Form\FormTab>
      */
-    public function getTabsGenerator()
+    public function getTabsCollection(): TabsCollection
     {
-        if (!isset($this->tabsGenerator))
+        if (!isset($this->tabsCollection))
         {
-            $this->tabsGenerator = new FormTabsRenderer(Manager::TABS_CONTENT_OBJECT, $this);
+            $this->tabsCollection = new TabsCollection();
         }
 
-        return $this->tabsGenerator;
+        return $this->tabsCollection;
     }
 
     /**
@@ -847,7 +857,7 @@ abstract class ContentObjectForm extends FormValidator
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_form_type()
     {
@@ -855,7 +865,7 @@ abstract class ContentObjectForm extends FormValidator
     }
 
     /**
-     * @return integer
+     * @return int
      */
     protected function get_owner_id()
     {
@@ -863,7 +873,7 @@ abstract class ContentObjectForm extends FormValidator
     }
 
     /**
-     * @param integer $owner_id
+     * @param int $owner_id
      */
     protected function set_owner_id($owner_id)
     {
@@ -880,23 +890,13 @@ abstract class ContentObjectForm extends FormValidator
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function is_version()
     {
         $values = $this->exportValues();
 
         return (isset($values[self::PROPERTY_VERSION]) && $values[self::PROPERTY_VERSION] == 1);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     */
-    public function prepareTabs()
-    {
-        $this->addDefaultTab();
-        $this->addMetadataTabs();
     }
 
     /**
@@ -1034,7 +1034,7 @@ abstract class ContentObjectForm extends FormValidator
     }
 
     /**
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function update_content_object()

@@ -20,6 +20,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -31,10 +32,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class SubscriptionsOverviewerComponent extends Manager implements TableSupport
 {
-    const PLATFORM_GROUP_ROOT_ID = 0;
+    public const PLATFORM_GROUP_ROOT_ID = 0;
 
-    const TAB_COURSE_GROUPS = 2;
-    const TAB_USERS = 1;
+    public const TAB_COURSE_GROUPS = 2;
+    public const TAB_USERS = 1;
 
     /**
      *
@@ -96,6 +97,14 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_TAB;
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
     public function getButtonToolbarRenderer()
     {
         if (!isset($this->buttonToolbarRenderer))
@@ -129,12 +138,9 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    public function getAdditionalParameters(array $additionalParameters = []): array
+    public function getLinkTabsRenderer(): LinkTabsRenderer
     {
-        $additionalParameters[] = self::PARAM_TAB;
-        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
-
-        return parent::getAdditionalParameters($additionalParameters);
+        return $this->getService(LinkTabsRenderer::class);
     }
 
     public function get_condition()
@@ -235,12 +241,12 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
      */
     private function get_tabs()
     {
-        $tabs = new LinkTabsRenderer('weblcms_course_user_browser');
+        $tabs = new TabsCollection();
 
         // all tab
         $link = $this->get_url(array(self::PARAM_TAB => self::TAB_USERS));
         $tab_name = Translation::get('User');
-        $tabs->addTab(
+        $tabs->add(
             new LinkTab(
                 self::TAB_USERS, $tab_name, new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas'), $link,
                 $this->current_tab == self::TAB_USERS
@@ -250,16 +256,14 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         // users tab
         $link = $this->get_url(array(self::PARAM_TAB => self::TAB_COURSE_GROUPS));
         $tab_name = Translation::get('CourseGroup');
-        $tabs->addTab(
+        $tabs->add(
             new LinkTab(
                 self::TAB_COURSE_GROUPS, $tab_name, new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $link,
                 $this->current_tab == self::TAB_COURSE_GROUPS
             )
         );
 
-        $tabs->set_content($this->get_tabs_content());
-
-        return $tabs->render();
+        return $this->getLinkTabsRenderer()->render($tabs, $this->get_tabs_content());
     }
 
     /**

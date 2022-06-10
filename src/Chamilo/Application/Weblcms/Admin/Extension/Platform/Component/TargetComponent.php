@@ -7,12 +7,12 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Table\Target\TargetTable;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -38,6 +38,11 @@ class TargetComponent extends Manager implements TableSupport
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
     }
 
     public function get_table_condition($table_class_name)
@@ -68,9 +73,7 @@ class TargetComponent extends Manager implements TableSupport
 
         $table = new TargetTable($this);
 
-        $tabs = new LinkTabsRenderer(
-            ClassnameUtilities::getInstance()->getClassnameFromNamespace(__CLASS__, true), $table->as_html()
-        );
+        $tabs = new TabsCollection();
 
         foreach ($this->get_target_types() as $target_type)
         {
@@ -108,7 +111,7 @@ class TargetComponent extends Manager implements TableSupport
 
             if ($count > 0)
             {
-                $tabs->addTab(
+                $tabs->add(
                     new LinkTab(
                         $target_type::ENTITY_TYPE, Translation::get(
                         StringUtilities::getInstance()->createString($target_type::ENTITY_NAME)->upperCamelize()
@@ -126,6 +129,6 @@ class TargetComponent extends Manager implements TableSupport
             }
         }
 
-        return $tabs->render();
+        return $this->getLinkTabsRenderer()->render($tabs);
     }
 }

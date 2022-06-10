@@ -32,7 +32,7 @@ abstract class Tab
         $this->display = $display;
     }
 
-    abstract public function body(bool $isOnlyTab = false): string;
+    abstract public function render(bool $isOnlyTab = false): string;
 
     public function bodyFooter(): string
     {
