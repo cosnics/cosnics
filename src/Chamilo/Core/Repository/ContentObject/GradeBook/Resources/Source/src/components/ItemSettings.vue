@@ -10,57 +10,62 @@
             </div>
             <div class="modal-body">
                 <template v-if="column.type !== 'standalone'">
-                    <h5 style="font-size: 20px" v-if="isGrouped">Gegroepeerde scores</h5>
-                    <ul style="margin-bottom: 5px">
-                        <li v-for="item in groupedItems" :key="item.id"><span style="font-size: 16px">{{ item.name }}</span>
+                    <h5 style="font-size: 20px;color:#487771;font-variant: all-small-caps;padding-bottom: .5rem; border-bottom: 1px dotted #c1d1cf;" v-if="isGrouped">Gegroepeerde scores</h5>
+                    <ul style="margin-bottom: 5px;padding-left: 2rem">
+                        <li v-for="item in groupedItems" :key="item.id" style="margin-bottom: .25rem"><span style="font-size: 16px">{{ item.name }}</span>
                             <div class="score-breadcrumb-trail">{{ item.breadcrumb }}</div>
                         </li>
                     </ul>
                     <div>
-                        <div style="margin: 0 0 0 3rem">
+                        <div style="margin: 0 0 0 2rem">
                             <button v-if="!(isGrouped || groupButtonPressed)" class="btn btn-default" @click="openGradesDropdown">Scores groeperen</button>
                             <grades-dropdown id="dropdown-settings" ref="dropdown" v-else :graded-items="gradedItems" @toggle="toggleSubItem"></grades-dropdown>
                         </div>
                     </div>
                 </template>
-                <h5 style="font-size: 20px;" :style="column.type !== 'standalone' ? 'margin-top:15px' : ''">Instellingen</h5>
-                <div style="margin-left: 30px">
+                <h5 style="font-size: 20px;color:#487771;font-variant: all-small-caps;padding-bottom: .5rem; border-bottom: 1px dotted #c1d1cf;" :style="column.type !== 'standalone' ? 'margin-top: 2rem' : ''">Instellingen</h5>
+                <div style="margin-left: 2rem; margin-bottom: 1.5rem">
                     <div>
                         <input type="checkbox" id="countForEndResult" v-model="column.countForEndResult">
                         <label for="countForEndResult" style="font-weight: 500; color: #245c55;">Meetellen voor eindresultaat</label>
                     </div>
-                    <div style="margin-top: 10px">
-                        <label for="weight" style="display:block;font-weight: 500; color: #245c55;">Gewicht</label>
-                        <input type="number" id="weight" :value="gradeBook.getWeight(column.id)|formatNum" @input="setWeight" autocomplete="off">
-                    </div>
-                    <div style="margin-top: 20px">
-                        <label style="font-weight: 500; color: #245c55;">Bij gewettigde afwezigheid:</label>
-                        <div>
-                            <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model.number="column.authPresenceEndResult">
-                            <label for="gafw-option1">Score niet meetellen voor het eindresultaat</label>
+                    <div v-if="column.countForEndResult">
+                        <div style="margin-top: 10px">
+                            <label for="weight" style="display:block;font-weight: 500; color: #245c55;">Gewicht:</label>
+                            <div style="position: relative;width:fit-content">
+                                <input type="number" id="weight" :value="gradeBook.getWeight(column.id)|formatNum" @input="setWeight" autocomplete="off">
+                                <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                            </div>
                         </div>
-                        <div>
-                            <input type="radio" name="gafw-option" id="gafw-option2" value="1" v-model.number="column.authPresenceEndResult">
-                            <label for="gafw-option2">Maximale score (100%) meetellen voor het eindresultaat</label>
+                        <div style="margin-top: 20px">
+                            <label style="font-weight: 500; color: #245c55;">Bij gewettigde afwezigheid:</label>
+                            <div>
+                                <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model.number="column.authPresenceEndResult">
+                                <label for="gafw-option1">Score niet meetellen voor het eindresultaat</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="gafw-option" id="gafw-option2" value="1" v-model.number="column.authPresenceEndResult">
+                                <label for="gafw-option2">Maximale score (100%) meetellen voor het eindresultaat</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="gafw-option" id="gafw-option3" value="2" v-model.number="column.authPresenceEndResult">
+                                <label for="gafw-option3">Minimale score (0%) meetellen voor het eindresultaat</label>
+                            </div>
                         </div>
-                        <div>
-                            <input type="radio" name="gafw-option" id="gafw-option3" value="2" v-model.number="column.authPresenceEndResult">
-                            <label for="gafw-option3">Minimale score (0%) meetellen voor het eindresultaat</label>
-                        </div>
-                    </div>
-                    <div style="margin-top: 20px">
-                        <label style="font-weight: 500; color: #245c55;">Bij ontbreken van score (zonder gewettigde afwezigheid):</label>
-                        <div>
-                            <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult">
-                            <label for="nogafw-option1">Score niet meetellen voor het eindresultaat</label>
-                        </div>
-                        <div>
-                            <input type="radio" name="nogafw-option" id="nogafw-option2" value="1" v-model.number="column.unauthPresenceEndResult">
-                            <label for="nogafw-option2">Maximale score (100%) meetellen voor het eindresultaat</label>
-                        </div>
-                        <div>
-                            <input type="radio" name="nogafw-option" id="nogafw-option3" value="2" v-model.number="column.unauthPresenceEndResult">
-                            <label for="nogafw-option3">Minimale score (0%) meetellen voor het eindresultaat</label>
+                        <div style="margin-top: 20px">
+                            <label style="font-weight: 500; color: #245c55;">Bij ontbreken van score (zonder gewettigde afwezigheid):</label>
+                            <div>
+                                <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult">
+                                <label for="nogafw-option1">Score niet meetellen voor het eindresultaat</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="nogafw-option" id="nogafw-option2" value="1" v-model.number="column.unauthPresenceEndResult">
+                                <label for="nogafw-option2">Maximale score (100%) meetellen voor het eindresultaat</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="nogafw-option" id="nogafw-option3" value="2" v-model.number="column.unauthPresenceEndResult">
+                                <label for="nogafw-option3">Minimale score (0%) meetellen voor het eindresultaat</label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -173,7 +178,7 @@ export default class ItemSettings extends Vue {
 
 <style lang="scss" scoped>
 input[type="text"], input[type="number"] {
-    border: 1px solid #ced4da;min-height: 24px;color: #333;padding: 2px 18px 2px 4px;font-weight: 400;
+    border: 1px solid #ced4da;min-height: 24px;color: #333;padding: 4px 18px 4px 4px;font-weight: 400;
     border-radius: .2rem;
 }
 
@@ -214,5 +219,25 @@ label {
     max-width: 90%;
     padding: 20px;
     width: 420px;
+}
+
+.percent {
+    display: flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #5b5f64;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #e9ecef;
+    border-left: 1px solid #ced4da;
+    z-index: 1;
+
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    bottom: 1px;
 }
 </style>

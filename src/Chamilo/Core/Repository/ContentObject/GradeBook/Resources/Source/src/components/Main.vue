@@ -9,7 +9,7 @@
         </div>
         <div>
             <div class="sticky-table-columns">
-                <div style="display:flex;justify-content:right;margin: 0 0 7px;gap: 5px">
+                <div style="display:flex;justify-content:flex-end;margin: 0 0 10px;gap: 5px">
                     <button class="btn btn-default btn-sm" style="padding: 3px 9px 3px 7px;" @click="createNewScore"><i data-v-1b75ca2e="" aria-hidden="true" class="fa fa-plus" style="margin-right: 5px;color: #406e8e;"></i>Nieuwe score</button>
                     <button class="btn btn-default btn-sm" style="padding: 3px 9px 3px 7px;" @click="createNewCategory"><i data-v-1b75ca2e="" aria-hidden="true" class="fa fa-plus" style="margin-right: 5px;color: #406e8e;"></i>Categorie</button>
                 </div>

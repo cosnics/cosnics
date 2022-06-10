@@ -98,6 +98,7 @@ export default class GradesDropdown extends Vue {
 }
 .btn.dropdown-toggle {
     align-items: center;
+    background-color: #efefef;
     display: flex;
     justify-content: space-between;
     width: 100%;

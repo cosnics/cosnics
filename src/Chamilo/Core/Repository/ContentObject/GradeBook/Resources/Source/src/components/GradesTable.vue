@@ -9,7 +9,7 @@
                             <b-th draggable :key="`category-${id}`" :colspan="Math.max(itemIds.length, 1)"
                                   :class="{'is-droppable': categoryDropArea === id}" style="color:#3e5c6e" :style="`background-color: ${color};` + (catEditItemId === id ? 'position: relative; z-index: 2;' : '')"
                                   @dragover.prevent="onDropAreaOverEnter($event, id)" @dragenter.prevent="onDropAreaOverEnter($event, id)" @dragleave="categoryDropArea = null" @drop="isDragging && onDrop($event, id)">
-                                <div v-if="id !== 0" style="display: flex; cursor: default; justify-content: space-between;align-items: center" @dblclick="catEditItemId = id">{{ name }}
+                                <div v-if="id !== 0" style="display: flex; cursor: pointer; justify-content: space-between;align-items: center" @dblclick="catEditItemId = id">{{ name }}
                                     <button style="padding:0; background: none; border: none;margin-left: 15px" @click="$emit('category-settings', id)"><i class="fa fa-gear" style="color:#55717c;margin-left: auto;display:inline-block"></i></button>
                                 </div>
                                 <item-name-input v-if="catEditItemId === id" :item-name="name" @cancel="catEditItemId = null" @ok="setCategoryName(id, $event)"></item-name-input>
@@ -26,10 +26,10 @@
                     <draggable v-for="({id, itemIds}) in displayedCategories" :key="`category-score-${id}`" :list="itemIds" tag="div" style="display: contents" ghost-class="ghost" @end="onDragEnd" :disabled="editItemId !== null || weightEditItemId !== null">
                         <b-th v-if="itemIds.length === 0" :key="`item-id-${id}`"></b-th>
                         <b-th v-else v-for="(itemId) in itemIds" :key="`${itemId}-name`" draggable @dragstart="startDrag($event, itemId)" :style="(editItemId === itemId || weightEditItemId === itemId) ? 'position: relative; z-index: 2' : ''">
-                            <div style="cursor: default;display:flex;justify-content:space-between;align-items:center" @dblclick="editItemId = itemId"><span style="white-space: nowrap"><i v-if="gradeBook.isGrouped(itemId)" class="fa fa-group" style="margin-right: .5rem"></i>{{ gradeBook.getName(itemId) }}</span>
+                            <div style="cursor: pointer;display:flex;justify-content:space-between;align-items:center" @dblclick="editItemId = itemId"><span style="white-space: nowrap"><i v-if="gradeBook.isGrouped(itemId)" class="fa fa-group" style="margin-right: .5rem"></i>{{ gradeBook.getName(itemId) }}</span>
                                 <button style="padding:0; background: none; border: none;margin-left: 15px" @click="$emit('item-settings', itemId)"><i class="fa fa-gear" style="margin-left: auto;display:inline-block"></i></button>
                             </div>
-                            <div style="cursor: default; margin-top: 5px;font-weight: 400;color: #477b7b;font-size: 1.2rem;" @dblclick="weightEditItemId = itemId" v-if="gradeBook.countsForEndResult(itemId)">{{ gradeBook.getWeight(itemId)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                            <div class="weight" :class="{'mod-custom': gradeBook.getGradeColumn(itemId).weight !== null}" @dblclick="weightEditItemId = itemId" v-if="gradeBook.countsForEndResult(itemId)">{{ gradeBook.getWeight(itemId)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                             <item-name-input v-if="editItemId === itemId" :item-name="gradeBook.getName(itemId)" @cancel="editItemId = null" @ok="setName(itemId, $event)"></item-name-input>
                             <weight-input v-if="weightEditItemId === itemId" :item-weight="gradeBook.getWeight(itemId)" @cancel="weightEditItemId = null" @ok="setWeight(itemId, $event)"></weight-input>
                         </b-th>
@@ -43,7 +43,9 @@
                     <template v-for="category in displayedCategories">
                         <b-td v-if="category.itemIds.length === 0" :key="`category-results-${category.id}`"></b-td>
                         <b-td v-else v-for="itemId in category.itemIds" :key="`${itemId}-result`" :style="editStudentScoreId === id && editScoreId === itemId ? 'position: relative; z-index: 2' : ''">
-                            <div @dblclick="showStudentScoreDialog(id, itemId)" style="cursor: default;" :style="gradeBook.countsForEndResult(itemId) ? '' : 'font-style: italic'">{{ gradeBook.getResult(results, itemId) }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                            <student-result :result="gradeBook.getResult(results, itemId)"
+                                            style="cursor: pointer;" :style="gradeBook.countsForEndResult(itemId) ? '' : 'font-style: italic'"
+                                            @edit="showStudentScoreDialog(id, itemId)"></student-result>
                             <score-input v-if="isStudentScoreDialogShown(id, itemId)" :score="gradeBook.getResult(results, itemId)" @ok="handleUpdatedScoreValue(results, itemId, $event)" @cancel="hideStudentScoreDialog"></score-input>
                         </b-td>
                     </template>
@@ -60,11 +62,12 @@ import GradeBook, {Category, ItemId, Results, ResultType} from '../domain/GradeB
 import ItemNameInput from './ItemNameInput.vue';
 import WeightInput from './WeightInput.vue';
 import ScoreInput from './ScoreInput.vue';
+import StudentResult from './StudentResult.vue';
 import draggable from 'vuedraggable';
 
 @Component({
     name: 'grades-table',
-    components: { draggable, ItemNameInput, WeightInput, ScoreInput },
+    components: { draggable, ItemNameInput, WeightInput, ScoreInput, StudentResult },
     filters: {
         formatNum: function (v: number|null) {
             if (v === null) { return ''; }
@@ -216,8 +219,12 @@ export default class GradesTable extends Vue {
             }
 
             &:not(:last-child):not(.is-droppable) {
-                border-right: none;
+                border-right: 1px double transparent;
             }
+        }
+
+        .table-head-row:last-child div:last-of-type th:last-child {
+            border-right: none;
         }
 
         .table-head-row:last-child th {
@@ -329,6 +336,24 @@ export default class GradesTable extends Vue {
         font-size: 1.1rem;
         margin-left: .15rem;
         opacity: .8;
+    }
+
+    .weight {
+        cursor: pointer;
+        margin-top: 2px;
+        font-weight: 400;
+        color: #477b7b;
+        font-size: 1.2rem;
+        padding: 3px 0 1px 0;
+        width: fit-content;
+    }
+
+    .weight.mod-custom {
+        background: rgb(211, 238, 224);
+        border-radius: 3px;
+        color: #466981;
+        padding-left: 6px;
+        padding-right: 8px;
     }
 
 /*    .dropdown-scores .btn {

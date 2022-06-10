@@ -1,7 +1,7 @@
 <template>
     <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
         <label for="weight">Gewicht:</label>
-        <div style="display: flex">
+        <div style="position: relative">
             <input id="weight" ref="weight-input" type="number" :value="itemWeight|formatNum" autocomplete="off" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
             <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
         </div>
@@ -43,9 +43,7 @@ export default class WeightInput extends Vue {
 <style lang="scss" scoped>
 input {
     border: 1px solid #ced4da;min-height: 24px;color: #333;padding: 2px 18px 2px 4px;font-weight: 400;width: 100%;
-    border-bottom-left-radius: .2rem;
-    border-top-left-radius: .2rem;
-    border-right-width: 0;
+    border-radius: .2rem;
 }
 
 input[type="number"] {
@@ -54,7 +52,7 @@ input[type="number"] {
     &::-webkit-inner-spin-button {
          -webkit-appearance: none;
          margin: 0;
-     }
+    }
 }
 
 .percent {
@@ -68,11 +66,14 @@ input[type="number"] {
     text-align: center;
     white-space: nowrap;
     background-color: #e9ecef;
-    border: 1px solid #ced4da;
-    border-radius: 0;
-    border-top-right-radius: 0.2rem;
-    border-bottom-right-radius: 0.2rem;
+    border-left: 1px solid #ced4da;
     z-index: 1;
+
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    right: 1px;
+
 }
 
 input:focus {

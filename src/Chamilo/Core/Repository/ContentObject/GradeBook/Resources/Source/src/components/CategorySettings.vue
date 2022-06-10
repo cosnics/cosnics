@@ -27,7 +27,7 @@ export default class CategorySettings extends Vue {
 
 <style lang="scss" scoped>
 input[type="text"], input[type="number"] {
-    border: 1px solid #ced4da;min-height: 24px;color: #333;padding: 2px 18px 2px 4px;font-weight: 400;
+    border: 1px solid #ced4da;min-height: 24px;color: #333;padding: 4px 18px 4px 4px;font-weight: 400;
     border-radius: .2rem;
 }
 
