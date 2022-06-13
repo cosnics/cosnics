@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="weblcms_gradebook_publication">
+    <properties>
+        <property
+                name="id"
+                type="integer"
+                unsigned="1"
+                notnull="1"
+                autoincrement="true" />
+        <property
+                name="publication_id"
+                type="integer"
+                unsigned="1"
+                notnull="1" />
+    </properties>
+    <index
+            name="publication_id"
+            type="unique">
+        <indexproperty name="publication_id" />
+    </index>
+</object>
