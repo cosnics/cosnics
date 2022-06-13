@@ -7,6 +7,7 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\BlockRenditionImplementation;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\TemplateRendition;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\Type\Html;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -18,6 +19,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -159,6 +161,13 @@ class Basic extends Html
         return $this->buttonToolbarRenderer;
     }
 
+    protected function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            LinkTabsRenderer::class
+        );
+    }
+
     public function render_block()
     {
         if ($this->show_all())
@@ -176,8 +185,7 @@ class Basic extends Html
 
                 $glyph = new NamespaceIdentGlyph(
                     $this->getBlockNamespace($block) . '\Block\\' .
-                    ClassnameUtilities::getInstance()->getClassnameFromObject($block), false, false, false, null,
-                    []
+                    ClassnameUtilities::getInstance()->getClassnameFromObject($block), false, false, false, null, []
                 );
 
                 $html[] = $glyph->render();
@@ -201,13 +209,8 @@ class Basic extends Html
 
             if ($this->get_template()->count_blocks() > 1)
             {
-                $tabs = new LinkTabsRenderer(
-                    ClassnameUtilities::getInstance()->getClassnameFromObject($this->get_template(), true),
-                    $rendered_block
-                );
-
+                $tabs = new TabsCollection();
                 $context_parameters = $this->get_context()->get_parameters();
-
                 $trail = BreadcrumbTrail::getInstance();
 
                 foreach ($this->get_template()->get_blocks() as $key => $block)
@@ -229,14 +232,14 @@ class Basic extends Html
                         IdentGlyph::SIZE_SMALL, []
                     );
 
-                    $tabs->addTab(
+                    $tabs->add(
                         new LinkTab(
                             $key, $title, $glyph, $this->get_context()->get_url($block_parameters), $is_current_block
                         )
                     );
                 }
 
-                return $tabs->render();
+                return $this->getLinkTabsRenderer()->render($tabs, $rendered_block);
             }
             else
             {

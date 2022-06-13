@@ -121,7 +121,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
             );
         }
 
-        return $this->get_parent()->getTabsRenderer()->render($renderer_name, $tabs);
+        return $this->get_parent()->getTabsCollection()->render($renderer_name, $tabs);
     }
 
     /**

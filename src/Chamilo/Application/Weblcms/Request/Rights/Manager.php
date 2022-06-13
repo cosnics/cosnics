@@ -6,6 +6,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Translation\Translation;
 
 abstract class Manager extends Application
@@ -25,26 +26,24 @@ abstract class Manager extends Application
         return $this->getService(LinkTabsRenderer::class);
     }
 
-    public function get_tabs($current_tab, $content)
+    public function get_tabs($current_tab): TabsCollection
     {
-        $tabs = new LinkTabsRenderer(
-            ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true), $content
-        );
+        $tabs = new TabsCollection();
 
-        $tabs->addTab(
+        $tabs->add(
             new LinkTab(
                 self::ACTION_CREATE, Translation::get('Add'), new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)), $current_tab == self::ACTION_CREATE
             )
         );
-        $tabs->addTab(
+        $tabs->add(
             new LinkTab(
                 self::ACTION_ACCESS, Translation::get('GeneralAccess'),
                 new FontAwesomeGlyph('key', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_ACCESS)), $current_tab == self::ACTION_ACCESS
             )
         );
-        $tabs->addTab(
+        $tabs->add(
             new LinkTab(
                 self::ACTION_BROWSE, Translation::get('Targets'),
                 new FontAwesomeGlyph('folder', array('fa-lg'), null, 'fas'),

@@ -12,16 +12,27 @@ class TabsRenderer
 {
     public const PARAM_SELECTED_TAB = 'tab';
 
+    private ActionsTabRenderer $actionsTabRenderer;
+
+    private ContentTabRenderer $contentTabRenderer;
+
     private ChamiloRequest $request;
 
-    /**
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     */
-    public function __construct(ChamiloRequest $request)
+    public function __construct(
+        ChamiloRequest $request, ContentTabRenderer $contentTabRenderer, ActionsTabRenderer $actionsTabRenderer
+    )
     {
         $this->request = $request;
+        $this->contentTabRenderer = $contentTabRenderer;
+        $this->actionsTabRenderer = $actionsTabRenderer;
     }
 
+    /**
+     * @param string $name
+     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\GenericTab> $tabs
+     *
+     * @return string
+     */
     public function render(string $name, TabsCollection $tabs): string
     {
         $html = [];
@@ -33,7 +44,15 @@ class TabsRenderer
             // Tab content
             foreach ($tabs as $tab)
             {
-                $html[] = $tab->render($name . '-' . $tab->getIdentifier());
+                switch (get_class($tab))
+                {
+                    case ContentTab::class:
+                        $html[] = $this->getContentTabRenderer()->renderContent($name, $tab);
+                        break;
+                    case ActionsTab::class:
+                        $html[] = $this->getActionsTabRenderer()->renderContent($name, $tab);
+                        break;
+                }
             }
 
             $html[] = $this->renderFooter($name, $tabs);
@@ -42,11 +61,27 @@ class TabsRenderer
         return implode(PHP_EOL, $html);
     }
 
+    public function getActionsTabRenderer(): ActionsTabRenderer
+    {
+        return $this->actionsTabRenderer;
+    }
+
+    public function getContentTabRenderer(): ContentTabRenderer
+    {
+        return $this->contentTabRenderer;
+    }
+
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
     }
 
+    /**
+     * @param string $name
+     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\GenericTab> $tabs
+     *
+     * @return ?string
+     */
     protected function getSelectedTab(string $name, TabsCollection $tabs): ?string
     {
         $selectedTabs = $this->getRequest()->query->get(self::PARAM_SELECTED_TAB);
@@ -66,7 +101,7 @@ class TabsRenderer
 
     /**
      * @param string $name
-     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Form\FormTab> $tabs
+     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\GenericTab> $tabs
      *
      * @return string
      */
@@ -82,11 +117,11 @@ class TabsRenderer
   $(this).tab(\'show\')
 })';
 
-        $selected_tab = $this->getSelectedTab($name, $tabs);
+        $selectedTab = $this->getSelectedTab($name, $tabs);
 
-        if (isset($selected_tab))
+        if (isset($selectedTab))
         {
-            $html[] = '$(\'#' . $name . 'Tabs a[href="#' . $selected_tab . '"]\').tab(\'show\');';
+            $html[] = '$(\'#' . $name . 'Tabs a[href="#' . $selectedTab . '"]\').tab(\'show\');';
         }
         else
         {
@@ -100,7 +135,7 @@ class TabsRenderer
 
     /**
      * @param string $name
-     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Form\FormTab> $tabs
+     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\GenericTab> $tabs
      *
      * @return string
      */
@@ -115,7 +150,15 @@ class TabsRenderer
 
         foreach ($tabs as $tab)
         {
-            $html[] = $tab->header();
+            switch (get_class($tab))
+            {
+                case ContentTab::class:
+                    $html[] = $this->getContentTabRenderer()->renderNavigation($name, $tab);
+                    break;
+                case ActionsTab::class:
+                    $html[] = $this->getActionsTabRenderer()->renderNavigation($name, $tab);
+                    break;
+            }
         }
 
         $html[] = '</ul>';

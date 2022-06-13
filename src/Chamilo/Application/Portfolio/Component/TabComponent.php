@@ -5,6 +5,7 @@ use Chamilo\Application\Portfolio\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 
 /**
  * Abstract component for the several portfolio browsers (all, favourite, ..)
@@ -14,11 +15,7 @@ use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 abstract class TabComponent extends Manager
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer
-     */
-    private $tabsRenderer;
+    private TabsCollection $tabsCollection;
 
     /**
      * Runs this component
@@ -27,30 +24,35 @@ abstract class TabComponent extends Manager
      */
     public function run()
     {
-        $this->tabsRenderer = new LinkTabsRenderer('workspace');
+        $this->tabsCollection = new TabsCollection();
 
-        $this->tabsRenderer->addTab(
+        $this->tabsCollection->add(
             new LinkTab(
                 self::ACTION_BROWSE,
                 $this->getTranslator()->trans(self::ACTION_BROWSE . 'Component', [], Manager::context()),
                 new FontAwesomeGlyph('search', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
-                $this->get_action() == self::ACTION_BROWSE, false, LinkTab::POSITION_LEFT, LinkTab::DISPLAY_BOTH
+                $this->get_action() == self::ACTION_BROWSE, false, LinkTab::POSITION_LEFT, LinkTab::DISPLAY_ICON_AND_TITLE
             )
         );
 
-        $this->tabsRenderer->addTab(
+        $this->tabsCollection->add(
             new LinkTab(
                 self::ACTION_BROWSE_FAVOURITES,
                 $this->getTranslator()->trans(self::ACTION_BROWSE_FAVOURITES . 'Component', [], Manager::context()),
                 new FontAwesomeGlyph('star', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_FAVOURITES)),
                 $this->get_action() == self::ACTION_BROWSE_FAVOURITES, false, LinkTab::POSITION_LEFT,
-                LinkTab::DISPLAY_BOTH
+                LinkTab::DISPLAY_ICON_AND_TITLE
             )
         );
 
         return $this->build();
+    }
+
+    protected function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return $this->getService(LinkTabsRenderer::class);
     }
 
     /**
@@ -60,14 +62,10 @@ abstract class TabComponent extends Manager
      */
     abstract public function build();
 
-    /**
-     * Get the TabsRenderer
-     *
-     * @return \Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer
-     */
-    public function getTabsRenderer()
+
+    public function getTabsCollection(): TabsCollection
     {
-        return $this->tabsRenderer;
+        return $this->tabsCollection;
     }
 
     /**
@@ -78,7 +76,7 @@ abstract class TabComponent extends Manager
     {
         $html = [];
 
-        $html[] = $this->getTabsRenderer()->renderFooter();
+        $html[] = $this->getLinkTabsRenderer()->renderFooter();
         $html[] = parent::render_footer();
 
         return implode(PHP_EOL, $html);
@@ -93,7 +91,7 @@ abstract class TabComponent extends Manager
         $html = [];
 
         $html[] = parent::render_header($pageTitle);
-        $html[] = $this->getTabsRenderer()->renderHeader();
+        $html[] = $this->getLinkTabsRenderer()->renderHeader($this->getTabsCollection());
 
         return implode(PHP_EOL, $html);
     }

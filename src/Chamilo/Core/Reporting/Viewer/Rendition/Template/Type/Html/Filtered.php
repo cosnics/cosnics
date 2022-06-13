@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
-use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Translation\Translation;
 
 class Filtered extends Basic
@@ -46,8 +46,7 @@ class Filtered extends Basic
 
                 $glyph = new NamespaceIdentGlyph(
                     $this->getBlockNamespace($block) . '\Block\\' .
-                    ClassnameUtilities::getInstance()->getClassnameFromObject($block), false, false, false, null,
-                    []
+                    ClassnameUtilities::getInstance()->getClassnameFromObject($block), false, false, false, null, []
                 );
 
                 $html[] = '<h2>';
@@ -82,10 +81,7 @@ class Filtered extends Basic
 
             if ($this->get_template()->count_blocks() > 1)
             {
-                $tabs = new LinkTabsRenderer(
-                    ClassnameUtilities::getInstance()->getClassnameFromObject($this->get_template(), true),
-                    implode(PHP_EOL, $html)
-                );
+                $tabs = new TabsCollection();
 
                 $context_parameters = $this->get_context()->get_parameters();
 
@@ -113,14 +109,14 @@ class Filtered extends Basic
                         IdentGlyph::SIZE_SMALL, []
                     );
 
-                    $tabs->addTab(
+                    $tabs->add(
                         new LinkTab(
                             $key, $title, $glyph, $this->get_context()->get_url($block_parameters), $is_current_block
                         )
                     );
                 }
 
-                return $tabs->render();
+                return $this->getLinkTabsRenderer()->render($tabs, implode(PHP_EOL, $html));
             }
             else
             {
@@ -128,4 +124,5 @@ class Filtered extends Basic
             }
         }
     }
+
 }

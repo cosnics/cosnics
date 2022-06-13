@@ -115,7 +115,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Tabs\TabsRenderer $tabs
+     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection $tabs
      *
      * @throws \Exception
      */
@@ -649,11 +649,6 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         $this->addDynamicTabsRendererLinks($tabs);
 
         return $tabs;
-    }
-
-    protected function getTabsRenderer(): TabsRenderer
-    {
-        return $this->getService(TabsRenderer::class);
     }
 
     /**

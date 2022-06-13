@@ -33,46 +33,6 @@ class Action
         $this->confirmationMessage = $confirmationMessage;
     }
 
-    public function render(): string
-    {
-        $html = [];
-
-        if ($this->hasConfirmationMessage())
-        {
-            $onclick = 'onclick = "return confirm(\'' . $this->getConfirmationMessage() . '\')"';
-        }
-        else
-        {
-            $onclick = '';
-        }
-
-        $html[] = '<div class="list-group-item vertical-action">';
-
-        $html[] = '<div class="pull-left icon">';
-        $html[] = '<a href="' . $this->getUrl() . '" ' . $onclick . '>';
-
-        $html[] = $this->getInlineGlyph()->render();
-
-        $html[] = '</a>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="pull-left">';
-
-        if ($this->getTitle())
-        {
-            $html[] = '<h5 class="list-group-item-heading"><a href="' . $this->getUrl() . '" ' . $onclick . '>' .
-                $this->getTitle() . '</a></h5>';
-        }
-
-        $html[] = '<p class="list-group-item-text">' . $this->getContent() . '</p>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="clearfix"></div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
     public function getConfirmationMessage(): bool
     {
         return $this->confirmationMessage;
@@ -123,10 +83,6 @@ class Action
         $this->url = $url;
     }
 
-    /**
-     *
-     * @return bool
-     */
     public function hasConfirmationMessage(): bool
     {
         return !empty($this->confirmationMessage);

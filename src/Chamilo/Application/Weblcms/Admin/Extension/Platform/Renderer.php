@@ -8,9 +8,11 @@ use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Renderer\CourseList\CourseListRenderer;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -45,18 +47,18 @@ class Renderer extends CourseListRenderer
     protected $course_types;
 
     /**
-     * The selected course type
-     *
-     * @var CourseType
-     */
-    protected $selected_course_type;
-
-    /**
      * The course list for the selected course type
      *
      * @var Course[]
      */
     protected $courses;
+
+    /**
+     * The selected course type
+     *
+     * @var CourseType
+     */
+    protected $selected_course_type;
 
     /**
      * **************************************************************************************************************
@@ -100,7 +102,7 @@ class Renderer extends CourseListRenderer
     protected function display_course_types()
     {
         $renderer_name = ClassnameUtilities::getInstance()->getClassnameFromObject($this, true);
-        $course_tabs = new LinkTabsRenderer($renderer_name);
+        $tabs = new TabsCollection();
 
         $selected_course_type_id = $this->get_selected_course_type_id();
 
@@ -115,30 +117,28 @@ class Renderer extends CourseListRenderer
 
             if ($this->count_courses_for_course_type($course_type[CourseType::PROPERTY_ID]) > 0)
             {
-                $course_tabs->addTab($created_tabs[$course_type[CourseType::PROPERTY_ID]]);
+                $tabs->add($created_tabs[$course_type[CourseType::PROPERTY_ID]]);
             }
         }
 
         // Add an extra tab for the no course type
-        $created_tabs[0] =
-            new LinkTab(0, Translation::get('NoCourseType'), null, $this->get_course_type_url(0));
+        $created_tabs[0] = new LinkTab(0, Translation::get('NoCourseType'), null, $this->get_course_type_url(0));
 
         if ($this->count_courses_for_course_type(0) > 0)
         {
-            $course_tabs->addTab($created_tabs[0]);
+            $tabs->add($created_tabs[0]);
         }
 
-        if ($course_tabs->size() > 0)
+        if ($tabs->count() > 0)
         {
             if ($created_tabs[$selected_course_type_id])
             {
                 $created_tabs[$selected_course_type_id]->set_selected(true);
             }
 
-            $content = $this->display_courses_for_course_type($selected_course_type_id);
-            $course_tabs->set_content($content);
-
-            return $course_tabs->render();
+            return $this->getLinkTabsRenderer()->render(
+                $tabs, $this->display_courses_for_course_type($selected_course_type_id)
+            );
         }
         else
         {
@@ -239,6 +239,13 @@ class Renderer extends CourseListRenderer
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    public function getLinkTabsRenderer(): LinkTabsRenderer
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            LinkTabsRenderer::class
+        );
     }
 
     /**

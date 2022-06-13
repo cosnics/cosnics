@@ -513,7 +513,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
     {
         $html = [];
 
-        $this->tabs = new LinkTabsRenderer('weblcms_course_user_browser');
+        $this->tabs = new TabsCollection();
 
         // all tab
         $link = $this->get_url(
@@ -521,7 +521,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         );
         $tab_name = Translation::get('AllSubscriptions');
 
-        $this->tabs->addTab(
+        $this->tabs->add(
             new LinkTab(
                 self::TAB_ALL, $tab_name, new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $link,
                 $this->current_tab == self::TAB_ALL
@@ -534,7 +534,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         );
         $tab_name = Translation::get('DirectSubscriptions');
 
-        $this->tabs->addTab(
+        $this->tabs->add(
             new LinkTab(
                 self::TAB_USERS, $tab_name, new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $link,
                 $this->current_tab == self::TAB_USERS
@@ -547,14 +547,14 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         $selected = $this->current_tab == self::TAB_PLATFORM_GROUPS_SUBGROUPS ||
             $this->current_tab == self::TAB_PLATFORM_GROUPS_USERS;
 
-        $this->tabs->addTab(
+        $this->tabs->add(
             new LinkTab(
                 self::TAB_PLATFORM_GROUPS_SUBGROUPS, $tab_name,
                 new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas'), $link, $selected
             )
         );
 
-        $html[] = $this->getLinkTabsRenderer()->render($this->tabs);
+        $html[] = $this->getLinkTabsRenderer()->renderHeader($this->tabs);
 
         return implode(PHP_EOL, $html);
     }

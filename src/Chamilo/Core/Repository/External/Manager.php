@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -23,6 +22,7 @@ use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -519,7 +519,7 @@ abstract class Manager extends Application implements NoContextComponent
     {
         $html = [];
 
-        $html[] = $this->tabs->renderFooter();
+        $html[] = $this->getLinkTabsRenderer()->renderFooter();
         $html[] = parent::render_footer();
 
         return implode(PHP_EOL, $html);
@@ -550,9 +550,7 @@ abstract class Manager extends Application implements NoContextComponent
             $external_repository_actions[] = self::ACTION_VIEW_EXTERNAL_REPOSITORY;
         }
 
-        $this->tabs = new LinkTabsRenderer(
-            ClassnameUtilities::getInstance()->getClassnameFromObject($this, true)
-        );
+        $tabs = new TabsCollection();
 
         foreach ($external_repository_actions as $external_repository_action)
         {
@@ -606,12 +604,12 @@ abstract class Manager extends Application implements NoContextComponent
                     break;
             }
 
-            $this->tabs->addTab(
+            $tabs->add(
                 new LinkTab($external_repository_action, $label, $glyph, $link, $selected)
             );
         }
 
-        $html[] = $this->getLinkTabsRenderer()->render($this->tabs);
+        $html[] = $this->getLinkTabsRenderer()->renderHeader($tabs);
 
         return implode(PHP_EOL, $html);
     }

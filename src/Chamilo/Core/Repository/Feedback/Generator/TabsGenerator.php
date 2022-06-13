@@ -5,8 +5,8 @@ use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -18,16 +18,11 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class TabsGenerator extends NavigationGenerator
 {
+    private TabsCollection $tabsCollection;
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Tabs\TabsRenderer
-     */
-    private $tabsRenderer;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Tabs\TabsRenderer $tabsRenderer
+     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection $tabsCollection
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param string[] $baseParameters
      * @param boolean $isAllowedToViewFeedback
@@ -36,7 +31,7 @@ class TabsGenerator extends NavigationGenerator
      * @param boolean $isActive
      */
     public function __construct(
-        TabsRenderer $tabsRenderer, Application $application, $baseParameters, $isAllowedToViewFeedback = false,
+        TabsCollection $tabsCollection, Application $application, $baseParameters, $isAllowedToViewFeedback = false,
         $feedbackCount = 0, $hasNotification = false, $isActive = false
     )
     {
@@ -44,7 +39,7 @@ class TabsGenerator extends NavigationGenerator
             $application, $baseParameters, $isAllowedToViewFeedback, $feedbackCount, $hasNotification, $isActive
         );
 
-        $this->tabsRenderer = $tabsRenderer;
+        $this->tabsCollection = $tabsCollection;
     }
 
     public function run()
@@ -59,11 +54,11 @@ class TabsGenerator extends NavigationGenerator
             $title .= ' [' . $this->getFeedbackCount() . ']';
         }
 
-        $this->getTabsRenderer()->addTab(
+        $this->getTabsCollection()->add(
             new LinkTab(
                 $application::ACTION_FEEDBACK, $title, new FontAwesomeGlyph('comments', array('fa-lg'), null, 'fas'),
                 $application->get_url($baseParameters), $this->getIsActive(), false, LinkTab::POSITION_LEFT,
-                LinkTab::DISPLAY_BOTH_SELECTED
+                LinkTab::DISPLAY_ICON_AND_TITLE
             )
         );
 
@@ -76,14 +71,14 @@ class TabsGenerator extends NavigationGenerator
 
                     $baseParameters[Manager::PARAM_ACTION] = Manager::ACTION_UNSUBSCRIBER;
 
-                    $this->getTabsRenderer()->addTab(
+                    $this->getTabsCollection()->add(
                         new LinkTab(
                             Manager::ACTION_UNSUBSCRIBER, Translation::get(
                             'StopReceivingNotifications', null,
                             'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback'
                         ), new FontAwesomeGlyph('times', array('fa-lg'), null, 'fas'),
                             $application->get_url($baseParameters), false, false, LinkTab::POSITION_LEFT,
-                            LinkTab::DISPLAY_BOTH_SELECTED
+                            LinkTab::DISPLAY_ICON_AND_TITLE
                         )
                     );
                 }
@@ -92,13 +87,13 @@ class TabsGenerator extends NavigationGenerator
                     $baseParameters = $this->getBaseParameters();
                     $baseParameters[Manager::PARAM_ACTION] = Manager::ACTION_SUBSCRIBER;
 
-                    $this->getTabsRenderer()->addTab(
+                    $this->getTabsCollection()->add(
                         new LinkTab(
                             Manager::ACTION_SUBSCRIBER, Translation::get(
                             'ReceiveNotifications', null, 'Chamilo\Core\Repository\ContentObject\Portfolio\Feedback'
                         ), new FontAwesomeGlyph('envelope', array('fa-lg'), null, 'fas'),
                             $application->get_url($baseParameters), false, false, LinkTab::POSITION_LEFT,
-                            LinkTab::DISPLAY_BOTH_SELECTED
+                            LinkTab::DISPLAY_ICON_AND_TITLE
                         )
                     );
                 }
@@ -106,21 +101,13 @@ class TabsGenerator extends NavigationGenerator
         }
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Tabs\TabsRenderer
-     */
-    public function getTabsRenderer()
+    public function getTabsCollection(): TabsCollection
     {
-        return $this->tabsRenderer;
+        return $this->tabsCollection;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Tabs\TabsRenderer $tabsRenderer
-     */
-    public function setTabsRenderer($tabsRenderer)
+    public function setTabsCollection(TabsCollection $tabsCollection)
     {
-        $this->tabsRenderer = $tabsRenderer;
+        $this->tabsCollection = $tabsCollection;
     }
 }

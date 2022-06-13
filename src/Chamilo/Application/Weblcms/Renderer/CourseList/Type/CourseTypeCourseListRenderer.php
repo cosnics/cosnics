@@ -12,10 +12,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategoryRelCours
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
-use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -50,18 +47,18 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
     protected $course_types;
 
     /**
-     * The selected course type
-     *
-     * @var CourseType
-     */
-    protected $selected_course_type;
-
-    /**
      * The course list for the selected course type
      *
      * @var Course[]
      */
     protected $courses;
+
+    /**
+     * The selected course type
+     *
+     * @var CourseType
+     */
+    protected $selected_course_type;
 
     /**
      * **************************************************************************************************************
@@ -127,24 +124,15 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
         $html[] = '<ul class="nav nav-tabs course-list-tabs">';
 
-        $renderer_name = ClassnameUtilities::getInstance()->getClassnameFromObject($this, true);
-        $course_tabs = new LinkTabsRenderer($renderer_name);
-
         $selected_course_type_id = $this->get_selected_course_type_id();
-
-        $created_tabs = [];
+        $createdTabs = 0;
 
         foreach ($this->course_types as $course_type)
         {
-            $created_tabs[$course_type[CourseType::PROPERTY_ID]] = new LinkTab(
-                $course_type[CourseType::PROPERTY_ID], $course_type[CourseType::PROPERTY_TITLE], null,
-                $this->get_course_type_url($course_type[CourseType::PROPERTY_ID])
-            );
-
             if ($this->get_parent()->show_empty_courses() ||
                 $this->count_courses_for_course_type($course_type[CourseType::PROPERTY_ID]) > 0)
             {
-                $course_tabs->addTab($created_tabs[$course_type[CourseType::PROPERTY_ID]]);
+                $createdTabs ++;
 
                 $active = $selected_course_type_id == $course_type[CourseType::PROPERTY_ID] ? 'active' : '';
 
@@ -155,12 +143,10 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
         }
 
         // Add an extra tab for the no course type
-        $created_tabs[0] =
-            new LinkTab(0, Translation::get('NoCourseType'), null, $this->get_course_type_url(0));
 
         if ($this->get_parent()->show_empty_courses() || $this->count_courses_for_course_type(0) > 0)
         {
-            $course_tabs->addTab($created_tabs[0]);
+            $createdTabs ++;
 
             $active = $selected_course_type_id == 0 ? 'active' : '';
 
@@ -171,15 +157,9 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
         $html[] = '</ul>';
 
-        if ($course_tabs->size() > 0)
+        if ($createdTabs > 0)
         {
-            if ($created_tabs[$selected_course_type_id])
-            {
-                $created_tabs[$selected_course_type_id]->set_selected(true);
-            }
-
             $content = $this->display_course_user_categories_for_course_type();
-            $course_tabs->set_content($content);
 
             $html[] = '<div class="course-list-tab-content">';
             $html[] = $content;
@@ -212,7 +192,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
         $count = 0;
         $size = $course_type_user_categories->count();
 
-        foreach($course_type_user_categories as $course_type_user_category)
+        foreach ($course_type_user_categories as $course_type_user_category)
         {
             $html[] = $this->display_course_user_category($course_type_user_category, $count, $size);
             $count ++;
@@ -648,7 +628,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
     {
         $parsed_courses = [];
 
-        foreach($courses as $course)
+        foreach ($courses as $course)
         {
             $category_id = $course[CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID];
             $category = !is_null($category_id) ? $category_id : 0;

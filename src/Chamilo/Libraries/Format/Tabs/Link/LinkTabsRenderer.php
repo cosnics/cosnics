@@ -10,7 +10,19 @@ use Chamilo\Libraries\Format\Tabs\TabsCollection;
  */
 class LinkTabsRenderer
 {
+    private LinkTabRenderer $linkTabRenderer;
 
+    public function __construct(LinkTabRenderer $linkTabRenderer)
+    {
+        $this->linkTabRenderer = $linkTabRenderer;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Link\LinkTab> $tabs
+     * @param ?string $content
+     *
+     * @return string
+     */
     public function render(TabsCollection $tabs, ?string $content = null): string
     {
         $html = [];
@@ -27,6 +39,11 @@ class LinkTabsRenderer
         return implode(PHP_EOL, $html);
     }
 
+    public function getLinkTabRenderer(): LinkTabRenderer
+    {
+        return $this->linkTabRenderer;
+    }
+
     public function renderFooter(): string
     {
         $html = [];
@@ -37,6 +54,11 @@ class LinkTabsRenderer
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Link\LinkTab> $tabs
+     *
+     * @return string
+     */
     public function renderHeader(TabsCollection $tabs): string
     {
         $html = [];
@@ -45,7 +67,7 @@ class LinkTabsRenderer
 
         foreach ($tabs as $tab)
         {
-            $html[] = $tab->header();
+            $html[] = $this->getLinkTabRenderer()->renderNavigation($tab);
         }
 
         $html[] = '</ul>';

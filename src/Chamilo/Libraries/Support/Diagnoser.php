@@ -74,7 +74,7 @@ class Diagnoser
             $tabs->add(
                 new ContentTab(
                     $section, $this->getTranslation(ucfirst($section) . 'Title'), $table->render(), null,
-                    Tab::DISPLAY_TITLE
+                    ContentTab::DISPLAY_TITLE
                 )
             );
         }

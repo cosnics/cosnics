@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
  * @package Chamilo\Libraries\Format\Tabs
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ContentTab extends Tab
+class ContentTab extends GenericTab
 {
 
     private string $content;
@@ -22,16 +22,6 @@ class ContentTab extends Tab
         $this->content = $content;
     }
 
-    public function render(bool $isOnlyTab = false): string
-    {
-        $html = [];
-        $html[] = $this->bodyHeader();
-        $html[] = $this->content;
-        $html[] = $this->bodyFooter();
-
-        return implode(PHP_EOL, $html);
-    }
-
     public function getContent(): string
     {
         return $this->content;
@@ -40,10 +30,5 @@ class ContentTab extends Tab
     public function setContent(string $content)
     {
         $this->content = $content;
-    }
-
-    public function getLink(): string
-    {
-        return '#' . $this->getIdentifier();
     }
 }

@@ -26,7 +26,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html = [];
 
         $html[] = $this->render_header();
-        $html[] = $this->get_tabs(self::ACTION_BROWSE, $table->render())->render();
+        $html[] = $this->getLinkTabsRenderer()->render($this->get_tabs(self::ACTION_BROWSE), $table->render());
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

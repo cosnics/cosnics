@@ -35,7 +35,7 @@ class EntityComponent extends Manager implements TableSupport
         $html = [];
 
         $html[] = $this->render_header();
-        $html[] = $this->get_tabs(self::ACTION_ENTITY, $this->get_entity_tabs())->render();
+        $html[] = $this->getLinkTabsRenderer()->render($this->get_tabs(self::ACTION_ENTITY),$this->get_entity_tabs());
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

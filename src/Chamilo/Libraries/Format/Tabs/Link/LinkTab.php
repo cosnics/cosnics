@@ -2,24 +2,20 @@
 namespace Chamilo\Libraries\Format\Tabs\Link;
 
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
-use Chamilo\Libraries\Format\Tabs\Tab;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Format\Tabs\AbstractTab;
 
 /**
  *
  * @package Chamilo\Libraries\Format\Tabs
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class LinkTab extends Tab
+class LinkTab extends AbstractTab
 {
     public const POSITION_LEFT = 'left';
     public const POSITION_RIGHT = 'right';
 
     public const TARGET_POPUP = 2;
     public const TARGET_WINDOW = 1;
-
-    protected int $display;
 
     private ?string $confirmationMessage;
 
@@ -42,13 +38,7 @@ class LinkTab extends Tab
         $this->isSelected = $isSelected;
         $this->confirmationMessage = $confirmationMessage;
         $this->position = $position;
-        $this->display = $display;
         $this->target = $target;
-    }
-
-    public function render(bool $isOnlyTab = false): string
-    {
-        return '';
     }
 
     public function getConfirmationMessage(): ?string
@@ -59,16 +49,6 @@ class LinkTab extends Tab
     public function setConfirmationMessage(?string $confirmationMessage)
     {
         $this->confirmationMessage = $confirmationMessage;
-    }
-
-    public function getDisplay(): int
-    {
-        return $this->display;
-    }
-
-    public function setDisplay(int $display)
-    {
-        $this->display = $display;
     }
 
     public function getLink(): string
@@ -111,67 +91,6 @@ class LinkTab extends Tab
         return false;
     }
 
-    public function header(): string
-    {
-        $classes = [];
-
-        if ($this->isSelected())
-        {
-            $classes[] = 'active';
-        }
-
-        $classes[] = 'pull-' . $this->getPosition();
-
-        $html = [];
-        $html[] = '<li class="' . implode(' ', $classes) . '">';
-
-        $link = [];
-        $link[] = '<a';
-
-        if ($this->getLink() && $this->getTarget() == self::TARGET_WINDOW)
-        {
-            $link[] = 'href="' . $this->getLink() . '"';
-
-            if ($this->hasConfirmationMessage())
-            {
-                $link[] = 'onclick="return confirm(\'' . addslashes(
-                        htmlentities(
-                            $this->getConfirmationMessage() === true ? Translation::get(
-                                'Confirm', null, StringUtilities::LIBRARIES
-                            ) : $this->getConfirmationMessage()
-                        )
-                    ) . '\');"';
-            }
-        }
-        elseif ($this->getLink() && $this->getTarget() == self::TARGET_POPUP)
-        {
-            $link[] = 'href="" onclick="javascript:openPopup(\'' . $this->getLink() . '\'); return false"';
-        }
-        else
-        {
-            $link[] = 'style="cursor: default;"';
-        }
-
-        $link[] = '>';
-
-        $html[] = implode(' ', $link);
-
-        if ($this->getInlineGlyph() && $this->isIconVisible())
-        {
-            $html[] = $this->getInlineGlyph()->render();
-        }
-
-        if ($this->getLabel() && $this->isTextVisible())
-        {
-            $html[] = '<span class="title">' . $this->getLabel() . '</span>';
-        }
-
-        $html[] = '</a>';
-        $html[] = '</li>';
-
-        return implode(PHP_EOL, $html);
-    }
-
     public function isSelected(): bool
     {
         return $this->isSelected;
@@ -180,5 +99,15 @@ class LinkTab extends Tab
     public function setIsSelected(bool $isSelected)
     {
         $this->isSelected = $isSelected;
+    }
+
+    public function opensInPopup(): bool
+    {
+        return $this->getTarget() == self::TARGET_POPUP;
+    }
+
+    public function opensInWindow(): bool
+    {
+        return $this->getTarget() == self::TARGET_WINDOW;
     }
 }

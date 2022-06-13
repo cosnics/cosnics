@@ -15,6 +15,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
+use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -172,9 +173,9 @@ abstract class Manager extends Application
         }
     }
 
-    public function get_tabs($current_tab, $content)
+    public function get_tabs($current_tab): TabsCollection
     {
-        $tabs = new LinkTabsRenderer(__CLASS__, $content);
+        $tabs = new TabsCollection();
 
         $tabs->add(
             new LinkTab(

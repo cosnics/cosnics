@@ -26,7 +26,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -155,12 +154,10 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         {
             $conditions = [];
             $conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_MOTIVATION),
-                $query
+                new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_MOTIVATION), $query
             );
             $conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_SUBJECT),
-                $query
+                new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_SUBJECT), $query
             );
 
             $search_conditions = new OrCondition($conditions);
