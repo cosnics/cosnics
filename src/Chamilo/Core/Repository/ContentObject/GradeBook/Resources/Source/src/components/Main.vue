@@ -3,18 +3,16 @@
         <div class="banner">
             <h1 class="banner-header">GradeBook</h1>
         </div>
-        <div style="margin:25px 20px 20px;display:flex;gap:20px">
-            <div style="flex:1"><input class="form-control" type="text" placeholder="Zoek student"></div>
+        <div class="gradebook-toolbar">
+            <input class="form-control" type="text" placeholder="Zoek student">
             <grades-dropdown id="dropdown-main" :graded-items="gradeBook.gradedItemsWithStatusAdded" @toggle="toggleGradeItem"></grades-dropdown>
         </div>
-        <div>
-            <div class="sticky-table-columns">
-                <div style="display:flex;justify-content:flex-end;margin: 0 0 10px;gap: 5px">
-                    <button class="btn btn-default btn-sm" style="padding: 3px 9px 3px 7px;" @click="createNewScore"><i data-v-1b75ca2e="" aria-hidden="true" class="fa fa-plus" style="margin-right: 5px;color: #406e8e;"></i>Nieuwe score</button>
-                    <button class="btn btn-default btn-sm" style="padding: 3px 9px 3px 7px;" @click="createNewCategory"><i data-v-1b75ca2e="" aria-hidden="true" class="fa fa-plus" style="margin-right: 5px;color: #406e8e;"></i>Categorie</button>
-                </div>
-                <grades-table :grade-book="gradeBook" @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"></grades-table>
+        <div class="gradebook-table-container">
+            <div class="gradebook-create-actions">
+                <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>Nieuwe score</button>
+                <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>Categorie</button>
             </div>
+            <grades-table :grade-book="gradeBook" @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"></grades-table>
         </div>
         <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :item-id="itemSettings" @close="itemSettings = null" @item-settings="itemSettings = $event"></item-settings>
         <category-settings v-if="selectedCategory" :category="selectedCategory" @close="closeSelectedCategory"></category-settings>
@@ -63,37 +61,69 @@
 
 <style>
 .u-flex {
-  display: flex;
+    display: flex;
 }
 
 .u-gap-small {
-  gap: 5px;
+    gap: 5px;
 }
 
 .u-flex-wrap {
-  flex-flow: wrap;
+    flex-flow: wrap;
 }
 
 .u-txt-truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .banner {
-  background-color: #2b6597;
-  border-bottom: 1px solid #14578f;
-  padding: 20px 15px;
+    background-color: #2b6597;
+    border-bottom: 1px solid #14578f;
+    padding: 20px 15px;
 }
 
 .banner-header {
-  color: #fff;
-  font-size: 2.2rem;
-  margin: 0;
+    color: #fff;
+    font-size: 2.2rem;
+    margin: 0;
+}
+</style>
+
+<style lang="scss" scoped>
+.gradebook-toolbar {
+    display: flex;
+    gap: 20px;
+    margin: 25px 20px 20px;
+
+    .form-control {
+        flex: 1;
+    }
 }
 
-.sticky-table-columns {
-  margin: -10px 20px 20px;
+.gradebook-table-container {
+    margin: -10px 20px 20px;
+}
+
+.gradebook-create-actions {
+    display:flex;
+    gap: 5px;
+    justify-content: flex-end;
+    margin: 0 0 10px;
+
+    .btn {
+        padding: 3px 9px 3px 7px;
+    }
+
+    .fa {
+        color: #406e8e;
+        margin-right: 5px;
+    }
+}
+
+#dropdown-main {
+    flex: 1;
 }
 </style>
 

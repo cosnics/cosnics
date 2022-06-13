@@ -1,44 +1,42 @@
 <template>
-    <div style="position: fixed; top: 0; bottom: 0; left: 0; right: 0;z-index:1;overflow-y: auto;">
-        <div style="margin: 20px auto;max-width: 800px;background: white;border-radius: 3px;box-shadow: 0 6px 12px #999;">
-            <div class="modal-header" style="display: flex; justify-content: space-between">
+    <div class="modal-wrapper">
+        <div class="modal-content">
+            <div class="modal-header">
                 <div>
-                    <input type="text" style="font-size:20px" :value="name" @input="name = $event" autocomplete="off"><!--<h5 style="font-size:20px">{{ gradeBook.getName(itemId) }}</h5>-->
+                    <input type="text" :value="name" @input="name = $event" autocomplete="off">
                     <button class="btn btn-link" @click="showRemoveItemDialog = true">Verwijderen</button>
                 </div>
-                <button class="btn-close" @click="$emit('close')" aria-label="Close" style="margin-left:auto;background:none;border:none;font-size:2rem"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <button class="btn-close" @click="$emit('close')" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <div class="modal-body">
                 <template v-if="column.type !== 'standalone'">
-                    <h5 style="font-size: 20px;color:#487771;font-variant: all-small-caps;padding-bottom: .5rem; border-bottom: 1px dotted #c1d1cf;" v-if="isGrouped">Gegroepeerde scores</h5>
-                    <ul style="margin-bottom: 5px;padding-left: 2rem">
-                        <li v-for="item in groupedItems" :key="item.id" style="margin-bottom: .25rem"><span style="font-size: 16px">{{ item.name }}</span>
+                    <h5 v-if="isGrouped">Gegroepeerde scores</h5>
+                    <ul class="grouped-scores">
+                        <li v-for="item in groupedItems" :key="item.id"><span>{{ item.name }}</span>
                             <div class="score-breadcrumb-trail">{{ item.breadcrumb }}</div>
                         </li>
                     </ul>
-                    <div>
-                        <div style="margin: 0 0 0 2rem">
-                            <button v-if="!(isGrouped || groupButtonPressed)" class="btn btn-default" @click="openGradesDropdown">Scores groeperen</button>
-                            <grades-dropdown id="dropdown-settings" ref="dropdown" v-else :graded-items="gradedItems" @toggle="toggleSubItem"></grades-dropdown>
-                        </div>
+                    <div style="margin: 0 0 0 2rem">
+                        <button v-if="!(isGrouped || groupButtonPressed)" class="btn btn-default" @click="openGradesDropdown">Scores groeperen</button>
+                        <grades-dropdown id="dropdown-settings" ref="dropdown" v-else :graded-items="gradedItems" @toggle="toggleSubItem"></grades-dropdown>
                     </div>
                 </template>
-                <h5 style="font-size: 20px;color:#487771;font-variant: all-small-caps;padding-bottom: .5rem; border-bottom: 1px dotted #c1d1cf;" :style="column.type !== 'standalone' ? 'margin-top: 2rem' : ''">Instellingen</h5>
-                <div style="margin-left: 2rem; margin-bottom: 1.5rem">
+                <h5 :class="{'standalone': column.type === 'standalone'}">Instellingen</h5>
+                <div class="settings">
                     <div>
                         <input type="checkbox" id="countForEndResult" v-model="column.countForEndResult">
-                        <label for="countForEndResult" style="font-weight: 500; color: #245c55;">Meetellen voor eindresultaat</label>
+                        <label class="settings-label" for="countForEndResult">Meetellen voor eindresultaat</label>
                     </div>
                     <div v-if="column.countForEndResult">
-                        <div style="margin-top: 10px">
-                            <label for="weight" style="display:block;font-weight: 500; color: #245c55;">Gewicht:</label>
-                            <div style="position: relative;width:fit-content">
+                        <div class="mt-10">
+                            <label for="weight" class="settings-label" style="display: block;">Gewicht:</label>
+                            <div class="number-input">
                                 <input type="number" id="weight" :value="gradeBook.getWeight(column.id)|formatNum" @input="setWeight" autocomplete="off">
                                 <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                             </div>
                         </div>
-                        <div style="margin-top: 20px">
-                            <label style="font-weight: 500; color: #245c55;">Bij gewettigde afwezigheid:</label>
+                        <div class="mt-20">
+                            <label class="settings-label">Bij gewettigde afwezigheid:</label>
                             <div>
                                 <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model.number="column.authPresenceEndResult">
                                 <label for="gafw-option1">Score niet meetellen voor het eindresultaat</label>
@@ -52,8 +50,8 @@
                                 <label for="gafw-option3">Minimale score (0%) meetellen voor het eindresultaat</label>
                             </div>
                         </div>
-                        <div style="margin-top: 20px">
-                            <label style="font-weight: 500; color: #245c55;">Bij ontbreken van score (zonder gewettigde afwezigheid):</label>
+                        <div class="mt-20">
+                            <label class="settings-label">Bij ontbreken van score (zonder gewettigde afwezigheid):</label>
                             <div>
                                 <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult">
                                 <label for="nogafw-option1">Score niet meetellen voor het eindresultaat</label>
@@ -71,11 +69,11 @@
                 </div>
             </div>
         </div>
-        <div style="position:fixed; top: 0; left: 0; width: 100vw; height: 100vh;background: #000;opacity: .2;z-index:-1" @click="$emit('close')"></div>
-        <div v-if="showRemoveItemDialog" style="position: fixed;inset:0;background: rgba(0, 0, 0, 0.2);z-index:1000;" @click.stop="">
-            <div class="modal-content">
-                <div class="modal-content-title">Score '{{ column.name }}' verwijderen uit overzicht?</div>
-                <div style="display:flex;gap: 10px;margin-top:20px">
+        <div class="modal-overlay" @click="$emit('close')"></div>
+        <div class="modal-remove" v-if="showRemoveItemDialog" @click.stop="">
+            <div class="modal-remove-content">
+                <div>Score '{{ column.name }}' verwijderen uit overzicht?</div>
+                <div class="modal-remove-actions">
                     <button class="btn btn-default btn-sm" @click="removeColumn">Verwijder</button>
                     <button class="btn btn-default btn-sm" @click="cancel">Annuleer</button>
                 </div>
@@ -177,6 +175,14 @@ export default class ItemSettings extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
 input[type="text"], input[type="number"] {
     border: 1px solid #ced4da;min-height: 24px;color: #333;padding: 4px 18px 4px 4px;font-weight: 400;
     border-radius: .2rem;
@@ -184,6 +190,10 @@ input[type="text"], input[type="number"] {
 
 input[type="radio"], input[type="checkbox"] {
     margin-right: 5px;
+}
+
+input[type="text"] {
+    font-size: 20px;
 }
 
 input[type="number"] {
@@ -206,7 +216,93 @@ label {
     font-weight: 400;
 }
 
+h5 {
+    border-bottom: 1px dotted #c1d1cf;
+    color:#487771;
+    font-size: 20px;
+    font-variant: all-small-caps;
+    padding-bottom: .5rem;
+
+    &:not(.standalone) {
+        margin-top: 2rem;
+    }
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    margin-left: auto;
+}
+
+.grouped-scores {
+    margin-bottom: 5px;
+    padding-left: 2rem;
+
+    li {
+        margin-bottom: .25rem;
+
+        > span {
+            font-size: 16px;
+        }
+    }
+}
+
+.settings {
+    margin-bottom: 1.5rem;
+    margin-left: 2rem;
+}
+
+.settings-label {
+    color: #245c55;
+    font-weight: 500;
+}
+
+.modal-wrapper {
+    inset: 0;
+    overflow-y: auto;
+    position: fixed;
+    z-index: 1;
+}
+
 .modal-content {
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0 6px 12px #999;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-overlay {
+    background-color: #000;
+    height: 100vh;
+    left: 0;
+    opacity: .2;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index:-1;
+}
+
+.modal-remove {
+    background-color: rgba(0, 0, 0, 0.2);
+    inset: 0;
+    position: fixed;
+    z-index: 1000;
+}
+
+.modal-remove-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-remove-content {
     align-items: center;
     background-color: #fff;
     border-radius: 3px;
@@ -221,23 +317,29 @@ label {
     width: 420px;
 }
 
+.number-input {
+    position: relative;
+    width: fit-content;
+}
+
 .percent {
-    display: flex;
     align-items: center;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #5b5f64;
-    text-align: center;
-    white-space: nowrap;
     background-color: #e9ecef;
     border-left: 1px solid #ced4da;
-    z-index: 1;
-
+    color: #5b5f64;
+    display: flex;
+    font-size: 1rem;
+    font-weight: 400;
+    inset: 1px 1px 1px auto;
+    line-height: 1.5;
+    padding: 0.375rem 0.75rem;
     position: absolute;
-    top: 1px;
-    right: 1px;
-    bottom: 1px;
+    text-align: center;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+#dropdown-settings {
+    width: 100%;
 }
 </style>

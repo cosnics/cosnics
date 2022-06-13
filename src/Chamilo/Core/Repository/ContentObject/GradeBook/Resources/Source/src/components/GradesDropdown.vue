@@ -1,9 +1,9 @@
 <template>
-    <div class="btn-group" style="flex: 1; width: 100%;" :class="{'open': isOpen}" v-click-outside="close">
+    <div :id="id" class="btn-group" :class="{'open': isOpen}" v-click-outside="close">
         <button aria-haspopup="true" :aria-expanded="isOpen" class="btn dropdown-toggle" title="Scores toevoegen" @click="isOpen = !isOpen">
             <span>Scores toevoegen</span> <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu" style="width: 100%" >
+        <ul class="dropdown-menu">
             <li role="presentation" v-for="(item, index) in gradedItems" :key="`item-${index}`" @click.stop="">
                 <a role="menuitem" href="#" target="_self" class="dropdown-item">
                     <b-form-checkbox :id="`${id}-item-${index}`" :checked="item.checked" :disabled="item.disabled" @change="toggleItem(item, index)" :class="{'is-disabled': item.disabled}">
@@ -13,10 +13,10 @@
                 </a>
             </li>
         </ul>
-        <div v-if="gradeItemToRemove" style="position: fixed;inset:0;background: rgba(0, 0, 0, 0.2);z-index:1000;" @click.stop="">
+        <div v-if="gradeItemToRemove" class="modal-wrapper" @click.stop="">
             <div class="modal-content">
                 <div class="modal-content-title">Score '{{ gradeItemToRemove.name }}' verwijderen uit overzicht?</div>
-                <div style="display:flex;gap: 10px;margin-top:20px">
+                <div class="actions">
                     <button class="btn btn-default btn-sm" @click="remove">Verwijder</button>
                     <button class="btn btn-default btn-sm" @click="cancel">Annuleer</button>
                 </div>
@@ -81,21 +81,27 @@ export default class GradesDropdown extends Vue {
     max-height: 400px;
     overflow-y: auto;
     overflow-x: hidden;
+    width: 100%;
 }
+
 .dropdown-menu >>> input[type=checkbox] {
     float: left;
     margin-right: .5em;
 }
+
 .dropdown-menu >>> label {
     font-weight: 400;
     white-space: normal;
 }
+
 .dropdown-menu >>> .dropdown-item {
     padding: 3px 10px;
 }
+
 .score-breadcrumb-trail {
     font-size: 1.2rem;
 }
+
 .btn.dropdown-toggle {
     align-items: center;
     background-color: #efefef;
@@ -106,6 +112,13 @@ export default class GradesDropdown extends Vue {
 .custom-control.is-disabled {
     color: #999;
     font-style: italic;
+}
+
+.modal-wrapper {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 1000;
 }
 
 .modal-content {
@@ -121,5 +134,11 @@ export default class GradesDropdown extends Vue {
     max-width: 90%;
     padding: 20px;
     width: 420px;
+}
+
+.modal-content .actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
 }
 </style>

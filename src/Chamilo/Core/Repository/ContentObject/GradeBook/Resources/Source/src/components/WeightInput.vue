@@ -1,8 +1,8 @@
 <template>
     <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
         <label for="weight">Gewicht:</label>
-        <div style="position: relative">
-            <input id="weight" ref="weight-input" type="number" :value="itemWeight|formatNum" autocomplete="off" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
+        <div class="weight-input">
+            <input id="weight" class="percent-input" ref="weight-input" type="number" :value="itemWeight|formatNum" autocomplete="off" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
             <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
         </div>
     </highlight-input>
@@ -41,51 +41,54 @@ export default class WeightInput extends Vue {
 </script>
 
 <style lang="scss" scoped>
-input {
-    border: 1px solid #ced4da;min-height: 24px;color: #333;padding: 2px 18px 2px 4px;font-weight: 400;width: 100%;
-    border-radius: .2rem;
+label {
+    font-weight: 500;
+    font-size: 1.25rem;
+    margin-bottom: 0;
+    margin-left: .15rem;
 }
 
-input[type="number"] {
+.weight-input {
+    position: relative;
+}
+
+.percent-input {
+    border: 1px solid #ced4da;
+    border-radius: .2rem;
+    color: #333;
+    font-weight: 400;
+    min-height: 24px;
+    padding: 2px 18px 2px 4px;
+    width: 100%;
+
     -moz-appearance: textfield;
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
-         -webkit-appearance: none;
-         margin: 0;
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    &:focus {
+        outline: 0;
+        border: 1px solid #6ac;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 8px rgba(102, 175, 233, 0.6);
     }
 }
 
 .percent {
-    display: flex;
     align-items: center;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #5b5f64;
-    text-align: center;
-    white-space: nowrap;
     background-color: #e9ecef;
     border-left: 1px solid #ced4da;
-    z-index: 1;
-
+    color: #5b5f64;
+    display: flex;
+    font-size: 1rem;
+    font-weight: 400;
+    inset: 1px 1px 1px auto;
+    line-height: 1.5;
+    padding: 0.375rem 0.75rem;
     position: absolute;
-    top: 1px;
-    bottom: 1px;
-    right: 1px;
-
-}
-
-input:focus {
-    outline: 0;
-    border: 1px solid #6ac;
-    box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
-}
-
-label {
-    font-weight: 500;
-    margin-bottom: 0;
-    font-size: 1.25rem;
-    margin-left: .15rem;
+    text-align: center;
+    white-space: nowrap;
+    z-index: 1;
 }
 </style>

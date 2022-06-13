@@ -225,7 +225,6 @@ input {
 button.btn {
     text-shadow: none;
 }
-
 </style>
 
 

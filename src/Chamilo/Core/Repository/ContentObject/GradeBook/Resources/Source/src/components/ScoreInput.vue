@@ -1,12 +1,12 @@
 <template>
     <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
-        <div style="display: flex; gap: 5px">
-            <div style="display: flex" class="number-input" :class="{'is-selected': type === 'number'}">
-                <input id="score" ref="score-input" type="number" :value="numValue|formatNum" autocomplete="off" @input="type = 'number'" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')" @focus="type = 'number'">
+        <div class="score-input-wrap">
+            <div class="number-input" :class="{'is-selected': type === 'number'}">
+                <input id="score" class="percent-input" ref="score-input" type="number" :value="numValue|formatNum" autocomplete="off" @input="type = 'number'" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')" @focus="type = 'number'">
                 <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
             </div>
-            <button class="color-code deep-orange-500" :class="{'is-selected': type === 'afw'}" style="padding: 2px 4px;line-height:1" @click="setAbsent"><span style="font-variant: all-small-caps">AFW</span></button>
-            <button class="color-code amber-700" :class="{'is-selected': type === 'gafw'}" style="padding: 2px 4px;line-height:1" @click="setAuthAbsent"><span style="font-variant: all-small-caps">GAFW</span></button>
+            <button class="color-code deep-orange-500" :class="{'is-selected': type === 'afw'}" @click="setAbsent"><span>AFW</span></button>
+            <button class="color-code amber-700" :class="{'is-selected': type === 'gafw'}" @click="setAuthAbsent"><span>GAFW</span></button>
         </div>
     </highlight-input>
 </template>
@@ -69,66 +69,59 @@ export default class ScoreInput extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.score-input-wrap {
+    display: flex;
+    gap: 5px;
+}
 
 .number-input {
     opacity: .42;
+    position: relative;
+
+    &.is-selected {
+        opacity: 1;
+    }
 }
 
-.number-input.is-selected {
-    opacity: 1;
-}
-
-input {
-    border: 1px solid #ced4da;min-height: 24px;color: #333;padding: 2px 18px 2px 4px;font-weight: 400;width: 100%;
+.percent-input {
+    border: 1px solid #ced4da;
     border-radius: .2rem;
-}
+    color: #333;
+    font-weight: 400;
+    min-height: 24px;
+    padding: 2px 18px 2px 4px;
+    width: 100%;
 
-input[type="number"] {
     -moz-appearance: textfield;
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
         -webkit-appearance: none;
         margin: 0;
     }
-}
 
-input:focus {
-    outline: 0;
-    border: 1px solid #6ac;
-    box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+    &:focus {
+        outline: 0;
+        border: 1px solid #6ac;
+        box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+    }
 }
 
 .percent {
-    display: flex;
     align-items: center;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #5b5f64;
-    text-align: center;
-    white-space: nowrap;
     background-color: #e9ecef;
     border-left: 1px solid #ced4da;
-    z-index: 1;
-
+    color: #5b5f64;
+    display: flex;
+    font-size: 1rem;
+    font-weight: 400;
+    inset: 1px 1px 1px auto;
+    line-height: 1.5;
+    padding: 0.375rem 0.75rem;
     position: absolute;
-    top: 1px;
-    right: 1px;
-    bottom: 1px;
+    text-align: center;
+    white-space: nowrap;
+    z-index: 1;
 }
-
-label {
-    font-weight: 500;
-    margin-bottom: 0;
-    font-size: 1.25rem;
-    margin-left: .15rem;
-}
-
-/*.btn-afw, .btn-gafw {
-    border: 1px solid transparent;
-    border-radius: .2rem;
-}*/
 
 .color-code {
     background-color: var(--color);
@@ -137,30 +130,31 @@ label {
     color: var(--text-color);
     display: flex;
     justify-content: center;
+    line-height: 1;
+    opacity: .42;
     padding: 2px 4px;
     transition: background 75ms linear,color 75ms linear,opacity 75ms linear;
     width: fit-content;
-    opacity: .42;
-}
 
-.color-code:hover, .color-code:focus {
-    opacity: 1;
-}
+    &:hover, &:focus {
+        opacity: 1;
+    }
 
-.color-code:focus-visible {
-    outline: none;
-}
+    &:focus-visible {
+        outline: none;
+    }
 
-.color-code.is-selected {
-    opacity: 1;
-    box-shadow: 0 0 0 .2rem var(--selected-color)
-}
+    &.is-selected {
+        box-shadow: 0 0 0 .2rem var(--selected-color);
+        opacity: 1;
+    }
 
-.color-code > span {
-    font-size: 14px;
-    font-variant: all-small-caps;
-    font-weight: 900;
-    line-height: 1.1;
+    > span {
+        font-size: 14px;
+        font-variant: all-small-caps;
+        font-weight: 900;
+        line-height: 1.1;
+    }
 }
 
 .deep-orange-500 {
