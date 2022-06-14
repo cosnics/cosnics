@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\Format\Tabs\Form;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
  *
@@ -16,11 +16,11 @@ class FormTabsGenerator
 
     private FormTabGenerator $formTabGenerator;
 
-    private ChamiloRequest $request;
+    private GenericTabsRenderer $genericTabsRenderer;
 
-    public function __construct(ChamiloRequest $request, FormTabGenerator $formTabGenerator)
+    public function __construct(GenericTabsRenderer $genericTabsRenderer, FormTabGenerator $formTabGenerator)
     {
-        $this->request = $request;
+        $this->genericTabsRenderer = $genericTabsRenderer;
         $this->formTabGenerator = $formTabGenerator;
     }
 
@@ -50,7 +50,7 @@ class FormTabsGenerator
 
         if ($tabs->hasMultipleTabs())
         {
-            $form->addElement('html', $this->renderFooter($name, $tabs));
+            $form->addElement('html', $this->getGenericTabsRenderer()->renderFooter($name, $tabs));
         }
     }
 
@@ -59,66 +59,9 @@ class FormTabsGenerator
         return $this->formTabGenerator;
     }
 
-    public function getRequest(): ChamiloRequest
+    public function getGenericTabsRenderer(): GenericTabsRenderer
     {
-        return $this->request;
-    }
-
-    /**
-     * @param string $name
-     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Form\FormTab> $tabs
-     *
-     * @return ?string
-     */
-    protected function getSelectedTab(string $name, TabsCollection $tabs): ?string
-    {
-        $selectedTabs = $this->getRequest()->query->get(self::PARAM_SELECTED_TAB);
-
-        if (is_array($selectedTabs))
-        {
-            $selectedTab = $selectedTabs[$name];
-
-            if (!is_null($selectedTab) && $tabs->isValidIdentifier($selectedTab))
-            {
-                return $selectedTab;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $name
-     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Form\FormTab> $tabs
-     *
-     * @return string
-     */
-    protected function renderFooter(string $name, TabsCollection $tabs): string
-    {
-        $html = [];
-
-        $html[] = '</div>';
-        $html[] = '<script>';
-
-        $html[] = '$(\'#' . $name . 'Tabs a\').click(function (e) {
-    e.preventDefault()
-    $(this).tab(\'show\')
-})';
-
-        $selectedTab = $this->getSelectedTab($name, $tabs);
-
-        if (isset($selectedTab))
-        {
-            $html[] = '$(\'#' . $name . 'Tabs a[href="#' . $name . '-' . $selectedTab . '"]\').tab(\'show\');';
-        }
-        else
-        {
-            $html[] = '$(\'#' . $name . 'Tabs a:first\').tab(\'show\')';
-        }
-
-        $html[] = '</script>';
-
-        return implode(PHP_EOL, $html);
+        return $this->genericTabsRenderer;
     }
 
     /**
@@ -131,20 +74,14 @@ class FormTabsGenerator
     {
         $html = [];
 
-        $html[] = '<div id="' . $name . 'Tabs">';
-
-        // Tab headers
-        $html[] = '<ul class="nav nav-tabs tabs-header dynamic-visual-tabs">';
+        $html[] = $this->getGenericTabsRenderer()->renderHeaderTop($name);
 
         foreach ($tabs as $tab)
         {
             $html[] = $this->getFormTabGenerator()->renderNavigation($name, $tab);
         }
 
-        $html[] = '</ul>';
-        $html[] = '</div>';
-
-        $html[] = '<div id="' . $name . 'TabsContent" class="tab-content dynamic-visual-tab-content">';
+        $html[] = $this->getGenericTabsRenderer()->renderHeaderBottom($name);
 
         return implode(PHP_EOL, $html);
     }

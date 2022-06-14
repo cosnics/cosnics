@@ -50,6 +50,7 @@ class LinkTabsRenderer
 
         $html[] = '</div>';
         $html[] = '</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -72,6 +73,7 @@ class LinkTabsRenderer
 
         $html[] = '</ul>';
         $html[] = '<div class="dynamic-visual-tab-content">';
+        $html[] = '<div class="list-group">';
         $html[] = '<div class="list-group-item">';
 
         return implode(PHP_EOL, $html);

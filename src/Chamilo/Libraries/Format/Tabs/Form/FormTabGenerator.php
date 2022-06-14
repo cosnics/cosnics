@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Tabs\Form;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Tabs\GenericTabRenderer;
 
 /**
  * @package Chamilo\Libraries\Format\Tabs
@@ -9,35 +10,23 @@ use Chamilo\Libraries\Format\Form\FormValidator;
  */
 class FormTabGenerator
 {
+    private GenericTabRenderer $genericTabRenderer;
+
+    public function __construct(GenericTabRenderer $genericTabRenderer)
+    {
+        $this->genericTabRenderer = $genericTabRenderer;
+    }
+
+    public function getGenericTabRenderer(): GenericTabRenderer
+    {
+        return $this->genericTabRenderer;
+    }
 
     public function renderContent(string $formTabsGeneratorName, FormValidator $form, FormTab $tab)
     {
-        $form->addElement('html', $this->renderContentHeader($formTabsGeneratorName, $tab));
+        $form->addElement('html', $this->getGenericTabRenderer()->renderContentHeader($formTabsGeneratorName, $tab));
         $this->renderContentSingleTab($form, $tab);
-        $form->addElement('html', $this->renderContentFooter());
-    }
-
-    protected function renderContentFooter(): string
-    {
-        $html = [];
-
-        $html[] = '<div class="clearfix"></div>';
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    protected function renderContentHeader(string $formTabsGeneratorName, FormTab $tab): string
-    {
-        $html = [];
-
-        $html[] =
-            '<div role="tabpanel" class="tab-pane" id="' . $formTabsGeneratorName . '-' . $tab->getIdentifier() . '">';
-        $html[] = '<div class="list-group-item">';
-
-        return implode(PHP_EOL, $html);
+        $form->addElement('html', $this->getGenericTabRenderer()->renderContentFooter());
     }
 
     public function renderContentSingleTab(FormValidator $form, FormTab $tab)
@@ -54,27 +43,6 @@ class FormTabGenerator
 
     public function renderNavigation(string $formTabsGeneratorName, FormTab $tab): string
     {
-        $html = [];
-        $html[] = '<li>';
-        $html[] =
-            '<a title="' . htmlentities(strip_tags($tab->getLabel())) . '" href="#' . $formTabsGeneratorName . '-' .
-            $tab->getIdentifier() . '">';
-        $html[] = '<span class="category">';
-
-        if ($tab->getInlineGlyph() && $tab->isIconVisible())
-        {
-            $html[] = $tab->getInlineGlyph()->render();
-        }
-
-        if ($tab->getLabel() && $tab->isTextVisible())
-        {
-            $html[] = '<span class="title">' . $tab->getLabel() . '</span>';
-        }
-
-        $html[] = '</span>';
-        $html[] = '</a>';
-        $html[] = '</li>';
-
-        return implode(PHP_EOL, $html);
+        return $this->getGenericTabRenderer()->renderNavigation($formTabsGeneratorName, $tab);
     }
 }

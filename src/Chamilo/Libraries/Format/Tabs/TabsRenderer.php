@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Tabs;
 
-use Chamilo\Libraries\Platform\ChamiloRequest;
-
 /**
  *
  * @package Chamilo\Libraries\Format\Tabs
@@ -16,13 +14,14 @@ class TabsRenderer
 
     private ContentTabRenderer $contentTabRenderer;
 
-    private ChamiloRequest $request;
+    private GenericTabsRenderer $genericTabsRenderer;
 
     public function __construct(
-        ChamiloRequest $request, ContentTabRenderer $contentTabRenderer, ActionsTabRenderer $actionsTabRenderer
+        GenericTabsRenderer $genericTabsRenderer, ContentTabRenderer $contentTabRenderer,
+        ActionsTabRenderer $actionsTabRenderer
     )
     {
-        $this->request = $request;
+        $this->genericTabsRenderer = $genericTabsRenderer;
         $this->contentTabRenderer = $contentTabRenderer;
         $this->actionsTabRenderer = $actionsTabRenderer;
     }
@@ -41,7 +40,6 @@ class TabsRenderer
         {
             $html[] = $this->renderHeader($name, $tabs);
 
-            // Tab content
             foreach ($tabs as $tab)
             {
                 switch (get_class($tab))
@@ -55,7 +53,7 @@ class TabsRenderer
                 }
             }
 
-            $html[] = $this->renderFooter($name, $tabs);
+            $html[] = $this->getGenericTabsRenderer()->renderFooter($name, $tabs);
         }
 
         return implode(PHP_EOL, $html);
@@ -71,66 +69,9 @@ class TabsRenderer
         return $this->contentTabRenderer;
     }
 
-    public function getRequest(): ChamiloRequest
+    public function getGenericTabsRenderer(): GenericTabsRenderer
     {
-        return $this->request;
-    }
-
-    /**
-     * @param string $name
-     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\GenericTab> $tabs
-     *
-     * @return ?string
-     */
-    protected function getSelectedTab(string $name, TabsCollection $tabs): ?string
-    {
-        $selectedTabs = $this->getRequest()->query->get(self::PARAM_SELECTED_TAB);
-
-        if (is_array($selectedTabs))
-        {
-            $selectedTab = $selectedTabs[$name];
-
-            if (!is_null($selectedTab) && $tabs->isValidIdentifier($selectedTab))
-            {
-                return $selectedTab;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $name
-     * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\GenericTab> $tabs
-     *
-     * @return string
-     */
-    public function renderFooter(string $name, TabsCollection $tabs): string
-    {
-        $html = [];
-
-        $html[] = '</div>';
-        $html[] = '<script>';
-
-        $html[] = '$(\'#' . $name . 'Tabs a\').click(function (e) {
-  e.preventDefault()
-  $(this).tab(\'show\')
-})';
-
-        $selectedTab = $this->getSelectedTab($name, $tabs);
-
-        if (isset($selectedTab))
-        {
-            $html[] = '$(\'#' . $name . 'Tabs a[href="#' . $selectedTab . '"]\').tab(\'show\');';
-        }
-        else
-        {
-            $html[] = '$(\'#' . $name . 'Tabs a:first\').tab(\'show\')';
-        }
-
-        $html[] = '</script>';
-
-        return implode(PHP_EOL, $html);
+        return $this->genericTabsRenderer;
     }
 
     /**
@@ -143,10 +84,7 @@ class TabsRenderer
     {
         $html = [];
 
-        $html[] = '<div id="' . $name . 'Tabs">';
-
-        // Tab headers
-        $html[] = '<ul class="nav nav-tabs tabs-header dynamic-visual-tabs">';
+        $html[] = $this->getGenericTabsRenderer()->renderHeaderTop($name);
 
         foreach ($tabs as $tab)
         {
@@ -161,10 +99,7 @@ class TabsRenderer
             }
         }
 
-        $html[] = '</ul>';
-        $html[] = '</div>';
-
-        $html[] = '<div id="' . $name . 'TabsContent" class="tab-content dynamic-visual-tab-content">';
+        $html[] = $this->getGenericTabsRenderer()->renderHeaderBottom($name);
 
         return implode(PHP_EOL, $html);
     }

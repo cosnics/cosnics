@@ -32,14 +32,14 @@ class ActionsTabRenderer
     {
         $html = [];
 
-        $html[] = $this->getTabRenderer()->renderContentHeader($tabsRendererName, $tab);
+        $html[] = $this->getTabRenderer()->renderContentHeaderForList($tabsRendererName, $tab);
 
         foreach ($tab->getActions() as $action)
         {
             $html[] = $this->getActionRenderer()->render($action);
         }
 
-        $html[] = $this->getTabRenderer()->renderContentFooter();
+        $html[] = $this->getTabRenderer()->renderContentFooterForList();
 
         return implode(PHP_EOL, $html);
     }

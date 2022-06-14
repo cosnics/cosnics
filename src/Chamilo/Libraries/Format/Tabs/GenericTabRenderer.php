@@ -11,6 +11,16 @@ class GenericTabRenderer
     {
         $html = [];
 
+        $html[] = '</div>';
+        $html[] = $this->renderContentFooterForList();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderContentFooterForList(): string
+    {
+        $html = [];
+
         $html[] = '<div class="clearfix"></div>';
 
         $html[] = '</div>';
@@ -20,6 +30,16 @@ class GenericTabRenderer
     }
 
     public function renderContentHeader(string $tabsRendererName, GenericTab $tab): string
+    {
+        $html = [];
+
+        $html[] = $this->renderContentHeaderForList($tabsRendererName, $tab);
+        $html[] = '<div class="list-group-item">';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderContentHeaderForList(string $tabsRendererName, GenericTab $tab): string
     {
         $html = [];
 

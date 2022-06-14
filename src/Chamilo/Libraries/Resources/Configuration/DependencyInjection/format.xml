@@ -27,6 +27,7 @@
         <service id="Chamilo\Libraries\Format\Tabs\ActionsTabRenderer"/>
         <service id="Chamilo\Libraries\Format\Tabs\ContentTabRenderer"/>
         <service id="Chamilo\Libraries\Format\Tabs\GenericTabRenderer"/>
+        <service id="Chamilo\Libraries\Format\Tabs\GenericTabsRenderer"/>
         <service id="Chamilo\Libraries\Format\Tabs\TabRenderer"/>
         <service id="Chamilo\Libraries\Format\Tabs\TabsRenderer"/>
     </services>

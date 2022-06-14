@@ -23,6 +23,7 @@ class ContentTabRenderer
     public function renderContent(string $tabsRendererName, ContentTab $tab): string
     {
         $html = [];
+
         $html[] = $this->getGenericTabRenderer()->renderContentHeader($tabsRendererName, $tab);
         $html[] = $tab->getContent();
         $html[] = $this->getGenericTabRenderer()->renderContentFooter();

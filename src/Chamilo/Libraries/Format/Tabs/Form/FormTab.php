@@ -2,14 +2,14 @@
 namespace Chamilo\Libraries\Format\Tabs\Form;
 
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
-use Chamilo\Libraries\Format\Tabs\AbstractTab;
+use Chamilo\Libraries\Format\Tabs\GenericTab;
 
 /**
  *
  * @package Chamilo\Libraries\Format\Tabs
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class FormTab extends AbstractTab
+class FormTab extends GenericTab
 {
 
     /**
