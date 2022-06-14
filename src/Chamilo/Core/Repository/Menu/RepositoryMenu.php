@@ -15,8 +15,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Format\Tabs\TabsRenderer;
+use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -127,7 +126,7 @@ class RepositoryMenu
                         Manager::PARAM_ACTION => Manager::ACTION_QUOTA,
                         Manager::PARAM_CATEGORY_ID => null,
                         \Chamilo\Core\Repository\Quota\Manager::PARAM_ACTION => null,
-                        TabsRenderer::PARAM_SELECTED_TAB => null
+                        GenericTabsRenderer::PARAM_SELECTED_TAB => null
                     ), array(Manager::PARAM_IMPORT_TYPE)
                 )
                 )

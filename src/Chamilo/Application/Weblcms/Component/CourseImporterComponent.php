@@ -8,8 +8,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Format\Tabs\TabsRenderer;
+use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -17,6 +16,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @package application.lib.weblcms.weblcms_manager.component
  */
+
 /**
  * Weblcms component allows the use to import a course
  */
@@ -37,7 +37,7 @@ class CourseImporterComponent extends Manager
             $success = $form->import_courses();
             $this->redirect(
                 Translation::get($success ? 'CsvCoursesProcessed' : 'CsvCoursesNotProcessed') . '<br />' .
-                     $form->get_failed_csv(), !$success
+                $form->get_failed_csv(), !$success
             );
         }
         else
@@ -54,6 +54,33 @@ class CourseImporterComponent extends Manager
         }
     }
 
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        if ($this->get_user()->is_platform_admin())
+        {
+            $redirect = new Redirect(
+                array(
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
+                )
+            );
+            $breadcrumbtrail->add(
+                new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin'))
+            );
+
+            $redirect = new Redirect(
+                array(
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
+                    GenericTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
+                        self::package()
+                    )
+                )
+            );
+            $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Courses')));
+        }
+    }
+
     public function display_extra_information()
     {
         $html = [];
@@ -67,34 +94,13 @@ class CourseImporterComponent extends Manager
         $html[] = '<p>' . Translation::get('Details') . '</p>';
         $html[] = '<blockquote>';
         $html[] = '<u><b>Action</u></b>'; // NO translation! This field is
-                                          // always plain 'action' in each CSV,
-                                          // regardless the language!
+        // always plain 'action' in each CSV,
+        // regardless the language!
         $html[] = '<br />A: ' . Translation::get('Add', null, StringUtilities::LIBRARIES);
         $html[] = '<br />U: ' . Translation::get('Update', null, StringUtilities::LIBRARIES);
         $html[] = '<br />D: ' . Translation::get('Delete', null, StringUtilities::LIBRARIES);
         $html[] = '</blockquote>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        if ($this->get_user()->is_platform_admin())
-        {
-            $redirect = new Redirect(
-                array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
-                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER));
-            $breadcrumbtrail->add(
-                new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin')));
-
-            $redirect = new Redirect(
-                array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
-                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
-                    TabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
-                        self::package())));
-            $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Courses')));
-        }
     }
 }

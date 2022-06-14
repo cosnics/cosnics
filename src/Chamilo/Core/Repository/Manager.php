@@ -28,6 +28,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -329,7 +330,7 @@ abstract class Manager extends Application
      */
     private function get_category_menu($force_search = false)
     {
-        $this->set_parameter(TabsRenderer::PARAM_SELECTED_TAB, array(self::TABS_FILTER => self::TAB_CATEGORY));
+        $this->set_parameter(GenericTabsRenderer::PARAM_SELECTED_TAB, array(self::TABS_FILTER => self::TAB_CATEGORY));
 
         if (!isset($this->category_menu))
         {
@@ -660,7 +661,7 @@ abstract class Manager extends Application
             FilterData::getInstance($this->getWorkspace()), $this->getWorkspace(), $this->get_user_id(),
             $this->get_allowed_content_object_types(), $this->get_url(
             array(
-                TabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_SEARCH),
+                GenericTabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_SEARCH),
                 self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS
             ), array(self::PARAM_CATEGORY_ID)
         )
@@ -680,13 +681,13 @@ abstract class Manager extends Application
         $object_type = new ObjectTypeMenu(
             $this, $selected_type, $this->get_url(
             array(
-                TabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
+                GenericTabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
                 FilterData::FILTER_TYPE => '__SELECTION__',
                 Application::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS
             ), array(self::PARAM_CATEGORY_ID, self::PARAM_CONTENT_OBJECT_ID)
         ), $selected_category, $this->get_url(
             array(
-                TabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
+                GenericTabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
                 FilterData::FILTER_TYPE => '__CATEGORY__',
                 Application::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS
             ), array(self::PARAM_CATEGORY_ID, self::PARAM_CONTENT_OBJECT_ID)
@@ -706,7 +707,7 @@ abstract class Manager extends Application
             $this, $current_user_view_id, $this->get_url(
             array(
                 FilterData::FILTER_USER_VIEW => '__VIEW__',
-                TabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_USERVIEW)
+                GenericTabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_USERVIEW)
             )
         )
         );
@@ -836,7 +837,7 @@ abstract class Manager extends Application
     public function set_optional_parameters()
     {
         $this->set_parameter(
-            TabsRenderer::PARAM_SELECTED_TAB, Request::get(TabsRenderer::PARAM_SELECTED_TAB)
+            GenericTabsRenderer::PARAM_SELECTED_TAB, Request::get(GenericTabsRenderer::PARAM_SELECTED_TAB)
         );
     }
 }

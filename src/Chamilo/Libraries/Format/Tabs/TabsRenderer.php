@@ -8,8 +8,6 @@ namespace Chamilo\Libraries\Format\Tabs;
  */
 class TabsRenderer
 {
-    public const PARAM_SELECTED_TAB = 'tab';
-
     private ActionsTabRenderer $actionsTabRenderer;
 
     private ContentTabRenderer $contentTabRenderer;

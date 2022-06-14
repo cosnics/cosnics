@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\ActionsTab;
+use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -47,7 +48,7 @@ class ImporterComponent extends Manager
         );
 
         $breadcrumbtrail->add(
-            new Breadcrumb($this->get_url(array(TabsRenderer::PARAM_SELECTED_TAB => $this->tab)), $tab_name)
+            new Breadcrumb($this->get_url(array(GenericTabsRenderer::PARAM_SELECTED_TAB => $this->tab)), $tab_name)
         );
 
         $html = [];

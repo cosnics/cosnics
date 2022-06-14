@@ -32,8 +32,8 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
+use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -133,7 +133,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // EXTERNAL INSTANCES
         if ($contentObject->is_external())
         {
-            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = 'external_instances';
+            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = 'external_instances';
             $browser = new ExternalLinkTable($this);
             $tabs->add(
                 new ContentTab(
@@ -146,7 +146,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // LINKS | PUBLICATIONS
         if ($contentObject->has_publications())
         {
-            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_PUBLICATIONS;
+            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_PUBLICATIONS;
             $browser = new LinkTable($this, LinkTable::TYPE_PUBLICATIONS);
             $tabs->add(
                 new ContentTab(
@@ -165,7 +165,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             {
                 $tabName = 'shared_in';
 
-                $parameters[TabsRenderer::PARAM_SELECTED_TAB] = $tabName;
+                $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = $tabName;
 
                 $browser = new SharedInTable($this);
 
@@ -181,7 +181,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // LINKS | PARENTS
         if ($contentObject->has_parents())
         {
-            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_PARENTS;
+            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_PARENTS;
             $browser = new LinkTable($this, LinkTable::TYPE_PARENTS);
             $tabs->add(
                 new ContentTab(
@@ -194,7 +194,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // LINKS | CHILDREN
         if ($contentObject->has_children())
         {
-            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_CHILDREN;
+            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_CHILDREN;
             $browser = new LinkTable($this, LinkTable::TYPE_CHILDREN);
             $tabs->add(
                 new ContentTab(
@@ -207,7 +207,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // LINKS | ATTACHED TO
         if ($contentObject->has_attachers())
         {
-            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_ATTACHED_TO;
+            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_ATTACHED_TO;
             $browser = new LinkTable($this, LinkTable::TYPE_ATTACHED_TO);
             $tabs->add(
                 new ContentTab(
@@ -220,7 +220,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // LINKS | ATTACHES
         if ($contentObject->has_attachments())
         {
-            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_ATTACHES;
+            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_ATTACHES;
             $browser = new LinkTable($this, LinkTable::TYPE_ATTACHES);
             $tabs->add(
                 new ContentTab(
@@ -233,7 +233,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // LINKS | INCLUDED IN
         if ($contentObject->has_includers())
         {
-            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_INCLUDED_IN;
+            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_INCLUDED_IN;
             $browser = new LinkTable($this, LinkTable::TYPE_INCLUDED_IN);
             $tabs->add(
                 new ContentTab(
@@ -246,7 +246,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         // LINKS | INCLUDES
         if ($contentObject->has_includes())
         {
-            $parameters[TabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_INCLUDES;
+            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_INCLUDES;
             $browser = new LinkTable($this, LinkTable::TYPE_INCLUDES);
             $tabs->add(
                 new ContentTab(

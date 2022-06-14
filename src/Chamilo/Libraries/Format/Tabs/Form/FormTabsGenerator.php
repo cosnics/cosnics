@@ -12,8 +12,6 @@ use Chamilo\Libraries\Format\Tabs\TabsCollection;
  */
 class FormTabsGenerator
 {
-    public const PARAM_SELECTED_TAB = 'tab';
-
     private FormTabGenerator $formTabGenerator;
 
     private GenericTabsRenderer $genericTabsRenderer;

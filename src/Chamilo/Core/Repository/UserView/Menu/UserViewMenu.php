@@ -13,8 +13,7 @@ use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Format\Tabs\TabsRenderer;
+use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -33,11 +32,10 @@ class UserViewMenu extends HtmlMenu
     const TREE_NAME = __CLASS__;
 
     /**
-     * The string passed to sprintf() to format category URLs
      *
-     * @var string
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
-    private $url_format;
+    private $application;
 
     /**
      * The array renderer used to determine the breadcrumbs.
@@ -47,10 +45,11 @@ class UserViewMenu extends HtmlMenu
     private $array_renderer;
 
     /**
+     * The string passed to sprintf() to format category URLs
      *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
+     * @var string
      */
-    private $application;
+    private $url_format;
 
     /**
      *
@@ -118,9 +117,10 @@ class UserViewMenu extends HtmlMenu
         $userview['url'] = $this->application->get_url(
             array(
                 \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_USER_VIEW,
-                TabsRenderer::PARAM_SELECTED_TAB => array(
+                GenericTabsRenderer::PARAM_SELECTED_TAB => array(
                     \Chamilo\Core\Repository\Manager::TABS_FILTER => \Chamilo\Core\Repository\Manager::TAB_USERVIEW
-                ), Manager::PARAM_ACTION => Manager::ACTION_BROWSE
+                ),
+                Manager::PARAM_ACTION => Manager::ACTION_BROWSE
             ), array(\Chamilo\Core\Repository\Manager::PARAM_CATEGORY_ID)
         );
 
@@ -128,7 +128,7 @@ class UserViewMenu extends HtmlMenu
         $userview['class'] = $glyph->getClassNamesString();
         $menu[] = $userview;
 
-        foreach($userviews as $userview)
+        foreach ($userviews as $userview)
         {
             $menu_item = [];
             $menu_item['title'] = $userview->get_name();

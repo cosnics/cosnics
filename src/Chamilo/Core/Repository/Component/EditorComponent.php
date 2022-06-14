@@ -16,8 +16,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Format\Tabs\TabsRenderer;
+use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
@@ -118,7 +117,7 @@ class EditorComponent extends Manager implements DelegateComponent
                     {
                         $parameters[Application::PARAM_ACTION] = self::ACTION_EDIT_CONTENT_OBJECTS;
                         $parameters[self::PARAM_CONTENT_OBJECT_ID] = $object->get_id();
-                        $parameters[TabsRenderer::PARAM_SELECTED_TAB] = array(
+                        $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = array(
                             self::TABS_CONTENT_OBJECT => $form->getSelectedTabIdentifier()
                         );
 
@@ -126,9 +125,9 @@ class EditorComponent extends Manager implements DelegateComponent
                     }
                     else
                     {
-                        $selectedTabs = $parameters[TabsRenderer::PARAM_SELECTED_TAB];
+                        $selectedTabs = $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB];
                         unset($selectedTabs[self::TABS_CONTENT_OBJECT]);
-                        $parameters[TabsRenderer::PARAM_SELECTED_TAB] = $selectedTabs;
+                        $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = $selectedTabs;
                     }
                 }
 
