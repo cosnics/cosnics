@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Libraries\Architecture\Application\Application;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Structure
@@ -11,64 +13,31 @@ namespace Chamilo\Libraries\Format\Structure;
 abstract class BaseFooter implements FooterInterface
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    private $application;
+    private Application $application;
 
-    /**
-     *
-     * @var integer
-     */
-    private $viewMode;
+    private string $containerMode;
 
-    /**
-     *
-     * @var string
-     */
-    private $containerMode;
+    private int $viewMode;
 
-    /**
-     *
-     * @param integer $viewMode
-     * @param string $containerMode
-     */
-    public function __construct($viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid')
+    public function __construct(int $viewMode = Page::VIEW_MODE_FULL, string $containerMode = 'container-fluid')
     {
         $this->viewMode = $viewMode;
         $this->containerMode = $containerMode;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Structure\FooterInterface::render()
-     */
-    abstract public function render();
+    abstract public function render(): string;
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function getApplication()
+    public function getApplication(): Application
     {
         return $this->application;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication($application)
+    public function setApplication(Application $application)
     {
         $this->application = $application;
     }
 
-    /**
-     *
-     * @return string
-     */
-    protected function getContainerFooter()
+    protected function getContainerFooter(): string
     {
         $html = [];
 
@@ -82,11 +51,7 @@ abstract class BaseFooter implements FooterInterface
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @return string
-     */
-    protected function getContainerHeader()
+    protected function getContainerHeader(): string
     {
         $html = [];
 
@@ -98,20 +63,12 @@ abstract class BaseFooter implements FooterInterface
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getContainerMode()
+    public function getContainerMode(): string
     {
         return $this->containerMode;
     }
 
-    /**
-     *
-     * @param string $containerMode
-     */
-    public function setContainerMode($containerMode)
+    public function setContainerMode(string $containerMode)
     {
         $this->containerMode = $containerMode;
     }
@@ -120,7 +77,7 @@ abstract class BaseFooter implements FooterInterface
      *
      * @return string
      */
-    protected function getFooter()
+    protected function getFooter(): string
     {
         $html = [];
 
@@ -130,11 +87,7 @@ abstract class BaseFooter implements FooterInterface
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @return string
-     */
-    protected function getHeader()
+    protected function getHeader(): string
     {
         $html = [];
 
@@ -143,30 +96,20 @@ abstract class BaseFooter implements FooterInterface
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getViewMode()
+    public function getViewMode(): int
     {
         return $this->viewMode;
     }
 
-    /**
-     *
-     * @param integer $viewMode
-     */
-    public function setViewMode($viewMode)
+    public function setViewMode(int $viewMode)
     {
         $this->viewMode = $viewMode;
     }
 
     /**
-     *
-     * @return string
-     * @deprecated Use render() now
+     * @deprecated Use BaseFooter::render() now
      */
-    public function toHtml()
+    public function toHtml(): string
     {
         return $this->render();
     }

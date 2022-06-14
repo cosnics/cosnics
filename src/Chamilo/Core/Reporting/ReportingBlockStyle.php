@@ -61,4 +61,3 @@ class ReportingBlockStyle
         $this->titleFont = ReportingTemplateStyle::parseFont($font);
     }
 }
-?>

@@ -17,17 +17,8 @@ class ProgressBarRenderer
     const MODE_SUCCESS = 'success';
     const MODE_WARNING = 'warning';
 
-    /**
-     * Renders a progressbar for a given percentage
-     *
-     * @param integer $progress - progress between 0 and 100
-     * @param string $mode
-     * @param integer $maxWidth
-     * @param boolean $striped
-     *
-     * @return string
-     */
-    public function render($progress, $mode = self::MODE_DEFAULT, $maxWidth = 150, $striped = false)
+    public function render(int $progress, string $mode = self::MODE_DEFAULT, int $maxWidth = 150, bool $striped = false
+    ): string
     {
         $this->validateProgress($progress);
         $this->validateMode($mode);
@@ -54,21 +45,17 @@ class ProgressBarRenderer
     }
 
     /**
-     * Returns a list of the allowed modes
-     *
      * @return string[]
      */
-    protected function getAllowedModes()
+    protected function getAllowedModes(): array
     {
         return array(self::MODE_DEFAULT, self::MODE_SUCCESS, self::MODE_INFO, self::MODE_WARNING, self::MODE_DANGER);
     }
 
     /**
-     * Validates the mode of the progress bar
-     *
-     * @param string $mode
+     * @throws InvalidArgumentException
      */
-    protected function validateMode($mode = self::MODE_DEFAULT)
+    protected function validateMode(string $mode = self::MODE_DEFAULT)
     {
         if (!in_array($mode, $this->getAllowedModes()))
         {
@@ -82,13 +69,11 @@ class ProgressBarRenderer
     }
 
     /**
-     * Validates the progress parameter
-     *
-     * @param integer $progress
+     * @throws InvalidArgumentException
      */
-    protected function validateProgress($progress)
+    protected function validateProgress(int $progress)
     {
-        if (!is_int($progress) || $progress < 0 || $progress > 100)
+        if ($progress < 0 || $progress > 100)
         {
             throw new InvalidArgumentException(
                 'The given progress must be a valid integer and must be between 0 and 100'

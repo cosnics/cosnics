@@ -111,4 +111,3 @@ class ReportingDataStyle
         $this->relativeWidth = $relativeWidth;
     }
 }
-?>

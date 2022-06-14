@@ -34,7 +34,6 @@ class ImporterComponent extends Manager
         $this->checkAuthorization(Manager::context(), 'ManageChamilo');
 
         $breadcrumbtrail = BreadcrumbTrail::getInstance();
-        $breadcrumbtrail->add_help('administration general');
 
         $this->tab = Request::get(self::PARAM_TAB);
 
@@ -60,11 +59,6 @@ class ImporterComponent extends Manager
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('admin_importer');
     }
 
     protected function getTabsRenderer(): TabsRenderer

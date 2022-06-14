@@ -275,5 +275,3 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         return $this->table_type;
     }
 }
-
-?>

@@ -10,114 +10,78 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 class Breadcrumb
 {
 
-    /**
-     *
-     * @var string
-     */
-    private $url;
+    private ?InlineGlyph $inlineGlyph;
 
-    /**
-     *
-     * @var string
-     */
-    private $name;
+    private string $name;
 
-    /**
-     *
-     * @var string
-     */
-    private $image;
+    private ?string $url;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
-     */
-    private $inlineGlyph;
-
-    /**
-     *
-     * @param string $url
-     * @param string $name
-     * @param string $image
-     * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $inlineGlyph
-     */
-    public function __construct($url, $name, $image = null, InlineGlyph $inlineGlyph = null)
+    public function __construct(?string $url = null, string $name, ?InlineGlyph $inlineGlyph = null)
     {
         $this->url = $url;
         $this->name = $name;
-        $this->image = $image;
         $this->inlineGlyph = $inlineGlyph;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     *
-     * @param string $image
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
-     */
-    public function getInlineGlyph()
+    public function getInlineGlyph(): ?InlineGlyph
     {
         return $this->inlineGlyph;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $inlineGlyph
-     */
-    public function setInlineGlyph(InlineGlyph $inlineGlyph = null)
+    public function setInlineGlyph(?InlineGlyph $inlineGlyph)
     {
         $this->inlineGlyph = $inlineGlyph;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_name()
-    {
-        return $this->name;
-    }
-
-    /**
-     *
-     * @param string $name
-     */
-    public function set_name($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_url()
+    public function getUrl(): ?string
     {
         return $this->url;
     }
 
     /**
-     *
-     * @param string $url
+     * @deprecated Use Breadcrumb::getUrl() now
      */
-    public function set_url($url)
+    public function get_url(): ?string
+    {
+        return $this->getUrl();
+    }
+
+    public function setUrl(?string $url)
     {
         $this->url = $url;
+    }
+
+    /**
+     * @deprecated Use Breadcrumb::setUrl() now
+     */
+    public function set_url(?string $url)
+    {
+        $this->setUrl($url);
+    }
+
+    /**
+     * @deprecated Use Breadcrumb::getName() now
+     */
+    public function get_name(): string
+    {
+        return $this->getName();
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @deprecated Use Breadcrumb::setName() now
+     */
+    public function set_name(string $name)
+    {
+        $this->setName($name);
+    }
+
+    public function setName(string $name)
+    {
+        $this->name = $name;
     }
 }

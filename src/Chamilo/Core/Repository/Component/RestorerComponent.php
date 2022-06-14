@@ -161,6 +161,5 @@ class RestorerComponent extends Manager
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS)),
                 Translation::get('RepositoryManagerRecycleBinBrowserComponent')));
-        $breadcrumbtrail->add_help('repository_restorer');
     }
 }

@@ -71,6 +71,5 @@ class UpdaterComponent extends Manager
             new Breadcrumb(
                 $this->get_url(array(Application::PARAM_ACTION => Manager::ACTION_BROWSE_HELP_ITEMS)),
                 Translation::get('HelpManagerBrowserComponent')));
-        $breadcrumbtrail->add_help('help_updater');
     }
 }

@@ -63,9 +63,4 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
             $object->send_as_download();
         }
     }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repository_document_downloader');
-    }
 }

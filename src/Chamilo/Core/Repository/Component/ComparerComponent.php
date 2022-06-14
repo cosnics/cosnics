@@ -110,8 +110,6 @@ class ComparerComponent extends Manager
                 ), Translation::get('ViewContentObject', array('CONTENT_OBJECT' => $baseContentObject->get_title()))
             )
         );
-
-        $breadcrumbtrail->add_help('repository_comparer');
     }
 
     /**

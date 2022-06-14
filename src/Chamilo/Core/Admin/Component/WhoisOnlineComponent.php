@@ -149,9 +149,4 @@ class WhoisOnlineComponent extends Manager implements TableSupport
 
         return implode(PHP_EOL, $html);
     }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('admin_whois_online');
-    }
 }

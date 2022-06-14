@@ -203,7 +203,7 @@ class ApplicationFactory
     )
     {
         $application = $this->createApplication($context, $applicationConfiguration, $fallBackAction);
-        $application->get_breadcrumb_generator()->generate_breadcrumbs();
+        $application->get_breadcrumb_generator()->generateBreadcrumbs();
 
         return $application;
     }

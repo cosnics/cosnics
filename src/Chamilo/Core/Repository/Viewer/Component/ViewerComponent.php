@@ -84,7 +84,6 @@ class ViewerComponent extends Manager
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $breadcrumbtrail->add_help('repo_viewer_viewer');
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSER)), Translation::get('BrowserComponent')

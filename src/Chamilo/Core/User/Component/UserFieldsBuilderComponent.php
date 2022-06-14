@@ -32,9 +32,4 @@ class UserFieldsBuilderComponent extends Manager
 
         return $application->run();
     }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('user_fields_builder');
-    }
 }

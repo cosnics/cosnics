@@ -161,9 +161,4 @@ class EditorComponent extends Manager implements DelegateComponent
             );
         }
     }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repository_editor');
-    }
 }

@@ -83,11 +83,6 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
         }
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repo_viewer_viewer');
-    }
-
     public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_EDIT_ID;

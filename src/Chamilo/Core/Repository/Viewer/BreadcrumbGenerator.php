@@ -19,21 +19,21 @@ class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\Breadcrumb
      * 
      * @var Manager
      */
-    protected $component;
+    protected $application;
 
     /**
      * Generates the breadcrumb for the component name
      */
     protected function generate_component_breadcrumb()
     {
-        if ($this->component->areBreadcrumbsDisabled())
+        if ($this->application->areBreadcrumbsDisabled())
         {
             return;
         }
         
-        $variable = ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_class($this->component));
+        $variable = ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_class($this->application));
         
-        $this->breadcrumb_trail->add(
-            new Breadcrumb($this->component->get_url(), Translation::get($variable, null, $this->component->package())));
+        $this->breadcrumbTrail->add(
+            new Breadcrumb($this->application->get_url(), Translation::get($variable, null, $this->application->package())));
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -15,51 +16,20 @@ class Page
     const VIEW_MODE_FULL = 1;
     const VIEW_MODE_HEADERLESS = 2;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\Page
-     */
-    protected static $instance = null;
+    protected static ?Page $instance = null;
 
-    /**
-     *
-     * @var integer
-     */
-    private $viewMode;
+    private Application $application;
 
-    /**
-     *
-     * @var string
-     */
-    private $containerMode;
+    private string $containerMode;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\HeaderInterface
-     */
-    private $header;
+    private FooterInterface $footer;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\FooterInterface
-     */
-    private $footer;
+    private HeaderInterface $header;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    private $application;
+    private int $viewMode;
 
-    /**
-     *
-     * @param integer $viewMode
-     * @param string $containerMode
-     * @param \Chamilo\Libraries\Format\Structure\HeaderInterface $header
-     * @param \Chamilo\Libraries\Format\Structure\FooterInterface $footer
-     */
     public function __construct(
-        $viewMode = self::VIEW_MODE_FULL, $containerMode = 'container-fluid', HeaderInterface $header,
+        int $viewMode = self::VIEW_MODE_FULL, string $containerMode = 'container-fluid', HeaderInterface $header,
         FooterInterface $footer
     )
     {
@@ -69,40 +39,24 @@ class Page
         $this->footer = $footer;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function getApplication()
+    public function getApplication(): Application
     {
         return $this->application;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication($application)
+    public function setApplication(Application $application)
     {
         $this->application = $application;
 
         $this->getHeader()->setApplication($this->application);
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getContainerMode()
+    public function getContainerMode(): string
     {
         return $this->containerMode;
     }
 
-    /**
-     *
-     * @param string $containerMode
-     */
-    public function setContainerMode($containerMode)
+    public function setContainerMode(string $containerMode)
     {
         $this->containerMode = $containerMode;
 
@@ -110,48 +64,27 @@ class Page
         $this->getFooter()->setContainerMode($this->containerMode);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\FooterInterface
-     */
-    public function getFooter()
+    public function getFooter(): FooterInterface
     {
         return $this->footer;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\FooterInterface $footer
-     */
-    public function setFooter($footer)
+    public function setFooter(FooterInterface $footer)
     {
         $this->footer = $footer;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\HeaderInterface
-     */
-    public function getHeader()
+    public function getHeader(): HeaderInterface
     {
         return $this->header;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\HeaderInterface $header
-     */
-    public function setHeader($header)
+    public function setHeader(HeaderInterface $header)
     {
         $this->header = $header;
     }
-
-    /**
-     * Return 'this' as singleton
-     *
-     * @return \Chamilo\Libraries\Format\Structure\Page
-     */
-    static public function getInstance()
+    
+    static public function getInstance(): Page
     {
         if (is_null(static::$instance))
         {
@@ -166,20 +99,12 @@ class Page
         return static::$instance;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getViewMode()
+    public function getViewMode(): int
     {
         return $this->viewMode;
     }
 
-    /**
-     *
-     * @param integer $viewMode
-     */
-    public function setViewMode($viewMode)
+    public function setViewMode(int $viewMode)
     {
         $this->viewMode = $viewMode;
 
@@ -187,29 +112,17 @@ class Page
         $this->getFooter()->setViewMode($this->viewMode);
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function isFullPage()
+    public function isFullPage(): bool
     {
         return $this->getViewMode() == self::VIEW_MODE_FULL;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function isHeaderless()
+    public function isHeaderless(): bool
     {
         return $this->getViewMode() == self::VIEW_MODE_HEADERLESS;
     }
 
-    /**
-     *
-     * @param string $title
-     */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->getHeader()->setTitle($title);
     }

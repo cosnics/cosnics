@@ -107,7 +107,6 @@ class UserDetailComponent extends Manager
                 Translation::get('AdminUserBrowserComponent')
             )
         );
-        $breadcrumbtrail->add_help('user_detail');
     }
 
     public function display_additional_information($user_id)

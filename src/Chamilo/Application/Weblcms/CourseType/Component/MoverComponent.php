@@ -71,7 +71,6 @@ class MoverComponent extends Manager
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $breadcrumbtrail->add_help('weblcms_course_type_activation_changer');
         $breadcrumbtrail->add(
             new Breadcrumb($this->get_browse_course_type_url(), Translation::get('CourseTypeManagerBrowseComponent')));
     }

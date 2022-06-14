@@ -115,11 +115,6 @@ class BrowserComponent extends Manager implements TableSupport
      * Inherited
      */
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repo_viewer_browser');
-    }
-
     public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PROPERTY_CATEGORY;

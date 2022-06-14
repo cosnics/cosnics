@@ -62,11 +62,6 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('user_browser');
-    }
-
     public function getButtonToolbarRenderer()
     {
         if (!isset($this->buttonToolbarRenderer))

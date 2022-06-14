@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Libraries\Architecture\Application\Application;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Structure
@@ -10,38 +12,15 @@ namespace Chamilo\Libraries\Format\Structure;
 interface HeaderInterface
 {
 
-    /**
-     *
-     * @return string
-     */
-    public function render();
+    public function render(): string;
 
-    /**
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication($application);
+    public function setApplication(Application $application);
 
-    /**
-     *
-     * @param string $containerMode
-     */
-    public function setContainerMode($containerMode);
+    public function setContainerMode(string $containerMode);
 
-    /**
-     *
-     * @param string $textDirection
-     */
-    public function setTextDirection($textDirection);
+    public function setTextDirection(string $textDirection);
 
-    /**
-     *
-     * @param string $title
-     */
-    public function setTitle($title);
+    public function setTitle(string $title);
 
-    /**
-     *
-     * @param string $viewMode
-     */
-    public function setViewMode($viewMode);
+    public function setViewMode(int $viewMode);
 }

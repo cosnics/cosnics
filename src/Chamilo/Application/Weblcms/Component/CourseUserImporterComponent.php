@@ -98,7 +98,5 @@ class CourseUserImporterComponent extends Manager
                 new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin'))
             );
         }
-
-        $breadcrumbtrail->add_help('weblcms_course_user_importer');
     }
 }

@@ -22,22 +22,13 @@ class Footer extends BaseFooter
 {
     use DependencyInjectionContainerTrait;
 
-    /**
-     *
-     * @param integer $viewMode
-     * @param string $containerMode
-     */
-    public function __construct($viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid')
+    public function __construct(int $viewMode = Page::VIEW_MODE_FULL, string $containerMode = 'container-fluid')
     {
         parent::__construct($viewMode, $containerMode);
         $this->initializeContainer();
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Structure\BaseFooter::render()
-     */
-    public function render()
+    public function render(): string
     {
         $html = [];
 
@@ -57,10 +48,10 @@ class Footer extends BaseFooter
     }
 
     /**
-     *
      * @return string[]
+     * @throws \ReflectionException
      */
-    protected function getLinks()
+    protected function getLinks(): array
     {
         $showAdministratorData = Configuration::get('Chamilo\Core\Admin', 'show_administrator_data');
         $showVersionData = Configuration::get('Chamilo\Core\Admin', 'show_version_data');

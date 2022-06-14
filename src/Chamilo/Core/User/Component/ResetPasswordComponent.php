@@ -175,11 +175,6 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
         return implode(PHP_EOL, $html);
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('user_password_resetter');
-    }
-
     /**
      * Creates a new random password for the given user and sends an email to this user with the new password.
      *

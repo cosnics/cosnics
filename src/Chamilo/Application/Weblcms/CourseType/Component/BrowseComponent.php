@@ -52,18 +52,6 @@ class BrowseComponent extends Manager implements TableSupport
     }
 
     /**
-     * Breadcrumbs are built semi automatically with the given application, subapplication, component...
-     * Use this
-     * function to add other breadcrumbs between the application / subapplication and the current component
-     *
-     * @param $breadcrumbtrail \libraries\format\BreadcrumbTrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('weblcms_course_type_browser');
-    }
-
-    /**
      * **************************************************************************************************************
      * Helper Functionality *
      * **************************************************************************************************************

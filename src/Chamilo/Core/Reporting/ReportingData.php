@@ -410,5 +410,3 @@ class ReportingData
         $this->show_row_heading = true;
     }
 }
-
-?>

@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Libraries\Architecture\Application\Application;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Structure
@@ -10,26 +12,11 @@ namespace Chamilo\Libraries\Format\Structure;
 interface FooterInterface
 {
 
-    /**
-     *
-     * @return string
-     */
-    public function render();
+    public function render(): string;
 
-    /**
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication($application);
+    public function setApplication(Application $application);
 
-    /**
-     *
-     * @param string $containerMode
-     */
-    public function setContainerMode($containerMode);
+    public function setContainerMode(string $containerMode);
 
-    /**
-     *
-     * @param string $viewMode
-     */
-    public function setViewMode($viewMode);
+    public function setViewMode(int $viewMode);
 }

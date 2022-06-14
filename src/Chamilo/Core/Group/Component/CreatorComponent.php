@@ -83,6 +83,5 @@ class CreatorComponent extends Manager
             new Breadcrumb(
                 $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)),
                 Translation::get('BrowserComponent')));
-        $breadcrumbtrail->add_help('group general');
     }
 }

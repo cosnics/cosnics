@@ -35,4 +35,3 @@ class BrowserComponent extends Manager implements TableSupport
         // TODO Auto-generated method stub
     }
 }
-?>

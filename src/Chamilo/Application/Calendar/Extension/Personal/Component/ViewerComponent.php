@@ -61,13 +61,6 @@ class ViewerComponent extends Manager implements DelegateComponent
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('personal_calendar_viewer');
-    }
 
     /**
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer

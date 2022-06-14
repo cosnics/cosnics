@@ -265,6 +265,5 @@ class LinkDeleterComponent extends Manager
                 Translation::get('RepositoryManagerViewerComponent')
             )
         );
-        $breadcrumbtrail->add_help('repository_link_deleter');
     }
 }

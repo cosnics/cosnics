@@ -16,7 +16,6 @@ class Header extends BaseHeader
 {
 
     /**
-     * Adds some default headers to the output
      * @throws \Exception
      */
     protected function addDefaultHeaders()

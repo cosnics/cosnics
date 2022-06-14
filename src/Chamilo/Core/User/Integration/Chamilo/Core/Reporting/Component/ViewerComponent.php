@@ -63,8 +63,5 @@ class ViewerComponent extends Manager
                 ), Translation::get('AdminUserBrowserComponent')
             )
         );
-        $breadcrumbtrail->add_help('user_reporting');
     }
 }
-
-?>

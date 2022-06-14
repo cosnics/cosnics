@@ -50,4 +50,3 @@ class BrowserComponent extends Manager
         return array($title_url, $description);
     }
 }
-?>

@@ -172,11 +172,6 @@ class ExporterComponent extends Manager
         }
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repository_exporter');
-    }
-
     private function export_table($content_object_ids)
     {
         $condition = new InCondition(

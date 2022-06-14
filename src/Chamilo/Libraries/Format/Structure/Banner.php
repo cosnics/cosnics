@@ -20,31 +20,14 @@ class Banner
 {
     use DependencyInjectionContainerTrait;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    private $application;
+    private Application $application;
 
-    /**
-     *
-     * @var integer
-     */
-    private $viewMode;
+    private string $containerMode;
 
-    /**
-     *
-     * @var string
-     */
-    private $containerMode;
+    private int $viewMode;
 
-    /**
-     * @param \Chamilo\Libraries\Architecture\Application\Application|null $application
-     * @param integer $viewMode
-     * @param string $containerMode
-     */
     public function __construct(
-        Application $application = null, $viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid'
+        Application $application = null, int $viewMode = Page::VIEW_MODE_FULL, string $containerMode = 'container-fluid'
     )
     {
         $this->application = $application;
@@ -55,10 +38,9 @@ class Banner
     }
 
     /**
-     * @return string
      * @throws \Exception
      */
-    public function render()
+    public function render(): string
     {
         $sessionUtilities = $this->getSessionUtilities();
         $configurationConsulter = $this->getConfigurationConsulter();
@@ -109,8 +91,7 @@ class Banner
             $html[] = ' ';
             $html[] = $userFullName;
             $html[] = ' ';
-            $html[] =
-                '<a href="' . $link . '">' . $translator->trans('Back', [], StringUtilities::LIBRARIES) . '</a>';
+            $html[] = '<a href="' . $link . '">' . $translator->trans('Back', [], StringUtilities::LIBRARIES) . '</a>';
             $html[] = '</div>';
         }
 
@@ -123,53 +104,35 @@ class Banner
 
             if ($breadcrumbtrail->size() > 0)
             {
-                $html[] = $breadcrumbtrail->render();
+                $breadcrumbTrailRenderer = new BreadcrumbTrailRenderer(new StringUtilities());
+                $html[] = $breadcrumbTrailRenderer->render($breadcrumbtrail);
             }
         }
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function getApplication()
+    public function getApplication(): Application
     {
         return $this->application;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication($application)
+    public function setApplication(Application $application)
     {
         $this->application = $application;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getContainerMode()
+    public function getContainerMode(): string
     {
         return $this->containerMode;
     }
 
-    /**
-     *
-     * @param string $containerMode
-     */
-    public function setContainerMode($containerMode)
+    public function setContainerMode(string $containerMode)
     {
         $this->containerMode = $containerMode;
     }
 
-    /**
-     * @return \Chamilo\Core\Menu\Renderer\MenuRenderer
-     */
-    public function getMenuRenderer()
+    public function getMenuRenderer(): MenuRenderer
     {
         return $this->getService(MenuRenderer::class);
     }
@@ -178,16 +141,12 @@ class Banner
      *
      * @return integer
      */
-    public function getViewMode()
+    public function getViewMode(): int
     {
         return $this->viewMode;
     }
 
-    /**
-     *
-     * @param integer $viewMode
-     */
-    public function setViewMode($viewMode)
+    public function setViewMode(int $viewMode)
     {
         $this->viewMode = $viewMode;
     }

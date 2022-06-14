@@ -46,13 +46,15 @@ class ComparisonCondition extends Condition
         {
             case self::LESS_THAN :
             case self::LESS_THAN_OR_EQUAL :
-                $hashParts[] = $this->getRightConditionVariable()->getHashParts();
+                $hashParts[] = $this->getRightConditionVariable() instanceof ConditionVariable ?
+                    $this->getRightConditionVariable()->getHashParts() : $this->getRightConditionVariable();
                 $hashParts[] = $this->getLeftConditionVariable()->getHashParts();
                 break;
             case self::EQUAL :
                 $parts = [];
                 $hashParts[] = $this->getLeftConditionVariable()->getHashParts();
-                $hashParts[] = $this->getRightConditionVariable()->getHashParts();
+                $hashParts[] = $this->getRightConditionVariable() instanceof ConditionVariable ?
+                    $this->getRightConditionVariable()->getHashParts() : $this->getRightConditionVariable();
 
                 sort($parts);
 
@@ -64,7 +66,8 @@ class ComparisonCondition extends Condition
                 break;
             default :
                 $hashParts[] = $this->getLeftConditionVariable()->getHashParts();
-                $hashParts[] = $this->getRightConditionVariable()->getHashParts();
+                $hashParts[] = $this->getRightConditionVariable() instanceof ConditionVariable ?
+                    $this->getRightConditionVariable()->getHashParts() : $this->getRightConditionVariable();
                 break;
         }
 

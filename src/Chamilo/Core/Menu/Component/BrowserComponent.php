@@ -72,14 +72,6 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('menu_browser');
-    }
-
-    /**
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
      */
     public function getButtonToolbarRenderer()

@@ -74,7 +74,6 @@ class VisibilityTogglerComponent extends Manager
         else
         {
             $trail = BreadcrumbTrail::getInstance();
-            $trail->add_help('category_manager_visibility_toggler');
             $trail->add(
                 new Breadcrumb(
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES)), 

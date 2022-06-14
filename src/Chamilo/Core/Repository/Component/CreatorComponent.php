@@ -188,11 +188,6 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
         }
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repository_creator');
-    }
-
     /**
      * @return \Chamilo\Core\Repository\Service\ContentObjectSaver
      */

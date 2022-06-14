@@ -103,5 +103,3 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
         return parent::render_cell($column, $object);
     }
 }
-
-?>

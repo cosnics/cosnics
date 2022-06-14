@@ -82,6 +82,5 @@ class CreatorComponent extends Manager
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_USERS)),
                 Translation::get('AdminUserBrowserComponent')));
-        $breadcrumbtrail->add_help('user_creator');
     }
 }

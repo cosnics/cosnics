@@ -17,11 +17,11 @@ class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\Breadcrumb
      */
     protected function generate_package_breadcrumb()
     {
-        if ($this->get_component()->get_user() instanceof User)
+        if ($this->getApplication()->get_user() instanceof User)
         {
-            $breadcrumb_trail = $this->get_breadcrumb_trail();
+            $breadcrumb_trail = $this->getBreadcrumbTrail();
             
-            $workspace = $this->get_component()->getWorkspace();
+            $workspace = $this->getApplication()->getWorkspace();
             if (! $workspace instanceof PersonalWorkspace)
             {
                 $parameters = [];
@@ -43,13 +43,13 @@ class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\Breadcrumb
             
             if ($workspace instanceof Workspace)
             {
-                $parameters[Manager::PARAM_WORKSPACE_ID] = $this->get_component()->getWorkspace()->getId();
+                $parameters[Manager::PARAM_WORKSPACE_ID] = $this->getApplication()->getWorkspace()->getId();
             }
             
             $redirect = new Redirect($parameters);
             
             $breadcrumb_trail->add(
-                new Breadcrumb($redirect->getUrl(), $this->get_component()->getWorkspace()->getTitle()));
+                new Breadcrumb($redirect->getUrl(), $this->getApplication()->getWorkspace()->getTitle()));
         }
     }
 }

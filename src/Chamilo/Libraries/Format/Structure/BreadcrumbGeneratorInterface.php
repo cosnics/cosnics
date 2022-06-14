@@ -12,15 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 interface BreadcrumbGeneratorInterface
 {
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $component
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
-     */
     public function __construct(Application $component, BreadcrumbTrail $breadcrumbTrail);
 
-    /**
-     * Automatically generates the breadcrumbs based on the given component
-     */
-    public function generate_breadcrumbs();
+    public function generateBreadcrumbs();
 }

@@ -220,7 +220,6 @@ class DeleterComponent extends Manager
                 Translation::get('BrowserComponent')
             )
         );
-        $breadcrumbtrail->add_help('repository_deleter');
     }
 
     public function getAdditionalParameters(array $additionalParameters = []): array

@@ -97,9 +97,4 @@ class BuilderComponent extends Manager implements ApplicationSupport
     {
         $this->redirect($message, $error_message, array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS));
     }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repository_complex_builder');
-    }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
@@ -17,59 +18,28 @@ class BaseHeader implements HeaderInterface
 {
     use DependencyInjectionContainerTrait;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    private $application;
+    private Application $application;
 
-    /**
-     *
-     * @var string
-     */
-    private $title;
-
-    /**
-     *
-     * @var integer
-     */
-    private $viewMode;
-
-    /**
-     *
-     * @var string
-     */
-    private $containerMode;
+    private string $containerMode;
 
     /**
      * The html headers which will be added in the <head> tag of the html document.
      *
      * @var string[]
      */
-    private $htmlHeaders;
+    private array $htmlHeaders;
 
-    /**
-     *
-     * @var string
-     */
-    private $languageCode;
+    private string $languageCode;
 
-    /**
-     *
-     * @var string
-     */
-    private $textDirection;
+    private string $textDirection;
 
-    /**
-     *
-     * @param integer $viewMode
-     * @param string $containerMode
-     * @param string $languageCode
-     * @param string $textDirection
-     */
+    private string $title;
+
+    private int $viewMode;
+
     public function __construct(
-        $viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid', $languageCode = 'en',
-        $textDirection = 'ltr'
+        int $viewMode = Page::VIEW_MODE_FULL, string $containerMode = 'container-fluid', string $languageCode = 'en',
+        string $textDirection = 'ltr'
     )
     {
         $this->viewMode = $viewMode;
@@ -82,10 +52,9 @@ class BaseHeader implements HeaderInterface
     }
 
     /**
-     * @return string
      * @throws \Exception
      */
-    public function render()
+    public function render(): string
     {
         $this->addDefaultHeaders();
 
@@ -97,7 +66,8 @@ class BaseHeader implements HeaderInterface
         $html[] = '<head>';
 
         $htmlHeaders = $this->getHtmlHeaders();
-        foreach ($htmlHeaders as $index => $htmlHeader)
+        
+        foreach ($htmlHeaders as $htmlHeader)
         {
             $html[] = $htmlHeader;
         }
@@ -123,18 +93,13 @@ class BaseHeader implements HeaderInterface
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @param string $file
-     * @param string $media
-     */
-    public function addCssFile($file, $media = 'screen')
+    public function addCssFile(string $file, string $media = 'screen')
     {
         $header = '<link rel="stylesheet" type="text/css" media="' . $media . '" href="' . $file . '" />';
         $this->addHtmlHeader($header);
     }
 
     /**
-     * Adds some default headers to the output
      * @throws \Exception
      */
     protected function addDefaultHeaders()
@@ -182,12 +147,9 @@ class BaseHeader implements HeaderInterface
         //        $exceptionLogger->addJavascriptExceptionLogger($this);
     }
 
-    /**
-     * @param string $html_header
-     */
-    public function addHtmlHeader($html_header)
+    public function addHtmlHeader(string $htmlHeader)
     {
-        $this->htmlHeaders[] = $html_header;
+        $this->htmlHeaders[] = $htmlHeader;
     }
 
     /**
@@ -200,159 +162,98 @@ class BaseHeader implements HeaderInterface
         );
     }
 
-    /**
-     * @param string $file
-     */
-    public function addJavascriptFile($file)
+    public function addJavascriptFile(string $file)
     {
         $header[] = '<script src="' . $file . '"></script>';
         $this->addHtmlHeader(implode(' ', $header));
     }
 
-    /**
-     * @param string $url
-     * @param string $rel
-     * @param string $title
-     * @param string $type
-     */
-    public function addLink($url, $rel = null, $title = null, $type = null)
+    public function addLink(string $url, ?string $rel = null, ?string $title = null, ?string $type = null)
     {
         $type = $type ? ' type="' . $type . '"' : '';
         $title = $title ? ' title="' . htmlentities($title) . '"' : '';
         $rel = $rel ? ' rel="' . $rel . '"' : '';
         $href = ' href="' . $url . '"';
-        $header = '<link' . $href . $rel . $title . $type . '/>';
-        $this->addHtmlHeader($header);
+        $this->addHtmlHeader('<link' . $href . $rel . $title . $type . '/>');
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function getApplication()
+    public function getApplication(): Application
     {
         return $this->application;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication($application)
+    public function setApplication(Application $application)
     {
         $this->application = $application;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\Banner
-     */
-    protected function getBanner()
+    protected function getBanner(): Banner
     {
         return new Banner($this->getApplication(), $this->getViewMode(), $this->getContainerMode());
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getContainerMode()
+    public function getContainerMode(): string
     {
         return $this->containerMode;
     }
 
-    /**
-     *
-     * @param string $containerMode
-     */
-    public function setContainerMode($containerMode)
+    public function setContainerMode(string $containerMode)
     {
         $this->containerMode = $containerMode;
     }
 
     /**
-     *
      * @return string[]
      */
-    public function getHtmlHeaders()
+    public function getHtmlHeaders(): array
     {
         return $this->htmlHeaders;
     }
 
     /**
-     *
      * @param string[] $htmlHeaders
      */
-    public function setHtmlHeaders($htmlHeaders)
+    public function setHtmlHeaders(array $htmlHeaders)
     {
         $this->htmlHeaders = $htmlHeaders;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getLanguageCode()
+    public function getLanguageCode(): string
     {
         return $this->languageCode;
     }
 
-    /**
-     *
-     * @param string $languageCode
-     */
-    public function setLanguageCode($languageCode)
+    public function setLanguageCode(string $languageCode)
     {
         $this->languageCode = $languageCode;
     }
 
-    /**
-     * @return \Chamilo\Libraries\File\PathBuilder
-     */
-    public function getPathBuilder()
+    public function getPathBuilder(): PathBuilder
     {
         return $this->getService(PathBuilder::class);
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getTextDirection()
+    public function getTextDirection(): string
     {
         return $this->textDirection;
     }
 
-    /**
-     *
-     * @param string $textDirection
-     */
-    public function setTextDirection($textDirection)
+    public function setTextDirection(string $textDirection)
     {
         $this->textDirection = $textDirection;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    public function getThemePathBuilder()
+    public function getThemePathBuilder(): ThemePathBuilder
     {
         return $this->getService(ThemePathBuilder::class);
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     *
-     * @param string $title
-     */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
     }
@@ -361,27 +262,21 @@ class BaseHeader implements HeaderInterface
      *
      * @return integer
      */
-    public function getViewMode()
+    public function getViewMode(): int
     {
         return $this->viewMode;
     }
 
-    /**
-     *
-     * @param integer $viewMode
-     */
-    public function setViewMode($viewMode)
+    public function setViewMode(int $viewMode)
     {
         $this->viewMode = $viewMode;
     }
 
     /**
-     *
-     * @return string
      * @throws \Exception
-     * @deprecated Use render() now
+     * @deprecated Use BaseHeader::render() now
      */
-    public function toHtml()
+    public function toHtml(): string
     {
         return $this->render();
     }

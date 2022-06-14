@@ -20,4 +20,3 @@ class EntityTableColumnModel extends DataClassTableColumnModel implements TableC
         $this->add_column(new StaticTableColumn(Translation::get('Path')));
     }
 }
-?>

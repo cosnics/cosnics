@@ -40,14 +40,6 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('personal_calendar_publisher');
-    }
-
-    /**
      *
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $selectedContentObjects
      *

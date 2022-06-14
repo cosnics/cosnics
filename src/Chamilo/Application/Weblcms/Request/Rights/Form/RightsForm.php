@@ -136,5 +136,3 @@ class RightsForm extends FormValidator
         return true;
     }
 }
-
-?>

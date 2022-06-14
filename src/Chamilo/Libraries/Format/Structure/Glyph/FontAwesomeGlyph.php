@@ -10,28 +10,18 @@ namespace Chamilo\Libraries\Format\Structure\Glyph;
  */
 class FontAwesomeGlyph extends InlineGlyph
 {
-    /**
-     * @var string
-     */
-    private $style;
+    private string $style;
 
-    /**
-     * @param string $type
-     * @param string[] $extraClasses
-     * @param string $title
-     * @param string $style
-     */
-    public function __construct($type, $extraClasses = [], $title = null, $style = 'fas')
+    public function __construct(string $type, array $extraClasses = [], ?string $title = null, string $style = 'fas')
     {
         parent::__construct($type, $extraClasses, $title);
         $this->style = $style;
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph::getBaseClassNames()
+     * @return string[]
      */
-    public function getBaseClassNames()
+    public function getBaseClassNames(): array
     {
         $baseClassNames = parent::getBaseClassNames();
 
@@ -41,19 +31,11 @@ class FontAwesomeGlyph extends InlineGlyph
         return $baseClassNames;
     }
 
-    /**
-     * @return string
-     */
     public function getStyle(): string
     {
         return $this->style;
     }
 
-    /**
-     * @param string $style
-     *
-     * @return FontAwesomeGlyph
-     */
     public function setStyle(string $style): FontAwesomeGlyph
     {
         $this->style = $style;

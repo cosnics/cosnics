@@ -139,6 +139,5 @@ abstract class UserApproverComponent extends Manager
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_APPROVAL_BROWSER)),
                 Translation::get('UserApprovalBrowserComponent')));
-        $breadcrumbtrail->add_help('user_approver');
     }
 }

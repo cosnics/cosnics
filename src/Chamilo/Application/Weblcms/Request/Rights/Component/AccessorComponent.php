@@ -38,4 +38,3 @@ class AccessorComponent extends Manager
         }
     }
 }
-?>

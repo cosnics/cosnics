@@ -77,9 +77,4 @@ class ExporterComponent extends Manager
         $export->set_filename($filename);
         $export->send_to_browser();
     }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('group general');
-    }
 }

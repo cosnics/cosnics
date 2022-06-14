@@ -15,19 +15,9 @@ class IdentGlyph extends FontAwesomeGlyph
     const SIZE_MINI = 16;
     const SIZE_SMALL = 22;
 
-    /**
-     * @param string $type
-     * @param boolean $isAligned
-     * @param boolean $isNew
-     * @param boolean $isDisabled
-     * @param integer $size
-     * @param string[] $extraClasses
-     * @param string $title
-     * @param string $style
-     */
     public function __construct(
-        $type, $isAligned = false, $isNew = false, $isDisabled = false, $size = IdentGlyph::SIZE_SMALL,
-        $extraClasses = [], $title = null, $style = 'fas-ci'
+        string $type, bool $isAligned = false, bool $isNew = false, bool $isDisabled = false,
+        int $size = IdentGlyph::SIZE_SMALL, array $extraClasses = [], ?string $title = null, string $style = 'fas-ci'
     )
     {
         $classes = [];
@@ -69,10 +59,9 @@ class IdentGlyph extends FontAwesomeGlyph
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph::getBaseClassNames()
+     * @return string[]
      */
-    public function getBaseClassNames()
+    public function getBaseClassNames(): array
     {
         $baseClassNames = InlineGlyph::getBaseClassNames();
 

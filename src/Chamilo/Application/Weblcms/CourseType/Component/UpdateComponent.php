@@ -97,7 +97,6 @@ class UpdateComponent extends CourseTypeFormActionComponent
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $breadcrumbtrail->add_help('weblcms_course_type_update');
         $breadcrumbtrail->add(
             new Breadcrumb($this->get_browse_course_type_url(), Translation::get('CourseTypeManagerBrowseComponent')));
     }

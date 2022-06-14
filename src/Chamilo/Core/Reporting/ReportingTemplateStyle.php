@@ -202,4 +202,3 @@ class ReportingTemplateStyle
         return array_map('intval', $color_array);
     }
 }
-?>

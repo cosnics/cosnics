@@ -27,9 +27,6 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $this->get_complex_content_object_breadcrumbs();
 
-        $trail = BreadcrumbTrail::getInstance();
-        $trail->add_help('repository builder');
-
         if ($this->get_complex_content_object_item())
         {
             $content_object = $this->get_complex_content_object_item()->get_ref_object();

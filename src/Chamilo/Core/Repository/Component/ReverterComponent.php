@@ -96,6 +96,5 @@ class ReverterComponent extends Manager
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)), 
                 Translation::get('BrowserComponent')));
-        $breadcrumbtrail->add_help('repository_reverter');
     }
 }

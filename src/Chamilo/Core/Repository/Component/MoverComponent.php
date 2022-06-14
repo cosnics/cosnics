@@ -214,7 +214,6 @@ class MoverComponent extends Manager
                 Translation::get('BrowserComponent')
             )
         );
-        $breadcrumbtrail->add_help('repository_mover');
     }
 
     private function get_categories_for_select($parent_id, $current_parent)

@@ -54,5 +54,3 @@ abstract class Manager extends Application
         return $tabs;
     }
 }
-
-?>

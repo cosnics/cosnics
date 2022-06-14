@@ -230,7 +230,7 @@ class ApplicationFactory
 
         if ($generateBreadcrumbs)
         {
-            $component->get_breadcrumb_generator()->generate_breadcrumbs();
+            $component->get_breadcrumb_generator()->generateBreadcrumbs();
         }
 
         return $component;

@@ -75,7 +75,6 @@ class DeleteComponent extends Manager
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $breadcrumbtrail->add_help('weblcms_course_deleter');
         $breadcrumbtrail->add(
             new Breadcrumb($this->get_browse_course_url(), Translation::get('CourseManagerBrowseComponent')));
     }

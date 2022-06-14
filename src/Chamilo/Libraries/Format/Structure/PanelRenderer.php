@@ -18,16 +18,7 @@ class PanelRenderer
     const MODE_SUCCESS = 'success';
     const MODE_WARNING = 'warning';
 
-    /**
-     * Renders a bootstrap panel
-     *
-     * @param string $title
-     * @param string $content
-     * @param string $mode
-     *
-     * @return string
-     */
-    public function render($title, $content, $mode = self::MODE_DEFAULT)
+    public function render(string $content, ?string $title = null, string $mode = self::MODE_DEFAULT): string
     {
         $html = [];
 
@@ -41,11 +32,9 @@ class PanelRenderer
     }
 
     /**
-     * Returns a list of the allowed modes
-     *
      * @return string[]
      */
-    protected function getAllowedModes()
+    protected function getAllowedModes(): array
     {
         return array(
             self::MODE_DEFAULT,
@@ -57,12 +46,7 @@ class PanelRenderer
         );
     }
 
-    /**
-     * Renders the footer for the panel
-     *
-     * @return string
-     */
-    protected function renderPanelFooter()
+    protected function renderPanelFooter(): string
     {
         $html = [];
 
@@ -71,15 +55,7 @@ class PanelRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Renders the header for the panel
-     *
-     * @param string $title
-     * @param string $mode
-     *
-     * @return string
-     */
-    protected function renderPanelHeader($title = null, $mode = self::MODE_DEFAULT)
+    protected function renderPanelHeader(?string $title = null, string $mode = self::MODE_DEFAULT): string
     {
         $this->validateMode($mode);
 
@@ -101,14 +77,9 @@ class PanelRenderer
 
     /**
      * Renders a panel with a table based on key => value data
-     *
-     * @param string $title
-     * @param string[] $tableValues
-     * @param string $mode
-     *
-     * @return string
      */
-    public function renderTablePanel($title, $tableValues = [], $mode = self::MODE_DEFAULT)
+    public function renderTablePanel(array $tableValues = [], ?string $title = null, string $mode = self::MODE_DEFAULT
+    ): string
     {
         $html = [];
         $html[] = $this->renderPanelHeader($title, $mode);
@@ -130,13 +101,9 @@ class PanelRenderer
     }
 
     /**
-     * Validates the mode of the panel renderer
-     *
-     * @param string $mode
-     *
      * @throws \InvalidArgumentException
      */
-    protected function validateMode($mode = self::MODE_DEFAULT)
+    protected function validateMode(string $mode = self::MODE_DEFAULT)
     {
         if (!in_array($mode, $this->getAllowedModes()))
         {

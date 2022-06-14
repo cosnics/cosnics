@@ -130,7 +130,6 @@ class UpdaterComponent extends Manager implements DelegateComponent
         else
         {
             $trail = BreadcrumbTrail::getInstance();
-            $trail->add_help('repository builder');
 
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(

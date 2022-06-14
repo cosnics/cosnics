@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Core\Help\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -13,28 +12,14 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class BreadcrumbTrailRenderer
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    private $stringUtilities;
+    private StringUtilities $stringUtilities;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
     public function __construct(StringUtilities $stringUtilities)
     {
         $this->stringUtilities = $stringUtilities;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
-     *
-     * @return string
-     */
-    public function render(BreadcrumbTrail $breadcrumbTrail)
+    public function render(BreadcrumbTrail $breadcrumbTrail): string
     {
         if ($breadcrumbTrail->size() == 0)
         {
@@ -52,126 +37,50 @@ class BreadcrumbTrailRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    public function getStringUtilities()
+    public function getStringUtilities(): StringUtilities
     {
         return $this->stringUtilities;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
-    public function setStringUtilities($stringUtilities)
+    public function setStringUtilities(StringUtilities $stringUtilities)
     {
         $this->stringUtilities = $stringUtilities;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
-     *
-     * @return string
-     */
-    public function renderBreadcrumbs(BreadcrumbTrail $breadcrumbTrail)
+    public function renderBreadcrumb(Breadcrumb $breadcrumb): string
+    {
+        $html = [];
+
+        $html[] = '<li>';
+        $html[] = '<a href="' . htmlentities($breadcrumb->getUrl()) . '" target="_self">';
+
+        if ($breadcrumb->getInlineGlyph() instanceof InlineGlyph)
+        {
+            $html[] = $breadcrumb->getInlineGlyph()->render();
+        }
+        else
+        {
+            $html[] = $this->getStringUtilities()->truncate($breadcrumb->getName(), 50);
+        }
+
+        $html[] = '</a>';
+        $html[] = '</li>';
+
+        return implode('', $html);
+    }
+
+    public function renderBreadcrumbs(BreadcrumbTrail $breadcrumbTrail): string
     {
         $html = [];
 
         $html[] = '<ol class="breadcrumb">';
 
-        $breadcrumbs = $breadcrumbTrail->get_breadcrumbs();
-
-        if (is_array($breadcrumbs) && count($breadcrumbs) > 0)
+        foreach ($breadcrumbTrail->getBreadcrumbs() as $breadcrumb)
         {
-            foreach ($breadcrumbs as $breadcrumb)
-            {
-                $breadCrumbHtml = [];
-
-                $breadCrumbHtml[] = '<li>';
-                $breadCrumbHtml[] = '<a href="' . htmlentities($breadcrumb->get_url()) . '" target="_self">';
-
-                if ($breadcrumb->getImage())
-                {
-                    $breadCrumbHtml[] =
-                        '<img src="' . $breadcrumb->getImage() . '" title="' . htmlentities($breadcrumb->get_name()) .
-                        '">';
-                }
-                elseif ($breadcrumb->getInlineGlyph() instanceof InlineGlyph)
-                {
-                    $breadCrumbHtml[] = $breadcrumb->getInlineGlyph()->render();
-                }
-                else
-                {
-                    $breadCrumbHtml[] = $this->getStringUtilities()->truncate($breadcrumb->get_name(), 50, true);
-                }
-
-                $breadCrumbHtml[] = '</a>';
-                $breadCrumbHtml[] = '</li>';
-
-                $html[] = implode('', $breadCrumbHtml);
-            }
+            $html[] = $this->renderBreadcrumb($breadcrumb);
         }
 
         $html[] = '</ol>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
-     *
-     * @return string
-     */
-    public function renderExtra(BreadcrumbTrail $breadcrumbTrail)
-    {
-        $html = [];
-
-        $extraItems = $breadcrumbTrail->getExtraItems();
-
-        $html[] = '<div id="extra_item">';
-        $toolbar = new Toolbar();
-
-        if (is_array($extraItems) && count($extraItems) > 0)
-        {
-            $toolbar->add_items($extraItems);
-            $toolbar->setType(Toolbar::TYPE_HORIZONTAL);
-        }
-
-        $html[] = $toolbar->render();
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbTrail
-     *
-     * @return string
-     */
-    public function renderHelp(BreadcrumbTrail $breadcrumbTrail)
-    {
-        $html = [];
-        $helpItem = $breadcrumbTrail->getHelpItem();
-
-        if (is_array($helpItem) && count($helpItem) == 2)
-        {
-            $item = Manager::get_tool_bar_help_item($helpItem);
-
-            if ($item instanceof ToolbarItem)
-            {
-                $html[] = '<div id="help_item">';
-                $toolbar = new Toolbar();
-                $toolbar->set_items(array($item));
-                $toolbar->setType(Toolbar::TYPE_HORIZONTAL);
-                $html[] = $toolbar->render();
-                $html[] = '</div>';
-            }
-        }
 
         return implode(PHP_EOL, $html);
     }

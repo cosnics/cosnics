@@ -11,11 +11,9 @@ class NumericWizardHeaderRenderer extends WizardHeaderRenderer
 {
 
     /**
-     * Returns the step titles
-     *
      * @return string[]
      */
-    protected function getStepTitles()
+    protected function getStepTitles(): array
     {
         $stepTitles = $this->wizardHeader->getStepTitles();
         foreach ($stepTitles as $index => $stepTitle)

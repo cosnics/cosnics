@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -15,84 +16,32 @@ class Toolbar
     const TYPE_VERTICAL = 'vertical';
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */
-    private $items = [];
+    private array $items = [];
 
-    /**
-     *
-     * @var string[]
-     */
-    private $class_names = [];
+    private string $type;
 
-    /**
-     *
-     * @var string
-     */
-    private $css = null;
-
-    /**
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     *
-     * @param string $type
-     * @param string[] $class_names
-     * @param string $css
-     */
-    public function __construct($type = self::TYPE_HORIZONTAL, $class_names = [], $css = null)
+    public function __construct(string $type = self::TYPE_HORIZONTAL)
     {
         $this->type = $type;
-        $this->class_names = $class_names;
-        $this->css = $css;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function render()
+    public function render(): ?string
     {
         if (!$this->has_items())
         {
             return null;
         }
 
-        $toolbar_data = $this->items;
-        $type = $this->getType();
-        $class_names = $this->class_names;
-        $css = $this->css;
-
-        if (!is_array($class_names))
-        {
-            $class_names = array($class_names);
-        }
-        $class_names[] = 'toolbar_' . $type;
-
         $html = [];
 
         $html[] = '<div class="btn-toolbar btn-toolbar-cosnics">';
         $html[] = '<div class="btn-group ">';
 
-        foreach ($toolbar_data as $index => $toolbar_item)
+        foreach ($this->items as $toolbarItem)
         {
-            $classes = [];
-
-            if ($index == 0)
-            {
-                $classes[] = 'first';
-            }
-
-            if ($index == count($toolbar_data) - 1)
-            {
-                $classes[] = 'last';
-            }
-
-            $html[] = $toolbar_item->render();
+            $html[] = $toolbarItem->render();
         }
 
         $html[] = '</div>';
@@ -101,20 +50,15 @@ class Toolbar
         return implode($html);
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $item
-     */
     public function add_item(ToolbarItem $item)
     {
         $this->items[] = $item;
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $items
      */
-    public function add_items($items)
+    public function add_items(array $items)
     {
         foreach ($items as $item)
         {
@@ -123,22 +67,14 @@ class Toolbar
     }
 
     /**
-     *
-     * @return string
-     * @deprecated Use render() now
+     * @deprecated Use Toolbar::render() now
      */
-    public function as_html()
+    public function as_html(): string
     {
         return $this->render();
     }
 
-    /**
-     *
-     * @param boolean $keepDisplayProperty
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
-     */
-    public function convertToButtonToolBar($keepDisplayProperty = true)
+    public function convertToButtonToolBar(bool $keepDisplayProperty = true): ButtonToolBar
     {
         $buttonToolbar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();
@@ -148,7 +84,7 @@ class Toolbar
             $buttonGroup->addButton(
                 new Button(
                     $item->get_label(), $item->get_image(), $item->get_href(),
-                    $keepDisplayProperty ? $item->get_display() : Button::DISPLAY_ICON_AND_LABEL,
+                    $keepDisplayProperty ? $item->get_display() : AbstractButton::DISPLAY_ICON_AND_LABEL,
                     $item->get_confirmation(), 'btn-link', $item->get_target()
                 )
             );
@@ -159,29 +95,20 @@ class Toolbar
         return $buttonToolbar;
     }
 
-    /**
-     * Returns the toolbaritem from the given position
-     *
-     * @param integer $index
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ToolbarItem
-     */
-    public function get_item($index)
+    public function get_item(int $index): ToolbarItem
     {
         return $this->items[$index];
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */
-    public function get_items()
+    public function get_items(): array
     {
         return $this->items;
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $items
      */
     public function set_items(array $items)
@@ -190,25 +117,24 @@ class Toolbar
     }
 
     /**
-     *
      * @deprecated Use Toolbar::getType() now
      */
-    public function get_type()
+    public function get_type(): string
     {
         return $this->getType();
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
+    public function setType(string $type)
+    {
+        $this->type = $type;
+    }
+
     /**
-     *
      * @deprecated Use Toolbar::setType() now
      */
     public function set_type($type)
@@ -216,53 +142,19 @@ class Toolbar
         $this->setType($type);
     }
 
-    /**
-     *
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function has_items()
+    public function has_items(): bool
     {
         return count($this->items) > 0;
     }
 
-    /**
-     * Inserts an item in the toolbar
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $item
-     * @param integer $index
-     */
-    public function insert_item(ToolbarItem $item, $index)
+    public function insert_item(ToolbarItem $item, int $index)
     {
         $items = $this->items;
         array_splice($items, $index, 0, array($item));
         $this->items = $items;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $item
-     */
-    public function prepend_item(ToolbarItem $item)
-    {
-        array_unshift($this->items, $item);
-    }
-
-    /**
-     * Replaces an item in the toolbar
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $item
-     * @param integer $index
-     */
-    public function replace_item(ToolbarItem $item, $index)
+    public function replace_item(ToolbarItem $item, int $index)
     {
         $items = $this->items;
         array_splice($items, $index, 1, array($item));

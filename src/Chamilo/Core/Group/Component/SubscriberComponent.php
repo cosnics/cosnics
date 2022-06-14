@@ -123,6 +123,5 @@ class SubscriberComponent extends Manager
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
                         self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID))),
                 Translation::get('ViewerComponent')));
-        $breadcrumbtrail->add_help('group general');
     }
 }

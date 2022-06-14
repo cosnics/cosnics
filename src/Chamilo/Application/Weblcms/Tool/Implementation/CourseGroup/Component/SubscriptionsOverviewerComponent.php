@@ -93,7 +93,6 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $breadcrumbtrail->add_help('weblcms_course_groups_overview');
         $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 

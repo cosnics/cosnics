@@ -25,8 +25,7 @@ class AddElementComponent extends Manager
         
         $trail = BreadcrumbTrail::getInstance();
         $trail->add(new Breadcrumb($this->get_url($parameters), Translation::get('AddElement')));
-        $trail->add_help('dynamic form general');
-        
+
         $element = new Element();
         $element->setType($type);
         $element->set_dynamic_form_id($this->get_form()->get_id());

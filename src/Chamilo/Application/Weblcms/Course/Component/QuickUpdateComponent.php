@@ -42,6 +42,5 @@ class QuickUpdateComponent extends UpdateComponent implements DelegateComponent
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        $breadcrumbtrail->add_help('weblcms_course_create');
     }
 }

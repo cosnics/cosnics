@@ -67,15 +67,6 @@ class PublisherComponent extends Manager implements DelegateComponent
 
     /**
      *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::add_additional_breadcrumbs()
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repository_publisher');
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Architecture\Application\Application::getAdditionalParameters()
      */
     public function getAdditionalParameters(array $additionalParameters = []): array

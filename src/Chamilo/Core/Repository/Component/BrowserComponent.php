@@ -100,11 +100,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         return implode(PHP_EOL, $html);
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repository_browser');
-    }
-
     public function getButtonToolbarRenderer()
     {
         if (!isset($this->buttonToolbarRenderer))

@@ -10,28 +10,14 @@ namespace Chamilo\Libraries\Format\Structure\WizardHeader;
 class WizardHeaderRenderer
 {
 
-    /**
-     * The wizard header object that needs to be rendered
-     *
-     * @var \Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader
-     */
-    protected $wizardHeader;
+    protected WizardHeader $wizardHeader;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader $wizardHeader
-     */
     public function __construct(WizardHeader $wizardHeader)
     {
         $this->wizardHeader = $wizardHeader;
     }
 
-    /**
-     * Renders the wizard header
-     *
-     * @return string
-     */
-    public function render()
+    public function render(): string
     {
         $html = [];
 
@@ -49,11 +35,9 @@ class WizardHeaderRenderer
     }
 
     /**
-     * Returns the step titles
-     *
      * @return string[]
      */
-    protected function getStepTitles()
+    protected function getStepTitles(): array
     {
         return $this->wizardHeader->getStepTitles();
     }

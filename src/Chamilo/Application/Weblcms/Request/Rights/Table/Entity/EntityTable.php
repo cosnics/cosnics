@@ -23,4 +23,3 @@ class EntityTable extends DataClassTable implements TableFormActionsSupport
         return $actions;
     }
 }
-?>

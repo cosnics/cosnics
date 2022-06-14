@@ -85,9 +85,4 @@ class ImporterComponent extends Manager
 
         return implode(PHP_EOL, $html);
     }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('group general');
-    }
 }

@@ -67,7 +67,6 @@ class DeleterComponent extends Manager
         );
 
         $trail->add(new Breadcrumb($this->get_url(), Translation::get('DeleteGroup')));
-        $trail->add_help('group general');
 
         $failures = 0;
 
@@ -163,6 +162,5 @@ class DeleterComponent extends Manager
                 ), Translation::get('ViewerComponent')
             )
         );
-        $breadcrumbtrail->add_help('group general');
     }
 }

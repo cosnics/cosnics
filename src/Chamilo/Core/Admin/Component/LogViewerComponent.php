@@ -60,11 +60,6 @@ class LogViewerComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('admin_log_viewer');
-    }
-
     public function build_form()
     {
         $form = new FormValidator('logviewer', FormValidator::FORM_METHOD_POST, $this->get_url());

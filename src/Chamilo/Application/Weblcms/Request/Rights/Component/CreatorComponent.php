@@ -38,4 +38,3 @@ class CreatorComponent extends Manager
         }
     }
 }
-?>

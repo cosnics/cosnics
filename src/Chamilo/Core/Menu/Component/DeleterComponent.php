@@ -61,7 +61,6 @@ class DeleterComponent extends Manager
                 $this->getHomeUrl(), $this->getTranslator()->trans('ManagerBrowserComponent', [], 'Chamilo\Core\Menu')
             )
         );
-        $breadcrumbtrail->add_help('menu_deleter');
     }
 
     /**

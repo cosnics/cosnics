@@ -118,7 +118,6 @@ class DoublesViewerComponent extends Manager implements TableSupport
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
                 Translation::get('BrowserComponent')));
-        $breadcrumbtrail->add_help('repository_doubles_viewer');
     }
 
     public function get_table_condition($table_class_name)

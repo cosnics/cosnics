@@ -91,7 +91,6 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
                 ), Translation::get('ViewerComponent')
             )
         );
-        $breadcrumbtrail->add_help('group general');
     }
 
     public function getButtonToolbarRenderer()

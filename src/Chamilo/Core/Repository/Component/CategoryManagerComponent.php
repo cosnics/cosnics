@@ -48,11 +48,6 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         return $component->run();
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('repository_category_manager');
-    }
-
     public function allowed_to_add_category($parent_category_id)
     {
         return true;

@@ -39,5 +39,3 @@ else
 {
     header("Location: " . $redirect);
 }
-
-?>

@@ -132,7 +132,6 @@ class ViewerComponent extends Manager implements TableSupport
                 Translation::get('BrowserComponent')
             )
         );
-        $breadcrumbtrail->add_help('group general');
     }
 
     public function getButtonToolbarRenderer()

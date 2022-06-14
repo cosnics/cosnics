@@ -12,41 +12,22 @@ abstract class InlineGlyph
 {
 
     /**
-     *
-     * @var string
-     */
-    private $type;
-
-    /**
-     *
      * @var string[]
      */
-    private $extraClasses;
+    private array $extraClasses;
 
-    /**
-     *
-     * @var string
-     */
-    private $title;
+    private ?string $title;
 
-    /**
-     *
-     * @param string $type
-     * @param string[] $extraClasses
-     * @param string $title
-     */
-    public function __construct($type, $extraClasses = [], $title = null)
+    private string $type;
+
+    public function __construct(string $type, array $extraClasses = [], ?string $title = null)
     {
         $this->type = $type;
         $this->extraClasses = $extraClasses;
         $this->title = $title;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function render()
+    public function render(): string
     {
         $title = $this->getTitle() ? ' title="' . htmlentities($this->getTitle()) . '"' : '';
 
@@ -54,10 +35,9 @@ abstract class InlineGlyph
     }
 
     /**
-     *
      * @return string[]
      */
-    public function getBaseClassNames()
+    public function getBaseClassNames(): array
     {
         $baseClassNames[] = 'inline-glyph';
 
@@ -65,10 +45,9 @@ abstract class InlineGlyph
     }
 
     /**
-     *
      * @return string[]
      */
-    public function getClassNames()
+    public function getClassNames(): array
     {
         $classes = $this->getBaseClassNames();
 
@@ -81,19 +60,17 @@ abstract class InlineGlyph
     }
 
     /**
-     *
      * @return string
      */
-    public function getClassNamesString()
+    public function getClassNamesString(): string
     {
         return implode(' ', $this->getClassNames());
     }
 
     /**
-     *
      * @return string[]
      */
-    public function getExtraClasses()
+    public function getExtraClasses(): array
     {
         return $this->extraClasses;
     }
@@ -102,43 +79,27 @@ abstract class InlineGlyph
      *
      * @param string[]
      */
-    public function setExtraClasses($extraClasses)
+    public function setExtraClasses(array $extraClasses)
     {
         $this->extraClasses = $extraClasses;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     *
-     * @param string
-     */
-    public function setTitle($title)
+    public function setTitle(?string $title)
     {
         $this->title = $title;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     *
-     * @param string $type
-     */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
     }

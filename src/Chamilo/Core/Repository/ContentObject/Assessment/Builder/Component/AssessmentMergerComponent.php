@@ -49,7 +49,6 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
             )
         );
         $trail->add(new Breadcrumb($this->get_url([]), Translation::get('MergeAssessment')));
-        $trail->add_help('repository assessment builder');
         $assessment = $this->get_root_content_object();
 
         if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())

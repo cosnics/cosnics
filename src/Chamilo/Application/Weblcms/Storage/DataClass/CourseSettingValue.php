@@ -51,5 +51,3 @@ abstract class CourseSettingValue extends DataClass
         $this->setDefaultProperty(self::PROPERTY_VALUE, $value);
     }
 }
-
-?>

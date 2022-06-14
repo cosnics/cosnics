@@ -10,85 +10,54 @@ namespace Chamilo\Libraries\Format\Structure\WizardHeader;
 class WizardHeader
 {
 
+    private int $selectedStepIndex;
+
     /**
-     * The titles of steps in the wizard
-     *
      * @var string[]
      */
-    private $stepTitles;
+    private array $stepTitles;
 
     /**
-     * The index of the selected step
-     *
-     * @var integer
-     */
-    private $selectedStepIndex;
-
-    /**
-     *
      * @param string[] $stepTitles
-     * @param integer $selectedStepIndex
      */
-    public function __construct($stepTitles = [], $selectedStepIndex = 0)
+    public function __construct(array $stepTitles = [], int $selectedStepIndex = 0)
     {
         $this->stepTitles = $stepTitles;
-        $this->selectedStepIndex;
+        $this->selectedStepIndex = $selectedStepIndex;
     }
 
-    /**
-     * Adds a step title
-     *
-     * @param string $stepTitle
-     */
-    public function addStepTitle($stepTitle)
+    public function addStepTitle(string $stepTitle)
     {
         $this->stepTitles[] = $stepTitle;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getSelectedStepIndex()
+    public function getSelectedStepIndex(): int
     {
         return $this->selectedStepIndex;
     }
 
-    /**
-     *
-     * @param integer $selectedStepIndex
-     */
-    public function setSelectedStepIndex($selectedStepIndex)
+    public function setSelectedStepIndex(int $selectedStepIndex)
     {
         $this->selectedStepIndex = $selectedStepIndex;
     }
 
     /**
-     *
      * @return string[]
      */
-    public function getStepTitles()
+    public function getStepTitles(): array
     {
         return $this->stepTitles;
     }
 
     /**
-     *
      * @param string[] $stepTitles
      */
-    public function setStepTitles($stepTitles)
+    public function setStepTitles(array $stepTitles)
     {
         $this->stepTitles = $stepTitles;
     }
 
-    /**
-     * Checks whether or not the given step index is currently selected
-     *
-     * @param integer $stepIndex
-     *
-     * @return boolean
-     */
-    public function isStepSelected($stepIndex)
+    public function isStepSelected(int $stepIndex): bool
     {
         return $stepIndex == $this->selectedStepIndex;
     }

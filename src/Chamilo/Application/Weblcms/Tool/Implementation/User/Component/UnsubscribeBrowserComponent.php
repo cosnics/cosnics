@@ -91,11 +91,6 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
     // TABS FUNCTIONS
     // **************************************************************************
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('weblcms_user_unsubscribe_browser');
-    }
-
     public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_TAB;

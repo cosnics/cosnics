@@ -320,5 +320,3 @@ class Rights extends RightsUtil
         );
     }
 }
-
-?>

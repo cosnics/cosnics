@@ -88,5 +88,3 @@ class EntityTableCellRenderer extends DataClassTableCellRenderer implements Tabl
         return parent::render_cell($column, $object);
     }
 }
-
-?>

@@ -81,11 +81,6 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
         }
     }
 
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('user_register');
-    }
-
     /**
      * Returns the admin breadcrumb generator
      *

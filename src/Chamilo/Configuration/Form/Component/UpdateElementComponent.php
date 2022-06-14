@@ -29,8 +29,7 @@ class UpdateElementComponent extends Manager
         
         $trail = BreadcrumbTrail::getInstance();
         $trail->add(new Breadcrumb($this->get_url($parameters), Translation::get('UpdateElement')));
-        $trail->add_help('dynamic form general');
-        
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Element::class, Element::PROPERTY_ID),
             new StaticConditionVariable($element_id));

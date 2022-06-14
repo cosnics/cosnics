@@ -35,4 +35,3 @@ class RequestTableColumnModel extends DataClassTableColumnModel implements Table
         }
     }
 }
-?>

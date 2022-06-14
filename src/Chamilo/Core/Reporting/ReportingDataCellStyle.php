@@ -100,4 +100,3 @@ class ReportingDataCellStyle
         $this->font = ReportingTemplateStyle::parseFont($font);
     }
 }
-?>
