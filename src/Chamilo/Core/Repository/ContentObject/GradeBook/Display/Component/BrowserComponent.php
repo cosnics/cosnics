@@ -5,8 +5,8 @@ namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Component;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Manager as AjaxManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-//use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Manager as AjaxManager;
 
 /**
  *
@@ -57,7 +57,13 @@ class BrowserComponent extends Manager
             'FOOTER' => $this->render_footer(),
             'LANGUAGE' => $this->getTranslator()->getLocale(),
             'CONTENT_OBJECT_TITLE' => $gradebook->get_title(),
-            'CONTENT_OBJECT_RENDITION' => $this->renderContentObject()
+            'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
+            'LOAD_ALL_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_ALL
+                ]
+            ),
         ];
     }
 

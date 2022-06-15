@@ -1,0 +1,175 @@
+<?php
+
+namespace Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity;
+
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Exclude;
+
+/**
+ * @package Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity
+ *
+ * @author Stefan Gabriëls - Hogeschool Gent
+ *
+ * @ORM\Entity(repositoryClass="Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Repository\GradeBookDataRepository")
+ *
+ * @ORM\Table(
+ *      name="repository_gradebook_data"
+ * )
+ *
+ */
+class GradeBookData
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, length=10)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Version
+     * @ORM\Column(name="version", type="integer")
+     *
+     */
+    protected $version;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_updated", type="datetime")
+     */
+    protected $lastUpdated;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="content_object_id", type="integer", nullable=true)
+     */
+    protected $contentObjectId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    protected $title;
+
+
+    /**
+     * GradeBookData constructor.
+     *
+     * @param string $title
+     *
+     * @noinspection PhpUnhandledExceptionInspection
+     */
+    public function __construct(string $title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return GradeBookData
+     */
+    public function setId(int $id): GradeBookData
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVersion(): ?int
+    {
+        return $this->version;
+    }
+
+    /**
+     * @param int $version
+     *
+     * @return GradeBookData
+     */
+    public function setVersion(int $version): GradeBookData
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastUpdated(): ?\DateTime
+    {
+        return $this->lastUpdated;
+    }
+
+    /**
+     * @param \DateTime $lastUpdated
+     *
+     * @return GradeBookData
+     */
+    public function setLastUpdated(\DateTime $lastUpdated): GradeBookData
+    {
+        $this->lastUpdated = $lastUpdated;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getContentObjectId(): ?int
+    {
+        return $this->contentObjectId;
+    }
+
+    /**
+     * @param int $contentObjectId
+     *
+     * @return GradeBookData
+     */
+    public function setContentObjectId(int $contentObjectId): GradeBookData
+    {
+        $this->contentObjectId = $contentObjectId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     *
+     * @return GradeBookData
+     */
+    public function setTitle(string $title): GradeBookData
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+}

@@ -2,6 +2,7 @@
 <object name="repository_gradebook">
     <properties>
         <property name="id" type="integer" unsigned="1" notnull="1" />
+        <property name="active_gradebook_data_id" type="integer" unsigned="1" notnull="0"/>
     </properties>
     <index name="id" type="primary">
         <indexproperty name="id"/>

@@ -1,9 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Form;
 
+use Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  *
@@ -14,13 +17,28 @@ use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
  */
 class GradeBookForm extends ContentObjectForm
 {
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
-    // Inherited
     public function create_content_object()
     {
-        $object = new GradeBook();
-        $this->set_content_object($object);
-        return parent::create_content_object();
+        $gradeBookObject = new GradeBook();
+
+        $this->set_content_object($gradeBookObject);
+
+        parent::create_content_object();
+
+        $gradeBookData = new GradeBookData($gradeBookObject->get_title());
+        $gradeBookData->setContentObjectId($gradeBookObject->getId());
+
+        $this->getGradeBookService()->saveGradeBook($gradeBookData);
+
+        $gradeBookObject->setActiveGradeBookDataId($gradeBookData->getId());
+        $gradeBookObject->update();
+
+        return $gradeBookObject;
     }
 
     protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
@@ -41,4 +59,13 @@ class GradeBookForm extends ContentObjectForm
 
         return $htmleditor_options;
     }
+
+    /**
+     * @return GradeBookService|object
+     */
+    protected function getGradeBookService()
+    {
+        return $this->getContainer()->get(GradeBookService::class);
+    }
+
 }

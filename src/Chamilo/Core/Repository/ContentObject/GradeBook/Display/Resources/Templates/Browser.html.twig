@@ -3,6 +3,17 @@
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\GradeBook\\Display' %}
 {% set commonContext = 'Chamilo\\Libraries' %}
 
-
-
 <h3 style="margin-left: 15px;color: #507177;margin-top: 0;">{{ CONTENT_OBJECT_TITLE }}</h3>
+<div id="app"></div>
+
+<script src="http://localhost:8080/js/chunk-vendors.js"></script>
+<script src="http://localhost:8080/js/app.js"></script>
+
+<script>
+    const apiConfig = {
+        loadAllURL: '{{ LOAD_ALL_URL|raw }}'
+    };
+    new Vue({
+        render: h => h(window.App, {attrs: {apiConfig}}),
+    }).$mount('#app');
+</script>
