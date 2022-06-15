@@ -18,6 +18,6 @@ class HtmlInlineDefaultRenditionImplementation extends HtmlInlineRenditionImplem
      */
     public function render($parameters)
     {
-        return $this->renderActions('btn-info');
+        return $this->renderActions(['btn-info']);
     }
 }

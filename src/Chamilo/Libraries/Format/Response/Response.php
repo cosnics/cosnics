@@ -12,13 +12,9 @@ class Response extends \Symfony\Component\HttpFoundation\Response
 {
 
     /**
-     *
-     * @param integer $version
-     * @param string $content
-     * @param integer $status
      * @param string[] $headers
      */
-    public function __construct($version, $content = '', $status = 200, $headers = [])
+    public function __construct(int $version, ?string $content = '', int $status = 200, array $headers = [])
     {
         $headers['Content-Type'] = 'text/html';
         $headers['X-Powered-By'] = 'Cosnics ' . $version;

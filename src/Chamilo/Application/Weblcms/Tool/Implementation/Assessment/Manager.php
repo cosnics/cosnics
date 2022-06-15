@@ -69,7 +69,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         $buttonGroup->prependButton(
             new Button(
                 Translation::get('Take'), new FontAwesomeGlyph('play'), $this->get_complex_display_url($publication_id),
-                Button::DISPLAY_ICON, false, 'btn-link'
+                Button::DISPLAY_ICON, null, ['btn-link']
             )
         );
 

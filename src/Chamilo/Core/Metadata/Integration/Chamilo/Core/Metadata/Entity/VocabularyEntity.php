@@ -32,7 +32,7 @@ class VocabularyEntity extends DataClassEntity
     public function getIcon($size = IdentGlyph::SIZE_MINI)
     {
         $glyph = new NamespaceIdentGlyph(
-            $this->getType(), true, false, false, $size, []
+            $this->getType(), true, false, false, $size
         );
 
         return $glyph->render();

@@ -14,7 +14,6 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -23,25 +22,25 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class ObjectTypeMenu extends HtmlMenu
 {
-    const TREE_NAME = __CLASS__;
-
-    /**
-     * The string passed to sprintf() to format category URLs
-     */
-    private $type_format;
-
-    private $category_format;
+    public const TREE_NAME = __CLASS__;
 
     /**
      * The array renderer used to determine the breadcrumbs.
      */
     private $array_renderer;
 
+    private $category_format;
+
     /**
      *
      * @var RepositoryManager
      */
     private $repository_manager;
+
+    /**
+     * The string passed to sprintf() to format category URLs
+     */
+    private $type_format;
 
     /**
      *
@@ -129,7 +128,8 @@ class ObjectTypeMenu extends HtmlMenu
             $menu_item = [];
 
             $glyph = new NamespaceIdentGlyph(
-                'Chamilo\Core\Repository\ContentObject\Category\\' . $category->getType(), true, false, false, null, array('fa-fw')
+                'Chamilo\Core\Repository\ContentObject\Category\\' . $category->getType(), true, false, false,
+                NamespaceIdentGlyph::SIZE_SMALL, array('fa-fw')
             );
 
             $menu_item['class'] = $glyph->getClassNamesString();
@@ -154,7 +154,7 @@ class ObjectTypeMenu extends HtmlMenu
                 }
 
                 $glyph = new NamespaceIdentGlyph(
-                    $glyphNamespace, true, false, false, null, array('fa-fw')
+                    $glyphNamespace, true, false, false, NamespaceIdentGlyph::SIZE_SMALL, array('fa-fw')
                 );
 
                 $sub_menu_item = [];

@@ -159,7 +159,7 @@ class CourseListRenderer
 
             if ($active && $visible && $hasNewPublications)
             {
-                $identGlyph = new NamespaceIdentGlyph($tool->getContext(), false, true, false, null);
+                $identGlyph = new NamespaceIdentGlyph($tool->getContext(), false, true);
                 $toolUrl = htmlspecialchars($this->get_tool_url($tool->get_name(), $course));
 
                 $html[] = '<a href="' . $toolUrl . '"' . $target . '>';

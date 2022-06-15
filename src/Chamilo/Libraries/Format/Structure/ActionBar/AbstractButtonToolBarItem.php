@@ -12,34 +12,30 @@ abstract class AbstractButtonToolBarItem
 {
 
     /**
-     *
-     * @var string
+     * @var string[]
      */
-    private $classes;
+    private array $classes;
 
     /**
-     *
-     * @param string $classes
+     * @param string[] $classes
      */
-    public function __construct($classes = null)
+    public function __construct(array $classes = [])
     {
         $this->classes = $classes;
     }
 
     /**
-     *
-     * @return string
+     * @return string[]
      */
-    public function getClasses()
+    public function getClasses(): array
     {
         return $this->classes;
     }
 
     /**
-     *
-     * @param string $classes
+     * @param string[] $classes
      */
-    public function setClasses($classes)
+    public function setClasses(array $classes)
     {
         $this->classes = $classes;
     }

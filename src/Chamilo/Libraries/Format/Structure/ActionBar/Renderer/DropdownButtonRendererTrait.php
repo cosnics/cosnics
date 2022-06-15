@@ -13,11 +13,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 trait DropdownButtonRendererTrait
 {
 
-    /**
-     *
-     * @return string
-     */
-    public function render()
+    public function render(): string
     {
         $html = [];
 
@@ -30,60 +26,34 @@ trait DropdownButtonRendererTrait
     }
 
     /**
-     *
      * @return string[]
      */
-    public function determineDropdownClasses()
+    public function determineDropdownClasses(): array
     {
-        $classes = [];
-
-        $classes[] = 'dropdown-menu';
-
-        $dropdownClasses = $this->getButton()->getDropdownClasses();
-
-        if (!empty($dropdownClasses))
-        {
-            $classes[] = $dropdownClasses;
-        }
-
-        return $classes;
+        return array_merge(['dropdown-menu'], $this->getButton()->getDropdownClasses());
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton
      */
     abstract public function getButton();
 
-    /**
-     *
-     * @return string
-     */
-    public function renderCaret()
+    public function renderCaret(): string
     {
         return '<span class="caret"></span>';
     }
 
-    /**
-     *
-     * @return string
-     */
-    abstract public function renderDropdown();
+    abstract public function renderDropdown(): string;
 
-    /**
-     *
-     * @return string
-     */
-    public function renderDropdownAttributes()
+    public function renderDropdownAttributes(): string
     {
         return 'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button"';
     }
 
     /**
-     *
-     * @return string
+     * @throws \ReflectionException
      */
-    public function renderSubButtons()
+    public function renderSubButtons(): string
     {
         $html = [];
 

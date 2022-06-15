@@ -71,7 +71,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
             $buttonToolBar->addButtonGroup($buttonGroup);
 
-            $classes = ($displayAction == self::ACTION_VIEW_WIKI_PAGE ? 'btn-primary disabled' : '');
+            $classes = ($displayAction == self::ACTION_VIEW_WIKI_PAGE ? ['btn-primary','disabled'] : []);
             $read_url = $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
@@ -82,11 +82,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('WikiArticle'), new FontAwesomeGlyph('desktop', [], null, 'fas'), $read_url,
-                    Button::DISPLAY_ICON_AND_LABEL, false, $classes
+                    Button::DISPLAY_ICON_AND_LABEL, null, $classes
                 )
             );
 
-            $classes = ($displayAction == self::ACTION_DISCUSS ? 'btn-primary disabled' : '');
+            $classes = ($displayAction == self::ACTION_DISCUSS ? ['btn-primary','disabled'] : []);
             $discuss_url = $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_DISCUSS,
@@ -98,11 +98,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('WikiDiscuss'), new FontAwesomeGlyph('comment', [], null, 'fas'),
-                    $discuss_url, Button::DISPLAY_ICON_AND_LABEL, false, $classes
+                    $discuss_url, Button::DISPLAY_ICON_AND_LABEL, null, $classes
                 )
             );
 
-            $classes = ($displayAction == self::ACTION_PAGE_STATISTICS ? 'btn-primary disabled' : '');
+            $classes = ($displayAction == self::ACTION_PAGE_STATISTICS ? ['btn-primary','disabled'] : []);
             $statistics_url = $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_PAGE_STATISTICS,
@@ -114,7 +114,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new Button(
                     Translation::get('WikiStatistics'), new FontAwesomeGlyph(
                     'chart-bar', [], null, 'fas'
-                ), $statistics_url, Button::DISPLAY_ICON_AND_LABEL, false, $classes
+                ), $statistics_url, Button::DISPLAY_ICON_AND_LABEL, null, $classes
                 )
             );
 
@@ -122,7 +122,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $buttonToolBar->addButtonGroup($buttonGroup);
 
             $classes =
-                ($displayAction == self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM ? 'btn-primary disabled' : '');
+                ($displayAction == self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM ? ['btn-primary','disabled'] : []);
             $edit_url = $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
@@ -134,13 +134,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new Button(
                     Translation::get('WikiEdit'), new FontAwesomeGlyph(
                     'edit', [], null, 'fas'
-                ), $edit_url, Button::DISPLAY_ICON_AND_LABEL, false, $classes
+                ), $edit_url, Button::DISPLAY_ICON_AND_LABEL, null, $classes
                 )
             );
 
             $classes = (($displayAction == self::ACTION_HISTORY) ||
             ($displayAction == self::ACTION_VIEW_WIKI_PAGE && Request::get(self::PARAM_WIKI_VERSION_ID)) ?
-                'btn-primary disabled' : '');
+                ['btn-primary disabled'] : []);
             $history_url = $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_HISTORY,
@@ -152,12 +152,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new Button(
                     Translation::get('WikiHistory'), new FontAwesomeGlyph(
                     'history', [], null, 'fas'
-                ), $history_url, Button::DISPLAY_ICON_AND_LABEL, false, $classes
+                ), $history_url, Button::DISPLAY_ICON_AND_LABEL, null, $classes
                 )
             );
 
             $classes =
-                ($displayAction == self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM ? 'btn-primary disabled' : '');
+                ($displayAction == self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM ? ['btn-primary disabled'] : []);
             $delete_url = $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
@@ -169,7 +169,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new Button(
                     Translation::get('WikiDelete'), new FontAwesomeGlyph(
                     'times', [], null, 'fas'
-                ), $delete_url, Button::DISPLAY_ICON_AND_LABEL, true, $classes
+                ), $delete_url, Button::DISPLAY_ICON_AND_LABEL, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), $classes
                 )
             );
         }

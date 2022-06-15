@@ -62,7 +62,7 @@ class JumpForm
         $buttonGroup = new ButtonGroup();
 
         $buttonToolbar->addItem(
-            new Button(Translation::get('JumpTo'), null, null, Button::DISPLAY_LABEL, false, 'btn-link')
+            new Button(Translation::get('JumpTo'), null, null, Button::DISPLAY_LABEL, null, ['btn-link'])
         );
         $buttonToolbar->addItem($buttonGroup);
 
@@ -78,7 +78,7 @@ class JumpForm
 
             $isActive = date('j', $this->getCurrentTime()) == $day;
             $dateButton->addSubButton(
-                new SubButton($day, null, $dayUrl, SubButton::DISPLAY_LABEL, false, [], null, $isActive)
+                new SubButton($day, null, $dayUrl, SubButton::DISPLAY_LABEL, null, [], null, $isActive)
             );
         }
 
@@ -95,7 +95,7 @@ class JumpForm
 
             $isActive = date('n', $this->getCurrentTime()) == $month;
             $monthButton->addSubButton(
-                new SubButton($monthLabel, null, $monthUrl, SubButton::DISPLAY_LABEL, false, [], null, $isActive)
+                new SubButton($monthLabel, null, $monthUrl, SubButton::DISPLAY_LABEL, null, [], null, $isActive)
             );
         }
 
@@ -111,7 +111,7 @@ class JumpForm
 
             $isActive = date('Y', $this->getCurrentTime()) == $year;
             $yearButton->addSubButton(
-                new SubButton($year, null, $yearUrl, SubButton::DISPLAY_LABEL, false, [], null, $isActive)
+                new SubButton($year, null, $yearUrl, SubButton::DISPLAY_LABEL, null, [], null, $isActive)
             );
         }
 

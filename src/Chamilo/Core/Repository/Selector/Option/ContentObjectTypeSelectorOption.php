@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
@@ -53,7 +54,7 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
         );
     }
 
-    public function get_image_path($imageSize = IdentGlyph::SIZE_BIG)
+    public function get_image_path($imageSize = IdentGlyph::SIZE_BIG): ?InlineGlyph
     {
         $templateRegistration = $this->get_template_registration();
 
@@ -72,7 +73,7 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
         return new NamespaceIdentGlyph($glyphNamespace, true, false, false, $imageSize, array('fa-fw'), $glyphTitle);
     }
 
-    public function get_label()
+    public function get_label(): ?string
     {
         return $this->get_name();
     }

@@ -246,8 +246,7 @@ abstract class ViewRenderer extends Renderer
         $currentRendererType = $displayParameters[self::PARAM_TYPE];
 
         $button =
-            new DropdownButton(Translation::get($currentRendererType . 'View'), new FontAwesomeGlyph('calendar-alt'));
-        $button->setDropdownClasses('dropdown-menu-right');
+            new DropdownButton(Translation::get($currentRendererType . 'View'), new FontAwesomeGlyph('calendar-alt'), DropdownButton::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']);
 
         foreach ($rendererTypes as $rendererType)
         {
@@ -256,7 +255,7 @@ abstract class ViewRenderer extends Renderer
 
             $button->addSubButton(
                 new SubButton(
-                    Translation::get($rendererType . 'View'), null, $typeUrl->getUrl(), SubButton::DISPLAY_LABEL, false,
+                    Translation::get($rendererType . 'View'), null, $typeUrl->getUrl(), SubButton::DISPLAY_LABEL, null,
                     [], null, $currentRendererType == $rendererType
                 )
             );

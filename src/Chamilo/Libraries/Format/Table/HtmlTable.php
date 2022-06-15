@@ -409,9 +409,8 @@ abstract class HtmlTable extends HTML_Table
         {
             $button = new SplitDropdownButton(
                 $firstAction->get_title(), null, $firstAction->get_action(), Button::DISPLAY_LABEL,
-                $firstAction->getConfirmation(), 'btn-sm btn-table-action'
+                $firstAction->getConfirmation(), ['btn-sm btn-table-action'], null, ['btn-table-action']
             );
-            $button->setDropdownClasses('btn-table-action');
 
             foreach ($formActions as $formAction)
             {
@@ -430,7 +429,7 @@ abstract class HtmlTable extends HTML_Table
             $buttonToolBar->addItem(
                 new Button(
                     $firstAction->get_title(), null, $firstAction->get_action(), Button::DISPLAY_LABEL,
-                    $firstAction->getConfirmation(), 'btn-sm btn-table-action'
+                    $firstAction->getConfirmation(), ['btn-sm','btn-table-action']
                 )
             );
         }

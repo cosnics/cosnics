@@ -194,7 +194,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
                         'SubscribeGroupsSearcherComponent', null, Manager::context()
                     ), new FontAwesomeGlyph('search'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS_SEARCHER)),
-                    Button::DISPLAY_ICON_AND_LABEL, false, 'pull-right'
+                    Button::DISPLAY_ICON_AND_LABEL, null, ['pull-right']
                 )
             );
 

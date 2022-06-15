@@ -103,7 +103,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 }
 
                 $viewActions = new DropdownButton(
-                    Translation::get($currentRenderer . 'View', null, StringUtilities::LIBRARIES), $glyph->render()
+                    Translation::get($currentRenderer . 'View', null, StringUtilities::LIBRARIES), $glyph
                 );
                 $buttonToolbar->addItem($viewActions);
 
@@ -127,7 +127,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                             Translation::get(
                                 (string) StringUtilities::getInstance()->createString($renderer)->upperCamelize() .
                                 'View', null, StringUtilities::LIBRARIES
-                            ), null, $action, Button::DISPLAY_LABEL, false, [], null, $isActive
+                            ), null, $action, Button::DISPLAY_LABEL, null, [], null, $isActive
                         )
                     );
                 }

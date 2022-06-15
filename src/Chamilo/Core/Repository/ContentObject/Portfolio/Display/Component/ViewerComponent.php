@@ -137,7 +137,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                     $contentItems->addButton(
                         $this->getPublicationButton(
                             Translation::get('CreatorComponent'), new FontAwesomeGlyph('plus'),
-                            $this->get_root_content_object()->get_allowed_types(), $parameters, [], 'btn-primary'
+                            $this->get_root_content_object()->get_allowed_types(), $parameters, [], ['btn-primary']
                         )
                     );
                 }
@@ -357,7 +357,8 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                             self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
                             self::PARAM_STEP => $this->get_current_step()
                         )
-                    ), Button::DISPLAY_ICON_AND_LABEL, true
+                    ), Button::DISPLAY_ICON_AND_LABEL,
+                        Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                     )
                 );
             }
@@ -511,12 +512,12 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
      * @param unknown $allowedContentObjectTypes
      * @param string[] $parameters
      * @param array $extraActions
-     * @param unknown $classes
+     * @param string[] $classes
      *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton
      */
     public function getPublicationButton(
-        $label, $glyph, $allowedContentObjectTypes, $parameters, $extraActions = [], $classes = null
+        $label, $glyph, $allowedContentObjectTypes, $parameters, $extraActions = [], array $classes = []
     )
     {
         $actionSelector = new ActionSelector(
@@ -634,8 +635,11 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
             $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
             $html[] = Translation::get(
-                'LastEditedOn',
-                array('DATE' => DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $last_activity->get_date()))
+                'LastEditedOn', array(
+                    'DATE' => DatetimeUtilities::getInstance()->formatLocaleDate(
+                        $date_format, $last_activity->get_date()
+                    )
+                )
             );
 
             $html[] = '<br />';

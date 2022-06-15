@@ -122,7 +122,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                             Application::PARAM_ACTION => self::ACTION_CREATE_CONTENT_OBJECTS,
                             TypeSelector::PARAM_SELECTION => $filter_type
                         )
-                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'btn-primary'
+                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL, null, ['btn-primary']
                     )
                 );
             }
@@ -192,7 +192,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                             Translation::get(
                                 (string) StringUtilities::getInstance()->createString($renderer)->upperCamelize() .
                                 'View', null, StringUtilities::LIBRARIES
-                            ), null, $action, Button::DISPLAY_LABEL, false, [], null, $isActive
+                            ), null, $action, Button::DISPLAY_LABEL, null, [], null, $isActive
                         )
                     );
                 }

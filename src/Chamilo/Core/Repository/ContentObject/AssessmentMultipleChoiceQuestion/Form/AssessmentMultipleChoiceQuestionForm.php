@@ -365,16 +365,16 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
                 new FontAwesomeGlyph('plus'),
                 ' ',
                 Button::DISPLAY_ICON_AND_LABEL,
-                false,
-                'btn-primary add-option'));
+                null,
+                ['btn-primary','add-option']));
         $buttonToolBar->addItem(
             new Button(
                 $switchLabel,
                 new FontAwesomeGlyph('retweet'),
                 ' ',
                 Button::DISPLAY_ICON_AND_LABEL,
-                false,
-                'change-answer-type'));
+                null,
+                ['change-answer-type']));
 
         $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 

@@ -12,37 +12,30 @@ class ButtonGroup extends AbstractButtonToolBarItem
 {
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[]
      */
-    private $buttons;
+    private array $buttons;
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[] $buttons
      * @param string[] $classes
      */
-    public function __construct($buttons = [], $classes = [])
+    public function __construct($buttons = [], array $classes = [])
     {
         parent::__construct($classes);
 
         $this->buttons = $buttons;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton $button
-     */
     public function addButton(AbstractButton $button)
     {
         $this->buttons[] = $button;
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[] $buttons
      */
-    public function addButtons($buttons)
+    public function addButtons(array $buttons)
     {
         foreach ($buttons as $button)
         {
@@ -51,47 +44,35 @@ class ButtonGroup extends AbstractButtonToolBarItem
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[]
      */
-    public function getButtons()
+    public function getButtons(): array
     {
         return $this->buttons;
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[] $buttons
      */
-    public function setButtons($buttons)
+    public function setButtons(array $buttons)
     {
         $this->buttons = $buttons;
     }
 
-    /**
-     * Returns whether or not the button group has buttons
-     *
-     * @return boolean
-     */
-    public function hasButtons()
+    public function hasButtons(): bool
     {
         return count($this->buttons) > 0;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton $button
-     */
     public function prependButton(AbstractButton $button)
     {
         array_unshift($this->buttons, $button);
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[] $buttons
      */
-    public function prependButtons($buttons)
+    public function prependButtons(array $buttons)
     {
         foreach ($buttons as $button)
         {

@@ -45,8 +45,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Ramsey\Uuid\Uuid;
 use Exception;
+use Ramsey\Uuid\Uuid;
 
 /**
  *
@@ -57,35 +57,35 @@ use Exception;
 class ContentObject extends CompositeDataClass
 {
 
-    const ATTACHMENT_ALL = 'all';
-    const ATTACHMENT_NORMAL = 'normal';
+    public const ATTACHMENT_ALL = 'all';
+    public const ATTACHMENT_NORMAL = 'normal';
 
-    const CURRENT_MULTIPLE = 2;
-    const CURRENT_OLD = 0;
-    const CURRENT_SINGLE = 1;
+    public const CURRENT_MULTIPLE = 2;
+    public const CURRENT_OLD = 0;
+    public const CURRENT_SINGLE = 1;
 
-    const PARAM_SECURITY_CODE = 'security_code';
+    public const PARAM_SECURITY_CODE = 'security_code';
 
-    const PROPERTIES_ADDITIONAL = 'additional_properties';
-    const PROPERTY_COMMENT = 'comment';
-    const PROPERTY_CONTENT_HASH = 'content_hash';
-    const PROPERTY_CREATION_DATE = 'created';
-    const PROPERTY_CURRENT = 'current';
-    const PROPERTY_DESCRIPTION = 'description';
-    const PROPERTY_MODIFICATION_DATE = 'modified';
-    const PROPERTY_OBJECT_NUMBER = 'object_number';
-    const PROPERTY_OWNER_ID = 'owner_id';
-    const PROPERTY_PARENT_ID = 'parent_id';
-    const PROPERTY_STATE = 'state';
-    const PROPERTY_TEMPLATE_REGISTRATION_ID = 'template_registration_id';
-    const PROPERTY_TITLE = 'title';
-    const PROPERTY_TYPE = 'type';
+    public const PROPERTIES_ADDITIONAL = 'additional_properties';
+    public const PROPERTY_COMMENT = 'comment';
+    public const PROPERTY_CONTENT_HASH = 'content_hash';
+    public const PROPERTY_CREATION_DATE = 'created';
+    public const PROPERTY_CURRENT = 'current';
+    public const PROPERTY_DESCRIPTION = 'description';
+    public const PROPERTY_MODIFICATION_DATE = 'modified';
+    public const PROPERTY_OBJECT_NUMBER = 'object_number';
+    public const PROPERTY_OWNER_ID = 'owner_id';
+    public const PROPERTY_PARENT_ID = 'parent_id';
+    public const PROPERTY_STATE = 'state';
+    public const PROPERTY_TEMPLATE_REGISTRATION_ID = 'template_registration_id';
+    public const PROPERTY_TITLE = 'title';
+    public const PROPERTY_TYPE = 'type';
 
-    const STATE_AUTOSAVE = 8;
-    const STATE_BACKUP = 16;
-    const STATE_INACTIVE = 1;
-    const STATE_NORMAL = 2;
-    const STATE_RECYCLED = 4;
+    public const STATE_AUTOSAVE = 8;
+    public const STATE_BACKUP = 16;
+    public const STATE_INACTIVE = 1;
+    public const STATE_NORMAL = 2;
+    public const STATE_RECYCLED = 4;
 
     private $attachment_ids = [];
 
@@ -210,7 +210,7 @@ class ContentObject extends CompositeDataClass
      *
      * @return string The type name.
      */
-    static public function class_to_type($class)
+    public static function class_to_type($class)
 
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace($class, true);
@@ -654,7 +654,7 @@ class ContentObject extends CompositeDataClass
      *
      * @param $id int The ID of the object to remove from the attachment list.
      *
-     * @return boolean True if the attachment was removed, false if it did not exist.
+     * @return bool True if the attachment was removed, false if it did not exist.
      */
     public function detach_content_object($id, $type = self::ATTACHMENT_NORMAL)
     {
@@ -713,7 +713,7 @@ class ContentObject extends CompositeDataClass
      *
      * @param $id int The ID of the object to remove from the include list.
      *
-     * @return boolean True if the include was removed, false if it did not exist.
+     * @return bool True if the include was removed, false if it did not exist.
      */
     public function exclude_content_object($id)
     {
@@ -789,8 +789,8 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
-     * @param integer $size
-     * @param boolean $isAvailable
+     * @param int $size
+     * @param bool $isAvailable
      * @param string[] $extraClasses
      *
      * @return \Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph
@@ -855,7 +855,7 @@ class ContentObject extends CompositeDataClass
     /**
      * @return string
      */
-    static public function getStorageSpaceProperty()
+    public static function getStorageSpaceProperty()
     {
         return null;
     }
@@ -1057,7 +1057,7 @@ class ContentObject extends CompositeDataClass
 
     /**
      *
-     * @param $content_object_id integer
+     * @param $content_object_id int
      *
      * @return ContentObject An object inheriting from ContentObject
      */
@@ -1191,7 +1191,7 @@ class ContentObject extends CompositeDataClass
      *         quota.
      * @deprecated Use ContentObject::getStorageSpaceProperty() now
      */
-    static public function get_disk_space_properties()
+    public static function get_disk_space_properties()
     {
         return static::getStorageSpaceProperty();
     }
@@ -1201,7 +1201,7 @@ class ContentObject extends CompositeDataClass
      *
      * @return string[]
      */
-    static public function get_html_editors($html_editors = [])
+    public static function get_html_editors($html_editors = [])
 
     {
         $html_editors[] = self::PROPERTY_DESCRIPTION;
@@ -1438,7 +1438,7 @@ class ContentObject extends CompositeDataClass
         );
     }
 
-    static public function get_searchable_property_names()
+    public static function get_searchable_property_names()
     {
         return [];
     }
@@ -1472,7 +1472,7 @@ class ContentObject extends CompositeDataClass
             $this->synchronization_data =
                 \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_synchronization_data_set(
                     $sync_condition
-                )->current();
+                );
         }
 
         return $this->synchronization_data;
@@ -1552,8 +1552,8 @@ class ContentObject extends CompositeDataClass
 
     /**
      * @param string $glyphNamespace
-     * @param integer $size
-     * @param boolean $isAvailable
+     * @param int $size
+     * @param bool $isAvailable
      * @param string $title
      * @param string[] $extraClasses
      *
@@ -1571,7 +1571,7 @@ class ContentObject extends CompositeDataClass
      *
      * @param $ancestor_id int
      *
-     * @return boolean True if the ID belongs to an ancestor, false otherwise.
+     * @return bool True if the ID belongs to an ancestor, false otherwise.
      */
     public function has_ancestor($ancestor_id)
     {
@@ -1637,7 +1637,7 @@ class ContentObject extends CompositeDataClass
     /**
      * Checks if this object has versions
      *
-     * @return boolean
+     * @return bool
      */
     public function has_versions()
     {
@@ -1646,8 +1646,8 @@ class ContentObject extends CompositeDataClass
 
     /**
      * @param string $glyphNamespace
-     * @param integer $size
-     * @param boolean $isAvailable
+     * @param int $size
+     * @param bool $isAvailable
      * @param string $title
      * @param string[] $extraClasses
      *
@@ -1686,7 +1686,7 @@ class ContentObject extends CompositeDataClass
      *
      * @param $object_id int
      *
-     * @return boolean
+     * @return bool
      */
     public function is_attached_to($object_id, $type = ContentObject::ATTACHMENT_NORMAL)
     {
@@ -1718,7 +1718,7 @@ class ContentObject extends CompositeDataClass
      * @param $content_object_id int
      * @param $check_content_object_id int
      *
-     * @return boolean
+     * @return bool
      */
     public function is_attached_to_or_included_in($object_id)
     {
@@ -1776,7 +1776,7 @@ class ContentObject extends CompositeDataClass
     /**
      * Determines whether this object is a complex object
      *
-     * @return boolean True if the LO is a CLO
+     * @return bool True if the LO is a CLO
      * @deprecated Use instanceof ComplexContentObjectSupport directly from now on
      */
     public function is_complex_content_object()
@@ -1791,9 +1791,7 @@ class ContentObject extends CompositeDataClass
 
     public function is_external()
     {
-        $is_external = $this->get_synchronization_data();
-
-        return isset($is_external);
+        return $this->get_synchronization_data() instanceof SynchronizationData;
     }
 
     public function is_included_in($object_id)
@@ -1837,7 +1835,7 @@ class ContentObject extends CompositeDataClass
     /**
      * Determines whether this object can have versions.
      *
-     * @return boolean True if the object is versionable, false otherwise.
+     * @return bool True if the object is versionable, false otherwise.
      * @deprecated Use instanceof Versionable directly from now on
      */
     public function is_versionable()
@@ -1954,7 +1952,7 @@ class ContentObject extends CompositeDataClass
      *
      * @param $state int The state.
      *
-     * @return boolean True upon success, false upon failure.
+     * @return bool True upon success, false upon failure.
      */
     public function set_state($state)
     {
@@ -1985,7 +1983,7 @@ class ContentObject extends CompositeDataClass
      * Determines whether this object supports attachments, i.e.
      * whether other objects may be attached to it.
      *
-     * @return boolean True if attachments are supported, false otherwise.
+     * @return bool True if attachments are supported, false otherwise.
      * @deprecated Use instanceof AttachmentSupport directly from now on
      */
     public function supports_attachments()
@@ -2068,7 +2066,7 @@ class ContentObject extends CompositeDataClass
      *
      * @return string The class name.
      */
-    static public function type_to_class($type)
+    public static function type_to_class($type)
 
     {
         return self::get_content_object_type_namespace($type) . '\\' .
@@ -2082,9 +2080,9 @@ class ContentObject extends CompositeDataClass
      * a change to a property that affects the object itself; changing the object's category, for instance, should not
      * change the last modification date.
      *
-     * @param $trueUpdate boolean True if the update is a true update (default), false otherwise.
+     * @param $trueUpdate bool True if the update is a true update (default), false otherwise.
      *
-     * @return boolean True if the update succeeded, false otherwise
+     * @return bool True if the update succeeded, false otherwise
      * .
      * @throws \Exception
      */

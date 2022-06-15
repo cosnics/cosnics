@@ -87,7 +87,7 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
 
         $visitDocumentButton = new Button(
             $visitDocumentLabel, null, $visitDocumentUrl,
-            Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
+            Button::DISPLAY_ICON_AND_LABEL, null, [], '_blank'
         );
 
         $courseGroupActionsToolbar->addItem($visitDocumentButton);

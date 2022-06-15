@@ -23,6 +23,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 class ViewerComponent extends BaseHtmlTreeComponent
@@ -188,7 +189,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                         self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
                         self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
                     )
-                ), SubButton::DISPLAY_ICON_AND_LABEL, true
+                ), SubButton::DISPLAY_ICON_AND_LABEL, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                 )
             );
         }
@@ -273,7 +274,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
         $moveButton = new SubButton(
             $translator->getTranslation('Move', null, Manager::context()), new FontAwesomeGlyph('random'), '#',
-            Button::DISPLAY_ICON_AND_LABEL, false, 'mover-open'
+            Button::DISPLAY_ICON_AND_LABEL, null, ['mover-open']
         );
 
         $button->addSubButton($moveButton);

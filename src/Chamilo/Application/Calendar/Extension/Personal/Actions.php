@@ -37,7 +37,7 @@ class Actions implements ActionsInterface
             $parameters);
 
         $createButton = $actionSelector->getActionButton(Translation::get('AddEvent'), new FontAwesomeGlyph('plus'));
-        $createButton->setClasses('btn-primary');
+        $createButton->setClasses(['btn-primary']);
 
         return array($createButton);
     }

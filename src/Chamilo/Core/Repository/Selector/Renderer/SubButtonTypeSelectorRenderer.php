@@ -53,8 +53,7 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
         {
             // If multiple categories add category header?
             $subButtons[] = new SubButton(
-                $option->get_label(),
-                $option->get_image_path(IdentGlyph::SIZE_MINI),
+                $option->get_label(), $option->get_image_path(IdentGlyph::SIZE_MINI),
                 $this->getContentObjectTypeUrl($option->get_template_registration_id())
             );
         }

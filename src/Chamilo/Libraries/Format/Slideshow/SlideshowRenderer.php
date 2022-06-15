@@ -20,76 +20,47 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class SlideshowRenderer
 {
-    const PARAM_AUTOPLAY = 'autoplay';
-    const PARAM_INDEX = 'slideshow';
+    public const PARAM_AUTOPLAY = 'autoplay';
+    public const PARAM_INDEX = 'slideshow';
 
     /**
-     *
-     * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject
-     */
-    private $contentObject;
-
-    /**
-     *
-     * @var integer
-     */
-    private $contentObjectCount;
-
-    /**
-     *
-     * @var \Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation
-     */
-    private $contentObjectRenditionImplementation;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\ToolbarItem[]
-     */
-    private $slideActions;
-
-    /**
-     *
      * @var string[]
      */
-    private $actionParameters;
+    private array $actionParameters;
+
+    private ContentObject $contentObject;
+
+    private int $contentObjectCount;
+
+    private ContentObjectRenditionImplementation $contentObjectRenditionImplementation;
+
+    private bool $isFirst;
+
+    private bool $isLast;
 
     /**
-     *
-     * @var integer
+     * @var \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */
-    private $slideshowIndex;
+    private array $slideActions;
 
-    /**
-     *
-     * @var integer
-     */
-    private $slideshowAutoPlay;
+    private int $slideshowAutoPlay;
 
-    /**
-     *
-     * @var boolean
-     */
-    private $isLast;
-
-    /**
-     *
-     * @var boolean
-     */
-    private $isFirst;
+    private int $slideshowIndex;
 
     /**
      *
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param integer $contentObjectCount
+     * @param int $contentObjectCount
      * @param \Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation $contentObjectRenditionImplementation
      * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $slideActions
      * @param string[] $actionParameters
-     * @param integer $slideshowIndex
-     * @param integer $slideshowAutoplay
+     * @param int $slideshowIndex
+     * @param int $slideshowAutoplay
      */
     public function __construct(
-        ContentObject $contentObject = null, $contentObjectCount, $contentObjectRenditionImplementation, $slideActions,
-        $actionParameters, $slideshowIndex, $slideshowAutoplay
+        ContentObject $contentObject, int $contentObjectCount,
+        ContentObjectRenditionImplementation $contentObjectRenditionImplementation, array $slideActions,
+        array $actionParameters, int $slideshowIndex, int $slideshowAutoplay
     )
     {
         $this->contentObject = $contentObject;
@@ -102,10 +73,10 @@ class SlideshowRenderer
     }
 
     /**
-     *
-     * @return string
+     * @throws \ReflectionException
+     * @throws \Exception
      */
-    public function render()
+    public function render(): string
     {
         $slideshowIndex = $this->getSlideshowIndex();
         $contentObject = $this->getContentObject();
@@ -168,13 +139,9 @@ class SlideshowRenderer
     }
 
     /**
-     *
-     * @param integer $slideshowIndex
-     * @param integer $slideshowAutoPlay
-     *
-     * @return string
+     * @throws \Exception
      */
-    public function determineUrl($slideshowIndex, $slideshowAutoPlay)
+    public function determineUrl(int $slideshowIndex, int $slideshowAutoPlay): string
     {
         $parameters = $this->getActionParameters();
 
@@ -187,72 +154,46 @@ class SlideshowRenderer
     }
 
     /**
-     *
      * @return string[]
      */
-    public function getActionParameters()
+    public function getActionParameters(): array
     {
         return $this->actionParameters;
     }
 
     /**
-     *
      * @param string[] $actionParameters
      */
-    public function setActionParameters($actionParameters)
+    public function setActionParameters(array $actionParameters)
     {
         $this->actionParameters = $actionParameters;
     }
 
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
-     */
-    public function getContentObject()
+    public function getContentObject(): ContentObject
     {
         return $this->contentObject;
     }
 
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     */
     public function setContentObject(ContentObject $contentObject)
     {
         $this->contentObject = $contentObject;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getContentObjectCount()
+    public function getContentObjectCount(): int
     {
         return $this->contentObjectCount;
     }
 
-    /**
-     *
-     * @param integer $contentObjectCount
-     */
-    public function setContentObjectCount($contentObjectCount)
+    public function setContentObjectCount(int $contentObjectCount)
     {
         $this->contentObjectCount = $contentObjectCount;
     }
 
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation
-     */
-    public function getContentObjectRenditionImplementation()
+    public function getContentObjectRenditionImplementation(): ContentObjectRenditionImplementation
     {
         return $this->contentObjectRenditionImplementation;
     }
 
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation $contentObjectRenditionImplementation
-     */
     public function setContentObjectRenditionImplementation(
         ContentObjectRenditionImplementation $contentObjectRenditionImplementation
     )
@@ -261,64 +202,42 @@ class SlideshowRenderer
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */
-    public function getSlideActions()
+    public function getSlideActions(): array
     {
         return $this->slideActions;
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $slideActions
      */
-    public function setSlideActions($slideActions)
+    public function setSlideActions(array $slideActions)
     {
         $this->slideActions = $slideActions;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getSlideshowAutoPlay()
+    public function getSlideshowAutoPlay(): int
     {
         return $this->slideshowAutoPlay;
     }
 
-    /**
-     *
-     * @param integer $slideshowAutoPlay
-     */
-    public function setSlideshowAutoPlay($slideshowAutoPlay)
+    public function setSlideshowAutoPlay(int $slideshowAutoPlay)
     {
         $this->slideshowAutoPlay = $slideshowAutoPlay;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getSlideshowIndex()
+    public function getSlideshowIndex(): int
     {
         return $this->slideshowIndex;
     }
 
-    /**
-     *
-     * @param integer $slideshowIndex
-     */
-    public function setSlideshowIndex($slideshowIndex)
+    public function setSlideshowIndex(int $slideshowIndex)
     {
         $this->slideshowIndex = $slideshowIndex;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function isFirst()
+    public function isFirst(): bool
     {
         if (!isset($this->isFirst))
         {
@@ -328,11 +247,7 @@ class SlideshowRenderer
         return $this->isFirst;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function isLast()
+    public function isLast(): bool
     {
         if (!isset($this->isLast))
         {
@@ -343,10 +258,10 @@ class SlideshowRenderer
     }
 
     /**
-     *
-     * @return string
+     * @throws \ReflectionException
+     * @throws \Exception
      */
-    public function renderButtonToolbar()
+    public function renderButtonToolbar(): string
     {
         $slideshowIndex = $this->getSlideshowIndex();
         $slideshowAutoplay = $this->getSlideshowAutoPlay();
@@ -379,10 +294,9 @@ class SlideshowRenderer
     }
 
     /**
-     *
-     * @return string
+     * @throws \Exception
      */
-    public function renderNextNavigation()
+    public function renderNextNavigation(): string
     {
         $html = [];
 
@@ -390,22 +304,22 @@ class SlideshowRenderer
         {
             $slideshowIndex = $this->getSlideshowIndex() + 1;
 
-            $glyph = new FontAwesomeGlyph('angle-right', array('fa-4x', 'fa-fw'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-right', ['fa-4x', 'fa-fw'], null, 'fas');
             $html[] = '<a href="' . $this->determineUrl($slideshowIndex, $this->getSlideshowAutoPlay()) . '">' .
                 $glyph->render() . '</a>';
 
             $slideshowIndex = $this->getContentObjectCount() - 1;
 
-            $glyph = new FontAwesomeGlyph('angle-double-right', array('fa-4x', 'fa-fw'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-double-right', ['fa-4x', 'fa-fw'], null, 'fas');
             $html[] = '<a href="' . $this->determineUrl($slideshowIndex, $this->getSlideshowAutoPlay()) . '">' .
                 $glyph->render() . '</span></a>';
         }
         else
         {
-            $glyph = new FontAwesomeGlyph('angle-right', array('fa-4x', 'fa-fw', 'text-muted'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-right', ['fa-4x', 'fa-fw', 'text-muted'], null, 'fas');
             $html[] = $glyph->render();
 
-            $glyph = new FontAwesomeGlyph('angle-double-right', array('fa-4x', 'fa-fw', 'text-muted'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-double-right', ['fa-4x', 'fa-fw', 'text-muted'], null, 'fas');
             $html[] = $glyph->render();
         }
 
@@ -413,31 +327,30 @@ class SlideshowRenderer
     }
 
     /**
-     *
-     * @return string
+     * @throws \Exception
      */
-    public function renderPreviousNavigation()
+    public function renderPreviousNavigation(): string
     {
         $html = [];
 
         if (!$this->isFirst())
         {
-            $glyph = new FontAwesomeGlyph('angle-double-left', array('fa-4x', 'fa-fw'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-double-left', ['fa-4x', 'fa-fw'], null, 'fas');
             $html[] =
                 '<a href="' . $this->determineUrl(0, $this->getSlideshowAutoPlay()) . '">' . $glyph->render() . '</a>';
 
             $slideshowIndex = $this->getSlideshowIndex() - 1;
 
-            $glyph = new FontAwesomeGlyph('angle-left', array('fa-4x', 'fa-fw'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-left', ['fa-4x', 'fa-fw'], null, 'fas');
             $html[] = '<a href="' . $this->determineUrl($slideshowIndex, $this->getSlideshowAutoPlay()) . '">' .
                 $glyph->render() . '</span></a>';
         }
         else
         {
-            $glyph = new FontAwesomeGlyph('angle-double-left', array('fa-4x', 'fa-fw', 'text-muted'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-double-left', ['fa-4x', 'fa-fw', 'text-muted'], null, 'fas');
             $html[] = $glyph->render();
 
-            $glyph = new FontAwesomeGlyph('angle-left', array('fa-4x', 'fa-fw', 'text-muted'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('angle-left', ['fa-4x', 'fa-fw', 'text-muted'], null, 'fas');
             $html[] = $glyph->render();
         }
 
@@ -445,10 +358,9 @@ class SlideshowRenderer
     }
 
     /**
-     *
-     * @return string
+     * @throws \Exception
      */
-    public function renderSlidshowAutoplay()
+    public function renderSlidshowAutoplay(): string
     {
         $slideshowAutoplay = $this->getSlideshowAutoPlay();
 

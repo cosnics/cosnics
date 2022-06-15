@@ -81,7 +81,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
                         self::PARAM_ACTION => self::ACTION_LICENSE,
                         self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE)
                     )
-                ), Button::DISPLAY_ICON_AND_LABEL, false, 'btn-primary'
+                ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-primary']
             )
         );
 

@@ -155,7 +155,7 @@ class BrowserComponent extends Manager implements TableSupport
                         new SubButton(
                             $workspace->getTitle(), null,
                             $this->get_url(array(self::PARAM_WORKSPACE_ID => $workspace->getId())),
-                            SubButton::DISPLAY_LABEL, false, [], null, $isActive
+                            SubButton::DISPLAY_LABEL, null, [], null, $isActive
                         )
                     );
                 }

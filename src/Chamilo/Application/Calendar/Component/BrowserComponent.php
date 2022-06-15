@@ -139,9 +139,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         $splitDropdownButton = new SplitDropdownButton(
-            Translation::get('ConfigComponent'), new FontAwesomeGlyph('cog'), $settingsUrl->getUrl()
+            Translation::get('ConfigComponent'), new FontAwesomeGlyph('cog'), $settingsUrl->getUrl(),
+            SplitDropdownButton::DISPLAY_ICON_AND_LABEL, null, [], null, ['dropdown-menu-right']
         );
-        $splitDropdownButton->setDropdownClasses('dropdown-menu-right');
 
         $availabilityUrl = new Redirect(
             array(Application::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => Manager::ACTION_AVAILABILITY)

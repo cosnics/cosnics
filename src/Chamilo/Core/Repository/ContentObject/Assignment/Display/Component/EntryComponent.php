@@ -209,7 +209,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
                             self::PARAM_ENTITY_TYPE => $this->getEntityType(),
                             self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
                         ]
-                    ), Button::DISPLAY_ICON_AND_LABEL, false, 'btn-success'
+                    ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-success']
                     )
                 );
             }
@@ -235,8 +235,8 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
                                                 ]
                                             ),
                                             Button::DISPLAY_ICON_AND_LABEL,
-                                            false,
-                                            'btn-success'
+                                            null,
+                                            ['btn-success']
                                         )
                                     )
                                 )
@@ -376,10 +376,8 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
             $selectEntityButton = new DropdownButton(
                 $this->getDataProvider()->renderEntityNameByEntityTypeAndEntityId(
                     $this->getEntityType(), $this->getEntityIdentifier()
-                ), new FontAwesomeGlyph('user')
+                ), new FontAwesomeGlyph('user'), DropdownButton::DISPLAY_ICON_AND_LABEL, [], ['dropdown-entities']
             );
-
-            $selectEntityButton->setDropdownClasses('dropdown-entities');
 
             $selectEntityButton->addSubButton(
                 new SubButtonHeader(
@@ -410,7 +408,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
                     new SubButton(
                         $this->getDataProvider()->renderEntityNameByEntityTypeAndEntity(
                             $this->getEntityType(), $entity
-                        ), null, $url, SubButton::DISPLAY_LABEL, false, [], null, $isActive
+                        ), null, $url, SubButton::DISPLAY_LABEL, null, [], null, $isActive
                     )
                 );
             }

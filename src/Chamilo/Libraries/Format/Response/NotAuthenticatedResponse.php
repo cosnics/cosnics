@@ -19,7 +19,7 @@ class NotAuthenticatedResponse extends Response
 {
 
     /**
-     * Constructor
+     * @throws \ReflectionException
      */
     public function __construct()
     {
@@ -35,11 +35,10 @@ class NotAuthenticatedResponse extends Response
     }
 
     /**
-     * Displays the login form
-     *
-     * @return string
+     * @throws \ReflectionException
+     * @throws \Exception
      */
-    public function displayLoginForm()
+    public function displayLoginForm(): string
     {
         $translator = Translation::getInstance();
         $redirect = new Redirect();
@@ -58,7 +57,7 @@ class NotAuthenticatedResponse extends Response
 
         $form->addElement(
             'text', 'login', $translator->getTranslation('UserName'),
-            array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control')
+            ['size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control']
         );
 
         $form->addElement('html', '</div>');
@@ -73,7 +72,7 @@ class NotAuthenticatedResponse extends Response
 
         $form->addElement(
             'password', 'password', $translator->getTranslation('Pass'),
-            array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control')
+            ['size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control']
         );
 
         $form->addElement('html', '</div>');
@@ -88,19 +87,16 @@ class NotAuthenticatedResponse extends Response
 
         $form->addRule('password', $translator->getTranslation('ThisFieldIsRequired'), 'required');
         $form->addRule(
-            'login', $translator->getTranslation('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
-            'required'
+            'login', $translator->getTranslation('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
         );
 
         return $form->render();
     }
 
     /**
-     * Renders the panel with the not authenticated message and the login form
-     *
-     * @return string
+     * @throws \ReflectionException
      */
-    public function renderPanel()
+    public function renderPanel(): string
     {
         $html = [];
 

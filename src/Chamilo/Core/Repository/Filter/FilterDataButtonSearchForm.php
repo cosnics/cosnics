@@ -33,7 +33,7 @@ class FilterDataButtonSearchForm extends ButtonSearchForm
     /**
      * Returns the query based on the filter data
      */
-    public function getQuery()
+    public function getQuery(): ?string
     {
         $query = parent::getQuery();
         
@@ -50,7 +50,7 @@ class FilterDataButtonSearchForm extends ButtonSearchForm
      * 
      * @return bool
      */
-    public function clearFormSubmitted()
+    public function clearFormSubmitted(): bool
     {
         if (parent::clearFormSubmitted())
         {

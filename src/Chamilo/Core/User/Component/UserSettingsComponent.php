@@ -9,7 +9,6 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
@@ -108,7 +107,7 @@ class UserSettingsComponent extends ProfileComponent
                 $is_current_tab = ($this->context === $setting_context);
                 $tab = new LinkTab(
                     $setting_context, Translation::get('TypeName', null, $setting_context), new NamespaceIdentGlyph(
-                    $setting_context, true, false, false, IdentGlyph::SIZE_SMALL, []
+                    $setting_context, true
                 ), $package_url, $is_current_tab
                 );
                 $tabs->add($tab);

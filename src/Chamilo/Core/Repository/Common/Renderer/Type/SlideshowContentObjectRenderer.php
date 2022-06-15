@@ -39,8 +39,6 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
             $workspace,
             ConditionFilterRenderer::factory($filterData, $workspace));
 
-        $contentObject = $contentObjectRenditionImplementation = $contentObjectActions = null;
-
         if($contentObjectCount)
         {
             $contentObject = $contentObjectService->getContentObjectsByTypeForWorkspace(
@@ -60,17 +58,19 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
             );
 
             $contentObjectActions = $this->get_content_object_actions($contentObject);
+
+            $slideshowRender = new SlideshowRenderer(
+                $contentObject,
+                $contentObjectCount,
+                $contentObjectRenditionImplementation,
+                $contentObjectActions,
+                $this->get_parameters(),
+                $slideshowIndex,
+                $slideshowAutoPlay);
+
+            return $slideshowRender->render();
         }
 
-        $slideshowRender = new SlideshowRenderer(
-            $contentObject,
-            $contentObjectCount,
-            $contentObjectRenditionImplementation,
-            $contentObjectActions,
-            $this->get_parameters(),
-            $slideshowIndex,
-            $slideshowAutoPlay);
-
-        return $slideshowRender->render();
+        return '';
     }
 }

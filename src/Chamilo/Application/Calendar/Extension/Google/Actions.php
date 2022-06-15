@@ -36,9 +36,9 @@ class Actions implements ActionsInterface
     public function getAdditional(Application $application)
     {
         $dropdownButton = new DropdownButton(
-            Translation::get('TypeName', null, __NAMESPACE__), new FontAwesomeGlyph('google', [], null, 'fab')
+            Translation::get('TypeName', null, __NAMESPACE__), new FontAwesomeGlyph('google', [], null, 'fab'),
+            DropdownButton::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']
         );
-        $dropdownButton->setDropdownClasses('dropdown-menu-right');
 
         $configurationContext = Manager::context();
         $accessToken = LocalSetting::getInstance()->get('token', $configurationContext);

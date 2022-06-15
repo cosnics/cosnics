@@ -63,7 +63,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
                 )
-            ), Button::DISPLAY_ICON, false, 'btn-link'
+            ), Button::DISPLAY_ICON, null, ['btn-link']
             )
         );
 
@@ -75,7 +75,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
                 )
-            ), Button::DISPLAY_ICON, false, 'btn-link'
+            ), Button::DISPLAY_ICON, null, ['btn-link']
             )
         );
 
@@ -94,7 +94,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                         \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_EPHORUS
                     )
-                ), Button::DISPLAY_ICON, false, null, '_blank'
+                ), Button::DISPLAY_ICON, null, [], '_blank'
                 )
             );
         }

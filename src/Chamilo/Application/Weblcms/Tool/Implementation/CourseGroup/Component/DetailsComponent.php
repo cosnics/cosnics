@@ -46,9 +46,9 @@ class DetailsComponent extends TabComponent implements TableSupport
         {
             $buttonToolbar->addItem(
                 new Button(
-                    $translator->getTranslation('SubscribeToGroup', [], Manager::context()), '',
+                    $translator->getTranslation('SubscribeToGroup', [], Manager::context()), null,
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_SELF_SUBSCRIBE)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'btn-success'
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL, null, ['btn-success']
                 )
             );
         }
@@ -57,9 +57,9 @@ class DetailsComponent extends TabComponent implements TableSupport
         {
             $buttonToolbar->addItem(
                 new Button(
-                    $translator->getTranslation('UnSubscribeFromGroup', [], Manager::context()), '',
+                    $translator->getTranslation('UnSubscribeFromGroup', [], Manager::context()), null,
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_SELF_UNSUBSCRIBE)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'btn-danger'
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL, null, ['btn-danger']
                 )
             );
         }

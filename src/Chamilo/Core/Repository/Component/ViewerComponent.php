@@ -38,6 +38,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use InvalidArgumentException;
 
@@ -337,7 +338,8 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         new Button(
                             $translator->trans('Unlink', [], StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('unlink', [], null, 'fas'), $unlink_url,
-                            Button::DISPLAY_ICON_AND_LABEL, true
+                            Button::DISPLAY_ICON_AND_LABEL,
+                            Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                         )
                     );
                 }
@@ -349,7 +351,8 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     $stateActions->addButton(
                         new Button(
                             $translator->trans('Restore', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('undo'),
-                            $restore_url, Button::DISPLAY_ICON_AND_LABEL, true
+                            $restore_url, Button::DISPLAY_ICON_AND_LABEL,
+                            Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                         )
                     );
                 }
@@ -400,8 +403,8 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $baseActions->addButton(
                             new Button(
                                 $translator->trans('Preview', [], StringUtilities::LIBRARIES),
-                                new FontAwesomeGlyph('desktop'), $preview_url, Button::DISPLAY_ICON_AND_LABEL, false,
-                                $onclick, '_blank'
+                                new FontAwesomeGlyph('desktop'), $preview_url, Button::DISPLAY_ICON_AND_LABEL, null,
+                                [$onclick], '_blank'
                             )
                         );
                     }
@@ -423,7 +426,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $baseActions->addButton(
                             new Button(
                                 $translator->trans($variable, [], StringUtilities::LIBRARIES), $image, $preview_url,
-                                Button::DISPLAY_ICON_AND_LABEL, false, $onclick, '_blank'
+                                Button::DISPLAY_ICON_AND_LABEL, null, [$onclick], '_blank'
                             )
                         );
                     }
@@ -483,7 +486,8 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     $stateActions->addButton(
                         new Button(
                             $translator->trans('Unshare', [], StringUtilities::LIBRARIES),
-                            new FontAwesomeGlyph('unlock'), $url, Button::DISPLAY_ICON_AND_LABEL, true
+                            new FontAwesomeGlyph('unlock'), $url, Button::DISPLAY_ICON_AND_LABEL,
+                            Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                         )
                     );
                 }

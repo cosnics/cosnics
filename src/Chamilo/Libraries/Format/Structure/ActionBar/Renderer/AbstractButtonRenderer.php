@@ -14,58 +14,35 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
 {
 
-    /**
-     *
-     * @return string
-     */
-    public function render()
+    public function render():string
     {
         return $this->renderLink();
     }
 
     /**
-     *
      * @return string[]
      */
-    public function determineClasses()
+    public function determineClasses(): array
     {
-        $classes = [];
-
-        $classes[] = 'btn';
-        $classes[] = 'btn-default';
-        $classes[] = $this->getButton()->getClasses();
-
-        return $classes;
+        return array_merge(['btn', 'btn-default'], $this->getButton()->getClasses());
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getLabel()
+    public function getLabel(): ?string
     {
         return ($this->getButton()->getLabel() ? $this->getButton()->getLabel() : null);
     }
 
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return htmlspecialchars(strip_tags($this->getLabel()));
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function renderClasses()
+    public function renderClasses(): string
     {
         return 'class="' . implode(' ', $this->determineClasses()) . '"';
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function renderLink()
+    public function renderLink(): string
     {
         $html = [];
 
@@ -80,20 +57,16 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
      *
      * @return string
      */
-    public function renderLinkClosingTag()
+    public function renderLinkClosingTag(): string
     {
         return '</a>';
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function renderLinkContent()
+    public function renderLinkContent(): string
     {
         $button = $this->getButton();
         $label = $this->getLabel();
-        $imagePath = $button->getImagePath();
+        $imagePath = $button->getInlineGlyph();
 
         $html = [];
 
@@ -113,32 +86,19 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
         return implode('', $html);
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function renderLinkContentImage()
+    public function renderLinkContentImage(): string
     {
-        $button = $this->getButton();
-        $title = $this->getTitle();
-        $imagePath = $button->getImagePath();
+        $inlineGlyph = $this->getButton()->getInlineGlyph();
 
-        if ($imagePath instanceof InlineGlyph)
+        if ($inlineGlyph instanceof InlineGlyph)
         {
-            return $imagePath->render();
+            return $inlineGlyph->render();
         }
-        else
-        {
-            return '<img src="' . htmlentities($button->getImagePath()) . '" alt="' . $title . '" title="' . $title .
-                '"/>';
-        }
+
+        return '';
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function renderLinkOpeningTag()
+    public function renderLinkOpeningTag(): string
     {
         $html = [];
 
@@ -154,7 +114,7 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
      *
      * @return string
      */
-    public function renderTitle()
+    public function renderTitle(): string
     {
         return 'title="' . htmlentities($this->getTitle()) . '"';
     }

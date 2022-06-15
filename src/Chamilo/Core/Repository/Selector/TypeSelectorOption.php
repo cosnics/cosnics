@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Selector;
 
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
+
 /**
  * An option in a TypeSelector
  *
@@ -9,15 +11,11 @@ namespace Chamilo\Core\Repository\Selector;
 interface TypeSelectorOption extends TypeSelectorItemInterface
 {
 
-    /**
-     *
-     * @return string
-     */
-    public function get_image_path();
+    public function get_image_path(): ?InlineGlyph;
 
     /**
      *
      * @return string
      */
-    public function get_label();
+    public function get_label(): ?string;
 }

@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar\Renderer;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -17,38 +18,25 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class ButtonToolBarRenderer
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
-     */
-    private $buttonToolBar;
+    private ButtonToolBar $buttonToolBar;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm
-     */
-    private $searchForm;
+    private ?ButtonSearchForm $searchForm;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar $buttonToolBar
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm $buttonSearchForm
-     */
-    public function __construct(ButtonToolBar $buttonToolBar, ButtonSearchForm $buttonSearchForm = null)
+    public function __construct(ButtonToolBar $buttonToolBar, ?ButtonSearchForm $buttonSearchForm = null)
     {
         $this->buttonToolBar = $buttonToolBar;
         $this->searchForm = $buttonSearchForm;
     }
 
     /**
-     *
-     * @return string
+     * @throws \ReflectionException
+     * @throws \Exception
      */
-    public function render()
+    public function render(): string
     {
         $html = [];
 
-        $html[] = '<div class="' . $this->getClasses() . '">';
+        $html[] = '<div class="' . implode(' ', $this->determineClasses()) . '">';
 
         foreach ($this->getButtonToolBar()->getItems() as $buttonGroup)
         {
@@ -65,7 +53,7 @@ class ButtonToolBarRenderer
 
             if ($searchForm->validate() && $searchForm->clearFormSubmitted())
             {
-                $redirectResponse = new RedirectResponse($searchForm->getActionURL());
+                $redirectResponse = new RedirectResponse($searchForm->getActionUrl());
                 $redirectResponse->send();
             }
 
@@ -78,44 +66,29 @@ class ButtonToolBarRenderer
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
+     * @return string[]
      */
-    public function getButtonToolBar()
+    protected function determineClasses(): array
+    {
+        return array_merge(array('btn-toolbar', 'btn-action-toolbar'), $this->getButtonToolBar()->getClasses());
+    }
+
+    public function getButtonToolBar(): ButtonToolBar
     {
         return $this->buttonToolBar;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar $buttonToolBar
-     */
     public function setButtonToolBar(ButtonToolBar $buttonToolBar)
     {
         $this->buttonToolBar = $buttonToolBar;
     }
 
     /**
-     *
-     * @return string
-     */
-    protected function getClasses()
-    {
-        $classes = array('btn-toolbar', 'btn-action-toolbar');
-        $classes = array_merge($classes, $this->getButtonToolBar()->getClasses());
-
-        return implode(' ', $classes);
-    }
-
-    /**
-     * Returns the search query conditions
-     *
      * @param \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[] $properties
      *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @throws \Exception
      */
-    public function getConditions($properties = [])
+    public function getConditions(array $properties = []): ?Condition
     {
         // check input parameter
         if (!is_array($properties))
@@ -127,24 +100,20 @@ class ButtonToolBarRenderer
         $query = $this->getSearchForm()->getQuery();
 
         // only process if we have a search query and properties
-        if (isset($query) && count($properties))
+        if ($query && count($properties))
         {
             $searchQueryConditionGenerator = new SearchQueryConditionGenerator();
-            $search_conditions = $searchQueryConditionGenerator->getSearchConditions($query, $properties);
 
-            $condition = $search_conditions;
+            return $searchQueryConditionGenerator->getSearchConditions($query, $properties);
         }
 
-        return $condition;
+        return null;
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm
-     *
-     * @throws \Exception
+     * @throws \ReflectionException
      */
-    public function getSearchForm()
+    public function getSearchForm(): ButtonSearchForm
     {
         if (!isset($this->searchForm))
         {

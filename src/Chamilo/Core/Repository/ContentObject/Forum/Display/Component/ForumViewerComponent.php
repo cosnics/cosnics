@@ -27,7 +27,6 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -125,7 +124,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             $commonActions->addButton(
                 $this->getPublicationButton(
                     Translation::get('NewTopic'), new FontAwesomeGlyph('plus'), array(ForumTopic::class),
-                    $publishParameters, [], 'btn-primary'
+                    $publishParameters, [], ['btn-primary']
                 )
             );
 
@@ -159,12 +158,12 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      * @param string[] $allowedContentObjectTypes
      * @param string[] $parameters
      * @param array $extraActions
-     * @param string $classes
+     * @param string[] $classes
      *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton
      */
     public function getPublicationButton(
-        $label, $glyph, $allowedContentObjectTypes, $parameters, $extraActions = [], $classes = null
+        $label, $glyph, $allowedContentObjectTypes, $parameters, $extraActions = [], array $classes = []
     )
     {
         $actionSelector = new ActionSelector(
@@ -379,7 +378,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                        $this->get_url($parameters), Button::DISPLAY_ICON, false, 'btn-link'
+                        $this->get_url($parameters), Button::DISPLAY_ICON, null, ['btn-link']
                     )
                 );
 
@@ -398,7 +397,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $buttonToolBar->addItem(
                                 new Button(
                                     Translation::get('Unlock'), new FontAwesomeGlyph('unlock'),
-                                    $this->get_url($parameters), Button::DISPLAY_ICON, false, 'btn-link'
+                                    $this->get_url($parameters), Button::DISPLAY_ICON, null, ['btn-link']
                                 )
                             );
                         }
@@ -413,7 +412,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $buttonToolBar->addItem(
                                 new Button(
                                     Translation::get('Lock'), new FontAwesomeGlyph('lock'), $this->get_url($parameters),
-                                    Button::DISPLAY_ICON, false, 'btn-link'
+                                    Button::DISPLAY_ICON, null, ['btn-link']
                                 )
                             );
                         }
@@ -435,7 +434,8 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('Subscribe'), new FontAwesomeGlyph('envelope'), $this->get_url($parameters),
-                        Button::DISPLAY_ICON, true, 'btn-link'
+                        Button::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES),
+                        ['btn-link']
                     )
                 );
             }
@@ -450,7 +450,8 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('UnSubscribe'), new FontAwesomeGlyph('envelope', [], null, 'far'),
-                        $this->get_url($parameters), Button::DISPLAY_ICON, true, 'btn-link'
+                        $this->get_url($parameters), Button::DISPLAY_ICON,
+                        Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
                     )
                 );
             }
@@ -475,7 +476,8 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                        $this->get_url($parameters), Button::DISPLAY_ICON, true, 'btn-link'
+                        $this->get_url($parameters), Button::DISPLAY_ICON,
+                        Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
                     )
                 );
             }
@@ -677,7 +679,8 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                        $this->get_url($parameters), Button::DISPLAY_ICON, true, 'btn-link'
+                        $this->get_url($parameters), Button::DISPLAY_ICON,
+                        Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
                     )
                 );
 
@@ -690,7 +693,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     $buttonToolBar->addItem(
                         new Button(
                             Translation::get('UnSticky'), new FontAwesomeGlyph('star'), $this->get_url($parameters),
-                            Button::DISPLAY_ICON, false, 'btn-link'
+                            Button::DISPLAY_ICON, null, ['btn-link']
                         )
                     );
                 }
@@ -706,7 +709,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                         $buttonToolBar->addItem(
                             new Button(
                                 Translation::get('UnImportant'), new FontAwesomeGlyph('exclamation-circle'),
-                                $this->get_url($parameters), Button::DISPLAY_ICON, false, 'btn-link'
+                                $this->get_url($parameters), Button::DISPLAY_ICON, null, ['btn-link']
                             )
                         );
                     }
@@ -718,7 +721,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $buttonToolBar->addItem(
                                 new Button(
                                     Translation::get('MakeSticky'), new FontAwesomeGlyph('star', [], null, 'far'),
-                                    $this->get_url($parameters), Button::DISPLAY_ICON, false, 'btn-link'
+                                    $this->get_url($parameters), Button::DISPLAY_ICON, null, ['btn-link']
                                 )
                             );
 
@@ -726,7 +729,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $buttonToolBar->addItem(
                                 new Button(
                                     Translation::get('MakeImportant'), new FontAwesomeGlyph('circle', [], null, 'far'),
-                                    $this->get_url($parameters), Button::DISPLAY_ICON, false, 'btn-link'
+                                    $this->get_url($parameters), Button::DISPLAY_ICON, null, ['btn-link']
                                 )
                             );
                         }
@@ -742,7 +745,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $buttonToolBar->addItem(
                                 new Button(
                                     Translation::get('Unlock'), new FontAwesomeGlyph('unlock'),
-                                    $this->get_url($parameters), Button::DISPLAY_ICON, false, 'btn-link'
+                                    $this->get_url($parameters), Button::DISPLAY_ICON, null, ['btn-link']
                                 )
                             );
                         }
@@ -752,7 +755,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $buttonToolBar->addItem(
                                 new Button(
                                     Translation::get('Lock'), new FontAwesomeGlyph('lock'), $this->get_url($parameters),
-                                    Button::DISPLAY_ICON, false, 'btn-link'
+                                    Button::DISPLAY_ICON, null, ['btn-link']
                                 )
                             );
                         }
@@ -768,7 +771,8 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('Subscribe', null, ForumTopic::package()), new FontAwesomeGlyph('envelope'),
-                        $this->get_url($parameters), Button::DISPLAY_ICON, true, 'btn-link'
+                        $this->get_url($parameters), Button::DISPLAY_ICON,
+                        Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
                     )
                 );
             }
@@ -780,7 +784,8 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     new Button(
                         Translation::get('UnSubscribe', null, ForumTopic::package()),
                         new FontAwesomeGlyph('envelope', [], null, 'far'), $this->get_url($parameters),
-                        Button::DISPLAY_ICON, true, 'btn-link'
+                        Button::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES),
+                        ['btn-link']
                     )
                 );
             }

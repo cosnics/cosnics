@@ -20,7 +20,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
 {
     use DependencyInjectionContainerTrait;
 
-    public function getButtonToolBar($classes = '')
+    public function getButtonToolBar(array $classes = [])
     {
         $object = $this->get_content_object();
         $name = $object->get_filename();
@@ -33,7 +33,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
             new Button(
                 Translation::get('DownloadFile', array('LABEL' => $label)),
                 new FontAwesomeGlyph('arrow-alt-circle-down'), $this->getDownloadUrl(), Button::DISPLAY_ICON_AND_LABEL,
-                false, $classes, '_blank'
+                null, $classes, '_blank'
             )
         );
 
@@ -71,11 +71,12 @@ class HtmlRenditionImplementation extends RenditionImplementation
 
     /**
      *
-     * @param string $classes
+     * @param string[] $classes
      *
      * @return string
+     * @throws \ReflectionException
      */
-    public function renderActions($classes = '')
+    public function renderActions(array $classes = [])
     {
         $buttonToolBarRenderer = new ButtonToolBarRenderer($this->getButtonToolBar($classes));
 
@@ -95,7 +96,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $button = new Button(
         //Translation::get('DownloadFile', array('LABEL' => 'qsdf')),
             Translation::get($file->get_filename(), array('LABEL' => 'qsdf')), $file->getGlyph(IdentGlyph::SIZE_MEDIUM),
-            $this->getDownloadUrl(), Button::DISPLAY_ICON_AND_LABEL, false, '', '_blank'
+            $this->getDownloadUrl(), Button::DISPLAY_ICON_AND_LABEL, null, [], '_blank'
         );
 
         $buttonToolBar->addItem($button);

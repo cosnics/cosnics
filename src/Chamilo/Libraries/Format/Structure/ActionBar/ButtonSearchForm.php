@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Table\Table;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_QuickForm_Renderer_Default;
 
 /**
  *
@@ -18,41 +19,23 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class ButtonSearchForm extends FormValidator implements TableSupportedSearchFormInterface
 {
-    /**
-     * Name of the search form
-     */
     const FORM_NAME = 'search';
 
-    /**
-     * #@+ Search parameter
-     */
     const PARAM_SIMPLE_SEARCH_QUERY = 'query';
 
-    /**
-     *
-     * @var string
-     */
-    protected $actionURL;
+    protected string $actionUrl;
+
+    private HTML_QuickForm_Renderer_Default $renderer;
 
     /**
-     * The renderer used to display the form
-     *
-     * @var \HTML_QuickForm_Renderer_Default
-     */
-    private $renderer;
-
-    /**
-     * Creates a new search form
-     *
-     * @param string $url The location to which the search request should be posted.
-     *
+     * @throws \ReflectionException
      * @throws \Exception
      */
-    public function __construct($url)
+    public function __construct(string $url)
     {
         parent::__construct(self::FORM_NAME, self::FORM_METHOD_POST, $url);
 
-        $this->actionURL = $url;
+        $this->actionUrl = $url;
 
         $this->setAttribute('class', 'form-inline');
         $this->renderer = clone $this->defaultRenderer();
@@ -67,10 +50,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
         $this->buildForm();
     }
 
-    /**
-     * Display the form
-     */
-    public function render()
+    public function render(): string
     {
         $this->accept($this->renderer);
 
@@ -78,7 +58,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
     }
 
     /**
-     * Build the simple search form.
+     * @throws \ReflectionException
      */
     private function buildForm()
     {
@@ -111,31 +91,17 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
         $this->addElement('html', '</div>');
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function clearFormSubmitted()
+    public function clearFormSubmitted(): bool
     {
         return !is_null(Request::post('clear'));
     }
 
-    /**
-     * Returns the action URL
-     *
-     * @return string
-     */
-    public function getActionURL()
+    public function getActionUrl(): string
     {
-        return $this->actionURL;
+        return $this->actionUrl;
     }
 
-    /**
-     * Gets the conditions that this form introduces.
-     *
-     * @return string
-     */
-    public function getQuery()
+    public function getQuery(): ?string
     {
         $query = Request::post(self::PARAM_SIMPLE_SEARCH_QUERY);
 
@@ -148,36 +114,28 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
     }
 
     /**
-     * @return string
-     * @deprecated Use getQuery() now
+     * @deprecated Use ButtonSearchForm::getQuery() now
      */
-    public function get_query()
+    public function get_query(): string
     {
         return $this->getQuery();
     }
 
-    /**
-     * Registers the form parameters in the table
-     *
-     * @param \Chamilo\Libraries\Format\Table\Table $table
-     */
     public function registerSearchFormParametersInTable(Table $table)
     {
         $table->addParameter(self::PARAM_SIMPLE_SEARCH_QUERY, $this->getQuery());
     }
 
     /**
-     * Registers the table parameters in the form
-     *
      * @param string[] $tableParameters
      */
     public function registerTableParametersInSearchForm(array $tableParameters = [])
     {
         foreach ($tableParameters as $tableParameter => $value)
         {
-            $this->actionURL .= '&' . $tableParameter . '=' . $value;
+            $this->actionUrl .= '&' . $tableParameter . '=' . $value;
         }
 
-        $this->updateAttributes(array('action' => $this->actionURL));
+        $this->updateAttributes(array('action' => $this->actionUrl));
     }
 }

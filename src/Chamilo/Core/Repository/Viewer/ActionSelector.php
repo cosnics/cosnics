@@ -30,27 +30,21 @@ class ActionSelector
 
     /**
      *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    protected $application;
-
-    /**
-     *
-     * @var integer
-     */
-    protected $userIdentifier;
-
-    /**
-     *
      * @var string[]
      */
     protected $allowedContentObjectTypes;
 
     /**
      *
+     * @var \Chamilo\Libraries\Architecture\Application\Application
+     */
+    protected $application;
+
+    /**
+     *
      * @var string[]
      */
-    protected $parameters;
+    protected $classes;
 
     /**
      *
@@ -60,15 +54,21 @@ class ActionSelector
 
     /**
      *
+     * @var string[]
+     */
+    protected $parameters;
+
+    /**
+     *
      * @var \Chamilo\Core\Repository\Selector\TypeSelector
      */
     protected $typeSelector;
 
     /**
      *
-     * @var string
+     * @var integer
      */
-    protected $classes;
+    protected $userIdentifier;
 
     /**
      *
@@ -77,11 +77,11 @@ class ActionSelector
      * @param string[] $allowedContentObjectTypes
      * @param string[] $parameters
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[] extraActions
-     * @param string $classes
+     * @param string[] $classes
      */
     public function __construct(
         Application $application, $userIdentifier, $allowedContentObjectTypes = [], $parameters = [],
-        $extraActions = [], $classes = null
+        $extraActions = [], array $classes = []
     )
     {
         $this->application = $application;
@@ -97,9 +97,9 @@ class ActionSelector
      * @param string $label
      * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph|string $image
      *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton
      */
-    public function getActionButton($label, $image)
+    public function getActionButton($label, $image): DropdownButton
     {
         $dropdownButton = $this->getDropdownButton($label, $image);
 
@@ -174,18 +174,18 @@ class ActionSelector
 
     /**
      *
-     * @return string
+     * @return string[]
      */
-    public function getClasses()
+    public function getClasses(): array
     {
         return $this->classes;
     }
 
     /**
      *
-     * @param string $classes
+     * @param string[] $classes
      */
-    public function setClasses($classes)
+    public function setClasses(array $classes)
     {
         $this->classes = $classes;
     }

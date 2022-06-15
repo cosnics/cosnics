@@ -323,16 +323,16 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $buttonToolBar->addItem(
             new Button(
                 Translation::get('SelectAll', null, StringUtilities::LIBRARIES),
-                new FontAwesomeGlyph('square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
-                'btn-sm select-all'
+                new FontAwesomeGlyph('square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, null,
+                ['btn-sm','select-all']
             )
         );
 
         $buttonToolBar->addItem(
             new Button(
                 Translation::get('UnselectAll', null, StringUtilities::LIBRARIES),
-                new FontAwesomeGlyph('check-square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
-                'btn-sm select-none'
+                new FontAwesomeGlyph('check-square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, null,
+                ['btn-sm','select-none']
             )
         );
 
@@ -340,9 +340,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $button = new SplitDropdownButton(
             $firstAction->get_title(), null, $firstAction->get_action(), Button::DISPLAY_LABEL,
-            $firstAction->getConfirmation(), 'btn-sm btn-table-action'
+            $firstAction->getConfirmation(), ['btn-sm','btn-table-action'],  null, ['btn-table-action']
         );
-        $button->setDropdownClasses('btn-table-action');
 
         foreach ($formActions as $formAction)
         {
@@ -512,9 +511,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $buttonGroup = new ButtonGroup();
 
         $dropdownButton = new DropdownButton(
-            Translation::get('Actions'), new FontAwesomeGlyph('cog'), Button::DISPLAY_ICON, 'btn-link'
+            Translation::get('Actions'), new FontAwesomeGlyph('cog'), Button::DISPLAY_ICON, ['btn-link'], ['dropdown-menu-right']
         );
-        $dropdownButton->setDropdownClasses('dropdown-menu-right');
 
         $publication_id = $publication[ContentObjectPublication::PROPERTY_ID];
         $publication_type = $this->get_publication_type();
@@ -560,7 +558,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                 $buttonGroup->addButton(
                     new Button(
                         Translation::get('SendByEMail'), new FontAwesomeGlyph('envelope'), $email_url,
-                        Button::DISPLAY_ICON, true, 'btn-link'
+                        Button::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
                     )
                 );
             }
@@ -585,7 +583,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_CONTENT_OBJECT,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
                     )
-                ), Button::DISPLAY_ICON, false, 'btn-link'
+                ), Button::DISPLAY_ICON, null, ['btn-link']
                 )
             );
         }
@@ -745,7 +743,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
                         )
                     ), Button::DISPLAY_ICON,
-                    Translation::get('ConfirmDeletePublication', null, 'Chamilo\Application\Weblcms'), 'btn-link'
+                    Translation::get('ConfirmDeletePublication', null, 'Chamilo\Application\Weblcms'), ['btn-link']
                 )
             );
         }

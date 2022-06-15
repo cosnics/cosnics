@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -83,8 +82,7 @@ class CreatorComponent extends Manager
                 foreach ($instance_types['types'][$category] as $type => $registration)
                 {
                     $glyph = new NamespaceIdentGlyph(
-                        $registration->get_context(), true, false, false,
-                        IdentGlyph::SIZE_MEDIUM, []
+                        $registration->get_context(), true, false, false, IdentGlyph::SIZE_MEDIUM
                     );
 
                     $title = Translation::get('TypeName', null, $registration->get_context());
@@ -136,7 +134,7 @@ class CreatorComponent extends Manager
         $types = [];
         $sections = [];
 
-        foreach($active_managers as $active_manager)
+        foreach ($active_managers as $active_manager)
         {
             $package_info = Package::get(
                 $active_manager->get_context()

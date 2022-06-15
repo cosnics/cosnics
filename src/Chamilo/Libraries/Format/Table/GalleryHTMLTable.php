@@ -121,16 +121,16 @@ class GalleryHTMLTable extends HtmlTable
         $buttonToolBar->prependItem(
             new Button(
                 Translation::get('SelectAll', null, StringUtilities::LIBRARIES),
-                new FontAwesomeGlyph('check-square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
-                'btn-sm select-all'
+                new FontAwesomeGlyph('check-square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, null,
+                ['btn-sm select-all']
             )
         );
 
         $buttonToolBar->prependItem(
             new Button(
                 Translation::get('UnselectAll', null, StringUtilities::LIBRARIES),
-                new FontAwesomeGlyph('square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
-                'btn-sm select-none'
+                new FontAwesomeGlyph('square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, null,
+                ['btn-sm select-none']
             )
         );
 
@@ -246,7 +246,7 @@ class GalleryHTMLTable extends HtmlTable
             $isSelected = $currentFirstOrderDirection == SORT_ASC;
 
             $subButtons[] = new SubButton(
-                Translation::get('ASC'), null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, false, [], null,
+                Translation::get('ASC'), null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, null, [], null,
                 $isSelected
             );
 
@@ -255,7 +255,7 @@ class GalleryHTMLTable extends HtmlTable
             $isSelected = $currentFirstOrderDirection == SORT_DESC;
 
             $subButtons[] = new SubButton(
-                Translation::get('DESC'), null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, false, [], null,
+                Translation::get('DESC'), null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, null, [], null,
                 $isSelected
             );
         }
@@ -293,8 +293,8 @@ class GalleryHTMLTable extends HtmlTable
 
             $dropDownButton->addSubButton(new SubButtonHeader(Translation::get('SortingProperty')));
             $dropDownButton->addSubButtons($this->renderPropertySubButtons());
-            $dropDownButton->setClasses('btn-sm');
-            $dropDownButton->setDropdownClasses('dropdown-menu-right');
+            $dropDownButton->setClasses(['btn-sm']);
+            $dropDownButton->setDropdownClasses(['dropdown-menu-right']);
 
             $orderPropertyName = Translation::get(
                 (string) StringUtilities::getInstance()->createString($orderProperty->get_name())->upperCamelize()
@@ -369,7 +369,7 @@ class GalleryHTMLTable extends HtmlTable
                 $isSelected = $currentFirstOrderColumn == $propertyIndex;
 
                 $subButtons[] = new SubButton(
-                    $label, null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, false, [], null, $isSelected
+                    $label, null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, null, [], null, $isSelected
                 );
             }
         }

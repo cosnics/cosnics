@@ -21,7 +21,6 @@ use Chamilo\Libraries\Format\Table\PagerRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -40,27 +39,9 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
     /**
      *
-     * @var integer
-     */
-    private $pageNumber;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Table\Pager
-     */
-    private $pager;
-
-    /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
-
-    /**
-     *
-     * @var boolean
-     */
-    private $isLocked;
 
     /**
      *
@@ -73,6 +54,24 @@ class TopicViewerComponent extends Manager implements DelegateComponent
      * @var \Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost[]
      */
     private $forumTopicPosts;
+
+    /**
+     *
+     * @var boolean
+     */
+    private $isLocked;
+
+    /**
+     *
+     * @var integer
+     */
+    private $pageNumber;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Format\Table\Pager
+     */
+    private $pager;
 
     public function run()
     {
@@ -115,8 +114,8 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             $buttonToolbar->addItem(
                 new Button(
                     Translation::get('ReplyOnTopic', null, 'Chamilo\Core\Repository\ContentObject\ForumTopic'),
-                    new FontAwesomeGlyph('plus'), $this->get_url($parameters), Button::DISPLAY_ICON_AND_LABEL, false,
-                    'btn-primary'
+                    new FontAwesomeGlyph('plus'), $this->get_url($parameters), Button::DISPLAY_ICON_AND_LABEL, null,
+                    ['btn-primary']
                 )
             );
 
@@ -160,7 +159,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
             $this->forumTopicPosts = [];
 
-            foreach($children as $child)
+            foreach ($children as $child)
             {
                 $this->forumTopicPosts[] = DataManager::retrieve_by_id(ForumPost::class, $child->get_id());
             }
@@ -255,12 +254,12 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             {
                 $conditions = [];
                 $conditions[] = new ContainsCondition(
-                    new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_TITLE),
-                     $query , ForumPost::getStorageUnitName(), false
+                    new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_TITLE), $query,
+                    ForumPost::getStorageUnitName(), false
                 );
                 $conditions[] = new ContainsCondition(
-                    new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CONTENT),
-                    $query, ForumPost::getStorageUnitName(), false
+                    new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CONTENT), $query,
+                    ForumPost::getStorageUnitName(), false
                 );
 
                 return new OrCondition($conditions);
@@ -316,7 +315,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     public function renderPostActions(ForumPost $forumPost)
     {
         $buttonToolBar = new ButtonToolBar();
-        $buttonToolBar->setClasses(array('pull-right'));
+        $buttonToolBar->setClasses(['pull-right']);
 
         if (!$this->isLocked())
         {
@@ -328,7 +327,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             $buttonToolBar->addItem(
                 new Button(
                     Translation::get('Quote'), new FontAwesomeGlyph('quote-right'), $this->get_url($parameters),
-                    Button::DISPLAY_ICON, false, 'btn-link'
+                    Button::DISPLAY_ICON, null, ['btn-link']
                 )
             );
 
@@ -340,7 +339,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             $buttonToolBar->addItem(
                 new Button(
                     Translation::get('Reply'), new FontAwesomeGlyph('comment'), $this->get_url($parameters),
-                    Button::DISPLAY_ICON, false, 'btn-link'
+                    Button::DISPLAY_ICON, null, ['btn-link']
                 )
             );
 
@@ -355,14 +354,15 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                        $this->get_url($parameters), Button::DISPLAY_ICON, false, 'btn-link'
+                        $this->get_url($parameters), Button::DISPLAY_ICON, null, ['btn-link']
                     )
                 );
             }
 
             if (!$this->getForumTopic()->is_first_post($forumPost))
             {
-                if (($forumPost->get_user_id() == $this->get_user_id() || $this->get_user()->is_platform_admin()) || $this->is_forum_manager($this->get_user()))
+                if (($forumPost->get_user_id() == $this->get_user_id() || $this->get_user()->is_platform_admin()) ||
+                    $this->is_forum_manager($this->get_user()))
                 {
                     $parameters = [];
                     $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] =
@@ -372,9 +372,9 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
                     $buttonToolBar->addItem(
                         new Button(
-                            Translation::get('Delete', null, StringUtilities::LIBRARIES),
-                            new FontAwesomeGlyph('times'), $this->get_url($parameters), Button::DISPLAY_ICON, true,
-                            'btn-link'
+                            Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
+                            $this->get_url($parameters), Button::DISPLAY_ICON,
+                            Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
                         )
                     );
                 }

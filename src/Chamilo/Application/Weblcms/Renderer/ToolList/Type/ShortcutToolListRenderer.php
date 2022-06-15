@@ -38,10 +38,8 @@ class ShortcutToolListRenderer extends ToolListRenderer
         $course = $parent->get_course();
 
         $toolsButton = new DropdownButton(
-            Translation::get('NavigateTo', null, StringUtilities::LIBRARIES), null, Button::DISPLAY_LABEL
+            Translation::get('NavigateTo', null, StringUtilities::LIBRARIES), null, Button::DISPLAY_LABEL, [], ['dropdown-menu-right']
         );
-
-        $toolsButton->setDropdownClasses('dropdown-menu-right');
 
         usort(
             $tools, function ($toolA, $toolB) use ($translator) {

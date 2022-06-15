@@ -54,7 +54,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObject::PROPERTY_ID]
                     )
-                ), Button::DISPLAY_ICON, false, 'btn-link'
+                ), Button::DISPLAY_ICON, null, ['btn-link']
                 )
             );
         }

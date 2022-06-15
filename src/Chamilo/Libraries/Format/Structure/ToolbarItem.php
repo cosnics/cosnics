@@ -20,25 +20,7 @@ class ToolbarItem
      *
      * @var string
      */
-    private $label;
-
-    /**
-     *
-     * @var integer
-     */
-    private $display;
-
-    /**
-     *
-     * @var string|\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
-     */
-    private $image;
-
-    /**
-     *
-     * @var string
-     */
-    private $href;
+    private $class;
 
     /**
      *
@@ -50,25 +32,43 @@ class ToolbarItem
      *
      * @var string
      */
-    private $class;
-
-    /**
-     *
-     * @var string
-     */
-    private $target;
-
-    /**
-     *
-     * @var string
-     */
     private $confirmationMessage;
+
+    /**
+     *
+     * @var integer
+     */
+    private $display;
 
     /**
      *
      * @var string[]
      */
     private $extraAttributes;
+
+    /**
+     *
+     * @var string
+     */
+    private $href;
+
+    /**
+     *
+     * @var string|\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
+     */
+    private $image;
+
+    /**
+     *
+     * @var string
+     */
+    private $label;
+
+    /**
+     *
+     * @var string
+     */
+    private $target;
 
     /**
      *
@@ -107,11 +107,7 @@ class ToolbarItem
         $this->extraAttributes = $extraAttributes;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function render()
+    public function render(): string
     {
         $label = ($this->get_label() ? htmlspecialchars($this->get_label()) : null);
         $display = !$this->get_display() ? self::DISPLAY_ICON : $this->get_display();
@@ -119,9 +115,29 @@ class ToolbarItem
         $elementClasses = !empty($this->class) ? explode(' ', $this->class) : [];
         array_unshift($elementClasses, 'btn-link');
 
+        $confirmation = $this->get_confirmation();
+        $confirmationMessage = $this->get_confirm_message();
+
+        if (is_string($confirmation))
+        {
+            $buttonConfirmationMessage = $confirmation;
+        }
+        elseif ($confirmation === true && is_string($confirmationMessage) && !empty($confirmationMessage))
+        {
+            $buttonConfirmationMessage = $confirmationMessage;
+        }
+        elseif ($confirmation === true)
+        {
+            $buttonConfirmationMessage = Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES);
+        }
+        else
+        {
+            $buttonConfirmationMessage = null;
+        }
+
         $button = new Button(
-            $label, $this->get_image(), $this->get_href(), $display, $this->get_confirmation(),
-            implode(' ', $elementClasses), $this->get_target()
+            $label, $this->get_image(), $this->get_href(), $display, $buttonConfirmationMessage, $elementClasses,
+            $this->get_target()
         );
 
         $buttonRenderer = new ButtonRenderer($button);

@@ -16,26 +16,20 @@ class SplitDropdownButtonRenderer extends AbstractButtonRenderer
     use ActionButtonRendererTrait;
 
     /**
-     *
      * @return string[]
      */
-    public function determineDropdownActionClasses()
+    public function determineDropdownActionClasses(): array
     {
         $classes = [];
 
         $classes[] = 'btn';
         $classes[] = 'btn-default';
         $classes[] = 'dropdown-toggle';
-        $classes[] = $this->getButton()->getClasses();
 
-        return $classes;
+        return array_merge($classes, $this->getButton()->getClasses());
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function renderDropdown()
+    public function renderDropdown(): string
     {
         $html = [];
 

@@ -74,7 +74,7 @@ class Office365WorkspaceExtension implements WorkspaceExtensionInterface
                     ]
                 ),
                 Button::DISPLAY_ICON_AND_LABEL,
-                false, null, '_blank'
+                null, [], '_blank'
             )
         );
 

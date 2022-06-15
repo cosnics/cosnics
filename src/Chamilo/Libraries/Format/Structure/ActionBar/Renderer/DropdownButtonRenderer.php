@@ -13,10 +13,9 @@ class DropdownButtonRenderer extends AbstractButtonRenderer
     use DropdownButtonRendererTrait;
 
     /**
-     *
      * @return string[]
      */
-    public function determineClasses()
+    public function determineClasses(): array
     {
         $classes = parent::determineClasses();
 
@@ -26,19 +25,14 @@ class DropdownButtonRenderer extends AbstractButtonRenderer
     }
 
     /**
-     *
-     * @return string
+     * @throws \ReflectionException
      */
-    public function renderDropdown()
+    public function renderDropdown(): string
     {
         return $this->renderSubButtons();
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function renderLinkContent()
+    public function renderLinkContent(): string
     {
         $html = [];
 
@@ -48,11 +42,7 @@ class DropdownButtonRenderer extends AbstractButtonRenderer
         return implode('', $html);
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function renderLinkOpeningTag()
+    public function renderLinkOpeningTag(): string
     {
         $html = [];
 

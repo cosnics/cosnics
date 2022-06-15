@@ -12,10 +12,9 @@ trait ActionButtonRendererTrait
 {
 
     /**
-     *
      * @return string[]
      */
-    public function determineClasses()
+    public function determineClasses(): array
     {
         $classes = parent::determineClasses();
 
@@ -28,16 +27,11 @@ trait ActionButtonRendererTrait
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton
      */
     abstract function getButton();
 
-    /**
-     *
-     * @return string
-     */
-    public function renderAction()
+    public function renderAction(): string
     {
         $button = $this->getButton();
         $html = [];
@@ -53,24 +47,17 @@ trait ActionButtonRendererTrait
 
             if ($button->needsConfirmation())
             {
-                $html[] = 'onclick="return confirm(\'' . addslashes(htmlentities($button->getConfirmation())) . '\');"';
+                $html[] = 'onclick="return confirm(\'' . addslashes(htmlentities($button->getConfirmationMessage())) .
+                    '\');"';
             }
         }
 
         return implode(' ', $html);
     }
 
-    /**
-     *
-     * @return string
-     */
-    abstract function renderClasses();
+    abstract function renderClasses(): string;
 
-    /**
-     *
-     * @return string
-     */
-    public function renderLinkOpeningTag()
+    public function renderLinkOpeningTag(): string
     {
         $html = [];
 
@@ -83,9 +70,5 @@ trait ActionButtonRendererTrait
         return implode(' ', $html);
     }
 
-    /**
-     *
-     * @return string
-     */
-    abstract function renderTitle();
+    abstract function renderTitle(): string;
 }

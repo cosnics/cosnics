@@ -19,7 +19,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class EntityTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
-    function get_actions($object)
+    public function get_actions($object)
     {
         $toolbar = new Toolbar();
 
@@ -61,8 +61,7 @@ class EntityTableCellRenderer extends DataClassTableCellRenderer implements Tabl
                 }
 
                 $glyph = new NamespaceIdentGlyph(
-                    $context, true, false, false, IdentGlyph::SIZE_MINI,
-                    []
+                    $context, true, false, false, IdentGlyph::SIZE_MINI
                 );
 
                 return $glyph->render();

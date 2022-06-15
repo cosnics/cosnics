@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Structure\ActionBar
@@ -14,92 +16,54 @@ abstract class AbstractButton extends AbstractButtonToolBarItem
     const DISPLAY_ICON_AND_LABEL = 3;
     const DISPLAY_LABEL = 2;
 
-    /**
-     *
-     * @var string
-     */
-    private $label;
+    private int $display;
 
-    /**
-     *
-     * @var int
-     */
-    private $display;
+    private ?InlineGlyph $inlineGlyph;
 
-    /**
-     *
-     * @var string
-     */
-    private $imagePath;
+    private ?string $label;
 
-    /**
-     *
-     * @param string $label
-     * @param string $imagePath
-     * @param integer $display
-     * @param string $classes
-     */
     public function __construct(
-        $label = null, $imagePath = null, $display = self::DISPLAY_ICON_AND_LABEL, $classes = null
+        ?string $label = null, ?InlineGlyph $inlineGlyph = null, int $display = self::DISPLAY_ICON_AND_LABEL,
+        array $classes = []
     )
     {
         parent::__construct($classes);
 
         $this->label = $label;
         $this->display = $display;
-        $this->imagePath = $imagePath;
+        $this->inlineGlyph = $inlineGlyph;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getDisplay()
+    public function getDisplay(): int
     {
         return $this->display;
     }
 
-    /**
-     *
-     * @param integer $display
-     */
-    public function setDisplay($display)
+    public function setDisplay(int $display)
     {
         $this->display = $display;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getImagePath()
+    public function getInlineGlyph(): ?InlineGlyph
     {
-        return $this->imagePath;
+        return $this->inlineGlyph;
     }
 
-    /**
-     *
-     * @param string $imagePath
-     */
-    public function setImagePath($imagePath)
+    public function setInlineGlyph(?InlineGlyph $inlineGlyph)
     {
-        $this->imagePath = $imagePath;
+        $this->inlineGlyph = $inlineGlyph;
     }
 
     /**
      *
      * @return string
      */
-    public function getLabel()
+    public function getLabel(): ?string
     {
         return $this->label;
     }
 
-    /**
-     *
-     * @param string $label
-     */
-    public function setLabel($label)
+    public function setLabel(?string $label)
     {
         $this->label = $label;
     }

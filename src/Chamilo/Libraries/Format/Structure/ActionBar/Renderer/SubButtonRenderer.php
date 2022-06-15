@@ -12,10 +12,7 @@ class SubButtonRenderer extends AbstractButtonRenderer
 {
     use ActionButtonRendererTrait;
 
-    /**
-     * @return string
-     */
-    public function render()
+    public function render(): string
     {
         $html = [];
 
@@ -27,21 +24,18 @@ class SubButtonRenderer extends AbstractButtonRenderer
     }
 
     /**
-     *
      * @return string[]
      */
-    public function determineClasses()
+    public function determineClasses(): array
     {
         $classes = [];
-
-        $classes[] = $this->getButton()->getClasses();
 
         if (!$this->getButton()->getAction())
         {
             $classes[] = 'disabled';
         }
 
-        return $classes;
+        return array_merge($this->getButton()->getClasses(), $classes);
     }
 
     /**

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Selector\Option;
 
 use Chamilo\Core\Repository\Selector\TypeSelectorOption;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -18,6 +19,11 @@ class LinkTypeSelectorOption implements TypeSelectorOption
     private $context;
 
     /**
+     * @var \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
+     */
+    private $glyph;
+
+    /**
      *
      * @var string
      */
@@ -28,11 +34,6 @@ class LinkTypeSelectorOption implements TypeSelectorOption
      * @var string
      */
     private $url;
-
-    /**
-     * @var \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
-     */
-    private $glyph;
 
     /**
      *
@@ -58,12 +59,12 @@ class LinkTypeSelectorOption implements TypeSelectorOption
         return $this->context;
     }
 
-    public function get_image_path()
+    public function get_image_path(): ?InlineGlyph
     {
         return $this->glyph;
     }
 
-    public function get_label()
+    public function get_label(): ?string
     {
         return Translation::get($this->getType(), null, $this->get_context());
     }

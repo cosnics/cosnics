@@ -65,7 +65,7 @@ class GenericTabsRenderer
 
         if (isset($selectedTab))
         {
-            $html[] = '$(\'#' . $name . 'Tabs a[href="#' . $selectedTab . '"]\').tab(\'show\');';
+            $html[] = '$(\'#' . $name . 'Tabs a[href="#' . $name . '-' . $selectedTab . '"]\').tab(\'show\');';
         }
         else
         {

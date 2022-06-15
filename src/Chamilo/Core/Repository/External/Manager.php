@@ -330,7 +330,7 @@ abstract class Manager extends Application implements NoContextComponent
                             if ($object->is_editable())
                             {
                                 $glyph = new NamespaceIdentGlyph(
-                                    $object::context(), true, false, false, IdentGlyph::SIZE_MINI, []
+                                    $object::context(), true, false, false, IdentGlyph::SIZE_MINI
                                 );
 
                                 $toolbar_items[self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY] = new ToolbarItem(
@@ -360,7 +360,7 @@ abstract class Manager extends Application implements NoContextComponent
                             {
 
                                 $glyph = new NamespaceIdentGlyph(
-                                    $object::context(), true, false, false, IdentGlyph::SIZE_MINI, []
+                                    $object::context(), true, false, false, IdentGlyph::SIZE_MINI
                                 );
                                 $toolbar_items[self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY] = new ToolbarItem(
                                     Translation::get(

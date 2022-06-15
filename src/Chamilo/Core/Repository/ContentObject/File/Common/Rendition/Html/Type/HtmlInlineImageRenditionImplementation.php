@@ -27,7 +27,7 @@ class HtmlInlineImageRenditionImplementation extends HtmlInlineRenditionImplemen
             $rendition = new HtmlInlineDefaultRenditionImplementation($this->get_context(), $this->get_content_object());
 
             $html[] = $rendition->render($parameters);
-            $html[] = $this->renderActions('btn-info');
+            $html[] = $this->renderActions(['btn-info']);
         }
         else
         {

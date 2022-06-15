@@ -91,7 +91,7 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
                     self::PARAM_ACTION => self::ACTION_INSTALL_PLATFORM,
                     self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE)
                 )
-            ), Button::DISPLAY_ICON_AND_LABEL, false, 'btn-success'
+            ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-success']
             )
         );
 

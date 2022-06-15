@@ -15,29 +15,13 @@ class ButtonGroupRenderer extends AbstractButtonToolbarItemRenderer
 {
 
     /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup
+     * @throws \ReflectionException
      */
-    private $buttonGroup;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup $buttonGroup
-     */
-    public function __construct(ButtonGroup $buttonGroup)
-    {
-        $this->buttonGroup = $buttonGroup;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function render()
+    public function render(): string
     {
         $html = [];
 
-        $html[] = '<div class="' . $this->getClasses() . '">';
+        $html[] = '<div class="' . implode(' ', $this->determineClasses()) . '">';
 
         foreach ($this->getButtonGroup()->getButtons() as $button)
         {
@@ -54,33 +38,23 @@ class ButtonGroupRenderer extends AbstractButtonToolbarItemRenderer
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup
+     * @return string[]
      */
-    public function getButtonGroup()
+    protected function determineClasses(): array
     {
-        return $this->buttonGroup;
+        return array_merge($this->getButtonGroup()->getClasses(), ['action-bar', 'btn-group']);
+    }
+
+    public function getButtonGroup(): ButtonGroup
+    {
+        return $this->getButton();
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup $buttonGroup
      */
     public function setButtonGroup(ButtonGroup $buttonGroup)
     {
-        $this->buttonGroup = $buttonGroup;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function getClasses()
-    {
-        $classes = $this->getButtonGroup()->getClasses();
-        $classes[] = 'action-bar';
-        $classes[] = 'btn-group';
-
-        return implode(' ', $classes);
+        $this->setButton($buttonGroup);
     }
 }

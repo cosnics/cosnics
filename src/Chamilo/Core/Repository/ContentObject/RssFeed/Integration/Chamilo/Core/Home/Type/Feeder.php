@@ -61,7 +61,7 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
 
         $glyph = new NamespaceIdentGlyph(
             'Chamilo\Core\Repository\ContentObject\RssFeed', true, false, false,
-            IdentGlyph::SIZE_MINI, []
+            IdentGlyph::SIZE_MINI
         );
 
         $html[] = $glyph->render() . ' ' . '<a href="{{ entry.link }}" ' . $target . '>{{ entry.title }}</a>';

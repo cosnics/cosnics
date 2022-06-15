@@ -22,13 +22,6 @@ class TableFormAction
     private $action;
 
     /**
-     * The title
-     *
-     * @var string
-     */
-    private $title;
-
-    /**
      * Whether or not a confirm box is necessary
      *
      * @var boolean
@@ -40,6 +33,13 @@ class TableFormAction
      * @var string
      */
     private $confirmationMessage;
+
+    /**
+     * The title
+     *
+     * @var string
+     */
+    private $title;
 
     /**
      *
@@ -56,9 +56,9 @@ class TableFormAction
         $this->confirmationMessage = $confirmationMessage;
     }
 
-    public function getConfirmation()
+    public function getConfirmation(): ?string
     {
-        $confirmation = false;
+        $confirmation = null;
 
         if ($this->get_confirm())
         {

@@ -160,7 +160,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $publishActions->addButton(
                     $this->getPublicationButton(
                         Translation::get('Publish', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
-                        $this->get_allowed_content_object_types(), $parameters, [], 'btn-primary'
+                        $this->get_allowed_content_object_types(), $parameters, [], ['btn-primary']
                     )
                 );
 
@@ -258,7 +258,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         Translation::get(
                             (string) StringUtilities::getInstance()->createString($browser_type)->upperCamelize() .
                             'View', null, StringUtilities::LIBRARIES
-                        ), null, $action, Button::DISPLAY_LABEL, false, [], null, $isActive
+                        ), null, $action, Button::DISPLAY_LABEL, null, [], null, $isActive
                     );
                 }
 
@@ -287,7 +287,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL
                     )
-                ), Button::DISPLAY_LABEL, false, [], null, $isSelected
+                ), Button::DISPLAY_LABEL, null, [], null, $isSelected
                 );
             }
 
@@ -298,7 +298,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FOR_ME
                 )
-            ), Button::DISPLAY_LABEL, false, [], null, $isSelected
+            ), Button::DISPLAY_LABEL, null, [], null, $isSelected
             );
 
             $isSelected = $publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME;
@@ -308,7 +308,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME
                 )
-            ), Button::DISPLAY_LABEL, false, [], null, $isSelected
+            ), Button::DISPLAY_LABEL, null, [], null, $isSelected
             );
 
             $filterAction->addSubButtons($filterActions);
@@ -359,7 +359,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     }
 
     public function getPublicationButton(
-        $label, $glyph, $allowedContentObjectTypes, $parameters, $extraActions = [], $classes = null
+        $label, $glyph, $allowedContentObjectTypes, $parameters, $extraActions = [], array $classes = []
     )
     {
         $actionSelector = new ActionSelector(

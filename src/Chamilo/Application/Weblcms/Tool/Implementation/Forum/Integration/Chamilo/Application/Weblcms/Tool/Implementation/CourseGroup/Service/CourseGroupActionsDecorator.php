@@ -87,7 +87,7 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
 
         $visitForumButton = new Button(
             $visitForumLabel, null, $visitForumUrl,
-            Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
+            Button::DISPLAY_ICON_AND_LABEL, null, [], '_blank'
         );
 
         $courseGroupActionsToolbar->addItem($visitForumButton);

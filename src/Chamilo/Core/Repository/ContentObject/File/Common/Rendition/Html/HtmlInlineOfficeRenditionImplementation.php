@@ -110,7 +110,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
      *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
      */
-    public function getButtonToolbar($classes = '')
+    public function getButtonToolbar(array $classes = [])
     {
         $buttonToolBar = parent::getButtonToolBar($classes);
 
@@ -119,7 +119,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
             $buttonToolBar->addItem(
                 new Button(
                     Translation::get('ViewFullScreen'), new FontAwesomeGlyph('arrows-alt'), '#',
-                    Button::DISPLAY_ICON_AND_LABEL, false, 'btn-office-viewer-full-screen'
+                    Button::DISPLAY_ICON_AND_LABEL, null, ['btn-office-viewer-full-screen']
                 )
             );
         }
@@ -148,7 +148,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
         );
 
         $html[] = '<br /><br />';
-        $html[] = $this->renderActions('btn-info');
+        $html[] = $this->renderActions(['btn-info']);
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

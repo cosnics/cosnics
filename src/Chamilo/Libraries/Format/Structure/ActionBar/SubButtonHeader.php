@@ -8,42 +8,10 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class SubButtonHeader extends AbstractButtonToolBarItem implements SubButtonInterface
+class SubButtonHeader extends AbstractButton implements SubButtonInterface
 {
-
-    /**
-     *
-     * @var string
-     */
-    private $label;
-
-    /**
-     *
-     * @param string $label
-     * @param string $classes
-     */
-    public function __construct($label, $classes = null)
+    public function __construct(string $label, array $classes = [])
     {
-        parent::__construct($classes);
-
-        $this->label = $label;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
-     *
-     * @param string $label
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
+        parent::__construct($label, null, self::DISPLAY_LABEL, $classes);
     }
 }

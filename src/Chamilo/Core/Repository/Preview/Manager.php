@@ -87,8 +87,7 @@ abstract class Manager extends Application
             $buttonToolBar = new ButtonToolBar(null, [], array('pull-right'));
             $this->buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
-            $dropdownButton = new DropdownButton(Translation::get('DisplayType'), new FontAwesomeGlyph('th'));
-            $dropdownButton->setDropdownClasses('dropdown-menu-right');
+            $dropdownButton = new DropdownButton(Translation::get('DisplayType'), new FontAwesomeGlyph('th'), DropdownButton::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']);
             $buttonToolBar->addItem($dropdownButton);
 
             $isDisplayAction = $this->get_action() == self::ACTION_DISPLAY;
@@ -102,7 +101,7 @@ abstract class Manager extends Application
                     new SubButton(
                         Translation::get('DisplayPreview'), null,
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_DISPLAY)),
-                        SubButton::DISPLAY_ICON_AND_LABEL, false, [], null, (bool) $isDisplayAction
+                        SubButton::DISPLAY_ICON_AND_LABEL, null, [], null, (bool) $isDisplayAction
                     )
                 );
             }
@@ -113,7 +112,7 @@ abstract class Manager extends Application
                     new Button(
                         Translation::get('ResetDisplayPreview'), new FontAwesomeGlyph('undo'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_RESET)),
-                        SubButton::DISPLAY_ICON_AND_LABEL, true
+                        SubButton::DISPLAY_ICON_AND_LABEL, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                     )
                 );
             }
@@ -144,7 +143,7 @@ abstract class Manager extends Application
                             self::PARAM_FORMAT => $this->getCurrentFormat(),
                             self::PARAM_VIEW => $view
                         )
-                    ), SubButton::DISPLAY_ICON_AND_LABEL, false, [], null, $isActive
+                    ), SubButton::DISPLAY_ICON_AND_LABEL, null, [], null, $isActive
                     )
                 );
             }

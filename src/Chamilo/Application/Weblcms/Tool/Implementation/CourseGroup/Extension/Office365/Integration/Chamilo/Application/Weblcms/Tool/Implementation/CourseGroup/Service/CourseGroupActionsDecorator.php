@@ -129,14 +129,14 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
 
         $visitGroupButton->addSubButton(
             new SubButton(
-                $visitPlannerLabel, null, $visitPlannerUrl, Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
+                $visitPlannerLabel, null, $visitPlannerUrl, Button::DISPLAY_ICON_AND_LABEL, null, null, '_blank'
             )
         );
 
         if($groupReference->hasTeam()){
             $visitGroupButton->addSubButton(
                 new SubButton(
-                $visitTeamLabel, null, $visitTeamUrl, Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
+                $visitTeamLabel, null, $visitTeamUrl, Button::DISPLAY_ICON_AND_LABEL, null, [], '_blank'
                )
             );
         }

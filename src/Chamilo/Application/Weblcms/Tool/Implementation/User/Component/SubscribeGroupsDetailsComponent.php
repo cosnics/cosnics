@@ -101,14 +101,14 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
             $buttonToolbar->addItem(
                 new Button(
                     $this->getTranslation('SubscribeGroup'),
-                    '',
+                    null,
                     $this->get_url(
                         array(
                             self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS,
                             self::PARAM_OBJECTS => $group->getId())),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL,
-                    false,
-                    'btn-success'));
+                    null,
+                    ['btn-success']));
         }
 
         return new ButtonToolBarRenderer($buttonToolbar);

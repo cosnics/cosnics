@@ -23,6 +23,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -49,15 +50,15 @@ class Basic extends Renderer
 
     /**
      *
-     * @var integer
-     */
-    private $homeUserIdentifier;
-
-    /**
-     *
      * @var \Chamilo\Core\Home\Service\HomeService
      */
     private $homeService;
+
+    /**
+     *
+     * @var integer
+     */
+    private $homeUserIdentifier;
 
     /**
      *
@@ -75,15 +76,15 @@ class Basic extends Renderer
 
         if ($isEditable)
         {
-            $html[] = '<script src="' .
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' . '"></script>';
+            $html[] =
+                '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' .
+                '"></script>';
         }
 
         if ($this->isGeneralMode())
         {
-            $html[] = '<script src="' .
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeGeneralModeAjax.js' .
-                '"></script>';
+            $html[] = '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) .
+                'HomeGeneralModeAjax.js' . '"></script>';
         }
 
         $html[] = $this->renderTabs();
@@ -101,9 +102,8 @@ class Basic extends Renderer
         $html[] = $this->renderPackageContainer();
         $html[] = $this->renderContent();
 
-        $html[] =
-            '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) .
-            'HomeView.js' . '"></script>';
+        $html[] = '<script src="' . Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeView.js' .
+            '"></script>';
 
         return implode(PHP_EOL, $html);
     }
@@ -159,22 +159,21 @@ class Basic extends Renderer
             {
                 $splitDropdownButton = new SplitDropdownButton(
                     Translation::get('NewBlock'), new FontAwesomeGlyph('plus'), '#', SubButton::DISPLAY_ICON_AND_LABEL,
-                    false, 'portal-add-block btn-link'
+                    false, ['portal-add-block btn-link'], null, ['dropdown-menu-right']
                 );
-                $splitDropdownButton->setDropdownClasses('dropdown-menu-right');
 
                 $buttonToolBar->addItem($splitDropdownButton);
 
                 $splitDropdownButton->addSubButton(
                     new SubButton(
-                        Translation::get('NewColumn'), null, '#', SubButton::DISPLAY_LABEL, false,
-                        'portal-add-column btn-link'
+                        Translation::get('NewColumn'), null, '#', SubButton::DISPLAY_LABEL, null,
+                        ['portal-add-column', 'btn-link']
                     )
                 );
                 $splitDropdownButton->addSubButton(
                     new SubButton(
-                        Translation::get('NewTab'), null, '#', SubButton::DISPLAY_LABEL, false,
-                        'portal-add-tab btn-link'
+                        Translation::get('NewTab'), null, '#', SubButton::DISPLAY_LABEL, null,
+                        ['portal-add-tab', 'btn-link']
                     )
                 );
 
@@ -185,7 +184,8 @@ class Basic extends Renderer
                     $splitDropdownButton->addSubButton(
                         new SubButton(
                             Translation::get('ResetHomepage'), null, $truncateLink->getUrl(), SubButton::DISPLAY_LABEL,
-                            true, 'portal-reset btn-link'
+                            Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES),
+                            ['portal-reset', 'btn-link']
                         )
                     );
                 }

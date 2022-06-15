@@ -41,8 +41,8 @@ class ActionsGenerator extends NavigationGenerator
                         new FontAwesomeGlyph('times'),
                         $application->get_url($baseParameters),
                         Button::DISPLAY_ICON_AND_LABEL,
-                        false,
-                        'btn-receive-feedback');
+                        null,
+                        ['btn-receive-feedback']);
                 }
                 else
                 {
@@ -54,8 +54,8 @@ class ActionsGenerator extends NavigationGenerator
                         new FontAwesomeGlyph('envelope'),
                         $application->get_url($baseParameters),
                         Button::DISPLAY_ICON_AND_LABEL,
-                        false,
-                        'btn-receive-feedback');
+                        null,
+                        ['btn-receive-feedback']);
                 }
             }
         }

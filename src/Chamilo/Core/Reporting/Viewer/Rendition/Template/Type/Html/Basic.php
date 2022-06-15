@@ -15,7 +15,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
@@ -185,7 +184,7 @@ class Basic extends Html
 
                 $glyph = new NamespaceIdentGlyph(
                     $this->getBlockNamespace($block) . '\Block\\' .
-                    ClassnameUtilities::getInstance()->getClassnameFromObject($block), false, false, false, null, []
+                    ClassnameUtilities::getInstance()->getClassnameFromObject($block)
                 );
 
                 $html[] = $glyph->render();
@@ -228,8 +227,7 @@ class Basic extends Html
 
                     $glyph = new NamespaceIdentGlyph(
                         $this->getBlockNamespace($block) . '\Block\\' .
-                        ClassnameUtilities::getInstance()->getClassnameFromObject($block), true, false, false,
-                        IdentGlyph::SIZE_SMALL, []
+                        ClassnameUtilities::getInstance()->getClassnameFromObject($block), true
                     );
 
                     $tabs->add(

@@ -35,7 +35,7 @@ abstract class HtmlInlineMediaRenditionImplementation extends HtmlInlineRenditio
         $html[] = '<h4>' . Translation::get($titleVariable) . '</h4>';
         $html[] = Translation::get('PlaybackNotSupported');
         $html[] = '<br />';
-        $html[] = $this->renderActions('btn-warning');
+        $html[] = $this->renderActions(['btn-warning']);
         $html[] = '</div>';
         
         return implode(PHP_EOL, $html);

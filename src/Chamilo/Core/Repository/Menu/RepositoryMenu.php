@@ -70,7 +70,7 @@ class RepositoryMenu
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_CREATE_CONTENT_OBJECTS
                         ), array(Manager::PARAM_IMPORT_TYPE)
-                    ), Button::DISPLAY_ICON_AND_LABEL, false, 'btn-primary'
+                    ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-primary']
                 )
             );
 

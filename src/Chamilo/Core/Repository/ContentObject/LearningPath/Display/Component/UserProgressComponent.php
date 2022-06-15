@@ -15,8 +15,8 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\PanelRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -33,9 +33,20 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
      */
     protected $buttonToolbarRenderer;
 
+    /**
+     * Adds the breadcrumbs for this component
+     *
+     * @param Translation $translator
+     */
+    protected function addBreadcrumbs(Translation $translator)
+    {
+        $trail = BreadcrumbTrail::getInstance();
+        $trail->add(new Breadcrumb($this->get_url(), $translator->getTranslation('UserProgressComponent')));
+    }
+
     function build()
     {
-        if (! $this->canEditCurrentTreeNode())
+        if (!$this->canEditCurrentTreeNode())
         {
             throw new NotAllowedException();
         }
@@ -56,10 +67,8 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         $html[] = '<div class="col-lg-8 col-md-12">';
 
         $html[] = $this->renderInformationPanel(
-            $this->getCurrentTreeNode(),
-            $this->getAutomaticNumberingService(),
-            $translator,
-            $panelRenderer);
+            $this->getCurrentTreeNode(), $this->getAutomaticNumberingService(), $translator, $panelRenderer
+        );
 
         $html[] = '</div>';
         $html[] = '<div class="col-lg-4 col-md-12">';
@@ -74,22 +83,80 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
         $html[] = $panelRenderer->render(
             $translator->getTranslation('UserProgress'),
-            $this->getSearchButtonToolbarRenderer()->render() . $table->as_html());
+            $this->getSearchButtonToolbarRenderer()->render() . $table->as_html()
+        );
 
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Adds the breadcrumbs for this component
-     *
-     * @param Translation $translator
-     */
-    protected function addBreadcrumbs(Translation $translator)
+    protected function getButtonToolbar(Translation $translator)
     {
-        $trail = BreadcrumbTrail::getInstance();
-        $trail->add(new Breadcrumb($this->get_url(), $translator->getTranslation('UserProgressComponent')));
+        $toolbar = parent::getButtonToolbar($translator);
+
+        $buttonGroup = new ButtonGroup();
+
+        $translationVariable =
+            $this->getCurrentTreeNode()->isRootNode() ? 'MailNotCompletedUsersRoot' : 'MailNotCompletedUsers';
+
+        $buttonGroup->addButton(
+            new Button(
+                $translator->getTranslation($translationVariable), new FontAwesomeGlyph('envelope'),
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_MAIL_USERS_WITH_INCOMPLETE_PROGRESS)),
+                Button::DISPLAY_ICON_AND_LABEL, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
+            )
+        );
+
+        $toolbar->addItem($buttonGroup);
+
+        return $toolbar;
+    }
+
+    /**
+     *
+     * @return ButtonToolBarRenderer
+     */
+    protected function getSearchButtonToolbarRenderer()
+    {
+        if (!isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar($this->get_url());
+
+            $buttonToolbar->addItem(
+                new Button(
+                    Translation::getInstance()->getTranslation('Export', null, StringUtilities::LIBRARIES),
+                    new FontAwesomeGlyph('download'), $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_EXPORT_REPORTING,
+                        ReportingExporterComponent::PARAM_EXPORT => ReportingExporterComponent::EXPORT_USER_PROGRESS
+                    ]
+                )
+                )
+            );
+
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+
+        return $this->buttonToolbarRenderer;
+    }
+
+    /**
+     * Returns the condition
+     *
+     * @param string $table_class_name
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     */
+    public function get_table_condition($table_class_name)
+    {
+        return $this->getSearchButtonToolbarRenderer()->getConditions(
+            array(
+                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
+                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME),
+                new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL)
+            )
+        );
     }
 
     /**
@@ -102,8 +169,10 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
      *
      * @return string
      */
-    protected function renderInformationPanel(TreeNode $currentTreeNode,
-        AutomaticNumberingService $automaticNumberingService, Translation $translator, PanelRenderer $panelRenderer)
+    protected function renderInformationPanel(
+        TreeNode $currentTreeNode, AutomaticNumberingService $automaticNumberingService, Translation $translator,
+        PanelRenderer $panelRenderer
+    )
     {
         $parentTitles = [];
         foreach ($currentTreeNode->getParentNodes() as $parentNode)
@@ -115,10 +184,12 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
         $informationValues = [];
 
-        $informationValues[$translator->getTranslation('Title')] = $automaticNumberingService->getAutomaticNumberedTitleForTreeNode(
-            $currentTreeNode);
+        $informationValues[$translator->getTranslation('Title')] =
+            $automaticNumberingService->getAutomaticNumberedTitleForTreeNode(
+                $currentTreeNode
+            );
 
-        if (! $currentTreeNode->isRootNode())
+        if (!$currentTreeNode->isRootNode())
         {
             $informationValues[$translator->getTranslation('Parents')] = implode(' >> ', $parentTitles);
         }
@@ -141,18 +212,20 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         $labels = [
             $translator->getTranslation('TargetUsersWithFullAttempts'),
             $translator->getTranslation('TargetUsersWithPartialAttempts'),
-            $translator->getTranslation('TargetUsersWithoutAttempts')];
+            $translator->getTranslation('TargetUsersWithoutAttempts')
+        ];
 
         $data = [
             $trackingService->countTargetUsersWithFullLearningPathAttempts(
-                $this->learningPath,
-                $this->getCurrentTreeNode()),
+                $this->learningPath, $this->getCurrentTreeNode()
+            ),
             $trackingService->countTargetUsersWithPartialLearningPathAttempts(
-                $this->learningPath,
-                $this->getCurrentTreeNode()),
+                $this->learningPath, $this->getCurrentTreeNode()
+            ),
             $trackingService->countTargetUsersWithoutLearningPathAttempts(
-                $this->learningPath,
-                $this->getCurrentTreeNode())];
+                $this->learningPath, $this->getCurrentTreeNode()
+            )
+        ];
 
         $panelHtml = [];
         $panelHtml[] = '<canvas id="myChart" height="135" width="270" style="margin: auto;"></canvas>';
@@ -188,69 +261,9 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         $panelHtml[] = '});';
         $panelHtml[] = '</script>';
 
-        return $panelRenderer->render($translator->getTranslation('OverviewUserProgress'), implode(PHP_EOL, $panelHtml));
-    }
-
-    /**
-     *
-     * @return ButtonToolBarRenderer
-     */
-    protected function getSearchButtonToolbarRenderer()
-    {
-        if (! isset($this->buttonToolbarRenderer))
-        {
-            $buttonToolbar = new ButtonToolBar($this->get_url());
-
-            $buttonToolbar->addItem(
-                new Button(
-                    Translation::getInstance()->getTranslation('Export', null, StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('download'),
-                    $this->get_url(
-                        [
-                            self::PARAM_ACTION => self::ACTION_EXPORT_REPORTING,
-                            ReportingExporterComponent::PARAM_EXPORT => ReportingExporterComponent::EXPORT_USER_PROGRESS])));
-
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        }
-
-        return $this->buttonToolbarRenderer;
-    }
-
-    protected function getButtonToolbar(Translation $translator)
-    {
-        $toolbar = parent::getButtonToolbar($translator);
-
-        $buttonGroup = new ButtonGroup();
-
-        $translationVariable = $this->getCurrentTreeNode()->isRootNode() ? 'MailNotCompletedUsersRoot' : 'MailNotCompletedUsers';
-
-        $buttonGroup->addButton(
-            new Button(
-                $translator->getTranslation($translationVariable),
-                new FontAwesomeGlyph('envelope'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_MAIL_USERS_WITH_INCOMPLETE_PROGRESS)),
-                Button::DISPLAY_ICON_AND_LABEL,
-                true));
-
-        $toolbar->addItem($buttonGroup);
-
-        return $toolbar;
-    }
-
-    /**
-     * Returns the condition
-     *
-     * @param string $table_class_name
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_table_condition($table_class_name)
-    {
-        return $this->getSearchButtonToolbarRenderer()->getConditions(
-            array(
-                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
-                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME),
-                new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL)));
+        return $panelRenderer->render(
+            $translator->getTranslation('OverviewUserProgress'), implode(PHP_EOL, $panelHtml)
+        );
     }
 
     /**

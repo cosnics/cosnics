@@ -85,7 +85,7 @@ class Toolbar
                 new Button(
                     $item->get_label(), $item->get_image(), $item->get_href(),
                     $keepDisplayProperty ? $item->get_display() : AbstractButton::DISPLAY_ICON_AND_LABEL,
-                    $item->get_confirmation(), 'btn-link', $item->get_target()
+                    $item->get_confirmation(), ['btn-link'], $item->get_target()
                 )
             );
         }

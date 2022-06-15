@@ -313,7 +313,7 @@ abstract class Manager extends Application
                                 self::PARAM_ACTION => self::ACTION_DELETE,
                                 self::PARAM_PUBLICATION_ID => $introduction_text->get_id()
                             )
-                        ), Button::DISPLAY_ICON_AND_LABEL, true
+                        ), Button::DISPLAY_ICON_AND_LABEL, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                     )
                 );
             }
@@ -966,8 +966,8 @@ abstract class Manager extends Application
         // null,
         // $bookmark_url,
         // Button::DISPLAY_ICON_AND_LABEL,
-        // false,
         // null,
+        // [],
         // '_blank'));
         // }
 

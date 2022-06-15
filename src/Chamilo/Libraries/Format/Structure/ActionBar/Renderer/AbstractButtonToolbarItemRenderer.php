@@ -13,40 +13,20 @@ use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem;
 abstract class AbstractButtonToolbarItemRenderer
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem
-     */
-    private $button;
+    private AbstractButtonToolBarItem $button;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem $button
-     */
     public function __construct(AbstractButtonToolBarItem $button)
     {
         $this->button = $button;
     }
 
-    /**
-     *
-     * @return string
-     */
-    abstract function render();
+    abstract function render(): string;
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem
-     */
     public function getButton()
     {
         return $this->button;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem $button
-     */
     public function setButton(AbstractButtonToolBarItem $button)
     {
         $this->button = $button;

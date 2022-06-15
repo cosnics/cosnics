@@ -157,7 +157,7 @@ abstract class BlogLayout
                 new Button(
                     Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_parent()->get_complex_content_object_item_update_url($complexBlogItem),
-                    ToolbarItem::DISPLAY_ICON, false, 'btn-link'
+                    ToolbarItem::DISPLAY_ICON, null, ['btn-link']
                 )
             );
         }
@@ -168,7 +168,8 @@ abstract class BlogLayout
                 new Button(
                     Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_parent()->get_complex_content_object_item_delete_url($complexBlogItem),
-                    ToolbarItem::DISPLAY_ICON, true, 'btn-link'
+                    ToolbarItem::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES),
+                    ['btn-link']
                 )
             );
         }
@@ -192,12 +193,12 @@ abstract class BlogLayout
 
         $parameters = new DataClassRetrievesParameters(
             $condition, null, null, new OrderBy(array(
-                    new OrderProperty(
-                        new PropertyConditionVariable(
-                            ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ADD_DATE
-                        )
+                new OrderProperty(
+                    new PropertyConditionVariable(
+                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ADD_DATE
                     )
-                ))
+                )
+            ))
         );
 
         return DataManager::retrieves(

@@ -1,9 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
-
 /**
  *
  * @package Chamilo\Libraries\Format\Structure\ActionBar
@@ -14,81 +11,38 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 trait ActionButtonTrait
 {
 
-    /**
-     *
-     * @var string
-     */
-    private $action;
+    private ?string $action;
 
-    /**
-     *
-     * @var boolean
-     */
-    private $confirmation;
+    private ?string $confirmationMessage;
 
-    /**
-     *
-     * @var string
-     */
-    private $target;
+    private ?string $target;
 
-    /**
-     *
-     * @return string
-     */
-    public function getAction()
+    public function getAction(): ?string
     {
         return $this->action;
     }
 
-    /**
-     *
-     * @param string $action
-     */
-    public function setAction($action)
+    public function setAction(?string $action)
     {
         $this->action = $action;
     }
 
-    /**
-     *
-     * @return boolean|string
-     */
-    public function getConfirmation()
+    public function getConfirmationMessage(): ?string
     {
-        return $this->confirmation;
+        return $this->confirmationMessage;
     }
 
-    /**
-     *
-     * @param boolean|string $confirmation
-     */
-    public function setConfirmation($confirmation)
+    public function setConfirmationMessage(?string $confirmationMessage)
     {
-        if ($confirmation === true)
-        {
-            $this->confirmation = Translation::get('ConfirmChosenAction', null, StringUtilities::LIBRARIES);
-        }
-        else
-        {
-            $this->confirmation = $confirmation;
-        }
+        $this->confirmationMessage = $confirmationMessage;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getTarget()
+    public function getTarget(): ?string
     {
         return $this->target;
     }
 
-    /**
-     *
-     * @param string $target
-     */
-    public function setTarget($target)
+    public function setTarget(?string $target)
     {
         $this->target = $target;
     }
@@ -97,24 +51,18 @@ trait ActionButtonTrait
      * Initialize method as replacement for constructor due to PHP issue
      * https://bugs.php.net/bug.php?id=65576
      * TODO: fix this once everyone moves to PHP 5.6
-     *
-     * @param string $action
-     * @param boolean|string $confirmation
-     * @param string $target
      */
-    public function initialize($action = null, $confirmation = null, $target = null)
+    public function initializeActionButton(
+        ?string $action = null, ?string $confirmationMessage = null, ?string $target = null
+    )
     {
         $this->setAction($action);
-        $this->setConfirmation($confirmation);
+        $this->setConfirmationMessage($confirmationMessage);
         $this->setTarget($target);
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function needsConfirmation()
+    public function needsConfirmation(): bool
     {
-        return $this->getConfirmation() !== false;
+        return !is_null($this->getConfirmationMessage());
     }
 }

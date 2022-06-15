@@ -167,9 +167,8 @@ class PagerRenderer
             );
         }
 
-        $dropDownButton = new DropdownButton($dropDownButtonLabel, null, Button::DISPLAY_LABEL, 'btn-sm');
-
-        $dropDownButton->setDropdownClasses('dropdown-menu-right');
+        $dropDownButton =
+            new DropdownButton($dropDownButtonLabel, null, Button::DISPLAY_LABEL, ['btn-sm'], ['dropdown-menu-right']);
         $buttonGroup->addButton($dropDownButton);
 
         for (
@@ -184,7 +183,7 @@ class PagerRenderer
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW], array('NUMBER' => $nr),
                         $translationVariables[Application::PARAM_CONTEXT]
                     ), null, $this->getUrl($queryParameters, $itemsPerPageParameterName, $nrOfRows),
-                    SubButton::DISPLAY_LABEL, false, [], null, $nrOfRows == $currentNumberOfRowsPerPage
+                    SubButton::DISPLAY_LABEL, null, [], null, $nrOfRows == $currentNumberOfRowsPerPage
                 )
             );
         }
@@ -197,7 +196,7 @@ class PagerRenderer
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL], null,
                         $translationVariables[Application::PARAM_CONTEXT]
                     ), null, $this->getUrl($queryParameters, $itemsPerPageParameterName, Pager::DISPLAY_ALL),
-                    SubButton::DISPLAY_LABEL, false, [], null,
+                    SubButton::DISPLAY_LABEL, null, [], null,
                     $pager->getNumberOfItemsPerPage() == $pager->getNumberOfItems()
                 )
             );

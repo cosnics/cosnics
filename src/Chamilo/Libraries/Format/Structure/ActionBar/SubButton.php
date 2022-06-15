@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Structure\ActionBar
@@ -10,43 +12,23 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar;
  */
 class SubButton extends Button implements SubButtonInterface
 {
-    /**
-     * @var boolean
-     */
-    private $isActive;
+    private bool $isActive;
 
-    /**
-     * SubButton constructor.
-     *
-     * @param string $label
-     * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $imagePath
-     * @param string $action
-     * @param integer $display
-     * @param boolean $confirmation
-     * @param string[] $classes
-     * @param string $target
-     * @param boolean $isActive
-     */
     public function __construct(
-        $label = null, $imagePath = null, $action = null, $display = self::DISPLAY_ICON_AND_LABEL,
-        $confirmation = false, $classes = null, $target = null, $isActive = false
+        ?string $label = null, ?InlineGlyph $inlineGlyph = null, ?string $action = null,
+        int $display = self::DISPLAY_ICON_AND_LABEL, ?string $confirmationMessage = null, array $classes = [],
+        ?string $target = null, bool $isActive = false
     )
     {
-        parent::__construct($label, $imagePath, $action, $display, $confirmation, $classes, $target);
+        parent::__construct($label, $inlineGlyph, $action, $display, $confirmationMessage, $classes, $target);
         $this->isActive = $isActive;
     }
 
-    /**
-     * @return bool
-     */
     public function isActive(): bool
     {
         return $this->isActive;
     }
 
-    /**
-     * @param bool $isActive
-     */
     public function setIsActive(bool $isActive): void
     {
         $this->isActive = $isActive;

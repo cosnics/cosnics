@@ -73,7 +73,7 @@ class ResultViewerComponent extends Manager
                 new Button(
                     Translation::get(
                         'PrintReport', [], self::EPHORUS_TRANSLATION_CONTEXT
-                    ), new FontAwesomeGlyph('item'), '#', ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'print_button'
+                    ), new FontAwesomeGlyph('item'), '#', ToolbarItem::DISPLAY_ICON_AND_LABEL, null, ['print_button']
                 )
             );
 
@@ -83,7 +83,7 @@ class ResultViewerComponent extends Manager
                         'ExportReport', [], self::EPHORUS_TRANSLATION_CONTEXT
                     ), new FontAwesomeGlyph('download'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT_RESULT)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL, false
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 

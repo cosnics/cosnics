@@ -319,8 +319,8 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
                 new FontAwesomeGlyph('plus'),
                 ' ',
                 Button::DISPLAY_ICON_AND_LABEL,
-                false,
-                'btn-primary add-option'));
+                null,
+                ['btn-primary','add-option']));
 
         $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 

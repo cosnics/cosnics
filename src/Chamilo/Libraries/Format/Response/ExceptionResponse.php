@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Format\Response;
 
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Page;
+use Exception;
 
 /**
  *
@@ -14,13 +16,7 @@ use Chamilo\Libraries\Format\Structure\Page;
 class ExceptionResponse extends Response
 {
 
-    /**
-     * Constructor
-     *
-     * @param \Exception $exception
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function __construct($exception, $application)
+    public function __construct(Exception $exception, Application $application)
     {
         $page = Page::getInstance();
         $page->setApplication($application);

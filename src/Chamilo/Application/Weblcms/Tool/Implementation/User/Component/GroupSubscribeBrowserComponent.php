@@ -172,12 +172,12 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         {
             $buttonToolbar->addItem(
                 new Button(
-                    $this->getTranslation('SubscribeGroup'), '', $this->get_url(
+                    $this->getTranslation('SubscribeGroup'), null, $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS,
                         self::PARAM_OBJECTS => $group->getId()
                     )
-                ), ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'btn-success'
+                ), ToolbarItem::DISPLAY_ICON_AND_LABEL, null, ['btn-success']
                 )
             );
         }

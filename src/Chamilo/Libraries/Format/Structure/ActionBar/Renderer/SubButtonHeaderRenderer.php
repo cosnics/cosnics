@@ -11,11 +11,7 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar\Renderer;
 class SubButtonHeaderRenderer extends AbstractButtonToolbarItemRenderer
 {
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\AbstractButtonRenderer::render()
-     */
-    public function render()
+    public function render(): string
     {
         $html = [];
 
@@ -27,17 +23,11 @@ class SubButtonHeaderRenderer extends AbstractButtonToolbarItemRenderer
     }
 
     /**
-     *
      * @return string[]
      */
-    public function determineClasses()
+    public function determineClasses(): array
     {
-        $classes = [];
-
-        $classes[] = 'dropdown-header';
-        $classes[] = $this->getButton()->getClasses();
-
-        return $classes;
+        return array_merge(['dropdown-header'], $this->getButton()->getClasses());
     }
 
     /**
@@ -48,11 +38,7 @@ class SubButtonHeaderRenderer extends AbstractButtonToolbarItemRenderer
         return parent::getButton();
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function renderClasses()
+    public function renderClasses(): string
     {
         return 'class="' . implode(' ', $this->determineClasses()) . '"';
     }

@@ -10,7 +10,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
@@ -103,8 +102,8 @@ class BrowserComponent extends Manager implements DelegateComponent
         $commonActions->addButton(
             new Button(
                 Translation::get('Preview', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('desktop'),
-                $this->get_parent()->get_preview_content_object_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL, false,
-                $onclick, '_blank'
+                $this->get_parent()->get_preview_content_object_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL, null,
+                [$onclick], '_blank'
             )
         );
 

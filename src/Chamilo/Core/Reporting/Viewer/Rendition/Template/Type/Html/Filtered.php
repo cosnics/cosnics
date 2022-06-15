@@ -11,7 +11,6 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\BlockRenditionImplementation;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
@@ -46,7 +45,7 @@ class Filtered extends Basic
 
                 $glyph = new NamespaceIdentGlyph(
                     $this->getBlockNamespace($block) . '\Block\\' .
-                    ClassnameUtilities::getInstance()->getClassnameFromObject($block), false, false, false, null, []
+                    ClassnameUtilities::getInstance()->getClassnameFromObject($block)
                 );
 
                 $html[] = '<h2>';
@@ -105,8 +104,7 @@ class Filtered extends Basic
 
                     $glyph = new NamespaceIdentGlyph(
                         $this->getBlockNamespace($block) . '\Block\\' .
-                        ClassnameUtilities::getInstance()->getClassnameFromObject($block), true, false, false,
-                        IdentGlyph::SIZE_SMALL, []
+                        ClassnameUtilities::getInstance()->getClassnameFromObject($block), true
                     );
 
                     $tabs->add(

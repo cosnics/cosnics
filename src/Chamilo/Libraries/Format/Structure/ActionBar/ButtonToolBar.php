@@ -12,68 +12,47 @@ class ButtonToolBar
 {
 
     /**
-     *
-     * @var string
-     */
-    private $searchUrl;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
-     */
-    private $items;
-
-    /**
-     *
      * @var string[]
      */
-    private $classes;
+    private array $classes;
+
+    /**
+     * @var \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
+     */
+    private array $items;
+
+    private ?string $searchUrl;
 
     /**
      *
-     * @param string $searchUrl
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $items
-     * @param string[] $classes
      */
-    public function __construct($searchUrl = null, $items = [], $classes = [])
+    public function __construct(?string $searchUrl = null, array $items = [], array $classes = [])
     {
         $this->searchUrl = $searchUrl;
         $this->items = $items;
         $this->classes = $classes;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem $buttonToolBarItem
-     */
-    public function addButtonGroup($buttonToolBarItem)
+    public function addButtonGroup(AbstractButtonToolBarItem $buttonToolBarItem)
     {
         $this->addItem($buttonToolBarItem);
     }
 
-    /**
-     *
-     * @param string $class
-     */
-    public function addClass($class)
+    public function addClass(string $class)
     {
         $this->classes[] = $class;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem $buttonToolBarItem
-     */
-    public function addItem($buttonToolBarItem)
+    public function addItem(AbstractButtonToolBarItem $buttonToolBarItem)
     {
         $this->items[] = $buttonToolBarItem;
     }
 
     /**
-     *
      * @param AbstractButtonToolBarItem[] $buttonToolbarItems
      */
-    public function addItems($buttonToolbarItems = [])
+    public function addItems(array $buttonToolbarItems = [])
     {
         foreach ($buttonToolbarItems as $buttonToolbarItem)
         {
@@ -82,96 +61,54 @@ class ButtonToolBar
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
-     * @deprecated Use getItems() now
-     */
-    public function getButtonGroups()
-    {
-        return $this->getItems();
-    }
-
-    /**
-     *
      * @return string[]
      */
-    public function getClasses()
+    public function getClasses(): array
     {
         return $this->classes;
     }
 
     /**
-     *
      * @param string[] $classes
      */
-    public function setClasses($classes)
+    public function setClasses(array $classes)
     {
         $this->classes = $classes;
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
-    public function getItems()
+    public function getItems(): array
     {
         return $this->items;
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $items
      */
-    public function setItems($items)
+    public function setItems(array $items)
     {
         $this->items = $items;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getSearchUrl()
+    public function getSearchUrl(): ?string
     {
         return $this->searchUrl;
     }
 
-    /**
-     *
-     * @param string $searchUrl
-     */
-    public function setSearchUrl($searchUrl)
+    public function setSearchUrl(?string $searchUrl)
     {
         $this->searchUrl = $searchUrl;
     }
 
-    /**
-     * Returns whether or not the current button toolbar has items
-     *
-     * @return boolean
-     */
-    public function hasItems()
+    public function hasItems(): bool
     {
         return count($this->items) > 0;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem $buttonToolBarItem
-     */
-    public function prependItem($buttonToolBarItem)
+    public function prependItem(AbstractButtonToolBarItem $buttonToolBarItem)
     {
         array_unshift($this->items, $buttonToolBarItem);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $items
-     *
-     * @deprecated Use setButtonToolBarItems() now
-     */
-    public function setButtonGroups($items)
-    {
-        $this->setItems($items);
     }
 }

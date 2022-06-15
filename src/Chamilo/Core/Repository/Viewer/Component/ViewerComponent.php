@@ -46,7 +46,7 @@ class ViewerComponent extends Manager
                         Translation::get('Publish', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('share-square'), $this->get_url(
                         array_merge($this->get_parameters(), array(self::PARAM_ID => $content_object->get_id())), false
-                    ), Button::DISPLAY_ICON_AND_LABEL, false, 'btn-primary'
+                    ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-primary']
                     )
                 );
             }

@@ -42,7 +42,7 @@ class BrowserComponent extends Manager
                         \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::ACTION_VIEW
                     )
                 ),
-                Button::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
+                Button::DISPLAY_ICON_AND_LABEL, null, [], '_blank'
             );
         }
 

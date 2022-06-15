@@ -42,7 +42,7 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
                 Translation::get('Install'),
                 new FontAwesomeGlyph('check'),
                 Button::DISPLAY_ICON_AND_LABEL,
-                'btn-primary');
+                ['btn-primary']);
 
             $buttonToolBar->addItem($dropDownButton);
 
@@ -59,7 +59,7 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
             $buttonToolBar->addItem(
                 new Button('Read the installation guide', new FontAwesomeGlyph('book'), 'documentation/install.txt'));
             $buttonToolBar->addItem(
-                new Button('Visit cosncis.org', new FontAwesomeGlyph('globe'), 'http://www.cosnics.org/'));
+                new Button('Visit cosnics.org', new FontAwesomeGlyph('globe'), 'http://www.cosnics.org/'));
             $buttonToolBar->addItem(
                 new Button('Get support', new FontAwesomeGlyph('question-circle'), 'http://www.cosnics.org/'));
 

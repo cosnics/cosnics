@@ -131,7 +131,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $publishActions->addButton(
                     $this->getPublicationButton(
                         Translation::get('Publish', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
-                        $this->get_allowed_types(), $publishParameters, [], 'btn-primary'
+                        $this->get_allowed_types(), $publishParameters, [], ['btn-primary']
                     )
                 );
             }
@@ -208,9 +208,8 @@ class BrowserComponent extends Manager implements DelegateComponent
         $buttonToolBar = new ButtonToolBar();
 
         $dropdownButton = new DropdownButton(
-            Translation::get('Actions'), new FontAwesomeGlyph('cog'), Button::DISPLAY_ICON, 'btn-link'
+            Translation::get('Actions'), new FontAwesomeGlyph('cog'), Button::DISPLAY_ICON, ['btn-link'], ['dropdown-menu-right']
         );
-        $dropdownButton->setDropdownClasses('dropdown-menu-right');
 
         if (!$forum->get_locked())
         {
@@ -226,7 +225,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('Subscribe', null, Forum::package()), new FontAwesomeGlyph('envelope'),
-                        $this->get_url($parameters), Button::DISPLAY_ICON, true, 'btn-link'
+                        $this->get_url($parameters), Button::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
                     )
                 );
             }
@@ -242,7 +241,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     new Button(
                         Translation::get('UnSubscribe', null, Forum::package()),
                         new FontAwesomeGlyph('envelope', [], null, 'far'), $this->get_url($parameters),
-                        Button::DISPLAY_ICON, true, 'btn-link'
+                        Button::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
                     )
                 );
             }
@@ -258,7 +257,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_CONTENT_OBJECT
                     )
-                ), Button::DISPLAY_ICON, false, 'btn-link'
+                ), Button::DISPLAY_ICON, null, ['btn-link']
                 )
             );
 
@@ -270,7 +269,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION
                     )
-                ), SubButton::DISPLAY_LABEL, false, 'btn-link'
+                ), SubButton::DISPLAY_LABEL, null, ['btn-link']
                 )
             );
 
@@ -286,7 +285,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_TOGGLE_VISIBILITY
                             )
-                        ), SubButton::DISPLAY_LABEL, false, 'btn-link'
+                        ), SubButton::DISPLAY_LABEL, null, ['btn-link']
                     )
                 );
             }
@@ -300,7 +299,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_TOGGLE_VISIBILITY
                             )
-                        ), SubButton::DISPLAY_LABEL, false, 'btn-link'
+                        ), SubButton::DISPLAY_LABEL, null, ['btn-link']
                     )
                 );
             }
@@ -313,7 +312,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $dropdownButton->addSubButton(
                     new SubButton(
                         Translation::get('Unlock'), new FontAwesomeGlyph('unlock'), $this->get_url($parameters),
-                        SubButton::DISPLAY_LABEL, false, 'btn-link'
+                        SubButton::DISPLAY_LABEL, null, ['btn-link']
                     )
                 );
             }
@@ -325,7 +324,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $dropdownButton->addSubButton(
                     new SubButton(
                         Translation::get('Lock'), new FontAwesomeGlyph('lock'), $this->get_url($parameters),
-                        SubButton::DISPLAY_LABEL, false, 'btn-link'
+                        SubButton::DISPLAY_LABEL, null, ['btn-link']
                     )
                 );
             }
@@ -340,7 +339,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_TO_CATEGORY
                     )
-                ), SubButton::DISPLAY_LABEL, false, 'btn-link'
+                ), SubButton::DISPLAY_LABEL, null, ['btn-link']
                 )
             );
 
@@ -355,7 +354,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION => \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION_UP
                         )
-                    ), SubButton::DISPLAY_LABEL, false, 'btn-link'
+                    ), SubButton::DISPLAY_LABEL, null, ['btn-link']
                     )
                 );
             }
@@ -371,7 +370,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION => \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION_DOWN
                         )
-                    ), SubButton::DISPLAY_LABEL, false, 'btn-link'
+                    ), SubButton::DISPLAY_LABEL, null, ['btn-link']
                     )
                 );
             }
@@ -387,7 +386,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE
                         )
-                    ), Button::DISPLAY_ICON, true, 'btn-link'
+                    ), Button::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
                 )
             );
         }
@@ -471,16 +470,16 @@ class BrowserComponent extends Manager implements DelegateComponent
     /**
      *
      * @param string $label
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\InlineGlyph $glyph
+     * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $glyph
      * @param string[] $allowedContentObjectTypes
      * @param string[] $parameters
      * @param array $extraActions
-     * @param string $classes
+     * @param string[] $classes
      *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton
      */
     public function getPublicationButton(
-        $label, $glyph, $allowedContentObjectTypes, $parameters, $extraActions = [], $classes = null
+        $label, $glyph, $allowedContentObjectTypes, $parameters, $extraActions = [], array $classes = []
     )
     {
         $actionSelector = new ActionSelector(
@@ -610,7 +609,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $button = new Button(
                 Translation::get('ManageRights', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
-                $rightsUrl, Button::DISPLAY_ICON, false, 'btn-link'
+                $rightsUrl, Button::DISPLAY_ICON, null, ['btn-link']
             );
 
             $buttonRenderer = new ButtonRenderer($button);

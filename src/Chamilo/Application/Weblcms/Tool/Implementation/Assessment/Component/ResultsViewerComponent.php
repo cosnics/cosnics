@@ -84,8 +84,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
         $html[] = '<h3 class="panel-title">';
 
         $glyph = new NamespaceIdentGlyph(
-            'Chamilo\Core\Repository\ContentObject\Assessment', false, false, false,
-            IdentGlyph::SIZE_MINI
+            'Chamilo\Core\Repository\ContentObject\Assessment', false, false, false, IdentGlyph::SIZE_MINI
         );
 
         $html[] = $glyph->render() . ' ' . $assessment->get_title();
@@ -165,7 +164,8 @@ class ResultsViewerComponent extends Manager implements TableSupport
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DELETE_RESULTS,
                             self::PARAM_ASSESSMENT => $aid
                         )
-                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL, true
+                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL,
+                        Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                     )
                 );
 

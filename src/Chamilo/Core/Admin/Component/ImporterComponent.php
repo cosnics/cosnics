@@ -120,7 +120,7 @@ class ImporterComponent extends Manager
                 $index = 0;
 
                 $glyph = new NamespaceIdentGlyph(
-                    $package, true, false, false, IdentGlyph::SIZE_SMALL, []
+                    $package, true, false, false, IdentGlyph::SIZE_SMALL
                 );
 
                 $index ++;
