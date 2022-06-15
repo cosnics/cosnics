@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="banner">
+        <!--<div class="banner">
             <h1 class="banner-header">GradeBook</h1>
-        </div>
+        </div>-->
         <div class="gradebook-toolbar">
             <input class="form-control" type="text" placeholder="Zoek student">
             <grades-dropdown id="dropdown-main" :graded-items="gradeBook.gradedItemsWithStatusAdded" @toggle="toggleGradeItem"></grades-dropdown>
@@ -78,7 +78,7 @@
     white-space: nowrap;
 }
 
-.banner {
+/*.banner {
     background-color: #2b6597;
     border-bottom: 1px solid #14578f;
     padding: 20px 15px;
@@ -88,7 +88,7 @@
     color: #fff;
     font-size: 2.2rem;
     margin: 0;
-}
+}*/
 </style>
 
 <style lang="scss" scoped>

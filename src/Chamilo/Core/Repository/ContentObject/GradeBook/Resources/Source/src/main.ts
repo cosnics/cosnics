@@ -8,6 +8,10 @@ Vue.use(BootstrapVue);
 
 Vue.config.productionTip = false;
 
-new Vue({
+(window as any).App = App;
+
+/*new Vue({
   render: h => h(App),
 }).$mount('#app');
+
+Vue.component('GradeBookApp', App);*/
