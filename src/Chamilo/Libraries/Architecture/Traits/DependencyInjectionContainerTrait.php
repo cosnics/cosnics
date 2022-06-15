@@ -13,6 +13,8 @@ use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Format\Validator\ValidatorDecorator;
@@ -156,6 +158,16 @@ trait DependencyInjectionContainerTrait
     public function getStringUtilities(): StringUtilities
     {
         return $this->getService(StringUtilities::class);
+    }
+
+    public function getNotificationMessageManager(): NotificationMessageManager
+    {
+        return $this->getService(NotificationMessageManager::class);
+    }
+
+    public function getNotificationMessageRenderer(): NotificationMessageRenderer
+    {
+        return $this->getService(NotificationMessageRenderer::class);
     }
 
     public function getThemePathBuilder(): ThemePathBuilder

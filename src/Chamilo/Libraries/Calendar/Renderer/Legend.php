@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Calendar\Renderer;
 
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
@@ -116,8 +117,7 @@ class Legend
 
                 if ($visibleSources == 0)
                 {
-                    $notificationMessageManager = new NotificationMessageManager();
-                    $notificationMessageManager->addMessage(
+                    $this->getNotificationMessageManager()->addMessage(
                         new NotificationMessage(
                             Translation::get('AllEventSourcesHidden'), NotificationMessage::TYPE_WARNING
                         )
@@ -133,7 +133,7 @@ class Legend
      *
      * @param string $source
      *
-     * @return integer
+     * @return int
      * @throws \Exception
      */
     public function addSource($source)
@@ -169,7 +169,7 @@ class Legend
      *
      * @return \Chamilo\Libraries\Calendar\Renderer\Legend
      */
-    static public function getInstance(CalendarRendererProviderInterface $dataProvider)
+    public static function getInstance(CalendarRendererProviderInterface $dataProvider)
     {
         $dataProviderType = get_class($dataProvider);
 
@@ -181,11 +181,18 @@ class Legend
         return static::$instance[$dataProviderType];
     }
 
+    protected function getNotificationMessageManager(): NotificationMessageManager
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            NotificationMessageManager::class
+        );
+    }
+
     /**
      * Determine the classes for a specific source
      *
      * @param string $source
-     * @param boolean $fade
+     * @param bool $fade
      *
      * @return string
      * @throws \Exception
@@ -206,7 +213,7 @@ class Legend
      *
      * @param string $source
      *
-     * @return integer
+     * @return int
      * @throws \Exception
      */
     public function getSourceKey($source)
@@ -243,7 +250,7 @@ class Legend
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function hasMultipleSources()
     {
@@ -252,7 +259,7 @@ class Legend
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function hasSources()
     {

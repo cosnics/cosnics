@@ -10,87 +10,42 @@ namespace Chamilo\Libraries\Format\NotificationMessage;
 class NotificationMessageManager
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\NotificationMessage\NotificationMessageStorageInterface
-     */
-    protected $notificationMessageStorage;
+    protected NotificationMessageRenderer $notificationMessageRenderer;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer
-     */
-    protected $notificationMessageRenderer;
+    protected NotificationMessageStorageInterface $notificationMessageStorage;
 
-    /**
-     * NotificationMessageManager constructor.
-     *
-     * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessageStorageInterface $notificationMessageStorage
-     * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer $notificationMessageRenderer
-     */
-    public function __construct(NotificationMessageStorageInterface $notificationMessageStorage = null,
-        NotificationMessageRenderer $notificationMessageRenderer = null)
+    public function __construct(
+        NotificationMessageStorageInterface $notificationMessageStorage,
+        NotificationMessageRenderer $notificationMessageRenderer
+    )
     {
-        if (is_null($notificationMessageStorage))
-        {
-            $notificationMessageStorage = new NotificationMessageSessionStorage();
-        }
-
-        if (is_null($notificationMessageRenderer))
-        {
-            $notificationMessageRenderer = new NotificationMessageRenderer();
-        }
-
         $this->notificationMessageStorage = $notificationMessageStorage;
         $this->notificationMessageRenderer = $notificationMessageRenderer;
     }
 
     /**
-     * Adds a message
-     *
-     * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage $notificationMessage
-     * @param integer $limitByCategory - Limits the number of messages of the same category by the given number (0 =
-     *        infinite)
+     * @param int $limitByCategory Limits the number of messages of the same category by the given number (0 = infinite)
      */
-    public function addMessage(NotificationMessage $notificationMessage, $limitByCategory = 0)
+    public function addMessage(NotificationMessage $notificationMessage, int $limitByCategory = 0)
     {
-        $notificationMessages = $this->notificationMessageStorage->retrieve();
+        $notificationMessages = $this->getNotificationMessageStorage()->retrieve();
 
         if ($this->canAddMessage($notificationMessage, $notificationMessages, $limitByCategory))
         {
             $notificationMessages[] = $notificationMessage;
         }
 
-        $this->notificationMessageStorage->store($notificationMessages);
+        $this->getNotificationMessageStorage()->store($notificationMessages);
     }
 
     /**
-     * Renders the messages on the screen and clears them from the storage
-     *
-     * @return string
-     */
-    public function renderMessages()
-    {
-        $messages = $this->notificationMessageStorage->retrieve();
-
-        $this->notificationMessageStorage->clear();
-
-        return $this->notificationMessageRenderer->render($messages);
-    }
-
-    /**
-     * Checks if a message can be added to the array of messages
-     *
-     * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage $notificationMessageToBeAdded
      * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[] $notificationMessages
-     * @param integer $limitByCategory
-     *
-     * @return boolean
      */
-    protected function canAddMessage(NotificationMessage $notificationMessageToBeAdded, $notificationMessages = [],
-        $limitByCategory = 0)
+    protected function canAddMessage(
+        NotificationMessage $notificationMessageToBeAdded, array $notificationMessages = [], int $limitByCategory = 0
+    ): bool
     {
-        if ($limitByCategory > 0 && ! is_null($notificationMessageToBeAdded->getCategory()))
+        if ($limitByCategory > 0 && !is_null($notificationMessageToBeAdded->getCategory()))
         {
             $numberOfMessagesFromSameCategory = 0;
 
@@ -109,5 +64,29 @@ class NotificationMessageManager
         }
 
         return true;
+    }
+
+    public function getNotificationMessageRenderer(): NotificationMessageRenderer
+    {
+        return $this->notificationMessageRenderer;
+    }
+
+    public function getNotificationMessageStorage(): NotificationMessageStorageInterface
+    {
+        return $this->notificationMessageStorage;
+    }
+
+    /**
+     * Renders the messages on the screen and clears them from the storage
+     *
+     * @return string
+     */
+    public function renderMessages(): string
+    {
+        $messages = $this->getNotificationMessageStorage()->retrieve();
+
+        $this->getNotificationMessageStorage()->clear();
+
+        return $this->getNotificationMessageRenderer()->render($messages);
     }
 }

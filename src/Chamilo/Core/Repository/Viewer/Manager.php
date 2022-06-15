@@ -41,7 +41,6 @@ abstract class Manager extends Application
 
     public const SELECT_MULTIPLE = 0;
     public const SELECT_SINGLE = 1;
-    public const SETTING_BREADCRUMBS_DISABLED = 'breadcrumbs_disabled';
 
     public const TAB_BROWSER = 'Browser';
     public const TAB_CREATOR = 'Creator';
@@ -98,15 +97,6 @@ abstract class Manager extends Application
     public static function any_object_selected()
     {
         return !is_null(self::get_selected_objects());
-    }
-
-    /**
-     *
-     * @return bool
-     */
-    public function areBreadcrumbsDisabled()
-    {
-        return $this->getApplicationConfiguration()->get(self::SETTING_BREADCRUMBS_DISABLED) === true;
     }
 
     /**

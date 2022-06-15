@@ -48,26 +48,26 @@ abstract class ContentObjectPublicationListRenderer
     use ClassContext;
 
     // Types
-    const TOOL_TYPE_ANNOUNCEMENT = 'Announcement';
+    public const TOOL_TYPE_ANNOUNCEMENT = 'Announcement';
 
-    const TYPE_GALLERY = 'GalleryTable';
+    public const TYPE_GALLERY = 'GalleryTable';
 
-    const TYPE_LIST = 'List';
+    public const TYPE_LIST = 'List';
 
-    const TYPE_SLIDESHOW = 'Slideshow';
+    public const TYPE_SLIDESHOW = 'Slideshow';
 
-    const TYPE_TABLE = 'Table';
-
-    protected $tool_browser;
+    public const TYPE_TABLE = 'Table';
 
     /**
      * private counter to keep track of first/last status;
      */
     protected $row_counter = 0;
 
-    private $parameters;
+    protected $tool_browser;
 
     private $actions;
+
+    private $parameters;
 
     /**
      * Constructor.
@@ -739,8 +739,7 @@ abstract class ContentObjectPublicationListRenderer
             );
 
             $count = DataManager::count(
-                ContentObjectPublicationCategory::class,
-                new DataClassCountParameters(new AndCondition($conditions))
+                ContentObjectPublicationCategory::class, new DataClassCountParameters(new AndCondition($conditions))
             );
 
             $count ++;
@@ -776,8 +775,8 @@ abstract class ContentObjectPublicationListRenderer
      * Renders publication actions for the given publication.
      *
      * @param $publication ContentObjectPublication The publication.
-     * @param $first boolean True if the publication is the first in the list it is a part of.
-     * @param $last boolean True if the publication is the last in the list it is a part of.
+     * @param $first bool True if the publication is the first in the list it is a part of.
+     * @param $last bool True if the publication is the last in the list it is a part of.
      *
      * @return string The rendered HTML.
      */

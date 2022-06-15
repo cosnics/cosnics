@@ -17,7 +17,11 @@
         <service id="Chamilo\Libraries\Format\Utilities\ResourceProcessor"/>
         <service id="Chamilo\Libraries\Format\Utilities\PackageDescriber"/>
 
+        <service id="Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager"/>
         <service id="Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer"/>
+        <service id="Chamilo\Libraries\Format\NotificationMessage\NotificationMessageSessionStorage"/>
+        <service id="Chamilo\Libraries\Format\NotificationMessage\NotificationMessageStorageInterface"
+                 alias="Chamilo\Libraries\Format\NotificationMessage\NotificationMessageSessionStorage"/>
 
         <service id="Chamilo\Libraries\Format\Tabs\Form\FormTabGenerator"/>
         <service id="Chamilo\Libraries\Format\Tabs\Form\FormTabsGenerator"/>

@@ -9,28 +9,19 @@ namespace Chamilo\Libraries\Format\NotificationMessage;
  */
 class NotificationMessageRenderer
 {
-    const TYPE_DANGER = 'danger';
-    const TYPE_INFO = 'info';
-    const TYPE_SUCCESS = 'success';
-    const TYPE_WARNING = 'warning';
+    public const TYPE_DANGER = 'danger';
+    public const TYPE_INFO = 'info';
+    public const TYPE_SUCCESS = 'success';
+    public const TYPE_WARNING = 'warning';
 
     /**
-     * Renders one or more notification messages
-     *
-     * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage|\Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[] $notificationMessages
-     *
-     * @return string
+     * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[] $notificationMessages
      */
-    public function render($notificationMessages = [])
+    public function render(array $notificationMessages = []): string
     {
         if (empty($notificationMessages))
         {
             return '';
-        }
-
-        if ($notificationMessages instanceof NotificationMessage)
-        {
-            $notificationMessages = array($notificationMessages);
         }
 
         $html = [];
@@ -47,14 +38,7 @@ class NotificationMessageRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Renders a given notification message
-     *
-     * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage $notificationMessage
-     *
-     * @return string
-     */
-    protected function renderNotificationMessage(NotificationMessage $notificationMessage)
+    protected function renderNotificationMessage(NotificationMessage $notificationMessage): string
     {
         $html = [];
 
@@ -66,5 +50,10 @@ class NotificationMessageRenderer
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function renderOne(NotificationMessage $notificationMessage): string
+    {
+        return $this->render([$notificationMessage]);
     }
 }

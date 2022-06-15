@@ -12,112 +12,59 @@ namespace Chamilo\Libraries\Format\NotificationMessage;
  */
 class NotificationMessage
 {
-    const TYPE_SUCCESS = 'success';
-    const TYPE_INFO = 'info';
-    const TYPE_WARNING = 'warning';
-    const TYPE_DANGER = 'danger';
+    public const TYPE_DANGER = 'danger';
+    public const TYPE_INFO = 'info';
+    public const TYPE_SUCCESS = 'success';
+    public const TYPE_WARNING = 'warning';
 
     /**
-     *
-     * @var string
+     * A category for the message. Can be used to limit the number of messages of the same category.
      */
-    protected $type;
+    protected ?string $category;
 
-    /**
-     *
-     * @var string
-     */
-    protected $message;
+    protected string $message;
 
-    /**
-     * A category for the message.
-     * Can be used to limit the number of messages of the same category.
-     *
-     * @var string
-     */
-    protected $category;
+    protected string $type;
 
-    /**
-     *
-     * @param string $message
-     * @param string $type
-     * @param string $category
-     */
-    public function __construct($message, $type = self::TYPE_INFO, $category = null)
+    public function __construct(string $message, string $type = self::TYPE_INFO, ?string $category = null)
     {
         $this->type = $type;
         $this->message = $message;
         $this->category = $category;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     *
-     * @param string $message
-     * @param string $category
-     * @return \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage
-     */
-    public static function confirm($message, $category = null)
+    public static function confirm(string $message, ?string $category = null): NotificationMessage
     {
         return new self($message, self::TYPE_SUCCESS, $category);
     }
 
-    /**
-     *
-     * @param string $message
-     * @param string $category
-     * @return \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage
-     */
-    public static function normal($message, $category = null)
+    public static function error(string $message, ?string $category = null): NotificationMessage
+    {
+        return new self($message, self::TYPE_DANGER, $category);
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public static function normal(string $message, ?string $category = null): NotificationMessage
     {
         return new self($message, self::TYPE_INFO, $category);
     }
 
-    /**
-     *
-     * @param string $message
-     * @param string $category
-     * @return \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage
-     */
-    public static function warning($message, $category = null)
+    public static function warning(string $message, ?string $category = null): NotificationMessage
     {
         return new self($message, self::TYPE_WARNING, $category);
-    }
-
-    /**
-     *
-     * @param string $message
-     * @param string $category
-     * @return \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage
-     */
-    public static function error($message, $category = null)
-    {
-        return new self($message, self::TYPE_DANGER, $category);
     }
 }

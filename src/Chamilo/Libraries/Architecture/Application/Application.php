@@ -16,8 +16,6 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
-use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
-use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
@@ -38,18 +36,20 @@ abstract class Application
     use ClassContext;
     use DependencyInjectionContainerTrait;
 
-    const PARAM_ACTION = 'go';
-    const PARAM_CONTEXT = 'application';
-    const PARAM_ERROR_MESSAGE = 'error_message';
-    const PARAM_MESSAGE = 'message';
-    const PARAM_MESSAGES = 'messages';
-    const PARAM_MESSAGE_TYPE = 'message_type';
-    const PARAM_WARNING_MESSAGE = 'warning_message';
+    public const PARAM_ACTION = 'go';
+    public const PARAM_CONTEXT = 'application';
+    public const PARAM_ERROR_MESSAGE = 'error_message';
+    public const PARAM_MESSAGE = 'message';
+    public const PARAM_MESSAGES = 'messages';
+    public const PARAM_MESSAGE_TYPE = 'message_type';
+    public const PARAM_WARNING_MESSAGE = 'warning_message';
 
-    const RESULT_TYPE_CREATED = 'Created';
-    const RESULT_TYPE_DELETED = 'Deleted';
-    const RESULT_TYPE_MOVED = 'Moved';
-    const RESULT_TYPE_UPDATED = 'Updated';
+    public const RESULT_TYPE_CREATED = 'Created';
+    public const RESULT_TYPE_DELETED = 'Deleted';
+    public const RESULT_TYPE_MOVED = 'Moved';
+    public const RESULT_TYPE_UPDATED = 'Updated';
+
+    public const SETTING_BREADCRUMBS_DISABLED = 'breadcrumbs_disabled';
 
     /**
      *
@@ -78,7 +78,7 @@ abstract class Application
      *
      * @return string
      */
-    abstract function run();
+    abstract public function run();
 
     /**
      *
@@ -86,6 +86,11 @@ abstract class Application
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
+    }
+
+    public function areBreadcrumbsDisabled(): bool
+    {
+        return $this->getApplicationConfiguration()->get(self::SETTING_BREADCRUMBS_DISABLED) === true;
     }
 
     /**
@@ -181,10 +186,7 @@ abstract class Application
      */
     public function display_error_message($message)
     {
-        $notificationMessageRenderer = new NotificationMessageRenderer();
-        $notificationMessage = NotificationMessage::error($message);
-
-        return $notificationMessageRenderer->render($notificationMessage);
+        return $this->getNotificationMessageRenderer()->renderOne(NotificationMessage::error($message));
     }
 
     /**
@@ -219,10 +221,7 @@ abstract class Application
      */
     public function display_message($message)
     {
-        $notificationMessageRenderer = new NotificationMessageRenderer();
-        $notificationMessage = NotificationMessage::normal($message);
-
-        return $notificationMessageRenderer->render($notificationMessage);
+        return $this->getNotificationMessageRenderer()->renderOne(NotificationMessage::normal($message));
     }
 
     /**
@@ -234,7 +233,6 @@ abstract class Application
      */
     public function display_messages($messages, $types)
     {
-        $notificationMessageRenderer = new NotificationMessageRenderer();
         $notificationMessages = [];
 
         foreach ($types as $key => $type)
@@ -242,7 +240,7 @@ abstract class Application
             $notificationMessages[] = new NotificationMessage($messages[$key], $type);
         }
 
-        return $notificationMessageRenderer->render($notificationMessages);
+        return $this->getNotificationMessageRenderer()->render($notificationMessages);
     }
 
     /**
@@ -254,10 +252,7 @@ abstract class Application
      */
     public function display_warning_message($message)
     {
-        $notificationMessageRenderer = new NotificationMessageRenderer();
-        $notificationMessage = NotificationMessage::warning($message);
-
-        return $notificationMessageRenderer->render($notificationMessage);
+        return $this->getNotificationMessageRenderer()->renderOne(NotificationMessage::warning($message));
     }
 
     /**
@@ -287,7 +282,7 @@ abstract class Application
      *
      * @param string $application
      *
-     * @return boolean
+     * @return bool
      */
     public static function exists($application)
     {
@@ -298,6 +293,15 @@ abstract class Application
         }
 
         return self::$application_path_cache[$application];
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        return $additionalParameters;
     }
 
     /**
@@ -372,15 +376,6 @@ abstract class Application
     }
 
     /**
-     *
-     * @return string[]
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        return $additionalParameters;
-    }
-
-    /**
      * Get the parent application
      *
      * @return \Chamilo\Libraries\Architecture\Application\Application
@@ -442,8 +437,8 @@ abstract class Application
     /**
      * Generates a general results message like ObjectCreated, ObjectUpdated, ObjectDeleted
      *
-     * @param integer $failures
-     * @param integer $count
+     * @param int $failures
+     * @param int $count
      * @param string $singleObject
      * @param string $multipleObject
      * @param string $type
@@ -486,7 +481,7 @@ abstract class Application
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function get_level()
     {
@@ -506,7 +501,7 @@ abstract class Application
      *
      * @param string[] $parameters
      * @param string[] $filter
-     * @param boolean $encodeEntities
+     * @param bool $encodeEntities
      *
      * @return string
      */
@@ -611,8 +606,8 @@ abstract class Application
 
     /**
      *
-     * @param integer $failures
-     * @param integer $count
+     * @param int $failures
+     * @param int $count
      * @param string $failMessageSingle
      * @param string $failMessageMultiple
      * @param string $succesMessageSingle
@@ -659,7 +654,7 @@ abstract class Application
      *
      * @param string[] $parameters
      * @param string[] $filter
-     * @param boolean $encodeEntities Whether or not to encode HTML entities. Defaults to false.
+     * @param bool $encodeEntities Whether or not to encode HTML entities. Defaults to false.
      *
      * @return string
      */
@@ -687,7 +682,7 @@ abstract class Application
     /**
      * Gets the user id of this personal calendars owner
      *
-     * @return integer
+     * @return int
      * @deprecated Use getUser()->getId() now
      */
     public function get_user_id()
@@ -705,7 +700,7 @@ abstract class Application
      * Can be overwritten by the specific
      * application
      *
-     * @return boolean
+     * @return bool
      */
     public function has_menu()
     {
@@ -719,7 +714,7 @@ abstract class Application
      * @param string $context
      * @param string $action
      *
-     * @return boolean
+     * @return bool
      */
     public function isAuthorized($context, $action = null)
     {
@@ -735,7 +730,7 @@ abstract class Application
      *
      * @param string $context
      *
-     * @return boolean
+     * @return bool
      */
     public static function is_active($context = null)
     {
@@ -761,7 +756,7 @@ abstract class Application
      *
      * @param string $string
      *
-     * @return boolean
+     * @return bool
      */
     public static function is_application_name($name)
     {
@@ -770,7 +765,7 @@ abstract class Application
 
     /**
      *
-     * @param boolean $showLoginForm
+     * @param bool $showLoginForm
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
@@ -804,10 +799,10 @@ abstract class Application
      * on messages directly instead of using the parameters array
      *
      * @param string $message
-     * @param boolean $errorMessage
+     * @param bool $errorMessage
      * @param string[] $parameters
      * @param string[] $filter
-     * @param boolean $encodeEntities Whether or not to encode HTML entities. Defaults to false.
+     * @param bool $encodeEntities Whether or not to encode HTML entities. Defaults to false.
      * @param string $anchor
      */
     public function redirect(
@@ -818,10 +813,7 @@ abstract class Application
         {
 
             $messageType = (!$errorMessage) ? NotificationMessage::TYPE_INFO : NotificationMessage::TYPE_DANGER;
-
-            $notificationMessageManager = new NotificationMessageManager();
-
-            $notificationMessageManager->addMessage(new NotificationMessage($message, $messageType));
+            $this->getNotificationMessageManager()->addMessage(new NotificationMessage($message, $messageType));
         }
 
         $this->simple_redirect($parameters, $filter, $encodeEntities, $anchor);
@@ -911,8 +903,7 @@ abstract class Application
             $html[] = $this->display_messages($messages[self::PARAM_MESSAGE], $messages[self::PARAM_MESSAGE_TYPE]);
         }
 
-        $notificationMessageManager = new NotificationMessageManager();
-        $html[] = $notificationMessageManager->renderMessages();
+        $html[] = $this->getNotificationMessageManager()->renderMessages();
 
         // DEPRECATED
         // Display messages
@@ -1001,7 +992,7 @@ abstract class Application
      *
      * @param string[] $parameters
      * @param string[] $filter
-     * @param boolean $encodeEntities Whether or not to encode HTML entities. Defaults to false.
+     * @param bool $encodeEntities Whether or not to encode HTML entities. Defaults to false.
      * @param string $anchor
      */
     public function simple_redirect($parameters = [], $filter = [], $encodeEntities = false, $anchor = null)

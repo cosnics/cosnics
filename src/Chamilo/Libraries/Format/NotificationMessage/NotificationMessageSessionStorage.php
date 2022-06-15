@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\NotificationMessage;
 
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
  * Stores user notification messages into the session
@@ -11,27 +11,34 @@ use Chamilo\Libraries\Platform\Session\Session;
  */
 class NotificationMessageSessionStorage implements NotificationMessageStorageInterface
 {
-    const PARAM_CATEGORY = 'category';
-    const PARAM_MESSAGE = 'message';
-    const PARAM_NOTIFICATION_MESSAGES = 'notification_messages';
-    const PARAM_TYPE = 'type';
+    public const PARAM_CATEGORY = 'category';
+    public const PARAM_MESSAGE = 'message';
+    public const PARAM_NOTIFICATION_MESSAGES = 'notification_messages';
+    public const PARAM_TYPE = 'type';
 
-    /**
-     * Clears the notification messages
-     */
+    protected SessionUtilities $sessionUtilities;
+
+    public function __construct(SessionUtilities $sessionUtilities)
+    {
+        $this->sessionUtilities = $sessionUtilities;
+    }
+
     public function clear()
     {
-        Session::unregister(self::PARAM_NOTIFICATION_MESSAGES);
+        $this->getSessionUtilities()->unregister(self::PARAM_NOTIFICATION_MESSAGES);
+    }
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return $this->sessionUtilities;
     }
 
     /**
-     * Retrieves the notification messages
-     *
      * @return \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[]
      */
-    public function retrieve()
+    public function retrieve(): array
     {
-        $notificationMessagesAsArray = Session::get(self::PARAM_NOTIFICATION_MESSAGES, []);
+        $notificationMessagesAsArray = $this->getSessionUtilities()->get(self::PARAM_NOTIFICATION_MESSAGES, []);
 
         $notificationMessages = [];
 
@@ -47,23 +54,21 @@ class NotificationMessageSessionStorage implements NotificationMessageStorageInt
     }
 
     /**
-     * Stores the notification messages
-     *
      * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[] $notificationMessages
      */
-    public function store($notificationMessages = [])
+    public function store(array $notificationMessages = [])
     {
         $notificationMessagesAsArray = [];
 
         foreach ($notificationMessages as $notificationMessage)
         {
-            $notificationMessagesAsArray[] = array(
+            $notificationMessagesAsArray[] = [
                 self::PARAM_TYPE => $notificationMessage->getType(),
                 self::PARAM_MESSAGE => $notificationMessage->getMessage(),
                 self::PARAM_CATEGORY => $notificationMessage->getCategory()
-            );
+            ];
         }
 
-        Session::register(self::PARAM_NOTIFICATION_MESSAGES, $notificationMessagesAsArray);
+        $this->getSessionUtilities()->register(self::PARAM_NOTIFICATION_MESSAGES, $notificationMessagesAsArray);
     }
 }

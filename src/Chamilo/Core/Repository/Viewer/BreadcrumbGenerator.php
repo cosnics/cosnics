@@ -7,7 +7,7 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Repo Viewer BreadcrumbGenerator
- * 
+ *
  * @package common\libraries
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -15,25 +15,22 @@ class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\Breadcrumb
 {
 
     /**
-     * The application component
-     * 
-     * @var Manager
-     */
-    protected $application;
-
-    /**
      * Generates the breadcrumb for the component name
      */
-    protected function generate_component_breadcrumb()
+    protected function generateComponentBreadcrumb()
     {
-        if ($this->application->areBreadcrumbsDisabled())
+        if ($this->getApplication()->areBreadcrumbsDisabled())
         {
             return;
         }
-        
-        $variable = ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_class($this->application));
-        
-        $this->breadcrumbTrail->add(
-            new Breadcrumb($this->application->get_url(), Translation::get($variable, null, $this->application->package())));
+
+        $variable = ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_class($this->getApplication()));
+
+        $this->getBreadcrumbTrail()->add(
+            new Breadcrumb(
+                $this->getApplication()->get_url(),
+                Translation::get($variable, null, $this->getApplication()->package())
+            )
+        );
     }
 }

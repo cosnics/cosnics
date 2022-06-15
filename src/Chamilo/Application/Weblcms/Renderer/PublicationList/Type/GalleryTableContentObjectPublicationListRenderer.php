@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Renderer\PublicationList\Type;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Table\Publication\Gallery\ObjectPublicationGalleryTable;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -10,12 +11,12 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Renderer to display a sortable table with learning object publications.
- * 
+ *
  * @author Unknown
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPublicationListRenderer implements 
-    TableSupport
+class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPublicationListRenderer
+    implements TableSupport
 {
 
     public function __construct($tool_browser, $parameters = [])
@@ -24,9 +25,16 @@ class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPubl
         $this->addWarning();
     }
 
+    public function addWarning()
+    {
+        $this->getNotificationMessageManager()->addMessage(
+            new NotificationMessage(Translation::get('BrowserWarningPreview'), NotificationMessage::TYPE_WARNING)
+        );
+    }
+
     /**
      * Returns the HTML output of this renderer.
-     * 
+     *
      * @return string The HTML output
      */
     public function as_html()
@@ -39,20 +47,20 @@ class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPubl
         {
             $table = new ObjectPublicationGalleryTable($this);
         }
-        
+
         return $table->as_html();
     }
 
-    public function addWarning()
+    protected function getNotificationMessageManager(): NotificationMessageManager
     {
-        $notificationMessageManager = new NotificationMessageManager();
-        $notificationMessageManager->addMessage(
-            new NotificationMessage(Translation::get('BrowserWarningPreview'), NotificationMessage::TYPE_WARNING));
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            NotificationMessageManager::class
+        );
     }
 
     /**
      * Returns the parameters that the table needs for the url building
-     * 
+     *
      * @return string[]
      */
     public function get_parameters()
@@ -62,7 +70,7 @@ class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPubl
 
     /**
      * Returns the condition
-     * 
+     *
      * @param string $table_class_name
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
