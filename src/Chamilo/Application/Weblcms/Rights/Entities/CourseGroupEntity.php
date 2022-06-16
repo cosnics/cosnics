@@ -25,8 +25,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class CourseGroupEntity implements NestedRightsEntity
 {
-    const ENTITY_NAME = 'course_group';
-    const ENTITY_TYPE = 4;
+    public const ENTITY_NAME = 'course_group';
+    public const ENTITY_TYPE = 4;
 
     private static $instance;
 
@@ -61,6 +61,24 @@ class CourseGroupEntity implements NestedRightsEntity
     public static function data_class_class_name()
     {
         return CourseGroup::class;
+    }
+
+    public function getElementFinderType()
+    {
+        $elementFinderType = static::getElementFinderTypeInstance();
+        $elementFinderType->set_parameters(array('course_id' => $this->course_id));
+
+        return $elementFinderType;
+    }
+
+    /**
+     * Retrieves the type for the advanced element finder for the simple rights editor
+     */
+    public static function getElementFinderTypeInstance()
+    {
+        return new AdvancedElementFinderElementType(
+            'course_groups', Translation::get('CourseGroups'), Manager::package(), 'course_groups_feed'
+        );
     }
 
     public static function getInstance($course_id)
@@ -118,17 +136,6 @@ class CourseGroupEntity implements NestedRightsEntity
 
         return new AdvancedElementFinderElement(
             self::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $group->get_name(), $group->get_description()
-        );
-    }
-
-    /**
-     * Retrieves the type for the advanced element finder for the simple rights editor
-     */
-    public function get_element_finder_type()
-    {
-        return new AdvancedElementFinderElementType(
-            'course_groups', Translation::get('CourseGroups'), Manager::package(), 'course_groups_feed',
-            array('course_id' => $this->course_id)
         );
     }
 
@@ -237,7 +244,7 @@ class CourseGroupEntity implements NestedRightsEntity
     /**
      * Retrieves the entity item ids relevant for a given user
      *
-     * @param $user_id integer
+     * @param $user_id int
      *
      * @return array
      */

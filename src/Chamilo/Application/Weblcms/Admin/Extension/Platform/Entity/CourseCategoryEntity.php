@@ -22,8 +22,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class CourseCategoryEntity implements NestedRightsEntity
 {
-    const ENTITY_NAME = 'course_category';
-    const ENTITY_TYPE = 3;
+    public const ENTITY_NAME = 'course_category';
+    public const ENTITY_TYPE = 3;
 
     private static $instance;
 
@@ -58,7 +58,7 @@ class CourseCategoryEntity implements NestedRightsEntity
     /**
      * Retrieves the entity item ids relevant for a given user (direct subscribed platformgroups and their parents)
      *
-     * @param $user_id integer
+     * @param $user_id int
      *
      * @return array
      */
@@ -71,6 +71,21 @@ class CourseCategoryEntity implements NestedRightsEntity
     public static function data_class_class_name()
     {
         return CourseCategory::class;
+    }
+
+    public function getElementFinderType()
+    {
+        return static::getElementFinderTypeInstance();
+    }
+
+    /**
+     * Retrieves the type for the advanced element finder for the simple rights editor
+     */
+    public static function getElementFinderTypeInstance()
+    {
+        return new AdvancedElementFinderElementType(
+            'course_categories', Translation::get('CourseCategories'), __NAMESPACE__, 'course_category_feed', []
+        );
     }
 
     public static function getInstance()
@@ -111,16 +126,6 @@ class CourseCategoryEntity implements NestedRightsEntity
         return new AdvancedElementFinderElement(
             self::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $course_category->get_name(),
             strip_tags($course_category->get_fully_qualified_name())
-        );
-    }
-
-    /**
-     * Retrieves the type for the advanced element finder for the simple rights editor
-     */
-    public function get_element_finder_type()
-    {
-        return new AdvancedElementFinderElementType(
-            'course_categories', Translation::get('CourseCategories'), __NAMESPACE__, 'course_category_feed', []
         );
     }
 
@@ -248,7 +253,7 @@ class CourseCategoryEntity implements NestedRightsEntity
         $redirect = new Redirect(
             array(
                 Application::PARAM_CONTEXT => Manager::package(),
-                Manager::PARAM_ACTION      => 'course_category'
+                Manager::PARAM_ACTION => 'course_category'
             )
         );
 
@@ -258,7 +263,7 @@ class CourseCategoryEntity implements NestedRightsEntity
     /**
      * Retrieves the entity item ids relevant for a given user
      *
-     * @param $user_id integer
+     * @param $user_id int
      *
      * @return array
      */

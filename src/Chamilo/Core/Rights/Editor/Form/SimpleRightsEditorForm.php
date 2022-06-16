@@ -203,7 +203,7 @@ class SimpleRightsEditorForm extends FormValidator
 
         foreach ($this->entities as $entity)
         {
-            $types->add_element_type($entity->get_element_finder_type());
+            $types->add_element_type($entity->getElementFinderType());
         }
 
         $this->addElement('html', '<div style="display:none;" class="entity_selector_box">');

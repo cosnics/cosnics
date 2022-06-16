@@ -22,8 +22,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class PlatformGroupEntity implements NestedRightsEntity
 {
-    const ENTITY_NAME = 'group';
-    const ENTITY_TYPE = 2;
+    public const ENTITY_NAME = 'group';
+    public const ENTITY_TYPE = 2;
 
     private static $instance;
 
@@ -65,6 +65,22 @@ class PlatformGroupEntity implements NestedRightsEntity
         return Group::class;
     }
 
+    public function getElementFinderType()
+    {
+        return static::getElementFinderTypeInstance();
+    }
+
+    /**
+     * Retrieves the type for the advanced element finder for the simple rights editor
+     */
+    public static function getElementFinderTypeInstance()
+    {
+        return new AdvancedElementFinderElementType(
+            'platform_groups', Translation::get('PlatformGroups'), Manager::context() . '\Ajax',
+            'platform_group_entity_feed', []
+        );
+    }
+
     public static function getInstance()
     {
         if (!isset(self::$instance))
@@ -101,17 +117,6 @@ class PlatformGroupEntity implements NestedRightsEntity
 
         return new AdvancedElementFinderElement(
             static::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $group->get_name(), $description
-        );
-    }
-
-    /**
-     * Retrieves the type for the advanced element finder for the simple rights editor
-     */
-    public function get_element_finder_type()
-    {
-        return new AdvancedElementFinderElementType(
-            'platform_groups', Translation::get('PlatformGroups'), Manager::context() . '\Ajax',
-            'platform_group_entity_feed', []
         );
     }
 
@@ -214,7 +219,7 @@ class PlatformGroupEntity implements NestedRightsEntity
     {
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT                     => \Chamilo\Core\Group\Ajax\Manager::package(),
+                Application::PARAM_CONTEXT => \Chamilo\Core\Group\Ajax\Manager::package(),
                 \Chamilo\Core\Group\Ajax\Manager::PARAM_ACTION => 'xml_group_menu_feed'
             )
         );
@@ -225,7 +230,7 @@ class PlatformGroupEntity implements NestedRightsEntity
     /**
      * Retrieves the entity item ids relevant for a given user (direct subscribed platformgroups and their parents)
      *
-     * @param $user_id integer
+     * @param $user_id int
      *
      * @return array
      */

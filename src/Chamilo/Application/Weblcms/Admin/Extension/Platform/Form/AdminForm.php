@@ -44,7 +44,7 @@ class AdminForm extends FormValidator
 
         foreach ($this->application->get_entity_types() as $type)
         {
-            $types->add_element_type($type::get_element_finder_type());
+            $types->add_element_type($type::getElementFinderTypeInstance());
         }
 
         $this->addElement('advanced_element_finder', self::PROPERTY_ENTITIES, null, $types);
@@ -56,7 +56,7 @@ class AdminForm extends FormValidator
 
         foreach ($this->application->get_target_types() as $type)
         {
-            $types->add_element_type($type::get_element_finder_type());
+            $types->add_element_type($type::getElementFinderTypeInstance());
         }
 
         $this->addElement('advanced_element_finder', self::PROPERTY_TARGETS, null, $types);

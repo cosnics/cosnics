@@ -108,7 +108,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
             );
         }
 
-        $max_objects = $this->get_table()->get_data_provider()->count_data();
+        $max_objects = $this->get_table()->get_data_provider()->countData();
 
         if ($display_order < $max_objects)
         {

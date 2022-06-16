@@ -21,8 +21,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class UserEntity implements RightsEntity
 {
-    const ENTITY_NAME = 'user';
-    const ENTITY_TYPE = 1;
+    public const ENTITY_NAME = 'user';
+    public const ENTITY_TYPE = 1;
 
     private static $instance;
 
@@ -64,6 +64,21 @@ class UserEntity implements RightsEntity
         return User::class;
     }
 
+    public function getElementFinderType()
+    {
+        return static::getElementFinderTypeInstance();
+    }
+
+    /**
+     * Retrieves the type for the advanced element finder for the simple rights editor
+     */
+    public static function getElementFinderTypeInstance()
+    {
+        return new AdvancedElementFinderElementType(
+            'users', Translation::get('Users'), Manager::context() . '\Ajax', 'user_entity_feed', []
+        );
+    }
+
     public static function getInstance()
     {
         if (!isset(self::$instance))
@@ -78,6 +93,7 @@ class UserEntity implements RightsEntity
      * Function that can be filled in extensions of this class to limit the users
      *
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
      * @return Condition
      */
     public function get_condition($condition = null)
@@ -102,16 +118,6 @@ class UserEntity implements RightsEntity
         return new AdvancedElementFinderElement(
             static::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $user->get_fullname(),
             $user->get_official_code()
-        );
-    }
-
-    /**
-     * Retrieves the type for the advanced element finder for the simple rights editor
-     */
-    public function get_element_finder_type()
-    {
-        return new AdvancedElementFinderElementType(
-            'users', Translation::get('Users'), Manager::context() . '\Ajax', 'user_entity_feed', []
         );
     }
 
@@ -175,7 +181,7 @@ class UserEntity implements RightsEntity
     /**
      * Retrieves the entity item ids relevant for a given user
      *
-     * @param $user_id integer
+     * @param $user_id int
      *
      * @return array
      */

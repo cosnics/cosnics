@@ -8,11 +8,15 @@ namespace Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder;
  */
 class AdvancedElementFinderElementType
 {
-    const PROPERTY_ID = 'id';
-    const PROPERTY_NAME = 'name';
-    const PROPERTY_CONTEXT = 'application';
-    const PROPERTY_METHOD = 'go';
-    const PROPERTY_PARAMETERS = 'parameters';
+    public const PROPERTY_CONTEXT = 'application';
+
+    public const PROPERTY_ID = 'id';
+
+    public const PROPERTY_METHOD = 'go';
+
+    public const PROPERTY_NAME = 'name';
+
+    public const PROPERTY_PARAMETERS = 'parameters';
 
     /**
      * Associative array for the properties
@@ -39,25 +43,13 @@ class AdvancedElementFinderElementType
     }
 
     /**
-     * Sets a property in the associative array of properties
+     * Returns this element as an array
      *
-     * @param string $propertyName
-     * @param mixed $value
+     * @return string[]
      */
-    public function set_property($propertyName, $value)
+    public function as_array()
     {
-        $this->properties[$propertyName] = $value;
-    }
-
-    /**
-     * Retrieves a property from the associative array of properties
-     *
-     * @param string $propertyName
-     * @return mixed
-     */
-    public function get_property($propertyName)
-    {
-        return $this->properties[$propertyName];
+        return $this->properties;
     }
 
     /**
@@ -71,16 +63,6 @@ class AdvancedElementFinderElementType
     }
 
     /**
-     * Sets the id of this element type
-     *
-     * @param string $id
-     */
-    public function set_id($id)
-    {
-        $this->set_property(self::PROPERTY_ID, $id);
-    }
-
-    /**
      * Returns the name of this element type
      *
      * @return string
@@ -91,13 +73,15 @@ class AdvancedElementFinderElementType
     }
 
     /**
-     * Sets the name of this element
+     * Retrieves a property from the associative array of properties
      *
-     * @param string $name
+     * @param string $propertyName
+     *
+     * @return mixed
      */
-    public function set_name($name)
+    public function get_property($propertyName)
     {
-        $this->set_property(self::PROPERTY_NAME, $name);
+        return $this->properties[$propertyName];
     }
 
     /**
@@ -111,6 +95,16 @@ class AdvancedElementFinderElementType
     }
 
     /**
+     * Sets the id of this element type
+     *
+     * @param string $id
+     */
+    public function set_id($id)
+    {
+        $this->set_property(self::PROPERTY_ID, $id);
+    }
+
+    /**
      * Sets the method of this element
      *
      * @param string $method
@@ -118,6 +112,16 @@ class AdvancedElementFinderElementType
     public function set_method($method)
     {
         $this->set_property(self::PROPERTY_METHOD, $method);
+    }
+
+    /**
+     * Sets the name of this element
+     *
+     * @param string $name
+     */
+    public function set_name($name)
+    {
+        $this->set_property(self::PROPERTY_NAME, $name);
     }
 
     /**
@@ -131,12 +135,13 @@ class AdvancedElementFinderElementType
     }
 
     /**
-     * Returns this element as an array
+     * Sets a property in the associative array of properties
      *
-     * @return string[]
+     * @param string $propertyName
+     * @param mixed $value
      */
-    public function as_array()
+    public function set_property($propertyName, $value)
     {
-        return $this->properties;
+        $this->properties[$propertyName] = $value;
     }
 }

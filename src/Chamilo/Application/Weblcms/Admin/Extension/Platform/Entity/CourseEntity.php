@@ -19,8 +19,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class CourseEntity implements RightsEntity
 {
-    const ENTITY_NAME = 'course';
-    const ENTITY_TYPE = 4;
+    public const ENTITY_NAME = 'course';
+    public const ENTITY_TYPE = 4;
 
     private static $instance;
 
@@ -58,6 +58,21 @@ class CourseEntity implements RightsEntity
     public static function data_class_class_name()
     {
         return Course::class;
+    }
+
+    public function getElementFinderType()
+    {
+        return static::getElementFinderTypeInstance();
+    }
+
+    /**
+     * Retrieves the type for the advanced element finder for the simple rights editor
+     */
+    public static function getElementFinderTypeInstance()
+    {
+        return new AdvancedElementFinderElementType(
+            'courses', Translation::get('Courses'), __NAMESPACE__, 'course_feed', []
+        );
     }
 
     public static function getInstance()
@@ -99,16 +114,6 @@ class CourseEntity implements RightsEntity
         return new AdvancedElementFinderElement(
             self::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $course->get_title(),
             strip_tags($course->get_fully_qualified_name())
-        );
-    }
-
-    /**
-     * Retrieves the type for the advanced element finder for the simple rights editor
-     */
-    public function get_element_finder_type()
-    {
-        return new AdvancedElementFinderElementType(
-            'courses', Translation::get('Courses'), __NAMESPACE__, 'course_feed', []
         );
     }
 
@@ -191,7 +196,7 @@ class CourseEntity implements RightsEntity
     /**
      * Retrieves the entity item ids relevant for a given course
      *
-     * @param $course_id integer
+     * @param $course_id int
      *
      * @return array
      */
