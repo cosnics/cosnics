@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataClass;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use stdClass;
 
 /**
@@ -79,28 +80,6 @@ class PropertyMapper
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[][]
-     */
-    public function groupDataClassByMethod(array $dataClasses, string $methodName): array
-    {
-        $mappedDataClasses = [];
-
-        foreach ($dataClasses as $dataClass)
-        {
-            $groupValue = $dataClass->$methodName();
-
-            if ($groupValue)
-            {
-                $mappedDataClasses[$groupValue][] = $dataClass;
-            }
-        }
-
-        return $mappedDataClasses;
-    }
-
-    /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Doctrine\Common\Collections\ArrayCollection $dataClasses
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[][]
@@ -124,6 +103,29 @@ class PropertyMapper
 
                     $mappedDataClasses[$dataClass->getDefaultProperty($propertyName)][] = $dataClass;
                 }
+            }
+        }
+
+        return $mappedDataClasses;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClasses
+     * @param string $methodName
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[][]
+     */
+    public function groupDataClassCollectionByMethod(ArrayCollection $dataClasses, string $methodName): array
+    {
+        $mappedDataClasses = [];
+
+        foreach ($dataClasses as $dataClass)
+        {
+            $groupValue = $dataClass->$methodName();
+
+            if ($groupValue)
+            {
+                $mappedDataClasses[$groupValue][] = $dataClass;
             }
         }
 

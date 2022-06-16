@@ -6,6 +6,7 @@ use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerF
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Console;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 
 $autoloader = require __DIR__ . '/vendor/autoload.php';
@@ -16,8 +17,10 @@ $container->get(Bootstrap::class)->setup();
 
 /** @var \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter */
 $configurationConsulter = $container->get(ConfigurationConsulter::class);
+/** @var \Chamilo\Libraries\Platform\Session\SessionUtilities */
+$sessionUtilities = $container->get(SessionUtilities::class);
 
-$exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter);
+$exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter, $sessionUtilities);
 $exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
 
 try

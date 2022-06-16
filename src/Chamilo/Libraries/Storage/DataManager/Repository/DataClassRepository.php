@@ -661,11 +661,11 @@ class DataClassRepository
      * @template retrieveById
      *
      * @param class-string<retrieveById> $dataClassName
-     * @param int $identifier
+     * @param string $identifier
      *
      * @return retrieveById
      */
-    public function retrieveById(string $dataClassName, int $identifier)
+    public function retrieveById(string $dataClassName, string $identifier)
     {
         $parentDataClassName = $this->determineCompositeDataClassParentClassName($dataClassName);
 

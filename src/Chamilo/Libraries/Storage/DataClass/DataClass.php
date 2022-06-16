@@ -263,7 +263,7 @@ abstract class DataClass
         return $foreignProperty;
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->getDefaultProperty(static::PROPERTY_ID);
     }
@@ -343,7 +343,7 @@ abstract class DataClass
     /**
      * @deprecated Use getId() now
      */
-    public function get_id(): ?int
+    public function get_id(): ?string
     {
         return $this->getId();
     }
@@ -454,7 +454,7 @@ abstract class DataClass
         return $this;
     }
 
-    public function setId(int $id): DataClass
+    public function setId(string $id): DataClass
     {
         if (strlen($id) > 0)
         {
@@ -508,7 +508,7 @@ abstract class DataClass
      * @throws \Exception
      * @deprecated Use setId($id) now
      */
-    public function set_id(int $id): DataClass
+    public function set_id(string $id): DataClass
     {
         return $this->setId($id);
     }

@@ -25,7 +25,7 @@ interface DataClassDisplayOrderSupport
 
     public function getDisplayOrderPropertyName(): string;
 
-    public function getId(): ?int;
+    public function getId(): ?string;
 
     public function isIdentified(): bool;
 

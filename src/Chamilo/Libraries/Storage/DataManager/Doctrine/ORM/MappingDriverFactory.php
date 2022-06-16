@@ -6,6 +6,7 @@ use Chamilo\Libraries\File\Path;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Persistence\Mapping\Driver\PHPDriver;
 use Doctrine\Persistence\Mapping\Driver\StaticPHPDriver;
@@ -71,7 +72,7 @@ class MappingDriverFactory
     /**
      * @param string[] $mappingConfiguration
      */
-    public function createMappingDriver(array $mappingConfiguration = []): MappingDriverChain
+    public function createMappingDriver(array $mappingConfiguration = []): MappingDriver
     {
         $mappingConfiguration = $this->processConfiguration($mappingConfiguration);
 

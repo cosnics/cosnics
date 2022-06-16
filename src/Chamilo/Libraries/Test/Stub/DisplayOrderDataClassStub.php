@@ -91,7 +91,7 @@ Class DisplayOrderDataClassStub implements DataClassDisplayOrderSupport
     /**
      * @return integer
      */
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
