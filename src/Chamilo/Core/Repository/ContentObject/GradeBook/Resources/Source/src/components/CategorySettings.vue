@@ -2,7 +2,7 @@
     <div class="modal-wrapper">
         <div class="modal-content">
             <div class="modal-header">
-                <input type="text" v-model="category.name" autocomplete="off">
+                <input type="text" v-model="category.title" autocomplete="off">
                 <button class="btn-close" @click="$emit('close')" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <div class="modal-body">

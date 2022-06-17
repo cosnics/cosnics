@@ -1,6 +1,6 @@
 <template>
     <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
-        <input ref="name-input" type="text" :value="itemName" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
+        <input ref="title-input" type="text" :value="itemTitle" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
     </highlight-input>
 </template>
 
@@ -9,22 +9,22 @@ import {Component, Prop, Vue} from 'vue-property-decorator';
 import HighlightInput from './HighlightInput.vue';
 
 @Component({
-    name: 'item-name-input',
+    name: 'item-title-input',
     components: { HighlightInput },
 })
-export default class ItemNameInput extends Vue {
-    @Prop({type: String, default: ''}) readonly itemName!: string;
+export default class ItemTitleInput extends Vue {
+    @Prop({type: String, default: ''}) readonly itemTitle!: string;
 
-    get nameInput() {
-        return this.$refs['name-input'] as HTMLInputElement;
+    get titleInput() {
+        return this.$refs['title-input'] as HTMLInputElement;
     }
 
     onEdit() {
-        this.$emit('ok', this.nameInput.value);
+        this.$emit('ok', this.titleInput.value);
     }
 
     mounted() {
-        this.$nextTick(() => this.nameInput.focus());
+        this.$nextTick(() => this.titleInput.focus());
     }
 }
 </script>

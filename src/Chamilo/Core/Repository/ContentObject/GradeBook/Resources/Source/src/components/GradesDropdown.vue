@@ -7,7 +7,7 @@
             <li role="presentation" v-for="(item, index) in gradedItems" :key="`item-${index}`" @click.stop="">
                 <a role="menuitem" href="#" target="_self" class="dropdown-item">
                     <b-form-checkbox :id="`${id}-item-${index}`" :checked="item.checked" :disabled="item.disabled" @change="toggleItem(item, index)" :class="{'is-disabled': item.disabled}">
-                        {{ item.name }}
+                        {{ item.title }}
                         <div class="score-breadcrumb-trail">{{ item.breadcrumb }}</div>
                     </b-form-checkbox>
                 </a>
@@ -15,7 +15,7 @@
         </ul>
         <div v-if="gradeItemToRemove" class="modal-wrapper" @click.stop="">
             <div class="modal-content">
-                <div class="modal-content-title">Score '{{ gradeItemToRemove.name }}' verwijderen uit overzicht?</div>
+                <div class="modal-content-title">Score '{{ gradeItemToRemove.title }}' verwijderen uit overzicht?</div>
                 <div class="actions">
                     <button class="btn btn-default btn-sm" @click="remove">Verwijder</button>
                     <button class="btn btn-default btn-sm" @click="cancel">Annuleer</button>

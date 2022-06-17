@@ -3,7 +3,7 @@ export type ResultType = number|'gafw'|'afw'|null;
 
 export interface GradeItem {
     readonly id: ItemId;
-    readonly name: string;
+    readonly title: string;
     readonly breadcrumb: string;
     checked?: boolean;
     disabled?: boolean;
@@ -12,7 +12,7 @@ export interface GradeItem {
 export interface GradeColumn {
     readonly id: ItemId;
     readonly type: string;
-    name?: string|null;
+    title?: string|null;
     subItemIds?: ItemId[];
     weight: number|null;
     countForEndResult: boolean;
@@ -37,8 +37,8 @@ export interface ResultsData {
 export interface Category {
     readonly id: number;
     color: string;
-    name: string;
-    itemIds: ItemId[];
+    title: string;
+    columnIds: ItemId[];
 }
 
 const COUNT_FOR_END_RESULT_DEFAULT = true;
@@ -53,7 +53,7 @@ export default class GradeBook {
     public gradeItems: GradeItem[] = [];
     public gradeColumns: GradeColumn[] = [];
     public categories: Category[] = [];
-    public nullCategory: Category = {id: 0, name: '', color: '', itemIds: []};
+    public nullCategory: Category = {id: 0, title: '', color: '', columnIds: []};
     public originalResultsData: any[] = [];
     public resultsData: ResultsData[] = [];
 
@@ -84,11 +84,11 @@ export default class GradeBook {
 
         this.allCategories.forEach(cat => {
             // eslint-disable-next-line prefer-spread
-            itemIds.push.apply(itemIds, cat.itemIds);
+            itemIds.push.apply(itemIds, cat.columnIds);
         });
 
         return this.gradeItems.map(item => ({
-            id: item.id, name: item.name, breadcrumb: item.breadcrumb, checked: itemIds.indexOf(item.id) !== -1
+            id: item.id, title: item.title, breadcrumb: item.breadcrumb, checked: itemIds.indexOf(item.id) !== -1
         }));
     }
 
@@ -139,14 +139,14 @@ export default class GradeBook {
         }
     }
 
-    getName(itemId: ItemId): string|null {
-        return this.getGradeColumn(itemId)?.name || this.getGradeItem(itemId)?.name || null;
+    getTitle(itemId: ItemId): string|null {
+        return this.getGradeColumn(itemId)?.title || this.getGradeItem(itemId)?.title || null;
     }
 
-    setName(itemId: ItemId, name: string) {
+    setTitle(itemId: ItemId, title: string) {
         const item = this.getGradeColumn(itemId);
         if (item) {
-            item.name = name;
+            item.title = title;
         }
     }
 
@@ -210,20 +210,20 @@ export default class GradeBook {
 
     addItemToCategory(categoryId: number, itemId: ItemId) {
         const category = categoryId === 0 ? this.nullCategory : this.getCategory(categoryId);
-        if (category?.itemIds.indexOf(itemId) === -1) {
+        if (category?.columnIds.indexOf(itemId) === -1) {
             this.allCategories.forEach(cat => {
-                if (cat.itemIds.indexOf(itemId) !== -1) {
-                    cat.itemIds = cat.itemIds.filter(id => id !== itemId);
+                if (cat.columnIds.indexOf(itemId) !== -1) {
+                    cat.columnIds = cat.columnIds.filter(id => id !== itemId);
                 }
             });
-            category.itemIds.push(itemId);
+            category.columnIds.push(itemId);
         }
     }
 
     addGradeItem(item: GradeItem) {
         this.addItemToCategory(0, item.id);
         this.gradeColumns.push({
-            id: item.id, type: 'item', name: null, weight: null,
+            id: item.id, type: 'item', title: null, weight: null,
             countForEndResult: COUNT_FOR_END_RESULT_DEFAULT,
             authPresenceEndResult: AUTH_PRESENCE_END_RESULT_DEFAULT,
             unauthPresenceEndResult: UNAUTH_PRESENCE_END_RESULT_DEFAULT
@@ -238,8 +238,8 @@ export default class GradeBook {
 
     removeGradeItem(item: GradeItem) {
         this.allCategories.forEach(cat => {
-            if (cat.itemIds.indexOf(item.id) !== -1) {
-                cat.itemIds = cat.itemIds.filter(id => id !== item.id);
+            if (cat.columnIds.indexOf(item.id) !== -1) {
+                cat.columnIds = cat.columnIds.filter(id => id !== item.id);
             }
         });
         const itemId = item.id;
@@ -294,8 +294,8 @@ export default class GradeBook {
 
     createNewScore() {
         const id = this.createNewStandaloneScoreId();
-        this.gradeColumns.push({id, name: 'Score', type: 'standalone', weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2});
-        this.nullCategory.itemIds.push(id);
+        this.gradeColumns.push({id, title: 'Score', type: 'standalone', weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2});
+        this.nullCategory.columnIds.push(id);
         this.resultsData.forEach(d => {
             d.results[id] = {value: null, ref: id, overwritten: true};
         });
@@ -303,7 +303,7 @@ export default class GradeBook {
 
     createNewCategory() {
         const id = Math.max.apply(null, this.categories.map(cat => cat.id)) + 1;
-        const newCategory = { id, name: 'Categorie', color: '#92eded', itemIds: [] };
+        const newCategory = { id, title: 'Categorie', color: '#92eded', columnIds: [] };
         this.categories.push(newCategory);
         return newCategory;
     }
@@ -315,7 +315,7 @@ export default class GradeBook {
             this.getGradeColumn(itemId)?.subItemIds?.push(item.id);
             this.updateResultsData(item, itemId);
             this.allCategories.forEach(cat => {
-                cat.itemIds = cat.itemIds.filter(id => id !== item.id);
+                cat.columnIds = cat.columnIds.filter(id => id !== item.id);
             });
             return null;
         } else {
@@ -324,7 +324,7 @@ export default class GradeBook {
             const oldItem = this.getGradeColumn(itemId);
             this.gradeColumns = this.gradeColumns.filter(it => it.id !== item.id).filter(item => item.id !== itemId);
             this.gradeColumns.push({
-                id: groupItemId, type: 'group', name: this.getGradeItem(itemId)?.name, subItemIds: [itemId, item.id], weight: null,
+                id: groupItemId, type: 'group', title: this.getGradeItem(itemId)?.title, subItemIds: [itemId, item.id], weight: null,
                 countForEndResult: oldItem?.countForEndResult!,
                 authPresenceEndResult: oldItem?.authPresenceEndResult!,
                 unauthPresenceEndResult: oldItem?.unauthPresenceEndResult!
@@ -335,11 +335,11 @@ export default class GradeBook {
             });
             this.updateResultsData(item, groupItemId);
             this.allCategories.forEach(cat => {
-                const index = cat.itemIds.indexOf(itemId);
+                const index = cat.columnIds.indexOf(itemId);
                 if (index !== -1) {
-                    cat.itemIds[index] = groupItemId;
+                    cat.columnIds[index] = groupItemId;
                 }
-                cat.itemIds = cat.itemIds.filter(id => id !== item.id);
+                cat.columnIds = cat.columnIds.filter(id => id !== item.id);
             });
             return groupItemId;
         }
@@ -403,7 +403,7 @@ export default class GradeBook {
             });
             this.gradeColumns = this.gradeColumns.filter(item => item !== column);
             this.allCategories.forEach(cat => {
-                cat.itemIds = cat.itemIds.filter(itemId => itemId !== column.id);
+                cat.columnIds = cat.columnIds.filter(id => id !== column.id);
             });
             this.resultsData.forEach(d => {
                 Object.keys(d.results).forEach(id => {

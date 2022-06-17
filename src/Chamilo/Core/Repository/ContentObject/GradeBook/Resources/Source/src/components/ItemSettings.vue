@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div>
-                    <input type="text" :value="name" @input="name = $event" autocomplete="off">
+                    <input type="text" :value="title" @input="title = $event" autocomplete="off">
                     <button class="btn btn-link" @click="showRemoveItemDialog = true">Verwijderen</button>
                 </div>
                 <button class="btn-close" @click="$emit('close')" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
@@ -12,7 +12,7 @@
                 <template v-if="column.type !== 'standalone'">
                     <h5 v-if="isGrouped">Gegroepeerde scores</h5>
                     <ul class="grouped-scores">
-                        <li v-for="item in groupedItems" :key="item.id"><span>{{ item.name }}</span>
+                        <li v-for="item in groupedItems" :key="item.id"><span>{{ item.title }}</span>
                             <div class="score-breadcrumb-trail">{{ item.breadcrumb }}</div>
                         </li>
                     </ul>
@@ -72,7 +72,7 @@
         <div class="modal-overlay" @click="$emit('close')"></div>
         <div class="modal-remove" v-if="showRemoveItemDialog" @click.stop="">
             <div class="modal-remove-content">
-                <div>Score '{{ column.name }}' verwijderen uit overzicht?</div>
+                <div>Score '{{ column.title }}' verwijderen uit overzicht?</div>
                 <div class="modal-remove-actions">
                     <button class="btn btn-default btn-sm" @click="removeColumn">Verwijder</button>
                     <button class="btn btn-default btn-sm" @click="cancel">Annuleer</button>
@@ -120,12 +120,12 @@ export default class ItemSettings extends Vue {
         return this.gradeBook.getGroupItems(this.itemId);
     }
 
-    get name() {
-        return this.gradeBook.getName(this.itemId);
+    get title() {
+        return this.gradeBook.getTitle(this.itemId);
     }
 
-    set name(event: any) {
-        this.gradeBook.setName(this.itemId, event.target.value);
+    set title(event: any) {
+        this.gradeBook.setTitle(this.itemId, event.target.value);
     }
 
     setWeight(event: any) {
