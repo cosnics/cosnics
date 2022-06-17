@@ -10,6 +10,8 @@ use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceResul
 /*use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Service\GradeBookService;*/
 /*use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceValidationService;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\UserService;*/
+
+use Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -149,6 +151,14 @@ abstract class Manager extends AjaxManager
     protected function get_root_content_object()
     {
         return $this->get_application()->get_root_content_object();
+    }
+
+    /**
+     * @return GradeBookService
+     */
+    protected function getGradeBookService()
+    {
+        return $this->getService(GradeBookService::class);
     }
 
     /**

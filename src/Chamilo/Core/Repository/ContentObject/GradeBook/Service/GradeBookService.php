@@ -60,7 +60,7 @@ class GradeBookService
      */
     public function getGradeBook(int $gradeBookDataId, int $expectedVersion = null)
     {
-        //return $this->rubricTreeBuilder->buildRubricTreeByRubricDataId($rubricDataId, $expectedVersion);
+        return $this->gradeBookDataRepository->findEntireGradeBookById($gradeBookDataId, $expectedVersion);
     }
 
     /**

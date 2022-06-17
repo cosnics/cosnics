@@ -60,6 +60,19 @@ class GradeBookData
      */
     protected $title;
 
+    /**
+     * @var GradeBookItem[] | ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="GradeBookItem", mappedBy="gradebookData")
+     */
+    protected $gradebookItems;
+
+    /**
+     * @var GradeBookColumn[] | ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="GradeBookColumn", mappedBy="gradebookData")
+     */
+    protected $gradebookColumns;
 
     /**
      * GradeBookData constructor.
@@ -171,5 +184,21 @@ class GradeBookData
         $this->title = $title;
 
         return $this;
+    }
+
+    /**
+     * @return GradeBookItem[]|ArrayCollection
+     */
+    public function getGradeBookItems()
+    {
+        return $this->gradebookItems;
+    }
+
+    /**
+     * @return GradeBookColumn[]|ArrayCollection
+     */
+    public function getGradeBookColumns()
+    {
+        return $this->gradebookColumns;
     }
 }

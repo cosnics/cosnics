@@ -3,7 +3,10 @@
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Manager;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookItemJSONModel;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookColumnJSONModel;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -17,51 +20,37 @@ class LoadAllComponent extends Manager
     {
         try
         {
-            /*$gradebook = $this->getGradeBook();
+            $gradebook = $this->getGradeBook();
 
-            if (!$gradebook instanceof GradeBook)
-            {
-                $this->throwUserException('GradeBookNotFound');
-            }*/
+            $gradebookData = $this->getGradeBookService()->getGradeBook($gradebook->getActiveGradeBookDataId(), null);
 
+            $gradeItems = $this->getGradeBookItemsJSON($gradebookData);
 
-            //Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\DataClass\Publication
-//weblcms_assessment_publication
-//weblcms_assignment_publication
-//weblcms_evaluation_publication
-
-            // column_id =>
-            $gradeItems = [
-                [ 'id' => 'op1', 'name' => 'Opdracht 1', 'breadcrumb' => 'Leerpaden » Categorie 1 » Leerpad 2 » Hoofdstuk 1' ],
-                [ 'id' => 'op2', 'name' => 'Opdracht 2', 'breadcrumb' => 'Opdrachten » Categorie 1' ],
-                [ 'id' => 'op3', 'name' => 'Opdracht 3', 'breadcrumb' => 'Opdrachten » Categorie 2' ],
-                [ 'id' => 'oe1', 'name' => 'Oefening 1', 'breadcrumb' => 'Oefeningen' ],
-                [ 'id' => 'oe2', 'name' => 'Oefening 2', 'breadcrumb' => 'Leerpaden » Leerpad 5 » Hoofdstuk 4' ],
-                [ 'id' => 'ev1', 'name' => 'Evaluatie 1', 'breadcrumb' => 'Evaluaties' ],
-                [ 'id' => 'ev2', 'name' => 'Evaluatie 2', 'breadcrumb' => 'Leerpaden » Leerpad 3 » Hoofdstuk 2' ]
-            ];
+            //var_dump($gradebookData->getGradeBookColumns()[0]->getSubItems());
+            //$gradeColumns = $this->getGradeBookColumnsJSON($gradebookData);
+            //var_dump($this->serialize($gradeColumns));
 
             $gradeColumns = [
-                [ 'id' => 'gr1', 'type' => 'group', 'name' => 'Groepsscore', 'subItemIds' => ['op1', 'op3'], 'weight' => null, 'countForEndResult' => true, 'authPresenceEndResult' => 0, 'unauthPresenceEndResult' => 2 ],
-                [ 'id' => 'op2', 'type' => 'item', 'name' => null, 'weight' => null, 'countForEndResult' => true, 'authPresenceEndResult' => 0, 'unauthPresenceEndResult' => 2 ],
-                [ 'id' => 'oe1', 'type' => 'item', 'name' => null, 'weight' => null, 'countForEndResult' => true, 'authPresenceEndResult' => 0, 'unauthPresenceEndResult' => 2 ],
-                [ 'id' => 'oe2', 'type' => 'item', 'name' => null, 'weight' => null, 'countForEndResult' => true, 'authPresenceEndResult' => 0, 'unauthPresenceEndResult' => 2 ],
-                [ 'id' => 'ev1', 'type' => 'item', 'name' => 'Mondeling examen', 'weight' => null, 'countForEndResult' => true, 'authPresenceEndResult' => 0, 'unauthPresenceEndResult' => 2 ]
+                [ 'id' => 'gr1', 'type' => 'group', 'title' => 'Groepsscore', 'subItemIds' => [1, 3], 'weight' => null, 'countForEndResult' => true, 'authPresenceEndResult' => 0, 'unauthPresenceEndResult' => 2 ],
+                [ 'id' => 2, 'type' => 'item', 'title' => null, 'weight' => null, 'countForEndResult' => true, 'authPresenceEndResult' => 0, 'unauthPresenceEndResult' => 2 ],
+                [ 'id' => 4, 'type' => 'item', 'title' => null, 'weight' => null, 'countForEndResult' => true, 'authPresenceEndResult' => 0, 'unauthPresenceEndResult' => 2 ],
+                [ 'id' => 5, 'type' => 'item', 'title' => null, 'weight' => null, 'countForEndResult' => true, 'authPresenceEndResult' => 0, 'unauthPresenceEndResult' => 2 ],
+                [ 'id' => 6, 'type' => 'item', 'title' => 'Mondeling examen', 'weight' => null, 'countForEndResult' => true, 'authPresenceEndResult' => 0, 'unauthPresenceEndResult' => 2 ]
             ];
 
             $categories = [
-                [ 'id' => 1, 'color' => '#caf1eb', 'name' => 'Categorie 1', 'itemIds' => ['gr1', 'op2', 'oe1'] ],
-                [ 'id' => 2, 'color' => '#ebf2e8', 'name' => 'Categorie 2', 'itemIds' => ['oe2', 'ev1'] ]
+                [ 'id' => 1, 'color' => '#caf1eb', 'title' => 'Categorie 1', 'columnIds' => ['gr1', 2, 4] ],
+                [ 'id' => 2, 'color' => '#ebf2e8', 'title' => 'Categorie 2', 'columnIds' => [5, 6] ]
             ];
 
-            $nullCategory = [ 'id' => 0, 'color' => 'none', 'name' => '', 'itemIds' => [] ];
+            $nullCategory = [ 'id' => 0, 'color' => 'none', 'title' => '', 'columnIds' => [] ];
 
             $resultsData = [
-                [ 'id' => 1, 'student' => 'Student 1', 'results' => ['op1' => null, 'op3' => 20, 'op2' => 60, 'oe1' => 80, 'oe2' => 50, 'ev1' => 75, 'ev2' => 50] ],
-                [ 'id' => 2, 'student' => 'Student 2', 'results' => ['op1' => 30, 'op3' => null, 'op2' => 50, 'oe1' => 40, 'oe2' => 80, 'ev1' => 65, 'ev2' => 50] ],
-                [ 'id' => 3, 'student' => 'Student 3', 'results' => ['op1' => null, 'op3' => 50, 'op2' => 30, 'oe1' => 70, 'oe2' => 80, 'ev1' => 95, 'ev2' => 50] ],
-                [ 'id' => 4, 'student' => 'Student 4', 'results' => ['op1' => 80, 'op3' => null, 'op2' => 40, 'oe1' => 40, 'oe2' => 30, 'ev1' => 75, 'ev2' => 50] ],
-                [ 'id' => 5, 'student' => 'Student 5', 'results' => ['op1' => null, 'op3' => 60, 'op2' => 10, 'oe1' => 90, 'oe2' => 40, 'ev1' => 25, 'ev2' => 50] ]
+                [ 'id' => 1, 'student' => 'Student 1', 'results' => [1 => null, 3 => 20, 2 => 60, 4 => 80, 5 => 50, 6 => 75, 7 => 50] ],
+                [ 'id' => 2, 'student' => 'Student 2', 'results' => [1 => 30, 3 => null, 2 => 50, 4 => 40, 5 => 80, 6 => 65, 7 => 50] ],
+                [ 'id' => 3, 'student' => 'Student 3', 'results' => [1 => null, 3 => 50, 2 => 30, 4 => 70, 5 => 80, 6 => 95, 7 => 50] ],
+                [ 'id' => 4, 'student' => 'Student 4', 'results' => [1 => 80, 3 => null, 2 => 40, 4 => 40, 5 => 30, 6 => 75, 7 => 50] ],
+                [ 'id' => 5, 'student' => 'Student 5', 'results' => [1 => null, 3 => 60, 2 => 10, 4 => 90, 5 => 40, 6 => 25, 7 => 50] ]
             ];
 
             $gradeBookObject = ['gradeItems' => $gradeItems, 'gradeColumns' => $gradeColumns, 'categories' => $categories, 'nullCategory' => $nullCategory, 'resultsData' => $resultsData];
@@ -72,5 +61,33 @@ class LoadAllComponent extends Manager
         {
             return new JsonResponse(['error' => ['code' => 500, 'message' => $ex->getMessage()]], 500);
         }
+    }
+
+    /**
+     * @param GradeBookData $gradebookData
+     *
+     * @return GradeBookItemJSONModel[]
+     */
+    public function getGradeBookItemsJSON(GradeBookData $gradebookData): array
+    {
+        $toJSON = function ($gradebookItem) {
+            return GradeBookItemJSONModel::fromGradeBookItem($gradebookItem);
+        };
+
+        return array_map($toJSON, $gradebookData->getGradeBookItems()->toArray());
+    }
+
+    /**
+     * @param GradeBookData $gradebookData
+     *
+     * @return GradeBookColumnJSONModel[]
+     */
+    public function getGradeBookColumnsJSON(GradeBookData $gradebookData): array
+    {
+        $toJSON = function ($gradebookItem) {
+            return GradeBookColumnJSONModel::fromGradeBookItem($gradebookItem);
+        };
+
+        return array_map($toJSON, $gradebookData->getGradeBookColumns()->toArray());
     }
 }

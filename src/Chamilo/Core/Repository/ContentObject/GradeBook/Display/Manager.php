@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\QRService;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\RightsService;*/
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -113,6 +114,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected function getContentObjectService()
     {
         return $this->getService(ContentObjectService::class);
+    }
+
+    /**
+     * @return GradeBookService
+     */
+    protected function getGradeBookService()
+    {
+        return $this->getService(GradeBookService::class);
     }
 
     /**
