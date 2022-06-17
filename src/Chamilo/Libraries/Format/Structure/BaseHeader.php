@@ -33,7 +33,7 @@ class BaseHeader implements HeaderInterface
 
     private string $textDirection;
 
-    private string $title;
+    private ?string $title = null;
 
     private int $viewMode;
 
@@ -248,12 +248,12 @@ class BaseHeader implements HeaderInterface
         return $this->getService(ThemePathBuilder::class);
     }
 
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title)
+    public function setTitle(?string $title)
     {
         $this->title = $title;
     }
