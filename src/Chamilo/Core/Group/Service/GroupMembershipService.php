@@ -208,7 +208,7 @@ class GroupMembershipService
             if (!$this->getGroupMembershipRepository()->createGroupUserRelation($groupRelation))
             {
                 throw new RuntimeException(
-                    sprintf('Could not subscribe the user %s to the group %s', $user->getId(), $group->getId())
+                    sprintf('Could not subscribe user %s to group %s', $user->getId(), $group->getId())
                 );
             }
 
@@ -259,7 +259,7 @@ class GroupMembershipService
         {
             throw new RuntimeException(
                 sprintf(
-                    'Could not unsubscribe the user %s from the group %s because there is no active subscription',
+                    'Could not unsubscribe user %s from group %s because there is no active subscription',
                     $user->getId(), $group->getId()
                 )
             );
@@ -268,7 +268,7 @@ class GroupMembershipService
         if (!$this->getGroupMembershipRepository()->deleteGroupUserRelation($groupRelation))
         {
             throw new RuntimeException(
-                sprintf('Could not unsubscribe the user %s to the group %s', $user->getId(), $group->getId())
+                sprintf('Could not unsubscribe user %s from group %s', $user->getId(), $group->getId())
             );
         }
 
