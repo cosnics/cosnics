@@ -75,8 +75,7 @@ abstract class Application
     }
 
     /**
-     *
-     * @return string
+     * @return string|\Symfony\Component\HttpFoundation\Response
      */
     abstract public function run();
 
