@@ -5,6 +5,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
  *
@@ -30,7 +31,7 @@ class Header extends BaseHeader
      */
     protected function addGoogleAnalyticsTracking()
     {
-        $fileConfigurationLocator = new FileConfigurationLocator(new PathBuilder(ClassnameUtilities::getInstance()));
+        $fileConfigurationLocator = new FileConfigurationLocator(new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals()));
 
         if (!$fileConfigurationLocator->isAvailable())
         {

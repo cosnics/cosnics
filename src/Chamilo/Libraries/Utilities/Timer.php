@@ -60,7 +60,7 @@ class Timer
 
     private function getMicrotime(): float
     {
-        list($usec, $sec) = explode(" ", microtime());
+        list($usec, $sec) = explode(' ', microtime());
 
         return ((float) $usec + (float) $sec);
     }

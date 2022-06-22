@@ -3,6 +3,7 @@ namespace Chamilo\Configuration\Package\Finder;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
  *
@@ -20,7 +21,7 @@ class LegacyBasicBundles extends BasicBundles
      */
     protected function verifyPackage($folderNamespace)
     {
-        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
+        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals());
         $packageInfoPath = $pathBuilder->namespaceToFullPath($folderNamespace) . '/package.info';
 
         return file_exists($packageInfoPath);

@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -42,7 +43,7 @@ class BreadcrumbTrail
 
         if ($includeMainIndex)
         {
-            $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
+            $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()), ChamiloRequest::createFromGlobals());
 
             $fileConfigurationLocator = new FileConfigurationLocator($pathBuilder);
 

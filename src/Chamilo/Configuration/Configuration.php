@@ -25,11 +25,11 @@ class Configuration
     use DependencyInjectionContainerTrait;
 
     // Constants
-    const REGISTRATION_CONTEXT = 1;
+    public const REGISTRATION_CONTEXT = 1;
 
-    const REGISTRATION_INTEGRATION = 3;
+    public const REGISTRATION_INTEGRATION = 3;
 
-    const REGISTRATION_TYPE = 2;
+    public const REGISTRATION_TYPE = 2;
 
     /**
      * Instance of this class for the singleton pattern.
@@ -45,7 +45,7 @@ class Configuration
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public static function available()
     {
@@ -208,7 +208,7 @@ class Configuration
      *
      * @param string $context
      *
-     * @return boolean
+     * @return bool
      */
     public function has_settings($context)
     {
@@ -219,7 +219,7 @@ class Configuration
      *
      * @param string $context
      *
-     * @return boolean
+     * @return bool
      */
     public function isRegistered($context)
     {
@@ -230,7 +230,7 @@ class Configuration
      *
      * @param string $context
      *
-     * @return boolean
+     * @return bool
      */
     public function isRegisteredAndActive($context)
     {
@@ -239,7 +239,7 @@ class Configuration
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function is_available()
     {
@@ -283,7 +283,7 @@ class Configuration
      *
      * @param string $context
      *
-     * @return boolean
+     * @return bool
      */
     public static function is_registered($context)
     {

@@ -5,6 +5,7 @@ use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
  *
@@ -80,7 +81,7 @@ class BasicBundles
         $blacklist = $this->getBlacklistedFolders();
         $rootNamespace = $rootNamespace == PackageList::ROOT ? '' : $rootNamespace;
 
-        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
+        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals());
         $path = $pathBuilder->namespaceToFullPath($rootNamespace);
 
         $folders = Filesystem::get_directory_content($path, Filesystem::LIST_DIRECTORIES, false);
@@ -117,7 +118,7 @@ class BasicBundles
      */
     protected function verifyPackage($folderNamespace)
     {
-        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
+        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals());
         $packageInfoPath = $pathBuilder->namespaceToFullPath($folderNamespace) . '/composer.json';
         return file_exists($packageInfoPath);
     }

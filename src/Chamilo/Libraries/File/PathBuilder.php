@@ -47,9 +47,12 @@ class PathBuilder
 
     private ClassnameUtilities $classnameUtilities;
 
-    public function __construct(ClassnameUtilities $classnameUtilities)
+    private ChamiloRequest $request;
+
+    public function __construct(ClassnameUtilities $classnameUtilities, ChamiloRequest $request)
     {
         $this->classnameUtilities = $classnameUtilities;
+        $this->request = $request;
     }
 
     /**
@@ -62,7 +65,7 @@ class PathBuilder
     {
         if ($web)
         {
-            $request = ChamiloRequest::createFromGlobals();
+            $request = $this->getRequest();
             $path = $request->getSchemeAndHttpHost() . $request->getBaseUrl() . $request->getPathInfo();
         }
         else
@@ -160,7 +163,7 @@ class PathBuilder
     {
         if (is_null(static::$instance))
         {
-            self::$instance = new static(ClassnameUtilities::getInstance());
+            self::$instance = new static(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals());
         }
 
         return static::$instance;
@@ -216,6 +219,11 @@ class PathBuilder
             $basePath . $this->getDirectorySeparator($web) . ($namespace ?
                 $this->getClassnameUtilities()->namespaceToPath($namespace, $web) . $this->getDirectorySeparator($web) :
                 '');
+    }
+
+    public function getRequest(): ChamiloRequest
+    {
+        return $this->request;
     }
 
     /**

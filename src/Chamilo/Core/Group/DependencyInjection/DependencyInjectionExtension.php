@@ -7,6 +7,7 @@ use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\IConfigurableExtension;
 use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -34,7 +35,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
 
     public function loadContainerConfiguration(ContainerBuilder $container)
     {
-        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
+        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()), ChamiloRequest::createFromGlobals());
 
         $loader = new YamlFileLoader(
             $container, new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\Group'))

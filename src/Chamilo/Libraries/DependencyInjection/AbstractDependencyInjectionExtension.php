@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\DependencyInjection;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,7 +25,7 @@ abstract class AbstractDependencyInjectionExtension extends Extension implements
 
     public function getPathBuilder(): PathBuilder
     {
-        return new PathBuilder(new ClassnameUtilities(new StringUtilities()));
+        return new PathBuilder(new ClassnameUtilities(new StringUtilities()), ChamiloRequest::createFromGlobals());
     }
 
     public function load(array $config, ContainerBuilder $container)
