@@ -47,7 +47,7 @@ class MoverComponent extends Manager
                 'ObjectNotMoved',
                 array('OBJECT' => Translation::get('Group')),
                 StringUtilities::LIBRARIES);
-            $this->redirect(
+            $this->redirectWithMessage(
                 $message, !$success || false,
                 array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS, self::PARAM_GROUP_ID => $parent));
         }

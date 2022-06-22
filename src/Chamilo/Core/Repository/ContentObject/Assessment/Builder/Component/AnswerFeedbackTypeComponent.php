@@ -105,7 +105,7 @@ class AnswerFeedbackTypeComponent extends Manager implements TableSupport
                 }
             }
             
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($message), 
                 false, 
                 array(self::PARAM_ACTION => self::ACTION_ANSWER_FEEDBACK_TYPE));

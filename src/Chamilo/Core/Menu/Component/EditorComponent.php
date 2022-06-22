@@ -61,7 +61,7 @@ class EditorComponent extends Manager implements DelegateComponent
                 StringUtilities::LIBRARIES
             );
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 $message, !$success,
                 array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_ITEM => $item->getParentId())
             );

@@ -31,12 +31,12 @@ class ForumSubscribeComponent extends Manager
         if ($succes)
         {
             $message = Translation::get("SuccesSubscribe");
-            $this->redirect($message, false, $params);
+            $this->redirectWithMessage($message, false, $params);
         }
         else
         {
             $message = Translation::get("UnSuccesSubscribe");
-            $this->redirect($message, true, $params);
+            $this->redirectWithMessage($message, true, $params);
         }
     }
 }

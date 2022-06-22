@@ -41,7 +41,7 @@ class UpdaterComponent extends Manager implements CourseSubManagerSupport
 
     public function redirect_after_quick_create($succes, $message)
     {
-        $this->redirect($message, ! $succes, [], array(self::PARAM_ACTION, self::ACTION_UPDATE));
+        $this->redirectWithMessage($message, ! $succes, [], array(self::PARAM_ACTION, self::ACTION_UPDATE));
     }
 
     /**

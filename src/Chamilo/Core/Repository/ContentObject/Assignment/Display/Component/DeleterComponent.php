@@ -41,7 +41,7 @@ class DeleterComponent extends Manager
             $message = 'EntryNotDeleted';
         }
 
-        $this->redirect(
+        $this->redirectWithMessage(
             Translation::get($message),
             !$success,
             array(

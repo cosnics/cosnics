@@ -79,7 +79,7 @@ class CreatorComponent extends Manager
             $parameters = [];
             $parameters[self::PARAM_ACTION] = self::ACTION_BROWSE;
             
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get(
                     $success ? 'ObjectCreated' : 'ObjectNotCreated', 
                     array('OBJECT' => Translation::get('Request')), 

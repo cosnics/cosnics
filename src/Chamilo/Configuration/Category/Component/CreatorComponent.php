@@ -53,7 +53,7 @@ class CreatorComponent extends Manager
         if ($form->validate())
         {
             $success = $form->create_category();
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success ? 'CategoryCreated' : 'CategoryNotCreated'), !$success,
                 array(
                     self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES,

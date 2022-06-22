@@ -158,7 +158,7 @@ class DetailsComponent extends TabComponent implements TableSupport
             }
 
             $message = Translation::get(count($users) > 1 ? 'UsersUnsubscribed' : 'UserUnsubscribed');
-            $this->redirect(
+            $this->redirectWithMessage(
                 $message, false, array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_GROUP_DETAILS,
                     self::PARAM_COURSE_GROUP => $course_group->get_id()

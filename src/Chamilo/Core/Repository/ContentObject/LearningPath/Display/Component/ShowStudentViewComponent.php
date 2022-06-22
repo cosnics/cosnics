@@ -23,6 +23,6 @@ class ShowStudentViewComponent extends Manager
         $sessionVariable = $this->getStudentViewSessionVariable();
         Session::register($sessionVariable, 1);
 
-        $this->redirect('', false, array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT));
+        $this->redirectWithMessage('', false, array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT));
     }
 }

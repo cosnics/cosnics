@@ -114,7 +114,7 @@ class DeleterComponent extends Manager
             $parameters[self::PARAM_CHILD_ID] = $new_node->getId();
         }
 
-        $this->redirect(
+        $this->redirectWithMessage(
             Translation::get(
                 $failures > 0 ? 'ObjectsNotDeleted' : 'ObjectsDeleted', array('OBJECTS' => Translation::get('Steps')),
                 StringUtilities::LIBRARIES

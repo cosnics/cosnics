@@ -4,15 +4,9 @@ namespace Chamilo\Core\Repository\DependencyInjection;
 use Chamilo\Core\Repository\DependencyInjection\CompilerPass\IncludeParserCompilerPass;
 use Chamilo\Core\Repository\DependencyInjection\CompilerPass\PublicationAggregatorCompilerPass;
 use Chamilo\Core\Repository\DependencyInjection\CompilerPass\WorkspaceExtensionCompilerPass;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
-use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Utilities\StringUtilities;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 /**
  * Extension on the dependency injection container.
@@ -24,9 +18,8 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DependencyInjectionExtension extends Extension implements ExtensionInterface, ICompilerPassExtension
+class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ICompilerPassExtension
 {
-
     /**
      * Returns the recommended alias to use in XML.
      * This alias is also the mandatory prefix to use when using YAML.
@@ -38,43 +31,19 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         return 'chamilo.core.repository';
     }
 
-    /**
-     * Loads a specific configuration.
-     *
-     * @param array $configuration
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
-     *
-     */
-    public function load(array $configuration, ContainerBuilder $container)
+    public function getConfigurationFiles(): array
     {
-        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
-
-        $xmlFileLoader = new XmlFileLoader(
-            $container,
-            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\Repository') . 'DependencyInjection')
-        );
-
-        $xmlFileLoader->load('instance.xml');
-        $xmlFileLoader->load('console.xml');
-        $xmlFileLoader->load('content_object.xml');
-        $xmlFileLoader->load('registration.xml');
-        $xmlFileLoader->load('services.xml');
-
-        $xmlFileLoader = new XmlFileLoader(
-            $container, new FileLocator(
-                $pathBuilder->getConfigurationPath('Chamilo\Core\Repository\Feedback') . 'DependencyInjection'
-            )
-        );
-
-        $xmlFileLoader->load('services.xml');
-
-        $xmlFileLoader = new XmlFileLoader(
-            $container, new FileLocator(
-                $pathBuilder->getConfigurationPath('Chamilo\Core\Repository\Workspace') . 'DependencyInjection'
-            )
-        );
-
-        $xmlFileLoader->load('services.xml');
+        return [
+            'Chamilo\Core\Repository' => [
+                'instance.xml',
+                'console.xml',
+                'content_object.xml',
+                'registration.xml',
+                'services.xml'
+            ],
+            'Chamilo\Core\Repository\Feedback' => ['services.xml'],
+            'Chamilo\Core\Repository\Workspace' => ['services.xml']
+        ];
     }
 
     /**

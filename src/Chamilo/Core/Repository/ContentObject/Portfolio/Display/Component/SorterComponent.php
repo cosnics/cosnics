@@ -83,7 +83,7 @@ class SorterComponent extends Manager implements DelegateComponent
             
             $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
             
-            $this->redirect($message, (! $succes), $parameters);
+            $this->redirectWithMessage($message, (! $succes), $parameters);
         }
         else
         {

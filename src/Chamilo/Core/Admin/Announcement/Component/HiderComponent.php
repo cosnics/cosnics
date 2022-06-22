@@ -67,7 +67,7 @@ class HiderComponent extends Manager
                 }
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($message, $parameter, StringUtilities::LIBRARIES), (bool) $failures,
                 array(self::PARAM_ACTION => self::ACTION_BROWSE)
             );

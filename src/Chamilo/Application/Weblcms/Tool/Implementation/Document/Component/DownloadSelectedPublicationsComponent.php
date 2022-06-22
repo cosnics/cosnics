@@ -54,7 +54,7 @@ class DownloadSelectedPublicationsComponent extends Manager
         
         if (count($content_object_ids) == 0)
         {
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get("NoFileSelected"), 
                 true, 
                 [], 

@@ -69,7 +69,7 @@ class UnshareComponent extends Manager
         $source = Request::get(self::PARAM_BROWSER_SOURCE);
         $returnComponent = isset($source) ? $source : \Chamilo\Core\Repository\Manager::ACTION_BROWSE_CONTENT_OBJECTS;
 
-        $this->redirect(
+        $this->redirectWithMessage(
             Translation::get('ContentObjectsUnshared'), false,
             array(self::PARAM_ACTION => null, \Chamilo\Core\Repository\Manager::PARAM_ACTION => $returnComponent)
         );

@@ -104,7 +104,7 @@ class UnlinkerComponent extends Manager
                 $parameters = array(Application::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS);
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($message, $parameter, StringUtilities::LIBRARIES), (bool) $failures,
                 $parameters);
         }

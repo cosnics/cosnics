@@ -102,7 +102,7 @@ class EditorComponent extends Manager implements DelegateComponent
                         StringUtilities::LIBRARIES
                     );
 
-                    $this->redirect(
+                    $this->redirectWithMessage(
                         $message, !$success, array(
                             self::PARAM_ACTION => Manager::ACTION_VIEW,
                             self::PARAM_PUBLICATION_ID => $calendarEventPublication->getId()

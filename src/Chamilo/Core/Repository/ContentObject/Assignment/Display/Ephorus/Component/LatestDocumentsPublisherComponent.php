@@ -32,7 +32,7 @@ class LatestDocumentsPublisherComponent extends Manager
             self::PARAM_ENTRY_ID => $ids
         );
 
-        $this->redirect('', false, $parameters);
+        $this->redirectWithMessage('', false, $parameters);
     }
 
 }

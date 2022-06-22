@@ -34,7 +34,7 @@ class DeleteComponent extends Manager
             $redirectMessageVariable = 'CoursesNotRemovedFromOpenCourseList';
         }
         
-        $this->redirect(
+        $this->redirectWithMessage(
             Translation::getInstance()->getTranslation($redirectMessageVariable, null, Manager::context()), 
             ! $success, 
             array(self::PARAM_ACTION => self::ACTION_BROWSE));

@@ -50,13 +50,13 @@ class LogoutComponent extends Manager
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
         
         $setting->update();
-        $this->redirect(Translation::get('LogoutSuccessful', null, StringUtilities::LIBRARIES), false, $parameters);
+        $this->redirectWithMessage(Translation::get('LogoutSuccessful', null, StringUtilities::LIBRARIES), false, $parameters);
     }
 
     public function failed()
     {
         $parameters = $this->get_parameters();
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
-        $this->redirect(Translation::get('LogoutFailed', null, StringUtilities::LIBRARIES), true, $parameters);
+        $this->redirectWithMessage(Translation::get('LogoutFailed', null, StringUtilities::LIBRARIES), true, $parameters);
     }
 }

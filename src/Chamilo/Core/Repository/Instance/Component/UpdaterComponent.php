@@ -33,7 +33,7 @@ class UpdaterComponent extends Manager
             if ($form->validate())
             {
                 $success = $form->update_external_instance();
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         $success ? 'ObjectUpdated' : 'ObjectNotUpdated', 
                         array('OBJECT' => Translation::get('ExternalInstance')), 

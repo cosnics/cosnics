@@ -21,11 +21,11 @@ class ImporterComponent extends Manager implements DelegateComponent
         
         if ($succes)
         {
-            $this->redirect(Translation::get('Succes', null, StringUtilities::LIBRARIES), false, $params);
+            $this->redirectWithMessage(Translation::get('Succes', null, StringUtilities::LIBRARIES), false, $params);
         }
         else
         {
-            $this->redirect(Translation::get('Failed', null, StringUtilities::LIBRARIES), true, $params);
+            $this->redirectWithMessage(Translation::get('Failed', null, StringUtilities::LIBRARIES), true, $params);
         }
     }
 }

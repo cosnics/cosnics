@@ -76,7 +76,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
             if (! $this->publication || ! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
             {
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get("NotAllowed", null, StringUtilities::LIBRARIES),
                     true,
                     [],
@@ -160,7 +160,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         {
             if ($this->assessment->count_questions() == 0)
             {
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get("EmptyAssessment"),
                     true,
                     [],

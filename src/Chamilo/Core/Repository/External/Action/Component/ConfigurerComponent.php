@@ -20,7 +20,7 @@ class ConfigurerComponent extends Manager
         if ($form->validate())
         {
             $success = $form->update_configuration();
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'), !$success
             );
         }

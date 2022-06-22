@@ -75,7 +75,7 @@ class ImpactViewComponent extends Manager
                 'CategoryNotDeleted'
             );
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 $result, $failures > 0,
                 array(self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES, self::PARAM_CATEGORY_ID => null)
             );

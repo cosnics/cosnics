@@ -72,7 +72,7 @@ class VisibilityChangerComponent extends Manager
                 }
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($message), $failures != 0,
                 array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS));
         }

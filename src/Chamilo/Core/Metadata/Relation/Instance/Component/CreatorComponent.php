@@ -48,7 +48,7 @@ class CreatorComponent extends Manager
                 $translation, array('OBJECT' => Translation::get('RelationInstance')), StringUtilities::LIBRARIES
             );
 
-            $this->redirect($message, !$success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
+            $this->redirectWithMessage($message, !$success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {

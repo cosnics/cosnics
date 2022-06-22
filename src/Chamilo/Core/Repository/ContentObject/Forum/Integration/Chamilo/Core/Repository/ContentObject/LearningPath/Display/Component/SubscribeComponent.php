@@ -53,6 +53,6 @@ class SubscribeComponent extends Manager
         $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION] =
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
-        $this->redirect($translator->getTranslation($message), !$succes, $parameters, array(self::PARAM_ACTION));
+        $this->redirectWithMessage($translator->getTranslation($message), !$succes, $parameters, array(self::PARAM_ACTION));
     }
 }

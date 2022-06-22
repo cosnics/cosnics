@@ -23,7 +23,7 @@ class LoginComponent extends Manager
                 {
                     $parameters = $this->get_parameters();
                     $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
-                    $this->redirect(
+                    $this->redirectWithMessage(
                         Translation::get('LoginFailed', null, StringUtilities::LIBRARIES),
                         true, 
                         $parameters);
@@ -32,7 +32,7 @@ class LoginComponent extends Manager
                 $parameters = $this->get_parameters();
                 $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
                 
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get('LoginSuccessful', null, StringUtilities::LIBRARIES),
                     false, 
                     $parameters);
@@ -42,14 +42,14 @@ class LoginComponent extends Manager
                 
                 $parameters = $this->get_parameters();
                 $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
-                $this->redirect(Translation::get('LoginFailed', null, StringUtilities::LIBRARIES), true, $parameters);
+                $this->redirectWithMessage(Translation::get('LoginFailed', null, StringUtilities::LIBRARIES), true, $parameters);
             }
         }
         else
         {
             $parameters = $this->get_parameters();
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
-            $this->redirect('', false, $parameters);
+            $this->redirectWithMessage('', false, $parameters);
         }
     }
 }

@@ -48,7 +48,7 @@ class MoverComponent extends Manager
                     StringUtilities::LIBRARIES);
             }
             
-            $this->redirect($message, $failure, array(self::PARAM_ACTION => self::ACTION_BROWSE));
+            $this->redirectWithMessage($message, $failure, array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
     }
 

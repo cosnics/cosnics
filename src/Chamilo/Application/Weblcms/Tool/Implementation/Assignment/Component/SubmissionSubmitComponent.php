@@ -17,6 +17,6 @@ class SubmissionSubmitComponent extends Manager
     /** Leave this for old redirects */
     public function run()
     {
-        $this->redirect(null, false, [self::PARAM_ACTION => self::ACTION_DISPLAY]);
+        $this->redirectWithMessage(null, false, [self::PARAM_ACTION => self::ACTION_DISPLAY]);
     }
 }

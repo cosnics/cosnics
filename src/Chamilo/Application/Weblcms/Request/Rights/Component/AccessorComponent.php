@@ -22,7 +22,7 @@ class AccessorComponent extends Manager
         {
             $success = $form->set_rights();
             
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success ? 'AccessRightsSaved' : 'AccessRightsNotSaved'), !$success
             );
         }

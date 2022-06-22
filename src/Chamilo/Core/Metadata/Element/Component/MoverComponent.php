@@ -35,7 +35,7 @@ class MoverComponent extends Manager
                 
                 $metadata_element->move($move);
                 
-                $this->redirect(
+                $this->redirectWithMessage(
                     '', 
                     false, 
                     array(

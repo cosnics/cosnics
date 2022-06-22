@@ -48,7 +48,7 @@ class ForumUnsubscribeComponent extends Manager
             null, 
             ContentObject::get_content_object_type_namespace('Forum'));
         
-        $this->redirect(
+        $this->redirectWithMessage(
             $message, 
             ! $success, 
             array(self::PARAM_ACTION => self::ACTION_BROWSE), 

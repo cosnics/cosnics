@@ -43,6 +43,6 @@ class ChangeLockComponent extends Manager
         $params = [];
         $params[self::PARAM_ACTION] = self::ACTION_BROWSE_FORUMS;
 
-        $this->redirect($message, ! $succes, $params);
+        $this->redirectWithMessage($message, ! $succes, $params);
     }
 }

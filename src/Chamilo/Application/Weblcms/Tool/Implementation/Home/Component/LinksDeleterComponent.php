@@ -23,6 +23,6 @@ class LinksDeleterComponent extends Manager
         
         $message = $succes ? 'PublicationRemovedFromHomepage' : 'PublicationNotRemovedFromHomepage';
         
-        $this->redirect(Translation::get($message), ! $succes, array(self::PARAM_ACTION => self::ACTION_BROWSE));
+        $this->redirectWithMessage(Translation::get($message), ! $succes, array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }
 }

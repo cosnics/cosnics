@@ -92,7 +92,7 @@ class QuestionSelecterComponent extends Manager
 
         $message = $succes ? Translation::get('QuestionsAdded') : Translation::get('QuestionsNotAdded');
 
-        $this->redirect(
+        $this->redirectWithMessage(
             $message,
             ! $succes,
             array(

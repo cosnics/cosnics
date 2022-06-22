@@ -74,7 +74,7 @@ class CourseUserSubscriptionRequestGranterComponent extends Manager
             $parameter = array('OBJECTS' => Translation::get('Requests'));
         }
         
-        $this->redirect(
+        $this->redirectWithMessage(
             Translation::getInstance()->getTranslation($message, $parameter, StringUtilities::LIBRARIES),
             (bool) $failures,
             array(self::PARAM_ACTION => self::ACTION_ADMIN_REQUEST_BROWSER));

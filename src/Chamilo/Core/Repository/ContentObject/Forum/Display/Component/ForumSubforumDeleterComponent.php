@@ -44,7 +44,7 @@ class ForumSubforumDeleterComponent extends Manager
                     array('OBJECT' => Translation::get('Subforum')),
                     StringUtilities::LIBRARIES));
 
-            $this->redirect($message, !$success, $params);
+            $this->redirectWithMessage($message, !$success, $params);
         }
         else
         {

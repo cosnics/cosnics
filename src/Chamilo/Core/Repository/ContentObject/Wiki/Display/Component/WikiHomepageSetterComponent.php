@@ -27,14 +27,14 @@ class WikiHomepageSetterComponent extends Manager
         {
             $page->set_is_homepage(true);
             $page->update();
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get('HomepageSelected'), false,
                 array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI, 'pid' => Request::get('pid'))
             );
         }
         else
         {
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get('HomepageNotSelected'), true, array(self::PARAM_ACTION => self::ACTION_BROWSE_WIKI)
             );
         }

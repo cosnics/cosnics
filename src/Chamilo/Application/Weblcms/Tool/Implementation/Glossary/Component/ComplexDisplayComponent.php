@@ -40,7 +40,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
 
         if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get("NotAllowed", null, StringUtilities::LIBRARIES),
                 true,
                 [],

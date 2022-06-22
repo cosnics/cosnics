@@ -76,7 +76,7 @@ class MoverComponent extends Manager
             }
         }
 
-        $this->redirect(
+        $this->redirectWithMessage(
             Translation::get($sucess ? 'CategoryMoved' : 'CategoryNotMoved'), !$sucess,
             array(
                 self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES,

@@ -29,11 +29,11 @@ class ExternalSyncerComponent extends Manager
                 
                 if ($succes)
                 {
-                    $this->redirect(Translation::get('Succes', null, StringUtilities::LIBRARIES), false, $params);
+                    $this->redirectWithMessage(Translation::get('Succes', null, StringUtilities::LIBRARIES), false, $params);
                 }
                 else
                 {
-                    $this->redirect(Translation::get('Failed', null, StringUtilities::LIBRARIES), true, $params);
+                    $this->redirectWithMessage(Translation::get('Failed', null, StringUtilities::LIBRARIES), true, $params);
                 }
             }
         }
@@ -41,7 +41,7 @@ class ExternalSyncerComponent extends Manager
         {
             $params = $this->get_parameters();
             $params[\Chamilo\Core\Repository\External\Manager::PARAM_ACTION] = \Chamilo\Core\Repository\External\Manager::ACTION_VIEW_EXTERNAL_REPOSITORY;
-            $this->redirect(null, false, $params);
+            $this->redirectWithMessage(null, false, $params);
         }
     }
 }

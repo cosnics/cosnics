@@ -225,7 +225,7 @@ class DenierComponent extends Manager
             }
         }
         
-        $this->redirect(
+        $this->redirectWithMessage(
             Translation::get($message, [], Manager::context()), (bool) $failureCount,
             array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }

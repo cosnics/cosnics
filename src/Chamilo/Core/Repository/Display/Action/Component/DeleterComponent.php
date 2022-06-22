@@ -64,7 +64,7 @@ class DeleterComponent extends Manager
                         StringUtilities::LIBRARIES));
             }
             
-            $this->redirect(
+            $this->redirectWithMessage(
                 $message, 
                 (! $succes), 
                 array(

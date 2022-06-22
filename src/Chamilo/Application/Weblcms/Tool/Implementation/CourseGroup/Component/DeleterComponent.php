@@ -80,10 +80,10 @@ class DeleterComponent extends Manager
                 array('OBJECT' => Translation::get('CourseGroup')),
                 StringUtilities::LIBRARIES
             );
-            $this->redirect($message, '', array('course_group' => null, self::PARAM_ACTION => null));
+            $this->redirectWithMessage($message, '', array('course_group' => null, self::PARAM_ACTION => null));
         }
 
-        $this->redirect($message, '', array('course_group' => null, self::PARAM_ACTION => null));
+        $this->redirectWithMessage($message, '', array('course_group' => null, self::PARAM_ACTION => null));
     }
 
     /**

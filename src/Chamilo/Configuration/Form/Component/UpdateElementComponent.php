@@ -40,7 +40,7 @@ class UpdateElementComponent extends Manager
         if ($form->validate())
         {
             $success = $form->update_dynamic_form_element();
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success ? 'DynamicFormElementUpdated' : 'DynamicFormElementNotUpdated'), !$success,
                 array(self::PARAM_ACTION => self::ACTION_BUILD_DYNAMIC_FORM));
         }

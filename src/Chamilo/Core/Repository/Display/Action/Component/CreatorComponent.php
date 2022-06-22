@@ -89,7 +89,7 @@ class CreatorComponent extends Manager implements ViewerInterface
         $params['cid'] = $complex_content_object_item_id;
         $params[\Chamilo\Core\Repository\Display\Manager::PARAM_ACTION] = \Chamilo\Core\Repository\Display\Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
-        $this->redirect($message, (! $succes), $params);
+        $this->redirectWithMessage($message, (! $succes), $params);
     }
 
     public function get_allowed_content_object_types()

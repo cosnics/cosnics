@@ -38,7 +38,7 @@ class CreatorComponent extends Manager
             if ($form->validate())
             {
                 $success = $form->create_external_instance();
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         $success ? 'ObjectAdded' : 'ObjectNotAdded',
                         array('OBJECT' => Translation::get('ExternalInstance')), StringUtilities::LIBRARIES

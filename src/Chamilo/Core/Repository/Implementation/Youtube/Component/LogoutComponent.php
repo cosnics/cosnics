@@ -39,7 +39,7 @@ class LogoutComponent extends Manager
             {
                 $parameters = $this->get_parameters();
                 $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get('LogoutSuccessful', null, StringUtilities::LIBRARIES),
                     false, 
                     $parameters);
@@ -48,7 +48,7 @@ class LogoutComponent extends Manager
             {
                 $parameters = $this->get_parameters();
                 $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
-                $this->redirect(Translation::get('LogoutFailed', null, StringUtilities::LIBRARIES), true, $parameters);
+                $this->redirectWithMessage(Translation::get('LogoutFailed', null, StringUtilities::LIBRARIES), true, $parameters);
             }
         }
     }

@@ -58,7 +58,7 @@ class CreatorComponent extends Manager
 
             if ($entry instanceof Entry)
             {
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get('EntryCreated'),
                     false,
                     array(
@@ -70,7 +70,7 @@ class CreatorComponent extends Manager
             }
             else
             {
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get('EntryNotCreated'),
                     true,
                     array(self::PARAM_ACTION => self::ACTION_VIEW)

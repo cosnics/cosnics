@@ -75,7 +75,7 @@ class ToggleVisibilityComponent extends Manager implements DelegateComponent
                 $params['tool_action'] = 'view';
             }
 
-            $this->redirect($message, $failures > 0, $params);
+            $this->redirectWithMessage($message, $failures > 0, $params);
         }
         else
         {

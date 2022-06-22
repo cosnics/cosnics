@@ -16,13 +16,13 @@ class ExporterComponent extends Manager implements DelegateComponent
         {
             $parameters = $this->get_parameters();
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
-            $this->redirect(Translation::get('ObjectExported', null, StringUtilities::LIBRARIES), false, $parameters);
+            $this->redirectWithMessage(Translation::get('ObjectExported', null, StringUtilities::LIBRARIES), false, $parameters);
         }
         else
         {
             $parameters = $this->get_parameters();
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_EXPORT_EXTERNAL_REPOSITORY;
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get('ObjectFailedExported', null, StringUtilities::LIBRARIES),
                 true, 
                 $parameters);

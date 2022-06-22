@@ -52,7 +52,7 @@ class PictureComponent extends ProfileComponent implements NoContextComponent
                 $pos_message = 'UserProfileUpdated';
             }
             
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success ? $pos_message : $neg_message), !$success,
                 array(Application::PARAM_ACTION => self::ACTION_CHANGE_PICTURE));
         }

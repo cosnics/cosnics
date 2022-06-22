@@ -56,7 +56,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
             {
                 if (count($compareObjectIdentifiers) < 2)
                 {
-                    $this->redirect(Translation::get('TooFewItems'), true);
+                    $this->redirectWithMessage(Translation::get('TooFewItems'), true);
                 }
 
                 $compareVersionIdentifier = $compareObjectIdentifiers[0];
@@ -96,7 +96,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
         }
         else
         {
-            $this->redirect(null, false, array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI));
+            $this->redirectWithMessage(null, false, array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI));
         }
     }
 

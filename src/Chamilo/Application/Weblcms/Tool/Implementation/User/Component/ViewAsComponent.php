@@ -47,7 +47,7 @@ class ViewAsComponent extends Manager
             Session::unregister(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
             Session::unregister(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID);
             
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get('ViewAsOriginal'), 
                 false, 
                 array(
@@ -63,7 +63,7 @@ class ViewAsComponent extends Manager
                 Session::register(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID, 
                     Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE));
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get('ViewAsUser'), 
                     false, 
                     array(

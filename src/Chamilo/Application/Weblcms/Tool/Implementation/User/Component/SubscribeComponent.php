@@ -114,7 +114,7 @@ class SubscribeComponent extends Manager
                         $message = 'UsersSubscribedToCourse';
                     }
 
-                    $this->redirect(
+                    $this->redirectWithMessage(
                         Translation::get($message), false, array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER
                         )

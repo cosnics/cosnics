@@ -22,14 +22,14 @@ class UpgraderComponent extends Manager
             
             if ($user->update())
             {
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get('QuotaUpgraded'), 
                     false, 
                     array(self::PARAM_ACTION => self::ACTION_BROWSE));
             }
         }
         
-        $this->redirect(
+        $this->redirectWithMessage(
             Translation::get('QuotaNotUpgraded'), 
             true, 
             array(self::PARAM_ACTION => self::ACTION_BROWSE));

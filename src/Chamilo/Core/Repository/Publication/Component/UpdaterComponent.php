@@ -42,7 +42,7 @@ class UpdaterComponent extends Manager
             $publication_attributes->set_content_object_id($latest_version);
             $success = $publication_attributes->update();
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get(
                     $success ? 'ObjectUpdated' : 'ObjectNotUpdated',
                     array('OBJECT' => Translation::get('Publication')),

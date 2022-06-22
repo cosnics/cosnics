@@ -55,7 +55,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
         if (!$this->getPublicationAggregator()->canContentObjectBeEdited($content_object->get_id()))
         {
             $parameters[\Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = null;
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get('UpdateNotAllowed'), false, array_merge(
                     $parameters, array(
                         \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE
@@ -117,7 +117,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
 
             $parameters[\Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = null;
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get(
                     'ObjectUpdated', array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
                 ), false, array_merge(

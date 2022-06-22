@@ -54,7 +54,7 @@ class UpdaterComponent extends Manager
                     $message .= '<br />' . implode('<br /', $user_view->getErrors());
                 }
                 
-                $this->redirect(
+                $this->redirectWithMessage(
                     $message, !$success,
                     array(self::PARAM_ACTION => self::ACTION_BROWSE));
             }

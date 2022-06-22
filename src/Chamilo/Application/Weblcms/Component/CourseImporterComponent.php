@@ -35,7 +35,7 @@ class CourseImporterComponent extends Manager
         if ($form->validate())
         {
             $success = $form->import_courses();
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success ? 'CsvCoursesProcessed' : 'CsvCoursesNotProcessed') . '<br />' .
                 $form->get_failed_csv(), !$success
             );

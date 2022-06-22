@@ -64,7 +64,7 @@ class EntryCodePageCorrectorComponent extends Manager
             $success = $page->create();
             $this->getDataProvider()->attachContentObjectToEntry($this->getEntry(), $page);
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 $this->getTranslator()->trans(
                     $success ? 'ObjectCreated' : 'ObjectNotCreated',
                     array('OBJECT' => $this->getTranslator()->trans('Page', [], 'Chamilo\Core\Repository\Page')),

@@ -58,7 +58,7 @@ class ContentObjectUpdaterComponent extends Manager
                 $params['tool_action'] = Request::get('tool_action');
                 $params[\Chamilo\Core\Repository\Display\Manager::PARAM_ACTION] = Manager::ACTION_VIEW_CLO;
 
-                $this->redirect($message, (!$succes), $params);
+                $this->redirectWithMessage($message, (!$succes), $params);
             }
             else
             {

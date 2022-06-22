@@ -120,7 +120,7 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
             $parameters = $this->getDisplayParameters();
         }
         
-        $this->parentComponent->redirect($message, ! $success, $parameters);
+        $this->parentComponent->redirectWithMessage($message, ! $success, $parameters);
     }
 
     /**

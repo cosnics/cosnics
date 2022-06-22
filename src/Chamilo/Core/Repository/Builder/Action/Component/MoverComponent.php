@@ -81,7 +81,7 @@ class MoverComponent extends Manager
                 }
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 $succes ? Translation::get(
                     'ObjectsMoved',
                     array('OBJECTS' => Translation::get('ComplexContentObjectItems')),

@@ -107,7 +107,7 @@ class UnsubscribeComponent extends Manager
                         $message = 'PartialUsersNotUnsubscribedFromCourse';
                     }
                 }
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get($message), !$success,
                     array(
                         self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER,

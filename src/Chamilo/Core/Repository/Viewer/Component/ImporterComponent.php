@@ -126,7 +126,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                             Session::register(Application::PARAM_MESSAGES, $messages);
                         }
 
-                        $this->simple_redirect(array(self::PARAM_ID => $filtered_content_object_ids[0]));
+                        $this->redirect(array(self::PARAM_ID => $filtered_content_object_ids[0]));
                     }
                     elseif (count($filtered_content_object_ids) == 0)
                     {
@@ -140,16 +140,16 @@ class ImporterComponent extends Manager implements DelegateComponent
                             Session::register(Application::PARAM_MESSAGES, $messages);
                         }
 
-                        $this->simple_redirect();
+                        $this->redirect();
                     }
                     else
                     {
-                        $this->simple_redirect(array(self::PARAM_ID => $content_object_ids));
+                        $this->redirect(array(self::PARAM_ID => $content_object_ids));
                     }
                 }
                 else
                 {
-                    $this->simple_redirect();
+                    $this->redirect();
                 }
                 /**
                  * TODO: Do something with the result here 1.

@@ -46,6 +46,6 @@ class ForumUnsubscribeComponent extends Manager
             $message = Translation::get("UnSuccesUnSubscribe");
         }
         
-        $this->redirect($message, !$succes, $params);
+        $this->redirectWithMessage($message, !$succes, $params);
     }
 }

@@ -92,7 +92,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
                 $this->create_complex_content_object_item($type, $content_object_id);
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get(
                     'ObjectAdded', array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
                 ), false, array(

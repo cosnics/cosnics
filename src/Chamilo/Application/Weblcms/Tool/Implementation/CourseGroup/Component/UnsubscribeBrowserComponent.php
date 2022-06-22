@@ -86,7 +86,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             }
 
             $message = Translation::get(count($users) > 1 ? 'UsersUnsubscribed' : 'UserUnsubscribed');
-            $this->redirect(
+            $this->redirectWithMessage(
                 $message, false, array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE,
                     self::PARAM_COURSE_GROUP => $course_group_id

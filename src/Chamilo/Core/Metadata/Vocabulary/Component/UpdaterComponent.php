@@ -72,7 +72,7 @@ class UpdaterComponent extends Manager
                 $message = $ex->getMessage();
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 $message, !$success, array(
                     self::PARAM_ACTION => self::ACTION_BROWSE,
                     \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID => $vocabulary->get_element_id(),

@@ -106,7 +106,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
 
                 if (!$contentObject)
                 {
-                    $this->redirect(
+                    $this->redirectWithMessage(
                         Translation::get(
                             'ObjectNotCreated', array('OBJECT' => Translation::get('ContentObject')),
                             StringUtilities::LIBRARIES
@@ -139,7 +139,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                             self::TABS_CONTENT_OBJECT => $selectedTab
                         );
 
-                        $this->simple_redirect($parameters);
+                        $this->redirect($parameters);
                     }
                 }
 
@@ -158,7 +158,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
                 $parameters[self::PARAM_CATEGORY_ID] = $parent;
 
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         'ObjectCreated', array('OBJECT' => Translation::get('TypeName', null, $typeContext)),
                         StringUtilities::LIBRARIES

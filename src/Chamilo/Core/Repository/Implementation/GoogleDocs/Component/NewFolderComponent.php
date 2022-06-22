@@ -17,13 +17,13 @@ class NewFolderComponent extends Manager
             {
                 $parameters = $this->get_parameters();
                 $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
-                $this->redirect('Folder is created', false, $parameters);
+                $this->redirectWithMessage('Folder is created', false, $parameters);
             }
             else
             {
                 $parameters = $this->get_parameters();
                 $parameters[Manager::PARAM_ACTION] = Manager::ACTION_NEW_FOLDER_EXTERNAL_REPOSITORY;
-                $this->redirect('Folder is not created', true, $parameters);
+                $this->redirectWithMessage('Folder is not created', true, $parameters);
             }
         }
         else

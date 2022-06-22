@@ -42,7 +42,7 @@ class CreatorComponent extends Manager
         );
 
         $parameters = array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE);
-        $this->redirect($message, $is_error_message, $parameters);
+        $this->redirectWithMessage($message, $is_error_message, $parameters);
     }
 
     /**

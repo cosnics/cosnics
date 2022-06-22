@@ -46,7 +46,7 @@ class SyncGroupComponent extends Manager
             $message = 'GroupNotSynced';
         }
 
-        $this->redirect(
+        $this->redirectWithMessage(
             $this->getTranslator()->trans($message, [], Manager::context()), !$success,
             [
                 \Chamilo\Core\Repository\Manager::PARAM_ACTION =>

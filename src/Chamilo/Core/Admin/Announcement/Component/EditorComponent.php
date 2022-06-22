@@ -71,7 +71,7 @@ class EditorComponent extends Manager
                         $publication, $this->getUser()->getId(), $publicationForm->exportValues()
                     );
 
-                    $this->redirect(
+                    $this->redirectWithMessage(
                         Translation::get(
                             $success ? 'ObjectUpdated' : 'ObjectNotUpdated',
                             array('OBJECT' => Translation::get('SystemAnnouncementPublication')),

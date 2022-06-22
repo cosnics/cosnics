@@ -45,7 +45,7 @@ class DeleterComponent extends Manager
             'SelectedItemsDeleted'
         );
 
-        $this->redirect(
+        $this->redirectWithMessage(
             $message, (bool) $failures,
             array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_PARENT => $parentIdentifier)
         );

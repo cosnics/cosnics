@@ -46,7 +46,7 @@ class ImporterComponent extends Manager
                 $parameters[Application::PARAM_ACTION] = \Chamilo\Core\Repository\Manager::ACTION_VIEW_CONTENT_OBJECTS;
                 $parameters[\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID] = $image->get_id();
                 
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get('ObjectImported', null, StringUtilities::LIBRARIES),
                     false, 
                     $parameters);
@@ -57,7 +57,7 @@ class ImporterComponent extends Manager
                 $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_EXTERNAL_REPOSITORY;
                 $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_ID] = $external_object->get_id();
                 
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get('ObjectFailedImported', null, StringUtilities::LIBRARIES),
                     true, 
                     $parameters);
@@ -69,7 +69,7 @@ class ImporterComponent extends Manager
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_EXTERNAL_REPOSITORY;
             $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_ID] = $external_object->get_id();
             
-            $this->redirect(null, false, $parameters);
+            $this->redirectWithMessage(null, false, $parameters);
         }
     }
 }

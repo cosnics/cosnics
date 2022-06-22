@@ -75,7 +75,7 @@ class ReverterComponent extends Manager
                     array('OBJECT' => Translation::get('ContentObject')), 
                     StringUtilities::LIBRARIES);
             }
-            $this->redirect(
+            $this->redirectWithMessage(
                 $message, (bool) $failures,
                 array(Application::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS));
         }

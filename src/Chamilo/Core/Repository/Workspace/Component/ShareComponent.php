@@ -84,7 +84,7 @@ class ShareComponent extends Manager implements TableSupport
                 }
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get('ContentObjectsShared'), false, array(
                     self::PARAM_ACTION => null,
                     \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_BROWSE_CONTENT_OBJECTS

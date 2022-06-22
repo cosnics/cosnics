@@ -54,7 +54,7 @@ class AccountComponent extends ProfileComponent
                 $neg_message = 'UserProfileNotUpdated';
                 $pos_message = 'UserProfileUpdated';
             }
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success ? $pos_message : $neg_message), !$success,
                 array(Application::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT)
             );

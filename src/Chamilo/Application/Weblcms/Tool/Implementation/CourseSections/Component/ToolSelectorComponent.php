@@ -46,7 +46,7 @@ class ToolSelectorComponent extends Manager
             if ($form->validate())
             {
                 $success = $form->update_course_modules();
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get($success ? 'CourseSectionUpdated' : 'CourseSectionNotUpdated'), !$success,
                     array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS));
             }

@@ -75,7 +75,7 @@ class EditorComponent extends TabComponent
                     ) . '<br />' . implode('<br />', $course_group->getErrors());
             }
 
-            $this->redirect($message, !$succes, array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
+            $this->redirectWithMessage($message, !$succes, array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
         }
 
         return $form->toHtml();

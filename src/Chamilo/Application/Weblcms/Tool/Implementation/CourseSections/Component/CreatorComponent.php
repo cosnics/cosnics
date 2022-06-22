@@ -50,7 +50,7 @@ class CreatorComponent extends Manager
             {
                 // $course_section =
                 $form->get_course_section();
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         'ObjectCreated',
                         array('OBJECT' => Translation::get('CourseSection')),
@@ -60,7 +60,7 @@ class CreatorComponent extends Manager
             }
             else
             {
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         'ObjectNotCreated',
                         array('OBJECT' => Translation::get('CourseSection')),

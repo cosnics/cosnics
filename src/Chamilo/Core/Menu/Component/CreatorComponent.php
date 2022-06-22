@@ -77,7 +77,7 @@ class CreatorComponent extends Manager implements DelegateComponent
                 );
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 $message, !$success, array(
                     Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_PARENT => $item->getParentId()
                 )

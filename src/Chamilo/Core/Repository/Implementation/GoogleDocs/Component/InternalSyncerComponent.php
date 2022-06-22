@@ -55,7 +55,7 @@ class InternalSyncerComponent extends Manager
                 $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Repository\Manager::context();
                 $parameters[Application::PARAM_ACTION] = \Chamilo\Core\Repository\Manager::ACTION_VIEW_CONTENT_OBJECTS;
                 $parameters[\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID] = $document->get_id();
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         'ObjectUpdated', 
                         array('OBJECT' => Translation::get('ContentObject')), 
@@ -69,7 +69,7 @@ class InternalSyncerComponent extends Manager
                 $parameters = $this->get_parameters();
                 $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_EXTERNAL_REPOSITORY;
                 $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_ID] = $external_object->get_id();
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         'ObjectFailedUpdated', 
                         array('OBJECT' => Translation::get('ContentObject')), 
@@ -83,7 +83,7 @@ class InternalSyncerComponent extends Manager
             $parameters = $this->get_parameters();
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_EXTERNAL_REPOSITORY;
             $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_ID] = $external_object->get_id();
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get(
                     'ObjectFailedUpdated', 
                     array('OBJECT' => Translation::get('ContentObject')), 

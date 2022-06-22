@@ -139,7 +139,7 @@ class CopierComponent extends Manager
             
             if ($numberOfCopiedContentOBjects > 1 || $numberOfCopiedContentOBjects == 0)
             {
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         'ObjectCopied', 
                         array('OBJECT' => Translation::get('ContentObject')), 
@@ -151,7 +151,7 @@ class CopierComponent extends Manager
             }
             else
             {
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         'ObjectCopied', 
                         array('OBJECT' => Translation::get('ContentObject')), 

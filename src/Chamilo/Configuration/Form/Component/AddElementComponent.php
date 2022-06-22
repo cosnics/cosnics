@@ -35,7 +35,7 @@ class AddElementComponent extends Manager
         if ($form->validate())
         {
             $success = $form->create_dynamic_form_element();
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success ? 'DynamicFormElementAdded' : 'DynamicFormElementNotAdded'), !$success,
                 array(self::PARAM_ACTION => self::ACTION_BUILD_DYNAMIC_FORM));
         }

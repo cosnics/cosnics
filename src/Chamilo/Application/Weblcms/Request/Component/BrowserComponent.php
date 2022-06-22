@@ -162,7 +162,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         }
         else
         {
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get('NoRequestsFormDirectly'), null, array(self::PARAM_ACTION => self::ACTION_CREATE)
             );
         }

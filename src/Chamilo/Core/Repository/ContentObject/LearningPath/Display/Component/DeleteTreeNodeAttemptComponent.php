@@ -65,7 +65,7 @@ class DeleteTreeNodeAttemptComponent extends BaseReportingComponent
             );
         }
 
-        $this->redirect($message, $is_error, $parameters);
+        $this->redirectWithMessage($message, $is_error, $parameters);
     }
 
     function build()

@@ -121,7 +121,7 @@ class Diagnoser
 
         if ($url)
         {
-            $url = $this->get_link($title, $url);
+            $url = $this->getLink($title, $url);
         }
         else
         {
@@ -502,7 +502,7 @@ class Diagnoser
         return $array;
     }
 
-    public function get_link(string $title, string $url): string
+    public function getLink(string $title, string $url): string
     {
         return '<a href="' . $url . '" target="about:bank">' . $title . '</a>';
     }

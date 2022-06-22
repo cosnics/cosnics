@@ -67,7 +67,7 @@ class CourseDeleterComponent extends Manager
         }
         else
         {
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get('CourseDeleted'), 
                 false, 
                 array(

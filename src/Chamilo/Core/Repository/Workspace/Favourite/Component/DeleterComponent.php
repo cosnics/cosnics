@@ -72,11 +72,11 @@ class DeleterComponent extends Manager
         $action = $this->getRequest()->get(\Chamilo\Core\Repository\Workspace\Manager::PARAM_BROWSER_SOURCE);
         if (! isset($action))
         {
-            $this->redirect($message, ! $success, array(self::PARAM_ACTION => $action));
+            $this->redirectWithMessage($message, ! $success, array(self::PARAM_ACTION => $action));
         }
         else
         {
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get(
                     'ObjectDeleted', 
                     array('OBJECT' => Translation::get('WorkspaceUserFavourite')), 

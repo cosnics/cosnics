@@ -79,7 +79,7 @@ class UserIncompleteProgressMailerComponent extends Manager
             $message = 'IncompleteProgressMailNotSent';
         }
 
-        $this->redirect(
+        $this->redirectWithMessage(
             $translator->getTranslation($message), !$success,
             array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS)
         );

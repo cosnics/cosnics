@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\File;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
@@ -15,50 +16,37 @@ use Exception;
  */
 class PathBuilder
 {
-    const ARCHIVE = 8;
-    const BASE = 2;
-    const CACHE = 6;
-    const CONFIGURATION = 12;
-    const CSS = 19;
-    const FULL = 1;
-    const I18N = 15;
-    const IMAGES = 20;
-    const JAVASCRIPT = 14;
-    const LOG = 7;
-    const PLUGIN = 11;
-    const PROFILE_PICTURE = 10;
-    const PUBLIC_STORAGE = 17;
-    const RELATIVE = 3;
-    const REPOSITORY = 9;
-    const RESOURCE = 13;
-    const STORAGE = 4;
-    const TEMPLATES = 18;
-    const TEMPORARY = 5;
-    const VENDOR = 16;
+    public const ARCHIVE = 8;
+    public const BASE = 2;
+    public const CACHE = 6;
+    public const CONFIGURATION = 12;
+    public const CSS = 19;
+    public const FULL = 1;
+    public const I18N = 15;
+    public const IMAGES = 20;
+    public const JAVASCRIPT = 14;
+    public const LOG = 7;
+    public const PLUGIN = 11;
+    public const PROFILE_PICTURE = 10;
+    public const PUBLIC_STORAGE = 17;
+    public const RELATIVE = 3;
+    public const REPOSITORY = 9;
+    public const RESOURCE = 13;
+    public const STORAGE = 4;
+    public const TEMPLATES = 18;
+    public const TEMPORARY = 5;
+    public const VENDOR = 16;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\File\PathBuilder
-     */
-    protected static $instance = null;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     */
-    private $classnameUtilities;
+    protected static ?PathBuilder $instance = null;
 
     /**
      *
      * @var string[]
      */
-    private $cache = [];
+    private array $cache = [];
 
-    /**
-     * Constructor
-     *
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     */
+    private ClassnameUtilities $classnameUtilities;
+
     public function __construct(ClassnameUtilities $classnameUtilities)
     {
         $this->classnameUtilities = $classnameUtilities;
@@ -66,7 +54,7 @@ class PathBuilder
 
     /**
      *
-     * @param boolean $web
+     * @param bool $web
      *
      * @return string
      */
@@ -74,15 +62,8 @@ class PathBuilder
     {
         if ($web)
         {
-            $dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] . 'x'));
-
-            if ($dir !== '/')
-            {
-                $dir .= '/';
-            }
-
-            $protocol = (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
-            $path = $protocol . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '') . $dir;
+            $request = ChamiloRequest::createFromGlobals();
+            $path = $request->getSchemeAndHttpHost() . $request->getBaseUrl() . $request->getPathInfo();
         }
         else
         {
@@ -113,7 +94,7 @@ class PathBuilder
     /**
      *
      * @param string $namespace
-     * @param boolean $web
+     * @param bool $web
      *
      * @return string
      */
@@ -136,7 +117,7 @@ class PathBuilder
     }
 
     /**
-     * @param boolean $web
+     * @param bool $web
      *
      * @return string
      */
@@ -148,7 +129,7 @@ class PathBuilder
     /**
      *
      * @param string $namespace
-     * @param boolean $web
+     * @param bool $web
      *
      * @return string
      */
@@ -175,7 +156,7 @@ class PathBuilder
      *
      * @return \Chamilo\Libraries\File\PathBuilder
      */
-    static public function getInstance()
+    public static function getInstance()
     {
         if (is_null(static::$instance))
         {
@@ -188,7 +169,7 @@ class PathBuilder
     /**
      *
      * @param string $namespace
-     * @param boolean $web
+     * @param bool $web
      *
      * @return string
      */
@@ -201,7 +182,7 @@ class PathBuilder
     /**
      *
      * @param string $namespace
-     * @param boolean $web
+     * @param bool $web
      *
      * @return string
      */
@@ -214,7 +195,7 @@ class PathBuilder
     /**
      *
      * @param string $namespace
-     * @param boolean $web
+     * @param bool $web
      *
      * @return string
      */
@@ -240,7 +221,7 @@ class PathBuilder
     /**
      *
      * @param string $namespace
-     * @param boolean $web
+     * @param bool $web
      *
      * @return string
      */
@@ -267,7 +248,7 @@ class PathBuilder
     /**
      *
      * @param string $namespace
-     * @param boolean $web
+     * @param bool $web
      *
      * @return string
      */
@@ -279,7 +260,7 @@ class PathBuilder
 
     /**
      *
-     * @param boolean $web
+     * @param bool $web
      *
      * @return string
      * @throws \Exception
@@ -300,7 +281,7 @@ class PathBuilder
      *
      * @param string $uri
      *
-     * @return boolean
+     * @return bool
      */
     public function isWebUri($uri)
     {
@@ -311,7 +292,7 @@ class PathBuilder
     /**
      *
      * @param string $namespace
-     * @param boolean $web
+     * @param bool $web
      *
      * @return string
      */

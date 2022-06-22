@@ -74,7 +74,7 @@ class EditorComponent extends Manager implements DelegateComponent
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
                 $parameters[FilterData::FILTER_CATEGORY] = $object->get_parent_id();
 
-                $this->redirect(Translation::get('EditNotAllowed'), true, $parameters);
+                $this->redirectWithMessage(Translation::get('EditNotAllowed'), true, $parameters);
             }
 
             if (!$this->getPublicationAggregator()->canContentObjectBeEdited($object->get_id()))
@@ -82,7 +82,7 @@ class EditorComponent extends Manager implements DelegateComponent
                 $parameters = [];
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
                 $parameters[FilterData::FILTER_CATEGORY] = $object->get_parent_id();
-                $this->redirect(Translation::get('UpdateNotAllowed'), false, $parameters);
+                $this->redirectWithMessage(Translation::get('UpdateNotAllowed'), false, $parameters);
             }
 
             $form = ContentObjectForm::factory(
@@ -121,7 +121,7 @@ class EditorComponent extends Manager implements DelegateComponent
                             self::TABS_CONTENT_OBJECT => $form->getSelectedTabIdentifier()
                         );
 
-                        $this->simple_redirect($parameters);
+                        $this->redirect($parameters);
                     }
                     else
                     {
@@ -131,7 +131,7 @@ class EditorComponent extends Manager implements DelegateComponent
                     }
                 }
 
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         $success == ContentObjectForm::RESULT_SUCCESS ? 'ObjectUpdated' : 'ObjectNotUpdated',
                         array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES

@@ -47,7 +47,7 @@ class ManageSubscriptionsComponent extends TabComponent
                         StringUtilities::LIBRARIES
                     ) . '<br />' . implode('<br />', $courseGroup->getErrors());
             }
-            $this->redirect($message, !$succes, array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
+            $this->redirectWithMessage($message, !$succes, array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
         }
 
         return $form->toHtml();

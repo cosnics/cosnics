@@ -93,7 +93,7 @@ class RandomizerComponent extends Manager
             }
         }
 
-        $this->redirect(
+        $this->redirectWithMessage(
             Translation::get($message), false, array(
                 self::PARAM_ACTION => self::ACTION_BROWSE,
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()

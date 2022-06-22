@@ -86,7 +86,7 @@ class DeleterComponent extends Manager implements DelegateComponent
             $message = htmlentities(Translation::get('ContentObjectPublicationsNotDeleted'));
         }
 
-        $this->redirect(
+        $this->redirectWithMessage(
             $message,
             $failures > 0,
             array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => null, 'tool_action' => null));

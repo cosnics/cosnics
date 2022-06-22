@@ -80,7 +80,7 @@ class MoverComponent extends ItemComponent
                 self::PARAM_STEP => 1
             );
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get(
                     'NoObjectsToMove', array('OBJECTS' => Translation::get('ComplexContentObjectItems')),
                     StringUtilities::LIBRARIES
@@ -202,7 +202,7 @@ class MoverComponent extends ItemComponent
                 $parameters[self::PARAM_STEP] = $new_node->get_id();
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get(
                     $failures > 0 ? 'ObjectsNotMoved' : 'ObjectsMoved',
                     array('OBJECTS' => Translation::get('ComplexContentObjectItems')), StringUtilities::LIBRARIES

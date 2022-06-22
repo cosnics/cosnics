@@ -68,7 +68,7 @@ class UserSettingsComponent extends ProfileComponent
         if ($this->form->validate())
         {
             $success = $this->form->update_user_settings();
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'), !$success,
                 array(Application::PARAM_ACTION => self::ACTION_USER_SETTINGS, self::PARAM_CONTEXT => $this->context)
             );

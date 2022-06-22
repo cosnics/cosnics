@@ -66,7 +66,7 @@ class IntroductionPublisherComponent extends Manager implements ViewerInterface,
             $parameters = $this->get_parameters();
             $parameters['tool_action'] = null;
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get(
                     'ObjectPublished',
                     array('OBJECT' => Translation::get('Introduction')),

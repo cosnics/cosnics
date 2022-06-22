@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\Application\Routing;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -15,14 +16,17 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 class UrlGenerator
 {
 
+    private PathBuilder $pathBuilder;
+
     private ChamiloRequest $request;
 
     private ParameterBag $urlParameterBag;
 
-    public function __construct(ChamiloRequest $request)
+    public function __construct(ChamiloRequest $request, PathBuilder $pathBuilder)
     {
-        $this->setUrlParameterBag($request->query);
         $this->request = $request;
+        $this->setUrlParameterBag($request->query);
+        $this->pathBuilder = $pathBuilder;
     }
 
     /**
@@ -62,10 +66,12 @@ class UrlGenerator
 
         $this->urlParameterBag->replace($baseParameters);
 
-        $request = $this->getRequest();
-        $basePath = $request->getSchemeAndHttpHost() . $request->getBaseUrl() . $request->getPathInfo();
+        return $this->getPathBuilder()->getBasePath() . $parametersUrlString;
+    }
 
-        return $basePath . $parametersUrlString;
+    public function getPathBuilder(): PathBuilder
+    {
+        return $this->pathBuilder;
     }
 
     public function getRequest(): ChamiloRequest

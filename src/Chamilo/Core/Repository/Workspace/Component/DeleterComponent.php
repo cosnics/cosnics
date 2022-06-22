@@ -77,6 +77,6 @@ class DeleterComponent extends Manager
         $source = $this->getRequest()->get(self::PARAM_BROWSER_SOURCE);
         $returnComponent = isset($source) ? $source : self::ACTION_BROWSE;
 
-        $this->redirect($message, ! $success, array(self::PARAM_ACTION => $returnComponent));
+        $this->redirectWithMessage($message, ! $success, array(self::PARAM_ACTION => $returnComponent));
     }
 }

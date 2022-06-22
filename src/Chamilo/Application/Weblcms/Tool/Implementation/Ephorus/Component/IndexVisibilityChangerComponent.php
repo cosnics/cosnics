@@ -28,7 +28,7 @@ class IndexVisibilityChangerComponent extends Manager
         );
 
         $parameters = array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE);
-        $this->redirect($message, $failures > 0, $parameters);
+        $this->redirectWithMessage($message, $failures > 0, $parameters);
     }
 
     /**

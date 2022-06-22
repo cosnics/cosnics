@@ -50,7 +50,7 @@ class UpdaterComponent extends Manager
             if ($form->validate())
             {
                 $success = $form->update_user();
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get($success ? 'UserUpdated' : 'UserNotUpdated'), !$success,
                     array(Application::PARAM_ACTION => self::ACTION_BROWSE_USERS));
             }

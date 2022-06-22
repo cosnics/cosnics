@@ -35,7 +35,7 @@ class TopicSubscribeComponent extends Manager
                     null, 
                     ContentObject::get_content_object_type_namespace('forum_topic'));
                 
-                $this->redirect($message, false, $params);
+                $this->redirectWithMessage($message, false, $params);
             }
             else
             {
@@ -43,7 +43,7 @@ class TopicSubscribeComponent extends Manager
                     'UnSuccesSubscribe', 
                     null, 
                     ContentObject::get_content_object_type_namespace('forum_topic'));
-                $this->redirect($message, true, $params);
+                $this->redirectWithMessage($message, true, $params);
             }
         }
         else
@@ -52,7 +52,7 @@ class TopicSubscribeComponent extends Manager
                 'UnSuccesSubscribe', 
                 null, 
                 ContentObject::get_content_object_type_namespace('forum_topic'));
-            $this->redirect($message, true, $params);
+            $this->redirectWithMessage($message, true, $params);
         }
     }
 }

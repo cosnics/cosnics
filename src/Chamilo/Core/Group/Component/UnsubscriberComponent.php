@@ -93,7 +93,7 @@ class UnsubscriberComponent extends Manager
                 }
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($message), (bool) $failures,
                 array(
                     Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,

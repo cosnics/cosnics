@@ -40,7 +40,7 @@ class DownloaderComponent extends Manager
 
         if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
         {
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get("NotAllowed", null, StringUtilities::LIBRARIES),
                 true,
                 [],

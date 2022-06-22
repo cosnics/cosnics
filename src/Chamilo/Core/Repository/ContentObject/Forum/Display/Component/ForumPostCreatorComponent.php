@@ -97,7 +97,7 @@ class ForumPostCreatorComponent extends ForumPostFormActionCreate
         $params = [];
         $params[self::PARAM_ACTION] = self::ACTION_VIEW_TOPIC;
         $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-        $this->redirect($message, !$success, $params);
+        $this->redirectWithMessage($message, !$success, $params);
     }
 
     /*

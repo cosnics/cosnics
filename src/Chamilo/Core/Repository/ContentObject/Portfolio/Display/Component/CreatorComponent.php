@@ -188,7 +188,7 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
                 }
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get(
                     $message, array('OBJECT' => Translation::get('Item'), 'OBJECTS' => Translation::get('Items')),
                     StringUtilities::LIBRARIES

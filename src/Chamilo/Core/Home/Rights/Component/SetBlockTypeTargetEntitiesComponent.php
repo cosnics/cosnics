@@ -49,7 +49,7 @@ class SetBlockTypeTargetEntitiesComponent extends Manager
                 $success = false;
             }
             
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::getInstance()->getTranslation($message, null, Manager::context()), 
                 ! $success, 
                 array(self::PARAM_ACTION => self::ACTION_BROWSE_BLOCK_TYPE_TARGET_ENTITIES));

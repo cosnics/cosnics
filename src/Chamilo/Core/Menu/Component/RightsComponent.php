@@ -72,7 +72,7 @@ class RightsComponent extends Manager implements DelegateComponent
                 'Chamilo\Libraries\Rights'
             );
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 $message, !$success, array(
                     Manager::PARAM_ACTION => Manager::ACTION_BROWSE,
                     Manager::PARAM_PARENT => $this->getItemParentIdentifier()

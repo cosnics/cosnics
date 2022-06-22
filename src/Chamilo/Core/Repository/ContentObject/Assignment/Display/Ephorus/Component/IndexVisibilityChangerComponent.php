@@ -32,7 +32,7 @@ class IndexVisibilityChangerComponent extends Manager
             self::EPHORUS_TRANSLATION_CONTEXT
         );
 
-        $this->redirect($message, $failures > 0, [self::PARAM_ACTION => self::ACTION_BROWSE]);
+        $this->redirectWithMessage($message, $failures > 0, [self::PARAM_ACTION => self::ACTION_BROWSE]);
     }
 
     /**

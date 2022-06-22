@@ -26,6 +26,6 @@ class DisableStudentViewComponent extends Manager
 
         Session::unregister($sessionVariable);
 
-        $this->redirect('', false, array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT));
+        $this->redirectWithMessage('', false, array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT));
     }
 }

@@ -67,7 +67,7 @@ class CreatorComponent extends Manager implements ViewerInterface
 
                 $parameters = array(self::PARAM_ACTION => self::ACTION_BROWSE);
 
-                $this->redirect($message, !$success, $parameters);
+                $this->redirectWithMessage($message, !$success, $parameters);
             }
             else
             {

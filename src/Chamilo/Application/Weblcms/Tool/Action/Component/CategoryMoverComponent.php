@@ -119,7 +119,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                         StringUtilities::LIBRARIES
                     );
                 }
-                $this->redirect(
+                $this->redirectWithMessage(
                     $message, false, array(
                         'tool_action' => null,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => null
@@ -244,7 +244,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
 
                 if (count($this->tree) < 1)
                 {
-                    $this->redirect(
+                    $this->redirectWithMessage(
                         Translation::get('NoCategoriesAvailable'), true, null,
                         array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION)
                     );

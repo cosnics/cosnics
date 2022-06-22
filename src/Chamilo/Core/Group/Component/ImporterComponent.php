@@ -31,7 +31,7 @@ class ImporterComponent extends Manager
         if ($form->validate())
         {
             $success = $form->import_groups();
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success ? 'GroupXMLProcessed' : 'GroupXMLNotProcessed') . '<br />' .
                      $form->get_failed_elements(), !$success,
                     array(Application::PARAM_ACTION => self::ACTION_IMPORT));

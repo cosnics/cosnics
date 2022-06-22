@@ -41,7 +41,7 @@ class MoverComponent extends Manager implements DelegateComponent
             $message = htmlentities(Translation::get('ContentObjectPublicationMoved'));
         }
 
-        $this->redirect(
+        $this->redirectWithMessage(
             $message,
             false,
             array(

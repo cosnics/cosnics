@@ -45,7 +45,7 @@ class RequestSubscribeUserComponent extends Manager
         {
             $success_request = $form->create_request();
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success_request ? 'RequestSent' : 'RequestNotSent'), !$success_request,
                 array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER)
             );

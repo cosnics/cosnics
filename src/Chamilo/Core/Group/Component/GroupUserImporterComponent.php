@@ -32,7 +32,7 @@ class GroupUserImporterComponent extends Manager
         if ($form->validate())
         {
             $success = $form->import_group_users();
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success ? 'GroupUserCSVProcessed' : 'GroupUserCSVNotProcessed') . '<br />' .
                      $form->get_failed_elements(), !$success,
                     array(Application::PARAM_ACTION => self::ACTION_IMPORT_GROUP_USERS));

@@ -207,7 +207,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
                 $redirect_params = array_merge(
                     $this->get_parameters(), array(self::PARAM_ACTION => self::ACTION_CREATOR)
                 );
-                $this->redirect(Translation::get('ContentObjectNotCreated'), true, $redirect_params);
+                $this->redirectWithMessage(Translation::get('ContentObjectNotCreated'), true, $redirect_params);
             }
 
             if (is_array($content_object))
@@ -225,7 +225,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
 
             $redirect_parameters = array_merge($this->get_parameters(), array(self::PARAM_ID => $content_object_ids));
 
-            $this->redirect(null, false, $redirect_parameters);
+            $this->redirectWithMessage(null, false, $redirect_parameters);
         }
         else
         {

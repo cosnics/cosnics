@@ -48,7 +48,7 @@ class Executer
         if ($form->validate())
         {
             $success = $form->update_values();
-            $this->application->redirect(
+            $this->application->redirectWithMessage(
                 Translation::get($success ? 'DynamicFormExecuted' : 'DynamicFormNotExecuted'), !$success,
                 []);
         }

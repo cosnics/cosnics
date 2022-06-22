@@ -139,7 +139,7 @@ class ParentChangerComponent extends Manager
                     \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE;
                 $parameters[\Chamilo\Core\Repository\Builder\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] =
                     null;
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         $message, array('OBJECTS' => Translation::get('ComplexContentObjectItems')),
                         StringUtilities::LIBRARIES

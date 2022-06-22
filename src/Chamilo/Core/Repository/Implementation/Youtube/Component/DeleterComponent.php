@@ -28,14 +28,14 @@ class DeleterComponent extends Manager
         {
             $parameters = $this->get_parameters();
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_EXTERNAL_REPOSITORY;
-            $this->redirect(Translation::get('ObjectDeleted', null, StringUtilities::LIBRARIES), false, $parameters);
+            $this->redirectWithMessage(Translation::get('ObjectDeleted', null, StringUtilities::LIBRARIES), false, $parameters);
         }
         else
         {
             $parameters = $this->get_parameters();
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_EXTERNAL_REPOSITORY;
             $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_ID] = $id;
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get('ObjectFailedDeleted', null, StringUtilities::LIBRARIES),
                 true, 
                 $parameters);

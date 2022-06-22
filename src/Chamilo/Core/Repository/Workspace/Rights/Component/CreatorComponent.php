@@ -67,7 +67,7 @@ class CreatorComponent extends Manager
                     \Chamilo\Core\Repository\Workspace\Manager::PARAM_BROWSER_SOURCE);
             }
             
-            $this->redirect($message, ! $success, $parameters, $filters);
+            $this->redirectWithMessage($message, ! $success, $parameters, $filters);
         }
         else
         {

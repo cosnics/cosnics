@@ -95,6 +95,6 @@ class BuilderComponent extends Manager implements ApplicationSupport
 
     public function redirect_away_from_complex_builder($message, $error_message)
     {
-        $this->redirect($message, $error_message, array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS));
+        $this->redirectWithMessage($message, $error_message, array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS));
     }
 }

@@ -61,6 +61,6 @@ class SubscriberComponent extends Manager
             $message = $ex->getMessage();
         }
         
-        $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
+        $this->redirectWithMessage($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }
 }

@@ -106,7 +106,7 @@ class PublicationUpdaterComponent extends Manager
                     );
                 }
 
-                $this->redirect($message, !$succes, $params, $filter);
+                $this->redirectWithMessage($message, !$succes, $params, $filter);
             }
             else
             {
@@ -121,7 +121,7 @@ class PublicationUpdaterComponent extends Manager
         }
         else
         {
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get("NotAllowed"),
                 true,
                 [],

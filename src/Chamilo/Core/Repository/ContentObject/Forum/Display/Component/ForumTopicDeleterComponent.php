@@ -49,7 +49,7 @@ class ForumTopicDeleterComponent extends Manager
                     array('OBJECT' => Translation::get('ForumTopic')),
                     StringUtilities::LIBRARIES));
 
-            $this->redirect($message, !$success, $params);
+            $this->redirectWithMessage($message, !$success, $params);
         }
         else
         {

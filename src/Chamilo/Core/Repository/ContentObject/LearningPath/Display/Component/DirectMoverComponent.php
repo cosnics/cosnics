@@ -91,6 +91,6 @@ class DirectMoverComponent extends Manager
         $parameters[self::PARAM_CHILD_ID] = $this->getCurrentTreeNode()->getId();
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
-        $this->redirect($message, (!$success), $parameters, array(self::PARAM_CONTENT_OBJECT_ID));
+        $this->redirectWithMessage($message, (!$success), $parameters, array(self::PARAM_CONTENT_OBJECT_ID));
     }
 }

@@ -50,7 +50,7 @@ class WikiPageCreatorComponent extends Manager implements ViewerInterface, Deleg
                 $complex_content_object_item->create();
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get('WikiItemCreated'), '', array(
                     self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id()

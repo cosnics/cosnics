@@ -49,7 +49,7 @@ class UpdateComponent extends Manager
                 $messageVariable = 'OpenCoursesUpdated';
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::getInstance()->getTranslation($messageVariable, null, Manager::context()),
                 !$success,
                 array(self::PARAM_ACTION => self::ACTION_BROWSE)

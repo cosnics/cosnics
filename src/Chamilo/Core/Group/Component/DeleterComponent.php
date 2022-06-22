@@ -131,7 +131,7 @@ class DeleterComponent extends Manager
                 }
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 $message, (bool) $failures, array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS),
                 array(self::PARAM_GROUP_ID)
             );

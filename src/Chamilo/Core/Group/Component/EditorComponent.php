@@ -57,7 +57,7 @@ class EditorComponent extends Manager
                     array('OBJECT' => Translation::get('Group')),
                     StringUtilities::LIBRARIES);
 
-                $this->redirect(
+                $this->redirectWithMessage(
                     $message, !$success,
                     array(
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,

@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\File;
 
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Security;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -157,6 +158,11 @@ class Redirect
         return $this->parameters;
     }
 
+    protected function getRequest(): ChamiloRequest
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ChamiloRequest::class);
+    }
+
     /**
      * @throws \Exception
      */
@@ -176,7 +182,15 @@ class Redirect
      */
     public function getUrl(): string
     {
-        $baseUrl = $this->getCurrentUrl(false) . $_SERVER['PHP_SELF'];
+        $request = $this->getRequest();
+
+//        var_dump($this->getCurrentUrl(false));
+//        var_dump($this->getCurrentUrl());
+//        var_dump($_SERVER['PHP_SELF']);
+//        exit;
+
+        $baseUrl = $request->getSchemeAndHttpHost() . $request->getBaseUrl() . $request->getPathInfo();
+        //$baseUrl = $this->getCurrentUrl(false) . $_SERVER['PHP_SELF'];
         $baseUrl = $this->getSecurity()->removeXSS($baseUrl);
 
         return $this->getWebLink($baseUrl);

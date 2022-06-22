@@ -313,39 +313,6 @@ abstract class Manager extends Application
     }
 
     /**
-     * Returns the link to the course's page
-     *
-     * @param $course Course
-     *
-     * @return String
-     */
-    public function get_course_viewing_link($course, $encode = false)
-    {
-        return $this->get_link(
-            array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE, self::PARAM_COURSE => $course->get_id()), $encode
-        );
-    }
-
-    /**
-     * Returns the url to the course's page
-     *
-     * @param $course Course
-     *
-     * @return String
-     */
-    public function get_course_viewing_url($course)
-    {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE, self::PARAM_COURSE => $course->get_id())
-        );
-    }
-
-    public function get_home_url()
-    {
-        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_WEBLCMS_HOME));
-    }
-
-    /**
      * Gets the date of the last visit of current user to the current location
      *
      * @param $tool string If $tool equals null, current active tool will be taken into account. If no tool is given or

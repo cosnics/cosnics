@@ -44,7 +44,7 @@ class SyncCourseGroupComponent extends Manager
 
         $translator = $this->getTranslator();
 
-        $this->redirect(
+        $this->redirectWithMessage(
             $translator->trans(
                 $message, [],
                 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup'

@@ -64,7 +64,7 @@ class UpdaterComponent extends Manager
                 $message = $ex->getMessage();
             }
             
-            $this->redirect(
+            $this->redirectWithMessage(
                 $message, 
                 ! $success, 
                 array(

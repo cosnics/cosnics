@@ -94,7 +94,7 @@ abstract class ActiveChangerComponent extends Manager
                     'UserActivated',
                     'UsersActivated');
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 $message,
                 ($failures > 0),
                 array(Application::PARAM_ACTION => self::ACTION_BROWSE_USERS));

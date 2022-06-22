@@ -85,11 +85,11 @@ class TruncaterComponent extends Manager
             }
 
             if (count($ids) == 1)
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get($message), (bool) $failures,
                     array(Application::PARAM_ACTION => self::ACTION_VIEW_GROUP, self::PARAM_GROUP_ID => $ids[0]));
             else
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get($message), (bool) $failures,
                     array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS));
         }

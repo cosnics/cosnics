@@ -46,7 +46,7 @@ class SimpleRightsEditorComponent extends Manager implements DelegateComponent
             $succes = $form->handle_form_submit();
 
             $message = Translation::get($succes ? 'RightsChanged' : 'RightsNotChanged');
-            $this->redirect($message, !$succes);
+            $this->redirectWithMessage($message, !$succes);
         }
 
         $html = [];

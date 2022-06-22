@@ -40,7 +40,7 @@ class VersionReverterComponent extends Manager
                         $complex_wiki_page->set_ref($version_object->get_latest_version_id());
                         if ($complex_wiki_page->update())
                         {
-                            $this->redirect(
+                            $this->redirectWithMessage(
                                 Translation::get('WikiPageReverted'), false, array(
                                     self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
                                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
@@ -49,7 +49,7 @@ class VersionReverterComponent extends Manager
                         }
                         else
                         {
-                            $this->redirect(
+                            $this->redirectWithMessage(
                                 Translation::get('WikiPageRevertedPublicationNotUpdated'), true, array(
                                     self::PARAM_ACTION => self::ACTION_HISTORY,
                                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
@@ -59,7 +59,7 @@ class VersionReverterComponent extends Manager
                     }
                     else
                     {
-                        $this->redirect(
+                        $this->redirectWithMessage(
                             Translation::get('WikiPageNotReverted'), true, array(
                                 self::PARAM_ACTION => self::ACTION_HISTORY,
                                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
@@ -69,7 +69,7 @@ class VersionReverterComponent extends Manager
                 }
                 else
                 {
-                    $this->redirect(
+                    $this->redirectWithMessage(
                         Translation::get('WikiPageNotReverted'), true, array(
                             self::PARAM_ACTION => self::ACTION_HISTORY,
                             self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
@@ -79,7 +79,7 @@ class VersionReverterComponent extends Manager
             }
             else
             {
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get('WikiPageNotReverted'), true, array(
                         self::PARAM_ACTION => self::ACTION_HISTORY,
                         self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page_id
@@ -89,7 +89,7 @@ class VersionReverterComponent extends Manager
         }
         else
         {
-            $this->redirect(null, false, array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI));
+            $this->redirectWithMessage(null, false, array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI));
         }
     }
 }

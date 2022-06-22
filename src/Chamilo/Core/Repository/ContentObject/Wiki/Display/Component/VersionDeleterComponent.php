@@ -42,7 +42,7 @@ class VersionDeleterComponent extends Manager
                 {
                     if ($object->delete(true))
                     {
-                        $this->redirect(
+                        $this->redirectWithMessage(
                             Translation::get(
                                 'ObjectDeleted', array('OBJECT' => Translation::get('WikiPageVersion')),
                                 StringUtilities::LIBRARIES
@@ -54,7 +54,7 @@ class VersionDeleterComponent extends Manager
                     }
                     else
                     {
-                        $this->redirect(
+                        $this->redirectWithMessage(
                             Translation::get(
                                 'ObjectNotDeleted', array('OBJECT' => Translation::get('WikiPageVersion')),
                                 StringUtilities::LIBRARIES
@@ -67,7 +67,7 @@ class VersionDeleterComponent extends Manager
                 }
                 else
                 {
-                    $this->redirect(
+                    $this->redirectWithMessage(
                         Translation::get(
                             'ObjectNotDeleted', array('OBJECT' => Translation::get('WikiPageVersion')),
                             StringUtilities::LIBRARIES
@@ -80,7 +80,7 @@ class VersionDeleterComponent extends Manager
             }
             else
             {
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         'ObjectNotDeleted', array('OBJECT' => Translation::get('WikiPageVersion')),
                         StringUtilities::LIBRARIES
@@ -93,7 +93,7 @@ class VersionDeleterComponent extends Manager
         }
         else
         {
-            $this->redirect(null, false, array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI));
+            $this->redirectWithMessage(null, false, array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI));
         }
     }
 }

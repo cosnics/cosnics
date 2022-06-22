@@ -38,7 +38,7 @@ class MoverComponent extends Manager
 
             $message = $success ? 'CourseSectionMoved' : 'CourseSectionNotMoved';
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($message),
                 (! $success),
                 array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS));

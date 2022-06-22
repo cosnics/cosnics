@@ -59,7 +59,7 @@ class UpdaterComponent extends Manager
         {
             $success = $form->update_category();
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success ? 'CategoryUpdated' : 'CategoryNotUpdated'), !$success,
                 array(
                     self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES,

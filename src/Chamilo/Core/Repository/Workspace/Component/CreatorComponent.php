@@ -59,7 +59,7 @@ class CreatorComponent extends TabComponent
                 $redirectParameters = array(self::PARAM_ACTION => self::ACTION_BROWSE_PERSONAL);
             }
             
-            $this->redirect($message, ! $success, $redirectParameters);
+            $this->redirectWithMessage($message, ! $success, $redirectParameters);
         }
         else
         {

@@ -43,7 +43,7 @@ class DocumentPublisherComponent extends Manager implements ViewerInterface
                 Manager::PARAM_CONTENT_OBJECT_IDS => $objects
             );
 
-            $this->redirect('', false, $parameters);
+            $this->redirectWithMessage('', false, $parameters);
         }
     }
 

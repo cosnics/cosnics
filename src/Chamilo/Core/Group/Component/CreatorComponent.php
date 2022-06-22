@@ -44,7 +44,7 @@ class CreatorComponent extends Manager
             if ($success)
             {
                 $group = $form->get_group();
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         'ObjectCreated',
                         array('OBJECT' => Translation::get('Group')),
@@ -56,7 +56,7 @@ class CreatorComponent extends Manager
             }
             else
             {
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         'ObjectNotCreated',
                         array('OBJECT' => Translation::get('Group')),

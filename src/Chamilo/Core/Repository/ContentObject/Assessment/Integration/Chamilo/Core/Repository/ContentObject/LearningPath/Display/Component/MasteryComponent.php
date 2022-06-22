@@ -28,7 +28,7 @@ class MasteryComponent extends Manager
         {
             $succes = $this->set_mastery_score($treeNodeData, $form->exportValues());
             $message = $succes ? 'MasteryScoreSet' : 'MasteryScoreNotSet';
-            $this->redirect(Translation::get($message), !$succes, $this->get_application()->get_parameters());
+            $this->redirectWithMessage(Translation::get($message), !$succes, $this->get_application()->get_parameters());
         }
         else
         {

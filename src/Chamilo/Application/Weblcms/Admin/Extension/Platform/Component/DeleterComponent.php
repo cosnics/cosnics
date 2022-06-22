@@ -212,6 +212,6 @@ class DeleterComponent extends Manager
             array('OBJECT' => Translation::get('Target')), 
             StringUtilities::LIBRARIES);
         
-        $this->redirect($message, ! $success, $parameters);
+        $this->redirectWithMessage($message, ! $success, $parameters);
     }
 }

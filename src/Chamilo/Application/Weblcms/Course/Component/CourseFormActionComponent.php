@@ -91,7 +91,7 @@ abstract class CourseFormActionComponent extends Manager
      */
     protected function redirect_after_form_handling($succes, $message)
     {
-        $this->redirect($message, ! $succes, array(self::PARAM_ACTION => self::ACTION_BROWSE));
+        $this->redirectWithMessage($message, ! $succes, array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }
 
     /**

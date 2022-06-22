@@ -42,6 +42,6 @@ class ChangeLockComponent extends Manager
         }
         $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
 
-        $this->redirect($message, ! $succes, $params);
+        $this->redirectWithMessage($message, ! $succes, $params);
     }
 }

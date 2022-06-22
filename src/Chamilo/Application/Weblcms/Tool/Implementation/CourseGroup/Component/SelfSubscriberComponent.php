@@ -34,14 +34,14 @@ class SelfSubscriberComponent extends Manager
             $course_group->subscribe_users($this->get_user());
             $this->getCourseGroupDecoratorsManager()->subscribeUser($course_group, $this->getUser());
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get('UserSubscribed'),
                 false,
                 array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
         }
         else
         {
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get('UserNotSubscribed'),
                 true,
                 array(

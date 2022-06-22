@@ -111,7 +111,7 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $this->redirect(null, false, array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI));
+            $this->redirectWithMessage(null, false, array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI));
         }
     }
 }

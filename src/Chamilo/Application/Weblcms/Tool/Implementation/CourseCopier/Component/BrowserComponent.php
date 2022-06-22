@@ -116,7 +116,7 @@ class BrowserComponent extends Manager
                     $copyCourseGroups
                 );
 
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get('CopySucceeded'),
                     false,
                     array(

@@ -75,7 +75,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             }
             else
             {
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get('PleaseConfigureWikiHomepage'), false,
                     array(self::PARAM_ACTION => self::ACTION_BROWSE_WIKI)
                 );

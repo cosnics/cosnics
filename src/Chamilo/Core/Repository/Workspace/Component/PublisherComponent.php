@@ -82,7 +82,7 @@ class PublisherComponent extends Manager
                     $parentId);
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get('ContentObjectsAddedToWorkspace'),
                 false,
                 array(

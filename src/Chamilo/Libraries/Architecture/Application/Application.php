@@ -314,6 +314,15 @@ abstract class Application
     }
 
     /**
+     * @param string[] $parameters
+     * @param string[] $filter
+     */
+    public function getLink(array $parameters = [], array $filter = []): string
+    {
+        return $this->getUrlGenerator()->generateURL($parameters, $filter);
+    }
+
+    /**
      *
      * @return string
      */
@@ -498,21 +507,6 @@ abstract class Application
     }
 
     /**
-     *
-     * @param string[] $parameters
-     * @param string[] $filter
-     * @param bool $encodeEntities
-     *
-     * @return string
-     */
-    public function get_link($parameters = [], $filter = [], $encodeEntities = false)
-    {
-        $redirect = new Redirect($parameters, $filter, $encodeEntities);
-
-        return $redirect->getUrl();
-    }
-
-    /**
      * Returns the html for the application-menu.
      * Empty per default Can be overwritten by the specific application
      *
@@ -648,24 +642,16 @@ abstract class Application
     }
 
     /**
-     * Gets the URL of the current page in the application.
-     * Optionally takes an associative array of name/value pairs representing additional query string parameters; these
-     * will either be added to the parameters already present, or override them if a value with the same name exists.
+     * Gets the URL of the current page in the application. Optionally takes an associative array of name/value pairs
+     * representing additional query string parameters; these will either be added to the parameters already present,
+     * or override them if a value with the same name exists.
      *
      * @param string[] $parameters
      * @param string[] $filter
-     * @param bool $encodeEntities Whether or not to encode HTML entities. Defaults to false.
-     *
-     * @return string
      */
-    public function get_url($parameters = [], $filter = [], $encodeEntities = false)
+    public function get_url(array $parameters = [], array $filter = []): string
     {
-        $parameters =
-            (count($parameters) ? array_merge($this->get_parameters(), $parameters) : $this->get_parameters());
-
-        $redirect = new Redirect($parameters, $filter, $encodeEntities);
-
-        return $redirect->getUrl();
+        return $this->getLink(array_merge($this->get_parameters(), $parameters), $filter);
     }
 
     /**
@@ -793,11 +779,18 @@ abstract class Application
         }
     }
 
+    public function redirect(array $parameters = [], array $filter = [])
+    {
+        $response = new RedirectResponse($this->getLink(array_merge($this->get_parameters(), $parameters), $filter));
+        $response->send();
+        exit;
+    }
+
     /**
      * @param string[] $parameters
      * @param string[] $filter
      */
-    public function redirect(
+    public function redirectWithMessage(
         ?string $message = null, bool $errorMessage = false, array $parameters = [], array $filter = []
     )
     {
@@ -807,7 +800,7 @@ abstract class Application
             $this->getNotificationMessageManager()->addMessage(new NotificationMessage($message, $messageType));
         }
 
-        $this->simple_redirect($parameters, $filter);
+        $this->redirect($parameters, $filter);
     }
 
     public function renderFooter()
@@ -975,14 +968,5 @@ abstract class Application
     public function set_parameter($name, $value)
     {
         Parameters::getInstance()->set_parameter($this, $name, $value);
-    }
-
-    public function simple_redirect(array $parameters = [], array $filter = [])
-    {
-        $parameters = array_merge($this->get_parameters(), $parameters);
-
-        $response = new RedirectResponse($this->getUrlGenerator()->generateURL($parameters, $filter));
-        $response->send();
-        exit;
     }
 }

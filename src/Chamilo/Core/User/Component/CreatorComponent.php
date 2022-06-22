@@ -47,7 +47,7 @@ class CreatorComponent extends Manager
             $success = $form->create_user();
             if ($success == 1)
             {
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get($success ? 'UserCreated' : 'UserNotCreated'), !$success,
                     array(Application::PARAM_ACTION => self::ACTION_BROWSE_USERS));
             }

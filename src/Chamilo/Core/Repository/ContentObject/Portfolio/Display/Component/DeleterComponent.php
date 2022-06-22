@@ -63,7 +63,7 @@ class DeleterComponent extends Manager
                 self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, 
                 self::PARAM_STEP => $this->get_current_node()->get_parent()->get_id());
             
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get(
                     'NoObjectsToDelete', 
                     array('OBJECTS' => Translation::get('ComplexContentObjectItems')), 
@@ -132,7 +132,7 @@ class DeleterComponent extends Manager
             $parameters[self::PARAM_STEP] = $new_node->get_id();
         }
         
-        $this->redirect(
+        $this->redirectWithMessage(
             Translation::get(
                 $failures > 0 ? 'ObjectsNotDeleted' : 'ObjectsDeleted', 
                 array('OBJECTS' => Translation::get('ComplexContentObjectItems')), 

@@ -53,6 +53,6 @@ class DeleterComponent extends Manager
             $filterParameters = array(self::PARAM_ACTION);
         }
 
-        $this->redirect($message, ! $success, $returnParameters, $filterParameters);
+        $this->redirectWithMessage($message, ! $success, $returnParameters, $filterParameters);
     }
 }

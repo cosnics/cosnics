@@ -90,7 +90,7 @@ class PublicationUpdaterComponent extends Manager implements DelegateComponent
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
                 }
                 
-                $this->redirect($message, ! $succes, $params, $filter);
+                $this->redirectWithMessage($message, ! $succes, $params, $filter);
             }
             else
             {
@@ -105,7 +105,7 @@ class PublicationUpdaterComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get("NotAllowed"), 
                 true, 
                 [], 

@@ -90,7 +90,7 @@ class LinkDeleterComponent extends Manager
                     break;
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 $message,
                 $is_error_message,
                 array(

@@ -118,7 +118,7 @@ abstract class UserApproverComponent extends Manager
                     'UsersDenied');
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 $message,
                 ($failures > 0),
                 array(Application::PARAM_ACTION => self::ACTION_USER_APPROVAL_BROWSER));

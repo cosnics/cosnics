@@ -65,7 +65,7 @@ class ResultsDeleterComponent extends Manager
             $params[self::PARAM_ASSESSMENT] = $redirect_aid;
         }
 
-        $this->redirect(Translation::get('ResultsDeleted'), false, $params);
+        $this->redirectWithMessage(Translation::get('ResultsDeleted'), false, $params);
     }
 
     public function delete_user_assessment_results($user_assessment)

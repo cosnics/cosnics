@@ -31,7 +31,7 @@ class EmailerComponent extends Manager
         if ($form->validate())
         {
             $success = $form->email();
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success ? 'EmailSent' : 'EmailNotSent'), !$success, []
             );
         }

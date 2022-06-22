@@ -99,7 +99,7 @@ class CreatorComponent extends Manager
                             StringUtilities::LIBRARIES
                         ) . '<br />' . implode('<br />', $course_group->getErrors());
                 }
-                $this->redirect(
+                $this->redirectWithMessage(
                     $message,
                     !$succes,
                     array(

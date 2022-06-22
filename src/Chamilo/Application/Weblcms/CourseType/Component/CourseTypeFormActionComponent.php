@@ -49,7 +49,7 @@ abstract class CourseTypeFormActionComponent extends Manager
                 array('OBJECT' => Translation::get('CourseType')), 
                 StringUtilities::LIBRARIES);
             
-            $this->redirect($message, ! $succes, array(self::PARAM_ACTION => self::ACTION_BROWSE));
+            $this->redirectWithMessage($message, ! $succes, array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {

@@ -92,7 +92,7 @@ class GroupUnsubscribeComponent extends Manager
                     $message = 'PartialGroupsNotUnsubscribedFromCourse';
                 }
 
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get($message), !$success,
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER,

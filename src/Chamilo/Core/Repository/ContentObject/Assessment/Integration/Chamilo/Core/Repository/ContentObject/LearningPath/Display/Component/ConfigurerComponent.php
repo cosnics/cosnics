@@ -32,7 +32,7 @@ class ConfigurerComponent extends Manager implements DelegateComponent
             $succes = $this->configure_feedback($form->exportValues());
             $message = $succes ? 'FeedbackConfigured' : 'FeedbackNotConfigured';
 
-            $this->redirect(Translation::get($message), ! $succes, $this->get_application()->get_parameters());
+            $this->redirectWithMessage(Translation::get($message), ! $succes, $this->get_application()->get_parameters());
         }
         else
         {

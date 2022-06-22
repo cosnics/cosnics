@@ -55,7 +55,7 @@ class PublicationMailerComponent extends Manager implements DelegateComponent
                 $params['tool_action'] = 'view';
             }
             
-            $this->redirect($message, $failure, $params);
+            $this->redirectWithMessage($message, $failure, $params);
         }
         else
         {

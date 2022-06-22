@@ -116,7 +116,7 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
                     $filter = [];
                 }
 
-                $this->redirect(Translation::get('ContentObjectUpdated'), false, $params, $filter);
+                $this->redirectWithMessage(Translation::get('ContentObjectUpdated'), false, $params, $filter);
             }
             else
             {
@@ -131,7 +131,7 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get("NotAllowed"),
                 true,
                 array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => null, 'tool_action' => null));

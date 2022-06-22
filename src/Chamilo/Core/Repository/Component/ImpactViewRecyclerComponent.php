@@ -212,7 +212,7 @@ class ImpactViewRecyclerComponent extends Manager
             'ContentObjectsDeleted'
         );
 
-        $this->redirect(
+        $this->redirectWithMessage(
             $result, $failures > 0, array(
                 self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS,
                 self::PARAM_CATEGORY_ID => $this->getRequest()->get(self::PARAM_CATEGORY_ID)

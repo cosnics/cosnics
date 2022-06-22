@@ -63,7 +63,7 @@ class DeleteElementComponent extends Manager
                 'DynamicFormElementDeleted', 
                 'DynamicFormElementsDeleted');
             
-            $this->redirect($message, ($failures > 0), array(self::PARAM_ACTION => self::ACTION_BUILD_DYNAMIC_FORM));
+            $this->redirectWithMessage($message, ($failures > 0), array(self::PARAM_ACTION => self::ACTION_BUILD_DYNAMIC_FORM));
         }
         else
         {

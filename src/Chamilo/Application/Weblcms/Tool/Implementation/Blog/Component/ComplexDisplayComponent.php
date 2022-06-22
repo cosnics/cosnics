@@ -39,7 +39,7 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
 
         if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get("NotAllowed", null, StringUtilities::LIBRARIES), true, [], array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID

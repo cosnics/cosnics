@@ -200,7 +200,7 @@ class DeleterComponent extends Manager
             $parameters[Application::PARAM_ACTION] =
                 ($permanent ? self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS : self::ACTION_BROWSE_CONTENT_OBJECTS);
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($message, $parameter, StringUtilities::LIBRARIES), $failures > 0, $parameters
             );
         }

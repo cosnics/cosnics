@@ -121,7 +121,7 @@ class GroupSubscribeComponent extends Manager
                 $returnAction = $this->getRequest()->get(self::PARAM_RETURN_TO_COMPONENT);
                 $returnAction = !empty($returnAction) ? $returnAction : self::ACTION_SUBSCRIBE_GROUP_DETAILS;
 
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get($message), !$success, array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => $returnAction,
                         \Chamilo\Application\Weblcms\Manager::PARAM_GROUP => $parent_group_id

@@ -94,7 +94,7 @@ class BrowserComponent extends Manager
                 
                 if ($success)
                 {
-                    $this->redirect(
+                    $this->redirectWithMessage(
                         Translation::get('AllSelectedObjectsRemoved'), 
                         false, 
                         array(

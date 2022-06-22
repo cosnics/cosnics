@@ -56,7 +56,7 @@ class BookmarkerComponent extends ItemComponent
                 $success = false;
             }
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 $success ? Translation::get('BookmarkCreated') : Translation::get('BookmarkNotCreated'), !$success,
                 array(
                     self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,

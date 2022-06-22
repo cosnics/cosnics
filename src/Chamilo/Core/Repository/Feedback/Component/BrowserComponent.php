@@ -56,7 +56,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $this->notifyNewFeedback($feedback);
 
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get(
                     $success ? 'ObjectCreated' : 'ObjectNotCreated',
                     array('OBJECT' => Translation::get('Feedback')),

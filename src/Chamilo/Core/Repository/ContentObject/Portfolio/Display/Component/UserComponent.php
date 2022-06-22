@@ -65,7 +65,7 @@ class UserComponent extends ItemComponent implements TableSupport
         if ($virtual_user instanceof User)
         {
             $this->get_parent()->clear_virtual_user_id();
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get('BackInRegularView'), false,
                 array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT)
             );
@@ -84,11 +84,11 @@ class UserComponent extends ItemComponent implements TableSupport
         {
             if (!$this->get_parent()->set_portfolio_virtual_user_id($selected_virtual_user_id))
             {
-                $this->redirect(Translation::get('ImpossibleToViewAsSelectedUser'), true);
+                $this->redirectWithMessage(Translation::get('ImpossibleToViewAsSelectedUser'), true);
             }
             else
             {
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get('ViewingPortfolioAsSelectedUser'), false,
                     array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT)
                 );

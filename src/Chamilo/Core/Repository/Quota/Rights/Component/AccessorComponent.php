@@ -59,7 +59,7 @@ class AccessorComponent extends Manager
                 'Chamilo\Libraries\Rights'
             );
 
-            $this->redirect($message, !$success, $urlParameters);
+            $this->redirectWithMessage($message, !$success, $urlParameters);
         }
 
         $html = [];

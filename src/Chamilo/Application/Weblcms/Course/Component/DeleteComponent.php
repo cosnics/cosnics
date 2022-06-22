@@ -59,7 +59,7 @@ class DeleteComponent extends Manager
             'SelectedCourseDeleted', 
             'SelectedCourseDeleted');
         
-        $this->redirect(
+        $this->redirectWithMessage(
             $message, 
             ($failures > 0), 
             array(self::PARAM_ACTION => self::ACTION_BROWSE), 

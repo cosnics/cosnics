@@ -51,7 +51,7 @@ class MoverComponent extends Manager
             StringUtilities::LIBRARIES
         );
 
-        $this->redirect(
+        $this->redirectWithMessage(
             $message, !$success, array(
                 Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_PARENT => $item->getParentId()
             )

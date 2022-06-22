@@ -45,7 +45,7 @@ class RightsComponent extends ItemComponent
                     self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, 
                     self::PARAM_STEP => $target_step);
                 
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get(
                         'NoObjectsToConfigureRightsFor', 
                         array('OBJECTS' => Translation::get('ComplexContentObjectItems')), 
@@ -68,7 +68,7 @@ class RightsComponent extends ItemComponent
                 $succes = $this->handle_rights($locations, $form->exportValues());
                 
                 $message = Translation::get($succes ? 'RightsChanged' : 'RightsNotChanged');
-                $this->redirect($message, ! $succes);
+                $this->redirectWithMessage($message, ! $succes);
             }
             
             $html = [];

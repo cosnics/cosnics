@@ -42,7 +42,7 @@ class UpdaterComponent extends Manager
             {
                 $success = $form->update_help_item();
                 $help_item = $form->get_help_item();
-                $this->redirect(
+                $this->redirectWithMessage(
                     Translation::get($success ? 'HelpItemUpdated' : 'HelpItemNotUpdated'), !$success,
                     array(Application::PARAM_ACTION => Manager::ACTION_BROWSE_HELP_ITEMS));
             }

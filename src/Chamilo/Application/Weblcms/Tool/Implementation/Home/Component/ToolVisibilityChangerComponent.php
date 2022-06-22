@@ -32,6 +32,6 @@ class ToolVisibilityChangerComponent extends Manager
 
         DataManager::set_tool_visibility_by_tool_name($this->get_course_id(), $tool, $visibility);
         $message = 'ToolVisibilityChanged';
-        $this->redirect(Translation::get($message), false, array(self::PARAM_ACTION => self::ACTION_BROWSE));
+        $this->redirectWithMessage(Translation::get($message), false, array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }
 }

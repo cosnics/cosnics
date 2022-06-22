@@ -47,7 +47,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
             $success_requests = $this->create_course_request_for_users($users, $request, $values);
             $array_type = [];
             $array_type['go'] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_WEBLCMS_HOME;
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get($success_requests ? 'CourseCreateRequestSent' : 'CourseCreateRequestNotSent'),
                 !$success_requests, $array_type,
                 array(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE)

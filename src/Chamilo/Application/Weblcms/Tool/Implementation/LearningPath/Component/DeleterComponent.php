@@ -108,7 +108,7 @@ class DeleterComponent extends Manager
             );
         }
 
-        $this->redirect(
+        $this->redirectWithMessage(
             $message, '',
             array('tool_action' => null, \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => null)
         );

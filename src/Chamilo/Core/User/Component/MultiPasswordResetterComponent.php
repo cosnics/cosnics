@@ -113,7 +113,7 @@ class MultiPasswordResetterComponent extends Manager
                 'UserPasswordResetted',
                 'UserPasswordsResetted');
 
-            $this->redirect($message, ($failures > 0), array(Application::PARAM_ACTION => self::ACTION_BROWSE_USERS));
+            $this->redirectWithMessage($message, ($failures > 0), array(Application::PARAM_ACTION => self::ACTION_BROWSE_USERS));
         }
         else
         {

@@ -35,7 +35,7 @@ class CourseManagerComponent extends Manager implements DelegateComponent, Cours
      */
     public function redirect_after_quick_create($succes, $message)
     {
-        $this->redirect(
+        $this->redirectWithMessage(
             $message,
             ! $succes,
             [],

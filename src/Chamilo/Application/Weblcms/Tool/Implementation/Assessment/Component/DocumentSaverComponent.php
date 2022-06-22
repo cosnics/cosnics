@@ -210,7 +210,7 @@ class DocumentSaverComponent extends Manager
         $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = self::ACTION_VIEW_RESULTS;
         $params[self::PARAM_ASSESSMENT] = Request::get(self::PARAM_ASSESSMENT);
         $params[self::PARAM_USER_ASSESSMENT] = Request::get(self::PARAM_USER_ASSESSMENT);
-        $this->redirect(Translation::get($message), false, $params);
+        $this->redirectWithMessage(Translation::get($message), false, $params);
     }
 
     /**

@@ -61,7 +61,7 @@ class CreatorComponent extends Manager
         }
         catch (Exception $ex)
         {
-            $this->redirect(
+            $this->redirectWithMessage(
                 Translation::get(
                     'ObjectNotCreated', 
                     array('OBJECT' => Translation::get('WorkspaceUserFavourite')), 
@@ -71,7 +71,7 @@ class CreatorComponent extends Manager
                 array(self::PARAM_ACTION));
         }
         
-        $this->redirect(
+        $this->redirectWithMessage(
             Translation::get(
                 'ObjectCreated', 
                 array('OBJECT' => Translation::get('WorkspaceUserFavourite', null, Manager::context())), 

@@ -72,7 +72,7 @@ abstract class StatusChangerComponent extends Manager
             Application::RESULT_TYPE_UPDATED
         );
 
-        $this->redirect(
+        $this->redirectWithMessage(
             $message, $failed > 0, array(
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER,
                 self::PARAM_TAB => Request::get(self::PARAM_TAB)

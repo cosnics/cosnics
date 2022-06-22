@@ -46,7 +46,7 @@ class ChangeUserComponent extends Manager
             $sessionUtilities->register('checkChamiloURL', $checkurl);
 
             $loginApplication = Configuration::get('Chamilo\Core\Admin', 'page_after_login');
-            $response = new RedirectResponse($this->get_link(array(Application::PARAM_CONTEXT => $loginApplication)));
+            $response = new RedirectResponse($this->getLink(array(Application::PARAM_CONTEXT => $loginApplication)));
             $response->send();
         }
         else

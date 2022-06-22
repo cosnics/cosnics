@@ -48,7 +48,7 @@ class ToggleBlockedStatusComponent extends Manager
             $translation = $success ? 'StepMarkedAsOptional' : 'StepNotMarkedAsOptional';
         }
 
-        $this->redirect(
+        $this->redirectWithMessage(
             Translation::getInstance()->getTranslation($translation), !$success, array(
                 self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
                 self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()

@@ -105,7 +105,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                     $filters = [self::PARAM_CONTENT_OBJECT_ID];
                 }
 
-                $this->redirect($message, (!$succes), $params, $filters);
+                $this->redirectWithMessage($message, (!$succes), $params, $filters);
             }
             else
             {
