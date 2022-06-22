@@ -6,6 +6,7 @@ use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Rights\Structure\Service\AuthorizationChecker;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\Bridge\BridgeManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
@@ -113,6 +114,16 @@ trait DependencyInjectionContainerTrait
         return $this->getService(Logger::class);
     }
 
+    public function getNotificationMessageManager(): NotificationMessageManager
+    {
+        return $this->getService(NotificationMessageManager::class);
+    }
+
+    public function getNotificationMessageRenderer(): NotificationMessageRenderer
+    {
+        return $this->getService(NotificationMessageRenderer::class);
+    }
+
     public function getPathBuilder(): PathBuilder
     {
         return $this->getService(PathBuilder::class);
@@ -160,16 +171,6 @@ trait DependencyInjectionContainerTrait
         return $this->getService(StringUtilities::class);
     }
 
-    public function getNotificationMessageManager(): NotificationMessageManager
-    {
-        return $this->getService(NotificationMessageManager::class);
-    }
-
-    public function getNotificationMessageRenderer(): NotificationMessageRenderer
-    {
-        return $this->getService(NotificationMessageRenderer::class);
-    }
-
     public function getThemePathBuilder(): ThemePathBuilder
     {
         return $this->getService(ThemePathBuilder::class);
@@ -183,6 +184,11 @@ trait DependencyInjectionContainerTrait
     public function getTwig(): Environment
     {
         return $this->getService(Environment::class);
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->getService(UrlGenerator::class);
     }
 
     public function getUserService(): UserService

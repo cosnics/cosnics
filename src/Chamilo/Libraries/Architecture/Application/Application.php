@@ -23,6 +23,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -793,29 +794,20 @@ abstract class Application
     }
 
     /**
-     * Redirect the end user to another location.
-     * The current url will be used as the basis. This method allows passing
-     * on messages directly instead of using the parameters array
-     *
-     * @param string $message
-     * @param bool $errorMessage
      * @param string[] $parameters
      * @param string[] $filter
-     * @param bool $encodeEntities Whether or not to encode HTML entities. Defaults to false.
-     * @param string $anchor
      */
     public function redirect(
-        $message = '', $errorMessage = false, $parameters = [], $filter = [], $encodeEntities = false, $anchor = null
+        ?string $message = null, bool $errorMessage = false, array $parameters = [], array $filter = []
     )
     {
-        if ($message != null)
+        if ($message)
         {
-
             $messageType = (!$errorMessage) ? NotificationMessage::TYPE_INFO : NotificationMessage::TYPE_DANGER;
             $this->getNotificationMessageManager()->addMessage(new NotificationMessage($message, $messageType));
         }
 
-        $this->simple_redirect($parameters, $filter, $encodeEntities, $anchor);
+        $this->simple_redirect($parameters, $filter);
     }
 
     public function renderFooter()
@@ -985,22 +977,12 @@ abstract class Application
         Parameters::getInstance()->set_parameter($this, $name, $value);
     }
 
-    /**
-     * Redirect the end user to another location.
-     * The current url will be used as the basis.
-     *
-     * @param string[] $parameters
-     * @param string[] $filter
-     * @param bool $encodeEntities Whether or not to encode HTML entities. Defaults to false.
-     * @param string $anchor
-     */
-    public function simple_redirect($parameters = [], $filter = [], $encodeEntities = false, $anchor = null)
+    public function simple_redirect(array $parameters = [], array $filter = [])
     {
-        $parameters =
-            (count($parameters) ? array_merge($this->get_parameters(), $parameters) : $this->get_parameters());
+        $parameters = array_merge($this->get_parameters(), $parameters);
 
-        $redirect = new Redirect($parameters, $filter, $encodeEntities, $anchor);
-        $redirect->toUrl();
-        exit();
+        $response = new RedirectResponse($this->getUrlGenerator()->generateURL($parameters, $filter));
+        $response->send();
+        exit;
     }
 }
