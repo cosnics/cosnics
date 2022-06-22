@@ -10,23 +10,19 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  *
  * @package Chamilo\Libraries\File
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @deprecated Use UrlGenerator now
  */
 class Redirect
 {
-    const ARGUMENT_SEPARATOR = '&';
+    public const ARGUMENT_SEPARATOR = '&';
 
     public static ?Security $security = null;
 
     private ?string $anchor;
 
-    /**
-     *
-     * @var boolean
-     */
     private bool $encodeEntities;
 
     /**
-     *
      * @var string[]
      */
     private array $filterParameters;
@@ -50,10 +46,6 @@ class Redirect
         $this->anchor = $anchor;
     }
 
-    /**
-     *
-     * @return string
-     */
     public function getAnchor(): ?string
     {
         return $this->anchor;
@@ -143,7 +135,7 @@ class Redirect
         {
             return $parameters;
         }
-        
+
         $filteredParameters = [];
 
         foreach ($parameters as $key => $value)
@@ -197,10 +189,10 @@ class Redirect
         if (count($parameters))
         {
             // remove anchor
-            $anchor = strstr($url, "#", false);
+            $anchor = strstr($url, '#', false);
             if ($anchor)
             {
-                $url = strstr($url, "#", true);
+                $url = strstr($url, '#', true);
             }
             if (strpos($url, '?') === false)
             {
