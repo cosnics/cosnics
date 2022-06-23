@@ -2,6 +2,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\DependencyInjection;
 
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
+use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  *
@@ -9,8 +11,10 @@ use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
+class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
 {
+    use ExtensionTrait;
+
     public function getAlias()
     {
         return 'chamilo.application.weblcms.tool.implementation.learning_path';

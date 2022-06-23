@@ -39,8 +39,8 @@ class UrlGenerationExtension extends AbstractExtension
     public function getFunctions()
     {
         return array(
-            new TwigFunction('url', array($this->urlGenerator, 'generateURL')),
-            new TwigFunction('context_url', array($this->urlGenerator, 'generateContextURL'))
+            new TwigFunction('url', array($this->urlGenerator, 'fromRequest')),
+            new TwigFunction('context_url', array($this->urlGenerator, 'forContext'))
         );
     }
 

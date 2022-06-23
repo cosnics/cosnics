@@ -16,7 +16,7 @@ use Exception;
 class ExceptionResponse extends Response
 {
 
-    public function __construct(Exception $exception, Application $application)
+    public function __construct(Exception $exception, ?Application $application = null)
     {
         $page = Page::getInstance();
         $page->setApplication($application);

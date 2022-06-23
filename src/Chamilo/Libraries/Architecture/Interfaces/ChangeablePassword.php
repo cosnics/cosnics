@@ -14,21 +14,11 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 interface ChangeablePassword
 {
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $oldPassword
-     * @param string $newPassword
-     *
-     * @return boolean
-     */
-    public function changePassword(User $user, $oldPassword, $newPassword);
+    
+    public function changePassword(User $user, string $oldPassword, string $newPassword): bool;
 
     /**
      * Get the password requirements for the authentication method
-     *
-     * @return string
      */
-    public function getPasswordRequirements();
+    public function getPasswordRequirements(): string;
 }

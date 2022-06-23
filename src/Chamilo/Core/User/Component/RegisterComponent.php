@@ -8,11 +8,11 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -53,8 +53,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
 
                 $parameters[Application::PARAM_CONTEXT] = '';
 
-                $redirect = new Redirect($parameters);
-                $redirect->toUrl();
+                return new RedirectResponse($this->getUrlGenerator()->fromParameters($parameters));
             }
             else
             {

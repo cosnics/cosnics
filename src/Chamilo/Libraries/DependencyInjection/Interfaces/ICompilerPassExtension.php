@@ -14,11 +14,6 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
  */
 interface ICompilerPassExtension extends ExtensionInterface
 {
-
-    /**
-     * Registers the compiler passes in the container
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
+    
     public function registerCompilerPasses(ContainerBuilder $container);
 }

@@ -22,25 +22,13 @@ use Symfony\Component\Translation\Translator;
  */
 class CasAuthentication extends Authentication implements AuthenticationInterface
 {
+    protected SessionUtilities $sessionUtilities;
+
     /**
      * @var string[]
      */
-    protected $settings;
+    protected array $settings;
 
-    /**
-     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
-     */
-    protected $sessionUtilities;
-
-    /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
-     *
-     * @throws \Exception
-     */
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
         UserService $userService, SessionUtilities $sessionUtilities
@@ -50,23 +38,12 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
         $this->sessionUtilities = $sessionUtilities;
     }
 
-    /**
-     * Returns the short name of the authentication to check in the settings
-     *
-     * @return string
-     */
-    public function getAuthenticationType()
+    public function getAuthenticationType(): string
     {
         return __NAMESPACE__;
     }
 
-    /**
-     * @param string $casUser
-     * @param string[] $casUserAttributes
-     *
-     * @return string
-     */
-    protected function getCasUserIdentifierFromAttributes($casUser, $casUserAttributes): string
+    protected function getCasUserIdentifierFromAttributes(string $casUser, array $casUserAttributes = []): string
     {
         return $casUser;
     }
@@ -74,60 +51,37 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
     /**
      * @return string[]
      */
-    protected function getConfiguration()
+    protected function getConfiguration(): array
     {
         if (!isset($this->settings))
         {
             $this->settings = [];
-            $this->settings['host'] =
-                $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_host'));
-            $this->settings['port'] =
-                $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_port'));
-            $this->settings['uri'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_uri'));
+            $this->settings['host'] = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'cas_host']);
+            $this->settings['port'] = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'cas_port']);
+            $this->settings['uri'] = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'cas_uri']);
             $this->settings['certificate'] = $this->configurationConsulter->getSetting(
-                array('Chamilo\Core\Admin', 'cas_certificate')
+                ['Chamilo\Core\Admin', 'cas_certificate']
             );
-            $this->settings['log'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_log'));
+            $this->settings['log'] = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'cas_log']);
             $this->settings['enable_log'] = $this->configurationConsulter->getSetting(
-                array('Chamilo\Core\Admin', 'cas_enable_log')
+                ['Chamilo\Core\Admin', 'cas_enable_log']
             );
         }
 
         return $this->settings;
     }
 
-    /**
-     * Returns the priority of the authentication, lower priorities come first
-     *
-     * @return int
-     */
-    public function getPriority()
+    public function getPriority(): int
     {
         return 500;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
-     */
     public function getSessionUtilities(): SessionUtilities
     {
         return $this->sessionUtilities;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
-     */
-    public function setSessionUtilities(SessionUtilities $sessionUtilities): void
-    {
-        $this->sessionUtilities = $sessionUtilities;
-    }
-
-    /**
-     * @param string $userIdentifier
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    protected function getUserByCasUserIdentifier(string $userIdentifier): User
+    protected function getUserByCasUserIdentifier(string $userIdentifier): ?User
     {
         return $this->userService->findUserByUsername($userIdentifier);
     }
@@ -141,61 +95,55 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
         {
             throw new Exception($this->getTranslator()->trans('CheckCASConfiguration'));
         }
-        else
+        elseif (!phpCAS::isInitialized())
         {
-            if (!phpCas::isInitialized())
+            $settings = $this->getConfiguration();
+
+            // initialize phpCAS
+            if ($settings['enable_log'])
             {
-                $settings = $this->getConfiguration();
+                phpCAS::setDebug($settings['log']);
+            }
 
-                // initialize phpCAS
-                if ($settings['enable_log'])
-                {
-                    phpCAS::setDebug($settings['log']);
-                }
+            $casVersion = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'cas_version']);
 
-                $casVersion = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_version'));
-
-                if ($casVersion == 'SAML_VERSION_1_1')
-                {
-                    phpCAS::client(
-                        SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], (string) $settings['uri'], false
-                    );
-                }
-                else
-                {
-                    phpCAS::client(
-                        CAS_VERSION_2_0, $settings['host'], (int) $settings['port'], (string) $settings['uri'], false
-                    );
-                }
-
-                $casCheckCertificate = $this->configurationConsulter->getSetting(
-                    array('Chamilo\Core\Admin', 'cas_check_certificate')
+            if ($casVersion == 'SAML_VERSION_1_1')
+            {
+                phpCAS::client(
+                    SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], (string) $settings['uri'], false
                 );
+            }
+            else
+            {
+                phpCAS::client(
+                    CAS_VERSION_2_0, $settings['host'], (int) $settings['port'], (string) $settings['uri'], false
+                );
+            }
 
-                // SSL validation for the CAS server
-                if ($casCheckCertificate == '1')
-                {
-                    phpCAS::setCasServerCACert($settings['certificate']);
-                }
-                else
-                {
-                    phpCAS::setNoCasServerValidation();
-                }
+            $casCheckCertificate = $this->configurationConsulter->getSetting(
+                ['Chamilo\Core\Admin', 'cas_check_certificate']
+            );
+
+            // SSL validation for the CAS server
+            if ($casCheckCertificate == '1')
+            {
+                phpCAS::setCasServerCACert($settings['certificate']);
+            }
+            else
+            {
+                phpCAS::setNoCasServerValidation();
             }
         }
     }
 
-    /**
-     * @return boolean
-     */
-    protected function isConfigured()
+    protected function isConfigured(): bool
     {
         $settings = $this->getConfiguration();
 
         foreach ($settings as $setting => $value)
         {
-            if ((empty($value) || !isset($value)) && !in_array(
-                    $setting, array('uri', 'certificate', 'log', 'enable_log')
+            if (empty($value) && !in_array(
+                    $setting, ['uri', 'certificate', 'log', 'enable_log']
                 ))
             {
                 return false;
@@ -206,10 +154,10 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
     }
 
     /**
-     * @return \Chamilo\Core\User\Storage\DataClass\User|null
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \Exception
      */
-    public function login()
+    public function login(): ?User
     {
         if (!$this->isAuthSourceActive())
         {
@@ -219,7 +167,7 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
         $this->initializeClient();
 
         $externalAuthenticationEnabled = $this->configurationConsulter->getSetting(
-            array('Chamilo\Core\Admin', 'enableExternalAuthentication')
+            ['Chamilo\Core\Admin', 'enableExternalAuthentication']
         );
 
         $bypassExternalAuthentication = (boolean) $this->request->getFromUrl('noExtAuth', false);
@@ -256,19 +204,17 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
         {
             throw new AuthenticationException(
                 $this->translator->trans(
-                    'CasAuthenticationError', array(
+                    'CasAuthenticationError', [
                     'PLATFORM' => $this->configurationConsulter->getSetting(
-                        array('Chamilo\Core\Admin', 'site_name')
+                        ['Chamilo\Core\Admin', 'site_name']
                     )
-                ), 'Chamilo\Libraries'
+                ], 'Chamilo\Libraries'
                 )
             );
         }
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
      * @throws \Exception
      */
     public function logout(User $user)
@@ -286,7 +232,7 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      * @throws \Exception
      */
-    protected function registerUser($casUser, $casUserAttributes)
+    protected function registerUser(string $casUser, array $casUserAttributes = []): User
     {
         $user = new User();
 

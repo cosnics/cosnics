@@ -55,7 +55,7 @@ class UrlGeneratorTest extends ChamiloTestCase
      */
     public function test_generate_url()
     {
-        $url = $this->urlGenerator->generateURL();
+        $url = $this->urlGenerator->fromRequest();
         $this->assertEquals('index.php?course_id=1&publication_id=2', $url);
     }
 
@@ -64,7 +64,7 @@ class UrlGeneratorTest extends ChamiloTestCase
      */
     public function test_generate_url_with_additional_parameters()
     {
-        $url = $this->urlGenerator->generateURL(array('tool' => 'document'));
+        $url = $this->urlGenerator->fromRequest(array('tool' => 'document'));
         $this->assertEquals('index.php?course_id=1&publication_id=2&tool=document', $url);
     }
 
@@ -73,7 +73,7 @@ class UrlGeneratorTest extends ChamiloTestCase
      */
     public function test_generate_url_with_replacing_parameters()
     {
-        $url = $this->urlGenerator->generateURL(array('publication_id' => 3));
+        $url = $this->urlGenerator->fromRequest(array('publication_id' => 3));
         $this->assertEquals('index.php?course_id=1&publication_id=3', $url);
     }
 
@@ -82,7 +82,7 @@ class UrlGeneratorTest extends ChamiloTestCase
      */
     public function test_generate_url_with_filters()
     {
-        $url = $this->urlGenerator->generateURL([], array('course_id', 'publication_id'));
+        $url = $this->urlGenerator->fromRequest([], array('course_id', 'publication_id'));
         $this->assertEquals('index.php', $url);
     }
 
@@ -91,7 +91,7 @@ class UrlGeneratorTest extends ChamiloTestCase
      */
     public function test_generate_context_url()
     {
-        $url = $this->urlGenerator->generateContextURL('application\countries', 'browse');
+        $url = $this->urlGenerator->forContext('Application\Countries', 'browse');
         $this->assertEquals(
             'index.php?course_id=1&publication_id=2&application=application\countries&go=browse', $url
         );
@@ -103,9 +103,9 @@ class UrlGeneratorTest extends ChamiloTestCase
      */
     public function test_generate_url_should_not_contain_parameters_of_previous_urls()
     {
-        $url1 = $this->urlGenerator->generateURL(array('go' => 'tryout'));
+        $url1 = $this->urlGenerator->fromRequest(array('go' => 'tryout'));
 
-        $url2 = $this->urlGenerator->generateURL([]);
+        $url2 = $this->urlGenerator->fromRequest([]);
         $this->assertEquals('index.php?course_id=1&publication_id=2', $url2);
     }
 

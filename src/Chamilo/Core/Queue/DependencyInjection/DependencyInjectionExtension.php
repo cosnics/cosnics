@@ -3,18 +3,20 @@ namespace Chamilo\Core\Queue\DependencyInjection;
 
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\IConfigurableExtension;
-use Chamilo\Libraries\File\Path;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\IConfigurableExtensionTrait;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Core\Queue\DependencyInjection
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements IConfigurableExtension
+class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
+    implements ExtensionInterface, IConfigurableExtension
 {
+    use ExtensionTrait;
+    use IConfigurableExtensionTrait;
 
     public function getAlias()
     {
@@ -26,14 +28,8 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
         return ['Chamilo\Core\Queue' => ['services.xml']];
     }
 
-    public function loadContainerConfiguration(ContainerBuilder $container)
+    public function getContainerConfigurationFiles(): array
     {
-        $loader = new YamlFileLoader(
-            $container, new FileLocator(
-                Path::getInstance()->namespaceToFullPath('Chamilo\Core\Queue') . 'Resources/Configuration'
-            )
-        );
-
-        $loader->load('Config.yml');
+        return ['Chamilo\Core\Queue' => ['Config.yml']];
     }
 }

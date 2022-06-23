@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Implementation\Flickr\Form\ExternalObjectForm;
 use Chamilo\Core\Repository\Implementation\Flickr\Manager;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class EditorComponent extends Manager
 {
@@ -28,9 +29,8 @@ class EditorComponent extends Manager
             $parameters = $this->get_parameters();
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_EXTERNAL_REPOSITORY;
             $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
-            
-            $redirect = new Redirect($parameters);
-            $redirect->toUrl();
+
+            return new RedirectResponse($this->getUrlGenerator()->fromParameters($parameters));
         }
         else
         {

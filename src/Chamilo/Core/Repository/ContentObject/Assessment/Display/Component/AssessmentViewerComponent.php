@@ -9,7 +9,6 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -20,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -27,9 +27,9 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class AssessmentViewerComponent extends Manager implements DelegateComponent
 {
-    const FORM_BACK = 'back';
-    const FORM_NEXT = 'next';
-    const FORM_SUBMIT = 'submit';
+    public const FORM_BACK = 'back';
+    public const FORM_NEXT = 'next';
+    public const FORM_SUBMIT = 'submit';
 
     /**
      * The form that displays the questions per page
@@ -102,8 +102,9 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
             {
                 if ($this->get_assessment_back_url())
                 {
-                    $redirect = new Redirect();
-                    $redirect->writeHeader($this->get_assessment_back_url());
+                    $response = new RedirectResponse($this->get_assessment_back_url());
+                    $response->send();
+                    exit;
                 }
             }
         }
@@ -377,11 +378,13 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
             $this->get_parent()->register_question_ids($question_ids);
         }
 
-        $order_by->add(new OrderProperty(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
+        $order_by->add(
+            new OrderProperty(
+                new PropertyConditionVariable(
+                    ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
+                )
             )
-        ));
+        );
 
         $condition = new InCondition(
             new PropertyConditionVariable(
@@ -390,8 +393,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         );
 
         $this->questions = DataManager:: retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class,
-            new DataClassRetrievesParameters($condition, null, null, $order_by)
+            ComplexContentObjectItem::class, new DataClassRetrievesParameters($condition, null, null, $order_by)
         );
     }
 

@@ -9,7 +9,7 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
@@ -23,27 +23,20 @@ use Symfony\Component\Translation\Translator;
  */
 class ApplicationItemRenderer extends ItemRenderer
 {
-    /**
-     * @var \Chamilo\Configuration\Service\RegistrationConsulter
-     */
-    private $registrationConsulter;
+    private RegistrationConsulter $registrationConsulter;
 
-    /**
-     * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
-     */
+    private UrlGenerator $urlGenerator;
+
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
-        ThemePathBuilder $themePathBuilder, ChamiloRequest $request, RegistrationConsulter $registrationConsulter
+        ThemePathBuilder $themePathBuilder, ChamiloRequest $request, RegistrationConsulter $registrationConsulter,
+        UrlGenerator $urlGenerator
     )
     {
         parent::__construct($authorizationChecker, $translator, $itemCacheService, $themePathBuilder, $request);
 
         $this->registrationConsulter = $registrationConsulter;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -106,31 +99,31 @@ class ApplicationItemRenderer extends ItemRenderer
      */
     protected function getApplicationItemUrl(ApplicationItem $item)
     {
-        $url = new Redirect();
-
         if ($item->getApplication() == 'root')
         {
-            return $url->getUrl();
+            return $this->getUrlGenerator()->fromParameters();
         }
 
-        $url->setParameter(Application::PARAM_CONTEXT, $item->getApplication());
+        $parameters = [];
+
+        $parameters[Application::PARAM_CONTEXT] = $item->getApplication();
 
         if ($item->getComponent())
         {
-            $url->setParameter(Application::PARAM_ACTION, $item->getComponent());
+            $parameters[Application::PARAM_ACTION] = $item->getComponent();
         }
 
         if ($item->getExtraParameters())
         {
-            $extraParameters = parse_str($item->getExtraParameters());
+            parse_str($item->getExtraParameters(), $extraParameters);
 
             foreach ($extraParameters as $key => $value)
             {
-                $url->setParameter($key, $value);
+                $parameters[$key] = $value;
             }
         }
 
-        return $url->getUrl();
+        return $this->getUrlGenerator()->fromParameters($parameters);
     }
 
     /**
@@ -149,11 +142,16 @@ class ApplicationItemRenderer extends ItemRenderer
         $this->registrationConsulter = $registrationConsulter;
     }
 
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
+    }
+
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      */
     public function isItemVisibleForUser(ApplicationItem $item, User $user)
     {
@@ -166,7 +164,7 @@ class ApplicationItemRenderer extends ItemRenderer
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item
      *
-     * @return boolean
+     * @return bool
      */
     public function isSelected(Item $item)
     {

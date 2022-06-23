@@ -14,37 +14,17 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class Authentication implements AuthenticationInterface
 {
-    const PARAM_LOGIN = 'login';
-    const PARAM_PASSWORD = 'password';
+    public const PARAM_LOGIN = 'login';
+    public const PARAM_PASSWORD = 'password';
 
-    /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    protected $configurationConsulter;
+    protected ConfigurationConsulter $configurationConsulter;
 
-    /**
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    protected $request;
+    protected ChamiloRequest $request;
 
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    protected $translator;
+    protected Translator $translator;
 
-    /**
-     * @var \Chamilo\Core\User\Service\UserService
-     */
-    protected $userService;
+    protected UserService $userService;
 
-    /**
-     * Authentication constructor.
-     *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     */
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
         UserService $userService
@@ -56,28 +36,20 @@ abstract class Authentication implements AuthenticationInterface
         $this->userService = $userService;
     }
 
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
     public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
     public function setTranslator(Translator $translator): void
     {
         $this->translator = $translator;
     }
 
     /**
-     * @return \Chamilo\Core\User\Storage\DataClass\User|null
-     *
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
-    protected function getUserFromCredentialsRequest()
+    protected function getUserFromCredentialsRequest(): ?User
     {
         $username = $this->request->getFromPost(self::PARAM_LOGIN);
 
@@ -105,13 +77,10 @@ abstract class Authentication implements AuthenticationInterface
         return $user;
     }
 
-    /**
-     * @return bool
-     */
-    protected function isAuthSourceActive()
+    protected function isAuthSourceActive(): bool
     {
         return (bool) $this->configurationConsulter->getSetting(
-            array('Chamilo\Core\Admin', 'enable' . str_replace('\\', '', $this->getAuthenticationType()))
+            ['Chamilo\Core\Admin', 'enable' . str_replace('\\', '', $this->getAuthenticationType())]
         );
     }
 

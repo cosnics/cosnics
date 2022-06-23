@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Component;
 
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Redirect;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -20,10 +20,13 @@ class HomeComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $component = $this->isAuthorized(Manager::context(), 'ViewPersonalCourses') ? 'CourseList' : 'OpenCoursesBrowser';
-        
-        $redirect = new Redirect(array(self::PARAM_CONTEXT => Manager::context(), self::PARAM_ACTION => $component));
-        
-        $redirect->toUrl();
+        $component =
+            $this->isAuthorized(Manager::context(), 'ViewPersonalCourses') ? 'CourseList' : 'OpenCoursesBrowser';
+
+        return new RedirectResponse(
+            $this->getUrlGenerator()->fromParameters(
+                [self::PARAM_CONTEXT => Manager::context(), self::PARAM_ACTION => $component]
+            )
+        );
     }
 }

@@ -116,68 +116,6 @@ abstract class Application
     }
 
     /**
-     *
-     * @param string $context
-     * @param string[] $fallbackContexts
-     *
-     * @return string
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     */
-    public static function context_fallback($context, array $fallbackContexts)
-    {
-        // Check if the context exists
-        $context_path = Path::getInstance()->namespaceToFullPath($context);
-
-        if (!is_dir($context_path))
-        {
-            // Adding a fallback for old-style contexts which might still exis in certain applications, links, etc.
-
-            $convertedContextParts = explode('\\', $context);
-
-            foreach ($convertedContextParts as $key => $convertedContextPart)
-            {
-                $convertedContextParts[$key] = (string) StringUtilities::getInstance()->createString(
-                    $convertedContextPart
-                )->upperCamelize();
-            }
-
-            $convertedContext = implode('\\', $convertedContextParts);
-
-            foreach ($fallbackContexts as $fallbackContext)
-            {
-                $possibleContext = $fallbackContext . $convertedContext;
-                if (is_dir(Path::getInstance()->namespaceToFullPath($possibleContext)))
-                {
-                    $context = $possibleContext;
-                    break;
-                }
-            }
-
-            $context_path = Path::getInstance()->namespaceToFullPath($context);
-            if (!is_dir($context_path))
-            {
-                throw new UserException(Translation::get('NoContextFound', array('CONTEXT' => $context)));
-            }
-            else
-            {
-                $query = $_GET;
-                $query[self::PARAM_CONTEXT] = $context;
-
-                $redirect = new Redirect();
-                $currentUrl = $redirect->getCurrentUrl();
-
-                $logger = new FileLogger(Path::getInstance()->getLogPath() . '/cosnics.error.parameters.log', true);
-                $logger->log_message($currentUrl);
-
-                $redirect = new Redirect($query);
-                $redirect->toUrl();
-            }
-        }
-
-        return $context;
-    }
-
-    /**
      * Displays an error message.
      *
      * @param string $message
@@ -319,7 +257,7 @@ abstract class Application
      */
     public function getLink(array $parameters = [], array $filter = []): string
     {
-        return $this->getUrlGenerator()->generateURL($parameters, $filter);
+        return $this->getUrlGenerator()->fromRequest($parameters, $filter);
     }
 
     /**

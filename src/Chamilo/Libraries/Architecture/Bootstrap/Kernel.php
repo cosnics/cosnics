@@ -9,19 +9,20 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException;
 use Chamilo\Libraries\Architecture\Exceptions\PlatformNotAvailableException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -32,15 +33,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Kernel
 {
-    const PARAM_CODE = 'code';
-    const PARAM_SESSION_STATE = 'session_state';
-    const PARAM_STATE = 'state';
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
-     */
-    protected $sessionUtilities;
+    public const PARAM_CODE = 'code';
+    public const PARAM_SESSION_STATE = 'session_state';
+    public const PARAM_STATE = 'state';
 
     /**
      * @var \Chamilo\Libraries\Authentication\AuthenticationValidator
@@ -49,15 +44,15 @@ class Kernel
 
     /**
      *
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest
+     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
-    private $request;
+    protected $sessionUtilities;
 
     /**
      *
-     * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
-    private $exceptionLogger;
+    private $application;
 
     /**
      *
@@ -79,15 +74,17 @@ class Kernel
 
     /**
      *
-     * @var integer
+     * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
-    private $version;
+    private $exceptionLogger;
 
     /**
      *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
+     * @var \Chamilo\Libraries\Platform\ChamiloRequest
      */
-    private $application;
+    private $request;
+
+    private UrlGenerator $urlGenerator;
 
     /**
      *
@@ -97,19 +94,25 @@ class Kernel
 
     /**
      *
+     * @var int
+     */
+    private $version;
+
+    /**
+     *
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\Architecture\Factory\ApplicationFactory $applicationFactory
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      * @param \Chamilo\Libraries\Authentication\AuthenticationValidator $authenticationValidator
-     * @param integer $version
+     * @param int $version
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
     public function __construct(
         ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
         SessionUtilities $sessionUtilities, ExceptionLoggerInterface $exceptionLogger,
-        AuthenticationValidator $authenticationValidator, $version, User $user = null
+        AuthenticationValidator $authenticationValidator, UrlGenerator $urlGenerator, $version, User $user = null
     )
     {
         $this->request = $request;
@@ -117,6 +120,7 @@ class Kernel
         $this->applicationFactory = $applicationFactory;
         $this->sessionUtilities = $sessionUtilities;
         $this->exceptionLogger = $exceptionLogger;
+        $this->urlGenerator = $urlGenerator;
         $this->version = $version;
         $this->user = $user;
         $this->authenticationValidator = $authenticationValidator;
@@ -222,7 +226,7 @@ class Kernel
             $context = $getContext;
         }
 
-        $this->setContext(Application::context_fallback($context, $this->getFallbackContexts()));
+        $this->setContext($context);
 
         return $this;
     }
@@ -340,21 +344,6 @@ class Kernel
     }
 
     /**
-     * Returns a list of the available fallback contexts
-     *
-     * @return string[]
-     */
-    protected function getFallbackContexts()
-    {
-        $fallbackContexts = [];
-        $fallbackContexts[] = 'Chamilo\Application\\';
-        $fallbackContexts[] = 'Chamilo\Core\\';
-        $fallbackContexts[] = 'Chamilo\\';
-
-        return $fallbackContexts;
-    }
-
-    /**
      * Returns a response that renders the not authenticated message
      *
      * @return \Chamilo\Libraries\Format\Response\NotAuthenticatedResponse
@@ -382,6 +371,23 @@ class Kernel
         $this->request = $request;
     }
 
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $urlGenerator
+     *
+     * @return Kernel
+     */
+    public function setUrlGenerator(UrlGenerator $urlGenerator): Kernel
+    {
+        $this->urlGenerator = $urlGenerator;
+
+        return $this;
+    }
+
     /**
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
@@ -402,7 +408,7 @@ class Kernel
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getVersion()
     {
@@ -411,7 +417,7 @@ class Kernel
 
     /**
      *
-     * @param integer $version
+     * @param int $version
      */
     public function setVersion($version)
     {
@@ -422,11 +428,11 @@ class Kernel
      * Redirects response of Microsoft OAuth 2.0 Authorization workflow to the component which have called
      * MicrosoftClientService::login(...).
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @return ?\Symfony\Component\HttpFoundation\RedirectResponse
      *
      * @see MicrosoftClientService::login(...)
      */
-    public function handleOAuth2()
+    public function handleOAuth2(): ?RedirectResponse
     {
         $code = $this->getRequest()->query->get(self::PARAM_CODE);
         $state = $this->getRequest()->query->get(self::PARAM_STATE);
@@ -434,20 +440,20 @@ class Kernel
 
         if (!$code || !$state)
         {
-            return $this;
+            return null;
         }
         $decodedState = base64_decode($state);
 
         if (!$decodedState)
         {
-            return $this;
+            return null;
         }
 
         $stateParameters = json_decode($decodedState, true);
 
         if (!is_array($stateParameters) || !array_key_exists('landingPageParameters', $stateParameters))
         {
-            return $this;
+            return null;
         }
 
         $landingPageParameters = $stateParameters['landingPageParameters'];
@@ -462,10 +468,7 @@ class Kernel
             $landingPageParameters[self::PARAM_SESSION_STATE] = $session_state;
         }
 
-        $redirect = new Redirect($landingPageParameters);
-        $redirect->toUrl();
-
-        return $this;
+        return new RedirectResponse($this->getUrlGenerator()->fromParameters($landingPageParameters));
     }
 
     /**
@@ -475,8 +478,19 @@ class Kernel
     {
         try
         {
-            $this->configureTimeZone()->configureContext()->handleOAuth2()->checkAuthentication()
-                ->checkPlatformAvailability()->buildApplication()->traceVisit()->runApplication();
+            $this->configureTimeZone()->configureContext();
+
+            $OAuth2Response = $this->handleOAuth2();
+
+            if ($OAuth2Response instanceof RedirectResponse)
+            {
+                $OAuth2Response->send();
+            }
+            else
+            {
+                $this->checkAuthentication()->checkPlatformAvailability()->buildApplication()->traceVisit()
+                    ->runApplication();
+            }
         }
         catch (NotAuthenticatedException $exception)
         {

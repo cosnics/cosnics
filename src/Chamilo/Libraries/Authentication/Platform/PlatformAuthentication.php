@@ -6,14 +6,15 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsername;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -30,44 +31,25 @@ class PlatformAuthentication extends Authentication
     /**
      * @var \Chamilo\Libraries\Hashing\HashingUtilities
      */
-    protected $hashingUtilities;
+    protected HashingUtilities $hashingUtilities;
 
-    /**
-     * Authentication constructor.
-     *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Chamilo\Libraries\Hashing\HashingUtilities $hashingUtilities
-     */
+    protected UrlGenerator $urlGenerator;
+
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
-        UserService $userService, HashingUtilities $hashingUtilities
+        UserService $userService, HashingUtilities $hashingUtilities, UrlGenerator $urlGenerator
     )
     {
         parent::__construct($configurationConsulter, $translator, $request, $userService);
         $this->hashingUtilities = $hashingUtilities;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $oldPassword
-     * @param string $newPassword
-     *
-     * @return boolean
-     *
      * @throws \Exception
      */
-    public function changePassword(User $user, $oldPassword, $newPassword)
+    public function changePassword(User $user, string $oldPassword, string $newPassword): bool
     {
-        // Check whether we have an actual User object
-        if (!$user instanceof User)
-        {
-            return false;
-        }
-
         // Check whether the current password is different from the new password
         if ($oldPassword == $newPassword)
         {
@@ -88,41 +70,25 @@ class PlatformAuthentication extends Authentication
         return $user->update();
     }
 
-    /**
-     * Returns the short name of the authentication to check in the settings
-     *
-     * @return string
-     */
-    public function getAuthenticationType()
+    public function getAuthenticationType(): string
     {
         return __NAMESPACE__;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword::getPasswordRequirements()
-     */
-    public function getPasswordRequirements()
+    public function getPasswordRequirements(): string
     {
         return $this->translator->trans('GeneralPasswordRequirements', [], 'Chamilo\Libraries\Authentication\Platform');
     }
 
-    /**
-     * Returns the priority of the authentication, lower priorities come first
-     *
-     * @return int
-     */
-    public function getPriority()
+    public function getPriority(): int
     {
         return 200;
     }
 
     /**
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     *
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
-    public function login()
+    public function login(): ?User
     {
         $user = $this->getUserFromCredentialsRequest();
         if (!$user instanceof User)
@@ -144,13 +110,13 @@ class PlatformAuthentication extends Authentication
         );
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
     public function logout(User $user)
     {
-        $redirect = new Redirect([], array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
-        $redirect->toUrl();
-        exit();
+        $redirect = new RedirectResponse(
+            $this->urlGenerator->fromParameters([], [Application::PARAM_ACTION, Application::PARAM_CONTEXT])
+        );
+
+        $redirect->send();
+        exit;
     }
 }

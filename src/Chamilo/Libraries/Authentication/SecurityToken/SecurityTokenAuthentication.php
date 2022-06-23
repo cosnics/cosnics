@@ -16,10 +16,7 @@ use Chamilo\Libraries\Authentication\AuthenticationInterface;
  */
 class SecurityTokenAuthentication extends Authentication implements AuthenticationInterface
 {
-    /**
-     * @var bool
-     */
-    protected $disableAuthSourceCheck = false;
+    protected bool $disableAuthSourceCheck = false;
 
     /**
      * Disables the check if the auth source is active or not (used to make sure that this can run for certain
@@ -30,33 +27,20 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
         $this->disableAuthSourceCheck = true;
     }
 
-    /**
-     * Returns the short name of the authentication to check in the settings
-     *
-     * @return string
-     */
-    public function getAuthenticationType()
+    public function getAuthenticationType(): string
     {
         return __NAMESPACE__;
     }
 
-    /**
-     * Returns the priority of the authentication, lower priorities come first
-     *
-     * @return int
-     */
-    public function getPriority()
+    public function getPriority(): int
     {
         return 300;
     }
 
     /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     *
      * @throws AuthenticationException
      */
-    public function login()
+    public function login(): ?User
     {
         if (!$this->disableAuthSourceCheck && !$this->isAuthSourceActive())
         {
@@ -82,9 +66,6 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
         return null;
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
     public function logout(User $user)
     {
 

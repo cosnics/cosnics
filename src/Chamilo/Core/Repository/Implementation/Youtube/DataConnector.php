@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Protocol\GoogleClient\GoogleClientService;
@@ -40,13 +41,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     protected $googleClientService;
 
+    private $session_token;
+
     /**
      *
      * @var \Google_Service_YouTube
      */
     private $youtube;
-
-    private $session_token;
 
     public function __construct($external_repository_instance)
     {
@@ -56,7 +57,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $user->setId(Session::get_user_id());
 
         $this->googleClientService = new GoogleClientService(
-            new GoogleClientSettingsProvider(
+            ChamiloRequest::createFromGlobals(), new GoogleClientSettingsProvider(
                 $external_repository_instance, $user, 'https://www.googleapis.com/auth/youtube'
             )
         );
@@ -104,13 +105,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $snippet = new Google_Service_YouTube_VideoSnippet();
         $snippet->setTitle($object->get_title());
         $snippet->setDescription(strip_tags($object->get_description()));
-        $snippet->setTags(array("tag1", "tag2"));
+        $snippet->setTags(array('tag1', 'tag2'));
 
         // Category Education
         $snippet->setCategoryId(27);
 
         $status = new Google_Service_YouTube_VideoStatus();
-        $status->privacyStatus = "unlisted";
+        $status->privacyStatus = 'unlisted';
         $status->embeddable = true;
 
         $video = new Google_Service_YouTube_Video();
@@ -118,12 +119,12 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $video->setStatus($status);
         $chunkSizeBytes = 1 * 1024 * 1024;
         $this->client->setDefer(true);
-        $insertRequest = $this->youtube->videos->insert("status,snippet", $video);
+        $insertRequest = $this->youtube->videos->insert('status,snippet', $video);
 
         $media = new Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
         $media->setFileSize(filesize($videoPath));
         $status = false;
-        $handle = fopen($videoPath, "rb");
+        $handle = fopen($videoPath, 'rb');
         while (!$status && !feof($handle))
         {
             $chunk = fread($handle, $chunkSizeBytes);
@@ -450,7 +451,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $snippet->setCategoryId($values[ExternalObjectForm::VIDEO_CATEGORY]);
 
         $status = new Google_Service_YouTube_VideoStatus();
-        $status->privacyStatus = "unlisted";
+        $status->privacyStatus = 'unlisted';
         $status->embeddable = true;
 
         $video = new Google_Service_YouTube_Video();
@@ -464,7 +465,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $media = new Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
         $media->setFileSize(filesize($_video_file['tmp_name']));
         $status = false;
-        $handle = fopen($_video_file['tmp_name'], "rb");
+        $handle = fopen($_video_file['tmp_name'], 'rb');
         while (!$status && !feof($handle))
         {
             $chunk = fread($handle, $chunkSizeBytes);

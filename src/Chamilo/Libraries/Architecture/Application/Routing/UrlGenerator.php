@@ -20,19 +20,17 @@ class UrlGenerator
 
     private ChamiloRequest $request;
 
-    private ParameterBag $urlParameterBag;
-
     public function __construct(ChamiloRequest $request, PathBuilder $pathBuilder)
     {
         $this->request = $request;
-        $this->setUrlParameterBag($request->query);
         $this->pathBuilder = $pathBuilder;
     }
 
     /**
      * Shortcut for the url generator to generate a url for a given context and component
      */
-    public function generateContextURL(string $context, string $component, array $parameters = [], array $filters = []
+    public function forContext(
+        string $context, string $component, array $parameters = [], array $filters = [], ?string $anchor = null
     ): string
     {
         if ($context)
@@ -45,28 +43,48 @@ class UrlGenerator
             $parameters[Application::PARAM_ACTION] = $component;
         }
 
-        return $this->generateURL($parameters, $filters);
+        return $this->fromRequest($parameters, $filters, $anchor);
+    }
+
+    public function fromParameters(array $parameters = [], array $filters = [], ?string $anchor = null): string
+    {
+        return $this->generate(new ParameterBag(), $parameters, $filters, $anchor);
     }
 
     /**
      * Generates a url based on the current url from the request, with the given parameters and filters
      */
-    public function generateURL(array $parameters = [], array $filters = []): string
+    public function fromRequest(array $parameters = [], array $filters = [], ?string $anchor = null): string
     {
-        $baseParameters = $this->urlParameterBag->all();
-        $this->urlParameterBag->add($parameters);
+        return $this->generate(new ParameterBag($this->getRequest()->query->all()), $parameters, $filters, $anchor);
+    }
+
+    protected function generate(
+        ParameterBag $parameterBag, array $parameters = [], array $filters = [], ?string $anchor = null
+    ): string
+    {
+        $parameterBag->add($parameters);
 
         foreach ($filters as $filter)
         {
-            $this->urlParameterBag->remove($filter);
+            $parameterBag->remove($filter);
         }
 
-        $parameters = $this->urlParameterBag->all();
-        $parametersUrlString = count($parameters) ? '?' . urldecode(http_build_query($parameters)) : '';
+        $urlParts = [];
 
-        $this->urlParameterBag->replace($baseParameters);
+        $urlParts[] = $this->getPathBuilder()->getBasePath(true);
 
-        return $this->getPathBuilder()->getBasePath() . $parametersUrlString;
+        if ($parameterBag->count())
+        {
+            $urlParts[] = '?' . urldecode(http_build_query($parameterBag->all()));
+        }
+
+        if ($anchor)
+        {
+            $urlParts[] = '#' . $anchor;
+        }
+
+        return implode('', $urlParts);
     }
 
     public function getPathBuilder(): PathBuilder
@@ -77,10 +95,5 @@ class UrlGenerator
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
-    }
-
-    public function setUrlParameterBag(ParameterBag $urlParameterBag)
-    {
-        $this->urlParameterBag = $urlParameterBag;
     }
 }

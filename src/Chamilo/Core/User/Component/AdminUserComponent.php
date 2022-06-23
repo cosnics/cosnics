@@ -5,6 +5,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Session;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -20,16 +21,15 @@ class AdminUserComponent extends Manager
     public function run()
     {
         $admin_user = Session::retrieve('_as_admin');
-        
+
         if ($admin_user)
         {
             $checkurl = Session::retrieve('checkChamiloURL');
             Session::clear();
             Session::register('_uid', $admin_user);
             Session::register('checkChamiloURL', $checkurl);
-            
-            $redirect = new Redirect();
-            $redirect->toUrl();
+
+            return new RedirectResponse($this->getUrlGenerator()->fromParameters());
         }
         else
         {

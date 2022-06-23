@@ -3,9 +3,9 @@ namespace Chamilo\Core\Home\Component;
 
 use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Core\Home\Manager;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Session;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -26,14 +26,13 @@ class PersonalComponent extends Manager
         {
             Session::unregister('Chamilo\Core\Home\General');
         }
-        
-        $redirect = new Redirect();
-        $redirect->toUrl();
+
+        return new RedirectResponse($this->getUrlGenerator()->fromParameters());
     }
 
     /**
      * Returns the admin breadcrumb generator
-     * 
+     *
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()

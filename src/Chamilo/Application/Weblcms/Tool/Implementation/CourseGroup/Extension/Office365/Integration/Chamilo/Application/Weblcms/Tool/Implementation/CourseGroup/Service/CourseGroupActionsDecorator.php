@@ -70,7 +70,7 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
             return;
         }
 
-        $visitGroupUrl = $this->urlGenerator->generateURL(
+        $visitGroupUrl = $this->urlGenerator->fromRequest(
             [
                 \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION =>
                     \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_LAUNCH_INTEGRATION,
@@ -82,7 +82,7 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
 
         $visitGroupLabel = $this->translator->trans('VisitGroup', [], Manager::context());
 
-        $visitPlannerUrl = $this->urlGenerator->generateURL(
+        $visitPlannerUrl = $this->urlGenerator->fromRequest(
             [
                 \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION =>
                     \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_LAUNCH_INTEGRATION,
@@ -97,7 +97,7 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
         if ($groupReference->hasTeam()) {
             $visitTeamLabel = $this->translator->trans('VisitTeam', [], Manager::context());
 
-            $visitTeamUrl = $this->urlGenerator->generateURL(
+            $visitTeamUrl = $this->urlGenerator->fromRequest(
                 [
                     \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION =>
                         \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_LAUNCH_INTEGRATION,
@@ -110,7 +110,7 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
 
         $visitPlannerLabel = $this->translator->trans('VisitPlanner', [], Manager::context());
 
-        $synchronizePlannerUrl = $this->urlGenerator->generateURL(
+        $synchronizePlannerUrl = $this->urlGenerator->fromRequest(
             [
                 \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION =>
                     \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_LAUNCH_INTEGRATION,

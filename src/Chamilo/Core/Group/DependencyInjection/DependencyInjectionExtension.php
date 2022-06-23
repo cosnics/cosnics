@@ -2,16 +2,13 @@
 namespace Chamilo\Core\Group\DependencyInjection;
 
 use Chamilo\Core\Group\DependencyInjection\CompilerPass\GroupEventListenerCompilerPass;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\IConfigurableExtension;
-use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Utilities\StringUtilities;
-use Symfony\Component\Config\FileLocator;
+use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
+use Chamilo\Libraries\DependencyInjection\Traits\IConfigurableExtensionTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Core\Group\DependencyInjection
@@ -20,8 +17,10 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
-    implements ICompilerPassExtension, IConfigurableExtension
+    implements ExtensionInterface, ICompilerPassExtension, IConfigurableExtension
 {
+    use ExtensionTrait;
+    use IConfigurableExtensionTrait;
 
     public function getAlias()
     {
@@ -33,15 +32,9 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         return ['Chamilo\Core\Group' => ['services.xml']];
     }
 
-    public function loadContainerConfiguration(ContainerBuilder $container)
+    public function getContainerConfigurationFiles(): array
     {
-        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()), ChamiloRequest::createFromGlobals());
-
-        $loader = new YamlFileLoader(
-            $container, new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\Group'))
-        );
-
-        $loader->load('Config.yml');
+        return ['Chamilo\Core\Group' => ['Config.yml']];
     }
 
     public function registerCompilerPasses(ContainerBuilder $container)

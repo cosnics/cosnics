@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UploaderComponent extends Manager
 {
@@ -25,9 +26,8 @@ class UploaderComponent extends Manager
                 $parameters = $this->get_parameters();
                 $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_EXTERNAL_REPOSITORY;
                 $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_ID] = $id;
-                
-                $redirect = new Redirect($parameters);
-                $redirect->toUrl();
+
+                return new RedirectResponse($this->getUrlGenerator()->fromParameters($parameters));
             }
             else
             {

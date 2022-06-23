@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Quota\Manager as QuotaManager;
 use Chamilo\Core\Repository\Quota\Rights\Form\RightsGroupForm;
 use Chamilo\Core\Repository\Quota\Rights\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Redirect;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class CreatorComponent extends Manager
 {
@@ -25,18 +25,17 @@ class CreatorComponent extends Manager
 
         $rightsService = $this->getRightsService();
 
-        $postBackUrl = new Redirect(
-            array(
-                RepositoryManager::PARAM_CONTEXT => RepositoryManager::package(),
-                RepositoryManager::PARAM_ACTION => RepositoryManager::ACTION_QUOTA,
-                QuotaManager::PARAM_ACTION => QuotaManager::ACTION_RIGHTS,
-                Manager::PARAM_ACTION => Manager::ACTION_CREATE
-            )
-        );
+        $postBackParameters = [
+            RepositoryManager::PARAM_CONTEXT => RepositoryManager::package(),
+            RepositoryManager::PARAM_ACTION => RepositoryManager::ACTION_QUOTA,
+            QuotaManager::PARAM_ACTION => QuotaManager::ACTION_RIGHTS,
+            Manager::PARAM_ACTION => Manager::ACTION_CREATE
+
+        ];
 
         $rightsForm = new RightsGroupForm(
-            $postBackUrl->getUrl(), $this->getTranslator(), false, $rightsService->getAvailableRights(),
-            $rightsService->getAvailableEntities()
+            $this->getUrlGenerator()->fromParameters($postBackParameters), $this->getTranslator(), false,
+            $rightsService->getAvailableRights(), $rightsService->getAvailableEntities()
         );
 
         if ($rightsForm->validate())
@@ -51,7 +50,7 @@ class CreatorComponent extends Manager
                 'Chamilo\Libraries\Rights'
             );
 
-            $postBackUrl->toUrl();
+            return new RedirectResponse($this->getUrlGenerator()->fromParameters($postBackParameters));
         }
 
         $html = [];

@@ -3,6 +3,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Document\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\DependencyInjection;
 
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
+use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Document\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\DependencyInjection
@@ -11,8 +13,10 @@ use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author - Sven Vanpoucke - Hogeschool Gent
  */
-class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
+class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
 {
+    use ExtensionTrait;
+
     public function getAlias()
     {
         return 'chamilo.application.weblcms.tool.implementation.document.integration.chamilo.application.weblcms.tool.implementation.course_group';

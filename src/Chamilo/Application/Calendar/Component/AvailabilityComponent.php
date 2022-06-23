@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Form\AvailabilityForm;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -16,15 +16,6 @@ use Chamilo\Libraries\File\Redirect;
  */
 class AvailabilityComponent extends Manager
 {
-
-    /**
-     *
-     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
-     */
-    protected function getAvailabilityService()
-    {
-        return $this->getService(AvailabilityService::class);
-    }
 
     public function run()
     {
@@ -40,8 +31,11 @@ class AvailabilityComponent extends Manager
                 $this->getUser(), $values[AvailabilityService::PROPERTY_CALENDAR]
             );
 
-            $nextAction = new Redirect(array(Application::PARAM_CONTEXT => Manager::context()));
-            $nextAction->toUrl();
+            return new RedirectResponse(
+                $this->getUrlGenerator()->fromParameters(
+                    [Application::PARAM_CONTEXT => Manager::context()]
+                )
+            );
         }
         else
         {
@@ -53,6 +47,15 @@ class AvailabilityComponent extends Manager
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
+     */
+    protected function getAvailabilityService()
+    {
+        return $this->getService(AvailabilityService::class);
     }
 
     /**

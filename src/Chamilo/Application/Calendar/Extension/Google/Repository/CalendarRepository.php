@@ -15,6 +15,7 @@ use Exception;
 use Google_Cache_File;
 use Google_Client;
 use Google_Service_Calendar;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -376,8 +377,9 @@ class CalendarRepository
         }
         else
         {
-            $redirect = new Redirect();
-            $redirect->writeHeader($googleClient->createAuthUrl());
+            $response = new RedirectResponse($googleClient->createAuthUrl());
+            $response->send();
+            exit;
         }
     }
 

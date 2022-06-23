@@ -3,8 +3,10 @@ namespace Chamilo\Configuration\DependencyInjection;
 
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
+use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 /**
@@ -12,8 +14,12 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
+class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
 {
+    use ExtensionTrait
+    {
+        load as public extentensionLoad;
+    }
 
     public function getAlias()
     {
@@ -25,9 +31,9 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         return ['Chamilo\Configuration' => ['configuration.xml', 'registration.xml', 'language.xml']];
     }
 
-    public function load(array $config, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container)
     {
-        parent::load($config, $container);
+        $this->extentensionLoad($configs, $container);
 
         $fileConfigurationLocator = new FileConfigurationLocator($this->getPathBuilder());
 

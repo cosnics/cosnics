@@ -2,13 +2,18 @@
 
 namespace Chamilo\Libraries\Authentication\Ldap;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Exception;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Translation\Translator;
 
 /**
  * This authentication class uses LDAP to authenticate users.
@@ -21,37 +26,41 @@ use Exception;
  */
 class LdapAuthentication extends Authentication implements AuthenticationInterface
 {
-    /**
-     *
-     * @var string[]
-     */
-    private $ldapSettings;
+    protected UrlGenerator $urlGenerator;
 
     /**
-     * Returns the short name of the authentication to check in the settings
-     *
-     * @return string
+     * @var string[]
      */
-    public function getAuthenticationType()
+    private array $ldapSettings;
+
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
+        UserService $userService, UrlGenerator $urlGenerator
+    )
+    {
+        parent::__construct($configurationConsulter, $translator, $request, $userService);
+        $this->urlGenerator = $urlGenerator;
+    }
+
+    public function getAuthenticationType(): string
     {
         return __NAMESPACE__;
     }
 
     /**
-     *
      * @return string[]
      */
-    protected function getConfiguration()
+    protected function getConfiguration(): array
     {
         if (!isset($this->ldapSettings))
         {
             $ldap = [];
-            $ldap['host'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_host'));
-            $ldap['port'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_port'));
-            $ldap['rdn'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_remote_dn'));
-            $ldap['password'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_password'));
+            $ldap['host'] = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'ldap_host']);
+            $ldap['port'] = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'ldap_port']);
+            $ldap['rdn'] = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'ldap_remote_dn']);
+            $ldap['password'] = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'ldap_password']);
             $ldap['search_dn'] = $this->configurationConsulter->getSetting(
-                array('Chamilo\Core\Admin', 'ldap_search_dn')
+                ['Chamilo\Core\Admin', 'ldap_search_dn']
             );
 
             $this->ldapSettings = $ldap;
@@ -60,27 +69,18 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
         return $this->ldapSettings;
     }
 
-    /**
-     * Returns the priority of the authentication, lower priorities come first
-     *
-     * @return int
-     */
-    public function getPriority()
+    public function getPriority(): int
     {
         return 100;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    protected function isConfigured()
+    protected function isConfigured(): bool
     {
         $settings = $this->getConfiguration();
 
-        foreach ($settings as $setting => $value)
+        foreach ($settings as $value)
         {
-            if (empty($value) || !isset($value))
+            if (empty($value))
             {
                 return false;
             }
@@ -90,12 +90,10 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
     }
 
     /**
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     *
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      * @throws \Exception
      */
-    public function login()
+    public function login(): ?User
     {
         $user = $this->getUserFromCredentialsRequest();
         if (!$user)
@@ -119,11 +117,11 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
             ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, 3);
             $filter = '(uid=' . $user->get_username() . ')';
 
-            $result = ldap_bind($ldapConnect, $settings['rdn'], $settings['password']);
+            ldap_bind($ldapConnect, $settings['rdn'], $settings['password']);
             $search_result = ldap_search($ldapConnect, $settings['search_dn'], $filter);
             $info = ldap_get_entries($ldapConnect, $search_result);
 
-            $dn = ($info[0]["dn"]);
+            $dn = ($info[0]['dn']);
 
             ldap_close($ldapConnect);
         }
@@ -163,7 +161,7 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
         $ldapConnect = ldap_connect($settings['host'], $settings['port']);
         ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, 3);
 
-        if (!(@ldap_bind($ldapConnect, $dn, $password)))
+        if (!(ldap_bind($ldapConnect, $dn, $password)))
         {
             ldap_close($ldapConnect);
 
@@ -179,13 +177,13 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
         }
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
     public function logout(User $user)
     {
-        $redirect = new Redirect([], array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
-        $redirect->toUrl();
-        exit();
+        $redirect = new RedirectResponse(
+            $this->urlGenerator->fromParameters([], [Application::PARAM_ACTION, Application::PARAM_CONTEXT])
+        );
+
+        $redirect->send();
+        exit;
     }
 }

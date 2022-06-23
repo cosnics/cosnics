@@ -72,7 +72,7 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
             $courseGroup, 'Document'
         );
 
-        $visitDocumentUrl = $this->urlGenerator->generateURL(
+        $visitDocumentUrl = $this->urlGenerator->fromRequest(
             [
                 Manager::PARAM_TOOL => 'Document',
                 Manager::PARAM_TOOL_ACTION =>

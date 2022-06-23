@@ -7,7 +7,7 @@ use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Redirect;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -29,9 +29,11 @@ class LogoutComponent extends Manager implements DelegateComponent
             $this->getAvailabilityService()->deleteAvailabilityByCalendarType(self::package());
         }
 
-        $nextAction =
-            new Redirect(array(Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context()));
-        $nextAction->toUrl();
+        return new RedirectResponse(
+            $this->getUrlGenerator()->fromParameters(
+                [Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context()]
+            )
+        );
     }
 
     /**

@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Protocol\GoogleClient\GoogleClientService;
@@ -17,19 +18,19 @@ use InvalidArgumentException;
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
 
-    const DOCUMENTS_FOLLOWED = 'followed';
+    public const DOCUMENTS_FOLLOWED = 'followed';
 
-    const DOCUMENTS_OWNED = 'mine';
+    public const DOCUMENTS_OWNED = 'mine';
 
-    const DOCUMENTS_RECENT = 'recent';
+    public const DOCUMENTS_RECENT = 'recent';
 
-    const DOCUMENTS_SHARED = '-mine';
+    public const DOCUMENTS_SHARED = '-mine';
 
-    const DOCUMENTS_TRASH = 'trashed';
+    public const DOCUMENTS_TRASH = 'trashed';
 
-    const FOLDERS_MINE = 1;
+    public const FOLDERS_MINE = 1;
 
-    const FOLDERS_SHARED = 2;
+    public const FOLDERS_SHARED = 2;
 
     /**
      *
@@ -56,7 +57,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $user->setId(Session::get_user_id());
 
         $this->googleClientService = new GoogleClientService(
-            new GoogleClientSettingsProvider(
+            ChamiloRequest::createFromGlobals(), new GoogleClientSettingsProvider(
                 $external_repository_instance, $user, 'https://www.googleapis.com/auth/drive'
             )
         );

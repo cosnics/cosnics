@@ -1,9 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Protocol\GoogleClient;
 
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Google_Auth_Exception;
 use Google_Client;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Initializes and handles the login procedure for the Google Client
@@ -28,17 +29,18 @@ class GoogleClientService
      */
     protected $googleClientSettingsProvider;
 
+    private ChamiloRequest $request;
+
     /**
-     *
-     * @param \Chamilo\Libraries\Protocol\GoogleClient\GoogleClientSettingsProviderInterface $googleClientSettingsProvider
-     * @param \Google_Client $googleClient
-     *
      * @throws \Exception
      */
     public function __construct(
-        GoogleClientSettingsProviderInterface $googleClientSettingsProvider, Google_Client $googleClient = null
+        ChamiloRequest $request, GoogleClientSettingsProviderInterface $googleClientSettingsProvider,
+        Google_Client $googleClient = null
     )
     {
+        $this->request = $request;
+
         if (!$googleClient)
         {
             $googleClient = new Google_Client();
@@ -58,6 +60,11 @@ class GoogleClientService
     public function getGoogleClient()
     {
         return $this->googleClient;
+    }
+
+    protected function getRequest(): ChamiloRequest
+    {
+        return $this->request;
     }
 
     /**
@@ -124,12 +131,10 @@ class GoogleClientService
         else
         {
             $this->googleClient->setApprovalPrompt('force');
-            $url = $this->googleClient->createAuthUrl();
 
-            $redirect = new Redirect();
-            $redirect->writeHeader($url);
-
-            exit();
+            $response = new RedirectResponse($this->googleClient->createAuthUrl());
+            $response->send();
+            exit;
         }
     }
 
@@ -143,7 +148,8 @@ class GoogleClientService
         $this->googleClientSettingsProvider->removeAccessToken();
         $this->googleClientSettingsProvider->removeRefreshToken();
 
-        $redirect = new Redirect();
-        $redirect->writeHeader($redirect->getCurrentUrl());
+        $response = new RedirectResponse($this->getRequest()->getUri());
+        $response->send();
+        exit;
     }
 }

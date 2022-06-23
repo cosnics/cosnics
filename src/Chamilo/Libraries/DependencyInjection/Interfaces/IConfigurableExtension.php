@@ -15,10 +15,5 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 interface IConfigurableExtension extends ExtensionInterface
 {
 
-    /**
-     * Loads the configuration for this package in the container
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
     public function loadContainerConfiguration(ContainerBuilder $container);
 }

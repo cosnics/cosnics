@@ -3,10 +3,10 @@ namespace Chamilo\Application\Portfolio\Component;
 
 use Chamilo\Application\Portfolio\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -30,12 +30,15 @@ class CodeComponent extends Manager
 
                 if ($user instanceof User)
                 {
-                    $redirect = new Redirect(
-                        array(
-                            self::PARAM_CONTEXT => self::package(),
-                            self::PARAM_ACTION => self::ACTION_HOME,
-                            self::PARAM_USER_ID => $user->get_id()));
-                    $redirect->toUrl();
+                    return new RedirectResponse(
+                        $this->getUrlGenerator()->fromParameters(
+                            [
+                                self::PARAM_CONTEXT => self::package(),
+                                self::PARAM_ACTION => self::ACTION_HOME,
+                                self::PARAM_USER_ID => $user->get_id()
+                            ]
+                        )
+                    );
                 }
                 else
                 {

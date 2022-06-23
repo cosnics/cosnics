@@ -6,7 +6,9 @@ use Chamilo\Core\Repository\DependencyInjection\CompilerPass\PublicationAggregat
 use Chamilo\Core\Repository\DependencyInjection\CompilerPass\WorkspaceExtensionCompilerPass;
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
+use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * Extension on the dependency injection container.
@@ -18,8 +20,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ICompilerPassExtension
+class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
+    implements ExtensionInterface, ICompilerPassExtension
 {
+    use ExtensionTrait;
+
     /**
      * Returns the recommended alias to use in XML.
      * This alias is also the mandatory prefix to use when using YAML.

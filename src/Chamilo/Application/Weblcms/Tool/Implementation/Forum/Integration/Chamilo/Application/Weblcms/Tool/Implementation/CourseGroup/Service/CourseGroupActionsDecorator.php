@@ -72,7 +72,7 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
             $courseGroup, 'Forum'
         );
 
-        $visitForumUrl = $this->urlGenerator->generateURL(
+        $visitForumUrl = $this->urlGenerator->fromRequest(
             [
                 Manager::PARAM_TOOL => 'Forum',
                 Manager::PARAM_TOOL_ACTION =>

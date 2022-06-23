@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection;
 
-use Chamilo\Libraries\Console\Command\Vendor\PHPStan\PHPStanPackages;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\AuthenticationCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheServicesConstructorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
@@ -9,15 +8,22 @@ use Chamilo\Libraries\DependencyInjection\CompilerPass\DoctrineEventListenerComp
 use Chamilo\Libraries\DependencyInjection\CompilerPass\FormTypeCompilerPass;
 use Chamilo\Libraries\DependencyInjection\Configuration\LibrariesConfiguration;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
+use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Libraries\DependencyInjection
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ICompilerPassExtension
+class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
+    implements ExtensionInterface, ICompilerPassExtension
 {
+    use ExtensionTrait
+    {
+        load as public extentensionLoad;
+    }
 
     public function getAlias()
     {
@@ -55,11 +61,10 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
         return 'Chamilo\Libraries';
     }
 
-    public function load(array $configuration, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container)
     {
-        parent::load($configuration, $container);
-
-        $this->processLibrariesConfiguration($configuration, $container);
+        $this->extentensionLoad($configs, $container);
+        $this->processLibrariesConfiguration($configs, $container);
     }
 
     protected function processLibrariesConfiguration(array $configuration, ContainerBuilder $container)
@@ -93,24 +98,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
                     'doctrine.orm.event_listener', array('event' => 'loadClassMetadata')
                 );
             }
-        }
-
-        $this->processPHPStanConfig($config, $container);
-    }
-
-    protected function processPHPStanConfig(array $configuration, ContainerBuilder $container)
-    {
-        if (!array_key_exists('phpstan', $configuration))
-        {
-            return;
-        }
-
-        $packagesConfiguration = $configuration['phpstan']['packages'];
-
-        if ($container->hasDefinition(PHPStanPackages::class))
-        {
-            $phpStanPackagesDefinition = $container->getDefinition(PHPStanPackages::class);
-            $phpStanPackagesDefinition->addMethodCall('setPackagesFromConfiguration', array($packagesConfiguration));
         }
     }
 

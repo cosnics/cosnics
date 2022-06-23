@@ -7,10 +7,11 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -22,12 +23,12 @@ use Symfony\Component\Translation\Translator;
  */
 class AuthenticationValidator
 {
-    const PARAM_AUTHENTICATION_ERROR = 'authentication_error';
+    public const PARAM_AUTHENTICATION_ERROR = 'authentication_error';
 
     /**
-     * @var ChamiloRequest
+     * @var \Chamilo\Libraries\Authentication\AuthenticationInterface[]
      */
-    protected $request;
+    protected $authentications;
 
     /**
      * @var ConfigurationConsulter
@@ -35,9 +36,9 @@ class AuthenticationValidator
     protected $configurationConsulter;
 
     /**
-     * @var \Symfony\Component\Translation\Translator
+     * @var ChamiloRequest
      */
-    protected $translator;
+    protected $request;
 
     /**
      * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
@@ -45,9 +46,11 @@ class AuthenticationValidator
     protected $sessionUtilities;
 
     /**
-     * @var \Chamilo\Libraries\Authentication\AuthenticationInterface[]
+     * @var \Symfony\Component\Translation\Translator
      */
-    protected $authentications;
+    protected $translator;
+
+    protected UrlGenerator $urlGenerator;
 
     /**
      * AuthenticationValidator constructor.
@@ -59,13 +62,14 @@ class AuthenticationValidator
      */
     public function __construct(
         ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, Translator $translator,
-        SessionUtilities $sessionUtilities
+        SessionUtilities $sessionUtilities, UrlGenerator $urlGenerator
     )
     {
         $this->request = $request;
         $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
         $this->sessionUtilities = $sessionUtilities;
+        $this->urlGenerator = $urlGenerator;
 
         $this->authentications = [];
     }
@@ -98,7 +102,7 @@ class AuthenticationValidator
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isAuthenticated()
     {
@@ -142,9 +146,12 @@ class AuthenticationValidator
             );
         }
 
-        $redirect = new Redirect($parameters);
-        $redirect->toUrl();
-        exit();
+        $redirect = new RedirectResponse(
+            $this->urlGenerator->fromParameters($parameters)
+        );
+
+        $redirect->send();
+        exit;
     }
 
     /**
@@ -167,7 +174,7 @@ class AuthenticationValidator
     }
 
     /**
-     * @return boolean
+     * @return bool
      *
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      * @throws \ReflectionException
