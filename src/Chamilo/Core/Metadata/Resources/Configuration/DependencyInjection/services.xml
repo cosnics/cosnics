@@ -26,5 +26,9 @@
 
         <service id="Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService"/>
 
+        <service id="Chamilo\Core\Metadata\Service\AdminActionProvider">
+            <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
+        </service>
+
     </services>
 </container>

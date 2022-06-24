@@ -133,6 +133,7 @@ class AuthenticationValidator
     protected function redirectAfterLogin()
     {
         $context = $this->request->query->get(Application::PARAM_CONTEXT);
+
         if ($this->request->query->count() > 0 && $context != 'Chamilo\Core\Home')
         {
             $parameters = $this->request->query->all();

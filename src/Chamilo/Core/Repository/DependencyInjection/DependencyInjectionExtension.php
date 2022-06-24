@@ -25,12 +25,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
 {
     use ExtensionTrait;
 
-    /**
-     * Returns the recommended alias to use in XML.
-     * This alias is also the mandatory prefix to use when using YAML.
-     *
-     * @return string
-     */
     public function getAlias()
     {
         return 'chamilo.core.repository';
@@ -51,11 +45,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         ];
     }
 
-    /**
-     * Registers the compiler passes in the container
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
     public function registerCompilerPasses(ContainerBuilder $container)
     {
         $container->addCompilerPass(new PublicationAggregatorCompilerPass());

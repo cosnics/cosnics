@@ -7,8 +7,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,12 +25,12 @@ class ChangeUserComponent extends Manager
     {
         $this->checkAuthorization(Manager::context(), 'ManageUsers');
 
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
 
-        $id = Request::get(self::PARAM_USER_USER_ID);
+        $id = $this->getRequest()->query->get(self::PARAM_USER_USER_ID);
         $this->set_parameter(self::PARAM_USER_USER_ID, $id);
 
         if ($id)
@@ -42,21 +40,24 @@ class ChangeUserComponent extends Manager
             $checkurl = $sessionUtilities->retrieve('checkChamiloURL');
             $sessionUtilities->clear();
             $sessionUtilities->register('_uid', $id);
-            $sessionUtilities->register('_as_admin', $this->get_user_id());
+            $sessionUtilities->register('_as_admin', $this->getUser()->getId());
             $sessionUtilities->register('checkChamiloURL', $checkurl);
 
             $loginApplication = Configuration::get('Chamilo\Core\Admin', 'page_after_login');
-            $response = new RedirectResponse($this->getLink(array(Application::PARAM_CONTEXT => $loginApplication)));
-            $response->send();
+
+            return new RedirectResponse(
+                $this->getUrlGenerator()->fromParameters([Application::PARAM_CONTEXT => $loginApplication])
+            );
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation::get('User')),
-                        StringUtilities::LIBRARIES)));
+                        'NoObjectSelected', ['OBJECT' => Translation::get('User')], StringUtilities::LIBRARIES
+                    )
+                )
+            );
         }
     }
 
@@ -65,7 +66,9 @@ class ChangeUserComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_USERS)),
-                Translation::get('AdminUserBrowserComponent')));
+                Translation::get('AdminUserBrowserComponent')
+            )
+        );
     }
 
 }

@@ -1,8 +1,0 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Package = repository\integration\core\home
-; Language = de
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-TypeName = "Home"
-ManageExternalInstances = "Verwaltung externer Inhaltsverbinder"
-ManageExternalInstancesDescription = "Verwaltung der Instanzen zur Verbindung zu externen Inhaltsquellen, wie YouTube, Google Docs, MediaMosa usw."

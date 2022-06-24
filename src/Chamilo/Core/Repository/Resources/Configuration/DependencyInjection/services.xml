@@ -22,5 +22,9 @@
         <service id="Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository"/>
 
         <service id="Chamilo\Core\Repository\Common\ContentObjectDifferenceRenderer"/>
+
+        <service id="Chamilo\Core\Repository\Service\AdminActionProvider">
+            <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
+        </service>
     </services>
 </container>

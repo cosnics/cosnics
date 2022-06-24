@@ -1,19 +1,11 @@
 <?php
 namespace Chamilo\Core\Admin\Component;
 
-use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Configuration\Package\PlatformPackageBundles;
-use Chamilo\Core\Admin\Form\AdminSearchForm;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Menu\PackageTypeLinksMenu;
+use Chamilo\Core\Admin\Service\ActionProvider;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
-use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Tabs\Action;
-use Chamilo\Libraries\Format\Tabs\ActionsTab;
-use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 
 class BrowserComponent extends Manager implements DelegateComponent
@@ -33,10 +25,15 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html = [];
 
         $html[] = $this->render_header();
-        $html[] = $this->get_tabs();
+        $html[] = $this->renderTabs();
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getActionProvider(): ActionProvider
+    {
+        return $this->getService(ActionProvider::class);
     }
 
     /**
@@ -65,72 +62,11 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function get_menu()
     {
         $tabNamespace = ClassnameUtilities::getInstance()->getNamespaceFromId($this->getCurrentTab());
-        $menu = new PackageTypeLinksMenu($tabNamespace, $this->get_url(array(self::PARAM_TAB => '__TYPE__')));
+        $menu = new PackageTypeLinksMenu(
+            $this->getActionProvider(), $tabNamespace, $this->get_url(array(self::PARAM_TAB => '__TYPE__'))
+        );
 
         return $menu->render_as_tree();
-    }
-
-    /**
-     * @return string
-     */
-    public function get_tabs()
-    {
-        $tabs = new TabsCollection();
-
-        $packages = PlatformPackageBundles::getInstance(PackageList::MODE_INSTALLED)->get_type_packages();
-
-        $packageNames = [];
-
-        $tabNamespace = ClassnameUtilities::getInstance()->getNamespaceFromId($this->getCurrentTab());
-
-        foreach ($packages[$tabNamespace] as $namespace => $package)
-        {
-            $packageNames[$this->getTranslator()->trans('TypeName', [], $namespace)] = $package;
-        }
-
-        ksort($packageNames);
-
-        foreach ($packageNames as $packageName => $package)
-        {
-            $managerClass = $package->get_context() . '\Integration\Chamilo\Core\Admin\Manager';
-
-            if (class_exists($managerClass) &&
-                is_subclass_of($managerClass, '\Chamilo\Core\Admin\ActionsSupportInterface'))
-            {
-                $links = $managerClass::getActions();
-
-                $index = 0;
-                $index ++;
-
-                $actions_tab = new ActionsTab(
-                    ClassnameUtilities::getInstance()->getNamespaceId($package->get_context()),
-                    $this->getTranslator()->trans('TypeName', [], $package->get_context()), new NamespaceIdentGlyph(
-                        $package->get_context(), true, false, false, IdentGlyph::SIZE_SMALL
-                    )
-                );
-
-                if ($links->get_search())
-                {
-                    $search_form = new AdminSearchForm($links->get_search(), $index);
-                    $actions_tab->addAction(
-                        new Action(
-                            $search_form->render(), null, new FontAwesomeGlyph(
-                                'search', array('fa-fw', 'fa-2x'), null, 'fas'
-                            )
-                        )
-                    );
-                }
-
-                foreach ($links->get_links() as $action)
-                {
-                    $actions_tab->addAction($action);
-                }
-
-                $tabs->add($actions_tab);
-            }
-        }
-
-        return $this->getTabsRenderer()->render('admin', $tabs);
     }
 
     /**
@@ -139,5 +75,14 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function has_menu()
     {
         return true;
+    }
+
+    protected function renderTabs(): string
+    {
+        $tabNamespace = ClassnameUtilities::getInstance()->getNamespaceFromId($this->getCurrentTab());
+        $tabsCollection = $this->getActionProvider()->getTabsCollection($tabNamespace);
+        $tabsCollection->sortByLabel();
+
+        return $this->getTabsRenderer()->render('admin', $tabsCollection);
     }
 }

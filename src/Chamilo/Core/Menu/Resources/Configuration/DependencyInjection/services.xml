@@ -54,5 +54,9 @@
         <service id="Chamilo\Core\Menu\Renderer\Item\LanguageItemRenderer"/>
         <service id="Chamilo\Core\Menu\Renderer\Item\LinkApplicationItemRenderer"/>
         <service id="Chamilo\Core\Menu\Renderer\Item\LinkItemRenderer"/>
+
+        <service id="Chamilo\Core\Menu\Service\AdminActionProvider">
+            <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
+        </service>
     </services>
 </container>

@@ -40,5 +40,10 @@
                      method="getActivePictureProvider"/>
         </service>
 
+        <service id="Chamilo\Core\User\Service\AdminActionProvider">
+            <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
+            <tag name="Chamilo\Core\Admin\Service\ImportActionProvider"/>
+        </service>
+
     </services>
 </container>

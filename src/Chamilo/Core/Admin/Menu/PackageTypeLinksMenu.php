@@ -5,6 +5,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Admin\Service\ActionProvider;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
@@ -14,12 +15,15 @@ use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 class PackageTypeLinksMenu extends HtmlMenu
 {
 
-    private $format;
+    private ActionProvider $actionProvider;
 
     private $array_renderer;
 
-    public function __construct($current_type, $format)
+    private $format;
+
+    public function __construct(ActionProvider $actionProvider, $current_type, $format)
     {
+        $this->actionProvider = $actionProvider;
         $this->format = $format;
 
         parent::__construct(
@@ -69,11 +73,7 @@ class PackageTypeLinksMenu extends HtmlMenu
 
             if (!empty($registration) && $registration[Registration::PROPERTY_STATUS])
             {
-                $manager_class = $package->get_context() . '\Integration\Chamilo\Core\Admin\Manager';
-
-                if (class_exists($manager_class) && is_subclass_of(
-                        $manager_class, '\Chamilo\Core\Admin\ActionsSupportInterface'
-                    ))
+                if ($this->actionProvider->existsForContext($package->get_context()))
                 {
                     $has_links = true;
                     break;

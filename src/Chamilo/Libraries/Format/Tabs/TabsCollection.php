@@ -40,4 +40,22 @@ class TabsCollection extends ArrayCollection
 
         return false;
     }
+
+    public function sortByLabel()
+    {
+        $tabs = $this->toArray();
+
+        usort(
+            $tabs, function (AbstractTab $tabLeft, AbstractTab $tabRight) {
+            return strcasecmp($tabLeft->getLabel(), $tabRight->getLabel());
+        }
+        );
+
+        $this->clear();
+
+        foreach ($tabs as $tab)
+        {
+            $this->add($tab);
+        }
+    }
 }

@@ -7,16 +7,9 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Core\Group\Service\GroupEventNotifier"/>
-        <service id="Chamilo\Core\Group\Service\GroupMembershipService"/>
-        <service id="Chamilo\Core\Group\Service\GroupService"/>
-        <service id="Chamilo\Core\Group\Service\GroupsTreeTraverser"/>
-
-        <service id="Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository"/>
-        <service id="Chamilo\Core\Group\Storage\Repository\GroupRepository"/>
-
-        <service id="Chamilo\Core\Group\Service\AdminActionProvider">
+        <service id="Chamilo\Core\Lynx\Service\AdminActionProvider">
             <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
         </service>
+
     </services>
 </container>
