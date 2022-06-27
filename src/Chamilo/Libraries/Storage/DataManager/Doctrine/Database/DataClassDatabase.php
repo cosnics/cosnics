@@ -22,6 +22,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Types\Type;
 use Exception;
+use Throwable;
 
 /**
  * This class provides basic functionality for database connections Create Table, Get next id, Insert, Update, Delete,
@@ -77,9 +78,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return (int) $record[0];
         }
-        catch (Exception $exception)
+        catch (Throwable $throwable)
         {
-            $this->handleError($exception);
+            $this->handleError($throwable);
 
             // TODO: Do something more useful when DataClassDatabase::count() throws an error
             exit;
@@ -109,9 +110,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return $counts;
         }
-        catch (Exception $exception)
+        catch (Throwable $throwable)
         {
-            $this->handleError($exception);
+            $this->handleError($throwable);
 
             // TODO: Do something more useful when DataClassDatabase::countGrouped() throws an error
             exit;
@@ -126,21 +127,28 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return true;
         }
-        catch (Exception $exception)
+        catch (Throwable $throwable)
         {
-            $this->handleError($exception);
+            $this->handleError($throwable);
 
             return false;
         }
     }
 
+    /**
+     * @template deleteDataClassName
+     *
+     * @param class-string<deleteDataClassName> $dataClassName
+     */
     public function delete(string $dataClassName, ?Condition $condition = null): bool
     {
         try
         {
             $queryBuilder = $this->getConnection()->createQueryBuilder();
 
-            $queryBuilder->delete($dataClassName::getStorageUnitName(), $this->getAlias($dataClassName::getStorageUnitName()));
+            $queryBuilder->delete(
+                $dataClassName::getStorageUnitName(), $this->getAlias($dataClassName::getStorageUnitName())
+            );
 
             if (isset($condition))
             {
@@ -151,9 +159,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return true;
         }
-        catch (Exception $exception)
+        catch (Throwable $throwable)
         {
-            $this->handleError($exception);
+            $this->handleError($throwable);
 
             return false;
         }
@@ -189,9 +197,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return $distinctElements;
         }
-        catch (Exception $exception)
+        catch (Throwable $throwable)
         {
-            $this->handleError($exception);
+            $this->handleError($throwable);
 
             // TODO: Do something more useful when DataClassDatabase::distinct() throws an error
             exit;
@@ -254,9 +262,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             return $this->getConnection()->lastInsertId($dataClassStorageUnitName);
         }
-        catch (Exception $exception)
+        catch (Throwable $throwable)
         {
-            $this->handleError($exception);
+            $this->handleError($throwable);
 
             // TODO: Do something more useful when DataClassDatabase::getLastInsertedIdentifier() throws an error
             exit;
@@ -303,6 +311,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return ClassnameUtilities::getInstance()->getNamespaceParent(static::context(), 3);
     }
 
+    /**
+     * @template prepareTableNameDataClassName
+     *
+     * @param class-string<prepareTableNameDataClassName> $dataClassName
+     */
     protected function prepareTableName(string $dataClassName): string
     {
         if (is_subclass_of($dataClassName, CompositeDataClass::class) &&
@@ -369,9 +382,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return $record;
         }
-        catch (Exception $exception)
+        catch (Throwable $throwable)
         {
-            $this->handleError($exception);
+            $this->handleError($throwable);
 
             throw new DataClassNoResultException($dataClassName, $parameters);
         }
@@ -401,9 +414,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return $records;
         }
-        catch (Exception $exception)
+        catch (Throwable $throwable)
         {
-            $this->handleError($exception);
+            $this->handleError($throwable);
             throw new DataClassNoResultException($dataClassName, $parameters);
         }
     }
@@ -465,9 +478,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return true;
         }
-        catch (Exception $exception)
+        catch (Throwable $throwable)
         {
-            $this->handleError($exception);
+            $this->handleError($throwable);
 
             return false;
         }
@@ -501,9 +514,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return true;
         }
-        catch (Exception $exception)
+        catch (Throwable $throwable)
         {
-            $this->handleError($exception);
+            $this->handleError($throwable);
 
             return false;
         }

@@ -296,7 +296,8 @@ class DataClassRepository
             $objectProperties = $dataClass->getAdditionalProperties();
             $objectProperties[DataClass::PROPERTY_ID] = $dataClass->getId();
 
-            $dataClassCreated = $this->getDataClassDatabase()->create($dataClass::getStorageUnitName(), $objectProperties);
+            $dataClassCreated =
+                $this->getDataClassDatabase()->create($dataClass::getStorageUnitName(), $objectProperties);
         }
 
         if ($dataClassCreated === true && $this->isQueryCacheEnabled())
@@ -318,6 +319,11 @@ class DataClassRepository
         }
     }
 
+    /**
+     * @template createRecordDataClassName
+     *
+     * @param class-string<createRecordDataClassName> $dataClassName
+     */
     public function createRecord(string $dataClassName, array $record): bool
     {
         return $this->getDataClassDatabase()->create($dataClassName::getStorageUnitName(), $record);
@@ -378,6 +384,11 @@ class DataClassRepository
         }
     }
 
+    /**
+     * @template determineCompositeDataClassParentClassNameDataClassName
+     *
+     * @param class-string<determineCompositeDataClassParentClassNameDataClassName> $dataClassName
+     */
     protected function determineCompositeDataClassParentClassName(string $dataClassName): string
     {
         if ($this->isExtensionClass($dataClassName))
@@ -856,6 +867,11 @@ class DataClassRepository
         return $this->retrievesClass($parentDataClassName, $dataClassName, $parameters);
     }
 
+    /**
+     * @template setCompositeDataClassParametersDataClassName
+     *
+     * @param class-string<setCompositeDataClassParametersDataClassName> $dataClassName
+     */
     protected function setCompositeDataClassParameters(
         string $parentDataClassName, string $dataClassName, DataClassParameters $parameters
     ): DataClassRepository
@@ -956,6 +972,11 @@ class DataClassRepository
         return $result;
     }
 
+    /**
+     * @template updatesDataClassName
+     *
+     * @param class-string<updatesDataClassName> $dataClassName
+     */
     public function updates(string $dataClassName, UpdateProperties $properties, Condition $condition): bool
     {
         if (!$this->getDataClassDatabase()->updates($dataClassName::getStorageUnitName(), $properties, $condition))

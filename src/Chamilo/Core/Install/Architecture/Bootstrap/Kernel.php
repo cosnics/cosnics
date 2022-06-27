@@ -7,9 +7,9 @@ use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerI
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
-use Chamilo\Libraries\Format\Response\Response;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Exception;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
@@ -251,7 +251,7 @@ class Kernel
 
         if (! $response instanceof Response)
         {
-            $response = new Response($this->getVersion(), $response);
+            $response = new Response($response);
         }
 
         $response->send();

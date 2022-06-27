@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Chat\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Chat\Manager;
-use Chamilo\Libraries\Format\Response\Response;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Symfony\Component\HttpFoundation\Response;
 
 class ViewerComponent extends Manager
 {

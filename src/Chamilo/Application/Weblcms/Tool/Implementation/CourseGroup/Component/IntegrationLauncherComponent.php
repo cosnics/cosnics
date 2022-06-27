@@ -13,12 +13,12 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
  */
 class IntegrationLauncherComponent extends Manager
 {
-    const PARAM_BASE_CONTEXT = 'BaseContext';
+    public const PARAM_BASE_CONTEXT = 'BaseContext';
 
     /**
      * Runs this component and returns it's result
      *
-     * @return \Chamilo\Libraries\Format\Response\Response | string
+     * @return \Symfony\Component\HttpFoundation\Response|string
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      */

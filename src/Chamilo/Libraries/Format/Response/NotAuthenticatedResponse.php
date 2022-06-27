@@ -7,6 +7,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
@@ -31,7 +32,7 @@ class NotAuthenticatedResponse extends Response
         $html[] = $this->renderPanel();
         $html[] = $page->getFooter()->render();
 
-        parent::__construct('', implode(PHP_EOL, $html));
+        parent::__construct(implode(PHP_EOL, $html));
     }
 
     /**

@@ -6,7 +6,6 @@ use Chamilo\Core\User\Service\SessionHandler;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
@@ -51,11 +50,6 @@ class Bootstrap
         if (!$this->getFileConfigurationLocator()->isAvailable())
         {
             $this->getRequest()->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
-            // TODO: This is old code to make sure those instances still accessing the parameter the old way keep on
-            // working for now
-            Request::set_get(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
-
-            return $this;
         }
 
         return $this;
@@ -145,6 +139,9 @@ class Bootstrap
         $this->registerErrorHandlers()->checkInstallation()->startSession();
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function startSession(): Bootstrap
     {
         if ($this->getSessionHandler() instanceof SessionHandler)

@@ -5,6 +5,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Page;
 use Exception;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
@@ -26,6 +27,6 @@ class ExceptionResponse extends Response
         $html[] = Display::error_message($exception->getMessage());
         $html[] = $page->getFooter()->render();
 
-        parent::__construct('', implode(PHP_EOL, $html));
+        parent::__construct(implode(PHP_EOL, $html));
     }
 }
