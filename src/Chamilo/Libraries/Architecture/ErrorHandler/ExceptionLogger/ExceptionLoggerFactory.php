@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
 
@@ -18,10 +19,15 @@ class ExceptionLoggerFactory
 
     protected SessionUtilities $sessionUtilities;
 
-    public function __construct(ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities)
+    protected UrlGenerator $urlGenerator;
+
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities, UrlGenerator $urlGenerator
+    )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->sessionUtilities = $sessionUtilities;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -29,8 +35,9 @@ class ExceptionLoggerFactory
      */
     protected function createDefaultExceptionLogger(): FileExceptionLogger
     {
-        $fileExceptionLoggerBuilder =
-            new FileExceptionLoggerBuilder($this->getConfigurationConsulter(), $this->getSessionUtilities());
+        $fileExceptionLoggerBuilder = new FileExceptionLoggerBuilder(
+            $this->getConfigurationConsulter(), $this->getSessionUtilities(), $this->getUrlGenerator()
+        );
 
         return $fileExceptionLoggerBuilder->createExceptionLogger();
     }
@@ -43,7 +50,7 @@ class ExceptionLoggerFactory
     public function createExceptionLogger(): ExceptionLoggerInterface
     {
         $errorHandlingConfiguration = $this->configurationConsulter->getSetting(
-            array('Chamilo\Configuration', 'error_handling')
+            ['Chamilo\Configuration', 'error_handling']
         );
 
         $exceptionLoggerConfiguration = $errorHandlingConfiguration['exception_logger'];
@@ -91,8 +98,9 @@ class ExceptionLoggerFactory
                     );
                 }
 
-                $exceptionLoggerBuilder =
-                    new $exceptionLoggerBuilderClass($this->getConfigurationConsulter(), $this->getSessionUtilities());
+                $exceptionLoggerBuilder = new $exceptionLoggerBuilderClass(
+                    $this->getConfigurationConsulter(), $this->getSessionUtilities(), $this->getUrlGenerator()
+                );
 
                 if (!$exceptionLoggerBuilder instanceof ExceptionLoggerBuilderInterface)
                 {
@@ -140,5 +148,10 @@ class ExceptionLoggerFactory
     public function getSessionUtilities(): SessionUtilities
     {
         return $this->sessionUtilities;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
     }
 }

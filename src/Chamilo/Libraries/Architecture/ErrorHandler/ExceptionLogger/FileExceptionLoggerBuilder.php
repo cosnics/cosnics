@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
@@ -17,10 +18,15 @@ class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 
     protected SessionUtilities $sessionUtilities;
 
-    public function __construct(ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities)
+    protected UrlGenerator $urlGenerator;
+
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities, UrlGenerator $urlGenerator
+    )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->sessionUtilities = $sessionUtilities;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -30,7 +36,7 @@ class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
     {
 
         $configurablePathBuilder = new ConfigurablePathBuilder(
-            $this->getConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'storage'))
+            $this->getConfigurationConsulter()->getSetting(['Chamilo\Configuration', 'storage'])
         );
 
         return new FileExceptionLogger($configurablePathBuilder->getLogPath());
@@ -54,11 +60,9 @@ class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
         return $this->sessionUtilities;
     }
 
-    public function setSessionUtilities(SessionUtilities $sessionUtilities): FileExceptionLoggerBuilder
+    public function getUrlGenerator(): UrlGenerator
     {
-        $this->sessionUtilities = $sessionUtilities;
-
-        return $this;
+        return $this->urlGenerator;
     }
 
 }

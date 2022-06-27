@@ -9,6 +9,7 @@ use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Configuration\Service\RegistrationLoader;
 use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
 use Chamilo\Libraries\DependencyInjection\ExtensionFinder\PackagesContainerExtensionFinder;
@@ -65,100 +66,35 @@ use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 class DependencyInjectionContainerBuilder
 {
 
-    /**
-     * Cache the container over requests due to issues with the container not being available everywhere
-     *
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private static $container;
+    private static ?ContainerInterface $container = null;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder
-     */
-    private static $instance;
+    private static ?DependencyInjectionContainerBuilder $instance = null;
 
-    /**
-     * The container builder
-     *
-     * @var \Symfony\Component\DependencyInjection\ContainerBuilder
-     */
-    private $builder;
+    private ?ContainerBuilder $builder;
 
-    /**
-     * The classname of the cached container
-     *
-     * @var string
-     */
-    private $cacheClass;
+    private ?string $cacheClass;
 
-    /**
-     * The path to the cache file
-     *
-     * @var string
-     */
-    private $cacheFile;
+    private ?string $cacheFile;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    private $classnameUtilities;
+    private ClassnameUtilities $classnameUtilities;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
-     */
-    private $configurablePathBuilder;
+    private ConfigurablePathBuilder $configurablePathBuilder;
 
-    /**
-     * The container extension finder
-     *
-     * @var \Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface
-     */
-    private $containerExtensionFinder;
+    private ?ContainerExtensionFinderInterface $containerExtensionFinder;
 
-    /**
-     *
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    private $fileConfigurationConsulter;
+    private ConfigurationConsulter $fileConfigurationConsulter;
 
-    /**
-     *
-     * @var \Chamilo\Configuration\Service\FileConfigurationLoader
-     */
-    private $fileConfigurationLocator;
+    private FileConfigurationLocator $fileConfigurationLocator;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\File\PathBuilder
-     */
-    private $pathBuilder;
+    private PathBuilder $pathBuilder;
 
-    /**
-     *
-     * @var \Chamilo\Configuration\Service\RegistrationConsulter
-     */
-    private $registrationConsulter;
+    private RegistrationConsulter $registrationConsulter;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    private $stringUtilities;
+    private StringUtilities $stringUtilities;
 
-    /**
-     * Constructor
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder|null $builder
-     * @param \Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface|null $containerExtensionFinder
-     * @param string|null $cacheFile
-     * @param string $cacheClass
-     */
     public function __construct(
-        ContainerBuilder $builder = null, ContainerExtensionFinderInterface $containerExtensionFinder = null,
-        $cacheFile = null, $cacheClass = 'ChamiloContainer'
+        ?ContainerBuilder $builder = null, ?ContainerExtensionFinderInterface $containerExtensionFinder = null,
+        ?string $cacheFile = null, string $cacheClass = 'ChamiloContainer'
     )
     {
         $this->setBuilder($builder);
@@ -173,13 +109,7 @@ class DependencyInjectionContainerBuilder
         $this->containerExtensionFinder = $containerExtensionFinder;
     }
 
-    /**
-     * Caches the container into a given cache file
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $cacheFile
-     */
-    protected function cacheContainer(ContainerBuilder $container, $cacheFile)
+    protected function cacheContainer(ContainerBuilder $container, string $cacheFile)
     {
         if (!is_dir(dirname($cacheFile)))
         {
@@ -187,12 +117,9 @@ class DependencyInjectionContainerBuilder
         }
 
         $dumper = new PhpDumper($container);
-        file_put_contents($cacheFile, $dumper->dump(array('class' => $this->cacheClass)));
+        file_put_contents($cacheFile, $dumper->dump(['class' => $this->cacheClass]));
     }
 
-    /**
-     * Clears the container instance
-     */
     public function clearContainerInstance()
     {
         self::$container = null;
@@ -201,9 +128,9 @@ class DependencyInjectionContainerBuilder
     /**
      * Creates and returns the default dependency injection container for Chamilo
      *
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     * @throws \Exception
      */
-    public function createContainer()
+    public function createContainer(): ContainerInterface
     {
         if (self::$container instanceof ContainerInterface)
         {
@@ -229,11 +156,7 @@ class DependencyInjectionContainerBuilder
         return $container;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    protected function getClassnameUtilities()
+    protected function getClassnameUtilities(): ClassnameUtilities
     {
         if (!isset($this->classnameUtilities))
         {
@@ -243,18 +166,14 @@ class DependencyInjectionContainerBuilder
         return $this->classnameUtilities;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
-     */
-    protected function getConfigurablePathBuilder()
+    protected function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
         if (!isset($this->configurablePathBuilder))
         {
             $fileConfigurationConsulter = $this->getFileConfigurationConsulter();
 
             $this->configurablePathBuilder = new ConfigurablePathBuilder(
-                $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage'))
+                $fileConfigurationConsulter->getSetting(['Chamilo\Configuration', 'storage'])
             );
         }
 
@@ -262,11 +181,9 @@ class DependencyInjectionContainerBuilder
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface
      * @throws \Exception
      */
-    public function getContainerExtensionFinder()
+    public function getContainerExtensionFinder(): ContainerExtensionFinderInterface
     {
         if (!isset($this->containerExtensionFinder))
         {
@@ -280,20 +197,12 @@ class DependencyInjectionContainerBuilder
         return $this->containerExtensionFinder;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface $containerExtensionFinder
-     */
-    public function setContainerExtensionFinder(ContainerExtensionFinderInterface $containerExtensionFinder = null)
+    public function setContainerExtensionFinder(?ContainerExtensionFinderInterface $containerExtensionFinder = null)
     {
         $this->containerExtensionFinder = $containerExtensionFinder;
     }
 
-    /**
-     *
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    protected function getFileConfigurationConsulter()
+    protected function getFileConfigurationConsulter(): ConfigurationConsulter
     {
         if (!isset($this->fileConfigurationConsulter))
         {
@@ -305,11 +214,7 @@ class DependencyInjectionContainerBuilder
         return $this->fileConfigurationConsulter;
     }
 
-    /**
-     *
-     * @return \Chamilo\Configuration\Service\FileConfigurationLocator
-     */
-    protected function getFileConfigurationLocator()
+    protected function getFileConfigurationLocator(): FileConfigurationLocator
     {
         if (!isset($this->fileConfigurationLocator))
         {
@@ -319,11 +224,7 @@ class DependencyInjectionContainerBuilder
         return $this->fileConfigurationLocator;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder
-     */
-    public static function getInstance()
+    public static function getInstance(): DependencyInjectionContainerBuilder
     {
         if (!isset(self::$instance))
         {
@@ -334,11 +235,10 @@ class DependencyInjectionContainerBuilder
     }
 
     /**
-     *
      * @return string[]
      * @throws \Exception
      */
-    protected function getPackageNamespaces()
+    protected function getPackageNamespaces(): array
     {
         $fileConfigurationLocator = $this->getFileConfigurationLocator();
 
@@ -360,26 +260,21 @@ class DependencyInjectionContainerBuilder
     }
 
     /**
-     *
      * @return string[]
      */
-    protected function getPackageNamespacesFromFilesystem()
+    protected function getPackageNamespacesFromFilesystem(): array
     {
         $platformPackageBundles = new PlatformPackageBundles();
 
         return array_keys($platformPackageBundles->get_packages());
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\File\PathBuilder
-     */
-    protected function getPathBuilder()
+    protected function getPathBuilder(): PathBuilder
     {
         if (!isset($this->pathBuilder))
         {
             $this->pathBuilder = new PathBuilder(
-                new ClassnameUtilities($this->getStringUtilities()), ChamiloRequest::createFromGlobals()
+                new ClassnameUtilities($this->getStringUtilities()), $this->getRequest()
             );
         }
 
@@ -387,9 +282,8 @@ class DependencyInjectionContainerBuilder
     }
 
     /**
-     *
-     * @return \Chamilo\Configuration\Service\RegistrationConsulter
      * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
+     * @throws \Exception
      */
     protected function getRegistrationConsulter(): RegistrationConsulter
     {
@@ -397,7 +291,7 @@ class DependencyInjectionContainerBuilder
         {
             $connectionFactory = new ConnectionFactory(
                 new DataSourceName(
-                    $this->getFileConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'database'))
+                    $this->getFileConfigurationConsulter()->getSetting(['Chamilo\Configuration', 'database'])
                 )
             );
 
@@ -421,16 +315,16 @@ class DependencyInjectionContainerBuilder
                 new StaticConditionVariableTranslator($storageAliasGenerator),
                 new SubselectConditionTranslator($storageAliasGenerator), new ConditionPartCache(),
                 $this->getFileConfigurationConsulter()->getSetting(
-                    array('Chamilo\Configuration', 'debug', 'enable_query_cache')
+                    ['Chamilo\Configuration', 'debug', 'enable_query_cache']
                 )
             );
 
             $exceptionLoggerFactory = new ExceptionLoggerFactory(
                 $this->getFileConfigurationConsulter(), new SessionUtilities(
-                    $this->getFileConfigurationConsulter()->getSetting(
-                        array('Chamilo\Configuration', 'general', 'security_key')
-                    )
+                $this->getFileConfigurationConsulter()->getSetting(
+                    ['Chamilo\Configuration', 'general', 'security_key']
                 )
+            ), new UrlGenerator($this->getRequest(), $this->getPathBuilder())
             );
 
             $dataClassRepositoryCache = new DataClassRepositoryCache();
@@ -457,11 +351,17 @@ class DependencyInjectionContainerBuilder
         return $this->registrationConsulter;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    protected function getStringUtilities()
+    protected function getRequest(): ChamiloRequest
+    {
+        if (!isset($this->request))
+        {
+            $this->request = ChamiloRequest::createFromGlobals();
+        }
+
+        return $this->request;
+    }
+
+    protected function getStringUtilities(): StringUtilities
     {
         if (!isset($this->stringUtilities))
         {
@@ -475,6 +375,8 @@ class DependencyInjectionContainerBuilder
      * Loads the extensions for the container
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
+     * @throws \Exception
      */
     protected function loadContainerExtensions(ContainerBuilder $container)
     {
@@ -509,19 +411,12 @@ class DependencyInjectionContainerBuilder
     }
 
     /**
-     * Resets and rebuilds the container
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $builder
-     * @param \Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface $containerExtensionFinder
-     * @param string $cacheFile
-     * @param string $cacheClass
-     *
-     * @return \Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder
+     * @throws \Exception
      */
     public function rebuildContainer(
-        ContainerBuilder $builder = null, ContainerExtensionFinderInterface $containerExtensionFinder = null,
-        $cacheFile = null, $cacheClass = 'ChamiloContainer'
-    )
+        ?ContainerBuilder $builder = null, ?ContainerExtensionFinderInterface $containerExtensionFinder = null,
+        ?string $cacheFile = null, string $cacheClass = 'ChamiloContainer'
+    ): DependencyInjectionContainerBuilder
     {
         $this->removeContainerCache();
         $this->clearContainerInstance();
@@ -532,9 +427,6 @@ class DependencyInjectionContainerBuilder
         return $newContainer;
     }
 
-    /**
-     * Removes the container's cache file from the system
-     */
     public function removeContainerCache()
     {
         if (file_exists($this->cacheFile))
@@ -548,11 +440,7 @@ class DependencyInjectionContainerBuilder
         }
     }
 
-    /**
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $builder
-     */
-    public function setBuilder(ContainerBuilder $builder = null)
+    public function setBuilder(?ContainerBuilder $builder = null)
     {
         $this->builder = $builder;
     }

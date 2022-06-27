@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
+use Chamilo\Core\User\Manager;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\BaseHeader;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
@@ -22,10 +25,14 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
 
     protected SessionUtilities $sessionUtilities;
 
+    protected UrlGenerator $urlGenerator;
+
     /**
      * @throws \Exception
      */
-    public function __construct(SessionUtilities $sessionUtilities, string $sentryConnectionString)
+    public function __construct(
+        SessionUtilities $sessionUtilities, UrlGenerator $urlGenerator, string $sentryConnectionString
+    )
     {
         if (!class_exists('\Sentry\SentrySdk'))
         {
@@ -39,19 +46,24 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
 
         $this->sentryConnectionString = $sentryConnectionString;
         $this->sessionUtilities = $sessionUtilities;
+        $this->urlGenerator = $urlGenerator;
 
         init(
             [
                 'dsn' => $sentryConnectionString,
                 'traces_sample_rate' => 0.01,
-                'before_send' => function (Event $event) use ($sessionUtilities): ?Event {
+                'before_send' => function (Event $event) use ($sessionUtilities, $urlGenerator): ?Event {
                     $userId = $sessionUtilities->getUserId();
 
-                    $profilePage =
-                        $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_NAME'] .
-                        '?application=Chamilo\\\\Core\\\\User&go=UserDetail&user_id=' . $userId;
+                    $profilePageUrl = $urlGenerator->fromParameters(
+                        [
+                            Application::PARAM_CONTEXT => Manager::context(),
+                            Application::PARAM_ACTION => Manager::ACTION_USER_DETAIL,
+                            Manager::PARAM_USER_USER_ID => $userId
+                        ]
+                    );
 
-                    $event->setContext('user', ['id' => $userId, 'profile_page' => $profilePage]);
+                    $event->setContext('user', ['id' => $userId, 'profile_page' => $profilePageUrl]);
 
                     return $event;
                 }
@@ -65,7 +77,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
     public function addJavascriptExceptionLogger(BaseHeader $header)
     {
         $matches = [];
-        preg_match("/https:\/\/(.*)@/", $this->getSentryConnectionString(), $matches);
+        preg_match('/https:\/\/(.*)@/', $this->getSentryConnectionString(), $matches);
 
         $sentryKey = $matches[1];
 

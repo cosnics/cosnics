@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
@@ -13,7 +14,9 @@ use Chamilo\Libraries\Platform\Session\SessionUtilities;
 interface ExceptionLoggerBuilderInterface
 {
 
-    public function __construct(ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities);
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities, UrlGenerator $urlGenerator
+    );
 
     public function createExceptionLogger(): ExceptionLoggerInterface;
 }

@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
 
@@ -18,10 +19,15 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 
     protected SessionUtilities $sessionUtilities;
 
-    public function __construct(ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities)
+    protected UrlGenerator $urlGenerator;
+
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter, SessionUtilities $sessionUtilities, UrlGenerator $urlGenerator
+    )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->sessionUtilities = $sessionUtilities;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -30,7 +36,7 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
     public function createExceptionLogger(): SentryExceptionLogger
     {
         $clientDSNKey = $this->getConfigurationConsulter()->getSetting(
-            array('Chamilo\Configuration', 'error_handling', 'sentry_error_logger', 'DSN')
+            ['Chamilo\Configuration', 'error_handling', 'sentry_error_logger', 'DSN']
         );
 
         if (empty($clientDSNKey))
@@ -42,7 +48,7 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
             );
         }
 
-        return new SentryExceptionLogger($this->getSessionUtilities(), $clientDSNKey);
+        return new SentryExceptionLogger($this->getSessionUtilities(), $this->getUrlGenerator(), $clientDSNKey);
     }
 
     public function getConfigurationConsulter(): ConfigurationConsulter
@@ -54,4 +60,10 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
     {
         return $this->sessionUtilities;
     }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
+    }
+    
 }
