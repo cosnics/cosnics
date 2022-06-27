@@ -87,8 +87,10 @@ export default class GradesTable extends Vue {
     @Prop({type: GradeBook, required: true}) readonly gradeBook!: GradeBook;
 
     handleUpdatedScoreValue(results: Results, itemId: ItemId, value: ResultType) {
-        (results as any)[itemId].value = value;
-        (results as any)[itemId].overwritten = true;
+        const result = results.find(r => r.id === itemId);
+        if (!result) { return; }
+        result.value = value;
+        result.overwritten = true;
         this.hideStudentScoreDialog();
     }
 

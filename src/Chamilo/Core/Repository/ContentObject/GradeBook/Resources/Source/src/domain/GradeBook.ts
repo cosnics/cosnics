@@ -22,17 +22,18 @@ export interface GradeColumn {
 }
 
 export interface ResultValue {
+    id: ColumnId;
     value: ResultType;
     ref: ItemId|null;
     overwritten: boolean;
 }
 
-export type Results = Record<ColumnId, ResultValue>;
+export type Results = ResultValue[];
 
 export interface ResultsData {
     readonly id: number;
     readonly student: string;
-    readonly results: Results;
+    results: Results;
 }
 
 export interface Category {
@@ -159,8 +160,9 @@ export default class GradeBook {
     }
 
     getResult(results: Results, columnId: ColumnId): ResultType {
-        if (typeof results[columnId] === 'undefined') { return null; }
-        return results[columnId].value;
+        const result = results.find(r => r.id === columnId);
+        if (typeof result === 'undefined') { return null; }
+        return result.value;
     }
 
     getEndResult(studentId: number) {
@@ -230,7 +232,7 @@ export default class GradeBook {
         this.originalResultsData.forEach(data => {
             const r = this.resultsData.find(d => d.id === data.id);
             if (r) {
-                r.results[newId] = { value: data.results.find((r: any) => r.id === item.id)?.value || null, ref: item.id, overwritten: false };
+                r.results.push({ id: newId, value: data.results.find((r: any) => r.id === item.id)?.value || null, ref: item.id, overwritten: false });
             }
         });
     }
@@ -262,13 +264,11 @@ export default class GradeBook {
             });
 
             this.resultsData.forEach(d => {
-                Object.keys(d.results).forEach(id => {
-                    if (id === item.id) {
-                        delete d.results[item.id];
-                    } else if (d.results[id].ref === item.id) {
-                        d.results[id].value = null;
-                        d.results[id].ref = null;
-                        d.results[id].overwritten = false;
+                d.results.forEach(res => {
+                    if (res.ref === item.id) {
+                        res.value = null;
+                        res.ref = null;
+                        res.overwritten = false;
                     }
                 })
             });
@@ -306,7 +306,7 @@ export default class GradeBook {
         this.gradeColumns.push({id, title: 'Score', type: 'standalone', subItemIds: [], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2});
         this.nullCategory.columnIds.push(id);
         this.resultsData.forEach(d => {
-            d.results[id] = {value: null, ref: id, overwritten: true};
+            d.results.push({id, value: null, ref: null, overwritten: true});
         });
     }
 
@@ -373,18 +373,19 @@ export default class GradeBook {
                 if (!studentResults) { return; }
                 let newResult;
                 if (srcColumn) {
-                    newResult = studentResults.results[srcColumn.id];
+                    newResult = studentResults.results.find(r => r.id === srcColumn.id) || undefined;
                 }
                 if (newResult === undefined) {
-                    newResult = { value, ref: item.id, overwritten: false };
+                    newResult = { id: columnId, value, ref: item.id, overwritten: false };
                 }
-                if (GradeBook.replaceByNewResult(studentResults.results[columnId], newResult)) {
-                    studentResults.results[columnId] = newResult;
+                const resultValue = studentResults.results.find(r => r.id === columnId);
+                if (resultValue && GradeBook.replaceByNewResult(resultValue, newResult)) {
+                    resultValue.value = newResult.value;
+                    resultValue.ref = newResult.ref;
+                    resultValue.overwritten = newResult.overwritten;
                 }
                 if (srcColumn) {
-                    if (studentResults.results[srcColumn.id] !== undefined) {
-                        delete studentResults.results[srcColumn.id];
-                    }
+                    studentResults.results = studentResults.results.filter(r => r.id !== srcColumn.id);
                 }
             }
         });
@@ -399,11 +400,7 @@ export default class GradeBook {
             cat.columnIds = cat.columnIds.filter(id => id !== column.id);
         });
         this.resultsData.forEach(d => {
-            Object.keys(d.results).forEach(id => {
-                if (String(id) === String(column.id)) {
-                    delete d.results[column.id];
-                }
-            });
+            d.results = d.results.filter(r => r.id !== column.id);
         });
     }
 
@@ -411,7 +408,7 @@ export default class GradeBook {
 
         function convertedResultsData(columns: GradeColumn[], data: any[]) : ResultsData[] {
             return data.map(resultsData => {
-                const results: Results = {};
+                const results: Results = [];
                 columns.forEach(column => {
                     if (column.subItemIds.length) {
                         let value: ResultType = null;
@@ -426,7 +423,7 @@ export default class GradeBook {
                                 ref = itemId;
                             }
                         });
-                        results[column.id] = {value, overwritten: false, ref};
+                        results.push({id: column.id, value, overwritten: false, ref});
                     }/* else {
                         results[column.id] = {value: resultsData.results[column.id], overwritten: false, ref: column.id};
                     }*/

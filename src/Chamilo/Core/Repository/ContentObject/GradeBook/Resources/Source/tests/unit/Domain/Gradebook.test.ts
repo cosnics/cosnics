@@ -69,8 +69,9 @@ test('endResultHandleAbsence', () => {
     let student = gradeBook.resultsData.find(d => d.id === 1);
 
     // test authorized presence
-    student!.results[2].value = 'gafw';
-    student!.results[2].overwritten = true;
+    let results = student!.results.find(r => r.id === 2);
+    results!.value = 'gafw';
+    results!.overwritten = true;
 
     // don't count score
     expect(gradeBook.getEndResult(1)).toBeCloseTo(56.25);
@@ -85,8 +86,9 @@ test('endResultHandleAbsence', () => {
 
     // test unauthorized presence
     student = gradeBook.resultsData.find(d => d.id === 3);
-    student!.results[3].value = 'afw';
-    student!.results[3].overwritten = true;
+    results = student!.results.find(r => r.id === 3);
+    results!.value = 'afw';
+    results!.overwritten = true;
 
     // min score
     expect(gradeBook.getEndResult(3)).toBeCloseTo(51);
@@ -136,15 +138,19 @@ test('removeFromGroupScore', () => {
     const student1 = gradeBook.resultsData.find(d => d.id === 1);
     const student2 = gradeBook.resultsData.find(d => d.id === 2);
     expect(gradeBook.getGradeColumn(1)!.subItemIds?.length).toEqual(2);
-    expect(student1!.results[1].value).toEqual(20);
+    let result = student1!.results.find(r => r.id === 1);
+    expect(result!.value).toEqual(20);
     gradeBook.removeGradeItem(gradeBook.getGradeItem(3)!);
     expect(gradeBook.getGradeColumn(1)!.subItemIds?.length).toEqual(1);
-    expect(student1!.results[1].value).toEqual(null);
-    expect(student2!.results[1].value).toEqual(30);
+    result = student1!.results.find(r => r.id === 1);
+    expect(result!.value).toEqual(null);
+    result = student2!.results.find(r => r.id === 1);
+    expect(result!.value).toEqual(30);
     expect(gradeBook.getEndResult(1)).toBeCloseTo(53);
     gradeBook.removeGradeItem(gradeBook.getGradeItem(1)!);
     expect(gradeBook.getGradeColumn(1)!.subItemIds?.length).toEqual(0);
-    expect(student2!.results[1].value).toEqual(null);
+    result = student2!.results.find(r => r.id === 1);
+    expect(result!.value).toEqual(null);
 });
 
 test('addNewScore', () => {
@@ -157,11 +163,12 @@ test('addNewScore', () => {
     expect(column.type).toEqual('standalone');
     const student1 = gradeBook.resultsData.find(d => d.id === 1);
     const student3 = gradeBook.resultsData.find(d => d.id === 3);
-    expect(student1!.results['sc1']).toEqual({ value: null, ref: 'sc1', overwritten: true});
+    expect(student1!.results.find(r => r.id === 'sc1')).toEqual({ id: 'sc1', value: null, ref: null, overwritten: true});
     expect(gradeBook.getEndResult(1)).toBeCloseTo(47.5);
     expect(gradeBook.getEndResult(3)).toBeCloseTo(54.17);
-    student3!.results['sc1'].value = 50;
-    student3!.results['sc1'].overwritten = true;
+    const results = student3!.results.find(r => r.id === 'sc1');
+    results!.value = 50;
+    results!.overwritten = true;
     expect(gradeBook.getEndResult(3)).toBeCloseTo(62.5);
 });
 
