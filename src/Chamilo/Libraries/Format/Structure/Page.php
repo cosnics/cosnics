@@ -13,12 +13,12 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class Page
 {
-    const VIEW_MODE_FULL = 1;
-    const VIEW_MODE_HEADERLESS = 2;
+    public const VIEW_MODE_FULL = 1;
+    public const VIEW_MODE_HEADERLESS = 2;
 
     protected static ?Page $instance = null;
 
-    private Application $application;
+    private ?Application $application;
 
     private string $containerMode;
 
@@ -39,12 +39,12 @@ class Page
         $this->footer = $footer;
     }
 
-    public function getApplication(): Application
+    public function getApplication(): ?Application
     {
         return $this->application;
     }
 
-    public function setApplication(Application $application)
+    public function setApplication(?Application $application)
     {
         $this->application = $application;
 
@@ -83,8 +83,8 @@ class Page
     {
         $this->header = $header;
     }
-    
-    static public function getInstance(): Page
+
+    public static function getInstance(): Page
     {
         if (is_null(static::$instance))
         {

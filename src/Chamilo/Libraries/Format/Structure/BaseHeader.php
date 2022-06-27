@@ -18,7 +18,7 @@ class BaseHeader implements HeaderInterface
 {
     use DependencyInjectionContainerTrait;
 
-    private Application $application;
+    private ?Application $application;
 
     private string $containerMode;
 
@@ -177,12 +177,12 @@ class BaseHeader implements HeaderInterface
         $this->addHtmlHeader('<link' . $href . $rel . $title . $type . '/>');
     }
 
-    public function getApplication(): Application
+    public function getApplication(): ?Application
     {
         return $this->application;
     }
 
-    public function setApplication(Application $application)
+    public function setApplication(?Application $application)
     {
         $this->application = $application;
     }

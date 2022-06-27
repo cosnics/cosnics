@@ -41,13 +41,13 @@ class Kernel
 
     protected SessionUtilities $sessionUtilities;
 
-    private Application $application;
+    private ?Application $application = null;
 
     private ApplicationFactory $applicationFactory;
 
     private ConfigurationConsulter $configurationConsulter;
 
-    private string $context;
+    private ?string $context = null;
 
     private ExceptionLoggerInterface $exceptionLogger;
 
@@ -174,7 +174,7 @@ class Kernel
         return $this;
     }
 
-    public function getApplication(): Application
+    public function getApplication(): ?Application
     {
         return $this->application;
     }
@@ -209,7 +209,7 @@ class Kernel
         $this->configurationConsulter = $configurationConsulter;
     }
 
-    public function getContext(): string
+    public function getContext(): ?string
     {
         return $this->context;
     }

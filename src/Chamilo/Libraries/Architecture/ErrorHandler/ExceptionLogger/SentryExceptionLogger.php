@@ -55,15 +55,18 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
                 'before_send' => function (Event $event) use ($sessionUtilities, $urlGenerator): ?Event {
                     $userId = $sessionUtilities->getUserId();
 
-                    $profilePageUrl = $urlGenerator->fromParameters(
-                        [
-                            Application::PARAM_CONTEXT => Manager::context(),
-                            Application::PARAM_ACTION => Manager::ACTION_USER_DETAIL,
-                            Manager::PARAM_USER_USER_ID => $userId
-                        ]
-                    );
+                    if ($userId)
+                    {
+                        $profilePageUrl = $urlGenerator->fromParameters(
+                            [
+                                Application::PARAM_CONTEXT => Manager::context(),
+                                Application::PARAM_ACTION => Manager::ACTION_USER_DETAIL,
+                                Manager::PARAM_USER_USER_ID => $userId
+                            ]
+                        );
 
-                    $event->setContext('user', ['id' => $userId, 'profile_page' => $profilePageUrl]);
+                        $event->setContext('user', ['id' => $userId, 'profile_page' => $profilePageUrl]);
+                    }
 
                     return $event;
                 }

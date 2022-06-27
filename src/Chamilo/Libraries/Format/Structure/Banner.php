@@ -20,14 +20,14 @@ class Banner
 {
     use DependencyInjectionContainerTrait;
 
-    private Application $application;
+    private ?Application $application;
 
     private string $containerMode;
 
     private int $viewMode;
 
     public function __construct(
-        Application $application = null, int $viewMode = Page::VIEW_MODE_FULL, string $containerMode = 'container-fluid'
+        ?Application $application = null, int $viewMode = Page::VIEW_MODE_FULL, string $containerMode = 'container-fluid'
     )
     {
         $this->application = $application;
@@ -112,12 +112,12 @@ class Banner
         return implode(PHP_EOL, $html);
     }
 
-    public function getApplication(): Application
+    public function getApplication(): ?Application
     {
         return $this->application;
     }
 
-    public function setApplication(Application $application)
+    public function setApplication(?Application $application)
     {
         $this->application = $application;
     }
