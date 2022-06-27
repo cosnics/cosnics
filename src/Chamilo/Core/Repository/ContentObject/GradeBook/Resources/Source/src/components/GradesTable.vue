@@ -25,13 +25,13 @@
                     <b-th class="col-sticky table-student">Student</b-th>
                     <draggable v-for="({id, columnIds}) in displayedCategories" :key="`category-score-${id}`" :list="columnIds" tag="div" style="display: contents" ghost-class="ghost" @end="onDragEnd" :disabled="editItemId !== null || weightEditItemId !== null">
                         <b-th v-if="columnIds.length === 0" :key="`item-id-${id}`"></b-th>
-                        <b-th v-else v-for="(itemId) in columnIds" :key="`${itemId}-name`" draggable @dragstart="startDrag($event, itemId)" :style="(editItemId === itemId || weightEditItemId === itemId) ? 'position: relative; z-index: 2' : ''">
-                            <div style="cursor: pointer;display:flex;justify-content:space-between;align-items:center" @dblclick="editItemId = itemId"><span style="white-space: nowrap"><i v-if="gradeBook.isGrouped(itemId)" class="fa fa-group" style="margin-right: .5rem"></i>{{ gradeBook.getTitle(itemId) }}</span>
-                                <button style="padding:0; background: none; border: none;margin-left: 15px" @click="$emit('item-settings', itemId)"><i class="fa fa-gear" style="margin-left: auto;display:inline-block"></i></button>
+                        <b-th v-else v-for="(columnId) in columnIds" :key="`${columnId}-name`" draggable @dragstart="startDrag($event, columnId)" :style="(editItemId === columnId || weightEditItemId === columnId) ? 'position: relative; z-index: 2' : ''">
+                            <div style="cursor: pointer;display:flex;justify-content:space-between;align-items:center" @dblclick="editItemId = columnId"><span style="white-space: nowrap"><i v-if="gradeBook.isGrouped(columnId)" class="fa fa-group" style="margin-right: .5rem"></i>{{ gradeBook.getTitle(columnId) }}</span>
+                                <button style="padding:0; background: none; border: none;margin-left: 15px" @click="$emit('item-settings', columnId)"><i class="fa fa-gear" style="margin-left: auto;display:inline-block"></i></button>
                             </div>
-                            <div class="weight" :class="{'mod-custom': gradeBook.getGradeColumn(itemId).weight !== null}" @dblclick="weightEditItemId = itemId" v-if="gradeBook.countsForEndResult(itemId)">{{ gradeBook.getWeight(itemId)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
-                            <item-title-input v-if="editItemId === itemId" :item-title="gradeBook.getTitle(itemId)" @cancel="editItemId = null" @ok="setTitle(itemId, $event)"></item-title-input>
-                            <weight-input v-if="weightEditItemId === itemId" :item-weight="gradeBook.getWeight(itemId)" @cancel="weightEditItemId = null" @ok="setWeight(itemId, $event)"></weight-input>
+                            <div class="weight" :class="{'mod-custom': gradeBook.getGradeColumn(columnId).weight !== null}" @dblclick="weightEditItemId = columnId" v-if="gradeBook.countsForEndResult(columnId)">{{ gradeBook.getWeight(columnId)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                            <item-title-input v-if="editItemId === columnId" :item-title="gradeBook.getTitle(columnId)" @cancel="editItemId = null" @ok="setTitle(columnId, $event)"></item-title-input>
+                            <weight-input v-if="weightEditItemId === columnId" :item-weight="gradeBook.getWeight(columnId)" @cancel="weightEditItemId = null" @ok="setWeight(columnId, $event)"></weight-input>
                         </b-th>
                     </draggable>
                     <b-th class="col-sticky table-student-total">Eindcijfer</b-th>
@@ -42,11 +42,11 @@
                     <b-td class="col-sticky table-student">{{ student }}</b-td>
                     <template v-for="category in displayedCategories">
                         <b-td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></b-td>
-                        <b-td v-else v-for="itemId in category.columnIds" :key="`${itemId}-result`" :style="editStudentScoreId === id && editScoreId === itemId ? 'position: relative; z-index: 2' : ''">
-                            <student-result :result="gradeBook.getResult(results, itemId)"
-                                            style="cursor: pointer;" :style="gradeBook.countsForEndResult(itemId) ? '' : 'font-style: italic'"
-                                            @edit="showStudentScoreDialog(id, itemId)"></student-result>
-                            <score-input v-if="isStudentScoreDialogShown(id, itemId)" :score="gradeBook.getResult(results, itemId)" @ok="handleUpdatedScoreValue(results, itemId, $event)" @cancel="hideStudentScoreDialog"></score-input>
+                        <b-td v-else v-for="columnId in category.columnIds" :key="`${category.id}-${columnId}-result`" :style="editStudentScoreId === id && editScoreId === columnId ? 'position: relative; z-index: 2' : ''">
+                            <student-result :result="gradeBook.getResult(results, columnId)"
+                                            style="cursor: pointer;" :style="gradeBook.countsForEndResult(columnId) ? '' : 'font-style: italic'"
+                                            @edit="showStudentScoreDialog(id, columnId)"></student-result>
+                            <score-input v-if="isStudentScoreDialogShown(id, columnId)" :score="gradeBook.getResult(results, columnId)" @ok="handleUpdatedScoreValue(results, columnId, $event)" @cancel="hideStudentScoreDialog"></score-input>
                         </b-td>
                     </template>
                     <b-td class="col-sticky table-student-total"> {{ gradeBook.getEndResult(id)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></b-td>
@@ -58,7 +58,7 @@
 
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
-import GradeBook, {Category, ItemId, Results, ResultType} from '../domain/GradeBook';
+import GradeBook, {Category, ColumnId, ItemId, Results, ResultType} from '../domain/GradeBook';
 import ItemTitleInput from './ItemTitleInput.vue';
 import WeightInput from './WeightInput.vue';
 import ScoreInput from './ScoreInput.vue';
@@ -133,15 +133,16 @@ export default class GradesTable extends Vue {
         this.weightEditItemId = null;
     }
 
-    startDrag(evt: any, item: any) {
-        evt.dataTransfer.setData('itemID', item);
+    startDrag(evt: DragEvent, id: ColumnId) {
+        if (!evt.dataTransfer) { return; }
+        evt.dataTransfer.setData('__ID', JSON.stringify({id}));
         this.isDragging = true;
     }
 
-    onDropAreaOverEnter(evt: any, index: number) {
-        /*if (index === 0) { return; }*/
+    onDropAreaOverEnter(evt: DragEvent, index: number) {
+        if (!evt.dataTransfer) { return; }
         this.categoryDropArea = index;
-        evt.dataTransfer.dropEffect = 'copyMove';
+        evt.dataTransfer.dropEffect = 'move';
         evt.dataTransfer.effectAllowed = 'copyMove';
     }
 
@@ -150,9 +151,10 @@ export default class GradesTable extends Vue {
         this.isDragging = false;
     }
 
-    onDrop(evt: any, categoryId: number) {
-        /*if (categoryId === 0) { return; }*/
-        this.gradeBook.addItemToCategory(categoryId, evt.dataTransfer.getData('itemID'));
+    onDrop(evt: DragEvent, categoryId: number) {
+        if (!evt.dataTransfer) { return; }
+        const id = JSON.parse(evt.dataTransfer.getData('__ID')).id;
+        this.gradeBook.addItemToCategory(categoryId, id);
     }
 
     @Watch('showNullCategory')

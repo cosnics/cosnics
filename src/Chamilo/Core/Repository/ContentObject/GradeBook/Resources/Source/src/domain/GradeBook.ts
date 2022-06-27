@@ -1,4 +1,5 @@
 export type ItemId = string|number;
+export type ColumnId = string|number;
 export type ResultType = number|'gafw'|'afw'|null;
 
 export interface GradeItem {
@@ -10,10 +11,10 @@ export interface GradeItem {
 }
 
 export interface GradeColumn {
-    readonly id: ItemId;
-    readonly type: string;
+    readonly id: ColumnId;
+    type: string;
     title?: string|null;
-    subItemIds?: ItemId[];
+    subItemIds: ItemId[];
     weight: number|null;
     countForEndResult: boolean;
     authPresenceEndResult: number;
@@ -26,7 +27,7 @@ export interface ResultValue {
     overwritten: boolean;
 }
 
-export type Results = Record<string, ResultValue>;
+export type Results = Record<ColumnId, ResultValue>;
 
 export interface ResultsData {
     readonly id: number;
@@ -38,7 +39,7 @@ export interface Category {
     readonly id: number;
     color: string;
     title: string;
-    columnIds: ItemId[];
+    columnIds: ColumnId[];
 }
 
 const COUNT_FOR_END_RESULT_DEFAULT = true;
@@ -65,101 +66,96 @@ export default class GradeBook {
         return this.gradeItems.find(item => item.id === itemId);
     }
 
-    getGradeColumn(itemId: ItemId) {
-        return this.gradeColumns.find(item => item.id === itemId);
+    getGradeColumn(columnId: ColumnId) {
+        return this.gradeColumns.find(column => column.id === columnId);
     }
 
     getCategory(categoryId: number) {
         return this.allCategories.find(category => category.id === categoryId);
     }
 
-    get gradedItemsWithStatusAdded(): GradeItem[] {
-        const itemIds: ItemId[] = [];
-        this.gradeColumns.forEach(item => {
-            if (item.subItemIds) {
-                // eslint-disable-next-line prefer-spread
-                itemIds.push.apply(itemIds, item.subItemIds);
-            }
-        })
-
-        this.allCategories.forEach(cat => {
-            // eslint-disable-next-line prefer-spread
-            itemIds.push.apply(itemIds, cat.columnIds);
-        });
+    get gradedItemsWithCheckedStatus(): GradeItem[] {
+        const itemIds = this.gradeColumns.reduce((ids: ItemId[], column: GradeColumn) => ids.concat(column.subItemIds), []);
 
         return this.gradeItems.map(item => ({
             id: item.id, title: item.title, breadcrumb: item.breadcrumb, checked: itemIds.indexOf(item.id) !== -1
         }));
     }
 
-    getGradedItemsFilteredByItem(itemId: ItemId): GradeItem[] {
+    getGradedItemsFilteredByColumn(columnId: ColumnId): GradeItem[] {
+        const column = this.getGradeColumn(columnId);
+        if (!column) { return []; }
         return this.gradeItems.map(item => {
-            const checked = this.getGroupItems(itemId).indexOf(item) !== -1;
+            const checked = column.subItemIds.indexOf(item.id) !== -1;
             let disabled = false;
-            if (item.id === itemId && this.getGradeColumn(itemId)?.type !== 'group') {
+            if (checked && column.type !== 'group') {
                 disabled = true;
             } else {
-                const groupItems = this.gradeColumns.filter(item => item.type === 'group' && item.id !== itemId);
-                groupItems.forEach(groupItem => {
-                    if (groupItem.subItemIds!.indexOf(item.id) !== -1) {
-                        disabled = true;
-                    }
-                });
+                const col = this.findGradeColumnWithGradeItem(item.id);
+                if (col && col.type === 'group' && col !== column) {
+                    disabled = true;
+                }
             }
             return {...item, checked, disabled};
         })
     }
 
-    countsForEndResult(itemId: ItemId): boolean {
-        return !!(this.getGradeColumn(itemId)?.countForEndResult);
+    countsForEndResult(columnId: ColumnId): boolean {
+        return !!(this.getGradeColumn(columnId)?.countForEndResult);
     }
 
-    getWeight(itemId: ItemId): number {
-        const col = this.getGradeColumn(itemId);
-        const weight = col ? col.weight : null;
+    getWeight(columnId: ColumnId): number {
+        const column = this.getGradeColumn(columnId);
+        const weight = column ? column.weight : null;
         if (weight === null) {
             let rest = 100;
             let noRest = 0;
-            this.gradeColumns.filter(item => item.countForEndResult).forEach(item => {
-                if (item.weight !== null) {
-                    rest -= item.weight;
-                } else {
-                    noRest += 1;
-                }
+            this.gradeColumns.filter(column => column.countForEndResult)
+                .forEach(column => {
+                    if (column.weight !== null) {
+                        rest -= column.weight;
+                    } else {
+                        noRest += 1;
+                    }
             });
             return rest / noRest;
         }
         return weight;
     }
 
-    setWeight(itemId: ItemId, weight: number|null) {
-        const item = this.getGradeColumn(itemId);
-        if (item) {
-            item.weight = weight;
+    setWeight(columnId: ColumnId, weight: number|null) {
+        const column = this.getGradeColumn(columnId);
+        if (column) {
+            column.weight = weight;
         }
     }
 
-    getTitle(itemId: ItemId): string|null {
-        return this.getGradeColumn(itemId)?.title || this.getGradeItem(itemId)?.title || null;
+    getTitle(columnId: ColumnId): string|null {
+        const column = this.getGradeColumn(columnId);
+        if (column) {
+            if (column.title) { return column.title; }
+            if (column.type === 'item') {
+                return this.getGradeItem(column.subItemIds[0])!.title;
+            }
+        }
+        return null;
     }
 
-    setTitle(itemId: ItemId, title: string) {
-        const item = this.getGradeColumn(itemId);
-        if (item) {
-            item.title = title;
+    setTitle(columnId: ColumnId, title: string) {
+        const column = this.getGradeColumn(columnId);
+        if (column) {
+            column.title = title;
         }
     }
 
-    isGrouped(itemId: ItemId) {
-        return this.getGradeColumn(itemId)?.type === 'group';
+    isGrouped(columnId: ColumnId) {
+        return this.getGradeColumn(columnId)?.type === 'group';
     }
 
-    getGroupItems(itemId: ItemId) {
-        if (!this.isGrouped(itemId)) {
-            return this.gradeItems.filter(item => item.id === itemId);
-        }
-        const itemIds = this.getGradeColumn(itemId)?.subItemIds || [];
-        return itemIds.map(itemId => this.getGradeItem(itemId));
+    getColumnSubItems(columnId: ColumnId): GradeItem[] {
+        const column = this.getGradeColumn(columnId);
+        if (!column) return [];
+        return column.subItemIds.map(itemId => this.getGradeItem(itemId)!);
     }
 
     getResult(results: Results, itemId: ItemId): ResultType {
@@ -173,25 +169,25 @@ export default class GradeBook {
         const results = r.results;
         let endResult = 0;
         let maxWeight = 0;
-        this.gradeColumns.filter(item => item.countForEndResult).forEach(item => {
-            let result = this.getResult(results, item.id);
+        this.gradeColumns.filter(column => column.countForEndResult).forEach(column => {
+            let result = this.getResult(results, column.id);
             if (result === null) {
                 result = 'afw';
             }
-            const weight = this.getWeight(item.id);
+            const weight = this.getWeight(column.id);
             if (typeof result === 'number') {
                 maxWeight += weight;
             } else if (result === 'gafw') {
-                if (item.authPresenceEndResult !== GradeBook.NO_SCORE) {
+                if (column.authPresenceEndResult !== GradeBook.NO_SCORE) {
                     maxWeight += weight;
-                    if (item.authPresenceEndResult === GradeBook.MAX_SCORE) {
+                    if (column.authPresenceEndResult === GradeBook.MAX_SCORE) {
                         endResult += weight;
                     }
                 }
             } else if (result === 'afw') {
-                if (item.unauthPresenceEndResult !== GradeBook.NO_SCORE) {
+                if (column.unauthPresenceEndResult !== GradeBook.NO_SCORE) {
                     maxWeight += weight;
-                    if (item.unauthPresenceEndResult === GradeBook.MAX_SCORE) {
+                    if (column.unauthPresenceEndResult === GradeBook.MAX_SCORE) {
                         endResult += weight;
                     }
                 }
@@ -208,60 +204,75 @@ export default class GradeBook {
         return endResult / maxWeight * 100;
     }
 
-    addItemToCategory(categoryId: number, itemId: ItemId) {
+    addItemToCategory(categoryId: number, columnId: ColumnId) {
         const category = categoryId === 0 ? this.nullCategory : this.getCategory(categoryId);
-        if (category?.columnIds.indexOf(itemId) === -1) {
+        if (category?.columnIds.indexOf(columnId) === -1) {
             this.allCategories.forEach(cat => {
-                if (cat.columnIds.indexOf(itemId) !== -1) {
-                    cat.columnIds = cat.columnIds.filter(id => id !== itemId);
+                if (cat.columnIds.indexOf(columnId) !== -1) {
+                    cat.columnIds = cat.columnIds.filter(id => id !== columnId);
                 }
             });
-            category.columnIds.push(itemId);
+            category.columnIds.push(columnId);
         }
     }
 
     addGradeItem(item: GradeItem) {
-        this.addItemToCategory(0, item.id);
+        const newId = this.createNewColumnId();
+
         this.gradeColumns.push({
-            id: item.id, type: 'item', title: null, weight: null,
+            id: newId, type: 'item', title: null, subItemIds: [item.id], weight: null,
             countForEndResult: COUNT_FOR_END_RESULT_DEFAULT,
             authPresenceEndResult: AUTH_PRESENCE_END_RESULT_DEFAULT,
             unauthPresenceEndResult: UNAUTH_PRESENCE_END_RESULT_DEFAULT
         });
+        this.addItemToCategory(0, newId);
+
         this.originalResultsData.forEach(data => {
             const r = this.resultsData.find(d => d.id === data.id);
             if (r) {
-                r.results[item.id] = { value: data.results[item.id], ref: item.id, overwritten: false };
+                r.results[newId] = { value: data.results[item.id], ref: item.id, overwritten: false };
             }
         });
     }
 
-    removeGradeItem(item: GradeItem) {
-        this.allCategories.forEach(cat => {
-            if (cat.columnIds.indexOf(item.id) !== -1) {
-                cat.columnIds = cat.columnIds.filter(id => id !== item.id);
-            }
-        });
+    findGradeColumnWithGradeItem(itemId: ItemId): GradeColumn|null {
+        const column = this.gradeColumns.find(column => column.subItemIds.indexOf(itemId) !== -1);
+        return column || null;
+    }
+
+    removeGradeItem(item: GradeItem, search = true) {
         const itemId = item.id;
-        if (this.getGradeColumn(itemId)) {
-            this.gradeColumns = this.gradeColumns.filter(item => item.id !== itemId);
-        }
-        this.gradeColumns.forEach(item => {
-            if (item.subItemIds?.length) {
-                item.subItemIds = item.subItemIds.filter(id => id !== itemId);
+
+        let column;
+
+        if (search) {
+            const col = this.findGradeColumnWithGradeItem(itemId);
+            if (col?.type === 'item') {
+                column = col;
             }
-        });
-        this.resultsData.forEach(d => {
-            Object.keys(d.results).forEach(id => {
-                if (id === item.id) {
-                    delete d.results[item.id];
-                } else if (d.results[id].ref === item.id) {
-                    d.results[id].value = null;
-                    d.results[id].ref = null;
-                    d.results[id].overwritten = false;
+        }
+
+        if (column) {
+            this.removeColumn(column);
+        } else {
+            this.gradeColumns.forEach(column => {
+                if (column.subItemIds.length) {
+                    column.subItemIds = column.subItemIds.filter(id => id !== itemId);
                 }
-            })
-        });
+            });
+
+            this.resultsData.forEach(d => {
+                Object.keys(d.results).forEach(id => {
+                    if (id === item.id) {
+                        delete d.results[item.id];
+                    } else if (d.results[id].ref === item.id) {
+                        d.results[id].value = null;
+                        d.results[id].ref = null;
+                        d.results[id].overwritten = false;
+                    }
+                })
+            });
+        }
     }
 
     toggleGradeItem(item: GradeItem, isAdding: boolean) {
@@ -273,9 +284,7 @@ export default class GradeBook {
     }
 
     createNewIdWithPrefix(prefix: string): string {
-        const itemIds = this.gradeItems.map(item => item.id);
-        // eslint-disable-next-line prefer-spread
-        itemIds.push.apply(itemIds, this.gradeColumns.map(item => item.id));
+        const itemIds = this.gradeColumns.map(column => column.id);
 
         let i = 1;
         while (itemIds.indexOf(prefix + i) !== -1) {
@@ -284,8 +293,8 @@ export default class GradeBook {
         return prefix + i;
     }
 
-    createNewGroupId() {
-        return this.createNewIdWithPrefix('gr');
+    createNewColumnId() {
+        return this.createNewIdWithPrefix('col');
     }
 
     createNewStandaloneScoreId() {
@@ -294,7 +303,7 @@ export default class GradeBook {
 
     createNewScore() {
         const id = this.createNewStandaloneScoreId();
-        this.gradeColumns.push({id, title: 'Score', type: 'standalone', weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2});
+        this.gradeColumns.push({id, title: 'Score', type: 'standalone', subItemIds: [], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2});
         this.nullCategory.columnIds.push(id);
         this.resultsData.forEach(d => {
             d.results[id] = {value: null, ref: id, overwritten: true};
@@ -308,40 +317,19 @@ export default class GradeBook {
         return newCategory;
     }
 
-    addSubItem(item: GradeItem, itemId: ItemId): ItemId|null {
-        if (this.isGrouped(itemId)) {
-            // group exists, push item
-            this.gradeColumns = this.gradeColumns.filter(it => it.id !== item.id);
-            this.getGradeColumn(itemId)?.subItemIds?.push(item.id);
-            this.updateResultsData(item, itemId);
+    addSubItem(item: GradeItem, columnId: ColumnId) {
+        const column = this.getGradeColumn(columnId);
+        if (!column) { return; }
+        const srcColumn = this.findGradeColumnWithGradeItem(item.id);
+        column.title = this.getTitle(columnId);
+        column.type = 'group';
+        this.updateResultsData(item, columnId);
+        column.subItemIds.push(item.id);
+        if (srcColumn) {
+            this.gradeColumns = this.gradeColumns.filter(column => column !== srcColumn);
             this.allCategories.forEach(cat => {
-                cat.columnIds = cat.columnIds.filter(id => id !== item.id);
+                cat.columnIds = cat.columnIds.filter(id => id !== srcColumn.id);
             });
-            return null;
-        } else {
-            // create a new group
-            const groupItemId = this.createNewGroupId();
-            const oldItem = this.getGradeColumn(itemId);
-            this.gradeColumns = this.gradeColumns.filter(it => it.id !== item.id).filter(item => item.id !== itemId);
-            this.gradeColumns.push({
-                id: groupItemId, type: 'group', title: this.getGradeItem(itemId)?.title, subItemIds: [itemId, item.id], weight: null,
-                countForEndResult: oldItem?.countForEndResult!,
-                authPresenceEndResult: oldItem?.authPresenceEndResult!,
-                unauthPresenceEndResult: oldItem?.unauthPresenceEndResult!
-            });
-            this.resultsData.forEach(d => {
-                d.results[groupItemId] = d.results[itemId];
-                delete d.results[itemId];
-            });
-            this.updateResultsData(item, groupItemId);
-            this.allCategories.forEach(cat => {
-                const index = cat.columnIds.indexOf(itemId);
-                if (index !== -1) {
-                    cat.columnIds[index] = groupItemId;
-                }
-                cat.columnIds = cat.columnIds.filter(id => id !== item.id);
-            });
-            return groupItemId;
         }
     }
 
@@ -374,45 +362,48 @@ export default class GradeBook {
         return false;
     }
 
-    private updateResultsData(item: GradeItem, itemId: ItemId) {
+    private updateResultsData(item: GradeItem, columnId: ItemId) {
+
+        const srcColumn = this.findGradeColumnWithGradeItem(item.id);
 
         this.originalResultsData.forEach(d => {
             if (d.results[item.id] !== null) {
                 const studentResults = this.resultsData.find(data => data.id === d.id);
                 if (!studentResults) { return; }
-                let newResult = studentResults.results[item.id];
+                let newResult;
+                if (srcColumn) {
+                    newResult = studentResults.results[srcColumn.id];
+                }
                 if (newResult === undefined) {
                     newResult = { value: d.results[item.id], ref: item.id, overwritten: false };
                 }
-                if (GradeBook.replaceByNewResult(studentResults.results[itemId], newResult)) {
-                    studentResults.results[itemId] = newResult;
+                if (GradeBook.replaceByNewResult(studentResults.results[columnId], newResult)) {
+                    studentResults.results[columnId] = newResult;
                 }
-                if (studentResults.results[item.id] !== undefined) {
-                    delete studentResults.results[item.id];
+                if (srcColumn) {
+                    if (studentResults.results[srcColumn.id] !== undefined) {
+                        delete studentResults.results[srcColumn.id];
+                    }
                 }
             }
         });
     }
 
     removeColumn(column: GradeColumn) {
-        if (column.type === 'item') {
-            this.removeGradeItem(this.getGradeItem(column.id)!);
-        } else {
-            column.subItemIds?.forEach(itemId => {
-                this.removeGradeItem(this.getGradeItem(itemId)!);
+        column.subItemIds.forEach(itemId => {
+            this.removeGradeItem(this.getGradeItem(itemId)!, false);
+        });
+        this.gradeColumns = this.gradeColumns.filter(col => col !== column);
+        this.allCategories.forEach(cat => {
+            cat.columnIds = cat.columnIds.filter(id => id !== column.id);
+        });
+        this.resultsData.forEach(d => {
+            Object.keys(d.results).forEach(id => {
+                if (String(id) === String(column.id)) {
+                    delete d.results[column.id];
+                }
             });
-            this.gradeColumns = this.gradeColumns.filter(item => item !== column);
-            this.allCategories.forEach(cat => {
-                cat.columnIds = cat.columnIds.filter(id => id !== column.id);
-            });
-            this.resultsData.forEach(d => {
-                Object.keys(d.results).forEach(id => {
-                    if (id === column.id) {
-                        delete d.results[column.id];
-                    }
-                });
-            });
-        }
+        });
     }
 
     static from(gradeBookObject: any): GradeBook {
@@ -420,11 +411,11 @@ export default class GradeBook {
         function convertedResultsData(columns: GradeColumn[], data: any[]) : ResultsData[] {
             return data.map(resultsData => {
                 const results: Results = {};
-                columns.forEach(item => {
-                    if (item.subItemIds?.length) {
+                columns.forEach(column => {
+                    if (column.subItemIds.length) {
                         let value: ResultType = null;
                         let ref = null;
-                        item.subItemIds.forEach(itemId => {
+                        column.subItemIds.forEach(itemId => {
                             const v = resultsData.results[itemId];
                             if (v !== null && (value === null
                             || (value === 'afw' && v === 'gafw')
@@ -434,9 +425,9 @@ export default class GradeBook {
                                 ref = itemId;
                             }
                         });
-                        results[item.id] = {value, overwritten: false, ref};
+                        results[column.id] = {value, overwritten: false, ref};
                     } else {
-                        results[item.id] = {value: resultsData.results[item.id], overwritten: false, ref: item.id};
+                        results[column.id] = {value: resultsData.results[column.id], overwritten: false, ref: column.id};
                     }
                 })
                 return {...resultsData, results};
@@ -450,6 +441,7 @@ export default class GradeBook {
         gradeBook.nullCategory = gradeBookObject.nullCategory;
         gradeBook.originalResultsData = gradeBookObject.resultsData;
         gradeBook.resultsData = convertedResultsData(gradeBook.gradeColumns, gradeBookObject.resultsData);
+
         return gradeBook;
     }
 }

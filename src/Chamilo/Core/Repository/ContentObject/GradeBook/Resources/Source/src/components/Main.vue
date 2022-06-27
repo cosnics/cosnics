@@ -5,7 +5,7 @@
         </div>-->
         <div class="gradebook-toolbar">
             <input class="form-control" type="text" placeholder="Zoek student">
-            <grades-dropdown id="dropdown-main" :graded-items="gradeBook.gradedItemsWithStatusAdded" @toggle="toggleGradeItem"></grades-dropdown>
+            <grades-dropdown id="dropdown-main" :graded-items="gradeBook.gradedItemsWithCheckedStatus" @toggle="toggleGradeItem"></grades-dropdown>
         </div>
         <div class="gradebook-table-container">
             <div class="gradebook-create-actions">
@@ -14,7 +14,7 @@
             </div>
             <grades-table :grade-book="gradeBook" @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"></grades-table>
         </div>
-        <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :item-id="itemSettings" @close="itemSettings = null" @item-settings="itemSettings = $event"></item-settings>
+        <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null" @item-settings="itemSettings = $event"></item-settings>
         <category-settings v-if="selectedCategory" :category="selectedCategory" @close="closeSelectedCategory"></category-settings>
     </div>
 </template>

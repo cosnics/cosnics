@@ -23,6 +23,13 @@
         async load(): Promise<void> {
             const allData: any = await this.connector?.loadAllData();
             if (allData) {
+                allData.resultsData.forEach(d => {
+                    const results: any = {};
+                    d['results'].forEach((l: any) => {
+                        results[l.id] = l.value;
+                    });
+                    d['results'] = results;
+                });
                 this.gradeBook = GradeBook.from(allData);
             }
         }

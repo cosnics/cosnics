@@ -37,7 +37,6 @@ export default class ScoreInput extends Vue {
     }
 
     onEdit() {
-        console.log('edit');
         if (this.type === 'number') {
             const value = parseFloat(this.scoreInput.value);
             this.$emit('ok', isNaN(value) ? null : value);

@@ -12,7 +12,7 @@
                 <template v-if="column.type !== 'standalone'">
                     <h5 v-if="isGrouped">Gegroepeerde scores</h5>
                     <ul class="grouped-scores">
-                        <li v-for="item in groupedItems" :key="item.id"><span>{{ item.title }}</span>
+                        <li v-for="item in subItems" :key="item.id"><span>{{ item.title }}</span>
                             <div class="score-breadcrumb-trail">{{ item.breadcrumb }}</div>
                         </li>
                     </ul>
@@ -72,7 +72,7 @@
         <div class="modal-overlay" @click="$emit('close')"></div>
         <div class="modal-remove" v-if="showRemoveItemDialog" @click.stop="">
             <div class="modal-remove-content">
-                <div>Score '{{ column.title }}' verwijderen uit overzicht?</div>
+                <div>Score '{{ title }}' verwijderen uit overzicht?</div>
                 <div class="modal-remove-actions">
                     <button class="btn btn-default btn-sm" @click="removeColumn">Verwijder</button>
                     <button class="btn btn-default btn-sm" @click="cancel">Annuleer</button>
@@ -84,7 +84,7 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
-import GradeBook, {GradeItem, ItemId} from '../domain/GradeBook';
+import GradeBook, {GradeItem, ColumnId} from '../domain/GradeBook';
 import GradesDropdown from './GradesDropdown.vue';
 
 @Component({
@@ -101,7 +101,7 @@ export default class ItemSettings extends Vue {
     private showRemoveItemDialog = false;
 
     @Prop({type: GradeBook, required: true}) readonly gradeBook!: GradeBook;
-    @Prop({type: [String, Number]}) readonly itemId!: ItemId;
+    @Prop({type: [String, Number]}) readonly columnId!: ColumnId;
 
     openGradesDropdown() {
         this.groupButtonPressed = true;
@@ -109,32 +109,32 @@ export default class ItemSettings extends Vue {
     }
 
     get column() {
-        return this.gradeBook.getGradeColumn(this.itemId);
+        return this.gradeBook.getGradeColumn(this.columnId);
     }
 
     get isGrouped() {
-        return this.gradeBook.isGrouped(this.itemId);
+        return this.gradeBook.isGrouped(this.columnId);
     }
 
-    get groupedItems() {
-        return this.gradeBook.getGroupItems(this.itemId);
+    get subItems() {
+        return this.gradeBook.getColumnSubItems(this.columnId);
     }
 
     get title() {
-        return this.gradeBook.getTitle(this.itemId);
+        return this.gradeBook.getTitle(this.columnId);
     }
 
     set title(event: any) {
-        this.gradeBook.setTitle(this.itemId, event.target.value);
+        this.gradeBook.setTitle(this.columnId, event.target.value);
     }
 
     setWeight(event: any) {
         const weight = parseFloat(event.target.value);
-        this.gradeBook.setWeight(this.itemId, isNaN(weight) ? null : weight);
+        this.gradeBook.setWeight(this.columnId, isNaN(weight) ? null : weight);
     }
 
     get gradedItems(): GradeItem[] {
-        return this.gradeBook.getGradedItemsFilteredByItem(this.itemId);
+        return this.gradeBook.getGradedItemsFilteredByColumn(this.columnId);
     }
 
     toggleSubItem(gradeItem: GradeItem, isAdding: boolean) {
@@ -147,15 +147,12 @@ export default class ItemSettings extends Vue {
     }
 
     addSubItem(item: GradeItem) {
-        const newGroupId = this.gradeBook.addSubItem(item, this.itemId);
-        if (newGroupId !== null) {
-            this.$emit('item-settings', newGroupId);
-        }
+        this.gradeBook.addSubItem(item, this.columnId);
     }
 
     removeSubItem(item: GradeItem) {
         this.gradeBook.removeGradeItem(item);
-        if (item.id === this.itemId) {
+        if (item.id === this.columnId) {
             this.$emit('close');
         }
     }

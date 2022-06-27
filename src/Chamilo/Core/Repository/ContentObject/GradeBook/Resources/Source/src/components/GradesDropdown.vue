@@ -1,7 +1,7 @@
 <template>
     <div :id="id" class="btn-group" :class="{'open': isOpen}" v-click-outside="close">
         <button aria-haspopup="true" :aria-expanded="isOpen" class="btn dropdown-toggle" title="Scores toevoegen" @click="isOpen = !isOpen">
-            <span>Scores toevoegen</span> <span class="caret"></span>
+            <span>Scores toevoegen/verwijderen</span> <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
             <li role="presentation" v-for="(item, index) in gradedItems" :key="`item-${index}`" @click.stop="">
