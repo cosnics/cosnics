@@ -19,6 +19,8 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder;
 use JMS\Serializer\SerializationContext;
+use JMS\Serializer\SerializerBuilder;
+use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax
@@ -143,9 +145,15 @@ abstract class Manager extends AjaxManager
 
     protected function serialize(array $array): string
     {
-        $context = new SerializationContext();
-        $context->setSerializeNull(true);
-        return $this->getSerializer()->serialize($array, 'json', $context);
+        $serializer =
+            SerializerBuilder::create()
+                ->setSerializationContextFactory(function () {
+                    return SerializationContext::create()
+                        ->setSerializeNull(true);
+                })
+                ->setPropertyNamingStrategy(new IdenticalPropertyNamingStrategy())
+                ->build();
+        return $serializer->serialize($array, 'json');
     }
 
     protected function get_root_content_object()

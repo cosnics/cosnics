@@ -82,6 +82,23 @@ class GradeBookColumn
     protected $unauthPresenceEndResult = 2;
 
     /**
+     * @var GradeBookCategory
+     *
+     * @ORM\ManyToOne(targetEntity="GradeBookCategory")
+     * @ORM\JoinColumn(name="gradebook_category_id", referencedColumnName="id", nullable=true)
+     *
+     * @Exclude
+     */
+    protected $gradebookCategory;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="sort", type="integer")
+     */
+    protected $sort;
+
+    /**
      * @var GradeBookColumnSubItem[] | ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="GradeBookColumnSubItem", mappedBy="gradebookColumn")
@@ -98,7 +115,6 @@ class GradeBookColumn
     {
         $this->setGradeBookData($gradebookData);
     }
-
 
     /**
      * @return int
@@ -136,6 +152,26 @@ class GradeBookColumn
     public function setGradeBookData(GradeBookData $gradebookData = null): GradeBookColumn
     {
         $this->gradebookData = $gradebookData;
+
+        return $this;
+    }
+
+    /**
+     * @return GradeBookCategory|null
+     */
+    public function getGradeBookCategory(): ?GradeBookCategory
+    {
+        return $this->gradebookCategory;
+    }
+
+    /**
+     * @param GradeBookCategory|null $gradebookCategory
+     *
+     * @return GradeBookColumn
+     */
+    public function setGradeBookCategory(GradeBookCategory $gradebookCategory = null): GradeBookColumn
+    {
+        $this->gradebookCategory = $gradebookCategory;
 
         return $this;
     }
@@ -256,6 +292,25 @@ class GradeBookColumn
     public function setUnauthPresenceEndResult(int $unauthPresenceEndResult): GradeBookColumn
     {
         $this->unauthPresenceEndResult = $unauthPresenceEndResult;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSort(): ?int
+    {
+        return $this->sort;
+    }
+
+    /** @param int $sort
+     *
+     * @return GradeBookColumn
+     */
+    public function setSort(int $sort): GradeBookColumn
+    {
+        $this->sort = $sort;
 
         return $this;
     }

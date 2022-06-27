@@ -71,8 +71,17 @@ class GradeBookData
      * @var GradeBookColumn[] | ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="GradeBookColumn", mappedBy="gradebookData")
+     *
      */
     protected $gradebookColumns;
+
+    /**
+     * @var GradeBookCategory[] | ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="GradeBookCategory", mappedBy="gradebookData")
+     * @ORM\OrderBy({"sort" = "asc"})
+     */
+    protected $gradebookCategories;
 
     /**
      * GradeBookData constructor.
@@ -200,5 +209,13 @@ class GradeBookData
     public function getGradeBookColumns()
     {
         return $this->gradebookColumns;
+    }
+
+    /**
+     * @return GradeBookCategory[]|ArrayCollection
+     */
+    public function getGradeBookCategories()
+    {
+        return $this->gradebookCategories;
     }
 }

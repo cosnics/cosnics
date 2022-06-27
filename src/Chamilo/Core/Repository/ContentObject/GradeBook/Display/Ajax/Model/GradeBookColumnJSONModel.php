@@ -64,10 +64,10 @@ class GradeBookColumnJSONModel
     protected $unauthPresenceEndResult;
 
     /**
-     * @var array
+     * @var int[]
      *
      */
-    protected $subItems;
+    protected $subItemIds;
 
 
     /**
@@ -91,10 +91,10 @@ class GradeBookColumnJSONModel
         $this->countForEndResult = $countForEndResult;
         $this->authPresenceEndResult = $authPresenceEndResult;
         $this->unauthPresenceEndResult = $unauthPresenceEndResult;
-        $this->subItems = array();
+        $this->subItemIds = array();
         foreach ($subItems as $item)
         {
-            $this->subItems[] = $item->getId();
+            $this->subItemIds[] = $item->getId();
         }
     }
 
@@ -155,11 +155,19 @@ class GradeBookColumnJSONModel
     }
 
     /**
+     * @return int[]
+     */
+    public function getSubItemIds(): array
+    {
+        return $this->subItemIds;
+    }
+
+    /**
      * @param GradeBookColumn $gradebookColumn
      *
      * @return GradeBookColumnJSONModel
      */
-    public static function fromGradeBookItem(GradeBookColumn $gradebookColumn)
+    public static function fromGradeBookColumn(GradeBookColumn $gradebookColumn)
     {
         return new self(
             $gradebookColumn->getId(), $gradebookColumn->getType(), $gradebookColumn->getTitle(),

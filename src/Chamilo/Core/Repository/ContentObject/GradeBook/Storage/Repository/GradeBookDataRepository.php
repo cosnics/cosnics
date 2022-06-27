@@ -136,13 +136,18 @@ class GradeBookDataRepository extends CommonEntityRepository
         }
 
         // preload for performance - voodoo magic
+        $gradeBookData->getGradeBookCategories()[0];
         $gradeBookData->getGradeBookItems()[0];
         $gradeBookData->getGradeBookColumns()[0];
-        //$rubricData->getChoices()[0];
 
         foreach ($gradeBookData->getGradeBookColumns() as $column)
         {
             $column->getGradeBookColumnSubItems()[0];
+        }
+
+        foreach ($gradeBookData->getGradeBookCategories() as $category)
+        {
+            $category->getGradeBookColumns()[0];
         }
 
         /*$choices = $rubricData->getChoices();
