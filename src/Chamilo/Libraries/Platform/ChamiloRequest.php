@@ -22,6 +22,11 @@ class ChamiloRequest extends Request
         return $this->getFromPOSTOrURL($key, $default);
     }
 
+    public function getContainerMode(): string
+    {
+        return $this->attributes->get('containerMode', 'container-fluid');
+    }
+
     /**
      * Returns a parameter from the post body (request) or fallback to the default value
      */

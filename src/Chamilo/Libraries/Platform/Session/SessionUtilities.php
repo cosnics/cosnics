@@ -29,6 +29,11 @@ class SessionUtilities
         session_destroy();
     }
 
+    public function exists(string $variable): bool
+    {
+        return array_key_exists($variable, $_SESSION);
+    }
+
     public function get(string $variable, $default = null)
     {
         if (array_key_exists($variable, $_SESSION))
@@ -81,7 +86,7 @@ class SessionUtilities
 
     public function retrieve(string $variable)
     {
-        if (array_key_exists($variable, $_SESSION))
+        if ($this->exists($variable))
         {
             return $_SESSION[$variable];
         }

@@ -34,5 +34,8 @@
         <service id="Chamilo\Libraries\Format\Tabs\GenericTabsRenderer"/>
         <service id="Chamilo\Libraries\Format\Tabs\TabRenderer"/>
         <service id="Chamilo\Libraries\Format\Tabs\TabsRenderer"/>
+
+        <service id="Chamilo\Libraries\Format\Structure\PageConfiguration"/>
+        <service id="Chamilo\Libraries\Format\Structure\FooterRenderer"/>
     </services>
 </container>

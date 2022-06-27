@@ -7,22 +7,19 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\FooterRenderer;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -249,6 +246,11 @@ abstract class Application
     public function getApplicationConfiguration()
     {
         return $this->applicationConfiguration;
+    }
+
+    public function getFooterRenderer(): FooterRenderer
+    {
+        return $this->getService(FooterRenderer::class);
     }
 
     /**
@@ -761,7 +763,7 @@ abstract class Application
             $html[] = '</div>';
         }
 
-        $html[] = $page->getFooter()->render();
+        $html[] = $this->getFooterRenderer()->render();
 
         return implode(PHP_EOL, $html);
     }
