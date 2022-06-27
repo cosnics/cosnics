@@ -16,20 +16,13 @@
     })
     export default class App extends Vue {
         private gradeBook: GradeBook|null = null;
-        private connector: Connector | null = null;
+        private connector: Connector|null = null;
 
         @Prop({type: Object, default: () => null}) readonly apiConfig!: APIConfig;
 
         async load(): Promise<void> {
             const allData: any = await this.connector?.loadAllData();
             if (allData) {
-                allData.resultsData.forEach(d => {
-                    const results: any = {};
-                    d['results'].forEach((l: any) => {
-                        results[l.id] = l.value;
-                    });
-                    d['results'] = results;
-                });
                 this.gradeBook = GradeBook.from(allData);
             }
         }

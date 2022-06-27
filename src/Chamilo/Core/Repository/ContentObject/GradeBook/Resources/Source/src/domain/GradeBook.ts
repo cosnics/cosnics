@@ -158,9 +158,9 @@ export default class GradeBook {
         return column.subItemIds.map(itemId => this.getGradeItem(itemId)!);
     }
 
-    getResult(results: Results, itemId: ItemId): ResultType {
-        if (typeof results[itemId] === 'undefined') { return null; }
-        return results[itemId].value;
+    getResult(results: Results, columnId: ColumnId): ResultType {
+        if (typeof results[columnId] === 'undefined') { return null; }
+        return results[columnId].value;
     }
 
     getEndResult(studentId: number) {
@@ -230,7 +230,7 @@ export default class GradeBook {
         this.originalResultsData.forEach(data => {
             const r = this.resultsData.find(d => d.id === data.id);
             if (r) {
-                r.results[newId] = { value: data.results[item.id], ref: item.id, overwritten: false };
+                r.results[newId] = { value: data.results.find((r: any) => r.id === item.id)?.value || null, ref: item.id, overwritten: false };
             }
         });
     }
@@ -367,7 +367,8 @@ export default class GradeBook {
         const srcColumn = this.findGradeColumnWithGradeItem(item.id);
 
         this.originalResultsData.forEach(d => {
-            if (d.results[item.id] !== null) {
+            const value = d.results.find((r: any) => r.id === item.id)?.value || null;
+            if (value !== null) {
                 const studentResults = this.resultsData.find(data => data.id === d.id);
                 if (!studentResults) { return; }
                 let newResult;
@@ -375,7 +376,7 @@ export default class GradeBook {
                     newResult = studentResults.results[srcColumn.id];
                 }
                 if (newResult === undefined) {
-                    newResult = { value: d.results[item.id], ref: item.id, overwritten: false };
+                    newResult = { value, ref: item.id, overwritten: false };
                 }
                 if (GradeBook.replaceByNewResult(studentResults.results[columnId], newResult)) {
                     studentResults.results[columnId] = newResult;
@@ -416,7 +417,7 @@ export default class GradeBook {
                         let value: ResultType = null;
                         let ref = null;
                         column.subItemIds.forEach(itemId => {
-                            const v = resultsData.results[itemId];
+                            const v = resultsData.results.find((r: any) => r.id === itemId)?.value || null;
                             if (v !== null && (value === null
                             || (value === 'afw' && v === 'gafw')
                             || ((value === 'afw' || value === 'gafw') && typeof v === 'number'))
@@ -426,9 +427,9 @@ export default class GradeBook {
                             }
                         });
                         results[column.id] = {value, overwritten: false, ref};
-                    } else {
+                    }/* else {
                         results[column.id] = {value: resultsData.results[column.id], overwritten: false, ref: column.id};
-                    }
+                    }*/
                 })
                 return {...resultsData, results};
             });
