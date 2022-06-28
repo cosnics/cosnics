@@ -146,7 +146,7 @@ class ConfigurerComponent extends Manager
         }
     }
 
-    public function get_menu()
+    public function get_menu(): string
     {
         $menu = new PackageTypeSettingsMenu(
             $this->get_tab(), $this->get_url(array(self::PARAM_TAB => '__TYPE__', self::PARAM_CONTEXT => null))
@@ -171,7 +171,7 @@ class ConfigurerComponent extends Manager
     /**
      * @return bool
      */
-    public function has_menu()
+    public function has_menu(): bool
     {
         return true;
     }

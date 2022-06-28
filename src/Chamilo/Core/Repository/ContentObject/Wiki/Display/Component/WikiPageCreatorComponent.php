@@ -64,7 +64,7 @@ class WikiPageCreatorComponent extends Manager implements ViewerInterface, Deleg
         return $this->get_root_content_object()->get_allowed_types();
     }
 
-    public function render_header($pageTitle = '', ComplexWikiPage $complex_wiki_page = null)
+    public function render_header(string $pageTitle = '', ?ComplexWikiPage $complex_wiki_page = null): string
     {
         $html = [];
 

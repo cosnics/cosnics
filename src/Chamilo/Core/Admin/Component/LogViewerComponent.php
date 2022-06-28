@@ -7,6 +7,7 @@ use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
@@ -154,12 +155,7 @@ class LogViewerComponent extends Manager
         return $table->toHtml();
     }
 
-    /**
-     * Returns the admin breadcrumb generator
-     *
-     * @return \libraries\format\BreadcrumbGeneratorInterface
-     */
-    public function get_breadcrumb_generator()
+    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
     {
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }

@@ -22,7 +22,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -50,8 +49,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         $this->checkAuthorization(Manager::context());
         $this->checkLoggedInAs();
 
-        $header = Page::getInstance()->getHeader();
-        $header->addCssFile($this->getThemePathBuilder()->getCssPath(self::package(), true) . 'Print.css', 'print');
+        $this->getPageConfiguration()->addCssFile(
+            $this->getThemePathBuilder()->getCssPath(self::package(), true) . 'Print.css', 'print'
+        );
 
         $this->set_parameter(ViewRenderer::PARAM_TYPE, $this->getCurrentRendererType());
         $this->set_parameter(ViewRenderer::PARAM_TIME, $this->getCurrentRendererTime());

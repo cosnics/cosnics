@@ -57,7 +57,7 @@ class FooterRenderer extends AbstractFooterRenderer
 
         $html[] = $this->getHeader();
 
-        if ($this->getPageConfiguration()->getViewMode() != Page::VIEW_MODE_HEADERLESS)
+        if ($this->getPageConfiguration()->getViewMode() != PageConfiguration::VIEW_MODE_HEADERLESS)
         {
             $html[] = $this->getContainerHeader();
             $html[] = implode(' | ', $this->getLinks());

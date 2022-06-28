@@ -11,11 +11,11 @@ use InvalidArgumentException;
  */
 class ProgressBarRenderer
 {
-    const MODE_DANGER = 'danger';
-    const MODE_DEFAULT = 'default';
-    const MODE_INFO = 'info';
-    const MODE_SUCCESS = 'success';
-    const MODE_WARNING = 'warning';
+    public const MODE_DANGER = 'danger';
+    public const MODE_DEFAULT = 'default';
+    public const MODE_INFO = 'info';
+    public const MODE_SUCCESS = 'success';
+    public const MODE_WARNING = 'warning';
 
     public function render(int $progress, string $mode = self::MODE_DEFAULT, int $maxWidth = 150, bool $striped = false
     ): string
@@ -49,7 +49,7 @@ class ProgressBarRenderer
      */
     protected function getAllowedModes(): array
     {
-        return array(self::MODE_DEFAULT, self::MODE_SUCCESS, self::MODE_INFO, self::MODE_WARNING, self::MODE_DANGER);
+        return [self::MODE_DEFAULT, self::MODE_SUCCESS, self::MODE_INFO, self::MODE_WARNING, self::MODE_DANGER];
     }
 
     /**

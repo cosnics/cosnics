@@ -42,7 +42,7 @@ abstract class DataClass
      */
     private array $properties;
 
-    public function __construct(?array $defaultProperties = [], ?array $optionalProperties = [])
+    public function __construct(array $defaultProperties = [], array $optionalProperties = [])
     {
         $this->setDefaultProperties($defaultProperties);
         $this->setOptionalProperties($optionalProperties);
@@ -325,7 +325,7 @@ abstract class DataClass
      */
     public function getSpecificProperties(string $propertiesType): array
     {
-        return $this->properties[$propertiesType];
+        return array_key_exists($propertiesType, $this->properties) ? $this->properties[$propertiesType] : [];
     }
 
     /**

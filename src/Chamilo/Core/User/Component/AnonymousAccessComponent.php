@@ -12,6 +12,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
@@ -54,7 +55,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
             }
         }
 
-        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+        $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
         $html = [];
 

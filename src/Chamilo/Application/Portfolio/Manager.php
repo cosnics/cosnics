@@ -17,16 +17,13 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
  */
 abstract class Manager extends Application
 {
-    // Parameters
-    const PARAM_USER_ID = 'user_id';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_BROWSE_FAVOURITES = 'Favourites';
+    public const ACTION_HOME = 'Home';
 
-    // Actions
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_BROWSE_FAVOURITES = 'Favourites';
-    const ACTION_HOME = 'Home';
+    public const DEFAULT_ACTION = self::ACTION_HOME;
 
-    // Default action
-    const DEFAULT_ACTION = self::ACTION_HOME;
+    public const PARAM_USER_ID = 'user_id';
 
     /**
      *
@@ -37,17 +34,6 @@ abstract class Manager extends Application
         parent::__construct($applicationConfiguration);
 
         $this->checkAuthorization(Manager::context());
-    }
-
-    /**
-     * Get the "current" user id, which is either the user of whom we are viewing the portfolio or the currently
-     * logged-in user
-     *
-     * @return int
-     */
-    public function getCurrentUserId()
-    {
-        return $this->getRequest()->query->get(self::PARAM_USER_ID, $this->getUser()->getId());
     }
 
     /**
@@ -62,21 +48,23 @@ abstract class Manager extends Application
     }
 
     /**
+     * Get the "current" user id, which is either the user of whom we are viewing the portfolio or the currently
+     * logged-in user
      *
-     * @return \Chamilo\Application\Portfolio\Service\RightsService
+     * @return int
      */
-    public function getRightsService()
+    public function getCurrentUserId()
     {
-        return $this->getService(RightsService::class);
+        return $this->getRequest()->query->get(self::PARAM_USER_ID, $this->getUser()->getId());
     }
 
     /**
      *
-     * @return \Chamilo\Core\Repository\Workspace\Service\RightsService
+     * @return \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService
      */
-    public function getWorkspaceRightsService()
+    public function getFavouriteService()
     {
-        return $this->getService(WorkspaceRightsService::class);
+        return $this->getService(FavouriteService::class);
     }
 
     /**
@@ -108,10 +96,19 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService
+     * @return \Chamilo\Application\Portfolio\Service\RightsService
      */
-    public function getFavouriteService()
+    public function getRightsService()
     {
-        return $this->getService(FavouriteService::class);
+        return $this->getService(RightsService::class);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Workspace\Service\RightsService
+     */
+    public function getWorkspaceRightsService()
+    {
+        return $this->getService(WorkspaceRightsService::class);
     }
 }

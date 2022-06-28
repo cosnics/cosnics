@@ -23,11 +23,11 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
 {
-    const PROPERTY_ADD_DATE = 'add_date';
-    const PROPERTY_DISPLAY_ORDER = 'display_order';
-    const PROPERTY_PARENT = 'parent_id';
-    const PROPERTY_REF = 'ref_id';
-    const PROPERTY_USER_ID = 'user_id';
+    public const PROPERTY_ADD_DATE = 'add_date';
+    public const PROPERTY_DISPLAY_ORDER = 'display_order';
+    public const PROPERTY_PARENT = 'parent_id';
+    public const PROPERTY_REF = 'ref_id';
+    public const PROPERTY_USER_ID = 'user_id';
 
     /**
      *
@@ -35,16 +35,16 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
      */
     private $reference_object;
 
-    public function __construct($default_properties = [], $additionalProperties = [])
+    public function __construct($default_properties = [], $additionalProperties = [], array $optionalProperties = [])
     {
-        parent::__construct($default_properties, $additionalProperties);
+        parent::__construct($default_properties, $additionalProperties, $optionalProperties);
         $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
     /**
      * Checks this object before saving + adds some default values
      *
-     * @return boolean
+     * @return bool
      */
     public function checkBeforeSave(): bool
     {
@@ -127,6 +127,19 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
     }
 
     /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
+     */
+    public function getDisplayOrderContextProperties(): array
+    {
+        return array(new PropertyConditionVariable(ComplexContentObjectItem::class, self::PROPERTY_PARENT));
+    }
+
+    public function getDisplayOrderProperty(): PropertyConditionVariable
+    {
+        return new PropertyConditionVariable(ComplexContentObjectItem::class, self::PROPERTY_DISPLAY_ORDER);
+    }
+
+    /**
      * @return string
      */
     public static function getStorageUnitName(): string
@@ -152,19 +165,6 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
     public function get_display_order()
     {
         return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
-     */
-    public function getDisplayOrderContextProperties(): array
-    {
-        return array(new PropertyConditionVariable(ComplexContentObjectItem::class, self::PROPERTY_PARENT));
-    }
-
-    public function getDisplayOrderProperty(): PropertyConditionVariable
-    {
-        return new PropertyConditionVariable(ComplexContentObjectItem::class, self::PROPERTY_DISPLAY_ORDER);
     }
 
     public function get_parent()

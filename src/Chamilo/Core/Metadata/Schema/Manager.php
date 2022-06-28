@@ -15,16 +15,16 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_CREATE = 'Creator';
-    const ACTION_DELETE = 'Deleter';
-    const ACTION_ELEMENT = 'Element';
-    const ACTION_UPDATE = 'Updater';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_DELETE = 'Deleter';
+    public const ACTION_ELEMENT = 'Element';
+    public const ACTION_UPDATE = 'Updater';
 
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
-    const PARAM_ACTION = 'schema_action';
-    const PARAM_SCHEMA_ID = 'schema_id';
+    public const PARAM_ACTION = 'schema_action';
+    public const PARAM_SCHEMA_ID = 'schema_id';
 
     /**
      * @return \Chamilo\Core\Metadata\Entity\DataClassEntityFactory

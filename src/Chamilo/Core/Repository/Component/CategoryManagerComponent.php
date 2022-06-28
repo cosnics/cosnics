@@ -202,7 +202,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
      * (non-PHPdoc) @see \configuration\category\CategorySupport::allowed_to_edit_category()
      */
 
-    public function get_parameters($include_search = false)
+    public function get_parameters(bool $include_search = false): array
     {
         $extra_parameters = [];
         if (!empty($this->impact_view_selected_categories))

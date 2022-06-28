@@ -190,7 +190,7 @@ abstract class ContentObjectRenderer implements TableSupport
         }
 
         $preview_url = $this->get_repository_browser()->get_preview_content_object_url($content_object);
-        $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
+        $onclick = '" onclick="javascript:openPopup(\'' . addslashes($preview_url) . '\'); return false;';
 
         if ($content_object instanceof ComplexContentObjectSupport)
         {

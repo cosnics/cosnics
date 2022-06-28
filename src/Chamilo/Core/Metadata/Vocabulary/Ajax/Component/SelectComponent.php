@@ -10,6 +10,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
@@ -69,7 +70,7 @@ class SelectComponent extends Manager implements TableSupport
             throw new Exception(Translation::get('NoVocabularyAllowed'));
         }
 
-        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+        $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
         $content = $this->getContent();
 

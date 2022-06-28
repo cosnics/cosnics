@@ -15,7 +15,7 @@ use Chamilo\Core\Rights\Editor\Manager;
  */
 class SimpleRightsEditorComponent extends Manager implements DelegateComponent
 {
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $html = [];
 

@@ -3,24 +3,15 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Home;
 
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Architecture\Application\Application;
 
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements DelegateComponent, 
-    IntroductionTextSupportInterface
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
+    implements DelegateComponent, IntroductionTextSupportInterface
 {
-    const PARAM_TOOL = 'target_tool';
-    const ACTION_CHANGE_TOOL_VISIBILITY = 'ToolVisibilityChanger';
-    const ACTION_MAKE_TOOL_VISIBLE = 'ToolVisible';
-    const ACTION_MAKE_TOOL_INVISIBLE = 'ToolInvisible';
-    const ACTION_DELETE_LINKS = 'LinksDeleter';
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const ACTION_CHANGE_TOOL_VISIBILITY = 'ToolVisibilityChanger';
+    public const ACTION_DELETE_LINKS = 'LinksDeleter';
+    public const ACTION_MAKE_TOOL_INVISIBLE = 'ToolInvisible';
+    public const ACTION_MAKE_TOOL_VISIBLE = 'ToolVisible';
 
-    /**
-     *
-     * @see \Chamilo\Application\Weblcms\Tool\Manager::render_header()
-     */
-    public function render_header($visible_tools = null, $show_introduction_text = false)
-    {
-        return Application::render_header();
-    }
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const PARAM_TOOL = 'target_tool';
 }

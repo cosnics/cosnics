@@ -49,7 +49,7 @@ class EmailerComponent extends Manager
         }
     }
 
-    public function render_header($pageTitle = null)
+    public function render_header(string $pageTitle = ''): string
     {
         $ids = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
 

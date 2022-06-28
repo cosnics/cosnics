@@ -10,21 +10,19 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    // Parameters
-    const PARAM_FAVOURITE_ID = 'favourite_id';
-    const PARAM_FAVOURITE_USER_ID = 'favourite_user_id';
-    const PARAM_ACTION = 'favourite_action';
-    const PARAM_SOURCE = 'source';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_DELETE = 'Deleter';
 
-    // Actions
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_DELETE = 'Deleter';
-    const ACTION_CREATE = 'Creator';
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
-    // Default action
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
-    const SOURCE_USER_BROWSER = 'user_browser';
-    const SOURCE_FAVOURITES_BROWSER = 'favourites_browser';
+    public const PARAM_ACTION = 'favourite_action';
+    public const PARAM_FAVOURITE_ID = 'favourite_id';
+    public const PARAM_FAVOURITE_USER_ID = 'favourite_user_id';
+    public const PARAM_SOURCE = 'source';
+
+    public const SOURCE_FAVOURITES_BROWSER = 'favourites_browser';
+    public const SOURCE_USER_BROWSER = 'user_browser';
 
     /**
      *

@@ -38,7 +38,7 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
                 Translation::get('Preview', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('desktop'),
                 $this->get_content_object_preview_url($object), ToolbarItem::DISPLAY_ICON, false, null, null, null,
                 array(
-                    'onclick' => 'javascript:openPopup(\'' . $this->get_content_object_preview_url($object) .
+                    'onclick' => 'javascript:openPopup(\'' . addslashes($this->get_content_object_preview_url($object)) .
                         '\');return false;'
                 )
             )

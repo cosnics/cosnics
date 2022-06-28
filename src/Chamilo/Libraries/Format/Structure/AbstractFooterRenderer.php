@@ -71,6 +71,4 @@ abstract class AbstractFooterRenderer implements FooterRendererInterface
         return $this->pageConfiguration;
     }
 
-
-
 }

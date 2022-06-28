@@ -19,7 +19,7 @@ class RepositoryApplicationItemRenderer extends ApplicationItemRenderer
     /**
      * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryApplicationItem $item
      *
-     * @return boolean
+     * @return bool
      */
     public function isSelected(Item $item)
     {

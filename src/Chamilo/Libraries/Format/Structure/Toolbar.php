@@ -12,8 +12,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
  */
 class Toolbar
 {
-    const TYPE_HORIZONTAL = 'horizontal';
-    const TYPE_VERTICAL = 'vertical';
+    public const TYPE_HORIZONTAL = 'horizontal';
+    public const TYPE_VERTICAL = 'vertical';
 
     /**
      * @var \Chamilo\Libraries\Format\Structure\ToolbarItem[]
@@ -150,14 +150,14 @@ class Toolbar
     public function insert_item(ToolbarItem $item, int $index)
     {
         $items = $this->items;
-        array_splice($items, $index, 0, array($item));
+        array_splice($items, $index, 0, [$item]);
         $this->items = $items;
     }
 
     public function replace_item(ToolbarItem $item, int $index)
     {
         $items = $this->items;
-        array_splice($items, $index, 1, array($item));
+        array_splice($items, $index, 1, [$item]);
         $this->items = $items;
     }
 }

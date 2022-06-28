@@ -15,18 +15,18 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_CREATE = 'Creator';
-    const ACTION_DEFAULT = 'Default';
-    const ACTION_DELETE = 'Deleter';
-    const ACTION_UPDATE = 'Updater';
-    const ACTION_USER = 'User';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_DEFAULT = 'Default';
+    public const ACTION_DELETE = 'Deleter';
+    public const ACTION_UPDATE = 'Updater';
+    public const ACTION_USER = 'User';
 
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
-    const PARAM_ACTION = 'vocabulary_action';
-    const PARAM_USER_ID = 'user_id';
-    const PARAM_VOCABULARY_ID = 'vocabulary_id';
+    public const PARAM_ACTION = 'vocabulary_action';
+    public const PARAM_USER_ID = 'user_id';
+    public const PARAM_VOCABULARY_ID = 'vocabulary_id';
 
     /**
      * @return \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
@@ -46,7 +46,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getSelectedElementId()
     {
@@ -54,7 +54,7 @@ abstract class Manager extends Application
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getSelectedUserId()
     {

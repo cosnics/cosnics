@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Exceptions;
 
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class represents an object not exists exception.
@@ -13,12 +13,11 @@ use Chamilo\Libraries\Translation\Translation;
 class NoObjectSelectedException extends UserException
 {
 
-    /**
-     *
-     * @param string $objectTranslation
-     */
-    public function __construct($objectTranslation)
+    public function __construct(string $objectTranslation)
     {
-        parent::__construct(Translation::get('NoObjectSelected', array('OBJECT' => $objectTranslation)));
+        parent::__construct(
+            $this->getTranslator()->trans('NoObjectSelected', ['OBJECT' => $objectTranslation],
+                StringUtilities::LIBRARIES)
+        );
     }
 }

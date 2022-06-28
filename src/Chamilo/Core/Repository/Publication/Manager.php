@@ -12,22 +12,18 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    // Parameters
-    const PARAM_ACTION = 'publication_action';
-    const PARAM_PUBLICATION_APPLICATION = 'publication_application';
-    const PARAM_PUBLICATION_ID = 'publication';
-    const PARAM_PUBLICATION_CONTEXT = 'publication_context';
-    
-    // Actions
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_PUBLISH = 'Publisher';
-    const ACTION_DELETE = 'Deleter';
-    const ACTION_UPDATE = 'Updater';
-    
-    // Default action
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
-    
-    // Properties
-    const WIZARD_TARGET = 'target';
-    const WIZARD_OPTION = 'option';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_DELETE = 'Deleter';
+    public const ACTION_PUBLISH = 'Publisher';
+    public const ACTION_UPDATE = 'Updater';
+
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
+
+    public const PARAM_ACTION = 'publication_action';
+    public const PARAM_PUBLICATION_APPLICATION = 'publication_application';
+    public const PARAM_PUBLICATION_CONTEXT = 'publication_context';
+    public const PARAM_PUBLICATION_ID = 'publication';
+
+    public const WIZARD_OPTION = 'option';
+    public const WIZARD_TARGET = 'target';
 }

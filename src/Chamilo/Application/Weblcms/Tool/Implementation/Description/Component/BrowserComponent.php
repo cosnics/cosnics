@@ -30,13 +30,4 @@ class BrowserComponent extends Manager
     {
         return count($this->publications);
     }
-
-    public function render_header($visible_tools = null, $show_introduction_text = false)
-    {
-        $html = [];
-
-        $html[] = parent::render_header($visible_tools, $show_introduction_text);
-
-        return implode(PHP_EOL, $html);
-    }
 }

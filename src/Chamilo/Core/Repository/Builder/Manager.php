@@ -24,50 +24,28 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 abstract class Manager extends Application implements TabsTypeSelectorSupport, TableSupport
 {
-    // Parameters
-    const ACTION_BROWSE = 'Browser';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CHANGE_PARENT = 'ParentChanger';
+    public const ACTION_COPY_COMPLEX_CONTENT_OBJECT_ITEM = 'Copier';
+    public const ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM = 'Creator';
+    public const ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM = 'Deleter';
+    public const ACTION_MOVE_COMPLEX_CONTENT_OBJECT_ITEM = 'Mover';
+    public const ACTION_PREVIEW = 'Preview';
+    public const ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM = 'Updater';
+    public const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
+    public const ACTION_VIEW_COMPLEX_CONTENT_OBJECT_ITEM = 'Viewer';
 
-    const ACTION_CHANGE_PARENT = 'ParentChanger';
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const PARAM_ACTION = 'builder_action';
 
-    const ACTION_COPY_COMPLEX_CONTENT_OBJECT_ITEM = 'Copier';
-
-    const ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM = 'Creator';
-
-    const ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM = 'Deleter';
-
-    const ACTION_MOVE_COMPLEX_CONTENT_OBJECT_ITEM = 'Mover';
-
-    const ACTION_PREVIEW = 'Preview';
-
-    const ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM = 'Updater';
-
-    const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
-
-    // Actions
-
-    const ACTION_VIEW_COMPLEX_CONTENT_OBJECT_ITEM = 'Viewer';
-
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
-
-    const PARAM_ACTION = 'builder_action';
-
-    const PARAM_ATTACHMENT_ID = 'attachment_id';
-
-    const PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID = 'cloi';
-
-    const PARAM_DELETE_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM = 'delete_selected_cloi';
-
-    const PARAM_DIRECTION = 'direction';
-
-    const PARAM_MOVE_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM = 'move_selected_cloi';
-
-    const PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID = 'selected_cloi';
-
-    const PARAM_TEMPLATE_ID = 'template_id';
-
-    // Default action
-
-    const PARAM_TYPE = 'type';
+    public const PARAM_ATTACHMENT_ID = 'attachment_id';
+    public const PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID = 'cloi';
+    public const PARAM_DELETE_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM = 'delete_selected_cloi';
+    public const PARAM_DIRECTION = 'direction';
+    public const PARAM_MOVE_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM = 'move_selected_cloi';
+    public const PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID = 'selected_cloi';
+    public const PARAM_TEMPLATE_ID = 'template_id';
+    public const PARAM_TYPE = 'type';
 
     private static $instance;
 
@@ -142,14 +120,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
         );
     }
 
-    /**
-     * Determine whether the content object type has a (complex) builder
-     *
-     * @param string $content_object_type
-     *
-     * @return boolean
-     */
-    public static function exists($content_object_type)
+    public static function exists(string $content_object_type): bool
     {
         $class_name = $content_object_type . '\Builder\Manager';
 
@@ -164,6 +135,13 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
         return new $class($application->get_user(), $application);
     }
 
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
     public function getButtonToolbarRenderer(ContentObject $content_object = null)
     {
         return '';
@@ -176,13 +154,6 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     public function get_additional_links()
     {
         return [];
-    }
-
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID;
-
-        return parent::getAdditionalParameters($additionalParameters);
     }
 
     public function get_browse_url()
@@ -488,7 +459,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
 
     /**
      *
-     * @return boolean
+     * @return bool
      * @deprecated Use instanceof MenuSupport directly from now on
      */
     public function show_menu()

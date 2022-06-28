@@ -229,7 +229,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
      * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::is_allowed_to_update_feedback()
      */
 
-    public function render_footer()
+    public function render_footer(): string
     {
         $html = [];
 
@@ -247,7 +247,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
      * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::is_allowed_to_delete_feedback()
      */
 
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $html = [];
 

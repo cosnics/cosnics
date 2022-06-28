@@ -19,7 +19,6 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator;
-use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
@@ -36,8 +35,6 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -63,132 +60,58 @@ use Exception;
  */
 abstract class Manager extends Application
 {
-    /**
-     * **************************************************************************************************************
-     * Actions *
-     * **************************************************************************************************************
-     */
-    const ACTION_BROWSE = 'Browser';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_BUILD_COMPLEX_CONTENT_OBJECT = 'ComplexBuilder';
+    public const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
+    public const ACTION_DELETE = 'Deleter';
+    public const ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT = 'ComplexDisplay';
+    public const ACTION_EDIT_RIGHTS = 'RightsEditor';
+    public const ACTION_EVALUATE_TOOL_PUBLICATION = 'Evaluate';
+    public const ACTION_HIDE_PUBLICATION = 'HidePublication';
+    public const ACTION_MAIL_PUBLICATION = 'PublicationMailer';
+    public const ACTION_MANAGE_CATEGORIES = 'CategoryManager';
+    public const ACTION_MOVE = 'Mover';
+    public const ACTION_MOVE_TO_CATEGORY = 'CategoryMover';
+    public const ACTION_PUBLISH = 'Publisher';
+    public const ACTION_PUBLISH_INTRODUCTION = 'IntroductionPublisher';
+    public const ACTION_SHOW_PUBLICATION = 'ShowPublication';
+    public const ACTION_TOGGLE_VISIBILITY = 'ToggleVisibility';
+    public const ACTION_UPDATE = 'Updater';
+    public const ACTION_UPDATE_CONTENT_OBJECT = 'ContentObjectUpdater';
+    public const ACTION_UPDATE_PUBLICATION = 'PublicationUpdater';
+    public const ACTION_VIEW = 'Viewer';
+    public const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
+    public const ACTION_VIEW_REPORTING_TEMPLATE = 'ReportingViewer';
 
-    const ACTION_BUILD_COMPLEX_CONTENT_OBJECT = 'ComplexBuilder';
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
-    const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
+    public const PARAM_ACTION = 'tool_action';
+    public const PARAM_BROWSER_TYPE = 'browser';
+    public const PARAM_BROWSE_PUBLICATION_TYPE = 'pub_type';
+    public const PARAM_COMPLEX_ID = 'cid';
+    public const PARAM_MOVE = 'move';
+    public const PARAM_MOVE_DIRECTION = 'move_direction';
+    public const PARAM_MOVE_DIRECTION_DOWN = 1;
+    public const PARAM_MOVE_DIRECTION_UP = - 1;
+    public const PARAM_OBJECT_ID = 'object_id';
+    public const PARAM_PUBLICATION_ID = 'publication';
+    public const PARAM_PUBLISH_MODE = 'publish_mode';
+    public const PARAM_TEMPLATE_NAME = 'template_name';
+    public const PARAM_VIEW_AS_COURSE_ID = 'view_as_course_id';
+    public const PARAM_VIEW_AS_ID = 'view_as_id';
+    public const PARAM_VISIBILITY = 'visible';
 
-    const ACTION_DELETE = 'Deleter';
+    public const PUBLICATION_TYPE_ALL = 1;
+    public const PUBLICATION_TYPE_FOR_ME = 2;
+    public const PUBLICATION_TYPE_FROM_ME = 3;
+    public const PUBLISH_DEPENDENT = 1;
 
-    const ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT = 'ComplexDisplay';
-
-    const ACTION_EDIT_RIGHTS = 'RightsEditor';
-
-    const ACTION_EVALUATE_TOOL_PUBLICATION = 'Evaluate';
-
-    const ACTION_HIDE_PUBLICATION = 'HidePublication';
-
-    const ACTION_MAIL_PUBLICATION = 'PublicationMailer';
-
-    const ACTION_MANAGE_CATEGORIES = 'CategoryManager';
-
-    const ACTION_MOVE = 'Mover';
-
-    const ACTION_MOVE_TO_CATEGORY = 'CategoryMover';
-
-    const ACTION_PUBLISH = 'Publisher';
-
-    const ACTION_PUBLISH_INTRODUCTION = 'IntroductionPublisher';
-
-    const ACTION_SHOW_PUBLICATION = 'ShowPublication';
-
-    const ACTION_TOGGLE_VISIBILITY = 'ToggleVisibility';
-
-    const ACTION_UPDATE = 'Updater';
-
-    const ACTION_UPDATE_CONTENT_OBJECT = 'ContentObjectUpdater';
-
-    const ACTION_UPDATE_PUBLICATION = 'PublicationUpdater';
-
-    const ACTION_VIEW = 'Viewer';
-
-    const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
-
-    const ACTION_VIEW_REPORTING_TEMPLATE = 'ReportingViewer';
-
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
-
-    /**
-     * **************************************************************************************************************
-     * URL Parameters *
-     * **************************************************************************************************************
-     */
-    const PARAM_ACTION = 'tool_action';
-
-    const PARAM_BROWSER_TYPE = 'browser';
-
-    const PARAM_BROWSE_PUBLICATION_TYPE = 'pub_type';
-
-    const PARAM_COMPLEX_ID = 'cid';
-
-    const PARAM_MOVE = 'move';
-
-    const PARAM_MOVE_DIRECTION = 'move_direction';
-
-    const PARAM_MOVE_DIRECTION_DOWN = 1;
-
-    /**
-     * **************************************************************************************************************
-     * Move Directions *
-     * **************************************************************************************************************
-     */
-    const PARAM_MOVE_DIRECTION_UP = - 1;
-
-    const PARAM_OBJECT_ID = 'object_id';
-
-    const PARAM_PUBLICATION_ID = 'publication';
-
-    const PARAM_PUBLISH_MODE = 'publish_mode';
-
-    const PARAM_TEMPLATE_NAME = 'template_name';
-
-    const PARAM_VIEW_AS_COURSE_ID = 'view_as_course_id';
-
-    const PARAM_VIEW_AS_ID = 'view_as_id';
-
-    const PARAM_VISIBILITY = 'visible';
-
-    /**
-     * **************************************************************************************************************
-     * Publication Types *
-     * **************************************************************************************************************
-     */
-    const PUBLICATION_TYPE_ALL = 1;
-
-    const PUBLICATION_TYPE_FOR_ME = 2;
-
-    const PUBLICATION_TYPE_FROM_ME = 3;
-
-    const PUBLISH_DEPENDENT = 1;
-
-    /**
-     * **************************************************************************************************************
-     * Publish dependent on tool type
-     * **************************************************************************************************************
-     */
-    const PUBLISH_INDEPENDENT = 0;
-
-    const PUBLISH_MODE_FULL = 2;
-
-    const PUBLISH_MODE_QUICK = 1;
-
-    const PUBLISH_TYPE_AUTO = 2;
-
-    const PUBLISH_TYPE_BOTH = 3;
-
-    const PUBLISH_TYPE_FORM = 1;
-
-    /**
-     * **************************************************************************************************************
-     * Construct Functionality *
-     * **************************************************************************************************************
-     */
+    public const PUBLISH_INDEPENDENT = 0;
+    public const PUBLISH_MODE_FULL = 2;
+    public const PUBLISH_MODE_QUICK = 1;
+    public const PUBLISH_TYPE_AUTO = 2;
+    public const PUBLISH_TYPE_BOTH = 3;
+    public const PUBLISH_TYPE_FORM = 1;
 
     private $introduction_cache;
 
@@ -313,7 +236,8 @@ abstract class Manager extends Application
                                 self::PARAM_ACTION => self::ACTION_DELETE,
                                 self::PARAM_PUBLICATION_ID => $introduction_text->get_id()
                             )
-                        ), Button::DISPLAY_ICON_AND_LABEL, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
+                        ), Button::DISPLAY_ICON_AND_LABEL,
+                        Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                     )
                 );
             }
@@ -615,28 +539,6 @@ abstract class Manager extends Application
         return $locations;
     }
 
-    public static function get_packages_from_filesystem($type = null)
-    {
-        $types = [];
-
-        $directories = Filesystem::get_directory_content(
-            Path::getInstance()->namespaceToFullPath(__NAMESPACE__ . '\Implementation'), Filesystem::LIST_DIRECTORIES,
-            false
-        );
-
-        foreach ($directories as $directory)
-        {
-            $namespace = __NAMESPACE__ . '\Implementation\\' . $directory;
-
-            if (Package::exists($namespace))
-            {
-                $types[] = $namespace;
-            }
-        }
-
-        return $types;
-    }
-
     public static function get_pcattree_parents($pcattree)
     {
         $parent = DataManager::retrieve_by_id(
@@ -683,7 +585,7 @@ abstract class Manager extends Application
         return 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $type;
     }
 
-    public function get_user_id()
+    public function get_user_id(): ?string
     {
         $va_id = Session::get(self::PARAM_VIEW_AS_ID);
         $course_id = Session::get(self::PARAM_VIEW_AS_COURSE_ID);
@@ -1007,12 +909,7 @@ abstract class Manager extends Application
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Renders the page title
-     *
-     * @return string
-     */
-    protected function renderPageTitle()
+    protected function renderPageTitle(): string
     {
         $html = [];
 
@@ -1021,7 +918,7 @@ abstract class Manager extends Application
         $html[] = parent::renderPageTitle();
         $html[] = '</div>';
 
-        if (Page::getInstance()->isFullPage())
+        if ($this->getPageConfiguration()->isFullPage())
         {
             $visible_tools = $this->get_visible_tools();
 
@@ -1035,10 +932,6 @@ abstract class Manager extends Application
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @param unknown $tools
-     */
     public function renderShortcuts($tools)
     {
         $courseSettingsController = CourseSettingsController::getInstance();

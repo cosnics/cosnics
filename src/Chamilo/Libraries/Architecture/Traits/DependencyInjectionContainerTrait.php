@@ -16,6 +16,11 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
+use Chamilo\Libraries\Format\Structure\FooterRenderer;
+use Chamilo\Libraries\Format\Structure\FooterRendererInterface;
+use Chamilo\Libraries\Format\Structure\HeaderRenderer;
+use Chamilo\Libraries\Format\Structure\HeaderRendererInterface;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Format\Validator\ValidatorDecorator;
@@ -99,6 +104,11 @@ trait DependencyInjectionContainerTrait
         return $this->getService('Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger');
     }
 
+    public function getFooterRenderer(): FooterRendererInterface
+    {
+        return $this->getService(FooterRenderer::class);
+    }
+
     public function getForm(): FormFactory
     {
         return $this->getService(FormFactory::class);
@@ -107,6 +117,11 @@ trait DependencyInjectionContainerTrait
     public function getGroupService(): GroupService
     {
         return $this->getService(GroupService::class);
+    }
+
+    public function getHeaderRenderer(): HeaderRendererInterface
+    {
+        return $this->getService(HeaderRenderer::class);
     }
 
     public function getLogger(): Logger
@@ -122,6 +137,11 @@ trait DependencyInjectionContainerTrait
     public function getNotificationMessageRenderer(): NotificationMessageRenderer
     {
         return $this->getService(NotificationMessageRenderer::class);
+    }
+
+    public function getPageConfiguration(): PageConfiguration
+    {
+        return $this->getService(PageConfiguration::class);
     }
 
     public function getPathBuilder(): PathBuilder
@@ -201,6 +221,9 @@ trait DependencyInjectionContainerTrait
         return $this->getService('Symfony\Component\Validator\Validator');
     }
 
+    /**
+     * @throws \Exception
+     */
     public function initializeContainer(): void
     {
         if (!isset($this->container))

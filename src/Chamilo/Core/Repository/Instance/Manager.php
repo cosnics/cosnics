@@ -23,32 +23,21 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class Manager extends Application
 {
-    // Parameters
-    const ACTION_ACTIVATE = 'Activator';
 
-    const ACTION_BROWSE = 'Browser';
+    public const ACTION_ACTIVATE = 'Activator';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_DEACTIVATE = 'Deactivator';
+    public const ACTION_DELETE = 'Deleter';
+    public const ACTION_RIGHTS = 'RightsEditor';
+    public const ACTION_UPDATE = 'Updater';
 
-    // Actions
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
-    const ACTION_CREATE = 'Creator';
+    public const PARAM_IMPLEMENTATION = 'implementation';
+    public const PARAM_INSTANCE_ID = 'instance';
 
-    const ACTION_DEACTIVATE = 'Deactivator';
-
-    const ACTION_DELETE = 'Deleter';
-
-    const ACTION_RIGHTS = 'RightsEditor';
-
-    const ACTION_UPDATE = 'Updater';
-
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
-
-    const PARAM_IMPLEMENTATION = 'implementation';
-
-    // Default action
-
-    const PARAM_INSTANCE_ID = 'instance';
-
-    public static function exists($type)
+    public static function exists(string $type): bool
     {
         return class_exists($type . '\Manager');
     }
@@ -110,7 +99,7 @@ abstract class Manager extends Application
 
             $available_instances = 0;
 
-            foreach($instances as $instance)
+            foreach ($instances as $instance)
             {
                 $link = Path::getInstance()->getBasePath(true) . 'index.php?' . Application::PARAM_CONTEXT . '=' .
                     urlencode($instance->get_implementation()) . '&' .
@@ -123,7 +112,7 @@ abstract class Manager extends Application
                 $glyph = new FontAwesomeGlyph('upload', [], null, 'fas');
 
                 $buttons[] =
-                    '<a class="btn btn-default" onclick="javascript:openPopup(\'' . htmlspecialchars($link) . '\');">';
+                    '<a class="btn btn-default" onclick="javascript:openPopup(\'' . addslashes($link) . '\');">';
                 $buttons[] = $glyph->render();
                 $buttons[] = ' ';
                 $buttons[] = htmlspecialchars($title);
@@ -151,8 +140,8 @@ abstract class Manager extends Application
                     $html[] = '$(document).ready(function ()';
                     $html[] = '{';
                     // htmlspecialchars converts & to &amp; -> need oher solution
-                    // $html[] = ' openPopup(\'' . htmlspecialchars($link) . '\');';
-                    $html[] = '	openPopup(\'' . $link . '\');';
+                    // $html[] = ' openPopup(\'' . addslashes($link) . '\');';
+                    $html[] = '	openPopup(\'' . addslashes($link) . '\');';
                     $html[] = '});';
                     $html[] = '</script>';
                 }

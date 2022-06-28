@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
-use Chamilo\Libraries\Format\Structure\BaseHeader;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Throwable;
 
 /**
@@ -11,14 +11,14 @@ use Throwable;
  */
 interface ExceptionLoggerInterface
 {
-    const EXCEPTION_LEVEL_ERROR = 2;
-    const EXCEPTION_LEVEL_FATAL_ERROR = 3;
-    const EXCEPTION_LEVEL_WARNING = 1;
+    public const EXCEPTION_LEVEL_ERROR = 2;
+    public const EXCEPTION_LEVEL_FATAL_ERROR = 3;
+    public const EXCEPTION_LEVEL_WARNING = 1;
 
     /**
      * Adds an exception logger for javascript to the header
      */
-    public function addJavascriptExceptionLogger(BaseHeader $header);
+    public function addJavascriptExceptionLogger(PageConfiguration $pageConfiguration);
 
     /**
      * Logs an exception

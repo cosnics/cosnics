@@ -398,7 +398,8 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         );
 
                         $preview_url = $this->get_preview_content_object_url($contentObject);
-                        $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
+                        $onclick =
+                            '" onclick="javascript:openPopup(\'' . addslashes($preview_url) . '\'); return false;';
 
                         $baseActions->addButton(
                             new Button(
@@ -421,7 +422,8 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                             $variable = 'Preview';
                         }
                         $preview_url = $this->get_preview_content_object_url($contentObject);
-                        $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
+                        $onclick =
+                            '" onclick="javascript:openPopup(\'' . addslashes($preview_url) . '\'); return false;';
 
                         $baseActions->addButton(
                             new Button(

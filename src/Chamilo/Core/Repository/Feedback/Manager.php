@@ -15,45 +15,30 @@ use Exception;
 
 abstract class Manager extends Application
 {
-    const ACTION_BROWSE = 'Browser';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_BROWSE_V2 = 'BrowserV2';
+    public const ACTION_DELETE = 'Deleter';
+    public const ACTION_SUBSCRIBER = 'Subscriber';
+    public const ACTION_UNSUBSCRIBER = 'Unsubscriber';
+    public const ACTION_UPDATE = 'Updater';
 
-    const ACTION_BROWSE_V2 = 'BrowserV2';
+    public const CONFIGURATION_SHOW_FEEDBACK_HEADER = 'showFeedbackHeader';
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const PARAM_ACTION = 'feedback_action';
 
-    // Parameters
-
-    const ACTION_DELETE = 'Deleter';
-
-    const ACTION_SUBSCRIBER = 'Subscriber';
-
-    // Actions
-
-    const ACTION_UNSUBSCRIBER = 'Unsubscriber';
-
-    const ACTION_UPDATE = 'Updater';
-
-    const CONFIGURATION_SHOW_FEEDBACK_HEADER = 'showFeedbackHeader';
-
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
-
-    const PARAM_ACTION = 'feedback_action';
-
-    const PARAM_FEEDBACK_BRIDGE = 'FeedbackBridge';
-
-    // Default action
-
-    const PARAM_FEEDBACK_ID = 'feedback_id';
-
-    const PARAM_FEEDBACK_RIGHTS_BRIDGE = 'FeedbackRightsBridge';
-
-    /**
-     * @var \Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface
-     */
-    protected $feedbackServiceBridge;
+    public const PARAM_FEEDBACK_BRIDGE = 'FeedbackBridge';
+    public const PARAM_FEEDBACK_ID = 'feedback_id';
+    public const PARAM_FEEDBACK_RIGHTS_BRIDGE = 'FeedbackRightsBridge';
 
     /**
      * @var \Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsServiceBridgeInterface
      */
     protected $feedbackRightsServiceBridge;
+
+    /**
+     * @var \Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface
+     */
+    protected $feedbackServiceBridge;
 
     /**
      * Manager constructor.

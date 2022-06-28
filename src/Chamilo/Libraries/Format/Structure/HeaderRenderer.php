@@ -20,10 +20,11 @@ class HeaderRenderer extends AbstractHeaderRenderer
 
     public function __construct(
         PageConfiguration $pageConfiguration, PathBuilder $pathBuilder, ThemePathBuilder $themePathBuilder,
-        ConfigurationConsulter $configurationConsulter, FileConfigurationLocator $fileConfigurationLocator
+        ConfigurationConsulter $configurationConsulter, FileConfigurationLocator $fileConfigurationLocator,
+        BannerRenderer $bannerRenderer
     )
     {
-        parent::__construct($pageConfiguration, $pathBuilder, $themePathBuilder);
+        parent::__construct($pageConfiguration, $pathBuilder, $themePathBuilder, $bannerRenderer);
 
         $this->configurationConsulter = $configurationConsulter;
         $this->fileConfigurationLocator = $fileConfigurationLocator;

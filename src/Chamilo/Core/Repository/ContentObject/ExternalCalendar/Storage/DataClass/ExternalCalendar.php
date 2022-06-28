@@ -28,27 +28,27 @@ use Exception;
 class ExternalCalendar extends ContentObject implements Versionable, FileStorageSupport
 {
     // Properties
-    const CACHE_TIME = 3600;
+    public const CACHE_TIME = 3600;
 
-    const PARAM_EVENT_ID = 'event_id';
+    public const PARAM_EVENT_ID = 'event_id';
 
-    const PATH_TYPE_LOCAL = 1;
-    const PATH_TYPE_REMOTE = 2;
+    public const PATH_TYPE_LOCAL = 1;
+    public const PATH_TYPE_REMOTE = 2;
 
-    const PROPERTY_FILENAME = 'filename';
-    const PROPERTY_FILESIZE = 'filesize';
-    const PROPERTY_HASH = 'hash';
-    const PROPERTY_PATH = 'path';
-    const PROPERTY_PATH_TYPE = 'path_type';
-    const PROPERTY_STORAGE_PATH = 'storage_path';
+    public const PROPERTY_FILENAME = 'filename';
+    public const PROPERTY_FILESIZE = 'filesize';
+    public const PROPERTY_HASH = 'hash';
+    public const PROPERTY_PATH = 'path';
+    public const PROPERTY_PATH_TYPE = 'path_type';
+    public const PROPERTY_STORAGE_PATH = 'storage_path';
 
-    const REPEAT_END = 'end';
-    const REPEAT_START = 'start';
-    const REPEAT_TYPE_DAY = 'DAILY';
-    const REPEAT_TYPE_MONTH = 'MONTHLY';
-    const REPEAT_TYPE_NONE = 'NONE';
-    const REPEAT_TYPE_WEEK = 'WEEKLY';
-    const REPEAT_TYPE_YEAR = 'YEARLY';
+    public const REPEAT_END = 'end';
+    public const REPEAT_START = 'start';
+    public const REPEAT_TYPE_DAY = 'DAILY';
+    public const REPEAT_TYPE_MONTH = 'MONTHLY';
+    public const REPEAT_TYPE_NONE = 'NONE';
+    public const REPEAT_TYPE_WEEK = 'WEEKLY';
+    public const REPEAT_TYPE_YEAR = 'YEARLY';
 
     /**
      *
@@ -65,6 +65,13 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
     private $in_memory_file;
 
     /**
+     * Indicates wether the File must be saved as a new version when its save() or update() method is called
+     *
+     * @var bool
+     */
+    private $save_as_new_version = false;
+
+    /**
      * Temporary file path.
      * A path to a file that has to be moved and renamed when the File is saved. Useful for
      * instance when a file is uploaded to the server.
@@ -72,13 +79,6 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
      * @var string
      */
     private $temporary_file_path;
-
-    /**
-     * Indicates wether the File must be saved as a new version when its save() or update() method is called
-     *
-     * @var boolean
-     */
-    private $save_as_new_version = false;
 
     /**
      * (non-PHPdoc)
@@ -135,7 +135,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
      * when a File is updated as a new version, without replacing the content Note: needed as when saving a new version
      * of a File, a new record is saved in the repository_document table, and the 'hash' field must be unique.
      *
-     * @return boolean
+     * @return bool
      */
     private function duplicate_current_file()
     {
@@ -173,6 +173,19 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
             self::PROPERTY_PATH_TYPE,
             self::PROPERTY_STORAGE_PATH
         );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_external_calendar';
+    }
+
+    public static function getTypeName(): string
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /**
@@ -295,7 +308,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
     /**
      * Get a value indicating wether the File must be saved as a new version if its save() or update() method is called
      *
-     * @return boolean
+     * @return bool
      */
     public function get_save_as_new_version()
     {
@@ -306,7 +319,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
      * Set a value indicating wether the File must be saved as a new version if its save() or update() method is called
      *
      * @return void
-     * @var $save_as_new_version boolean
+     * @var $save_as_new_version bool
      */
     public function set_save_as_new_version($save_as_new_version)
     {
@@ -324,14 +337,6 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
     public function get_storage_path()
     {
         return $this->getAdditionalProperty(self::PROPERTY_STORAGE_PATH);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_external_calendar';
     }
 
     /**
@@ -365,11 +370,6 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
         }
     }
 
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
-
     public function has_file_to_save()
     {
         return StringUtilities::getInstance()->hasValue($this->get_temporary_file_path()) ||
@@ -397,7 +397,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
      * Save the in memory file or the temporary file to the current user disk space Return true if the file could be
      * saved
      *
-     * @return boolean
+     * @return bool
      */
     private function save_file()
     {
@@ -496,7 +496,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
         header('Pragma: no-cache');
         header('Content-type: text/calendar');
         header('Content-length: ' . $this->get_filesize());
-        if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT']))
+        if (preg_match('/MSIE 5.5/', $_SERVER['HTTP_USER_AGENT']))
         {
             header('Content-Disposition: filename= "' . $filename . '"');
         }

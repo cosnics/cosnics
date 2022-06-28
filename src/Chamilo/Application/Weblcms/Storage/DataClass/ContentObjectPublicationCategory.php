@@ -5,12 +5,12 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Category\Interfaces\CategoryVisibilitySupported;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use RuntimeException;
 
 /**
@@ -25,10 +25,10 @@ use RuntimeException;
 class ContentObjectPublicationCategory extends PlatformCategory
     implements CategoryVisibilitySupported, DisplayOrderDataClassListenerSupport
 {
-    const PROPERTY_ALLOW_CHANGE = 'allow_change';
-    const PROPERTY_COURSE = 'course_id';
-    const PROPERTY_TOOL = 'tool';
-    const PROPERTY_VISIBLE = 'visible';
+    public const PROPERTY_ALLOW_CHANGE = 'allow_change';
+    public const PROPERTY_COURSE = 'course_id';
+    public const PROPERTY_TOOL = 'tool';
+    public const PROPERTY_VISIBLE = 'visible';
 
     public function __construct($default_properties = [], $optional_properties = [])
     {
@@ -101,16 +101,6 @@ class ContentObjectPublicationCategory extends PlatformCategory
         return parent::delete();
     }
 
-    public function get_allow_change()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_ALLOW_CHANGE);
-    }
-
-    public function get_course()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_COURSE);
-    }
-
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return array(
@@ -143,12 +133,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
         );
     }
 
-    /**
-     * Returns the display order condition
-     *
-     * @return Condition
-     */
-    public function getDisplayOrderContextProperties()
+    public function getDisplayOrderContextProperties(): array
     {
         return array(
             new PropertyConditionVariable(self::class, self::PROPERTY_PARENT),
@@ -162,7 +147,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
      *
      * @return string
      */
-    public function getDisplayOrderProperty()
+    public function getDisplayOrderProperty(): PropertyConditionVariable
     {
         return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }
@@ -174,6 +159,16 @@ class ContentObjectPublicationCategory extends PlatformCategory
     public static function getStorageUnitName(): string
     {
         return 'weblcms_content_object_publication_category';
+    }
+
+    public function get_allow_change()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_ALLOW_CHANGE);
+    }
+
+    public function get_course()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_COURSE);
     }
 
     public function get_tool()

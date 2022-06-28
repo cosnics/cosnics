@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
+use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -80,12 +81,8 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
         }
     }
 
-    /**
-     * Returns the admin breadcrumb generator
-     *
-     * @return \libraries\format\BreadcrumbGeneratorInterface
-     */
-    public function get_breadcrumb_generator()
+
+    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
     {
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }

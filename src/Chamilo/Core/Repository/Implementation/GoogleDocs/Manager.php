@@ -9,22 +9,21 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 {
-    const ACTION_LOGIN = 'Login';
-    const ACTION_LOGOUT = 'Logout';
+    public const ACTION_LOGIN = 'Login';
+    public const ACTION_LOGOUT = 'Logout';
 
-    const DEFAULT_ACTION = self::ACTION_LOGIN;
+    public const DEFAULT_ACTION = self::ACTION_LOGIN;
 
-    const PARAM_EXPORT_FORMAT = 'export_format';
-    const PARAM_FOLDER = 'folder';
+    public const PARAM_EXPORT_FORMAT = 'export_format';
+    public const PARAM_FOLDER = 'folder';
 
-    const REPOSITORY_TYPE = 'google_docs';
+    public const REPOSITORY_TYPE = 'google_docs';
 
     private $categoryTreeMenu;
 
@@ -136,7 +135,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         return $this->get_url($parameters);
     }
 
-    public function get_menu()
+    public function get_menu(): string
     {
         if (!isset($this->categoryTreeMenu))
         {
@@ -145,7 +144,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
             );
         }
 
-        return $this->categoryTreeMenu;
+        return $this->categoryTreeMenu->render();
     }
 
     /*

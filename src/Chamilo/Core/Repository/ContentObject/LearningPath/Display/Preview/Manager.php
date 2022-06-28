@@ -13,7 +13,7 @@ use Chamilo\Core\Repository\Display\Preview;
 use Chamilo\Core\Repository\Display\PreviewResetSupport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -28,14 +28,14 @@ abstract class Manager extends Preview implements PreviewResetSupport
 {
 
     /**
-     * @var TrackingService
-     */
-    protected $trackingService;
-
-    /**
      * @var TrackingRepository
      */
     protected $trackingRepository;
+
+    /**
+     * @var TrackingService
+     */
+    protected $trackingService;
 
     /**
      * Builds the TrackingService
@@ -103,7 +103,7 @@ abstract class Manager extends Preview implements PreviewResetSupport
      *
      * @return int
      */
-    function get_embedded_content_object_id()
+    public function get_embedded_content_object_id()
     {
         return Embedder::get_embedded_content_object_id();
     }
@@ -113,12 +113,12 @@ abstract class Manager extends Preview implements PreviewResetSupport
     /**
      * Functionality is publication dependent, so not available in preview mode.
      */
-    function get_publication()
+    public function get_publication()
     {
         $this->not_available(Translation::get('ImpossibleInPreviewMode'));
     }
 
-    function get_root_content_object()
+    public function get_root_content_object()
     {
         if ($this->is_embedded())
         {
@@ -155,24 +155,24 @@ abstract class Manager extends Preview implements PreviewResetSupport
      *
      * @param $right
      *
-     * @return boolean
+     * @return bool
      */
-    function is_allowed($right)
+    public function is_allowed($right)
     {
         return true;
     }
 
-    function is_allowed_to_add_child()
+    public function is_allowed_to_add_child()
     {
         return true;
     }
 
-    function is_allowed_to_delete_child()
+    public function is_allowed_to_delete_child()
     {
         return true;
     }
 
-    function is_allowed_to_delete_feedback($feedback)
+    public function is_allowed_to_delete_feedback($feedback)
     {
         return true;
     }
@@ -182,7 +182,7 @@ abstract class Manager extends Preview implements PreviewResetSupport
         return true;
     }
 
-    function is_allowed_to_edit_feedback()
+    public function is_allowed_to_edit_feedback()
     {
         return true;
     }
@@ -199,9 +199,9 @@ abstract class Manager extends Preview implements PreviewResetSupport
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
-    function is_embedded()
+    public function is_embedded()
     {
         $embedded_content_object_id = $this->get_embedded_content_object_id();
 
@@ -213,14 +213,13 @@ abstract class Manager extends Preview implements PreviewResetSupport
      *
      * @return string
      */
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         if ($this->is_embedded())
         {
-            $page = Page::getInstance();
-            $page->setViewMode(Page::VIEW_MODE_HEADERLESS);
+            $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
-            return $page->getHeader()->render();
+            return $this->getHeaderRenderer()->render();
         }
         else
         {

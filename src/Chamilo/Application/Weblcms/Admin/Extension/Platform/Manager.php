@@ -26,30 +26,18 @@ use Chamilo\Libraries\Translation\Translation;
 
 abstract class Manager extends Application
 {
-    // Actions
-    const ACTION_BROWSE = 'Browser';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_DELETE = 'Deleter';
+    public const ACTION_ENTITY = 'Entity';
+    public const ACTION_TARGET = 'Target';
 
-    const ACTION_CREATE = 'Creator';
+    public const DEFAULT_ACTION = self::ACTION_CREATE;
 
-    const ACTION_DELETE = 'Deleter';
-
-    const ACTION_ENTITY = 'Entity';
-
-    const ACTION_TARGET = 'Target';
-
-    // Parameters
-
-    const DEFAULT_ACTION = self::ACTION_CREATE;
-
-    const PARAM_ADMIN_ID = 'admin_id';
-
-    const PARAM_ENTITY_ID = 'entity_id';
-
-    const PARAM_ENTITY_TYPE = 'entity_type';
-
-    // Default action
-
-    const PARAM_TARGET_TYPE = 'target_type';
+    public const PARAM_ADMIN_ID = 'admin_id';
+    public const PARAM_ENTITY_ID = 'entity_id';
+    public const PARAM_ENTITY_TYPE = 'entity_type';
+    public const PARAM_TARGET_TYPE = 'target_type';
 
     public function getLinkTabsRenderer(): LinkTabsRenderer
     {

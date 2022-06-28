@@ -11,8 +11,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
  */
 abstract class Manager extends Application
 {
-    const ACTION_BROWSE = 'Browser';
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const ACTION_BROWSE = 'Browser';
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {

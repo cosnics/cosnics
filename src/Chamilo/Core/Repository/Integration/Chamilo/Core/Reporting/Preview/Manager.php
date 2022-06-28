@@ -5,8 +5,13 @@ use Chamilo\Libraries\Architecture\Application\Application;
 
 abstract class Manager extends Application
 {
-    // Parameters
-    const PARAM_ACTION = 'reporting_preview_action';
+    public const PARAM_ACTION = 'reporting_preview_action';
+
+    /**
+     *
+     * @return string[]
+     */
+    abstract public static function get_available_actions();
 
     /**
      *
@@ -16,10 +21,4 @@ abstract class Manager extends Application
     {
         return $this->get_parent()->get_content_object();
     }
-
-    /**
-     *
-     * @return string[]
-     */
-    abstract static public function get_available_actions();
 }

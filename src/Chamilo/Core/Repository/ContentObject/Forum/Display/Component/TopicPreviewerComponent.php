@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Forum\Display\Component;
 
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 
 /**
  *
@@ -15,15 +15,15 @@ class TopicPreviewerComponent extends TopicViewerComponent implements DelegateCo
 
     public function run()
     {
-        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
-        
+        $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
+
         $html = [];
-        
+
         $html[] = $this->render_header();
         $html[] = $this->renderPosts();
         $html[] = $this->renderPager();
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -34,8 +34,8 @@ class TopicPreviewerComponent extends TopicViewerComponent implements DelegateCo
     public function getVisibleForumTopicPosts()
     {
         return array_slice(
-            array_reverse($this->getForumTopicPosts()), 
-            $this->getPager()->getCurrentRangeOffset(), 
-            $this->getItemsPerPage());
+            array_reverse($this->getForumTopicPosts()), $this->getPager()->getCurrentRangeOffset(),
+            $this->getItemsPerPage()
+        );
     }
 }

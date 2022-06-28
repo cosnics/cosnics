@@ -14,6 +14,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -309,13 +310,13 @@ class AttemptResultViewerComponent extends Manager
     /**
      * Displays the header, depending on the parameters
      */
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $html = [];
 
         if (!Request::get(self::PARAM_SHOW_FULL))
         {
-            Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+            $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
             $html[] = Application::render_header($pageTitle);
         }
         else

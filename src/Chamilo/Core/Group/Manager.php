@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -26,71 +27,46 @@ use Chamilo\Libraries\Translation\Translation;
  */
 abstract class Manager extends Application
 {
-    const ACTION_BROWSE_GROUPS = 'Browser';
+    public const ACTION_BROWSE_GROUPS = 'Browser';
+    public const ACTION_CREATE_GROUP = 'Creator';
+    public const ACTION_DELETE_GROUP = 'Deleter';
+    public const ACTION_EDIT_GROUP = 'Editor';
+    public const ACTION_EXPORT = 'Exporter';
+    public const ACTION_IMPORT = 'Importer';
+    public const ACTION_IMPORT_GROUP_USERS = 'GroupUserImporter';
+    public const ACTION_MANAGE_METADATA = 'MetadataManager';
+    public const ACTION_MOVE_GROUP = 'Mover';
+    public const ACTION_SUBSCRIBE_USER_BROWSER = 'SubscribeUserBrowser';
+    public const ACTION_SUBSCRIBE_USER_TO_GROUP = 'Subscriber';
+    public const ACTION_TRUNCATE_GROUP = 'Truncater';
+    public const ACTION_UNSUBSCRIBE_USER_FROM_GROUP = 'Unsubscriber';
+    public const ACTION_VIEW_GROUP = 'Viewer';
 
-    const ACTION_CREATE_GROUP = 'Creator';
+    public const DEFAULT_ACTION = self::ACTION_BROWSE_GROUPS;
 
-    const ACTION_DELETE_GROUP = 'Deleter';
-
-    const ACTION_EDIT_GROUP = 'Editor';
-
-    const ACTION_EXPORT = 'Exporter';
-
-    const ACTION_IMPORT = 'Importer';
-
-    const ACTION_IMPORT_GROUP_USERS = 'GroupUserImporter';
-
-    const ACTION_MANAGE_METADATA = 'MetadataManager';
-
-    const ACTION_MOVE_GROUP = 'Mover';
-
-    const ACTION_SUBSCRIBE_USER_BROWSER = 'SubscribeUserBrowser';
-
-    const ACTION_SUBSCRIBE_USER_TO_GROUP = 'Subscriber';
-
-    const ACTION_TRUNCATE_GROUP = 'Truncater';
-
-    const ACTION_UNSUBSCRIBE_USER_FROM_GROUP = 'Unsubscriber';
-
-    const ACTION_VIEW_GROUP = 'Viewer';
-
-    const DEFAULT_ACTION = self::ACTION_BROWSE_GROUPS;
-
-    const PARAM_COMPONENT_ACTION = 'action';
-
-    const PARAM_FIRSTLETTER = 'firstletter';
-
-    const PARAM_GROUP_ID = 'group_id';
-
-    const PARAM_GROUP_REL_USER_ID = 'group_rel_user_id';
-
-    const PARAM_USER_ID = 'user_id';
+    public const PARAM_COMPONENT_ACTION = 'action';
+    public const PARAM_FIRSTLETTER = 'firstletter';
+    public const PARAM_GROUP_ID = 'group_id';
+    public const PARAM_GROUP_REL_USER_ID = 'group_rel_user_id';
+    public const PARAM_USER_ID = 'user_id';
 
     protected $breadcrumbs;
 
-    private $parameters;
-
-    private $search_parameters;
-
-    private $user_search_parameters;
-
-    private $search_form;
-
-    private $user_search_form;
-
-    private $user_id;
-
-    private $user;
-
     private $category_menu;
-
-    private $quota_url;
-
-    private $publication_url;
 
     private $create_url;
 
+    private $parameters;
+
+    private $publication_url;
+
+    private $quota_url;
+
     private $recycle_bin_url;
+
+    private $search_form;
+
+    private $search_parameters;
 
     /**
      * The currently selected group
@@ -98,6 +74,14 @@ abstract class Manager extends Application
      * @var Group
      */
     private $selected_group;
+
+    private $user;
+
+    private $user_id;
+
+    private $user_search_form;
+
+    private $user_search_parameters;
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
@@ -121,12 +105,7 @@ abstract class Manager extends Application
         return DataManager::count(Group::class, $parameters);
     }
 
-    /**
-     * Returns the admin breadcrumb generator
-     *
-     * @return \libraries\format\BreadcrumbGeneratorInterface
-     */
-    public function get_breadcrumb_generator()
+    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
     {
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
@@ -175,7 +154,8 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_TO_GROUP, self::PARAM_GROUP_ID => $group->get_id(),
+                self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_TO_GROUP,
+                self::PARAM_GROUP_ID => $group->get_id(),
                 self::PARAM_USER_ID => $user->get_id()
             )
         );
@@ -217,14 +197,7 @@ abstract class Manager extends Application
         );
     }
 
-    /**
-     * Gets the parameter list
-     *
-     * @param boolean $include_search Include the search parameters in the returned list?
-     *
-     * @return array The list of parameters.
-     */
-    public function get_parameters($include_search = false, $include_user_search = false)
+    public function get_parameters(bool $include_search = false, bool $include_user_search = false): array
     {
         $parms = parent::get_parameters();
 
@@ -297,8 +270,8 @@ abstract class Manager extends Application
 
     /**
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\GroupRelUser>

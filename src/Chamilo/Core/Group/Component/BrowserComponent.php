@@ -301,7 +301,7 @@ class BrowserComponent extends Manager implements TableSupport
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function get_menu()
+    public function get_menu(): string
     {
         $group_menu = new GroupMenu($this->getGroupIdentifier());
 
@@ -458,10 +458,7 @@ class BrowserComponent extends Manager implements TableSupport
         return $condition;
     }
 
-    /**
-     * @return bool
-     */
-    public function has_menu()
+    public function has_menu(): bool
     {
         return true;
     }

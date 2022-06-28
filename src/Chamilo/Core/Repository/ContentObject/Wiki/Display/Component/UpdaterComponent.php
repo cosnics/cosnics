@@ -33,7 +33,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
         $breadcrumbtrail = $this->get_breadcrumbtrail();
     }
 
-    public function render_header($pageTitle = '', ComplexWikiPage $complex_wiki_page = null)
+    public function render_header(string $pageTitle = '', ?ComplexWikiPage $complex_wiki_page = null): string
     {
         $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         $complex_wiki_page = DataManager::retrieve_by_id(

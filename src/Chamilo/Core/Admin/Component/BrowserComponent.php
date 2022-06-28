@@ -59,7 +59,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     /**
      * @return string
      */
-    public function get_menu()
+    public function get_menu(): string
     {
         $tabNamespace = ClassnameUtilities::getInstance()->getNamespaceFromId($this->getCurrentTab());
         $menu = new PackageTypeLinksMenu(
@@ -72,7 +72,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     /**
      * @return bool
      */
-    public function has_menu()
+    public function has_menu(): bool
     {
         return true;
     }

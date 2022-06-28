@@ -1,11 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Exceptions;
 
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -18,31 +15,22 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class NotAllowedException extends UserException
 {
 
-    /**
-     *
-     * @param boolean $showLoginForm
-     */
-    public function __construct($showLoginForm = false)
+    public function __construct(bool $showLoginForm = false)
     {
-        Session::register('request_uri', $_SERVER['REQUEST_URI']);
+        $this->getSessionUtilities()->register('request_uri', $_SERVER['REQUEST_URI']);
 
         $html = [];
 
-        $html[] = Translation::get('NotAllowed', null, StringUtilities::LIBRARIES);
+        $html[] = $this->getTranslator()->trans('NotAllowed', [], StringUtilities::LIBRARIES);
 
         parent::__construct(implode(PHP_EOL, $html));
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Form\FormValidator
-     */
-    public function getLoginForm()
+    public function getLoginForm(): FormValidator
     {
-        $translator = Translation::getInstance();
-        $redirect = new Redirect();
+        $translator = $this->getTranslator();
 
-        $form = new FormValidator('formLogin', FormValidator::FORM_METHOD_POST, $redirect->getCurrentUrl());
+        $form = new FormValidator('formLogin', FormValidator::FORM_METHOD_POST, $this->getRequest()->getUri());
 
         $form->get_renderer()->setElementTemplate('{element}');
 
@@ -52,12 +40,13 @@ class NotAllowedException extends UserException
         $form->addElement('html', '<div class="input-group">');
 
         $form->addElement(
-            'html', '<div class="input-group-addon">' . $translator->getTranslation('Username') . '</div>'
+            'html', '<div class="input-group-addon">' . $translator->trans('Username', [], StringUtilities::LIBRARIES) .
+            '</div>'
         );
 
         $form->addElement(
-            'text', 'login', Translation::get('UserName'),
-            array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control')
+            'text', 'login', $translator->trans('UserName', [], StringUtilities::LIBRARIES),
+            ['size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control']
         );
 
         $form->addElement('html', '</div>');
@@ -67,12 +56,13 @@ class NotAllowedException extends UserException
         $form->addElement('html', '<div class="input-group">');
 
         $form->addElement(
-            'html', '<div class="input-group-addon">' . $translator->getTranslation('Password') . '</div>'
+            'html', '<div class="input-group-addon">' . $translator->trans('Password', [], StringUtilities::LIBRARIES) .
+            '</div>'
         );
 
         $form->addElement(
-            'password', 'password', Translation::get('Pass'),
-            array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control')
+            'password', 'password', $translator->trans('Pass', [], StringUtilities::LIBRARIES),
+            ['size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control']
         );
 
         $form->addElement('html', '</div>');
@@ -80,14 +70,18 @@ class NotAllowedException extends UserException
 
         $form->addElement('html', '<div class="form-group text-right">');
         $form->addElement(
-            'style_submit_button', 'submitAuth', Translation::get('Login'), null, null,
-            new FontAwesomeGlyph('sign-in-alt')
+            'style_submit_button', 'submitAuth', $translator->trans('Login', [], StringUtilities::LIBRARIES), null,
+            null, new FontAwesomeGlyph('sign-in-alt')
         );
         $form->addElement('html', '</div>');
 
-        $form->addRule('password', Translation::get('ThisFieldIsRequired'), 'required');
+        $form->addRule(
+            'password', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+        );
 
-        $form->addRule('login', Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required');
+        $form->addRule(
+            'login', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+        );
 
         return $form;
     }

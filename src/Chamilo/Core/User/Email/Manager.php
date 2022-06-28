@@ -11,9 +11,10 @@ use Chamilo\Libraries\Platform\Session\Request;
  */
 abstract class Manager extends Application
 {
-    const ACTION_EMAIL = 'Emailer';
-    const DEFAULT_ACTION = self::ACTION_EMAIL;
-    const PARAM_ACTION = 'email_action';
+    public const ACTION_EMAIL = 'Emailer';
+
+    public const DEFAULT_ACTION = self::ACTION_EMAIL;
+    public const PARAM_ACTION = 'email_action';
 
     private $target_users;
 
@@ -30,13 +31,13 @@ abstract class Manager extends Application
         }
     }
 
-    public function set_target_users($target_users)
-    {
-        $this->target_users = $target_users;
-    }
-
     public function get_target_users()
     {
         return $this->target_users;
+    }
+
+    public function set_target_users($target_users)
+    {
+        $this->target_users = $target_users;
     }
 }

@@ -6,6 +6,7 @@ use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerI
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Exception;
 use Symfony\Component\Translation\Translator;
+use Throwable;
 
 /**
  * Manages the error handler, the exception handler and the shutdown function
@@ -17,32 +18,12 @@ use Symfony\Component\Translation\Translator;
 class ErrorHandler
 {
 
-    /**
-     * The Exception Logger
-     *
-     * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
-     */
-    protected $exceptionLogger;
+    protected ExceptionLoggerInterface $exceptionLogger;
 
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    protected $translator;
+    protected ThemePathBuilder $themePathBuilder;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    protected $themePathBuilder;
+    protected Translator $translator;
 
-    /**
-     * ErrorHandler constructor.
-     *
-     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     */
     public function __construct(
         ExceptionLoggerInterface $exceptionLogger, Translator $translator, ThemePathBuilder $themePathBuilder
     )
@@ -52,21 +33,18 @@ class ErrorHandler
         $this->themePathBuilder = $themePathBuilder;
     }
 
-    /**
-     * Displays a general error page
-     */
     protected function displayGeneralErrorPage()
     {
         $path = $this->getThemePathBuilder()->getTemplatePath('Chamilo\Configuration', false) . 'Error.html.tpl';
 
         $template = file_get_contents($path);
 
-        $variables = array(
+        $variables = [
             'error_code' => 500,
             'error_title' => $this->getTranslation('FatalErrorTitle'),
             'error_content' => $this->getTranslation('FatalErrorContent'),
             'return_button_content' => $this->getTranslation('ReturnToPreviousPage')
-        );
+        ];
 
         foreach ($variables as $variable => $value)
         {
@@ -76,91 +54,50 @@ class ErrorHandler
         echo $template;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
-     */
-    public function getExceptionLogger()
+    public function getExceptionLogger(): ExceptionLoggerInterface
     {
         return $this->exceptionLogger;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
-     */
     public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger)
     {
         $this->exceptionLogger = $exceptionLogger;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    public function getThemePathBuilder()
+    public function getThemePathBuilder(): ThemePathBuilder
     {
         return $this->themePathBuilder;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     */
     public function setThemePathBuilder(ThemePathBuilder $themePathBuilder)
     {
         $this->themePathBuilder = $themePathBuilder;
     }
 
-    /**
-     * Helper function for translations
-     *
-     * @param string $variable
-     * @param string[] $parameters
-     * @param string $context
-     *
-     * @return string
-     */
-    protected function getTranslation($variable, $parameters = [], $context = 'Chamilo\Configuration')
+    protected function getTranslation(string $variable, array $parameters = [], string $context = 'Chamilo\Configuration'
+    ): string
     {
         return $this->getTranslator()->trans($variable, $parameters, $context);
     }
 
-    /**
-     *
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator()
+    public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
     public function setTranslator(Translator $translator)
     {
         $this->translator = $translator;
     }
 
-    /**
-     * General error handler for (catchable) errors in PHP
-     *
-     * @param integer $errorNumber
-     * @param string $errorString
-     * @param string $file
-     * @param integer $line
-     *
-     * @return boolean
-     */
-    public function handleError($errorNumber, $errorString, $file, $line)
+    public function handleError(int $errorNumber, string $errorString, string $file, int $line): bool
     {
-        $exceptionTypes = array(
+        $exceptionTypes = [
             E_USER_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR,
             E_USER_WARNING => ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING,
             E_USER_NOTICE => ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING,
             E_RECOVERABLE_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR
-        );
+        ];
 
         if (!array_key_exists($errorNumber, $exceptionTypes))
         {
@@ -174,20 +111,12 @@ class ErrorHandler
         return true;
     }
 
-    /**
-     * General exception handler for exceptions in PHP
-     *
-     * @param \Exception $exception
-     */
-    public function handleException($exception)
+    public function handleException(Throwable $exception)
     {
         $this->getExceptionLogger()->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
         $this->displayGeneralErrorPage();
     }
 
-    /**
-     * General shutdown handler for fatal errors in PHP
-     */
     public function handleShutdown()
     {
         $error = error_get_last();
@@ -210,9 +139,9 @@ class ErrorHandler
      */
     public function registerErrorHandlers()
     {
-        set_exception_handler(array($this, 'handleException'));
-        set_error_handler(array($this, 'handleError'));
+        set_exception_handler([$this, 'handleException']);
+        set_error_handler([$this, 'handleError']);
 
-        register_shutdown_function(array($this, 'handleShutdown'));
+        register_shutdown_function([$this, 'handleShutdown']);
     }
 }

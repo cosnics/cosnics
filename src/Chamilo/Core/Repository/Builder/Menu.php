@@ -206,7 +206,7 @@ class Menu extends HtmlMenu
                 {
                     if ($url)
                     {
-                        $menu_item['onclick'] = 'javascript:openPopup(\'' . json_encode($url) . '\'); return false;';
+                        $menu_item['onclick'] = 'javascript:openPopup(\'' . addslashes($url) . '\'); return false;';
                     }
                     else
                     {

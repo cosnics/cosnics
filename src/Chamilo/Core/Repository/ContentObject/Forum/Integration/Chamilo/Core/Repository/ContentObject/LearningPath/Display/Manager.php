@@ -11,18 +11,11 @@ use Chamilo\Libraries\Translation\Translation;
 
 abstract class Manager extends Application
 {
-    // Parameters
-    const ACTION_SUBSCRIBE = 'Subscribe';
+    public const ACTION_SUBSCRIBE = 'Subscribe';
+    public const ACTION_UNSUBSCRIBE = 'Unsubscribe';
 
-    // Actions
-
-    const ACTION_UNSUBSCRIBE = 'Unsubscribe';
-
-    const DEFAULT_ACTION = self::ACTION_SUBSCRIBE;
-
-    // Default action
-
-    const PARAM_ACTION = 'type_action';
+    public const DEFAULT_ACTION = self::ACTION_SUBSCRIBE;
+    public const PARAM_ACTION = 'type_action';
 
     /**
      *

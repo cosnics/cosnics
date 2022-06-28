@@ -10,10 +10,10 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
@@ -29,21 +29,9 @@ use Exception;
  */
 class BuilderComponent extends Manager implements ApplicationSupport
 {
-    const PARAM_POPUP = 'popup';
+    public const PARAM_POPUP = 'popup';
 
     private $content_object;
-
-    public function render_header($pageTitle = '')
-    {
-        $is_popup = Request::get(self::PARAM_POPUP);
-
-        if ($is_popup)
-        {
-            Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
-        }
-
-        return parent::render_header($pageTitle);
-    }
 
     /**
      * Runs this component and displays its output.
@@ -56,10 +44,9 @@ class BuilderComponent extends Manager implements ApplicationSupport
         {
             $this->content_object = DataManager::retrieve_by_id(ContentObject::class, $content_object_id);
 
-            if (! RightsService::getInstance()->canEditContentObject(
-                $this->get_user(),
-                $this->content_object,
-                $this->getWorkspace()))
+            if (!RightsService::getInstance()->canEditContentObject(
+                $this->get_user(), $this->content_object, $this->getWorkspace()
+            ))
             {
                 throw new NotAllowedException();
             }
@@ -68,23 +55,25 @@ class BuilderComponent extends Manager implements ApplicationSupport
                 new Breadcrumb(
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_BUILD_COMPLEX_CONTENT_OBJECT)),
                     Translation::get(
-                        'BuildContentObject',
-                        array('CONTENT_OBJECT' => $this->content_object->get_title()))));
+                        'BuildContentObject', array('CONTENT_OBJECT' => $this->content_object->get_title())
+                    )
+                )
+            );
 
-            $context = ClassnameUtilities::getInstance()->getNamespaceParent($this->content_object->getType(), 3) .
-                 '\Builder';
+            $context =
+                ClassnameUtilities::getInstance()->getNamespaceParent($this->content_object->getType(), 3) . '\Builder';
 
             return $this->getApplicationFactory()->getApplication(
-                $context,
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+                $context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            )->run();
         }
         catch (Exception $exception)
         {
             return $this->display_error_page(
                 Translation::get(
-                    'NoObjectSelected',
-                    array('OBJECT' => Translation::get('ContentObject')),
-                    StringUtilities::LIBRARIES));
+                    'NoObjectSelected', array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
+                )
+            );
         }
     }
 
@@ -95,6 +84,20 @@ class BuilderComponent extends Manager implements ApplicationSupport
 
     public function redirect_away_from_complex_builder($message, $error_message)
     {
-        $this->redirectWithMessage($message, $error_message, array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS));
+        $this->redirectWithMessage(
+            $message, $error_message, array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)
+        );
+    }
+
+    public function render_header(string $pageTitle = ''): string
+    {
+        $is_popup = Request::get(self::PARAM_POPUP);
+
+        if ($is_popup)
+        {
+            $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
+        }
+
+        return parent::render_header($pageTitle);
     }
 }

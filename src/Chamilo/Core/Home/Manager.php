@@ -17,34 +17,32 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
  */
 abstract class Manager extends Application
 {
-    // Parameters
-    const PARAM_HOME_ID = 'id';
-    const PARAM_HOME_TYPE = 'type';
-    const PARAM_DIRECTION = 'direction';
-    const PARAM_TAB_ID = 'tab';
-    const PARAM_OBJECT_ID = 'object_id';
-    const PARAM_PARENT_ID = 'parent_id';
-    const PARAM_RENDERER_TYPE = 'renderer_type';
+    public const ACTION_CONFIGURE_HOME = 'Configurer';
+    public const ACTION_CONFIGURE_HOME_ADMIN = 'AdminConfigurer';
+    public const ACTION_CONFIGURE_HOME_PERSONAL = 'HomeConfigurer';
+    public const ACTION_EDIT_HOME = 'Editor';
+    public const ACTION_EDIT_HOME_ADMIN = 'AdminEditor';
+    public const ACTION_EDIT_HOME_PERSONAL = 'HomeEditor';
+    public const ACTION_MANAGE_HOME = 'Manager';
+    public const ACTION_PERSONAL = 'Personal';
+    public const ACTION_TRUNCATE = 'Truncater';
+    public const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
+    public const ACTION_VIEW_HOME = 'Home';
 
-    // Actions
-    const ACTION_VIEW_HOME = 'Home';
-    const ACTION_MANAGE_HOME = 'Manager';
-    const ACTION_EDIT_HOME = 'Editor';
-    const ACTION_CONFIGURE_HOME = 'Configurer';
-    const ACTION_EDIT_HOME_ADMIN = 'AdminEditor';
-    const ACTION_EDIT_HOME_PERSONAL = 'HomeEditor';
-    const ACTION_CONFIGURE_HOME_ADMIN = 'AdminConfigurer';
-    const ACTION_CONFIGURE_HOME_PERSONAL = 'HomeConfigurer';
-    const ACTION_TRUNCATE = 'Truncater';
-    const ACTION_PERSONAL = 'Personal';
-    const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
-    const DEFAULT_ACTION = self::ACTION_VIEW_HOME;
+    public const DEFAULT_ACTION = self::ACTION_VIEW_HOME;
 
-    // Types
-    const TYPE_BLOCK = 'block';
-    const TYPE_COLUMN = 'column';
-    const TYPE_ROW = 'row';
-    const TYPE_TAB = 'tab';
+    public const PARAM_DIRECTION = 'direction';
+    public const PARAM_HOME_ID = 'id';
+    public const PARAM_HOME_TYPE = 'type';
+    public const PARAM_OBJECT_ID = 'object_id';
+    public const PARAM_PARENT_ID = 'parent_id';
+    public const PARAM_RENDERER_TYPE = 'renderer_type';
+    public const PARAM_TAB_ID = 'tab';
+
+    public const TYPE_BLOCK = 'block';
+    public const TYPE_COLUMN = 'column';
+    public const TYPE_ROW = 'row';
+    public const TYPE_TAB = 'tab';
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {

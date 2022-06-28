@@ -25,6 +25,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
@@ -292,12 +293,7 @@ abstract class Manager extends Application
         return $types;
     }
 
-    /**
-     * Returns the admin breadcrumb generator
-     *
-     * @return \Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface
-     */
-    public function get_breadcrumb_generator()
+    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
     {
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
@@ -640,7 +636,7 @@ abstract class Manager extends Application
         return $redirect->getUrl();
     }
 
-    public function get_menu()
+    public function get_menu(): string
     {
         $translator = Translation::getInstance();
 
@@ -735,14 +731,7 @@ abstract class Manager extends Application
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Gets the parameter list
-     *
-     * @param $include_search bool Include the search parameters in the returned list?
-     *
-     * @return array The list of parameters.
-     */
-    public function get_parameters($include_search = false)
+    public function get_parameters(bool $include_search = false): array
     {
         if ($include_search && isset($this->search_parameters))
         {
@@ -796,12 +785,12 @@ abstract class Manager extends Application
         return $this->get_url($params);
     }
 
-    public function has_menu()
+    public function has_menu(): bool
     {
         return true;
     }
 
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $html = [];
 

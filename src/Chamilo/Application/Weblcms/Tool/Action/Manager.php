@@ -15,32 +15,44 @@ use Exception;
  */
 
 /**
- * ============================================================================== This is the base class component for
- * all tool components used in applications.
+ * This is the base class component for all tool components used in applications.
  *
  * @author Sven Vanpoucke
- * @author Hans De Bisschop ==============================================================================
+ * @author Hans De Bisschop
  */
 abstract class Manager extends Application implements NoContextComponent
 {
-    const PARAM_ACTION = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION;
-    const ACTION_VIEW = 'Viewer';
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_PUBLISH = 'Publisher';
-    const ACTION_DELETE = 'Deleter';
-    const ACTION_TOGGLE_VISIBILITY = 'ToggleVisibility';
-    const ACTION_MOVE = 'Mover';
-    const ACTION_UPDATE_CONTENT_OBJECT = 'ContentObjectUpdater';
-    const ACTION_UPDATE_PUBLICATION = 'PublicationUpdater';
-    const ACTION_INTEGRATION_LAUNCHER = 'IntegrationLauncher';
-    const MOVE_TO_CATEGORY_COMPONENT = 'CategoryMover';
-    const INTRODUCTION_PUBLISHER_COMPONENT = 'IntroductionPublisher';
-    const MANAGE_CATEGORIES_COMPONENT = 'CategoryManager';
-    const VIEW_REPORTING_COMPONENT = 'ReportingViewer';
-    const BUILD_COMPLEX_CONTENT_OBJECT_COMPONENT = 'ComplexBuilder';
-    const DISPLAY_COMPLEX_CONTENT_OBJECT_COMPONENT = 'ComplexDisplay';
-    const RIGHTS_EDITOR_COMPONENT = 'RightsEditor';
-    const DEFAULT_ACTION = \Chamilo\Application\Weblcms\Tool\Manager::DEFAULT_ACTION;
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_DELETE = 'Deleter';
+    public const ACTION_INTEGRATION_LAUNCHER = 'IntegrationLauncher';
+    public const ACTION_MOVE = 'Mover';
+    public const ACTION_PUBLISH = 'Publisher';
+    public const ACTION_TOGGLE_VISIBILITY = 'ToggleVisibility';
+    public const ACTION_UPDATE_CONTENT_OBJECT = 'ContentObjectUpdater';
+    public const ACTION_UPDATE_PUBLICATION = 'PublicationUpdater';
+    public const ACTION_VIEW = 'Viewer';
+
+    public const BUILD_COMPLEX_CONTENT_OBJECT_COMPONENT = 'ComplexBuilder';
+
+    public const DEFAULT_ACTION = \Chamilo\Application\Weblcms\Tool\Manager::DEFAULT_ACTION;
+
+    public const DISPLAY_COMPLEX_CONTENT_OBJECT_COMPONENT = 'ComplexDisplay';
+
+    public const INTRODUCTION_PUBLISHER_COMPONENT = 'IntroductionPublisher';
+
+    public const MANAGE_CATEGORIES_COMPONENT = 'CategoryManager';
+
+    public const MOVE_TO_CATEGORY_COMPONENT = 'CategoryMover';
+
+    public const PARAM_ACTION = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION;
+
+    public const RIGHTS_EDITOR_COMPONENT = 'RightsEditor';
+    public const VIEW_REPORTING_COMPONENT = 'ReportingViewer';
+
+    public function display_introduction_text($introduction_text)
+    {
+        return $this->get_parent()->display_introduction_text($introduction_text);
+    }
 
     public static function factory($type, $tool_component)
     {
@@ -53,6 +65,107 @@ abstract class Manager extends Application implements NoContextComponent
         }
 
         return new $class($tool_component);
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator
+     */
+    public function getCategoryBreadcrumbsGenerator()
+    {
+        return $this->getService(CategoryBreadcrumbsGenerator::class);
+    }
+
+    public function get_access_details_toolbar_item($parent)
+    {
+        return $this->get_parent()->get_access_details_toolbar_item($parent);
+    }
+
+    public function get_allowed_content_object_types()
+    {
+        return $this->get_parent()->get_allowed_types();
+    }
+
+    public function get_allowed_types()
+    {
+        return $this->get_parent()->get_allowed_types();
+    }
+
+    public function get_categories($list = false)
+    {
+        return $this->get_parent()->get_categories($list);
+    }
+
+    public function get_category($id)
+    {
+        return $this->get_parent()->get_category($id);
+    }
+
+    public function get_complex_builder_url($pid)
+    {
+        return $this->get_parent()->get_complex_builder_url($pid);
+    }
+
+    public function get_complex_display_url($pid)
+    {
+        return $this->get_parent()->get_complex_display_url($pid);
+    }
+
+    public function get_content_object_display_attachment_url($attachment)
+    {
+        return $this->get_parent()->get_content_object_display_attachment_url($attachment);
+    }
+
+    /**
+     *
+     * @return Course
+     */
+    public function get_course()
+    {
+        return $this->get_parent()->get_course();
+    }
+
+    public function get_course_groups()
+    {
+        return $this->get_parent()->get_course_groups();
+    }
+
+    public function get_course_id()
+    {
+        return $this->get_parent()->get_course_id();
+    }
+
+    public function get_entities()
+    {
+        return $this->get_parent()->get_entities();
+    }
+
+    /**
+     *
+     * @see WeblcmsManager::get_last_visit_date()
+     */
+    public function get_last_visit_date()
+    {
+        return $this->get_parent()->get_last_visit_date();
+    }
+
+    public function get_location($category_id = null)
+    {
+        return $this->get_parent()->get_location($category_id);
+    }
+
+    public function get_locations()
+    {
+        return $this->get_parent()->get_locations();
+    }
+
+    public function get_tool_id()
+    {
+        return $this->get_parent()->get_tool_id();
+    }
+
+    public function get_user_info($user_id)
+    {
+        return $this->get_parent()->get_user_info($user_id);
     }
 
     /**
@@ -70,119 +183,13 @@ abstract class Manager extends Application implements NoContextComponent
         return $this->get_parent()->is_allowed($right, $publication, $category_id);
     }
 
-    /**
-     *
-     * @see WeblcmsManager::get_last_visit_date()
-     */
-    public function get_last_visit_date()
-    {
-        return $this->get_parent()->get_last_visit_date();
-    }
-
     public function perform_requested_actions()
     {
         return $this->get_parent()->perform_requested_actions();
     }
 
-    public function get_categories($list = false)
-    {
-        return $this->get_parent()->get_categories($list);
-    }
-
-    public function get_category($id)
-    {
-        return $this->get_parent()->get_category($id);
-    }
-
-    public function display_introduction_text($introduction_text)
-    {
-        return $this->get_parent()->display_introduction_text($introduction_text);
-    }
-
-    public function get_access_details_toolbar_item($parent)
-    {
-        return $this->get_parent()->get_access_details_toolbar_item($parent);
-    }
-
-    public function get_allowed_types()
-    {
-        return $this->get_parent()->get_allowed_types();
-    }
-
-    public function get_complex_builder_url($pid)
-    {
-        return $this->get_parent()->get_complex_builder_url($pid);
-    }
-
-    public function get_complex_display_url($pid)
-    {
-        return $this->get_parent()->get_complex_display_url($pid);
-    }
-
-    /**
-     *
-     * @return Course
-     */
-    public function get_course()
-    {
-        return $this->get_parent()->get_course();
-    }
-
-    public function get_course_id()
-    {
-        return $this->get_parent()->get_course_id();
-    }
-
-    public function get_course_groups()
-    {
-        return $this->get_parent()->get_course_groups();
-    }
-
-    public function get_user_info($user_id)
-    {
-        return $this->get_parent()->get_user_info($user_id);
-    }
-
-    public function get_tool_id()
-    {
-        return $this->get_parent()->get_tool_id();
-    }
-
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         return $this->get_parent()->render_header($pageTitle);
-    }
-
-    public function get_allowed_content_object_types()
-    {
-        return $this->get_parent()->get_allowed_types();
-    }
-
-    public function get_location($category_id = null)
-    {
-        return $this->get_parent()->get_location($category_id);
-    }
-
-    public function get_locations()
-    {
-        return $this->get_parent()->get_locations();
-    }
-
-    public function get_entities()
-    {
-        return $this->get_parent()->get_entities();
-    }
-
-    public function get_content_object_display_attachment_url($attachment)
-    {
-        return $this->get_parent()->get_content_object_display_attachment_url($attachment);
-    }
-
-    /**
-     * @return \Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator
-     */
-    public function getCategoryBreadcrumbsGenerator()
-    {
-        return $this->getService(CategoryBreadcrumbsGenerator::class);
     }
 }

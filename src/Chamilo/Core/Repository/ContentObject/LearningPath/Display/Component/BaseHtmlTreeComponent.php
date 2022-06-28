@@ -13,7 +13,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -59,7 +59,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         return $this->build();
     }
 
-    abstract function build();
+    public abstract function build();
 
     protected function getBootstrapTreeData()
     {
@@ -192,11 +192,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         );
     }
 
-    /**
-     *
-     * @see \libraries\SubManager::render_footer()
-     */
-    public function render_footer()
+    public function render_footer(): string
     {
         $html = [];
 
@@ -217,16 +213,14 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     */
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $isFullScreen = $this->getRequest()->query->get(self::PARAM_FULL_SCREEN, false);
         $isMenuHidden = Session::retrieve('learningPathMenuIsHidden');
 
         if ($isFullScreen)
         {
-            Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+            $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
         }
 
         $html = [];

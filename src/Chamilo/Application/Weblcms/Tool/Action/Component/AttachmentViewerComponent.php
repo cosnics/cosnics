@@ -14,6 +14,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -83,7 +84,7 @@ class AttachmentViewerComponent extends Manager implements DelegateComponent
             $error_message = Translation::get('NotAllowed');
         }
 
-        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+        $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
         if (! $failed)
         {

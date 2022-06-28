@@ -15,18 +15,22 @@ use Mobile_Detect;
 abstract class Manager extends Application
 {
     // Parameters
-    const PARAM_TIME = 'time';
-    const PARAM_VIEW = 'view';
-    const PARAM_DOWNLOAD = 'download';
+    public const ACTION_AVAILABILITY = 'Availability';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_ICAL = 'ICal';
+    public const ACTION_PRINT = 'Printer';
 
-    // Actions
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_AVAILABILITY = 'Availability';
-    const ACTION_ICAL = 'ICal';
-    const ACTION_PRINT = 'Printer';
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
-    // Default action
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const PARAM_DOWNLOAD = 'download';
+    public const PARAM_TIME = 'time';
+    public const PARAM_VIEW = 'view';
+
+    /**
+     *
+     * @var int
+     */
+    private $currentTime;
 
     /**
      *
@@ -36,9 +40,22 @@ abstract class Manager extends Application
 
     /**
      *
-     * @var integer
+     * @return int
      */
-    private $currentTime;
+    public function getCurrentRendererTime()
+    {
+        if (!isset($this->currentTime))
+        {
+            $defaultRenderDate = new DateTime();
+            $defaultRenderDate->setTime(0, 0);
+
+            $this->currentTime = $this->getRequest()->query->get(
+                ViewRenderer::PARAM_TIME, $defaultRenderDate->getTimestamp()
+            );
+        }
+
+        return $this->currentTime;
+    }
 
     /**
      *
@@ -67,26 +84,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return integer
-     */
-    public function getCurrentRendererTime()
-    {
-        if (!isset($this->currentTime))
-        {
-            $defaultRenderDate = new DateTime();
-            $defaultRenderDate->setTime(0, 0);
-
-            $this->currentTime = $this->getRequest()->query->get(
-                ViewRenderer::PARAM_TIME, $defaultRenderDate->getTimestamp()
-            );
-        }
-
-        return $this->currentTime;
-    }
-
-    /**
-     *
-     * @param integer $currentTime
+     * @param int $currentTime
      */
     public function setCurrentRendererTime($currentTime)
     {

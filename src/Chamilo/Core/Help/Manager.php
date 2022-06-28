@@ -8,6 +8,7 @@ use Chamilo\Core\Help\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -29,13 +30,13 @@ use Chamilo\Libraries\Translation\Translation;
  */
 abstract class Manager extends Application
 {
-    const ACTION_BROWSE_HELP_ITEMS = 'Browser';
+    public const ACTION_BROWSE_HELP_ITEMS = 'Browser';
 
-    const ACTION_UPDATE_HELP_ITEM = 'Updater';
+    public const ACTION_UPDATE_HELP_ITEM = 'Updater';
 
-    const DEFAULT_ACTION = self::ACTION_BROWSE_HELP_ITEMS;
+    public const DEFAULT_ACTION = self::ACTION_BROWSE_HELP_ITEMS;
 
-    const PARAM_HELP_ITEM = 'help_item';
+    public const PARAM_HELP_ITEM = 'help_item';
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
@@ -49,12 +50,7 @@ abstract class Manager extends Application
         return DataManager::count(HelpItem::class, new DataClassCountParameters($condition));
     }
 
-    /**
-     * Returns the admin breadcrumb generator
-     *
-     * @return \libraries\format\BreadcrumbGeneratorInterface
-     */
-    public function get_breadcrumb_generator()
+    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
     {
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }

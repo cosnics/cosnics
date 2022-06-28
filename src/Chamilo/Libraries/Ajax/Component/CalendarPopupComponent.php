@@ -5,6 +5,7 @@ use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -28,7 +29,7 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupport
 
         $html = [];
 
-        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+        $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
         $DaysShort = array(
             $translator->trans("MondayShort", [], StringUtilities::LIBRARIES),

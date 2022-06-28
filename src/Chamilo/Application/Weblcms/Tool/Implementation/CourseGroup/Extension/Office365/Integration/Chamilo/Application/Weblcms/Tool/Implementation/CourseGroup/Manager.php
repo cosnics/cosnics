@@ -15,17 +15,13 @@ use RuntimeException;
  */
 abstract class Manager extends Application
 {
-    const ACTION_SYNC_COURSE_GROUP = 'SyncCourseGroup';
+    public const ACTION_SYNC_COURSE_GROUP = 'SyncCourseGroup';
+    public const ACTION_VISIT_GROUP = 'VisitGroup';
+    public const ACTION_VISIT_PLANNER = 'VisitPlanner';
+    public const ACTION_VISIT_TEAM = 'VisitTeam';
 
-    const ACTION_VISIT_GROUP = 'VisitGroup';
-
-    const ACTION_VISIT_PLANNER = 'VisitPlanner';
-
-    const ACTION_VISIT_TEAM = 'VisitTeam';
-
-    const DEFAULT_ACTION = self::ACTION_VISIT_GROUP;
-
-    const PARAM_ACTION = 'Office365CourseGroupAction';
+    public const DEFAULT_ACTION = self::ACTION_VISIT_GROUP;
+    public const PARAM_ACTION = 'Office365CourseGroupAction';
 
     /**
      * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365Connector

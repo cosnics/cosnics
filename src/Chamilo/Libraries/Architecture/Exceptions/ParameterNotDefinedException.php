@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Exceptions;
 
-use Chamilo\Libraries\Translation\Translation;
-
 /**
  * This class represents a parameter not defined exception.
  * Throw this if you expected an URL parameter that is not
@@ -13,12 +11,8 @@ use Chamilo\Libraries\Translation\Translation;
 class ParameterNotDefinedException extends UserException
 {
 
-    /**
-     *
-     * @param string $parameter
-     */
-    public function __construct($parameter)
+    public function __construct(string $parameter)
     {
-        parent::__construct(Translation::get('ParameterNotDefined', array('PARAMETER' => $parameter)));
+        parent::__construct($this->getTranslator()->trans('ParameterNotDefined', ['PARAMETER' => $parameter]));
     }
 }

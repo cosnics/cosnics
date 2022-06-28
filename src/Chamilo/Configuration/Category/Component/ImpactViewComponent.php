@@ -95,28 +95,10 @@ class ImpactViewComponent extends Manager
         }
     }
 
-    /**
-     * **************************************************************************************************************
-     * Helper Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Builds a result message with given parameters
-     *
-     * @param int $failures
-     * @param int $count
-     * @param string $fail_message_single
-     * @param string $fail_message_multiple
-     * @param string $succes_message_single
-     * @param string $succes_message_multiple
-     *
-     * @return string
-     */
     public function get_result(
-        $failures, $count, $fail_message_single, $fail_message_multiple, $succes_message_single,
-        $succes_message_multiple, $context = null
-    )
+        int $failures, int $count, string $fail_message_single, string $fail_message_multiple,
+        string $succes_message_single, string $succes_message_multiple, ?string $context = null
+    ): string
     {
         if ($failures)
         {

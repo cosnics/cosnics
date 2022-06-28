@@ -12,25 +12,22 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    // Parameters
-    const PARAM_ACTION = 'element_action';
-    const PARAM_ELEMENT_ID = 'element_id';
-    const PARAM_MOVE = 'move';
-    
-    // Actions
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_DELETE = 'Deleter';
-    const ACTION_UPDATE = 'Updater';
-    const ACTION_CREATE = 'Creator';
-    const ACTION_MOVE = 'Mover';
-    const ACTION_VOCABULARY = 'Vocabulary';
-    
-    // Default action
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_DELETE = 'Deleter';
+    public const ACTION_MOVE = 'Mover';
+    public const ACTION_UPDATE = 'Updater';
+    public const ACTION_VOCABULARY = 'Vocabulary';
+
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
+
+    public const PARAM_ACTION = 'element_action';
+    public const PARAM_ELEMENT_ID = 'element_id';
+    public const PARAM_MOVE = 'move';
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getSchemaId()
     {

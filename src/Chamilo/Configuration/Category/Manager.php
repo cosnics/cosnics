@@ -7,26 +7,26 @@ use Chamilo\Libraries\Platform\Session\Request;
 
 abstract class Manager extends Application
 {
-    const ACTION_AJAX_DELETE_CATEGORIES = 'AjaxCategoryDeleter';
-    const ACTION_AJAX_MOVE_CATEGORIES = 'AjaxCategoryMover';
-    const ACTION_BROWSE_CATEGORIES = 'Browser';
-    const ACTION_CHANGE_CATEGORY_PARENT = 'ParentChanger';
-    const ACTION_CREATE_CATEGORY = 'Creator';
-    const ACTION_DELETE_CATEGORY = 'Deleter';
-    const ACTION_IMPACT_VIEW = 'ImpactView';
-    const ACTION_MOVE_CATEGORY = 'Mover';
-    const ACTION_TOGGLE_CATEGORY_VISIBILITY = 'VisibilityToggler';
-    const ACTION_UPDATE_CATEGORY = 'Updater';
+    public const ACTION_AJAX_DELETE_CATEGORIES = 'AjaxCategoryDeleter';
+    public const ACTION_AJAX_MOVE_CATEGORIES = 'AjaxCategoryMover';
+    public const ACTION_BROWSE_CATEGORIES = 'Browser';
+    public const ACTION_CHANGE_CATEGORY_PARENT = 'ParentChanger';
+    public const ACTION_CREATE_CATEGORY = 'Creator';
+    public const ACTION_DELETE_CATEGORY = 'Deleter';
+    public const ACTION_IMPACT_VIEW = 'ImpactView';
+    public const ACTION_MOVE_CATEGORY = 'Mover';
+    public const ACTION_TOGGLE_CATEGORY_VISIBILITY = 'VisibilityToggler';
+    public const ACTION_UPDATE_CATEGORY = 'Updater';
 
-    const DEFAULT_ACTION = self::ACTION_BROWSE_CATEGORIES;
+    public const DEFAULT_ACTION = self::ACTION_BROWSE_CATEGORIES;
 
-    const PARAM_ACTION = 'category_action';
-    const PARAM_CATEGORY_ID = 'category_id';
-    const PARAM_DIRECTION = 'direction';
-    const PARAM_MOVE_SELECTED_CATEGORIES = 'move_selected_categories';
-    const PARAM_REMOVE_SELECTED_CATEGORIES = 'remove_selected_categories';
+    public const PARAM_ACTION = 'category_action';
+    public const PARAM_CATEGORY_ID = 'category_id';
+    public const PARAM_DIRECTION = 'direction';
+    public const PARAM_MOVE_SELECTED_CATEGORIES = 'move_selected_categories';
+    public const PARAM_REMOVE_SELECTED_CATEGORIES = 'remove_selected_categories';
 
-    const PROPERTY_DISPLAY_ORDER = 'display_order';
+    public const PROPERTY_DISPLAY_ORDER = 'display_order';
 
     public function getAdditionalParameters(array $additionalParameters = []): array
     {
@@ -93,11 +93,7 @@ abstract class Manager extends Application
         );
     }
 
-    /**
-     *
-     * @return Application | CategorySupport
-     */
-    public function get_parent()
+    public function get_parent(): ?Application
     {
         return parent::get_parent();
     }

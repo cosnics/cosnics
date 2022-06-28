@@ -18,32 +18,32 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 abstract class Manager extends Application
 {
-    const ACTION_DISPLAY = 'Display';
-    const ACTION_RENDITION = 'Rendition';
-    const ACTION_RESET = 'Reset';
+    public const ACTION_DISPLAY = 'Display';
+    public const ACTION_RENDITION = 'Rendition';
+    public const ACTION_RESET = 'Reset';
 
-    const DEFAULT_ACTION = self::ACTION_DISPLAY;
+    public const DEFAULT_ACTION = self::ACTION_DISPLAY;
 
-    const PARAM_CONTENT_OBJECT_ID = 'preview_content_object_id';
-    const PARAM_FORMAT = 'format';
-    const PARAM_VIEW = 'view';
+    public const PARAM_CONTENT_OBJECT_ID = 'preview_content_object_id';
+    public const PARAM_FORMAT = 'format';
+    public const PARAM_VIEW = 'view';
+
+    /**
+     * @var \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
+     */
+    private $buttonToolBarRenderer;
 
     /**
      *
      * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
     private $content_object;
-
-    /**
-     * @var \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
-     */
-    private $buttonToolBarRenderer;
 
     /**
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
@@ -87,7 +87,10 @@ abstract class Manager extends Application
             $buttonToolBar = new ButtonToolBar(null, [], array('pull-right'));
             $this->buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
-            $dropdownButton = new DropdownButton(Translation::get('DisplayType'), new FontAwesomeGlyph('th'), DropdownButton::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']);
+            $dropdownButton = new DropdownButton(
+                Translation::get('DisplayType'), new FontAwesomeGlyph('th'), DropdownButton::DISPLAY_ICON_AND_LABEL, [],
+                ['dropdown-menu-right']
+            );
             $buttonToolBar->addItem($dropdownButton);
 
             $isDisplayAction = $this->get_action() == self::ACTION_DISPLAY;
@@ -112,7 +115,8 @@ abstract class Manager extends Application
                     new Button(
                         Translation::get('ResetDisplayPreview'), new FontAwesomeGlyph('undo'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_RESET)),
-                        SubButton::DISPLAY_ICON_AND_LABEL, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
+                        SubButton::DISPLAY_ICON_AND_LABEL,
+                        Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                     )
                 );
             }
@@ -268,19 +272,13 @@ abstract class Manager extends Application
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @param string $pageTitle
-     *
-     * @return string
-     */
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
-        $page = Page::getInstance();
-        $page->setViewMode(Page::VIEW_MODE_HEADERLESS);
+        $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
         $html = [];
 
-        $html[] = $page->getHeader()->toHtml();
+        $html[] = $this->getHeaderRenderer()->render();
         $html[] = $this->renderPreviewHeader();
 
         return implode(PHP_EOL, $html);

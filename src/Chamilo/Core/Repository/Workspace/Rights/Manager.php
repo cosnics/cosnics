@@ -14,19 +14,16 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    // Parameters
-    const PARAM_ENTITY_RELATION_ID = 'entity_relation_id';
-    const PARAM_ACTION = 'rights_action';
-    
-    // Actions
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_DELETE = 'Deleter';
-    const ACTION_CREATE = 'Creator';
-    const ACTION_UPDATE = 'Updater';
-    const ACTION_RIGHTS = 'Rights';
-    
-    // Default action
-    const DEFAULT_ACTION = self::ACTION_CREATE;
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_DELETE = 'Deleter';
+    public const ACTION_RIGHTS = 'Rights';
+    public const ACTION_UPDATE = 'Updater';
+
+    public const DEFAULT_ACTION = self::ACTION_CREATE;
+
+    public const PARAM_ACTION = 'rights_action';
+    public const PARAM_ENTITY_RELATION_ID = 'entity_relation_id';
 
     /**
      *
@@ -35,6 +32,7 @@ abstract class Manager extends Application
     public function getCurrentWorkspace()
     {
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
+
         return $workspaceService->getWorkspaceByIdentifier($this->getCurrentWorkspaceIdentifier());
     }
 

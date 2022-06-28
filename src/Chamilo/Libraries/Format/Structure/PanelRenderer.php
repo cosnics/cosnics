@@ -11,12 +11,12 @@ use InvalidArgumentException;
  */
 class PanelRenderer
 {
-    const MODE_DANGER = 'danger';
-    const MODE_DEFAULT = 'default';
-    const MODE_INFO = 'info';
-    const MODE_PRIMARY = 'primary';
-    const MODE_SUCCESS = 'success';
-    const MODE_WARNING = 'warning';
+    public const MODE_DANGER = 'danger';
+    public const MODE_DEFAULT = 'default';
+    public const MODE_INFO = 'info';
+    public const MODE_PRIMARY = 'primary';
+    public const MODE_SUCCESS = 'success';
+    public const MODE_WARNING = 'warning';
 
     public function render(string $content, ?string $title = null, string $mode = self::MODE_DEFAULT): string
     {
@@ -36,14 +36,14 @@ class PanelRenderer
      */
     protected function getAllowedModes(): array
     {
-        return array(
+        return [
             self::MODE_DEFAULT,
             self::MODE_PRIMARY,
             self::MODE_SUCCESS,
             self::MODE_INFO,
             self::MODE_WARNING,
             self::MODE_DANGER
-        );
+        ];
     }
 
     protected function renderPanelFooter(): string

@@ -11,8 +11,6 @@
             <argument key="$theme">%chamilo.configuration.general.theme%</argument>
         </service>
 
-        <service id="Chamilo\Libraries\Format\BreadcrumbTrailRenderer"/>
-
         <service id="Chamilo\Libraries\Format\Utilities\ResourceManager"/>
         <service id="Chamilo\Libraries\Format\Utilities\ResourceProcessor"/>
         <service id="Chamilo\Libraries\Format\Utilities\PackageDescriber"/>
@@ -35,7 +33,10 @@
         <service id="Chamilo\Libraries\Format\Tabs\TabRenderer"/>
         <service id="Chamilo\Libraries\Format\Tabs\TabsRenderer"/>
 
+        <service id="Chamilo\Libraries\Format\Structure\BreadcrumbTrailRenderer"/>
+        <service id="Chamilo\Libraries\Format\Structure\BannerRenderer"/>
         <service id="Chamilo\Libraries\Format\Structure\PageConfiguration"/>
         <service id="Chamilo\Libraries\Format\Structure\FooterRenderer"/>
+        <service id="Chamilo\Libraries\Format\Structure\HeaderRenderer"/>
     </services>
 </container>

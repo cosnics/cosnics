@@ -27,7 +27,7 @@ class PreviewComponent extends Manager
      *
      * @return string
      */
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $html = [];
 

@@ -33,25 +33,25 @@ use MediawikiParserContext;
  */
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
-    const ACTION_ACCESS_DETAILS = 'AccessDetails';
-    const ACTION_BROWSE_WIKI = 'WikiBrowser';
-    const ACTION_COMPARE = 'Comparer';
-    const ACTION_CREATE_PAGE = 'WikiPageCreator';
-    const ACTION_DISCUSS = 'WikiDiscuss';
-    const ACTION_HISTORY = 'WikiHistory';
-    const ACTION_PAGE_STATISTICS = 'PageStatistics';
-    const ACTION_SET_AS_HOMEPAGE = 'WikiHomepageSetter';
-    const ACTION_STATISTICS = 'Statistics';
-    const ACTION_VERSION_DELETE = 'VersionDeleter';
-    const ACTION_VERSION_REVERT = 'VersionReverter';
-    const ACTION_VIEW_WIKI = 'Viewer';
-    const ACTION_VIEW_WIKI_PAGE = 'WikiItemViewer';
+    public const ACTION_ACCESS_DETAILS = 'AccessDetails';
+    public const ACTION_BROWSE_WIKI = 'WikiBrowser';
+    public const ACTION_COMPARE = 'Comparer';
+    public const ACTION_CREATE_PAGE = 'WikiPageCreator';
+    public const ACTION_DISCUSS = 'WikiDiscuss';
+    public const ACTION_HISTORY = 'WikiHistory';
+    public const ACTION_PAGE_STATISTICS = 'PageStatistics';
+    public const ACTION_SET_AS_HOMEPAGE = 'WikiHomepageSetter';
+    public const ACTION_STATISTICS = 'Statistics';
+    public const ACTION_VERSION_DELETE = 'VersionDeleter';
+    public const ACTION_VERSION_REVERT = 'VersionReverter';
+    public const ACTION_VIEW_WIKI = 'Viewer';
+    public const ACTION_VIEW_WIKI_PAGE = 'WikiItemViewer';
 
-    const DEFAULT_ACTION = self::ACTION_VIEW_WIKI;
+    public const DEFAULT_ACTION = self::ACTION_VIEW_WIKI;
 
-    const PARAM_WIKI_ID = 'wiki_id';
-    const PARAM_WIKI_PAGE_ID = 'wiki_page_id';
-    const PARAM_WIKI_VERSION_ID = 'wiki_version_id';
+    public const PARAM_WIKI_ID = 'wiki_id';
+    public const PARAM_WIKI_PAGE_ID = 'wiki_page_id';
+    public const PARAM_WIKI_VERSION_ID = 'wiki_version_id';
 
     /**
      * @var \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
@@ -71,7 +71,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
             $buttonToolBar->addButtonGroup($buttonGroup);
 
-            $classes = ($displayAction == self::ACTION_VIEW_WIKI_PAGE ? ['btn-primary','disabled'] : []);
+            $classes = ($displayAction == self::ACTION_VIEW_WIKI_PAGE ? ['btn-primary', 'disabled'] : []);
             $read_url = $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
@@ -86,7 +86,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 )
             );
 
-            $classes = ($displayAction == self::ACTION_DISCUSS ? ['btn-primary','disabled'] : []);
+            $classes = ($displayAction == self::ACTION_DISCUSS ? ['btn-primary', 'disabled'] : []);
             $discuss_url = $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_DISCUSS,
@@ -97,12 +97,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('WikiDiscuss'), new FontAwesomeGlyph('comment', [], null, 'fas'),
-                    $discuss_url, Button::DISPLAY_ICON_AND_LABEL, null, $classes
+                    Translation::get('WikiDiscuss'), new FontAwesomeGlyph('comment', [], null, 'fas'), $discuss_url,
+                    Button::DISPLAY_ICON_AND_LABEL, null, $classes
                 )
             );
 
-            $classes = ($displayAction == self::ACTION_PAGE_STATISTICS ? ['btn-primary','disabled'] : []);
+            $classes = ($displayAction == self::ACTION_PAGE_STATISTICS ? ['btn-primary', 'disabled'] : []);
             $statistics_url = $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_PAGE_STATISTICS,
@@ -122,7 +122,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $buttonToolBar->addButtonGroup($buttonGroup);
 
             $classes =
-                ($displayAction == self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM ? ['btn-primary','disabled'] : []);
+                ($displayAction == self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM ? ['btn-primary', 'disabled'] : []);
             $edit_url = $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
@@ -169,7 +169,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 new Button(
                     Translation::get('WikiDelete'), new FontAwesomeGlyph(
                     'times', [], null, 'fas'
-                ), $delete_url, Button::DISPLAY_ICON_AND_LABEL, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), $classes
+                ), $delete_url, Button::DISPLAY_ICON_AND_LABEL,
+                    Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), $classes
                 )
             );
         }
@@ -431,7 +432,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     /**
      * @return string
      */
-    public function render_footer()
+    public function render_footer(): string
     {
         $html = [];
 
@@ -442,13 +443,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\ComplexWikiPage|null $complex_wiki_page
-     *
-     * @return string
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     */
-    public function render_header($pageTitle = '', ComplexWikiPage $complex_wiki_page = null)
+    public function render_header(string $pageTitle = '', ?ComplexWikiPage $complex_wiki_page = null): string
     {
         $html = [];
 

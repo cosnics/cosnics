@@ -46,7 +46,7 @@ class ReportingTemplateViewerComponent extends Manager implements DelegateCompon
         return $component->run();
     }
 
-    public function render_header($pageTitle = '', ComplexWikiPage $complex_wiki_page = null)
+    public function render_header(string $pageTitle = '', ?ComplexWikiPage $complex_wiki_page = null): string
     {
         if ($this->get_action() == self::ACTION_STATISTICS)
         {

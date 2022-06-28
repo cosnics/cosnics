@@ -16,12 +16,11 @@ use InvalidArgumentException;
  */
 abstract class Manager extends Application implements WorkspaceExtensionSupport
 {
-    const PARAM_ACTION = 'workspace_extension_action';
+    public const ACTION_SYNC_GROUP = 'SyncGroup';
+    public const ACTION_VISIT_GROUP = 'VisitGroup';
 
-    const ACTION_VISIT_GROUP = 'VisitGroup';
-    const ACTION_SYNC_GROUP = 'SyncGroup';
-
-    const DEFAULT_ACTION = self::ACTION_VISIT_GROUP;
+    public const DEFAULT_ACTION = self::ACTION_VISIT_GROUP;
+    public const PARAM_ACTION = 'workspace_extension_action';
 
     /**
      *

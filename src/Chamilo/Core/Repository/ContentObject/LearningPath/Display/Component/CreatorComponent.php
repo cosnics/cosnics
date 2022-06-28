@@ -193,7 +193,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
      *
      * @return string
      */
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $html = [];
         $html[] = parent::render_header($pageTitle);

@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Install\Format\Structure;
 
-use Chamilo\Libraries\Format\Structure\BaseFooter;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\AbstractFooterRenderer;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 
 /**
  *
@@ -11,20 +11,15 @@ use Chamilo\Libraries\Format\Structure\Page;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Footer extends BaseFooter
+class FooterRenderer extends AbstractFooterRenderer
 {
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Structure\BaseFooter::render()
-     */
-    public function render()
+    public function render(): string
     {
         $html = [];
 
         $html[] = $this->getHeader();
 
-        if ($this->getViewMode() != Page::VIEW_MODE_HEADERLESS)
+        if ($this->getPageConfiguration()->getViewMode() != PageConfiguration::VIEW_MODE_HEADERLESS)
         {
             $html[] = $this->getContainerHeader();
             $html[] = $this->getContainerFooter();

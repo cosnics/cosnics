@@ -3,14 +3,13 @@ namespace Chamilo\Application\Weblcms\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Manager;
-use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
 use Chamilo\Core\Repository\ContentObject\Bookmark\Form\BookmarkForm;
 use Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass\Bookmark;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -20,14 +19,14 @@ use Chamilo\Libraries\Translation\Translation;
 class CourseBookmarkCreatorComponent extends Manager
 {
 
-    private $parents;
-
     private $items = [];
+
+    private $parents;
 
     /**
      * Runs this component and displays its output.
      */
-    function run()
+    public function run()
     {
         $this->checkAuthorization(Manager::context(), 'ManagePersonalCourses');
 
@@ -58,11 +57,11 @@ class CourseBookmarkCreatorComponent extends Manager
         $params_form[self::PARAM_COURSE] = $course_id;
 
         $form = new BookmarkForm(
-            BookmarkForm::TYPE_CREATE, new PersonalWorkspace($this->getUser()), $content_object, "",
+            BookmarkForm::TYPE_CREATE, new PersonalWorkspace($this->getUser()), $content_object, '',
             FormValidator::FORM_METHOD_POST, $this->get_url($params_form), null, null, false
         );
 
-        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+        $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
         if ($form->validate())
         {

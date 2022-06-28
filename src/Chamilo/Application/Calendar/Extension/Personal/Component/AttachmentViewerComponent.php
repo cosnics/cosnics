@@ -2,16 +2,15 @@
 namespace Chamilo\Application\Calendar\Extension\Personal\Component;
 
 use Chamilo\Application\Calendar\Extension\Personal\Manager;
-use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
-use Chamilo\Application\Calendar\Extension\Personal\Storage\DataManager;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -62,15 +61,14 @@ class AttachmentViewerComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            ContentObject::class, $attachment_id
-        );
+        $contentObject = DataManager::retrieve_by_id(ContentObject::class, $attachment_id);
+
         if (!$contentObject)
         {
             throw new ObjectNotExistException(Translation::get('ContentObject'), $attachment_id);
         }
 
-        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+        $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
         $html = [];
 

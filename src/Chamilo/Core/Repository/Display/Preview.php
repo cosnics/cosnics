@@ -14,9 +14,10 @@ use Chamilo\Libraries\Format\Display;
  */
 abstract class Preview extends Application
 {
-    const PARAM_ACTION = 'preview_action';
-    const ACTION_VIEW = 'Viewer';
-    const DEFAULT_ACTION = self::ACTION_VIEW;
+    public const ACTION_VIEW = 'Viewer';
+
+    public const DEFAULT_ACTION = self::ACTION_VIEW;
+    public const PARAM_ACTION = 'preview_action';
 
     public static function get_default_action()
     {
@@ -25,7 +26,7 @@ abstract class Preview extends Application
 
     /**
      * Method always has to be implemented for a class implementing the Display
-     * 
+     *
      * @return \core\repository\ContentObject
      */
     public function get_root_content_object()
@@ -34,25 +35,10 @@ abstract class Preview extends Application
     }
 
     /**
-     * Inform the user that the requested functionality is not available in preview mode
-     * 
-     * @param string $message
-     */
-    public function not_available($message)
-    {
-        $html = [];
-        
-        $html[] = $this->render_header();
-        $html[] = Display::normal_message($message);
-        $html[] = $this->render_footer();
-        
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
      *
      * @param int $right
-     * @return boolean
+     *
+     * @return bool
      */
     public function is_allowed($right)
     {
@@ -61,7 +47,7 @@ abstract class Preview extends Application
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function is_allowed_to_add_child()
     {
@@ -70,7 +56,7 @@ abstract class Preview extends Application
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function is_allowed_to_delete_child()
     {
@@ -79,7 +65,7 @@ abstract class Preview extends Application
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function is_allowed_to_delete_feedback($feedback)
     {
@@ -88,7 +74,7 @@ abstract class Preview extends Application
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
     {
@@ -97,7 +83,7 @@ abstract class Preview extends Application
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function is_allowed_to_edit_feedback()
     {
@@ -106,7 +92,7 @@ abstract class Preview extends Application
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
     {
@@ -114,8 +100,24 @@ abstract class Preview extends Application
     }
 
     /**
+     * Inform the user that the requested functionality is not available in preview mode
      *
-     * @return boolean
+     * @param string $message
+     */
+    public function not_available($message)
+    {
+        $html = [];
+
+        $html[] = $this->render_header();
+        $html[] = Display::normal_message($message);
+        $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return bool
      */
     public function supports_reset()
     {

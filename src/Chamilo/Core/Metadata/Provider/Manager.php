@@ -16,15 +16,15 @@ use InvalidArgumentException;
  */
 abstract class Manager extends Application
 {
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_CONFIGURE = 'Configurer';
-    const ACTION_DELETE = 'Deleter';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CONFIGURE = 'Configurer';
+    public const ACTION_DELETE = 'Deleter';
 
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
-    const PARAM_ACTION = 'provider_action';
-    const PARAM_ENTITY_TYPE = 'entity_type';
-    const PARAM_PROVIDER_LINK_ID = 'provider_link_id';
+    public const PARAM_ACTION = 'provider_action';
+    public const PARAM_ENTITY_TYPE = 'entity_type';
+    public const PARAM_PROVIDER_LINK_ID = 'provider_link_id';
 
     /**
      *

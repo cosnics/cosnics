@@ -4,15 +4,15 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -36,15 +36,15 @@ class AttachmentViewerComponent extends Manager
 
         /** @var ContentObject $attachment */
         $attachment = DataManager::retrieve_by_id(
-            ContentObject::class,
-            $attachment_id
+            ContentObject::class, $attachment_id
         );
 
         $entry = $this->getEntry();
 
         if (!$this->get_root_content_object()->is_attached_to_or_included_in($attachment_id))
         {
-            if(!$entry instanceof Entry || !$this->getDataProvider()->isContentObjectAttachedToEntry($entry, $attachment))
+            if (!$entry instanceof Entry ||
+                !$this->getDataProvider()->isContentObjectAttachedToEntry($entry, $attachment))
             {
                 throw new NotAllowedException();
             }
@@ -61,37 +61,26 @@ class AttachmentViewerComponent extends Manager
             )
         );
 
-        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+        $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
         $html = [];
 
         $html[] = $this->render_header();
         $html[] = ContentObjectRenditionImplementation::launch(
-            $attachment,
-            ContentObjectRendition::FORMAT_HTML,
-            ContentObjectRendition::VIEW_FULL,
-            $this
+            $attachment, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL, $this
         );
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
     }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::render_header()
-     */
-    public function render_header($pageTitle = '')
+    
+    public function render_footer(): string
     {
-        return Page::getInstance()->getHeader()->toHtml();
+        return $this->getFooterRenderer()->render();
     }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::render_footer()
-     */
-    public function render_footer()
+    
+    public function render_header(string $pageTitle = ''): string
     {
-        return Page::getInstance()->getFooter()->toHtml();
+        return $this->getHeaderRenderer()->render();
     }
 }

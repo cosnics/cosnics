@@ -7,15 +7,17 @@ use Chamilo\Libraries\Architecture\Application\Application;
 
 abstract class Manager extends Application
 {
-    const PARAM_ACTION = 'announcement_action';
-    const PARAM_SYSTEM_ANNOUNCEMENT_ID = 'announcement';
-    const ACTION_CREATE = 'Creator';
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_EDIT = 'Editor';
-    const ACTION_DELETE = 'Deleter';
-    const ACTION_VIEW = 'Viewer';
-    const ACTION_HIDE = 'Hider';
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_DELETE = 'Deleter';
+    public const ACTION_EDIT = 'Editor';
+    public const ACTION_HIDE = 'Hider';
+    public const ACTION_VIEW = 'Viewer';
+
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
+
+    public const PARAM_ACTION = 'announcement_action';
+    public const PARAM_SYSTEM_ANNOUNCEMENT_ID = 'announcement';
 
     /**
      * @return \Chamilo\Core\Admin\Announcement\Service\PublicationService

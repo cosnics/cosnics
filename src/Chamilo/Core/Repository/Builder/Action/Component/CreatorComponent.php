@@ -157,7 +157,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
         return (Request::get(\Chamilo\Core\Repository\Viewer\Component\BrowserComponent::SHARED_BROWSER) == 1);
     }
 
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $html = [];
 

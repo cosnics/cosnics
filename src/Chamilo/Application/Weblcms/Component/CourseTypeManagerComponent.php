@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
@@ -25,15 +26,11 @@ class CourseTypeManagerComponent extends Manager implements DelegateComponent
 
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Application\Weblcms\CourseType\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
     }
 
-    /**
-     * Returns the admin breadcrumb generator
-     *
-     * @return \libraries\format\BreadcrumbGeneratorInterface
-     */
-    public function get_breadcrumb_generator()
+    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
     {
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }

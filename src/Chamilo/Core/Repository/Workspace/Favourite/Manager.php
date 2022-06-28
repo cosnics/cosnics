@@ -14,17 +14,14 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    // Parameters
-    const PARAM_FAVOURITE_ID = 'favourite_id';
-    const PARAM_ACTION = 'favourite_action';
-    
-    // Actions
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_DELETE = 'Deleter';
-    const ACTION_CREATE = 'Creator';
-    
-    // Default action
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_DELETE = 'Deleter';
+
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
+
+    public const PARAM_ACTION = 'favourite_action';
+    public const PARAM_FAVOURITE_ID = 'favourite_id';
 
     /**
      *
@@ -33,6 +30,7 @@ abstract class Manager extends Application
     public function getCurrentWorkspace()
     {
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
+
         return $workspaceService->getWorkspaceByIdentifier($this->getCurrentWorkspaceIdentifier());
     }
 

@@ -19,7 +19,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -32,11 +31,11 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserComponent extends Manager implements TableSupport
 {
-    const PROPERTY_CATEGORY = 'category';
+    public const PROPERTY_CATEGORY = 'category';
 
-    const SHARED_BROWSER = 'shared';
+    public const SHARED_BROWSER = 'shared';
 
-    const SHARED_BROWSER_ALLOWED = 'allow_shared_browser';
+    public const SHARED_BROWSER_ALLOWED = 'allow_shared_browser';
 
     /**
      *
@@ -268,10 +267,10 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Publish', null, StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('share-square'), $this->get_url(
-                    array_merge($this->get_parameters(), array(self::PARAM_ID => $content_object->get_id())), false
-                ), ToolbarItem::DISPLAY_ICON
+                    Translation::get('Publish', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('share-square'),
+                    $this->get_url(
+                        array_merge($this->get_parameters(), array(self::PARAM_ID => $content_object->get_id())), false
+                    ), ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -316,7 +315,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
 
             $preview_url = \Chamilo\Core\Repository\Manager::get_preview_content_object_url($content_object);
-            $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
+            $onclick = '" onclick="javascript:openPopup(\'' . addslashes($preview_url) . '\'); return false;';
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Preview', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('desktop'),
@@ -330,11 +329,11 @@ class BrowserComponent extends Manager implements TableSupport
 
     /**
      *
-     * @param boolean $allow_shared
+     * @param bool $allow_shared
      *
      * @return \Chamilo\Core\Repository\Viewer\Menu\RepositoryCategoryMenu
      */
-    public function get_menu($allow_shared = true)
+    public function get_menu(bool $allow_shared = true): string
     {
         $url =
             $this->get_url($this->get_parameters(), array(self::PARAM_QUERY)) . '&' . self::PROPERTY_CATEGORY . '=%s';

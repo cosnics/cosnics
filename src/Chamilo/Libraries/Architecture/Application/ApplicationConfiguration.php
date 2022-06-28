@@ -5,7 +5,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
- *
  * @package Chamilo\Libraries\Architecture\Application
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -14,39 +13,24 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 class ApplicationConfiguration implements ApplicationConfigurationInterface
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest $request
-     */
-    private $request;
+    private ?Application $application;
 
     /**
      *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
+     * @var string[]
      */
-    private $application;
+    private array $configurationParameters;
+
+    private ChamiloRequest $request;
+
+    private ?User $user;
 
     /**
-     *
-     * @var \Chamilo\Core\User\Storage\DataClass\User
-     */
-    private $user;
-
-    /**
-     *
-     * @var mixed[]
-     */
-    private $configurationParameters;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user $user
-     * @param \Chamilo\Libraries\Architecture\Application\Application $parentApplication
      * @param string[] $configurationParameters
      */
     public function __construct(
-        ChamiloRequest $request, $user = null, $parentApplication = null, $configurationParameters = []
+        ChamiloRequest $request, ?User $user = null, ?Application $parentApplication = null,
+        array $configurationParameters = []
     )
     {
         $this->request = $request;
@@ -55,61 +39,37 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
         $this->configurationParameters = $configurationParameters;
     }
 
-    /**
-     *
-     * @param string $key
-     * @param string $defaultValue
-     *
-     * @return string
-     */
-    public function get($key, $defaultValue = null)
+    public function get(string $key, ?string $defaultValue = null): string
     {
-        return isset($this->configurationParameters[$key]) ? $this->configurationParameters[$key] : $defaultValue;
+        return $this->configurationParameters[$key] ?? $defaultValue;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function getApplication()
+    public function getApplication(): ?Application
     {
         return $this->application;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    public function getRequest()
+    public function getRequest(): ChamiloRequest
     {
         return $this->request;
     }
 
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function setUser(User $user)
+    public function setUser(?User $user): ApplicationConfigurationInterface
     {
         $this->user = $user;
+
+        return $this;
     }
 
-    /**
-     *
-     * @param string $key
-     * @param string $value
-     */
-    public function set($key, $value)
+    public function set(string $key, string $value): ApplicationConfigurationInterface
     {
         $this->configurationParameters[$key] = $value;
+
+        return $this;
     }
 }

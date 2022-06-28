@@ -133,7 +133,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         }
     }
 
-    public function get_action()
+    public function get_action(): ?string
     {
         $actions = array(self::FORM_NEXT, self::FORM_SUBMIT, self::FORM_BACK);
 

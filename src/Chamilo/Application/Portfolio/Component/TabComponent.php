@@ -72,7 +72,7 @@ abstract class TabComponent extends Manager
      *
      * @see \Chamilo\Libraries\Architecture\Application\Application::render_footer()
      */
-    public function render_footer()
+    public function render_footer(): string
     {
         $html = [];
 
@@ -86,7 +86,7 @@ abstract class TabComponent extends Manager
      *
      * @see \Chamilo\Libraries\Architecture\Application\Application::render_header()
      */
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $html = [];
 

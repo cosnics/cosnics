@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager;
 use Chamilo\Core\Tracking\Storage\DataClass\Tracker;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Exception;
 
 /**
@@ -13,33 +13,19 @@ use Exception;
  */
 class CourseVisit extends Tracker
 {
-    const PROPERTY_CATEGORY_ID = 'category_id';
+    use DependencyInjectionContainerTrait;
 
-    const PROPERTY_COURSE_ID = 'course_id';
-
-    const PROPERTY_FIRST_ACCESS_DATE = 'first_access_date';
-
-    const PROPERTY_LAST_ACCESS_DATE = 'last_access_date';
-
-    const PROPERTY_PUBLICATION_ID = 'publication_id';
-
-    const PROPERTY_TOOL_ID = 'tool_id';
-
-    const PROPERTY_TOTAL_NUMBER_OF_ACCESS = 'total_number_of_access';
-
-    const PROPERTY_TOTAL_TIME = 'total_time';
-
-    const PROPERTY_USER_ID = 'user_id';
-
-    const TYPE_LEAVE = 'leave_course';
-
-    const TYPE_VISIT = 'visit_course';
-
-    /**
-     * **************************************************************************************************************
-     * Inherited Functionality *
-     * **************************************************************************************************************
-     */
+    public const PROPERTY_CATEGORY_ID = 'category_id';
+    public const PROPERTY_COURSE_ID = 'course_id';
+    public const PROPERTY_FIRST_ACCESS_DATE = 'first_access_date';
+    public const PROPERTY_LAST_ACCESS_DATE = 'last_access_date';
+    public const PROPERTY_PUBLICATION_ID = 'publication_id';
+    public const PROPERTY_TOOL_ID = 'tool_id';
+    public const PROPERTY_TOTAL_NUMBER_OF_ACCESS = 'total_number_of_access';
+    public const PROPERTY_TOTAL_TIME = 'total_time';
+    public const PROPERTY_USER_ID = 'user_id';
+    public const TYPE_LEAVE = 'leave_course';
+    public const TYPE_VISIT = 'visit_course';
 
     /**
      * Runs this tracker
@@ -61,26 +47,6 @@ class CourseVisit extends Tracker
         }
 
         return false;
-    }
-
-    /**
-     * Returns the category_id
-     *
-     * @return int
-     */
-    public function get_category_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CATEGORY_ID);
-    }
-
-    /**
-     * Returns the course_id
-     *
-     * @return int
-     */
-    public function get_course_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_COURSE_ID);
     }
 
     /**
@@ -106,6 +72,40 @@ class CourseVisit extends Tracker
     }
 
     /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'tracking_weblcms_course_visit';
+    }
+
+    /**
+     * Returns the category_id
+     *
+     * @return int
+     */
+    public function get_category_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CATEGORY_ID);
+    }
+
+    /**
+     * Returns the course_id
+     *
+     * @return int
+     */
+    public function get_course_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_ID);
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Public Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Returns the first_access_date
      *
      * @return int
@@ -117,7 +117,7 @@ class CourseVisit extends Tracker
 
     /**
      * **************************************************************************************************************
-     * Public Functionality *
+     * Getters & Setters Functionality *
      * **************************************************************************************************************
      */
 
@@ -132,12 +132,6 @@ class CourseVisit extends Tracker
     }
 
     /**
-     * **************************************************************************************************************
-     * Getters & Setters Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Returns the publication_id
      *
      * @return int
@@ -145,14 +139,6 @@ class CourseVisit extends Tracker
     public function get_publication_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_ID);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'tracking_weblcms_course_visit';
     }
 
     /**
@@ -340,6 +326,8 @@ class CourseVisit extends Tracker
      */
     public function track_visit($course_visit)
     {
+        $this->initializeContainer();
+
         if (!$course_visit)
         {
             $course_visit = $this;
@@ -355,7 +343,7 @@ class CourseVisit extends Tracker
         {
             $tracker_id = $course_visit->get_id();
             $html_header_id = "<script type=\"text/javascript\">var course_visit_tracker={$tracker_id};</script>";
-            Page::getInstance()->getHeader()->addHtmlHeader($html_header_id);
+            $this->getPageConfiguration()->addHtmlHeader($html_header_id);
         }
 
         return $success;

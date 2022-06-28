@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
-use Chamilo\Libraries\Format\Structure\BaseHeader;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Exception;
 use Throwable;
 
@@ -49,11 +49,11 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
         $this->exceptionLoggers = $exceptionLoggers;
     }
 
-    public function addJavascriptExceptionLogger(BaseHeader $header)
+    public function addJavascriptExceptionLogger(PageConfiguration $pageConfiguration)
     {
         foreach ($this->exceptionLoggers as $exceptionLogger)
         {
-            $exceptionLogger->addJavascriptExceptionLogger($header);
+            $exceptionLogger->addJavascriptExceptionLogger($pageConfiguration);
         }
     }
 

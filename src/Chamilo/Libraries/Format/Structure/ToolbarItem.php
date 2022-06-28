@@ -3,88 +3,47 @@ namespace Chamilo\Libraries\Format\Structure;
 
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure
  */
 class ToolbarItem
 {
-    const DISPLAY_ICON = 1;
-    const DISPLAY_ICON_AND_LABEL = 3;
-    const DISPLAY_LABEL = 2;
+    public const DISPLAY_ICON = 1;
+    public const DISPLAY_ICON_AND_LABEL = 3;
+    public const DISPLAY_LABEL = 2;
+
+    private ?string $class;
 
     /**
-     *
-     * @var string
-     */
-    private $class;
-
-    /**
-     *
-     * @var boolean|string
+     * @var bool|string
      */
     private $confirmation;
 
-    /**
-     *
-     * @var string
-     */
-    private $confirmationMessage;
+    private ?string $confirmationMessage;
+
+    private int $display;
 
     /**
-     *
-     * @var integer
-     */
-    private $display;
-
-    /**
-     *
      * @var string[]
      */
-    private $extraAttributes;
+    private ?array $extraAttributes;
 
-    /**
-     *
-     * @var string
-     */
-    private $href;
+    private ?string $href;
 
-    /**
-     *
-     * @var string|\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
-     */
-    private $image;
+    private ?InlineGlyph $image;
 
-    /**
-     *
-     * @var string
-     */
-    private $label;
+    private ?string $label;
 
-    /**
-     *
-     * @var string
-     */
-    private $target;
+    private ?string $target;
 
-    /**
-     *
-     * @param string $label
-     * @param string|\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $image
-     * @param string $href
-     * @param integer $display
-     * @param boolean|string $confirmation
-     * @param string $class
-     * @param string $target
-     * @param string $confirmationMessage
-     * @param string[] $extraAttributes
-     */
     public function __construct(
-        $label = null, $image = null, $href = null, $display = self::DISPLAY_ICON_AND_LABEL, $confirmation = false,
-        $class = null, $target = null, $confirmationMessage = null, $extraAttributes = null
+        ?string $label = null, ?InlineGlyph $image = null, ?string $href = null,
+        int $display = self::DISPLAY_ICON_AND_LABEL, $confirmation = false, ?string $class = null,
+        ?string $target = null, ?string $confirmationMessage = null, ?array $extraAttributes = null
     )
     {
         $this->label = $label;
@@ -146,54 +105,41 @@ class ToolbarItem
     }
 
     /**
-     *
-     * @return string
-     * @deprecated Use render() now
+     * @deprecated Use ToolbarItem::render() now
      */
-    public function as_html()
+    public function as_html(): string
     {
         return $this->render();
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getClasses()
+    public function getClasses(): ?string
     {
         return $this->class;
     }
 
     /**
-     *
-     * @return string[]
+     * @return ?string[]
      */
-    public function getExtraAttributes()
+    public function getExtraAttributes(): ?array
     {
         return $this->extraAttributes;
     }
 
     /**
-     *
-     * @param string[] $extraAttributes
+     * @param ?string[] $extraAttributes
      */
-    public function setExtraAttributes($extraAttributes)
+    public function setExtraAttributes(?array $extraAttributes)
     {
         $this->extraAttributes = $extraAttributes;
     }
 
-    /**
-     *
-     * @return string
-     */
-    function get_confirm_message()
+    public function get_confirm_message(): ?string
     {
         return $this->confirmationMessage;
     }
 
     /**
-     *
-     * @return boolean|string
+     * @return bool|string
      */
     public function get_confirmation()
     {
@@ -201,109 +147,64 @@ class ToolbarItem
     }
 
     /**
-     *
-     * @param boolean|string $confirmation
+     * @param bool|string $confirmation
      */
     public function set_confirmation($confirmation)
     {
         $this->confirmation = $confirmation;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function get_display()
+    public function get_display(): int
     {
         return $this->display;
     }
 
-    /**
-     *
-     * @param integer $display
-     */
-    public function set_display($display)
+    public function set_display(int $display)
     {
         $this->display = $display;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_href()
+    public function get_href(): ?string
     {
         return $this->href;
     }
 
-    /**
-     *
-     * @param string $href
-     */
-    public function set_href($href)
+    public function set_href(?string $href)
     {
         $this->href = $href;
     }
 
-    /**
-     *
-     * @return string|\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
-     */
-    public function get_image()
+    public function get_image(): ?InlineGlyph
     {
         return $this->image;
     }
 
-    /**
-     *
-     * @param string|\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $image
-     */
-    public function set_image($image)
+    public function set_image(?InlineGlyph $image)
     {
         $this->image = $image;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_label()
+    public function get_label(): ?string
     {
         return $this->label;
     }
 
-    /**
-     *
-     * @param string $label
-     */
-    public function set_label($label)
+    public function set_label(?string $label)
     {
         $this->label = $label;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_target()
+    public function get_target(): ?string
     {
         return $this->target;
     }
 
-    /**
-     *
-     * @param string $target
-     */
-    public function set_target($target)
+    public function set_target(?string $target)
     {
         $this->target = $target;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function needsConfirmation()
+    public function needsConfirmation(): bool
     {
         if ($this->get_confirmation() === false)
         {
@@ -315,11 +216,7 @@ class ToolbarItem
         }
     }
 
-    /**
-     *
-     * @param string $message
-     */
-    function set_confirm_message($message)
+    public function set_confirm_message(?string $message)
     {
         $this->confirmationMessage = $message;
     }

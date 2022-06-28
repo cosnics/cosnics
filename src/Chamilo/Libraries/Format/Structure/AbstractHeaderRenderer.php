@@ -14,6 +14,8 @@ use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
  */
 class AbstractHeaderRenderer implements HeaderRendererInterface
 {
+    private BannerRenderer $bannerRenderer;
+
     private PageConfiguration $pageConfiguration;
 
     private PathBuilder $pathBuilder;
@@ -21,12 +23,14 @@ class AbstractHeaderRenderer implements HeaderRendererInterface
     private ThemePathBuilder $themePathBuilder;
 
     public function __construct(
-        PageConfiguration $pageConfiguration, PathBuilder $pathBuilder, ThemePathBuilder $themePathBuilder
+        PageConfiguration $pageConfiguration, PathBuilder $pathBuilder, ThemePathBuilder $themePathBuilder,
+        BannerRenderer $bannerRenderer
     )
     {
         $this->pageConfiguration = $pageConfiguration;
         $this->pathBuilder = $pathBuilder;
         $this->themePathBuilder = $themePathBuilder;
+        $this->bannerRenderer = $bannerRenderer;
     }
 
     /**
@@ -55,14 +59,14 @@ class AbstractHeaderRenderer implements HeaderRendererInterface
 
         $html[] = '<body dir="' . $pageConfiguration->getTextDirection() . '">';
 
-        if ($pageConfiguration->getViewMode() != Page::VIEW_MODE_HEADERLESS)
+        if ($pageConfiguration->getViewMode() != PageConfiguration::VIEW_MODE_HEADERLESS)
         {
-            $html[] = $this->getBanner()->render();
+            $html[] = $this->getBannerRenderer()->render();
         }
 
         $classes = $pageConfiguration->getContainerMode();
 
-        if ($pageConfiguration->getViewMode() == Page::VIEW_MODE_HEADERLESS)
+        if ($pageConfiguration->getViewMode() == PageConfiguration::VIEW_MODE_HEADERLESS)
         {
             $classes .= ' container-headerless';
         }
@@ -121,14 +125,9 @@ class AbstractHeaderRenderer implements HeaderRendererInterface
         );
     }
 
-    protected function getBanner(): Banner
+    public function getBannerRenderer(): BannerRenderer
     {
-        $pageConfiguration = $this->getPageConfiguration();
-
-        return new Banner(
-            $pageConfiguration->getApplication(), $pageConfiguration->getViewMode(),
-            $pageConfiguration->getContainerMode()
-        );
+        return $this->bannerRenderer;
     }
 
     public function getPageConfiguration(): PageConfiguration

@@ -2,10 +2,7 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
 use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
-use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 
 /**
  * This class tracks the visits to pages
@@ -14,16 +11,14 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Visit extends SimpleTracker
 {
-    const PROPERTY_ENTER_DATE = 'enter_date';
+    use DependencyInjectionContainerTrait;
 
-    const PROPERTY_LEAVE_DATE = 'leave_date';
-
-    const PROPERTY_LOCATION = 'location';
-
-    const PROPERTY_USER_ID = 'user_id';
-
-    const TYPE_ENTER = 'enter';
-    const TYPE_LEAVE = 'leave';
+    public const PROPERTY_ENTER_DATE = 'enter_date';
+    public const PROPERTY_LEAVE_DATE = 'leave_date';
+    public const PROPERTY_LOCATION = 'location';
+    public const PROPERTY_USER_ID = 'user_id';
+    public const TYPE_ENTER = 'enter';
+    public const TYPE_LEAVE = 'leave';
 
     public function run(array $parameters = [])
     {
@@ -56,6 +51,14 @@ class Visit extends SimpleTracker
                 self::PROPERTY_LOCATION
             )
         );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'tracking_user_visit';
     }
 
     /**
@@ -151,13 +154,15 @@ class Visit extends SimpleTracker
 
     private function track_enter()
     {
+        $this->initializeContainer();
         $this->init_enter();
         $success = $this->create();
         if ($success)
         {
             $tracker_id = $this->get_id();
             $html_header = "<script>var tracker={$tracker_id};</script>";
-            Page::getInstance()->getHeader()->addHtmlHeader($html_header);
+
+            $this->getPageConfiguration()->addHtmlHeader($html_header);
         }
     }
 
@@ -182,13 +187,5 @@ class Visit extends SimpleTracker
         {
             $this->set_id($parameters[self::PROPERTY_ID]);
         }
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'tracking_user_visit';
     }
 }

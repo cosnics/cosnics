@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
-use Chamilo\Libraries\Format\Structure\BaseHeader;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
 use Throwable;
@@ -30,12 +30,7 @@ class NewRelicExceptionLogger implements ExceptionLoggerInterface
         $this->configureChamiloParameters();
     }
 
-    /**
-     * Adds an exception logger for javascript to the header
-     *
-     * @param \Chamilo\Libraries\Format\Structure\BaseHeader $header
-     */
-    public function addJavascriptExceptionLogger(BaseHeader $header)
+    public function addJavascriptExceptionLogger(PageConfiguration $pageConfiguration)
     {
     }
 

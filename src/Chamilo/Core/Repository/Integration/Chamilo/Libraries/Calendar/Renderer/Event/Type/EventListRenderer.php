@@ -80,7 +80,7 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
                         if ($url)
                         {
                             $render[] =
-                                '<a onclick="javascript:openPopup(\'' . $url . '\'); return false;" href="' . $url .
+                                '<a onclick="javascript:openPopup(\'' . addslashes($url) . '\'); return false;" href="' . $url .
                                 '">';
                         }
 

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component\AjaxComponent;
 use Chamilo\Libraries\Architecture\AjaxManager;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use RuntimeException;
 
@@ -14,15 +15,19 @@ use RuntimeException;
  */
 abstract class Manager extends AjaxManager
 {
-    const PARAM_ACTION = 'LearningPathAjaxAction';
+    public const ACTION_ADD_LEARNING_PATH_TREE_NODE = 'AddTreeNode';
 
-    const ACTION_GET_LEARNING_PATH_TREE_NODES = 'GetTreeNodes';
-    const ACTION_MOVE_LEARNING_PATH_TREE_NODE = 'MoveTreeNode';
-    const ACTION_ADD_LEARNING_PATH_TREE_NODE = 'AddTreeNode';
-    const ACTION_UPDATE_LEARNING_PATH_TREE_NODE_TITLE = 'UpdateTreeNodeTitle';
-    const ACTION_DELETE_LEARNING_PATH_TREE_NODE = 'DeleteTreeNode';
+    public const ACTION_DELETE_LEARNING_PATH_TREE_NODE = 'DeleteTreeNode';
 
-    const DEFAULT_ACTION = self::ACTION_GET_LEARNING_PATH_TREE_NODES;
+    public const ACTION_GET_LEARNING_PATH_TREE_NODES = 'GetTreeNodes';
+
+    public const ACTION_MOVE_LEARNING_PATH_TREE_NODE = 'MoveTreeNode';
+
+    public const ACTION_UPDATE_LEARNING_PATH_TREE_NODE_TITLE = 'UpdateTreeNodeTitle';
+
+    public const DEFAULT_ACTION = self::ACTION_GET_LEARNING_PATH_TREE_NODES;
+
+    public const PARAM_ACTION = 'LearningPathAjaxAction';
 
     /**
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
@@ -30,7 +35,7 @@ abstract class Manager extends AjaxManager
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
-        if(!$this->get_application() instanceof AjaxComponent)
+        if (!$this->get_application() instanceof AjaxComponent)
         {
             throw new RuntimeException(
                 'The LearningPath display ajax application should only be run from ' .
@@ -39,10 +44,7 @@ abstract class Manager extends AjaxManager
         }
     }
 
-    /**
-     * @return AjaxComponent
-     */
-    public function get_application()
+    public function get_application(): ?Application
     {
         return parent::get_application();
     }

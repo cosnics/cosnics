@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\Application;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
  *
@@ -13,45 +14,15 @@ use Chamilo\Core\User\Storage\DataClass\User;
 interface ApplicationConfigurationInterface
 {
 
-    /**
-     *
-     * @param string $key
-     * @param string $defaultValue
-     *
-     * @return string
-     */
-    public function get($key, $defaultValue = null);
+    public function get(string $key, ?string $defaultValue = null): string;
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function getApplication();
+    public function getApplication(): ?Application;
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    public function getRequest();
+    public function getRequest(): ChamiloRequest;
 
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getUser();
+    public function getUser(): ?User;
 
-    /**
-     *
-     * @param string $key
-     * @param string $value
-     */
-    public function set($key, $value);
+    public function set(string $key, string $value): ApplicationConfigurationInterface;
 
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function setUser(User $user);
+    public function setUser(?User $user): ApplicationConfigurationInterface;
 }

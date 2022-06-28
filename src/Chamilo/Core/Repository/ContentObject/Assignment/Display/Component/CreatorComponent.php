@@ -108,7 +108,7 @@ class CreatorComponent extends Manager
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $parameters = [
             'HEADER' => parent::render_header($pageTitle),

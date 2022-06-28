@@ -16,20 +16,19 @@ use RuntimeException;
  */
 abstract class Manager extends Application
 {
-    const EPHORUS_TRANSLATION_CONTEXT = 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CHANGE_INDEX_VISIBILITY = 'IndexVisibilityChanger';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_EXPORT_RESULT = 'ResultExporter';
+    public const ACTION_PUBLISH_LATEST_DOCUMENTS = 'LatestDocumentsPublisher';
+    public const ACTION_VIEW_RESULT = 'ResultViewer';
 
-    const PARAM_ACTION = 'assignment_ephorus_action';
-    const PARAM_ENTRY_ID = 'entry_id';
-    const PARAM_SOURCE = 'source';
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const EPHORUS_TRANSLATION_CONTEXT = 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus';
 
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_CREATE = 'Creator';
-    const ACTION_CHANGE_INDEX_VISIBILITY = 'IndexVisibilityChanger';
-    const ACTION_PUBLISH_LATEST_DOCUMENTS = 'LatestDocumentsPublisher';
-    const ACTION_VIEW_RESULT = 'ResultViewer';
-    const ACTION_EXPORT_RESULT = 'ResultExporter';
-
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const PARAM_ACTION = 'assignment_ephorus_action';
+    public const PARAM_ENTRY_ID = 'entry_id';
+    public const PARAM_SOURCE = 'source';
 
     /**
      *
@@ -48,20 +47,20 @@ abstract class Manager extends Application
     }
 
     /**
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment|\Chamilo\Core\Repository\Storage\DataClass\ContentObject
+     */
+    public function getAssignment()
+    {
+        return $this->getEphorusComponent()->getAssignment();
+    }
+
+    /**
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider |
      *     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface
      */
     public function getDataProvider()
     {
         return $this->getEphorusComponent()->getDataProvider();
-    }
-
-    /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment|\Chamilo\Core\Repository\Storage\DataClass\ContentObject
-     */
-    public function getAssignment()
-    {
-        return $this->getEphorusComponent()->getAssignment();
     }
 
     /**
@@ -73,18 +72,18 @@ abstract class Manager extends Application
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager
-     */
-    public function getRequestManager()
-    {
-        return $this->getService(RequestManager::class);
-    }
-
-    /**
      * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer
      */
     public function getReportRenderer()
     {
         return $this->getService(ReportRenderer::class);
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager
+     */
+    public function getRequestManager()
+    {
+        return $this->getService(RequestManager::class);
     }
 }

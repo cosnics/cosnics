@@ -178,7 +178,7 @@ class CourseGroup extends NestedSet
      *
      * @return int
      */
-    public function get_id(): ?int
+    public function get_id(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_ID);
     }

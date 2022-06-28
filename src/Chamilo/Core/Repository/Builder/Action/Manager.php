@@ -18,17 +18,17 @@ use Exception;
  */
 abstract class Manager extends Application
 {
-    const ACTION_PREVIEW = 'Preview';
-    const ATTACHMENT_VIEWER_COMPONENT = 'AttachmentViewer';
-    const BROWSER_COMPONENT = 'Browser';
-    const CREATOR_COMPONENT = 'Creator';
-    const DEFAULT_ACTION = self::BROWSER_COMPONENT;
-    const DELETER_COMPONENT = 'Deleter';
-    const MOVER_COMPONENT = 'Mover';
-    const PARAM_ACTION = \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION;
-    const PARENT_CHANGER_COMPONENT = 'ParentChanger';
-    const UPDATER_COMPONENT = 'Updater';
-    const VIEWER_COMPONENT = 'Viewer';
+    public const ACTION_PREVIEW = 'Preview';
+    public const ATTACHMENT_VIEWER_COMPONENT = 'AttachmentViewer';
+    public const BROWSER_COMPONENT = 'Browser';
+    public const CREATOR_COMPONENT = 'Creator';
+    public const DEFAULT_ACTION = self::BROWSER_COMPONENT;
+    public const DELETER_COMPONENT = 'Deleter';
+    public const MOVER_COMPONENT = 'Mover';
+    public const PARAM_ACTION = \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION;
+    public const PARENT_CHANGER_COMPONENT = 'ParentChanger';
+    public const UPDATER_COMPONENT = 'Updater';
+    public const VIEWER_COMPONENT = 'Viewer';
 
     public static function factory($type, $application)
     {

@@ -111,7 +111,7 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $availableTabs = $this->getAvailableTabs();
 

@@ -10,7 +10,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Libraries\Architecture\Factory
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -18,31 +17,12 @@ use Symfony\Component\Translation\Translator;
 class ApplicationFactory
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    private $request;
+    private ChamiloRequest $request;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    private $stringUtilities;
+    private StringUtilities $stringUtilities;
 
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
+    private Translator $translator;
 
-    /**
-     * ApplicationFactory constructor.
-     *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
     public function __construct(ChamiloRequest $request, StringUtilities $stringUtilities, Translator $translator)
     {
         $this->request = $request;
@@ -51,14 +31,9 @@ class ApplicationFactory
     }
 
     /**
-     *
-     * @param string $context
-     * @param string $action
-     *
-     * @return string
-     * @throws ClassNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
      */
-    private function buildClassName($context, $action)
+    private function buildClassName(string $context, string $action): string
     {
         $className = $context . '\Component\\' . $action . 'Component';
 
@@ -78,17 +53,12 @@ class ApplicationFactory
     }
 
     /**
-     * @param string $context
-     * @param ApplicationConfiguration $applicationConfiguration
-     * @param string $fallBackAction
-     *
-     * @return mixed
-     * @throws ClassNotExistException
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     protected function createApplication(
-        string $context, ApplicationConfiguration $applicationConfiguration, string $fallBackAction = null
-    )
+        string $context, ApplicationConfiguration $applicationConfiguration, ?string $fallBackAction = null
+    ): Application
     {
         $action = $this->getAction($context, $applicationConfiguration, $fallBackAction);
         $className = $this->getClassName($context, $applicationConfiguration, $action);
@@ -109,19 +79,13 @@ class ApplicationFactory
 
         foreach ($parameters as $parameter)
         {
-            $application->set_parameter($parameter, $this->getRequest()->get($parameter));
+            $application->set_parameter($parameter, $this->getRequest()->getFromPostOrUrl($parameter));
         }
 
         return $application;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     *
-     * @return integer
-     */
-    protected function determineLevel(Application $application = null)
+    protected function determineLevel(?Application $application = null): int
     {
         if ($application instanceof Application)
         {
@@ -138,16 +102,11 @@ class ApplicationFactory
     }
 
     /**
-     * @param string $context
-     * @param ApplicationConfiguration $applicationConfiguration
-     * @param string|null $fallBackAction
-     *
-     * @return string
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     protected function getAction(
-        string $context, ApplicationConfiguration $applicationConfiguration, string $fallBackAction = null
-    )
+        string $context, ApplicationConfiguration $applicationConfiguration, ?string $fallBackAction = null
+    ): string
     {
         $actionParameter = $this->getActionParameter($context);
         $managerClass = $this->getManagerClass($context);
@@ -157,15 +116,7 @@ class ApplicationFactory
 
         if (is_array($actions))
         {
-            if (isset($actions[$level]))
-            {
-                $action = $actions[$level];
-            }
-            else
-            {
-                // TODO: Catch the fact that there might not be a default action
-                $action = $managerClass::DEFAULT_ACTION;
-            }
+            $action = $actions[$level] ?? $managerClass::DEFAULT_ACTION;
         }
         else
         {
@@ -176,13 +127,9 @@ class ApplicationFactory
     }
 
     /**
-     *
-     * @param string $context
-     *
-     * @return string
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    protected function getActionParameter($context)
+    protected function getActionParameter(string $context): string
     {
         $managerClass = $this->getManagerClass($context);
 
@@ -190,17 +137,13 @@ class ApplicationFactory
     }
 
     /**
-     * @param string $context
-     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfiguration $applicationConfiguration
-     * @param string $fallBackAction When no action is available in request, use this if you want an action other then
-     *     the default
-     *
-     * @return mixed
+     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function getApplication(
-        string $context, ApplicationConfiguration $applicationConfiguration, string $fallBackAction = null
-    )
+        string $context, ApplicationConfiguration $applicationConfiguration, ?string $fallBackAction = null
+    ): Application
     {
         $application = $this->createApplication($context, $applicationConfiguration, $fallBackAction);
         $application->get_breadcrumb_generator()->generateBreadcrumbs();
@@ -209,17 +152,12 @@ class ApplicationFactory
     }
 
     /**
-     * @param string $context
-     * @param ApplicationConfiguration $applicationConfiguration
-     * @param string|null $action
-     *
-     * @return string
-     * @throws ClassNotExistException
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public function getClassName(
-        string $context, ApplicationConfiguration $applicationConfiguration, string $action = null
-    )
+        string $context, ApplicationConfiguration $applicationConfiguration, ?string $action = null
+    ): string
     {
         if (is_null($action))
         {
@@ -230,13 +168,9 @@ class ApplicationFactory
     }
 
     /**
-     * @param $context
-     *
-     * @return string
-     *
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    protected function getDefaultAction($context)
+    protected function getDefaultAction(string $context): string
     {
         $managerClass = $this->getManagerClass($context);
 
@@ -244,13 +178,9 @@ class ApplicationFactory
     }
 
     /**
-     *
-     * @param string $context
-     *
-     * @return string
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    protected function getManagerClass($context)
+    protected function getManagerClass(string $context): string
     {
         $managerClass = $context . '\Manager';
 
@@ -258,7 +188,7 @@ class ApplicationFactory
         {
             throw new UserException(
                 $this->getTranslator()->trans(
-                    'InvalidApplication', array('CONTEXT' => $context), 'Chamilo\Libraries'
+                    'InvalidApplication', ['CONTEXT' => $context], 'Chamilo\Libraries'
                 )
             );
         }
@@ -266,44 +196,26 @@ class ApplicationFactory
         return $managerClass;
     }
 
-    /**
-     *
-     * @param ApplicationConfiguration $applicationConfiguration
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    protected function getParentApplication(ApplicationConfiguration $applicationConfiguration)
+    protected function getParentApplication(ApplicationConfiguration $applicationConfiguration): ?Application
     {
         return $applicationConfiguration->getApplication();
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    public function getRequest()
+    public function getRequest(): ChamiloRequest
     {
         return $this->request;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     */
     public function setRequest(ChamiloRequest $request)
     {
         $this->request = $request;
     }
 
     /**
-     * @param string $actionParameter
-     * @param string $context
-     * @param string|null $fallBackAction
-     *
-     * @return string
-     * @throws \Exception
+     * @return string|string[]
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    protected function getRequestedAction(string $actionParameter, string $context, string $fallBackAction = null)
+    protected function getRequestedAction(string $actionParameter, string $context, ?string $fallBackAction = null)
     {
         $request = $this->getRequest();
 
@@ -329,37 +241,22 @@ class ApplicationFactory
         return $this->getDefaultAction($context);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    public function getStringUtilities()
+    public function getStringUtilities(): StringUtilities
     {
         return $this->stringUtilities;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
     public function setStringUtilities(StringUtilities $stringUtilities)
     {
         $this->stringUtilities = $stringUtilities;
     }
 
-    /**
-     *
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator()
+    public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslation(Translator $translator)
+    public function setTranslator(Translator $translator)
     {
         $this->translator = $translator;
     }

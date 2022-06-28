@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -26,22 +26,22 @@ class AttachmentViewerComponent extends Manager
 
         $attachment_id = Request::get(self::PARAM_ATTACHMENT_ID);
 
-        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+        $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
         if ($object_id && $attachment_id)
         {
             $object = DataManager::retrieve_by_id(
-                ContentObject::class,
-                $object_id);
+                ContentObject::class, $object_id
+            );
 
-            if (! RightsService::getInstance()->canViewContentObject($this->get_user(), $object, $this->getWorkspace()))
+            if (!RightsService::getInstance()->canViewContentObject($this->get_user(), $object, $this->getWorkspace()))
             {
                 throw new NotAllowedException();
             }
 
             $attachment = DataManager::retrieve_by_id(
-                ContentObject::class,
-                $attachment_id);
+                ContentObject::class, $attachment_id
+            );
 
             $html = [];
 
@@ -50,10 +50,8 @@ class AttachmentViewerComponent extends Manager
                 $html[] = $this->render_header();
 
                 $html[] = ContentObjectRenditionImplementation::launch(
-                    $attachment,
-                    ContentObjectRendition::FORMAT_HTML,
-                    ContentObjectRendition::VIEW_FULL,
-                    $this);
+                    $attachment, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL, $this
+                );
                 $html[] = $this->render_footer();
             }
             else

@@ -11,25 +11,25 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
  */
 abstract class Manager extends Application
 {
-    const ACTION_ACTIVATE = 'Activator';
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_DEACTIVATE = 'Deactivator';
-    const ACTION_INSTALL = 'Installer';
-    const ACTION_REMOVE = 'Remover';
-    const ACTION_VIEW = 'Viewer';
+    public const ACTION_ACTIVATE = 'Activator';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_DEACTIVATE = 'Deactivator';
+    public const ACTION_INSTALL = 'Installer';
+    public const ACTION_REMOVE = 'Remover';
+    public const ACTION_VIEW = 'Viewer';
 
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
-    const PARAM_ACTION = 'manager_action';
-    const PARAM_ACTIVATE_SELECTED = 'activate';
-    const PARAM_CONTEXT = 'context';
-    const PARAM_DEACTIVATE_SELECTED = 'deactivate';
-    const PARAM_INSTALL_SELECTED = 'install';
-    const PARAM_INSTALL_TYPE = 'type';
-    const PARAM_PACKAGE = 'package';
-    const PARAM_REGISTRATION = 'registration';
-    const PARAM_REGISTRATION_TYPE = 'type';
-    const PARAM_SECTION = 'section';
+    public const PARAM_ACTION = 'manager_action';
+    public const PARAM_ACTIVATE_SELECTED = 'activate';
+    public const PARAM_CONTEXT = 'context';
+    public const PARAM_DEACTIVATE_SELECTED = 'deactivate';
+    public const PARAM_INSTALL_SELECTED = 'install';
+    public const PARAM_INSTALL_TYPE = 'type';
+    public const PARAM_PACKAGE = 'package';
+    public const PARAM_REGISTRATION = 'registration';
+    public const PARAM_REGISTRATION_TYPE = 'type';
+    public const PARAM_SECTION = 'section';
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {

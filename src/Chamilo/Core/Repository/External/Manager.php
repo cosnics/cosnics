@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\External;
 
-use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\External\Renderer\Renderer;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
@@ -11,14 +10,13 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
@@ -34,8 +32,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 abstract class Manager extends Application implements NoContextComponent
 {
-
-    // Actions
     public const ACTION_BROWSE_EXTERNAL_REPOSITORY = 'Browser';
     public const ACTION_CONFIGURE_EXTERNAL_REPOSITORY = 'Configurer';
     public const ACTION_DELETE_EXTERNAL_REPOSITORY = 'Deleter';
@@ -50,24 +46,14 @@ abstract class Manager extends Application implements NoContextComponent
     public const ACTION_UPLOAD_EXTERNAL_REPOSITORY = 'Uploader';
     public const ACTION_VIEW_EXTERNAL_REPOSITORY = 'Viewer';
 
-    // Default action
-
     public const DEFAULT_ACTION = self::ACTION_BROWSE_EXTERNAL_REPOSITORY;
 
-    // Parameters
-
     public const PARAM_EMBEDDED = 'embedded';
-
     public const PARAM_EXTERNAL_REPOSITORY = 'external_instance';
-
     public const PARAM_EXTERNAL_REPOSITORY_ID = 'external_repository_id';
-
     public const PARAM_FOLDER = 'folder';
-
     public const PARAM_QUERY = 'query';
-
     public const PARAM_RENDERER = 'renderer';
-
     public const PARAM_USER_QUOTUM = 'default_user_quotum';
 
     /**
@@ -142,13 +128,7 @@ abstract class Manager extends Application implements NoContextComponent
         return $this->get_external_repository_manager_connector()->delete_external_repository_object($id);
     }
 
-    /**
-     *
-     * @param $type string
-     *
-     * @return bool
-     */
-    public static function exists($type)
+    public static function exists(string $type): bool
     {
         $path = Path::getInstance()->namespaceToFullPath(__NAMESPACE__) . '../implementation';
         $external_repository_path = $path . '/' . $type;
@@ -400,11 +380,6 @@ abstract class Manager extends Application implements NoContextComponent
         return [];
     }
 
-    public function get_menu()
-    {
-        return null;
-    }
-
     /**
      *
      * @return array
@@ -432,26 +407,6 @@ abstract class Manager extends Application implements NoContextComponent
             self::PARAM_ACTION => self::ACTION_VIEW_EXTERNAL_REPOSITORY,
             self::PARAM_EXTERNAL_REPOSITORY_ID => $external_instance_sync->get_external_object_id()
         );
-    }
-
-    public static function get_packages_from_filesystem($type = null)
-    {
-        $external_repository_managers = [];
-
-        $path = Path::getInstance()->namespaceToFullPath('Chamilo\Core\Repository\Implementation');
-        $directories = Filesystem::get_directory_content($path, Filesystem::LIST_DIRECTORIES, false);
-
-        foreach ($directories as $directory)
-        {
-            $namespace = self::get_namespace(basename($directory));
-
-            if (Package::exists($namespace))
-            {
-                $external_repository_managers[] = $namespace;
-            }
-        }
-
-        return $external_repository_managers;
     }
 
     public static function get_registered_types($status = Registration::STATUS_ACTIVE)
@@ -515,7 +470,7 @@ abstract class Manager extends Application implements NoContextComponent
         return !(boolean) $this->get_parameter(self::PARAM_EMBEDDED);
     }
 
-    public function render_footer()
+    public function render_footer(): string
     {
         $html = [];
 
@@ -525,7 +480,7 @@ abstract class Manager extends Application implements NoContextComponent
         return implode(PHP_EOL, $html);
     }
 
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $action = $this->get_action();
 
@@ -533,7 +488,7 @@ abstract class Manager extends Application implements NoContextComponent
 
         if (!$this->is_stand_alone())
         {
-            Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+            $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
         }
 
         $html[] = parent::render_header($pageTitle);

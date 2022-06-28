@@ -7,6 +7,7 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
@@ -21,102 +22,52 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
  */
 abstract class Manager extends Application
 {
-    // Parameters
-    const PARAM_USER_USER_ID = 'user_id';
-    const PARAM_ACTIVE = 'active';
-    const PARAM_CHOICE = 'choice';
-    const PARAM_FIRSTLETTER = 'firstletter';
-    const PARAM_REFER = 'refer';
+    public const ACTION_ACCESS_ANONYMOUSLY = 'AnonymousAccess';
+    public const ACTION_ACTIVATE = 'Activator';
+    public const ACTION_ADDITIONAL_ACCOUNT_INFORMATION = 'AdditionalAccountInformation';
+    public const ACTION_ADMIN_USER = 'AdminUser';
+    public const ACTION_APPROVE_USER = 'UserAccepter';
+    public const ACTION_BROWSE_USERS = 'AdminUserBrowser';
+    public const ACTION_BUILD_USER_FIELDS = 'UserFieldsBuilder';
+    public const ACTION_CHANGE_ACTIVATION = 'ActiveChanger';
+    public const ACTION_CHANGE_PICTURE = 'Picture';
+    public const ACTION_CHANGE_USER = 'ChangeUser';
+    public const ACTION_CREATE_USER = 'Creator';
+    public const ACTION_DEACTIVATE = 'Deactivator';
+    public const ACTION_DELETE_USER = 'Deleter';
+    public const ACTION_DENY_USER = 'UserDenier';
+    public const ACTION_EMAIL = 'Emailer';
+    public const ACTION_EXPORT_USERS = 'Exporter';
+    public const ACTION_IMPORT_USERS = 'Importer';
+    public const ACTION_LOGOUT = 'Logout';
+    public const ACTION_MANAGE_METADATA = 'MetadataManager';
+    public const ACTION_QUICK_LANG = 'QuickLanguage';
+    public const ACTION_REGISTER_USER = 'Register';
+    public const ACTION_REPORTING = 'Reporting';
+    public const ACTION_RESET_PASSWORD = 'ResetPassword';
+    public const ACTION_RESET_PASSWORD_MULTI = 'MultiPasswordResetter';
+    public const ACTION_UPDATE_USER = 'Updater';
+    public const ACTION_USER_APPROVAL_BROWSER = 'UserApprovalBrowser';
+    public const ACTION_USER_APPROVER = 'UserApprover';
+    public const ACTION_USER_DETAIL = 'UserDetail';
+    public const ACTION_USER_SETTINGS = 'UserSettings';
+    public const ACTION_VIEW_ACCOUNT = 'Account';
+    public const ACTION_VIEW_QUOTA = 'QuotaViewer';
 
-    // Actions
-    const ACTION_CREATE_USER = 'Creator';
-    const ACTION_BROWSE_USERS = 'AdminUserBrowser';
-    const ACTION_EXPORT_USERS = 'Exporter';
-    const ACTION_IMPORT_USERS = 'Importer';
-    const ACTION_UPDATE_USER = 'Updater';
-    const ACTION_DELETE_USER = 'Deleter';
-    const ACTION_REGISTER_USER = 'Register';
-    const ACTION_LOGOUT = 'Logout';
-    const ACTION_VIEW_ACCOUNT = 'Account';
-    const ACTION_CHANGE_PICTURE = 'Picture';
-    const ACTION_EMAIL = 'Emailer';
-    const ACTION_RESET_PASSWORD = 'ResetPassword';
-    const ACTION_CHANGE_USER = 'ChangeUser';
-    const ACTION_ADMIN_USER = 'AdminUser';
-    const ACTION_REPORTING = 'Reporting';
-    const ACTION_VIEW_QUOTA = 'QuotaViewer';
-    const ACTION_USER_DETAIL = 'UserDetail';
-    const ACTION_CHANGE_ACTIVATION = 'ActiveChanger';
-    const ACTION_ACTIVATE = 'Activator';
-    const ACTION_DEACTIVATE = 'Deactivator';
-    const ACTION_RESET_PASSWORD_MULTI = 'MultiPasswordResetter';
-    const ACTION_BUILD_USER_FIELDS = 'UserFieldsBuilder';
-    const ACTION_ADDITIONAL_ACCOUNT_INFORMATION = 'AdditionalAccountInformation';
-    const ACTION_USER_SETTINGS = 'UserSettings';
-    const ACTION_USER_APPROVAL_BROWSER = 'UserApprovalBrowser';
-    const ACTION_USER_APPROVER = 'UserApprover';
-    const ACTION_APPROVE_USER = 'UserAccepter';
-    const ACTION_DENY_USER = 'UserDenier';
-    const ACTION_MANAGE_METADATA = 'MetadataManager';
-    const ACTION_QUICK_LANG = 'QuickLanguage';
-    const ACTION_ACCESS_ANONYMOUSLY = 'AnonymousAccess';
+    public const DEFAULT_ACTION = self::ACTION_BROWSE_USERS;
 
-    // Default action
-    const DEFAULT_ACTION = self::ACTION_BROWSE_USERS;
-
-    public function retrieve_user_by_username($username)
-    {
-        return DataManager::retrieve_user_by_username($username);
-    }
-
-    public function user_deletion_allowed($user)
-    {
-        return DataManager::user_deletion_allowed($user);
-    }
+    public const PARAM_ACTIVE = 'active';
+    public const PARAM_CHOICE = 'choice';
+    public const PARAM_FIRSTLETTER = 'firstletter';
+    public const PARAM_REFER = 'refer';
+    public const PARAM_USER_USER_ID = 'user_id';
 
     /**
-     * gets the user editing url
-     *
-     * @param return the requested url
+     * @return AuthenticationValidator
      */
-    public function get_user_editing_url($user)
+    public function getAuthenticationValidator()
     {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_UPDATE_USER, self::PARAM_USER_USER_ID => $user->get_id()));
-    }
-
-    public function get_change_user_url($user)
-    {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_CHANGE_USER, self::PARAM_USER_USER_ID => $user->get_id()));
-    }
-
-    /**
-     * gets the user delete url
-     *
-     * @param return the requested url
-     */
-    public function get_user_delete_url($user)
-    {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_DELETE_USER, self::PARAM_USER_USER_ID => $user->get_id()));
-    }
-
-    public function get_reporting_url()
-    {
-        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_REPORTING));
-    }
-
-    public function get_user_reporting_url($user_id)
-    {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_REPORTING, self::PARAM_USER_USER_ID => $user_id));
-    }
-
-    public function get_user_detail_url($user_id)
-    {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_USER_DETAIL, self::PARAM_USER_USER_ID => $user_id));
+        return $this->getService(AuthenticationValidator::class);
     }
 
     public function get_approve_user_url($user)
@@ -126,7 +77,35 @@ abstract class Manager extends Application
                 self::PARAM_CONTEXT => self::context(),
                 self::PARAM_ACTION => self::ACTION_USER_APPROVER,
                 self::PARAM_USER_USER_ID => $user->get_id(),
-                self::PARAM_CHOICE => UserApproverComponent::CHOICE_APPROVE));
+                self::PARAM_CHOICE => UserApproverComponent::CHOICE_APPROVE
+            )
+        );
+    }
+
+    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
+    {
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
+    }
+
+    public function get_change_user_url($user)
+    {
+        return $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_CHANGE_USER, self::PARAM_USER_USER_ID => $user->get_id())
+        );
+    }
+
+    /**
+     * Returns the last modification date for the terms and conditions
+     *
+     * @return mixed
+     */
+    public static function get_date_terms_and_conditions_last_modified()
+    {
+        $platform_setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
+            'date_terms_and_conditions_update', self::context()
+        );
+
+        return $platform_setting->get_value();
     }
 
     public function get_deny_user_url($user)
@@ -136,19 +115,28 @@ abstract class Manager extends Application
                 self::PARAM_CONTEXT => self::context(),
                 self::PARAM_ACTION => self::ACTION_USER_APPROVER,
                 self::PARAM_USER_USER_ID => $user->get_id(),
-                self::PARAM_CHOICE => UserApproverComponent::CHOICE_DENY));
-    }
-
-    public function get_email_user_url($user)
-    {
-        return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_EMAIL, self::PARAM_USER_USER_ID => $user->get_id()));
+                self::PARAM_CHOICE => UserApproverComponent::CHOICE_DENY
+            )
+        );
     }
 
     public function get_edit_metadata_url($user)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_MANAGE_METADATA, self::PARAM_USER_USER_ID => $user->get_id()));
+            array(self::PARAM_ACTION => self::ACTION_MANAGE_METADATA, self::PARAM_USER_USER_ID => $user->get_id())
+        );
+    }
+
+    public function get_email_user_url($user)
+    {
+        return $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_EMAIL, self::PARAM_USER_USER_ID => $user->get_id())
+        );
+    }
+
+    public function get_reporting_url()
+    {
+        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_REPORTING));
     }
 
     /**
@@ -159,6 +147,49 @@ abstract class Manager extends Application
     public static function get_terms_and_conditions()
     {
         return implode(PHP_EOL, file(Path::getInstance()->getBasePath() . 'files/documentation/license.txt'));
+    }
+
+    /**
+     * gets the user delete url
+     *
+     * @param return the requested url
+     */
+    public function get_user_delete_url($user)
+    {
+        return $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_DELETE_USER, self::PARAM_USER_USER_ID => $user->get_id())
+        );
+    }
+
+    public function get_user_detail_url($user_id)
+    {
+        return $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_USER_DETAIL, self::PARAM_USER_USER_ID => $user_id)
+        );
+    }
+
+    /**
+     * gets the user editing url
+     *
+     * @param return the requested url
+     */
+    public function get_user_editing_url($user)
+    {
+        return $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_UPDATE_USER, self::PARAM_USER_USER_ID => $user->get_id())
+        );
+    }
+
+    public function get_user_reporting_url($user_id)
+    {
+        return $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_REPORTING, self::PARAM_USER_USER_ID => $user_id)
+        );
+    }
+
+    public function retrieve_user_by_username($username)
+    {
+        return DataManager::retrieve_user_by_username($username);
     }
 
     /**
@@ -178,8 +209,8 @@ abstract class Manager extends Application
         $success &= fwrite($fh, $stringData);
 
         $platform_setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
-            'date_terms_and_conditions_update',
-            self::context());
+            'date_terms_and_conditions_update', self::context()
+        );
 
         $platform_setting->set_value(time());
         $success &= $platform_setting->update();
@@ -187,35 +218,8 @@ abstract class Manager extends Application
         return $success;
     }
 
-    /**
-     * Returns the last modification date for the terms and conditions
-     *
-     * @return mixed
-     */
-    public static function get_date_terms_and_conditions_last_modified()
+    public function user_deletion_allowed($user)
     {
-        $platform_setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
-            'date_terms_and_conditions_update',
-            self::context());
-
-        return $platform_setting->get_value();
-    }
-
-    /**
-     * Returns the admin breadcrumb generator
-     *
-     * @return \libraries\format\BreadcrumbGeneratorInterface
-     */
-    public function get_breadcrumb_generator()
-    {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
-    }
-
-    /**
-     * @return AuthenticationValidator
-     */
-    public function getAuthenticationValidator()
-    {
-        return $this->getService(AuthenticationValidator::class);
+        return DataManager::user_deletion_allowed($user);
     }
 }

@@ -15,14 +15,20 @@ use InvalidArgumentException;
  */
 abstract class Manager extends Application
 {
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_CREATE = 'Creator';
-    const ACTION_DELETE = 'Deleter';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_DELETE = 'Deleter';
 
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
-    const PARAM_ACTION = 'relation_instance_action';
-    const PARAM_RELATION_INSTANCE_ID = 'relation_instance_id';
+    public const PARAM_ACTION = 'relation_instance_action';
+    public const PARAM_RELATION_INSTANCE_ID = 'relation_instance_id';
+
+    /**
+     *
+     * @var \Chamilo\Core\Metadata\Storage\DataClass\Relation[]
+     */
+    private $relations;
 
     /**
      *
@@ -35,12 +41,6 @@ abstract class Manager extends Application
      * @var \Chamilo\Core\Metadata\Entity\EntityInterface[]
      */
     private $targetEntities;
-
-    /**
-     *
-     * @var \Chamilo\Core\Metadata\Storage\DataClass\Relation[]
-     */
-    private $relations;
 
     /**
      *

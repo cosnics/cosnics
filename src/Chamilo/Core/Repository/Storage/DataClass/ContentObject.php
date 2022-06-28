@@ -132,9 +132,9 @@ class ContentObject extends CompositeDataClass
      * @param $additionalProperties array The properties specific for this type of object. Associative array. Null if
      *        they are unknown at construction of the object; in this case, they will be retrieved when needed.
      */
-    public function __construct($default_properties = [], $additionalProperties = [])
+    public function __construct($default_properties = [], $additionalProperties = [], array $optionalProperties = [])
     {
-        parent::__construct($default_properties);
+        parent::__construct($default_properties, $optionalProperties);
         $this->setAdditionalProperties($additionalProperties);
         $this->oldState = $default_properties[self::PROPERTY_STATE];
     }
@@ -1367,29 +1367,6 @@ class ContentObject extends CompositeDataClass
     public function get_owner_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_OWNER_ID);
-    }
-
-    public function get_packages_from_filesystem()
-    {
-        $types = [];
-
-        $directories = Filesystem::get_directory_content(
-            Path::getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject'),
-            Filesystem::LIST_DIRECTORIES, true
-        );
-
-        foreach ($directories as $directory)
-        {
-            $directory_name_split = explode('Chamilo\Core\Repository\ContentObject\\', $directory);
-            $namespace = self::get_content_object_type_namespace($directory_name_split[1]);
-
-            if (Package::exists($namespace))
-            {
-                $types[] = $namespace;
-            }
-        }
-
-        return $types;
     }
 
     /**

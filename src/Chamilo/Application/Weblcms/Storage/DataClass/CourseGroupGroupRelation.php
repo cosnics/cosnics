@@ -271,7 +271,7 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return int
      */
-    function get_id(): ?int
+    function get_id(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_ID);
     }

@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -20,10 +20,9 @@ class PreviewerComponent extends Manager
     {
         $content_object = $this->get_root_content_object();
 
-        if (! RightsService::getInstance()->canViewContentObject(
-            $this->get_user(),
-            $content_object,
-            $this->getWorkspace()))
+        if (!RightsService::getInstance()->canViewContentObject(
+            $this->get_user(), $content_object, $this->getWorkspace()
+        ))
         {
             throw new NotAllowedException();
         }
@@ -32,7 +31,7 @@ class PreviewerComponent extends Manager
 
         if ($content_object)
         {
-            Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+            $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
             return $this->getPreview()->run();
         }
@@ -40,14 +39,6 @@ class PreviewerComponent extends Manager
         {
             return $this->display_error_page(Translation::get('NoObjectSelected', null, StringUtilities::LIBRARIES));
         }
-    }
-
-    public function get_root_content_object()
-    {
-        $content_object_id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
-        return DataManager::retrieve_by_id(
-            ContentObject::class,
-            $content_object_id);
     }
 
     public function getPreview()
@@ -58,7 +49,16 @@ class PreviewerComponent extends Manager
         $namespace = $contentObjectNamespace . '\Display\Preview';
 
         return $this->getApplicationFactory()->getApplication(
-            $namespace,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            $namespace, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        );
+    }
+
+    public function get_root_content_object()
+    {
+        $content_object_id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
+
+        return DataManager::retrieve_by_id(
+            ContentObject::class, $content_object_id
+        );
     }
 }

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Viewer;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -16,7 +17,6 @@ use Chamilo\Libraries\Platform\Session\Request;
  */
 abstract class Manager extends Application
 {
-    // Parameters
     public const ACTION_BROWSER = 'Browser';
     public const ACTION_CREATOR = 'Creator';
     public const ACTION_IMPORTER = 'Importer';
@@ -182,12 +182,7 @@ abstract class Manager extends Application
         $this->actions = $actions;
     }
 
-    /**
-     * Returns the breadcrumb generator
-     *
-     * @return BreadcrumbGenerator
-     */
-    public function get_breadcrumb_generator()
+    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
     {
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }

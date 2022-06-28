@@ -65,11 +65,7 @@ abstract class ItemComponent extends Manager implements DelegateComponent
         );
     }
 
-    /**
-     *
-     * @see \libraries\SubManager::render_footer()
-     */
-    public function render_footer()
+    public function render_footer(): string
     {
         $html = [];
 
@@ -80,11 +76,7 @@ abstract class ItemComponent extends Manager implements DelegateComponent
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @see \libraries\SubManager::render_header()
-     */
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $html = [];
 

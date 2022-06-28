@@ -193,7 +193,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
     }
 
-    public function get_menu()
+    public function get_menu(): string
     {
         $menu = new PackageTypeMenu(
             $this->getCurrentType(), $this->get_url(array(Manager::PARAM_REGISTRATION_TYPE => '__type__'))
@@ -302,7 +302,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $table->toHtml();
     }
 
-    public function has_menu()
+    public function has_menu(): bool
     {
         return true;
     }

@@ -27,15 +27,15 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class AdminUserBrowserComponent extends Manager implements TableSupport
 {
 
-    private $firstletter;
-
-    private $menu_breadcrumbs;
-
     /**
      *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
+
+    private $firstletter;
+
+    private $menu_breadcrumbs;
 
     /**
      * Runs this component and displays its output.
@@ -104,11 +104,7 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    /*
-     * (non-PHPdoc) @see common\libraries.NewObjectTableSupport::get_object_table_condition()
-     */
-
-    public function get_parameters()
+    public function get_parameters(): array
     {
         $parameters = parent::get_parameters();
         if (isset($this->buttonToolbarRenderer))

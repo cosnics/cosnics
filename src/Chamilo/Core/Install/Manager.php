@@ -3,15 +3,15 @@ namespace Chamilo\Core\Install;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Core\Install\Format\Structure\Footer;
-use Chamilo\Core\Install\Format\Structure\Header;
+use Chamilo\Core\Install\Format\Structure\FooterRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\FooterRendererInterface;
+use Chamilo\Libraries\Format\Structure\HeaderRendererInterface;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeaderRenderer;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -28,33 +28,17 @@ use Exception;
  */
 abstract class Manager extends Application implements NoContextComponent
 {
-    /**
-     * Constant defining an action of the repository manager.
-     */
-    const ACTION_INSTALL_PLATFORM = 'installer';
+    public const ACTION_INSTALL_PLATFORM = 'installer';
+    public const ACTION_INTRODUCTION = 'introduction';
+    public const ACTION_LICENSE = 'license';
+    public const ACTION_OVERVIEW = 'overview';
+    public const ACTION_REQUIREMENTS = 'requirements';
+    public const ACTION_SETTINGS = 'settings';
+    public const DEFAULT_ACTION = self::ACTION_INTRODUCTION;
+    public const PARAM_LANGUAGE = 'install_language';
+    public const PARAM_SETTINGS = 'install_settings';
 
-    const ACTION_INTRODUCTION = 'introduction';
-
-    const ACTION_LICENSE = 'license';
-
-    const ACTION_OVERVIEW = 'overview';
-
-    const ACTION_REQUIREMENTS = 'requirements';
-
-    const ACTION_SETTINGS = 'settings';
-
-    const DEFAULT_ACTION = self::ACTION_INTRODUCTION;
-
-    // Parameters
-
-    const PARAM_LANGUAGE = 'install_language';
-    const PARAM_SETTINGS = 'install_settings';
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader
-     */
-    private $wizardHeader;
+    private WizardHeader $wizardHeader;
 
     /**
      *
@@ -69,7 +53,7 @@ abstract class Manager extends Application implements NoContextComponent
     /**
      * Checks if the installation is allowed
      *
-     * @return boolean
+     * @return bool
      * @throws \ReflectionException
      */
     protected function checkInstallationAllowed()
@@ -101,6 +85,16 @@ abstract class Manager extends Application implements NoContextComponent
     public function getFileConfigurationLocator()
     {
         return $this->getService(FileConfigurationLocator::class);
+    }
+
+    public function getFooterRenderer(): FooterRendererInterface
+    {
+        return $this->getService(FooterRenderer::class);
+    }
+
+    public function getHeaderRenderer(): HeaderRendererInterface
+    {
+        return $this->getService('Chamilo\Core\Install\Format\Structure\HeaderRenderer');
     }
 
     /**
@@ -139,25 +133,6 @@ abstract class Manager extends Application implements NoContextComponent
         }
 
         return $language_list;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\Page
-     */
-    public function getPage()
-    {
-        if (!isset($this->page))
-        {
-            $header = new Header(
-                Page::VIEW_MODE_FULL, 'container-fluid', Translation::getInstance()->getLanguageIsocode(), 'ltr'
-            );
-            $footer = new Footer(Page::VIEW_MODE_FULL);
-
-            $this->page = new Page(Page::VIEW_MODE_FULL, 'container-fluid', $header, $footer);
-        }
-
-        return $this->page;
     }
 
     /**
@@ -207,8 +182,8 @@ abstract class Manager extends Application implements NoContextComponent
 
     protected function initialize()
     {
-        ini_set("memory_limit", "-1");
-        ini_set("max_execution_time", "7200");
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', '7200');
 
         $this->setLanguage();
     }
@@ -231,35 +206,34 @@ abstract class Manager extends Application implements NoContextComponent
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Architecture\Application\Application::render_footer()
      */
-    public function render_footer()
+    public function render_footer(): string
     {
         $html = [];
 
         $html[] = '</div>';
         $html[] = '</div>';
-        $html[] = $this->getPage()->getFooter()->toHtml();
+        $html[] = $this->getFooterRenderer()->render();
 
         return implode(PHP_EOL, $html);
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Architecture\Application\Application::render_header()
      */
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
-        $page = $this->getPage();
+        $page = $this->getPageConfiguration();
 
         $page->setApplication($this);
         $page->setContainerMode('container');
-        $page->setTitle(Translation::get('ChamiloInstallationTitle'));
+        $page->setLanguageCode($this->getTranslator()->getLocale());
+        $page->setTitle($this->getTranslator()->trans('ChamiloInstallationTitle', [], self::context()));
 
         $html = [];
 
-        $html[] = $page->getHeader()->toHtml();
+        $html[] = $this->getHeaderRenderer()->render();
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12">';

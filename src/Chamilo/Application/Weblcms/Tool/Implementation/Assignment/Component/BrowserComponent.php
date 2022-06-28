@@ -101,7 +101,7 @@ class BrowserComponent extends Manager
         );
     }
 
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $html = [];
 

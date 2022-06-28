@@ -12,21 +12,18 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    // Parameters
-    const PARAM_ACTION = 'personal_action';
-    const PARAM_PUBLICATION_ID = 'publication_id';
-    const PARAM_OBJECT = 'object';
+    public const ACTION_CREATE = 'Publisher';
+    public const ACTION_DELETE = 'Deleter';
+    public const ACTION_EDIT = 'Editor';
+    public const ACTION_EXPORT = 'Exporter';
+    public const ACTION_VIEW = 'Viewer';
+    public const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
 
-    // Properties
-    const ACTION_VIEW = 'Viewer';
-    const ACTION_CREATE = 'Publisher';
-    const ACTION_DELETE = 'Deleter';
-    const ACTION_EDIT = 'Editor';
-    const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
-    const ACTION_EXPORT = 'Exporter';
+    public const DEFAULT_ACTION = self::ACTION_VIEW;
 
-    // Default action
-    const DEFAULT_ACTION = self::ACTION_VIEW;
+    public const PARAM_ACTION = 'personal_action';
+    public const PARAM_OBJECT = 'object';
+    public const PARAM_PUBLICATION_ID = 'publication_id';
 
     /**
      * @return \Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService

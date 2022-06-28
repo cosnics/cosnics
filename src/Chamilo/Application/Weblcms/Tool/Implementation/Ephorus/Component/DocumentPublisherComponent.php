@@ -58,7 +58,7 @@ class DocumentPublisherComponent extends Manager implements ViewerInterface
     }
 
 
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $html = [];
 

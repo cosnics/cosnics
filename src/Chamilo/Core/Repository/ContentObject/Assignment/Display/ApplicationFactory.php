@@ -24,7 +24,7 @@ class ApplicationFactory extends \Chamilo\Libraries\Architecture\Factory\Applica
         $this->assignmentDataProvider = $assignmentDataProvider;
     }
 
-    public function getDefaultAction($context)
+    public function getDefaultAction(string $context): string
     {
         if($this->assignmentDataProvider->canEditAssignment())
         {

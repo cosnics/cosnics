@@ -14,6 +14,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -267,7 +268,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     /**
      * Fake user as necessary for "view as" functionality.
      */
-    public function get_user()
+    public function get_user(): ?User
     {
         $va_id = Session::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
         $course_id = Session::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID);
@@ -287,7 +288,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      * Fake user id as necessary for "view as" functionality.
      * If no "view as" id is set, use normal user id.
      */
-    public function get_user_id()
+    public function get_user_id(): ?string
     {
         $va_id = Session::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
         $course_id = Session::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID);
@@ -465,7 +466,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      *
      * @return string
      */
-    public function render_header($pageTitle = null)
+    public function render_header(string $pageTitle = ''): string
     {
         $html = [];
 

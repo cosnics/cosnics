@@ -2,65 +2,17 @@
 namespace Chamilo\Libraries\Architecture\Application;
 
 /**
- *
  * @package Chamilo\Libraries\Architecture\Application
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Parameters
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\Application\Parameters
-     */
-    private static $instance;
+    private static ?Parameters $instance = null;
 
-    /**
-     *
-     * @var string[]
-     */
-    private $parameters;
+    private array $parameters = [];
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     *
-     * @return string
-     */
-    private function &determine_level(Application $application)
-    {
-        $application_hashes = [];
-        $application_hashes[] = spl_object_hash($application);
-
-        while ($application->get_application() instanceof Application)
-        {
-            $application_hashes[] = spl_object_hash($application->get_application());
-            $application = $application->get_application();
-        }
-
-        $application_hashes = array_reverse($application_hashes);
-
-        $parameters = &$this->parameters;
-
-        foreach ($application_hashes as $application_hash)
-        {
-            if (!isset($parameters[$application_hash]) || !isset($parameters[$application_hash]['parameters']))
-            {
-
-                $parameters[$application_hash] = [];
-                $parameters[$application_hash]['parameters'] = [];
-            }
-            $parameters = &$parameters[$application_hash];
-        }
-
-        return $parameters['parameters'];
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Parameters
-     */
-    public static function getInstance()
+    public static function getInstance(): Parameters
     {
         if (!isset(self::$instance))
         {
@@ -70,81 +22,56 @@ class Parameters
         return self::$instance;
     }
 
-    /**
-     * Returns the value of the given URL parameter.
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param string $name
-     *
-     * @return string
-     */
-    public function get_parameter(Application $application, $name)
+    public function get_parameter(Application $application, string $name)
     {
-        $parameters = &$this->determine_level($application);
+        $applicationHash = spl_object_hash($application);
 
-        if (array_key_exists($name, $parameters))
+        if (array_key_exists($applicationHash, $this->parameters))
         {
-            return $parameters[$name];
+            return $this->parameters[$applicationHash][$name];
         }
+
+        return null;
     }
 
-    /**
-     * Returns the current URL parameters.
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     *
-     * @return string[]
-     */
-    public function get_parameters(Application $application)
+    public function get_parameters(Application $application): array
     {
-        $application_hashes = [];
-        $application_hashes[] = spl_object_hash($application);
+        $applicationHashes = [];
+        $applicationHashes[] = spl_object_hash($application);
 
         while ($application->get_application() instanceof Application)
         {
-            $application_hashes[] = spl_object_hash($application->get_application());
+            $applicationHashes[] = spl_object_hash($application->get_application());
             $application = $application->get_application();
         }
 
-        $application_hashes = array_reverse($application_hashes);
+        $applicationHashes = array_reverse($applicationHashes);
 
-        $heap = [];
-        $parameters = &$this->parameters;
+        $aggregatedParameters = [];
 
-        foreach ($application_hashes as $application_hash)
+        foreach ($applicationHashes as $applicationHash)
         {
-            if (isset($parameters[$application_hash]) && isset($parameters[$application_hash]['parameters']))
+            if (array_key_exists($applicationHash, $this->parameters))
             {
-                foreach ($parameters[$application_hash]['parameters'] as $key => $value)
+                foreach ($this->parameters[$applicationHash] as $key => $value)
                 {
-                    $heap[$key] = $value;
+                    $aggregatedParameters[$key] = $value;
                 }
             }
-            $parameters = &$parameters[$application_hash];
         }
 
-        return $heap;
+        return $aggregatedParameters;
     }
 
-    /**
-     * Sets the value of a URL parameter.
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param string $name
-     * @param string $value
-     */
-    public function set_parameter(Application $application, $name, $value)
+    public function set_parameter(Application $application, string $name, $value = null)
     {
-        $parameters = &$this->determine_level($application);
-        $parameters[$name] = $value;
-    }
+        $applicationHash = spl_object_hash($application);
 
-    /**
-     *
-     * @param string[] $parameters
-     */
-    private function set_parameters($parameters)
-    {
-        $this->parameters = $parameters;
+        if (!array_key_exists($applicationHash, $this->parameters))
+        {
+            $this->parameters[$applicationHash] = [];
+        }
+
+        $this->parameters[$applicationHash][$name] = $value;
     }
 }

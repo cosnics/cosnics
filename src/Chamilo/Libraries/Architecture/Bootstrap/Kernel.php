@@ -18,7 +18,8 @@ use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Response\PlatformNotAvailableResponse;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
@@ -51,6 +52,8 @@ class Kernel
 
     private ExceptionLoggerInterface $exceptionLogger;
 
+    private PageConfiguration $pageConfiguration;
+
     private ChamiloRequest $request;
 
     private UrlGenerator $urlGenerator;
@@ -60,7 +63,8 @@ class Kernel
     public function __construct(
         ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
         SessionUtilities $sessionUtilities, ExceptionLoggerInterface $exceptionLogger,
-        AuthenticationValidator $authenticationValidator, UrlGenerator $urlGenerator, User $user = null
+        AuthenticationValidator $authenticationValidator, UrlGenerator $urlGenerator,
+        PageConfiguration $pageConfiguration, User $user = null
     )
     {
         $this->request = $request;
@@ -69,6 +73,7 @@ class Kernel
         $this->sessionUtilities = $sessionUtilities;
         $this->exceptionLogger = $exceptionLogger;
         $this->urlGenerator = $urlGenerator;
+        $this->pageConfiguration = $pageConfiguration;
         $this->user = $user;
         $this->authenticationValidator = $authenticationValidator;
     }
@@ -234,6 +239,23 @@ class Kernel
         return new NotAuthenticatedResponse();
     }
 
+    public function getPageConfiguration(): PageConfiguration
+    {
+        return $this->pageConfiguration;
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    protected function getPlatformNotAvailableResponse(): PlatformNotAvailableResponse
+    {
+        return new PlatformNotAvailableResponse(
+            $this->configurationConsulter->getSetting(
+                ['Chamilo\Core\Admin', 'maintenance_warning_message']
+            ), $this->getApplication()
+        );
+    }
+
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
@@ -320,48 +342,30 @@ class Kernel
         {
             $this->configureTimezone()->configureContext();
 
-            $OAuth2Response = $this->handleOAuth2();
+            $response = $this->handleOAuth2();
 
-            if ($OAuth2Response instanceof RedirectResponse)
+            if (!$response instanceof RedirectResponse)
             {
-                $OAuth2Response->send();
-            }
-            else
-            {
-                $this->checkAuthentication()->checkPlatformAvailability()->buildApplication()->traceVisit()
+                $response = $this->checkAuthentication()->checkPlatformAvailability()->buildApplication()->traceVisit()
                     ->runApplication();
             }
         }
         catch (NotAuthenticatedException $exception)
         {
             $response = $this->getNotAuthenticatedResponse();
-            $response->send();
         }
         catch (PlatformNotAvailableException $exception)
         {
-            $page = Page::getInstance();
-            $page->setApplication($this->getApplication());
-
-            $html = [];
-            $html[] = $page->getHeader()->render();
-            $html[] = '<br />';
-            $html[] = '<div class="alert alert-danger text-center">';
-            $html[] = $this->configurationConsulter->getSetting(
-                ['Chamilo\Core\Admin', 'maintenance_warning_message']
-            );
-            $html[] = '</div>';
-            $html[] = $page->getFooter()->render();
-
-            $response = new Response(implode(PHP_EOL, $html));
-            $response->send();
+            $response = $this->getPlatformNotAvailableResponse();
         }
         catch (UserException $exception)
         {
             $this->getExceptionLogger()->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING);
 
             $response = new ExceptionResponse($exception, $this->getApplication());
-            $response->send();
         }
+
+        $this->sendResponse($response);
     }
 
     /**
@@ -383,7 +387,7 @@ class Kernel
             $response = new Response($response);
         }
 
-        $this->sendResponse($response);
+        return $response;
     }
 
     protected function sendResponse(Response $response)

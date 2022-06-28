@@ -19,7 +19,7 @@ class ChamiloRequest extends Request
      */
     public function get(string $key, $default = null)
     {
-        return $this->getFromPOSTOrURL($key, $default);
+        return $this->getFromPostOrUrl($key, $default);
     }
 
     public function getContainerMode(): string
@@ -50,7 +50,7 @@ class ChamiloRequest extends Request
             return $result;
         }
 
-        if (null != $result = $this->getFromURL($key))
+        if (null != $result = $this->getFromUrl($key))
         {
             return $result;
         }

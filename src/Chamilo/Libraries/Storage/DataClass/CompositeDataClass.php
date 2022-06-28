@@ -13,15 +13,16 @@ abstract class CompositeDataClass extends DataClass
     public const PROPERTY_TYPE = 'type';
 
     /**
-     *
      * @param string[] $defaultProperties
      * @param string[] $additionalProperties
      *
      * @throws \Exception
      */
-    public function __construct(?array $defaultProperties = [], array $additionalProperties = [])
+    public function __construct(
+        array $defaultProperties = [], array $additionalProperties = [], array $optionalProperties = []
+    )
     {
-        parent::__construct($defaultProperties);
+        parent::__construct($defaultProperties, $optionalProperties);
         $this->setAdditionalProperties($additionalProperties);
         $this->setType(static::class);
     }
@@ -34,7 +35,7 @@ abstract class CompositeDataClass extends DataClass
     {
         $additionalProperties = $this->getSpecificProperties(self::PROPERTIES_ADDITIONAL);
 
-        if (empty($additionalProperties))
+        if (empty($additionalProperties) && $this->isIdentified())
         {
             /**
              * @var \Chamilo\Libraries\Storage\DataManager\DataManager $dataManagerClassName
@@ -65,6 +66,7 @@ abstract class CompositeDataClass extends DataClass
                 unset($record[$property]);
             }
         }
+
         if (count($record) > 0 && $object instanceof CompositeDataClass)
         {
             foreach ($record as $optional_property_name => $optional_property_value)

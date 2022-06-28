@@ -12,16 +12,13 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    // Parameters
-    const PARAM_ACTION = 'user_view_action';
-    const PARAM_USER_VIEW_ID = 'user_view_id';
-    
-    // Actions
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_CREATE = 'Creator';
-    const ACTION_DELETE = 'Deleter';
-    const ACTION_UPDATE = 'Updater';
-    
-    // Default action
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_DELETE = 'Deleter';
+    public const ACTION_UPDATE = 'Updater';
+
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
+
+    public const PARAM_ACTION = 'user_view_action';
+    public const PARAM_USER_VIEW_ID = 'user_view_id';
 }

@@ -543,7 +543,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         return implode(PHP_EOL, $html);
     }
 
-    public function render_footer()
+    public function render_footer(): string
     {
         $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'KeyboardNavigation.js'
@@ -554,7 +554,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         return implode(PHP_EOL, $html);
     }
 
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         $buttonToolbarRenderer = new ButtonToolBarRenderer($this->getButtonToolbar());
         $translator = Translation::getInstance();

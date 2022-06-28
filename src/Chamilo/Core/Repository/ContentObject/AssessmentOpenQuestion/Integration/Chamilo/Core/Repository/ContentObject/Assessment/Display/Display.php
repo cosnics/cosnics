@@ -58,7 +58,7 @@ class Display extends QuestionDisplay
 
         $group[] = $formvalidator->createElement(
             'static', null, null,
-            '<a class="btn btn-default" onclick="openPopup(\'' . $link->getUrl() . '\');">' . $uploadGlyph->render() .
+            '<a class="btn btn-default" onclick="openPopup(\'' . addslashes($link->getUrl()) . '\');">' . $uploadGlyph->render() .
             ' ' . Translation::get('BrowseContentObjects') . '</a>'
         );
 

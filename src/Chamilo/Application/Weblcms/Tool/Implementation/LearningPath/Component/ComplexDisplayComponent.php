@@ -40,7 +40,7 @@ use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -97,7 +97,7 @@ class ComplexDisplayComponent extends Manager
         if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
             $this->redirectWithMessage(
-                Translation::getInstance()->getTranslation("NotAllowed", null, StringUtilities::LIBRARIES), true, [],
+                Translation::getInstance()->getTranslation('NotAllowed', null, StringUtilities::LIBRARIES), true, [],
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
@@ -257,6 +257,16 @@ class ComplexDisplayComponent extends Manager
         Event::trigger('ViewForumTopic', \Chamilo\Application\Weblcms\Manager::context(), $parameters);
     }
 
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
+        $additionalParameters[] = \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP;
+        $additionalParameters[] =
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
     /**
      * Returns the TreeNode for the current step
      *
@@ -275,16 +285,6 @@ class ComplexDisplayComponent extends Manager
     protected function getSelectedLearningPath()
     {
         return $this->publication->getContentObject();
-    }
-
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
-        $additionalParameters[] = \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP;
-        $additionalParameters[] =
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN;
-
-        return parent::getAdditionalParameters($additionalParameters);
     }
 
     public function get_assessment_back_url()
@@ -344,7 +344,7 @@ class ComplexDisplayComponent extends Manager
      *
      * @return int
      */
-    function get_embedded_content_object_id()
+    public function get_embedded_content_object_id()
     {
         return Embedder::get_embedded_content_object_id();
     }
@@ -471,7 +471,7 @@ class ComplexDisplayComponent extends Manager
 
     public function get_wiki_publication()
     {
-        throw new Exception("Unimplemented method : " . __CLASS__ . ':' . __METHOD__);
+        throw new Exception('Unimplemented method : ' . __CLASS__ . ':' . __METHOD__);
     }
 
     public function get_wiki_statistics_reporting_template_name()
@@ -540,9 +540,9 @@ class ComplexDisplayComponent extends Manager
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
-    function is_embedded()
+    public function is_embedded()
     {
         $embedded_content_object_id = $this->get_embedded_content_object_id();
 
@@ -579,11 +579,11 @@ class ComplexDisplayComponent extends Manager
      *
      * @return string
      */
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         if ($this->is_embedded())
         {
-            Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+            $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
             return Application::render_header($pageTitle);
         }

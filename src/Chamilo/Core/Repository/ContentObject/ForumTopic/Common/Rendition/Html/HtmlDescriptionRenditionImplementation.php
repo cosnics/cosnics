@@ -202,7 +202,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
                     foreach ($attachments as $attachment)
                     {
                         $url = $this->get_context()->get_content_object_display_attachment_url($attachment);
-                        $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
+                        $url = 'javascript:openPopup(\'' . addslashes($url) . '\'); return false;';
                         $message .= '<li><a href="#" onClick="' . $url . '">' . $attachment->getGlyph()->render() .
                             $attachment->get_title() . '</a></li>';
                     }

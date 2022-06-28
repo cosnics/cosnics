@@ -15,20 +15,20 @@ use Exception;
  */
 abstract class Manager extends Application
 {
-    const ACTION_EDIT_SIMPLE_RIGHTS = 'SimpleRightsEditor';
+    public const ACTION_EDIT_SIMPLE_RIGHTS = 'SimpleRightsEditor';
 
-    const DEFAULT_ACTION = self::ACTION_EDIT_SIMPLE_RIGHTS;
+    public const DEFAULT_ACTION = self::ACTION_EDIT_SIMPLE_RIGHTS;
 
-    const PARAM_ACTION = 'rights_action';
-    const PARAM_ENTITY_ID = 'entity_id';
-    const PARAM_ENTITY_TYPE = 'entity_type';
-    const PARAM_RIGHT_ID = 'right_id';
+    public const PARAM_ACTION = 'rights_action';
+    public const PARAM_ENTITY_ID = 'entity_id';
+    public const PARAM_ENTITY_TYPE = 'entity_type';
+    public const PARAM_RIGHT_ID = 'right_id';
 
     private $context;
 
-    private $locations;
-
     private $entities;
+
+    private $locations;
 
     private $selected_entity;
 
@@ -48,7 +48,7 @@ abstract class Manager extends Application
     /**
      * Retrieves the available rights
      *
-     * @return Array
+     * @return array
      */
     public function get_available_rights()
     {

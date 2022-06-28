@@ -143,7 +143,7 @@ class ForumPostRendition
                 $params[Manager::PARAM_ATTACHMENT_ID] = $attachment->get_id();
 
                 $url = $this->getApplication()->get_url($params);
-                $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
+                $url = 'javascript:openPopup(\'' . addslashes($url) . '\'); return false;';
 
                 $glyph = $attachment->getGlyph(IdentGlyph::SIZE_MINI);
 

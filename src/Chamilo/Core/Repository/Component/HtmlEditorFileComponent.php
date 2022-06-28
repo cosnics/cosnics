@@ -6,12 +6,12 @@ use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 
 class HtmlEditorFileComponent extends Manager
 {
-    const PARAM_PLUGIN = 'plugin';
+    public const PARAM_PLUGIN = 'plugin';
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
@@ -27,22 +27,23 @@ class HtmlEditorFileComponent extends Manager
         $plugin = $this->get_plugin();
         $this->set_parameter(self::PARAM_PLUGIN, $plugin);
 
-        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+        $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
-        if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            );
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
+
             return $component->run();
         }
         else
         {
             $processor = HtmlEditorProcessor::factory(
-                $plugin,
-                $this,
-                \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects());
+                $plugin, $this, \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
+            );
 
             $html = [];
 
@@ -54,11 +55,6 @@ class HtmlEditorFileComponent extends Manager
         }
     }
 
-    public function get_plugin()
-    {
-        return Request::get(self::PARAM_PLUGIN);
-    }
-
     public function get_allowed_content_object_types()
     {
         $types = [];
@@ -68,12 +64,18 @@ class HtmlEditorFileComponent extends Manager
         foreach ($active_types as $active_type)
         {
             if (in_array(
-                'Chamilo\Libraries\Architecture\Interfaces\Includeable',
-                (array) class_implements($active_type)))
+                'Chamilo\Libraries\Architecture\Interfaces\Includeable', (array) class_implements($active_type)
+            ))
             {
                 $types[] = $active_type;
             }
         }
+
         return $types;
+    }
+
+    public function get_plugin()
+    {
+        return Request::get(self::PARAM_PLUGIN);
     }
 }

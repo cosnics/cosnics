@@ -58,7 +58,7 @@ class HtmlInlineContentObjectRendition extends HtmlContentObjectRendition
                 foreach ($attachments as $attachment)
                 {
                     $url = $this->get_context()->get_content_object_display_attachment_url($attachment);
-                    $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
+                    $url = 'javascript:openPopup(\'' . addslashes($url) . '\'); return false;';
 
                     $glyph = $attachment->getGlyph();
 

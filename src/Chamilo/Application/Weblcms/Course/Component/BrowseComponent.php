@@ -155,12 +155,7 @@ class BrowseComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
-     */
-    public function get_parameters()
+    public function get_parameters(): array
     {
         $parameters = parent::get_parameters();
         $parameters[self::PARAM_CATEGORY_ID] = Request::get(self::PARAM_CATEGORY_ID);

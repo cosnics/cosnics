@@ -732,16 +732,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::$number_of_categories[$user_id];
     }
 
-    public static function get_registered_applications()
-    {
-        if (!isset(self::$applications) || count(self::$applications) == 0)
-        {
-            self::$applications = Application::get_active_packages();
-        }
-
-        return self::$applications;
-    }
-
     public static function get_registered_types($show_active_only = true)
     {
         if (!(self::$registered_types))

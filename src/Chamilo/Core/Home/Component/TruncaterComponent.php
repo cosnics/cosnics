@@ -4,6 +4,7 @@ namespace Chamilo\Core\Home\Component;
 use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -27,7 +28,7 @@ class TruncaterComponent extends Manager
      *
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
-    public function get_breadcrumb_generator()
+    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
     {
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }

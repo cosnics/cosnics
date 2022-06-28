@@ -28,13 +28,11 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     const PROPERTY_USER_ID = 'user_id';
 
     /**
-     * @param string[] $default_properties
-     *
      * @throws \Exception
      */
-    public function __construct($default_properties = [])
+    public function __construct(array $defaultProperties = [], array $additionalProperties = [], array $optionalProperties = [])
     {
-        parent::__construct($default_properties);
+        parent::__construct($defaultProperties, $additionalProperties, $optionalProperties);
         $this->addListener(new DisplayOrderDataClassListener($this));
     }
 

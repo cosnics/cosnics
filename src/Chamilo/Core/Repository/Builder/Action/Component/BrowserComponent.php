@@ -98,7 +98,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $preview_url = \Chamilo\Core\Repository\Manager::get_preview_content_object_url($content_object);
 
-        $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
+        $onclick = '" onclick="javascript:openPopup(\'' . addslashes($preview_url) . '\'); return false;';
         $commonActions->addButton(
             new Button(
                 Translation::get('Preview', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('desktop'),

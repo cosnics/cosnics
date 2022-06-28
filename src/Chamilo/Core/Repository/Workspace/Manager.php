@@ -13,27 +13,24 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    // Parameters
-    const PARAM_ACTION = 'workspace_action';
-    const PARAM_WORKSPACE_ID = 'workspace_id';
-    const PARAM_SELECTED_WORKSPACE_ID = 'selected_workspace_id';
-    const PARAM_BROWSER_SOURCE = 'browser_source';
+    public const ACTION_BROWSE = 'Browser';
+    public const ACTION_BROWSE_PERSONAL = 'PersonalBrowser';
+    public const ACTION_BROWSE_SHARED = 'SharedBrowser';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_DELETE = 'Deleter';
+    public const ACTION_FAVOURITE = 'Favourite';
+    public const ACTION_PUBLISH = 'Publisher';
+    public const ACTION_RIGHTS = 'Rights';
+    public const ACTION_SHARE = 'Share';
+    public const ACTION_UNSHARE = 'Unshare';
+    public const ACTION_UPDATE = 'Updater';
 
-    // Actions
-    const ACTION_BROWSE = 'Browser';
-    const ACTION_DELETE = 'Deleter';
-    const ACTION_CREATE = 'Creator';
-    const ACTION_UPDATE = 'Updater';
-    const ACTION_RIGHTS = 'Rights';
-    const ACTION_SHARE = 'Share';
-    const ACTION_UNSHARE = 'Unshare';
-    const ACTION_PUBLISH = 'Publisher';
-    const ACTION_BROWSE_PERSONAL = 'PersonalBrowser';
-    const ACTION_BROWSE_SHARED = 'SharedBrowser';
-    const ACTION_FAVOURITE = 'Favourite';
+    public const DEFAULT_ACTION = self::ACTION_BROWSE_PERSONAL;
 
-    // Default action
-    const DEFAULT_ACTION = self::ACTION_BROWSE_PERSONAL;
+    public const PARAM_ACTION = 'workspace_action';
+    public const PARAM_BROWSER_SOURCE = 'browser_source';
+    public const PARAM_SELECTED_WORKSPACE_ID = 'selected_workspace_id';
+    public const PARAM_WORKSPACE_ID = 'workspace_id';
 
     /**
      * @return \Chamilo\Core\Repository\Service\WorkspaceExtensionManager

@@ -1,25 +1,17 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Application;
 
-use Chamilo\Configuration\Configuration;
-use Chamilo\Configuration\Package\Storage\DataClass\Package;
-use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
+use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\FooterRenderer;
-use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -50,20 +42,14 @@ abstract class Application
     public const SETTING_BREADCRUMBS_DISABLED = 'breadcrumbs_disabled';
 
     /**
-     *
      * @var string[]
      */
-    public static $application_path_cache = [];
+    public static array $application_path_cache = [];
+
+    protected ApplicationConfigurationInterface $applicationConfiguration;
 
     /**
-     *
-     * @var \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
-     */
-    protected $applicationConfiguration;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
+     * @throws \Exception
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
@@ -77,29 +63,21 @@ abstract class Application
      */
     abstract public function run();
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\BreadcrumbTrail $breadcrumbtrail
-     */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
     }
 
     public function areBreadcrumbsDisabled(): bool
     {
-        return $this->getApplicationConfiguration()->get(self::SETTING_BREADCRUMBS_DISABLED) === true;
+        return $this->getApplicationConfiguration()->get(self::SETTING_BREADCRUMBS_DISABLED) == true;
     }
 
     /**
      * Helper function to call the authorization checker with the current logged in user.
-     * Throws the NotAllowedException when not valid.
-     *
-     * @param string $context
-     * @param string $action
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
-    public function checkAuthorization($context, $action = null)
+    public function checkAuthorization(string $context, ?string $action = null)
     {
         if (!$this instanceof NoAuthenticationSupport)
         {
@@ -112,26 +90,12 @@ abstract class Application
         }
     }
 
-    /**
-     * Displays an error message.
-     *
-     * @param string $message
-     *
-     * @return string
-     */
-    public function display_error_message($message)
+    public function display_error_message(string $message): string
     {
         return $this->getNotificationMessageRenderer()->renderOne(NotificationMessage::error($message));
     }
 
-    /**
-     * Displays an error page.
-     *
-     * @param string $message
-     *
-     * @return string
-     */
-    public function display_error_page($message)
+    public function display_error_page(string $message): string
     {
         if ($this->get_application() instanceof Application)
         {
@@ -147,26 +111,12 @@ abstract class Application
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Displays a normal message.
-     *
-     * @param string $message
-     *
-     * @return string
-     */
-    public function display_message($message)
+    public function display_message(string $message, string $type = NotificationMessage::TYPE_INFO): string
     {
-        return $this->getNotificationMessageRenderer()->renderOne(NotificationMessage::normal($message));
+        return $this->getNotificationMessageRenderer()->renderOne(new NotificationMessage($message, $type));
     }
 
-    /**
-     *
-     * @param string[] $messages
-     * @param string[] $types
-     *
-     * @return string
-     */
-    public function display_messages($messages, $types)
+    public function display_messages(array $messages, array $types): string
     {
         $notificationMessages = [];
 
@@ -178,26 +128,12 @@ abstract class Application
         return $this->getNotificationMessageRenderer()->render($notificationMessages);
     }
 
-    /**
-     * Displays a warning message.
-     *
-     * @param string $message
-     *
-     * @return string
-     */
-    public function display_warning_message($message)
+    public function display_warning_message(string $message): string
     {
         return $this->getNotificationMessageRenderer()->renderOne(NotificationMessage::warning($message));
     }
 
-    /**
-     * Displays a warning page.
-     *
-     * @param string $message
-     *
-     * @return string
-     */
-    public function display_warning_page($message)
+    public function display_warning_page(string $message): string
     {
         if ($this->get_application() instanceof Application)
         {
@@ -213,13 +149,7 @@ abstract class Application
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @param string $application
-     *
-     * @return bool
-     */
-    public static function exists($application)
+    public static function exists(string $application): bool
     {
         if (!isset(self::$application_path_cache[$application]))
         {
@@ -230,27 +160,14 @@ abstract class Application
         return self::$application_path_cache[$application];
     }
 
-    /**
-     *
-     * @return string[]
-     */
     public function getAdditionalParameters(array $additionalParameters = []): array
     {
         return $additionalParameters;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
-     */
-    public function getApplicationConfiguration()
+    public function getApplicationConfiguration(): ApplicationConfigurationInterface
     {
         return $this->applicationConfiguration;
-    }
-
-    public function getFooterRenderer(): FooterRenderer
-    {
-        return $this->getService(FooterRenderer::class);
     }
 
     /**
@@ -262,145 +179,45 @@ abstract class Application
         return $this->getUrlGenerator()->fromRequest($parameters, $filter);
     }
 
-    /**
-     *
-     * @return string
-     */
-    protected function getPageTitle()
+    protected function getPageTitle(): string
     {
-        return Configuration::get('Chamilo\Core\Admin', 'institution') . ' - ' .
-            Configuration::get('Chamilo\Core\Admin', 'site_name');
+        $configurationConsulter = $this->getConfigurationConsulter();
+
+        return $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'institution']) . ' - ' .
+            $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name']);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    public function getRequest()
-    {
-        return $this->getApplicationConfiguration()->getRequest();
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->getApplicationConfiguration()->getUser();
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_action()
+    public function get_action(): ?string
     {
         return $this->get_parameter(static::PARAM_ACTION);
     }
 
-    /**
-     *
-     * @param string $type
-     *
-     * @return string[]
-     */
-    public static function get_active_packages($type = Registration::TYPE_APPLICATION)
-    {
-        $applications = Configuration::registrations_by_type($type);
-
-        $active_applications = [];
-
-        foreach ($applications as $application)
-        {
-            if (!$application[Registration::PROPERTY_STATUS])
-            {
-                continue;
-            }
-
-            $active_applications[] = $application[Registration::PROPERTY_CONTEXT];
-        }
-
-        return $active_applications;
-    }
-
-    /**
-     * Get the parent application
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function get_application()
+    public function get_application(): ?Application
     {
         return $this->getApplicationConfiguration()->getApplication();
     }
 
-    /**
-     * @return string
-     * @throws \ReflectionException
-     */
-    public function get_application_name()
-    {
-        return ClassnameUtilities::getInstance()->getPackageNameFromNamespace(static::context());
-    }
-
-    /**
-     *
-     * @param string $applicationName
-     *
-     * @return string
-     * @deprecated Fallback in case we still have an application name somewhere which can't be changed to
-     */
-    public static function get_application_namespace($applicationName)
-    {
-        $path = Path::getInstance()->namespaceToFullPath('Chamilo\Core') . $applicationName . '/';
-
-        if (is_dir($path))
-        {
-            return 'Chamilo\Core\\' . $applicationName;
-        }
-        else
-        {
-            $path = Path::getInstance()->namespaceToFullPath('Chamilo\Application') . $applicationName . '/';
-
-            if (is_dir($path))
-            {
-                return 'Chamilo\Application\\' . $applicationName;
-            }
-            else
-            {
-                return $applicationName;
-            }
-        }
-    }
-
-    /**
-     * Returns the breadcrumb generator
-     *
-     * @return \Chamilo\Libraries\Format\Structure\BreadcrumbGenerator
-     */
-    public function get_breadcrumb_generator()
+    public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
     {
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 
     /**
-     * Generates a general results message like ObjectCreated, ObjectUpdated, ObjectDeleted
-     *
-     * @param int $failures
-     * @param int $count
-     * @param string $singleObject
-     * @param string $multipleObject
-     * @param string $type
-     *
-     * @return string
+     * @throws \ReflectionException
      */
     public function get_general_result(
-        $failures, $count, $singleObject, $multipleObject, $type = Application::RESULT_TYPE_CREATED
-    )
+        int $failures, int $count, string $singleObject, string $multipleObject,
+        string $type = Application::RESULT_TYPE_CREATED
+    ): string
     {
         if ($count == 1)
         {
-            $param = array('OBJECT' => $singleObject);
+            $param = ['OBJECT' => $singleObject];
 
             if ($failures)
             {
@@ -413,7 +230,7 @@ abstract class Application
         }
         else
         {
-            $param = array('OBJECTS' => $multipleObject);
+            $param = ['OBJECTS' => $multipleObject];
 
             if ($failures)
             {
@@ -425,14 +242,10 @@ abstract class Application
             }
         }
 
-        return Translation::get($message, $param);
+        return $this->getTranslator()->trans($message, $param, static::context());
     }
 
-    /**
-     *
-     * @return int
-     */
-    public function get_level()
+    public function get_level(): int
     {
         $level = 0;
         $application = $this;
@@ -446,114 +259,36 @@ abstract class Application
         return $level;
     }
 
-    /**
-     * Returns the html for the application-menu.
-     * Empty per default Can be overwritten by the specific application
-     *
-     * @return string
-     */
-    public function get_menu()
+    public function get_menu(): string
     {
         return '';
     }
 
-    /**
-     * Get a list of core and web applications from the filesystem as an array
-     *
-     * @param string $type
-     *
-     * @return string[]
-     */
-    public static function get_packages_from_filesystem($type = null)
-    {
-        $applications = [];
-
-        if (!$type || $type == Registration::TYPE_CORE)
-        {
-            $directories = Filesystem::get_directory_content(
-                Path::getInstance()->namespaceToFullPath('Chamilo\Core'), Filesystem::LIST_DIRECTORIES, false
-            );
-
-            foreach ($directories as $directory)
-            {
-                $namespace = self::get_application_namespace(basename($directory));
-
-                if (Package::exists($namespace))
-                {
-                    $applications[] = $namespace;
-                }
-            }
-        }
-
-        if (!$type || $type == Registration::TYPE_APPLICATION)
-        {
-            $directories = Filesystem::get_directory_content(
-                Path::getInstance()->namespaceToFullPath('Chamilo\Application'), Filesystem::LIST_DIRECTORIES, false
-            );
-
-            foreach ($directories as $directory)
-            {
-                $namespace = self::get_application_namespace(basename($directory));
-
-                if (Package::exists($namespace))
-                {
-                    $applications[] = $namespace;
-                }
-            }
-        }
-
-        return $applications;
-    }
-
-    /**
-     * Returns the value of the given URL parameter.
-     *
-     * @param string $name
-     *
-     * @return string
-     */
-    public function get_parameter($name)
+    public function get_parameter(string $name)
     {
         return Parameters::getInstance()->get_parameter($this, $name);
     }
 
-    /**
-     * Returns the current URL parameters.
-     *
-     * @return string[]
-     */
-    public function get_parameters()
+    public function get_parameters(): array
     {
         return Parameters::getInstance()->get_parameters($this);
     }
 
     /**
-     * Get the parent application
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
      * @deprecated User get_application() now
      */
-    public function get_parent()
+    public function get_parent(): ?Application
     {
         return $this->get_application();
     }
 
     /**
-     *
-     * @param int $failures
-     * @param int $count
-     * @param string $failMessageSingle
-     * @param string $failMessageMultiple
-     * @param string $succesMessageSingle
-     * @param string $succesMessageMultiple
-     * @param null $context
-     *
-     * @return string
+     * @throws \ReflectionException
      */
     public function get_result(
-        $failures, $count, $failMessageSingle, $failMessageMultiple, $succesMessageSingle, $succesMessageMultiple,
-        $context = null
-    )
+        int $failures, int $count, string $failMessageSingle, string $failMessageMultiple, string $succesMessageSingle,
+        string $succesMessageMultiple, string $context = null
+    ): string
     {
         if ($failures)
         {
@@ -566,19 +301,16 @@ abstract class Application
                 $message = $failMessageMultiple;
             }
         }
+        elseif ($count == 1)
+        {
+            $message = $succesMessageSingle;
+        }
         else
         {
-            if ($count == 1)
-            {
-                $message = $succesMessageSingle;
-            }
-            else
-            {
-                $message = $succesMessageMultiple;
-            }
+            $message = $succesMessageMultiple;
         }
 
-        return Translation::get($message, [], $context);
+        return $this->getTranslator()->trans($message, [], $context ?: static::context());
     }
 
     /**
@@ -595,23 +327,17 @@ abstract class Application
     }
 
     /**
-     * Gets the user.
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     * @deprecated Use getUser() now
+     * @deprecated Use Application::getUser() now
      */
-    public function get_user()
+    public function get_user(): ?User
     {
         return $this->getUser();
     }
 
     /**
-     * Gets the user id of this personal calendars owner
-     *
-     * @return int
-     * @deprecated Use getUser()->getId() now
+     * @deprecated Use Application::getUser()::getId() now
      */
-    public function get_user_id()
+    public function get_user_id(): ?string
     {
         if ($this->getApplicationConfiguration()->getUser())
         {
@@ -621,28 +347,12 @@ abstract class Application
         return 0;
     }
 
-    /**
-     * Does the entire application have a leftside menu? False per default.
-     * Can be overwritten by the specific
-     * application
-     *
-     * @return bool
-     */
-    public function has_menu()
+    public function has_menu(): bool
     {
         return false;
     }
 
-    /**
-     * Helper function to call the authorization checker with the current logged in user, returns true or false
-     * and can be used in if statements
-     *
-     * @param string $context
-     * @param string $action
-     *
-     * @return bool
-     */
-    public function isAuthorized($context, $action = null)
+    public function isAuthorized(string $context, ?string $action = null): bool
     {
         if (!$this->getUser() instanceof User)
         {
@@ -653,61 +363,20 @@ abstract class Application
     }
 
     /**
-     *
-     * @param string $context
-     *
-     * @return bool
-     */
-    public static function is_active($context = null)
-    {
-        if (self::exists($context))
-        {
-            if (Configuration::getInstance()->isRegisteredAndActive($context))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /**
-     * Determines if a given name is the name of an application
-     *
-     * @param string $string
-     *
-     * @return bool
-     */
-    public static function is_application_name($name)
-    {
-        return (preg_match('/^[a-z][a-z_]+$/', $name) > 0);
-    }
-
-    /**
-     *
-     * @param bool $showLoginForm
-     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
-    public function not_allowed($showLoginForm = true)
+    public function not_allowed(bool $showLoginForm = true)
     {
         throw new NotAllowedException($showLoginForm);
     }
 
     /**
-     * @return string
      * @throws \ReflectionException
      */
-    public static function package()
+    public static function package(): string
     {
         $classNameUtilities = ClassnameUtilities::getInstance();
-        $className = $classNameUtilities->getClassNameFromNamespace(get_called_class());
+        $className = $classNameUtilities->getClassnameFromNamespace(get_called_class());
 
         if ($className == 'Manager')
         {
@@ -743,18 +412,16 @@ abstract class Application
         $this->redirect($parameters, $filter);
     }
 
-    public function renderFooter()
+    public function renderFooter(): string
     {
         if ($this->get_application())
         {
             return $this->get_application()->render_footer();
         }
 
-        $page = Page::getInstance();
-
         $html = [];
 
-        if ($page->isFullPage())
+        if ($this->getPageConfiguration()->isFullPage())
         {
             $html[] = '<div class="clearfix"></div>';
             $html[] = '</div>';
@@ -768,14 +435,7 @@ abstract class Application
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Displays the header
-     *
-     * @param string $pageTitle
-     *
-     * @return string
-     */
-    public function renderHeader($pageTitle = '')
+    public function renderHeader(string $pageTitle = ''): string
     {
         if (!$pageTitle)
         {
@@ -787,17 +447,15 @@ abstract class Application
             return $this->get_application()->render_header($pageTitle);
         }
 
-        $breadcrumbtrail = BreadcrumbTrail::getInstance();
-
-        $page = Page::getInstance();
-        $page->setApplication($this);
-        $page->setTitle($this->getPageTitle());
+        $pageConfiguration = $this->getPageConfiguration();
+        $pageConfiguration->setApplication($this);
+        $pageConfiguration->setTitle($this->getPageTitle());
 
         $html = [];
 
-        $html[] = $page->getHeader()->render();
+        $html[] = $this->getHeaderRenderer()->render();
 
-        if ($page->isFullPage())
+        if ($pageConfiguration->isFullPage())
         {
             $html[] = '<div class="row">';
 
@@ -819,9 +477,12 @@ abstract class Application
         }
 
         // Display messages
-        $messages = Session::retrieve(self::PARAM_MESSAGES);
+        $sessionUtilities = $this->getSessionUtilities();
+        $request = $this->getRequest();
 
-        Session::unregister(self::PARAM_MESSAGES);
+        $messages = $sessionUtilities->retrieve(self::PARAM_MESSAGES);
+
+        $sessionUtilities->unregister(self::PARAM_MESSAGES);
         if (is_array($messages))
         {
             $html[] = $this->display_messages($messages[self::PARAM_MESSAGE], $messages[self::PARAM_MESSAGE_TYPE]);
@@ -831,21 +492,21 @@ abstract class Application
 
         // DEPRECATED
         // Display messages
-        $message = Request::get(self::PARAM_MESSAGE);
-        $type = Request::get(self::PARAM_MESSAGE_TYPE);
+        $message = $request->query->get(self::PARAM_MESSAGE);
+        $type = $request->query->get(self::PARAM_MESSAGE_TYPE);
 
         if ($message)
         {
-            $html[] = $this->display_message($message);
+            $html[] = $this->display_message($message, $type);
         }
 
-        $message = Request::get(self::PARAM_ERROR_MESSAGE);
+        $message = $request->query->get(self::PARAM_ERROR_MESSAGE);
         if ($message)
         {
             $html[] = $this->display_error_message($message);
         }
 
-        $message = Request::get(self::PARAM_WARNING_MESSAGE);
+        $message = $request->query->get(self::PARAM_WARNING_MESSAGE);
         if ($message)
         {
             $html[] = $this->display_warning_message($message);
@@ -854,12 +515,7 @@ abstract class Application
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Renders the page title
-     *
-     * @return string
-     */
-    protected function renderPageTitle()
+    protected function renderPageTitle(): string
     {
         $breadcrumbTrail = BreadcrumbTrail::getInstance();
 
@@ -874,38 +530,27 @@ abstract class Application
     }
 
     /**
-     * @deprecated Use renderFooter() now
+     * @deprecated Use Application::renderFooter() now
      */
-    public function render_footer()
+    public function render_footer(): string
     {
         return $this->renderFooter();
     }
 
     /**
-     * @deprecated Use renderHeader() now
+     * @deprecated Use Application::renderHeader() now
      */
-    public function render_header($pageTitle = '')
+    public function render_header(string $pageTitle = ''): string
     {
         return $this->renderHeader($pageTitle);
     }
-
-    /**
-     * Sets the current action.
-     *
-     * @param string $action
-     */
-    public function set_action($action)
+    
+    public function set_action(?string $action)
     {
         $this->set_parameter(static::PARAM_ACTION, $action);
     }
 
-    /**
-     * Sets the value of a URL parameter.
-     *
-     * @param string $name
-     * @param string $value
-     */
-    public function set_parameter($name, $value)
+    public function set_parameter(string $name, $value)
     {
         Parameters::getInstance()->set_parameter($this, $name, $value);
     }

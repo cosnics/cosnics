@@ -5,13 +5,14 @@ use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  *
  * @package repository.lib.repository_manager.component
  */
+
 /**
  * Repository manager component to restore objects.
  * This means moving objects from the recycle bin to there original
@@ -19,25 +20,23 @@ use Chamilo\Libraries\Platform\Session\Request;
  */
 class RepositoryViewerComponent extends Manager
 {
-    const PARAM_ELEMENT_NAME = 'element_name';
+    public const PARAM_ELEMENT_NAME = 'element_name';
 
     public function run()
     {
         $element_name = $this->get_element_name();
         $this->set_parameter(self::PARAM_ELEMENT_NAME, $element_name);
+        $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
-        if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
-            Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
-
             return $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            )->run();
         }
         else
         {
-            Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
-
             $html = [];
 
             $html[] = $this->render_header();
@@ -47,9 +46,10 @@ class RepositoryViewerComponent extends Manager
 
             $html[] = '<script>';
             $html[] = 'window.opener.$("input[name=' . $element_name . '_title]").val("' . addslashes(
-                $object->get_title()) . '");';
-            $html[] = 'window.opener.$("input[name=' . $element_name . ']").val("' . addslashes($object->get_id()) .
-                 '");';
+                    $object->get_title()
+                ) . '");';
+            $html[] =
+                'window.opener.$("input[name=' . $element_name . ']").val("' . addslashes($object->get_id()) . '");';
             $html[] = 'window.close();';
             $html[] = '</script>';
 
@@ -59,13 +59,13 @@ class RepositoryViewerComponent extends Manager
         }
     }
 
-    public function get_element_name()
-    {
-        return Request::get(self::PARAM_ELEMENT_NAME);
-    }
-
     public function get_allowed_content_object_types()
     {
         return array(File::class);
+    }
+
+    public function get_element_name()
+    {
+        return Request::get(self::PARAM_ELEMENT_NAME);
     }
 }

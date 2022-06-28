@@ -85,7 +85,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
             }
 
             $previewLink = \Chamilo\Core\Repository\Preview\Manager::get_content_object_default_action_link($document);
-            $onclick = 'onclick="javascript:openPopup(\'' . $previewLink . '\'); return false;';
+            $onclick = 'onclick="javascript:openPopup(\'' . addslashes($previewLink) . '\'); return false;';
 
             $viewButton = [];
             $viewButton[] = '<a class="btn btn-primary view" target="_blank" ' . $onclick . ' ">';

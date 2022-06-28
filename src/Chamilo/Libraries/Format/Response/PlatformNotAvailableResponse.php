@@ -3,8 +3,6 @@ namespace Chamilo\Libraries\Format\Response;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\Format\Display;
-use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -13,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ExceptionResponse extends Response
+class PlatformNotAvailableResponse extends Response
 {
     use DependencyInjectionContainerTrait;
 
@@ -21,7 +19,7 @@ class ExceptionResponse extends Response
      * @throws \ReflectionException
      * @throws \Exception
      */
-    public function __construct(Exception $exception, ?Application $application = null)
+    public function __construct(string $message, ?Application $application = null)
     {
         $this->initializeContainer();
 
@@ -29,7 +27,10 @@ class ExceptionResponse extends Response
 
         $html = [];
         $html[] = $this->getHeaderRenderer()->render();
-        $html[] = Display::error_message($exception->getMessage());
+        $html[] = '<br />';
+        $html[] = '<div class="alert alert-danger text-center">';
+        $html[] = $message;
+        $html[] = '</div>';
         $html[] = $this->getFooterRenderer()->render();
 
         parent::__construct(implode(PHP_EOL, $html));

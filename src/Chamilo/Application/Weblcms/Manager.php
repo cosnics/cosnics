@@ -29,64 +29,59 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 abstract class Manager extends Application
 {
-    const ACTION_ADMIN = 'Admin';
-    const ACTION_ADMIN_COURSE_MANAGER = 'AdminCourseManager';
-    const ACTION_ADMIN_REQUEST_BROWSER = 'AdminRequestBrowser';
-    const ACTION_ANNOUNCEMENT = 'Announcement';
-    const ACTION_BROWSE_OPEN_COURSES = 'OpenCoursesBrowser';
-    const ACTION_COURSE_CATEGORY_MANAGER = 'CourseCategoryManager';
-    const ACTION_COURSE_MANAGER = 'CourseManager';
-    const ACTION_COURSE_TYPE_MANAGER = 'CourseTypeManager';
-    const ACTION_COURSE_USER_SUBSCRIPTION_REQUEST_GRANT = 'course_user_subscription_request_granter';
-    const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
-    const ACTION_IMPORT_COURSES = 'CourseImporter';
-    const ACTION_IMPORT_COURSE_USERS = 'CourseUserImporter';
-    const ACTION_MANAGER_SORT = 'Sorter';
-    const ACTION_REPORTING = 'Reporting';
-    const ACTION_REQUEST = 'Request';
-    const ACTION_VIEW_COURSE = 'CourseViewer';
-    const ACTION_VIEW_WEBLCMS_HOME = 'Home';
+    public const ACTION_ADMIN = 'Admin';
+    public const ACTION_ADMIN_COURSE_MANAGER = 'AdminCourseManager';
+    public const ACTION_ADMIN_REQUEST_BROWSER = 'AdminRequestBrowser';
+    public const ACTION_ANNOUNCEMENT = 'Announcement';
+    public const ACTION_BROWSE_OPEN_COURSES = 'OpenCoursesBrowser';
+    public const ACTION_COURSE_CATEGORY_MANAGER = 'CourseCategoryManager';
+    public const ACTION_COURSE_MANAGER = 'CourseManager';
+    public const ACTION_COURSE_TYPE_MANAGER = 'CourseTypeManager';
+    public const ACTION_COURSE_USER_SUBSCRIPTION_REQUEST_GRANT = 'course_user_subscription_request_granter';
+    public const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
+    public const ACTION_IMPORT_COURSES = 'CourseImporter';
+    public const ACTION_IMPORT_COURSE_USERS = 'CourseUserImporter';
+    public const ACTION_MANAGER_SORT = 'Sorter';
+    public const ACTION_REPORTING = 'Reporting';
+    public const ACTION_REQUEST = 'Request';
+    public const ACTION_VIEW_COURSE = 'CourseViewer';
+    public const ACTION_VIEW_WEBLCMS_HOME = 'Home';
 
-    const DEFAULT_ACTION = self::ACTION_VIEW_WEBLCMS_HOME;
+    public const DEFAULT_ACTION = self::ACTION_VIEW_WEBLCMS_HOME;
 
-    const PARAM_ACTIVATE_SELECTED_COURSE_TYPES = 'activate selected coursetypes';
-    const PARAM_ACTIVE = 'active';
-    const PARAM_CATEGORY = 'publication_category';
-    const PARAM_CHANGE_COURSE_TYPE_SELECTED_COURSES = 'Change Coursetype selected courses';
-    const PARAM_COMPONENT_ACTION = 'action';
-    const PARAM_COURSE = 'course';
-    const PARAM_COURSE_CATEGORY_ID = 'category';
-    const PARAM_COURSE_GROUP = 'course_group';
-    const PARAM_COURSE_TYPE = 'course_type';
-    const PARAM_COURSE_TYPE_USER_CATEGORY_ID = 'user_category';
-    const PARAM_COURSE_USER = 'course';
-    const PARAM_DEACTIVATE_SELECTED_COURSE_TYPES = 'deactivate selected coursetypes';
-    const PARAM_DIRECTION = 'direction';
-    const PARAM_EXTRA = 'extra';
-    const PARAM_GROUP = 'group';
-    const PARAM_PUBLICATION = 'publication';
-    const PARAM_REMOVE_SELECTED = 'remove_selected';
-    const PARAM_REMOVE_SELECTED_COURSE_TYPES = 'remove selected coursetypes';
-    const PARAM_REMOVE_SELECTED_REQUESTS = 'removed selected requests';
-    const PARAM_REQUEST = 'request';
-    const PARAM_REQUEST_TYPE = 'request_type';
-    const PARAM_REQUEST_VIEW = 'request_view';
-    const PARAM_STATUS = 'user_status';
-    const PARAM_SUBSCRIBE_SELECTED = 'subscribe_selected';
-    const PARAM_SUBSCRIBE_SELECTED_AS_ADMIN = 'subscribe_selected_as_admin';
-    const PARAM_SUBSCRIBE_SELECTED_AS_STUDENT = 'subscribe_selected_as_student';
-    const PARAM_SUBSCRIBE_SELECTED_GROUP = 'subscribe_selected_group_admin';
-    const PARAM_TEMPLATE_ID = 'template_id';
-    const PARAM_TOOL = 'tool';
-    const PARAM_TOOL_ACTION = 'tool_action';
-    const PARAM_TYPE = 'type';
-    const PARAM_UNSUBSCRIBE_SELECTED = 'unsubscribe_selected';
-    const PARAM_USERS = 'users';
-
-    /**
-     * The sections that this application offers.
-     */
-    private $sections;
+    public const PARAM_ACTIVATE_SELECTED_COURSE_TYPES = 'activate selected coursetypes';
+    public const PARAM_ACTIVE = 'active';
+    public const PARAM_CATEGORY = 'publication_category';
+    public const PARAM_CHANGE_COURSE_TYPE_SELECTED_COURSES = 'Change Coursetype selected courses';
+    public const PARAM_COMPONENT_ACTION = 'action';
+    public const PARAM_COURSE = 'course';
+    public const PARAM_COURSE_CATEGORY_ID = 'category';
+    public const PARAM_COURSE_GROUP = 'course_group';
+    public const PARAM_COURSE_TYPE = 'course_type';
+    public const PARAM_COURSE_TYPE_USER_CATEGORY_ID = 'user_category';
+    public const PARAM_COURSE_USER = 'course';
+    public const PARAM_DEACTIVATE_SELECTED_COURSE_TYPES = 'deactivate selected coursetypes';
+    public const PARAM_DIRECTION = 'direction';
+    public const PARAM_EXTRA = 'extra';
+    public const PARAM_GROUP = 'group';
+    public const PARAM_PUBLICATION = 'publication';
+    public const PARAM_REMOVE_SELECTED = 'remove_selected';
+    public const PARAM_REMOVE_SELECTED_COURSE_TYPES = 'remove selected coursetypes';
+    public const PARAM_REMOVE_SELECTED_REQUESTS = 'removed selected requests';
+    public const PARAM_REQUEST = 'request';
+    public const PARAM_REQUEST_TYPE = 'request_type';
+    public const PARAM_REQUEST_VIEW = 'request_view';
+    public const PARAM_STATUS = 'user_status';
+    public const PARAM_SUBSCRIBE_SELECTED = 'subscribe_selected';
+    public const PARAM_SUBSCRIBE_SELECTED_AS_ADMIN = 'subscribe_selected_as_admin';
+    public const PARAM_SUBSCRIBE_SELECTED_AS_STUDENT = 'subscribe_selected_as_student';
+    public const PARAM_SUBSCRIBE_SELECTED_GROUP = 'subscribe_selected_group_admin';
+    public const PARAM_TEMPLATE_ID = 'template_id';
+    public const PARAM_TOOL = 'tool';
+    public const PARAM_TOOL_ACTION = 'tool_action';
+    public const PARAM_TYPE = 'type';
+    public const PARAM_UNSUBSCRIBE_SELECTED = 'unsubscribe_selected';
+    public const PARAM_USERS = 'users';
 
     /**
      * The course_group object of the course_group currently active in this application
@@ -94,6 +89,11 @@ abstract class Manager extends Application
     private $course_group;
 
     private $request;
+
+    /**
+     * The sections that this application offers.
+     */
+    private $sections;
 
     public function count_requests($condition = null)
     {
@@ -483,7 +483,7 @@ abstract class Manager extends Application
      * @param $course Course
      * @param $group_id int
      *
-     * @return boolean
+     * @return bool
      */
     public function subscribe_group_to_course($course, $group_id, $status)
     {
@@ -536,7 +536,7 @@ abstract class Manager extends Application
      * @param $course Course
      * @param $user_id int
      *
-     * @return boolean
+     * @return bool
      */
     public function unsubscribe_group_from_course($course, $group_id)
     {
@@ -549,7 +549,7 @@ abstract class Manager extends Application
      * @param $course Course
      * @param $user_id int
      *
-     * @return boolean
+     * @return bool
      */
     public function unsubscribe_user_from_course($course, $user_id)
     {

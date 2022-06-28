@@ -92,7 +92,7 @@ class ImpactViewRecyclerComponent extends Manager
         );
     }
 
-    public function get_parameters($include_search = false)
+    public function get_parameters(bool $include_search = false): array
     {
         return array_merge(
             array(self::PARAM_CATEGORY_ID => $this->getRequest()->get(self::PARAM_CATEGORY_ID)),
@@ -113,9 +113,9 @@ class ImpactViewRecyclerComponent extends Manager
      * @return string
      */
     public function get_result(
-        $failures, $count, $fail_message_single, $fail_message_multiple, $succes_message_single,
-        $succes_message_multiple, $context = null
-    )
+        int $failures, int $count, string $fail_message_single, string $fail_message_multiple, string $succes_message_single,
+        string $succes_message_multiple, ?string $context = null
+    ): string
     {
         if ($failures)
         {
