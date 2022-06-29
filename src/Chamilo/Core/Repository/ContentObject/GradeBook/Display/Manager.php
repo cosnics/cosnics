@@ -2,19 +2,12 @@
 
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display;
 
-/*use Chamilo\Application\Presence\Service\PresenceRegistrationService;
-use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\ExportService;
-use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\QRService;
-use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\RightsService;*/
-
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 
 /**
  *

@@ -71,6 +71,7 @@ class GradeBookData
      * @var GradeBookColumn[] | ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="GradeBookColumn", mappedBy="gradebookData")
+     * @ORM\OrderBy({"sort" = "asc"})
      *
      */
     protected $gradebookColumns;
@@ -212,10 +213,47 @@ class GradeBookData
     }
 
     /**
+     * @return array
+     */
+    public function getGradeBookColumnsUncategorized(): array
+    {
+        $columns = array();
+        foreach ($this->gradebookColumns as $column)
+        {
+            if (is_null($column->getGradeBookCategory()))
+            {
+                $columns[] = $column;
+            }
+        }
+        return $columns;
+    }
+
+    /**
      * @return GradeBookCategory[]|ArrayCollection
      */
     public function getGradeBookCategories()
     {
         return $this->gradebookCategories;
+    }
+
+    /**
+     * @param int $categoryId
+     *
+     * @return GradeBookCategory
+     *
+     * @throws ObjectNotExistException
+     */
+    public function getGradeBookCategoryById(int $categoryId)
+    {
+        $category = $this->gradebookCategories->filter(function(GradeBookCategory $category) use ($categoryId) {
+            return $category->getId() == $categoryId;
+        })->first();
+
+        if (!$category instanceof GradeBookCategory)
+        {
+            throw new ObjectNotExistException('gradebook category', $categoryId);
+        }
+
+        return $category;
     }
 }

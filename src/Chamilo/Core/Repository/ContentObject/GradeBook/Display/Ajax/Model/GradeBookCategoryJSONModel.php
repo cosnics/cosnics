@@ -56,6 +56,7 @@ class GradeBookCategoryJSONModel
         $this->title = $title;
         $this->color = $color;
 
+        $this->columnIds = array();
         foreach ($columns as $column)
         {
             $this->columnIds[] = $column->getId();
@@ -92,6 +93,20 @@ class GradeBookCategoryJSONModel
     public function getColumnIds(): array
     {
         return $this->columnIds;
+    }
+
+    /**
+     * @param GradeBookCategory $category
+     *
+     * @return GradeBookCategory
+     */
+    public function updateGradeBookCategory(GradeBookCategory $category)
+    {
+        $category->setId($this->id);
+        $category->setTitle($this->title);
+        $category->setColor($this->color);
+
+        return $category;
     }
 
     /**

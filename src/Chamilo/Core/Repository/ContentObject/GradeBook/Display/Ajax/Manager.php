@@ -2,20 +2,16 @@
 
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax;
 
-/*use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Component\BulkSavePresenceEntriesComponent;*/
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Component\AjaxComponent;
-/*use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceResultPeriodService;
-use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceResultEntryService;*/
-/*use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Service\GradeBookService;*/
-/*use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceValidationService;
-use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\UserService;*/
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookService;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookAjaxService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Response\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder;
 use JMS\Serializer\SerializationContext;
@@ -29,21 +25,14 @@ use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
  */
 abstract class Manager extends AjaxManager
 {
-    /*const ACTION_LOAD_PRESENCE = 'LoadPresence';
-    const ACTION_UPDATE_PRESENCE = 'UpdatePresence';
-    const ACTION_LOAD_REGISTERED_PRESENCE_ENTRY_STATUSES = 'LoadRegisteredPresenceEntryStatuses';
-    const ACTION_LOAD_PRESENCE_ENTRIES = 'LoadPresenceEntries';
-    const ACTION_SAVE_PRESENCE_ENTRY = 'SavePresenceEntry';
-    const ACTION_BULK_SAVE_PRESENCE_ENTRIES = 'BulkSavePresenceEntries';
-    const ACTION_CREATE_PRESENCE_PERIOD = 'CreatePresencePeriod';
-    const ACTION_UPDATE_PRESENCE_PERIOD = 'UpdatePresencePeriod';
-    const ACTION_DELETE_PRESENCE_PERIOD = 'DeletePresencePeriod';
-    const ACTION_TOGGLE_PRESENCE_ENTRY_CHECKOUT = 'TogglePresenceEntryCheckout';
-    const ACTION_LOAD_STATISTICS = 'LoadStatistics';*/
-
-    const ACTION_LOAD_ALL = 'LoadAll';
+    const ACTION_LOAD_GRADEBOOK_DATA = 'LoadGradeBookData';
+    const ACTION_UPDATE_CATEGORY = 'UpdateCategory';
 
     const PARAM_ACTION = 'gradebook_display_ajax_action';
+
+    const PARAM_GRADEBOOK_DATA_ID = 'gradebookDataId';
+    const PARAM_VERSION = 'version';
+    const PARAM_CATEGORY_DATA = 'categoryData';
 
     /**
      * @var AjaxComponent
@@ -69,6 +58,30 @@ abstract class Manager extends AjaxManager
 
         parent::__construct($applicationConfiguration);
     }
+
+    /**
+     * @return string|Response
+     */
+    function run()
+    {
+        try
+        {
+            $result = $this->runAjaxComponent();
+
+            return new JsonResponse($this->serialize($result, 'json'), 200, [], true);
+        }
+        catch (\Exception $ex)
+        {
+            $this->getExceptionLogger()->logException($ex);
+
+            return new AjaxExceptionResponse($ex);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    abstract function runAjaxComponent();
 
     /**
      * @return bool
@@ -170,6 +183,14 @@ abstract class Manager extends AjaxManager
     }
 
     /**
+     * @return GradeBookAjaxService
+     */
+    protected function getGradeBookAjaxService()
+    {
+        return $this->getService(GradeBookAjaxService::class);
+    }
+
+    /**
      * @return GradeBook
      * @throws UserException
      */
@@ -227,4 +248,29 @@ abstract class Manager extends AjaxManager
             $this->throwUserException('InvalidStatus');
         }
     }*/
+
+    /**
+     * @return int
+     */
+    protected function getGradeBookDataId()
+    {
+        return $this->getRequest()->getFromPost(self::PARAM_GRADEBOOK_DATA_ID);
+    }
+
+    /**
+     * @return int
+     */
+    protected function getVersion()
+    {
+        return $this->getRequest()->getFromPost(self::PARAM_VERSION);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCategoryData()
+    {
+        return $this->getRequest()->getFromPost(self::PARAM_CATEGORY_DATA);
+    }
+
 }

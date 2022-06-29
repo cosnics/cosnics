@@ -58,12 +58,18 @@ class BrowserComponent extends Manager
             'LANGUAGE' => $this->getTranslator()->getLocale(),
             'CONTENT_OBJECT_TITLE' => $gradebook->get_title(),
             'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
-            'LOAD_ALL_URL' => $this->get_url(
+            'LOAD_GRADEBOOK_DATA_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,
-                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_ALL
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_GRADEBOOK_DATA
                 ]
             ),
+            'UPDATE_CATEGORY_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_UPDATE_CATEGORY
+                ]
+            )
         ];
     }
 
