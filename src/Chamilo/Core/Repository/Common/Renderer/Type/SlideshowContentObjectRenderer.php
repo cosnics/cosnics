@@ -2,8 +2,6 @@
 namespace Chamilo\Core\Repository\Common\Renderer\Type;
 
 use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
-use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
-use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
@@ -30,47 +28,33 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
 
         $slideshowIndex = $application->getRequest()->query->get(SlideshowRenderer::PARAM_INDEX, 0);
-        $slideshowAutoPlay = $application->getRequest()->query->get(SlideshowRenderer::PARAM_AUTOPLAY, 0);
 
         $filterData = FilterData::getInstance($workspace);
 
         $contentObjectCount = $contentObjectService->countContentObjectsByTypeForWorkspace(
-            $filterData->getTypeDataClass(),
-            $workspace,
-            ConditionFilterRenderer::factory($filterData, $workspace));
+            $filterData->getTypeDataClass(), $workspace, ConditionFilterRenderer::factory($filterData, $workspace)
+        );
 
-        if($contentObjectCount)
+        if ($contentObjectCount)
         {
             $contentObject = $contentObjectService->getContentObjectsByTypeForWorkspace(
-                $filterData->getTypeDataClass(),
-                $workspace,
-                ConditionFilterRenderer::factory($filterData, $workspace),
-                1,
-                $slideshowIndex,
-                []
+                $filterData->getTypeDataClass(), $workspace, ConditionFilterRenderer::factory($filterData, $workspace),
+                1, $slideshowIndex
             )->current();
-
-            $contentObjectRenditionImplementation = ContentObjectRenditionImplementation::factory(
-                $contentObject,
-                ContentObjectRendition::FORMAT_HTML,
-                ContentObjectRendition::VIEW_PREVIEW,
-                $this->get_repository_browser()
-            );
 
             $contentObjectActions = $this->get_content_object_actions($contentObject);
 
-            $slideshowRender = new SlideshowRenderer(
-                $contentObject,
-                $contentObjectCount,
-                $contentObjectRenditionImplementation,
-                $contentObjectActions,
-                $this->get_parameters(),
-                $slideshowIndex,
-                $slideshowAutoPlay);
-
-            return $slideshowRender->render();
+            return $this->getSlideshowRenderer()->render(
+                $this->get_repository_browser(), $contentObject, $contentObjectCount, $contentObjectActions,
+                $this->get_parameters()
+            );
         }
 
         return '';
+    }
+
+    protected function getSlideshowRenderer(): SlideshowRenderer
+    {
+        return $this->get_repository_browser()->getService(SlideshowRenderer::class);
     }
 }

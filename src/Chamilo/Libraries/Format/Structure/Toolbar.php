@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 
@@ -81,13 +79,7 @@ class Toolbar
 
         foreach ($this->get_items() as $item)
         {
-            $buttonGroup->addButton(
-                new Button(
-                    $item->get_label(), $item->get_image(), $item->get_href(),
-                    $keepDisplayProperty ? $item->get_display() : AbstractButton::DISPLAY_ICON_AND_LABEL,
-                    $item->get_confirmation(), ['btn-link'], $item->get_target()
-                )
-            );
+            $buttonGroup->addButton($item->convertToButton($keepDisplayProperty));
         }
 
         $buttonToolbar->addItem($buttonGroup);

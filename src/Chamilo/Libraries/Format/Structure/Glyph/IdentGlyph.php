@@ -10,10 +10,10 @@ namespace Chamilo\Libraries\Format\Structure\Glyph;
  */
 class IdentGlyph extends FontAwesomeGlyph
 {
-    const SIZE_BIG = 48;
-    const SIZE_MEDIUM = 32;
-    const SIZE_MINI = 16;
-    const SIZE_SMALL = 22;
+    public const SIZE_BIG = 48;
+    public const SIZE_MEDIUM = 32;
+    public const SIZE_MINI = 16;
+    public const SIZE_SMALL = 22;
 
     public function __construct(
         string $type, bool $isAligned = false, bool $isNew = false, bool $isDisabled = false,

@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
@@ -110,7 +111,7 @@ class ContentObjectService
      */
     public function getContentObjectsByTypeForWorkspace(
         $contentObjectClassName, WorkspaceInterface $workspace, ConditionFilterRenderer $filterConditionRenderer,
-        $offset = null, $count = null, $orderProperty = null
+        $count = null, $offset = null, ?OrderBy $orderBy = null
     )
     {
         $contentObjectClassName = empty($contentObjectClassName) ? ContentObject::class : $contentObjectClassName;
@@ -118,13 +119,13 @@ class ContentObjectService
         if ($workspace instanceof PersonalWorkspace)
         {
             return $this->getContentObjectRepository()->findAllInPersonalWorkspace(
-                $contentObjectClassName, $workspace, $filterConditionRenderer, $offset, $count, $orderProperty
+                $contentObjectClassName, $workspace, $filterConditionRenderer, $count, $offset, $orderBy
             );
         }
         else
         {
             return $this->getContentObjectRepository()->findAllInWorkspace(
-                $contentObjectClassName, $workspace, $filterConditionRenderer, $offset, $count, $orderProperty
+                $contentObjectClassName, $workspace, $filterConditionRenderer, $count, $offset, $orderBy
             );
         }
     }
@@ -142,11 +143,11 @@ class ContentObjectService
      * @deprecated Use ContentObjectService::getContentObjectsByTypeForWorkspace
      */
     public function getContentObjectsForWorkspace(
-        WorkspaceInterface $workspace, ConditionFilterRenderer $filterConditionRenderer, $offset, $count, $orderProperty
+        WorkspaceInterface $workspace, ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty
     )
     {
         return $this->getContentObjectsByTypeForWorkspace(
-            ContentObject::class, $workspace, $filterConditionRenderer, $offset, $count, $orderProperty
+            ContentObject::class, $workspace, $filterConditionRenderer, $count, $offset, $orderProperty
         );
     }
 }

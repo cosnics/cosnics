@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -39,13 +40,13 @@ class ContentObjectRepository
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
     public function findAllInPersonalWorkspace($contentObjectClassName, WorkspaceInterface $personalWorkspace,
-        ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty)
+        ConditionFilterRenderer $filterConditionRenderer, $count, $offset, ?OrderBy $orderBy = null)
     {
         $parameters = new DataClassRetrievesParameters(
             $this->getPersonalWorkspaceConditions($personalWorkspace, $filterConditionRenderer),
             $count,
             $offset,
-            $orderProperty);
+            $orderBy);
 
         return $this->findAll($contentObjectClassName, $parameters);
     }
@@ -99,13 +100,13 @@ class ContentObjectRepository
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
     public function findAllInWorkspace($contentObjectClassName, WorkspaceInterface $workspace,
-        ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty)
+        ConditionFilterRenderer $filterConditionRenderer, $count, $offset, ?OrderBy $orderBy = null)
     {
         $parameters = new DataClassRetrievesParameters(
             $this->getWorkspaceConditions($workspace, $filterConditionRenderer),
             $count,
             $offset,
-            $orderProperty,
+            $orderBy,
             $this->getWorkspaceJoins());
 
         return $this->findAll($contentObjectClassName, $parameters);

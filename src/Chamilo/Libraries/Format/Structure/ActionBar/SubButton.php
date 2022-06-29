@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure\ActionBar
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

@@ -29,7 +29,7 @@ trait ActionButtonRendererTrait
     /**
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton
      */
-    abstract function getButton();
+    abstract public function getButton();
 
     public function renderAction(): string
     {
@@ -55,7 +55,7 @@ trait ActionButtonRendererTrait
         return implode(' ', $html);
     }
 
-    abstract function renderClasses(): string;
+    abstract public function renderClasses(): string;
 
     public function renderLinkOpeningTag(): string
     {
@@ -70,5 +70,5 @@ trait ActionButtonRendererTrait
         return implode(' ', $html);
     }
 
-    abstract function renderTitle(): string;
+    abstract public function renderTitle(): string;
 }

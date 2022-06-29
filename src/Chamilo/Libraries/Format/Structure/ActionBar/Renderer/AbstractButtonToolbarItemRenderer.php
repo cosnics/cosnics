@@ -20,7 +20,7 @@ abstract class AbstractButtonToolbarItemRenderer
         $this->button = $button;
     }
 
-    abstract function render(): string;
+    public abstract function render(): string;
 
     public function getButton()
     {

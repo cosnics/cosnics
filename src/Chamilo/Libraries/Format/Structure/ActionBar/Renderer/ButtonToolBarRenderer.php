@@ -70,7 +70,7 @@ class ButtonToolBarRenderer
      */
     protected function determineClasses(): array
     {
-        return array_merge(array('btn-toolbar', 'btn-action-toolbar'), $this->getButtonToolBar()->getClasses());
+        return array_merge(['btn-toolbar', 'btn-action-toolbar'], $this->getButtonToolBar()->getClasses());
     }
 
     public function getButtonToolBar(): ButtonToolBar
@@ -93,7 +93,7 @@ class ButtonToolBarRenderer
         // check input parameter
         if (!is_array($properties))
         {
-            $properties = array($properties);
+            $properties = [$properties];
         }
 
         // get query

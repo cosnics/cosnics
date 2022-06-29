@@ -22,7 +22,6 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
     {
         $toolbrowser = $this->get_tool_browser();
         $slideshowIndex = $toolbrowser->getRequest()->query->get(SlideshowRenderer::PARAM_INDEX, 0);
-        $slideshowAutoPlay = $toolbrowser->getRequest()->query->get(SlideshowRenderer::PARAM_AUTOPLAY, 0);
 
         $publications = $this->get_publications($slideshowIndex, 1);
         $publication = $publications[0];

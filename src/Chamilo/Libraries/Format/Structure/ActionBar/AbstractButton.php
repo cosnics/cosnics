@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure\ActionBar
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -12,9 +11,9 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
  */
 abstract class AbstractButton extends AbstractButtonToolBarItem
 {
-    const DISPLAY_ICON = 1;
-    const DISPLAY_ICON_AND_LABEL = 3;
-    const DISPLAY_LABEL = 2;
+    public const DISPLAY_ICON = 1;
+    public const DISPLAY_ICON_AND_LABEL = 3;
+    public const DISPLAY_LABEL = 2;
 
     private int $display;
 

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
@@ -68,8 +69,31 @@ class ToolbarItem
 
     public function render(): string
     {
+        $buttonRenderer = new ButtonRenderer($this->convertToButton());
+
+        return $buttonRenderer->render();
+    }
+
+    /**
+     * @deprecated Use ToolbarItem::render() now
+     */
+    public function as_html(): string
+    {
+        return $this->render();
+    }
+
+    public function convertToButton(bool $keepDisplayProperty = true): Button
+    {
         $label = ($this->get_label() ? htmlspecialchars($this->get_label()) : null);
-        $display = !$this->get_display() ? self::DISPLAY_ICON : $this->get_display();
+
+        if($keepDisplayProperty)
+        {
+            $display = !$this->get_display() ? self::DISPLAY_ICON : $this->get_display();
+        }
+        else
+        {
+            $display = AbstractButton::DISPLAY_ICON_AND_LABEL;
+        }
 
         $elementClasses = !empty($this->class) ? explode(' ', $this->class) : [];
         array_unshift($elementClasses, 'btn-link');
@@ -94,22 +118,10 @@ class ToolbarItem
             $buttonConfirmationMessage = null;
         }
 
-        $button = new Button(
+        return new Button(
             $label, $this->get_image(), $this->get_href(), $display, $buttonConfirmationMessage, $elementClasses,
             $this->get_target()
         );
-
-        $buttonRenderer = new ButtonRenderer($button);
-
-        return $buttonRenderer->render();
-    }
-
-    /**
-     * @deprecated Use ToolbarItem::render() now
-     */
-    public function as_html(): string
-    {
-        return $this->render();
     }
 
     public function getClasses(): ?string

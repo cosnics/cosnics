@@ -19,9 +19,9 @@ use HTML_QuickForm_Renderer_Default;
  */
 class ButtonSearchForm extends FormValidator implements TableSupportedSearchFormInterface
 {
-    const FORM_NAME = 'search';
+    public const FORM_NAME = 'search';
 
-    const PARAM_SIMPLE_SEARCH_QUERY = 'query';
+    public const PARAM_SIMPLE_SEARCH_QUERY = 'query';
 
     protected string $actionUrl;
 
@@ -44,7 +44,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
 
         if ($query)
         {
-            $this->setDefaults(array(self::PARAM_SIMPLE_SEARCH_QUERY => $query));
+            $this->setDefaults([self::PARAM_SIMPLE_SEARCH_QUERY => $query]);
         }
 
         $this->buildForm();
@@ -68,7 +68,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
 
         $this->addElement(
             'text', self::PARAM_SIMPLE_SEARCH_QUERY, Translation::get('Search', null, StringUtilities::LIBRARIES),
-            array('class' => 'form-group form-control action-bar-search')
+            ['class' => 'form-group form-control action-bar-search']
         );
 
         $this->renderer->setElementTemplate('{element} ', self::PARAM_SIMPLE_SEARCH_QUERY);
@@ -136,6 +136,6 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
             $this->actionUrl .= '&' . $tableParameter . '=' . $value;
         }
 
-        $this->updateAttributes(array('action' => $this->actionUrl));
+        $this->updateAttributes(['action' => $this->actionUrl]);
     }
 }
