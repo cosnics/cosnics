@@ -12,10 +12,10 @@
                 <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>Nieuwe score</button>
                 <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>Categorie</button>
             </div>
-            <grades-table :grade-book="gradeBook" @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"></grades-table>
+            <grades-table :grade-book="gradeBook" @item-settings="itemSettings = $event" @category-settings="categorySettings = $event" @change-category="onChangeCategory"></grades-table>
         </div>
         <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null" @item-settings="itemSettings = $event"></item-settings>
-        <category-settings v-if="selectedCategory" :category="selectedCategory" @close="closeSelectedCategory"></category-settings>
+        <category-settings v-if="selectedCategory" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory"></category-settings>
     </div>
 </template>
 
@@ -23,9 +23,10 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import GradesDropdown from './GradesDropdown.vue';
     import GradesTable from './GradesTable.vue';
-    import GradeBook, {GradeItem} from '../domain/GradeBook';
+    import GradeBook, {Category, GradeItem} from '../domain/GradeBook';
     import ItemSettings from './ItemSettings.vue';
     import CategorySettings from './CategorySettings.vue';
+    import Connector from '../connector/Connector';
 
     @Component({
         components: { GradesTable, GradesDropdown, ItemSettings, CategorySettings }
@@ -35,6 +36,7 @@
         private categorySettings: number|null = null;
 
         @Prop({type: GradeBook, required: true}) readonly gradeBook!: GradeBook;
+        @Prop(Connector) readonly connector!: Connector|null;
 
         toggleGradeItem(item: GradeItem, isAdding: boolean) {
             this.gradeBook.toggleGradeItem(item, isAdding);
@@ -55,6 +57,10 @@
 
         closeSelectedCategory() {
             this.categorySettings = null;
+        }
+
+        onChangeCategory(category: Category) {
+            this.connector?.updateCategory(category);
         }
     }
 </script>

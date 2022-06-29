@@ -121,7 +121,10 @@ export default class GradesTable extends Vue {
 
     setCategoryTitle(id: number, title: string) {
         const category = this.gradeBook.getCategory(id);
-        if (category) { category.title = title; }
+        if (category) {
+            category.title = title;
+            this.$emit('change-category', category);
+        }
         this.catEditItemId = null;
     }
 

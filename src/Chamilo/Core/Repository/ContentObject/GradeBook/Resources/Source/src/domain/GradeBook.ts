@@ -1,3 +1,5 @@
+import APIConfig from "@/connector/APIConfig";
+
 export type ItemId = string|number;
 export type ColumnId = string|number;
 export type ResultType = number|'gafw'|'afw'|null;
@@ -58,6 +60,17 @@ export default class GradeBook {
     public nullCategory: Category = {id: 0, title: '', color: '', columnIds: []};
     public originalResultsData: any[] = [];
     public resultsData: ResultsData[] = [];
+
+    public readonly dataId;
+    public currentVersion: number|null;
+    public readonly title;
+
+
+    constructor(dataId: number, currentVersion: number|null, title: string) {
+        this.dataId = dataId;
+        this.title = title;
+        this.currentVersion = currentVersion;
+    }
 
     get allCategories(): Category[] {
         return [...this.categories, this.nullCategory];
@@ -432,7 +445,7 @@ export default class GradeBook {
             });
         }
 
-        const gradeBook = new GradeBook();
+        const gradeBook = new GradeBook(gradeBookObject.dataId, gradeBookObject.version, gradeBookObject.title);
         gradeBook.gradeItems = gradeBookObject.gradeItems;
         gradeBook.gradeColumns = gradeBookObject.gradeColumns;
         gradeBook.categories = gradeBookObject.categories;

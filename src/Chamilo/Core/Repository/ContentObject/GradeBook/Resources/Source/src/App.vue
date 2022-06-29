@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Main v-if="gradeBook" :grade-book="gradeBook"></Main>
+    <Main v-if="gradeBook" :grade-book="gradeBook" :connector="connector"></Main>
   </div>
 </template>
 
@@ -21,14 +21,14 @@
         @Prop({type: Object, default: () => null}) readonly apiConfig!: APIConfig;
 
         async load(): Promise<void> {
-            const allData: any = await this.connector?.loadAllData();
+            const allData: any = await Connector.loadGradeBookData(this.apiConfig.loadGradeBookDataURL);
             if (allData) {
                 this.gradeBook = GradeBook.from(allData);
+                this.connector = new Connector(this.apiConfig, this.gradeBook.dataId, this.gradeBook.currentVersion);
             }
         }
 
         mounted() {
-            this.connector = new Connector(this.apiConfig);
             this.load();
         }
     }

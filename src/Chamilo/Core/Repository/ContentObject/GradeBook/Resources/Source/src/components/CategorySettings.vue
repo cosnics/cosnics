@@ -2,11 +2,11 @@
     <div class="modal-wrapper">
         <div class="modal-content">
             <div class="modal-header">
-                <input type="text" v-model="category.title" autocomplete="off">
+                <input type="text" v-model="category.title" autocomplete="off" @input="onCategoryChange">
                 <button class="btn-close" @click="$emit('close')" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <div class="modal-body">
-                <input type="color" v-model="category.color">
+                <input type="color" v-model="category.color" @input="onCategoryChange">
             </div>
         </div>
         <div class="modal-overlay" @click="$emit('close')"></div>
@@ -16,12 +16,22 @@
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
 import {Category} from '../domain/GradeBook';
+import debounce from 'debounce';
 
 @Component({
     components: { }
 })
 export default class CategorySettings extends Vue {
     @Prop({type: Object, required: true}) readonly category!: Category;
+
+    constructor() {
+        super();
+        this.onCategoryChange = debounce(this.onCategoryChange, 750);
+    }
+
+    onCategoryChange() {
+        this.$emit('change-category', this.category);
+    }
 }
 </script>
 

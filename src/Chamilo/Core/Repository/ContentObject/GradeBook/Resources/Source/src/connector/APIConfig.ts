@@ -1,3 +1,5 @@
 export default interface APIConfig {
-    readonly loadAllURL: string;
+    readonly loadGradeBookDataURL: string;
+    readonly updateCategoryURL: string;
+    readonly csrfToken: string;
 }
