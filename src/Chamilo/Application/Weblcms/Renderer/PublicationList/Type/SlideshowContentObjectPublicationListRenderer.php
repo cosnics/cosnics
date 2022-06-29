@@ -2,8 +2,7 @@
 namespace Chamilo\Application\Weblcms\Renderer\PublicationList\Type;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
-use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
-use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Slideshow\SlideshowRenderer;
 
 /**
@@ -37,19 +36,17 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
 
             if ($contentObject)
             {
-                $contentObjectRenditionImplementation = ContentObjectRenditionImplementation::factory(
-                    $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_PREVIEW, $this
+                return $this->getSlideshowRenderer()->render(
+                    $this, $contentObject, $publicationCount, $publicationActions, $toolbrowser->get_parameters()
                 );
-
-                $slideshowRender = new SlideshowRenderer(
-                    $contentObject, $publicationCount, $contentObjectRenditionImplementation, $publicationActions,
-                    $toolbrowser->get_parameters(), $slideshowIndex, $slideshowAutoPlay
-                );
-
-                return $slideshowRender->render();
             }
         }
 
         return '';
+    }
+
+    protected function getSlideshowRenderer(): SlideshowRenderer
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(SlideshowRenderer::class);
     }
 }

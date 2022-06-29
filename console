@@ -1,6 +1,7 @@
 <?php
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
@@ -20,7 +21,10 @@ $configurationConsulter = $container->get(ConfigurationConsulter::class);
 /** @var \Chamilo\Libraries\Platform\Session\SessionUtilities */
 $sessionUtilities = $container->get(SessionUtilities::class);
 
-$exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter, $sessionUtilities);
+/** @var \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator */
+$urlGenerator = $container->get(UrlGenerator::class);
+
+$exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter, $sessionUtilities, $urlGenerator);
 $exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
 
 try
