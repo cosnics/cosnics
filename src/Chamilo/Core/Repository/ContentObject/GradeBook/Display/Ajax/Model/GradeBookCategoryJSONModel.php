@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookCategory;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookColumn;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
 use Doctrine\Common\Collections\ArrayCollection;
 use http\Exception\InvalidArgumentException;
 use JMS\Serializer\Annotation\Type;
@@ -119,5 +120,18 @@ class GradeBookCategoryJSONModel
         return new self(
             $gradebookCategory->getId(), $gradebookCategory->getTitle(), $gradebookCategory->getColor(), $gradebookCategory->getGradeBookColumns()
         );
+    }
+
+    /**
+     * @param GradeBookData $gradebookData
+     *
+     * @return GradeBookCategory
+     */
+    public function toGradeBookCategory(GradeBookData $gradebookData)
+    {
+        $category = new GradeBookCategory($gradebookData);
+        $this->updateGradeBookCategory($category);
+
+        return $category;
     }
 }

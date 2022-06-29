@@ -118,6 +118,29 @@ class GradeBookAjaxService
      *
      * @throws \Doctrine\ORM\ORMException
      */
+    public function addCategory(int $gradeBookDataId, int $versionId, string $gradeBookCategoryJSONData)
+    {
+        $gradebookCategoryJSONModel = $this->parseGradeBookCategoryJSONModel($gradeBookCategoryJSONData);
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $category = $gradebookCategoryJSONModel->toGradeBookCategory($gradebookData);
+        $gradebookData->addGradeBookCategory($category);
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+            'category' => $gradebookCategoryJSONModel::fromGradeBookCategory($category)
+        ];
+    }
+
+    /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param string $gradeBookCategoryJSONData
+     *
+     * @return array
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
     public function updateCategory(int $gradeBookDataId, int $versionId, string $gradeBookCategoryJSONData)
     {
         $gradebookCategoryJSONModel = $this->parseGradeBookCategoryJSONModel($gradeBookCategoryJSONData);

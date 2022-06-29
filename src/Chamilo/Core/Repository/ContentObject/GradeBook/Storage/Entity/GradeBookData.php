@@ -237,6 +237,25 @@ class GradeBookData
     }
 
     /**
+     * @param GradeBookCategory $gradebookCategory
+     *
+     * @return GradeBookData
+     */
+    public function addGradeBookCategory(GradeBookCategory $gradebookCategory): GradeBookData
+    {
+        if ($this->gradebookCategories->contains($gradebookCategory))
+        {
+            return $this;
+        }
+
+        $this->gradebookCategories->add($gradebookCategory);
+        $gradebookCategory->setGradeBookData($this);
+        $gradebookCategory->setSort(count($this->gradebookCategories));
+
+        return $this;
+    }
+
+    /**
      * @param int $categoryId
      *
      * @return GradeBookCategory

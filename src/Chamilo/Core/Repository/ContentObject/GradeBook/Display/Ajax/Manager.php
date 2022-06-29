@@ -26,6 +26,7 @@ use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 abstract class Manager extends AjaxManager
 {
     const ACTION_LOAD_GRADEBOOK_DATA = 'LoadGradeBookData';
+    const ACTION_ADD_CATEGORY = 'AddCategory';
     const ACTION_UPDATE_CATEGORY = 'UpdateCategory';
 
     const PARAM_ACTION = 'gradebook_display_ajax_action';
