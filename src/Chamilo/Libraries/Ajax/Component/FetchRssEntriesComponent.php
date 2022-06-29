@@ -52,7 +52,7 @@ class FetchRssEntriesComponent extends Manager implements NoAuthenticationSuppor
      *
      * @see \Chamilo\Libraries\Architecture\AjaxManager::getRequiredPostParameters()
      */
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return array('rss_feed_url', 'number_of_entries');
     }

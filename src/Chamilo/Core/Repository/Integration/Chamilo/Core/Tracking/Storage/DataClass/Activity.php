@@ -113,7 +113,7 @@ class Activity extends Tracker
      *
      * @return string
      */
-    public function get_type_string()
+    public function get_type_string(): string
     {
         return self::type_string($this->getType());
     }

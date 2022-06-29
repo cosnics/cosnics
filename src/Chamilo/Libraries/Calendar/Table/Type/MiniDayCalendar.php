@@ -9,18 +9,12 @@ namespace Chamilo\Libraries\Calendar\Table\Type;
 class MiniDayCalendar extends DayCalendar
 {
 
-    /**
-     *
-     * @param integer $displayTime
-     * @param integer $hourStep
-     * @param integer $startHour
-     * @param integer $endHour
-     * @param boolean $hideOtherHours
-     */
-    public function __construct($displayTime, $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false)
+    public function __construct(
+        int $displayTime, int $hourStep = 1, int $startHour = 0, int $endHour = 24, bool $hideOtherHours = false
+    )
     {
         parent::__construct(
-            $displayTime, $hourStep, $startHour, $endHour, $hideOtherHours, array('table-calendar-mini')
+            $displayTime, $hourStep, $startHour, $endHour, $hideOtherHours, ['table-calendar-mini']
         );
     }
 }

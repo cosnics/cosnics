@@ -53,7 +53,7 @@ class UpdateTreeNodeTitleComponent extends Manager
      *
      * @return string
      */
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return array(self::PARAM_NEW_TITLE, self::PARAM_CHILD_ID);
     }

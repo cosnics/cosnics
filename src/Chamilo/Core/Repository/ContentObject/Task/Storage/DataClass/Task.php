@@ -232,7 +232,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
     /**
      * @return string
      */
-    public function get_type_string()
+    public function get_type_string(): string
     {
         if ($this->has_frequency())
         {

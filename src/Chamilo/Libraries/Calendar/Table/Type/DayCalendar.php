@@ -7,49 +7,23 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package Chamilo\Libraries\Calendar\Table\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DayCalendar extends Calendar
 {
 
-    /**
-     * The number of hours for one table cell.
-     *
-     * @var integer
-     */
-    private $hourStep;
+    private int $endHour;
 
-    /**
-     *
-     * @var integer
-     */
-    private $startHour;
+    private bool $hideOtherHours;
 
-    /**
-     *
-     * @var integer
-     */
-    private $endHour;
+    private int $hourStep;
 
-    /**
-     *
-     * @var boolean
-     */
-    private $hideOtherHours;
+    private int $startHour;
 
-    /**
-     *
-     * @param integer $displayTime A time in the day to be displayed
-     * @param integer $hourStep The number of hours for one table cell. Defaults to 1.
-     * @param integer $startHour
-     * @param integer $endHour
-     * @param boolean $hideOtherHours
-     * @param string[] $classes
-     */
     public function __construct(
-        $displayTime, $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false, $classes = []
+        int $displayTime, int $hourStep = 1, int $startHour = 0, int $endHour = 24, bool $hideOtherHours = false,
+        array $classes = []
     )
     {
         $this->hourStep = $hourStep;
@@ -61,20 +35,13 @@ class DayCalendar extends Calendar
         $this->buildTable();
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function render()
+    public function render(): string
     {
         $this->addEvents();
 
         return $this->toHtml();
     }
 
-    /**
-     * Adds the events to the calendar
-     */
     protected function addEvents()
     {
         $events = $this->getEventsToShow();
@@ -112,9 +79,6 @@ class DayCalendar extends Calendar
         }
     }
 
-    /**
-     * Builds the table
-     */
     protected function buildTable()
     {
         $header = $this->getHeader();
@@ -171,12 +135,9 @@ class DayCalendar extends Calendar
     }
 
     /**
-     *
-     * @param integer $hour
-     *
      * @return string[]
      */
-    protected function determineCellClasses($hour)
+    protected function determineCellClasses(int $hour): array
     {
         $classes = [];
 
@@ -203,30 +164,17 @@ class DayCalendar extends Calendar
         return $classes;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getEndHour()
+    public function getEndHour(): int
     {
         return $this->endHour;
     }
 
-    /**
-     *
-     * @param integer $endHour
-     */
-    public function setEndHour($endHour)
+    public function setEndHour(int $endHour)
     {
         $this->endHour = $endHour;
     }
 
-    /**
-     * Gets the end date which will be displayed by this calendar.
-     *
-     * @return integer
-     */
-    public function getEndTime()
+    public function getEndTime(): int
     {
         if ($this->getHideOtherHours())
         {
@@ -236,68 +184,37 @@ class DayCalendar extends Calendar
         return strtotime('+24 Hours', $this->getStartTime());
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function getHideOtherHours()
+    public function getHideOtherHours(): bool
     {
         return $this->hideOtherHours;
     }
 
-    /**
-     *
-     * @param boolean $hideOtherHours
-     */
-    public function setHideOtherHours($hideOtherHours)
+    public function setHideOtherHours(bool $hideOtherHours)
     {
         $this->hideOtherHours = $hideOtherHours;
     }
 
-    /**
-     * Gets the number of hours for one table cell.
-     *
-     * @return integer
-     */
-    public function getHourStep()
+    public function getHourStep(): int
     {
         return $this->hourStep;
     }
 
-    /**
-     * Sets the number of hours for one table cell.
-     *
-     * @param integer $hourStep
-     */
-    public function setHourStep($hourStep)
+    public function setHourStep(int $hourStep)
     {
         $this->hourStep = $hourStep;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getStartHour()
+    public function getStartHour(): int
     {
         return $this->startHour;
     }
 
-    /**
-     *
-     * @param integer $startHour
-     */
-    public function setStartHour($startHour)
+    public function setStartHour(int $startHour)
     {
         $this->startHour = $startHour;
     }
 
-    /**
-     * Gets the first date which will be displayed by this calendar.
-     *
-     * @return integer
-     */
-    public function getStartTime()
+    public function getStartTime(): int
     {
         if ($this->getHideOtherHours())
         {

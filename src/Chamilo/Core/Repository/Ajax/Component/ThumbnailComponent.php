@@ -19,7 +19,7 @@ class ThumbnailComponent extends \Chamilo\Core\Repository\Ajax\Manager
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return array(Manager::PARAM_CONTENT_OBJECT_ID, self::PARAM_WIDTH, self::PARAM_HEIGHT);
     }

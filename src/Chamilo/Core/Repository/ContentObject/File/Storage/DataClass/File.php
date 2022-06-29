@@ -524,7 +524,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
-    public function get_type_string()
+    public function get_type_string(): string
     {
         return Translation::get('TypeFile', array('EXTENSION' => strtoupper($this->get_extension())));
     }

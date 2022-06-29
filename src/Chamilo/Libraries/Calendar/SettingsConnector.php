@@ -6,7 +6,6 @@ use Chamilo\Core\User\Manager;
 use DateTimeZone;
 
 /**
- *
  * @package Chamilo\Libraries\Calendar
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -16,10 +15,9 @@ class SettingsConnector
 {
 
     /**
-     *
      * @return string[]
      */
-    public static function get_time_zones()
+    public static function get_time_zones(): array
     {
         $timezones = [];
         $timezoneIdentifiers = DateTimeZone::listIdentifiers();
@@ -33,14 +31,12 @@ class SettingsConnector
     }
 
     /**
-     *
-     * @return boolean
      * @throws \ReflectionException
      */
-    public static function is_allowed_to_change_platform_timezone()
+    public static function is_allowed_to_change_platform_timezone(): bool
     {
         return Configuration::getInstance()->get_setting(
-                array(Manager::context(), 'allow_user_change_platform_timezone')
+                [Manager::context(), 'allow_user_change_platform_timezone']
             ) == 1;
     }
 }

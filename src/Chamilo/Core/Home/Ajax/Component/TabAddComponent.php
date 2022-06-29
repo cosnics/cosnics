@@ -101,7 +101,7 @@ class TabAddComponent extends Manager
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
 
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return [];
     }

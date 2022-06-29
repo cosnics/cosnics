@@ -18,6 +18,13 @@ class MiniWeekCalendar extends Calendar
 {
 
     /**
+     * The number of hours for one table cell.
+     *
+     * @var int
+     */
+    private $hourStep;
+
+    /**
      * The navigation links
      *
      * @var string
@@ -25,17 +32,10 @@ class MiniWeekCalendar extends Calendar
     private $navigationHtml;
 
     /**
-     * The number of hours for one table cell.
-     *
-     * @var integer
-     */
-    private $hourStep;
-
-    /**
      * Creates a new week calendar
      *
-     * @param integer $displayTime A time in the week to be displayed
-     * @param integer $hourStep The number of hours for one table cell. Defaults to 2.
+     * @param int $displayTime A time in the week to be displayed
+     * @param int $hourStep The number of hours for one table cell. Defaults to 2.
      */
     public function __construct($displayTime, $hourStep = 2)
     {
@@ -67,8 +67,7 @@ class MiniWeekCalendar extends Calendar
         );
 
         $navigation->setCellContents(
-            0, 1,
-            htmlentities(Translation::get('Week', null, StringUtilities::LIBRARIES)) . ' ' . $weekNumber . ' : ' .
+            0, 1, htmlentities(Translation::get('Week', null, StringUtilities::LIBRARIES)) . ' ' . $weekNumber . ' : ' .
             date('l d M Y', $this->getStartTime()) . ' - ' .
             date('l d M Y', strtotime('+6 Days', $this->getStartTime()))
         );
@@ -171,9 +170,9 @@ class MiniWeekCalendar extends Calendar
      * Gets the end date which will be displayed by this calendar.
      * This is always a sunday.
      *
-     * @return integer
+     * @return int
      */
-    public function getEndTime()
+    public function getEndTime(): int
     {
         $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
 
@@ -188,7 +187,7 @@ class MiniWeekCalendar extends Calendar
     /**
      * Gets the number of hours for one table cell.
      *
-     * @return integer
+     * @return int
      */
     public function getHourStep()
     {
@@ -199,9 +198,9 @@ class MiniWeekCalendar extends Calendar
      * Gets the first date which will be displayed by this calendar.
      * This is always a monday.
      *
-     * @return integer
+     * @return int
      */
-    public function getStartTime()
+    public function getStartTime(): int
     {
         $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
 

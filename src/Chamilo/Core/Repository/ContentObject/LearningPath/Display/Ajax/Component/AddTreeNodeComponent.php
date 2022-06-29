@@ -87,7 +87,7 @@ class AddTreeNodeComponent extends Manager
      *
      * @return string
      */
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return array(self::PARAM_PARENT_NODE_ID, self::PARAM_NODE_TYPE);
     }

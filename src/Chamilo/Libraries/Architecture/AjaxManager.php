@@ -97,11 +97,9 @@ abstract class AjaxManager extends Application
     }
 
     /**
-     * Get an array of parameters which should be set for this call to work
-     *
      * @return string[]
      */
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return [];
     }

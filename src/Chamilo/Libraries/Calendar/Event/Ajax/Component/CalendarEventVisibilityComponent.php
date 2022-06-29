@@ -13,16 +13,16 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Libraries\Calendar\Event\Ajax\Component
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class CalendarEventVisibilityComponent extends Manager
 {
-    const PARAM_SOURCE = 'source';
+    public const PARAM_SOURCE = 'source';
 
     /**
      * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function run()
     {
@@ -45,20 +45,18 @@ abstract class CalendarEventVisibilityComponent extends Manager
         $visibility = $this->retrieveVisibility($condition);
         $translator = $this->getTranslator();
 
-        $result = new JsonAjaxResult();
-
         if ($visibility instanceof Visibility)
         {
             if ($visibility->delete())
             {
-                $result->success();
+                JsonAjaxResult::success();
             }
             else
             {
-                $result->error(
+                JsonAjaxResult::error(
                     500, $translator->trans(
                     'ObjectNotDeleted',
-                    array('OBJECT' => $translator->trans('Visibility', [], 'Chamilo\Libraries\Calendar')),
+                    ['OBJECT' => $translator->trans('Visibility', [], 'Chamilo\Libraries\Calendar')],
                     StringUtilities::LIBRARIES
                 )
                 );
@@ -72,33 +70,25 @@ abstract class CalendarEventVisibilityComponent extends Manager
 
             if ($visibility->create())
             {
-                $result->success();
+                JsonAjaxResult::success();
             }
             else
             {
-                $result->error(
+                JsonAjaxResult::error(
                     500, $translator->trans(
                     'ObjectNotCreated',
-                    array('OBJECT' => $translator->trans('Visibility', [], 'Chamilo\Libraries\Calendar')),
+                    ['OBJECT' => $translator->trans('Visibility', [], 'Chamilo\Libraries\Calendar')],
                     StringUtilities::LIBRARIES
                 )
                 );
             }
         }
-
-        $result->display();
     }
 
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
-        return array(self::PARAM_SOURCE);
+        return [self::PARAM_SOURCE];
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return \Chamilo\Libraries\Calendar\Event\Visibility
-     */
-    abstract function retrieveVisibility(Condition $condition);
+    abstract public function retrieveVisibility(Condition $condition): Visibility;
 }

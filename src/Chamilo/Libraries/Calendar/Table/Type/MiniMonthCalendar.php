@@ -10,34 +10,22 @@ use Exception;
  */
 class MiniMonthCalendar extends MonthCalendar
 {
-    const PERIOD_DAY = 2;
-    const PERIOD_MONTH = 0;
-    const PERIOD_WEEK = 1;
+    public const PERIOD_DAY = 2;
+    public const PERIOD_MONTH = 0;
+    public const PERIOD_WEEK = 1;
 
-    /**
-     *
-     * @param integer $displayTime
-     */
-    public function __construct($displayTime)
+    public function __construct(int $displayTime)
     {
-        parent::__construct($displayTime, null, array('table-calendar-mini'));
+        parent::__construct($displayTime, null, ['table-calendar-mini']);
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar::render()
-     */
-    public function render()
+    public function render(): string
     {
         $this->addEvents();
 
         return $this->toHtml();
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar::addEvents()
-     */
     public function addEvents()
     {
         $events = $this->getEventsToShow();
@@ -74,11 +62,7 @@ class MiniMonthCalendar extends MonthCalendar
         }
     }
 
-    /**
-     *
-     * @param string $urlFormat
-     */
-    public function addNavigationLinks($urlFormat)
+    public function addNavigationLinks(string $urlFormat)
     {
         $day = $this->getStartTime();
         $row = 0;
@@ -99,13 +83,7 @@ class MiniMonthCalendar extends MonthCalendar
         }
     }
 
-    /**
-     *
-     * @param integer $tableDate
-     *
-     * @return string
-     */
-    protected function determineCellContent($tableDate)
+    protected function determineCellContent(int $tableDate): string
     {
         $cellContent = parent::determineCellContent($tableDate);
 

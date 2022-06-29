@@ -16,82 +16,30 @@ class Event
 {
     use ClassContext;
 
-    /**
-     *
-     * @var integer
-     */
-    private $id;
+    private ?string $content;
 
-    /**
-     *
-     * @var integer
-     */
-    private $startDate;
+    private ?string $context;
 
-    /**
-     *
-     * @var integer
-     */
-    private $endDate;
+    private ?int $endDate;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules
-     */
-    private $recurrenceRules;
+    private ?int $id;
 
-    /**
-     *
-     * @var string
-     */
-    private $url;
+    private ?string $location;
 
-    /**
-     *
-     * @var string
-     */
-    private $title;
+    private ?RecurrenceRules $recurrenceRules;
 
-    /**
-     *
-     * @var string
-     */
-    private $content;
+    private ?string $source;
 
-    /**
-     *
-     * @var string
-     */
-    private $location;
+    private ?int $startDate;
 
-    /**
-     *
-     * @var string
-     */
-    private $source;
+    private ?string $title;
 
-    /**
-     *
-     * @var string
-     */
-    private $context;
+    private ?string $url;
 
-    /**
-     *
-     * @param integer $id
-     * @param integer $startDate
-     * @param integer $endDate
-     * @param RecurrenceRules $recurrenceRules
-     * @param string $url
-     * @param string $title
-     * @param string $content
-     * @param string $location
-     * @param string $source
-     * @param string $context
-     */
     public function __construct(
-        $id = null, $startDate = null, $endDate = null, RecurrenceRules $recurrenceRules = null, $url = null,
-        $title = null, $content = null, $location = null, $source = null, $context = null
+        ?int $id = null, ?int $startDate = null, ?int $endDate = null, ?RecurrenceRules $recurrenceRules = null,
+        ?string $url = null, ?string $title = null, ?string $content = null, ?string $location = null,
+        ?string $source = null, ?string $context = null
     )
     {
         $this->id = $id;
@@ -106,191 +54,110 @@ class Event
         $this->context = $context;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    /**
-     *
-     * @param string $content
-     */
-    public function setContent($content)
+    public function setContent(?string $content)
     {
         $this->content = $content;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getContext()
+    public function getContext(): ?string
     {
         return $this->context;
     }
 
-    /**
-     *
-     * @param string $context
-     */
-    public function setContext($context)
+    public function setContext(?string $context)
     {
         $this->context = $context;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getEndDate()
+    public function getEndDate(): ?int
     {
         return $this->endDate;
     }
 
-    /**
-     *
-     * @param integer $endDate
-     */
-    public function setEndDate($endDate)
+    public function setEndDate(?int $endDate)
     {
         $this->endDate = $endDate;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     *
-     * @param integer $id
-     */
-    public function setId($id)
+    public function setId(?int $id)
     {
         $this->id = $id;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getLocation()
+    public function getLocation(): ?string
     {
         return $this->location;
     }
 
-    /**
-     *
-     * @param string $location
-     */
-    public function setLocation($location)
+    public function setLocation(?string $location)
     {
         $this->location = $location;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules
-     */
-    public function getRecurrenceRules()
+    public function getRecurrenceRules(): ?RecurrenceRules
     {
         return $this->recurrenceRules;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules $recurrenceRules
-     */
-    public function setRecurrenceRules($recurrenceRules)
+    public function setRecurrenceRules(?RecurrenceRules $recurrenceRules)
     {
         $this->recurrenceRules = $recurrenceRules;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getSource()
+    public function getSource(): ?string
     {
         return $this->source;
     }
 
-    /**
-     *
-     * @param string $source
-     */
-    public function setSource($source)
+    public function setSource(?string $source)
     {
         $this->source = $source;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getStartDate()
+    public function getStartDate(): ?int
     {
         return $this->startDate;
     }
 
-    /**
-     *
-     * @param integer $startDate
-     */
-    public function setStartDate($startDate)
+    public function setStartDate(?int $startDate)
     {
         $this->startDate = $startDate;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     *
-     * @param string $title
-     */
-    public function setTitle($title)
+    public function setTitle(?string $title)
     {
         $this->title = $title;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->url;
     }
 
-    /**
-     *
-     * @param string $url
-     */
-    public function setUrl($url)
+    public function setUrl(?string $url)
     {
         $this->url = $url;
     }
-    
+
     /**
-     * @return string
      * @throws \ReflectionException
      */
-    public static function package()
+    public static function package(): string
     {
         return static::context();
     }

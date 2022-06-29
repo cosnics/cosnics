@@ -29,7 +29,7 @@ class SetElementTargetEntitiesComponent extends Manager
      * Returns the required post parameters
      * @return array
      */
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return array(self::PARAM_ELEMENT_ID);
     }

@@ -13,31 +13,19 @@ use Sabre\VObject;
 class RecurrenceCalculator
 {
 
+    private int $endTime;
+
     /**
-     *
      * @var \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    private $events;
+    private array $events;
+
+    private int $startTime;
 
     /**
-     *
-     * @var integer
-     */
-    private $startTime;
-
-    /**
-     *
-     * @var integer
-     */
-    private $endTime;
-
-    /**
-     *
      * @param \Chamilo\Libraries\Calendar\Event\Event[] $events
-     * @param integer $startTime
-     * @param integer $endTime
      */
-    public function __construct(array $events, $startTime, $endTime)
+    public function __construct(array $events, int $startTime, int $endTime)
     {
         $this->events = $events;
         $this->startTime = $startTime;
@@ -45,11 +33,10 @@ class RecurrenceCalculator
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      * @throws \Sabre\VObject\InvalidDataException
      */
-    public function expandEvents()
+    public function expandEvents(): array
     {
         $vCalendar = new VObject\Component\VCalendar();
 
@@ -83,6 +70,9 @@ class RecurrenceCalculator
             $endDateTime = new DateTime();
             $endDateTime->setTimestamp($event->getEndDate());
 
+            /**
+             * @var \Sabre\VObject\Component\VEvent $vEvent
+             */
             $vEvent = $vCalendar->add('VEVENT');
 
             $vEvent->add('SUMMARY', $event->getTitle());
@@ -123,60 +113,35 @@ class RecurrenceCalculator
         return $expandedEvents;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getEndTime()
+    public function getEndTime(): int
     {
         return $this->endTime;
     }
 
-    /**
-     *
-     * @param integer $endTime
-     */
-    public function setEndTime($endTime)
+    public function setEndTime(int $endTime)
     {
         $this->endTime = $endTime;
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getEvents()
+    public function getEvents(): array
     {
         return $this->events;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getStartTime()
+    public function getStartTime(): int
     {
         return $this->startTime;
     }
 
-    /**
-     *
-     * @param integer $startTime
-     */
-    public function setStartTime($startTime)
+    public function setStartTime(int $startTime)
     {
         $this->startTime = $startTime;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\Event $event
-     * @param integer $fromTime
-     * @param integer $endTime
-     *
-     * @return boolean
-     */
-    private function isVisible(Event $event, $fromTime, $endTime)
+    private function isVisible(Event $event, int $fromTime, int $endTime): bool
     {
         return ($event->getStartDate() >= $fromTime && $event->getStartDate() <= $endTime) ||
             ($event->getEndDate() >= $fromTime && $event->getEndDate() <= $endTime) ||
@@ -184,10 +149,9 @@ class RecurrenceCalculator
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Calendar\Event\Event[] $events
      */
-    public function setEvent($events)
+    public function setEvent(array $events)
     {
         $this->events = $events;
     }

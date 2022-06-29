@@ -153,7 +153,7 @@ class SelectComponent extends Manager implements TableSupport
      *
      * @return array
      */
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return array(\Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID);
     }

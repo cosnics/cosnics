@@ -1498,7 +1498,7 @@ class ContentObject extends CompositeDataClass
         return $this->getDefaultProperty(self::PROPERTY_TITLE);
     }
 
-    public function get_type_string()
+    public function get_type_string(): string
     {
         $template_registration = $this->get_template_registration();
         $type_string = $template_registration instanceof TemplateRegistration ? 'TypeName' .

@@ -461,7 +461,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
-    public function get_type_string()
+    public function get_type_string(): string
     {
         return Translation::get('TypeWebpage', array('EXTENSION' => strtoupper($this->get_extension())));
     }

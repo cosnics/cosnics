@@ -63,7 +63,7 @@ class VocabularyComponent extends Manager
      *
      * @return array
      */
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return array(self::PARAM_ELEMENT_ID, self::PARAM_SCHEMA_ID, self::PARAM_SCHEMA_INSTANCE_ID);
     }

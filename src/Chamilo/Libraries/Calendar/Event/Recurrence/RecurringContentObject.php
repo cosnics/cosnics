@@ -13,31 +13,28 @@ use Exception;
  */
 abstract class RecurringContentObject extends ContentObject
 {
-    const FREQUENCY_BIWEEKLY = 4;
-    const FREQUENCY_DAILY = 1;
-    const FREQUENCY_MONTHLY = 5;
-    const FREQUENCY_NONE = 0;
-    const FREQUENCY_WEEKDAYS = 3;
-    const FREQUENCY_WEEKLY = 2;
-    const FREQUENCY_YEARLY = 6;
+    public const FREQUENCY_BIWEEKLY = 4;
+    public const FREQUENCY_DAILY = 1;
+    public const FREQUENCY_MONTHLY = 5;
+    public const FREQUENCY_NONE = 0;
+    public const FREQUENCY_WEEKDAYS = 3;
+    public const FREQUENCY_WEEKLY = 2;
+    public const FREQUENCY_YEARLY = 6;
 
-    const PROPERTY_BYDAY = 'byday';
-    const PROPERTY_BYMONTH = 'bymonth';
-    const PROPERTY_BYMONTHDAY = 'bymonthday';
-    const PROPERTY_FREQUENCY = 'frequency';
-    const PROPERTY_FREQUENCY_COUNT = 'frequency_count';
-    const PROPERTY_FREQUENCY_INTERVAL = 'frequency_interval';
-    const PROPERTY_UNTIL = 'until';
+    public const PROPERTY_BYDAY = 'byday';
+    public const PROPERTY_BYMONTH = 'bymonth';
+    public const PROPERTY_BYMONTHDAY = 'bymonthday';
+    public const PROPERTY_FREQUENCY = 'frequency';
+    public const PROPERTY_FREQUENCY_COUNT = 'frequency_count';
+    public const PROPERTY_FREQUENCY_INTERVAL = 'frequency_interval';
+    public const PROPERTY_UNTIL = 'until';
 
-    public static $days = array(1 => 'MO', 2 => 'TU', 3 => 'WE', 4 => 'TH', 5 => 'FR', 6 => 'SA', 7 => 'SU');
+    public static array $days = [1 => 'MO', 2 => 'TU', 3 => 'WE', 4 => 'TH', 5 => 'FR', 6 => 'SA', 7 => 'SU'];
 
     /**
-     * @param integer $frequency
-     *
-     * @return string
      * @throws \Exception
      */
-    public static function frequency_as_string($frequency)
+    public static function frequency_as_string(int $frequency): string
     {
         $translator = Translation::getInstance();
 
@@ -69,30 +66,33 @@ abstract class RecurringContentObject extends ContentObject
     }
 
     /**
-     * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function frequency_is_indefinately()
+    public function frequency_is_indefinately(): bool
     {
         $repeat_to = $this->get_until();
 
-        return ($repeat_to == 0 || is_null($repeat_to));
+        return ($repeat_to == 0);
     }
 
     /**
      * @return string
+     * @throws \ReflectionException
      */
-    public function get_byday()
+    public static function getTypeName(): string
+    {
+        return ClassnameUtilities::getInstance()->getClassnameFromNamespace(static::class, true);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function get_byday(): ?string
     {
         return $this->getAdditionalProperty(self::PROPERTY_BYDAY);
     }
 
-    /**
-     * @param integer $rank
-     * @param integer $day
-     *
-     * @return string
-     */
-    public static function get_byday_ical_format($rank, $day)
+    public static function get_byday_ical_format(int $rank, int $day): string
     {
         $format = [];
         if ($rank != 0)
@@ -107,80 +107,79 @@ abstract class RecurringContentObject extends ContentObject
 
     /**
      * @return string[]
+     * @throws \ReflectionException
+     * @throws \Exception
      */
-    public static function get_byday_options()
+    public static function get_byday_options(): array
     {
         $translator = Translation::getInstance();
 
-        return $result = array(
-            1 => $translator->getTranslation("Monday", [], 'Chamilo\Libraries\Calendar'),
-            2 => $translator->getTranslation("Tuesday", [], 'Chamilo\Libraries\Calendar'),
-            3 => $translator->getTranslation("Wednesday", [], 'Chamilo\Libraries\Calendar'),
-            4 => $translator->getTranslation("Thursday", [], 'Chamilo\Libraries\Calendar'),
-            5 => $translator->getTranslation("Friday", [], 'Chamilo\Libraries\Calendar'),
-            6 => $translator->getTranslation("Saturday", [], 'Chamilo\Libraries\Calendar'),
-            7 => $translator->getTranslation("Sunday", [], 'Chamilo\Libraries\Calendar')
-        );
+        return [
+            1 => $translator->getTranslation('Monday', [], 'Chamilo\Libraries\Calendar'),
+            2 => $translator->getTranslation('Tuesday', [], 'Chamilo\Libraries\Calendar'),
+            3 => $translator->getTranslation('Wednesday', [], 'Chamilo\Libraries\Calendar'),
+            4 => $translator->getTranslation('Thursday', [], 'Chamilo\Libraries\Calendar'),
+            5 => $translator->getTranslation('Friday', [], 'Chamilo\Libraries\Calendar'),
+            6 => $translator->getTranslation('Saturday', [], 'Chamilo\Libraries\Calendar'),
+            7 => $translator->getTranslation('Sunday', [], 'Chamilo\Libraries\Calendar')
+        ];
     }
 
     /**
-     * @param string $bydays
-     *
      * @return string[]
      */
-    public static function get_byday_parts($bydays)
+    public static function get_byday_parts(string $bydays): array
     {
         $bydays = explode(',', $bydays);
         $parts = [];
 
         foreach ($bydays as $byday)
         {
-
             preg_match_all('/(-?[1-5]?)([A-Z]+)/', $byday, $byday_parts);
 
-            $parts[] = array($byday_parts[1] == 0 ? 0 : $byday_parts[1][0], $byday_parts[2][0]);
+            $parts[] = [$byday_parts[1] == 0 ? 0 : $byday_parts[1][0], $byday_parts[2][0]];
         }
 
         return $parts;
     }
 
     /**
-     * @return string
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function get_bymonth()
+    public function get_bymonth(): ?string
     {
         return $this->getAdditionalProperty(self::PROPERTY_BYMONTH);
     }
 
     /**
      * @return string[]
+     * @throws \ReflectionException
+     * @throws \Exception
      */
-    public static function get_bymonth_options()
+    public static function get_bymonth_options(): array
     {
         $translator = Translation::getInstance();
 
-        return array(
-            1 => $translator->getTranslation("January", [], 'Chamilo\Libraries\Calendar'),
-            2 => $translator->getTranslation("February", [], 'Chamilo\Libraries\Calendar'),
-            3 => $translator->getTranslation("March", [], 'Chamilo\Libraries\Calendar'),
-            4 => $translator->getTranslation("April", [], 'Chamilo\Libraries\Calendar'),
-            5 => $translator->getTranslation("May", [], 'Chamilo\Libraries\Calendar'),
-            6 => $translator->getTranslation("June", [], 'Chamilo\Libraries\Calendar'),
-            7 => $translator->getTranslation("Juli", [], 'Chamilo\Libraries\Calendar'),
-            8 => $translator->getTranslation("August", [], 'Chamilo\Libraries\Calendar'),
-            9 => $translator->getTranslation("September", [], 'Chamilo\Libraries\Calendar'),
-            10 => $translator->getTranslation("October", [], 'Chamilo\Libraries\Calendar'),
-            11 => $translator->getTranslation("November", [], 'Chamilo\Libraries\Calendar'),
-            12 => $translator->getTranslation("December", [], 'Chamilo\Libraries\Calendar')
-        );
+        return [
+            1 => $translator->getTranslation('January', [], 'Chamilo\Libraries\Calendar'),
+            2 => $translator->getTranslation('February', [], 'Chamilo\Libraries\Calendar'),
+            3 => $translator->getTranslation('March', [], 'Chamilo\Libraries\Calendar'),
+            4 => $translator->getTranslation('April', [], 'Chamilo\Libraries\Calendar'),
+            5 => $translator->getTranslation('May', [], 'Chamilo\Libraries\Calendar'),
+            6 => $translator->getTranslation('June', [], 'Chamilo\Libraries\Calendar'),
+            7 => $translator->getTranslation('Juli', [], 'Chamilo\Libraries\Calendar'),
+            8 => $translator->getTranslation('August', [], 'Chamilo\Libraries\Calendar'),
+            9 => $translator->getTranslation('September', [], 'Chamilo\Libraries\Calendar'),
+            10 => $translator->getTranslation('October', [], 'Chamilo\Libraries\Calendar'),
+            11 => $translator->getTranslation('November', [], 'Chamilo\Libraries\Calendar'),
+            12 => $translator->getTranslation('December', [], 'Chamilo\Libraries\Calendar')
+        ];
     }
 
     /**
-     * @param integer $month
-     *
-     * @return string
+     * @throws \ReflectionException
      */
-    public static function get_bymonth_string($month)
+    public static function get_bymonth_string(int $month): string
     {
         $translation = self::get_bymonth_options();
 
@@ -188,9 +187,9 @@ abstract class RecurringContentObject extends ContentObject
     }
 
     /**
-     * @return string
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function get_bymonthday()
+    public function get_bymonthday(): ?string
     {
         return $this->getAdditionalProperty(self::PROPERTY_BYMONTHDAY);
     }
@@ -198,39 +197,27 @@ abstract class RecurringContentObject extends ContentObject
     /**
      * @return string[]
      */
-    public static function get_bymonthday_options()
+    public static function get_bymonthday_options(): array
     {
         return range(1, 31);
     }
 
-    /**
-     * @param string $day
-     *
-     * @return integer
-     */
-    public static function get_day_format($day)
+    public static function get_day_format(string $day): int
     {
         $days = array_flip(self::$days);
 
         return $days[$day];
     }
 
-    /**
-     * @param integer $day
-     *
-     * @return string
-     */
-    public static function get_day_ical_format($day)
+    public static function get_day_ical_format(int $day): string
     {
         return self::$days[$day];
     }
 
     /**
-     * @param integer $day_number
-     *
-     * @return string
+     * @throws \ReflectionException
      */
-    public static function get_day_string($day_number)
+    public static function get_day_string(int $day_number): string
     {
         if (!is_numeric($day_number))
         {
@@ -242,54 +229,53 @@ abstract class RecurringContentObject extends ContentObject
     }
 
     /**
-     * @return integer
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function get_frequency()
+    public function get_frequency(): ?int
     {
         return $this->getAdditionalProperty(self::PROPERTY_FREQUENCY);
     }
 
     /**
-     * @return string
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
-    public function get_frequency_as_string()
+    public function get_frequency_as_string(): string
     {
         return self::frequency_as_string($this->get_frequency());
     }
 
     /**
-     * @return integer
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function get_frequency_count()
+    public function get_frequency_count(): ?int
     {
         return $this->getAdditionalProperty(self::PROPERTY_FREQUENCY_COUNT);
     }
 
     /**
-     * @return integer
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function get_frequency_interval()
+    public function get_frequency_interval(): ?int
     {
         return $this->getAdditionalProperty(self::PROPERTY_FREQUENCY_INTERVAL);
     }
 
     /**
      * @return string[]
+     * @throws \ReflectionException
+     * @throws \Exception
      */
-    public static function get_frequency_options()
+    public static function get_frequency_options(): array
     {
         $translator = Translation::getInstance();
         $options = [];
 
         $options[self::FREQUENCY_DAILY] = $translator->getTranslation('Daily', [], 'Chamilo\Libraries\Calendar');
-        $options[self::FREQUENCY_WEEKDAYS] =
-            $translator->getTranslation('Weekdays', [], 'Chamilo\Libraries\Calendar');
+        $options[self::FREQUENCY_WEEKDAYS] = $translator->getTranslation('Weekdays', [], 'Chamilo\Libraries\Calendar');
         $options[self::FREQUENCY_WEEKLY] = $translator->getTranslation('Weekly', [], 'Chamilo\Libraries\Calendar');
-        $options[self::FREQUENCY_BIWEEKLY] =
-            $translator->getTranslation('BiWeekly', [], 'Chamilo\Libraries\Calendar');
-        $options[self::FREQUENCY_MONTHLY] =
-            $translator->getTranslation('Monthly', [], 'Chamilo\Libraries\Calendar');
+        $options[self::FREQUENCY_BIWEEKLY] = $translator->getTranslation('BiWeekly', [], 'Chamilo\Libraries\Calendar');
+        $options[self::FREQUENCY_MONTHLY] = $translator->getTranslation('Monthly', [], 'Chamilo\Libraries\Calendar');
         $options[self::FREQUENCY_YEARLY] = $translator->getTranslation('Yearly', [], 'Chamilo\Libraries\Calendar');
 
         return $options;
@@ -297,8 +283,10 @@ abstract class RecurringContentObject extends ContentObject
 
     /**
      * @return string[]
+     * @throws \ReflectionException
+     * @throws \Exception
      */
-    public static function get_rank_options()
+    public static function get_rank_options(): array
     {
         $translator = Translation::getInstance();
         $ranks = [];
@@ -315,11 +303,9 @@ abstract class RecurringContentObject extends ContentObject
     }
 
     /**
-     * @param integer $rank
-     *
-     * @return string
+     * @throws \ReflectionException
      */
-    public static function get_rank_string($rank)
+    public static function get_rank_string(int $rank): string
     {
         $translation = self::get_rank_options();
 
@@ -327,18 +313,10 @@ abstract class RecurringContentObject extends ContentObject
     }
 
     /**
-     * @return string
      * @throws \ReflectionException
+     * @throws \Exception
      */
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(static::class, true);
-    }
-
-    /**
-     * @return string
-     */
-    public function get_type_string()
+    public function get_type_string(): string
     {
         if ($this->has_frequency())
         {
@@ -353,76 +331,55 @@ abstract class RecurringContentObject extends ContentObject
     }
 
     /**
-     * @return integer
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function get_until()
+    public function get_until(): ?int
     {
         return $this->getAdditionalProperty(self::PROPERTY_UNTIL);
     }
 
     /**
-     * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function has_frequency()
+    public function has_frequency(): bool
     {
         $repeat = $this->get_frequency();
 
         return ($repeat != '0');
     }
 
-    /**
-     * @param string $byday
-     */
-    public function set_byday($byday)
+    public function set_byday(?string $byday)
     {
-        return $this->setAdditionalProperty(self::PROPERTY_BYDAY, $byday);
+        $this->setAdditionalProperty(self::PROPERTY_BYDAY, $byday);
     }
 
-    /**
-     * @param string $bymonth
-     */
-    public function set_bymonth($bymonth)
+    public function set_bymonth(?string $bymonth)
     {
-        return $this->setAdditionalProperty(self::PROPERTY_BYMONTH, $bymonth);
+        $this->setAdditionalProperty(self::PROPERTY_BYMONTH, $bymonth);
     }
 
-    /**
-     * @param string $bymonthday
-     */
-    public function set_bymonthday($bymonthday)
+    public function set_bymonthday(?string $bymonthday)
     {
-        return $this->setAdditionalProperty(self::PROPERTY_BYMONTHDAY, $bymonthday);
+        $this->setAdditionalProperty(self::PROPERTY_BYMONTHDAY, $bymonthday);
     }
 
-    /**
-     * @param integer $frequency
-     */
-    public function set_frequency($frequency)
+    public function set_frequency(?int $frequency)
     {
-        return $this->setAdditionalProperty(self::PROPERTY_FREQUENCY, $frequency);
+        $this->setAdditionalProperty(self::PROPERTY_FREQUENCY, $frequency);
     }
 
-    /**
-     * @param integer $frequency_count
-     */
-    public function set_frequency_count($frequency_count)
+    public function set_frequency_count(?int $frequency_count)
     {
-        return $this->setAdditionalProperty(self::PROPERTY_FREQUENCY_COUNT, $frequency_count);
+        $this->setAdditionalProperty(self::PROPERTY_FREQUENCY_COUNT, $frequency_count);
     }
 
-    /**
-     * @param integer $frequency_interval
-     */
-    public function set_frequency_interval($frequency_interval)
+    public function set_frequency_interval(?int $frequency_interval)
     {
-        return $this->setAdditionalProperty(self::PROPERTY_FREQUENCY_INTERVAL, $frequency_interval);
+        $this->setAdditionalProperty(self::PROPERTY_FREQUENCY_INTERVAL, $frequency_interval);
     }
 
-    /**
-     * @param integer $until
-     */
-    public function set_until($until)
+    public function set_until(?int $until)
     {
-        return $this->setAdditionalProperty(self::PROPERTY_UNTIL, $until);
+        $this->setAdditionalProperty(self::PROPERTY_UNTIL, $until);
     }
 }

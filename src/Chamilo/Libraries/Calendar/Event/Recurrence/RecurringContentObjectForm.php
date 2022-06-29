@@ -14,14 +14,14 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
  */
 class RecurringContentObjectForm extends ContentObjectForm
 {
-    const PARAM_DAILY = 'daily';
-    const PARAM_DAY = 'day';
-    const PARAM_MONTHLY = 'monthly';
-    const PARAM_OPTION = 'option';
-    const PARAM_RANGE = 'range';
-    const PARAM_RANK = 'rank';
-    const PARAM_WEEKLY = 'weekly';
-    const PARAM_YEARLY = 'yearly';
+    public const PARAM_DAILY = 'daily';
+    public const PARAM_DAY = 'day';
+    public const PARAM_MONTHLY = 'monthly';
+    public const PARAM_OPTION = 'option';
+    public const PARAM_RANGE = 'range';
+    public const PARAM_RANK = 'rank';
+    public const PARAM_WEEKLY = 'weekly';
+    public const PARAM_YEARLY = 'yearly';
 
     /**
      * @param string $type
@@ -31,10 +31,10 @@ class RecurringContentObjectForm extends ContentObjectForm
         $this->addElement('html', '<div class="form-row col-md-12 col-lg-8">');
 
         $this->add_select(
-            $type . '[' . self::PARAM_OPTION . ']', null, array(
+            $type . '[' . self::PARAM_OPTION . ']', null, [
             RecurringContentObject::PROPERTY_BYDAY => RecurringContentObject::PROPERTY_BYDAY,
             RecurringContentObject::PROPERTY_BYMONTHDAY => RecurringContentObject::PROPERTY_BYMONTHDAY
-        ), false, array('style' => 'display: none;')
+        ], false, ['style' => 'display: none;']
         );
 
         $html = [];
@@ -51,10 +51,7 @@ class RecurringContentObjectForm extends ContentObjectForm
     }
 
     /**
-     * @param string $type
-     * @param string $subElement
-     * @param string $addonLabel
-     * @param boolean $multiple
+     * @throws \ReflectionException
      */
     protected function addByDayPropertiesToForm(
         string $type, string $subElement = self::PARAM_DAY, string $addonLabel = null, bool $multiple = false
@@ -110,7 +107,7 @@ class RecurringContentObjectForm extends ContentObjectForm
     }
 
     /**
-     * @param string $type
+     * @throws \ReflectionException
      */
     protected function addByDayRankAndByDayPropertiesToForm(string $type)
     {
@@ -123,7 +120,7 @@ class RecurringContentObjectForm extends ContentObjectForm
     }
 
     /**
-     * @param string $type
+     * @throws \ReflectionException
      */
     protected function addByDayRankPropertiesToForm(string $type)
     {
@@ -153,7 +150,7 @@ class RecurringContentObjectForm extends ContentObjectForm
         $this->add_select(
             $type . '[' . RecurringContentObject::PROPERTY_BYMONTHDAY . ']', null,
             RecurringContentObject::get_bymonthday_options(), false,
-            array('multiple' => 'multiple', 'style' => 'display: none;')
+            ['multiple' => 'multiple', 'style' => 'display: none;']
         );
 
         $html = [];
@@ -350,11 +347,11 @@ class RecurringContentObjectForm extends ContentObjectForm
         $this->addElement('html', implode(PHP_EOL, $html));
 
         $this->add_select(
-            self::PARAM_RANGE, null, array(
+            self::PARAM_RANGE, null, [
             1 => $translator->trans('RecurrenceRangeNoEndDate', [], 'Chamilo\Libraries\Calendar'),
             2 => $translator->trans('RecurrenceRangeCreate', [], 'Chamilo\Libraries\Calendar'),
             3 => $translator->trans('RecurrenceRangeUntil', [], 'Chamilo\Libraries\Calendar')
-        ), false, array('style' => 'display: none;')
+        ], false, ['style' => 'display: none;']
         );
 
         $html = [];
@@ -396,7 +393,7 @@ class RecurringContentObjectForm extends ContentObjectForm
 
         $this->addElement(
             'datepicker', $this->getAttribute('name'), RecurringContentObject::PROPERTY_UNTIL, '',
-            array('class' => RecurringContentObject::PROPERTY_UNTIL), true
+            ['class' => RecurringContentObject::PROPERTY_UNTIL], true
         );
 
         $html = [];
@@ -526,14 +523,14 @@ class RecurringContentObjectForm extends ContentObjectForm
                         {
                             $defaults[RecurringContentObject::PROPERTY_FREQUENCY] = 3;
                             $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                            $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_BYDAY] = array(1);
+                            $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_BYDAY] = [1];
                         }
                         elseif ($recurringContentObject->get_frequency_interval() == 2 &&
                             $recurringContentObject->get_byday() == '')
                         {
                             $defaults[RecurringContentObject::PROPERTY_FREQUENCY] = 4;
                             $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] = 1;
-                            $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_BYDAY] = array(1);
+                            $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_BYDAY] = [1];
                         }
                         else
                         {
@@ -635,17 +632,17 @@ class RecurringContentObjectForm extends ContentObjectForm
             $defaults[self::PARAM_DAILY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] = 1;
 
             $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] = 1;
-            $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_BYDAY] = array(1);
+            $defaults[self::PARAM_WEEKLY][RecurringContentObject::PROPERTY_BYDAY] = [1];
 
             $defaults[self::PARAM_MONTHLY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] = 1;
             $defaults[self::PARAM_MONTHLY][self::PARAM_OPTION] = 0;
             $defaults[self::PARAM_MONTHLY][RecurringContentObject::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
-            $defaults[self::PARAM_MONTHLY][RecurringContentObject::PROPERTY_BYMONTHDAY] = array(1);
+            $defaults[self::PARAM_MONTHLY][RecurringContentObject::PROPERTY_BYMONTHDAY] = [1];
 
             $defaults[self::PARAM_YEARLY][RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL] = 1;
             $defaults[self::PARAM_YEARLY][self::PARAM_OPTION] = 0;
             $defaults[self::PARAM_YEARLY][RecurringContentObject::PROPERTY_BYDAY][self::PARAM_RANK] = 0;
-            $defaults[self::PARAM_YEARLY][RecurringContentObject::PROPERTY_BYMONTHDAY] = array(1);
+            $defaults[self::PARAM_YEARLY][RecurringContentObject::PROPERTY_BYMONTHDAY] = [1];
 
             $defaults[self::PARAM_RANGE] = 1;
             $defaults[RecurringContentObject::PROPERTY_UNTIL] = null;
@@ -657,7 +654,7 @@ class RecurringContentObjectForm extends ContentObjectForm
 
     protected function setFrequencyElementTemplates()
     {
-        $elementNames = array(
+        $elementNames = [
             RecurringContentObject::PROPERTY_FREQUENCY,
 
             self::PARAM_DAILY . '[' . RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL . ']',
@@ -682,7 +679,7 @@ class RecurringContentObjectForm extends ContentObjectForm
             RecurringContentObject::PROPERTY_FREQUENCY_COUNT,
             RecurringContentObject::PROPERTY_UNTIL
 
-        );
+        ];
 
         foreach ($elementNames as $elementName)
         {
@@ -691,9 +688,9 @@ class RecurringContentObjectForm extends ContentObjectForm
     }
 
     /**
-     * @param \Chamilo\Libraries\Calendar\Event\Recurrence\RecurringContentObject $calendarEvent
+     * @throws \Exception
      */
-    public function setRecurrenceProperties($calendarEvent)
+    public function setRecurrenceProperties(RecurringContentObject $calendarEvent)
     {
         $values = $this->exportValues();
 
@@ -829,7 +826,9 @@ class RecurringContentObjectForm extends ContentObjectForm
                 case 3 :
                     $calendarEvent->set_frequency_count(0);
                     $calendarEvent->set_until(
-                        DatetimeUtilities::getInstance()->timeFromDatepicker($values[RecurringContentObject::PROPERTY_UNTIL])
+                        DatetimeUtilities::getInstance()->timeFromDatepicker(
+                            $values[RecurringContentObject::PROPERTY_UNTIL]
+                        )
                     );
             }
         }

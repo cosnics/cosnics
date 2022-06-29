@@ -17,7 +17,7 @@ class UploadImageComponent extends \Chamilo\Core\Repository\Ajax\Manager impleme
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return array(\Chamilo\Core\User\Manager::PARAM_USER_USER_ID);
     }

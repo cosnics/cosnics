@@ -68,7 +68,7 @@ class MoveTreeNodeComponent extends Manager
      *
      * @return string
      */
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return array(self::PARAM_PARENT_ID, self::PARAM_DISPLAY_ORDER, self::PARAM_CHILD_ID);
     }

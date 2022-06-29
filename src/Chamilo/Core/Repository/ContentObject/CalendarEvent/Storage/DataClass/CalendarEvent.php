@@ -83,7 +83,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
     /**
      * @return string
      */
-    public function get_type_string()
+    public function get_type_string(): string
     {
         if ($this->has_frequency())
         {

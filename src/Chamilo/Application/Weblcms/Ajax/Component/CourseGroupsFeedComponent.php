@@ -34,7 +34,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
      *
      * @return string[]
      */
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return array(self::PARAM_COURSE_ID);
     }

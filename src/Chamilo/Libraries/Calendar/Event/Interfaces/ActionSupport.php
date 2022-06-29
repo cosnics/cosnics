@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event\Interfaces;
 
+use Chamilo\Libraries\Calendar\Event\Event;
+
 /**
  *
  * @package Chamilo\Libraries\Calendar\Event\Interfaces
@@ -12,11 +14,7 @@ interface ActionSupport
 {
 
     /**
-     * Get the actions available in the renderer for the given event
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\Event $event
-     *
      * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */
-    public function getEventActions($event);
+    public function getEventActions(Event $event): array;
 }

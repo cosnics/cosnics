@@ -20,7 +20,7 @@ class BlockSortComponent extends Manager
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return array(self::PARAM_COLUMN, self::PARAM_ORDER);
     }

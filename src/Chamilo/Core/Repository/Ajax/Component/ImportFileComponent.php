@@ -170,7 +170,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
         return $this->getRequest()->files->get($filePropertyName);
     }
 
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return array(self::PARAM_PARENT_ID);
     }

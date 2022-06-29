@@ -14,32 +14,7 @@ use Exception;
  */
 class WeekCalendar extends Calendar
 {
-    const TIME_PLACEHOLDER = '__TIME__';
-
-    /**
-     * The number of hours for one table cell.
-     *
-     * @var integer
-     */
-    private $hourStep;
-
-    /**
-     *
-     * @var integer
-     */
-    private $startHour;
-
-    /**
-     *
-     * @var integer
-     */
-    private $endHour;
-
-    /**
-     *
-     * @var boolean
-     */
-    private $hideOtherHours;
+    public const TIME_PLACEHOLDER = '__TIME__';
 
     /**
      * @var string
@@ -47,14 +22,39 @@ class WeekCalendar extends Calendar
     private $dayUrlTemplate;
 
     /**
+     *
+     * @var int
+     */
+    private $endHour;
+
+    /**
+     *
+     * @var bool
+     */
+    private $hideOtherHours;
+
+    /**
+     * The number of hours for one table cell.
+     *
+     * @var int
+     */
+    private $hourStep;
+
+    /**
+     *
+     * @var int
+     */
+    private $startHour;
+
+    /**
      * Creates a new week calendar
      *
-     * @param integer $displayTime A time in the week to be displayed
+     * @param int $displayTime A time in the week to be displayed
      * @param string $dayUrlTemplate
-     * @param integer $hourStep The number of hours for one table cell. Defaults to 2.
-     * @param integer $startHour
-     * @param integer $endHour
-     * @param boolean $hideOtherHours
+     * @param int $hourStep The number of hours for one table cell. Defaults to 2.
+     * @param int $startHour
+     * @param int $endHour
+     * @param bool $hideOtherHours
      * @param string[] $classes
      */
     public function __construct(
@@ -203,11 +203,11 @@ class WeekCalendar extends Calendar
 
     /**
      *
-     * @param integer $today
-     * @param integer $week_day
-     * @param integer $hour
-     * @param integer $workingStart
-     * @param integer $workingEnd
+     * @param int $today
+     * @param int $week_day
+     * @param int $hour
+     * @param int $workingStart
+     * @param int $workingEnd
      *
      * @return string[]
      */
@@ -243,7 +243,7 @@ class WeekCalendar extends Calendar
 
     /**
      *
-     * @param integer $time
+     * @param int $time
      *
      * @return string
      */
@@ -272,7 +272,7 @@ class WeekCalendar extends Calendar
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getEndHour()
     {
@@ -281,7 +281,7 @@ class WeekCalendar extends Calendar
 
     /**
      *
-     * @param integer $endHour
+     * @param int $endHour
      */
     public function setEndHour($endHour)
     {
@@ -292,9 +292,9 @@ class WeekCalendar extends Calendar
      * Gets the end date which will be displayed by this calendar.
      * This is always a sunday.
      *
-     * @return integer
+     * @return int
      */
-    public function getEndTime()
+    public function getEndTime(): int
     {
         $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
 
@@ -308,7 +308,7 @@ class WeekCalendar extends Calendar
 
     /**
      *
-     * @param integer $weekDayTime
+     * @param int $weekDayTime
      *
      * @return string
      */
@@ -331,7 +331,7 @@ class WeekCalendar extends Calendar
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function getHideOtherHours()
     {
@@ -340,7 +340,7 @@ class WeekCalendar extends Calendar
 
     /**
      *
-     * @param boolean $hideOtherHours
+     * @param bool $hideOtherHours
      */
     public function setHideOtherHours($hideOtherHours)
     {
@@ -350,7 +350,7 @@ class WeekCalendar extends Calendar
     /**
      * Gets the number of hours for one table cell.
      *
-     * @return integer
+     * @return int
      */
     public function getHourStep()
     {
@@ -360,7 +360,7 @@ class WeekCalendar extends Calendar
     /**
      * Sets the number of hours for one table cell.
      *
-     * @param integer $hourStep
+     * @param int $hourStep
      */
     public function setHourStep($hourStep)
     {
@@ -369,7 +369,7 @@ class WeekCalendar extends Calendar
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getStartHour()
     {
@@ -378,7 +378,7 @@ class WeekCalendar extends Calendar
 
     /**
      *
-     * @param integer $startHour
+     * @param int $startHour
      */
     public function setStartHour($startHour)
     {
@@ -389,9 +389,9 @@ class WeekCalendar extends Calendar
      * Gets the first date which will be displayed by this calendar.
      * This is always a monday.
      *
-     * @return integer
+     * @return int
      */
-    public function getStartTime()
+    public function getStartTime(): int
     {
         $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
 

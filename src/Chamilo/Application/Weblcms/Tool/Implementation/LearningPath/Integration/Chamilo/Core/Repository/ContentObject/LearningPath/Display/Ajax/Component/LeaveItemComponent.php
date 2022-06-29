@@ -24,7 +24,7 @@ class LeaveItemComponent extends
     /**
      * @return array
      */
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return array(self::PARAM_TRACKER_ID);
     }

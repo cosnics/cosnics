@@ -14,29 +14,23 @@ use Exception;
  */
 class MonthCalendar extends Calendar
 {
-    const TIME_PLACEHOLDER = '__TIME__';
+    public const TIME_PLACEHOLDER = '__TIME__';
 
     /**
      * Keep mapping of dates and their corresponding table cells
      *
-     * @var integer[]
+     * @var int[]
      */
-    private $cellMapping;
+    private array $cellMapping;
+
+    private ?string $dayUrlTemplate;
 
     /**
-     *
-     * @var string
-     */
-    private $dayUrlTemplate;
-
-    /**
-     * Creates a new month calendar
-     *
-     * @param integer $displayTime
-     * @param string $dayUrlTemplate
      * @param string[] $classes
+     *
+     * @throws \ReflectionException
      */
-    public function __construct($displayTime, $dayUrlTemplate = null, $classes = [])
+    public function __construct(int $displayTime, ?string $dayUrlTemplate = null, array $classes = [])
     {
         parent::__construct($displayTime, $classes);
 
@@ -46,20 +40,13 @@ class MonthCalendar extends Calendar
         $this->buildTable();
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function render()
+    public function render(): string
     {
         $this->addEvents();
 
         return $this->toHtml();
     }
 
-    /**
-     * Adds the events to the calendar
-     */
     public function addEvents()
     {
         $events = $this->getEventsToShow();
@@ -76,7 +63,7 @@ class MonthCalendar extends Calendar
                 continue;
             }
 
-            foreach ($items as $index => $item)
+            foreach ($items as $item)
             {
                 try
                 {
@@ -92,7 +79,7 @@ class MonthCalendar extends Calendar
     }
 
     /**
-     * Builds the table
+     * @throws \ReflectionException
      */
     private function buildTable()
     {
@@ -107,7 +94,7 @@ class MonthCalendar extends Calendar
                 $row = intval($cell / 7);
                 $column = $cell % 7;
 
-                $this->cellMapping[date('Ymd', $tableDate)] = array($row, $column);
+                $this->cellMapping[date('Ymd', $tableDate)] = [$row, $column];
 
                 $classes = $this->determineCellClasses($tableDate);
 
@@ -128,12 +115,9 @@ class MonthCalendar extends Calendar
     }
 
     /**
-     *
-     * @param integer $tableDate
-     *
      * @return string[]
      */
-    protected function determineCellClasses($tableDate)
+    protected function determineCellClasses(int $tableDate): array
     {
         $classes = [];
 
@@ -158,13 +142,7 @@ class MonthCalendar extends Calendar
         return $classes;
     }
 
-    /**
-     *
-     * @param integer $tableDate
-     *
-     * @return string
-     */
-    protected function determineCellContent($tableDate)
+    protected function determineCellContent(int $tableDate): string
     {
         $dayLabel = date('j', $tableDate);
         $dayUrlTemplate = $this->getDayUrlTemplate();
@@ -180,51 +158,35 @@ class MonthCalendar extends Calendar
     }
 
     /**
-     *
-     * @return integer[]
+     * @return int[]
      */
-    public function getCellMapping()
+    public function getCellMapping(): array
     {
         return $this->cellMapping;
     }
 
-    /**
-     *
-     * @param integer $time
-     *
-     * @return string
-     */
-    public function getDayUrl($time)
+    public function getDayUrl(int $time): string
     {
         return str_replace(self::TIME_PLACEHOLDER, $time, $this->getDayUrlTemplate());
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getDayUrlTemplate()
+    public function getDayUrlTemplate(): ?string
     {
         return $this->dayUrlTemplate;
     }
 
-    /**
-     *
-     * @param string $dayUrlTemplate
-     */
-    public function setDayUrlTemplate($dayUrlTemplate)
+    public function setDayUrlTemplate(?string $dayUrlTemplate)
     {
         $this->dayUrlTemplate = $dayUrlTemplate;
     }
 
     /**
-     * Gets the end date which will be displayed by this calendar.
-     * This is always a sunday. Of the current month doesn't
-     * end on a sunday, the first sunday of next month is returned.
+     * Gets the end date which will be displayed by this calendar. This is always a sunday. If the current month
+     * doesn't end on a sunday, the first sunday of next month is returned.
      *
-     * @return integer
+     * @return int
      */
-    public function getEndTime()
+    public function getEndTime(): int
     {
         $endTime = $this->getStartTime();
 
@@ -236,15 +198,9 @@ class MonthCalendar extends Calendar
         return $endTime;
     }
 
-    /**
-     *
-     * @param integer $firstDay
-     *
-     * @return integer
-     */
-    protected function getFirstTableDate($firstDay)
+    protected function getFirstTableDate(int $firstDay): int
     {
-        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+        $setting = Configuration::getInstance()->get_setting(['Chamilo\Libraries\Calendar', 'first_day_of_week']);
 
         if ($setting == 'sunday')
         {
@@ -257,16 +213,13 @@ class MonthCalendar extends Calendar
     }
 
     /**
-     * Gets the first date which will be displayed by this calendar.
-     * This is always a monday. If the current month
+     * Gets the first date which will be displayed by this calendar. This is always a monday. If the current month
      * doesn't start on a monday, the last monday of previous month is returned.
-     *
-     * @return integer
      */
-    public function getStartTime()
+    public function getStartTime(): int
     {
         $firstDay = mktime(0, 0, 0, date('m', $this->getDisplayTime()), 1, date('Y', $this->getDisplayTime()));
-        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+        $setting = Configuration::getInstance()->get_setting(['Chamilo\Libraries\Calendar', 'first_day_of_week']);
 
         if ($setting == 'sunday')
         {
@@ -276,38 +229,42 @@ class MonthCalendar extends Calendar
         return strtotime('Next Monday', strtotime('-1 Week', $firstDay));
     }
 
+    /**
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     protected function setHeader()
     {
         $header = $this->getHeader();
 
-        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+        $setting = Configuration::getInstance()->get_setting(['Chamilo\Libraries\Calendar', 'first_day_of_week']);
 
         if ($setting == 'sunday')
         {
             $header->addRow(
-                array(
-                    Translation::get('SundayShort', null, StringUtilities::LIBRARIES),
-                    Translation::get('MondayShort', null, StringUtilities::LIBRARIES),
-                    Translation::get('TuesdayShort', null, StringUtilities::LIBRARIES),
-                    Translation::get('WednesdayShort', null, StringUtilities::LIBRARIES),
-                    Translation::get('ThursdayShort', null, StringUtilities::LIBRARIES),
-                    Translation::get('FridayShort', null, StringUtilities::LIBRARIES),
-                    Translation::get('SaturdayShort', null, StringUtilities::LIBRARIES)
-                )
+                [
+                    Translation::get('SundayShort', [], StringUtilities::LIBRARIES),
+                    Translation::get('MondayShort', [], StringUtilities::LIBRARIES),
+                    Translation::get('TuesdayShort', [], StringUtilities::LIBRARIES),
+                    Translation::get('WednesdayShort', [], StringUtilities::LIBRARIES),
+                    Translation::get('ThursdayShort', [], StringUtilities::LIBRARIES),
+                    Translation::get('FridayShort', [], StringUtilities::LIBRARIES),
+                    Translation::get('SaturdayShort', [], StringUtilities::LIBRARIES)
+                ]
             );
         }
         else
         {
             $header->addRow(
-                array(
-                    Translation::get('MondayShort', null, StringUtilities::LIBRARIES),
-                    Translation::get('TuesdayShort', null, StringUtilities::LIBRARIES),
-                    Translation::get('WednesdayShort', null, StringUtilities::LIBRARIES),
-                    Translation::get('ThursdayShort', null, StringUtilities::LIBRARIES),
-                    Translation::get('FridayShort', null, StringUtilities::LIBRARIES),
-                    Translation::get('SaturdayShort', null, StringUtilities::LIBRARIES),
-                    Translation::get('SundayShort', null, StringUtilities::LIBRARIES)
-                )
+                [
+                    Translation::get('MondayShort', [], StringUtilities::LIBRARIES),
+                    Translation::get('TuesdayShort', [], StringUtilities::LIBRARIES),
+                    Translation::get('WednesdayShort', [], StringUtilities::LIBRARIES),
+                    Translation::get('ThursdayShort', [], StringUtilities::LIBRARIES),
+                    Translation::get('FridayShort', [], StringUtilities::LIBRARIES),
+                    Translation::get('SaturdayShort', [], StringUtilities::LIBRARIES),
+                    Translation::get('SundayShort', [], StringUtilities::LIBRARIES)
+                ]
             );
         }
 

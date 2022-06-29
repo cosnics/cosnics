@@ -10,26 +10,19 @@ use HTML_Table;
  */
 abstract class Calendar extends HTML_Table
 {
-    const TIME_PLACEHOLDER = '__TIME__';
+    public const TIME_PLACEHOLDER = '__TIME__';
+
+    private int $displayTime;
 
     /**
-     *
-     * @var integer
-     */
-    private $displayTime;
-
-    /**
-     *
      * @var string[]
      */
-    private $eventsToShow;
+    private array $eventsToShow;
 
     /**
-     *
-     * @param integer $displayTime
      * @param string[] $classes
      */
-    public function __construct($displayTime, $classes = [])
+    public function __construct(?int $displayTime = null, array $classes = [])
     {
         if (is_null($displayTime))
         {
@@ -43,62 +36,38 @@ abstract class Calendar extends HTML_Table
 
         array_unshift($classes, 'table-calendar');
 
-        parent::__construct(array('class' => implode(' ', $classes), 'cellspacing' => 0));
+        parent::__construct(['class' => implode(' ', $classes), 'cellspacing' => 0]);
     }
 
-    /**
-     * Add an event to the calendar
-     *
-     * @param integer $time A time in the day on which the event should be displayed
-     * @param string $content The html content to insert in the month calendar
-     */
-    public function addEvent($time, $content)
+    public function addEvent(int $time, string $content)
     {
         $this->eventsToShow[$time][] = $content;
     }
 
-    /**
-     *
-     * @param integer $time
-     *
-     * @return boolean
-     */
-    public function containsEventsForTime($time)
+    public function containsEventsForTime(int $time): bool
     {
         return count($this->eventsToShow[$time]) > 0;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getDisplayTime()
+    public function getDisplayTime(): int
     {
         return $this->displayTime;
     }
 
-    /**
-     *
-     * @param integer $displayTime
-     */
-    public function setDisplayTime($displayTime)
+    public function setDisplayTime(int $displayTime)
     {
         $this->displayTime = $displayTime;
     }
 
     /**
      * Gets the end date which will be displayed by this calendar.
-     *
-     * @return integer
      */
-    abstract public function getEndTime();
+    abstract public function getEndTime(): int;
 
     /**
      * Gets the list of events to show sorted by their starting time
-     *
-     * @return string[][]
      */
-    public function getEventsToShow()
+    public function getEventsToShow(): array
     {
         ksort($this->eventsToShow);
 
@@ -107,8 +76,6 @@ abstract class Calendar extends HTML_Table
 
     /**
      * Gets the first date which will be displayed by this calendar.
-     *
-     * @return integer
      */
-    abstract public function getStartTime();
+    abstract public function getStartTime(): int;
 }

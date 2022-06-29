@@ -8,47 +8,10 @@ namespace Chamilo\Libraries\Calendar\Event\RecurrenceRules;
  */
 class RecurrenceRulesIcalParser
 {
-
     /**
-     *
-     * @var string
-     */
-    private $icalRecurrenceRules;
-
-    /**
-     *
-     * @param string $icalRecurrenceRules
-     */
-    public function __construct($icalRecurrenceRules)
-    {
-        $this->icalRecurrenceRules = $icalRecurrenceRules;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getIcalRecurrenceRules()
-    {
-        return $this->icalRecurrenceRules;
-    }
-
-    /**
-     *
-     * @param string $icalRecurrenceRules
-     */
-    public function setIcalRecurrenceRules($icalRecurrenceRules)
-    {
-        $this->icalRecurrenceRules = $icalRecurrenceRules;
-    }
-
-    /**
-     *
-     * @param string $icalRecurrenceRules
-     *
      * @return string[][]
      */
-    private function getParts($icalRecurrenceRules)
+    private function getParts(string $icalRecurrenceRules): array
     {
         // Make sure everything is uppercase
         $icalRecurrenceRules = strtoupper($icalRecurrenceRules);
@@ -66,7 +29,7 @@ class RecurrenceRulesIcalParser
             // Split the part name and value
             list($rulePartName, $rulePartValue) = explode('=', $rulePart);
 
-            if (in_array($rulePartName, array('FREQ', 'UNTIL', 'COUNT', 'INTERVAL')))
+            if (in_array($rulePartName, ['FREQ', 'UNTIL', 'COUNT', 'INTERVAL']))
             {
                 $parts[$rulePartName] = $rulePartValue;
             }
@@ -79,13 +42,9 @@ class RecurrenceRulesIcalParser
         return $parts;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules
-     */
-    public function getRules()
+    public function getRules(string $icalRecurrenceRules): RecurrenceRules
     {
-        $icalRecurrenceRules = $this->getParts($this->getIcalRecurrenceRules());
+        $icalRecurrenceRules = $this->getParts($icalRecurrenceRules);
 
         $recurrenceRules = new RecurrenceRules();
 

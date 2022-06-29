@@ -8,6 +8,7 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\File\Redirect;
@@ -116,7 +117,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      *
      * @see \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport::getEventActions()
      */
-    public function getEventActions($event)
+    public function getEventActions(Event $event): array
     {
         $actions = [];
 

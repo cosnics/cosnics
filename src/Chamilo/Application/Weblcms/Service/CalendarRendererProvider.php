@@ -8,8 +8,8 @@ use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -36,7 +36,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     /**
      *
      * @param \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent $renderer
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository $dataProviderRepository
      * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
      * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
      * @param string[] $displayParameters ;
@@ -51,9 +50,9 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
-     * @param integer $sourceType
-     * @param integer $startTime
-     * @param integer $endTime
+     * @param int $sourceType
+     * @param int $startTime
+     * @param int $endTime
      */
     public function aggregateEvents($sourceType, $startTime, $endTime)
     {
@@ -89,11 +88,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         return $events;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport::getEventActions()
-     */
-    public function getEventActions($event)
+    public function getEventActions(Event $event): array
     {
         $actions = [];
 
@@ -102,20 +97,20 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
             $actions[] = new ToolbarItem(
                 Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->getRenderer()->get_url(
-                    array(
+                    [
                         Manager::PARAM_ACTION => Manager::ACTION_UPDATE_PUBLICATION,
                         Manager::PARAM_PUBLICATION_ID => $event->getId()
-                    )
+                    ]
                 ), ToolbarItem::DISPLAY_ICON
             );
 
             $actions[] = new ToolbarItem(
                 Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                 $this->getRenderer()->get_url(
-                    array(
+                    [
                         Manager::PARAM_ACTION => Manager::ACTION_DELETE,
                         Manager::PARAM_PUBLICATION_ID => $event->getId()
-                    )
+                    ]
                 ), ToolbarItem::DISPLAY_ICON, true
             );
         }

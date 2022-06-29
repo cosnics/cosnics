@@ -10,12 +10,9 @@ class IcalRecurrenceRulesFormatter
 {
 
     /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules $recurrenceRules
-     *
      * @return string[][]
      */
-    public function format(RecurrenceRules $recurrenceRules)
+    public function format(RecurrenceRules $recurrenceRules): array
     {
         $iCalRules = [];
 
@@ -39,13 +36,13 @@ class IcalRecurrenceRulesFormatter
                 break;
             case RecurrenceRules::FREQUENCY_WEEKDAYS :
                 $iCalRules['FREQ'] = 'DAILY';
-                $iCalRules['BYDAY'] = array(
-                    array('DAY' => 'MO'),
-                    array('DAY' => 'TU'),
-                    array('DAY' => 'WE'),
-                    array('DAY' => 'TH'),
-                    array('DAY' => 'FR')
-                );
+                $iCalRules['BYDAY'] = [
+                    ['DAY' => 'MO'],
+                    ['DAY' => 'TU'],
+                    ['DAY' => 'WE'],
+                    ['DAY' => 'TH'],
+                    ['DAY' => 'FR']
+                ];
                 break;
         }
 
@@ -88,31 +85,24 @@ class IcalRecurrenceRulesFormatter
     }
 
     /**
-     *
      * @param string[] $byDays
      *
      * @return string[]
      */
-    private function getByDayParts($byDays)
+    private function getByDayParts(array $byDays): array
     {
         $parts = [];
 
         foreach ($byDays as $byDay)
         {
             preg_match_all('/(-?[1-5]?)([A-Z]+)/', $byDay, $byDayParts);
-            $parts[] = array($byDayParts[1] == 0 ? 0 : $byDayParts[1][0], $byDayParts[2][0]);
+            $parts[] = [$byDayParts[1] == 0 ? 0 : $byDayParts[1][0], $byDayParts[2][0]];
         }
 
         return $parts;
     }
 
-    /**
-     *
-     * @param integer $date
-     *
-     * @return string
-     */
-    private function getDateInIcalFormat($date)
+    private function getDateInIcalFormat(int $date): string
     {
         $y = date('Y', $date);
         $m = date('m', $date);

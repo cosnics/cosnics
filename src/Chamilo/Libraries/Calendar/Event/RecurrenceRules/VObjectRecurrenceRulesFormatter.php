@@ -15,7 +15,7 @@ class VObjectRecurrenceRulesFormatter extends IcalRecurrenceRulesFormatter
      *
      * @return string[]
      */
-    public function format(RecurrenceRules $recurrenceRules)
+    public function format(RecurrenceRules $recurrenceRules): array
     {
         $iCalRules = parent::format($recurrenceRules);
 

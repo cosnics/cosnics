@@ -17,6 +17,7 @@ class NotAllowedException extends UserException
 
     public function __construct(bool $showLoginForm = false)
     {
+        $this->initializeContainer();
         $this->getSessionUtilities()->register('request_uri', $_SERVER['REQUEST_URI']);
 
         $html = [];

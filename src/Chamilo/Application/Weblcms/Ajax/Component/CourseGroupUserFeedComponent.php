@@ -223,7 +223,7 @@ class CourseGroupUserFeedComponent extends Manager
         return $this->getRequest()->request->get(self::PARAM_OFFSET, 0);
     }
 
-    public function getRequiredPostParameters()
+    public function getRequiredPostParameters(): array
     {
         return array(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
     }
