@@ -68,6 +68,16 @@ export default class Connector {
         return res.data;
     }
 
+    addCategory(category: Category) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'categoryData': JSON.stringify(category)
+            };
+            const data = await this.executeAPIRequest(this.apiConfig.addCategoryURL, parameters);
+            category.id = data.category.id;
+        });
+    }
+
     updateCategory(category: Category) {
         this.addToQueue(async () => {
             const parameters = {

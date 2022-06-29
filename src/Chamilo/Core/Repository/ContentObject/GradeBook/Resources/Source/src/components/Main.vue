@@ -49,6 +49,7 @@
         createNewCategory() {
             const category = this.gradeBook.createNewCategory();
             this.categorySettings = category.id;
+            this.connector?.addCategory(category);
         }
 
         createNewScore() {

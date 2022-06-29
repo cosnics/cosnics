@@ -39,7 +39,7 @@ export interface ResultsData {
 }
 
 export interface Category {
-    readonly id: number;
+    id: number;
     color: string;
     title: string;
     columnIds: ColumnId[];
