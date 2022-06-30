@@ -16,50 +16,19 @@ class WeekCalendar extends Calendar
 {
     public const TIME_PLACEHOLDER = '__TIME__';
 
-    /**
-     * @var string
-     */
-    private $dayUrlTemplate;
+    private ?string $dayUrlTemplate;
 
-    /**
-     *
-     * @var int
-     */
-    private $endHour;
+    private int $endHour;
 
-    /**
-     *
-     * @var bool
-     */
-    private $hideOtherHours;
+    private bool $hideOtherHours;
 
-    /**
-     * The number of hours for one table cell.
-     *
-     * @var int
-     */
-    private $hourStep;
+    private int $hourStep;
 
-    /**
-     *
-     * @var int
-     */
-    private $startHour;
+    private int $startHour;
 
-    /**
-     * Creates a new week calendar
-     *
-     * @param int $displayTime A time in the week to be displayed
-     * @param string $dayUrlTemplate
-     * @param int $hourStep The number of hours for one table cell. Defaults to 2.
-     * @param int $startHour
-     * @param int $endHour
-     * @param bool $hideOtherHours
-     * @param string[] $classes
-     */
     public function __construct(
-        $displayTime, $dayUrlTemplate = null, $hourStep = 2, $startHour = 0, $endHour = 24, $hideOtherHours = false,
-        $classes = []
+        int $displayTime, ?string $dayUrlTemplate = null, int $hourStep = 2, int $startHour = 0, int $endHour = 24,
+        bool $hideOtherHours = false, array $classes = []
     )
     {
         $this->dayUrlTemplate = $dayUrlTemplate;
@@ -72,20 +41,13 @@ class WeekCalendar extends Calendar
         $this->buildTable();
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function render()
+    public function render(): string
     {
         $this->addEvents();
 
         return $this->toHtml();
     }
 
-    /**
-     * Adds the events to the calendar
-     */
     private function addEvents()
     {
         $events = $this->getEventsToShow();
@@ -117,7 +79,7 @@ class WeekCalendar extends Calendar
                 $column = 7;
             }
 
-            foreach ($items as $index => $item)
+            foreach ($items as $item)
             {
                 try
                 {
@@ -132,9 +94,6 @@ class WeekCalendar extends Calendar
         }
     }
 
-    /**
-     * Builds the table
-     */
     private function buildTable()
     {
         $header = $this->getHeader();
@@ -142,10 +101,8 @@ class WeekCalendar extends Calendar
         $header->setHeaderContents(0, 0, '');
         $header->updateCellAttributes(0, 0, 'class="table-calendar-week-hours"');
 
-        $weekNumber = date('W', $this->getDisplayTime());
         // Go 1 week back end them jump to the next monday to reach the first day of this week
         $firstDay = $this->getStartTime();
-        $lastDay = $this->getEndTime();
 
         $workingStart = $this->getStartHour();
         $workingEnd = $this->getEndHour();
@@ -177,7 +134,6 @@ class WeekCalendar extends Calendar
             $this->updateCellAttributes($rowId, 0, 'class="' . implode(' ', $classes) . '"');
         }
 
-        $dates[] = '';
         $today = date('Y-m-d');
 
         for ($day = 0; $day < 7; $day ++)
@@ -202,16 +158,10 @@ class WeekCalendar extends Calendar
     }
 
     /**
-     *
-     * @param int $today
-     * @param int $week_day
-     * @param int $hour
-     * @param int $workingStart
-     * @param int $workingEnd
-     *
      * @return string[]
      */
-    protected function determineCellClasses($today, $weekDay, $hour, $workingStart, $workingEnd)
+    protected function determineCellClasses(int $today, int $weekDay, int $hour, int $workingStart, int $workingEnd
+    ): array
     {
         $classes = [];
 
@@ -219,7 +169,7 @@ class WeekCalendar extends Calendar
         {
             if (date('H') >= $hour && date('H') < $hour + $this->getHourStep())
             {
-                $class[] = 'table-calendar-highlight';
+                $classes[] = 'table-calendar-highlight';
             }
         }
 
@@ -241,62 +191,37 @@ class WeekCalendar extends Calendar
         return $classes;
     }
 
-    /**
-     *
-     * @param int $time
-     *
-     * @return string
-     */
-    public function getDayUrl($time)
+    public function getDayUrl(int $time): string
     {
         return str_replace(self::TIME_PLACEHOLDER, $time, $this->getDayUrlTemplate());
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getDayUrlTemplate()
+    public function getDayUrlTemplate(): ?string
     {
         return $this->dayUrlTemplate;
     }
 
-    /**
-     *
-     * @param string $dayUrlTemplate
-     */
-    public function setDayUrlTemplate($dayUrlTemplate)
+    public function setDayUrlTemplate(?string $dayUrlTemplate)
     {
         $this->dayUrlTemplate = $dayUrlTemplate;
     }
 
-    /**
-     *
-     * @return int
-     */
-    public function getEndHour()
+    public function getEndHour(): int
     {
         return $this->endHour;
     }
 
-    /**
-     *
-     * @param int $endHour
-     */
-    public function setEndHour($endHour)
+    public function setEndHour(int $endHour)
     {
         $this->endHour = $endHour;
     }
 
     /**
-     * Gets the end date which will be displayed by this calendar.
-     * This is always a sunday.
-     *
-     * @return int
+     * Gets the end date which will be displayed by this calendar. This is always a sunday.
      */
     public function getEndTime(): int
     {
-        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+        $setting = Configuration::getInstance()->get_setting(['Chamilo\Libraries\Calendar', 'first_day_of_week']);
 
         if ($setting == 'sunday')
         {
@@ -306,13 +231,7 @@ class WeekCalendar extends Calendar
         return strtotime('Next Sunday', $this->getStartTime());
     }
 
-    /**
-     *
-     * @param int $weekDayTime
-     *
-     * @return string
-     */
-    protected function getHeaderContent($weekDayTime)
+    protected function getHeaderContent(int $weekDayTime): string
     {
         $dayLabel = Translation::get(date('l', $weekDayTime) . 'Short', null, StringUtilities::LIBRARIES) . ' ' .
             date('d/m', $weekDayTime);
@@ -329,71 +248,42 @@ class WeekCalendar extends Calendar
         }
     }
 
-    /**
-     *
-     * @return bool
-     */
-    public function getHideOtherHours()
+    public function getHideOtherHours(): bool
     {
         return $this->hideOtherHours;
     }
 
-    /**
-     *
-     * @param bool $hideOtherHours
-     */
-    public function setHideOtherHours($hideOtherHours)
+    public function setHideOtherHours(bool $hideOtherHours)
     {
         $this->hideOtherHours = $hideOtherHours;
     }
 
-    /**
-     * Gets the number of hours for one table cell.
-     *
-     * @return int
-     */
-    public function getHourStep()
+    public function getHourStep(): int
     {
         return $this->hourStep;
     }
 
-    /**
-     * Sets the number of hours for one table cell.
-     *
-     * @param int $hourStep
-     */
-    public function setHourStep($hourStep)
+    public function setHourStep(int $hourStep)
     {
         $this->hourStep = $hourStep;
     }
 
-    /**
-     *
-     * @return int
-     */
-    public function getStartHour()
+    public function getStartHour(): int
     {
         return $this->startHour;
     }
 
-    /**
-     *
-     * @param int $startHour
-     */
-    public function setStartHour($startHour)
+    public function setStartHour(int $startHour)
     {
         $this->startHour = $startHour;
     }
 
     /**
-     * Gets the first date which will be displayed by this calendar.
-     * This is always a monday.
-     *
-     * @return int
+     * Gets the first date which will be displayed by this calendar. This is always a monday.
      */
     public function getStartTime(): int
     {
-        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+        $setting = Configuration::getInstance()->get_setting(['Chamilo\Libraries\Calendar', 'first_day_of_week']);
 
         if ($setting == 'sunday')
         {

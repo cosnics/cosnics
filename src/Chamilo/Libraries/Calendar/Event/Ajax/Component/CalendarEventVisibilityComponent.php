@@ -90,5 +90,5 @@ abstract class CalendarEventVisibilityComponent extends Manager
         return [self::PARAM_SOURCE];
     }
 
-    abstract public function retrieveVisibility(Condition $condition): Visibility;
+    abstract public function retrieveVisibility(Condition $condition): ?Visibility;
 }

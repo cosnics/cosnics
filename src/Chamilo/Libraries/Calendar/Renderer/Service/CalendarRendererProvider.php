@@ -12,41 +12,28 @@ use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInter
  */
 abstract class CalendarRendererProvider implements CalendarRendererProviderInterface
 {
-    const SOURCE_TYPE_BOTH = 3;
-    const SOURCE_TYPE_EXTERNAL = 2;
-    const SOURCE_TYPE_INTERNAL = 1;
+    public const SOURCE_TYPE_BOTH = 3;
+    public const SOURCE_TYPE_EXTERNAL = 2;
+    public const SOURCE_TYPE_INTERNAL = 1;
+
+    private User $dataUser;
 
     /**
-     *
-     * @var \Chamilo\Core\User\Storage\DataClass\User
-     */
-    private $dataUser;
-
-    /**
-     *
-     * @var \Chamilo\Core\User\Storage\DataClass\User
-     */
-    private $viewingUser;
-
-    /**
-     *
      * @var string[]
      */
-    private $displayParameters;
+    private array $displayParameters;
 
     /**
-     *
      * @var \Chamilo\Libraries\Calendar\Event\Event[][]
      */
-    private $events;
+    private array $events;
+
+    private User $viewingUser;
 
     /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
-     * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
      * @param string[] $displayParameters ;
      */
-    public function __construct(User $dataUser, User $viewingUser, $displayParameters)
+    public function __construct(User $dataUser, User $viewingUser, array $displayParameters)
     {
         $this->dataUser = $dataUser;
         $this->viewingUser = $viewingUser;
@@ -54,48 +41,31 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
     }
 
     /**
-     *
-     * @param integer $sourceType
-     * @param integer $startTime
-     * @param integer $endTime
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    abstract public function aggregateEvents($sourceType, $startTime, $endTime);
+    abstract public function aggregateEvents(int $sourceType, int $startTime, int $endTime): array;
 
     /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getAllEvents()
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getAllEvents()
+    public function getAllEvents(): array
     {
         return $this->getEvents(self::SOURCE_TYPE_BOTH);
     }
 
     /**
-     * @param integer $startTime
-     * @param integer $endTime
-     * @param boolean $calculateRecurrence
-     *
-     * @return \Chamilo\Libraries\Calendar\Event\Event|\Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getAllEventsInPeriod($startTime, $endTime, $calculateRecurrence = true)
+    public function getAllEventsInPeriod(int $startTime, int $endTime, bool $calculateRecurrence = true): array
     {
         return $this->getEvents(self::SOURCE_TYPE_BOTH, $startTime, $endTime, $calculateRecurrence);
     }
 
-    /**
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getDataUser()
+    public function getDataUser(): User
     {
         return $this->dataUser;
     }
 
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
-     */
     public function setDataUser(User $dataUser)
     {
         $this->dataUser = $dataUser;
@@ -104,30 +74,26 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
     /**
      * @return string[]
      */
-    public function getDisplayParameters()
+    public function getDisplayParameters(): array
     {
         return $this->displayParameters;
     }
 
     /**
-     *
      * @param string[] $displayParameters
      */
-    public function setDisplayParameters($displayParameters)
+    public function setDisplayParameters(array $displayParameters)
     {
         $this->displayParameters = $displayParameters;
     }
 
     /**
-     *
-     * @param integer $sourceType
-     * @param integer $startTime
-     * @param integer $endTime
-     * @param boolean $calculateRecurrence
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @throws \Sabre\VObject\InvalidDataException
      */
-    private function getEvents($sourceType, $startTime = null, $endTime = null, $calculateRecurrence = false)
+    private function getEvents(
+        int $sourceType, ?int $startTime = null, ?int $endTime = null, bool $calculateRecurrence = false
+    ): array
     {
         $cacheIdentifier = md5(serialize(array($sourceType, $startTime, $endTime, $calculateRecurrence)));
 
@@ -150,94 +116,62 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getExternalEvents()
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @throws \Sabre\VObject\InvalidDataException
      */
-    public function getExternalEvents()
+    public function getExternalEvents(): array
     {
         return $this->getEvents(self::SOURCE_TYPE_EXTERNAL);
     }
 
     /**
-     * @param integer $startTime
-     * @param integer $endTime
-     * @param boolean $calculateRecurrence
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @throws \Sabre\VObject\InvalidDataException
      */
-    public function getExternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true)
+    public function getExternalEventsInPeriod(int $startTime, int $endTime, bool $calculateRecurrence = true): array
     {
         return $this->getEvents(self::SOURCE_TYPE_EXTERNAL, $startTime, $endTime, $calculateRecurrence);
     }
 
     /**
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @throws \Sabre\VObject\InvalidDataException
      */
-    public function getInternalEvents()
+    public function getInternalEvents(): array
     {
         return $this->getEvents(self::SOURCE_TYPE_INTERNAL);
     }
 
     /**
-     * @param integer $startTime
-     * @param integer $endTime
-     * @param boolean $calculateRecurrence
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @throws \Sabre\VObject\InvalidDataException
      */
-    public function getInternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true)
+    public function getInternalEventsInPeriod(int $startTime, int $endTime, bool $calculateRecurrence = true): array
     {
         return $this->getEvents(self::SOURCE_TYPE_INTERNAL, $startTime, $endTime, $calculateRecurrence);
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getViewingUser()
-     */
-    public function getViewingUser()
+    public function getViewingUser(): User
     {
         return $this->viewingUser;
     }
 
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
-     */
     public function setViewingUser(User $viewingUser)
     {
         $this->viewingUser = $viewingUser;
     }
 
-    /**
-     *
-     * @param integer $source
-     *
-     * @return boolean
-     */
-    public function isExternalSource($source)
+    public function isExternalSource(int $source): bool
     {
         return $this->matchesRequestedSource(self::SOURCE_TYPE_EXTERNAL, $source);
     }
 
-    /**
-     *
-     * @param integer $source
-     *
-     * @return boolean
-     */
-    public function isInternalSource($source)
+    public function isInternalSource(int $source): bool
     {
         return $this->matchesRequestedSource(self::SOURCE_TYPE_INTERNAL, $source);
     }
 
-    /**
-     *
-     * @param integer $requestedSource
-     * @param integer $implementationSource
-     *
-     * @return boolean
-     */
-    public function matchesRequestedSource($requestedSource, $implementationSource)
+    public function matchesRequestedSource(int $requestedSource, int $implementationSource): bool
     {
         return (boolean) ($requestedSource & $implementationSource);
     }

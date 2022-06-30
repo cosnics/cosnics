@@ -4,7 +4,8 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 use Chamilo\Libraries\Calendar\Renderer\Event\Configuration;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
+use Chamilo\Libraries\Calendar\Renderer\LegendRenderer;
+use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\DayCalendar;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
@@ -16,47 +17,23 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 class DayRenderer extends FullTableRenderer
 {
 
-    /**
-     *
-     * @var integer
-     */
-    private $hourStep;
+    private int $endHour;
+
+    private bool $hideOtherHours;
+
+    private int $hourStep;
+
+    private int $startHour;
 
     /**
-     *
-     * @var integer
-     */
-    private $startHour;
-
-    /**
-     *
-     * @var integer
-     */
-    private $endHour;
-
-    /**
-     *
-     * @var boolean
-     */
-    private $hideOtherHours;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
-     * @param integer $displayTime
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $viewActions
-     * @param string $linkTarget
-     * @param integer $hourStep
-     * @param integer $startHour
-     * @param integer $endHour
-     * @param boolean $hideOtherHours
      *
      * @throws \Exception
      */
     public function __construct(
-        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = [],
-        $linkTarget = '', $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false
+        CalendarRendererProviderInterface $dataProvider, LegendRenderer $legend, int $displayTime,
+        array $viewActions = [], string $linkTarget = '', int $hourStep = 1, int $startHour = 0, int $endHour = 24,
+        bool $hideOtherHours = false
     )
     {
         $this->hourStep = $hourStep;
@@ -67,113 +44,68 @@ class DayRenderer extends FullTableRenderer
         parent::__construct($dataProvider, $legend, $displayTime, $viewActions, $linkTarget);
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getEndHour()
+    public function getEndHour(): int
     {
         return $this->endHour;
     }
 
-    /**
-     *
-     * @param integer $endHour
-     */
-    public function setEndHour($endHour)
+    public function setEndHour(int $endHour)
     {
         $this->endHour = $endHour;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function getHideOtherHours()
+    public function getHideOtherHours(): bool
     {
         return $this->hideOtherHours;
     }
 
-    /**
-     *
-     * @param boolean $hideOtherHours
-     */
-    public function setHideOtherHours($hideOtherHours)
+    public function setHideOtherHours(bool $hideOtherHours)
     {
         $this->hideOtherHours = $hideOtherHours;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getHourStep()
+    public function getHourStep(): int
     {
         return $this->hourStep;
     }
 
-    /**
-     *
-     * @param integer $hourStep
-     */
-    public function setHourStep($hourStep)
+    public function setHourStep(int $hourStep)
     {
         $this->hourStep = $hourStep;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getNextDisplayTime()
-     */
-    public function getNextDisplayTime()
+    public function getNextDisplayTime(): int
     {
         return strtotime('+1 Day', $this->getDisplayTime());
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getPreviousDisplayTime()
-     */
-    public function getPreviousDisplayTime()
+    public function getPreviousDisplayTime(): int
     {
         return strtotime('-1 Day', $this->getDisplayTime());
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getStartHour()
+    public function getStartHour(): int
     {
         return $this->startHour;
     }
 
-    /**
-     *
-     * @param integer $startHour
-     */
-    public function setStartHour($startHour)
+    public function setStartHour(int $startHour)
     {
         $this->startHour = $startHour;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Table\Type\DayCalendar
-     */
-    public function initializeCalendar()
+    public function initializeCalendar(): Calendar
     {
         return new DayCalendar(
             $this->getDisplayTime(), $this->getHourStep(), $this->getStartHour(), $this->getEndHour(),
-            $this->getHideOtherHours(), array('table-calendar-day')
+            $this->getHideOtherHours(), ['table-calendar-day']
         );
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderFullCalendar()
+     * @throws \Exception
      */
-    public function renderFullCalendar()
+    public function renderFullCalendar(): string
     {
         $calendar = $this->getCalendar();
 
@@ -190,7 +122,7 @@ class DayRenderer extends FullTableRenderer
         {
             $nextTableDate = strtotime('+' . $this->getHourStep() . ' Hours', $tableDate);
 
-            foreach ($events as $index => $event)
+            foreach ($events as $event)
             {
                 $startDate = $event->getStartDate();
                 $endDate = $event->getEndDate();
@@ -216,10 +148,9 @@ class DayRenderer extends FullTableRenderer
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderTitle()
+     * @throws \Exception
      */
-    public function renderTitle()
+    public function renderTitle(): string
     {
         return DatetimeUtilities::getInstance()->formatLocaleDate('%A %d %B %Y', $this->getDisplayTime());
     }

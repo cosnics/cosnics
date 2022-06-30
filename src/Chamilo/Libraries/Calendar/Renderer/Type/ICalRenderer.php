@@ -21,19 +21,12 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ICalRenderer extends Renderer
 {
-    const TIMEZONE_END = 2145916799;
-    const TIMEZONE_START = 100;
+    public const TIMEZONE_END = 2145916799;
+    public const TIMEZONE_START = 100;
+
+    private VCalendar $calendar;
 
     /**
-     *
-     * @var \Sabre\VObject\Component\VCalendar
-     */
-    private $calendar;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     *
      * @throws \Exception
      */
     public function __construct(CalendarRendererProviderInterface $dataProvider)
@@ -44,10 +37,9 @@ class ICalRenderer extends Renderer
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
+     * @throws \Exception
      */
-    public function render()
+    public function render(): string
     {
         $this->addTimeZone();
         $this->addEvents();
@@ -56,9 +48,6 @@ class ICalRenderer extends Renderer
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\Event $providedEvent
-     *
      * @throws \Exception
      */
     private function addEvent(Event $providedEvent)
@@ -90,12 +79,12 @@ class ICalRenderer extends Renderer
             'DTSTAMP', new DateTime(date('Y-m-d\TH:i:s', time()), new DateTimeZone(date_default_timezone_get()))
         );
 
-        $uniqueIdentifiers = array(
+        $uniqueIdentifiers = [
             $providedEvent->getSource(),
             $providedEvent->getId(),
             $providedEvent->getStartDate(),
             $providedEvent->getEndDate()
-        );
+        ];
 
         $event->add('UID', md5(serialize($uniqueIdentifiers)));
 
@@ -126,7 +115,7 @@ class ICalRenderer extends Renderer
     }
 
     /**
-     * @return false|void
+     * @return void
      * @throws \Exception
      * @author MicroEducate
      * @url https://microeducate.tech/generating-an-icalender-vtimezone-component-from-phps-timezone-value/
@@ -149,6 +138,7 @@ class ICalRenderer extends Renderer
 
             $std = null;
             $dst = null;
+
             foreach ($transitions as $i => $trans)
             {
                 $cmp = null;
@@ -211,37 +201,25 @@ class ICalRenderer extends Renderer
         }
     }
 
-    /**
-     *
-     * @return \Sabre\VObject\Component\VCalendar
-     */
-    public function getCalendar()
+    public function getCalendar(): VCalendar
     {
         return $this->calendar;
     }
 
-    /**
-     *
-     * @param \Sabre\VObject\Component\VCalendar $calendar
-     */
     public function setCalendar(VCalendar $calendar)
     {
         $this->calendar = $calendar;
     }
 
     /**
-     * Render the iCal calendar and send it
+     * @throws \Exception
      */
     public function renderAndSend()
     {
         $this->sendResponse($this->render());
     }
 
-    /**
-     *
-     * @param string $serializedCalendar
-     */
-    private function sendResponse($serializedCalendar)
+    private function sendResponse(string $serializedCalendar)
     {
         $headers = [];
 

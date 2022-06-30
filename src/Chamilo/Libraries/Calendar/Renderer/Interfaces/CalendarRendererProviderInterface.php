@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Interfaces;
 
+use Chamilo\Core\User\Storage\DataClass\User;
+
 /**
  * An interface which forces the implementing Application to provide a given set of methods
  *
@@ -13,74 +15,41 @@ interface CalendarRendererProviderInterface
 {
 
     /**
-     * Get the events
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getAllEvents();
+    public function getAllEvents(): array;
 
     /**
-     * Get the events between $startTime and $endTime
-     *
-     * @param integer $startTime
-     * @param integer $endTime
-     * @param boolean $calculateRecurrence
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getAllEventsInPeriod($startTime, $endTime, $calculateRecurrence = true);
+    public function getAllEventsInPeriod(int $startTime, int $endTime, bool $calculateRecurrence = true): array;
+
+    public function getDataUser(): User;
 
     /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getDataUser();
-
-    /**
-     *
      * @return string[]
      */
-    public function getDisplayParameters();
+    public function getDisplayParameters(): array;
 
     /**
-     * Get the external events
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getExternalEvents();
+    public function getExternalEvents(): array;
 
     /**
-     * Get the external events between $startTime and $endTime
-     *
-     * @param integer $startTime
-     * @param integer $endTime
-     * @param boolean $calculateRecurrence
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getExternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true);
+    public function getExternalEventsInPeriod(int $startTime, int $endTime, bool $calculateRecurrence = true): array;
 
     /**
-     * Get the internal events
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getInternalEvents();
+    public function getInternalEvents(): array;
 
     /**
-     * Get the internal events between $startTime and $endTime
-     *
-     * @param integer $startTime
-     * @param integer $endTime
-     * @param boolean $calculateRecurrence
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getInternalEventsInPeriod($startTime, $endTime, $calculateRecurrence = true);
+    public function getInternalEventsInPeriod(int $startTime, int $endTime, bool $calculateRecurrence = true): array;
 
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getViewingUser();
+    public function getViewingUser(): User;
 }

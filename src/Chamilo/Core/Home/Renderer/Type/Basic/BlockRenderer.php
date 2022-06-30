@@ -27,24 +27,14 @@ class BlockRenderer
 {
     use DependencyInjectionContainerTrait;
 
-    const BLOCK_PROPERTY_ID = 'id';
+    public const BLOCK_PROPERTY_ID = 'id';
+    public const BLOCK_PROPERTY_IMAGE = 'image';
+    public const BLOCK_PROPERTY_NAME = 'name';
 
-    const BLOCK_PROPERTY_IMAGE = 'image';
+    public const PARAM_ACTION = 'block_action';
 
-    const BLOCK_PROPERTY_NAME = 'name';
-
-    const PARAM_ACTION = 'block_action';
-
-    const SOURCE_AJAX = 2;
-
-    const SOURCE_DEFAULT = 1;
-
-    /**
-     * The source from which this block renderer is called
-     *
-     * @var int
-     */
-    protected $source;
+    public const SOURCE_AJAX = 2;
+    public const SOURCE_DEFAULT = 1;
 
     /**
      * Caching variable for general mode
@@ -54,12 +44,11 @@ class BlockRenderer
     protected $generalMode;
 
     /**
+     * The source from which this block renderer is called
      *
-     * @var \Chamilo\Core\Home\Renderer\Renderer
+     * @var int
      */
-    private $renderer;
-
-    private $type;
+    protected $source;
 
     /**
      *
@@ -72,6 +61,14 @@ class BlockRenderer
      * @var \Chamilo\Core\Home\Service\HomeService
      */
     private $homeService;
+
+    /**
+     *
+     * @var \Chamilo\Core\Home\Renderer\Renderer
+     */
+    private $renderer;
+
+    private $type;
 
     /**
      *
@@ -278,7 +275,7 @@ class BlockRenderer
     /**
      *
      * @param string[] $parameters
-     * @param boolean $encode
+     * @param bool $encode
      *
      * @return string
      * @deprecated User getLink() now
@@ -300,7 +297,7 @@ class BlockRenderer
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function hasStaticTitle()
     {
@@ -309,7 +306,7 @@ class BlockRenderer
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function isConfigurable()
     {
@@ -318,7 +315,7 @@ class BlockRenderer
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function isDeletable()
     {
@@ -327,7 +324,7 @@ class BlockRenderer
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function isEditable()
     {
@@ -336,7 +333,7 @@ class BlockRenderer
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function isHidable()
     {
@@ -364,7 +361,7 @@ class BlockRenderer
      *
      * @param ContentObject $object The content object to be tested.
      *
-     * @return boolean default response: false.
+     * @return bool default response: false.
      */
     public function isViewAttachmentAllowed($object)
     {

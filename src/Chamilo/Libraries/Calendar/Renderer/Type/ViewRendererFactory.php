@@ -2,7 +2,8 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Type;
 
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
+use Chamilo\Libraries\Calendar\Renderer\LegendRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Renderer;
 
 /**
  *
@@ -13,53 +14,26 @@ class ViewRendererFactory
 {
 
     /**
-     *
-     * @var string
-     */
-    private $rendererType;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
-     */
-    private $dataProvider;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Legend
-     */
-    private $legend;
-
-    /**
-     *
-     * @var integer
-     */
-    private $displayTime;
-
-    /**
-     *
      * @var \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
-    private $actions;
+    private array $actions;
+
+    private CalendarRendererProviderInterface $dataProvider;
+
+    private int $displayTime;
+
+    private LegendRenderer $legend;
+
+    private string $linkTarget;
+
+    private string $rendererType;
 
     /**
-     *
-     * @var string
-     */
-    private $linkTarget;
-
-    /**
-     *
-     * @param string $rendererType
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
-     * @param integer $displayTime
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $actions
-     * @param string $linkTarget
      */
     public function __construct(
-        $rendererType, CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
-        $actions = [], $linkTarget = ''
+        string $rendererType, CalendarRendererProviderInterface $dataProvider, LegendRenderer $legend, int $displayTime,
+        array $actions = [], string $linkTarget = ''
     )
     {
         $this->rendererType = $rendererType;
@@ -71,112 +45,73 @@ class ViewRendererFactory
     }
 
     /**
-     * Constructs the renderer and runs it
-     *
-     * @return string
      * @throws \Exception
      */
-    public function render()
+    public function render(): string
     {
         return $this->getRenderer()->render();
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
-    public function getActions()
+    public function getActions(): array
     {
         return $this->actions;
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $actions
      */
-    public function setActions($actions)
+    public function setActions(array $actions)
     {
         $this->actions = $actions;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
-     */
-    public function getDataProvider()
+    public function getDataProvider(): CalendarRendererProviderInterface
     {
         return $this->dataProvider;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     */
     public function setDataProvider(CalendarRendererProviderInterface $dataProvider)
     {
         $this->dataProvider = $dataProvider;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getDisplayTime()
+    public function getDisplayTime(): int
     {
         return $this->displayTime;
     }
 
-    /**
-     *
-     * @param integer $displayTime
-     */
-    public function setDisplayTime($displayTime)
+    public function setDisplayTime(int $displayTime)
     {
         $this->displayTime = $displayTime;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Legend
-     */
-    public function getLegend()
+    public function getLegend(): LegendRenderer
     {
         return $this->legend;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
-     */
-    public function setLegend(Legend $legend)
+    public function setLegend(LegendRenderer $legend)
     {
         $this->legend = $legend;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getLinkTarget()
+    public function getLinkTarget(): string
     {
         return $this->linkTarget;
     }
 
-    /**
-     *
-     * @param string $linkTarget
-     */
-    public function setLinkTarget($linkTarget)
+    public function setLinkTarget(string $linkTarget)
     {
         $this->linkTarget = $linkTarget;
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
      * @throws \Exception
      */
-    public function getRenderer()
+    public function getRenderer(): Renderer
     {
         $className = __NAMESPACE__ . '\View\\' . $this->getRendererType() . 'Renderer';
 
@@ -186,20 +121,12 @@ class ViewRendererFactory
         );
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getRendererType()
+    public function getRendererType(): string
     {
         return $this->rendererType;
     }
 
-    /**
-     *
-     * @param string $rendererType
-     */
-    public function setRendererType($rendererType)
+    public function setRendererType(string $rendererType)
     {
         $this->rendererType = $rendererType;
     }

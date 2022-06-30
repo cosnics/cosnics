@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Calendar\Renderer;
 
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
-use Exception;
 
 /**
  *
@@ -16,52 +15,28 @@ abstract class Renderer
 {
     use ClassContext;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
-     */
-    private $dataProvider;
+    private CalendarRendererProviderInterface $dataProvider;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     *
-     * @throws \Exception
-     */
     public function __construct(CalendarRendererProviderInterface $dataProvider)
     {
-        if (!$dataProvider instanceof CalendarRendererProviderInterface)
-        {
-            throw new Exception(
-                'Please implement the CalendarRendererProviderInterface in ' . get_class($dataProvider)
-            );
-        }
-
         $this->dataProvider = $dataProvider;
     }
 
-    /**
-     * Render the calendar
-     *
-     * @return string
-     */
-    abstract public function render();
+    abstract public function render(): string;
 
     /**
      *
      * @return \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
      */
-    public function getDataProvider()
+    public function getDataProvider(): CalendarRendererProviderInterface
     {
         return $this->dataProvider;
     }
 
     /**
-     *
-     * @return string
      * @throws \ReflectionException
      */
-    public static function package()
+    public static function package(): string
     {
         return static::context();
     }

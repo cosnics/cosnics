@@ -3,7 +3,6 @@ namespace Chamilo\Application\Calendar\Service;
 
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
-use Chamilo\Application\Calendar\Storage\DataClass\Visibility;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -36,15 +35,15 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     private $dataProviderRepository;
 
     /**
+     * @var \Chamilo\Application\Calendar\Storage\DataClass\Visibility[]
+     */
+    private $visibilities;
+
+    /**
      *
      * @var string
      */
     private $visibilityContext;
-
-    /**
-     * @var \Chamilo\Application\Calendar\Storage\DataClass\Visibility[]
-     */
-    private $visibilities;
 
     /**
      *
@@ -66,19 +65,16 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     }
 
     /**
-     * @param integer $requestedSourceType
-     * @param integer $startTime
-     * @param integer $endTime
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @throws \ReflectionException
      */
-    public function aggregateEvents($requestedSourceType, $startTime, $endTime)
+    public function aggregateEvents(int $sourceType, int $startTime, int $endTime): array
     {
         $events = [];
 
-        foreach ($this->getSources($requestedSourceType) as $context => $implementor)
+        foreach ($this->getSources($sourceType) as $context => $implementor)
         {
-            $events = array_merge($events, $implementor->getEvents($this, $requestedSourceType, $startTime, $endTime));
+            $events = array_merge($events, $implementor->getEvents($this, $sourceType, $startTime, $endTime));
         }
 
         return $events;
@@ -179,7 +175,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @param integer $eventIdentifier
+     * @param int $eventIdentifier
      *
      * @return string
      */
@@ -198,7 +194,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @param integer $eventIdentifier
+     * @param int $eventIdentifier
      *
      * @return string
      */
@@ -231,7 +227,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @param integer $requestedSourceType
+     * @param int $requestedSourceType
      *
      * @return \Chamilo\Application\Calendar\Architecture\CalendarInterface[][]
      * @throws \ReflectionException
@@ -292,11 +288,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         return $this->visibilities;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport::getVisibilityContext()
-     */
-    public function getVisibilityContext()
+    public function getVisibilityContext(): string
     {
         return $this->visibilityContext;
     }
@@ -310,22 +302,12 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         $this->visibilityContext = $visibilityContext;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport::getVisibilityData()
-     */
-    public function getVisibilityData()
+    public function getVisibilityData(): array
     {
         return [];
     }
 
-    /**
-     * @param string $source
-     * @param integer|null $userIdentifier
-     *
-     * @return boolean
-     */
-    public function isSourceVisible($source, $userIdentifier = null)
+    public function isSourceVisible(string $source, ?int $userIdentifier = null): bool
     {
         if (is_null($userIdentifier))
         {

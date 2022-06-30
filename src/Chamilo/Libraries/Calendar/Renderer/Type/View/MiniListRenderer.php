@@ -9,11 +9,7 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 class MiniListRenderer extends ListRenderer
 {
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::render()
-     */
-    public function render()
+    public function render(): string
     {
         $html = [];
 
@@ -29,11 +25,7 @@ class MiniListRenderer extends ListRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @return integer
-     */
-    protected function getEndTime()
+    protected function getEndTime(): int
     {
         return strtotime('+3 Days', $this->getStartTime());
     }

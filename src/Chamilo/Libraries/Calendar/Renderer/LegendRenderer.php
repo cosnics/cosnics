@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Calendar\Renderer;
 
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
@@ -12,47 +11,33 @@ use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
- *
  * @package Chamilo\Libraries\Calendar\Renderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class Legend
+class LegendRenderer
 {
+    private CalendarRendererProviderInterface $dataProvider;
+
+    private NotificationMessageManager $notificationMessageManager;
 
     /**
-     *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Legend[]
-     */
-    protected static $instance = [];
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
-     */
-    private $dataProvider;
-
-    /**
-     *
      * @var string[]
      */
-    private $sources;
+    private array $sources = [];
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     */
-    public function __construct(CalendarRendererProviderInterface $dataProvider)
+    public function __construct(
+        NotificationMessageManager $notificationMessageManager, CalendarRendererProviderInterface $dataProvider
+    )
     {
+        $this->notificationMessageManager = $notificationMessageManager;
         $this->dataProvider = $dataProvider;
-        $this->sources = [];
     }
 
     /**
      * Builds a color-based legend for the calendar to help users to see the origin of the the published events
-     *
-     * @return string
+     * @throws \Exception
      */
-    public function render()
+    public function render(): string
     {
         $result = [];
 
@@ -130,13 +115,9 @@ class Legend
     }
 
     /**
-     *
-     * @param string $source
-     *
-     * @return int
      * @throws \Exception
      */
-    public function addSource($source)
+    public function addSource(string $source): int
     {
         if (!in_array($source, $this->getSources()))
         {
@@ -146,58 +127,40 @@ class Legend
         return $this->getSourceKey($source);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface
-     */
-    public function getDataProvider()
+    public function getDataProvider(): CalendarRendererProviderInterface
     {
         return $this->dataProvider;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     */
-    public function setDataProvider(CalendarRendererProviderInterface $dataProvider)
+    public function setDataProvider(CalendarRendererProviderInterface $dataProvider): LegendRenderer
     {
         $this->dataProvider = $dataProvider;
+
+        return $this;
+    }
+
+    public function getNotificationMessageManager(): NotificationMessageManager
+    {
+        return $this->notificationMessageManager;
     }
 
     /**
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
+     * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager $notificationMessageManager
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Legend
+     * @return LegendRenderer
      */
-    public static function getInstance(CalendarRendererProviderInterface $dataProvider)
+    public function setNotificationMessageManager(NotificationMessageManager $notificationMessageManager
+    ): LegendRenderer
     {
-        $dataProviderType = get_class($dataProvider);
+        $this->notificationMessageManager = $notificationMessageManager;
 
-        if (is_null(static::$instance[$dataProviderType]))
-        {
-            self::$instance[$dataProviderType] = new static($dataProvider);
-        }
-
-        return static::$instance[$dataProviderType];
-    }
-
-    protected function getNotificationMessageManager(): NotificationMessageManager
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            NotificationMessageManager::class
-        );
+        return $this;
     }
 
     /**
-     * Determine the classes for a specific source
-     *
-     * @param string $source
-     * @param bool $fade
-     *
-     * @return string
      * @throws \Exception
      */
-    public function getSourceClasses($source = null, $fade = false)
+    public function getSourceClasses(?string $source = null, bool $fade = false): string
     {
         $classes = 'event-container-source event-container-source-' . $this->addSource($source);
 
@@ -210,13 +173,9 @@ class Legend
     }
 
     /**
-     *
-     * @param string $source
-     *
-     * @return int
      * @throws \Exception
      */
-    public function getSourceKey($source)
+    public function getSourceKey(string $source): int
     {
         $sourceKey = array_search($source, $this->getSources());
 
@@ -231,37 +190,33 @@ class Legend
     }
 
     /**
-     *
      * @return string[]
      */
-    public function getSources()
+    public function getSources(): array
     {
         return $this->sources;
     }
 
     /**
-     *
      * @param string[] $sources
      */
-    public function setSources($sources)
+    public function setSources(array $sources)
     {
         $this->sources = $sources;
     }
 
     /**
-     *
      * @return bool
      */
-    public function hasMultipleSources()
+    public function hasMultipleSources(): bool
     {
         return count($this->getSources()) > 1;
     }
 
     /**
-     *
      * @return bool
      */
-    public function hasSources()
+    public function hasSources(): bool
     {
         return count($this->getSources()) > 0;
     }

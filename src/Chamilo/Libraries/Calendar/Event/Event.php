@@ -22,7 +22,7 @@ class Event
 
     private ?int $endDate;
 
-    private ?int $id;
+    private ?string $id;
 
     private ?string $location;
 
@@ -37,7 +37,7 @@ class Event
     private ?string $url;
 
     public function __construct(
-        ?int $id = null, ?int $startDate = null, ?int $endDate = null, ?RecurrenceRules $recurrenceRules = null,
+        ?string $id = null, ?int $startDate = null, ?int $endDate = null, ?RecurrenceRules $recurrenceRules = null,
         ?string $url = null, ?string $title = null, ?string $content = null, ?string $location = null,
         ?string $source = null, ?string $context = null
     )
@@ -84,12 +84,12 @@ class Event
         $this->endDate = $endDate;
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function setId(?int $id)
+    public function setId(?string $id)
     {
         $this->id = $id;
     }

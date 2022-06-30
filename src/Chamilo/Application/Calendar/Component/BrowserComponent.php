@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
+use Chamilo\Libraries\Calendar\Renderer\LegendRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
@@ -210,7 +210,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     protected function renderNormalCalendar()
     {
         $dataProvider = $this->getCalendarDataProvider();
-        $calendarLegend = new Legend($dataProvider);
+        $calendarLegend = new LegendRenderer($this->getNotificationMessageManager(), $dataProvider);
 
         $rendererFactory = new ViewRendererFactory(
             $this->getCurrentRendererType(), $dataProvider, $calendarLegend, $this->getCurrentRendererTime(),

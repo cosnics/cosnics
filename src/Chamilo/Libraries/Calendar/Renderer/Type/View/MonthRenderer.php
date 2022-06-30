@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\Configuration;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
+use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MonthCalendar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Translation\Translation;
@@ -16,29 +17,20 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class MonthRenderer extends FullTableRenderer
 {
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getNextDisplayTime()
-     */
-    public function getNextDisplayTime()
+    public function getNextDisplayTime(): int
     {
         return strtotime('first day of next month', $this->getDisplayTime());
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getPreviousDisplayTime()
-     */
-    public function getPreviousDisplayTime()
+    public function getPreviousDisplayTime(): int
     {
         return strtotime('first day of previous month', $this->getDisplayTime());
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar
+     * @throws \ReflectionException
      */
-    public function initializeCalendar()
+    public function initializeCalendar(): Calendar
     {
         $displayParameters = $this->getDataProvider()->getDisplayParameters();
         $displayParameters[self::PARAM_TIME] = MonthCalendar::TIME_PLACEHOLDER;
@@ -48,11 +40,7 @@ class MonthRenderer extends FullTableRenderer
         return new MonthCalendar($this->getDisplayTime(), $dayUrlTemplate->getUrl(), array('table-calendar-month'));
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderFullCalendar()
-     */
-    public function renderFullCalendar()
+    public function renderFullCalendar(): string
     {
         $calendar = $this->getCalendar();
 
@@ -90,11 +78,7 @@ class MonthRenderer extends FullTableRenderer
         return '<div class="month-calendar">' . $calendar->render() . '</div>';
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderTitle()
-     */
-    public function renderTitle()
+    public function renderTitle(): string
     {
         return Translation::get(date('F', $this->getDisplayTime()) . 'Long', null, StringUtilities::LIBRARIES) . ' ' .
             date('Y', $this->getDisplayTime());

@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Component;
 use Chamilo\Application\Weblcms\Service\CalendarRendererProvider;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
+use Chamilo\Libraries\Calendar\Renderer\LegendRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -16,13 +16,13 @@ use Mobile_Detect;
 
 class BrowserComponent extends Manager
 {
-    const FILTER_THIS_MONTH = 'month';
+    public const FILTER_THIS_MONTH = 'month';
 
-    const FILTER_THIS_WEEK = 'week';
+    public const FILTER_THIS_WEEK = 'week';
 
-    const FILTER_TODAY = 'today';
+    public const FILTER_TODAY = 'today';
 
-    const PARAM_FILTER = 'filter';
+    public const PARAM_FILTER = 'filter';
 
     /**
      *
@@ -32,7 +32,7 @@ class BrowserComponent extends Manager
 
     /**
      *
-     * @var integer
+     * @var int
      */
     private $currentTime;
 
@@ -69,6 +69,13 @@ class BrowserComponent extends Manager
     {
     }
 
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_BROWSE_PUBLICATION_TYPE;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
     public function getCalendarDataProvider()
     {
         if (!isset($this->calendarDataProvider))
@@ -87,7 +94,7 @@ class BrowserComponent extends Manager
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getCurrentRendererTime()
     {
@@ -141,13 +148,6 @@ class BrowserComponent extends Manager
         return $this->defaultComponent;
     }
 
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_BROWSE_PUBLICATION_TYPE;
-
-        return parent::getAdditionalParameters($additionalParameters);
-    }
-
     public function get_tool_actions()
     {
         $toolActions = [];
@@ -164,7 +164,7 @@ class BrowserComponent extends Manager
     public function renderCalendar()
     {
         $dataProvider = $this->getCalendarDataProvider();
-        $calendarLegend = new Legend($dataProvider);
+        $calendarLegend = new LegendRenderer($this->getNotificationMessageManager(), $dataProvider);
 
         $rendererFactory = new ViewRendererFactory(
             $this->getCurrentRendererType(), $dataProvider, $calendarLegend, $this->getCurrentRendererTime()

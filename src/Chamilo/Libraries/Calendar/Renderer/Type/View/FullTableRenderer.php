@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
 use Chamilo\Libraries\Calendar\Table\Calendar;
+use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -19,22 +20,14 @@ abstract class FullTableRenderer extends FullRenderer
 
     use TableRenderer;
 
-    /**
-     *
-     * @return integer
-     */
-    abstract public function getNextDisplayTime();
+    abstract public function getNextDisplayTime(): int;
+
+    abstract public function getPreviousDisplayTime(): int;
 
     /**
-     *
-     * @return integer
+     * @throws \ReflectionException
      */
-    abstract public function getPreviousDisplayTime();
-    
-    /**
-     * @return string
-     */
-    public function renderNavigation()
+    public function renderNavigation(): string
     {
         $urlFormat = $this->determineNavigationUrl();
 
@@ -49,18 +42,21 @@ abstract class FullTableRenderer extends FullRenderer
         $buttonGroup = new ButtonGroup();
 
         $buttonToolBar->addItem(
-            new Button(Translation::get('Today'), new FontAwesomeGlyph('home'), $todayUrl, Button::DISPLAY_ICON)
+            new Button(Translation::get('Today'), new FontAwesomeGlyph('home'), $todayUrl, AbstractButton::DISPLAY_ICON)
         );
 
         $buttonToolBar->addItem($buttonGroup);
 
         $buttonGroup->addButton(
             new Button(
-                Translation::get('Previous'), new FontAwesomeGlyph('caret-left'), $previousUrl, Button::DISPLAY_ICON
+                Translation::get('Previous'), new FontAwesomeGlyph('caret-left'), $previousUrl,
+                AbstractButton::DISPLAY_ICON
             )
         );
         $buttonGroup->addButton(
-            new Button(Translation::get('Next'), new FontAwesomeGlyph('caret-right'), $nextUrl, Button::DISPLAY_ICON)
+            new Button(
+                Translation::get('Next'), new FontAwesomeGlyph('caret-right'), $nextUrl, AbstractButton::DISPLAY_ICON
+            )
         );
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);

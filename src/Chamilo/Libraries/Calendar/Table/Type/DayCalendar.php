@@ -47,12 +47,10 @@ class DayCalendar extends Calendar
         $events = $this->getEventsToShow();
 
         $start = 0;
-        $end = 24;
 
         if ($this->getHideOtherHours())
         {
             $start = $this->getStartHour();
-            $end = $this->getEndHour();
         }
 
         foreach ($events as $time => $items)
@@ -64,7 +62,7 @@ class DayCalendar extends Calendar
 
             $row = (date('H', $time) - $start) / $this->hourStep;
 
-            foreach ($items as $index => $item)
+            foreach ($items as $item)
             {
                 try
                 {

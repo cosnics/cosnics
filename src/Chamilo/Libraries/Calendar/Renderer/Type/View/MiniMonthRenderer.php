@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 use Chamilo\Libraries\Calendar\Renderer\Event\Configuration;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
+use Chamilo\Libraries\Calendar\Renderer\LegendRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
@@ -26,24 +26,12 @@ class MiniMonthRenderer extends ViewRenderer
     /**
      * One of 3 possible values (or null): MiniMonthCalendar::PERIOD_MONTH, MiniMonthCalendar::PERIOD_WEEK,
      * MiniMonthCalendar::PERIOD_DAY;
-     *
-     * @var integer
      */
-    private $markPeriod;
+    private ?int $markPeriod;
 
-    /**
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
-     * @param integer $displayTime
-     * @param array $viewActions
-     * @param string $linkTarget
-     * @param integer $markPeriod
-     *
-     * @throws \Exception
-     */
     public function __construct(
-        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = [],
-        $linkTarget = '', $markPeriod = null
+        CalendarRendererProviderInterface $dataProvider, LegendRenderer $legend, int $displayTime,
+        array $viewActions = [], string $linkTarget = '', ?int $markPeriod = null
     )
     {
         $this->markPeriod = $markPeriod;
@@ -52,10 +40,9 @@ class MiniMonthRenderer extends ViewRenderer
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
+     * @throws \Exception
      */
-    public function render()
+    public function render(): string
     {
         $html = [];
 
@@ -72,39 +59,28 @@ class MiniMonthRenderer extends ViewRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getMarkPeriod()
+    public function getMarkPeriod(): ?int
     {
         return $this->markPeriod;
     }
 
-    /**
-     *
-     * @param integer $markPeriod
-     */
-    public function setMarkPeriod($markPeriod)
+    public function setMarkPeriod(?int $markPeriod)
     {
         $this->markPeriod = $markPeriod;
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar
+     * @throws \ReflectionException
      */
-    public function initializeCalendar()
+    public function initializeCalendar(): Calendar
     {
         return new MiniMonthCalendar($this->getDisplayTime());
     }
 
     /**
-     *
-     * @return string
      * @throws \Exception
      */
-    public function renderCalendar()
+    public function renderCalendar(): string
     {
         $calendar = $this->getCalendar();
 
@@ -118,7 +94,7 @@ class MiniMonthRenderer extends ViewRenderer
         {
             $nextTableDate = strtotime('+1 Day', $tableDate);
 
-            foreach ($events as $index => $event)
+            foreach ($events as $event)
             {
                 $startDate = $event->getStartDate();
                 $endDate = $event->getEndDate();
@@ -156,12 +132,7 @@ class MiniMonthRenderer extends ViewRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Adds a navigation bar to the calendar
-     *
-     * @return string
-     */
-    public function renderNavigation()
+    public function renderNavigation(): string
     {
         $html = [];
 
@@ -176,41 +147,29 @@ class MiniMonthRenderer extends ViewRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function renderNextMonthNavigation()
+    public function renderNextMonthNavigation(): string
     {
         $urlFormat = $this->determineNavigationUrl();
         $nextTime = strtotime('+1 Month', $this->getDisplayTime());
         $nextUrl = str_replace(Calendar::TIME_PLACEHOLDER, $nextTime, $urlFormat);
 
-        $glyph = new FontAwesomeGlyph('chevron-right', array('pull-right'), null, 'fas');
+        $glyph = new FontAwesomeGlyph('chevron-right', ['pull-right'], null, 'fas');
 
         return '<a href="' . $nextUrl . '">' . $glyph->render() . '</a>';
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function renderPreviousMonthNavigation()
+    public function renderPreviousMonthNavigation(): string
     {
         $urlFormat = $this->determineNavigationUrl();
         $previousTime = strtotime('-1 Month', $this->getDisplayTime());
         $previousUrl = str_replace(Calendar::TIME_PLACEHOLDER, $previousTime, $urlFormat);
 
-        $glyph = new FontAwesomeGlyph('chevron-left', array('pull-left'), null, 'fas');
+        $glyph = new FontAwesomeGlyph('chevron-left', ['pull-left'], null, 'fas');
 
         return '<a href="' . $previousUrl . '">' . $glyph->render() . '</a>';
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function renderTitle()
+    public function renderTitle(): string
     {
         return Translation::get(date('F', $this->getDisplayTime()) . 'Long', null, StringUtilities::LIBRARIES) . ' ' .
             date('Y', $this->getDisplayTime());

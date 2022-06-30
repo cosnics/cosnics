@@ -17,27 +17,11 @@ use HTML_Table;
 class MiniWeekCalendar extends Calendar
 {
 
-    /**
-     * The number of hours for one table cell.
-     *
-     * @var int
-     */
-    private $hourStep;
+    private int $hourStep;
 
-    /**
-     * The navigation links
-     *
-     * @var string
-     */
-    private $navigationHtml;
+    private string $navigationHtml;
 
-    /**
-     * Creates a new week calendar
-     *
-     * @param int $displayTime A time in the week to be displayed
-     * @param int $hourStep The number of hours for one table cell. Defaults to 2.
-     */
-    public function __construct($displayTime, $hourStep = 2)
+    public function __construct(int $displayTime, int $hourStep = 2)
     {
         $this->navigationHtml = '';
         $this->hourStep = $hourStep;
@@ -45,12 +29,15 @@ class MiniWeekCalendar extends Calendar
         $this->buildTable();
     }
 
-    /**
-     * Adds a navigation bar to the calendar
-     *
-     * @param string $urlFormat The *TIME* in this string will be replaced by a timestamp
-     */
-    public function addCalendarNavigation($urlFormat)
+    public function render(): string
+    {
+        $this->addEvents();
+        $html = $this->toHtml();
+
+        return $this->navigationHtml . $html;
+    }
+
+    public function addCalendarNavigation(string $urlFormat)
     {
         $weekNumber = date('W', $this->getDisplayTime());
         $prev = strtotime('-1 Week', $this->getDisplayTime());
@@ -81,9 +68,6 @@ class MiniWeekCalendar extends Calendar
         $this->navigationHtml = $navigation->toHtml();
     }
 
-    /**
-     * Adds the events to the calendar
-     */
     private function addEvents()
     {
         $events = $this->getEventsToShow();
@@ -98,7 +82,7 @@ class MiniWeekCalendar extends Calendar
                 $row = 7;
             }
 
-            foreach ($items as $index => $item)
+            foreach ($items as $item)
             {
                 try
                 {
@@ -113,9 +97,6 @@ class MiniWeekCalendar extends Calendar
         }
     }
 
-    /**
-     * Builds the table
-     */
     private function buildTable()
     {
         // Go 1 week back end them jump to the next monday to reach the first day of this week
@@ -167,14 +148,11 @@ class MiniWeekCalendar extends Calendar
     }
 
     /**
-     * Gets the end date which will be displayed by this calendar.
-     * This is always a sunday.
-     *
-     * @return int
+     * Gets the end date which will be displayed by this calendar. This is always a sunday.
      */
     public function getEndTime(): int
     {
-        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+        $setting = Configuration::getInstance()->get_setting(['Chamilo\Libraries\Calendar', 'first_day_of_week']);
 
         if ($setting == 'sunday')
         {
@@ -184,25 +162,17 @@ class MiniWeekCalendar extends Calendar
         return strtotime('Next Sunday', $this->getStartTime());
     }
 
-    /**
-     * Gets the number of hours for one table cell.
-     *
-     * @return int
-     */
-    public function getHourStep()
+    public function getHourStep(): int
     {
         return $this->hourStep;
     }
 
     /**
-     * Gets the first date which will be displayed by this calendar.
-     * This is always a monday.
-     *
-     * @return int
+     * Gets the first date which will be displayed by this calendar. This is always a monday.
      */
     public function getStartTime(): int
     {
-        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
+        $setting = Configuration::getInstance()->get_setting(['Chamilo\Libraries\Calendar', 'first_day_of_week']);
 
         if ($setting == 'sunday')
         {
@@ -210,18 +180,5 @@ class MiniWeekCalendar extends Calendar
         }
 
         return strtotime('Next Monday', strtotime('-1 Week', $this->getDisplayTime()));
-    }
-
-    /**
-     * Returns a html-representation of this monthcalendar
-     *
-     * @return string
-     */
-    public function toHtml()
-    {
-        $this->add_events();
-        $html = parent::toHtml();
-
-        return $this->navigationHtml . $html;
     }
 }

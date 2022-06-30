@@ -12,28 +12,12 @@ namespace Chamilo\Libraries\Calendar\Renderer\Interfaces;
 interface VisibilitySupport
 {
 
-    /**
-     * Return the executable application containing the VisibilityComponent which will be called when setting a source
-     * visible or invisible
-     *
-     * @return string
-     */
-    public function getVisibilityContext();
+    public function getVisibilityContext(): string;
 
     /**
-     * Return the additional Application data needed for the storage of the Visibility instance
-     *
      * @return string[]
      */
-    public function getVisibilityData();
-
-    /**
-     * Check whether the given source is visible for the user
-     *
-     * @param string $source
-     * @param integer $userIdentifier
-     *
-     * @return boolean
-     */
-    public function isSourceVisible($source, $userIdentifier = null);
+    public function getVisibilityData(): array;
+    
+    public function isSourceVisible(string $source, ?int $userIdentifier = null): bool;
 }

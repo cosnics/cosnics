@@ -15,10 +15,9 @@ abstract class FullRenderer extends ViewRenderer
 {
 
     /**
-     * @return string
      * @throws \Exception
      */
-    public function render()
+    public function render(): string
     {
         $html = [];
 
@@ -62,11 +61,7 @@ abstract class FullRenderer extends ViewRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Form\JumpForm
-     */
-    protected function getJumpForm()
+    protected function getJumpForm(): JumpForm
     {
         if (!isset($this->form))
         {
@@ -76,34 +71,21 @@ abstract class FullRenderer extends ViewRenderer
         return $this->form;
     }
 
-    /**
-     *
-     * @return string
-     */
-    abstract public function renderFullCalendar();
+    abstract public function renderFullCalendar(): string;
 
     /**
-     * @return string
      * @throws \Exception
      */
-    public function renderMiniMonth()
+    public function renderMiniMonth(): string
     {
         $renderer = new MiniMonthRenderer(
-            $this->getDataProvider(), $this->getLegend(), $this->getDisplayTime(), null, null
+            $this->getDataProvider(), $this->getLegend(), $this->getDisplayTime()
         );
 
         return $renderer->render();
     }
 
-    /**
-     *
-     * @return string
-     */
-    abstract public function renderNavigation();
+    abstract public function renderNavigation(): string;
 
-    /**
-     *
-     * @return string
-     */
-    abstract public function renderTitle();
+    abstract public function renderTitle(): string;
 }

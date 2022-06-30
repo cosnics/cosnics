@@ -5,10 +5,11 @@ use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
+use Chamilo\Libraries\Calendar\Renderer\LegendRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
@@ -25,57 +26,35 @@ use Chamilo\Libraries\Translation\Translation;
  */
 abstract class ViewRenderer extends Renderer
 {
-    const MARKER_TYPE = '__TYPE__';
+    public const MARKER_TYPE = '__TYPE__';
 
-    const PARAM_TIME = 'time';
-    const PARAM_TYPE = 'type';
+    public const PARAM_TIME = 'time';
+    public const PARAM_TYPE = 'type';
 
-    const TYPE_DAY = 'Day';
-    const TYPE_LIST = 'List';
-    const TYPE_MINI_DAY = 'MiniDay';
-    const TYPE_MINI_MONTH = 'MiniMonth';
-    const TYPE_MONTH = 'Month';
-    const TYPE_WEEK = 'Week';
-    const TYPE_YEAR = 'Year';
+    public const TYPE_DAY = 'Day';
+    public const TYPE_LIST = 'List';
+    public const TYPE_MINI_DAY = 'MiniDay';
+    public const TYPE_MINI_MONTH = 'MiniMonth';
+    public const TYPE_MONTH = 'Month';
+    public const TYPE_WEEK = 'Week';
+    public const TYPE_YEAR = 'Year';
 
-    /**
-     * The time of the moment to render
-     *
-     * @var integer
-     */
-    private $displayTime;
+    private int $displayTime;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Legend
-     */
-    private $legend;
+    private LegendRenderer $legend;
+
+    private string $linkTarget;
+
+    private array $viewActions;
 
     /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
-     */
-    private $viewActions;
-
-    /**
-     *
-     * @var string
-     */
-    private $linkTarget;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
-     * @param integer $displayTime
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $viewActions
-     * @param string $linkTarget
      *
      * @throws \Exception
      */
     public function __construct(
-        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = [],
-        $linkTarget = ''
+        CalendarRendererProviderInterface $dataProvider, LegendRenderer $legend, int $displayTime,
+        array $viewActions = [], string $linkTarget = ''
     )
     {
         parent::__construct($dataProvider);
@@ -86,11 +65,7 @@ abstract class ViewRenderer extends Renderer
         $this->linkTarget = $linkTarget;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function determineNavigationUrl()
+    public function determineNavigationUrl(): string
     {
         $parameters = $this->getDataProvider()->getDisplayParameters();
         $parameters[self::PARAM_TIME] = Calendar::TIME_PLACEHOLDER;
@@ -101,13 +76,9 @@ abstract class ViewRenderer extends Renderer
     }
 
     /**
-     * Get the actions available in the renderer for the given event
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\Event $event
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
-    public function getActions(Event $event)
+    public function getActions(Event $event): array
     {
         if ($this->getDataProvider() instanceof ActionSupport)
         {
@@ -117,24 +88,15 @@ abstract class ViewRenderer extends Renderer
         return [];
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getDisplayTime()
+    public function getDisplayTime(): int
     {
         return $this->displayTime;
     }
 
     /**
-     * Get the events between $start_time and $end_time which should be displayed in the calendar
-     *
-     * @param integer $startTime
-     * @param integer $endTime
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getEvents($startTime, $endTime)
+    public function getEvents(int $startTime, int $endTime): array
     {
         $events = $this->getDataProvider()->getAllEventsInPeriod($startTime, $endTime);
 
@@ -158,68 +120,43 @@ abstract class ViewRenderer extends Renderer
         return $events;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Legend
-     */
-    public function getLegend()
+    public function getLegend(): LegendRenderer
     {
         return $this->legend;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
-     */
-    public function setLegend(Legend $legend)
+    public function setLegend(LegendRenderer $legend)
     {
         $this->legend = $legend;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getLinkTarget()
+    public function getLinkTarget(): string
     {
         return $this->linkTarget;
     }
 
-    /**
-     * @param $linkTarget
-     */
-    public function setLinkTarget($linkTarget)
+    public function setLinkTarget(string $linkTarget)
     {
         $this->linkTarget = $linkTarget;
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
-    public function getViewActions()
+    public function getViewActions(): array
     {
         return $this->viewActions;
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $viewActions
      */
-    public function setViewActions($viewActions)
+    public function setViewActions(array $viewActions)
     {
         $this->viewActions = $viewActions;
     }
 
-    /**
-     * Check whether the given source is visible for the user
-     *
-     * @param string $source
-     * @param integer $userIdentifier
-     *
-     * @return boolean
-     */
-    public function isSourceVisible($source, $userIdentifier = null)
+    public function isSourceVisible(string $source, ?int $userIdentifier = null): bool
     {
         if ($this->getDataProvider() instanceof VisibilitySupport)
         {
@@ -229,24 +166,22 @@ abstract class ViewRenderer extends Renderer
         return true;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton
-     */
-    public function renderTypeButton()
+    public function renderTypeButton(): DropdownButton
     {
-        $rendererTypes = array(
+        $rendererTypes = [
             ViewRenderer::TYPE_MONTH,
             ViewRenderer::TYPE_WEEK,
             ViewRenderer::TYPE_DAY,
             ViewRenderer::TYPE_LIST
-        );
+        ];
 
         $displayParameters = $this->getDataProvider()->getDisplayParameters();
         $currentRendererType = $displayParameters[self::PARAM_TYPE];
 
-        $button =
-            new DropdownButton(Translation::get($currentRendererType . 'View'), new FontAwesomeGlyph('calendar-alt'), DropdownButton::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']);
+        $button = new DropdownButton(
+            Translation::get($currentRendererType . 'View'), new FontAwesomeGlyph('calendar-alt'),
+            AbstractButton::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']
+        );
 
         foreach ($rendererTypes as $rendererType)
         {
@@ -255,8 +190,8 @@ abstract class ViewRenderer extends Renderer
 
             $button->addSubButton(
                 new SubButton(
-                    Translation::get($rendererType . 'View'), null, $typeUrl->getUrl(), SubButton::DISPLAY_LABEL, null,
-                    [], null, $currentRendererType == $rendererType
+                    Translation::get($rendererType . 'View'), null, $typeUrl->getUrl(), AbstractButton::DISPLAY_LABEL,
+                    null, [], null, $currentRendererType == $rendererType
                 )
             );
         }
@@ -265,10 +200,9 @@ abstract class ViewRenderer extends Renderer
     }
 
     /**
-     *
-     * @return string
+     * @throws \ReflectionException
      */
-    public function renderViewActions()
+    public function renderViewActions(): string
     {
         $buttonToolBar = new ButtonToolBar();
 

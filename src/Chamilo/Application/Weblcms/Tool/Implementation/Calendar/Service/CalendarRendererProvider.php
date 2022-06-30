@@ -5,8 +5,6 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\File\Redirect;
 
 /**
@@ -19,32 +17,26 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @var \Chamilo\Application\Weblcms\Service\PublicationService
-     */
-    private $publicationService;
-
-    /**
-     *
      * @var \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course
      */
     private $course;
 
     /**
      *
-     * @var string
+     * @var \Chamilo\Application\Weblcms\Service\PublicationService
      */
-    private $tool;
+    private $publicationService;
 
     /**
      *
-     * @param \Chamilo\Application\Weblcms\Service\PublicationService $publicationService
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository $dataProviderRepository
-     * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
-     * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
-     * @param string[] $displayParameters;
+     * @var string
      */
-    public function __construct(PublicationService $publicationService, Course $course, $tool, User $dataUser,
-        User $viewingUser, $displayParameters)
+    private $tool;
+    
+    public function __construct(
+        PublicationService $publicationService, Course $course, $tool, User $dataUser, User $viewingUser,
+        $displayParameters
+    )
     {
         parent::__construct($dataUser, $viewingUser, $displayParameters);
 
@@ -54,21 +46,23 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     }
 
     /**
-     *
-     * @return \Chamilo\Application\Weblcms\Service\PublicationService
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
-    public function getPublicationService()
+    public function aggregateEvents(int $sourceType, int $startTime, int $endTime): array
     {
-        return $this->publicationService;
-    }
+        $publications = $this->getPublicationService()->getPublicationsForUser(
+            $this->getDataUser(), $this->getCourse(), $this->getTool()
+        );
+        $events = [];
 
-    /**
-     *
-     * @param \Chamilo\Application\Weblcms\Service\PublicationService $publicationService
-     */
-    public function setPublicationService(PublicationService $publicationService)
-    {
-        $this->publicationService = $publicationService;
+        foreach ($publications as $publication)
+        {
+            $eventParser = new EventParser($publication, $startTime, $endTime);
+            $events = array_merge($events, $eventParser->getEvents());
+        }
+
+        return $events;
     }
 
     /**
@@ -91,6 +85,24 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
+     * @return \Chamilo\Application\Weblcms\Service\PublicationService
+     */
+    public function getPublicationService()
+    {
+        return $this->publicationService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Weblcms\Service\PublicationService $publicationService
+     */
+    public function setPublicationService(PublicationService $publicationService)
+    {
+        $this->publicationService = $publicationService;
+    }
+
+    /**
+     *
      * @return string
      */
     public function getTool()
@@ -109,35 +121,12 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
-     * @param integer $sourceType
-     * @param integer $startTime
-     * @param integer $endTime
-     */
-    public function aggregateEvents($sourceType, $startTime, $endTime)
-    {
-        $publications = $this->getPublicationService()->getPublicationsForUser(
-            $this->getDataUser(),
-            $this->getCourse(),
-            $this->getTool());
-        $events = [];
-
-        foreach ($publications as $publication)
-        {
-            $eventParser = new EventParser($publication, $startTime, $endTime);
-            $events = array_merge($events, $eventParser->getEvents());
-        }
-
-        return $events;
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getUrl()
      */
     public function getUrl($parameters = [], $filterParameters = [], $encodeEntities = false)
     {
         $redirect = new Redirect($parameters, $filterParameters, $encodeEntities);
+
         return $redirect->getUrl();
     }
 }

@@ -9,11 +9,7 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 class MiniDayRenderer extends DayRenderer
 {
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::render()
-     */
-    public function render()
+    public function render(): string
     {
         $html = [];
         $html[] = $this->renderFullCalendar();

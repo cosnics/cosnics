@@ -4,7 +4,8 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 use Chamilo\Libraries\Calendar\Renderer\Event\Configuration;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
+use Chamilo\Libraries\Calendar\Renderer\LegendRenderer;
+use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\WeekCalendar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Translation\Translation;
@@ -46,7 +47,7 @@ class WeekRenderer extends FullTableRenderer
     /**
      *
      * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
-     * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
+     * @param \Chamilo\Libraries\Calendar\Renderer\LegendRenderer $legend
      * @param integer $displayTime
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $viewActions
      * @param string $linkTarget
@@ -56,7 +57,7 @@ class WeekRenderer extends FullTableRenderer
      * @param boolean $hideOtherHours
      */
     public function __construct(
-        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = [],
+        CalendarRendererProviderInterface $dataProvider, LegendRenderer $legend, $displayTime, $viewActions = [],
         $linkTarget = '', $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false
     )
     {
@@ -162,7 +163,7 @@ class WeekRenderer extends FullTableRenderer
      *
      * @return \Chamilo\Libraries\Calendar\Table\Type\WeekCalendar
      */
-    public function initializeCalendar()
+    public function initializeCalendar(): Calendar
     {
         $displayParameters = $this->getDataProvider()->getDisplayParameters();
         $displayParameters[self::PARAM_TIME] = WeekCalendar::TIME_PLACEHOLDER;

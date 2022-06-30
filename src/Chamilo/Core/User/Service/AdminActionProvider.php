@@ -104,7 +104,7 @@ class AdminActionProvider extends AbstractActionProvider implements ActionProvid
             $translator->trans('BuildUserFields', [], $context),
             new FontAwesomeGlyph('user', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
         );
-        
+
         $parameters = [
             Application::PARAM_CONTEXT => $context,
             Application::PARAM_ACTION => Manager::ACTION_BROWSE_USERS

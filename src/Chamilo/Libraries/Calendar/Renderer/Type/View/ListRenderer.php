@@ -1,11 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
+use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -19,22 +20,15 @@ use Chamilo\Libraries\Translation\Translation;
 class ListRenderer extends FullRenderer
 {
 
-    /**
-     *
-     * @return integer
-     */
-    protected function getEndTime()
+    protected function getEndTime(): int
     {
         return strtotime('+6 Months', $this->getStartTime());
     }
 
     /**
-     * @param integer $startTime
-     * @param integer $endTime
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[][]
      */
-    public function getEvents($startTime, $endTime)
+    public function getEvents(int $startTime, int $endTime): array
     {
         $events = parent::getEvents($startTime, $endTime);
 
@@ -55,39 +49,29 @@ class ListRenderer extends FullRenderer
 
         ksort($structuredEvents);
 
-        foreach ($structuredEvents as $dateKey => &$dateEvents)
+        foreach ($structuredEvents as &$dateEvents)
         {
-            usort($dateEvents, array($this, "orderEvents"));
+            usort($dateEvents, [$this, 'orderEvents']);
         }
 
         return $structuredEvents;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    protected function getStartTime()
+    protected function getStartTime(): int
     {
         return $this->getDisplayTime();
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\Event $eventLeft
-     * @param \Chamilo\Libraries\Calendar\Event\Event $eventRight
-     *
-     * @return integer
-     */
-    public function orderEvents($eventLeft, $eventRight)
+    public function orderEvents(Event $eventLeft, Event $eventRight): int
     {
         return strcmp($eventLeft->getStartDate(), $eventRight->getStartDate());
     }
 
     /**
-     * @return string
+     * @throws \ReflectionException
+     * @throws \Exception
      */
-    public function renderFullCalendar()
+    public function renderFullCalendar(): string
     {
         $events = $this->getEvents($this->getStartTime(), $this->getEndTime());
 
@@ -146,19 +130,17 @@ class ListRenderer extends FullRenderer
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderNavigation()
+     * @throws \ReflectionException
      */
-    public function renderNavigation()
+    public function renderNavigation(): string
     {
         $urlFormat = $this->determineNavigationUrl();
         $todayUrl = str_replace(Calendar::TIME_PLACEHOLDER, time(), $urlFormat);
 
         $buttonToolBar = new ButtonToolBar();
-        $buttonGroup = new ButtonGroup();
 
         $buttonToolBar->addItem(
-            new Button(Translation::get('Today'), new FontAwesomeGlyph('home'), $todayUrl, Button::DISPLAY_ICON)
+            new Button(Translation::get('Today'), new FontAwesomeGlyph('home'), $todayUrl, AbstractButton::DISPLAY_ICON)
         );
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
@@ -166,11 +148,7 @@ class ListRenderer extends FullRenderer
         return $buttonToolbarRenderer->render();
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullRenderer::renderTitle()
-     */
-    public function renderTitle()
+    public function renderTitle(): string
     {
         return date('d M Y', $this->getStartTime()) . ' - ' . date('d M Y', $this->getEndTime());
     }
