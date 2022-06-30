@@ -63,7 +63,8 @@ export default class Connector {
         this._isSaving = false;
     }
 
-    static async loadGradeBookData(loadAllURL: string, params: any = undefined) {
+    static async loadGradeBookData(loadAllURL: string, csrfToken: string|undefined) {
+        const params = csrfToken ? {'_csrf_token': csrfToken } : {};
         const res = await axios.get(loadAllURL, {params});
         return res.data;
     }

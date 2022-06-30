@@ -21,7 +21,7 @@
         @Prop({type: Object, default: () => null}) readonly apiConfig!: APIConfig;
 
         async load(): Promise<void> {
-            const allData: any = await Connector.loadGradeBookData(this.apiConfig.loadGradeBookDataURL);
+            const allData: any = await Connector.loadGradeBookData(this.apiConfig.loadGradeBookDataURL, this.apiConfig.csrfToken);
             if (allData) {
                 this.gradeBook = GradeBook.from(allData);
                 this.connector = new Connector(this.apiConfig, this.gradeBook.dataId, this.gradeBook.currentVersion);
