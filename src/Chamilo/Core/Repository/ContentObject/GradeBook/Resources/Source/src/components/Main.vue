@@ -12,7 +12,7 @@
                 <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>Nieuwe score</button>
                 <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>Categorie</button>
             </div>
-            <grades-table :grade-book="gradeBook" @item-settings="itemSettings = $event" @category-settings="categorySettings = $event" @change-category="onChangeCategory"></grades-table>
+            <grades-table :grade-book="gradeBook" @item-settings="itemSettings = $event" @category-settings="categorySettings = $event" @change-category="onChangeCategory" @move-category="onMoveCategory"></grades-table>
         </div>
         <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null" @item-settings="itemSettings = $event"></item-settings>
         <category-settings v-if="selectedCategory" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory"></category-settings>
@@ -62,6 +62,10 @@
 
         onChangeCategory(category: Category) {
             this.connector?.updateCategory(category);
+        }
+
+        onMoveCategory(category: Category) {
+            this.connector?.moveCategory(category, this.gradeBook.categories.indexOf(category));
         }
     }
 </script>

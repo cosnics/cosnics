@@ -87,6 +87,16 @@ export default class Connector {
         });
     }
 
+    moveCategory(category: Category, newIndex: number) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'categoryData': JSON.stringify(category),
+                'newSort': newIndex + 1
+            };
+            await this.executeAPIRequest(this.apiConfig.moveCategoryURL, parameters);
+        });
+    }
+
     protected addToQueue(callback: Function) {
         this.queue.add(async () => {
             await callback();

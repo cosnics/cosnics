@@ -1,6 +1,6 @@
 <template>
     <div class="table-wrap">
-        <b-table-simple bordered striped class="gradebook-table" :class="{'is-dragging': isDragging, 'is-category-drop': categoryDropArea !== null }">
+        <b-table-simple bordered striped class="gradebook-table" :class="{'is-dragging': isDraggingColumn, 'is-category-drop': categoryDropArea !== null }">
             <b-thead>
                 <b-tr class="table-row table-head-row">
                     <b-th class="col-sticky table-student"></b-th>
@@ -8,7 +8,7 @@
                         <template v-for="{id, title, color, columnIds} in gradeBook.categories">
                             <b-th draggable :key="`category-${id}`" :colspan="Math.max(columnIds.length, 1)"
                                   :class="{'is-droppable': categoryDropArea === id}" style="color:#3e5c6e" :style="`background-color: ${color};` + (catEditItemId === id ? 'position: relative; z-index: 2;' : '')"
-                                  @dragover.prevent="onDropAreaOverEnter($event, id)" @dragenter.prevent="onDropAreaOverEnter($event, id)" @dragleave="categoryDropArea = null" @drop="isDragging && onDrop($event, id)">
+                                  @dragstart="startDragCategory($event, id)" @dragover.prevent="onDropAreaOverEnter($event, id)" @dragenter.prevent="onDropAreaOverEnter($event, id)" @dragleave="categoryDropArea = null" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, id)">
                                 <div v-if="id !== 0" style="display: flex; cursor: pointer; justify-content: space-between;align-items: center" @dblclick="catEditItemId = id">{{ title }}
                                     <button style="padding:0; background: none; border: none;margin-left: 15px" @click="$emit('category-settings', id)"><i class="fa fa-gear" style="color:#55717c;margin-left: auto;display:inline-block"></i></button>
                                 </div>
@@ -17,7 +17,7 @@
                         </template>
                     </draggable>
                     <b-th v-if="showNullCategory" :colspan="Math.max(gradeBook.nullCategory.columnIds.length, 1)" class="mod-no-category-assigned" :class="{'is-droppable': categoryDropArea === 0}" title="Zonder categorie"
-                          @dragover.prevent="onDropAreaOverEnter($event, 0)" @dragenter.prevent="onDropAreaOverEnter($event, 0)" @dragleave="categoryDropArea = null" @drop="isDragging && onDrop($event, 0)"
+                          @dragover.prevent="onDropAreaOverEnter($event, 0)" @dragenter.prevent="onDropAreaOverEnter($event, 0)" @dragleave="categoryDropArea = null" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, 0)"
                     ></b-th>
                     <b-th class="col-sticky table-student-total"></b-th>
                 </b-tr>
@@ -25,7 +25,7 @@
                     <b-th class="col-sticky table-student">Student</b-th>
                     <draggable v-for="({id, columnIds}) in displayedCategories" :key="`category-score-${id}`" :list="columnIds" tag="div" style="display: contents" ghost-class="ghost" @end="onDragEnd" :disabled="editItemId !== null || weightEditItemId !== null">
                         <b-th v-if="columnIds.length === 0" :key="`item-id-${id}`"></b-th>
-                        <b-th v-else v-for="(columnId) in columnIds" :key="`${columnId}-name`" draggable @dragstart="startDrag($event, columnId)" :style="(editItemId === columnId || weightEditItemId === columnId) ? 'position: relative; z-index: 2' : ''">
+                        <b-th v-else v-for="(columnId) in columnIds" :key="`${columnId}-name`" draggable @dragstart="startDragColumn($event, columnId)" :style="(editItemId === columnId || weightEditItemId === columnId) ? 'position: relative; z-index: 2' : ''">
                             <div style="cursor: pointer;display:flex;justify-content:space-between;align-items:center" @dblclick="editItemId = columnId"><span style="white-space: nowrap"><i v-if="gradeBook.isGrouped(columnId)" class="fa fa-group" style="margin-right: .5rem"></i>{{ gradeBook.getTitle(columnId) }}</span>
                                 <button style="padding:0; background: none; border: none;margin-left: 15px" @click="$emit('item-settings', columnId)"><i class="fa fa-gear" style="margin-left: auto;display:inline-block"></i></button>
                             </div>
@@ -76,7 +76,8 @@ import draggable from 'vuedraggable';
     }
 })
 export default class GradesTable extends Vue {
-    private isDragging = false;
+    private isDraggingColumn = false;
+    private isDraggingCategory = false;
     private categoryDropArea: number|null = null;
     private editItemId: ItemId|null = null;
     private catEditItemId: number|null = null;
@@ -95,7 +96,7 @@ export default class GradesTable extends Vue {
     }
 
     get showNullCategory() {
-        return this.isDragging || this.gradeBook.nullCategory.columnIds.length > 0;
+        return this.isDraggingColumn || this.gradeBook.nullCategory.columnIds.length > 0;
     }
 
     get displayedCategories(): Category[] {
@@ -138,10 +139,16 @@ export default class GradesTable extends Vue {
         this.weightEditItemId = null;
     }
 
-    startDrag(evt: DragEvent, id: ColumnId) {
+    startDragColumn(evt: DragEvent, id: ColumnId) {
         if (!evt.dataTransfer) { return; }
-        evt.dataTransfer.setData('__ID', JSON.stringify({id}));
-        this.isDragging = true;
+        evt.dataTransfer.setData('__COLUMN_ID', JSON.stringify({id}));
+        this.isDraggingColumn = true;
+    }
+
+    startDragCategory(evt: DragEvent, id: number) {
+        if (!evt.dataTransfer) { return; }
+        evt.dataTransfer.setData('__CATEGORY_ID', JSON.stringify({id}));
+        this.isDraggingCategory = true;
     }
 
     onDropAreaOverEnter(evt: DragEvent, index: number) {
@@ -153,13 +160,21 @@ export default class GradesTable extends Vue {
 
     onDragEnd() {
         this.categoryDropArea = null;
-        this.isDragging = false;
+        this.isDraggingColumn = false;
+        this.isDraggingColumn = false;
     }
 
     onDrop(evt: DragEvent, categoryId: number) {
         if (!evt.dataTransfer) { return; }
-        const id = JSON.parse(evt.dataTransfer.getData('__ID')).id;
-        this.gradeBook.addItemToCategory(categoryId, id);
+        if (this.isDraggingColumn) {
+            const id = JSON.parse(evt.dataTransfer.getData('__COLUMN_ID')).id;
+            this.gradeBook.addItemToCategory(categoryId, id);
+        } else if (this.isDraggingCategory) {
+            const id = JSON.parse(evt.dataTransfer.getData('__CATEGORY_ID')).id;
+            window.setTimeout(() => {
+                this.$emit('move-category', this.gradeBook.getCategory(id)!);
+            }, 200);
+        }
     }
 
     @Watch('showNullCategory')
