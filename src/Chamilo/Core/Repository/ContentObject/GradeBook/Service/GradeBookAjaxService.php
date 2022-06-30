@@ -182,7 +182,6 @@ class GradeBookAjaxService
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
             'category' => $gradebookCategoryJSONModel::fromGradeBookCategory($category)
         ];
-
     }
 
     /**
