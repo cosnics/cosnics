@@ -158,6 +158,34 @@ class GradeBookAjaxService
     }
 
     /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param string $gradeBookCategoryJSONData
+     * @param int $newSort
+     *
+     * @return array
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function moveCategory(int $gradeBookDataId, int $versionId, string $gradeBookCategoryJSONData, int $newSort)
+    {
+        $gradebookCategoryJSONModel = $this->parseGradeBookCategoryJSONModel($gradeBookCategoryJSONData);
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+
+        $category = $gradebookData->getGradeBookCategoryById($gradebookCategoryJSONModel->getId());
+        $gradebookData->moveGradeBookCategory($category, $newSort);
+
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+            'category' => $gradebookCategoryJSONModel::fromGradeBookCategory($category)
+        ];
+
+    }
+
+    /**
      * @param string $gradeBookCategoryJSONData
      *
      * @return GradeBookCategoryJSONModel

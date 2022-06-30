@@ -28,12 +28,14 @@ abstract class Manager extends AjaxManager
     const ACTION_LOAD_GRADEBOOK_DATA = 'LoadGradeBookData';
     const ACTION_ADD_CATEGORY = 'AddCategory';
     const ACTION_UPDATE_CATEGORY = 'UpdateCategory';
+    const ACTION_MOVE_CATEGORY = 'MoveCategory';
 
     const PARAM_ACTION = 'gradebook_display_ajax_action';
 
     const PARAM_GRADEBOOK_DATA_ID = 'gradebookDataId';
     const PARAM_VERSION = 'version';
     const PARAM_CATEGORY_DATA = 'categoryData';
+    const PARAM_NEW_SORT = 'newSort';
 
     /**
      * @var AjaxComponent

@@ -181,6 +181,26 @@ class GradeBookCategory
     }
 
     /**
+     * @return GradeBookCategory
+     */
+    public function decrementSort(): GradeBookCategory
+    {
+        $this->setSort($this->getSort() - 1);
+
+        return $this;
+    }
+
+    /**
+     * return GradeBookCategory
+     */
+    public function incrementSort(): GradeBookCategory
+    {
+        $this->setSort($this->getSort() + 1);
+
+        return $this;
+    }
+
+    /**
      * @return GradeBookColumn[]|ArrayCollection
      */
     public function getGradeBookColumns()

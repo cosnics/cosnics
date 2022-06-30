@@ -237,6 +237,27 @@ class GradeBookData
     }
 
     /**
+     * @param int $categoryId
+     *
+     * @return GradeBookCategory
+     *
+     * @throws ObjectNotExistException
+     */
+    public function getGradeBookCategoryById(int $categoryId)
+    {
+        $category = $this->gradebookCategories->filter(function(GradeBookCategory $category) use ($categoryId) {
+            return $category->getId() == $categoryId;
+        })->first();
+
+        if (!$category instanceof GradeBookCategory)
+        {
+            throw new ObjectNotExistException('gradebook category', $categoryId);
+        }
+
+        return $category;
+    }
+
+    /**
      * @param GradeBookCategory $gradebookCategory
      *
      * @return GradeBookData
@@ -256,23 +277,42 @@ class GradeBookData
     }
 
     /**
-     * @param int $categoryId
+     * @param GradeBookCategory $gradeBookCategory
+     * @param int $newSort
      *
-     * @return GradeBookCategory
-     *
-     * @throws ObjectNotExistException
+     * @return GradeBookData
      */
-    public function getGradeBookCategoryById(int $categoryId)
+    public function moveGradeBookCategory(GradeBookCategory $gradeBookCategory, int $newSort): GradeBookData
     {
-        $category = $this->gradebookCategories->filter(function(GradeBookCategory $category) use ($categoryId) {
-            return $category->getId() == $categoryId;
-        })->first();
-
-        if (!$category instanceof GradeBookCategory)
+        if (!$this->gradebookCategories->contains($gradeBookCategory))
         {
-            throw new ObjectNotExistException('gradebook category', $categoryId);
+            throw new \InvalidArgumentException(
+                sprintf('The given category %s is not available in gradebook data %s', $gradeBookCategory->getId(), $this->getId())
+            );
         }
 
-        return $category;
+        $oldSort = $gradeBookCategory->getSort();
+
+        foreach ($this->gradebookCategories as $category)
+        {
+            if ($category == $gradeBookCategory)
+            {
+                continue;
+            }
+
+            if ($category->getSort() >= $oldSort)
+            {
+                $category->decrementSort();
+            }
+
+            if ($category->getSort() >= $newSort)
+            {
+                $category->incrementSort();
+            }
+        }
+
+        $gradeBookCategory->setSort($newSort);
+
+        return $this;
     }
 }

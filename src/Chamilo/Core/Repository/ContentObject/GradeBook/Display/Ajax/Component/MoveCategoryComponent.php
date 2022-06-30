@@ -9,15 +9,16 @@ use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Manager;
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class UpdateCategoryComponent extends Manager
+class MoveCategoryComponent extends Manager
 {
     /**
      * @return array
      *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
      */
     function runAjaxComponent()
     {
-        return $this->getGradeBookAjaxService()->updateCategory($this->getGradeBookDataId(), $this->getVersion(), $this->getCategoryData());
+        return $this->getGradeBookAjaxService()->moveCategory($this->getGradeBookDataId(), $this->getVersion(), $this->getCategoryData(), $this->getRequest()->getFromPost(self::PARAM_NEW_SORT));
     }
 }
