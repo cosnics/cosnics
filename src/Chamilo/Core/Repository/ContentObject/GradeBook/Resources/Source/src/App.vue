@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <Main v-if="gradeBook" :grade-book="gradeBook" :connector="connector"></Main>
+    <div id="server-response"></div>
   </div>
 </template>
 

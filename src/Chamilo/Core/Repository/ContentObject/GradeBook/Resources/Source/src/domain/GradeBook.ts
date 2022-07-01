@@ -16,11 +16,11 @@ export interface GradeColumn {
     readonly id: ColumnId;
     type: string;
     title?: string|null;
-    subItemIds: ItemId[];
     weight: number|null;
     countForEndResult: boolean;
     authPresenceEndResult: number;
     unauthPresenceEndResult: number;
+    subItemIds: ItemId[];
 }
 
 export interface ResultValue {
@@ -148,7 +148,7 @@ export default class GradeBook {
         const column = this.getGradeColumn(columnId);
         if (column) {
             if (column.title) { return column.title; }
-            if (column.type === 'item') {
+            if (column.type === 'item' || column.type === 'group') {
                 return this.getGradeItem(column.subItemIds[0])!.title;
             }
         }
@@ -158,7 +158,7 @@ export default class GradeBook {
     setTitle(columnId: ColumnId, title: string) {
         const column = this.getGradeColumn(columnId);
         if (column) {
-            column.title = title;
+            column.title = title || null;
         }
     }
 

@@ -24,7 +24,7 @@
                 <h5 :class="{'standalone': column.type === 'standalone'}">Instellingen</h5>
                 <div class="settings">
                     <div>
-                        <input type="checkbox" id="countForEndResult" v-model="column.countForEndResult">
+                        <input type="checkbox" id="countForEndResult" v-model="column.countForEndResult" @input="onGradeColumnChange">
                         <label class="settings-label" for="countForEndResult">Meetellen voor eindresultaat</label>
                     </div>
                     <div v-if="column.countForEndResult">
@@ -38,30 +38,30 @@
                         <div class="mt-20">
                             <label class="settings-label">Bij gewettigde afwezigheid:</label>
                             <div>
-                                <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model.number="column.authPresenceEndResult">
+                                <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange">
                                 <label for="gafw-option1">Score niet meetellen voor het eindresultaat</label>
                             </div>
                             <div>
-                                <input type="radio" name="gafw-option" id="gafw-option2" value="1" v-model.number="column.authPresenceEndResult">
+                                <input type="radio" name="gafw-option" id="gafw-option2" value="1" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange">
                                 <label for="gafw-option2">Maximale score (100%) meetellen voor het eindresultaat</label>
                             </div>
                             <div>
-                                <input type="radio" name="gafw-option" id="gafw-option3" value="2" v-model.number="column.authPresenceEndResult">
+                                <input type="radio" name="gafw-option" id="gafw-option3" value="2" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange">
                                 <label for="gafw-option3">Minimale score (0%) meetellen voor het eindresultaat</label>
                             </div>
                         </div>
                         <div class="mt-20">
                             <label class="settings-label">Bij ontbreken van score (zonder gewettigde afwezigheid):</label>
                             <div>
-                                <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult">
+                                <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange">
                                 <label for="nogafw-option1">Score niet meetellen voor het eindresultaat</label>
                             </div>
                             <div>
-                                <input type="radio" name="nogafw-option" id="nogafw-option2" value="1" v-model.number="column.unauthPresenceEndResult">
+                                <input type="radio" name="nogafw-option" id="nogafw-option2" value="1" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange">
                                 <label for="nogafw-option2">Maximale score (100%) meetellen voor het eindresultaat</label>
                             </div>
                             <div>
-                                <input type="radio" name="nogafw-option" id="nogafw-option3" value="2" v-model.number="column.unauthPresenceEndResult">
+                                <input type="radio" name="nogafw-option" id="nogafw-option3" value="2" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange">
                                 <label for="nogafw-option3">Minimale score (0%) meetellen voor het eindresultaat</label>
                             </div>
                         </div>
@@ -86,6 +86,7 @@
 import {Component, Prop, Vue} from 'vue-property-decorator';
 import GradeBook, {GradeItem, ColumnId} from '../domain/GradeBook';
 import GradesDropdown from './GradesDropdown.vue';
+import debounce from 'debounce';
 
 @Component({
     components: { GradesDropdown },
@@ -102,6 +103,11 @@ export default class ItemSettings extends Vue {
 
     @Prop({type: GradeBook, required: true}) readonly gradeBook!: GradeBook;
     @Prop({type: [String, Number]}) readonly columnId!: ColumnId;
+
+    constructor() {
+        super();
+        this.onGradeColumnChange = debounce(this.onGradeColumnChange, 750);
+    }
 
     openGradesDropdown() {
         this.groupButtonPressed = true;
@@ -126,11 +132,13 @@ export default class ItemSettings extends Vue {
 
     set title(event: any) {
         this.gradeBook.setTitle(this.columnId, event.target.value);
+        this.onGradeColumnChange();
     }
 
     setWeight(event: any) {
         const weight = parseFloat(event.target.value);
         this.gradeBook.setWeight(this.columnId, isNaN(weight) ? null : weight);
+        this.onGradeColumnChange();
     }
 
     get gradedItems(): GradeItem[] {
@@ -167,6 +175,10 @@ export default class ItemSettings extends Vue {
 
     cancel() {
         this.showRemoveItemDialog = false;
+    }
+
+    onGradeColumnChange() {
+        this.$emit('change-gradecolumn', this.column!);
     }
 }
 </script>

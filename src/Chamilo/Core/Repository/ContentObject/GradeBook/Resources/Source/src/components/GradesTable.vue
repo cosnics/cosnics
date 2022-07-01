@@ -129,13 +129,21 @@ export default class GradesTable extends Vue {
         this.catEditItemId = null;
     }
 
-    setTitle(itemId: ItemId, title: string) {
-        this.gradeBook.setTitle(itemId, title);
+    setTitle(columnId: ColumnId, title: string) {
+        const gradeColumn = this.gradeBook.getGradeColumn(columnId);
+        if (gradeColumn) {
+            this.gradeBook.setTitle(columnId, title);
+            this.$emit('change-gradecolumn', gradeColumn);
+        }
         this.editItemId = null;
     }
 
-    setWeight(itemId: ItemId, weight: number|null) {
-        this.gradeBook.setWeight(itemId, weight);
+    setWeight(columnId: ColumnId, weight: number|null) {
+        const gradeColumn = this.gradeBook.getGradeColumn(columnId);
+        if (gradeColumn) {
+            this.gradeBook.setWeight(columnId, weight);
+            this.$emit('change-gradecolumn', gradeColumn);
+        }
         this.weightEditItemId = null;
     }
 

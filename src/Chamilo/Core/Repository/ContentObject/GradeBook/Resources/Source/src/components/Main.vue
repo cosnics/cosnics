@@ -12,9 +12,9 @@
                 <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>Nieuwe score</button>
                 <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>Categorie</button>
             </div>
-            <grades-table :grade-book="gradeBook" @item-settings="itemSettings = $event" @category-settings="categorySettings = $event" @change-category="onChangeCategory" @move-category="onMoveCategory"></grades-table>
+            <grades-table :grade-book="gradeBook" @item-settings="itemSettings = $event" @category-settings="categorySettings = $event" @change-category="onChangeCategory" @move-category="onMoveCategory" @change-gradecolumn="onChangeGradeColumn"></grades-table>
         </div>
-        <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null" @item-settings="itemSettings = $event"></item-settings>
+        <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null" @item-settings="itemSettings = $event" @change-gradecolumn="onChangeGradeColumn"></item-settings>
         <category-settings v-if="selectedCategory" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory"></category-settings>
     </div>
 </template>
@@ -23,7 +23,7 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import GradesDropdown from './GradesDropdown.vue';
     import GradesTable from './GradesTable.vue';
-    import GradeBook, {Category, GradeItem} from '../domain/GradeBook';
+    import GradeBook, {Category, GradeColumn, GradeItem} from '../domain/GradeBook';
     import ItemSettings from './ItemSettings.vue';
     import CategorySettings from './CategorySettings.vue';
     import Connector from '../connector/Connector';
@@ -66,6 +66,10 @@
 
         onMoveCategory(category: Category) {
             this.connector?.moveCategory(category, this.gradeBook.categories.indexOf(category));
+        }
+
+        onChangeGradeColumn(gradeColumn: GradeColumn) {
+            this.connector?.updateGradeColumn(gradeColumn);
         }
     }
 </script>

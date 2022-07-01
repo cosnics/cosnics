@@ -1,7 +1,7 @@
 import axios from 'axios';
 import APIConfig from './APIConfig';
 import PQueue from 'p-queue';
-import {Category} from '../domain/GradeBook';
+import {Category, GradeColumn} from '../domain/GradeBook';
 
 const HTTP_FORBIDDEN = 403;
 const HTTP_NOT_FOUND = 404;
@@ -98,6 +98,15 @@ export default class Connector {
         });
     }
 
+    updateGradeColumn(gradeColumn: GradeColumn) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'gradeColumnData': JSON.stringify(gradeColumn)
+            };
+            await this.executeAPIRequest(this.apiConfig.updateColumnURL, parameters);
+        });
+    }
+
     protected addToQueue(callback: Function) {
         this.queue.add(async () => {
             await callback();
@@ -121,6 +130,7 @@ export default class Connector {
 
         try {
             const res = await axios.post(apiURL, formData, {timeout: TIMEOUT_SEC * 1000});
+            this.logResponse(res.data);
             if (typeof res.data === 'object') {
                 this.gradebookDataId = res.data.gradebook.dataId;
                 this.currentVersion = res.data.gradebook.version;
@@ -131,6 +141,7 @@ export default class Connector {
                 throw { 'type': 'Unknown' };
             }
         } catch (err) {
+            console.log(err);
             let error: any;
             if (err?.isAxiosError && err.message?.toLowerCase().indexOf('timeout') !== -1) {
                 error = { 'type': 'Timeout' };
@@ -145,4 +156,14 @@ export default class Connector {
         }
     }
 
+    logResponse(data: any) {
+        const responseEl = document.getElementById('server-response');
+        if (responseEl) {
+            if (typeof data === 'object') {
+                responseEl.innerHTML = JSON.stringify(data, null, 4);
+            } else {
+                responseEl.innerHTML = `<div>An error occurred:</div>${data}`;
+            }
+        }
+    }
 }
