@@ -177,6 +177,7 @@ export default class GradesTable extends Vue {
         if (this.isDraggingColumn) {
             const id = JSON.parse(evt.dataTransfer.getData('__COLUMN_ID')).id;
             this.gradeBook.addItemToCategory(categoryId, id);
+            this.$emit('change-gradecolumn-category', this.gradeBook.getGradeColumn(id)!, categoryId || null);
         } else if (this.isDraggingCategory) {
             const id = JSON.parse(evt.dataTransfer.getData('__CATEGORY_ID')).id;
             window.setTimeout(() => {

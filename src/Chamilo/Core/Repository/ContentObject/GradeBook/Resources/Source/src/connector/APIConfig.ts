@@ -4,5 +4,6 @@ export default interface APIConfig {
     readonly updateCategoryURL: string;
     readonly moveCategoryURL: string;
     readonly updateColumnURL: string;
+    readonly updateColumnCategoryURL: string;
     readonly csrfToken: string;
 }

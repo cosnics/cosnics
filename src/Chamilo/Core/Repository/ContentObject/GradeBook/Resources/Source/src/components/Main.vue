@@ -12,7 +12,9 @@
                 <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>Nieuwe score</button>
                 <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>Categorie</button>
             </div>
-            <grades-table :grade-book="gradeBook" @item-settings="itemSettings = $event" @category-settings="categorySettings = $event" @change-category="onChangeCategory" @move-category="onMoveCategory" @change-gradecolumn="onChangeGradeColumn"></grades-table>
+            <grades-table :grade-book="gradeBook" @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"
+                          @change-category="onChangeCategory" @move-category="onMoveCategory"
+                          @change-gradecolumn="onChangeGradeColumn" @change-gradecolumn-category="onChangeGradeColumnCategory"></grades-table>
         </div>
         <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null" @item-settings="itemSettings = $event" @change-gradecolumn="onChangeGradeColumn"></item-settings>
         <category-settings v-if="selectedCategory" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory"></category-settings>
@@ -70,6 +72,10 @@
 
         onChangeGradeColumn(gradeColumn: GradeColumn) {
             this.connector?.updateGradeColumn(gradeColumn);
+        }
+
+        onChangeGradeColumnCategory(gradeColumn: GradeColumn, categoryId: number|null) {
+            this.connector?.updateGradeColumnCategory(gradeColumn, categoryId);
         }
     }
 </script>

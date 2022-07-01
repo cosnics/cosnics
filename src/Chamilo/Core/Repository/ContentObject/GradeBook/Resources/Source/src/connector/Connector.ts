@@ -107,6 +107,17 @@ export default class Connector {
         });
     }
 
+    updateGradeColumnCategory(gradeColumn: GradeColumn, categoryId: number|null)
+    {
+        this.addToQueue(async () => {
+            const parameters = {
+                'gradeColumnId': gradeColumn.id,
+                'categoryId': categoryId
+            };
+            await this.executeAPIRequest(this.apiConfig.updateColumnCategoryURL, parameters);
+        });
+    }
+
     protected addToQueue(callback: Function) {
         this.queue.add(async () => {
             await callback();
