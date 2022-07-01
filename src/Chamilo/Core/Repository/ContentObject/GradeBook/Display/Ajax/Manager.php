@@ -31,14 +31,17 @@ abstract class Manager extends AjaxManager
     const ACTION_UPDATE_CATEGORY = 'UpdateCategory';
     const ACTION_MOVE_CATEGORY = 'MoveCategory';
     const ACTION_UPDATE_COLUMN = 'UpdateColumn';
+    const ACTION_UPDATE_COLUMN_CATEGORY = 'UpdateColumnCategory';
 
     const PARAM_ACTION = 'gradebook_display_ajax_action';
 
     const PARAM_GRADEBOOK_DATA_ID = 'gradebookDataId';
     const PARAM_VERSION = 'version';
     const PARAM_CATEGORY_DATA = 'categoryData';
+    const PARAM_CATEGORY_ID = 'categoryId';
     const PARAM_NEW_SORT = 'newSort';
     const PARAM_GRADECOLUMN_DATA = 'gradeColumnData';
+    const PARAM_GRADECOLUMN_ID = 'gradeColumnId';
 
     /**
      * @var AjaxComponent
@@ -284,7 +287,7 @@ abstract class Manager extends AjaxManager
      */
     protected function getGradeBookDataId()
     {
-        return $this->getRequest()->getFromPost(self::PARAM_GRADEBOOK_DATA_ID);
+        return (int) $this->getRequest()->getFromPost(self::PARAM_GRADEBOOK_DATA_ID);
     }
 
     /**
@@ -292,7 +295,7 @@ abstract class Manager extends AjaxManager
      */
     protected function getVersion()
     {
-        return $this->getRequest()->getFromPost(self::PARAM_VERSION);
+        return (int) $this->getRequest()->getFromPost(self::PARAM_VERSION);
     }
 
     /**
@@ -311,4 +314,20 @@ abstract class Manager extends AjaxManager
         return $this->getRequest()->getFromPost(self::PARAM_GRADECOLUMN_DATA);
     }
 
+    /**
+     * @return int
+     */
+    protected function getGradeColumnId()
+    {
+        return (int) $this->getRequest()->getFromPost(self::PARAM_GRADECOLUMN_ID);
+    }
+
+    /**
+     * @return int|null
+     */
+    protected function getCategoryId()
+    {
+        $id = $this->getRequest()->getFromPost(self::PARAM_CATEGORY_ID);
+        return $id == 'null' ? null : (int) $id;
+    }
 }

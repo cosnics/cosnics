@@ -337,4 +337,58 @@ class GradeBookData
 
         return $this;
     }
+
+    /**
+     * @param int $gradeBookColumnId
+     * @param int|null $categoryId
+     *
+     * @return GradeBookColumn
+     *
+     * @throws ObjectNotExistException
+     */
+    public function updateGradeBookColumnCategory(int $gradeBookColumnId, ?int $categoryId): GradeBookColumn
+    {
+        $column = $this->getGradeBookColumnById($gradeBookColumnId);
+        $oldCategory = $column->getGradeBookCategory();
+        $oldSort = $column->getSort();
+        $newCategory = empty($categoryId) ? null : $this->getGradeBookCategoryById($categoryId);
+
+        if ($oldCategory !== $newCategory)
+        {
+            if (empty($oldCategory))
+            {
+                $columns = $this->getGradeBookColumnsUncategorized();
+            }
+            else
+            {
+                $columns = $oldCategory->getGradeBookColumns();
+            }
+            foreach ($columns as $gradeBookColumn)
+            {
+                if ($gradeBookColumn == $column)
+                {
+                    continue;
+                }
+
+                if ($gradeBookColumn->getSort() >= $oldSort)
+                {
+                    $gradeBookColumn->decrementSort();
+                }
+            }
+
+            if (empty($newCategory))
+            {
+                $column->setGradeBookCategory(null);
+                $column->setSort(count($this->getGradeBookColumnsUncategorized()));
+            }
+            else
+            {
+                $count = count($newCategory->getGradeBookColumns());
+                $column->setGradeBookCategory($newCategory);
+                $column->setSort($count + 1);
+            }
+        }
+
+        return $column;
+    }
 }

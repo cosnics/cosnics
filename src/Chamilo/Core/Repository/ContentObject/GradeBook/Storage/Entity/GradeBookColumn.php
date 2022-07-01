@@ -316,6 +316,26 @@ class GradeBookColumn
     }
 
     /**
+     * @return GradeBookColumn
+     */
+    public function decrementSort(): GradeBookColumn
+    {
+        $this->setSort($this->getSort() - 1);
+
+        return $this;
+    }
+
+    /**
+     * return GradeBookColumn
+     */
+    public function incrementSort(): GradeBookColumn
+    {
+        $this->setSort($this->getSort() + 1);
+
+        return $this;
+    }
+
+    /**
      * @return GradeBookColumnSubItem[]|ArrayCollection
      */
     public function getGradeBookColumnSubItems()

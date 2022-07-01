@@ -250,6 +250,31 @@ class GradeBookAjaxService
     }
 
     /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param int $gradeBookColumnId
+     * @param int|null $categoryId
+     *
+     * @return array
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function updateGradeBookColumnCategory(int $gradeBookDataId, int $versionId, int $gradeBookColumnId, ?int $categoryId)
+    {
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $column = $gradebookData->updateGradeBookColumnCategory($gradeBookColumnId, $categoryId);
+        $newCategory = $column->getGradeBookCategory();
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+            'gradebookColumnId' => $column->getId(),
+            'categoryId' => empty($newCategory) ? null : $newCategory->getId(),
+            'sort' => $column->getSort()
+        ];
+    }
+
+    /**
      * @return Serializer
      */
     private function createSerializer(): Serializer
