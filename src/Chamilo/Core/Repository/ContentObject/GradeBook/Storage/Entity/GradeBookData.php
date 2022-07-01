@@ -391,4 +391,44 @@ class GradeBookData
 
         return $column;
     }
+
+    /**
+     * @param GradeBookColumn $gradeBookColumn
+     * @param int $newSort
+     *
+     * @return GradeBookData
+     */
+    public function moveGradeBookColumn(GradeBookColumn $gradeBookColumn, int $newSort): GradeBookData
+    {
+        if (!$this->gradebookColumns->contains($gradeBookColumn))
+        {
+            throw new \InvalidArgumentException(
+                sprintf('The given column %s is not available in gradebook data %s', $gradeBookColumn->getId(), $this->getId())
+            );
+        }
+
+        $oldSort = $gradeBookColumn->getSort();
+
+        foreach ($this->gradebookColumns as $column)
+        {
+            if ($column == $gradeBookColumn)
+            {
+                continue;
+            }
+
+            if ($column->getSort() >= $oldSort)
+            {
+                $column->decrementSort();
+            }
+
+            if ($column->getSort() >= $newSort)
+            {
+                $column->incrementSort();
+            }
+        }
+
+        $gradeBookColumn->setSort($newSort);
+
+        return $this;
+    }
 }

@@ -275,6 +275,33 @@ class GradeBookAjaxService
     }
 
     /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param int $gradeBookColumnId
+     * @param int $newSort
+     *
+     * @return array
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function moveGradeBookColumn(int $gradeBookDataId, int $versionId, int $gradeBookColumnId, int $newSort)
+    {
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+
+        $gradeBookColumn = $gradebookData->getGradeBookColumnById($gradeBookColumnId);
+        $gradebookData->moveGradeBookColumn($gradeBookColumn, $newSort);
+
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+            'gradebookColumnId' => $gradeBookColumn->getId(),
+            'sort' => $gradeBookColumn->getSort()
+        ];
+    }
+
+    /**
      * @return Serializer
      */
     private function createSerializer(): Serializer

@@ -32,6 +32,7 @@ abstract class Manager extends AjaxManager
     const ACTION_MOVE_CATEGORY = 'MoveCategory';
     const ACTION_UPDATE_COLUMN = 'UpdateColumn';
     const ACTION_UPDATE_COLUMN_CATEGORY = 'UpdateColumnCategory';
+    const ACTION_MOVE_COLUMN = 'MoveColumn';
 
     const PARAM_ACTION = 'gradebook_display_ajax_action';
 
