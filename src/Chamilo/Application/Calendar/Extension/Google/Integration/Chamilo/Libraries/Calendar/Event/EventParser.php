@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libr
 
 use Chamilo\Application\Calendar\Extension\Google\CalendarProperties;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
-use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRulesIcalParser;
+use Chamilo\Libraries\Calendar\Service\Recurrence\RecurrenceRulesIcalParser;
 use Chamilo\Libraries\Translation\Translation;
 use DateTime;
 use DateTimeZone;
@@ -46,7 +46,7 @@ class EventParser
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
+     * @param \Chamilo\Libraries\Calendar\Service\View\CalendarRenderer $renderer
      * @param \Chamilo\Application\Calendar\Extension\Google\CalendarProperties $calendarProperties
      * @param \Google_Service_Calendar_Event $googleCalendarEvent
      * @param int $fromDate
@@ -188,7 +188,7 @@ class EventParser
      *
      * @param string[] $recurrenceRules
      *
-     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules
+     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules
      */
     private function getRecurrence($recurrenceRules)
     {

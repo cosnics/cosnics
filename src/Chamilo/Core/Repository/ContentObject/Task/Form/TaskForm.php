@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Task\Form;
 
 use Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task;
-use Chamilo\Libraries\Calendar\Event\Recurrence\RecurringContentObjectForm;
+use Chamilo\Libraries\Calendar\Form\RecurringContentObjectForm;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**

@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\L
 
 use Chamilo\Application\Calendar\Extension\Office365\Manager;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
-use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
+use Chamilo\Libraries\Calendar\Event\RecurrenceRules;
 use Chamilo\Libraries\Translation\Translation;
 use DateTime;
 use DateTimeZone;
@@ -259,7 +259,7 @@ class EventParser
      *
      * @param \Microsoft\Graph\Model\PatternedRecurrence $recurrence
      *
-     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules
+     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules
      */
     private function getRecurrence(PatternedRecurrence $recurrence = null)
     {

@@ -28,6 +28,18 @@ class ConfigurationService
 
     /**
      *
+     * @param string $context
+     * @param string $variable
+     *
+     * @return \Chamilo\Configuration\Storage\DataClass\Setting
+     */
+    public function findSettingByContextAndVariableName($context, $variable)
+    {
+        return $this->getConfigurationRepository()->findSettingByContextAndVariableName($context, $variable);
+    }
+
+    /**
+     *
      * @return \Chamilo\Configuration\Storage\Repository\ConfigurationRepository
      */
     protected function getConfigurationRepository()

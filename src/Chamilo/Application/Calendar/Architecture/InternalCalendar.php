@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Architecture;
 
-use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
+use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 
 /**
  *

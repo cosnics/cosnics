@@ -8,6 +8,6 @@ namespace Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libr
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EventMonthRenderer extends \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventMonthRenderer
+class EventMonthRenderer extends \Chamilo\Libraries\Calendar\Service\Event\EventMonthRenderer
 {
 }

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\CalendarEvent\Form;
 
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
-use Chamilo\Libraries\Calendar\Event\Recurrence\RecurringContentObjectForm;
+use Chamilo\Libraries\Calendar\Form\RecurringContentObjectForm;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 

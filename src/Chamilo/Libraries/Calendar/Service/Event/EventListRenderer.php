@@ -1,0 +1,127 @@
+<?php
+namespace Chamilo\Libraries\Calendar\Service\Event;
+
+use Chamilo\Libraries\Calendar\Architecture\Interfaces\ActionSupport;
+use Chamilo\Libraries\Format\Structure\Toolbar;
+use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
+
+/**
+ *
+ * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
+class EventListRenderer extends EventRenderer
+{
+
+    /**
+     * Gets a html representation of an event for a month renderer
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function render()
+    {
+        $event = $this->getEvent();
+        $legend = $this->getRenderer()->getLegend();
+
+        $sourceClasses = $legend->getSourceClasses($event->getSource());
+        $eventClasses = implode(' ', array('event-container', $sourceClasses));
+
+        $html = [];
+
+        if (!$this->getRenderer()->isSourceVisible($event->getSource()))
+        {
+            $rowClasses = ' event-container-hidden';
+        }
+        else
+        {
+            $rowClasses = '';
+        }
+
+        $html[] =
+            '<div class="row' . $rowClasses . '" data-source-key="' . $legend->addSource($event->getSource()) . '">';
+
+        $html[] = '<div class="col-xs-1">';
+        $html[] = '<span class="' . $eventClasses . '"></span>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="col-xs-3 list-event-item-time">';
+        $html[] = $this->getRange();
+        $html[] = '</div>';
+
+        $html[] = '<div class="col-xs-7 list-event-item-data">';
+
+        if ($this->getEvent()->getUrl())
+        {
+            $html[] = '<a href="' . $event->getUrl() . '">';
+        }
+
+        $html[] = htmlspecialchars($event->getTitle());
+
+        if ($this->getEvent()->getUrl())
+        {
+            $html[] = '</a>';
+        }
+
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function getActions()
+    {
+        $html = [];
+
+        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
+
+        if ($this->getRenderer()->getDataProvider() instanceof ActionSupport)
+        {
+            foreach ($this->getRenderer()->getActions($this->getEvent()) as $action)
+            {
+                $toolbar->add_item($action);
+            }
+        }
+
+        $html[] = '<div style="float: right; margin-top: 2px;">';
+        $html[] = $toolbar->render();
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getRange()
+    {
+        $html = [];
+
+        $dateFormat = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
+
+        if ($this->getEvent()->getEndDate() != '')
+        {
+            if (date('Y m d', $this->getEvent()->getStartDate()) == date('Y m d', $this->getEvent()->getEndDate()))
+            {
+                $dateFormat = Translation::get('TimeNoSecFormat', null, StringUtilities::LIBRARIES);
+            }
+
+            $html[] = '<div class="calendar-event-range">' . htmlentities(
+                    DatetimeUtilities::getInstance()->formatLocaleDate($dateFormat, $this->getEvent()->getStartDate()) . ' - ' .
+                    DatetimeUtilities::getInstance()->formatLocaleDate($dateFormat, $this->getEvent()->getEndDate())
+                ) . '</div>';
+        }
+        else
+        {
+            $html[] = '<div class="calendar-event-range">' . DatetimeUtilities::getInstance()->formatLocaleDate(
+                    $dateFormat, $this->getEvent()->getStartDate()
+                ) . '</div>';
+        }
+
+        return implode(PHP_EOL, $html);
+    }
+}

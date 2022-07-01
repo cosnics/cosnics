@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\C
 use Chamilo\Application\Calendar\Architecture\InternalCalendar;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo\Application\Calendar\Service\CalendarEventDataProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
+use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 
 /**
  *

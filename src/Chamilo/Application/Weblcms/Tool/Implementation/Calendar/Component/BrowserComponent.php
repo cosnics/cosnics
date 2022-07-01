@@ -4,9 +4,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Component;
 use Chamilo\Application\Weblcms\Service\CalendarRendererProvider;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Calendar\Renderer\LegendRenderer;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
+use Chamilo\Libraries\Calendar\Service\LegendRenderer;
+use Chamilo\Libraries\Calendar\Service\Renderer\Type\ViewRendererFactory;
+use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -81,8 +81,8 @@ class BrowserComponent extends Manager
         if (!isset($this->calendarDataProvider))
         {
             $displayParameters = $this->getDefaultComponent()->get_parameters();
-            $displayParameters[ViewRenderer::PARAM_TYPE] = $this->getCurrentRendererType();
-            $displayParameters[ViewRenderer::PARAM_TIME] = $this->getCurrentRendererTime();
+            $displayParameters[HtmlCalendarRenderer::PARAM_TYPE] = $this->getCurrentRendererType();
+            $displayParameters[HtmlCalendarRenderer::PARAM_TIME] = $this->getCurrentRendererTime();
 
             $this->calendarDataProvider = new CalendarRendererProvider(
                 $this->getDefaultComponent(), $this->get_user(), $this->get_user(), $displayParameters
@@ -100,7 +100,7 @@ class BrowserComponent extends Manager
     {
         if (!isset($this->currentTime))
         {
-            $this->currentTime = $this->getRequest()->query->get(ViewRenderer::PARAM_TIME, time());
+            $this->currentTime = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TIME, time());
         }
 
         return $this->currentTime;
@@ -112,18 +112,18 @@ class BrowserComponent extends Manager
      */
     public function getCurrentRendererType()
     {
-        $rendererType = $this->getRequest()->query->get(ViewRenderer::PARAM_TYPE);
+        $rendererType = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TYPE);
 
         if (!$rendererType)
         {
             $rendererType = LocalSetting::getInstance()->get('default_view', 'Chamilo\Libraries\Calendar');
 
-            if ($rendererType == ViewRenderer::TYPE_MONTH)
+            if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH)
             {
                 $detect = new Mobile_Detect();
                 if ($detect->isMobile() && !$detect->isTablet())
                 {
-                    $rendererType = ViewRenderer::TYPE_LIST;
+                    $rendererType = HtmlCalendarRenderer::TYPE_LIST;
                 }
             }
         }
@@ -171,8 +171,8 @@ class BrowserComponent extends Manager
         );
         $renderer = $rendererFactory->getRenderer();
 
-        if ($this->getCurrentRendererType() == ViewRenderer::TYPE_DAY ||
-            $this->getCurrentRendererType() == ViewRenderer::TYPE_WEEK)
+        if ($this->getCurrentRendererType() == HtmlCalendarRenderer::TYPE_DAY ||
+            $this->getCurrentRendererType() == HtmlCalendarRenderer::TYPE_WEEK)
         {
             $renderer->setStartHour(
                 LocalSetting::getInstance()->get('working_hours_start', 'Chamilo\Libraries\Calendar')

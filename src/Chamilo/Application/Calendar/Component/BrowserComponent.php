@@ -11,18 +11,16 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
-use Chamilo\Libraries\Calendar\Renderer\LegendRenderer;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
-use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
+use Chamilo\Libraries\Calendar\Architecture\Factory\CalendarRendererFactory;
+use Chamilo\Libraries\Calendar\Form\JumpForm;
+use Chamilo\Libraries\Calendar\Service\LegendRenderer;
+use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -53,8 +51,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->getThemePathBuilder()->getCssPath(self::package(), true) . 'Print.css', 'print'
         );
 
-        $this->set_parameter(ViewRenderer::PARAM_TYPE, $this->getCurrentRendererType());
-        $this->set_parameter(ViewRenderer::PARAM_TIME, $this->getCurrentRendererTime());
+        $this->set_parameter(HtmlCalendarRenderer::PARAM_TYPE, $this->getCurrentRendererType());
+        $this->set_parameter(HtmlCalendarRenderer::PARAM_TIME, $this->getCurrentRendererTime());
 
         $html = [];
 
@@ -90,8 +88,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             $displayParameters = array(
                 self::PARAM_CONTEXT => self::package(),
                 self::PARAM_ACTION => self::ACTION_BROWSE,
-                ViewRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
-                ViewRenderer::PARAM_TIME => $this->getCurrentRendererTime()
+                HtmlCalendarRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
+                HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
             );
 
             $this->calendarDataProvider = new CalendarRendererProvider(
@@ -103,6 +101,11 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->calendarDataProvider;
     }
 
+    protected function getCalendarRendererFactory(): CalendarRendererFactory
+    {
+        return $this->getService(CalendarRendererFactory::class);
+    }
+
     protected function getGeneralActions()
     {
         $buttonGroup = new ButtonGroup();
@@ -111,8 +114,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             array(
                 self::PARAM_CONTEXT => self::package(),
                 self::PARAM_ACTION => self::ACTION_PRINT,
-                ViewRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
-                ViewRenderer::PARAM_TIME => $this->getCurrentRendererTime()
+                HtmlCalendarRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
+                HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
             )
         );
 
@@ -159,21 +162,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $buttonGroup;
     }
 
-    public function getMiniMonthMarkPeriod()
-    {
-        switch ($this->getCurrentRendererType())
-        {
-            case ViewRenderer::TYPE_DAY :
-                return MiniMonthCalendar::PERIOD_DAY;
-            case ViewRenderer::TYPE_MONTH :
-                return MiniMonthCalendar::PERIOD_MONTH;
-            case ViewRenderer::TYPE_WEEK :
-                return MiniMonthCalendar::PERIOD_WEEK;
-            default :
-                return MiniMonthCalendar::PERIOD_DAY;
-        }
-    }
-
     protected function getViewActions()
     {
         $actions = [];
@@ -212,14 +200,18 @@ class BrowserComponent extends Manager implements DelegateComponent
         $dataProvider = $this->getCalendarDataProvider();
         $calendarLegend = new LegendRenderer($this->getNotificationMessageManager(), $dataProvider);
 
+        /*
         $rendererFactory = new ViewRendererFactory(
             $this->getCurrentRendererType(), $dataProvider, $calendarLegend, $this->getCurrentRendererTime(),
             $this->getViewActions()
         );
-        $renderer = $rendererFactory->getRenderer();
+        */
 
-        if ($this->getCurrentRendererType() == ViewRenderer::TYPE_DAY ||
-            $this->getCurrentRendererType() == ViewRenderer::TYPE_WEEK)
+        $renderer = $this->getCalendarRendererFactory()->getRenderer($this->getCurrentRendererType());
+
+        /*
+        if ($this->getCurrentRendererType() == HtmlCalendarRenderer::TYPE_DAY ||
+            $this->getCurrentRendererType() == HtmlCalendarRenderer::TYPE_WEEK)
         {
             $renderer->setStartHour(
                 LocalSetting::getInstance()->get('working_hours_start', 'Chamilo\Libraries\Calendar')
@@ -229,7 +221,10 @@ class BrowserComponent extends Manager implements DelegateComponent
                 LocalSetting::getInstance()->get('hide_none_working_hours', 'Chamilo\Libraries\Calendar')
             );
         }
+        */
 
-        return $renderer->render();
+        return $renderer->render(
+            $dataProvider, $calendarLegend, $this->getCurrentRendererTime(), $this->getViewActions()
+        );
     }
 }

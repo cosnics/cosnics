@@ -7,9 +7,9 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Calendar\Architecture\Interfaces\ActionSupport;
+use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -24,7 +24,7 @@ use ReflectionClass;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider
+class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider
     implements VisibilitySupport, ActionSupport
 {
 
@@ -111,7 +111,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport::getEventActions()
+     * @see \Chamilo\Libraries\Calendar\Architecture\Interfaces\ActionSupport::getEventActions()
      */
     public function getEventActions(Event $event): array
     {

@@ -17,25 +17,26 @@ class CalendarDetailsRenderer extends ContentObjectPublicationDetailsRenderer
         parent::__construct($browser);
     }
 
+    public function as_html()
+    {
+        return parent::as_html();
+    }
+
     public function render_description($publication)
     {
         $event = $publication->get_content_object();
         $html[] = '<em>';
         // TODO: date formatting
         $html[] = htmlentities(Translation::get('From', null, StringUtilities::LIBRARIES)) . ': ' .
-             date('r', $event->get_start_date());
+            date('r', $event->get_start_date());
         $html[] = '<br />';
         // TODO: date formatting
         $html[] = htmlentities(Translation::get('To', null, StringUtilities::LIBRARIES)) . ': ' .
-             date('r', $event->get_end_date());
+            date('r', $event->get_end_date());
         $html[] = '</em>';
         $html[] = '<br />';
         $html[] = $event->get_description();
-        return implode(PHP_EOL, $html);
-    }
 
-    public function as_html()
-    {
-        return parent::as_html();
+        return implode(PHP_EOL, $html);
     }
 }

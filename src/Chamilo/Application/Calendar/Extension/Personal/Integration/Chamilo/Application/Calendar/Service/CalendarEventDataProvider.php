@@ -14,7 +14,7 @@ use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
+use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -82,7 +82,7 @@ class CalendarEventDataProvider extends MixedCalendar
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
+     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
      * @param integer $fromDate
      * @param integer $toDate
      *
@@ -105,7 +105,7 @@ class CalendarEventDataProvider extends MixedCalendar
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
+     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
      * @param integer $fromDate
      * @param integer $toDate
      *
@@ -126,7 +126,7 @@ class CalendarEventDataProvider extends MixedCalendar
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
+     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
      * @param RecordRetrievesParameters $recordRetrievesParameters
      * @param int $fromDate
      * @param int $toDate
@@ -172,7 +172,7 @@ class CalendarEventDataProvider extends MixedCalendar
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
+     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[] $publications
      * @param integer $fromDate
      * @param integer $toDate

@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Libraries\Calendar\Event;
 
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
-use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
+use Chamilo\Libraries\Calendar\Event\RecurrenceRules;
 
 /**
  *

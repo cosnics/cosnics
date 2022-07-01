@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Task\Integration\Chamilo\Libraries\Calendar\Event;
 
 use Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task;
-use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
+use Chamilo\Libraries\Calendar\Event\RecurrenceRules;
 
 /**
  *

@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event;
 
-use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
+use Chamilo\Libraries\Calendar\Event\RecurrenceRules;
 
 /**
  *

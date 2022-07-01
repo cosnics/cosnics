@@ -7,7 +7,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 class CalendarEventVisibilityComponent
-    extends \Chamilo\Libraries\Calendar\Event\Ajax\Component\CalendarEventVisibilityComponent
+    extends \Chamilo\Libraries\Calendar\Ajax\Component\CalendarEventVisibilityComponent
 {
 
     public function retrieveVisibility(Condition $condition): ?\Chamilo\Libraries\Calendar\Event\Visibility

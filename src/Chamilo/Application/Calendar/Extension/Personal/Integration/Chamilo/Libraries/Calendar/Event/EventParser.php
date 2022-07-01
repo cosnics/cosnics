@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
+use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
 
@@ -21,7 +21,7 @@ class EventParser
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider
+     * @var \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider
      */
     private $calendarRendererProvider;
 
@@ -45,7 +45,7 @@ class EventParser
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
+     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      * @param integer $fromDate
      * @param integer $toDate
@@ -63,7 +63,7 @@ class EventParser
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Renderer
+     * @return \Chamilo\Libraries\Calendar\Service\View\CalendarRenderer
      */
     public function getCalendarRendererProvider()
     {
@@ -72,7 +72,7 @@ class EventParser
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Renderer\Renderer $renderer
+     * @param \Chamilo\Libraries\Calendar\Service\View\CalendarRenderer $renderer
      */
     public function setCalendarRendererProvider(
         CalendarRendererProvider $calendarRendererProvider

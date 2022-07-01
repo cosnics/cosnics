@@ -8,6 +8,6 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Rendere
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EventMonthRenderer extends \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventMonthRenderer
+class EventMonthRenderer extends \Chamilo\Libraries\Calendar\Service\Event\EventMonthRenderer
 {
 }

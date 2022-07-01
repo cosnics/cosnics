@@ -8,6 +8,6 @@ namespace Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\L
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EventMiniListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventMiniListRenderer
+class EventMiniListRenderer extends \Chamilo\Libraries\Calendar\Service\Event\EventMiniListRenderer
 {
 }

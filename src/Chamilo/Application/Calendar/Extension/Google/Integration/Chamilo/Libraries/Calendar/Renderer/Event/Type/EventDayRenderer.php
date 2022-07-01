@@ -8,6 +8,6 @@ namespace Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libr
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EventDayRenderer extends \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventDayRenderer
+class EventDayRenderer extends \Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer
 {
 }

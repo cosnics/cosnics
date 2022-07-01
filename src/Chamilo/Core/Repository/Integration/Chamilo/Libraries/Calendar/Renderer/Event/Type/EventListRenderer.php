@@ -18,14 +18,14 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventListRenderer
+abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Service\Event\EventListRenderer
 {
 
     abstract function getAttachmentLink(Event $event, ContentObject $attachment);
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventListRenderer::getContent()
+     * @see \Chamilo\Libraries\Calendar\Service\Event\EventListRenderer::getContent()
      */
     public function getContent()
     {

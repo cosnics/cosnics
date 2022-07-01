@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Storage;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Libraries\Calendar\Renderer\Renderer;
+use Chamilo\Libraries\Calendar\Service\View\CalendarRenderer;
 
 /**
  *
@@ -17,12 +17,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /**
      *
-     * @param Renderer $renderer
+     * @param CalendarRenderer $renderer
      * @param int $from_date
      * @param int $to_date
+     *
      * @return Event[]
      */
-    public static function getEvents(Renderer $renderer, $from_date, $to_date)
+    public static function getEvents(CalendarRenderer $renderer, $from_date, $to_date)
     {
         $events = [];
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(Manager::package());

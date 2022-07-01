@@ -8,8 +8,8 @@ use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Calendar\Architecture\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -23,7 +23,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider
+class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider
     implements ActionSupport
 {
 
@@ -133,7 +133,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getUrl()
+     * @see \Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface::getUrl()
      */
     public function getUrl($parameters = [], $filterParameters = [], $encodeEntities = false)
     {

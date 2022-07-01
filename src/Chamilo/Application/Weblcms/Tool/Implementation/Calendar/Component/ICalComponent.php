@@ -14,7 +14,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Authentication\SecurityToken\SecurityTokenAuthentication;
-use Chamilo\Libraries\Calendar\Renderer\Type\ICalRenderer;
+use Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Translation\Translation;
@@ -156,7 +156,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
 
     private function renderCalendar(User $user)
     {
-        $icalRenderer = new ICalRenderer($this->getCalendarRendererProvider($user));
+        $icalRenderer = new ICalCalendarRenderer($this->getCalendarRendererProvider($user));
         $icalRenderer->renderAndSend();
     }
 

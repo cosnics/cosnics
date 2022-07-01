@@ -6,7 +6,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
-use Chamilo\Libraries\Calendar\Event\Recurrence\RecurringContentObject;
+use Chamilo\Libraries\Calendar\Event\RecurringContentObject;
 use Chamilo\Libraries\Translation\Translation;
 
 /**

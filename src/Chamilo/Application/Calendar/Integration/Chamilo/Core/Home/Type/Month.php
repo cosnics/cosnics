@@ -7,8 +7,8 @@ use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Calendar\Renderer\LegendRenderer;
-use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
+use Chamilo\Libraries\Calendar\Service\LegendRenderer;
+use Chamilo\Libraries\Calendar\Service\View\MiniMonthRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -30,7 +30,7 @@ class Month extends BlockRenderer implements StaticBlockTitleInterface
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer
+     * @return \Chamilo\Libraries\Calendar\Service\View\MiniMonthRenderer
      */
     protected function getCalendarRenderer()
     {

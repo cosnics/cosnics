@@ -12,7 +12,7 @@ use Chamilo\Libraries\File\Redirect;
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider
+class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider
 {
 
     /**
@@ -121,7 +121,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getUrl()
+     * @see \Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface::getUrl()
      */
     public function getUrl($parameters = [], $filterParameters = [], $encodeEntities = false)
     {

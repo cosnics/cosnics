@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Task\Common\Export\Ical;
 
 use Chamilo\Core\Repository\ContentObject\Task\Common\Export\IcalExportImplementation;
 use Chamilo\Core\Repository\ContentObject\Task\Integration\Chamilo\Libraries\Calendar\Event\RecurrenceRulesParser;
-use Chamilo\Libraries\Calendar\Event\RecurrenceRules\VObjectRecurrenceRulesFormatter;
+use Chamilo\Libraries\Calendar\Service\Recurrence\VObjectRecurrenceRulesFormatter;
 use DateTime;
 use DateTimeZone;
 

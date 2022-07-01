@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
+use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 
 /**
@@ -28,8 +28,8 @@ class PrinterComponent extends BrowserComponent implements DelegateComponent
             $this->getThemePathBuilder()->getCssPath(self::package(), true) . 'Print.css', 'print'
         );
 
-        $this->set_parameter(ViewRenderer::PARAM_TYPE, $this->getCurrentRendererType());
-        $this->set_parameter(ViewRenderer::PARAM_TIME, $this->getCurrentRendererTime());
+        $this->set_parameter(HtmlCalendarRenderer::PARAM_TYPE, $this->getCurrentRendererType());
+        $this->set_parameter(HtmlCalendarRenderer::PARAM_TIME, $this->getCurrentRendererTime());
 
         $html = [];
 

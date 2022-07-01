@@ -7,8 +7,8 @@ use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
-use Chamilo\Libraries\Calendar\Renderer\LegendRenderer;
-use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniDayRenderer;
+use Chamilo\Libraries\Calendar\Service\LegendRenderer;
+use Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -36,7 +36,7 @@ class Day extends BlockRenderer implements ConfigurableInterface, StaticBlockTit
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Renderer\Type\View\MiniDayRenderer
+     * @return \Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer
      */
     protected function getCalendarRenderer()
     {
@@ -55,7 +55,7 @@ class Day extends BlockRenderer implements ConfigurableInterface, StaticBlockTit
                 $hourStep = 1;
             }
 
-            return new MiniDayRenderer(
+            return new MiniDayCalendarRenderer(
                 $dataProvider, $calendarLegend, $time, [], $this->getLinkTarget(), $hourStep,
                 $this->getBlock()->getSetting(self::CONFIGURATION_TIME_START, 8),
                 $this->getBlock()->getSetting(self::CONFIGURATION_TIME_END, 17),
