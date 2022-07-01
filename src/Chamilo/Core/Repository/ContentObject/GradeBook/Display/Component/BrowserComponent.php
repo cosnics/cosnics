@@ -81,6 +81,12 @@ class BrowserComponent extends Manager
                     self::PARAM_ACTION => self::ACTION_AJAX,
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_MOVE_CATEGORY
                 ]
+            ),
+            'UPDATE_COLUMN_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_UPDATE_COLUMN
+                ]
             )
         ];
     }

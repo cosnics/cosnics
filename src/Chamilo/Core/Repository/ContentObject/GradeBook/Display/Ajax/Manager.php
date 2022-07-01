@@ -10,10 +10,11 @@ use Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookAjaxService
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Format\Response\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder;
+use JMS\Serializer\DeserializationContext;
+use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
@@ -29,6 +30,7 @@ abstract class Manager extends AjaxManager
     const ACTION_ADD_CATEGORY = 'AddCategory';
     const ACTION_UPDATE_CATEGORY = 'UpdateCategory';
     const ACTION_MOVE_CATEGORY = 'MoveCategory';
+    const ACTION_UPDATE_COLUMN = 'UpdateColumn';
 
     const PARAM_ACTION = 'gradebook_display_ajax_action';
 
@@ -36,11 +38,17 @@ abstract class Manager extends AjaxManager
     const PARAM_VERSION = 'version';
     const PARAM_CATEGORY_DATA = 'categoryData';
     const PARAM_NEW_SORT = 'newSort';
+    const PARAM_GRADECOLUMN_DATA = 'gradeColumnData';
 
     /**
      * @var AjaxComponent
      */
     protected $ajaxComponent;
+
+    /**
+     * @var Serializer
+     */
+    protected $serializer;
 
     /**
      * Manager constructor.
@@ -63,7 +71,7 @@ abstract class Manager extends AjaxManager
     }
 
     /**
-     * @return string|Response
+     * @return AjaxExceptionResponse|JsonResponse
      */
     function run()
     {
@@ -71,7 +79,7 @@ abstract class Manager extends AjaxManager
         {
             $result = $this->runAjaxComponent();
 
-            return new JsonResponse($this->serialize($result, 'json'), 200, [], true);
+            return new JsonResponse($this->serialize($result), 200, [], true);
         }
         catch (\Exception $ex)
         {
@@ -152,6 +160,7 @@ abstract class Manager extends AjaxManager
 
     /**
      * @param string $json
+     *
      * @return array
      */
     protected function deserialize(string $json): array
@@ -159,17 +168,35 @@ abstract class Manager extends AjaxManager
         return $this->getSerializer()->deserialize($json, 'array', 'json');
     }
 
+    /**
+     * @param array $array
+     *
+     * @return string
+     */
     protected function serialize(array $array): string
     {
-        $serializer =
-            SerializerBuilder::create()
+        return $this->getSerializer()->serialize($array, 'json');
+    }
+
+    /**
+     * @return Serializer
+     */
+    public function getSerializer(): Serializer
+    {
+        if (empty($this->serializer))
+        {
+            $this->serializer = SerializerBuilder::create()
                 ->setSerializationContextFactory(function () {
                     return SerializationContext::create()
                         ->setSerializeNull(true);
                 })
+                ->setDeserializationContextFactory(function () {
+                    return DeserializationContext::create();
+                })
                 ->setPropertyNamingStrategy(new IdenticalPropertyNamingStrategy())
                 ->build();
-        return $serializer->serialize($array, 'json');
+        }
+        return $this->serializer;
     }
 
     protected function get_root_content_object()
@@ -274,6 +301,14 @@ abstract class Manager extends AjaxManager
     protected function getCategoryData()
     {
         return $this->getRequest()->getFromPost(self::PARAM_CATEGORY_DATA);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getGradeColumnData()
+    {
+        return $this->getRequest()->getFromPost(self::PARAM_GRADECOLUMN_DATA);
     }
 
 }

@@ -40,6 +40,7 @@ class GradeBookCategoryJSONModel
     /**
      * @var int[]
      *
+     * @Type("array")
      */
     protected $columnIds;
 

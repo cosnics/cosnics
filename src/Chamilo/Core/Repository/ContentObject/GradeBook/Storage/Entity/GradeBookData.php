@@ -229,6 +229,28 @@ class GradeBookData
     }
 
     /**
+     * @param int $columnId
+     *
+     * @return GradeBookColumn
+     *
+     * @throws ObjectNotExistException
+     */
+    public function getGradeBookColumnById(int $columnId)
+    {
+        $column = $this->gradebookColumns->filter(function(GradeBookColumn $column) use ($columnId) {
+            return $column->getId() == $columnId;
+        })->first();
+
+        if (!$column instanceof GradeBookColumn)
+        {
+            throw new ObjectNotExistException('gradebook column', $columnId);
+        }
+
+        return $column;
+    }
+
+
+    /**
      * @return GradeBookCategory[]|ArrayCollection
      */
     public function getGradeBookCategories()

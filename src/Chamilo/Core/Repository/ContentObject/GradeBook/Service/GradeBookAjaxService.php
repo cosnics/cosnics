@@ -7,7 +7,10 @@ use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBook
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookItemJSONModel;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
+use JMS\Serializer\DeserializationContext;
+use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializerBuilder;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\GradeBook\Service
@@ -30,12 +33,11 @@ class GradeBookAjaxService
      * GradeBookAjaxService constructor.
      *
      * @param GradeBookService $gradeBookService
-     * @param Serializer $serializer
      */
-    public function __construct(GradeBookService $gradeBookService, Serializer $serializer)
+    public function __construct(GradeBookService $gradeBookService)
     {
         $this->gradeBookService = $gradeBookService;
-        $this->serializer = $serializer;
+        $this->serializer = $this->createSerializer();
     }
 
     /**
@@ -143,17 +145,17 @@ class GradeBookAjaxService
      */
     public function updateCategory(int $gradeBookDataId, int $versionId, string $gradeBookCategoryJSONData)
     {
-        $gradebookCategoryJSONModel = $this->parseGradeBookCategoryJSONModel($gradeBookCategoryJSONData);
+        $jsonModel = $this->parseGradeBookCategoryJSONModel($gradeBookCategoryJSONData);
         $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
 
-        $category = $gradebookData->getGradeBookCategoryById($gradebookCategoryJSONModel->getId());
-        $gradebookCategoryJSONModel->updateGradeBookCategory($category);
+        $category = $gradebookData->getGradeBookCategoryById($jsonModel->getId());
+        $jsonModel->updateGradeBookCategory($category);
 
         $this->gradeBookService->saveGradeBook($gradebookData);
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
-            'category' => $gradebookCategoryJSONModel::fromGradeBookCategory($category)
+            'category' => $jsonModel::fromGradeBookCategory($category)
         ];
     }
 
@@ -180,7 +182,7 @@ class GradeBookAjaxService
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
-            'category' => $gradebookCategoryJSONModel::fromGradeBookCategory($category)
+            'category' => GradebookCategoryJSONModel::fromGradeBookCategory($category)
         ];
     }
 
@@ -191,14 +193,72 @@ class GradeBookAjaxService
      */
     protected function parseGradeBookCategoryJSONModel(string $gradeBookCategoryJSONData)
     {
-        $gradeBookJSONModel = $this->serializer->deserialize(
+        $jsonModel = $this->serializer->deserialize(
             $gradeBookCategoryJSONData, GradeBookCategoryJSONModel::class, 'json'
         );
-        if (!$gradeBookJSONModel instanceof GradeBookCategoryJSONModel)
+
+        if (!$jsonModel instanceof GradeBookCategoryJSONModel)
         {
             throw new \RuntimeException('Could not parse the gradebook category JSON model');
         }
 
-        return $gradeBookJSONModel;
+        return $jsonModel;
+    }
+
+    /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param string $gradeBookColumnJSONData
+     *
+     * @return array
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function updateGradeBookColumn(int $gradeBookDataId, int $versionId, string $gradeBookColumnJSONData)
+    {
+        $jsonModel = $this->parseGradeBookColumnJSONModel($gradeBookColumnJSONData);
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+
+        $column = $gradebookData->getGradeBookColumnById($jsonModel->getId());
+        $jsonModel->updateGradeBookColumn($column);
+
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+            'gradebookColumn' => GradeBookColumnJSONModel::fromGradeBookColumn($column)
+        ];
+    }
+
+    /**
+     * @param string $gradeBookColumnJSONData
+     *
+     * @return GradeBookColumnJSONModel
+     */
+    protected function parseGradeBookColumnJSONModel(string $gradeBookColumnJSONData)
+    {
+        $jsonModel = $this->serializer->deserialize(
+            $gradeBookColumnJSONData, GradeBookColumnJSONModel::class, 'json'
+        );
+
+        if (!$jsonModel instanceof GradeBookColumnJSONModel)
+        {
+            throw new \RuntimeException('Could not parse the gradebook column JSON model');
+        }
+
+        return $jsonModel;
+    }
+
+    /**
+     * @return Serializer
+     */
+    private function createSerializer(): Serializer
+    {
+        return SerializerBuilder::create()
+            ->setDeserializationContextFactory(function () {
+                return DeserializationContext::create();
+            })
+            ->setPropertyNamingStrategy(new IdenticalPropertyNamingStrategy())
+            ->build();
     }
 }

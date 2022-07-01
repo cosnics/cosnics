@@ -66,6 +66,7 @@ class GradeBookColumnJSONModel
     /**
      * @var int[]
      *
+     * @Type("array")
      */
     protected $subItemIds;
 
@@ -175,5 +176,23 @@ class GradeBookColumnJSONModel
             $gradebookColumn->getAuthPresenceEndResult(), $gradebookColumn->getUnauthPresenceEndResult(),
             $gradebookColumn->getSubItems()
         );
+    }
+
+    /**
+     * @param GradeBookColumn $column
+     *
+     * @return GradeBookColumn
+     */
+    public function updateGradeBookColumn(GradeBookColumn $column)
+    {
+        $column->setId($this->id);
+        $column->setType($this->type);
+        $column->setTitle($this->title);
+        $column->setWeight($this->weight);
+        $column->setCountForEndResult($this->countForEndResult);
+        $column->setAuthPresenceEndResult($this->authPresenceEndResult);
+        $column->setUnauthPresenceEndResult($this->unauthPresenceEndResult);
+
+        return $column;
     }
 }
