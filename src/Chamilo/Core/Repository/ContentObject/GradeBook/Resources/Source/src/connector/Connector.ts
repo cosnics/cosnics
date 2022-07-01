@@ -118,6 +118,16 @@ export default class Connector {
         });
     }
 
+    moveGradeColumn(gradeColumn: GradeColumn, newIndex: number) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'gradeColumnId': gradeColumn.id,
+                'newSort': newIndex + 1
+            };
+            await this.executeAPIRequest(this.apiConfig.moveColumnURL, parameters);
+        });
+    }
+
     protected addToQueue(callback: Function) {
         this.queue.add(async () => {
             await callback();

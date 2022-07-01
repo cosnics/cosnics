@@ -25,7 +25,7 @@
                     <b-th class="col-sticky table-student">Student</b-th>
                     <draggable v-for="({id, columnIds}) in displayedCategories" :key="`category-score-${id}`" :list="columnIds" tag="div" style="display: contents" ghost-class="ghost" @end="onDragEnd" :disabled="editItemId !== null || weightEditItemId !== null">
                         <b-th v-if="columnIds.length === 0" :key="`item-id-${id}`"></b-th>
-                        <b-th v-else v-for="(columnId) in columnIds" :key="`${columnId}-name`" draggable @dragstart="startDragColumn($event, columnId)" :style="(editItemId === columnId || weightEditItemId === columnId) ? 'position: relative; z-index: 2' : ''">
+                        <b-th v-else v-for="(columnId) in columnIds" :key="`${columnId}-name`" draggable @dragstart="startDragColumn($event, columnId)" :style="(editItemId === columnId || weightEditItemId === columnId) ? 'position: relative; z-index: 2' : ''" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, -1)">
                             <div style="cursor: pointer;display:flex;justify-content:space-between;align-items:center" @dblclick="editItemId = columnId"><span style="white-space: nowrap"><i v-if="gradeBook.isGrouped(columnId)" class="fa fa-group" style="margin-right: .5rem"></i>{{ gradeBook.getTitle(columnId) }}</span>
                                 <button style="padding:0; background: none; border: none;margin-left: 15px" @click="$emit('item-settings', columnId)"><i class="fa fa-gear" style="margin-left: auto;display:inline-block"></i></button>
                             </div>
@@ -176,8 +176,14 @@ export default class GradesTable extends Vue {
         if (!evt.dataTransfer) { return; }
         if (this.isDraggingColumn) {
             const id = JSON.parse(evt.dataTransfer.getData('__COLUMN_ID')).id;
-            this.gradeBook.addItemToCategory(categoryId, id);
-            this.$emit('change-gradecolumn-category', this.gradeBook.getGradeColumn(id)!, categoryId || null);
+            if (categoryId === -1) {
+                window.setTimeout(() => {
+                    this.$emit('move-gradecolumn', this.gradeBook.getGradeColumn(id)!);
+                });
+            } else {
+                this.gradeBook.addItemToCategory(categoryId, id);
+                this.$emit('change-gradecolumn-category', this.gradeBook.getGradeColumn(id)!, categoryId || null);
+            }
         } else if (this.isDraggingCategory) {
             const id = JSON.parse(evt.dataTransfer.getData('__CATEGORY_ID')).id;
             window.setTimeout(() => {

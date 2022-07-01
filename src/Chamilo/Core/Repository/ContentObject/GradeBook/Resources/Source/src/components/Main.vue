@@ -14,7 +14,7 @@
             </div>
             <grades-table :grade-book="gradeBook" @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"
                           @change-category="onChangeCategory" @move-category="onMoveCategory"
-                          @change-gradecolumn="onChangeGradeColumn" @change-gradecolumn-category="onChangeGradeColumnCategory"></grades-table>
+                          @change-gradecolumn="onChangeGradeColumn" @change-gradecolumn-category="onChangeGradeColumnCategory" @move-gradecolumn="onMoveGradeColumn"></grades-table>
         </div>
         <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null" @item-settings="itemSettings = $event" @change-gradecolumn="onChangeGradeColumn"></item-settings>
         <category-settings v-if="selectedCategory" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory"></category-settings>
@@ -76,6 +76,13 @@
 
         onChangeGradeColumnCategory(gradeColumn: GradeColumn, categoryId: number|null) {
             this.connector?.updateGradeColumnCategory(gradeColumn, categoryId);
+        }
+
+        onMoveGradeColumn(column: GradeColumn) {
+            const category = this.gradeBook.allCategories.find(category => category.columnIds.indexOf(column.id) !== -1);
+            if (category) {
+                this.connector?.moveGradeColumn(column, category.columnIds.indexOf(column.id));
+            }
         }
     }
 </script>
