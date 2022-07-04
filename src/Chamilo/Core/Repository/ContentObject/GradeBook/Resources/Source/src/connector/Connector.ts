@@ -1,7 +1,7 @@
 import axios from 'axios';
 import APIConfig from './APIConfig';
 import PQueue from 'p-queue';
-import {Category, GradeColumn} from '../domain/GradeBook';
+import {Category, ColumnId, GradeColumn, ItemId} from '../domain/GradeBook';
 
 const HTTP_FORBIDDEN = 403;
 const HTTP_NOT_FOUND = 404;
@@ -106,6 +106,16 @@ export default class Connector {
             };
             const data = await this.executeAPIRequest(this.apiConfig.addColumnURL, parameters);
             callback(data.column);
+        });
+    }
+
+    addColumnSubItem(gradeColumnId: ColumnId, gradeItemId: ItemId) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'gradeColumnId': gradeColumnId,
+                'gradeItemId': gradeItemId
+            };
+            await this.executeAPIRequest(this.apiConfig.addColumnSubItemURL, parameters);
         });
     }
 

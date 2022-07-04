@@ -156,6 +156,7 @@ export default class ItemSettings extends Vue {
 
     addSubItem(item: GradeItem) {
         this.gradeBook.addSubItem(item, this.columnId);
+        this.$emit('add-subitem', item, this.columnId);
     }
 
     removeSubItem(item: GradeItem) {
