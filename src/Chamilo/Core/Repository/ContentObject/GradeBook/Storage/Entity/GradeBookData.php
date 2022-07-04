@@ -249,6 +249,26 @@ class GradeBookData
         return $column;
     }
 
+    /**
+     * @param int $itemId
+     *
+     * @return GradeBookItem
+     *
+     * @throws ObjectNotExistException
+     */
+    public function getGradeBookItemById(int $itemId)
+    {
+        $item = $this->gradebookItems->filter(function(GradeBookItem $item) use ($itemId) {
+            return $item->getId() == $itemId;
+        })->first();
+
+        if (!$item instanceof GradeBookItem)
+        {
+            throw new ObjectNotExistException('gradebook item', $itemId);
+        }
+
+        return $item;
+    }
 
     /**
      * @return GradeBookCategory[]|ArrayCollection
@@ -390,6 +410,25 @@ class GradeBookData
         }
 
         return $column;
+    }
+
+    /**
+     * @param GradeBookColumn $gradeBookColumn
+     *
+     * @return GradeBookData
+     */
+    public function addGradeBookColumn(GradeBookColumn $gradeBookColumn): GradeBookData
+    {
+        if ($this->gradebookColumns->contains($gradeBookColumn))
+        {
+            return $this;
+        }
+
+        $this->gradebookColumns->add($gradeBookColumn);
+        $gradeBookColumn->setGradeBookData($this);
+        $gradeBookColumn->setSort(count($this->getGradeBookColumnsUncategorized()));
+
+        return $this;
     }
 
     /**

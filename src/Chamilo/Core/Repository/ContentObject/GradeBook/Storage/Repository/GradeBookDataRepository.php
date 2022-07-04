@@ -40,6 +40,16 @@ class GradeBookDataRepository extends CommonEntityRepository
             $this->saveEntity($category, false);
         }
 
+        foreach ($gradeBookData->getGradeBookColumns() as $column)
+        {
+            $this->saveEntity($column, false);
+        }
+
+        foreach ($gradeBookData->getGradeBookItems() as $item)
+        {
+            $this->saveEntity($item, false);
+        }
+
         /*foreach($rubricData->getTreeNodes() as $treeNode)
         {
             $this->saveEntity($treeNode, false);

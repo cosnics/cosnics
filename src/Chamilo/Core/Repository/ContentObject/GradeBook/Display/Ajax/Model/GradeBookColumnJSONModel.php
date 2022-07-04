@@ -197,4 +197,17 @@ class GradeBookColumnJSONModel
 
         return $column;
     }
+
+    /**
+     * @param GradeBookData $gradebookData
+     *
+     * @return GradeBookColumn
+     */
+    public function toGradeBookColumn(GradeBookData $gradebookData)
+    {
+        $gradeBookColumn = new GradeBookColumn($gradebookData);
+        $this->updateGradeBookColumn($gradeBookColumn);
+
+        return $gradeBookColumn;
+    }
 }

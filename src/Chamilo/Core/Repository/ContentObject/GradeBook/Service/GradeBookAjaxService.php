@@ -214,6 +214,33 @@ class GradeBookAjaxService
      *
      * @throws \Doctrine\ORM\ORMException
      */
+    public function addGradeBookColumn(int $gradeBookDataId, int $versionId, string $gradeBookColumnJSONData)
+    {
+        $jsonModel = $this->parseGradeBookColumnJSONModel($gradeBookColumnJSONData);
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $column = $jsonModel->toGradeBookColumn($gradebookData);
+        $column->setGradeBookCategory(null);
+        $gradebookItemId = $jsonModel->getSubItemIds()[0];
+        $gradeItem = $gradebookData->getGradeBookItemById($gradebookItemId);
+        $gradeItem->setGradeBookColumn($column);
+        $gradebookData->addGradeBookColumn($column);
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+            'column' => $jsonModel::fromGradeBookColumn($column)
+        ];
+    }
+
+    /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param string $gradeBookColumnJSONData
+     *
+     * @return array
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
     public function updateGradeBookColumn(int $gradeBookDataId, int $versionId, string $gradeBookColumnJSONData)
     {
         $jsonModel = $this->parseGradeBookColumnJSONModel($gradeBookColumnJSONData);
