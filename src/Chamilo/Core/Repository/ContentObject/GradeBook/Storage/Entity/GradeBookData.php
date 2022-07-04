@@ -85,6 +85,13 @@ class GradeBookData
     protected $gradebookCategories;
 
     /**
+     * Keeps track of removed entities so they can be removed from the database after
+     *
+     * @var ArrayCollection
+     */
+    protected $removedEntities;
+
+    /**
      * GradeBookData constructor.
      *
      * @param string $title
@@ -403,9 +410,8 @@ class GradeBookData
             }
             else
             {
-                $count = count($newCategory->getGradeBookColumns());
                 $column->setGradeBookCategory($newCategory);
-                $column->setSort($count + 1);
+                $column->setSort(count($newCategory->getGradeBookColumns()) + 1);
             }
         }
 
@@ -432,6 +438,67 @@ class GradeBookData
     }
 
     /**
+     * @param GradeBookColumn $gradeBookColumnToRemove
+     *
+     * @return GradeBookData
+     */
+    public function removeGradeBookColumn(GradeBookColumn $gradeBookColumnToRemove): GradeBookData
+    {
+        if (!$this->gradebookColumns->contains($gradeBookColumnToRemove))
+        {
+            return $this;
+        }
+
+        $this->gradebookColumns->removeElement($gradeBookColumnToRemove);
+
+        $category = $gradeBookColumnToRemove->getGradeBookCategory();
+
+        $gradeBookColumnToRemove->setGradeBookCategory(null);
+        $gradeBookColumnToRemove->setGradeBookData(null);
+
+
+        if (empty($category))
+        {
+            $columns = $this->getGradeBookColumnsUncategorized();
+        }
+        else
+        {
+            $columns = $category->getGradeBookColumns();
+        }
+
+        foreach ($columns as $column)
+        {
+            if ($gradeBookColumnToRemove == $column)
+            {
+                continue;
+            }
+
+            if ($column->getSort() >= $gradeBookColumnToRemove->getSort())
+            {
+                $column->decrementSort();
+            }
+        }
+
+        $this->getRemovedEntities()->add($gradeBookColumnToRemove);
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRemovedEntities(): ?ArrayCollection
+    {
+        if(!$this->removedEntities instanceof ArrayCollection)
+        {
+            $this->removedEntities = new ArrayCollection();
+        }
+
+        return $this->removedEntities;
+    }
+
+
+    /**
      * @param GradeBookColumn $gradeBookColumn
      * @param int $newSort
      *
@@ -446,9 +513,19 @@ class GradeBookData
             );
         }
 
+        $category = $gradeBookColumn->getGradeBookCategory();
+
         $oldSort = $gradeBookColumn->getSort();
 
-        foreach ($this->gradebookColumns as $column)
+        if (empty($category))
+        {
+            $columns = $this->getGradeBookColumnsUncategorized();
+        }
+        else
+        {
+            $columns = $category->getGradeBookColumns();
+        }
+        foreach ($columns as $column)
         {
             if ($column == $gradeBookColumn)
             {

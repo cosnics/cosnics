@@ -2,12 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Repository;
 
-/*use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\Exceptions\InvalidChildTypeException;
-use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\Choice;
-use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\CriteriumNode;
-use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\Level;*/
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
-//use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\TreeNode;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\CommonEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\LockMode;
@@ -50,30 +45,14 @@ class GradeBookDataRepository extends CommonEntityRepository
             $this->saveEntity($item, false);
         }
 
-        /*foreach($rubricData->getTreeNodes() as $treeNode)
-        {
-            $this->saveEntity($treeNode, false);
-        }
-
-        foreach($rubricData->getLevels() as $level)
-        {
-            $this->saveEntity($level, false);
-        }
-
-        foreach($rubricData->getChoices() as $choice)
-        {
-            $this->saveEntity($choice, false);
-        }*/
-
         $this->flush();
 
-        /*foreach($rubricData->getRemovedEntities() as $removedEntity)
+        foreach($gradeBookData->getRemovedEntities() as $removedEntity)
         {
             $this->removeEntity($removedEntity, false);
         }
 
         $this->flush();
-        */
     }
 
     /**

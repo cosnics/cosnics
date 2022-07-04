@@ -228,7 +228,39 @@ class GradeBookAjaxService
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
-            'column' => $jsonModel::fromGradeBookColumn($column)
+            'column' => GradeBookColumnJSONModel::fromGradeBookColumn($column)
+        ];
+    }
+
+    /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param int $gradeBookColumnId
+     * @param int $gradeItemId
+     *
+     * @return array
+     */
+    public function addGradeBookColumnSubItem(int $gradeBookDataId, int $versionId, int $gradeBookColumnId, int $gradeItemId)
+    {
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradeItem = $gradebookData->getGradeBookItemById($gradeItemId);
+        $oldGradeBookColumn = $gradeItem->getGradeBookColumn();
+        $gradeBookColumn = $gradebookData->getGradeBookColumnById($gradeBookColumnId);
+        if (!empty($oldGradeBookColumn))
+        {
+            if ($oldGradeBookColumn->getType() == 'group')
+            {
+                throw new \RuntimeException('Grade item ' . $gradeItem->getId() . ' already belongs to a group');
+            }
+            $gradebookData->removeGradeBookColumn($oldGradeBookColumn);
+        }
+        $gradeBookColumn->setType('group');
+        $gradeItem->setGradeBookColumn($gradeBookColumn);
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+            'column' => GradeBookColumnJSONModel::fromGradeBookColumn($gradeBookColumn)
         ];
     }
 

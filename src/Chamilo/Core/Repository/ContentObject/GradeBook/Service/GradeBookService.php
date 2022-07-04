@@ -2,16 +2,11 @@
 
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Service;
 
-/*use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\Exceptions\RubricHasResultsException;
-use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\CriteriumNode;
-use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\Level;*/
-
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookCategoryJSONModel;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookColumnJSONModel;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookItemJSONModel;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
-//use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\TreeNode;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Repository\GradeBookDataRepository;
 
 /**
@@ -83,6 +78,8 @@ class GradeBookService
         //$this->rubricValidator->validateRubric($rubricData);
 
         $this->gradeBookDataRepository->saveGradeBookData($gradeBookData);
+
+
     }
 
     /**

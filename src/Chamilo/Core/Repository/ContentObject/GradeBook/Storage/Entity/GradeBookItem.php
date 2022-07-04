@@ -136,6 +136,13 @@ class GradeBookItem
     }
 
     /**
+     * @return GradeBookColumn|null
+     */
+    public function getGradeBookColumn(): ?GradeBookColumn {
+        return $this->gradebookColumn;
+    }
+
+    /**
      * @param GradeBookColumn|null $gradebookColumn
      *
      * @return GradeBookItem

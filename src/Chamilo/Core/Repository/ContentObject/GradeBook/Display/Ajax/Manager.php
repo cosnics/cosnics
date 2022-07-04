@@ -34,6 +34,7 @@ abstract class Manager extends AjaxManager
     const ACTION_UPDATE_COLUMN = 'UpdateColumn';
     const ACTION_UPDATE_COLUMN_CATEGORY = 'UpdateColumnCategory';
     const ACTION_MOVE_COLUMN = 'MoveColumn';
+    const ACTION_ADD_COLUMN_SUBITEM = 'AddColumnSubItem';
 
     const PARAM_ACTION = 'gradebook_display_ajax_action';
 
@@ -44,6 +45,7 @@ abstract class Manager extends AjaxManager
     const PARAM_NEW_SORT = 'newSort';
     const PARAM_GRADECOLUMN_DATA = 'gradeColumnData';
     const PARAM_GRADECOLUMN_ID = 'gradeColumnId';
+    const PARAM_GRADEITEM_ID = 'gradeItemId';
 
     /**
      * @var AjaxComponent
@@ -314,6 +316,14 @@ abstract class Manager extends AjaxManager
     protected function getGradeColumnData()
     {
         return $this->getRequest()->getFromPost(self::PARAM_GRADECOLUMN_DATA);
+    }
+
+    /**
+     * @return int
+     */
+    protected function getGradeItemId()
+    {
+        return (int) $this->getRequest()->getFromPost(self::PARAM_GRADEITEM_ID);
     }
 
     /**
