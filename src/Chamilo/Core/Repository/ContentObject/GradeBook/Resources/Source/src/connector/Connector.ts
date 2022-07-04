@@ -66,6 +66,7 @@ export default class Connector {
     static async loadGradeBookData(loadAllURL: string, csrfToken: string|undefined) {
         const params = csrfToken ? {'_csrf_token': csrfToken } : {};
         const res = await axios.get(loadAllURL, {params});
+        console.log(res);
         return res.data;
     }
 
@@ -95,6 +96,16 @@ export default class Connector {
                 'newSort': newIndex + 1
             };
             await this.executeAPIRequest(this.apiConfig.moveCategoryURL, parameters);
+        });
+    }
+
+    addGradeColumn(gradeColumn: GradeColumn, callback: Function) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'gradeColumnData': JSON.stringify(gradeColumn)
+            };
+            const data = await this.executeAPIRequest(this.apiConfig.addColumnURL, parameters);
+            callback(data.column);
         });
     }
 

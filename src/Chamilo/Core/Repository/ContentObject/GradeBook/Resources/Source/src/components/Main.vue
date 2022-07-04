@@ -25,7 +25,7 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import GradesDropdown from './GradesDropdown.vue';
     import GradesTable from './GradesTable.vue';
-    import GradeBook, {Category, GradeColumn, GradeItem} from '../domain/GradeBook';
+    import GradeBook, {Category, GradeColumn, GradeItem, ColumnId} from '../domain/GradeBook';
     import ItemSettings from './ItemSettings.vue';
     import CategorySettings from './CategorySettings.vue';
     import Connector from '../connector/Connector';
@@ -41,8 +41,17 @@
         @Prop(Connector) readonly connector!: Connector|null;
 
         toggleGradeItem(item: GradeItem, isAdding: boolean) {
-            this.gradeBook.toggleGradeItem(item, isAdding);
+            if (isAdding) {
+                const column = this.gradeBook.addGradeItem(item);
+                this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}) => {
+                    this.gradeBook.updateGradeColumnId(column, id);
+                });
+            } else {
+                this.gradeBook.removeGradeItem(item);
+            }
         }
+
+
 
         get selectedCategory() {
             return this.gradeBook.categories.find(cat => cat.id === this.categorySettings) || null;

@@ -13,7 +13,7 @@ export interface GradeItem {
 }
 
 export interface GradeColumn {
-    readonly id: ColumnId;
+    id: ColumnId;
     type: string;
     title?: string|null;
     weight: number|null;
@@ -231,15 +231,33 @@ export default class GradeBook {
         }
     }
 
+    public updateGradeColumnId(column: GradeColumn, newId: ColumnId) {
+        const oldId = column.id;
+        column.id = newId;
+        this.allCategories.forEach(cat => {
+            const index = cat.columnIds.indexOf(oldId);
+            if (index !== -1) {
+                cat.columnIds[index] = newId;
+            }
+        });
+        this.resultsData.forEach(d => {
+            const result = d.results.find(r => r.id === oldId);
+            if (result) {
+                result.id = newId;
+            }
+        });
+    }
+
     addGradeItem(item: GradeItem) {
         const newId = this.createNewColumnId();
 
-        this.gradeColumns.push({
+        const column = {
             id: newId, type: 'item', title: null, subItemIds: [item.id], weight: null,
             countForEndResult: COUNT_FOR_END_RESULT_DEFAULT,
             authPresenceEndResult: AUTH_PRESENCE_END_RESULT_DEFAULT,
             unauthPresenceEndResult: UNAUTH_PRESENCE_END_RESULT_DEFAULT
-        });
+        };
+        this.gradeColumns.push(column);
         this.addItemToCategory(0, newId);
 
         this.originalResultsData.forEach(data => {
@@ -248,6 +266,7 @@ export default class GradeBook {
                 r.results.push({ id: newId, value: data.results.find((r: any) => r.id === item.id)?.value || null, ref: item.id, overwritten: false });
             }
         });
+        return column;
     }
 
     findGradeColumnWithGradeItem(itemId: ItemId): GradeColumn|null {
@@ -285,14 +304,6 @@ export default class GradeBook {
                     }
                 })
             });
-        }
-    }
-
-    toggleGradeItem(item: GradeItem, isAdding: boolean) {
-        if (isAdding) {
-            this.addGradeItem(item);
-        } else {
-            this.removeGradeItem(item);
         }
     }
 
