@@ -53,14 +53,6 @@ class EventDayRenderer extends EventTableRenderer
     /**
      * @return boolean
      */
-    public function isFadedEvent()
-    {
-        return false;
-    }
-
-    /**
-     * @return boolean
-     */
     public function showPostfixDate()
     {
         $configuration = $this->getConfiguration();

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Architecture\Traits;
 
+use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
 
 /**
@@ -15,11 +16,11 @@ trait TableRendererTrait
     /**
      * @throws \ReflectionException
      */
-    public function getCalendar(): CalendarTable
+    public function getCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): CalendarTable
     {
         if (!isset($this->calendar))
         {
-            $this->calendar = $this->initializeCalendar();
+            $this->calendar = $this->initializeCalendar($dataProvider, $displayTime);
         }
 
         return $this->calendar;
@@ -30,5 +31,6 @@ trait TableRendererTrait
         $this->calendar = $calendar;
     }
 
-    abstract public function initializeCalendar(): CalendarTable;
+    abstract public function initializeCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime
+    ): CalendarTable;
 }

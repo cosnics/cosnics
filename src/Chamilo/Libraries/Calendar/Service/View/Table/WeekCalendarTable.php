@@ -7,8 +7,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\View\Table
  *
- * @package Chamilo\Libraries\Calendar\Table\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WeekCalendarTable extends CalendarTable
@@ -40,14 +40,7 @@ class WeekCalendarTable extends CalendarTable
         $this->buildTable();
     }
 
-    public function render(): string
-    {
-        $this->addEvents();
-
-        return $this->toHtml();
-    }
-
-    private function addEvents()
+    protected function addEvents()
     {
         $events = $this->getEventsToShow();
         $workingStart = $this->getStartHour();

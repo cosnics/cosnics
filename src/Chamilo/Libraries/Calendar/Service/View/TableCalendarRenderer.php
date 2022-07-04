@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Architecture\Traits\TableRendererTrait;
 use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
@@ -9,7 +10,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -28,12 +29,13 @@ abstract class TableCalendarRenderer extends SidebarCalendarRenderer
     /**
      * @throws \ReflectionException
      */
-    public function renderNavigation(int $displayTime): string
+    public function renderNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        $urlFormat = $this->determineNavigationUrl();
+        $urlFormat = $this->determineNavigationUrl($dataProvider);
+        $translator = $this->getTranslator();
 
-        $previousTime = $this->getPreviousDisplayTime();
-        $nextTime = $this->getNextDisplayTime();
+        $previousTime = $this->getPreviousDisplayTime($displayTime);
+        $nextTime = $this->getNextDisplayTime($displayTime);
 
         $todayUrl = str_replace(CalendarTable::TIME_PLACEHOLDER, time(), $urlFormat);
         $previousUrl = str_replace(CalendarTable::TIME_PLACEHOLDER, $previousTime, $urlFormat);
@@ -43,20 +45,24 @@ abstract class TableCalendarRenderer extends SidebarCalendarRenderer
         $buttonGroup = new ButtonGroup();
 
         $buttonToolBar->addItem(
-            new Button(Translation::get('Today'), new FontAwesomeGlyph('home'), $todayUrl, AbstractButton::DISPLAY_ICON)
+            new Button(
+                $translator->trans('Today', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'), $todayUrl,
+                AbstractButton::DISPLAY_ICON
+            )
         );
 
         $buttonToolBar->addItem($buttonGroup);
 
         $buttonGroup->addButton(
             new Button(
-                Translation::get('Previous'), new FontAwesomeGlyph('caret-left'), $previousUrl,
-                AbstractButton::DISPLAY_ICON
+                $translator->trans('Previous', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('caret-left'),
+                $previousUrl, AbstractButton::DISPLAY_ICON
             )
         );
         $buttonGroup->addButton(
             new Button(
-                Translation::get('Next'), new FontAwesomeGlyph('caret-right'), $nextUrl, AbstractButton::DISPLAY_ICON
+                $translator->trans('Next', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('caret-right'),
+                $nextUrl, AbstractButton::DISPLAY_ICON
             )
         );
 

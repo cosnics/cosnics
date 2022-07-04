@@ -13,7 +13,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Architecture\Factory\CalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Form\JumpForm;
-use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -48,7 +47,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $this->checkLoggedInAs();
 
         $this->getPageConfiguration()->addCssFile(
-            $this->getThemePathBuilder()->getCssPath(self::package(), true) . 'Print.css', 'print'
+            $this->getPathBuilder()->getCssPath(self::package(), true) . 'print.'. $this->getThemePathBuilder()->getTheme() .'.min.css', 'print'
         );
 
         $this->set_parameter(HtmlCalendarRenderer::PARAM_TYPE, $this->getCurrentRendererType());
@@ -198,14 +197,16 @@ class BrowserComponent extends Manager implements DelegateComponent
     protected function renderNormalCalendar()
     {
         $dataProvider = $this->getCalendarDataProvider();
-        $calendarLegend = new LegendRenderer($this->getNotificationMessageManager(), $dataProvider);
 
         /*
-        $rendererFactory = new ViewRendererFactory(
-            $this->getCurrentRendererType(), $dataProvider, $calendarLegend, $this->getCurrentRendererTime(),
-            $this->getViewActions()
-        );
-        */
+       $calendarLegend = new LegendRenderer($this->getNotificationMessageManager(), $dataProvider);
+
+
+       $rendererFactory = new ViewRendererFactory(
+           $this->getCurrentRendererType(), $dataProvider, $calendarLegend, $this->getCurrentRendererTime(),
+           $this->getViewActions()
+       );
+       */
 
         $renderer = $this->getCalendarRendererFactory()->getRenderer($this->getCurrentRendererType());
 
@@ -224,7 +225,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         */
 
         return $renderer->render(
-            $dataProvider, $calendarLegend, $this->getCurrentRendererTime(), $this->getViewActions()
+            $dataProvider, $this->getCurrentRendererTime(), $this->getViewActions()
         );
     }
 }

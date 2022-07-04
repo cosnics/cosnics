@@ -92,7 +92,7 @@ class LegendRenderer
                 $result[] = '</script>';
 
                 $result[] = ResourceManager::getInstance()->getResourceHtml(
-                    Path::getInstance()->getJavascriptPath(__NAMESPACE__, true) . 'Highlight.js'
+                    Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar', true) . 'Highlight.js'
                 );
 
                 if ($visibleSources == 0)

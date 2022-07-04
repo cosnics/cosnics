@@ -8,7 +8,7 @@ use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Calendar\Service\View\MiniMonthRenderer;
+use Chamilo\Libraries\Calendar\Service\View\MiniMonthCalendarRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -30,7 +30,7 @@ class Month extends BlockRenderer implements StaticBlockTitleInterface
 
     /**
      *
-     * @return \Chamilo\Libraries\Calendar\Service\View\MiniMonthRenderer
+     * @return \Chamilo\Libraries\Calendar\Service\View\MiniMonthCalendarRenderer
      */
     protected function getCalendarRenderer()
     {
@@ -39,7 +39,7 @@ class Month extends BlockRenderer implements StaticBlockTitleInterface
             $dataProvider = new CalendarRendererProvider(
                 new CalendarRendererProviderRepository(), $this->getUser(), $this->getUser(), array(
                 Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(),
-                MiniMonthRenderer::PARAM_TYPE => MiniMonthRenderer::TYPE_DAY
+                MiniMonthCalendarRenderer::PARAM_TYPE => MiniMonthCalendarRenderer::TYPE_DAY
             ), Manager::context()
             );
 
@@ -48,7 +48,7 @@ class Month extends BlockRenderer implements StaticBlockTitleInterface
             $time = Request::get('time') ? intval(Request::get('time')) : time();
 
             $this->calendarRenderer =
-                new MiniMonthRenderer($dataProvider, $calendarLegend, $time, [], $this->getLinkTarget());
+                new MiniMonthCalendarRenderer($dataProvider, $calendarLegend, $time, [], $this->getLinkTarget());
         }
 
         return $this->calendarRenderer;

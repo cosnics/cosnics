@@ -6,7 +6,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- * @package Chamilo\Libraries\Calendar\Table\Type
+ * @package Chamilo\Libraries\Calendar\Service\View\Table
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DayCalendarTable extends CalendarTable
@@ -32,13 +33,6 @@ class DayCalendarTable extends CalendarTable
 
         parent::__construct($displayTime, $classes);
         $this->buildTable();
-    }
-
-    public function render(): string
-    {
-        $this->addEvents();
-
-        return $this->toHtml();
     }
 
     protected function addEvents()

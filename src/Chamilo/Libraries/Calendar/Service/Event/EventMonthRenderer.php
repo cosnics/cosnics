@@ -1,93 +1,51 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\Event;
 
+use Chamilo\Libraries\Calendar\Event\Event;
+
 /**
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class EventMonthRenderer extends EventTableRenderer
+class EventMonthRenderer extends TableEventRenderer
 {
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Service\Event\EventTableRenderer::getPostfixSymbol()
-     */
-    public function getPostfixSymbol()
+    public function getPostfixSymbol(): string
     {
         return $this->getSymbol('chevron-right');
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Service\Event\EventTableRenderer::getPrefixSymbol()
-     */
-    public function getPrefixSymbol()
+    public function getPrefixSymbol(): string
     {
         return $this->getSymbol('chevron-left');
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Service\Event\EventTableRenderer::isFadedEvent()
-     */
-    public function isFadedEvent()
+    public function showPostfixDate(Event $event, int $cellStartDate, int $cellEndDate): bool
     {
-        $startDate = $this->getEvent()->getStartDate();
+        $startDate = $event->getStartDate();
+        $endDate = $event->getEndDate();
 
-        $fromDate = strtotime(date('Y-m-1', $this->getRenderer()->getDisplayTime()));
-        $toDate = strtotime('-1 Second', strtotime('Next Month', $fromDate));
-
-        return $startDate < $fromDate || $startDate > $toDate;
+        return ($startDate != $endDate && $endDate < $cellEndDate && $startDate < $cellStartDate);
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Service\Event\EventTableRenderer::showPostfixDate()
-     */
-    public function showPostfixDate()
+    public function showPostfixSymbol(Event $event, int $cellEndDate): bool
     {
-        $configuration = $this->getConfiguration();
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
+        $startDate = $event->getStartDate();
+        $endDate = $event->getEndDate();
 
-        return ($startDate != $endDate && $endDate < strtotime('+1 Day', $configuration->getStartDate()) &&
-            $startDate < $configuration->getStartDate());
+        return ($startDate != $endDate && $endDate > $cellEndDate);
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Service\Event\EventTableRenderer::showPostfixSymbol()
-     */
-    public function showPostfixSymbol()
+    public function showPrefixDate(Event $event, int $cellStartDate, int $cellEndDate): bool
     {
-        $configuration = $this->getConfiguration();
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
+        $startDate = $event->getStartDate();
 
-        return ($startDate != $endDate && $endDate > strtotime('+1 Day', $configuration->getStartDate()));
+        return ($startDate >= $cellStartDate && $startDate <= $cellEndDate && $startDate != $cellStartDate);
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Service\Event\EventTableRenderer::showPrefixDate()
-     */
-    public function showPrefixDate()
+    public function showPrefixSymbol(Event $event, int $cellStartDate): bool
     {
-        $configuration = $this->getConfiguration();
-        $startDate = $this->getEvent()->getStartDate();
-
-        return ($startDate >= $configuration->getStartDate() &&
-            $startDate <= strtotime('+1 Day', $configuration->getStartDate()) &&
-            $startDate != $configuration->getStartDate());
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Service\Event\EventTableRenderer::showPrefixSymbol()
-     */
-    public function showPrefixSymbol()
-    {
-        return ($this->getEvent()->getStartDate() < $this->getConfiguration()->getStartDate());
+        return ($event->getStartDate() < $cellStartDate);
     }
 }

@@ -7,8 +7,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\View\Table
  *
- * @package Chamilo\Libraries\Calendar\Table\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MonthCalendarTable extends CalendarTable
@@ -39,14 +39,23 @@ class MonthCalendarTable extends CalendarTable
         $this->buildTable();
     }
 
-    public function render(): string
+    protected function addEventItems($time, $row, $column, $items)
     {
-        $this->addEvents();
-
-        return $this->toHtml();
+        foreach ($items as $item)
+        {
+            try
+            {
+                $cellContent = $this->getCellContents($row, $column);
+                $cellContent .= $item;
+                $this->setCellContents($row, $column, $cellContent);
+            }
+            catch (Exception $exception)
+            {
+            }
+        }
     }
 
-    public function addEvents()
+    protected function addEvents()
     {
         $events = $this->getEventsToShow();
 
@@ -62,18 +71,7 @@ class MonthCalendarTable extends CalendarTable
                 continue;
             }
 
-            foreach ($items as $item)
-            {
-                try
-                {
-                    $cellContent = $this->getCellContents($row, $column);
-                    $cellContent .= $item;
-                    $this->setCellContents($row, $column, $cellContent);
-                }
-                catch (Exception $exception)
-                {
-                }
-            }
+            $this->addEventItems($time, $row, $column, $items);
         }
     }
 

@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\Calendar\Service\View\Table;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\View\Table
  *
- * @package Chamilo\Libraries\Calendar\Table\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MiniDayCalendarTable extends DayCalendarTable

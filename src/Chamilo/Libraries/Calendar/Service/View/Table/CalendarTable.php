@@ -4,8 +4,8 @@ namespace Chamilo\Libraries\Calendar\Service\View\Table;
 use HTML_Table;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\View\Table
  *
- * @package Chamilo\Libraries\Calendar\Table
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class CalendarTable extends HTML_Table
@@ -39,10 +39,19 @@ abstract class CalendarTable extends HTML_Table
         parent::__construct(['class' => implode(' ', $classes), 'cellspacing' => 0]);
     }
 
+    public function render(): string
+    {
+        $this->addEvents();
+
+        return $this->toHtml();
+    }
+
     public function addEvent(int $time, string $content)
     {
         $this->eventsToShow[$time][] = $content;
     }
+
+    abstract protected function addEvents();
 
     public function containsEventsForTime(int $time): bool
     {

@@ -7,7 +7,13 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Libraries\Calendar\Architecture\Factory\ViewRendererFactory"/>
-        <service id="Chamilo\Application\Calendar\Repository\AvailabilityRepository"/>
+        <service id="Chamilo\Libraries\Calendar\Architecture\Factory\CalendarRendererFactory"/>
+        <service id="Chamilo\Libraries\Calendar\Service\LegendRenderer"/>
+        <service id="Chamilo\Libraries\Calendar\Service\Event\EventListRenderer"/>
+        <service id="Chamilo\Libraries\Calendar\Service\Event\EventMonthRenderer"/>
+        <service id="Chamilo\Libraries\Calendar\Service\Event\EventMiniMonthRenderer"/>
+        <service id="Chamilo\Libraries\Calendar\Service\View\ListCalendarRenderer"/>
+        <service id="Chamilo\Libraries\Calendar\Service\View\MonthCalendarRenderer"/>
+        <service id="Chamilo\Libraries\Calendar\Service\View\MiniMonthCalendarRenderer"/>
     </services>
 </container>

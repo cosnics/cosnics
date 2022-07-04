@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Form;
 
-use Chamilo\Libraries\Calendar\Service\View\Table\Calendar;
+use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -22,20 +22,20 @@ class JumpForm
 
     /**
      *
+     * @var int
+     */
+    private $currentTime;
+
+    /**
+     *
      * @var string
      */
     private $navigationUrl;
 
     /**
      *
-     * @var integer
-     */
-    private $currentTime;
-
-    /**
-     *
      * @param string $navigationUrl
-     * @param integer $currentTime
+     * @param int $currentTime
      */
     public function __construct($navigationUrl, $currentTime = null)
     {
@@ -71,7 +71,7 @@ class JumpForm
         foreach ($this->getDays() as $day)
         {
             $dayUrl = str_replace(
-                Calendar::TIME_PLACEHOLDER,
+                CalendarTable::TIME_PLACEHOLDER,
                 mktime(null, null, null, date('n', $this->getCurrentTime()), $day, date('Y', $this->getCurrentTime())),
                 $this->getNavigationUrl()
             );
@@ -88,7 +88,7 @@ class JumpForm
         foreach ($this->getMonths() as $month => $monthLabel)
         {
             $monthUrl = str_replace(
-                Calendar::TIME_PLACEHOLDER, mktime(
+                CalendarTable::TIME_PLACEHOLDER, mktime(
                 null, null, null, $month, date('j', $this->getCurrentTime()), date('Y', $this->getCurrentTime())
             ), $this->getNavigationUrl()
             );
@@ -104,7 +104,7 @@ class JumpForm
         foreach ($this->getYears() as $year)
         {
             $yearUrl = str_replace(
-                Calendar::TIME_PLACEHOLDER,
+                CalendarTable::TIME_PLACEHOLDER,
                 mktime(null, null, null, date('n', $this->getCurrentTime()), date('j', $this->getCurrentTime()), $year),
                 $this->getNavigationUrl()
             );
@@ -124,7 +124,7 @@ class JumpForm
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getCurrentTime()
     {
@@ -133,7 +133,7 @@ class JumpForm
 
     /**
      *
-     * @return integer[]
+     * @return int
      */
     public function getDays()
     {
@@ -157,18 +157,18 @@ class JumpForm
         $translator = Translation::getInstance();
 
         $monthNames = array(
-            $translator->getTranslation("JanuaryLong", [], StringUtilities::LIBRARIES),
-            $translator->getTranslation("FebruaryLong", [], StringUtilities::LIBRARIES),
-            $translator->getTranslation("MarchLong", [], StringUtilities::LIBRARIES),
-            $translator->getTranslation("AprilLong", [], StringUtilities::LIBRARIES),
-            $translator->getTranslation("MayLong", [], StringUtilities::LIBRARIES),
-            $translator->getTranslation("JuneLong", [], StringUtilities::LIBRARIES),
-            $translator->getTranslation("JulyLong", [], StringUtilities::LIBRARIES),
-            $translator->getTranslation("AugustLong", [], StringUtilities::LIBRARIES),
-            $translator->getTranslation("SeptemberLong", [], StringUtilities::LIBRARIES),
-            $translator->getTranslation("OctoberLong", [], StringUtilities::LIBRARIES),
-            $translator->getTranslation("NovemberLong", [], StringUtilities::LIBRARIES),
-            $translator->getTranslation("DecemberLong", [], StringUtilities::LIBRARIES)
+            $translator->getTranslation('JanuaryLong', [], StringUtilities::LIBRARIES),
+            $translator->getTranslation('FebruaryLong', [], StringUtilities::LIBRARIES),
+            $translator->getTranslation('MarchLong', [], StringUtilities::LIBRARIES),
+            $translator->getTranslation('AprilLong', [], StringUtilities::LIBRARIES),
+            $translator->getTranslation('MayLong', [], StringUtilities::LIBRARIES),
+            $translator->getTranslation('JuneLong', [], StringUtilities::LIBRARIES),
+            $translator->getTranslation('JulyLong', [], StringUtilities::LIBRARIES),
+            $translator->getTranslation('AugustLong', [], StringUtilities::LIBRARIES),
+            $translator->getTranslation('SeptemberLong', [], StringUtilities::LIBRARIES),
+            $translator->getTranslation('OctoberLong', [], StringUtilities::LIBRARIES),
+            $translator->getTranslation('NovemberLong', [], StringUtilities::LIBRARIES),
+            $translator->getTranslation('DecemberLong', [], StringUtilities::LIBRARIES)
         );
         $months = [];
 
@@ -191,7 +191,7 @@ class JumpForm
 
     /**
      *
-     * @return integer[]
+     * @return int
      */
     public function getYears()
     {

@@ -25,7 +25,7 @@ class PrinterComponent extends BrowserComponent implements DelegateComponent
 
         $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
         $this->getPageConfiguration()->addCssFile(
-            $this->getThemePathBuilder()->getCssPath(self::package(), true) . 'Print.css', 'print'
+            $this->getPathBuilder()->getCssPath(self::package(), true) . 'print.'. $this->getThemePathBuilder()->getTheme() .'.min.css', 'print'
         );
 
         $this->set_parameter(HtmlCalendarRenderer::PARAM_TYPE, $this->getCurrentRendererType());

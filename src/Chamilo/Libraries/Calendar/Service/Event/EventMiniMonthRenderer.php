@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\Event;
 
+use Chamilo\Libraries\Calendar\Event\Event;
+
 /**
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
@@ -8,64 +10,48 @@ namespace Chamilo\Libraries\Calendar\Service\Event;
  */
 class EventMiniMonthRenderer extends EventMonthRenderer
 {
-
-    /**
-     * Gets an html representation of an event for the renderer
-     *
-     * @return string
-     * @throws \Exception
-     */
-    public function render()
+    public function render(
+        Event $event, int $cellStartDate, int $cellEndDate, bool $isFadedEvent = false,
+        bool $isEventSourceVisible = true
+    ): string
     {
+
+
+        $eventClasses = $this->determineEventClasses($event, $isFadedEvent, $isEventSourceVisible);
+
+        $title = $this->renderFullTitle($event, $cellStartDate, $cellEndDate);
+
         $html = [];
-
-        $event = $this->getEvent();
-        $legend = $this->getRenderer()->getLegend();
-
-        $sourceClasses = $legend->getSourceClasses($event->getSource());
-        $eventClasses = implode(' ', array('event-container', $sourceClasses));
 
         $html[] = '<div class="tooltip-event-container">';
         $html[] = '<span class="' . $eventClasses . '"></span>';
-        $html[] = '<span class="tooltip-event-content">' . $this->renderFullTitle() . '</span>';
+        $html[] = '<span class="tooltip-event-content">' . htmlentities($event->getTitle()) . '</span>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function renderFullTitle()
+    public function renderPostfix(Event $event, int $cellStartDate, int $cellEndDate): string
     {
-        $fullTitle = '';
+        $postfix = parent::renderPostfix($event, $cellStartDate, $cellEndDate);
 
-        $prefix = $this->renderPrefix();
-        if ($prefix)
-        {
-            $fullTitle .= '<span class="tooltip-event-prefix">' . $prefix . '</span> ';
-        }
-
-        $fullTitle .= htmlentities($this->getEvent()->getTitle());
-
-        $postfix = $this->renderPostfix();
         if ($postfix)
         {
-            $fullTitle .= '<span class="tooltip-event-postfix"> ' . $postfix . '</span>';
+            $postfix = '<span class="tooltip-event-postfix">' . $postfix . '</span> ';
         }
 
-        return $fullTitle;
+        return $postfix;
     }
 
-    /**
-     *
-     * @param integer $date
-     *
-     * @return string
-     */
-    public function renderTime($date)
+    public function renderPrefix(Event $event, int $cellStartDate, int $cellEndDate): string
     {
-        return date('H:i', $date);
+        $prefix = parent::renderPrefix($event, $cellStartDate, $cellEndDate);
+
+        if ($prefix)
+        {
+            $prefix = '<span class="tooltip-event-prefix">' . $prefix . '</span> ';
+        }
+
+        return $prefix;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Architecture\Factory;
 
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Calendar\Service\View\CalendarRenderer;
 
 /**
@@ -10,13 +11,23 @@ use Chamilo\Libraries\Calendar\Service\View\CalendarRenderer;
  */
 class CalendarRendererFactory
 {
+    use DependencyInjectionContainerTrait;
+
+    /**
+     * @throws \Exception
+     */
+    public function __construct()
+    {
+        $this->initializeContainer();
+    }
+
     /**
      * @throws \Exception
      */
     public function getRenderer(string $rendererType): CalendarRenderer
     {
-        $className = __NAMESPACE__ . '\View\\' . $rendererType . 'Renderer';
+        $className = 'Chamilo\Libraries\Calendar\Service\View\\' . $rendererType . 'CalendarRenderer';
 
-        return new $className();
+        return $this->getService($className);
     }
 }

@@ -1,13 +1,16 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Service\Event\Configuration;
 use Chamilo\Libraries\Calendar\Service\Event\EventMonthRenderer;
+use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
 use Chamilo\Libraries\Calendar\Service\View\Table\MonthCalendarTable;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -16,6 +19,22 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class MonthCalendarRenderer extends TableCalendarRenderer
 {
+    protected EventMonthRenderer $eventMonthRenderer;
+
+    public function __construct(
+        LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
+        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, EventMonthRenderer $eventMonthRenderer
+    )
+    {
+        parent::__construct($legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer);
+
+        $this->eventMonthRenderer = $eventMonthRenderer;
+    }
+
+    public function getEventMonthRenderer(): EventMonthRenderer
+    {
+        return $this->eventMonthRenderer;
+    }
 
     public function getNextDisplayTime(int $displayTime): int
     {
@@ -30,28 +49,39 @@ class MonthCalendarRenderer extends TableCalendarRenderer
     /**
      * @throws \ReflectionException
      */
-    public function initializeCalendar(): CalendarTable
+    public function initializeCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): CalendarTable
     {
-        $displayParameters = $this->getDataProvider()->getDisplayParameters();
+        $displayParameters = $dataProvider->getDisplayParameters();
         $displayParameters[self::PARAM_TIME] = MonthCalendarTable::TIME_PLACEHOLDER;
         $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
-        $dayUrlTemplate = new Redirect($displayParameters);
 
-        return new MonthCalendarTable($this->getDisplayTime(), $dayUrlTemplate->getUrl(), ['table-calendar-month']);
+        return new MonthCalendarTable(
+            $displayTime, $this->getUrlGenerator()->fromParameters($displayParameters), ['table-calendar-month']
+        );
+    }
+
+    public function isFadedEvent(int $displayTime, Event $event): bool
+    {
+        $startDate = $event->getStartDate();
+
+        $fromDate = strtotime(date('Y-m-1', $displayTime));
+        $toDate = strtotime('-1 Second', strtotime('Next Month', $fromDate));
+
+        return $startDate < $fromDate || $startDate > $toDate;
     }
 
     /**
      * @throws \ReflectionException
      * @throws \Exception
      */
-    public function renderFullCalendar(): string
+    public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        $calendar = $this->getCalendar();
+        $calendar = $this->getCalendar($dataProvider, $displayTime);
 
         $startTime = $calendar->getStartTime();
         $endTime = $calendar->getEndTime();
 
-        $events = $this->getEvents($startTime, $endTime);
+        $events = $this->getEvents($dataProvider, $startTime, $endTime);
         $tableDate = $startTime;
 
         while ($tableDate <= $endTime)
@@ -70,9 +100,12 @@ class MonthCalendarRenderer extends TableCalendarRenderer
                     $configuration = new Configuration();
                     $configuration->setStartDate($tableDate);
 
-                    $eventRendererFactory = new EventMonthRenderer($this, $event, $configuration);
-
-                    $calendar->addEvent($tableDate, $eventRendererFactory->render());
+                    $calendar->addEvent(
+                        $tableDate, $this->getEventMonthRenderer()->render(
+                        $event, $tableDate, $nextTableDate, $this->isFadedEvent($displayTime, $event),
+                        $this->isEventSourceVisible($dataProvider, $event)
+                    )
+                    );
                 }
             }
 
@@ -82,9 +115,9 @@ class MonthCalendarRenderer extends TableCalendarRenderer
         return '<div class="month-calendar">' . $calendar->render() . '</div>';
     }
 
-    public function renderTitle(): string
+    public function renderTitle(int $displayTime): string
     {
-        return Translation::get(date('F', $this->getDisplayTime()) . 'Long', null, StringUtilities::LIBRARIES) . ' ' .
-            date('Y', $this->getDisplayTime());
+        return $this->getTranslator()->trans(date('F', $displayTime) . 'Long', [], StringUtilities::LIBRARIES) . ' ' .
+            date('Y', $displayTime);
     }
 }

@@ -4,78 +4,34 @@ namespace Chamilo\Libraries\Calendar\Service\View\Table;
 use Exception;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\View\Table
  *
- * @package Chamilo\Libraries\Calendar\Table\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MiniMonthCalendarTable extends MonthCalendarTable
 {
-    public function __construct(int $displayTime)
+    public function __construct(int $displayTime, ?string $dayUrlTemplate = null)
     {
-        parent::__construct($displayTime, null, ['table-calendar-mini']);
+        parent::__construct($displayTime, $dayUrlTemplate, ['table-calendar-mini']);
     }
 
-    public function render(): string
+    protected function addEventItems($time, $row, $column, $items)
     {
-        $this->addEvents();
+        $tooltip = htmlentities(implode(PHP_EOL, $items));
 
-        return $this->toHtml();
-    }
-
-    public function addEvents()
-    {
-        $events = $this->getEventsToShow();
-        $cellMapping = $this->getCellMapping();
-
-        foreach ($events as $time => $items)
+        if (date('Ymd', $time) != date('Ymd'))
         {
-            $cellMappingKey = date('Ymd', $time);
-
-            $row = $cellMapping[$cellMappingKey][0];
-            $column = $cellMapping[$cellMappingKey][1];
-
-            if (is_null($row) || is_null($column))
+            try
             {
-                continue;
+                $this->setCellContents(
+                    $row, $column,
+                    '<span class="badge" data-toggle="tooltip" data-placement="top" data-content="' . $tooltip . '">' .
+                    $this->getCellContents($row, $column) . '</span>'
+                );
             }
-
-            $tooltip = htmlentities(implode(PHP_EOL, $items));
-
-            if (date('Ymd', $time) != date('Ymd'))
+            catch (Exception $exception)
             {
-                try
-                {
-                    $this->setCellContents(
-                        $row, $column,
-                        '<span class="badge" data-toggle="tooltip" data-placement="top" data-content="' . $tooltip .
-                        '">' . $this->getCellContents($row, $column) . '</span>'
-                    );
-                }
-                catch (Exception $exception)
-                {
-                }
             }
-        }
-    }
-
-    public function addNavigationLinks(string $urlFormat)
-    {
-        $day = $this->getStartTime();
-        $row = 0;
-        $maxRows = $this->getRowCount();
-
-        while ($row < $maxRows)
-        {
-            for ($col = 0; $col < 7; $col ++)
-            {
-                $url = str_replace(self::TIME_PLACEHOLDER, $day, $urlFormat);
-                $content = $this->getCellContents($row, $col);
-                $content = '<a href="' . $url . '">' . $content . '</a>';
-                $this->setCellContents($row, $col, $content);
-                $day = strtotime('+24 Hours', $day);
-            }
-
-            $row ++;
         }
     }
 

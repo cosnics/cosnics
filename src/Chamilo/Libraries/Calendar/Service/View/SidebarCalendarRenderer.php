@@ -1,10 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Form\JumpForm;
+use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -13,13 +16,22 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
  */
 abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
 {
+    protected MiniMonthCalendarRenderer $miniMonthCalendarRenderer;
+
+    public function __construct(
+        LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
+        MiniMonthCalendarRenderer $miniMonthCalendarRenderer
+    )
+    {
+        parent::__construct($legendRenderer, $urlGenerator, $translator);
+
+        $this->miniMonthCalendarRenderer = $miniMonthCalendarRenderer;
+    }
 
     /**
      * @throws \Exception
      */
-    public function render(
-        CalendarRendererProviderInterface $dataProvider, int $displayTime, array $viewActions = [],
-        string $linkTarget = ''
+    public function render(CalendarRendererProviderInterface $dataProvider, int $displayTime, array $viewActions = []
     ): string
     {
         $html = [];
@@ -29,66 +41,71 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12 col-lg-4">';
         $html[] = '<div class="pull-left">';
-        $html[] = $this->renderNavigation($displayTime);
+        $html[] = $this->renderNavigation($dataProvider, $displayTime);
         $html[] = '</div>';
 
         $html[] = '<div class="table-calendar-current-time pull-left">';
         $html[] = '<h4>';
-        $html[] = $this->renderTitle();
+        $html[] = $this->renderTitle($displayTime);
         $html[] = '</h4>';
         $html[] = '</div>';
         $html[] = '</div>';
 
         $html[] = '<div class="col-xs-12 col-lg-8">';
         $html[] = '<div class="pull-right">';
-        $html[] = $this->renderViewActions();
+        $html[] = $this->renderViewActions($dataProvider, $viewActions);
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $html[] = $this->renderFullCalendar();
+        $html[] = $this->renderFullCalendar($dataProvider, $displayTime);
         $html[] = '</div>';
 
         $html[] = '<div class="col-xs-12 col-lg-3 table-calendar-sidebar">';
-        //        $html[] = $this->renderMiniMonth();
-        //        $html[] = $this->getLegend()->render();
-        //        $html[] = $this->getJumpForm()->render();
+        $html[] = $this->renderMiniMonth($dataProvider, $displayTime, $viewActions);
+        $html[] = $this->getLegendRenderer()->render($dataProvider);
+        $html[] = $this->getJumpForm($dataProvider, $displayTime)->render();
         $html[] = '</div>';
 
         $html[] = '<div class="clearfix"></div>';
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js'
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar', true) . 'EventTooltip.js'
         );
 
         return implode(PHP_EOL, $html);
     }
 
-    protected function getJumpForm(): JumpForm
+    protected function getJumpForm(CalendarRendererProviderInterface $dataProvider, int $displayTime): JumpForm
     {
         if (!isset($this->form))
         {
-            $this->form = new JumpForm($this->determineNavigationUrl(), $this->getDisplayTime());
+            $this->form = new JumpForm($this->determineNavigationUrl($dataProvider), $displayTime);
         }
 
         return $this->form;
     }
 
-    abstract public function renderFullCalendar(): string;
+    public function getMiniMonthCalendarRenderer(): MiniMonthCalendarRenderer
+    {
+        return $this->miniMonthCalendarRenderer;
+    }
+
+    abstract public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime
+    ): string;
 
     /**
      * @throws \Exception
      */
-    public function renderMiniMonth(): string
+    public function renderMiniMonth(
+        CalendarRendererProviderInterface $dataProvider, int $displayTime, array $viewActions = []
+    ): string
     {
-        $renderer = new MiniMonthRenderer(
-            $this->getDataProvider(), $this->getLegend(), $this->getDisplayTime()
-        );
-
-        return $renderer->render();
+        return $this->getMiniMonthCalendarRenderer()->render($dataProvider, $displayTime, $viewActions);
     }
 
-    abstract public function renderNavigation(int $displayTime): string;
+    abstract public function renderNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime
+    ): string;
 
-    abstract public function renderTitle(): string;
+    abstract public function renderTitle(int $displayTime): string;
 }

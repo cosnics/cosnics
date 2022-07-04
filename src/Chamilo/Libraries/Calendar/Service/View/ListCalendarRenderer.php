@@ -1,8 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Calendar\Architecture\Interfaces\ActionSupport;
+use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Service\Event\EventListRenderer;
+use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
@@ -10,7 +14,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -19,18 +24,47 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class ListCalendarRenderer extends SidebarCalendarRenderer
 {
+    protected EventListRenderer $eventListRenderer;
 
-    protected function getEndTime(): int
+    public function __construct(
+        LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
+        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, EventListRenderer $eventListRenderer
+    )
     {
-        return strtotime('+6 Months', $this->getStartTime());
+        parent::__construct($legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer);
+
+        $this->eventListRenderer = $eventListRenderer;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
+     */
+    public function getActions(CalendarRendererProviderInterface $dataProvider, Event $event): array
+    {
+        if ($dataProvider instanceof ActionSupport)
+        {
+            return $dataProvider->getEventActions($event);
+        }
+
+        return [];
+    }
+
+    protected function getEndTime(int $displayTime): int
+    {
+        return strtotime('+6 Months', $displayTime);
+    }
+
+    public function getEventListRenderer(): EventListRenderer
+    {
+        return $this->eventListRenderer;
     }
 
     /**
      * @return \Chamilo\Libraries\Calendar\Event\Event[][]
      */
-    public function getEvents(int $startTime, int $endTime): array
+    public function getEvents(CalendarRendererProviderInterface $dataProvider, int $startTime, int $endTime): array
     {
-        $events = parent::getEvents($startTime, $endTime);
+        $events = parent::getEvents($dataProvider, $startTime, $endTime);
 
         $structuredEvents = [];
 
@@ -57,23 +91,17 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
         return $structuredEvents;
     }
 
-    protected function getStartTime(): int
-    {
-        return $this->getDisplayTime();
-    }
-
     public function orderEvents(Event $eventLeft, Event $eventRight): int
     {
         return strcmp($eventLeft->getStartDate(), $eventRight->getStartDate());
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Exception
      */
-    public function renderFullCalendar(): string
+    public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        $events = $this->getEvents($this->getStartTime(), $this->getEndTime());
+        $events = $this->getEvents($dataProvider, $displayTime, $this->getEndTime($displayTime));
 
         $html = [];
 
@@ -87,7 +115,7 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
 
                 foreach ($dateEvents as $dateEvent)
                 {
-                    if (!$this->isSourceVisible($dateEvent->getSource()))
+                    if (!$this->isSourceVisible($dataProvider, $dateEvent->getSource()))
                     {
                         $hiddenEvents ++;
                     }
@@ -106,10 +134,11 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
 
                 foreach ($dateEvents as $dateEvent)
                 {
-                    $eventRendererFactory = new EventListRenderer($this, $dateEvent);
-
                     $html[] = '<li class="list-group-item ">';
-                    $html[] = $eventRendererFactory->render();
+                    $html[] = $this->getEventListRenderer()->render(
+                        $dateEvent, $this->isEventSourceVisible($dataProvider, $dateEvent),
+                        $this->getActions($dataProvider, $dateEvent)
+                    );
                     $html[] = '</li>';
                 }
 
@@ -123,7 +152,9 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
         }
         else
         {
-            $html[] = Display::normal_message(Translation::get('NoUpcomingEvents'));
+            $html[] = Display::normal_message(
+                $this->getTranslator()->trans('NoUpcomingEvents', [], 'Chamilo\Libraries\Calendar')
+            );
         }
 
         return implode('', $html);
@@ -132,15 +163,18 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
     /**
      * @throws \ReflectionException
      */
-    public function renderNavigation(): string
+    public function renderNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        $urlFormat = $this->determineNavigationUrl();
+        $urlFormat = $this->determineNavigationUrl($dataProvider);
         $todayUrl = str_replace(CalendarTable::TIME_PLACEHOLDER, time(), $urlFormat);
 
         $buttonToolBar = new ButtonToolBar();
 
         $buttonToolBar->addItem(
-            new Button(Translation::get('Today'), new FontAwesomeGlyph('home'), $todayUrl, AbstractButton::DISPLAY_ICON)
+            new Button(
+                $this->getTranslator()->trans('Today', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'),
+                $todayUrl, AbstractButton::DISPLAY_ICON
+            )
         );
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
@@ -148,8 +182,8 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
         return $buttonToolbarRenderer->render();
     }
 
-    public function renderTitle(): string
+    public function renderTitle(int $displayTime): string
     {
-        return date('d M Y', $this->getStartTime()) . ' - ' . date('d M Y', $this->getEndTime());
+        return date('d M Y', $displayTime) . ' - ' . date('d M Y', $this->getEndTime($displayTime));
     }
 }

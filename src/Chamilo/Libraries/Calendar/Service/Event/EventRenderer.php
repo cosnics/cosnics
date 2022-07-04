@@ -1,8 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\Event;
 
-use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Calendar\Service\View\CalendarRenderer;
+use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 
 /**
  *
@@ -13,90 +12,18 @@ use Chamilo\Libraries\Calendar\Service\View\CalendarRenderer;
  */
 abstract class EventRenderer
 {
+    private LegendRenderer $legendRenderer;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer
-     */
-    private $renderer;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Calendar\Event\Event
-     */
-    private $event;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Calendar\Service\Event\Configuration
-     */
-    private $configuration;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Service\View\CalendarRenderer $renderer
-     * @param \Chamilo\Libraries\Calendar\Event\Event $event
-     * @param \Chamilo\Libraries\Calendar\Service\Event\Configuration $configuration
-     */
-    public function __construct(CalendarRenderer $renderer, Event $event, Configuration $configuration = null)
+    public function __construct(LegendRenderer $legendRenderer)
     {
-        $this->renderer = $renderer;
-        $this->event = $event;
-        $this->configuration = $configuration ?: new Configuration();
+        $this->legendRenderer = $legendRenderer;
     }
 
-    /**
-     * Gets an html representation of an event for the renderer
-     *
-     * @return string
-     */
-    abstract public function render();
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Service\Event\Configuration
-     */
-    public function getConfiguration()
-    {
-        return $this->configuration;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Service\Event\Configuration $configuration
-     */
-    public function setConfiguration(Configuration $configuration)
-    {
-        $this->configuration = $configuration;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Event\Event
-     */
-    public function getEvent()
-    {
-        return $this->event;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\Event $event
-     */
-    public function setEvent($event)
-    {
-        $this->event = $event;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getEventClasses()
+    public function getEventClasses(bool $isEventSourceVisible = true): string
     {
         $eventClasses = 'event-container';
 
-        if (!$this->getRenderer()->isSourceVisible($this->getEvent()->getSource()))
+        if (!$isEventSourceVisible)
         {
             $eventClasses .= ' event-container-hidden';
         }
@@ -104,21 +31,15 @@ abstract class EventRenderer
         return $eventClasses;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer
-     */
-    public function getRenderer()
+    public function getLegendRenderer(): LegendRenderer
     {
-        return $this->renderer;
+        return $this->legendRenderer;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Service\View\CalendarRenderer $renderer
-     */
-    public function setRenderer(CalendarRenderer $renderer)
+    public function setLegendRenderer(LegendRenderer $legendRenderer): EventRenderer
     {
-        $this->renderer = $renderer;
+        $this->legendRenderer = $legendRenderer;
+
+        return $this;
     }
 }

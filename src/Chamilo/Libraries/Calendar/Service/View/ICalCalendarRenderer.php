@@ -25,20 +25,18 @@ class ICalCalendarRenderer extends CalendarRenderer
     /**
      * @throws \Exception
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider)
+    public function __construct()
     {
-        parent::__construct($dataProvider);
-
         $this->calendar = new VCalendar();
     }
 
     /**
      * @throws \Exception
      */
-    public function render(): string
+    public function render(CalendarRendererProviderInterface $dataProvider): string
     {
         $this->addTimeZone();
-        $this->addEvents();
+        $this->addEvents($dataProvider);
 
         return $this->getCalendar()->serialize();
     }
@@ -100,9 +98,9 @@ class ICalCalendarRenderer extends CalendarRenderer
     /**
      * @throws \Exception
      */
-    private function addEvents()
+    private function addEvents(CalendarRendererProviderInterface $dataProvider)
     {
-        $providedEvents = $this->getDataProvider()->getInternalEvents();
+        $providedEvents = $dataProvider->getInternalEvents();
 
         foreach ($providedEvents as $providedEvent)
         {
@@ -210,9 +208,9 @@ class ICalCalendarRenderer extends CalendarRenderer
     /**
      * @throws \Exception
      */
-    public function renderAndSend()
+    public function renderAndSend(CalendarRendererProviderInterface $dataProvider)
     {
-        $this->sendResponse($this->render());
+        $this->sendResponse($this->render($dataProvider));
     }
 
     private function sendResponse(string $serializedCalendar)
