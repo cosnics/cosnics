@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookColumn;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
+use Doctrine\Common\Collections\ArrayCollection;
 use http\Exception\InvalidArgumentException;
 use JMS\Serializer\Annotation\Type;
 
@@ -81,9 +83,9 @@ class GradeBookColumnJSONModel
      * @param bool $countForEndResult
      * @param int $authPresenceEndResult
      * @param int $unauthPresenceEndResult
-     * @param GradeBookItem[]|array $subItems
+     * @param GradeBookItem[]|ArrayCollection|array $subItems
      */
-    public function __construct(int $id, string $type, ?string $title, ?int $weight, bool $countForEndResult, int $authPresenceEndResult, int $unauthPresenceEndResult, array $subItems)
+    public function __construct(int $id, string $type, ?string $title, ?int $weight, bool $countForEndResult, int $authPresenceEndResult, int $unauthPresenceEndResult, $subItems)
     {
         $this->id = $id;
         $this->type = $type;
@@ -174,7 +176,7 @@ class GradeBookColumnJSONModel
             $gradebookColumn->getId(), $gradebookColumn->getType(), $gradebookColumn->getTitle(),
             $gradebookColumn->getWeight(), $gradebookColumn->getCountForEndResult(),
             $gradebookColumn->getAuthPresenceEndResult(), $gradebookColumn->getUnauthPresenceEndResult(),
-            $gradebookColumn->getSubItems()
+            $gradebookColumn->getGradeBookColumnSubItems()
         );
     }
 

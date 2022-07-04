@@ -99,9 +99,9 @@ class GradeBookColumn
     protected $sort;
 
     /**
-     * @var GradeBookColumnSubItem[] | ArrayCollection
+     * @var GradeBookItem[] | ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="GradeBookColumnSubItem", mappedBy="gradebookColumn")
+     * @ORM\OneToMany(targetEntity="GradeBookItem", mappedBy="gradebookColumn")
      */
     protected $gradebookColumnSubItems;
 
@@ -336,23 +336,10 @@ class GradeBookColumn
     }
 
     /**
-     * @return GradeBookColumnSubItem[]|ArrayCollection
+     * @return GradeBookItem[]|ArrayCollection
      */
     public function getGradeBookColumnSubItems()
     {
         return $this->gradebookColumnSubItems;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSubItems(): array
-    {
-        $items = [];
-        foreach ($this->getGradeBookColumnSubItems() as $subItem)
-        {
-            $items[] = $subItem->getGradeBookItem();
-        }
-        return $items;
     }
 }

@@ -44,6 +44,15 @@ class GradeBookItem
     protected $gradebookData;
 
     /**
+     * @var GradeBookColumn
+     *
+     * @ORM\ManyToOne(targetEntity="GradeBookColumn")
+     * @ORM\JoinColumn(name="gradebook_column_id", referencedColumnName="id")
+     *
+     */
+    protected $gradebookColumn;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
@@ -76,11 +85,13 @@ class GradeBookItem
      * GradeBookItem constructor.
      *
      * @param GradeBookData $gradebookData
+     * @param GradeBookColumn $gradeBookColumn
      *
      */
-    public function __construct(GradeBookData $gradebookData)
+    public function __construct(GradeBookData $gradebookData, GradeBookColumn $gradebookColumn)
     {
         $this->setGradeBookData($gradebookData);
+        $this->setGradeBookColumn($gradebookColumn);
     }
 
 
@@ -120,6 +131,18 @@ class GradeBookItem
     public function setGradeBookData(GradeBookData $gradebookData = null): GradeBookItem
     {
         $this->gradebookData = $gradebookData;
+
+        return $this;
+    }
+
+    /**
+     * @param GradeBookColumn|null $gradebookColumn
+     *
+     * @return GradeBookItem
+     */
+    public function setGradeBookColumn(GradeBookColumn $gradebookColumn = null): GradeBookItem
+    {
+        $this->gradebookColumn = $gradebookColumn;
 
         return $this;
     }
