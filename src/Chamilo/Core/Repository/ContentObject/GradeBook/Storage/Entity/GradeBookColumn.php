@@ -171,7 +171,23 @@ class GradeBookColumn
      */
     public function setGradeBookCategory(GradeBookCategory $gradebookCategory = null): GradeBookColumn
     {
+        if ($this->gradebookCategory === $gradebookCategory)
+        {
+            return $this;
+        }
+
+        $oldGradebookCategory = $this->gradebookCategory;
         $this->gradebookCategory = $gradebookCategory;
+
+        if ($oldGradebookCategory instanceof GradeBookCategory)
+        {
+            $oldGradebookCategory->removeGradeBookColumn($this);
+        }
+
+        if ($gradebookCategory instanceof GradeBookCategory)
+        {
+            $gradebookCategory->addGradeBookColumn($this);
+        }
 
         return $this;
     }

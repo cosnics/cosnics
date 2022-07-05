@@ -116,7 +116,23 @@ class GradeBookCategory
      */
     public function setGradeBookData(GradeBookData $gradebookData = null): GradeBookCategory
     {
+        if ($this->gradebookData === $gradebookData)
+        {
+            return $this;
+        }
+
+        $oldGradebookData = $this->gradebookData;
         $this->gradebookData = $gradebookData;
+
+        if ($oldGradebookData instanceof GradeBookData)
+        {
+            $oldGradebookData->removeGradeBookCategory($this);
+        }
+
+        if ($gradebookData instanceof GradeBookData)
+        {
+            $gradebookData->addGradeBookCategory($this);
+        }
 
         return $this;
     }
@@ -206,5 +222,43 @@ class GradeBookCategory
     public function getGradeBookColumns()
     {
         return $this->gradebookColumns;
+    }
+
+    /**
+     * This method should only be called from GradeBookColumn's setGradeBookCategory method.
+     *
+     * @param GradeBookColumn $gradeBookColumn
+     *
+     * @return GradeBookCategory
+     */
+    public function addGradeBookColumn(GradeBookColumn $gradeBookColumn): GradeBookCategory
+    {
+        if ($this->gradebookColumns->contains($gradeBookColumn))
+        {
+            return $this;
+        }
+
+        $this->gradebookColumns->add($gradeBookColumn);
+
+        return $this;
+    }
+
+    /**
+     * This method should only be called from GradeBookColumn's setGradeBookCategory method.
+     *
+     * @param GradeBookColumn $gradeBookColumnToRemove
+     *
+     * @return GradeBookCategory
+     */
+    public function removeGradeBookColumn(GradeBookColumn $gradeBookColumnToRemove): GradeBookCategory
+    {
+        if (!$this->gradebookColumns->contains($gradeBookColumnToRemove))
+        {
+            return $this;
+        }
+
+        $this->gradebookColumns->removeElement($gradeBookColumnToRemove);
+
+        return $this;
     }
 }
