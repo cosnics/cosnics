@@ -1,49 +1,76 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Calendar\Service\Event\Configuration;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Architecture\Traits\HourBasedCalendarTrait;
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
+use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
 use Chamilo\Libraries\Calendar\Service\View\Table\DayCalendarTable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\View
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DayCalendarRenderer extends HourBasedTableCalendarRenderer
+class DayCalendarRenderer extends TableCalendarRenderer
 {
+    use HourBasedCalendarTrait;
 
-    public function getNextDisplayTime(): int
+    protected EventDayRenderer $eventDayRenderer;
+
+    public function __construct(
+        LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
+        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, DatetimeUtilities $datetimeUtilities,
+        EventDayRenderer $eventDayRenderer
+    )
     {
-        return strtotime('+1 Day', $this->getDisplayTime());
+        parent::__construct(
+            $legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer
+        );
+
+        $this->eventDayRenderer = $eventDayRenderer;
+        $this->datetimeUtilities = $datetimeUtilities;
     }
 
-    public function getPreviousDisplayTime(): int
+    public function getEventDayRenderer(): EventDayRenderer
     {
-        return strtotime('-1 Day', $this->getDisplayTime());
+        return $this->eventDayRenderer;
     }
 
-    public function initializeCalendar(): CalendarTable
+    public function getNextDisplayTime(int $displayTime): int
+    {
+        return strtotime('+1 Day', $displayTime);
+    }
+
+    public function getPreviousDisplayTime(int $displayTime): int
+    {
+        return strtotime('-1 Day', $displayTime);
+    }
+
+    public function initializeCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): CalendarTable
     {
         return new DayCalendarTable(
-            $this->getDisplayTime(), $this->getHourStep(), $this->getStartHour(), $this->getEndHour(),
-            $this->getHideOtherHours(), ['table-calendar-day']
+            $displayTime, $this->getHourStep(), $this->getStartHour(), $this->getEndHour(), $this->getHideOtherHours(),
+            ['table-calendar-day']
         );
     }
 
     /**
+     * @throws \ReflectionException
      * @throws \Exception
      */
-    public function renderFullCalendar(): string
+    public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        $calendar = $this->getCalendar();
+        $calendar = $this->getCalendar($dataProvider, $displayTime);
 
         $fromDate = $calendar->getStartTime();
         $toDate = $calendar->getEndTime();
 
-        $events = $this->getEvents($fromDate, $toDate);
+        $events = $this->getEvents($dataProvider, $fromDate, $toDate);
 
         $startTime = $calendar->getStartTime();
         $endTime = $calendar->getEndTime();
@@ -62,13 +89,11 @@ class DayCalendarRenderer extends HourBasedTableCalendarRenderer
                     $tableDate < $endDate && $endDate < $nextTableDate ||
                     $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    $configuration = new Configuration();
-                    $configuration->setStartDate($tableDate);
-                    $configuration->setHourStep($this->getHourStep());
-
-                    $eventRendererFactory = new EventDayRenderer($this, $event, $configuration);
-
-                    $calendar->addEvent($tableDate, $eventRendererFactory->render());
+                    $calendar->addEvent(
+                        $tableDate, $this->getEventDayRenderer()->render(
+                        $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event)
+                    )
+                    );
                 }
             }
 
@@ -78,11 +103,8 @@ class DayCalendarRenderer extends HourBasedTableCalendarRenderer
         return $calendar->render();
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function renderTitle(): string
+    public function renderTitle(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        return DatetimeUtilities::getInstance()->formatLocaleDate('%A %d %B %Y', $this->getDisplayTime());
+        return $this->getDatetimeUtilities()->formatLocaleDate('%A %d %B %Y', $displayTime);
     }
 }

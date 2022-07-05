@@ -1,43 +1,66 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Calendar\Service\Event\Configuration;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Architecture\Traits\HourBasedCalendarTrait;
 use Chamilo\Libraries\Calendar\Service\Event\EventWeekRenderer;
+use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
 use Chamilo\Libraries\Calendar\Service\View\Table\WeekCalendarTable;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\View
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class WeekCalendarRenderer extends HourBasedTableCalendarRenderer
+class WeekCalendarRenderer extends TableCalendarRenderer
 {
+    use HourBasedCalendarTrait;
 
-    public function getNextDisplayTime(): int
+    protected EventWeekRenderer $eventWeekRenderer;
+
+    public function __construct(
+        LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
+        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, DatetimeUtilities $datetimeUtilities,
+        EventWeekRenderer $eventWeekRenderer
+    )
     {
-        return strtotime('+1 Week', $this->getDisplayTime());
+        parent::__construct(
+            $legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer
+        );
+
+        $this->eventWeekRenderer = $eventWeekRenderer;
+        $this->datetimeUtilities = $datetimeUtilities;
     }
 
-    public function getPreviousDisplayTime(): int
+    public function getEventWeekRenderer(): EventWeekRenderer
     {
-        return strtotime('-1 Week', $this->getDisplayTime());
+        return $this->eventWeekRenderer;
     }
 
-    public function initializeCalendar(): CalendarTable
+    public function getNextDisplayTime(int $displayTime): int
     {
-        $displayParameters = $this->getDataProvider()->getDisplayParameters();
+        return strtotime('+1 Week', $displayTime);
+    }
+
+    public function getPreviousDisplayTime(int $displayTime): int
+    {
+        return strtotime('-1 Week', $displayTime);
+    }
+
+    public function initializeCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): CalendarTable
+    {
+        $displayParameters = $dataProvider->getDisplayParameters();
         $displayParameters[self::PARAM_TIME] = WeekCalendarTable::TIME_PLACEHOLDER;
         $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
-        $dayUrlTemplate = new Redirect($displayParameters);
 
         return new WeekCalendarTable(
-            $this->getDisplayTime(), $dayUrlTemplate->getUrl(), $this->getHourStep(), $this->getStartHour(),
-            $this->getEndHour(), $this->getHideOtherHours(), ['table-calendar-week']
+            $displayTime, $this->getUrlGenerator()->fromParameters($displayParameters), $this->getHourStep(),
+            $this->getStartHour(), $this->getEndHour(), $this->getHideOtherHours(), ['table-calendar-week']
         );
     }
 
@@ -45,13 +68,13 @@ class WeekCalendarRenderer extends HourBasedTableCalendarRenderer
      * @throws \ReflectionException
      * @throws \Exception
      */
-    public function renderFullCalendar(): string
+    public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        $calendar = $this->getCalendar();
-        $fromDate = strtotime('Last Monday', strtotime('+1 Day', strtotime(date('Y-m-d', $this->getDisplayTime()))));
+        $calendar = $this->getCalendar($dataProvider, $displayTime);
+        $fromDate = strtotime('Last Monday', strtotime('+1 Day', strtotime(date('Y-m-d', $displayTime))));
         $toDate = strtotime('-1 Second', strtotime('Next Week', $fromDate));
 
-        $events = $this->getEvents($fromDate, $toDate);
+        $events = $this->getEvents($dataProvider, $fromDate, $toDate);
 
         $startTime = $calendar->getStartTime();
         $endTime = $toDate;
@@ -71,13 +94,11 @@ class WeekCalendarRenderer extends HourBasedTableCalendarRenderer
                     $tableDate < $endDate && $endDate <= $nextTableDate ||
                     $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    $configuration = new Configuration();
-                    $configuration->setStartDate($tableDate);
-                    $configuration->setHourStep($calendar->getHourStep());
-
-                    $eventRendererFactory = new EventWeekRenderer($this, $event, $configuration);
-
-                    $calendar->addEvent($tableDate, $eventRendererFactory->render());
+                    $calendar->addEvent(
+                        $tableDate, $this->getEventWeekRenderer()->render(
+                        $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event)
+                    )
+                    );
                 }
             }
 
@@ -89,16 +110,24 @@ class WeekCalendarRenderer extends HourBasedTableCalendarRenderer
 
     /**
      * @throws \ReflectionException
-     * @throws \Exception
      */
-    public function renderTitle(): string
+    public function renderTitle(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        $weekNumber = date('W', $this->getDisplayTime());
+        $weekNumber = date('W', $displayTime);
+        $dateTimeUtilities = $this->getDatetimeUtilities();
+        $calendar = $this->getCalendar($dataProvider, $displayTime);
 
-        return Translation::get('Week', null, StringUtilities::LIBRARIES) . ' ' . $weekNumber . ' : ' .
-            DatetimeUtilities::getInstance()->formatLocaleDate('%A %d %B %Y', $this->getCalendar()->getStartTime()) .
-            ' - ' . DatetimeUtilities::getInstance()->formatLocaleDate(
-                '%A %d %B %Y', strtotime('+6 Days', $this->getCalendar()->getStartTime())
-            );
+        $titleParts = [];
+
+        $titleParts[] = $this->getTranslator()->trans('Week', [], StringUtilities::LIBRARIES);
+        $titleParts[] = $weekNumber;
+        $titleParts[] = ':';
+        $titleParts[] = $dateTimeUtilities->formatLocaleDate('%A %d %B %Y', $calendar->getStartTime());
+        $titleParts[] = '-';
+        $titleParts[] = $dateTimeUtilities->formatLocaleDate(
+            '%A %d %B %Y', strtotime('+6 Days', $calendar->getStartTime())
+        );
+
+        return implode(' ', $titleParts);
     }
 }

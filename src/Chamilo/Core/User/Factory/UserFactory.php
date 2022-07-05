@@ -20,21 +20,21 @@ class UserFactory
 
     /**
      *
-     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
-     */
-    private $sessionUtilities;
-
-    /**
-     *
-     * @var \Chamilo\Core\User\Service\UserService
-     */
-    private $userService;
-
-    /**
-     *
      * @var \Chamilo\Configuration\Service\ConfigurationConsulter
      */
     private $configurationConsulter;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Platform\Configuration\LocalSetting
+     */
+    private $localSettingUtilities;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    private $sessionUtilities;
 
     /**
      *
@@ -50,9 +50,9 @@ class UserFactory
 
     /**
      *
-     * @var \Chamilo\Libraries\Platform\Configuration\LocalSetting
+     * @var \Chamilo\Core\User\Service\UserService
      */
-    private $localSettingUtilities;
+    private $userService;
 
     /**
      *
@@ -172,7 +172,7 @@ class UserFactory
      */
     public function getUser()
     {
-        $userIdentifier = $this->getSessionUtilities()->get_user_id();
+        $userIdentifier = $this->getSessionUtilities()->getUserId();
 
         if ($userIdentifier)
         {

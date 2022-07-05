@@ -107,5 +107,5 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
     abstract public function renderNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime
     ): string;
 
-    abstract public function renderTitle(int $displayTime): string;
+    abstract public function renderTitle(CalendarRendererProviderInterface $dataProvider, int $displayTime): string;
 }

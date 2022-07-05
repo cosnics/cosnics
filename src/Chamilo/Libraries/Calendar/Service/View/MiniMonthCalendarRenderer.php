@@ -21,7 +21,7 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class MiniMonthCalendarRenderer extends HtmlCalendarRenderer
+class MiniMonthCalendarRenderer extends MiniCalendarRenderer
 {
     use TableRendererTrait;
 
@@ -114,8 +114,8 @@ class MiniMonthCalendarRenderer extends HtmlCalendarRenderer
 
                     $calendar->addEvent(
                         $tableDate, $this->getEventMiniMonthRenderer()->render(
-                        $event, $tableDate, $nextTableDate, $this->isFadedEvent($displayTime, $event),
-                        $this->isEventSourceVisible($dataProvider, $event)
+                        $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event),
+                        $this->isFadedEvent($displayTime, $event)
                     )
                     );
                 }
@@ -123,8 +123,6 @@ class MiniMonthCalendarRenderer extends HtmlCalendarRenderer
 
             $tableDate = $nextTableDate;
         }
-
-        //$calendar->addNavigationLinks($this->determineNavigationUrl($dataProvider));
 
         $html = [];
 
@@ -148,7 +146,7 @@ class MiniMonthCalendarRenderer extends HtmlCalendarRenderer
         $html[] = $this->renderPreviousMonthNavigation($dataProvider, $displayTime);
         $html[] = $this->renderNextMonthNavigation($dataProvider, $displayTime);
         $html[] = '<h4 class="panel-title">';
-        $html[] = $this->renderTitle($displayTime);
+        $html[] = $this->renderTitle($dataProvider, $displayTime);
         $html[] = '</h4>';
         $html[] = '</div>';
 
@@ -178,7 +176,7 @@ class MiniMonthCalendarRenderer extends HtmlCalendarRenderer
         return '<a href="' . $previousUrl . '">' . $glyph->render() . '</a>';
     }
 
-    public function renderTitle(int $displayTime): string
+    public function renderTitle(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
         return $this->getTranslator()->trans(date('F', $displayTime) . 'Long', [], StringUtilities::LIBRARIES) . ' ' .
             date('Y', $displayTime);

@@ -1,97 +1,53 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\Event;
 
+use Chamilo\Libraries\Calendar\Event\Event;
+
 /**
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class EventDayRenderer extends EventTableRenderer
+class EventDayRenderer extends TableEventRenderer
 {
 
-    /**
-     *
-     * @var integer
-     */
-    private $tableEndDate;
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Service\Event\EventTableRenderer::getPostfixSymbol()
-     */
-    public function getPostfixSymbol()
+    public function getPostfixSymbol(): string
     {
         return $this->getSymbol('chevron-down');
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Service\Event\EventTableRenderer::getPrefixSymbol()
-     */
-    public function getPrefixSymbol()
+    public function getPrefixSymbol(): string
     {
         return $this->getSymbol('chevron-up');
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getTableEndDate()
+    public function showPostfixDate(Event $event, int $cellStartDate, int $cellEndDate): bool
     {
-        if (!isset($this->tableEndDate))
-        {
-            $configuration = $this->getConfiguration();
-            $this->tableEndDate = strtotime(
-                '+' . $configuration->getHourStep() . ' hours', $configuration->getStartDate()
-            );
-        }
+        $startDate = $event->getStartDate();
+        $endDate = $event->getEndDate();
 
-        return $this->tableEndDate;
+        return ($startDate != $endDate) && ($endDate < $cellEndDate && $startDate < $cellStartDate);
     }
 
-    /**
-     * @return boolean
-     */
-    public function showPostfixDate()
+    public function showPostfixSymbol(Event $event, int $cellEndDate): bool
     {
-        $configuration = $this->getConfiguration();
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
+        $startDate = $event->getStartDate();
+        $endDate = $event->getEndDate();
 
-        return ($startDate != $endDate) &&
-            ($endDate < $this->getTableEndDate() && $startDate < $configuration->getStartDate());
+        return ($startDate != $endDate) && ($endDate > $cellEndDate);
     }
 
-    /**
-     * @return boolean
-     */
-    public function showPostfixSymbol()
+    public function showPrefixDate(Event $event, int $cellStartDate, int $cellEndDate): bool
     {
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
+        $startDate = $event->getStartDate();
+        $endDate = $event->getEndDate();
 
-        return ($startDate != $endDate) && ($endDate > $this->getTableEndDate());
+        return ($startDate >= $cellStartDate && $startDate <= $cellEndDate &&
+            ($startDate != $cellStartDate || $endDate < $cellEndDate));
     }
 
-    /**
-     * @return boolean
-     */
-    public function showPrefixDate()
+    public function showPrefixSymbol(Event $event, int $cellStartDate): bool
     {
-        $configuration = $this->getConfiguration();
-        $startDate = $this->getEvent()->getStartDate();
-        $endDate = $this->getEvent()->getEndDate();
-
-        return ($startDate >= $configuration->getStartDate() && $startDate <= $this->getTableEndDate() &&
-            ($startDate != $configuration->getStartDate() || $endDate < $this->getTableEndDate()));
-    }
-
-    /**
-     * @return boolean
-     */
-    public function showPrefixSymbol()
-    {
-        return ($this->getEvent()->getStartDate() < $this->getConfiguration()->getStartDate());
+        return ($event->getStartDate() < $cellStartDate);
     }
 }

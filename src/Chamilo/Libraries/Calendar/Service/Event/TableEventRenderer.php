@@ -16,8 +16,9 @@ abstract class TableEventRenderer extends EventRenderer
      * @throws \Exception
      */
     public function render(
-        Event $event, int $cellStartDate, int $cellEndDate, bool $isFadedEvent = false,
-        bool $isEventSourceVisible = true
+        Event $event, int $cellStartDate, int $cellEndDate, bool $isEventSourceVisible = true,
+        bool $isFadedEvent = false
+
     ): string
     {
         $html = [];

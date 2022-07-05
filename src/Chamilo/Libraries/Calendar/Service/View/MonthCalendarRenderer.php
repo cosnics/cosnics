@@ -13,8 +13,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\View
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MonthCalendarRenderer extends TableCalendarRenderer
@@ -102,8 +102,8 @@ class MonthCalendarRenderer extends TableCalendarRenderer
 
                     $calendar->addEvent(
                         $tableDate, $this->getEventMonthRenderer()->render(
-                        $event, $tableDate, $nextTableDate, $this->isFadedEvent($displayTime, $event),
-                        $this->isEventSourceVisible($dataProvider, $event)
+                        $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event),
+                        $this->isFadedEvent($displayTime, $event)
                     )
                     );
                 }
@@ -115,7 +115,7 @@ class MonthCalendarRenderer extends TableCalendarRenderer
         return '<div class="month-calendar">' . $calendar->render() . '</div>';
     }
 
-    public function renderTitle(int $displayTime): string
+    public function renderTitle(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
         return $this->getTranslator()->trans(date('F', $displayTime) . 'Long', [], StringUtilities::LIBRARIES) . ' ' .
             date('Y', $displayTime);
