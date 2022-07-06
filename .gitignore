@@ -18,3 +18,4 @@ vue-cli-service
 /.settings/org.eclipse.php.core.prefs
 /.settings/org.eclipse.wst.validation.prefs
 /composer.phar
+.vscode/settings.json
