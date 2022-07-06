@@ -6,7 +6,7 @@ use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderI
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
+use Chamilo\Libraries\Calendar\Service\View\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
@@ -47,7 +47,7 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
     public function determineNavigationUrl(CalendarRendererProviderInterface $dataProvider): string
     {
         $parameters = $dataProvider->getDisplayParameters();
-        $parameters[self::PARAM_TIME] = CalendarTable::TIME_PLACEHOLDER;
+        $parameters[self::PARAM_TIME] = CalendarTableBuilder::TIME_PLACEHOLDER;
 
         return $this->getUrlGenerator()->fromParameters($parameters);
     }

@@ -6,7 +6,7 @@ use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderI
 use Chamilo\Libraries\Calendar\Architecture\Traits\AgendaCalendarTrait;
 use Chamilo\Libraries\Calendar\Service\Event\EventListRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
+use Chamilo\Libraries\Calendar\Service\View\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -52,7 +52,7 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
     public function renderNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
         $urlFormat = $this->determineNavigationUrl($dataProvider);
-        $todayUrl = str_replace(CalendarTable::TIME_PLACEHOLDER, time(), $urlFormat);
+        $todayUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, time(), $urlFormat);
 
         $buttonToolBar = new ButtonToolBar();
 

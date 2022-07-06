@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Form;
 
-use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
+use Chamilo\Libraries\Calendar\Service\View\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -71,7 +71,7 @@ class JumpForm
         foreach ($this->getDays() as $day)
         {
             $dayUrl = str_replace(
-                CalendarTable::TIME_PLACEHOLDER,
+                CalendarTableBuilder::TIME_PLACEHOLDER,
                 mktime(null, null, null, date('n', $this->getCurrentTime()), $day, date('Y', $this->getCurrentTime())),
                 $this->getNavigationUrl()
             );
@@ -88,7 +88,7 @@ class JumpForm
         foreach ($this->getMonths() as $month => $monthLabel)
         {
             $monthUrl = str_replace(
-                CalendarTable::TIME_PLACEHOLDER, mktime(
+                CalendarTableBuilder::TIME_PLACEHOLDER, mktime(
                 null, null, null, $month, date('j', $this->getCurrentTime()), date('Y', $this->getCurrentTime())
             ), $this->getNavigationUrl()
             );
@@ -104,7 +104,7 @@ class JumpForm
         foreach ($this->getYears() as $year)
         {
             $yearUrl = str_replace(
-                CalendarTable::TIME_PLACEHOLDER,
+                CalendarTableBuilder::TIME_PLACEHOLDER,
                 mktime(null, null, null, date('n', $this->getCurrentTime()), date('j', $this->getCurrentTime()), $year),
                 $this->getNavigationUrl()
             );

@@ -1,21 +1,17 @@
 <?php
-namespace Chamilo\Libraries\Calendar\Service\View\Table;
+namespace Chamilo\Libraries\Calendar\Service\View\TableBuilder;
 
 use Exception;
+use HTML_Table;
 
 /**
- * @package Chamilo\Libraries\Calendar\Service\View\Table
+ * @package Chamilo\Libraries\Calendar\Service\View\TableBuilder
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class MiniMonthCalendarTable extends MonthCalendarTable
+class MiniMonthCalendarTableBuilder extends MonthCalendarTableBuilder
 {
-    public function __construct(int $displayTime, ?string $dayUrlTemplate = null)
-    {
-        parent::__construct($displayTime, $dayUrlTemplate, ['table-calendar-mini']);
-    }
-
-    protected function addEventItems($time, $row, $column, $items)
+    protected function addEventItems(HTML_Table $table, $time, $row, $column, $items)
     {
         $tooltip = htmlentities(implode(PHP_EOL, $items));
 
@@ -23,10 +19,10 @@ class MiniMonthCalendarTable extends MonthCalendarTable
         {
             try
             {
-                $this->setCellContents(
+                $table->setCellContents(
                     $row, $column,
                     '<span class="badge" data-toggle="tooltip" data-placement="top" data-content="' . $tooltip . '">' .
-                    $this->getCellContents($row, $column) . '</span>'
+                    $table->getCellContents($row, $column) . '</span>'
                 );
             }
             catch (Exception $exception)
@@ -35,7 +31,7 @@ class MiniMonthCalendarTable extends MonthCalendarTable
         }
     }
 
-    protected function determineCellContent(int $tableDate): string
+    protected function determineCellContent(int $tableDate, ?string $dayUrlTemplate = null): string
     {
         $cellContent = parent::determineCellContent($tableDate);
 

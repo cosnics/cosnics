@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Service\View;
 
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
+use Chamilo\Libraries\Calendar\Service\View\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -34,9 +34,9 @@ abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
         $previousTime = $this->getPreviousDisplayTime($displayTime);
         $nextTime = $this->getNextDisplayTime($displayTime);
 
-        $todayUrl = str_replace(CalendarTable::TIME_PLACEHOLDER, time(), $urlFormat);
-        $previousUrl = str_replace(CalendarTable::TIME_PLACEHOLDER, $previousTime, $urlFormat);
-        $nextUrl = str_replace(CalendarTable::TIME_PLACEHOLDER, $nextTime, $urlFormat);
+        $todayUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, time(), $urlFormat);
+        $previousUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, $previousTime, $urlFormat);
+        $nextUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, $nextTime, $urlFormat);
 
         $buttonToolBar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();

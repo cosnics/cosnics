@@ -62,7 +62,7 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
         $html[] = '</div>';
 
         $html[] = '<div class="col-xs-12 col-lg-3 table-calendar-sidebar">';
-        $html[] = $this->renderMiniMonth($dataProvider, $displayTime, $viewActions);
+        //$html[] = $this->renderMiniMonth($dataProvider, $displayTime, $viewActions);
         $html[] = $this->getLegendRenderer()->render($dataProvider);
         $html[] = $this->getJumpForm($dataProvider, $displayTime)->render();
         $html[] = '</div>';

@@ -16,6 +16,27 @@
 
         <service id="Chamilo\Libraries\Calendar\Service\LegendRenderer"/>
 
+        <service id="Chamilo\Libraries\Calendar\Service\View\TableBuilder\DayCalendarTableBuilder">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
+        <service id="Chamilo\Libraries\Calendar\Service\View\TableBuilder\MiniMonthCalendarTableBuilder">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
+        <service id="Chamilo\Libraries\Calendar\Service\View\TableBuilder\MonthCalendarTableBuilder">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
+        <service id="Chamilo\Libraries\Calendar\Service\View\TableBuilder\WeekCalendarTableBuilder">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
+
         <service id="Chamilo\Libraries\Calendar\Service\View\DayCalendarRenderer">
             <argument key="$user"
                       type="service"
@@ -29,7 +50,11 @@
         </service>
         <service id="Chamilo\Libraries\Calendar\Service\View\MiniListCalendarRenderer"/>
         <service id="Chamilo\Libraries\Calendar\Service\View\MiniMonthCalendarRenderer"/>
-        <service id="Chamilo\Libraries\Calendar\Service\View\MonthCalendarRenderer"/>
+        <service id="Chamilo\Libraries\Calendar\Service\View\MonthCalendarRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
         <service id="Chamilo\Libraries\Calendar\Service\View\WeekCalendarRenderer">
             <argument key="$user"
                       type="service"

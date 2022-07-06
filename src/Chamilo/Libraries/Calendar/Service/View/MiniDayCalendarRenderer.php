@@ -8,7 +8,7 @@ use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderI
 use Chamilo\Libraries\Calendar\Architecture\Traits\HourBasedCalendarTrait;
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Calendar\Service\View\Table\DayCalendarTable;
+use Chamilo\Libraries\Calendar\Service\View\TableBuilder\DayCalendarTableBuilder;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -72,7 +72,7 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
      */
     public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        $calendar = new DayCalendarTable(
+        $calendar = new DayCalendarTableBuilder(
             $displayTime, $this->getHourStep(), $this->getStartHour(), $this->getEndHour(), $this->getHideOtherHours(),
             ['table-calendar-mini']
         );

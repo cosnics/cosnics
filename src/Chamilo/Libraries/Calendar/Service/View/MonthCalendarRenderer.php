@@ -1,13 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Calendar\Service\Event\Configuration;
 use Chamilo\Libraries\Calendar\Service\Event\EventMonthRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Calendar\Service\View\Table\MonthCalendarTable;
+use Chamilo\Libraries\Calendar\Service\View\TableBuilder\MonthCalendarTableBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -20,33 +21,43 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
 {
     protected EventMonthRenderer $eventMonthRenderer;
 
+    protected MonthCalendarTableBuilder $monthCalendarTableBuilder;
+
+    protected User $user;
+
+    protected UserSettingService $userSettingService;
+
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, EventMonthRenderer $eventMonthRenderer
+        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, EventMonthRenderer $eventMonthRenderer,
+        UserSettingService $userSettingService, User $user, MonthCalendarTableBuilder $monthCalendarTableBuilder
     )
     {
         parent::__construct($legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer);
 
         $this->eventMonthRenderer = $eventMonthRenderer;
+        $this->userSettingService = $userSettingService;
+        $this->user = $user;
+        $this->monthCalendarTableBuilder = $monthCalendarTableBuilder;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
-    public function getCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): MonthCalendarTable
+    public function getDayUrlTemplate(CalendarRendererProviderInterface $dataProvider): string
     {
         $displayParameters = $dataProvider->getDisplayParameters();
-        $displayParameters[self::PARAM_TIME] = MonthCalendarTable::TIME_PLACEHOLDER;
+        $displayParameters[self::PARAM_TIME] = MonthCalendarTableBuilder::TIME_PLACEHOLDER;
         $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
 
-        return new MonthCalendarTable(
-            $displayTime, $this->getUrlGenerator()->fromParameters($displayParameters), ['table-calendar-month']
-        );
+        return $this->getUrlGenerator()->fromParameters($displayParameters);
     }
 
     public function getEventMonthRenderer(): EventMonthRenderer
     {
         return $this->eventMonthRenderer;
+    }
+
+    public function getMonthCalendarTableBuilder(): MonthCalendarTableBuilder
+    {
+        return $this->monthCalendarTableBuilder;
     }
 
     public function getNextDisplayTime(int $displayTime): int
@@ -57,6 +68,16 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
     public function getPreviousDisplayTime(int $displayTime): int
     {
         return strtotime('first day of previous month', $displayTime);
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function getUserSettingService(): UserSettingService
+    {
+        return $this->userSettingService;
     }
 
     public function isFadedEvent(int $displayTime, Event $event): bool
@@ -75,13 +96,13 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
      */
     public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        $calendar = $this->getCalendar($dataProvider, $displayTime);
-
-        $startTime = $calendar->getStartTime();
-        $endTime = $calendar->getEndTime();
+        $calendarTableBuilder = $this->getMonthCalendarTableBuilder();
+        $startTime = $calendarTableBuilder->getTableStartTime($displayTime);
+        $endTime = $calendarTableBuilder->getTableEndTime($displayTime);
 
         $events = $this->getEvents($dataProvider, $startTime, $endTime);
         $tableDate = $startTime;
+        $eventsToShow = [];
 
         while ($tableDate <= $endTime)
         {
@@ -96,11 +117,9 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
                     $tableDate < $endDate && $endDate <= $nextTableDate ||
                     $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    $calendar->addEvent(
-                        $tableDate, $this->getEventMonthRenderer()->render(
+                    $eventsToShow[$tableDate][] = $this->getEventMonthRenderer()->render(
                         $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event),
                         $this->isFadedEvent($displayTime, $event)
-                    )
                     );
                 }
             }
@@ -108,7 +127,14 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
             $tableDate = $nextTableDate;
         }
 
-        return '<div class="month-calendar">' . $calendar->render() . '</div>';
+        $html = [];
+
+        $html[] = '<div class="month-calendar">';
+        $html[] = $calendarTableBuilder->render($displayTime, $eventsToShow, ['table-calendar-month'],
+            $this->getDayUrlTemplate($dataProvider));
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     public function renderTitle(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
