@@ -103,7 +103,7 @@ test('endResultHandleAbsence', () => {
 });
 
 test('addScore', () => {
-    gradeBook.toggleGradeItem(gradeBook.getGradeItem(7)!, true);
+    gradeBook.addGradeColumnFromItem(gradeBook.getGradeItem(7)!);
     expect(gradeBook.gradeColumns.length).toEqual(6);
     expect(gradeBook.gradeColumns[5].type).toEqual('item');
     expect(gradeBook.getEndResult(1)).toBeCloseTo(55.83);

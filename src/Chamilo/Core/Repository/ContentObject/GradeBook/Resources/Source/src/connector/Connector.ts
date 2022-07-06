@@ -119,6 +119,16 @@ export default class Connector {
         });
     }
 
+    removeColumnSubItem(gradeColumnId: ColumnId, gradeItemId: ItemId) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'gradeColumnId': gradeColumnId,
+                'gradeItemId': gradeItemId
+            };
+            await this.executeAPIRequest(this.apiConfig.removeColumnSubItemURL, parameters);
+        });
+    }
+
     updateGradeColumn(gradeColumn: GradeColumn) {
         this.addToQueue(async () => {
             const parameters = {
@@ -146,6 +156,15 @@ export default class Connector {
                 'newSort': newIndex + 1
             };
             await this.executeAPIRequest(this.apiConfig.moveColumnURL, parameters);
+        });
+    }
+
+    removeGradeColumn(gradeColumn: GradeColumn) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'gradeColumnId': gradeColumn.id
+            };
+            await this.executeAPIRequest(this.apiConfig.removeColumnURL, parameters);
         });
     }
 

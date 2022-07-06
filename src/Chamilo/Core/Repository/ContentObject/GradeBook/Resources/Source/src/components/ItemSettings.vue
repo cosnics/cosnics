@@ -160,15 +160,18 @@ export default class ItemSettings extends Vue {
     }
 
     removeSubItem(item: GradeItem) {
-        this.gradeBook.removeGradeItem(item);
+        this.gradeBook.removeSubItem(item);
+        this.$emit('remove-subitem', item, this.columnId);
         if (item.id === this.columnId) {
             this.$emit('close');
         }
     }
 
     removeColumn() {
-        if (this.column) {
-            this.gradeBook.removeColumn(this.column);
+        const column = this.column;
+        if (column) {
+            this.gradeBook.removeColumn(column);
+            this.$emit('remove-column', column);
         }
         this.showRemoveItemDialog = false;
         this.$emit('close');

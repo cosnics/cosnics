@@ -248,7 +248,7 @@ export default class GradeBook {
         });
     }
 
-    addGradeItem(item: GradeItem) {
+    addGradeColumnFromItem(item: GradeItem) {
         const newId = this.createNewColumnId();
 
         const column = {
@@ -274,37 +274,22 @@ export default class GradeBook {
         return column || null;
     }
 
-    removeGradeItem(item: GradeItem, search = true) {
-        const itemId = item.id;
-
-        let column;
-
-        if (search) {
-            const col = this.findGradeColumnWithGradeItem(itemId);
-            if (col?.type === 'item') {
-                column = col;
+    removeSubItem(item: GradeItem) {
+        this.gradeColumns.forEach(column => {
+            if (column.subItemIds.length) {
+                column.subItemIds = column.subItemIds.filter(id => id !== item.id);
             }
-        }
+        });
 
-        if (column) {
-            this.removeColumn(column);
-        } else {
-            this.gradeColumns.forEach(column => {
-                if (column.subItemIds.length) {
-                    column.subItemIds = column.subItemIds.filter(id => id !== itemId);
+        this.resultsData.forEach(d => {
+            d.results.forEach(res => {
+                if (res.ref === item.id) {
+                    res.value = null;
+                    res.ref = null;
+                    res.overwritten = false;
                 }
-            });
-
-            this.resultsData.forEach(d => {
-                d.results.forEach(res => {
-                    if (res.ref === item.id) {
-                        res.value = null;
-                        res.ref = null;
-                        res.overwritten = false;
-                    }
-                })
-            });
-        }
+            })
+        });
     }
 
     createNewIdWithPrefix(prefix: string): string {
@@ -417,7 +402,7 @@ export default class GradeBook {
 
     removeColumn(column: GradeColumn) {
         column.subItemIds.forEach(itemId => {
-            this.removeGradeItem(this.getGradeItem(itemId)!, false);
+            this.removeSubItem(this.getGradeItem(itemId)!);
         });
         this.gradeColumns = this.gradeColumns.filter(col => col !== column);
         this.allCategories.forEach(cat => {

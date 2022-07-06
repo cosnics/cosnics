@@ -17,7 +17,7 @@
                           @change-gradecolumn="onChangeGradeColumn" @change-gradecolumn-category="onChangeGradeColumnCategory" @move-gradecolumn="onMoveGradeColumn"></grades-table>
         </div>
         <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null"
-                       @item-settings="itemSettings = $event" @change-gradecolumn="onChangeGradeColumn" @add-subitem="onAddSubItem"></item-settings>
+                       @item-settings="itemSettings = $event" @change-gradecolumn="onChangeGradeColumn" @add-subitem="onAddSubItem" @remove-subitem="onRemoveSubItem" @remove-column="onRemoveColumn"></item-settings>
         <category-settings v-if="selectedCategory" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory"></category-settings>
     </div>
 </template>
@@ -41,18 +41,32 @@
         @Prop({type: GradeBook, required: true}) readonly gradeBook!: GradeBook;
         @Prop(Connector) readonly connector!: Connector|null;
 
-        toggleGradeItem(item: GradeItem, isAdding: boolean) {
-            if (isAdding) {
-                const column = this.gradeBook.addGradeItem(item);
-                this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}) => {
-                    this.gradeBook.updateGradeColumnId(column, id);
-                });
+        addGradeItem(item: GradeItem) {
+            const column = this.gradeBook.addGradeColumnFromItem(item);
+            this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}) => {
+                this.gradeBook.updateGradeColumnId(column, id);
+            });
+        }
+
+        removeGradeItem(item: GradeItem) {
+            const column = this.gradeBook.findGradeColumnWithGradeItem(item.id);
+            if (!column) { return; }
+            if (column.type === 'item') {
+                this.gradeBook.removeColumn(column);
+                this.onRemoveColumn(column);
             } else {
-                this.gradeBook.removeGradeItem(item);
+                this.gradeBook.removeSubItem(item);
+                this.onRemoveSubItem(item, column.id);
             }
         }
 
-
+        toggleGradeItem(item: GradeItem, isAdding: boolean) {
+            if (isAdding) {
+                this.addGradeItem(item);
+            } else {
+                this.removeGradeItem(item);
+            }
+        }
 
         get selectedCategory() {
             return this.gradeBook.categories.find(cat => cat.id === this.categorySettings) || null;
@@ -97,6 +111,14 @@
 
         onAddSubItem(item: GradeItem, columnId: ColumnId) {
             this.connector?.addColumnSubItem(columnId, item.id);
+        }
+
+        onRemoveSubItem(item: GradeItem, columnId: ColumnId) {
+            this.connector?.removeColumnSubItem(columnId, item.id);
+        }
+
+        onRemoveColumn(column: GradeColumn) {
+            this.connector?.removeGradeColumn(column);
         }
     }
 </script>

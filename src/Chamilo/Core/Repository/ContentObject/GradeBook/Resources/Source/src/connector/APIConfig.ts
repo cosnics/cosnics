@@ -7,6 +7,8 @@ export default interface APIConfig {
     readonly updateColumnURL: string;
     readonly updateColumnCategoryURL: string;
     readonly addColumnSubItemURL: string;
+    readonly removeColumnSubItemURL: string;
     readonly moveColumnURL: string;
+    readonly removeColumnURL: string;
     readonly csrfToken: string;
 }
