@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBook
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookColumnJSONModel;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookItemJSONModel;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookColumn;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
 use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
@@ -239,6 +240,9 @@ class GradeBookAjaxService
      * @param int $gradeItemId
      *
      * @return array
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Doctrine\ORM\ORMException
      */
     public function addGradeBookColumnSubItem(int $gradeBookDataId, int $versionId, int $gradeBookColumnId, int $gradeItemId)
     {
@@ -246,7 +250,7 @@ class GradeBookAjaxService
         $gradeItem = $gradebookData->getGradeBookItemById($gradeItemId);
         $oldGradeBookColumn = $gradeItem->getGradeBookColumn();
         $gradeBookColumn = $gradebookData->getGradeBookColumnById($gradeBookColumnId);
-        if (!empty($oldGradeBookColumn))
+        if ($oldGradeBookColumn instanceof GradeBookColumn)
         {
             if ($oldGradeBookColumn->getType() == 'group')
             {
@@ -256,6 +260,38 @@ class GradeBookAjaxService
         }
         $gradeBookColumn->setType('group');
         $gradeItem->setGradeBookColumn($gradeBookColumn);
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+            'column' => GradeBookColumnJSONModel::fromGradeBookColumn($gradeBookColumn)
+        ];
+    }
+
+    /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param int $gradeBookColumnId
+     * @param int $gradeItemId
+     *
+     * @return array
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function removeGradeBookColumnSubItem(int $gradeBookDataId, int $versionId, int $gradeBookColumnId, int $gradeItemId)
+    {
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradeItem = $gradebookData->getGradeBookItemById($gradeItemId);
+        $gradeItemColumn = $gradeItem->getGradeBookColumn();
+        $gradeBookColumn = $gradebookData->getGradeBookColumnById($gradeBookColumnId);
+
+        if ($gradeItemColumn !== $gradeBookColumn)
+        {
+            throw new \RuntimeException('Grade item ' . $gradeItem->getId() . ' is not a subitem of column ' . $gradeBookColumn->getId());
+        }
+
+        $gradeItem->setGradeBookColumn(null);
         $this->gradeBookService->saveGradeBook($gradebookData);
 
         return [
@@ -357,6 +393,28 @@ class GradeBookAjaxService
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
             'gradebookColumnId' => $gradeBookColumn->getId(),
             'sort' => $gradeBookColumn->getSort()
+        ];
+    }
+
+    /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param int $gradeBookColumnId
+     *
+     * @return array
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function removeGradeBookColumn(int $gradeBookDataId, int $versionId, int $gradeBookColumnId)
+    {
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradeBookColumn = $gradebookData->getGradeBookColumnById($gradeBookColumnId);
+        $gradebookData->removeGradeBookColumn($gradeBookColumn);
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()]
         ];
     }
 

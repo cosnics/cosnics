@@ -212,58 +212,13 @@ class GradeBookData
     }
 
     /**
-     * @return GradeBookColumn[]|ArrayCollection
-     */
-    public function getGradeBookColumns()
-    {
-        return $this->gradebookColumns;
-    }
-
-    /**
-     * @return array
-     */
-    public function getGradeBookColumnsUncategorized(): array
-    {
-        $columns = array();
-        foreach ($this->gradebookColumns as $column)
-        {
-            if (is_null($column->getGradeBookCategory()))
-            {
-                $columns[] = $column;
-            }
-        }
-        return $columns;
-    }
-
-    /**
-     * @param int $columnId
-     *
-     * @return GradeBookColumn
-     *
-     * @throws ObjectNotExistException
-     */
-    public function getGradeBookColumnById(int $columnId)
-    {
-        $column = $this->gradebookColumns->filter(function(GradeBookColumn $column) use ($columnId) {
-            return $column->getId() == $columnId;
-        })->first();
-
-        if (!$column instanceof GradeBookColumn)
-        {
-            throw new ObjectNotExistException('gradebook column', $columnId);
-        }
-
-        return $column;
-    }
-
-    /**
      * @param int $itemId
      *
      * @return GradeBookItem
      *
      * @throws ObjectNotExistException
      */
-    public function getGradeBookItemById(int $itemId)
+    public function getGradeBookItemById(int $itemId): GradeBookItem
     {
         $item = $this->gradebookItems->filter(function(GradeBookItem $item) use ($itemId) {
             return $item->getId() == $itemId;
@@ -275,6 +230,44 @@ class GradeBookData
         }
 
         return $item;
+    }
+
+    /**
+     * @param GradeBookItem $gradebookItem
+     *
+     * @return GradeBookData
+     */
+    public function addGradeBookItem(GradeBookItem $gradebookItem): GradeBookData
+    {
+        if ($this->gradebookItems->contains($gradebookItem))
+        {
+            return $this;
+        }
+
+        $this->gradebookItems->add($gradebookItem);
+        $gradebookItem->setGradeBookData($this);
+
+        return $this;
+    }
+
+    /**
+     * @param GradeBookItem $gradeBookItemToRemove
+     *
+     * @return GradeBookData
+     */
+    public function removeGradeBookItem(GradeBookItem $gradeBookItemToRemove): GradeBookData
+    {
+        if (!$this->gradebookItems->contains($gradeBookItemToRemove))
+        {
+            return $this;
+        }
+
+        $this->gradebookItems->removeElement($gradeBookItemToRemove);
+        $gradeBookItemToRemove->setGradeBookData(null);
+
+        $this->getRemovedEntities()->add($gradeBookItemToRemove);
+
+        return $this;
     }
 
     /**
@@ -394,6 +387,170 @@ class GradeBookData
     }
 
     /**
+     * @return GradeBookColumn[]|ArrayCollection
+     */
+    public function getGradeBookColumns()
+    {
+        return $this->gradebookColumns;
+    }
+
+    /**
+     * @param GradeBookCategory|null $category
+     *
+     * @return array|GradeBookColumn[]|ArrayCollection
+     */
+    public function getGradeBookCategoryColumns(?GradeBookCategory $category)
+    {
+        if ($category instanceof GradeBookCategory)
+        {
+            return $category->getGradeBookColumns();
+        }
+
+        return $this->getGradeBookColumnsUncategorized();
+    }
+
+    /**
+     * @return array
+     */
+    public function getGradeBookColumnsUncategorized(): array
+    {
+        $columns = array();
+        foreach ($this->gradebookColumns as $column)
+        {
+            if (is_null($column->getGradeBookCategory()))
+            {
+                $columns[] = $column;
+            }
+        }
+        return $columns;
+    }
+
+    /**
+     * @param int $columnId
+     *
+     * @return GradeBookColumn
+     *
+     * @throws ObjectNotExistException
+     */
+    public function getGradeBookColumnById(int $columnId)
+    {
+        $column = $this->gradebookColumns->filter(function(GradeBookColumn $column) use ($columnId) {
+            return $column->getId() == $columnId;
+        })->first();
+
+        if (!$column instanceof GradeBookColumn)
+        {
+            throw new ObjectNotExistException('gradebook column', $columnId);
+        }
+
+        return $column;
+    }
+
+    /**
+     * @param GradeBookColumn $gradeBookColumn
+     *
+     * @return GradeBookData
+     */
+    public function addGradeBookColumn(GradeBookColumn $gradeBookColumn): GradeBookData
+    {
+        if ($this->gradebookColumns->contains($gradeBookColumn))
+        {
+            return $this;
+        }
+
+        $this->gradebookColumns->add($gradeBookColumn);
+        $gradeBookColumn->setGradeBookData($this);
+        $gradeBookColumn->setSort(count($this->getGradeBookColumnsUncategorized()));
+
+        return $this;
+    }
+
+    /**
+     * @param GradeBookColumn $gradeBookColumnToRemove
+     *
+     * @return GradeBookData
+     */
+    public function removeGradeBookColumn(GradeBookColumn $gradeBookColumnToRemove): GradeBookData
+    {
+        if (!$this->gradebookColumns->contains($gradeBookColumnToRemove))
+        {
+            return $this;
+        }
+
+        $this->gradebookColumns->removeElement($gradeBookColumnToRemove);
+
+        $category = $gradeBookColumnToRemove->getGradeBookCategory();
+
+        $items = $gradeBookColumnToRemove->getGradeBookColumnSubItems();
+        foreach ($items as $item)
+        {
+            $gradeBookColumnToRemove->removeGradeBookColumnSubItem($item);
+        }
+
+        $gradeBookColumnToRemove->setGradeBookCategory(null);
+        $gradeBookColumnToRemove->setGradeBookData(null);
+
+        foreach ($this->getGradeBookCategoryColumns($category) as $column)
+        {
+            if ($gradeBookColumnToRemove == $column)
+            {
+                continue;
+            }
+
+            if ($column->getSort() >= $gradeBookColumnToRemove->getSort())
+            {
+                $column->decrementSort();
+            }
+        }
+
+        $this->getRemovedEntities()->add($gradeBookColumnToRemove);
+
+        return $this;
+    }
+
+    /**
+     * @param GradeBookColumn $gradeBookColumn
+     * @param int $newSort
+     *
+     * @return GradeBookData
+     */
+    public function moveGradeBookColumn(GradeBookColumn $gradeBookColumn, int $newSort): GradeBookData
+    {
+        if (!$this->gradebookColumns->contains($gradeBookColumn))
+        {
+            throw new \InvalidArgumentException(
+                sprintf('The given column %s is not available in gradebook data %s', $gradeBookColumn->getId(), $this->getId())
+            );
+        }
+
+        $category = $gradeBookColumn->getGradeBookCategory();
+
+        $oldSort = $gradeBookColumn->getSort();
+
+        foreach ($this->getGradeBookCategoryColumns($category) as $column)
+        {
+            if ($column == $gradeBookColumn)
+            {
+                continue;
+            }
+
+            if ($column->getSort() >= $oldSort)
+            {
+                $column->decrementSort();
+            }
+
+            if ($column->getSort() >= $newSort)
+            {
+                $column->incrementSort();
+            }
+        }
+
+        $gradeBookColumn->setSort($newSort);
+
+        return $this;
+    }
+
+    /**
      * @param int $gradeBookColumnId
      * @param int|null $categoryId
      *
@@ -441,62 +598,6 @@ class GradeBookData
     }
 
     /**
-     * @param GradeBookColumn $gradeBookColumn
-     *
-     * @return GradeBookData
-     */
-    public function addGradeBookColumn(GradeBookColumn $gradeBookColumn): GradeBookData
-    {
-        if ($this->gradebookColumns->contains($gradeBookColumn))
-        {
-            return $this;
-        }
-
-        $this->gradebookColumns->add($gradeBookColumn);
-        $gradeBookColumn->setGradeBookData($this);
-        $gradeBookColumn->setSort(count($this->getGradeBookColumnsUncategorized()));
-
-        return $this;
-    }
-
-    /**
-     * @param GradeBookColumn $gradeBookColumnToRemove
-     *
-     * @return GradeBookData
-     */
-    public function removeGradeBookColumn(GradeBookColumn $gradeBookColumnToRemove): GradeBookData
-    {
-        if (!$this->gradebookColumns->contains($gradeBookColumnToRemove))
-        {
-            return $this;
-        }
-
-        $this->gradebookColumns->removeElement($gradeBookColumnToRemove);
-
-        $category = $gradeBookColumnToRemove->getGradeBookCategory();
-
-        $gradeBookColumnToRemove->setGradeBookCategory(null);
-        $gradeBookColumnToRemove->setGradeBookData(null);
-
-        foreach ($this->getGradeBookCategoryColumns($category) as $column)
-        {
-            if ($gradeBookColumnToRemove == $column)
-            {
-                continue;
-            }
-
-            if ($column->getSort() >= $gradeBookColumnToRemove->getSort())
-            {
-                $column->decrementSort();
-            }
-        }
-
-        $this->getRemovedEntities()->add($gradeBookColumnToRemove);
-
-        return $this;
-    }
-
-    /**
      * @return ArrayCollection
      */
     public function getRemovedEntities(): ?ArrayCollection
@@ -507,63 +608,5 @@ class GradeBookData
         }
 
         return $this->removedEntities;
-    }
-
-
-    /**
-     * @param GradeBookColumn $gradeBookColumn
-     * @param int $newSort
-     *
-     * @return GradeBookData
-     */
-    public function moveGradeBookColumn(GradeBookColumn $gradeBookColumn, int $newSort): GradeBookData
-    {
-        if (!$this->gradebookColumns->contains($gradeBookColumn))
-        {
-            throw new \InvalidArgumentException(
-                sprintf('The given column %s is not available in gradebook data %s', $gradeBookColumn->getId(), $this->getId())
-            );
-        }
-
-        $category = $gradeBookColumn->getGradeBookCategory();
-
-        $oldSort = $gradeBookColumn->getSort();
-
-        foreach ($this->getGradeBookCategoryColumns($category) as $column)
-        {
-            if ($column == $gradeBookColumn)
-            {
-                continue;
-            }
-
-            if ($column->getSort() >= $oldSort)
-            {
-                $column->decrementSort();
-            }
-
-            if ($column->getSort() >= $newSort)
-            {
-                $column->incrementSort();
-            }
-        }
-
-        $gradeBookColumn->setSort($newSort);
-
-        return $this;
-    }
-
-    /**
-     * @param GradeBookCategory|null $category
-     *
-     * @return array|GradeBookColumn[]|ArrayCollection
-     */
-    public function getGradeBookCategoryColumns(?GradeBookCategory $category)
-    {
-        if ($category instanceof GradeBookCategory)
-        {
-            return $category->getGradeBookColumns();
-        }
-
-        return $this->getGradeBookColumnsUncategorized();
     }
 }

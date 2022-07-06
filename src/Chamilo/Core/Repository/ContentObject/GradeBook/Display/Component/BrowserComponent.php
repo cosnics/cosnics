@@ -111,6 +111,18 @@ class BrowserComponent extends Manager
                     self::PARAM_ACTION => self::ACTION_AJAX,
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_ADD_COLUMN_SUBITEM
                 ]
+            ),
+            'REMOVE_COLUMN_SUBITEM_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_REMOVE_COLUMN_SUBITEM
+                ]
+            ),
+            'REMOVE_COLUMN_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_REMOVE_COLUMN
+                ]
             )
         ];
     }

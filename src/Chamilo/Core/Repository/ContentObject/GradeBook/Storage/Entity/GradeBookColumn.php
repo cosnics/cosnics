@@ -151,7 +151,23 @@ class GradeBookColumn
      */
     public function setGradeBookData(GradeBookData $gradebookData = null): GradeBookColumn
     {
+        if ($this->gradebookData === $gradebookData)
+        {
+            return $this;
+        }
+
+        $oldGradebookData = $this->gradebookData;
         $this->gradebookData = $gradebookData;
+
+        if ($oldGradebookData instanceof GradeBookData)
+        {
+            $oldGradebookData->removeGradeBookColumn($this);
+        }
+
+        if ($gradebookData instanceof GradeBookData)
+        {
+            $gradebookData->addGradeBookColumn($this);
+        }
 
         return $this;
     }
@@ -357,5 +373,37 @@ class GradeBookColumn
     public function getGradeBookColumnSubItems()
     {
         return $this->gradebookColumnSubItems;
+    }
+
+    /**
+     * @param GradeBookItem $gradeBookItem
+     *
+     * @return GradeBookColumn
+     */
+    public function addGradeBookColumnSubItem(GradeBookItem $gradeBookItem): GradeBookColumn
+    {
+        if ($this->gradebookColumnSubItems->contains($gradeBookItem))
+        {
+            return $this;
+        }
+        $this->gradebookColumnSubItems->add($gradeBookItem);
+        $gradeBookItem->setGradeBookColumn($this);
+        return $this;
+    }
+
+    /**
+     * @param GradeBookItem $gradeBookItemToRemove
+     *
+     * @return GradeBookColumn
+     */
+    public function removeGradeBookColumnSubItem(GradeBookItem $gradeBookItemToRemove): GradeBookColumn
+    {
+        if (!$this->gradebookColumnSubItems->contains($gradeBookItemToRemove))
+        {
+            return $this;
+        }
+        $this->gradebookColumnSubItems->removeElement($gradeBookItemToRemove);
+        $gradeBookItemToRemove->setGradeBookColumn(null);
+        return $this;
     }
 }

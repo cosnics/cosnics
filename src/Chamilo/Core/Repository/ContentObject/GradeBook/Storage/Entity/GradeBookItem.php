@@ -130,7 +130,23 @@ class GradeBookItem
      */
     public function setGradeBookData(GradeBookData $gradebookData = null): GradeBookItem
     {
+        if ($this->gradebookData === $gradebookData)
+        {
+            return $this;
+        }
+
+        $oldGradebookData = $this->gradebookData;
         $this->gradebookData = $gradebookData;
+
+        if ($oldGradebookData instanceof GradeBookData)
+        {
+            $oldGradebookData->removeGradeBookItem($this);
+        }
+
+        if ($gradebookData instanceof GradeBookData)
+        {
+            $gradebookData->addGradeBookItem($this);
+        }
 
         return $this;
     }
@@ -150,6 +166,25 @@ class GradeBookItem
     public function setGradeBookColumn(GradeBookColumn $gradebookColumn = null): GradeBookItem
     {
         $this->gradebookColumn = $gradebookColumn;
+
+
+        if ($this->gradebookColumn === $gradebookColumn)
+        {
+            return $this;
+        }
+
+        $oldGradebookColumn = $this->gradebookColumn;
+        $this->gradebookColumn = $gradebookColumn;
+
+        if ($oldGradebookColumn instanceof GradeBookColumn)
+        {
+            $oldGradebookColumn->removeGradeBookColumnSubItem($this);
+        }
+
+        if ($gradebookColumn instanceof GradeBookColumn)
+        {
+            $gradebookColumn->addGradeBookColumnSubItem($this);
+        }
 
         return $this;
     }
