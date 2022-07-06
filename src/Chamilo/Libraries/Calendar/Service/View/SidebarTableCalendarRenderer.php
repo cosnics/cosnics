@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Calendar\Service\View;
 
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Architecture\Traits\TableRendererTrait;
 use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -13,14 +12,12 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\View
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class TableCalendarRenderer extends SidebarCalendarRenderer
+abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
 {
-
-    use TableRendererTrait;
 
     abstract public function getNextDisplayTime(int $displayTime): int;
 

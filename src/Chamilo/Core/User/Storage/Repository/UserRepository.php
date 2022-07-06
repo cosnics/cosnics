@@ -11,18 +11,24 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\Join;
+use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
+use Chamilo\Libraries\Storage\Query\Variable\CaseConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * The repository wrapper for the user data manager
@@ -60,7 +66,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return integer
+     * @return int
      */
     public function countUsers(Condition $condition = null)
     {
@@ -70,7 +76,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @param string $searchQuery
      *
-     * @return integer
+     * @return int
      */
     public function countUsersForSearchQuery(string $searchQuery = null)
     {
@@ -81,9 +87,9 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param string $searchQuery
-     * @param integer[] $userIdentifiers
+     * @param int $userIdentifiers
      *
-     * @return integer
+     * @return int
      */
     public function countUsersForSearchQueryAndUserIdentifiers(
         string $searchQuery = null, array $userIdentifiers = []
@@ -104,7 +110,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createUser(User $user)
@@ -115,7 +121,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\UserSetting $userSetting
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createUserSetting(UserSetting $userSetting)
@@ -131,7 +137,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteUser(User $user)
     {
@@ -143,7 +149,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\UserSetting $userSetting
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteUserSetting(UserSetting $userSetting)
     {
@@ -151,7 +157,7 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param integer $status
+     * @param int $status
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
@@ -193,6 +199,57 @@ class UserRepository implements UserRepositoryInterface
         );
     }
 
+    public function findSettingsForUser(User $user): ArrayCollection
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_USER_SETTING),
+            new StaticConditionVariable(1)
+        );
+
+        $joinConditions = [];
+        $joinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_USER_ID),
+            new StaticConditionVariable($user->getId())
+        );
+        $joinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_ID),
+            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID)
+        );
+
+        $join = new Join(UserSetting::class, new AndCondition($joinConditions), Join::TYPE_LEFT);
+
+        $retrieveProperties = [];
+        $retrieveProperties[] = new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID);
+        $retrieveProperties[] = new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT);
+        $retrieveProperties[] = new PropertyConditionVariable(Setting::class, Setting::PROPERTY_VARIABLE);
+
+        $caseElements = [];
+        $caseElements[] = new CaseElementConditionVariable(
+            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_VALUE), new OrCondition(
+                [
+                    new EqualityCondition(
+                        new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_VALUE), null
+                    ),
+                    new EqualityCondition(
+                        new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_VALUE),
+                        new StaticConditionVariable('')
+                    )
+                ]
+            )
+        );
+        $caseElements[] = new CaseElementConditionVariable(
+            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_VALUE)
+        );
+
+        $retrieveProperties[] = new CaseConditionVariable($caseElements, UserSetting::PROPERTY_VALUE);
+
+        return $this->getDataClassRepository()->records(
+            Setting::class, new RecordRetrievesParameters(
+                new RetrieveProperties($retrieveProperties), $condition, null, null, null, new Joins([$join])
+            )
+        );
+    }
+
     /**
      * @param string $email
      *
@@ -208,7 +265,7 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param integer $id
+     * @param int $id
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
@@ -285,7 +342,7 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     public function findUserIdentifiers()
@@ -301,7 +358,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @param string[] $officialCodes
      *
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     public function findUserIdentifiersByOfficialCodes(array $officialCodes)
@@ -324,8 +381,8 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $count
-     * @param integer $offset
+     * @param int $count
+     * @param int $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
@@ -338,7 +395,7 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param integer[] $userIdentifiers
+     * @param int $userIdentifiers
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
@@ -358,8 +415,8 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param string $searchQuery
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
@@ -381,9 +438,9 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param string $searchQuery
-     * @param integer[] $userIdentifiers
-     * @param integer $offset
-     * @param integer $count
+     * @param int $userIdentifiers
+     * @param int $offset
+     * @param int $count
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
@@ -464,7 +521,7 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param string $searchQuery
-     * @param integer[] $userIdentifiers
+     * @param int $userIdentifiers
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
@@ -516,7 +573,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      */
     public function updateUser(User $user)
     {
@@ -526,7 +583,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\UserSetting $userSetting
      *
-     * @return boolean
+     * @return bool
      */
     public function updateUserSetting(UserSetting $userSetting)
     {

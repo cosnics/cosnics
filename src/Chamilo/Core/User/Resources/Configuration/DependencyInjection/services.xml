@@ -15,6 +15,18 @@
 
         <service id="Chamilo\Core\User\Factory\UserFactory"/>
         <service id="Chamilo\Core\User\Service\UserService"/>
+        <service id="Chamilo\Core\User\Factory\UserSettingsCacheFactory"/>
+        <service id="Chamilo\Core\User\Service\UserSettingService">
+            <argument key="$userSettingsCache"
+                      type="service"
+                      id="Chamilo\Core\User\Service\UserSettingCacheService"/>
+        </service>
+
+        <service id="Chamilo\Core\User\Service\UserSettingCacheService">
+            <factory service="Chamilo\Core\User\Factory\UserSettingsCacheFactory"
+                     method="createUserSettingsCache"/>
+        </service>
+
         <service id="Chamilo\Core\User\Service\PasswordGenerator"/>
         <service id="Chamilo\Core\User\Storage\Repository\UserRepository"/>
 

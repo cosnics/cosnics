@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Service;
 
 use Chamilo\Configuration\Service\ConfigurationService;
+use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
@@ -22,9 +23,9 @@ class UserService
 
     /**
      *
-     * @var \Chamilo\Core\User\Storage\Repository\UserRepository
+     * @var \Chamilo\Configuration\Service\ConfigurationService
      */
-    private $userRepository;
+    private $configurationService;
 
     /**
      *
@@ -33,15 +34,15 @@ class UserService
     private $hashingUtilities;
 
     /**
-     *
-     * @var \Chamilo\Configuration\Service\ConfigurationService
-     */
-    private $configurationService;
-
-    /**
      * @var \Chamilo\Libraries\Storage\DataClass\PropertyMapper
      */
     private $propertyMapper;
+
+    /**
+     *
+     * @var \Chamilo\Core\User\Storage\Repository\UserRepository
+     */
+    private $userRepository;
 
     /**
      *
@@ -65,7 +66,7 @@ class UserService
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return integer
+     * @return int
      */
     public function countUsers($condition)
     {
@@ -75,7 +76,7 @@ class UserService
     /**
      * @param string $searchQuery
      *
-     * @return integer
+     * @return int
      */
     public function countUsersForSearchQuery(string $searchQuery = null)
     {
@@ -84,9 +85,9 @@ class UserService
 
     /**
      * @param string $searchQuery
-     * @param integer[] $userIdentifiers
+     * @param int $userIdentifiers
      *
-     * @return integer
+     * @return int
      */
     public function countUsersForSearchQueryAndUserIdentifiers(
         string $searchQuery = null, array $userIdentifiers = []
@@ -98,7 +99,7 @@ class UserService
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createUser(User $user)
@@ -175,7 +176,7 @@ class UserService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $value
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createUserSettingForSettingAndUser($context, $variable, User $user, $value = null)
@@ -221,7 +222,7 @@ class UserService
 
     /**
      *
-     * @param integer $status
+     * @param int $status
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
@@ -252,7 +253,7 @@ class UserService
 
     /**
      *
-     * @param integer $identifier
+     * @param int $identifier
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
@@ -306,7 +307,7 @@ class UserService
     }
 
     /**
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     public function findUserIdentifiers()
@@ -317,7 +318,7 @@ class UserService
     /**
      * @param string[] $officialCodes
      *
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     public function findUserIdentifiersByOfficialCodes(array $officialCodes)
@@ -328,8 +329,8 @@ class UserService
     /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
@@ -341,7 +342,7 @@ class UserService
 
     /**
      *
-     * @param integer[] $userIdentifiers
+     * @param int $userIdentifiers
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
@@ -357,7 +358,7 @@ class UserService
 
     /**
      *
-     * @param integer[] $userIdentifiers
+     * @param int $userIdentifiers
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
@@ -368,8 +369,8 @@ class UserService
 
     /**
      * @param string $searchQuery
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
@@ -380,9 +381,9 @@ class UserService
 
     /**
      * @param string $searchQuery
-     * @param integer[] $userIdentifiers
-     * @param integer $offset
-     * @param integer $count
+     * @param int $userIdentifiers
+     * @param int $offset
+     * @param int $count
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
@@ -397,8 +398,8 @@ class UserService
 
     /**
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
@@ -461,6 +462,24 @@ class UserService
     public function setPropertyMapper(PropertyMapper $propertyMapper): void
     {
         $this->propertyMapper = $propertyMapper;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function findSettingsForUser(User $user): array
+    {
+        $userSettings = $this->getUserRepository()->findSettingsForUser($user);
+
+        $mappedUserSettings = [];
+
+        foreach ($userSettings as $userSetting)
+        {
+            $mappedUserSettings[$userSetting[Setting::PROPERTY_CONTEXT]][$userSetting[Setting::PROPERTY_VARIABLE]] =
+                $userSetting[UserSetting::PROPERTY_VALUE];
+        }
+
+        return $mappedUserSettings;
     }
 
     /**
@@ -553,7 +572,7 @@ class UserService
      *
      * @param string $username
      *
-     * @return boolean
+     * @return bool
      */
     public function isUsernameAvailable($username)
     {
@@ -577,7 +596,7 @@ class UserService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      */
     public function updateUser(User $user)
     {

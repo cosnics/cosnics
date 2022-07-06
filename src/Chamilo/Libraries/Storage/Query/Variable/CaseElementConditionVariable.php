@@ -19,11 +19,11 @@ class CaseElementConditionVariable extends ConditionVariable
      * The condition used after the WHEN statement.
      * If empty the case element is an ELSE statement.
      */
-    private Condition $condition;
+    private ?Condition $condition;
 
-    private string $statement;
+    private ConditionVariable $statement;
 
-    public function __construct(string $statement, ?Condition $condition = null)
+    public function __construct(ConditionVariable $statement, ?Condition $condition = null)
     {
         $this->statement = $statement;
         $this->condition = $condition;
@@ -54,17 +54,17 @@ class CaseElementConditionVariable extends ConditionVariable
             $hashParts[] = null;
         }
 
-        $hashParts[] = $this->getStatement();
+        $hashParts[] = $this->getStatement()->hash();
 
         return $hashParts;
     }
 
-    public function getStatement(): string
+    public function getStatement(): ConditionVariable
     {
         return $this->statement;
     }
 
-    public function setStatement(string $statement): CaseElementConditionVariable
+    public function setStatement(ConditionVariable $statement): CaseElementConditionVariable
     {
         $this->statement = $statement;
 

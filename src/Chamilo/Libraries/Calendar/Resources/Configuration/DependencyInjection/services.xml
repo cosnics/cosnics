@@ -8,12 +8,32 @@
                   public="true"/>
 
         <service id="Chamilo\Libraries\Calendar\Architecture\Factory\CalendarRendererFactory"/>
-        <service id="Chamilo\Libraries\Calendar\Service\LegendRenderer"/>
+
+        <service id="Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer"/>
         <service id="Chamilo\Libraries\Calendar\Service\Event\EventListRenderer"/>
-        <service id="Chamilo\Libraries\Calendar\Service\Event\EventMonthRenderer"/>
         <service id="Chamilo\Libraries\Calendar\Service\Event\EventMiniMonthRenderer"/>
+        <service id="Chamilo\Libraries\Calendar\Service\Event\EventMonthRenderer"/>
+
+        <service id="Chamilo\Libraries\Calendar\Service\LegendRenderer"/>
+
+        <service id="Chamilo\Libraries\Calendar\Service\View\DayCalendarRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
         <service id="Chamilo\Libraries\Calendar\Service\View\ListCalendarRenderer"/>
-        <service id="Chamilo\Libraries\Calendar\Service\View\MonthCalendarRenderer"/>
+        <service id="Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
+        <service id="Chamilo\Libraries\Calendar\Service\View\MiniListCalendarRenderer"/>
         <service id="Chamilo\Libraries\Calendar\Service\View\MiniMonthCalendarRenderer"/>
+        <service id="Chamilo\Libraries\Calendar\Service\View\MonthCalendarRenderer"/>
+        <service id="Chamilo\Libraries\Calendar\Service\View\WeekCalendarRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
     </services>
 </container>

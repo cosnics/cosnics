@@ -16,8 +16,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
- * @package Chamilo\Libraries\Calendar\Renderer\Type
+ * @package Chamilo\Libraries\Calendar\Service\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

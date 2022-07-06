@@ -5,7 +5,7 @@ use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Calendar\Service\View\CalendarRenderer;
 
 /**
- * @package Chamilo\Libraries\Calendar\Factory
+ * @package Chamilo\Libraries\Calendar\Architecture\Factory
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */

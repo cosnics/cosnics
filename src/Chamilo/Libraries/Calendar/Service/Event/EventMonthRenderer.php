@@ -4,8 +4,8 @@ namespace Chamilo\Libraries\Calendar\Service\Event;
 use Chamilo\Libraries\Calendar\Event\Event;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\Event
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class EventMonthRenderer extends TableEventRenderer

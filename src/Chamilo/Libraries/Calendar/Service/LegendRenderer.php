@@ -3,30 +3,43 @@ namespace Chamilo\Libraries\Calendar\Service;
 
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilitySupport;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Translation\Translation;
 use Exception;
+use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Calendar\Renderer
+ * @package Chamilo\Libraries\Calendar\Service
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LegendRenderer
 {
 
-    private NotificationMessageManager $notificationMessageManager;
+    protected NotificationMessageManager $notificationMessageManager;
+
+    protected PathBuilder $pathBuilder;
+
+    protected ResourceManager $resourceManager;
 
     /**
      * @var string[]
      */
-    private array $sources = [];
+    protected array $sources = [];
 
-    public function __construct(NotificationMessageManager $notificationMessageManager)
+    protected Translator $translator;
+
+    public function __construct(
+        NotificationMessageManager $notificationMessageManager, Translator $translator,
+        ResourceManager $resourceManager, PathBuilder $pathBuilder
+    )
     {
         $this->notificationMessageManager = $notificationMessageManager;
+        $this->translator = $translator;
+        $this->resourceManager = $resourceManager;
+        $this->pathBuilder = $pathBuilder;
     }
 
     /**
@@ -35,6 +48,8 @@ class LegendRenderer
      */
     public function render(CalendarRendererProviderInterface $dataProvider): string
     {
+        $translator = $this->getTranslator();
+
         $result = [];
 
         if ($this->hasSources())
@@ -43,7 +58,8 @@ class LegendRenderer
 
             $result[] = '<div class="panel panel-default table-calendar-legend">';
             $result[] = '<div class="panel-heading">';
-            $result[] = '<h4 class="panel-title">' . Translation::get('Legend') . '</h4>';
+            $result[] =
+                '<h4 class="panel-title">' . $translator->trans('Legend', [], 'Chamilo\Libraries\Calendar') . '</h4>';
             $result[] = '</div>';
             $result[] = '<ul class="list-group">';
 
@@ -91,15 +107,16 @@ class LegendRenderer
                     'var calendarVisibilityContext = ' . json_encode($dataProvider->getVisibilityContext()) . ';';
                 $result[] = '</script>';
 
-                $result[] = ResourceManager::getInstance()->getResourceHtml(
-                    Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar', true) . 'Highlight.js'
+                $result[] = $this->getResourceManager()->getResourceHtml(
+                    $this->getPathBuilder()->getJavascriptPath('Chamilo\Libraries\Calendar', true) . 'Highlight.js'
                 );
 
                 if ($visibleSources == 0)
                 {
                     $this->getNotificationMessageManager()->addMessage(
                         new NotificationMessage(
-                            Translation::get('AllEventSourcesHidden'), NotificationMessage::TYPE_WARNING
+                            $translator->trans('AllEventSourcesHidden', [], 'Chamilo\Libraries\Calendar'),
+                            NotificationMessage::TYPE_WARNING
                         )
                     );
                 }
@@ -127,17 +144,14 @@ class LegendRenderer
         return $this->notificationMessageManager;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager $notificationMessageManager
-     *
-     * @return LegendRenderer
-     */
-    public function setNotificationMessageManager(NotificationMessageManager $notificationMessageManager
-    ): LegendRenderer
+    public function getPathBuilder(): PathBuilder
     {
-        $this->notificationMessageManager = $notificationMessageManager;
+        return $this->pathBuilder;
+    }
 
-        return $this;
+    public function getResourceManager(): ResourceManager
+    {
+        return $this->resourceManager;
     }
 
     /**
@@ -164,7 +178,7 @@ class LegendRenderer
 
         if ($sourceKey === false)
         {
-            throw new Exception(Translation::get('InvalidLegendSource'));
+            throw new Exception($this->getTranslator()->trans('InvalidLegendSource', [], 'Chamilo\Libraries\Calendar'));
         }
         else
         {
@@ -188,12 +202,9 @@ class LegendRenderer
         $this->sources = $sources;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasMultipleSources(): bool
+    public function getTranslator(): Translator
     {
-        return count($this->getSources()) > 1;
+        return $this->translator;
     }
 
     /**

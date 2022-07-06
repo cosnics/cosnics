@@ -8,8 +8,8 @@ use Chamilo\Libraries\Calendar\Service\Event\EventListRenderer;
 use Chamilo\Libraries\Format\Display;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Architecture\Traits
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 trait AgendaCalendarTrait
@@ -146,7 +146,7 @@ trait AgendaCalendarTrait
         return implode('', $html);
     }
 
-    public function renderTitle(int $displayTime): string
+    public function renderTitle(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
         return date('d M Y', $displayTime) . ' - ' . date('d M Y', $this->getEndTime($displayTime));
     }

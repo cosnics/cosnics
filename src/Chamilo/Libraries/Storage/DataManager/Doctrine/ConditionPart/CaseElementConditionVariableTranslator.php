@@ -38,7 +38,9 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
             $strings[] = ' ELSE ';
         }
 
-        $strings[] = $caseElementConditionVariable->getStatement();
+        $strings[] = $conditionPartTranslatorService->translate(
+            $dataClassDatabase, $caseElementConditionVariable->getStatement(), $enableAliasing
+        );
 
         return implode('', $strings);
     }

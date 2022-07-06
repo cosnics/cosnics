@@ -1,17 +1,19 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Architecture\Traits\HourBasedCalendarTrait;
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Calendar\Service\View\Table\DayCalendarTable;
 use Symfony\Component\Translation\Translator;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\View
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MiniDayCalendarRenderer extends MiniCalendarRenderer
@@ -20,18 +22,20 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
 
     protected EventDayRenderer $eventDayRenderer;
 
+    protected User $user;
+
+    protected UserSettingService $userSettingService;
+
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, DatetimeUtilities $datetimeUtilities,
-        EventDayRenderer $eventDayRenderer
+        UserSettingService $userSettingService, User $user, EventDayRenderer $eventDayRenderer
     )
     {
-        parent::__construct(
-            $legendRenderer, $urlGenerator, $translator
-        );
+        parent::__construct($legendRenderer, $urlGenerator, $translator);
 
         $this->eventDayRenderer = $eventDayRenderer;
-        $this->datetimeUtilities = $datetimeUtilities;
+        $this->userSettingService = $userSettingService;
+        $this->user = $user;
     }
 
     /**
@@ -52,13 +56,26 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
         return $this->eventDayRenderer;
     }
 
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function getUserSettingService(): UserSettingService
+    {
+        return $this->userSettingService;
+    }
+
     /**
      * @throws \ReflectionException
      * @throws \Exception
      */
     public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        $calendar = $this->getCalendar($dataProvider, $displayTime);
+        $calendar = new DayCalendarTable(
+            $displayTime, $this->getHourStep(), $this->getStartHour(), $this->getEndHour(), $this->getHideOtherHours(),
+            ['table-calendar-mini']
+        );
 
         $fromDate = $calendar->getStartTime();
         $toDate = $calendar->getEndTime();

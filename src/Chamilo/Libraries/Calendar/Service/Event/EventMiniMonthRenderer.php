@@ -4,15 +4,15 @@ namespace Chamilo\Libraries\Calendar\Service\Event;
 use Chamilo\Libraries\Calendar\Event\Event;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\Event
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class EventMiniMonthRenderer extends EventMonthRenderer
 {
     public function render(
-        Event $event, int $cellStartDate, int $cellEndDate, bool $isFadedEvent = false,
-        bool $isEventSourceVisible = true
+        Event $event, int $cellStartDate, int $cellEndDate, bool $isEventSourceVisible = true,
+        bool $isFadedEvent = false
     ): string
     {
 

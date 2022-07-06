@@ -5,8 +5,8 @@ use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\Event
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class TableEventRenderer extends EventRenderer

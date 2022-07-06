@@ -9,8 +9,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\Event
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class EventListRenderer extends EventRenderer

@@ -1,12 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Architecture\Traits\HourBasedCalendarTrait;
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
 use Chamilo\Libraries\Calendar\Service\View\Table\DayCalendarTable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Symfony\Component\Translation\Translator;
@@ -16,16 +17,22 @@ use Symfony\Component\Translation\Translator;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DayCalendarRenderer extends TableCalendarRenderer
+class DayCalendarRenderer extends SidebarTableCalendarRenderer
 {
     use HourBasedCalendarTrait;
 
+    protected DatetimeUtilities $datetimeUtilities;
+
     protected EventDayRenderer $eventDayRenderer;
+
+    protected User $user;
+
+    protected UserSettingService $userSettingService;
 
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
         MiniMonthCalendarRenderer $miniMonthCalendarRenderer, DatetimeUtilities $datetimeUtilities,
-        EventDayRenderer $eventDayRenderer
+        UserSettingService $userSettingService, User $user, EventDayRenderer $eventDayRenderer
     )
     {
         parent::__construct(
@@ -34,6 +41,13 @@ class DayCalendarRenderer extends TableCalendarRenderer
 
         $this->eventDayRenderer = $eventDayRenderer;
         $this->datetimeUtilities = $datetimeUtilities;
+        $this->userSettingService = $userSettingService;
+        $this->user = $user;
+    }
+
+    public function getDatetimeUtilities(): DatetimeUtilities
+    {
+        return $this->datetimeUtilities;
     }
 
     public function getEventDayRenderer(): EventDayRenderer
@@ -51,12 +65,14 @@ class DayCalendarRenderer extends TableCalendarRenderer
         return strtotime('-1 Day', $displayTime);
     }
 
-    public function initializeCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): CalendarTable
+    public function getUser(): User
     {
-        return new DayCalendarTable(
-            $displayTime, $this->getHourStep(), $this->getStartHour(), $this->getEndHour(), $this->getHideOtherHours(),
-            ['table-calendar-day']
-        );
+        return $this->user;
+    }
+
+    public function getUserSettingService(): UserSettingService
+    {
+        return $this->userSettingService;
     }
 
     /**
@@ -65,7 +81,10 @@ class DayCalendarRenderer extends TableCalendarRenderer
      */
     public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        $calendar = $this->getCalendar($dataProvider, $displayTime);
+        $calendar = new DayCalendarTable(
+            $displayTime, $this->getHourStep(), $this->getStartHour(), $this->getEndHour(), $this->getHideOtherHours(),
+            ['table-calendar-day']
+        );
 
         $fromDate = $calendar->getStartTime();
         $toDate = $calendar->getEndTime();

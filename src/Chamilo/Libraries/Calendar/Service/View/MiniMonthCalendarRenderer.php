@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Calendar\Service\View;
 
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Architecture\Traits\TableRendererTrait;
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Service\Event\Configuration;
 use Chamilo\Libraries\Calendar\Service\Event\EventMiniMonthRenderer;
@@ -17,14 +16,12 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\View
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MiniMonthCalendarRenderer extends MiniCalendarRenderer
 {
-    use TableRendererTrait;
-
     protected EventMiniMonthRenderer $eventMiniMonthRenderer;
 
     public function __construct(
@@ -63,14 +60,6 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
         return $this->eventMiniMonthRenderer;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
-    public function initializeCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): CalendarTable
-    {
-        return new MiniMonthCalendarTable($displayTime, $this->determineNavigationUrl($dataProvider));
-    }
-
     public function isFadedEvent(int $displayTime, Event $event): bool
     {
         $startDate = $event->getStartDate();
@@ -86,7 +75,7 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
      */
     public function renderCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        $calendar = $this->getCalendar($dataProvider, $displayTime);
+        $calendar = new MiniMonthCalendarTable($displayTime, $this->determineNavigationUrl($dataProvider));
 
         $startTime = $calendar->getStartTime();
         $endTime = $calendar->getEndTime();
@@ -108,9 +97,6 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
                     $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
                     $this->getLegendRenderer()->addSource($event->getSource());
-
-                    $configuration = new Configuration();
-                    $configuration->setStartDate($tableDate);
 
                     $calendar->addEvent(
                         $tableDate, $this->getEventMiniMonthRenderer()->render(

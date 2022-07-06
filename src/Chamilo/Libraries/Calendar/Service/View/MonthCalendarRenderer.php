@@ -7,7 +7,6 @@ use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Service\Event\Configuration;
 use Chamilo\Libraries\Calendar\Service\Event\EventMonthRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
 use Chamilo\Libraries\Calendar\Service\View\Table\MonthCalendarTable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
@@ -17,7 +16,7 @@ use Symfony\Component\Translation\Translator;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class MonthCalendarRenderer extends TableCalendarRenderer
+class MonthCalendarRenderer extends SidebarTableCalendarRenderer
 {
     protected EventMonthRenderer $eventMonthRenderer;
 
@@ -29,6 +28,20 @@ class MonthCalendarRenderer extends TableCalendarRenderer
         parent::__construct($legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer);
 
         $this->eventMonthRenderer = $eventMonthRenderer;
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function getCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): MonthCalendarTable
+    {
+        $displayParameters = $dataProvider->getDisplayParameters();
+        $displayParameters[self::PARAM_TIME] = MonthCalendarTable::TIME_PLACEHOLDER;
+        $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
+
+        return new MonthCalendarTable(
+            $displayTime, $this->getUrlGenerator()->fromParameters($displayParameters), ['table-calendar-month']
+        );
     }
 
     public function getEventMonthRenderer(): EventMonthRenderer
@@ -44,20 +57,6 @@ class MonthCalendarRenderer extends TableCalendarRenderer
     public function getPreviousDisplayTime(int $displayTime): int
     {
         return strtotime('first day of previous month', $displayTime);
-    }
-
-    /**
-     * @throws \ReflectionException
-     */
-    public function initializeCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): CalendarTable
-    {
-        $displayParameters = $dataProvider->getDisplayParameters();
-        $displayParameters[self::PARAM_TIME] = MonthCalendarTable::TIME_PLACEHOLDER;
-        $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
-
-        return new MonthCalendarTable(
-            $displayTime, $this->getUrlGenerator()->fromParameters($displayParameters), ['table-calendar-month']
-        );
     }
 
     public function isFadedEvent(int $displayTime, Event $event): bool
@@ -97,9 +96,6 @@ class MonthCalendarRenderer extends TableCalendarRenderer
                     $tableDate < $endDate && $endDate <= $nextTableDate ||
                     $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    $configuration = new Configuration();
-                    $configuration->setStartDate($tableDate);
-
                     $calendar->addEvent(
                         $tableDate, $this->getEventMonthRenderer()->render(
                         $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event),

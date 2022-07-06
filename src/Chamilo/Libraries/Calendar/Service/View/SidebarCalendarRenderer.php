@@ -10,8 +10,8 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Symfony\Component\Translation\Translator;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\View
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
@@ -46,7 +46,7 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
 
         $html[] = '<div class="table-calendar-current-time pull-left">';
         $html[] = '<h4>';
-        $html[] = $this->renderTitle($displayTime);
+        $html[] = $this->renderTitle($dataProvider, $displayTime);
         $html[] = '</h4>';
         $html[] = '</div>';
         $html[] = '</div>';

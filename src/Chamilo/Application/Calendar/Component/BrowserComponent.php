@@ -47,7 +47,8 @@ class BrowserComponent extends Manager implements DelegateComponent
         $this->checkLoggedInAs();
 
         $this->getPageConfiguration()->addCssFile(
-            $this->getPathBuilder()->getCssPath(self::package(), true) . 'print.'. $this->getThemePathBuilder()->getTheme() .'.min.css', 'print'
+            $this->getPathBuilder()->getCssPath(self::package(), true) . 'print.' .
+            $this->getThemePathBuilder()->getTheme() . '.min.css', 'print'
         );
 
         $this->set_parameter(HtmlCalendarRenderer::PARAM_TYPE, $this->getCurrentRendererType());
@@ -198,31 +199,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $dataProvider = $this->getCalendarDataProvider();
 
-        /*
-       $calendarLegend = new LegendRenderer($this->getNotificationMessageManager(), $dataProvider);
-
-
-       $rendererFactory = new ViewRendererFactory(
-           $this->getCurrentRendererType(), $dataProvider, $calendarLegend, $this->getCurrentRendererTime(),
-           $this->getViewActions()
-       );
-       */
-
         $renderer = $this->getCalendarRendererFactory()->getRenderer($this->getCurrentRendererType());
-
-        /*
-        if ($this->getCurrentRendererType() == HtmlCalendarRenderer::TYPE_DAY ||
-            $this->getCurrentRendererType() == HtmlCalendarRenderer::TYPE_WEEK)
-        {
-            $renderer->setStartHour(
-                LocalSetting::getInstance()->get('working_hours_start', 'Chamilo\Libraries\Calendar')
-            );
-            $renderer->setEndHour(LocalSetting::getInstance()->get('working_hours_end', 'Chamilo\Libraries\Calendar'));
-            $renderer->setHideOtherHours(
-                LocalSetting::getInstance()->get('hide_none_working_hours', 'Chamilo\Libraries\Calendar')
-            );
-        }
-        */
 
         return $renderer->render(
             $dataProvider, $this->getCurrentRendererTime(), $this->getViewActions()

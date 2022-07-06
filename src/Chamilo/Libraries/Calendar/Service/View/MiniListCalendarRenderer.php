@@ -9,8 +9,8 @@ use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Symfony\Component\Translation\Translator;
 
 /**
+ * @package Chamilo\Libraries\Calendar\Service\View
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Type\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MiniListCalendarRenderer extends MiniCalendarRenderer
@@ -37,7 +37,7 @@ class MiniListCalendarRenderer extends MiniCalendarRenderer
         $html = [];
 
         $html[] = '<h4>';
-        $html[] = $this->renderTitle($displayTime);
+        $html[] = $this->renderTitle($dataProvider, $displayTime);
         $html[] = '</h4>';
 
         $html[] = $this->renderFullCalendar($dataProvider, $displayTime);

@@ -4,8 +4,7 @@ namespace Chamilo\Libraries\Calendar\Service\View;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 
 /**
- *
- * @package Chamilo\Libraries\Calendar\Renderer
+ * @package Chamilo\Libraries\Calendar\Service\View
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

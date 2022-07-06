@@ -1,9 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Architecture\Traits;
 
-use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
  * @package Chamilo\Libraries\Calendar\Architecture\Traits
@@ -12,78 +11,64 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
  */
 trait HourBasedCalendarTrait
 {
-    protected DatetimeUtilities $datetimeUtilities;
 
-    protected UserService $userService;
+    protected int $endHour;
 
-    private int $endHour;
+    protected bool $hideOtherHours;
 
-    private bool $hideOtherHours;
+    protected int $hourStep;
 
-    private int $hourStep;
-
-    private int $startHour;
-
-    public function getDatetimeUtilities(): DatetimeUtilities
-    {
-        return $this->datetimeUtilities;
-    }
+    protected int $startHour;
 
     public function getEndHour(): int
     {
-        return $this->endHour;
-    }
+        if (!isset($this->endHour))
+        {
+            $this->endHour = $this->getUserSettingService()->getSettingForUser(
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'working_hours_end'
+            );
+        }
 
-    public function setEndHour(int $endHour)
-    {
-        $this->endHour = $endHour;
+        return $this->endHour;
     }
 
     public function getHideOtherHours(): bool
     {
-        return $this->hideOtherHours;
-    }
+        if (!isset($this->hideOtherHours))
+        {
+            $this->hideOtherHours = $this->getUserSettingService()->getSettingForUser(
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'hide_non_working_hours'
+            );
+        }
 
-    public function setHideOtherHours(bool $hideOtherHours)
-    {
-        $this->hideOtherHours = $hideOtherHours;
+        return $this->hideOtherHours;
     }
 
     public function getHourStep(): int
     {
+        if (!isset($this->hourStep))
+        {
+            $this->hourStep = $this->getUserSettingService()->getSettingForUser(
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'hour_step'
+            );
+        }
+
         return $this->hourStep;
-    }
-
-    public function setHourStep(int $hourStep)
-    {
-        $this->hourStep = $hourStep;
-    }
-
-    protected User $user;
-
-    public function getUser(): User
-    {
-        return $this->user;
     }
 
     public function getStartHour(): int
     {
-        if(!isset($this->startHour))
+        if (!isset($this->startHour))
         {
-            // TODO: Continue her
-            $this->getUserService()->getUserSettingForSettingContextVariableAndUser();
+            $this->startHour = $this->getUserSettingService()->getSettingForUser(
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'working_hours_start'
+            );
         }
 
         return $this->startHour;
     }
 
-    public function setStartHour(int $startHour)
-    {
-        $this->startHour = $startHour;
-    }
+    abstract public function getUser(): User;
 
-    public function getUserService(): UserService
-    {
-        return $this->userService;
-    }
+    abstract public function getUserSettingService(): UserSettingService;
 }

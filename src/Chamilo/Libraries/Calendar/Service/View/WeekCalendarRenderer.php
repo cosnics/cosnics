@@ -1,12 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Architecture\Traits\HourBasedCalendarTrait;
-use Chamilo\Libraries\Calendar\Service\Event\EventWeekRenderer;
+use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Calendar\Service\View\Table\CalendarTable;
 use Chamilo\Libraries\Calendar\Service\View\Table\WeekCalendarTable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -17,29 +18,59 @@ use Symfony\Component\Translation\Translator;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class WeekCalendarRenderer extends TableCalendarRenderer
+class WeekCalendarRenderer extends SidebarTableCalendarRenderer
 {
     use HourBasedCalendarTrait;
 
-    protected EventWeekRenderer $eventWeekRenderer;
+    protected DatetimeUtilities $datetimeUtilities;
+
+    protected EventDayRenderer $eventDayRenderer;
+
+    protected User $user;
+
+    protected UserSettingService $userSettingService;
+
+    protected WeekCalendarTable $weekCalendarTable;
 
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
         MiniMonthCalendarRenderer $miniMonthCalendarRenderer, DatetimeUtilities $datetimeUtilities,
-        EventWeekRenderer $eventWeekRenderer
+        UserSettingService $userSettingService, User $user, EventDayRenderer $eventDayRenderer
     )
     {
-        parent::__construct(
-            $legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer
-        );
+        parent::__construct($legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer);
 
-        $this->eventWeekRenderer = $eventWeekRenderer;
+        $this->eventDayRenderer = $eventDayRenderer;
         $this->datetimeUtilities = $datetimeUtilities;
+        $this->userSettingService = $userSettingService;
+        $this->user = $user;
     }
 
-    public function getEventWeekRenderer(): EventWeekRenderer
+    public function getCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): WeekCalendarTable
     {
-        return $this->eventWeekRenderer;
+        if (!isset($this->weekCalendarTable))
+        {
+            $displayParameters = $dataProvider->getDisplayParameters();
+            $displayParameters[self::PARAM_TIME] = WeekCalendarTable::TIME_PLACEHOLDER;
+            $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
+
+            $this->weekCalendarTable = new WeekCalendarTable(
+                $displayTime, $this->getUrlGenerator()->fromParameters($displayParameters), $this->getHourStep(),
+                $this->getStartHour(), $this->getEndHour(), $this->getHideOtherHours(), ['table-calendar-week']
+            );
+        }
+
+        return $this->weekCalendarTable;
+    }
+
+    public function getDatetimeUtilities(): DatetimeUtilities
+    {
+        return $this->datetimeUtilities;
+    }
+
+    public function getEventDayRenderer(): EventDayRenderer
+    {
+        return $this->eventDayRenderer;
     }
 
     public function getNextDisplayTime(int $displayTime): int
@@ -52,16 +83,14 @@ class WeekCalendarRenderer extends TableCalendarRenderer
         return strtotime('-1 Week', $displayTime);
     }
 
-    public function initializeCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): CalendarTable
+    public function getUser(): User
     {
-        $displayParameters = $dataProvider->getDisplayParameters();
-        $displayParameters[self::PARAM_TIME] = WeekCalendarTable::TIME_PLACEHOLDER;
-        $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
+        return $this->user;
+    }
 
-        return new WeekCalendarTable(
-            $displayTime, $this->getUrlGenerator()->fromParameters($displayParameters), $this->getHourStep(),
-            $this->getStartHour(), $this->getEndHour(), $this->getHideOtherHours(), ['table-calendar-week']
-        );
+    public function getUserSettingService(): UserSettingService
+    {
+        return $this->userSettingService;
     }
 
     /**
@@ -95,7 +124,7 @@ class WeekCalendarRenderer extends TableCalendarRenderer
                     $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
                     $calendar->addEvent(
-                        $tableDate, $this->getEventWeekRenderer()->render(
+                        $tableDate, $this->getEventDayRenderer()->render(
                         $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event)
                     )
                     );
@@ -108,9 +137,6 @@ class WeekCalendarRenderer extends TableCalendarRenderer
         return $calendar->render();
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function renderTitle(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
         $weekNumber = date('W', $displayTime);
