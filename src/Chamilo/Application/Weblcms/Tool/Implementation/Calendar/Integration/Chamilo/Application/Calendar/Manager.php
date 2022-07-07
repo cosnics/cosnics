@@ -31,15 +31,9 @@ class Manager extends InternalCalendar
      *
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
-    public function getEvents(
-        CalendarRendererProvider $calendarRendererProvider,
-        $requestedSourceType, $fromDate, $toDate)
+    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate)
     {
-        return $this->calendarEventDataProvider->getEvents(
-            $calendarRendererProvider,
-            $requestedSourceType,
-            $fromDate,
-            $toDate);
+        return $this->calendarEventDataProvider->getEvents($calendarRendererProvider, $fromDate, $toDate);
     }
 
     /**

@@ -44,6 +44,10 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
         $this->translator = $translator;
     }
 
+    abstract public function render(
+        CalendarRendererProviderInterface $dataProvider, int $displayTime, array $viewActions = []
+    ): string;
+
     public function determineNavigationUrl(CalendarRendererProviderInterface $dataProvider): string
     {
         $parameters = $dataProvider->getDisplayParameters();
@@ -57,7 +61,7 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
      */
     public function getEvents(CalendarRendererProviderInterface $dataProvider, int $startTime, int $endTime): array
     {
-        $events = $dataProvider->getAllEventsInPeriod($startTime, $endTime);
+        $events = $dataProvider->getEventsInPeriod($startTime, $endTime);
 
         usort(
             $events, function (Event $eventLeft, Event $eventRight) {

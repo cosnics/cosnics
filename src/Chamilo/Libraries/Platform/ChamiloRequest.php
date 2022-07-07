@@ -22,22 +22,6 @@ class ChamiloRequest extends Request
         return $this->getFromPostOrUrl($key, $default);
     }
 
-    public function getBaseUrl()
-    {
-        $baseUrl = parent::getBaseUrl();
-
-        $indexPath = '/index.php';
-        $length = strlen($indexPath);
-        $containsIndex = $length > 0 ? substr($baseUrl, - $length) === $indexPath : true;
-
-        if ($containsIndex)
-        {
-            return str_replace($indexPath, '', $baseUrl);
-        }
-
-        return $baseUrl;
-    }
-
     public function getContainerMode(): string
     {
         return $this->attributes->get('containerMode', 'container-fluid');

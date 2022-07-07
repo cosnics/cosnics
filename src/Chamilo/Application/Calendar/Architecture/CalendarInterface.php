@@ -18,15 +18,12 @@ interface CalendarInterface
      * Gets the events published in the implementing context
      *
      * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
-     * @param integer $requestedSourceType
      * @param integer $fromDate
      * @param integer $toDate
      *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getEvents(
-        CalendarRendererProvider $calendarRendererProvider,
-        $requestedSourceType, $fromDate, $toDate);
+    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate);
 
     /**
      * Get the individual calendars in the implementing context
@@ -35,11 +32,4 @@ interface CalendarInterface
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      */
     public function getCalendars(User $user = null);
-
-    /**
-     * Get the source type of the implementing context
-     *
-     * @return integer
-     */
-    public function getSourceType();
 }

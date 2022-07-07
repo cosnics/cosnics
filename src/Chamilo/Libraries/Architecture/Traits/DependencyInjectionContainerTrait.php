@@ -6,6 +6,7 @@ use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Rights\Structure\Service\AuthorizationChecker;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\Bridge\BridgeManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -214,6 +215,11 @@ trait DependencyInjectionContainerTrait
     public function getUserService(): UserService
     {
         return $this->getService(UserService::class);
+    }
+
+    public function getUserSettingService(): UserSettingService
+    {
+        return $this->getService(UserSettingService::class);
     }
 
     public function getValidator(): ValidatorDecorator

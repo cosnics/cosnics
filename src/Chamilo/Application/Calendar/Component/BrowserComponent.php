@@ -11,7 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Calendar\Architecture\Factory\CalendarRendererFactory;
+use Chamilo\Libraries\Calendar\Architecture\Factory\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Form\JumpForm;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\File\Redirect;
@@ -20,6 +20,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -93,7 +94,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             );
 
             $this->calendarDataProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(), $this->get_user(), $this->get_user(), $displayParameters,
+                new CalendarRendererProviderRepository(), $this->get_user(), $displayParameters,
                 \Chamilo\Application\Calendar\Ajax\Manager::context()
             );
         }
@@ -101,9 +102,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->calendarDataProvider;
     }
 
-    protected function getCalendarRendererFactory(): CalendarRendererFactory
+    protected function getCalendarRendererFactory(): HtmlCalendarRendererFactory
     {
-        return $this->getService(CalendarRendererFactory::class);
+        return $this->getService(HtmlCalendarRendererFactory::class);
     }
 
     protected function getGeneralActions()
@@ -203,4 +204,6 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->getCalendarDataProvider(), $this->getCurrentRendererTime(), $this->getViewActions()
         );
     }
+
+
 }

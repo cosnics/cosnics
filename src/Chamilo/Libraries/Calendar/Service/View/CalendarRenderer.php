@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Service\View;
 
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
+use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\View
@@ -12,6 +13,7 @@ use Chamilo\Libraries\Architecture\Traits\ClassContext;
 abstract class CalendarRenderer
 {
     use ClassContext;
+
 
     /**
      * @throws \ReflectionException

@@ -42,14 +42,12 @@ abstract class CalendarEventDataProvider extends InternalCalendar
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      *
      * @param CalendarRendererProvider $calendarRendererProvider
-     * @param int $requestedSourceType
      * @param int $fromDate
      * @param int $toDate
      *
      * @return array|\Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $requestedSourceType, $fromDate,
-        $toDate)
+    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate)
     {
         $rightsService = ServiceFactory::getInstance()->getRightsService();
 

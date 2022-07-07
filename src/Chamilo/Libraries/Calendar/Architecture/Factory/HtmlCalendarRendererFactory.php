@@ -2,14 +2,14 @@
 namespace Chamilo\Libraries\Calendar\Architecture\Factory;
 
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\Calendar\Service\View\CalendarRenderer;
+use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 
 /**
  * @package Chamilo\Libraries\Calendar\Architecture\Factory
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CalendarRendererFactory
+class HtmlCalendarRendererFactory
 {
     use DependencyInjectionContainerTrait;
 
@@ -24,7 +24,7 @@ class CalendarRendererFactory
     /**
      * @throws \Exception
      */
-    public function getRenderer(string $rendererType): CalendarRenderer
+    public function getRenderer(string $rendererType): HtmlCalendarRenderer
     {
         $className = 'Chamilo\Libraries\Calendar\Service\View\\' . $rendererType . 'CalendarRenderer';
 

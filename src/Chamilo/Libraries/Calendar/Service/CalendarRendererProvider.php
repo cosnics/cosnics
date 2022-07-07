@@ -28,38 +28,19 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
      */
     private array $events;
 
-    private User $viewingUser;
-
     /**
      * @param string[] $displayParameters ;
      */
-    public function __construct(User $dataUser, User $viewingUser, array $displayParameters)
+    public function __construct(User $dataUser, array $displayParameters)
     {
         $this->dataUser = $dataUser;
-        $this->viewingUser = $viewingUser;
         $this->displayParameters = $displayParameters;
     }
 
     /**
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    abstract public function aggregateEvents(int $sourceType, ?int $startTime = null, ?int $endTime = null): array;
-
-    /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
-     */
-    public function getAllEvents(): array
-    {
-        return $this->getEvents(self::SOURCE_TYPE_BOTH);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
-     */
-    public function getAllEventsInPeriod(int $startTime, int $endTime, bool $calculateRecurrence = true): array
-    {
-        return $this->getEvents(self::SOURCE_TYPE_BOTH, $startTime, $endTime, $calculateRecurrence);
-    }
+    abstract public function aggregateEvents(?int $startTime = null, ?int $endTime = null): array;
 
     public function getDataUser(): User
     {
@@ -91,15 +72,13 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      * @throws \Sabre\VObject\InvalidDataException
      */
-    private function getEvents(
-        int $sourceType, ?int $startTime = null, ?int $endTime = null, bool $calculateRecurrence = false
-    ): array
+    public function getEvents(?int $startTime = null, ?int $endTime = null, bool $calculateRecurrence = false): array
     {
-        $cacheIdentifier = md5(serialize(array($sourceType, $startTime, $endTime, $calculateRecurrence)));
+        $cacheIdentifier = md5(serialize(array($startTime, $endTime, $calculateRecurrence)));
 
         if (!isset($this->events[$cacheIdentifier]))
         {
-            $events = $this->aggregateEvents($sourceType, $startTime, $endTime);
+            $events = $this->aggregateEvents($startTime, $endTime);
 
             if ($startTime && $endTime && $calculateRecurrence)
             {
@@ -119,60 +98,8 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      * @throws \Sabre\VObject\InvalidDataException
      */
-    public function getExternalEvents(): array
+    public function getEventsInPeriod(int $startTime, int $endTime, bool $calculateRecurrence = true): array
     {
-        return $this->getEvents(self::SOURCE_TYPE_EXTERNAL);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
-     * @throws \Sabre\VObject\InvalidDataException
-     */
-    public function getExternalEventsInPeriod(int $startTime, int $endTime, bool $calculateRecurrence = true): array
-    {
-        return $this->getEvents(self::SOURCE_TYPE_EXTERNAL, $startTime, $endTime, $calculateRecurrence);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
-     * @throws \Sabre\VObject\InvalidDataException
-     */
-    public function getInternalEvents(): array
-    {
-        return $this->getEvents(self::SOURCE_TYPE_INTERNAL);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
-     * @throws \Sabre\VObject\InvalidDataException
-     */
-    public function getInternalEventsInPeriod(int $startTime, int $endTime, bool $calculateRecurrence = true): array
-    {
-        return $this->getEvents(self::SOURCE_TYPE_INTERNAL, $startTime, $endTime, $calculateRecurrence);
-    }
-
-    public function getViewingUser(): User
-    {
-        return $this->viewingUser;
-    }
-
-    public function setViewingUser(User $viewingUser)
-    {
-        $this->viewingUser = $viewingUser;
-    }
-
-    public function isExternalSource(int $source): bool
-    {
-        return $this->matchesRequestedSource(self::SOURCE_TYPE_EXTERNAL, $source);
-    }
-
-    public function isInternalSource(int $source): bool
-    {
-        return $this->matchesRequestedSource(self::SOURCE_TYPE_INTERNAL, $source);
-    }
-
-    public function matchesRequestedSource(int $requestedSource, int $implementationSource): bool
-    {
-        return (boolean) ($requestedSource & $implementationSource);
+        return $this->getEvents($startTime, $endTime, $calculateRecurrence);
     }
 }

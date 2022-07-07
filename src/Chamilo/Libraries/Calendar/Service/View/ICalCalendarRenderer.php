@@ -99,7 +99,7 @@ class ICalCalendarRenderer extends CalendarRenderer
      */
     private function addEvents(CalendarRendererProviderInterface $dataProvider)
     {
-        $providedEvents = $dataProvider->getInternalEvents();
+        $providedEvents = $dataProvider->getEvents();
 
         foreach ($providedEvents as $providedEvent)
         {

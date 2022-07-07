@@ -154,7 +154,7 @@ class EventParser
         $parsedEvents = $parser->getEvents();
         foreach ($parsedEvents as $parsedEvent)
         {
-            if ($publisher != $this->getCalendarRendererProvider()->getViewingUser()->getId())
+            if ($publisher != $this->getCalendarRendererProvider()->getDataUser()->getId())
             {
                 $parsedEvent->setTitle($parsedEvent->getTitle() . ' [' . $publishingUser->get_fullname() . ']');
             }

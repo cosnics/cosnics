@@ -139,7 +139,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         if (!isset($this->calendarRendererProvider))
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(), $user, $user, [],
+                new CalendarRendererProviderRepository(), $user, [],
                 \Chamilo\Application\Calendar\Ajax\Manager::context()
             );
         }

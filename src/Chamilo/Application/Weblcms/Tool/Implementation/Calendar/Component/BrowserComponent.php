@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Component;
 use Chamilo\Application\Weblcms\Service\CalendarRendererProvider;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Calendar\Architecture\Factory\CalendarRendererFactory;
+use Chamilo\Libraries\Calendar\Architecture\Factory\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -84,16 +84,16 @@ class BrowserComponent extends Manager
             $displayParameters[HtmlCalendarRenderer::PARAM_TIME] = $this->getCurrentRendererTime();
 
             $this->calendarDataProvider = new CalendarRendererProvider(
-                $this->getDefaultComponent(), $this->get_user(), $this->get_user(), $displayParameters
+                $this->getDefaultComponent(), $this->get_user(), $displayParameters
             );
         }
 
         return $this->calendarDataProvider;
     }
 
-    protected function getCalendarRendererFactory(): CalendarRendererFactory
+    protected function getCalendarRendererFactory(): HtmlCalendarRendererFactory
     {
-        return $this->getService(CalendarRendererFactory::class);
+        return $this->getService(HtmlCalendarRendererFactory::class);
     }
 
     /**

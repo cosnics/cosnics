@@ -37,7 +37,7 @@ class Month extends BlockRenderer implements StaticBlockTitleInterface
         if (!isset($this->calendarRenderer))
         {
             $dataProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(), $this->getUser(), $this->getUser(), array(
+                new CalendarRendererProviderRepository(), $this->getUser(), array(
                 Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(),
                 MiniMonthCalendarRenderer::PARAM_TYPE => MiniMonthCalendarRenderer::TYPE_DAY
             ), Manager::context()

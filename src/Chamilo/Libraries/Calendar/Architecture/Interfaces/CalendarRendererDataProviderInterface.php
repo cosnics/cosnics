@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Architecture\Interfaces;
 
-use Chamilo\Core\User\Storage\DataClass\User;
-
 /**
  * An interface which forces the implementing Application to provide a given set of methods
  *
@@ -11,23 +9,16 @@ use Chamilo\Core\User\Storage\DataClass\User;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-interface CalendarRendererProviderInterface
+interface CalendarRendererDataProviderInterface
 {
 
     /**
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getEvents(?int $startTime = null, ?int $endTime = null, bool $calculateRecurrence = false): array;
+    public function getCalendarEvents(): array;
 
     /**
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getEventsInPeriod(int $startTime, int $endTime, bool $calculateRecurrence = true): array;
-
-    public function getDataUser(): User;
-
-    /**
-     * @return string[]
-     */
-    public function getDisplayParameters(): array;
+    public function getCalendarEventsInPeriod(int $startTime, int $endTime): array;
 }

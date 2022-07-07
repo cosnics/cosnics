@@ -147,7 +147,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         if (!isset($this->calendarRendererProvider))
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                $this->getPublicationService(), $this->get_course(), $this->get_tool_id(), $user, $user, []
+                $this->getPublicationService(), $this->get_course(), $this->get_tool_id(), $user, []
             );
         }
 

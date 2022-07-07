@@ -59,12 +59,11 @@ class PathBuilder
     {
         if (!isset($this->cache[self::BASE][(string) $web]))
         {
-
             if ($web)
             {
                 $request = $this->getRequest();
                 $this->cache[self::BASE][(string) $web] =
-                    $request->getSchemeAndHttpHost() . $request->getBaseUrl() . $request->getPathInfo();
+                    $request->getSchemeAndHttpHost() . $request->getBasePath() . $request->getPathInfo();
             }
             else
             {

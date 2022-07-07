@@ -7,7 +7,7 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Libraries\Calendar\Architecture\Factory\CalendarRendererFactory"/>
+        <service id="Chamilo\Libraries\Calendar\Architecture\Factory\HtmlCalendarRendererFactory"/>
 
         <service id="Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer"/>
         <service id="Chamilo\Libraries\Calendar\Service\Event\EventListRenderer"/>

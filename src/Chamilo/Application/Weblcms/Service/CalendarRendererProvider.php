@@ -37,20 +37,19 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
      *
      * @param \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent $renderer
      * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
-     * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
      * @param string[] $displayParameters ;
      */
-    public function __construct(Application $renderer, User $dataUser, User $viewingUser, $displayParameters)
+    public function __construct(Application $renderer, User $dataUser, $displayParameters)
     {
         $this->renderer = $renderer;
 
-        parent::__construct($dataUser, $viewingUser, $displayParameters);
+        parent::__construct($dataUser, $displayParameters);
     }
 
     /**
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    function aggregateEvents(int $sourceType, ?int $startTime = null, ?int $endTime = null): array
+    public function aggregateEvents(?int $startTime = null, ?int $endTime = null): array
     {
         $publications = $this->getRenderer()->get_publications();
         $events = [];

@@ -32,13 +32,12 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
      * @var string
      */
     private $tool;
-    
+
     public function __construct(
-        PublicationService $publicationService, Course $course, $tool, User $dataUser, User $viewingUser,
-        $displayParameters
+        PublicationService $publicationService, Course $course, $tool, User $dataUser, $displayParameters
     )
     {
-        parent::__construct($dataUser, $viewingUser, $displayParameters);
+        parent::__construct($dataUser, $displayParameters);
 
         $this->publicationService = $publicationService;
         $this->course = $course;
@@ -49,7 +48,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
-    function aggregateEvents(int $sourceType, ?int $startTime = null, ?int $endTime = null): array
+    public function aggregateEvents(?int $startTime = null, ?int $endTime = null): array
     {
         $publications = $this->getPublicationService()->getPublicationsForUser(
             $this->getDataUser(), $this->getCourse(), $this->getTool()

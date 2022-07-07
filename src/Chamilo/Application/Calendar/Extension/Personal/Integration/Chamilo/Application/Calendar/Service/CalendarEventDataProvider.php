@@ -47,10 +47,7 @@ class CalendarEventDataProvider extends MixedCalendar
      *
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
-    public function getEvents(
-        CalendarRendererProvider $calendarRendererProvider,
-        $requestedSourceType, $fromDate, $toDate
-    )
+    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate)
     {
         $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 5);
         $availabilityService = $this->getAvailabilityService();
