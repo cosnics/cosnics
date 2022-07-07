@@ -38,6 +38,7 @@
         </service>
 
         <service id="Chamilo\Libraries\Calendar\Service\View\DayCalendarRenderer"/>
+        <service id="Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer"/>
         <service id="Chamilo\Libraries\Calendar\Service\View\ListCalendarRenderer"/>
         <service id="Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer"/>
         <service id="Chamilo\Libraries\Calendar\Service\View\MiniListCalendarRenderer"/>

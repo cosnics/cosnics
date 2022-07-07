@@ -49,7 +49,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
-    public function aggregateEvents(int $sourceType, int $startTime, int $endTime): array
+    function aggregateEvents(int $sourceType, ?int $startTime = null, ?int $endTime = null): array
     {
         $publications = $this->getPublicationService()->getPublicationsForUser(
             $this->getDataUser(), $this->getCourse(), $this->getTool()

@@ -43,7 +43,7 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
     /**
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    abstract public function aggregateEvents(int $sourceType, int $startTime, int $endTime): array;
+    abstract public function aggregateEvents(int $sourceType, ?int $startTime = null, ?int $endTime = null): array;
 
     /**
      * @return \Chamilo\Libraries\Calendar\Event\Event[]

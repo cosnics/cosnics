@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ICalComponent extends Manager implements NoAuthenticationSupport
 {
-    const PARAM_DOWNLOAD = 'download';
+    public const PARAM_DOWNLOAD = 'download';
 
     /**
      *
@@ -129,11 +129,11 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     }
 
     /**
-     * @return SecurityTokenAuthentication
+     * @return AuthenticationValidator
      */
-    protected function getSecurityTokenAuthentication()
+    protected function getAuthenticationValidator()
     {
-        return $this->getService(SecurityTokenAuthentication::class);
+        return $this->getService(AuthenticationValidator::class);
     }
 
     /**
@@ -154,10 +154,9 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         return $this->calendarRendererProvider;
     }
 
-    private function renderCalendar(User $user)
+    public function getICalCalendarRenderer(): ICalCalendarRenderer
     {
-        $icalRenderer = new ICalCalendarRenderer($this->getCalendarRendererProvider($user));
-        $icalRenderer->renderAndSend();
+        return $this->getService(ICalCalendarRenderer::class);
     }
 
     /**
@@ -167,6 +166,22 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     protected function getPublicationService()
     {
         return $this->getService(PublicationService::class);
+    }
+
+    /**
+     * @return SecurityTokenAuthentication
+     */
+    protected function getSecurityTokenAuthentication()
+    {
+        return $this->getService(SecurityTokenAuthentication::class);
+    }
+
+    public function get_course()
+    {
+        $course = new Course();
+        $course->setId($this->getRequest()->get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE));
+
+        return $course;
     }
 
     /**
@@ -180,24 +195,13 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         );
     }
 
-    public function get_course()
-    {
-        $course = new Course();
-        $course->setId($this->getRequest()->get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE));
-
-        return $course;
-    }
-
     public function get_tool_id()
     {
         return 'Calendar';
     }
 
-    /**
-     * @return AuthenticationValidator
-     */
-    protected function getAuthenticationValidator()
+    private function renderCalendar(User $user)
     {
-        return $this->getService(AuthenticationValidator::class);
+        $this->getICalCalendarRenderer()->renderAndSend($this->getCalendarRendererProvider($user));
     }
 }

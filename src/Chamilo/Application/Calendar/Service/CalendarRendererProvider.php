@@ -68,7 +68,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      * @throws \ReflectionException
      */
-    public function aggregateEvents(int $sourceType, int $startTime, int $endTime): array
+    function aggregateEvents(int $sourceType, ?int $startTime = null, ?int $endTime = null): array
     {
         $events = [];
 

@@ -49,7 +49,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
             if ($user instanceof User)
             {
                 $this->renderCalendar($user);
-                if(!$alreadyAuthenticated)
+                if (!$alreadyAuthenticated)
                 {
                     $authentication->logout($user);
                 }
@@ -58,16 +58,17 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
             {
                 $response = new Response();
                 $response->setStatusCode(401);
-                return $response;
 
+                return $response;
             }
         }
         else
         {
-            if(!$this->getUser() instanceof User)
+            if (!$this->getUser() instanceof User)
             {
                 $response = new Response();
                 $response->setStatusCode(401);
+
                 return $response;
             }
 
@@ -120,11 +121,11 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     }
 
     /**
-     * @return SecurityTokenAuthentication
+     * @return AuthenticationValidator
      */
-    protected function getSecurityTokenAuthentication()
+    protected function getAuthenticationValidator()
     {
-        return $this->getService(SecurityTokenAuthentication::class);
+        return $this->getService(AuthenticationValidator::class);
     }
 
     /**
@@ -138,10 +139,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         if (!isset($this->calendarRendererProvider))
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(),
-                $user,
-                $user,
-                [],
+                new CalendarRendererProviderRepository(), $user, $user, [],
                 \Chamilo\Application\Calendar\Ajax\Manager::context()
             );
         }
@@ -149,17 +147,21 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         return $this->calendarRendererProvider;
     }
 
-    private function renderCalendar(User $user)
+    public function getICalCalendarRenderer(): ICalCalendarRenderer
     {
-        $icalRenderer = new ICalCalendarRenderer($this->getCalendarRendererProvider($user));
-        $icalRenderer->renderAndSend();
+        return $this->getService(ICalCalendarRenderer::class);
     }
 
     /**
-     * @return AuthenticationValidator
+     * @return SecurityTokenAuthentication
      */
-    protected function getAuthenticationValidator()
+    protected function getSecurityTokenAuthentication()
     {
-        return $this->getService(AuthenticationValidator::class);
+        return $this->getService(SecurityTokenAuthentication::class);
+    }
+
+    private function renderCalendar(User $user)
+    {
+        $this->getICalCalendarRenderer()->renderAndSend($this->getCalendarRendererProvider($user));
     }
 }
