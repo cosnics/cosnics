@@ -37,28 +37,12 @@
                       id="Chamilo\Core\User\User"/>
         </service>
 
-        <service id="Chamilo\Libraries\Calendar\Service\View\DayCalendarRenderer">
-            <argument key="$user"
-                      type="service"
-                      id="Chamilo\Core\User\User"/>
-        </service>
+        <service id="Chamilo\Libraries\Calendar\Service\View\DayCalendarRenderer"/>
         <service id="Chamilo\Libraries\Calendar\Service\View\ListCalendarRenderer"/>
-        <service id="Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer">
-            <argument key="$user"
-                      type="service"
-                      id="Chamilo\Core\User\User"/>
-        </service>
+        <service id="Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer"/>
         <service id="Chamilo\Libraries\Calendar\Service\View\MiniListCalendarRenderer"/>
         <service id="Chamilo\Libraries\Calendar\Service\View\MiniMonthCalendarRenderer"/>
-        <service id="Chamilo\Libraries\Calendar\Service\View\MonthCalendarRenderer">
-            <argument key="$user"
-                      type="service"
-                      id="Chamilo\Core\User\User"/>
-        </service>
-        <service id="Chamilo\Libraries\Calendar\Service\View\WeekCalendarRenderer">
-            <argument key="$user"
-                      type="service"
-                      id="Chamilo\Core\User\User"/>
-        </service>
+        <service id="Chamilo\Libraries\Calendar\Service\View\MonthCalendarRenderer"/>
+        <service id="Chamilo\Libraries\Calendar\Service\View\WeekCalendarRenderer"/>
     </services>
 </container>

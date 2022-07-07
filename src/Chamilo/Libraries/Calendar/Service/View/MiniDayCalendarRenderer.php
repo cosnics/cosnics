@@ -1,11 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Core\User\Service\UserSettingService;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Architecture\Traits\HourBasedCalendarTrait;
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\View\TableBuilder\DayCalendarTableBuilder;
@@ -18,24 +15,19 @@ use Symfony\Component\Translation\Translator;
  */
 class MiniDayCalendarRenderer extends MiniCalendarRenderer
 {
-    use HourBasedCalendarTrait;
+    protected DayCalendarTableBuilder $dayCalendarTableBuilder;
 
     protected EventDayRenderer $eventDayRenderer;
 
-    protected User $user;
-
-    protected UserSettingService $userSettingService;
-
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        UserSettingService $userSettingService, User $user, EventDayRenderer $eventDayRenderer
+        EventDayRenderer $eventDayRenderer, DayCalendarTableBuilder $dayCalendarTableBuilder
     )
     {
         parent::__construct($legendRenderer, $urlGenerator, $translator);
 
         $this->eventDayRenderer = $eventDayRenderer;
-        $this->userSettingService = $userSettingService;
-        $this->user = $user;
+        $this->dayCalendarTableBuilder = $dayCalendarTableBuilder;
     }
 
     /**
@@ -51,19 +43,14 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
         return implode(PHP_EOL, $html);
     }
 
+    public function getDayCalendarTableBuilder(): DayCalendarTableBuilder
+    {
+        return $this->dayCalendarTableBuilder;
+    }
+
     public function getEventDayRenderer(): EventDayRenderer
     {
         return $this->eventDayRenderer;
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    public function getUserSettingService(): UserSettingService
-    {
-        return $this->userSettingService;
     }
 
     /**
@@ -72,23 +59,19 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
      */
     public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        $calendar = new DayCalendarTableBuilder(
-            $displayTime, $this->getHourStep(), $this->getStartHour(), $this->getEndHour(), $this->getHideOtherHours(),
-            ['table-calendar-mini']
-        );
+        $calendarTableBuilder = $this->getDayCalendarTableBuilder();
 
-        $fromDate = $calendar->getStartTime();
-        $toDate = $calendar->getEndTime();
+        $startTime = $calendarTableBuilder->getTableStartTime($displayTime);
+        $endTime = $calendarTableBuilder->getTableEndTime($displayTime);
 
-        $events = $this->getEvents($dataProvider, $fromDate, $toDate);
+        $events = $this->getEvents($dataProvider, $startTime, $endTime);
 
-        $startTime = $calendar->getStartTime();
-        $endTime = $calendar->getEndTime();
         $tableDate = $startTime;
+        $eventsToShow = [];
 
         while ($tableDate <= $endTime)
         {
-            $nextTableDate = strtotime('+' . $this->getHourStep() . ' Hours', $tableDate);
+            $nextTableDate = strtotime('+' . $calendarTableBuilder->getHourStep() . ' Hours', $tableDate);
 
             foreach ($events as $event)
             {
@@ -99,10 +82,9 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
                     $tableDate < $endDate && $endDate < $nextTableDate ||
                     $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    $calendar->addEvent(
-                        $tableDate, $this->getEventDayRenderer()->render(
+                    $eventsToShow[$tableDate][] = $this->getEventDayRenderer()->render(
                         $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event)
-                    )
+
                     );
                 }
             }
@@ -110,6 +92,6 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
             $tableDate = $nextTableDate;
         }
 
-        return $calendar->render();
+        return $calendarTableBuilder->render($displayTime, $eventsToShow, ['table-calendar-mini']);
     }
 }

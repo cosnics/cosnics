@@ -58,7 +58,7 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
 
         $header->setHeaderContents(
             0, 1,
-            $this->getTranslator()->trans(date('l', $displayTime) . 'Short', null, StringUtilities::LIBRARIES) . ' ' .
+            $this->getTranslator()->trans(date('l', $displayTime) . 'Short', [], StringUtilities::LIBRARIES) . ' ' .
             date('d/m', $displayTime)
         );
 

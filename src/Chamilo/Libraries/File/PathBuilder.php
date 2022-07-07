@@ -55,111 +55,66 @@ class PathBuilder
         $this->request = $request;
     }
 
-    /**
-     *
-     * @param bool $web
-     *
-     * @return string
-     */
-    public function getBasePath($web = false)
+    public function getBasePath(bool $web = false): string
     {
-        if ($web)
+        if (!isset($this->cache[self::BASE][(string) $web]))
         {
-            $request = $this->getRequest();
-            $path = $request->getSchemeAndHttpHost() . $request->getBaseUrl() . $request->getPathInfo();
-        }
-        else
-        {
-            $path = realpath(__DIR__ . '/../../../') . DIRECTORY_SEPARATOR;
+
+            if ($web)
+            {
+                $request = $this->getRequest();
+                $this->cache[self::BASE][(string) $web] =
+                    $request->getSchemeAndHttpHost() . $request->getBaseUrl() . $request->getPathInfo();
+            }
+            else
+            {
+                $this->cache[self::BASE][(string) $web] = realpath(__DIR__ . '/../../../') . DIRECTORY_SEPARATOR;
+            }
         }
 
-        return $this->cache[self::BASE][(string) $web] = $path;
+        return $this->cache[self::BASE][(string) $web];
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    public function getClassnameUtilities()
+    public function getClassnameUtilities(): ClassnameUtilities
     {
         return $this->classnameUtilities;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     */
     public function setClassnameUtilities(ClassnameUtilities $classnameUtilities)
     {
         $this->classnameUtilities = $classnameUtilities;
     }
 
-    /**
-     *
-     * @param string $namespace
-     * @param bool $web
-     *
-     * @return string
-     */
-    public function getConfigurationPath($namespace = 'Chamilo\Configuration', $web = false)
+    public function getConfigurationPath(string $namespace = 'Chamilo\Configuration', bool $web = false): string
     {
-        return $this->cache[self::CONFIGURATION][(string) $namespace][(string) $web] =
+        return $this->cache[self::CONFIGURATION][$namespace][(string) $web] =
             $this->getResourcesPath($namespace, $web) . 'Configuration' . $this->getDirectorySeparator($web);
     }
 
-    /**
-     * @param string $namespace
-     * @param false $web
-     *
-     * @return string
-     */
-    public function getCssPath($namespace = 'Chamilo\Configuration', $web = false)
+    public function getCssPath(string $namespace = 'Chamilo\Configuration', bool $web = false): string
     {
-        return $this->cache[self::CSS][(string) $namespace][(string) $web] =
+        return $this->cache[self::CSS][$namespace][(string) $web] =
             $this->getResourcesPath($namespace, $web) . 'Css' . $this->getDirectorySeparator($web);
     }
 
-    /**
-     * @param bool $web
-     *
-     * @return string
-     */
-    public function getDirectorySeparator(bool $web = true)
+    public function getDirectorySeparator(bool $web = true): string
     {
         return ($web ? '/' : DIRECTORY_SEPARATOR);
     }
 
-    /**
-     *
-     * @param string $namespace
-     * @param bool $web
-     *
-     * @return string
-     */
-    public function getI18nPath($namespace = 'Chamilo\Configuration', $web = false)
+    public function getI18nPath(string $namespace = 'Chamilo\Configuration', bool $web = false): string
     {
-        return $this->cache[self::I18N][(string) $namespace][(string) $web] =
+        return $this->cache[self::I18N][$namespace][(string) $web] =
             $this->getResourcesPath($namespace, $web) . 'I18n' . $this->getDirectorySeparator($web);
     }
 
-    /**
-     * @param string $namespace
-     * @param false $web
-     *
-     * @return string
-     */
-    public function getImagesPath($namespace = StringUtilities::LIBRARIES, $web = false)
+    public function getImagesPath(string $namespace = StringUtilities::LIBRARIES, bool $web = false): string
     {
-        return $this->cache[self::IMAGES][(string) $namespace][(string) $web] =
+        return $this->cache[self::IMAGES][$namespace][(string) $web] =
             $this->getResourcesPath($namespace, $web) . 'Images' . $this->getDirectorySeparator($web);
     }
 
-    /**
-     * Return 'this' as singleton
-     *
-     * @return \Chamilo\Libraries\File\PathBuilder
-     */
-    public static function getInstance()
+    public static function getInstance(): ?PathBuilder
     {
         if (is_null(static::$instance))
         {
@@ -169,40 +124,19 @@ class PathBuilder
         return static::$instance;
     }
 
-    /**
-     *
-     * @param string $namespace
-     * @param bool $web
-     *
-     * @return string
-     */
-    public function getJavascriptPath($namespace = 'Chamilo\Configuration', $web = false)
+    public function getJavascriptPath(string $namespace = 'Chamilo\Configuration', bool $web = false): string
     {
-        return $this->cache[self::JAVASCRIPT][(string) $namespace][(string) $web] =
+        return $this->cache[self::JAVASCRIPT][$namespace][(string) $web] =
             $this->getResourcesPath($namespace, $web) . 'Javascript' . $this->getDirectorySeparator($web);
     }
 
-    /**
-     *
-     * @param string $namespace
-     * @param bool $web
-     *
-     * @return string
-     */
-    public function getPluginPath($namespace = 'Chamilo\Configuration', $web = false)
+    public function getPluginPath(string $namespace = 'Chamilo\Configuration', bool $web = false): string
     {
-        return $this->cache[self::PLUGIN][(string) $namespace][(string) $web] =
+        return $this->cache[self::PLUGIN][$namespace][(string) $web] =
             $this->getResourcesPath($namespace, $web) . 'Plugin' . $this->getDirectorySeparator($web);
     }
 
-    /**
-     *
-     * @param string $namespace
-     * @param bool $web
-     *
-     * @return string
-     */
-    public function getPublicStoragePath($namespace = null, $web = false)
+    public function getPublicStoragePath(string $namespace = null, bool $web = false): string
     {
         if ($web)
         {
@@ -226,26 +160,13 @@ class PathBuilder
         return $this->request;
     }
 
-    /**
-     *
-     * @param string $namespace
-     * @param bool $web
-     *
-     * @return string
-     */
-    public function getResourcesPath($namespace = 'Chamilo\Configuration', $web = false)
+    public function getResourcesPath(string $namespace = 'Chamilo\Configuration', bool $web = false): string
     {
-        return $this->cache[self::RESOURCE][(string) $namespace][(string) $web] =
+        return $this->cache[self::RESOURCE][$namespace][(string) $web] =
             $this->namespaceToFullPath($namespace, $web) . 'Resources' . $this->getDirectorySeparator($web);
     }
 
-    /**
-     *
-     * @param string $namespace
-     *
-     * @return string
-     */
-    public function getStoragePath($namespace = null)
+    public function getStoragePath(?string $namespace = null): string
     {
         $basePath = realpath($this->getBasePath() . '../files/');
 
@@ -253,27 +174,16 @@ class PathBuilder
             ($namespace ? $this->getClassnameUtilities()->namespaceToPath($namespace) . DIRECTORY_SEPARATOR : '');
     }
 
-    /**
-     *
-     * @param string $namespace
-     * @param bool $web
-     *
-     * @return string
-     */
-    public function getTemplatesPath($namespace = 'Chamilo\Configuration', $web = false)
+    public function getTemplatesPath(string $namespace = 'Chamilo\Configuration', bool $web = false): string
     {
-        return $this->cache[self::TEMPLATES][(string) $namespace][(string) $web] =
+        return $this->cache[self::TEMPLATES][$namespace][(string) $web] =
             $this->getResourcesPath($namespace, $web) . 'Templates' . $this->getDirectorySeparator($web);
     }
 
     /**
-     *
-     * @param bool $web
-     *
-     * @return string
      * @throws \Exception
      */
-    public function getVendorPath($web = false)
+    public function getVendorPath(bool $web = false): string
     {
         if ($web)
         {
@@ -284,27 +194,13 @@ class PathBuilder
             realpath($this->getBasePath($web) . '../vendor/') . $this->getDirectorySeparator($web);
     }
 
-    /**
-     * Checks if string is HTTP or FTP uri
-     *
-     * @param string $uri
-     *
-     * @return bool
-     */
-    public function isWebUri($uri)
+    public function isWebUri(string $uri): bool
     {
         return ((stripos($uri, 'http://') === 0) || (stripos($uri, 'https://') === 0) ||
             (stripos($uri, 'ftp://') === 0));
     }
 
-    /**
-     *
-     * @param string $namespace
-     * @param bool $web
-     *
-     * @return string
-     */
-    public function namespaceToFullPath($namespace = null, $web = false)
+    public function namespaceToFullPath(?string $namespace = null, bool $web = false): string
     {
         return $this->cache[self::FULL][(string) $namespace][(string) $web] = $this->getBasePath($web) . ($namespace ?
                 $this->getClassnameUtilities()->namespaceToPath($namespace, $web) . $this->getDirectorySeparator($web) :

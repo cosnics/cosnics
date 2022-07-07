@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Core\User\Service\UserSettingService;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Event\Event;
@@ -23,21 +21,15 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
 
     protected MonthCalendarTableBuilder $monthCalendarTableBuilder;
 
-    protected User $user;
-
-    protected UserSettingService $userSettingService;
-
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
         MiniMonthCalendarRenderer $miniMonthCalendarRenderer, EventMonthRenderer $eventMonthRenderer,
-        UserSettingService $userSettingService, User $user, MonthCalendarTableBuilder $monthCalendarTableBuilder
+        MonthCalendarTableBuilder $monthCalendarTableBuilder
     )
     {
         parent::__construct($legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer);
 
         $this->eventMonthRenderer = $eventMonthRenderer;
-        $this->userSettingService = $userSettingService;
-        $this->user = $user;
         $this->monthCalendarTableBuilder = $monthCalendarTableBuilder;
     }
 
@@ -68,16 +60,6 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
     public function getPreviousDisplayTime(int $displayTime): int
     {
         return strtotime('first day of previous month', $displayTime);
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    public function getUserSettingService(): UserSettingService
-    {
-        return $this->userSettingService;
     }
 
     public function isFadedEvent(int $displayTime, Event $event): bool

@@ -1,14 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Core\User\Service\UserSettingService;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\View\TableBuilder\DayCalendarTableBuilder;
-use Chamilo\Libraries\Calendar\Service\View\TableBuilder\WeekCalendarTableBuilder;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -25,15 +22,10 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
 
     protected EventDayRenderer $eventDayRenderer;
 
-    protected User $user;
-
-    protected UserSettingService $userSettingService;
-
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
         MiniMonthCalendarRenderer $miniMonthCalendarRenderer, DatetimeUtilities $datetimeUtilities,
-        UserSettingService $userSettingService, User $user, EventDayRenderer $eventDayRenderer,
-        DayCalendarTableBuilder $dayCalendarTableBuilder
+        EventDayRenderer $eventDayRenderer, DayCalendarTableBuilder $dayCalendarTableBuilder
     )
     {
         parent::__construct(
@@ -42,8 +34,6 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
 
         $this->eventDayRenderer = $eventDayRenderer;
         $this->datetimeUtilities = $datetimeUtilities;
-        $this->userSettingService = $userSettingService;
-        $this->user = $user;
         $this->dayCalendarTableBuilder = $dayCalendarTableBuilder;
     }
 
@@ -55,15 +45,6 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
     public function getDayCalendarTableBuilder(): DayCalendarTableBuilder
     {
         return $this->dayCalendarTableBuilder;
-    }
-
-    public function getDayUrlTemplate(CalendarRendererProviderInterface $dataProvider): string
-    {
-        $displayParameters = $dataProvider->getDisplayParameters();
-        $displayParameters[self::PARAM_TIME] = WeekCalendarTableBuilder::TIME_PLACEHOLDER;
-        $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
-
-        return $this->getUrlGenerator()->fromParameters($displayParameters);
     }
 
     public function getEventDayRenderer(): EventDayRenderer
@@ -81,36 +62,19 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
         return strtotime('-1 Day', $displayTime);
     }
 
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    public function getUserSettingService(): UserSettingService
-    {
-        return $this->userSettingService;
-    }
-
     /**
      * @throws \ReflectionException
      * @throws \Exception
      */
     public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        //        $calendarTableBuilder = new DayCalendarTableBuilder(
-        //            $displayTime, $this->getHourStep(), $this->getStartHour(), $this->getEndHour(), $this->getHideOtherHours(),
-        //            ['table-calendar-day']
-        //        );
-
         $calendarTableBuilder = $this->getDayCalendarTableBuilder();
-
-        $fromDate = $calendarTableBuilder->getTableStartTime($displayTime);
-        $toDate = $calendarTableBuilder->getTableEndTime($displayTime);
-
-        $events = $this->getEvents($dataProvider, $fromDate, $toDate);
 
         $startTime = $calendarTableBuilder->getTableStartTime($displayTime);
         $endTime = $calendarTableBuilder->getTableEndTime($displayTime);
+
+        $events = $this->getEvents($dataProvider, $startTime, $endTime);
+
         $tableDate = $startTime;
         $eventsToShow = [];
 

@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Core\User\Service\UserSettingService;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
@@ -23,25 +21,18 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
 
     protected EventDayRenderer $eventDayRenderer;
 
-    protected User $user;
-
-    protected UserSettingService $userSettingService;
-
     protected WeekCalendarTableBuilder $weekCalendarTableBuilder;
 
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
         MiniMonthCalendarRenderer $miniMonthCalendarRenderer, DatetimeUtilities $datetimeUtilities,
-        UserSettingService $userSettingService, User $user, EventDayRenderer $eventDayRenderer,
-        WeekCalendarTableBuilder $weekCalendarTableBuilder
+        EventDayRenderer $eventDayRenderer, WeekCalendarTableBuilder $weekCalendarTableBuilder
     )
     {
         parent::__construct($legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer);
 
         $this->eventDayRenderer = $eventDayRenderer;
         $this->datetimeUtilities = $datetimeUtilities;
-        $this->userSettingService = $userSettingService;
-        $this->user = $user;
         $this->weekCalendarTableBuilder = $weekCalendarTableBuilder;
     }
 
@@ -74,16 +65,6 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
         return strtotime('-1 Week', $displayTime);
     }
 
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    public function getUserSettingService(): UserSettingService
-    {
-        return $this->userSettingService;
-    }
-
     public function getWeekCalendarTableBuilder(): WeekCalendarTableBuilder
     {
         return $this->weekCalendarTableBuilder;
@@ -96,13 +77,11 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
     public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
         $calendarTableBuilder = $this->getWeekCalendarTableBuilder();
-        $fromDate = strtotime('Last Monday', strtotime('+1 Day', strtotime(date('Y-m-d', $displayTime))));
-        $toDate = strtotime('-1 Second', strtotime('Next Week', $fromDate));
-
-        $events = $this->getEvents($dataProvider, $fromDate, $toDate);
 
         $startTime = $calendarTableBuilder->getTableStartTime($displayTime);
         $endTime = $calendarTableBuilder->getTableEndTime($displayTime);
+
+        $events = $this->getEvents($dataProvider, $startTime, $endTime);
 
         $tableDate = $startTime;
         $eventsToShow = [];
