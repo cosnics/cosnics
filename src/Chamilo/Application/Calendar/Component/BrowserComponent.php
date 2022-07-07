@@ -197,12 +197,10 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     protected function renderNormalCalendar()
     {
-        $dataProvider = $this->getCalendarDataProvider();
-
         $renderer = $this->getCalendarRendererFactory()->getRenderer($this->getCurrentRendererType());
 
         return $renderer->render(
-            $dataProvider, $this->getCurrentRendererTime(), $this->getViewActions()
+            $this->getCalendarDataProvider(), $this->getCurrentRendererTime(), $this->getViewActions()
         );
     }
 }
