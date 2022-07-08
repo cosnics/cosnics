@@ -140,14 +140,14 @@ test('removeFromGroupScore', () => {
     expect(gradeBook.getGradeColumn(1)!.subItemIds?.length).toEqual(2);
     let result = student1!.results.find(r => r.id === 1);
     expect(result!.value).toEqual(20);
-    gradeBook.removeGradeItem(gradeBook.getGradeItem(3)!);
+    gradeBook.removeSubItem(gradeBook.getGradeItem(3)!);
     expect(gradeBook.getGradeColumn(1)!.subItemIds?.length).toEqual(1);
     result = student1!.results.find(r => r.id === 1);
     expect(result!.value).toEqual(null);
     result = student2!.results.find(r => r.id === 1);
     expect(result!.value).toEqual(30);
     expect(gradeBook.getEndResult(1)).toBeCloseTo(53);
-    gradeBook.removeGradeItem(gradeBook.getGradeItem(1)!);
+    gradeBook.removeSubItem(gradeBook.getGradeItem(1)!);
     expect(gradeBook.getGradeColumn(1)!.subItemIds?.length).toEqual(0);
     result = student2!.results.find(r => r.id === 1);
     expect(result!.value).toEqual(null);
