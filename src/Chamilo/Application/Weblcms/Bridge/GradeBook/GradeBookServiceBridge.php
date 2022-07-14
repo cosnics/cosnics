@@ -6,7 +6,8 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Storage\DataClass\Publication as GradeBookPublication;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookServiceBridgeInterface;
-use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Service\PublicationService;
+use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Service\GradeBookPublicationService;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
@@ -19,7 +20,7 @@ use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 class GradeBookServiceBridge implements GradeBookServiceBridgeInterface
 {
     /**
-     * @var PublicationService
+     * @var GradeBookPublicationService
      */
     protected $publicationService;
 
@@ -44,9 +45,9 @@ class GradeBookServiceBridge implements GradeBookServiceBridgeInterface
     protected $canEditGradebook;
 
     /**
-     * @param PublicationService $publicationService
+     * @param GradeBookPublicationService $publicationService
      */
-    public function __construct(PublicationService $publicationService)
+    public function __construct(GradeBookPublicationService $publicationService)
     {
         $this->publicationService = $publicationService;
     }
@@ -112,8 +113,19 @@ class GradeBookServiceBridge implements GradeBookServiceBridgeInterface
         return $this->publicationService->getTargetUserIds($this->contentObjectPublication, $filterParameters);
     }
 
+    /**
+     * @return string
+     */
     public function getContextTitle(): string
     {
         return $this->course instanceof Course ? $this->course->get_title() : '';
+    }
+
+    /**
+     * @return GradeBookItem[]
+     */
+    public function findPublicationGradeBookItems()
+    {
+        return $this->publicationService->getGradeBookItemsForCourse($this->course);
     }
 }

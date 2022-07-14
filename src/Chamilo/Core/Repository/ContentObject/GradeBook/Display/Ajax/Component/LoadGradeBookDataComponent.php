@@ -14,6 +14,9 @@ class LoadGradeBookDataComponent extends Manager implements CsrfComponentInterfa
 {
     function runAjaxComponent()
     {
-        return $this->getGradeBookAjaxService()->getGradeBookObjectData($this->getGradeBook());
+        $gradeBookData = $this->getGradeBookAjaxService()->getGradeBookData($this->getGradeBook());
+        $gradebookItems = $this->getGradeBookServiceBridge()->findPublicationGradeBookItems();
+        $this->getGradeBookAjaxService()->updateGradeBookData($gradeBookData, $gradebookItems);
+        return $this->getGradeBookAjaxService()->getGradeBookObjectData($gradeBookData);
     }
 }

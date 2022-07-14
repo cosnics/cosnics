@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces;
 
+use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
@@ -29,4 +30,9 @@ interface GradeBookServiceBridgeInterface
     public function getTargetUserIds(FilterParameters $filterParameters = null): array;
 
     public function getContextTitle(): string;
+
+    /**
+     * @return GradeBookItem[]
+     */
+    public function findPublicationGradeBookItems();
 }

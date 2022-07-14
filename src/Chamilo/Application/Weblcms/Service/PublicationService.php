@@ -133,9 +133,9 @@ class PublicationService implements PublicationServiceInterface
     }
 
     /**
-     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param Course $course
      *
-     * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication[]
+     * @return ContentObjectPublication[]
      */
     public function getPublicationsByCourse(Course $course)
     {
@@ -143,7 +143,7 @@ class PublicationService implements PublicationServiceInterface
     }
 
     /**
-     * Returns the publications for a giventool
+     * Returns the publications for a given tool
      *
      * @param string $tool
      *
@@ -157,7 +157,7 @@ class PublicationService implements PublicationServiceInterface
     /**
      * Returns the publications for a given course and tool
      *
-     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param Course $course
      * @param string $tool
      *
      * @return ContentObjectPublication[]
@@ -211,7 +211,7 @@ class PublicationService implements PublicationServiceInterface
     }
 
     /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $publication
+     * @param ContentObjectPublication $publication
      *
      * @return int[]
      */
@@ -434,7 +434,7 @@ class PublicationService implements PublicationServiceInterface
     }
 
     /**
-     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param Course $course
      * @param string $tool
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory|null $parentCategory
      *
@@ -507,7 +507,7 @@ class PublicationService implements PublicationServiceInterface
      * Filters a list of categories to find the categories for which the given user has access
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param Course $course
      * @param ContentObjectPublicationCategory[] $contentObjectPublicationCategories
      *
      * @return ContentObjectPublicationCategory[]

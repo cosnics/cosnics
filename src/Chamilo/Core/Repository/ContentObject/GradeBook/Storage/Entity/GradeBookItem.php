@@ -54,17 +54,18 @@ class GradeBookItem
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255)
      */
-    protected $title;
+    protected $type = '';
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="breadcrumb", type="text", nullable=true)
      */
-    protected $breadcrumb;
+    protected $title = '';
+
+    /**
+     * @var array
+     */
+    protected $breadcrumb = array();
 
     /**
      * @var string
@@ -80,20 +81,17 @@ class GradeBookItem
      */
     protected $contextId;
 
-
     /**
      * GradeBookItem constructor.
      *
-     * @param GradeBookData $gradebookData
-     * @param GradeBookColumn $gradeBookColumn
-     *
+     * @param GradeBookData|null $gradebookData
+     * @param GradeBookColumn|null $gradebookColumn
      */
-    public function __construct(GradeBookData $gradebookData, GradeBookColumn $gradebookColumn)
+    public function __construct(GradeBookData $gradebookData = null, GradeBookColumn $gradebookColumn = null)
     {
         $this->setGradeBookData($gradebookData);
         $this->setGradeBookColumn($gradebookColumn);
     }
-
 
     /**
      * @return int
@@ -192,6 +190,26 @@ class GradeBookItem
     /**
      * @return string
      */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return GradeBookItem
+     */
+    public function setType(string $type): GradeBookItem
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getTitle(): ?string
     {
         return $this->title;
@@ -210,19 +228,19 @@ class GradeBookItem
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getBreadcrumb(): ?string
+    public function getBreadcrumb(): ?array
     {
         return $this->breadcrumb;
     }
 
     /**
-     * @param string $breadcrumb
+     * @param array $breadcrumb
      *
      * @return GradeBookItem
      */
-    public function setBreadcrumb(string $breadcrumb): GradeBookItem
+    public function setBreadcrumb(array $breadcrumb): GradeBookItem
     {
         $this->breadcrumb = $breadcrumb;
 
@@ -285,7 +303,7 @@ class GradeBookItem
     /**
      * @return ContextIdentifier
      */
-    public function getContextIdentifier()
+    public function getContextIdentifier(): ContextIdentifier
     {
         return new ContextIdentifier($this->getContextClass(), $this->getContextId());
     }

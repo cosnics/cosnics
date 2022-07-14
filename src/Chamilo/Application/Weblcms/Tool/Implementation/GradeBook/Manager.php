@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\GradeBook;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Service\PublicationService;
+use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Service\GradeBookPublicationService;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
@@ -36,11 +36,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
-     * @return PublicationService
+     * @return GradeBookPublicationService
      */
-    public function getPublicationService(): PublicationService
+    public function getPublicationService(): GradeBookPublicationService
     {
-        return $this->getService(PublicationService::class);
+        return $this->getService(GradeBookPublicationService::class);
     }
 
     /**

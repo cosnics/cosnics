@@ -7,7 +7,9 @@ use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBook
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookItemJSONModel;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookColumn;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
+use Chamilo\Libraries\Architecture\ContextIdentifier;
 use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\Serializer;
@@ -43,13 +45,78 @@ class GradeBookAjaxService
 
     /**
      * @param GradeBook $gradebook
-     * @return array
+     *
+     * @return GradeBookData
      * @throws \Doctrine\ORM\ORMException
      */
-    public function getGradeBookObjectData(GradeBook $gradebook): array
+    public function getGradeBookData(GradeBook $gradebook)
     {
-        $gradebookData = $this->gradeBookService->getGradeBook($gradebook->getActiveGradeBookDataId(), null);
+        return $this->gradeBookService->getGradeBook($gradebook->getActiveGradeBookDataId(), null);
+    }
 
+    /**
+     * @param GradeBookData $gradebookData
+     * @param GradeBookItem[] $publicationItems
+     *
+     */
+    public function updateGradeBookData(GradeBookData $gradebookData, array $publicationItems)
+    {
+        $shouldUpdate = false;
+        $gradebookItems = array();
+        foreach ($gradebookData->getGradeBookItems() as $gradebookItem)
+        {
+            $hash = $this->getContextHash($gradebookItem->getContextIdentifier());
+            $gradebookItems[$hash] = $gradebookItem;
+        }
+
+        foreach ($publicationItems as $publicationItem)
+        {
+            $hash = $this->getContextHash($publicationItem->getContextIdentifier());
+            $gradebookItem = $gradebookItems[$hash];
+            if (!empty($gradebookItem))
+            {
+                $gradebookItem->setType($publicationItem->getType());
+                $gradebookItem->setTitle($publicationItem->getTitle());
+                $gradebookItem->setBreadcrumb($publicationItem->getBreadcrumb());
+                unset($gradebookItems[$hash]);
+            }
+            else
+            {
+                // add new items to the gradebook.
+                $gradebookItem = $publicationItem;
+                $gradebookItem->setGradeBookData($gradebookData);
+                $shouldUpdate = true;
+            }
+        }
+        foreach ($gradebookItems as $key => $gradebookItem)
+        {
+            // $gradebookItems still in the array refer to items that have been removed
+            // todo: update the corresponding data structure of the gradebook.
+        }
+
+        if ($shouldUpdate)
+        {
+            $this->gradeBookService->saveGradeBook($gradebookData);
+        }
+    }
+
+    /**
+     * @param ContextIdentifier $contextIdentifier
+     *
+     * @return string
+     */
+    public function getContextHash(ContextIdentifier $contextIdentifier): string
+    {
+        return md5($contextIdentifier->getContextClass() . ':' . $contextIdentifier->getContextId());
+    }
+
+    /**
+     * @param GradeBookData $gradebookData
+     *
+     * @return array
+     */
+    public function getGradeBookObjectData(GradeBookData $gradebookData): array
+    {
         $resultsData = [
             [ 'id' => 1, 'student' => 'Student 1', 'results' => [['id' => 1, 'value' => null], ['id' => 3, 'value' => 20  ], ['id' => 2, 'value' => 60], ['id' => 4, 'value' => 80], ['id' => 5, 'value' => 50], ['id' => 6, 'value' => 75], ['id' => 7, 'value' => 50]] ],
             [ 'id' => 2, 'student' => 'Student 2', 'results' => [['id' => 1, 'value' => 30  ], ['id' => 3, 'value' => null], ['id' => 2, 'value' => 50], ['id' => 4, 'value' => 40], ['id' => 5, 'value' => 80], ['id' => 6, 'value' => 65], ['id' => 7, 'value' => 50]] ],

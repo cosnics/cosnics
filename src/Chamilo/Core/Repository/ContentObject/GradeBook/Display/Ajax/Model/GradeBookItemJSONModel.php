@@ -28,9 +28,9 @@ class GradeBookItemJSONModel
     protected $title;
 
     /**
-     * @var string
+     * @var int[]
      *
-     * @Type("string")
+     * @Type("array")
      */
     protected $breadcrumb;
 
@@ -39,9 +39,9 @@ class GradeBookItemJSONModel
      *
      * @param int $id
      * @param string $title
-     * @param string $breadcrumb
+     * @param array $breadcrumb
      */
-    public function __construct(int $id, string $title, string $breadcrumb)
+    public function __construct(int $id, string $title, array $breadcrumb)
     {
         $this->id = $id;
         $this->title = $title;
@@ -65,9 +65,9 @@ class GradeBookItemJSONModel
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getBreadcrumb(): ?string
+    public function getBreadcrumb(): ?array
     {
         return $this->breadcrumb;
     }

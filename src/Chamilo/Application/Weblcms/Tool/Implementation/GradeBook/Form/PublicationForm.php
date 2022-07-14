@@ -5,7 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Form;
 use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Service\PublicationService;
+use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Service\GradeBookPublicationService as PublicationService;
 use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Storage\DataClass\Publication;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Symfony\Component\Translation\Translator;
