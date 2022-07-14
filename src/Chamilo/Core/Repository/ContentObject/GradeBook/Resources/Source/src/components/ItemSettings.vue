@@ -13,7 +13,7 @@
                     <h5 v-if="isGrouped">Gegroepeerde scores</h5>
                     <ul class="grouped-scores">
                         <li v-for="item in subItems" :key="item.id"><span>{{ item.title }}</span>
-                            <div class="score-breadcrumb-trail">{{ item.breadcrumb }}</div>
+                            <div class="score-breadcrumb-trail">{{ item|breadcrumb }}</div>
                         </li>
                     </ul>
                     <div style="margin: 0 0 0 2rem">
@@ -94,6 +94,9 @@ import debounce from 'debounce';
         formatNum: function (v: number|null) {
             if (v === null) { return ''; }
             return v.toLocaleString(undefined, {maximumFractionDigits: 2});
+        },
+        breadcrumb: function (gradedItem: GradeItem) {
+            return gradedItem.breadcrumb.join(' » ');
         }
     }
 })

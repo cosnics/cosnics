@@ -3,13 +3,13 @@ import GradeBook, {ResultsData} from '@/domain/GradeBook';
 function createGradeBookObject() {
     return {
         gradeItems: [
-            { id: 1, title: 'Opdracht 1', breadcrumb: 'Leerpaden » Categorie 1 » Leerpad 2 » Hoofdstuk 1' },
-            { id: 2, title: 'Opdracht 2', breadcrumb: 'Opdrachten » Categorie 1' },
-            { id: 3, title: 'Opdracht 3', breadcrumb: 'Opdrachten » Categorie 2' },
-            { id: 4, title: 'Oefening 1', breadcrumb: 'Oefeningen' },
-            { id: 5, title: 'Oefening 2', breadcrumb: 'Leerpaden » Leerpad 5 » Hoofdstuk 4' },
-            { id: 6, title: 'Evaluatie 1', breadcrumb: 'Evaluaties' },
-            { id: 7, title: 'Evaluatie 2', breadcrumb: 'Leerpaden » Leerpad 3 » Hoofdstuk 2' }
+            { id: 1, title: 'Opdracht 1', breadcrumb: ['Leerpaden', 'Categorie 1', 'Leerpad 2', 'Hoofdstuk 1'] },
+            { id: 2, title: 'Opdracht 2', breadcrumb: ['Opdrachten', 'Categorie 1'] },
+            { id: 3, title: 'Opdracht 3', breadcrumb: ['Opdrachten' , 'Categorie 2'] },
+            { id: 4, title: 'Oefening 1', breadcrumb: ['Oefeningen'] },
+            { id: 5, title: 'Oefening 2', breadcrumb: ['Leerpaden', 'Leerpad 5', 'Hoofdstuk 4'] },
+            { id: 6, title: 'Evaluatie 1', breadcrumb: ['Evaluaties'] },
+            { id: 7, title: 'Evaluatie 2', breadcrumb: ['Leerpaden', 'Leerpad 3', 'Hoofdstuk 2'] }
         ],
         gradeColumns: [
             { id: 1, type: 'group', title: 'Groepsscore', subItemIds: [1, 3], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2 },

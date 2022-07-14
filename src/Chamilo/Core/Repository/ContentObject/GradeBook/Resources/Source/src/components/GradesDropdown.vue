@@ -8,7 +8,7 @@
                 <a role="menuitem" href="#" target="_self" class="dropdown-item">
                     <b-form-checkbox :id="`${id}-item-${index}`" :checked="item.checked" :disabled="item.disabled" @change="toggleItem(item, index)" :class="{'is-disabled': item.disabled}">
                         {{ item.title }}
-                        <div class="score-breadcrumb-trail">{{ item.breadcrumb }}</div>
+                        <div class="score-breadcrumb-trail">{{ item|breadcrumb }}</div>
                     </b-form-checkbox>
                 </a>
             </li>
@@ -31,7 +31,12 @@ import ClickOutside from 'vue-click-outside';
 import {GradeItem} from '../domain/GradeBook';
 
 @Component({
-    directives: { ClickOutside }
+    directives: { ClickOutside },
+    filters: {
+        breadcrumb: function (gradedItem: GradeItem) {
+            return gradedItem.breadcrumb.join(' » ');
+        }
+    }
 })
 export default class GradesDropdown extends Vue {
     private isOpen = false;

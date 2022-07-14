@@ -7,7 +7,7 @@ export type ResultType = number|'gafw'|'afw'|null;
 export interface GradeItem {
     readonly id: ItemId;
     readonly title: string;
-    readonly breadcrumb: string;
+    readonly breadcrumb: string[];
     checked?: boolean;
     disabled?: boolean;
 }
