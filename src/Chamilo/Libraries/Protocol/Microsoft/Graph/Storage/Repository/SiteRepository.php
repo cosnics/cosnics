@@ -119,6 +119,8 @@ class SiteRepository
             $parameters['$filter'] = $filter;
         }
 
+        $parameters['top'] = 5000;
+
         if(count($parameters) > 0)
         {
             $url .= '?' . http_build_query($parameters);
