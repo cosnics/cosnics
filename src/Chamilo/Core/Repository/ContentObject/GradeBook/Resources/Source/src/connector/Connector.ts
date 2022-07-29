@@ -1,7 +1,7 @@
 import axios from 'axios';
 import APIConfig from './APIConfig';
 import PQueue from 'p-queue';
-import {Category, ColumnId, GradeColumn, ItemId} from '../domain/GradeBook';
+import {Category, ColumnId, GradeColumn, GradeItem, ItemId} from '../domain/GradeBook';
 
 const HTTP_FORBIDDEN = 403;
 const HTTP_NOT_FOUND = 404;
@@ -66,7 +66,11 @@ export default class Connector {
     static async loadGradeBookData(loadAllURL: string, csrfToken: string|undefined) {
         const params = csrfToken ? {'_csrf_token': csrfToken } : {};
         const res = await axios.get(loadAllURL, {params});
-        console.log(res);
+        return res.data;
+    }
+
+    async loadGradeItemScores(gradeItem: GradeItem) {
+        const res = await axios.get(this.apiConfig.loadGradeItemScoresURL, {params: {'gradeItemId': gradeItem.id}});
         return res.data;
     }
 
