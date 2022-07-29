@@ -123,6 +123,12 @@ class BrowserComponent extends Manager
                     self::PARAM_ACTION => self::ACTION_AJAX,
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_REMOVE_COLUMN
                 ]
+            ),
+            'LOAD_GRADEITEM_SCORES_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_GRADEITEM_SCORES
+                ]
             )
         ];
     }

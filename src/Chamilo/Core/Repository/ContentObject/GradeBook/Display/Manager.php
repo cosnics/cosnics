@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -48,21 +49,21 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         }
     }
 
-/*    /**
+    /**
      * @return RightsService
      */
-/*    public function getRightsService()
+    public function getRightsService()
     {
         if (!isset($this->rightsService))
         {
             $this->rightsService = new RightsService();
-            $this->rightsService->setPresenceServiceBridge($this->getPresenceServiceBridge());
+            $this->rightsService->setGradeBookServiceBridge($this->getGradeBookServiceBridge());
         }
 
         return $this->rightsService;
     }
 
-    /**
+/*    /**
      * @return ExportService
      */
 /*    protected function getExportService(): ExportService

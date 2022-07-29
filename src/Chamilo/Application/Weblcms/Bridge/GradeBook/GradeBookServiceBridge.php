@@ -7,6 +7,8 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Storage\DataClass\Publication as GradeBookPublication;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookServiceBridgeInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Service\GradeBookPublicationService;
+use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemService;
+use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemScoreService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
@@ -23,6 +25,16 @@ class GradeBookServiceBridge implements GradeBookServiceBridgeInterface
      * @var GradeBookPublicationService
      */
     protected $publicationService;
+
+    /**
+     * @var GradeBookItemService
+     */
+    protected $gradeBookItemService;
+
+    /**
+     * @var GradeBookItemScoreService
+     */
+    protected $gradeBookItemScoreService;
 
     /**
      * @var ContentObjectPublication
@@ -46,10 +58,14 @@ class GradeBookServiceBridge implements GradeBookServiceBridgeInterface
 
     /**
      * @param GradeBookPublicationService $publicationService
+     * @param GradeBookItemService $gradeBookItemService
+     * @param GradeBookItemScoreService $gradeBookItemScoreService
      */
-    public function __construct(GradeBookPublicationService $publicationService)
+    public function __construct(GradeBookPublicationService $publicationService, GradeBookItemService $gradeBookItemService, GradeBookItemScoreService $gradeBookItemScoreService)
     {
         $this->publicationService = $publicationService;
+        $this->gradeBookItemService = $gradeBookItemService;
+        $this->gradeBookItemScoreService = $gradeBookItemScoreService;
     }
 
     /**
@@ -126,6 +142,16 @@ class GradeBookServiceBridge implements GradeBookServiceBridgeInterface
      */
     public function findPublicationGradeBookItems()
     {
-        return $this->publicationService->getGradeBookItemsForCourse($this->course);
+        return $this->gradeBookItemService->getGradeBookItemsForCourse($this->course);
+    }
+
+    /**
+     * @param GradeBookItem $gradeBookItem
+     *
+     * @return array
+     */
+    public function findScores(GradeBookItem $gradeBookItem): array
+    {
+        return $this->gradeBookItemScoreService->getScores($gradeBookItem, $this->getTargetUserIds());
     }
 }

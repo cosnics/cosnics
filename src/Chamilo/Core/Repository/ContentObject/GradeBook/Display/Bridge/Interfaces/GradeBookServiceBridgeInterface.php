@@ -35,4 +35,11 @@ interface GradeBookServiceBridgeInterface
      * @return GradeBookItem[]
      */
     public function findPublicationGradeBookItems();
+
+    /**
+     * @param GradeBookItem $gradeBookItem
+     *
+     * @return array
+     */
+    public function findScores(GradeBookItem $gradeBookItem);
 }

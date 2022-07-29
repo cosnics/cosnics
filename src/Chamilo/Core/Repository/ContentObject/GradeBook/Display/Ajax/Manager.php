@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder;
 use JMS\Serializer\DeserializationContext;
@@ -37,6 +38,7 @@ abstract class Manager extends AjaxManager
     const ACTION_ADD_COLUMN_SUBITEM = 'AddColumnSubItem';
     const ACTION_REMOVE_COLUMN_SUBITEM = 'RemoveColumnSubItem';
     const ACTION_REMOVE_COLUMN = 'RemoveColumn';
+    const ACTION_LOAD_GRADEITEM_SCORES = 'LoadGradeItemScores';
 
     const PARAM_ACTION = 'gradebook_display_ajax_action';
 
@@ -75,6 +77,10 @@ abstract class Manager extends AjaxManager
         }
 
         $this->ajaxComponent = $applicationConfiguration->getApplication();
+        if (!$this->ajaxComponent->getRightsService()->canUserEditGradeBook())
+        {
+            throw new NotAllowedException();
+        }
 
         parent::__construct($applicationConfiguration);
     }
@@ -325,7 +331,7 @@ abstract class Manager extends AjaxManager
      */
     protected function getGradeItemId()
     {
-        return (int) $this->getRequest()->getFromPost(self::PARAM_GRADEITEM_ID);
+        return (int) $this->getRequest()->getFromPostOrUrl(self::PARAM_GRADEITEM_ID);
     }
 
     /**

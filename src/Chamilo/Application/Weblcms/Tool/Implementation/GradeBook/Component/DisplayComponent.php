@@ -2,11 +2,13 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Component;
 
+use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\CourseGroupEntityService;
 use Chamilo\Application\Weblcms\Bridge\GradeBook\GradeBookServiceBridge;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Manager;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookServiceBridgeInterface;
 //use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -65,8 +67,8 @@ class DisplayComponent extends Manager implements DelegateComponent
     protected function buildBridges(ContentObjectPublication $contentObjectPublication)
     {
         /** @var EvaluationEntityServiceManager $evaluationEntityServiceManager */
-        //$evaluationEntityServiceManager = $this->getService(EvaluationEntityServiceManager::class);
-        //$evaluationEntityServiceManager->addEntityService(1, $this->getService(CourseGroupEntityService::class));
+        $evaluationEntityServiceManager = $this->getService(EvaluationEntityServiceManager::class);
+        $evaluationEntityServiceManager->addEntityService(1, $this->getService(CourseGroupEntityService::class));
 
         // /** @var PublicationUserEntityService $publicationUserEntityService */
         //$publicationUserEntityService = $this->getService(PublicationUserEntityService::class);

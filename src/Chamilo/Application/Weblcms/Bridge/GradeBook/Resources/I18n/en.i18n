@@ -1,1 +1,6 @@
 TypeName = "Weblcms GradeBook Bridge"
+AssignmentToolTypeName = "Assignments"
+ExamAssignmentToolTypeName = "Exam Assignments"
+EvaluationToolTypeName = "Evaluations"
+AssessmentToolTypeName = "Assessments"
+LearningPathToolTypeName = "Learning paths"
