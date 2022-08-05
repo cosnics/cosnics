@@ -87,6 +87,32 @@ class GradeBookItemService
 
     /**
      * @param ContentObjectPublication $publication
+     *
+     * @return GradeBookItem[]
+     * @throws \Exception
+     */
+    public function getGradeBookItemsForLearningPath(ContentObjectPublication $publication): array
+    {
+        $contentObject = $publication->get_content_object();
+        if (!$contentObject instanceof LearningPath)
+        {
+            throw new \Exception('Content object ' . $contentObject->getId() . ' is not a learning path.');
+        }
+        $publicationGradebookItems = array();
+        $treeNodes = $this->learningPathService->getTree($contentObject)->getTreeNodes();
+        foreach ($treeNodes as $treeNode)
+        {
+            $gradebookItem = $this->getLearningPathTreeNodeGradeBookItem($publication, $treeNode);
+            if (!empty($gradebookItem))
+            {
+                $publicationGradebookItems[] = $gradebookItem;
+            }
+        }
+        return $publicationGradebookItems;
+    }
+
+    /**
+     * @param ContentObjectPublication $publication
      * @param array $courseBreadcrumbs
      *
      * @return GradeBookItem

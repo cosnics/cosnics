@@ -7,38 +7,38 @@
         <defaults autowire="true" public="true" />
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemService" />
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemScoreService" />
-        <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssignmentEntity\AssignmentScoreUserEntityService" />
-        <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssignmentEntity\AssignmentScoreCourseGroupEntityService" />
-        <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssignmentEntity\AssignmentScorePlatformGroupEntityService" />
-        <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssignmentEntity\AssignmentScoreServiceManager">
-            <call method="addScoreService">
-                <argument type="string">0</argument>
-                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssignmentEntity\AssignmentScoreUserEntityService" />
-            </call>
-            <call method="addScoreService">
-                <argument type="string">1</argument>
-                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssignmentEntity\AssignmentScoreCourseGroupEntityService" />
-            </call>
-            <call method="addScoreService">
-                <argument type="string">2</argument>
-                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssignmentEntity\AssignmentScorePlatformGroupEntityService" />
-            </call>
-        </service>
-        <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\GradeBookItemAssessmentScoreService" />
-        <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\GradeBookItemAssignmentScoreService" />
-        <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\GradeBookItemEvaluationScoreService" />
-        <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\GradeBookItemScoreServiceManager">
+        <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssessmentScoreService" />
+        <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssignmentScoreService" />
+        <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\EvaluationScoreService" />
+        <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\LearningPathTrackingScoreService" />
+        <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\ScoreServiceManager">
             <call method="addScoreService">
                 <argument type="string">Assessment</argument>
-                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\GradeBookItemAssessmentScoreService" />
+                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssessmentScoreService" />
             </call>
             <call method="addScoreService">
                 <argument type="string">Assignment</argument>
-                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\GradeBookItemAssignmentScoreService" />
+                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssignmentScoreService" />
+            </call>
+            <call method="addScoreService">
+                <argument type="string">ExamAssignment</argument>
+                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssignmentScoreService" />
             </call>
             <call method="addScoreService">
                 <argument type="string">Evaluation</argument>
-                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\GradeBookItemEvaluationScoreService" />
+                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\EvaluationScoreService" />
+            </call>
+            <call method="addLearningPathScoreService">
+                <argument type="string">Assessment</argument>
+                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\LearningPathTrackingScoreService" />
+            </call>
+            <call method="addLearningPathScoreService">
+                <argument type="string">Assignment</argument>
+                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\LearningPathTrackingScoreService" />
+            </call>
+            <call method="addLearningPathScoreService">
+                <argument type="string">Evaluation</argument>
+                <argument type="service" id="Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\EvaluationScoreService" />
             </call>
         </service>
         <service id="Chamilo\Application\Weblcms\Bridge\GradeBook\GradeBookServiceBridge" />

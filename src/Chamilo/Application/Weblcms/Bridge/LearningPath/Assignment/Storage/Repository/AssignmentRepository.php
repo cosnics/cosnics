@@ -365,6 +365,22 @@ class AssignmentRepository extends
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param TreeNodeData $treeNodeData
+     * @param integer $entityType
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function retrieveMaxScoreForTreeNodeDataEntityType(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType
+    )
+    {
+        return $this->retrieveMaxScoreForEntityType(
+            $entityType, $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
+        );
+    }
+
+    /**
      *
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData

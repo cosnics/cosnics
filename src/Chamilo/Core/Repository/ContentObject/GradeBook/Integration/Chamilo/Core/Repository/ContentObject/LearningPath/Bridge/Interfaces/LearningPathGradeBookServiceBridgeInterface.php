@@ -1,25 +1,21 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces;
+namespace Chamilo\Core\Repository\ContentObject\GradeBook\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
-/**
- *
- * @package Chamilo\Core\Repository\ContentObject\GradeBook\Display\Interfaces
- * @author Stefan Gabriëls <stefan.gabriels@hogent.be>
- */
-interface GradeBookServiceBridgeInterface
+interface LearningPathGradeBookServiceBridgeInterface
 {
     /**
+     * @param int $stepId
      * @return ContextIdentifier
      */
-//    public function getContextIdentifier(): ContextIdentifier;
+    public function getContextIdentifier(int $stepId): ContextIdentifier;
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function canEditGradeBook(): bool;
 
