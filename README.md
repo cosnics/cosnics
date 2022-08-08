@@ -1,4 +1,4 @@
-# nics
+# Cosnics
 
 ## Installation
 
