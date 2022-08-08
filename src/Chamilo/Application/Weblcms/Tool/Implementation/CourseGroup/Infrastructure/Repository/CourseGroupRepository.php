@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -43,6 +44,19 @@ class CourseGroupRepository extends CommonDataClassRepository
         return $this->dataClassRepository->count(
             CourseGroup::class_name(),
             new DataClassCountParameters($condition)
+        );
+    }
+
+    public function getCourseGroupsInCourse(int $courseId)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+            new StaticConditionVariable($courseId)
+        );
+
+        return $this->dataClassRepository->retrieves(
+            CourseGroup::class_name(),
+            new DataClassRetrievesParameters($condition)
         );
     }
 
