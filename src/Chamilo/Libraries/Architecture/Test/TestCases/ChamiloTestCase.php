@@ -66,9 +66,14 @@ abstract class ChamiloTestCase extends TestCase
      */
     protected function get_property_value($object, $property_name)
     {
-        $reflection_property = $this->get_property(get_class($object), $property_name);
-        
-        return $reflection_property->getValue($object);
+        return $this->getPropertyValue($object, $property_name);
+    }
+
+    protected function getPropertyValue(object $object, string $propertyName)
+    {
+        $property = $this->get_property(get_class($object), $propertyName);
+
+        return $property->getValue($object);
     }
 
     /**
@@ -82,9 +87,14 @@ abstract class ChamiloTestCase extends TestCase
      */
     protected function set_property_value($object, $property_name, $value)
     {
-        $reflection_property = $this->get_property(get_class($object), $property_name);
-        
-        return $reflection_property->setValue($object, $value);
+        $this->setPropertyValue($object, $property_name, $value);
+    }
+
+    protected function setPropertyValue(object $object, string $propertyName, $value)
+    {
+        $property = $this->get_property(get_class($object), $propertyName);
+
+        $property->setValue($object, $value);
     }
 
     /**
