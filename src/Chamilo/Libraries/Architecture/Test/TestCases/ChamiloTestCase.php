@@ -39,6 +39,20 @@ abstract class ChamiloTestCase extends TestCase
     }
 
     /**
+     * @param object $object
+     * @param string $methodName
+     *
+     * @param ...$arguments
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    protected function callMethod(object $object, string $methodName, ...$arguments)
+    {
+        $method = $this->get_method(get_class($object), $methodName);
+        return $method->invoke($object, ...$arguments);
+    }
+
+    /**
      * Returns a reflection property for the usage of the protected / private properties
      *
      * @param string $class_name
