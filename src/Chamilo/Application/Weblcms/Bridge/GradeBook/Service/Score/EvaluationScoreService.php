@@ -21,6 +21,8 @@ use Chamilo\Libraries\Storage\Iterator\RecordIterator;
  */
 class EvaluationScoreService implements ScoreServiceInterface, LearningPathScoreServiceInterface
 {
+    const AUTH_ABSENT = 'gafw';
+
     /**
      * @var EvaluationPublicationRepository
      */
@@ -54,66 +56,6 @@ class EvaluationScoreService implements ScoreServiceInterface, LearningPathScore
         $this->evaluationEntityServiceManager = $evaluationEntityServiceManager;
         $this->learningPathStepContextService = $learningPathStepContextService;
     }
-
-    /*public function getScores(ContentObjectPublication $publication, array $userIds): array
-    {
-        $entityType = $this->getPublicationEntityType($publication);
-        $selectedEntities = $this->getSelectedEntitiesForPublication($publication, $entityType);
-
-        $userMap = array();
-        $groups = array();
-        foreach ($selectedEntities as $entity)
-        {
-            $members = $this->getUsersForEntity($entity['id'], $entityType);
-
-            foreach ($members as $member)
-            {
-                $memberId = $member->getId();
-                if (!array_key_exists($memberId, $userMap))
-                {
-                    $userMap[$memberId] = array();
-                }
-                $userMap[$memberId][] = $entity;
-            }
-            $groups[$entity['id']] = $entity;
-        }
-
-        $scores = array();
-
-        foreach ($userIds as $userId)
-        {
-            $score = null;
-
-            $userGroups = $userMap[$userId];
-            foreach ($userGroups as $group)
-            {
-                if ($group['is_absent'])
-                {
-                    if (is_null($score))
-                    {
-                        $score = 'gafw';
-                    }
-                }
-                else if (!is_null($group['score']))
-                {
-                    if (is_null($score))
-                    {
-                        $score = (float) $group['score'];
-                    }
-                    else if (is_numeric($score))
-                    {
-                        if (((float) $group['score']) > $score)
-                        {
-                            $score = (float) $group['score'];
-                        }
-                    }
-                }
-            }
-            $scores[] = ['user_id' => (int) $userId, 'score' => $score];
-        }
-
-        return $scores;
-    }*/
 
     /**
      * @param ContentObjectPublication $publication
@@ -164,12 +106,13 @@ class EvaluationScoreService implements ScoreServiceInterface, LearningPathScore
             else
             {
                 $users = $this->getUsersForEntity($entity['id'], $entityType);
+
                 foreach ($users as $user)
                 {
                     $userId = $user->getId();
                     $hasKey = array_key_exists($userId, $scores);
                     $curScore = $scores[$userId];
-                    if (!$hasKey || (is_numeric($score) && (is_null($curScore) || $curScore == 'gafw' || (is_numeric($curScore) && $score > $curScore))))
+                    if (!$hasKey || ($score == self::AUTH_ABSENT && is_null($curScore)) || (is_numeric($score) && (is_null($curScore) || $curScore == self::AUTH_ABSENT || (is_numeric($curScore) && $score > $curScore))))
                     {
                         $scores[$userId] = $score;
                     }
@@ -253,7 +196,7 @@ class EvaluationScoreService implements ScoreServiceInterface, LearningPathScore
     {
         if ($entity['is_absent'])
         {
-            return 'gafw';
+            return self::AUTH_ABSENT;
         }
 
         $score = $entity['score'];

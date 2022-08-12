@@ -1,12 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\ScoreDataService;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score
@@ -16,18 +12,26 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class AssessmentScoreService implements ScoreServiceInterface
 {
     /**
+     * @var ScoreDataService
+     */
+    protected $scoreDataService;
+
+    /**
+     * @param ScoreDataService $scoreDataService
+     */
+    public function __construct(ScoreDataService $scoreDataService)
+    {
+        $this->scoreDataService = $scoreDataService;
+    }
+
+    /**
      * @param ContentObjectPublication $publication
      *
      * @return array
      */
     public function getScores(ContentObjectPublication $publication): array
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
-            new StaticConditionVariable($publication->getId())
-        );
-
-        $attempts = WeblcmsTrackingDataManager::retrieve_assessment_attempts_with_user($condition);
+        $attempts = $this->scoreDataService->getAssessmentAttempts($publication);
 
         $scores = array();
         while ($attempt = $attempts->next_result())
