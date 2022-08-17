@@ -2,8 +2,10 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\GradeBook\Test\Unit\Service\Score;
 
+use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\EntityDataService;
 use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\EvaluationScoreService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Domain\EvaluationConfiguration;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathStepContext;
@@ -63,6 +65,11 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
     protected $evaluationEntityServiceMock;
 
     /**
+     * @var EntityDataService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entityDataServiceMock;
+
+    /**
      * Setup before each test
      */
     public function setUp()
@@ -81,7 +88,10 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $this->evaluationEntityServiceMock = $this->getMockForAbstractClass(
             'Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceInterface'
         );
-        $this->evaluationScoreService = new EvaluationScoreService($this->evaluationPublicationRepositoryMock, $this->publicationEntityServiceManagerMock, $this->evaluationEntityServiceManagerMock, $this->learningPathStepContextServiceMock);
+        $this->entityDataServiceMock = $this->getMockBuilder(EntityDataService::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $this->evaluationScoreService = new EvaluationScoreService($this->evaluationPublicationRepositoryMock, $this->publicationEntityServiceManagerMock, $this->evaluationEntityServiceManagerMock, $this->learningPathStepContextServiceMock, $this->entityDataServiceMock);
     }
 
     /**
@@ -95,6 +105,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         unset($this->learningPathStepContextServiceMock);
         unset($this->publicationEntityServiceMock);
         unset($this->evaluationEntityServiceMock);
+        unset($this->entityDataServiceMock);
         unset($this->evaluationScoreService);
     }
 
@@ -123,28 +134,35 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
 
     public function testEvaluationScoresCourseGroupEntity()
     {
-        $this->_testEvaluationScoresGroupEntity(1);
-    }
-
-    public function testEvaluationScoresPlatformGroupEntity()
-    {
-        $this->_testEvaluationScoresGroupEntity(2);
-    }
-
-    protected function _testEvaluationScoresGroupEntity(int $entityType)
-    {
         $contentObjectPublication = $this->createContentObjectPublication();
         $entityIds = [20, 21, 22];
+        $entityType = 1;
         $entitiesFromIds = new RecordIterator(CourseGroup::class_name(), [
             ['id' => '20', 'score' => '90', 'score_registered' => '1', 'is_absent' => '0'],
             ['id' => '21', 'score' => null, 'score_registered' => '0', 'is_absent' => '1'],
             ['id' => '22', 'score' => '80', 'score_registered' => '1', 'is_absent' => '0'],
         ]);
-        $users = $this->createUsers([10, 4, 9, 18, 37, 55]);
-        $returnValues = [[$users[0], $users[1]], [$users[2], $users[3]], [$users[4], $users[5]]];
+        $returnValues = [20 => [10, 4], 21 => [9, 18], 22 => [37, 55]];
 
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
-        $this->mockGetUsersForEntity($entityIds, $returnValues);
+        $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
+
+        $this->assertEquals([10 => 90, 4 => 90, 9 => EvaluationScoreService::AUTH_ABSENT, 18 => EvaluationScoreService::AUTH_ABSENT, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
+    }
+
+    public function testEvaluationScoresPlatformGroupEntity()
+    {
+        $contentObjectPublication = $this->createContentObjectPublication();
+        $entityIds = [20, 21, 22];
+        $entityType = 2;
+        $entitiesFromIds = new RecordIterator(Group::class_name(), [
+            ['id' => '20', 'score' => '90', 'score_registered' => '1', 'is_absent' => '0'],
+            ['id' => '21', 'score' => null, 'score_registered' => '0', 'is_absent' => '1'],
+            ['id' => '22', 'score' => '80', 'score_registered' => '1', 'is_absent' => '0'],
+        ]);
+
+        $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
+        $this->mockGetUserEntitiesFromPlatformGroup($entityIds, [[10, 4], [9, 18], [37, 55]]);
 
         $this->assertEquals([10 => 90, 4 => 90, 9 => EvaluationScoreService::AUTH_ABSENT, 18 => EvaluationScoreService::AUTH_ABSENT, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
     }
@@ -159,11 +177,10 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
             ['id' => '21', 'score' => null, 'score_registered' => '0', 'is_absent' => '1'],
             ['id' => '22', 'score' => '80', 'score_registered' => '1', 'is_absent' => '0'],
         ]);
-        $users = $this->createUsers([10, 4, 9, 18, 37, 55]);
-        $returnValues = [[$users[0], $users[1]], [$users[2], $users[3]], [$users[4], $users[5], $users[3]]];
+        $returnValues = [20 => [10, 4], 21 => [9, 18], 22 => [37, 55, 18]];
 
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
-        $this->mockGetUsersForEntity($entityIds, $returnValues);
+        $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
         $this->assertEquals([10 => 90, 4 => 90, 9 => EvaluationScoreService::AUTH_ABSENT, 18 => 80, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
     }
@@ -178,11 +195,10 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
             ['id' => '21', 'score' => '80', 'score_registered' => '1', 'is_absent' => '0'],
             ['id' => '22', 'score' => null, 'score_registered' => '0', 'is_absent' => '1'],
         ]);
-        $users = $this->createUsers([10, 4, 9, 18, 37, 55]);
-        $returnValues = [[$users[0], $users[1]], [$users[4], $users[5], $users[3]], [$users[2], $users[3]]];
+        $returnValues = [20 => [10, 4], 21 => [37, 55, 18], 22 => [9, 18]];
 
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
-        $this->mockGetUsersForEntity($entityIds, $returnValues);
+        $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
         $this->assertEquals([10 => 90, 4 => 90, 9 => EvaluationScoreService::AUTH_ABSENT, 18 => 80, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
     }
@@ -197,11 +213,10 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
             ['id' => '21', 'score' => null, 'score_registered' => '0', 'is_absent' => '0'],
             ['id' => '22', 'score' => '80', 'score_registered' => '1', 'is_absent' => '0'],
         ]);
-        $users = $this->createUsers([10, 4, 9, 18, 37, 55]);
-        $returnValues = [[$users[0], $users[1]], [$users[2], $users[3]], [$users[4], $users[5], $users[3]]];
+        $returnValues = [20 => [10, 4], 21 => [9, 18], 22 => [37, 55, 18]];
 
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
-        $this->mockGetUsersForEntity($entityIds, $returnValues);
+        $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
         $this->assertEquals([10 => 90, 4 => 90, 9 => null, 18 => 80, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
     }
@@ -216,11 +231,10 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
             ['id' => '21', 'score' => '80', 'score_registered' => '1', 'is_absent' => '0'],
             ['id' => '22', 'score' => null, 'score_registered' => '0', 'is_absent' => '0'],
         ]);
-        $users = $this->createUsers([10, 4, 9, 18, 37, 55]);
-        $returnValues = [[$users[0], $users[1]], [$users[4], $users[5], $users[3]], [$users[2], $users[3]]];
+        $returnValues = [20 => [10, 4], 21 => [37, 55, 18], 22 => [9, 18]];
 
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
-        $this->mockGetUsersForEntity($entityIds, $returnValues);
+        $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
         $this->assertEquals([10 => 90, 4 => 90, 9 => null, 18 => 80, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
     }
@@ -235,11 +249,10 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
             ['id' => '21', 'score' => null, 'score_registered' => '0', 'is_absent' => '0'],
             ['id' => '22', 'score' => null, 'score_registered' => '0', 'is_absent' => '1'],
         ]);
-        $users = $this->createUsers([10, 4, 9, 18, 37, 55]);
-        $returnValues = [[$users[0], $users[1]], [$users[2], $users[3]], [$users[4], $users[5], $users[3]]];
+        $returnValues = [20 => [10, 4], 21 => [9, 18], 22 => [37, 55, 18]];
 
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
-        $this->mockGetUsersForEntity($entityIds, $returnValues);
+        $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
         $this->assertEquals([10 => 90, 4 => 90, 9 => null, 18 => EvaluationScoreService::AUTH_ABSENT, 37 => EvaluationScoreService::AUTH_ABSENT, 55 => EvaluationScoreService::AUTH_ABSENT], $this->evaluationScoreService->getScores($contentObjectPublication));
     }
@@ -254,11 +267,10 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
             ['id' => '21', 'score' => null, 'score_registered' => '1', 'is_absent' => '1'],
             ['id' => '22', 'score' => null, 'score_registered' => '0', 'is_absent' => '0'],
         ]);
-        $users = $this->createUsers([10, 4, 9, 18, 37, 55]);
-        $returnValues = [[$users[0], $users[1]], [$users[4], $users[5], $users[3]], [$users[2], $users[3]]];
+        $returnValues = [20 => [10, 4], 21 => [37, 55, 18], 22 => [9, 18]];
 
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
-        $this->mockGetUsersForEntity($entityIds, $returnValues);
+        $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
         $this->assertEquals([10 => 90, 4 => 90, 9 => null, 18 => EvaluationScoreService::AUTH_ABSENT, 37 => EvaluationScoreService::AUTH_ABSENT, 55 => EvaluationScoreService::AUTH_ABSENT], $this->evaluationScoreService->getScores($contentObjectPublication));
     }
@@ -273,11 +285,10 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
             ['id' => '21', 'score' => '70', 'score_registered' => '1', 'is_absent' => '0'],
             ['id' => '22', 'score' => '80', 'score_registered' => '1', 'is_absent' => '0'],
         ]);
-        $users = $this->createUsers([10, 4, 9, 18, 37, 55]);
-        $returnValues = [[$users[0], $users[1]], [$users[2], $users[3]], [$users[4], $users[5], $users[3]]];
+        $returnValues = [20 => [10, 4], 21 => [9, 18], 22 => [37, 55, 18]];
 
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
-        $this->mockGetUsersForEntity($entityIds, $returnValues);
+        $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
         $this->assertEquals([10 => 90, 4 => 90, 9 => 70, 18 => 80, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
     }
@@ -292,11 +303,10 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
             ['id' => '21', 'score' => '80', 'score_registered' => '1', 'is_absent' => '0'],
             ['id' => '22', 'score' => '70', 'score_registered' => '1', 'is_absent' => '0'],
         ]);
-        $users = $this->createUsers([10, 4, 9, 18, 37, 55]);
-        $returnValues = [[$users[0], $users[1]], [$users[4], $users[5], $users[3]], [$users[2], $users[3]]];
+        $returnValues = [20 => [10, 4], 21 => [37, 55, 18], 22 => [9, 18]];
 
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
-        $this->mockGetUsersForEntity($entityIds, $returnValues);
+        $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
         $this->assertEquals([10 => 90, 4 => 90, 9 => 70, 18 => 80, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
     }
@@ -324,7 +334,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $this->mockGetOrCreateLearningPathStepContext($contentObjectPublication, $learningPathStepContextMock, $stepId);
         $learningPathStepContextMock->expects($this->once())->method('getId')->will($this->returnValue($learningPathStepContextId));
         $this->mockSetContentObjectPublication($contentObjectPublication);
-        $this->mockGetPublicationEntityService($entityType, 1);
+        $this->mockGetPublicationEntityService($entityType);
         $this->mockGetTargetEntityIds($entityIds);
         $this->mockGetEvaluationEntityService($entityType);
         $this->mockGetEntitiesFromIds($contentObjectPublication, $entityIds, $entitiesFromIds, $contextIdentifier);
@@ -336,7 +346,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
     {
         $this->mockFindPublicationByContentObjectPublication($contentObjectPublication, $entityType);
         $this->mockSetContentObjectPublication($contentObjectPublication);
-        $this->mockGetPublicationEntityService($entityType, $entityType == 0 ? 1 : count($entityIds) + 1);
+        $this->mockGetPublicationEntityService($entityType);
         $this->mockGetTargetEntityIds($entityIds);
         $this->mockGetEvaluationEntityService($entityType);
         $this->mockGetEntitiesFromIds($contentObjectPublication, $entityIds, $entitiesFromIds);
@@ -357,9 +367,9 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
             ->method('setContentObjectPublication')->with($contentObjectPublication);
     }
 
-    protected function mockGetPublicationEntityService(int $entityType, int $entityCount)
+    protected function mockGetPublicationEntityService(int $entityType)
     {
-        $this->publicationEntityServiceManagerMock->expects($this->exactly($entityCount))
+        $this->publicationEntityServiceManagerMock->expects($this->once())
             ->method('getEntityServiceByType')->with($entityType)
             ->will($this->returnValue($this->publicationEntityServiceMock));
     }
@@ -390,13 +400,21 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
             ->will($this->returnValue($entitiesFromIds));
     }
 
-    protected function mockGetUsersForEntity(array $args, array $returnValues)
+    protected function mockGetCourseGroupUserEntitiesRecursiveFromCourse(ContentObjectPublication $contentObjectPublication, array $returnValues)
+    {
+        $this->entityDataServiceMock
+            ->method('getCourseGroupUserEntitiesRecursiveFromCourse')
+            ->with($contentObjectPublication->get_course_id())
+            ->will($this->returnValue($returnValues));
+    }
+
+    protected function mockGetUserEntitiesFromPlatformGroup(array $args, array $returnValues)
     {
         $argValues = array_map(function ($arg) { return [$arg]; }, $args);
         $returnValues = array_map($this->returnValue, $returnValues);
 
-        $this->publicationEntityServiceMock->expects($this->exactly(count($args)))
-            ->method('getUsersForEntity')
+        $this->entityDataServiceMock
+            ->method('getUserEntitiesFromPlatformGroup')
             ->withConsecutive(...$argValues)
             ->willReturnOnConsecutiveCalls(...$returnValues);
     }
@@ -406,7 +424,6 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $this->learningPathStepContextServiceMock->expects($this->once())->method('getOrCreateLearningPathStepContext')
             ->with($stepId, ContentObjectPublication::class_name(), $contentObjectPublication->getId())
             ->will($this->returnValue($learningPathStepContextMock));
-
     }
 
     /**
@@ -434,16 +451,6 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $evaluationPublication->setPublicationId($contentObjectPublication->getId());
         $evaluationPublication->setEntityType($entityType);
         return $evaluationPublication;
-    }
-
-    /**
-     * @param int[] $ids
-     *
-     * @return User[]
-     */
-    protected function createUsers(array $ids): array
-    {
-        return array_map(function ($id) { return (new User())->setId($id); }, $ids);
     }
 
     /**

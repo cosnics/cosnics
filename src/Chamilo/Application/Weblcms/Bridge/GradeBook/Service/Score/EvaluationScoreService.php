@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score;
 
 use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\PublicationEntityServiceManager;
+use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\EntityDataService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\Repository\PublicationRepository as EvaluationPublicationRepository;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Domain\EvaluationConfiguration;
@@ -44,17 +45,24 @@ class EvaluationScoreService implements ScoreServiceInterface, LearningPathScore
     protected $learningPathStepContextService;
 
     /**
+     * @var EntityDataService
+     */
+    protected $entityDataService;
+
+    /**
      * @param EvaluationPublicationRepository $evaluationPublicationRepository
      * @param PublicationEntityServiceManager $publicationEntityServiceManager
      * @param EvaluationEntityServiceManager $evaluationEntityServiceManager
      * @param LearningPathStepContextService $learningPathStepContextService
+     * @param EntityDataService $entityDataService
      */
-    public function __construct(EvaluationPublicationRepository $evaluationPublicationRepository, PublicationEntityServiceManager $publicationEntityServiceManager, EvaluationEntityServiceManager $evaluationEntityServiceManager, LearningPathStepContextService $learningPathStepContextService)
+    public function __construct(EvaluationPublicationRepository $evaluationPublicationRepository, PublicationEntityServiceManager $publicationEntityServiceManager, EvaluationEntityServiceManager $evaluationEntityServiceManager, LearningPathStepContextService $learningPathStepContextService, EntityDataService $entityDataService)
     {
         $this->evaluationPublicationRepository = $evaluationPublicationRepository;
         $this->publicationEntityServiceManager = $publicationEntityServiceManager;
         $this->evaluationEntityServiceManager = $evaluationEntityServiceManager;
         $this->learningPathStepContextService = $learningPathStepContextService;
+        $this->entityDataService = $entityDataService;
     }
 
     /**
@@ -92,30 +100,39 @@ class EvaluationScoreService implements ScoreServiceInterface, LearningPathScore
     protected function getUserScores(ContentObjectPublication $publication, ContextIdentifier $contextIdentifier, int $entityType): array
     {
         $selectedEntities = $this->getSelectedEntitiesForPublication($publication, $contextIdentifier, $entityType);
-
         $scores = array();
+
+        switch ($entityType)
+        {
+            case 0:
+                foreach ($selectedEntities as $entity)
+                {
+                    $entityId = $entity['id'];
+                    $score = $this->getEntityScore($entity);
+                    $scores[$entityId] = $score;
+                }
+                return $scores;
+            case 1:
+                $userEntities = $this->entityDataService->getCourseGroupUserEntitiesRecursiveFromCourse($publication->get_course_id());
+                break;
+            case 2:
+                $userEntities = $this->getPlatformGroupUserEntitiesFromEntityScores($selectedEntities);
+                break;
+        }
+
         foreach ($selectedEntities as $entity)
         {
             $entityId = $entity['id'];
             $score = $this->getEntityScore($entity);
+            $users = $userEntities[$entityId];
 
-            if ($entityType == 0)
+            foreach ($users as $userId)
             {
-                $scores[$entityId] = $score;
-            }
-            else
-            {
-                $users = $this->getUsersForEntity($entity['id'], $entityType);
-
-                foreach ($users as $user)
+                $hasKey = array_key_exists($userId, $scores);
+                $curScore = $scores[$userId];
+                if (!$hasKey || ($score == self::AUTH_ABSENT && is_null($curScore)) || (is_numeric($score) && (is_null($curScore) || $curScore == self::AUTH_ABSENT || (is_numeric($curScore) && $score > $curScore))))
                 {
-                    $userId = $user->getId();
-                    $hasKey = array_key_exists($userId, $scores);
-                    $curScore = $scores[$userId];
-                    if (!$hasKey || ($score == self::AUTH_ABSENT && is_null($curScore)) || (is_numeric($score) && (is_null($curScore) || $curScore == self::AUTH_ABSENT || (is_numeric($curScore) && $score > $curScore))))
-                    {
-                        $scores[$userId] = $score;
-                    }
+                    $scores[$userId] = $score;
                 }
             }
         }
@@ -139,15 +156,19 @@ class EvaluationScoreService implements ScoreServiceInterface, LearningPathScore
     }
 
     /**
-     * @param int $entityId
-     * @param int $entityType
+     * @param RecordIterator $entityScores
      *
      * @return array
      */
-    protected function getUsersForEntity(int $entityId, int $entityType): array
+    protected function getPlatformGroupUserEntitiesFromEntityScores(RecordIterator $entityScores): array
     {
-        $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
-        return $publicationEntityService->getUsersForEntity($entityId);
+        $userEntities = [];
+        foreach ($entityScores as $entityScore)
+        {
+            $entityId = $entityScore['id'];
+            $userEntities[$entityId] = $this->entityDataService->getUserEntitiesFromPlatformGroup($entityId);
+        }
+        return $userEntities;
     }
 
     /**

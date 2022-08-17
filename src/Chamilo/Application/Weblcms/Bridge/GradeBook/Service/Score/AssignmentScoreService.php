@@ -1,12 +1,10 @@
 <?php
 namespace Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score;
 
-use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\ScoreDataService;
+use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\EntityDataService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository as AssignmentPublicationRepository;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepository;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 
 /**
@@ -27,27 +25,20 @@ class AssignmentScoreService implements ScoreServiceInterface
     protected $assignmentService;
 
     /**
-     * @var CourseGroupRepository
+     * @var EntityDataService
      */
-    protected $courseGroupRepository;
-
-    /**
-     * @var ScoreDataService
-     */
-    protected $scoreDataService;
+    protected $entityDataService;
 
     /**
      * @param AssignmentPublicationRepository $assignmentPublicationRepository
      * @param AssignmentService $assignmentService
-     * @param CourseGroupRepository $courseGroupRepository
-     * @param ScoreDataService $scoreDataService
+     * @param EntityDataService $entityDataService
      */
-    public function __construct(AssignmentPublicationRepository $assignmentPublicationRepository, AssignmentService $assignmentService, CourseGroupRepository $courseGroupRepository, ScoreDataService $scoreDataService)
+    public function __construct(AssignmentPublicationRepository $assignmentPublicationRepository, AssignmentService $assignmentService, EntityDataService $entityDataService)
     {
         $this->assignmentPublicationRepository = $assignmentPublicationRepository;
         $this->assignmentService = $assignmentService;
-        $this->courseGroupRepository = $courseGroupRepository;
-        $this->scoreDataService = $scoreDataService;
+        $this->entityDataService = $entityDataService;
     }
 
     /**
@@ -60,37 +51,37 @@ class AssignmentScoreService implements ScoreServiceInterface
         $entityType = $this->getEntityTypeFromPublication($publication);
         $entityScores = $this->assignmentService->getMaxScoresForContentObjectPublicationEntityType($publication, $entityType);
 
-        if ($entityType == 1)
-        {
-            $userEntities = $this->getCourseGroupUserEntitiesRecursiveFromPublication($publication);
-        }
-        else if ($entityType == 2)
-        {
-            $userEntities = $this->getPlatformGroupUserEntitiesFromEntityScores($entityScores);
-        }
-
-
         $scores = array();
+        switch ($entityType)
+        {
+            case 0:
+                foreach ($entityScores as $entityScore)
+                {
+                    $maxScore = (float) $entityScore['maximum_score'];
+                    $entityId = $entityScore['entity_id'];
+                    $scores[$entityId] = $maxScore;
+                }
+                return $scores;
+            case 1:
+                $userEntities = $this->entityDataService->getCourseGroupUserEntitiesRecursiveFromCourse($publication->get_course_id());
+                break;
+            case 2:
+                $userEntities = $this->getPlatformGroupUserEntitiesFromEntityScores($entityScores);
+                break;
+        }
+
         foreach ($entityScores as $entityScore)
         {
             $maxScore = (float) $entityScore['maximum_score'];
             $entityId = $entityScore['entity_id'];
+            $users = $userEntities[$entityId];
 
-            if ($entityType == 0)
+            foreach ($users as $userId)
             {
-                $scores[$entityId] = $maxScore;
-            }
-            else
-            {
-                $users = $userEntities[$entityId];
-
-                foreach ($users as $userId)
+                $hasKey = array_key_exists($userId, $scores);
+                if (!$hasKey || ($maxScore > $scores[$userId]))
                 {
-                    $hasKey = array_key_exists($userId, $scores);
-                    if (!$hasKey || ($maxScore > $scores[$userId]))
-                    {
-                        $scores[$userId] = $maxScore;
-                    }
+                    $scores[$userId] = $maxScore;
                 }
             }
         }
@@ -114,35 +105,6 @@ class AssignmentScoreService implements ScoreServiceInterface
     }
 
     /**
-     * @param ContentObjectPublication $publication
-     *
-     * @return array
-     */
-    protected function getCourseGroupUserEntitiesRecursiveFromPublication(ContentObjectPublication $publication): array
-    {
-        $courseGroups = $this->toAssociativeArray(
-            $this->courseGroupRepository->getCourseGroupsInCourse($publication->get_course_id())
-        );
-
-        $courseGroupIdsRecursive = [];
-        foreach ($courseGroups as $courseGroup)
-        {
-            $courseGroupId = $courseGroup->getId();
-            $groupIdAndAncestorIds = [$courseGroupId];
-            $curCourseGroup = $courseGroup;
-            while ($curCourseGroup->get_parent_id() != 0)
-            {
-                $parentId = $curCourseGroup->get_parent_id();
-                $groupIdAndAncestorIds[] = $parentId;
-                $curCourseGroup = $courseGroups[$parentId];
-            }
-            $courseGroupIdsRecursive[$courseGroupId] = $groupIdAndAncestorIds;
-        }
-
-        return $this->scoreDataService->getUserEntitiesFromCourseGroupsRecursive(array_keys($courseGroups), $courseGroupIdsRecursive);
-    }
-
-    /**
      * @param RecordIterator $entityScores
      *
      * @return array
@@ -153,24 +115,8 @@ class AssignmentScoreService implements ScoreServiceInterface
         foreach ($entityScores as $entityScore)
         {
             $entityId = $entityScore['entity_id'];
-            $userEntities[$entityId] = $this->scoreDataService->getUserEntitiesFromPlatformGroup($entityId);
+            $userEntities[$entityId] = $this->entityDataService->getUserEntitiesFromPlatformGroup($entityId);
         }
         return $userEntities;
-    }
-
-    /**
-     * @param DataClassIterator $courseGroups
-     *
-     * @return array
-     */
-    protected function toAssociativeArray(DataClassIterator $courseGroups): array
-    {
-        $groups = [];
-        foreach ($courseGroups as $courseGroup)
-        {
-            $courseGroupId = $courseGroup->getId();
-            $groups[$courseGroupId] = $courseGroup;
-        }
-        return $groups;
     }
 }

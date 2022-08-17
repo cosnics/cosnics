@@ -1,14 +1,12 @@
 <?php
 namespace Chamilo\Application\Weblcms\Bridge\GradeBook\Test\Unit\Service\Score;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository as AssignmentPublicationRepository;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\AssignmentScoreService;
-use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\ScoreDataService;
+use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\EntityDataService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication as AssignmentPublication;
 use Chamilo\Libraries\Storage\Iterator\RecordIterator;
@@ -36,14 +34,9 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
     protected $assignmentServiceMock;
 
     /**
-     * @var CourseGroupRepository|\PHPUnit\Framework\MockObject\MockObject
+     * @var EntityDataService|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $courseGroupRepositoryMock;
-
-    /**
-     * @var ScoreDataService|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $scoreDataServiceMock;
+    protected $entityDataServiceMock;
 
     /**
      * Setup before each test
@@ -54,12 +47,10 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
             ->disableOriginalConstructor()->getMock();
         $this->assignmentServiceMock = $this->getMockBuilder(AssignmentService::class)
             ->disableOriginalConstructor()->getMock();
-        $this->courseGroupRepositoryMock = $this->getMockBuilder(CourseGroupRepository::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->scoreDataServiceMock = $this->getMockBuilder(ScoreDataService::class)
+        $this->entityDataServiceMock = $this->getMockBuilder(EntityDataService::class)
             ->disableOriginalConstructor()->getMock();
         $this->assignmentScoreService = new AssignmentScoreService(
-            $this->assignmentPublicationRepositoryMock, $this->assignmentServiceMock, $this->courseGroupRepositoryMock, $this->scoreDataServiceMock);
+            $this->assignmentPublicationRepositoryMock, $this->assignmentServiceMock, $this->entityDataServiceMock);
     }
 
     /**
@@ -69,8 +60,7 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
     {
         unset($this->assignmentPublicationRepositoryMock);
         unset($this->assignmentServiceMock);
-        unset($this->courseGroupRepositoryMock);
-        unset($this->scoreDataServiceMock);
+        unset($this->entityDataServiceMock);
         unset($this->assignmentScoreService);
     }
 
@@ -148,11 +138,9 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
      */
     protected function mockServicesWithCourseGroups(ContentObjectPublication $contentObjectPublication, array $entityScores, array $entityIds, array $courseGroupIdsRecursive): void
     {
-        $courseGroups = $this->createCourseGroups($entityIds);
         $this->mockFindPublicationByContentObjectPublication($contentObjectPublication, 1);
         $this->mockGetMaxScoresForContentObjectPublicationEntityType($contentObjectPublication, 1, $entityScores);
-        $this->mockGetCourseGroupsInCourse($contentObjectPublication, $courseGroups);
-        $this->mockGetUserEntitiesFromCourseGroupsRecursive($entityIds, $courseGroupIdsRecursive);
+        $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $courseGroupIdsRecursive);
     }
 
     protected function mockFindPublicationByContentObjectPublication(ContentObjectPublication $contentObjectPublication, int $entityType)
@@ -171,18 +159,11 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
             ->will($this->returnValue(new RecordIterator(Entry::class_name(), $entityScores)));
     }
 
-    public function mockGetCourseGroupsInCourse(ContentObjectPublication $contentObjectPublication, array $courseGroups): void
+    protected function mockGetCourseGroupUserEntitiesRecursiveFromCourse(ContentObjectPublication $contentObjectPublication, array $returnValues)
     {
-        $this->courseGroupRepositoryMock->expects($this->once())
-            ->method('getCourseGroupsInCourse')->with($contentObjectPublication->get_course_id())
-            ->will($this->returnValue(new RecordIterator(CourseGroup::class_name(), $courseGroups)));
-    }
-
-    protected function mockGetUserEntitiesFromCourseGroupsRecursive(array $courseGroupsIds, array $returnValues)
-    {
-        $this->scoreDataServiceMock
-            ->method('getUserEntitiesFromCourseGroupsRecursive')
-            ->with($courseGroupsIds)
+        $this->entityDataServiceMock
+            ->method('getCourseGroupUserEntitiesRecursiveFromCourse')
+            ->with($contentObjectPublication->get_course_id())
             ->will($this->returnValue($returnValues));
     }
 
@@ -191,7 +172,7 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
         $argValues = array_map(function ($arg) { return [$arg]; }, $args);
         $returnValues = array_map($this->returnValue, $returnValues);
 
-        $this->scoreDataServiceMock
+        $this->entityDataServiceMock
             ->method('getUserEntitiesFromPlatformGroup')
             ->withConsecutive(...$argValues)
             ->willReturnOnConsecutiveCalls(...$returnValues);
@@ -222,20 +203,5 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
         $assignmentPublication->setPublicationId($contentObjectPublication->getId());
         $assignmentPublication->setEntityType($entityType);
         return $assignmentPublication;
-    }
-
-    /**
-     * @param int[] $ids
-     *
-     * @return CourseGroup[]
-     */
-    protected function createCourseGroups(array $ids): array
-    {
-        return array_map(function ($id) {
-            $courseGroup = new CourseGroup();
-            $courseGroup->setId($id);
-            $courseGroup->set_parent_id(0);
-            return $courseGroup;
-        }, $ids);
     }
 }
