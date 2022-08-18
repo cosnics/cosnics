@@ -103,40 +103,31 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
     public function testAssignmentScoresCourseGroupEntity()
     {
         $contentObjectPublication = $this->createContentObjectPublication();
-        $entityIds = [101, 103];
         $entityScores = [['entity_id' => 101, 'maximum_score' => 59], ['entity_id' => 103, 'maximum_score' => 68]];
         $courseGroupIdsRecursive = [101 => [7, 5], 103 => [24, 28]];
-        $this->mockServicesWithCourseGroups($contentObjectPublication, $entityScores, $entityIds, $courseGroupIdsRecursive);
+        $this->mockServicesWithCourseGroups($contentObjectPublication, $entityScores, $courseGroupIdsRecursive);
         $this->assertEquals([7 => 59, 5 => 59, 24 => 68, 28 => 68], $this->assignmentScoreService->getScores($contentObjectPublication));
     }
 
     public function testAssignmentScoresGroupEntityUserInMultipleGroups()
     {
         $contentObjectPublication = $this->createContentObjectPublication();
-        $entityIds = [101, 103, 104];
         $entityScores = [['entity_id' => 101, 'maximum_score' => 59], ['entity_id' => 103, 'maximum_score' => 55], ['entity_id' => 104, 'maximum_score' => 72]];
         $courseGroupIdsRecursive = [101 => [7, 5], 103 => [24, 5], 104 => [28, 29]];
-        $this->mockServicesWithCourseGroups($contentObjectPublication, $entityScores, $entityIds, $courseGroupIdsRecursive);
+        $this->mockServicesWithCourseGroups($contentObjectPublication, $entityScores, $courseGroupIdsRecursive);
         $this->assertEquals([7 => 59, 5 => 59, 24 => 55, 28 => 72, 29 => 72], $this->assignmentScoreService->getScores($contentObjectPublication));
     }
 
     public function testAssignmentScoresGroupEntityUserInMultipleGroupsDifferentOrder()
     {
         $contentObjectPublication = $this->createContentObjectPublication();
-        $entityIds = [103, 101, 104];
         $entityScores = [['entity_id' => 103, 'maximum_score' => 55], ['entity_id' => 101, 'maximum_score' => 59], ['entity_id' => 104, 'maximum_score' => 72]];
         $courseGroupIdsRecursive = [103 => [24, 5], 101 => [7, 5], 104 => [28, 29]];
-        $this->mockServicesWithCourseGroups($contentObjectPublication, $entityScores, $entityIds, $courseGroupIdsRecursive);
+        $this->mockServicesWithCourseGroups($contentObjectPublication, $entityScores, $courseGroupIdsRecursive);
         $this->assertEquals([7 => 59, 5 => 59, 24 => 55, 28 => 72, 29 => 72], $this->assignmentScoreService->getScores($contentObjectPublication));
     }
 
-    /**
-     * @param ContentObjectPublication $contentObjectPublication
-     * @param array $entityScores
-     * @param array $entityIds
-     * @param array $courseGroupIdsRecursive
-     */
-    protected function mockServicesWithCourseGroups(ContentObjectPublication $contentObjectPublication, array $entityScores, array $entityIds, array $courseGroupIdsRecursive): void
+    protected function mockServicesWithCourseGroups(ContentObjectPublication $contentObjectPublication, array $entityScores, array $courseGroupIdsRecursive): void
     {
         $this->mockFindPublicationByContentObjectPublication($contentObjectPublication, 1);
         $this->mockGetMaxScoresForContentObjectPublicationEntityType($contentObjectPublication, 1, $entityScores);
