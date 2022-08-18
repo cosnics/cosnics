@@ -20,7 +20,7 @@ use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
- * Tests the AssessmentScoreService
+ * Tests the GradeBookItemScoreService
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
