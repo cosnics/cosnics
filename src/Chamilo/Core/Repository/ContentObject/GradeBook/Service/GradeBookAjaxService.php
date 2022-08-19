@@ -4,11 +4,12 @@ namespace Chamilo\Core\Repository\ContentObject\GradeBook\Service;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookCategoryJSONModel;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookColumnJSONModel;
-use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookItemJSONModel;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookItemScoreServiceInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookColumn;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookScore;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
@@ -28,6 +29,11 @@ class GradeBookAjaxService
     protected $gradeBookService;
 
     /**
+     * @var GradeBookItemScoreServiceInterface
+     */
+    protected $gradeBookItemScoreService;
+
+    /**
      * @var Serializer
      */
     protected $serializer;
@@ -36,10 +42,12 @@ class GradeBookAjaxService
      * GradeBookAjaxService constructor.
      *
      * @param GradeBookService $gradeBookService
+     * @param GradeBookItemScoreServiceInterface $gradeBookItemScoreService
      */
-    public function __construct(GradeBookService $gradeBookService)
+    public function __construct(GradeBookService $gradeBookService, GradeBookItemScoreServiceInterface $gradeBookItemScoreService)
     {
         $this->gradeBookService = $gradeBookService;
+        $this->gradeBookItemScoreService = $gradeBookItemScoreService;
         $this->serializer = $this->createSerializer();
     }
 
@@ -108,75 +116,6 @@ class GradeBookAjaxService
     public function getContextHash(ContextIdentifier $contextIdentifier): string
     {
         return md5($contextIdentifier->getContextClass() . ':' . $contextIdentifier->getContextId());
-    }
-
-    /**
-     * @param GradeBookData $gradebookData
-     *
-     * @return array
-     */
-    public function getGradeBookObjectData(GradeBookData $gradebookData): array
-    {
-        $resultsData = [
-            [ 'id' => 1, 'student' => 'Student 1', 'results' => [['id' => 1, 'value' => null], ['id' => 3, 'value' => 20  ], ['id' => 2, 'value' => 60], ['id' => 4, 'value' => 80], ['id' => 5, 'value' => 50], ['id' => 6, 'value' => 75], ['id' => 7, 'value' => 50]] ],
-            [ 'id' => 2, 'student' => 'Student 2', 'results' => [['id' => 1, 'value' => 30  ], ['id' => 3, 'value' => null], ['id' => 2, 'value' => 50], ['id' => 4, 'value' => 40], ['id' => 5, 'value' => 80], ['id' => 6, 'value' => 65], ['id' => 7, 'value' => 50]] ],
-            [ 'id' => 3, 'student' => 'Student 3', 'results' => [['id' => 1, 'value' => null], ['id' => 3, 'value' => 50  ], ['id' => 2, 'value' => 30], ['id' => 4, 'value' => 70], ['id' => 5, 'value' => 80], ['id' => 6, 'value' => 95], ['id' => 7, 'value' => 50]] ],
-            [ 'id' => 4, 'student' => 'Student 4', 'results' => [['id' => 1, 'value' => 80  ], ['id' => 3, 'value' => null], ['id' => 2, 'value' => 40], ['id' => 4, 'value' => 40], ['id' => 5, 'value' => 30], ['id' => 6, 'value' => 75], ['id' => 7, 'value' => 50]] ],
-            [ 'id' => 5, 'student' => 'Student 5', 'results' => [['id' => 1, 'value' => null], ['id' => 3, 'value' => 60  ], ['id' => 2, 'value' => 10], ['id' => 4, 'value' => 90], ['id' => 5, 'value' => 40], ['id' => 6, 'value' => 25], ['id' => 7, 'value' => 50]] ]
-        ];
-
-        return [
-            'dataId' => $gradebookData->getId(),
-            'version' => $gradebookData->getVersion(),
-            'title' => $gradebookData->getTitle(),
-            'gradeItems' => $this->getGradeBookItemsJSON($gradebookData),
-            'gradeColumns' => $this->getGradeBookColumnsJSON($gradebookData),
-            'categories' => $this->getGradeBookCategoriesJSON($gradebookData),
-            'nullCategory' => new GradeBookCategoryJSONModel(0, '', 'none', $gradebookData->getGradeBookColumnsUncategorized()),
-            'resultsData' => $resultsData
-        ];
-    }
-
-    /**
-     * @param GradeBookData $gradebookData
-     *
-     * @return GradeBookItemJSONModel[]
-     */
-    private function getGradeBookItemsJSON(GradeBookData $gradebookData): array
-    {
-        $toJSON = function ($gradebookItem) {
-            return GradeBookItemJSONModel::fromGradeBookItem($gradebookItem);
-        };
-
-        return array_map($toJSON, $gradebookData->getGradeBookItems()->toArray());
-    }
-
-    /**
-     * @param GradeBookData $gradebookData
-     *
-     * @return GradeBookColumnJSONModel[]
-     */
-    private function getGradeBookColumnsJSON(GradeBookData $gradebookData): array
-    {
-        $toJSON = function ($gradebookColumn) {
-            return GradeBookColumnJSONModel::fromGradeBookColumn($gradebookColumn);
-        };
-
-        return array_map($toJSON, $gradebookData->getGradeBookColumns()->toArray());
-    }
-
-    /**
-     * @param GradeBookData $gradebookData
-     *
-     * @return GradeBookCategoryJSONModel[]
-     */
-    private function getGradeBookCategoriesJSON(GradeBookData $gradebookData): array
-    {
-        $toJSON = function ($gradebookCategory) {
-            return GradeBookCategoryJSONModel::fromGradeBookCategory($gradebookCategory);
-        };
-
-        return array_map($toJSON, $gradebookData->getGradeBookCategories()->toArray());
     }
 
     /**
@@ -277,12 +216,13 @@ class GradeBookAjaxService
      * @param int $gradeBookDataId
      * @param int $versionId
      * @param string $gradeBookColumnJSONData
+     * @param int[] $targetUserIds
      *
      * @return array
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    public function addGradeBookColumn(int $gradeBookDataId, int $versionId, string $gradeBookColumnJSONData)
+    public function addGradeBookColumn(int $gradeBookDataId, int $versionId, string $gradeBookColumnJSONData, array $targetUserIds)
     {
         $jsonModel = $this->parseGradeBookColumnJSONModel($gradeBookColumnJSONData);
         $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
@@ -290,13 +230,36 @@ class GradeBookAjaxService
         $column->setGradeBookCategory(null);
         $gradebookItemId = $jsonModel->getSubItemIds()[0];
         $gradeItem = $gradebookData->getGradeBookItemById($gradebookItemId);
+
         $gradeItem->setGradeBookColumn($column);
         $gradebookData->addGradeBookColumn($column);
+
+        $scoreData = $this->gradeBookItemScoreService->getScores($gradeItem, $targetUserIds);
+
+        foreach ($scoreData['scores'] as $scoreItem)
+        {
+            $userId = $scoreItem['user_id'];
+            $score = $scoreItem['score'];
+            $isAuthAbsent = $score == 'gafw';
+            $isAbsent = $score == 'afw';
+            $gradebookScore = new GradeBookScore();
+            $gradebookScore->setGradeBookData($gradebookData);
+            $gradebookScore->setGradeBookColumn($column);
+            $gradebookScore->setOverwritten(false);
+            $gradebookScore->setTargetUserId($userId);
+            $gradebookScore->setSourceScoreAuthAbsent($isAuthAbsent);
+            $gradebookScore->setSourceScoreAbsent($isAbsent);
+            if (!($isAbsent || $isAuthAbsent))
+            {
+                $gradebookScore->setSourceScore($score);
+            }
+        }
+
         $this->gradeBookService->saveGradeBook($gradebookData);
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
-            'column' => GradeBookColumnJSONModel::fromGradeBookColumn($column)
+            'column' => GradeBookColumnJSONModel::fromGradeBookColumn($column), 'scores' => $scores
         ];
     }
 

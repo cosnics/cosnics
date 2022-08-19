@@ -91,6 +91,46 @@ class PublicationRepository extends CommonDataClassRepository
     /**
      * @param ContentObjectPublication $contentObjectPublication
      * @param FilterParameters|null $filterParameters
+     * @param array|null $ids
+     *
+     * @return User[]
+     */
+    public function getTargetUsers(ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters = null, array $ids = null): array
+    {
+        if (empty($ids))
+        {
+            $ids = DataManager::getPublicationTargetUserIds(
+                $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
+            );
+        }
+
+        $searchProperties = new DataClassProperties([
+            new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME),
+            new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
+            new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE),
+        ]);
+
+        $dataClassParameters = new DataClassRetrievesParameters();
+        $condition = new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $ids);
+
+        if (is_null($filterParameters))
+        {
+            $filterParameters = new FilterParameters();
+        }
+
+        $this->filterParametersTranslator->translateFilterParameters(
+            $filterParameters, $searchProperties, $dataClassParameters, $condition
+        );
+
+        return $this->userService->findUsers(
+            $dataClassParameters->getCondition(), $dataClassParameters->getOffset(), $dataClassParameters->getCount(),
+            $dataClassParameters->getOrderBy()
+        );
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param FilterParameters|null $filterParameters
      *
      * @return array
      */
@@ -112,7 +152,7 @@ class PublicationRepository extends CommonDataClassRepository
             return $ids;
         }
 
-        $searchProperties = new DataClassProperties([
+        /*$searchProperties = new DataClassProperties([
             new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME),
             new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
             new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE),
@@ -127,7 +167,9 @@ class PublicationRepository extends CommonDataClassRepository
         $users = $this->userService->findUsers(
             $dataClassParameters->getCondition(), $dataClassParameters->getOffset(), $dataClassParameters->getCount(),
             $dataClassParameters->getOrderBy()
-        );
+        );*/
+
+        $users = $this->getTargetUsers($contentObjectPublication, $filterParameters, $ids);
 
         $filteredUserIds = [];
         foreach($users as $user)

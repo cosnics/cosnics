@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathGradeBookServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathStepContextService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Service\GradeBookPublicationService;
@@ -115,6 +116,15 @@ class LearningPathGradeBookServiceBridge implements LearningPathGradeBookService
     public function setCanEditGradeBook($canEditGradeBook = true)
     {
         $this->canEditGradeBook = $canEditGradeBook;
+    }
+
+    /**
+     * @param FilterParameters|null $filterParameters
+     * @return User[]
+     */
+    public function getTargetUsers(FilterParameters $filterParameters = null): array
+    {
+        return $this->publicationService->getTargetUsers($this->contentObjectPublication, $filterParameters);
     }
 
     /**

@@ -45,9 +45,14 @@ class GradeBookDataRepository extends CommonEntityRepository
             $this->saveEntity($item, false);
         }
 
+        foreach ($gradeBookData->getGradeBookScores() as $score)
+        {
+            $this->saveEntity($score, false);
+        }
+
         $this->flush();
 
-        foreach($gradeBookData->getRemovedEntities() as $removedEntity)
+        foreach ($gradeBookData->getRemovedEntities() as $removedEntity)
         {
             $this->removeEntity($removedEntity, false);
         }
@@ -133,6 +138,7 @@ class GradeBookDataRepository extends CommonEntityRepository
         $gradeBookData->getGradeBookCategories()[0];
         $gradeBookData->getGradeBookItems()[0];
         $gradeBookData->getGradeBookColumns()[0];
+        $gradeBookData->getGradeBookScores()[0];
 
         foreach ($gradeBookData->getGradeBookColumns() as $column)
         {

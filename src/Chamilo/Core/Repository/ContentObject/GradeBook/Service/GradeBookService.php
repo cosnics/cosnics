@@ -78,8 +78,6 @@ class GradeBookService
         //$this->rubricValidator->validateRubric($rubricData);
 
         $this->gradeBookDataRepository->saveGradeBookData($gradeBookData);
-
-
     }
 
     /**

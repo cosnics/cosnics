@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity;
 
+use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookDataJSONModel;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -83,6 +84,13 @@ class GradeBookData
      * @ORM\OrderBy({"sort" = "asc"})
      */
     protected $gradebookCategories;
+
+    /**
+     * @var GradeBookScore[] | ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="GradeBookScore", mappedBy="gradebookData")
+     */
+    protected $gradebookScores;
 
     /**
      * Keeps track of removed entities so they can be removed from the database after
@@ -598,6 +606,52 @@ class GradeBookData
     }
 
     /**
+     * @return GradeBookScore[]|ArrayCollection
+     */
+    public function getGradeBookScores()
+    {
+        return $this->gradebookScores;
+    }
+
+    /**
+     * @param GradeBookScore $gradebookScore
+     *
+     * @return GradeBookData
+     */
+    public function addGradeBookScore(GradeBookScore $gradebookScore): GradeBookData
+    {
+        if ($this->gradebookScores->contains($gradebookScore))
+        {
+            return $this;
+        }
+
+        $this->gradebookScores->add($gradebookScore);
+        $gradebookScore->setGradeBookData($this);
+
+        return $this;
+    }
+
+    /**
+     * @param GradeBookScore $gradeBookScoreToRemove
+     *
+     * @return GradeBookData
+     */
+    public function removeGradeBookScore(GradeBookScore $gradeBookScoreToRemove): GradeBookData
+    {
+        if (!$this->gradebookScores->contains($gradeBookScoreToRemove))
+        {
+            return $this;
+        }
+
+        $this->gradebookScores->removeElement($gradeBookScoreToRemove);
+        $gradeBookScoreToRemove->setGradeBookData(null);
+
+        $this->getRemovedEntities()->add($gradeBookScoreToRemove);
+
+        return $this;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getRemovedEntities(): ?ArrayCollection
@@ -608,5 +662,13 @@ class GradeBookData
         }
 
         return $this->removedEntities;
+    }
+
+    /**
+     * @return GradeBookDataJSONModel
+     */
+    public function toJSONModel(): GradeBookDataJSONModel
+    {
+        return GradeBookDataJSONModel::fromGradeBookData($this);
     }
 }

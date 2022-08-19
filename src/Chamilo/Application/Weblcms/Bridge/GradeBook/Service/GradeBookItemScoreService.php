@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Bridge\GradeBook\Service;
 
+use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookItemScoreServiceInterface;
 use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\ScoreServiceManager;
@@ -14,7 +15,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Learni
  *
  * @author Stefan Gabriels - Hogeschool Gent
  */
-class GradeBookItemScoreService
+class GradeBookItemScoreService implements GradeBookItemScoreServiceInterface
 {
     /**
      * @var PublicationService

@@ -133,45 +133,13 @@ abstract class Manager extends AjaxManager
         return $this->getBridgeManager()->getBridgeByInterface(GradeBookServiceBridgeInterface::class);
     }
 
-/*    /**
-     * @return UserService
+    /**
+     * @return int[]
      */
-/*    protected function getUserService(): UserService
+    protected function getTargetUserIds(): array
     {
-        return $this->getService(UserService::class);
-    }*/
-
-/*    /**
-     * @return PresenceService
-     */
-/*    protected function getPresenceService(): PresenceService
-    {
-        return $this->getService(PresenceService::class);
-    }*/
-
-/*    /**
-     * @return PresenceResultPeriodService
-     */
-/*    protected function getPresenceResultPeriodService(): PresenceResultPeriodService
-    {
-        return $this->getService(PresenceResultPeriodService::class);
-    }*/
-
-/*    /**
-     * @return PresenceResultEntryService
-     */
-/*    protected function getPresenceResultEntryService(): PresenceResultEntryService
-    {
-        return $this->getService(PresenceResultEntryService::class);
-    }*/
-
-/*    /**
-     * @return PresenceValidationService
-     */
-/*    protected function getPresenceValidationService(): PresenceValidationService
-    {
-        return $this->getService(PresenceValidationService::class);
-    }*/
+        return $this->getGradeBookServiceBridge()->getTargetUserIds();
+    }
 
     /**
      * @param string $json

@@ -10,7 +10,7 @@ use http\Exception\InvalidArgumentException;
 use JMS\Serializer\Annotation\Type;
 
 /**
- * @package Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax
+ * @package Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */

@@ -15,6 +15,6 @@ class AddColumnComponent extends Manager implements CsrfComponentInterface
     function runAjaxComponent()
     {
         return $this->getGradeBookAjaxService()->addGradeBookColumn(
-            $this->getGradeBookDataId(), $this->getVersion(), $this->getGradeColumnData());
+            $this->getGradeBookDataId(), $this->getVersion(), $this->getGradeColumnData(), $this->getTargetUserIds());
     }
 }

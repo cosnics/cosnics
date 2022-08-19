@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity;
 
+use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookColumnJSONModel;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use http\Exception\InvalidArgumentException;
@@ -405,5 +406,13 @@ class GradeBookColumn
         $this->gradebookColumnSubItems->removeElement($gradeBookItemToRemove);
         $gradeBookItemToRemove->setGradeBookColumn(null);
         return $this;
+    }
+
+    /**
+     * @return GradeBookColumnJSONModel
+     */
+    public function toJSONModel(): GradeBookColumnJSONModel
+    {
+        return GradeBookColumnJSONModel::fromGradeBookColumn($this);
     }
 }

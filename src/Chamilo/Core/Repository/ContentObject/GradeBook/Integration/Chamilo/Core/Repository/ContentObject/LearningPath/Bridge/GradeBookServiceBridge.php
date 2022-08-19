@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemScoreServi
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathGradeBookServiceBridgeInterface;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
@@ -40,6 +41,15 @@ class GradeBookServiceBridge implements GradeBookServiceBridgeInterface
     public function canEditGradeBook(): bool
     {
         return $this->learningPathGradeBookServiceBridge->canEditGradeBook();
+    }
+
+    /**
+     * @param FilterParameters|null $filterParameters
+     * @return User[]
+     */
+    public function getTargetUsers(FilterParameters $filterParameters = null): array
+    {
+        return $this->learningPathGradeBookServiceBridge->getTargetUsers($filterParameters);
     }
 
     /**

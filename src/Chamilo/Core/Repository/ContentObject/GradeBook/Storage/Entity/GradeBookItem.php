@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity;
 
+use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookItemJSONModel;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -165,7 +166,6 @@ class GradeBookItem
     {
         $this->gradebookColumn = $gradebookColumn;
 
-
         if ($this->gradebookColumn === $gradebookColumn)
         {
             return $this;
@@ -306,5 +306,13 @@ class GradeBookItem
     public function getContextIdentifier(): ContextIdentifier
     {
         return new ContextIdentifier($this->getContextClass(), $this->getContextId());
+    }
+
+    /**
+     * @return GradeBookItemJSONModel
+     */
+    public function toJSONModel(): GradeBookItemJSONModel
+    {
+        return GradeBookItemJSONModel::fromGradeBookItem($this);
     }
 }

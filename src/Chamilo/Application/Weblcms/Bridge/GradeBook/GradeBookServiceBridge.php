@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Service\GradeBookP
 use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemService;
 use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemScoreService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
@@ -122,7 +123,18 @@ class GradeBookServiceBridge implements GradeBookServiceBridgeInterface
 
     /**
      * @param FilterParameters|null $filterParameters
-     * @return array
+     *
+     * @return User[]
+     */
+    public function getTargetUsers(FilterParameters $filterParameters = null): array
+    {
+        return $this->publicationService->getTargetUsers($this->contentObjectPublication, $filterParameters);
+    }
+
+    /**
+     * @param FilterParameters|null $filterParameters
+     *
+     * @return int[]
      */
     public function getTargetUserIds(FilterParameters $filterParameters = null): array
     {

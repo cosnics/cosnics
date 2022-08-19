@@ -42,6 +42,17 @@ class GradeBookPublicationService
      *
      * @return array
      */
+    public function getTargetUsers(ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters = null): array
+    {
+        return $this->publicationRepository->getTargetUsers($contentObjectPublication, $filterParameters);
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param FilterParameters|null $filterParameters
+     *
+     * @return array
+     */
     public function getTargetUserIds(ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters = null): array
     {
         return $this->publicationRepository->getTargetUserIds($contentObjectPublication, $filterParameters);
