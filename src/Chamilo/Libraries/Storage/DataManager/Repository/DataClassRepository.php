@@ -34,6 +34,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\ParametersHandler;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Uid\Uuid;
 
 /**
  *
@@ -285,11 +286,18 @@ class DataClassRepository
         }
 
         $objectProperties = $dataClass->getDefaultProperties();
-        unset($objectProperties[DataClass::PROPERTY_ID]);
+
+        if(!Uuid::isValid((string) $objectProperties[DataClass::PROPERTY_ID]))
+        {
+            unset($objectProperties[DataClass::PROPERTY_ID]);
+        }
 
         $dataClassCreated = $this->getDataClassDatabase()->create($objectTableName, $objectProperties);
 
-        $dataClass->setId($this->getDataClassDatabase()->getLastInsertedIdentifier($objectTableName));
+        if(!Uuid::isValid((string) $objectProperties[DataClass::PROPERTY_ID]))
+        {
+            $dataClass->setId($this->getDataClassDatabase()->getLastInsertedIdentifier($objectTableName));
+        }
 
         if ($dataClassCreated === true && $dataClass instanceof CompositeDataClass && $dataClass::isExtended())
         {

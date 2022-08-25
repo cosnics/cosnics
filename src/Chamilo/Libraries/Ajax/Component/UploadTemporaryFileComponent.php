@@ -5,8 +5,8 @@ use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Ramsey\Uuid\Uuid;
 use Exception;
+use Symfony\Component\Uid\Uuid;
 
 /**
  *
@@ -35,7 +35,7 @@ class UploadTemporaryFileComponent extends Manager
 
         Filesystem::create_dir($temporaryPath);
 
-        $fileName = md5(Uuid::uuid4());
+        $fileName = md5(Uuid::v4());
         $temporaryFilePath = $temporaryPath . $fileName;
 
         $result = move_uploaded_file($file->getRealPath(), $temporaryFilePath);
@@ -70,12 +70,12 @@ class UploadTemporaryFileComponent extends Manager
         $file = $this->getRequest()->files->get($filePropertyName);
         if (empty($file))
         {
-            $errorMessage = "File with key " . $filePropertyName . "not found in request.";
+            $errorMessage = 'File with key ' . $filePropertyName . 'not found in request.';
 
             $availableKeys = $this->getRequest()->files->keys();
             if (!empty($availableKeys))
             {
-                $errorMessage .= " Available file keys: " . implode(', ', $availableKeys) . ".";
+                $errorMessage .= ' Available file keys: ' . implode(', ', $availableKeys) . '.';
             }
 
             throw new Exception($errorMessage);

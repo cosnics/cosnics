@@ -20,7 +20,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Repository\Service
@@ -29,6 +29,51 @@ use Ramsey\Uuid\Uuid;
  */
 class ContentObjectSaver
 {
+    /**
+     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
+     */
+    private $classnameUtilities;
+
+    /**
+     * @var \Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService
+     */
+    private $contentObjectRelationService;
+
+    /**
+     * @var \Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository
+     */
+    private $contentObjectRepository;
+
+    /**
+     * @var \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
+     */
+    private $dataClassEntityFactory;
+
+    /**
+     * @var \Chamilo\Core\Repository\Service\IncludeParserManager
+     */
+    private $includeParserManager;
+
+    /**
+     * @var \Chamilo\Core\Metadata\Service\EntityService
+     */
+    private $metadataEntityService;
+
+    /**
+     * @var \Chamilo\Core\Metadata\Service\InstanceService
+     */
+    private $metadataInstanceService;
+
+    /**
+     * @var \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface
+     */
+    private $publicationAggregator;
+
+    /**
+     * @var \Chamilo\Core\Repository\Service\RepositoryCategoryService
+     */
+    private $repositoryCategoryService;
+
     /**
      * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
@@ -40,59 +85,14 @@ class ContentObjectSaver
     private $stringUtilities;
 
     /**
-     * @var \Chamilo\Core\Repository\Service\RepositoryCategoryService
+     * @var \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
      */
-    private $repositoryCategoryService;
-
-    /**
-     * @var \Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService
-     */
-    private $contentObjectRelationService;
-
-    /**
-     * @var \Chamilo\Core\Repository\Service\IncludeParserManager
-     */
-    private $includeParserManager;
-
-    /**
-     * @var \Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository
-     */
-    private $contentObjectRepository;
-
-    /**
-     * @var \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface
-     */
-    private $publicationAggregator;
-
-    /**
-     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    private $classnameUtilities;
-
-    /**
-     * @var \Chamilo\Core\Metadata\Service\InstanceService
-     */
-    private $metadataInstanceService;
+    private $templateRegistrationConsulter;
 
     /**
      * @var \Chamilo\Core\User\Service\UserService
      */
     private $userService;
-
-    /**
-     * @var \Chamilo\Core\Metadata\Service\EntityService
-     */
-    private $metadataEntityService;
-
-    /**
-     * @var \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
-     */
-    private $dataClassEntityFactory;
-
-    /**
-     * @var \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
-     */
-    private $templateRegistrationConsulter;
 
     /**
      * @param \Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository $contentObjectRepository
@@ -137,7 +137,7 @@ class ContentObjectSaver
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
-     * @return boolean
+     * @return bool
      */
     protected function allowsCategorySelection(ContentObject $contentObject)
     {
@@ -147,10 +147,10 @@ class ContentObjectSaver
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param integer $attachmentIdentifier
+     * @param int $attachmentIdentifier
      * @param string $type
      *
-     * @return boolean
+     * @return bool
      * @throws \ReflectionException
      * @throws \Exception
      */
@@ -172,15 +172,14 @@ class ContentObjectSaver
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param integer[] $attachmentIdentifiers
+     * @param int $attachmentIdentifiers
      * @param string $type
      *
-     * @return boolean
+     * @return bool
      * @throws \ReflectionException
      */
     public function attachContentObjectsByIdentifierAndType(
-        ContentObject $contentObject, array $attachmentIdentifiers = [],
-        string $type = ContentObject::ATTACHMENT_NORMAL
+        ContentObject $contentObject, array $attachmentIdentifiers = [], string $type = ContentObject::ATTACHMENT_NORMAL
     )
     {
         foreach ($attachmentIdentifiers as $attachmentIdentifier)
@@ -196,10 +195,10 @@ class ContentObjectSaver
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param integer $attachmentIdentifier
+     * @param int $attachmentIdentifier
      * @param string $type
      *
-     * @return integer
+     * @return int
      * @throws \ReflectionException
      */
     public function countContentObjectAttachmentsByIdentifierAndType(
@@ -214,7 +213,7 @@ class ContentObjectSaver
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
-     * @return boolean
+     * @return bool
      * @throws \ReflectionException
      * @throws \Exception
      */
@@ -245,7 +244,7 @@ class ContentObjectSaver
         }
         else
         {
-            $contentObject->set_object_number(Uuid::uuid4());
+            $contentObject->set_object_number(Uuid::v4());
             $contentObject->set_current(ContentObject::CURRENT_SINGLE);
         }
 
@@ -272,7 +271,7 @@ class ContentObjectSaver
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment $contentObjectAttachment
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createContentObjectAttachment(ContentObjectAttachment $contentObjectAttachment)
@@ -330,7 +329,7 @@ class ContentObjectSaver
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment $contentObjectAttachment
      *
-     * @return boolean
+     * @return bool
      * @throws \ReflectionException
      */
     public function deleteContentObjectAttachment(ContentObjectAttachment $contentObjectAttachment)
@@ -342,7 +341,7 @@ class ContentObjectSaver
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param string $type
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function detachAllContentObjectsByType(
@@ -364,10 +363,10 @@ class ContentObjectSaver
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param integer $attachmentIdentifier
+     * @param int $attachmentIdentifier
      * @param string $type
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function detachContentObjectByIdentifierAndType(
@@ -392,8 +391,8 @@ class ContentObjectSaver
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param string $type
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      * @throws \Exception
@@ -410,8 +409,8 @@ class ContentObjectSaver
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param boolean $includeLast
-     * @param boolean $includeSelf
+     * @param bool $includeLast
+     * @param bool $includeSelf
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      * @throws \ReflectionException
@@ -429,7 +428,7 @@ class ContentObjectSaver
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param array $values
      *
-     * @return integer
+     * @return int
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      * @throws \ReflectionException
      */
@@ -471,7 +470,7 @@ class ContentObjectSaver
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param integer $attachmentIdentifier
+     * @param int $attachmentIdentifier
      * @param string $type
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment
@@ -490,8 +489,8 @@ class ContentObjectSaver
     }
 
     /**
-     * @param integer $templateIdentifier
-     * @param integer $userIdentfier
+     * @param int $templateIdentifier
+     * @param int $userIdentfier
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
@@ -506,7 +505,7 @@ class ContentObjectSaver
     }
 
     /**
-     * @param integer $templateIdentifier
+     * @param int $templateIdentifier
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
@@ -717,10 +716,10 @@ class ContentObjectSaver
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param integer $attachmentIdentifier
+     * @param int $attachmentIdentifier
      * @param string $type
      *
-     * @return boolean
+     * @return bool
      * @throws \ReflectionException
      */
     public function isContentObjectAttachedTo(
@@ -733,7 +732,7 @@ class ContentObjectSaver
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param integer $attachmentIdentifier
+     * @param int $attachmentIdentifier
      * @param string $type
      *
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment
@@ -798,9 +797,9 @@ class ContentObjectSaver
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param boolean $trueUpdate
+     * @param bool $trueUpdate
      *
-     * @return boolean
+     * @return bool
      * @throws \ReflectionException
      */
     public function updateContentObject(ContentObject $contentObject, bool $trueUpdate = true)
@@ -836,7 +835,7 @@ class ContentObjectSaver
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param array $values
      *
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      * @throws \ReflectionException
      * @throws \Exception

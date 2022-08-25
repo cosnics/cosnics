@@ -40,5 +40,6 @@
         <service id="Chamilo\Libraries\Format\Structure\PageConfiguration"/>
         <service id="Chamilo\Libraries\Format\Structure\FooterRenderer"/>
         <service id="Chamilo\Libraries\Format\Structure\HeaderRenderer"/>
+        <service id="Chamilo\Libraries\Format\Structure\PanelRenderer"/>
     </services>
 </container>

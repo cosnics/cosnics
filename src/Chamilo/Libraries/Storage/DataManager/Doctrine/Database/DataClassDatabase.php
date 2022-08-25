@@ -147,12 +147,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $queryBuilder = $this->getConnection()->createQueryBuilder();
 
             $queryBuilder->delete(
-                $dataClassName::getStorageUnitName(), $this->getAlias($dataClassName::getStorageUnitName())
+                $dataClassName::getStorageUnitName()/*, $this->getAlias($dataClassName::getStorageUnitName())*/
             );
 
             if (isset($condition))
             {
-                $queryBuilder->where($this->getConditionPartTranslatorService()->translate($this, $condition));
+                $queryBuilder->where($this->getConditionPartTranslatorService()->translate($this, $condition, false));
             }
 
             $this->getConnection()->executeQuery($queryBuilder->getSQL());

@@ -46,7 +46,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 
 /**
  *
@@ -387,7 +387,7 @@ class ContentObject extends CompositeDataClass
                 }
                 else
                 {
-                    $content_object->set_object_number(Uuid::uuid4());
+                    $content_object->set_object_number(Uuid::v4());
                     $content_object->set_current(ContentObject::CURRENT_SINGLE);
                 }
 
@@ -444,7 +444,7 @@ class ContentObject extends CompositeDataClass
             $this->set_modification_date($now);
         }
 
-        $this->set_object_number(Uuid::uuid4());
+        $this->set_object_number(Uuid::v4());
 
         if (!parent::create())
         {

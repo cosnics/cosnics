@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Notification;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * A dummy Notification class which allows the preview to emulate the Notification functionality
@@ -13,7 +13,7 @@ use Ramsey\Uuid\Uuid;
 class DummyNotification extends Notification
 {
     // Properties
-    const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
+    public const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
 
     /**
      *
@@ -21,7 +21,7 @@ class DummyNotification extends Notification
      */
     public function create(): bool
     {
-        $this->set_id(Uuid::uuid4());
+        $this->set_id(Uuid::v4());
 
         return PreviewStorage::getInstance()->create_notification($this);
     }
@@ -33,15 +33,6 @@ class DummyNotification extends Notification
     public function delete(): bool
     {
         return PreviewStorage::getInstance()->delete_notification($this);
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function get_content_object_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -61,6 +52,15 @@ class DummyNotification extends Notification
     public static function getStorageUnitName(): string
     {
         return 'repository_portfolio_preview_notification';
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function get_content_object_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**

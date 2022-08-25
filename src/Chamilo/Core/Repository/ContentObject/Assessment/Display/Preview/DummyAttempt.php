@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractAttempt;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 
 /**
  *
@@ -13,7 +13,7 @@ use Ramsey\Uuid\Uuid;
  */
 class DummyAttempt extends AbstractAttempt
 {
-    const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
+    public const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
 
     /**
      *
@@ -21,7 +21,7 @@ class DummyAttempt extends AbstractAttempt
      */
     public function create(): bool
     {
-        $this->set_id(Uuid::uuid4());
+        $this->set_id(Uuid::v4());
 
         return PreviewStorage::getInstance()->create_assessment_attempt($this);
     }
@@ -33,15 +33,6 @@ class DummyAttempt extends AbstractAttempt
     public function delete(): bool
     {
         return PreviewStorage::getInstance()->delete_assessment_attempt($this);
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function get_content_object_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -63,6 +54,15 @@ class DummyAttempt extends AbstractAttempt
     public static function getStorageUnitName(): string
     {
         return 'repository_assessment_preview_assessment_attempt';
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function get_content_object_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**

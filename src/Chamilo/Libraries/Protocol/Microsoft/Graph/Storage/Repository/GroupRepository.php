@@ -2,12 +2,12 @@
 
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
-use Ramsey\Uuid\Uuid;
 use GuzzleHttp\Exception\ClientException;
 use Microsoft\Graph\Model\Event;
 use Microsoft\Graph\Model\Group;
 use Microsoft\Graph\Model\PlannerPlan;
 use Microsoft\Graph\Model\User;
+use Symfony\Component\Uid\Uuid;
 
 /**
  *
@@ -54,7 +54,7 @@ class GroupRepository
             'displayName' => $groupName,
             'mailEnabled' => false,
             'mailNickname' => str_replace(
-                '-', '_', $this->cosnicsPrefix . Uuid::uuid4()
+                '-', '_', $this->cosnicsPrefix . Uuid::v4()
             ),
             'groupTypes' => [
                 'Unified',

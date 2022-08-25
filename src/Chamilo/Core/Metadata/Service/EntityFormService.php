@@ -18,8 +18,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Ramsey\Uuid\Uuid;
 use stdClass;
+use Symfony\Component\Uid\Uuid;
 
 /**
  *
@@ -33,6 +33,11 @@ class EntityFormService
 {
 
     /**
+     * @var \Chamilo\Core\Metadata\Element\Service\ElementService
+     */
+    private $elementService;
+
+    /**
      * @var \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService
      */
     private $propertyProviderService;
@@ -41,11 +46,6 @@ class EntityFormService
      * @var \Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService
      */
     private $vocabularyService;
-
-    /**
-     * @var \Chamilo\Core\Metadata\Element\Service\ElementService
-     */
-    private $elementService;
 
     /**
      * @param \Chamilo\Core\Metadata\Provider\Service\PropertyProviderService $propertyProviderService
@@ -100,13 +100,12 @@ class EntityFormService
 
         $elements = $this->getElementService()->getElementsForSchemaInstance($schemaInstance);
 
-        foreach($elements as $element)
+        foreach ($elements as $element)
         {
             try
             {
                 $providedIcon = new FontAwesomeGlyph(
-                    'lock', [], Translation::get('ProvidedMetadataElementValue', null, 'Chamilo\Core\Metadata'),
-                    'fas'
+                    'lock', [], Translation::get('ProvidedMetadataElementValue', null, 'Chamilo\Core\Metadata'), 'fas'
                 );
 
                 $providedIcon = '<span class="locked-row-label">' . $providedIcon->render() . '</span>';
@@ -157,7 +156,7 @@ class EntityFormService
                 if ($element->usesVocabulary())
                 {
 
-                    $uniqueIdentifier = Uuid::uuid4();
+                    $uniqueIdentifier = Uuid::v4();
 
                     $class = 'metadata-input';
                     if ($element->isVocabularyUserDefined())
@@ -288,7 +287,7 @@ class EntityFormService
 
         $elements = $this->getElementService()->getElementsForSchemaInstance($schemaInstance);
 
-        foreach($elements as $element)
+        foreach ($elements as $element)
         {
             try
             {

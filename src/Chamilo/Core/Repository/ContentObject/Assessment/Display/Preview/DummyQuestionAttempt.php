@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractQuestionAttempt;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 
 /**
  *
@@ -13,17 +13,47 @@ use Ramsey\Uuid\Uuid;
  */
 class DummyQuestionAttempt extends AbstractQuestionAttempt
 {
-    const PROPERTY_ATTEMPT_ID = 'attempt_id';
+    public const PROPERTY_ATTEMPT_ID = 'attempt_id';
+
+    /**
+     *
+     * @see \libraries\storage\DataClass::create()
+     */
+    public function create(): bool
+    {
+        $this->set_id(Uuid::v4());
+
+        return PreviewStorage::getInstance()->create_assessment_question_attempt($this);
+    }
+
+    /**
+     *
+     * @see \libraries\storage\DataClass::delete()
+     */
+    public function delete(): bool
+    {
+        return PreviewStorage::getInstance()->delete_assessment_question_attempt($this);
+    }
 
     /**
      *
      * @param string[] $extendedPropertyNames
+     *
      * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_ATTEMPT_ID;
+
         return parent::getDefaultPropertyNames($extendedPropertyNames);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_assessment_preview_question_attempt';
     }
 
     /**
@@ -51,32 +81,5 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
     public function update(): bool
     {
         return PreviewStorage::getInstance()->update_assessment_question_attempt($this);
-    }
-
-    /**
-     *
-     * @see \libraries\storage\DataClass::create()
-     */
-    public function create(): bool
-    {
-        $this->set_id(Uuid::uuid4());
-        return PreviewStorage::getInstance()->create_assessment_question_attempt($this);
-    }
-
-    /**
-     *
-     * @see \libraries\storage\DataClass::delete()
-     */
-    public function delete(): bool
-    {
-        return PreviewStorage::getInstance()->delete_assessment_question_attempt($this);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_assessment_preview_question_attempt';
     }
 }

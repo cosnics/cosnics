@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview;
 
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Feedback;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * A dummy Feedback class which allows the preview to emulate the Feedback functionality
@@ -13,7 +13,7 @@ use Ramsey\Uuid\Uuid;
 class DummyFeedback extends Feedback
 {
     // Properties
-    const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
+    public const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
 
     /**
      *
@@ -21,7 +21,7 @@ class DummyFeedback extends Feedback
      */
     public function create(): bool
     {
-        $this->set_id(Uuid::uuid4());
+        $this->set_id(Uuid::v4());
 
         return PreviewStorage::getInstance()->create_feedback($this);
     }
@@ -33,15 +33,6 @@ class DummyFeedback extends Feedback
     public function delete(): bool
     {
         return PreviewStorage::getInstance()->delete_feedback($this);
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function get_content_object_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -60,6 +51,15 @@ class DummyFeedback extends Feedback
     public static function getStorageUnitName(): string
     {
         return 'repository_portfolio_preview_feedback';
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function get_content_object_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
