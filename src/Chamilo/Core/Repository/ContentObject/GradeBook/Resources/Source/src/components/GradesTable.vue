@@ -38,7 +38,19 @@
                 </b-tr>
             </b-thead>
             <b-tbody>
-                <b-tr v-for="{id, student, results} in gradeBook.resultsData" :key="student" class="table-row table-body-row">
+                <b-tr v-for="user in gradeBook.users" :key="'user-' + user.id" class="table-row table-body-row">
+                    <b-td class="col-sticky table-student">{{ user.firstName }} {{ user.lastName }}</b-td>
+                    <template v-for="category in displayedCategories">
+                        <b-td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></b-td>
+                        <b-td v-else v-for="columnId in category.columnIds" :key="`${category.id}-${columnId}-result`" :style="editStudentScoreId === user.id && editScoreId === columnId ? 'position: relative; z-index: 2' : ''">
+                            <student-result :result="getResult(columnId, user.id)"
+                                            style="cursor: pointer;" :style="gradeBook.countsForEndResult(columnId) ? '' : 'font-style: italic'"
+                                            @edit="showStudentScoreDialog(id, columnId)"></student-result>
+                        </b-td>
+                    </template>
+                    <b-td class="col-sticky table-student-total"> {{ getEndResult(user.id)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></b-td>
+                </b-tr>
+                <!--<b-tr v-for="{id, student, results} in gradeBook.resultsData" :key="student" class="table-row table-body-row">
                     <b-td class="col-sticky table-student">{{ student }}</b-td>
                     <template v-for="category in displayedCategories">
                         <b-td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></b-td>
@@ -50,7 +62,7 @@
                         </b-td>
                     </template>
                     <b-td class="col-sticky table-student-total"> {{ gradeBook.getEndResult(id)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></b-td>
-                </b-tr>
+                </b-tr>-->
             </b-tbody>
         </b-table-simple>
     </div>
@@ -93,6 +105,56 @@ export default class GradesTable extends Vue {
         result.value = value;
         result.overwritten = true;
         this.hideStudentScoreDialog();
+    }
+
+    getResult(columnId: ColumnId, userId: number): ResultType {
+        if (!this.gradeBook.tscores[columnId]) { return null; }
+        const score = this.gradeBook.tscores[columnId][userId];
+        if (score.sourceScoreAbsent) { return 'afw'; }
+        if (score.sourceScoreAuthAbsent) { return 'gafw'; }
+        //console.log(columnId, userId, score.sourceScore);
+        return score.sourceScore;
+    }
+
+    getEndResult(userId: number) {
+        /*const r = this.resultsData.find(res => res.id === studentId);
+        if (!r) { return 0; }
+        const results = r.results;*/
+        let endResult = 0;
+        let maxWeight = 0;
+        this.gradeBook.gradeColumns.filter(column => column.countForEndResult).forEach(column => {
+            let result = this.getResult(column.id, userId);
+            if (result === null) {
+                result = 'afw';
+            }
+            const weight = this.gradeBook.getWeight(column.id);
+            if (typeof result === 'number') {
+                maxWeight += weight;
+            } else if (result === 'gafw') {
+                if (column.authPresenceEndResult !== GradeBook.NO_SCORE) {
+                    maxWeight += weight;
+                    if (column.authPresenceEndResult === GradeBook.MAX_SCORE) {
+                        endResult += weight;
+                    }
+                }
+            } else if (result === 'afw') {
+                if (column.unauthPresenceEndResult !== GradeBook.NO_SCORE) {
+                    maxWeight += weight;
+                    if (column.unauthPresenceEndResult === GradeBook.MAX_SCORE) {
+                        endResult += weight;
+                    }
+                }
+            }
+            if (typeof result === 'number') {
+                endResult += (result * weight * 0.01);
+            }
+        });
+
+        if (maxWeight === 0) {
+            return 0;
+        }
+
+        return endResult / maxWeight * 100;
     }
 
     get showNullCategory() {

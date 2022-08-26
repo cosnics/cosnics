@@ -23,9 +23,23 @@
 
         async load(): Promise<void> {
             const allData: any = await Connector.loadGradeBookData(this.apiConfig.loadGradeBookDataURL, this.apiConfig.csrfToken);
+            console.log(allData);
             if (allData) {
-                this.gradeBook = GradeBook.from(allData);
+                this.gradeBook = GradeBook.from(allData.gradebook);
+                this.gradeBook.users = allData.users;
                 this.connector = new Connector(this.apiConfig, this.gradeBook.dataId, this.gradeBook.currentVersion);
+                let tscores: any = {};
+                allData.scores.forEach((score: any) => {
+                    if (!tscores[score.columnId]) {
+                        tscores[score.columnId] = {};
+                    }
+                    tscores[score.columnId][score.targetUserId] = score;
+                });
+                this.gradeBook.tscores = tscores;
+                //console.log(this.gradeBook.gradeItems);
+                //let item = this.gradeBook.gradeItems[0];
+                //console.log(item.title);
+                //const d = await this.connector.loadGradeItemScores(item);
             }
         }
 
@@ -35,6 +49,7 @@
     }
 </script>
 
+<!--
 <style>
 .navbar-brand {
     padding: 0;
@@ -218,4 +233,4 @@ button.btn {
 }
 </style>
 
-
+-->

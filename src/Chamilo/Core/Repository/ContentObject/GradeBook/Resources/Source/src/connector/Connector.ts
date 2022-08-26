@@ -71,6 +71,7 @@ export default class Connector {
 
     async loadGradeItemScores(gradeItem: GradeItem) {
         const res = await axios.get(this.apiConfig.loadGradeItemScoresURL, {params: {'gradeItemId': gradeItem.id}});
+        this.logResponse(res.data);
         return res.data;
     }
 
@@ -109,27 +110,29 @@ export default class Connector {
                 'gradeColumnData': JSON.stringify(gradeColumn)
             };
             const data = await this.executeAPIRequest(this.apiConfig.addColumnURL, parameters);
-            callback(data.column);
+            callback(data.column, data.scores);
         });
     }
 
-    addColumnSubItem(gradeColumnId: ColumnId, gradeItemId: ItemId) {
+    addColumnSubItem(gradeColumnId: ColumnId, gradeItemId: ItemId, callback: Function) {
         this.addToQueue(async () => {
             const parameters = {
                 'gradeColumnId': gradeColumnId,
                 'gradeItemId': gradeItemId
             };
-            await this.executeAPIRequest(this.apiConfig.addColumnSubItemURL, parameters);
+            const data = await this.executeAPIRequest(this.apiConfig.addColumnSubItemURL, parameters);
+            callback(data.column, data.scores);
         });
     }
 
-    removeColumnSubItem(gradeColumnId: ColumnId, gradeItemId: ItemId) {
+    removeColumnSubItem(gradeColumnId: ColumnId, gradeItemId: ItemId, callback: Function) {
         this.addToQueue(async () => {
             const parameters = {
                 'gradeColumnId': gradeColumnId,
                 'gradeItemId': gradeItemId
             };
-            await this.executeAPIRequest(this.apiConfig.removeColumnSubItemURL, parameters);
+            const data = await this.executeAPIRequest(this.apiConfig.removeColumnSubItemURL, parameters);
+            callback(data.column, data.scores);
         });
     }
 

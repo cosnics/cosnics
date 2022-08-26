@@ -45,6 +45,12 @@ export interface Category {
     columnIds: ColumnId[];
 }
 
+export interface User {
+    id: number;
+    firstName: string;
+    lastName: string;
+}
+
 const COUNT_FOR_END_RESULT_DEFAULT = true;
 const AUTH_PRESENCE_END_RESULT_DEFAULT = 0;
 const UNAUTH_PRESENCE_END_RESULT_DEFAULT = 2;
@@ -60,11 +66,12 @@ export default class GradeBook {
     public nullCategory: Category = {id: 0, title: '', color: '', columnIds: []};
     public originalResultsData: any[] = [];
     public resultsData: ResultsData[] = [];
+    public users: User[] = [];
+    public tscores: any = {};
 
     public readonly dataId;
     public currentVersion: number|null;
     public readonly title;
-
 
     constructor(dataId: number, currentVersion: number|null, title: string) {
         this.dataId = dataId;
@@ -260,12 +267,12 @@ export default class GradeBook {
         this.gradeColumns.push(column);
         this.addItemToCategory(0, newId);
 
-        this.originalResultsData.forEach(data => {
+        /*this.originalResultsData.forEach(data => {
             const r = this.resultsData.find(d => d.id === data.id);
             if (r) {
                 r.results.push({ id: newId, value: data.results.find((r: any) => r.id === item.id)?.value || null, ref: item.id, overwritten: false });
             }
-        });
+        });*/
         return column;
     }
 
@@ -332,13 +339,14 @@ export default class GradeBook {
         const srcColumn = this.findGradeColumnWithGradeItem(item.id);
         column.title = this.getTitle(columnId);
         column.type = 'group';
-        this.updateResultsData(item, columnId);
+        //this.updateResultsData(item, columnId);
         column.subItemIds.push(item.id);
         if (srcColumn) {
             this.gradeColumns = this.gradeColumns.filter(column => column !== srcColumn);
             this.allCategories.forEach(cat => {
                 cat.columnIds = cat.columnIds.filter(id => id !== srcColumn.id);
             });
+            delete this.tscores[srcColumn.id];
         }
     }
 
@@ -371,7 +379,7 @@ export default class GradeBook {
         return false;
     }
 
-    private updateResultsData(item: GradeItem, columnId: ItemId) {
+    /*private updateResultsData(item: GradeItem, columnId: ItemId) {
 
         const srcColumn = this.findGradeColumnWithGradeItem(item.id);
 
@@ -398,12 +406,13 @@ export default class GradeBook {
                 }
             }
         });
-    }
+    }*/
 
     removeColumn(column: GradeColumn) {
         column.subItemIds.forEach(itemId => {
             this.removeSubItem(this.getGradeItem(itemId)!);
         });
+        delete this.tscores[column.id];
         this.gradeColumns = this.gradeColumns.filter(col => col !== column);
         this.allCategories.forEach(cat => {
             cat.columnIds = cat.columnIds.filter(id => id !== column.id);
@@ -447,7 +456,8 @@ export default class GradeBook {
         gradeBook.categories = gradeBookObject.categories;
         gradeBook.nullCategory = gradeBookObject.nullCategory;
         gradeBook.originalResultsData = gradeBookObject.resultsData;
-        gradeBook.resultsData = convertedResultsData(gradeBook.gradeColumns, gradeBookObject.resultsData);
+        //gradeBook.resultsData = convertedResultsData(gradeBook.gradeColumns, gradeBookObject.resultsData);
+        gradeBook.resultsData = [];
 
         return gradeBook;
     }

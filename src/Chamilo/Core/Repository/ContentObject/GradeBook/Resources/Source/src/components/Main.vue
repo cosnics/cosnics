@@ -43,8 +43,15 @@
 
         addGradeItem(item: GradeItem) {
             const column = this.gradeBook.addGradeColumnFromItem(item);
-            this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}) => {
+            this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: any) => {
                 this.gradeBook.updateGradeColumnId(column, id);
+                const tscores = this.gradeBook.tscores;
+                scores.forEach((score: any) => {
+                    if (!tscores[score.columnId]) {
+                        Vue.set(tscores, score.columnId, {});
+                    }
+                    tscores[score.columnId][score.targetUserId] = score;
+                });
             });
         }
 
@@ -110,11 +117,31 @@
         }
 
         onAddSubItem(item: GradeItem, columnId: ColumnId) {
-            this.connector?.addColumnSubItem(columnId, item.id);
+            this.connector?.addColumnSubItem(columnId, item.id, (column: GradeColumn, scores: any) => {
+                console.log('scores', scores);
+                const tscores = this.gradeBook.tscores;
+                delete tscores[columnId];
+                scores.forEach((score: any) => {
+                    if (!tscores[columnId]) {
+                        Vue.set(tscores, columnId, {});
+                    }
+                    tscores[columnId][score.targetUserId] = score;
+                });
+            });
         }
 
         onRemoveSubItem(item: GradeItem, columnId: ColumnId) {
-            this.connector?.removeColumnSubItem(columnId, item.id);
+            this.connector?.removeColumnSubItem(columnId, item.id, (column: GradeColumn, scores: any) => {
+                console.log('scores', scores);
+                const tscores = this.gradeBook.tscores;
+                delete tscores[columnId];
+                scores.forEach((score: any) => {
+                    if (!tscores[columnId]) {
+                        Vue.set(tscores, columnId, {});
+                    }
+                    tscores[columnId][score.targetUserId] = score;
+                });
+            });
         }
 
         onRemoveColumn(column: GradeColumn) {
