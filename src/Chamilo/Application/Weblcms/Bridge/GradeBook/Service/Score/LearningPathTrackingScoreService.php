@@ -3,6 +3,8 @@ namespace Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score;
 
 use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\TrackingServiceBuilderService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScore;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 
@@ -30,7 +32,7 @@ class LearningPathTrackingScoreService implements LearningPathScoreServiceInterf
      * @param ContentObjectPublication $publication
      * @param TreeNode $treeNode
      *
-     * @return array
+     * @return GradeScoreInterface[]
      * @throws \Exception
      */
     public function getScoresFromTreeNode(ContentObjectPublication $publication, TreeNode $treeNode): array
@@ -48,7 +50,7 @@ class LearningPathTrackingScoreService implements LearningPathScoreServiceInterf
         foreach ($learningPathAttempts as $attempt)
         {
             $userId = $attempt['user_id'];
-            $scores[$userId] = (float) $attempt['max_score'];
+            $scores[$userId] = new GradeScore((float) $attempt['max_score']);
         }
         return $scores;
     }

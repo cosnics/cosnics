@@ -3,6 +3,8 @@ namespace Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\ScoreDataService;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScore;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score
@@ -27,21 +29,22 @@ class AssessmentScoreService implements ScoreServiceInterface
     /**
      * @param ContentObjectPublication $publication
      *
-     * @return array
+     * @return GradeScoreInterface[]
      */
     public function getScores(ContentObjectPublication $publication): array
     {
         $attempts = $this->scoreDataService->getAssessmentAttempts($publication);
 
+        /** @var GradeScore[] $scores */
         $scores = array();
         while ($attempt = $attempts->next_result())
         {
-            $totalScore = (float) $attempt['total_score'];
+            $gradeScore = new GradeScore((float) $attempt['total_score']);
             $userId = $attempt['user_id'];
             $hasKey = array_key_exists($userId, $scores);
-            if (!$hasKey || ($totalScore > $scores[$userId]))
+            if (!$hasKey || $gradeScore->hasPresedenceOver($scores[$userId]))
             {
-                $scores[$userId] = $totalScore;
+                $scores[$userId] = $gradeScore;
             }
         }
         return $scores;

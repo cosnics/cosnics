@@ -78,7 +78,7 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
         $entityScores = [['entity_id' => 7, 'maximum_score' => 80], ['entity_id' => 5, 'maximum_score' => 75], ['entity_id' => 24, 'maximum_score' => 83]];
         $this->mockFindPublicationByContentObjectPublication($contentObjectPublication, 0);
         $this->mockGetMaxScoresForContentObjectPublicationEntityType($contentObjectPublication, 0, $entityScores);
-        $this->assertEquals([7 => 80, 5 => 75, 24 => 83], $this->assignmentScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([7 => 80, 5 => 75, 24 => 83], $this->getScores($contentObjectPublication));
     }
 
     public function testAssignmentScoresExamAssignment()
@@ -87,7 +87,7 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
         $contentObjectPublication->set_tool('ExamAssignment');
         $entityScores = [['entity_id' => 7, 'maximum_score' => 80], ['entity_id' => 5, 'maximum_score' => 75], ['entity_id' => 24, 'maximum_score' => 83]];
         $this->mockGetMaxScoresForContentObjectPublicationEntityType($contentObjectPublication, 0, $entityScores);
-        $this->assertEquals([7 => 80, 5 => 75, 24 => 83], $this->assignmentScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([7 => 80, 5 => 75, 24 => 83], $this->getScores($contentObjectPublication));
     }
 
     public function testAssignmentScoresPlatformGroupEntity()
@@ -97,7 +97,7 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
         $this->mockFindPublicationByContentObjectPublication($contentObjectPublication, 2);
         $this->mockGetMaxScoresForContentObjectPublicationEntityType($contentObjectPublication, 2, $entityScores);
         $this->mockGetUserEntitiesFromPlatformGroup([101, 103], [[7, 5], [24, 28]]);
-        $this->assertEquals([7 => 59, 5 => 59, 24 => 68, 28 => 68], $this->assignmentScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([7 => 59, 5 => 59, 24 => 68, 28 => 68], $this->getScores($contentObjectPublication));
     }
 
     public function testAssignmentScoresCourseGroupEntity()
@@ -106,7 +106,7 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
         $entityScores = [['entity_id' => 101, 'maximum_score' => 59], ['entity_id' => 103, 'maximum_score' => 68]];
         $courseGroupIdsRecursive = [101 => [7, 5], 103 => [24, 28]];
         $this->mockServicesWithCourseGroups($contentObjectPublication, $entityScores, $courseGroupIdsRecursive);
-        $this->assertEquals([7 => 59, 5 => 59, 24 => 68, 28 => 68], $this->assignmentScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([7 => 59, 5 => 59, 24 => 68, 28 => 68], $this->getScores($contentObjectPublication));
     }
 
     public function testAssignmentScoresGroupEntityUserInMultipleGroups()
@@ -115,7 +115,7 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
         $entityScores = [['entity_id' => 101, 'maximum_score' => 59], ['entity_id' => 103, 'maximum_score' => 55], ['entity_id' => 104, 'maximum_score' => 72]];
         $courseGroupIdsRecursive = [101 => [7, 5], 103 => [24, 5], 104 => [28, 29]];
         $this->mockServicesWithCourseGroups($contentObjectPublication, $entityScores, $courseGroupIdsRecursive);
-        $this->assertEquals([7 => 59, 5 => 59, 24 => 55, 28 => 72, 29 => 72], $this->assignmentScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([7 => 59, 5 => 59, 24 => 55, 28 => 72, 29 => 72], $this->getScores($contentObjectPublication));
     }
 
     public function testAssignmentScoresGroupEntityUserInMultipleGroupsDifferentOrder()
@@ -124,7 +124,7 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
         $entityScores = [['entity_id' => 103, 'maximum_score' => 55], ['entity_id' => 101, 'maximum_score' => 59], ['entity_id' => 104, 'maximum_score' => 72]];
         $courseGroupIdsRecursive = [103 => [24, 5], 101 => [7, 5], 104 => [28, 29]];
         $this->mockServicesWithCourseGroups($contentObjectPublication, $entityScores, $courseGroupIdsRecursive);
-        $this->assertEquals([7 => 59, 5 => 59, 24 => 55, 28 => 72, 29 => 72], $this->assignmentScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([7 => 59, 5 => 59, 24 => 55, 28 => 72, 29 => 72], $this->getScores($contentObjectPublication));
     }
 
     protected function mockServicesWithCourseGroups(ContentObjectPublication $contentObjectPublication, array $entityScores, array $courseGroupIdsRecursive): void
@@ -194,5 +194,22 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
         $assignmentPublication->setPublicationId($contentObjectPublication->getId());
         $assignmentPublication->setEntityType($entityType);
         return $assignmentPublication;
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     *
+     * @return array
+     */
+    protected function getScores(ContentObjectPublication $contentObjectPublication): array
+    {
+        $userScores = $this->assignmentScoreService->getScores($contentObjectPublication);
+
+        $scores = array();
+        foreach ($userScores as $userId => $gradeScore)
+        {
+            $scores[$userId] = $gradeScore->getValue();
+        }
+        return $scores;
     }
 }

@@ -79,7 +79,7 @@ class AssessmentScoreServiceTest extends ChamiloTestCase
         $this->scoreDataServiceMock->expects($this->once())
             ->method('getAssessmentAttempts')->with($contentObjectPublication)
             ->will($this->returnValue(new ArrayResultSet($retrievedScores)));
-        $this->assertEquals($finalScores, $this->assessmentScoreService->getScores($contentObjectPublication));
+        $this->assertEquals($finalScores, $this->getScores($contentObjectPublication));
     }
 
     /**
@@ -93,5 +93,22 @@ class AssessmentScoreServiceTest extends ChamiloTestCase
         $contentObjectPublication->set_content_object_id(77);
         $contentObjectPublication->set_tool('Assessment');
         return $contentObjectPublication;
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     *
+     * @return array
+     */
+    protected function getScores(ContentObjectPublication $contentObjectPublication): array
+    {
+        $userScores = $this->assessmentScoreService->getScores($contentObjectPublication);
+
+        $scores = array();
+        foreach ($userScores as $userId => $gradeScore)
+        {
+            $scores[$userId] = $gradeScore->getValue();
+        }
+        return $scores;
     }
 }

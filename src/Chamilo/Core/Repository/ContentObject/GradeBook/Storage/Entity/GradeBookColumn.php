@@ -107,6 +107,14 @@ class GradeBookColumn
     protected $gradebookColumnSubItems;
 
     /**
+     * @var GradeBookScore[] | ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="GradeBookScore", mappedBy="gradebookColumn")
+     */
+    protected $gradebookScores;
+
+
+    /**
      * GradeBookColumn constructor.
      *
      * @param GradeBookData $gradebookData
@@ -114,6 +122,8 @@ class GradeBookColumn
      */
     public function __construct(GradeBookData $gradebookData)
     {
+        $this->gradebookColumnSubItems = new ArrayCollection();
+        $this->gradebookScores = new ArrayCollection();
         $this->setGradeBookData($gradebookData);
     }
 
@@ -405,6 +415,50 @@ class GradeBookColumn
         }
         $this->gradebookColumnSubItems->removeElement($gradeBookItemToRemove);
         $gradeBookItemToRemove->setGradeBookColumn(null);
+        return $this;
+    }
+
+    /**
+     * @return GradeBookScore[]|ArrayCollection
+     */
+    public function getGradeBookScores()
+    {
+        return $this->gradebookScores;
+    }
+
+    /**
+     * @param GradeBookScore $gradebookScore
+     *
+     * @return GradeBookColumn
+     */
+    public function addGradeBookScore(GradeBookScore $gradebookScore): GradeBookColumn
+    {
+        if ($this->gradebookScores->contains($gradebookScore))
+        {
+            return $this;
+        }
+
+        $this->gradebookScores->add($gradebookScore);
+        $gradebookScore->setGradeBookColumn($this);
+
+        return $this;
+    }
+
+    /**
+     * @param GradeBookScore $gradeBookScoreToRemove
+     *
+     * @return GradeBookColumn
+     */
+    public function removeGradeBookScore(GradeBookScore $gradeBookScoreToRemove): GradeBookColumn
+    {
+        if (!$this->gradebookScores->contains($gradeBookScoreToRemove))
+        {
+            return $this;
+        }
+
+        $this->gradebookScores->removeElement($gradeBookScoreToRemove);
+        $gradeBookScoreToRemove->setGradeBookColumn(null);
+
         return $this;
     }
 

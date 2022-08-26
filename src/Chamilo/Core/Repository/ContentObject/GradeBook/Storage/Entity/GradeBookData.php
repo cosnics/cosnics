@@ -109,6 +109,11 @@ class GradeBookData
     public function __construct(string $title)
     {
         $this->title = $title;
+        $this->gradebookItems = new ArrayCollection();
+        $this->gradebookColumns = new ArrayCollection();
+        $this->gradebookCategories = new ArrayCollection();
+        $this->gradebookScores = new ArrayCollection();
+        $this->removedEntities = new ArrayCollection();
     }
 
     /**
@@ -485,6 +490,12 @@ class GradeBookData
             return $this;
         }
 
+        $gradebookScores = $gradeBookColumnToRemove->getGradeBookScores();
+        foreach ($gradebookScores as $score)
+        {
+            $this->removeGradeBookScore($score);
+        }
+
         $this->gradebookColumns->removeElement($gradeBookColumnToRemove);
 
         $category = $gradeBookColumnToRemove->getGradeBookCategory();
@@ -643,8 +654,10 @@ class GradeBookData
             return $this;
         }
 
-        $this->gradebookScores->removeElement($gradeBookScoreToRemove);
+        $gradeBookScoreToRemove->setGradeBookColumn(null);
         $gradeBookScoreToRemove->setGradeBookData(null);
+
+        $this->gradebookScores->removeElement($gradeBookScoreToRemove);
 
         $this->getRemovedEntities()->add($gradeBookScoreToRemove);
 

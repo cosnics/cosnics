@@ -3,6 +3,11 @@
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookScoreJSONModel;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\AbsentScore;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\AuthAbsentScore;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScore;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\NullScore;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Exclude;
 
@@ -46,6 +51,16 @@ class GradeBookScore
      *
      */
     protected $gradebookColumn;
+
+    /**
+     * @var GradeBookItem
+     *
+     * @ORM\ManyToOne(targetEntity="GradeBookItem")
+     * @ORM\JoinColumn(name="gradebook_item_id", referencedColumnName="id", nullable=true)
+     *
+     * @Exclude
+     */
+    protected $gradebookItem;
 
     /**
      * @var int
@@ -147,15 +162,52 @@ class GradeBookScore
     }
 
     /**
-     * @param GradeBookColumn $gradebookColumn
+     * @param GradeBookColumn|null $gradebookColumn
      *
      * @return GradeBookScore
      */
-    public function setGradeBookColumn(GradeBookColumn $gradebookColumn): GradeBookScore
+    public function setGradeBookColumn(GradeBookColumn $gradebookColumn = null): GradeBookScore
     {
-        // todo: gradebookColumn == null ?
-        // fill in the update mechanism
+        if ($this->gradebookColumn === $gradebookColumn)
+        {
+            return $this;
+        }
+
+        $oldGradebookColumn = $this->gradebookColumn;
         $this->gradebookColumn = $gradebookColumn;
+
+        if ($oldGradebookColumn instanceof GradeBookColumn)
+        {
+            $oldGradebookColumn->removeGradeBookScore($this);
+        }
+
+        if ($gradebookColumn instanceof GradeBookColumn)
+        {
+            $gradebookColumn->addGradeBookScore($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return GradeBookItem|null
+     */
+    public function getGradeBookItem(): ?GradeBookItem {
+        return $this->gradebookItem;
+    }
+
+    /**
+     * @param GradeBookItem|null $gradebookItem
+     *
+     * @return GradeBookScore
+     */
+    public function setGradeBookItem(GradeBookItem $gradebookItem = null): GradeBookScore
+    {
+        if ($this->gradebookItem === $gradebookItem) {
+            return $this;
+        }
+
+        $this->gradebookItem = $gradebookItem;
 
         return $this;
     }
@@ -276,5 +328,26 @@ class GradeBookScore
     public function toJSONModel(): GradeBookScoreJSONModel
     {
         return GradeBookScoreJSONModel::fromGradeBookScore($this);
+    }
+
+    /**
+     * @return GradeScoreInterface
+     */
+    public function toGradeScore(): GradeScoreInterface
+    {
+        if ($this->sourceScoreAbsent)
+        {
+            return new AbsentScore();
+        }
+        if ($this->sourceScoreAuthAbsent)
+        {
+            return new AuthAbsentScore();
+        }
+        $sourceScore = $this->getSourceScore();
+        if (is_null($sourceScore))
+        {
+            return new NullScore();
+        }
+        return new GradeScore($sourceScore);
     }
 }

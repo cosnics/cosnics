@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces;
 
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 
 /**
@@ -15,7 +16,7 @@ interface GradeBookItemScoreServiceInterface
      * @param GradeBookItem $gradeBookItem
      * @param int[] $userIds
      *
-     * @return array
+     * @return GradeScoreInterface[]
      */
     public function getScores(GradeBookItem $gradeBookItem, array $userIds): array;
 }

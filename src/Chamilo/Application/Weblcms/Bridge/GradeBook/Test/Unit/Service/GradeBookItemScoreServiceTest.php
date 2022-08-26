@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\ScoreServiceManag
 use Chamilo\Application\Weblcms\Service\PublicationService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScore;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\Tree;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
@@ -89,13 +90,16 @@ class GradeBookItemScoreServiceTest extends ChamiloTestCase
         $contextIdentifier = new ContextIdentifier(ContentObjectPublication::class, 21);
         $gradeBookItem->setContextIdentifier($contextIdentifier);
         $scoreService = $this->getMockForAbstractClass('\Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\ScoreServiceInterface');
-        $userScores = [7 => 59, 5 => 59, 24 => 55, 28 => 72, 29 => 72, 30 => 57];
+        $gs1 = new GradeScore(59);
+        $gs2 =  new GradeScore(55);
+        $gs3 = new GradeScore(72);
+        $gs4 = new GradeScore(57);
+        $userScores = [7 => $gs1, 5 => $gs1, 24 => $gs2, 28 => $gs3, 29 => $gs3, 30 => $gs4];
 
         $this->mockGetPublication(21, $contentObjectPublication);
         $this->mockGetScoreServiceByType('Assignment', $scoreService);
         $this->mockGetScores($scoreService, $contentObjectPublication, $userScores);
-        $this->assertEquals(
-            ['id' => 4, 'context_class' => 'Chamilo\\Application\\Weblcms\\Storage\\DataClass\\ContentObjectPublication', 'context_id' => 21, 'tool' => 'Assignment', 'scores' => [['user_id' => 7, 'score' => 59], ['user_id' => 5, 'score' => 59], ['user_id' => 24, 'score' => 55], ['user_id' => 28, 'score' => 72], ['user_id' => 29, 'score' => 72]]],
+        $this->assertEquals([7 => $gs1, 5 => $gs1, 24 => $gs2, 28 => $gs3, 29 => $gs3],
             $this->gradeBookItemScoreService->getScores($gradeBookItem, [7, 5, 24, 28, 29]));
     }
 
@@ -121,15 +125,18 @@ class GradeBookItemScoreServiceTest extends ChamiloTestCase
         $lpsContext->setContextId(22);
         $lpsContext->setLearningPathStepId(10);
         $scoreService = $this->getMockForAbstractClass('\Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\LearningPathScoreServiceInterface');
-        $userScores = [7 => 59, 5 => 59, 24 => 55, 28 => 72, 29 => 72, 30 => 57];
+        $gs1 = new GradeScore(59);
+        $gs2 = new GradeScore(55);
+        $gs3 = new GradeScore(72);
+        $gs4 = new GradeScore(57);
+        $userScores = [7 => $gs1, 5 => $gs1, 24 => $gs2, 28 => $gs3, 29 => $gs3, 30 => $gs4];
 
         $this->mockFindLearningPathStepContextById($lpsContext);
         $this->mockGetPublication(22, $contentObjectPublication);
         $this->mockGetTree($learningPath, $tree);
         $this->mockGetLearningPathScoreServiceByType('Assignment', $scoreService);
         $this->mockGetScoresFromTreeNode($scoreService, $contentObjectPublication, $treeNode, $userScores);
-        $this->assertEquals(
-            ['id' => 5, 'context_class' => 'Chamilo\\Core\\Repository\\ContentObject\\LearningPath\\Storage\\DataClass\\LearningPathStepContext', 'context_id' => 1, 'tool' => 'LearningPath', 'scores' => [['user_id' => 7, 'score' => 59], ['user_id' => 5, 'score' => 59], ['user_id' => 24, 'score' => 55], ['user_id' => 28, 'score' => 72], ['user_id' => 29, 'score' => 72]]],
+        $this->assertEquals([7 => $gs1, 5 => $gs1, 24 => $gs2, 28 => $gs3, 29 => $gs3],
             $this->gradeBookItemScoreService->getScores($gradeBookItem, [7, 5, 24, 28, 29]));
     }
 

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces;
 
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
@@ -48,7 +49,7 @@ interface GradeBookServiceBridgeInterface
     /**
      * @param GradeBookItem $gradeBookItem
      *
-     * @return array
+     * @return GradeScoreInterface[]
      */
     public function findScores(GradeBookItem $gradeBookItem);
 }

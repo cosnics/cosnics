@@ -79,6 +79,7 @@ class GradeBookCategory
      */
     public function __construct(GradeBookData $gradebookData)
     {
+        $this->gradebookColumns = new ArrayCollection();
         $this->setGradeBookData($gradebookData);
     }
 

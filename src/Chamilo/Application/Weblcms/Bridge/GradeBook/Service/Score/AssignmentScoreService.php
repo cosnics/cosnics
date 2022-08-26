@@ -5,6 +5,8 @@ use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\EntityDataService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\Repository\PublicationRepository as AssignmentPublicationRepository;
 use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScore;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
 use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 
 /**
@@ -44,22 +46,22 @@ class AssignmentScoreService implements ScoreServiceInterface
     /**
      * @param ContentObjectPublication $publication
      *
-     * @return array
+     * @return GradeScoreInterface[]
      */
     public function getScores(ContentObjectPublication $publication): array
     {
         $entityType = $this->getEntityTypeFromPublication($publication);
         $entityScores = $this->assignmentService->getMaxScoresForContentObjectPublicationEntityType($publication, $entityType);
 
+        /** @var GradeScore[] $scores */
         $scores = array();
         switch ($entityType)
         {
             case 0:
                 foreach ($entityScores as $entityScore)
                 {
-                    $maxScore = (float) $entityScore['maximum_score'];
                     $entityId = $entityScore['entity_id'];
-                    $scores[$entityId] = $maxScore;
+                    $scores[$entityId] = new GradeScore((float) $entityScore['maximum_score']);
                 }
                 return $scores;
             case 1:
@@ -72,16 +74,16 @@ class AssignmentScoreService implements ScoreServiceInterface
 
         foreach ($entityScores as $entityScore)
         {
-            $maxScore = (float) $entityScore['maximum_score'];
+            $gradeScore = new GradeScore((float) $entityScore['maximum_score']);
             $entityId = $entityScore['entity_id'];
             $users = $userEntities[$entityId];
 
             foreach ($users as $userId)
             {
                 $hasKey = array_key_exists($userId, $scores);
-                if (!$hasKey || ($maxScore > $scores[$userId]))
+                if (!$hasKey || $gradeScore->hasPresedenceOver($scores[$userId]))
                 {
-                    $scores[$userId] = $maxScore;
+                    $scores[$userId] = $gradeScore;
                 }
             }
         }

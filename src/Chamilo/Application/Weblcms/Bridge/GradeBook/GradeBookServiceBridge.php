@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\Gr
 use Chamilo\Application\Weblcms\Tool\Implementation\GradeBook\Service\GradeBookPublicationService;
 use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemService;
 use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemScoreService;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
@@ -160,7 +161,7 @@ class GradeBookServiceBridge implements GradeBookServiceBridgeInterface
     /**
      * @param GradeBookItem $gradeBookItem
      *
-     * @return array
+     * @return GradeScoreInterface[]
      */
     public function findScores(GradeBookItem $gradeBookItem): array
     {

@@ -3,12 +3,17 @@ namespace Chamilo\Application\Weblcms\Bridge\GradeBook\Service;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookItemScoreServiceInterface;
 use Chamilo\Application\Weblcms\Service\PublicationService;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\NullScore;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\UserScore;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score\ScoreServiceManager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathStepContext;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathStepContextRepository;
+use Exception;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\GradeBook\Service
@@ -55,8 +60,8 @@ class GradeBookItemScoreService implements GradeBookItemScoreServiceInterface
      * @param GradeBookItem $gradeBookItem
      * @param int[] $userIds
      *
-     * @return array
-     * @throws \Exception
+     * @return GradeScoreInterface[]
+     * @throws Exception
      */
     public function getScores(GradeBookItem $gradeBookItem, array $userIds): array
     {
@@ -66,7 +71,7 @@ class GradeBookItemScoreService implements GradeBookItemScoreServiceInterface
         if ($gradeBookItem->getContextClass() == LearningPathStepContext::class)
         {
             $userScores = $this->getTreeNodeScores($gradeBookItem);
-            $tool = 'LearningPath';
+            //$tool = 'LearningPath';
         }
         else
         {
@@ -79,16 +84,19 @@ class GradeBookItemScoreService implements GradeBookItemScoreServiceInterface
         $scores = array();
         foreach ($userIds as $userId)
         {
-            $scores[] = ['user_id' => (int) $userId, 'score' => $userScores[$userId]];
+            //$scores[] = ['user_id' => (int) $userId, 'score' => $userScores[$userId] ?? new NullScore()];
+            //$scores = new UserScore((int) $userId, $userScores[$userId] ?? new NullScore());
+            $scores[$userId] = $userScores[$userId] ?? new NullScore();
         }
-        return ['id' => $gradeBookItem->getId(), 'context_class' => $contextClass, 'context_id' => $contextId, 'tool' => $tool, 'scores' => $scores];
+        return $scores;
+        //return ['id' => $gradeBookItem->getId(), 'context_class' => $contextClass, 'context_id' => $contextId, 'tool' => $tool, 'scores' => $scores];
     }
 
     /**
      * @param GradeBookItem $gradeBookItem
      *
-     * @return array
-     * @throws \Exception
+     * @return GradeScoreInterface[]
+     * @throws TreeNodeNotFoundException
      */
     protected function getTreeNodeScores(GradeBookItem $gradeBookItem): array
     {
@@ -97,7 +105,7 @@ class GradeBookItemScoreService implements GradeBookItemScoreServiceInterface
         $learningPath = $publication->getContentObject();
         if (!$learningPath instanceof LearningPath)
         {
-            throw new \Exception('Content object ' . $learningPath->getId() . ' is not a learning path.');
+            throw new Exception('Content object ' . $learningPath->getId() . ' is not a learning path.');
         }
         $tree = $this->learningPathService->getTree($learningPath);
         $treeNode = $tree->getTreeNodeById($lpsContext->getLearningPathStepId());

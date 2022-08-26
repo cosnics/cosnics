@@ -5,6 +5,8 @@ namespace Chamilo\Core\Repository\ContentObject\GradeBook\Service;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookCategoryJSONModel;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookColumnJSONModel;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookItemScoreServiceInterface;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\NullScore;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookColumn;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
@@ -234,28 +236,18 @@ class GradeBookAjaxService
         $gradeItem->setGradeBookColumn($column);
         $gradebookData->addGradeBookColumn($column);
 
-        $scoreData = $this->gradeBookItemScoreService->getScores($gradeItem, $targetUserIds);
+        $gradeScores = $this->gradeBookItemScoreService->getScores($gradeItem, $targetUserIds);
 
-        foreach ($scoreData['scores'] as $scoreItem)
+        foreach ($gradeScores as $userId => $score)
         {
-            $userId = $scoreItem['user_id'];
-            $score = $scoreItem['score'];
-            $isAuthAbsent = $score == 'gafw';
-            $isAbsent = $score == 'afw';
-            $gradebookScore = new GradeBookScore();
-            $gradebookScore->setGradeBookData($gradebookData);
-            $gradebookScore->setGradeBookColumn($column);
-            $gradebookScore->setOverwritten(false);
-            $gradebookScore->setTargetUserId($userId);
-            $gradebookScore->setSourceScoreAuthAbsent($isAuthAbsent);
-            $gradebookScore->setSourceScoreAbsent($isAbsent);
-            if (!($isAbsent || $isAuthAbsent))
-            {
-                $gradebookScore->setSourceScore($score);
-            }
+            $this->addGradeBookScore($column, $gradeItem, $userId, $score);
         }
 
         $this->gradeBookService->saveGradeBook($gradebookData);
+
+        $scores = array_map(function(GradeBookScore $score) {
+            return $score->toJSONModel();
+        }, $column->getGradeBookScores()->toArray());
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
@@ -268,34 +260,140 @@ class GradeBookAjaxService
      * @param int $versionId
      * @param int $gradeBookColumnId
      * @param int $gradeItemId
+     * @param int[] $targetUserIds
      *
      * @return array
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function addGradeBookColumnSubItem(int $gradeBookDataId, int $versionId, int $gradeBookColumnId, int $gradeItemId)
+    public function addGradeBookColumnSubItem(int $gradeBookDataId, int $versionId, int $gradeBookColumnId, int $gradeItemId, array $targetUserIds)
     {
         $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
         $gradeItem = $gradebookData->getGradeBookItemById($gradeItemId);
-        $oldGradeBookColumn = $gradeItem->getGradeBookColumn();
+        $columnToMerge = $gradeItem->getGradeBookColumn();
+        $isGradeItemInColumn = $columnToMerge instanceof GradeBookColumn;
         $gradeBookColumn = $gradebookData->getGradeBookColumnById($gradeBookColumnId);
-        if ($oldGradeBookColumn instanceof GradeBookColumn)
+
+        if ($isGradeItemInColumn && $columnToMerge->getType() == 'group')
         {
-            if ($oldGradeBookColumn->getType() == 'group')
-            {
-                throw new \RuntimeException('Grade item ' . $gradeItem->getId() . ' already belongs to a group');
-            }
-            $gradebookData->removeGradeBookColumn($oldGradeBookColumn);
+            throw new \RuntimeException('Grade item ' . $gradeItem->getId() . ' already belongs to a group');
         }
+
         $gradeBookColumn->setType('group');
         $gradeItem->setGradeBookColumn($gradeBookColumn);
+
+        if ($isGradeItemInColumn)
+        {
+            $this->mergeColumnScores($gradeBookColumn, $columnToMerge, $targetUserIds);
+            $gradebookData->removeGradeBookColumn($columnToMerge);
+        }
+        else
+        {
+            $this->mergeColumnAndItemScores($gradeBookColumn, $gradeItem, $targetUserIds);
+        }
+
         $this->gradeBookService->saveGradeBook($gradebookData);
+
+        $scores = array_map(function(GradeBookScore $score) {
+            return $score->toJSONModel();
+        }, $gradeBookColumn->getGradeBookScores()->toArray());
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
-            'column' => GradeBookColumnJSONModel::fromGradeBookColumn($gradeBookColumn)
+            'column' => GradeBookColumnJSONModel::fromGradeBookColumn($gradeBookColumn), 'scores' => $scores
         ];
+    }
+
+    /**
+     * @param GradeBookColumn $gradeBookColumn
+     * @param GradeBookColumn $columnToMerge
+     * @param array $targetUserIds
+     */
+    protected function mergeColumnScores(GradeBookColumn $gradeBookColumn, GradeBookColumn $columnToMerge, array $targetUserIds)
+    {
+        $gradeBookScores = $gradeBookColumn->getGradeBookScores();
+        $scoresToMerge = $columnToMerge->getGradeBookScores();
+
+        $userScores = array();
+
+        foreach ($gradeBookScores as $score)
+        {
+            $userId = $score->getTargetUserId();
+            $userScores[$userId] = ['dest' => $score];
+        }
+
+        foreach ($targetUserIds as $userId)
+        {
+            if (!array_key_exists($userId, $userScores))
+            {
+                $score = $this->addGradeBookScore($gradeBookColumn, null, $userId, new NullScore());
+                $userScores[$userId] = ['dest' => $score];
+            }
+        }
+
+        foreach ($scoresToMerge as $score)
+        {
+            $userId = $score->getTargetUserId();
+            if (array_key_exists($userId, $userScores))
+            {
+                $userScores[$userId]['from'] = $score;
+            }
+        }
+
+        foreach ($targetUserIds as $userId)
+        {
+            $scores = $userScores[$userId];
+            /** @var GradeBookScore|null $fromScore */
+            $fromScore = $scores['from'];
+            /** @var GradeBookScore $destScore */
+            $destScore = $scores['dest'];
+
+            if (!is_null($fromScore) && $fromScore->toGradeScore()->hasPresedenceOver($destScore->toGradeScore()))
+            {
+                $destScore->setSourceScore($fromScore->getSourceScore());
+                $destScore->setSourceScoreAbsent($fromScore->isSourceScoreAbsent());
+                $destScore->setSourceScoreAuthAbsent($fromScore->isSourceScoreAuthAbsent());
+                $destScore->setGradeBookItem($fromScore->getGradeBookItem());
+            }
+        }
+    }
+
+    /**
+     * @param GradeBookColumn $gradeBookColumn
+     * @param GradeBookItem $gradeBookItem
+     * @param array $targetUserIds
+     */
+    protected function mergeColumnAndItemScores(GradeBookColumn $gradeBookColumn, GradeBookItem $gradeBookItem, array $targetUserIds)
+    {
+        $gradeBookScores = $gradeBookColumn->getGradeBookScores();
+        $gradeScores = $this->gradeBookItemScoreService->getScores($gradeBookItem, $targetUserIds);
+
+        $userScores = array();
+
+        foreach ($gradeBookScores as $score)
+        {
+            $userId = $score->getTargetUserId();
+            $userScores[$userId] = $score;
+        }
+
+        foreach ($targetUserIds as $userId)
+        {
+            if (!array_key_exists($userId, $userScores))
+            {
+                $userScores[$userId] = $this->addGradeBookScore($gradeBookColumn, null, $userId, new NullScore());
+            }
+            $destScore = $userScores[$userId];
+            $fromGradeScore = $gradeScores[$userId];
+
+            if (!is_null($fromGradeScore) && $fromGradeScore->hasPresedenceOver($destScore->toGradeScore()))
+            {
+                $destScore->setSourceScoreAuthAbsent($fromGradeScore->isAuthAbsent());
+                $destScore->setSourceScoreAbsent($fromGradeScore->isAbsent());
+                $destScore->setSourceScore($fromGradeScore->hasValue() ? $fromGradeScore->getValue() : null);
+                $destScore->setGradeBookItem($gradeBookItem);
+            }
+        }
     }
 
     /**
@@ -321,12 +419,30 @@ class GradeBookAjaxService
             throw new \RuntimeException('Grade item ' . $gradeItem->getId() . ' is not a subitem of column ' . $gradeBookColumn->getId());
         }
 
+        $gradeBookScores = $gradeBookColumn->getGradeBookScores();
+
+        foreach ($gradeBookScores as $score)
+        {
+            if ($score->getGradeBookItem() === $gradeItem)
+            {
+                $score->setSourceScore(null);
+                $score->setSourceScoreAbsent(false);
+                $score->setSourceScoreAuthAbsent(false);
+                $score->setGradeBookItem(null);
+            }
+        }
+        // possible todo: this doesn't restore to a possible previously "lower" score
+
         $gradeItem->setGradeBookColumn(null);
         $this->gradeBookService->saveGradeBook($gradebookData);
 
+        $scores = array_map(function(GradeBookScore $score) {
+            return $score->toJSONModel();
+        }, $gradeBookColumn->getGradeBookScores()->toArray());
+
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
-            'column' => GradeBookColumnJSONModel::fromGradeBookColumn($gradeBookColumn)
+            'column' => GradeBookColumnJSONModel::fromGradeBookColumn($gradeBookColumn), 'scores' => $scores
         ];
     }
 
@@ -446,6 +562,31 @@ class GradeBookAjaxService
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()]
         ];
+    }
+
+    /**
+     * @param GradeBookColumn $column
+     * @param GradeBookItem|null $gradeBookItem
+     * @param int $userId
+     * @param GradeScoreInterface $score
+     *
+     * @return GradeBookScore
+     */
+    protected function addGradeBookScore(GradeBookColumn $column, ?GradeBookItem $gradeBookItem, int $userId, GradeScoreInterface $score): GradeBookScore
+    {
+        $gradebookScore = new GradeBookScore();
+        $gradebookScore->setGradeBookData($column->getGradeBookData());
+        $gradebookScore->setGradeBookColumn($column);
+        $gradebookScore->setGradeBookItem($gradeBookItem);
+        $gradebookScore->setOverwritten(false);
+        $gradebookScore->setTargetUserId($userId);
+        $gradebookScore->setSourceScoreAuthAbsent($score->isAuthAbsent());
+        $gradebookScore->setSourceScoreAbsent($score->isAbsent());
+        if (!($score->isAbsent() || $score->isAuthAbsent()))
+        {
+            $gradebookScore->setSourceScore($score->getValue());
+        }
+        return $gradebookScore;
     }
 
     /**

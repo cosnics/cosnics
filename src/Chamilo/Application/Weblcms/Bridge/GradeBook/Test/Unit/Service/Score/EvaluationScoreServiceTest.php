@@ -129,7 +129,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
 
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
 
-        $this->assertEquals([10 => 75, 15 => 76, 30 => 70], $this->evaluationScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([10 => 75, 15 => 76, 30 => 70], $this->getScores($contentObjectPublication));
     }
 
     public function testEvaluationScoresCourseGroupEntity()
@@ -147,7 +147,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
         $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
-        $this->assertEquals([10 => 90, 4 => 90, 9 => EvaluationScoreService::AUTH_ABSENT, 18 => EvaluationScoreService::AUTH_ABSENT, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([10 => 90, 4 => 90, 9 => EvaluationScoreService::AUTH_ABSENT, 18 => EvaluationScoreService::AUTH_ABSENT, 37 => 80, 55 => 80], $this->getScores($contentObjectPublication));
     }
 
     public function testEvaluationScoresPlatformGroupEntity()
@@ -164,7 +164,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
         $this->mockGetUserEntitiesFromPlatformGroup($entityIds, [[10, 4], [9, 18], [37, 55]]);
 
-        $this->assertEquals([10 => 90, 4 => 90, 9 => EvaluationScoreService::AUTH_ABSENT, 18 => EvaluationScoreService::AUTH_ABSENT, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([10 => 90, 4 => 90, 9 => EvaluationScoreService::AUTH_ABSENT, 18 => EvaluationScoreService::AUTH_ABSENT, 37 => 80, 55 => 80], $this->getScores($contentObjectPublication));
     }
 
     public function testEvaluationScoresGroupEntityWithScoreOverAbsencePresedence()
@@ -182,7 +182,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
         $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
-        $this->assertEquals([10 => 90, 4 => 90, 9 => EvaluationScoreService::AUTH_ABSENT, 18 => 80, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([10 => 90, 4 => 90, 9 => EvaluationScoreService::AUTH_ABSENT, 18 => 80, 37 => 80, 55 => 80], $this->getScores($contentObjectPublication));
     }
 
     public function testEvaluationScoresGroupEntityWithScoreOverAbsencePresedenceDifferentOrder()
@@ -200,7 +200,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
         $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
-        $this->assertEquals([10 => 90, 4 => 90, 9 => EvaluationScoreService::AUTH_ABSENT, 18 => 80, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([10 => 90, 4 => 90, 9 => EvaluationScoreService::AUTH_ABSENT, 18 => 80, 37 => 80, 55 => 80], $this->getScores($contentObjectPublication));
     }
 
     public function testEvaluationScoresGroupEntityWithScoreOverNullPresedence()
@@ -218,7 +218,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
         $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
-        $this->assertEquals([10 => 90, 4 => 90, 9 => null, 18 => 80, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([10 => 90, 4 => 90, 9 => null, 18 => 80, 37 => 80, 55 => 80], $this->getScores($contentObjectPublication));
     }
 
     public function testEvaluationScoresGroupEntityWithScoreOverNullPresedenceDifferentOrder()
@@ -236,7 +236,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
         $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
-        $this->assertEquals([10 => 90, 4 => 90, 9 => null, 18 => 80, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([10 => 90, 4 => 90, 9 => null, 18 => 80, 37 => 80, 55 => 80], $this->getScores($contentObjectPublication));
     }
 
     public function testEvaluationScoresGroupEntityWithAbsenceOverNullPresedence()
@@ -254,7 +254,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
         $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
-        $this->assertEquals([10 => 90, 4 => 90, 9 => null, 18 => EvaluationScoreService::AUTH_ABSENT, 37 => EvaluationScoreService::AUTH_ABSENT, 55 => EvaluationScoreService::AUTH_ABSENT], $this->evaluationScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([10 => 90, 4 => 90, 9 => null, 18 => EvaluationScoreService::AUTH_ABSENT, 37 => EvaluationScoreService::AUTH_ABSENT, 55 => EvaluationScoreService::AUTH_ABSENT], $this->getScores($contentObjectPublication));
     }
 
     public function testEvaluationScoresGroupEntityWithAbsenceOverNullPresedenceDifferentOrder()
@@ -272,7 +272,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
         $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
-        $this->assertEquals([10 => 90, 4 => 90, 9 => null, 18 => EvaluationScoreService::AUTH_ABSENT, 37 => EvaluationScoreService::AUTH_ABSENT, 55 => EvaluationScoreService::AUTH_ABSENT], $this->evaluationScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([10 => 90, 4 => 90, 9 => null, 18 => EvaluationScoreService::AUTH_ABSENT, 37 => EvaluationScoreService::AUTH_ABSENT, 55 => EvaluationScoreService::AUTH_ABSENT], $this->getScores($contentObjectPublication));
     }
 
     public function testEvaluationScoresGroupEntityWithHighestScorePresedence()
@@ -290,7 +290,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
         $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
-        $this->assertEquals([10 => 90, 4 => 90, 9 => 70, 18 => 80, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([10 => 90, 4 => 90, 9 => 70, 18 => 80, 37 => 80, 55 => 80], $this->getScores($contentObjectPublication));
     }
 
     public function testEvaluationScoresGroupEntityWithHighestScorePresedenceDifferentOrder()
@@ -308,7 +308,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $this->mockServices($contentObjectPublication, $entityType, $entityIds, $entitiesFromIds);
         $this->mockGetCourseGroupUserEntitiesRecursiveFromCourse($contentObjectPublication, $returnValues);
 
-        $this->assertEquals([10 => 90, 4 => 90, 9 => 70, 18 => 80, 37 => 80, 55 => 80], $this->evaluationScoreService->getScores($contentObjectPublication));
+        $this->assertEquals([10 => 90, 4 => 90, 9 => 70, 18 => 80, 37 => 80, 55 => 80], $this->getScores($contentObjectPublication));
     }
 
     public function testLearningPathEvaluationScores()
@@ -339,7 +339,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
         $this->mockGetEvaluationEntityService($entityType);
         $this->mockGetEntitiesFromIds($contentObjectPublication, $entityIds, $entitiesFromIds, $contextIdentifier);
 
-        $this->assertEquals([10 => 75, 15 => 76, 30 => 70], $this->evaluationScoreService->getScoresFromTreeNode($contentObjectPublication, $treeNodeMock));
+        $this->assertEquals([10 => 75, 15 => 76, 30 => 70], $this->getScoresFromTreeNode($contentObjectPublication, $treeNodeMock));
     }
 
     protected function mockServices(ContentObjectPublication $contentObjectPublication, int $entityType, array $entityIds, RecordIterator $entitiesFromIds)
@@ -478,5 +478,54 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
     {
         /** @var LearningPathStepContext | \PHPUnit_Framework_MockObject_MockObject $learningPathStepContextMock */
         return $this->getMockBuilder(LearningPathStepContext::class)->disableOriginalConstructor()->getMock();
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     *
+     * @return array
+     */
+    protected function getScores(ContentObjectPublication $contentObjectPublication): array
+    {
+        $userScores = $this->evaluationScoreService->getScores($contentObjectPublication);
+        return $this->getSimplifiedScores($userScores);
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param TreeNode|\PHPUnit_Framework_MockObject_MockObject $treeNodeMock
+     *
+     * @return array
+     */
+    public function getScoresFromTreeNode(ContentObjectPublication $contentObjectPublication, $treeNodeMock): array
+    {
+        $userScores = $this->evaluationScoreService->getScoresFromTreeNode($contentObjectPublication, $treeNodeMock);
+        return $this->getSimplifiedScores($userScores);
+    }
+
+    /**
+     * @param array $userScores
+     *
+     * @return array
+     */
+    protected function getSimplifiedScores(array $userScores): array
+    {
+        $scores = array();
+        foreach ($userScores as $userId => $gradeScore)
+        {
+            if ($gradeScore->isAuthAbsent())
+            {
+                $scores[$userId] = EvaluationScoreService::AUTH_ABSENT;
+            }
+            else if ($gradeScore->hasValue())
+            {
+                $scores[$userId] = $gradeScore->getValue();
+            }
+            else
+            {
+                $scores[$userId] = null;
+            }
+        }
+        return $scores;
     }
 }

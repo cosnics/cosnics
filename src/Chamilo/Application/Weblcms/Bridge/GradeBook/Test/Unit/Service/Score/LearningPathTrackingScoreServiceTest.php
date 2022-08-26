@@ -86,7 +86,7 @@ class LearningPathTrackingScoreServiceTest extends ChamiloTestCase
             ->method('getLearningPathAttemptsWithUser')->with($learningPath, $treeNode)
             ->will($this->returnValue($actual));
 
-        $this->assertEquals($expected, $this->learningPathTrackingScoreService->getScoresFromTreeNode($contentObjectPublication, $treeNode));
+        $this->assertEquals($expected, $this->getScores($contentObjectPublication, $treeNode));
     }
 
     /**
@@ -103,5 +103,24 @@ class LearningPathTrackingScoreServiceTest extends ChamiloTestCase
         $contentObjectPublication->set_content_object_id($contentObject->getId());
         $contentObjectPublication->set_tool('LearningPath');
         return $contentObjectPublication;
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param TreeNode $treeNode
+     *
+     * @return array
+     * @throws \Exception
+     */
+    protected function getScores(ContentObjectPublication $contentObjectPublication, TreeNode $treeNode): array
+    {
+        $userScores = $this->learningPathTrackingScoreService->getScoresFromTreeNode($contentObjectPublication, $treeNode);
+
+        $scores = array();
+        foreach ($userScores as $userId => $gradeScore)
+        {
+            $scores[$userId] = $gradeScore->getValue();
+        }
+        return $scores;
     }
 }

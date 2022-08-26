@@ -15,6 +15,6 @@ class AddColumnSubItemComponent extends Manager implements CsrfComponentInterfac
     function runAjaxComponent()
     {
         return $this->getGradeBookAjaxService()->addGradeBookColumnSubItem(
-            $this->getGradeBookDataId(), $this->getVersion(), $this->getGradeColumnId(), $this->getGradeItemId());
+            $this->getGradeBookDataId(), $this->getVersion(), $this->getGradeColumnId(), $this->getGradeItemId(), $this->getTargetUserIds());
     }
 }

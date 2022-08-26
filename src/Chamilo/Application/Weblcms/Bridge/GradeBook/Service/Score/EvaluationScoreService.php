@@ -6,6 +6,10 @@ use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\EntityDataService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\Repository\PublicationRepository as EvaluationPublicationRepository;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Domain\EvaluationConfiguration;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\AuthAbsentScore;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScore;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\NullScore;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathStepContextService;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
@@ -68,7 +72,7 @@ class EvaluationScoreService implements ScoreServiceInterface, LearningPathScore
     /**
      * @param ContentObjectPublication $publication
      *
-     * @return array
+     * @return GradeScoreInterface[]
      */
     public function getScores(ContentObjectPublication $publication): array
     {
@@ -81,7 +85,7 @@ class EvaluationScoreService implements ScoreServiceInterface, LearningPathScore
      * @param ContentObjectPublication $publication
      * @param TreeNode $treeNode
      *
-     * @return array
+     * @return GradeScoreInterface[]
      */
     public function getScoresFromTreeNode(ContentObjectPublication $publication, TreeNode $treeNode): array
     {
@@ -95,11 +99,13 @@ class EvaluationScoreService implements ScoreServiceInterface, LearningPathScore
      * @param ContextIdentifier $contextIdentifier
      * @param int $entityType
      *
-     * @return array
+     * @return GradeScoreInterface[]
      */
     protected function getUserScores(ContentObjectPublication $publication, ContextIdentifier $contextIdentifier, int $entityType): array
     {
         $selectedEntities = $this->getSelectedEntitiesForPublication($publication, $contextIdentifier, $entityType);
+
+        /** @var GradeScoreInterface[] $scores */
         $scores = array();
 
         switch ($entityType)
@@ -108,8 +114,8 @@ class EvaluationScoreService implements ScoreServiceInterface, LearningPathScore
                 foreach ($selectedEntities as $entity)
                 {
                     $entityId = $entity['id'];
-                    $score = $this->getEntityScore($entity);
-                    $scores[$entityId] = $score;
+                    $gradeScore = $this->getEntityScore($entity);
+                    $scores[$entityId] = $gradeScore;
                 }
                 return $scores;
             case 1:
@@ -123,16 +129,15 @@ class EvaluationScoreService implements ScoreServiceInterface, LearningPathScore
         foreach ($selectedEntities as $entity)
         {
             $entityId = $entity['id'];
-            $score = $this->getEntityScore($entity);
+            $gradeScore = $this->getEntityScore($entity);
             $users = $userEntities[$entityId];
 
             foreach ($users as $userId)
             {
                 $hasKey = array_key_exists($userId, $scores);
-                $curScore = $scores[$userId];
-                if (!$hasKey || ($score == self::AUTH_ABSENT && is_null($curScore)) || (is_numeric($score) && (is_null($curScore) || $curScore == self::AUTH_ABSENT || (is_numeric($curScore) && $score > $curScore))))
+                if (!$hasKey || $gradeScore->hasPresedenceOver($scores[$userId]))
                 {
-                    $scores[$userId] = $score;
+                    $scores[$userId] = $gradeScore;
                 }
             }
         }
@@ -211,21 +216,24 @@ class EvaluationScoreService implements ScoreServiceInterface, LearningPathScore
     /**
      * @param array $entity
      *
-     * @return float|string|null
+     * @return GradeScoreInterface
      */
-    protected function getEntityScore(array $entity)
+    protected function getEntityScore(array $entity): GradeScoreInterface
     {
         if ($entity['is_absent'])
         {
-            return self::AUTH_ABSENT;
+            return new AuthAbsentScore();
+            //return self::AUTH_ABSENT;
         }
 
         $score = $entity['score'];
         if (!is_null($score))
         {
-            return (float) $score;
+            return new GradeScore((float) $score);
+            //return (float) $score;
         }
 
-        return null;
+        //return null;
+        return new NullScore();
     }
 }

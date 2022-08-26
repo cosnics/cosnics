@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\GradeBook\Integration\Chamilo\Co
 
 use Chamilo\Application\Weblcms\Bridge\GradeBook\Service\GradeBookItemScoreService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathGradeBookServiceBridgeInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -80,7 +81,7 @@ class GradeBookServiceBridge implements GradeBookServiceBridgeInterface
     /**
      * @param GradeBookItem $gradeBookItem
      *
-     * @return array
+     * @return GradeScoreInterface[]
      */
     public function findScores(GradeBookItem $gradeBookItem)
     {

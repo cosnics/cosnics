@@ -143,6 +143,7 @@ class GradeBookDataRepository extends CommonEntityRepository
         foreach ($gradeBookData->getGradeBookColumns() as $column)
         {
             $column->getGradeBookColumnSubItems()[0];
+            $column->getGradeBookScores()[0];
         }
 
         foreach ($gradeBookData->getGradeBookCategories() as $category)

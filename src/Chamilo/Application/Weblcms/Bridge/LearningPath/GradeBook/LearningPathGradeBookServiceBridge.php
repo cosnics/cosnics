@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Bridge\LearningPath\GradeBook;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathGradeBookServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathStepContextService;
@@ -153,7 +154,7 @@ class LearningPathGradeBookServiceBridge implements LearningPathGradeBookService
     /**
      * @param GradeBookItem $gradeBookItem
      *
-     * @return array
+     * @return GradeScoreInterface[]
      */
     public function findScores(GradeBookItem $gradeBookItem)
     {

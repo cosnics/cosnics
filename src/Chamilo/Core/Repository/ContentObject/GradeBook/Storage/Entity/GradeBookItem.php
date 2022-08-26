@@ -164,8 +164,6 @@ class GradeBookItem
      */
     public function setGradeBookColumn(GradeBookColumn $gradebookColumn = null): GradeBookItem
     {
-        $this->gradebookColumn = $gradebookColumn;
-
         if ($this->gradebookColumn === $gradebookColumn)
         {
             return $this;

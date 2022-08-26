@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Bridge\GradeBook\Service\Score;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 
 /**
@@ -15,7 +16,7 @@ interface LearningPathScoreServiceInterface
      * @param ContentObjectPublication $publication
      * @param TreeNode $treeNode
      *
-     * @return array
+     * @return GradeScoreInterface[]
      */
     public function getScoresFromTreeNode(ContentObjectPublication $publication, TreeNode $treeNode): array;
 }
