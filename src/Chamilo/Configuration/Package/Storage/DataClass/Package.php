@@ -132,12 +132,10 @@ class Package extends DataClass
     /**
      * Returns the dependencies for this dataclass
      *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition[] $dependencies
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
+     * @return ?\Chamilo\Configuration\Package\Properties\Dependencies\Dependencies
      * @throws \Exception
      */
-    public function getDependencies($dependencies = []): array
+    public function get_dependencies()
     {
         return unserialize($this->getDefaultProperty(self::PROPERTY_DEPENDENCIES));
     }
@@ -239,7 +237,7 @@ class Package extends DataClass
      */
     public function has_dependencies()
     {
-        return (!is_null($this->getDependencies()));
+        return (!is_null($this->get_dependencies()));
     }
 
     /**

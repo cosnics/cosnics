@@ -122,7 +122,7 @@ class Sequencer
      */
     public function check_dependencies($package_context)
     {
-        $this->process_dependency($this->get_package($package_context)->getDependencies());
+        $this->process_dependency($this->get_package($package_context)->get_dependencies());
     }
 
     /**
@@ -178,7 +178,7 @@ class Sequencer
         while (($unprocessed_package_context = $this->get_next_unprocessed_package_context()) != null)
         {
 
-            if ($this->verify_dependency($this->get_package($unprocessed_package_context)->getDependencies()))
+            if ($this->verify_dependency($this->get_package($unprocessed_package_context)->get_dependencies()))
             {
                 $this->sequence[] = $unprocessed_package_context;
             }

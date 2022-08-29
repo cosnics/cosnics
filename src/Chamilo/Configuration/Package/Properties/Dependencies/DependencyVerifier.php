@@ -18,24 +18,31 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class DependencyVerifier
 {
 
+    public const TYPE_REMOVE = 'remove';
+
+    public const TYPE_UPDATE = 'update';
+
+    protected $logger;
+
     /**
      *
-     * @var \configuration\package\storage\data_class\Package
+     * @var \Chamilo\Configuration\Package\Storage\DataClass\Package
      */
     private $package;
 
-    protected $logger;
-    const TYPE_REMOVE = 'remove';
-    const TYPE_UPDATE = 'update';
-
     /**
      *
-     * @param \configuration\package\storage\data_class\Package $package
+     * @param \Chamilo\Configuration\Package\Storage\DataClass\Package $package
      */
     public function __construct($package)
     {
         $this->package = $package;
         $this->logger = MessageLogger::getInstance($this);
+    }
+
+    public function get_logger()
+    {
+        return $this->logger;
     }
 
     /**
@@ -47,23 +54,19 @@ class DependencyVerifier
         return $this->package;
     }
 
-    public function get_logger()
-    {
-        return $this->logger;
-    }
-
     public function is_installable()
     {
-        $dependencies = $this->get_package()->getDependencies();
+        $dependencies = $this->get_package()->get_dependencies();
 
         if (is_null($dependencies))
         {
             return true;
         }
 
-        if (! $dependencies->check())
+        if (!$dependencies->check())
         {
             $this->logger->add_message($dependencies->get_logger()->render());
+
             return false;
         }
         else
@@ -79,18 +82,20 @@ class DependencyVerifier
         $condition = new NotCondition(
             new EqualityCondition(
                 new PropertyConditionVariable(Registration::class, Registration::PROPERTY_CONTEXT),
-                new StaticConditionVariable($this->get_package()->get_context())));
+                new StaticConditionVariable($this->get_package()->get_context())
+            )
+        );
 
         $registrations = DataManager::retrieves(
-            Registration::class,
-            new DataClassRetrievesParameters($condition));
+            Registration::class, new DataClassRetrievesParameters($condition)
+        );
 
-        foreach($registrations as $registration)
+        foreach ($registrations as $registration)
         {
             $package = Package::get($registration->get_context());
-            $dependencies = $package->getDependencies();
+            $dependencies = $package->get_dependencies();
 
-            if (! is_null($dependencies) && $dependencies->needs($this->get_package()->get_context()))
+            if (!is_null($dependencies) && $dependencies->needs($this->get_package()->get_context()))
             {
                 return false;
             }

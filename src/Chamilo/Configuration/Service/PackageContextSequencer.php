@@ -57,7 +57,7 @@ class PackageContextSequencer
     protected function checkPackageContextDependencies(array &$packageContexts, string $packageContext)
     {
         $package = $this->getPackageFactory()->getPackage($packageContext);
-        $this->processDependencies($packageContexts, $package->getDependencies());
+        $this->processDependencies($packageContexts, $package->get_dependencies());
     }
 
     /**
@@ -160,7 +160,7 @@ class PackageContextSequencer
         {
             $package = $this->getPackageFactory()->getPackage($unprocessed_package_context);
 
-            if ($this->verifyDependency($sequence, $package->getDependencies()))
+            if ($this->verifyDependency($sequence, $package->get_dependencies()))
             {
                 $sequence[] = $unprocessed_package_context;
             }
@@ -177,7 +177,7 @@ class PackageContextSequencer
      * @param string[] $sequence
      * @param Dependencies|Dependency $dependency
      *
-     * @return boolean
+     * @return bool
      */
     public function verifyDependency(array &$sequence, $dependency)
     {
