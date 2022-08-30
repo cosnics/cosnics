@@ -454,7 +454,7 @@ abstract class DataClass
         return $this;
     }
 
-    public function setId(string $id): DataClass
+    public function setId(?string $id): DataClass
     {
         if (strlen($id) > 0)
         {
@@ -508,7 +508,7 @@ abstract class DataClass
      * @throws \Exception
      * @deprecated Use setId($id) now
      */
-    public function set_id(string $id): DataClass
+    public function set_id(?string $id): DataClass
     {
         return $this->setId($id);
     }

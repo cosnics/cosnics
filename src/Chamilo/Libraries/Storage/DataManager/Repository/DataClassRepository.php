@@ -8,6 +8,7 @@ use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
+use Chamilo\Libraries\Storage\DataClass\Interfaces\UuidDataClassInterface;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
@@ -285,16 +286,21 @@ class DataClassRepository
             $objectTableName = $dataClass::getStorageUnitName();
         }
 
+        if($dataClass instanceof UuidDataClassInterface && !$dataClass->isIdentified())
+        {
+            $dataClass->setId(Uuid::v4());
+        }
+
         $objectProperties = $dataClass->getDefaultProperties();
 
-        if(!Uuid::isValid((string) $objectProperties[DataClass::PROPERTY_ID]))
+        if(!$dataClass instanceof UuidDataClassInterface)
         {
             unset($objectProperties[DataClass::PROPERTY_ID]);
         }
 
         $dataClassCreated = $this->getDataClassDatabase()->create($objectTableName, $objectProperties);
 
-        if(!Uuid::isValid((string) $objectProperties[DataClass::PROPERTY_ID]))
+        if(!$dataClass instanceof UuidDataClassInterface)
         {
             $dataClass->setId($this->getDataClassDatabase()->getLastInsertedIdentifier($objectTableName));
         }
