@@ -39,6 +39,7 @@ abstract class Manager extends AjaxManager
     const ACTION_REMOVE_COLUMN_SUBITEM = 'RemoveColumnSubItem';
     const ACTION_REMOVE_COLUMN = 'RemoveColumn';
     const ACTION_LOAD_GRADEITEM_SCORES = 'LoadGradeItemScores';
+    const ACTION_SYNCHRONIZE_GRADEBOOK = 'SynchronizeGradeBook';
 
     const PARAM_ACTION = 'gradebook_display_ajax_action';
 

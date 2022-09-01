@@ -129,6 +129,12 @@ class BrowserComponent extends Manager
                     self::PARAM_ACTION => self::ACTION_AJAX,
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_GRADEITEM_SCORES
                 ]
+            ),
+            'SYNCHRONIZE_GRADEBOOK_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_SYNCHRONIZE_GRADEBOOK
+                ]
             )
         ];
     }

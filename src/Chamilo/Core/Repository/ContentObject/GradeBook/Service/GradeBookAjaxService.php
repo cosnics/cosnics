@@ -472,6 +472,48 @@ class GradeBookAjaxService
     }
 
     /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param array $targetUserIds
+     *
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function synchronizeGradeBook(int $gradeBookDataId, int $versionId, array $targetUserIds)
+    {
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradeScores = $this->getGradeScores($gradebookData, $targetUserIds);
+        $scoreSynchronizer = new ScoreSynchronizer($gradebookData, $gradeScores, $targetUserIds);
+
+        foreach ($scoreSynchronizer->getRemoveScores() as $score)
+        {
+            $gradebookData->removeGradeBookScore($score);
+        }
+
+        foreach ($scoreSynchronizer->getUpdateScores() as list($gradeBookScore, $gradeBookItem, $gradeScore))
+        {
+            $this->updateGradeBookScore($gradeBookScore, $gradeBookItem, $gradeScore);
+        }
+
+        foreach ($scoreSynchronizer->getAddScores() as list($gradeBookColumn, $userId, $gradeBookItem, $gradeScore))
+        {
+            $this->addGradeBookScore($gradeBookColumn, $gradeBookItem, $userId, $gradeScore);
+        }
+
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        $scores = array_map(function(GradeBookScore $score) {
+            return $score->toJSONModel();
+        }, $gradebookData->getGradeBookScores()->toArray());
+        $scores = array_values($scores);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+            'scores' => $scores
+        ];
+    }
+
+    /**
      * @param string $gradeBookColumnJSONData
      *
      * @return GradeBookColumnJSONModel
@@ -590,6 +632,22 @@ class GradeBookAjaxService
     }
 
     /**
+     * @param GradeBookScore $gradeBookScore
+     * @param GradeBookItem|null $gradeBookItem
+     * @param GradeScoreInterface $gradeScore
+     *
+     * @return GradeBookScore
+     */
+    protected function updateGradeBookScore(GradeBookScore $gradeBookScore, ?GradeBookItem $gradeBookItem, GradeScoreInterface $gradeScore): GradeBookScore
+    {
+        $gradeBookScore->setSourceScoreAbsent($gradeScore->isAbsent());
+        $gradeBookScore->setSourceScoreAuthAbsent($gradeScore->isAuthAbsent());
+        $gradeBookScore->setSourceScore($gradeScore->hasValue() ? $gradeScore->getValue() : null);
+        $gradeBookScore->setGradeBookItem($gradeBookItem);
+        return $gradeBookScore;
+    }
+
+    /**
      * @return Serializer
      */
     private function createSerializer(): Serializer
@@ -600,5 +658,20 @@ class GradeBookAjaxService
             })
             ->setPropertyNamingStrategy(new IdenticalPropertyNamingStrategy())
             ->build();
+    }
+
+    /**
+     * @param GradeBookData $gradebookData
+     * @param array $targetUserIds
+     * @return array
+     */
+    protected function getGradeScores(GradeBookData $gradebookData, array $targetUserIds): array
+    {
+        $gradeScores = array();
+        foreach ($gradebookData->getGradeBookItems() as $gradeBookItem)
+        {
+            $gradeScores[$gradeBookItem->getId()] = $this->gradeBookItemScoreService->getScores($gradeBookItem, $targetUserIds);
+        }
+        return $gradeScores;
     }
 }
