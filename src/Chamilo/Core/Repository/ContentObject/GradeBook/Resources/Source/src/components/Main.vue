@@ -9,6 +9,7 @@
         </div>
         <div class="gradebook-table-container">
             <div class="gradebook-create-actions">
+                <button class="btn btn-default btn-sm" @click="synchronizeGradeBook"><i aria-hidden="true" class="fa fa-refresh"></i>Synchronizeer scores</button>
                 <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>Nieuwe score</button>
                 <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>Categorie</button>
             </div>
@@ -83,6 +84,18 @@
             const category = this.gradeBook.createNewCategory();
             this.categorySettings = category.id;
             this.connector?.addCategory(category);
+        }
+
+        async synchronizeGradeBook() {
+            await this.connector?.synchronizeGradeBook((scores: any) => {
+                const tscores = this.gradeBook.tscores;
+                scores.forEach((score: any) => {
+                    if (!tscores[score.columnId]) {
+                        Vue.set(tscores, score.columnId, {});
+                    }
+                    tscores[score.columnId][score.targetUserId] = score;
+                });
+            });
         }
 
         createNewScore() {

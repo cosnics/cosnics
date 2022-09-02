@@ -110,6 +110,7 @@ export default class GradesTable extends Vue {
     getResult(columnId: ColumnId, userId: number): ResultType {
         if (!this.gradeBook.tscores[columnId]) { return null; }
         const score = this.gradeBook.tscores[columnId][userId];
+        if (!score) { return null; }
         if (score.sourceScoreAbsent) { return 'afw'; }
         if (score.sourceScoreAuthAbsent) { return 'gafw'; }
         //console.log(columnId, userId, score.sourceScore);

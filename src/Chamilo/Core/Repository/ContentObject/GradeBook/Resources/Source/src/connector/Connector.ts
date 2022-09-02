@@ -175,6 +175,19 @@ export default class Connector {
         });
     }
 
+    synchronizeGradeBook(callback: Function) {
+        this.addToQueue(async () => {
+            const data = await this.executeAPIRequest(this.apiConfig.synchronizeGradeBookURL);
+            callback(data.scores);
+        });
+/*        return new Promise(resolve => {
+            this.addToQueue(async () => {
+                const data = await this.executeAPIRequest(this.apiConfig.synchronizeGradeBookURL);
+                resolve(data);
+            });
+        })*/
+    }
+
     protected addToQueue(callback: Function) {
         this.queue.add(async () => {
             await callback();
