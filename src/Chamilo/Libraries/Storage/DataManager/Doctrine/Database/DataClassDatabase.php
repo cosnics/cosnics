@@ -384,7 +384,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
         catch (Throwable $throwable)
         {
-            $this->handleError($throwable);
+            if(!$throwable instanceof DataClassNoResultException)
+            {
+                $this->handleError($throwable);
+            }
 
             throw new DataClassNoResultException($dataClassName, $parameters);
         }
