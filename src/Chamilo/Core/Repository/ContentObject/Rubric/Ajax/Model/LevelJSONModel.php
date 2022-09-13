@@ -163,13 +163,10 @@ class LevelJSONModel
      * @param RubricData $rubricData
      *
      * @return Level
-     *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function toLevel(RubricData $rubricData)
     {
-        $criterium = !empty($this->criteriumId) ? $rubricData->getCriteriumById($this->criteriumId) : null;
-        $level = new Level($rubricData, $criterium);
+        $level = new Level($rubricData);
         $this->updateLevel($level);
 
         return $level;
@@ -203,5 +200,10 @@ class LevelJSONModel
         return new self(
             $level->getId(), $level->getTitle(), $level->getScore(), $level->usesRangeScore(), $level->getMinimumScore(), $level->isDefault(), $level->getDescription(), $level->getCriteriumId()
         );
+    }
+
+    public function hasCriterium()
+    {
+        return !empty($this->getCriteriumId());
     }
 }
