@@ -83,6 +83,11 @@
             <tag name="chamilo.libraries.console.command" />
         </service>
 
+        <service id="Chamilo\Application\Weblcms\Console\Command\CourseLocationFixerCommand" autowire="true">
+            <tag name="chamilo.libraries.console.command" />
+        </service>
+
+
         <service id="Chamilo\Application\Weblcms\Service\CourseService" alias="chamilo.application.weblcms.service.course"/>
 
         <service id="Chamilo\Application\Weblcms\Service\CourseUserCategoryService" autowire="true"/>
