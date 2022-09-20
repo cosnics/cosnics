@@ -73,7 +73,9 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
 
         foreach ($this->getSources() as $implementor)
         {
-            $events = array_merge($events, $implementor->getEvents($this, $startTime, $endTime));
+            $implementorEvents = $implementor->getEvents($this, $startTime, $endTime);
+
+            $events = array_merge($events, $implementorEvents);
         }
 
         return $events;

@@ -28,19 +28,19 @@ class EventParser
 
     /**
      *
+     * @var int
+     */
+    private $fromDate;
+
+    /**
+     *
      * @var \Microsoft\Graph\Model\Event
      */
     private $office365CalendarEvent;
 
     /**
      *
-     * @var integer
-     */
-    private $fromDate;
-
-    /**
-     *
-     * @var integer
+     * @var int
      */
     private $toDate;
 
@@ -48,8 +48,8 @@ class EventParser
      *
      * @param \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar $availableCalendar
      * @param \Microsoft\Graph\Model\Event $office365CalendarEvent
-     * @param integer $fromDate
-     * @param integer $toDate
+     * @param int $fromDate
+     * @param int $toDate
      */
     public function __construct(
         AvailableCalendar $availableCalendar, \Microsoft\Graph\Model\Event $office365CalendarEvent, $fromDate, $toDate
@@ -64,7 +64,7 @@ class EventParser
     /**
      *
      * @param string $eventTimeZone
-     * @param boolean $isAllDay
+     * @param bool $isAllDay
      *
      * @return \DateTimeZone|NULL
      */
@@ -158,7 +158,7 @@ class EventParser
      *
      * @param string $frequencyType
      *
-     * @return integer
+     * @return int
      */
     private function getFrequency($frequencyType)
     {
@@ -185,7 +185,7 @@ class EventParser
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getFromDate()
     {
@@ -194,7 +194,7 @@ class EventParser
 
     /**
      *
-     * @param integer $fromDate
+     * @param int $fromDate
      */
     public function setFromDate($fromDate)
     {
@@ -339,7 +339,7 @@ class EventParser
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getToDate()
     {
@@ -348,7 +348,7 @@ class EventParser
 
     /**
      *
-     * @param integer $toDate
+     * @param int $toDate
      */
     public function setToDate($toDate)
     {

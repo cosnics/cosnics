@@ -22,7 +22,7 @@ class AvailabilityComponent extends Manager
         $this->checkAuthorization(Manager::context());
 
         $availabilityService = $this->getAvailabilityService();
-        $form = $this->getForm($availabilityService);
+        $form = $this->getAvailabilityForm($availabilityService);
 
         if ($form->validate())
         {
@@ -64,7 +64,7 @@ class AvailabilityComponent extends Manager
      *
      * @return \Chamilo\Application\Calendar\Form\AvailabilityForm
      */
-    public function getForm(AvailabilityService $availabilityService)
+    public function getAvailabilityForm(AvailabilityService $availabilityService): AvailabilityForm
     {
         return new AvailabilityForm($this->get_url(), $this->getUser(), $availabilityService);
     }

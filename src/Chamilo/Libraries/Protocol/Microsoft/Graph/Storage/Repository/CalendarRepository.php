@@ -32,8 +32,8 @@ class CalendarRepository
      *
      * @param string $calendarIdentifier
      * @param string $azureUserIdentifier
-     * @param integer $fromDate
-     * @param integer $toDate
+     * @param int $fromDate
+     * @param int $toDate
      *
      * @return \Microsoft\Graph\Model\Event[] | \Microsoft\Graph\Model\Entity[]
      */
@@ -45,10 +45,12 @@ class CalendarRepository
             ['$top' => 200, 'startDateTime' => date('c', $fromDate), 'endDateTime' => date('c', $toDate)]
         );
 
-        return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
+        $result = $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
             '/users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier . '/calendarview?' .
             $queryParameters, Event::class, true
         );
+
+        return $result;
     }
 
     /**

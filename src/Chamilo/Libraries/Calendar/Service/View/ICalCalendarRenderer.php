@@ -99,7 +99,7 @@ class ICalCalendarRenderer extends CalendarRenderer
      */
     private function addEvents(CalendarRendererProviderInterface $dataProvider)
     {
-        $providedEvents = $dataProvider->getEvents();
+        $providedEvents = $dataProvider->getEvents(strtotime('-2 Months', time()), strtotime('+6 Months', time()));
 
         foreach ($providedEvents as $providedEvent)
         {

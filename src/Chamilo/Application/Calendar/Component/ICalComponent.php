@@ -95,7 +95,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 );
 
                 $includedCalendars =
-                    implode(', ', $this->getCalendarRendererProvider($this->getUser())->getInternalSourceNames());
+                    implode(', ', $this->getCalendarRendererProvider($this->getUser())->getSourceNames());
 
                 $html = [];
 
