@@ -119,7 +119,7 @@ class Level
      * @param CriteriumNode|null $criterium
      *
      */
-    public function __construct(RubricData $rubricData, CriteriumNode $criterium = null)
+    public function __construct(RubricData $rubricData, ?CriteriumNode $criterium = null)
     {
         $this->choices = new ArrayCollection();
         $this->setCriterium($criterium);
@@ -399,7 +399,7 @@ class Level
      *
      * @return $this
      */
-    public function setCriterium(CriteriumNode $criterium = null): Level
+    public function setCriterium(?CriteriumNode $criterium = null): Level
     {
         if ($criterium === $this->criterium)
         {
