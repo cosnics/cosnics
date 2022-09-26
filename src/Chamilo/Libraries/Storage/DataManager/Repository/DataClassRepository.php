@@ -631,7 +631,7 @@ class DataClassRepository
             }
             catch (DataClassNoResultException $exception)
             {
-                return false;
+                return null;
             }
         }
     }
@@ -743,7 +743,7 @@ class DataClassRepository
             }
             catch (DataClassNoResultException $exception)
             {
-                return false;
+                return null;
             }
         }
     }

@@ -107,7 +107,7 @@ class DataClassRepositoryCache
 
     public function addForNoResult(DataClassNoResultException $exception): bool
     {
-        $this->set($exception->get_class_name(), $exception->get_parameters()->hash(), false);
+        $this->set($exception->get_class_name(), $exception->get_parameters()->hash(), null);
 
         return true;
     }
@@ -160,7 +160,7 @@ class DataClassRepositoryCache
         else
 
         {
-            return false;
+            return null;
         }
     }
 
