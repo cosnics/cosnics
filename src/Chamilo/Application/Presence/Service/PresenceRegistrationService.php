@@ -59,6 +59,7 @@ class PresenceRegistrationService
      * @param User $user
      * @param int $publicationId
      * @param int|null $treeNodeId
+     * @param int|null $presencePeriodId
      * @param string $securityKey
      *
      * @return array
@@ -66,7 +67,7 @@ class PresenceRegistrationService
      * @throws NotAllowedException
      */
     public function registerUserInPresence(
-        User $user, int $publicationId, int $treeNodeId = null, string $securityKey = ''
+        User $user, int $publicationId, ?int $treeNodeId = null, ?int $presencePeriodId = null, string $securityKey = ''
     )
     {
         $publication = $this->getPublicationById($publicationId);
@@ -91,20 +92,39 @@ class PresenceRegistrationService
 
         $presence = $this->getPresenceById($presenceId, $publicationId, $treeNodeId);
 
-        $calculatedSecurityKey = $this->calculateSecurityKey($presence, $publicationId, $treeNodeId);
+        $calculatedSecurityKey = $this->calculateSecurityKey($presence, $publicationId, $treeNodeId, $presencePeriodId);
         if($calculatedSecurityKey != $securityKey)
         {
             throw new NotAllowedException();
         }
 
         $periods = $this->resultPeriodService->getResultPeriodsForPresence($presence, $contextIdentifier, true);
-        $lastPeriod = array_pop($periods);
 
-        $result = $this->resultEntryService->getPresenceResultEntry($lastPeriod['id'], $user->getId());
+        if (empty($presencePeriodId))
+        {
+            $periodToRegister = array_pop($periods);
+        }
+        else
+        {
+            foreach ($periods as $period)
+            {
+                if ($period['id'] == $presencePeriodId)
+                {
+                    $periodToRegister = $period;
+                }
+            }
+        }
+
+        if (empty($periodToRegister))
+        {
+            throw new NotAllowedException();
+        }
+
+        $result = $this->resultEntryService->getPresenceResultEntry($periodToRegister['id'], $user->getId());
         if (!$result instanceof PresenceResultEntry || $result->getChoiceId() != Presence::STATUS_PRESENT)
         {
             $result = $this->resultEntryService->createOrUpdatePresenceResultEntry(
-                $presence, $lastPeriod['id'], $user->getId(), Presence::STATUS_PRESENT
+                $presence, $periodToRegister['id'], $user->getId(), Presence::STATUS_PRESENT
             );
         }
 
@@ -193,9 +213,17 @@ class PresenceRegistrationService
         return $this->verificationIconService->renderVerificationIconForPresence($presence);
     }
 
-    public function getPresenceRegistrationUrl(Presence $presence, int $publicationId, int $treeNodeId = null): string
+    /**
+     * @param Presence $presence
+     * @param int $publicationId
+     * @param int|null $treeNodeId
+     * @param int|null $presencePeriodId
+     *
+     * @return string
+     */
+    public function getPresenceRegistrationUrl(Presence $presence, int $publicationId, ?int $treeNodeId = null, ?int $presencePeriodId = null): string
     {
-        $securityKey = $this->calculateSecurityKey($presence, $publicationId, $treeNodeId);
+        $securityKey = $this->calculateSecurityKey($presence, $publicationId, $treeNodeId, $presencePeriodId);
 
         $redirect = new Redirect(
             [
@@ -203,6 +231,7 @@ class PresenceRegistrationService
                 Application::PARAM_ACTION => \Chamilo\Application\Presence\Manager::ACTION_PRESENCE_REGISTRATION,
                 \Chamilo\Application\Presence\Manager::PARAM_PUBLICATION_ID => $publicationId,
                 \Chamilo\Application\Presence\Manager::PARAM_TREE_NODE_ID => $treeNodeId,
+                \Chamilo\Application\Presence\Manager::PARAM_PRESENCE_PERIOD_ID => $presencePeriodId,
                 \Chamilo\Application\Presence\Manager::PARAM_SECURITY_KEY => $securityKey
             ]
         );
@@ -214,12 +243,17 @@ class PresenceRegistrationService
      * @param Presence $presence
      * @param int $publicationId
      * @param int|null $treeNodeId
+     * @param int|null $presencePeriodId
      *
      * @return string
      */
-    protected function calculateSecurityKey(Presence $presence, int $publicationId, int $treeNodeId = null): string
+    protected function calculateSecurityKey(Presence $presence, int $publicationId, int $treeNodeId = null, int $presencePeriodId = null): string
     {
-        return md5($publicationId . ':' . $treeNodeId . ':' . $presence->get_object_number());
+        if (is_null($presencePeriodId))
+        {
+            return md5($publicationId . ':' . $treeNodeId . ':' . $presence->get_object_number());
+        }
+        return md5($publicationId . ':' . $treeNodeId . ':' . $presence->get_object_number() . ':' . $presencePeriodId);
     }
 
 }

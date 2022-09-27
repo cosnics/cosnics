@@ -68,11 +68,11 @@
                                  @toggle-checkout="toggleCheckout"
                                  @change-selected-period="setSelectedPeriod">
                         <template v-slot:slot-top v-if="hasSelectedPeriod">
-                            <div class="u-flex u-align-items-baseline u-justify-content-space-between u-gap-small-3x minw-100">
+                            <div class="u-flex u-align-items-baseline u-justify-content-space-between u-gap-small-2x minw-100">
                                 <button class="btn btn-sm mod-period-action mod-show-periods" @click="setSelectedPeriod(null)">{{ $t('show-all-periods') }}</button>
                                 <button id="show-more" @click="showMore = !showMore" class="btn btn-default btn-sm mod-more">{{ $t('more') }}&hellip;</button>
                                 <bulk-status-popup target="show-more" :is-visible="showMore" :presence-statuses="presenceStatuses" :status-defaults="statusDefaults"
-                                                   @apply="applyBulkStatus" @cancel="cancelBulkStatus"/>
+                                                   :print-qr-code-url="`${apiConfig.printQrCodeURL}&presence_period_id=${selectedPeriod.id}`" @apply="applyBulkStatus" @cancel="cancelBulkStatus"/>
                             </div>
                         </template>
                         <template v-slot:slot-bottom v-if="hasSelectedPeriod">

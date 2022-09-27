@@ -27,8 +27,10 @@ class PresenceRegistrationComponent extends Manager
 
         $publicationId = $this->getRequest()->getFromUrl(self::PARAM_PUBLICATION_ID);
         $treeNodeId = $this->getRequest()->getFromUrl(self::PARAM_TREE_NODE_ID);
+        $presencePeriodId = $this->getRequest()->getFromUrl(self::PARAM_PRESENCE_PERIOD_ID);
 
         $securityKey = $this->getRequest()->getFromUrl(self::PARAM_SECURITY_KEY);
+
 
         if (empty($publicationId) || empty($securityKey))
         {
@@ -38,7 +40,7 @@ class PresenceRegistrationComponent extends Manager
         try
         {
             list($userRegistrationEntry, $presence) = $this->getPresenceRegistrationService()->registerUserInPresence(
-                $this->getUser(), $publicationId, $treeNodeId, $securityKey
+                $this->getUser(), $publicationId, $treeNodeId, $presencePeriodId, $securityKey
             );
 
             $isUserInPresenceList =

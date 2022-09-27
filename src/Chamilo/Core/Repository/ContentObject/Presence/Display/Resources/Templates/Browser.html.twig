@@ -104,7 +104,9 @@
             <presence-entry :api-config="apiConfig" :load-index="updateCountEntry" :use-statistics="activeTab === 'statistics'" :stat-mode="statMode"></presence-entry>
         </div>
         <div role="tabpanel" class="tab-pane mod-pad" id="properties" :class="{'active': activeTab === 'properties'}">
-            <a class="btn btn-default" style="margin-bottom: 20px;" href="{{ PRINT_QR_CODE_URL|raw }}" target="_blank">{{ 'PrintQR'|trans({}, appContext) }}</a>
+            <a class="btn btn-default" style="margin-bottom: 20px;" :href="apiConfig.printQrCodeURL" target="_blank">{{ 'PrintQR'|trans({}, appContext) }}</a>
+            <br>
+            {{ 'EndSelfRegistration'|trans({}, appContext) }}
             {{ CONTENT_OBJECT_RENDITION|raw }}
         </div>
         <div role="tabpanel" class="tab-pane mod-pad" id="presence-builder" :class="{'active': activeTab === 'builder'}" style="margin-top: 10px">
@@ -148,6 +150,7 @@
         deletePresencePeriodURL: '{{ DELETE_PRESENCE_PERIOD_URL|raw }}',
         loadRegisteredPresenceEntryStatusesURL: '{{ LOAD_REGISTERED_PRESENCE_ENTRY_STATUSES_URL|raw }}',
         togglePresenceEntryCheckoutURL: '{{ TOGGLE_PRESENCE_ENTRY_CHECKOUT_URL|raw }}',
+        printQrCodeURL: '{{ PRINT_QR_CODE_URL|raw }}',
         exportURL: '{{ EXPORT_URL|raw }}',
         csrfToken: '{{ csrf_token('ComponentToken') }}'
     };

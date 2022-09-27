@@ -17,5 +17,6 @@ abstract class Manager extends Application
 
     const PARAM_PUBLICATION_ID = 'publication_id';
     const PARAM_TREE_NODE_ID = 'tree_node_id';
+    const PARAM_PRESENCE_PERIOD_ID = 'presence_period_id';
     const PARAM_SECURITY_KEY = 'sk';
 }
