@@ -668,7 +668,7 @@ class DataClassRepository
      *
      * @param class-string<retrieveDataClassName> $dataClassName
      *
-     * @return retrieveDataClassName
+     * @return ?retrieveDataClassName
      */
     public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters)
     {
@@ -709,7 +709,7 @@ class DataClassRepository
      *
      * @param class-string<retrieveClass> $dataClassName
      *
-     * @return retrieveClass|bool
+     * @return ?retrieveClass
      */
     protected function retrieveClass(
         string $cacheDataClassName, string $dataClassName, DataClassRetrieveParameters $parameters
