@@ -1203,6 +1203,14 @@ export default class Builder extends Vue {
     display: none;
 }
 
+.onoffswitch.mod-self-disable {
+    width: 200px;
+}
+
+.onoffswitch.mod-self-disable.mod-period {
+    width: 220px;
+}
+
 .onoffswitch-label {
     border: 1px solid #80a2b3;
     border-radius: 3px;
@@ -1212,7 +1220,7 @@ export default class Builder extends Vue {
     overflow: hidden;
 }
 
-.onoffswitch-label.mod-checkout, .onoffswitch-label.mod-checkout-choice {
+.onoffswitch-label.mod-self-disable, .onoffswitch-label.mod-checkout, .onoffswitch-label.mod-checkout-choice {
     border-color: #d6dee0;
 }
 
@@ -1220,6 +1228,7 @@ export default class Builder extends Vue {
     border-color: #6dab6f;
 }
 
+.onoffswitch-checkbox:checked + .onoffswitch-label.mod-self-disable,
 .onoffswitch-checkbox:checked + .onoffswitch-label.mod-checkout-choice {
     border-color: #91a0b1;
 }
@@ -1259,6 +1268,7 @@ export default class Builder extends Vue {
     padding-left: 8px;
 }
 
+.onoffswitch-inner-before.mod-self-disable,
 .onoffswitch-inner-before.mod-checkout-choice {
     background-color: #91a0b1;
     color: white;
@@ -1285,7 +1295,7 @@ export default class Builder extends Vue {
     width: 12px;
 }
 
-.onoffswitch-switch.mod-checkout, .onoffswitch-switch.mod-checkout-choice {
+.onoffswitch-switch.mod-self-disable, .onoffswitch-switch.mod-checkout, .onoffswitch-switch.mod-checkout-choice {
     border-color: #c2ced1;
 }
 
@@ -1293,6 +1303,7 @@ export default class Builder extends Vue {
     border-color: #6dab6f;
 }
 
+.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch.mod-self-disable,
 .onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch.mod-checkout-choice {
     border-color: #91a0b1;
 }

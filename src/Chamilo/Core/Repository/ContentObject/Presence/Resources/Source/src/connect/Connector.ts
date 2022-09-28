@@ -86,14 +86,25 @@ export default class Connector {
         });
     }
 
+    async updatePresenceGlobalSelfRegistration(id: number, self_registration_disabled: boolean, callback: Function|undefined = undefined) {
+        this.addToQueue(async() => {
+            const parameters = { data: JSON.stringify({id, self_registration_disabled})};
+            const data = await this.executeAPIRequest(this.apiConfig.updatePresenceGlobalSelfRegistrationURL, parameters);
+            if (callback) {
+                callback(data);
+            }
+            return data;
+        });
+    }
+
     async loadRegisteredPresenceEntryStatuses() {
         const res = await axios.get(this.apiConfig.loadRegisteredPresenceEntryStatusesURL);
         return res.data;
     }
 
-    async updatePresencePeriod(periodId: number, label: string, callback: Function|undefined = undefined) {
+    async updatePresencePeriod(periodId: number, label: string, selfRegistrationDisabled: boolean, callback: Function|undefined = undefined) {
         this.addToQueue(async () => {
-            const parameters = { 'period_id': periodId, 'period_label': label };
+            const parameters = { 'period_id': periodId, 'period_label': label, 'period_self_registration_disabled': selfRegistrationDisabled };
             const data = await this.executeAPIRequest(this.apiConfig.updatePresencePeriodURL, parameters);
             if (callback) {
                 callback(data);

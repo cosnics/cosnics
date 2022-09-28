@@ -104,9 +104,7 @@
             <presence-entry :api-config="apiConfig" :load-index="updateCountEntry" :use-statistics="activeTab === 'statistics'" :stat-mode="statMode"></presence-entry>
         </div>
         <div role="tabpanel" class="tab-pane mod-pad" id="properties" :class="{'active': activeTab === 'properties'}">
-            <a class="btn btn-default" style="margin-bottom: 20px;" :href="apiConfig.printQrCodeURL" target="_blank">{{ 'PrintQR'|trans({}, appContext) }}</a>
-            <br>
-            {{ 'EndSelfRegistration'|trans({}, appContext) }}
+            <presence-properties :api-config="apiConfig"></presence-properties>
             {{ CONTENT_OBJECT_RENDITION|raw }}
         </div>
         <div role="tabpanel" class="tab-pane mod-pad" id="presence-builder" :class="{'active': activeTab === 'builder'}" style="margin-top: 10px">
@@ -143,6 +141,7 @@
         loadStatisticsURL: '{{ LOAD_STATISTICS_URL|raw }}',
         loadPresenceURL: '{{ LOAD_PRESENCE_URL|raw }}',
         updatePresenceURL: '{{ UPDATE_PRESENCE_URL|raw }}',
+        updatePresenceGlobalSelfRegistrationURL: '{{ UPDATE_PRESENCE_GLOBAL_SELF_REGISTRATION_URL|raw }}',
         savePresenceEntryURL: '{{ SAVE_PRESENCE_ENTRY_URL|raw }}',
         bulkSavePresenceEntriesURL: '{{ BULK_SAVE_PRESENCE_ENTRIES_URL|raw }}',
         createPresencePeriodURL: '{{ CREATE_PRESENCE_PERIOD_URL|raw }}',

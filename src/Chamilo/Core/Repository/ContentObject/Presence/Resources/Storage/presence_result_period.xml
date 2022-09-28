@@ -7,6 +7,7 @@
         <property name="date" type="integer" unsigned="1" notnull="1" /> 
         <property name="context_class" type="text" length="255" notnull="1" />
         <property name="context_id" type="integer" unsigned="1" notnull="1" />
+        <property name="period_self_registration_disabled" type="boolean" notnull="1" default="0" />
     </properties>
     <index name="presence_id">
         <indexproperty name="presence_id" />

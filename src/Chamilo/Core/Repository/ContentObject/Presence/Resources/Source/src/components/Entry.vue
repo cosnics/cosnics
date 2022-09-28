@@ -71,8 +71,9 @@
                             <div class="u-flex u-align-items-baseline u-justify-content-space-between u-gap-small-2x minw-100">
                                 <button class="btn btn-sm mod-period-action mod-show-periods" @click="setSelectedPeriod(null)">{{ $t('show-all-periods') }}</button>
                                 <button id="show-more" @click="showMore = !showMore" class="btn btn-default btn-sm mod-more">{{ $t('more') }}&hellip;</button>
-                                <bulk-status-popup target="show-more" :is-visible="showMore" :presence-statuses="presenceStatuses" :status-defaults="statusDefaults"
-                                                   :print-qr-code-url="`${apiConfig.printQrCodeURL}&presence_period_id=${selectedPeriod.id}`" @apply="applyBulkStatus" @cancel="cancelBulkStatus"/>
+                                <period-menu target="show-more" :is-visible="showMore" :presence-statuses="presenceStatuses" :status-defaults="statusDefaults"
+                                   :print-qr-code-url="`${apiConfig.printQrCodeURL}&presence_period_id=${selectedPeriod.id}`" :self-registration-disabled="selectedPeriod.period_self_registration_disabled"
+                                   @self-registration-disabled-changed="setSelectedPeriodSelfRegistrationDisabled(selectedPeriod, $event)" @apply-bulk="applyBulkStatus" @cancel-bulk="cancelBulkStatus"/>
                             </div>
                         </template>
                         <template v-slot:slot-bottom v-if="hasSelectedPeriod">
@@ -123,13 +124,13 @@ import DynamicFieldKey from './entry/DynamicFieldKey.vue';
 import EntryTable from './entry/EntryTable.vue';
 import FilterStatusButton from './entry/FilterStatusButton.vue';
 import OnOffSwitch from './OnOffSwitch.vue';
-import BulkStatusPopup from './entry/BulkStatusPopup.vue';
+import PeriodMenu from './entry/PeriodMenu.vue';
 import PeriodsStatsTable from './entry/PeriodsStatsTable.vue';
 import ErrorDisplay from './ErrorDisplay.vue';
 
 @Component({
     name: 'entry',
-    components: {PeriodsStatsTable, EntryTable, OnOffSwitch, FilterStatusButton, SearchBar, LegendItem, DynamicFieldKey, BulkStatusPopup, ErrorDisplay}
+    components: {PeriodsStatsTable, EntryTable, OnOffSwitch, FilterStatusButton, SearchBar, LegendItem, DynamicFieldKey, PeriodMenu, ErrorDisplay}
 })
 export default class Entry extends Vue {
     statusDefaults: PresenceStatusDefault[] = [];
@@ -278,6 +279,9 @@ export default class Entry extends Vue {
             this.statusDefaults = presenceData['status-defaults'];
             this.presence = presenceData.presence;
         }
+        if (!this.presence?.has_checkout) {
+            this.checkoutMode = false;
+        }
     }
 
     async itemsProvider(ctx: any) {
@@ -392,7 +396,14 @@ export default class Entry extends Vue {
     setSelectedPeriodLabel(selectedPeriod: PresencePeriod, label: string) {
         this.errorData = null;
         selectedPeriod.label = label;
-        this.connector?.updatePresencePeriod(selectedPeriod.id, label);
+        this.connector?.updatePresencePeriod(selectedPeriod.id, label, selectedPeriod.period_self_registration_disabled);
+    }
+
+    setSelectedPeriodSelfRegistrationDisabled(selectedPeriod: PresencePeriod, selfRegistrationDisabled: boolean)
+    {
+        this.errorData = null;
+        selectedPeriod.period_self_registration_disabled = selfRegistrationDisabled;
+        this.connector?.updatePresencePeriod(selectedPeriod.id, selectedPeriod.label, selfRegistrationDisabled);
     }
 
     async setSelectedStudentStatus(student: any, selectedPeriod: PresencePeriod, status: number, isFullyEditable = true) {

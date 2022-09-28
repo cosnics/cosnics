@@ -115,7 +115,9 @@ class PresenceRegistrationService
             }
         }
 
-        if (empty($periodToRegister))
+        if (empty($periodToRegister)
+            || (is_null($presencePeriodId) && $presence->isGlobalSelfRegistrationDisabled())
+            || (!is_null($presencePeriodId) && $periodToRegister['period_self_registration_disabled']))
         {
             throw new NotAllowedException();
         }

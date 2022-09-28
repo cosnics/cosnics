@@ -3,24 +3,26 @@
     "en": {
         "apply": "Apply",
         "cancel": "Cancel",
+        "self-registration-off": "Self registration for period OFF",
+        "self-registration-on": "Self registration for period ON",
         "set-students-without-status": "Set all students without a status to"
     },
     "nl": {
         "apply": "Pas toe",
         "cancel": "Annuleer",
+        "self-registration-off": "Zelfregistratie voor periode UIT",
+        "self-registration-on": "Zelfregistratie voor periode AAN",
         "set-students-without-status": "Zet alle studenten zonder status op"
     }
 }
 </i18n>
 <template>
     <b-popover :target="target" :show.sync="isVisible" triggers="click" placement="right" custom-class="bulk-status">
-        <div style="padding: 4px 8px 8px; border-bottom: 1px solid #d4d4d4">
-            <a :href="printQrCodeUrl" target="_blank" style="font-size: 13px;line-height: 16px">Toon QR code voor zelfregistratie</a>
-        </div>
-        <div style="padding: 4px 8px 8px; border-bottom: 1px solid #d4d4d4">
-            <div class="u-flex u-justify-content-start u-align-items-baseline msg-text u-gap-small">
-                <input type="checkbox" id="disable-selfreg-check"><label for="disable-selfreg-check" style="font-weight: normal;margin-bottom: 0">Beëindig zelfregistratie voor periode</label>
-            </div>
+        <div style="padding: 8px; border-bottom: 1px solid #d4d4d4; font-size: 13px">
+            <on-off-switch id="disable-selfreg-check" switch-class="mod-self-disable mod-period"
+                           :on-text="$t('self-registration-on')" :off-text="$t('self-registration-off')" :checked="!selfRegistrationDisabled"
+                           @toggle="selfRegistrationChanged"/>
+            <a v-if="!selfRegistrationDisabled" :href="printQrCodeUrl" target="_blank" style="display: inline-block;margin-top: 7px"><i class="fa fa-print" style="margin-right: 5px" aria-hidden="true"></i>Toon QR code voor zelfregistratie</a>
         </div>
         <div style="padding: 8px 8px 8px">
             <div id="lbl-bulk" class="u-flex u-justify-content-start u-align-items-center msg-text u-cursor-pointer">{{ $t('set-students-without-status') }}
@@ -47,27 +49,34 @@
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
 import {PresenceStatus, PresenceStatusDefault} from '../../types';
+import OnOffSwitch from '../OnOffSwitch.vue';
 
 @Component({
-    name: 'bulk-status-popup'
+    name: 'period-menu',
+    components: {OnOffSwitch}
 })
-export default class BulkStatusPopup extends Vue {
+export default class PeriodMenu extends Vue {
     selectedStatus: PresenceStatus|null = null;
 
     @Prop({type: String, required: true}) readonly target!: string;
     @Prop({type: Boolean, default: false}) readonly isVisible!: boolean;
     @Prop({type: Array, default: () => []}) readonly presenceStatuses!: PresenceStatus[];
     @Prop({type: Array, default: () => []}) readonly statusDefaults!: PresenceStatusDefault[];
+    @Prop({type: Boolean, required: true}) readonly selfRegistrationDisabled!: boolean;
     @Prop({type: String, default: ''}) readonly printQrCodeUrl!: string;
 
     apply() {
-        this.$emit('apply', this.selectedStatus);
+        this.$emit('apply-bulk', this.selectedStatus);
         this.selectedStatus = null;
     }
 
     cancel() {
-        this.$emit('cancel');
+        this.$emit('cancel-bulk');
         this.selectedStatus = null;
+    }
+
+    selfRegistrationChanged() {
+        this.$emit('self-registration-disabled-changed', !this.selfRegistrationDisabled);
     }
 
     getPresenceStatusTitle(status: PresenceStatus): string {
