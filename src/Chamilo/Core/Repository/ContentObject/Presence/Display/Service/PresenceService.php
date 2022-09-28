@@ -151,6 +151,18 @@ class PresenceService
     }
 
     /**
+     * @param Presence $presence
+     * @param bool $selfRegistrationDisabled
+     *
+     * @throws \Exception
+     */
+    public function setPresenceSelfRegistrationDisabled(Presence $presence, bool $selfRegistrationDisabled)
+    {
+        $presence->setGlobalSelfRegistrationDisabled($selfRegistrationDisabled);
+        $presence->update();
+    }
+
+    /**
      * @return SerializationContext
      */
     protected function createSerializationContext(): SerializationContext

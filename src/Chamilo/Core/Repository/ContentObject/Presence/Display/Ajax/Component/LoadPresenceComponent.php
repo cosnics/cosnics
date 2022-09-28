@@ -49,7 +49,8 @@ class LoadPresenceComponent extends Manager
                     'title' => $presence->get_title(),
                     'statuses' => $this->deserialize($presence->getOptions()),
                     'has_checkout' => $presence->hasCheckout(),
-                    'verification_icon_data' => $verificationIconData
+                    'verification_icon_data' => $verificationIconData,
+                    'global_self_registration_disabled' => $presence->isGlobalSelfRegistrationDisabled()
                 ],
             ];
             return new JsonResponse($this->serialize($resultData), 200, [], true);
