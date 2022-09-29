@@ -15,7 +15,7 @@
 }
 </i18n>
 <template>
-    <div class="rubric mod-bf" :class="{'mod-weight': rubric.useWeights}" :style="{'--num-cols': rubric.rubricLevels.length}">
+    <div class="rubric mod-bf" :class="{'mod-weight': rubric.useWeights}" :style="{'--num-cols': rubric.maxNumLevels}">
         <formatting-help v-if="showFormatting" @close="showFormatting = false" class="mod-bf"></formatting-help>
         <ul class="rubric-tools">
             <li><a href="#" role="button" class="tools-show-formatting" @click.prevent="showFormatting=!showFormatting">{{ $t('formatting') }}</a></li>

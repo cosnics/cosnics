@@ -149,6 +149,17 @@ module.exports = function (IteratorConstructor, NAME, next) {
 
 /***/ }),
 
+/***/ "01d2":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_2_id_0f672eca_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("3e16");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_2_id_0f672eca_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_2_id_0f672eca_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_2_id_0f672eca_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "0209":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4785,17 +4796,6 @@ var getBuiltIn = __webpack_require__("f914");
 
 module.exports = getBuiltIn('document', 'documentElement');
 
-
-/***/ }),
-
-/***/ "1e2d":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricEntry_vue_vue_type_style_index_1_id_12ed4496_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("6bea");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricEntry_vue_vue_type_style_index_1_id_12ed4496_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricEntry_vue_vue_type_style_index_1_id_12ed4496_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricEntry_vue_vue_type_style_index_1_id_12ed4496_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -9520,6 +9520,17 @@ module.exports = version && +version;
 
 /***/ }),
 
+/***/ "3a22":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricEntry_vue_vue_type_style_index_1_id_143ee1eb_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("92a4");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricEntry_vue_vue_type_style_index_1_id_143ee1eb_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricEntry_vue_vue_type_style_index_1_id_143ee1eb_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricEntry_vue_vue_type_style_index_1_id_143ee1eb_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "3ab7":
 /***/ (function(module, exports) {
 
@@ -9646,6 +9657,13 @@ module.exports = function (Component) {
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TreeNodeDescriptions_vue_vue_type_style_index_0_id_01498932_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TreeNodeDescriptions_vue_vue_type_style_index_0_id_01498932_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
  /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TreeNodeDescriptions_vue_vue_type_style_index_0_id_01498932_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "3e16":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -14098,13 +14116,6 @@ var TEMPLATE = String(String).split('String');
 
 /***/ }),
 
-/***/ "6bea":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "6d94":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -14614,13 +14625,6 @@ module.exports = function (argument) {
   return argument > 0 ? min(toInteger(argument), 0x1FFFFFFFFFFFFF) : 0; // 2 ** 53 - 1 == 9007199254740991
 };
 
-
-/***/ }),
-
-/***/ "7d72":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -15806,6 +15810,13 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
 
 /***/ }),
 
+/***/ "92a4":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "92e6":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -16773,17 +16784,6 @@ module.exports = function from(arrayLike /* , mapfn = undefined, thisArg = undef
 
 /***/ }),
 
-/***/ "a7c6":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_2_id_1afa7de6_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("e249");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_2_id_1afa7de6_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_2_id_1afa7de6_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_2_id_1afa7de6_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
 /***/ "a85d":
 /***/ (function(module, exports) {
 
@@ -17332,17 +17332,6 @@ $({ target: 'Object', stat: true, sham: !DESCRIPTORS }, {
   }
 });
 
-
-/***/ }),
-
-/***/ "b815":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_1_id_1afa7de6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("7d72");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_1_id_1afa7de6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_1_id_1afa7de6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_1_id_1afa7de6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -19790,6 +19779,26 @@ function (_TreeNode) {
     key: "hasCustomLevels",
     get: function get() {
       return this.levels.length !== this.rubricLevels.length;
+    }
+  }, {
+    key: "maxNumLevels",
+    get: function get() {
+      var _this15 = this;
+
+      var num = this.rubricLevels.length;
+
+      if (!this.hasCustomLevels) {
+        return num;
+      }
+
+      this.getAllCriteria().forEach(function (criterium) {
+        var numCriteriumLevels = _this15.filterLevelsByCriterium(criterium).length;
+
+        if (numCriteriumLevels > num) {
+          num = numCriteriumLevels;
+        }
+      });
+      return num;
     }
   }, {
     key: "clusters",
@@ -24682,15 +24691,15 @@ var ScoreRubricView_component = normalizeComponent(
 )
 
 /* harmony default export */ var Rubric_ScoreRubricView = (ScoreRubricView_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricBuilderFull.vue?vue&type=template&id=1afa7de6&scoped=true&
-var RubricBuilderFullvue_type_template_id_1afa7de6_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"rubric mod-bf",class:{'mod-weight': _vm.rubric.useWeights},style:({'--num-cols': _vm.rubric.rubricLevels.length})},[(_vm.showFormatting)?_c('formatting-help',{staticClass:"mod-bf",on:{"close":function($event){_vm.showFormatting = false}}}):_vm._e(),_c('ul',{staticClass:"rubric-tools"},[_c('li',[_c('a',{staticClass:"tools-show-formatting",attrs:{"href":"#","role":"button"},on:{"click":function($event){$event.preventDefault();_vm.showFormatting=!_vm.showFormatting}}},[_vm._v(_vm._s(_vm.$t('formatting')))])])]),(_vm.rubric.useWeights)?_c('div',{staticClass:"treenode-weight-header mod-show"},[_c('span',[_vm._v(_vm._s(_vm.$t('weight')))])]):_vm._e(),(!_vm.rubric.hasCustomLevels)?_c('div',{staticClass:"rubric-header mod-show"},_vm._l((_vm.rubric.rubricLevels),function(level){return _c('div',{staticClass:"rubric-header-title"},[_vm._v(_vm._s(level.title))])}),0):_vm._e(),_vm._l((_vm.rubric.clusters),function(cluster,index){return [_c('div',{staticClass:"treenode-title-header rb-lg:col-start-1"},[_c('h1',{staticClass:"treenode-title cluster-title"},[_vm._v(_vm._s(cluster.title))])]),_vm._l((cluster.categories),function(category){return [(category.title && _vm.rubric.getAllCriteria(category).length > 0)?_c('div',{staticClass:"treenode-title-header mod-category has-category rb-lg:col-start-1",style:(("--category-color: " + (category.title && category.color ? category.color : '#999')))},[_c('div',{staticClass:"treenode-title-header-pre mod-category",class:{'mod-no-color': !category.color}}),_c('h2',{staticClass:"treenode-title category-title"},[_vm._v(_vm._s(category.title))])]):_vm._e(),_vm._l((_vm.getCriteriumRowsData(category)),function(ref){
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricBuilderFull.vue?vue&type=template&id=0f672eca&scoped=true&
+var RubricBuilderFullvue_type_template_id_0f672eca_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"rubric mod-bf",class:{'mod-weight': _vm.rubric.useWeights},style:({'--num-cols': _vm.rubric.maxNumLevels})},[(_vm.showFormatting)?_c('formatting-help',{staticClass:"mod-bf",on:{"close":function($event){_vm.showFormatting = false}}}):_vm._e(),_c('ul',{staticClass:"rubric-tools"},[_c('li',[_c('a',{staticClass:"tools-show-formatting",attrs:{"href":"#","role":"button"},on:{"click":function($event){$event.preventDefault();_vm.showFormatting=!_vm.showFormatting}}},[_vm._v(_vm._s(_vm.$t('formatting')))])])]),(_vm.rubric.useWeights)?_c('div',{staticClass:"treenode-weight-header mod-show"},[_c('span',[_vm._v(_vm._s(_vm.$t('weight')))])]):_vm._e(),(!_vm.rubric.hasCustomLevels)?_c('div',{staticClass:"rubric-header mod-show"},_vm._l((_vm.rubric.rubricLevels),function(level){return _c('div',{staticClass:"rubric-header-title"},[_vm._v(_vm._s(level.title))])}),0):_vm._e(),_vm._l((_vm.rubric.clusters),function(cluster,index){return [_c('div',{staticClass:"treenode-title-header rb-lg:col-start-1"},[_c('h1',{staticClass:"treenode-title cluster-title"},[_vm._v(_vm._s(cluster.title))])]),_vm._l((cluster.categories),function(category){return [(category.title && _vm.rubric.getAllCriteria(category).length > 0)?_c('div',{staticClass:"treenode-title-header mod-category has-category rb-lg:col-start-1",style:(("--category-color: " + (category.title && category.color ? category.color : '#999')))},[_c('div',{staticClass:"treenode-title-header-pre mod-category",class:{'mod-no-color': !category.color}}),_c('h2',{staticClass:"treenode-title category-title"},[_vm._v(_vm._s(category.title))])]):_vm._e(),_vm._l((_vm.getCriteriumRowsData(category)),function(ref){
 var criterium = ref.criterium;
 var ext = ref.ext;
 return [_c('div',{staticClass:"treenode-title-header rb-lg:col-start-1",class:{'has-category': !!category.title},style:(("--category-color: " + (!(category.title && category.color) ? '#999' : category.color)))},[_c('div',{staticClass:"treenode-title-header-pre mod-criterium"}),_c('h3',{staticClass:"treenode-title criterium-title u-markdown-criterium",class:{'mod-no-category': !category.title},domProps:{"innerHTML":_vm._s(criterium.toMarkdown())}})]),(_vm.rubric.useWeights)?_c('div',{staticClass:"treenode-weight mod-pad rb-md:col-span-full"},[_c('span',{staticClass:"treenode-weight-title"},[_vm._v(_vm._s(_vm.$t('weight'))+": ")]),(_vm.rubric.useRelativeWeights)?_c('input',{directives:[{name:"model",rawName:"v-model.number",value:(criterium.rel_weight),expression:"criterium.rel_weight",modifiers:{"number":true}}],staticClass:"input-detail rel-weight",class:{'is-set': criterium.rel_weight !== null, 'is-error': _vm.rubric.eqRestWeight < 0},attrs:{"type":"number","placeholder":_vm.rubric.eqRestWeight.toLocaleString(),"min":"0","max":"100"},domProps:{"value":(criterium.rel_weight)},on:{"input":[function($event){if($event.target.composing){ return; }_vm.$set(criterium, "rel_weight", _vm._n($event.target.value))},function($event){return _vm.onWeightChange($event, criterium)}],"blur":function($event){return _vm.$forceUpdate()}}}):[(_vm.rubric.filterLevelsByCriterium(criterium).length)?_c('span',{staticStyle:{"margin-left":"1em"}},[_vm._v("100")]):_c('input',{directives:[{name:"model",rawName:"v-model.number",value:(criterium.weight),expression:"criterium.weight",modifiers:{"number":true}}],staticClass:"input-detail abs-weight",attrs:{"type":"number","min":"0","max":"100"},domProps:{"value":(criterium.weight)},on:{"input":[function($event){if($event.target.composing){ return; }_vm.$set(criterium, "weight", _vm._n($event.target.value))},function($event){return _vm.onWeightChange($event, criterium)}],"blur":function($event){return _vm.$forceUpdate()}}})],_c('span',{staticClass:"sr-only"},[_vm._v("%")]),_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}})],2):_vm._e(),_c('tree-node-descriptions',{attrs:{"rubric":_vm.rubric,"criterium":criterium,"ext":ext},on:{"input":_vm.updateHeight,"update-level-description":_vm.updateLevelDescription,"update-choice-feedback":_vm.updateFeedback}})]})]}),(index < _vm.rubric.clusters.length - 1)?_c('div',{staticClass:"cluster-sep"}):_vm._e()]})],2)}
-var RubricBuilderFullvue_type_template_id_1afa7de6_scoped_true_staticRenderFns = []
+var RubricBuilderFullvue_type_template_id_0f672eca_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Views/RubricBuilderFull.vue?vue&type=template&id=1afa7de6&scoped=true&
+// CONCATENATED MODULE: ./src/Views/RubricBuilderFull.vue?vue&type=template&id=0f672eca&scoped=true&
 
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Components/Builder/FullView/DescriptionField.vue?vue&type=template&id=245d28d4&
 var DescriptionFieldvue_type_template_id_245d28d4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"description-input-area"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.descriptiveItem.description),expression:"descriptiveItem.description"}],staticClass:"ta-default-feedback",class:{'is-input-active': _vm.isInputActive || !_vm.descriptiveItem.description},attrs:{"placeholder":_vm.$t('enter-level-description')},domProps:{"value":(_vm.descriptiveItem.description)},on:{"input":[function($event){if($event.target.composing){ return; }_vm.$set(_vm.descriptiveItem, "description", $event.target.value)},_vm.onDescriptionChange],"focus":function($event){_vm.isInputActive = true},"blur":function($event){_vm.isInputActive = false}}}),_c('div',{staticClass:"description-markup-preview",class:{'is-input-active': _vm.isInputActive || !_vm.descriptiveItem.description}},[_vm._t("default"),_c('div',{staticClass:"preview",domProps:{"innerHTML":_vm._s(_vm.preview)}})],2)])}
@@ -25304,11 +25313,11 @@ RubricBuilderFullvue_type_script_lang_ts_RubricBuilderFull = __decorate([vue_cla
 // EXTERNAL MODULE: ./src/Views/RubricBuilderFull.vue?vue&type=style&index=0&lang=scss&
 var RubricBuilderFullvue_type_style_index_0_lang_scss_ = __webpack_require__("1135");
 
-// EXTERNAL MODULE: ./src/Views/RubricBuilderFull.vue?vue&type=style&index=1&id=1afa7de6&scoped=true&lang=css&
-var RubricBuilderFullvue_type_style_index_1_id_1afa7de6_scoped_true_lang_css_ = __webpack_require__("b815");
+// EXTERNAL MODULE: ./src/Views/RubricBuilderFull.vue?vue&type=style&index=1&id=0f672eca&scoped=true&lang=css&
+var RubricBuilderFullvue_type_style_index_1_id_0f672eca_scoped_true_lang_css_ = __webpack_require__("d6af");
 
-// EXTERNAL MODULE: ./src/Views/RubricBuilderFull.vue?vue&type=style&index=2&id=1afa7de6&lang=scss&scoped=true&
-var RubricBuilderFullvue_type_style_index_2_id_1afa7de6_lang_scss_scoped_true_ = __webpack_require__("a7c6");
+// EXTERNAL MODULE: ./src/Views/RubricBuilderFull.vue?vue&type=style&index=2&id=0f672eca&lang=scss&scoped=true&
+var RubricBuilderFullvue_type_style_index_2_id_0f672eca_lang_scss_scoped_true_ = __webpack_require__("01d2");
 
 // EXTERNAL MODULE: ./src/Views/RubricBuilderFull.vue?vue&type=custom&index=0&blockType=i18n
 var RubricBuilderFullvue_type_custom_index_0_blockType_i18n = __webpack_require__("eaf2");
@@ -25326,11 +25335,11 @@ var RubricBuilderFullvue_type_custom_index_0_blockType_i18n = __webpack_require_
 
 var RubricBuilderFull_component = normalizeComponent(
   Views_RubricBuilderFullvue_type_script_lang_ts_,
-  RubricBuilderFullvue_type_template_id_1afa7de6_scoped_true_render,
-  RubricBuilderFullvue_type_template_id_1afa7de6_scoped_true_staticRenderFns,
+  RubricBuilderFullvue_type_template_id_0f672eca_scoped_true_render,
+  RubricBuilderFullvue_type_template_id_0f672eca_scoped_true_staticRenderFns,
   false,
   null,
-  "1afa7de6",
+  "0f672eca",
   null
   
 )
@@ -25721,8 +25730,8 @@ var RubricPreviewWrappervue_type_template_id_d0755506_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/Views/RubricPreviewWrapper.vue?vue&type=template&id=d0755506&
 
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricEntry.vue?vue&type=template&id=12ed4496&scoped=true&
-var RubricEntryvue_type_template_id_12ed4496_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"rubric",class:[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, _vm.useScores ? 'mod-scores' : 'mod-grades', { 'mod-rel-weights': _vm.useScores && _vm.rubric.useRelativeWeights, 'mod-abs-weights': _vm.useScores && _vm.rubric.hasAbsoluteWeights }],style:({'--num-cols': _vm.rubric.rubricLevels.length}),on:{"click":function($event){$event.stopPropagation();}}},[_c('ul',{staticClass:"rubric-tools"},[_vm._t("demoEvaluator"),_c('li',{staticClass:"app-tool-item",class:{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }},[_c('button',{staticClass:"btn-check",class:{ checked: _vm.showDefaultFeedbackFields },attrs:{"aria-label":_vm.$t('show-default-descriptions'),"aria-expanded":_vm.showDefaultFeedbackFields ? 'true' : 'false'},on:{"click":function($event){$event.preventDefault();return _vm.toggleDefaultFeedbackFields($event)}}},[_c('span',{staticClass:"lbl-check",attrs:{"tabindex":"-1"}},[_c('i',{staticClass:"btn-icon-check fa",attrs:{"aria-hidden":"true"}}),_vm._v(_vm._s(_vm.options.isDemo ? _vm.$t('feedback') : _vm.$t('expand-all')))])])])],2),(_vm.rubric.useWeights)?_c('div',{staticClass:"treenode-weight-header mod-show"},[_c('span',[_vm._v(_vm._s(_vm.$t('weight')))])]):_vm._e(),(!_vm.rubric.hasCustomLevels)?[_c('ul',{staticClass:"rubric-header mod-show rb-md-max:col-start-1"},_vm._l((_vm.rubric.rubricLevels),function(level){return _c('li',{staticClass:"rubric-header-title"},[_vm._v(_vm._s(level.title))])}),0),_c('div',{staticClass:"rubric-header-fill"})]:_vm._e(),_vm._l((_vm.getClusterRowsData(_vm.rubric)),function(ref){
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricEntry.vue?vue&type=template&id=143ee1eb&scoped=true&
+var RubricEntryvue_type_template_id_143ee1eb_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"rubric",class:[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, _vm.useScores ? 'mod-scores' : 'mod-grades', { 'mod-rel-weights': _vm.useScores && _vm.rubric.useRelativeWeights, 'mod-abs-weights': _vm.useScores && _vm.rubric.hasAbsoluteWeights }],style:({'--num-cols': _vm.rubric.maxNumLevels}),on:{"click":function($event){$event.stopPropagation();}}},[_c('ul',{staticClass:"rubric-tools"},[_vm._t("demoEvaluator"),_c('li',{staticClass:"app-tool-item",class:{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }},[_c('button',{staticClass:"btn-check",class:{ checked: _vm.showDefaultFeedbackFields },attrs:{"aria-label":_vm.$t('show-default-descriptions'),"aria-expanded":_vm.showDefaultFeedbackFields ? 'true' : 'false'},on:{"click":function($event){$event.preventDefault();return _vm.toggleDefaultFeedbackFields($event)}}},[_c('span',{staticClass:"lbl-check",attrs:{"tabindex":"-1"}},[_c('i',{staticClass:"btn-icon-check fa",attrs:{"aria-hidden":"true"}}),_vm._v(_vm._s(_vm.options.isDemo ? _vm.$t('feedback') : _vm.$t('expand-all')))])])])],2),(_vm.rubric.useWeights)?_c('div',{staticClass:"treenode-weight-header mod-show"},[_c('span',[_vm._v(_vm._s(_vm.$t('weight')))])]):_vm._e(),(!_vm.rubric.hasCustomLevels)?[_c('ul',{staticClass:"rubric-header mod-show rb-md-max:col-start-1"},_vm._l((_vm.rubric.rubricLevels),function(level){return _c('li',{staticClass:"rubric-header-title"},[_vm._v(_vm._s(level.title))])}),0),_c('div',{staticClass:"rubric-header-fill"})]:_vm._e(),_vm._l((_vm.getClusterRowsData(_vm.rubric)),function(ref){
 var cluster = ref.cluster;
 var ext = ref.ext;
 var evaluation = ref.evaluation;
@@ -25737,10 +25746,10 @@ var ext = ref.ext;
 var evaluation = ref.evaluation;
 var score = ref.score;
 return [_c('div',{staticClass:"treenode-title-header rb-lg:col-start-1 rb-md-max:col-span-full",class:{'is-feedback-visible': _vm.showDefaultFeedbackFields || ext.showDefaultFeedback, 'is-highlighted': _vm.highlightedTreeNode === criterium, 'has-category': !!category.title},style:(("--category-color: " + (!(category.title && category.color) ? '#999' : category.color))),on:{"mouseover":function($event){_vm.highlightedTreeNode = criterium},"mouseout":function($event){_vm.highlightedTreeNode = null}}},[_c('div',{staticClass:"treenode-title-header-pre mod-criterium"}),_c('h3',{staticClass:"treenode-title criterium-title u-markdown-criterium",class:{'mod-no-category': !category.title},attrs:{"id":("criterium-" + (criterium.id) + "-title")},domProps:{"innerHTML":_vm._s(criterium.toMarkdown())}}),(!_vm.showDefaultFeedbackFields)?_c('button',{staticClass:"btn-show",attrs:{"aria-label":_vm.$t('show-default-description'),"title":_vm.$t('show-default-description')},on:{"click":function($event){$event.preventDefault();ext.showDefaultFeedback = !ext.showDefaultFeedback}}},[_c('i',{staticClass:"btn-icon-show-feedback fa",class:{'is-feedback-visible': _vm.showDefaultFeedbackFields || ext.showDefaultFeedback},attrs:{"tabindex":"-1","aria-hidden":"true"}})]):_vm._e()]),(_vm.rubric.useWeights)?_c('div',{staticClass:"treenode-weight mod-pad"},[_c('span',{staticClass:"treenode-weight-title"},[_vm._v(_vm._s(_vm.$t('weight'))+": ")]),_c('span',[_vm._v(_vm._s(_vm._f("formatNum")(_vm.rubric.hasAbsoluteWeights && _vm.rubric.filterLevelsByCriterium(criterium).length ? 100 : _vm.rubric.getCriteriumWeight(criterium))))]),_c('span',{staticClass:"sr-only"},[_vm._v("%")]),_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}})]):_vm._e(),_c('div',{staticClass:"treenode-rubric-input rb-md:col-start-1 rb-sm:col-span-full",on:{"mouseover":function($event){_vm.highlightedTreeNode = criterium},"mouseout":function($event){_vm.highlightedTreeNode = null}}},[_c('tree-node-entry',{attrs:{"rubric":_vm.rubric,"ext":ext,"evaluation":evaluation,"preview":_vm.preview,"show-default-feedback-fields":_vm.showDefaultFeedbackFields},on:{"select":_vm.selectLevel,"deselect":_vm.deselectLevel,"range-level-score":_vm.updateRangeLevelScore}}),(evaluation && (_vm.showDefaultFeedbackFields || ext.showDefaultFeedback))?_c('div',{staticClass:"treenode-custom-feedback rb-md:col-start-1 rb-sm:col-span-full"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(evaluation.feedback),expression:"evaluation.feedback"}],staticClass:"ta-custom-feedback",attrs:{"placeholder":_vm.$t('extra-feedback')},domProps:{"value":(evaluation.feedback)},on:{"input":[function($event){if($event.target.composing){ return; }_vm.$set(evaluation, "feedback", $event.target.value)},function($event){return _vm.onTreeNodeFeedbackChanged(evaluation)}]}})]):_vm._e()],1),(_vm.useScores)?_c('div',{staticClass:"rb-sm:col-start-2"},[_c('div',{staticClass:"treenode-score-calc mod-criterium",class:{'mod-empty': _vm.preview || score === null}},[_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('total'))+":")]),_c('score-display',{attrs:{"score":_vm.preview ? null : score,"percent":_vm.rubric.useRelativeWeights,"is-invalid":_vm.hasRangeError(evaluation)}}),_vm._v(" "),(!_vm.rubric.useRelativeWeights)?_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('points')))]):_vm._e()],1)]):_vm._e()]})]}),(_vm.useScores)?[_c('div',{staticClass:"total-title rb-md-max:col-start-1",class:_vm.rubric.useWeights ? 'rb-lg:col-start-3' : 'rb-lg:col-start-2'},[_vm._v(_vm._s(_vm.$t('total'))+" "+_vm._s(_vm.$t('subsection'))+":")]),_c('div',{staticClass:"treenode-score-calc mod-cluster",class:{'mod-empty': _vm.preview || score === null}},[_c('score-display',{attrs:{"score":_vm.preview ? null : score,"percent":_vm.rubric.useRelativeWeights}}),_vm._v(" "),(!_vm.rubric.useRelativeWeights)?_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('points')))]):_vm._e()],1)]:_vm._e(),_c('div',{staticClass:"cluster-sep",class:{ 'mod-hide-last': _vm.useGrades }})]}),_vm._t("slot-inner"),(_vm.useScores)?[_c('div',{staticClass:"total-title rb-md-max:col-start-1",class:_vm.rubric.useWeights ? 'rb-lg:col-start-3' : 'rb-lg:col-start-2'},[_vm._v(_vm._s(_vm.$t('total'))+" "+_vm._s(_vm.$t('rubric'))+":")]),_c('div',{staticClass:"treenode-score-calc mod-rubric",class:{'mod-empty': _vm.preview || _vm.rubricEvaluation.getRubricScore() === null}},[_c('score-display',{attrs:{"score":_vm.preview ? null : _vm.rubricEvaluation.getRubricScore(),"percent":_vm.rubric.useRelativeWeights}}),_vm._v(" "),(!_vm.rubric.useRelativeWeights)?_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('points')))]):_vm._e()],1),(!_vm.rubric.useRelativeWeights)?[_c('div',{staticClass:"total-title rb-md-max:col-start-1",class:_vm.rubric.useWeights ? 'rb-lg:col-start-3' : 'rb-lg:col-start-2'},[_vm._v("Maximum:")]),_c('div',{staticClass:"treenode-score-calc mod-rubric-max"},[_c('score-display',{attrs:{"score":_vm.rubric.getMaximumScore()}}),_vm._v(" "),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('points')))])],1)]:_vm._e()]:_vm._e()],2)}
-var RubricEntryvue_type_template_id_12ed4496_scoped_true_staticRenderFns = []
+var RubricEntryvue_type_template_id_143ee1eb_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Views/RubricEntry.vue?vue&type=template&id=12ed4496&scoped=true&
+// CONCATENATED MODULE: ./src/Views/RubricEntry.vue?vue&type=template&id=143ee1eb&scoped=true&
 
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Components/ScoreDisplay.vue?vue&type=template&id=0be0e6a4&
 var ScoreDisplayvue_type_template_id_0be0e6a4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.score !== null)?_c('span',{style:(_vm.isInvalid ? 'color: #e10505' : '')},[(_vm.isInvalid)?_c('i',{staticClass:"fa fa-warning",staticStyle:{"font-size":"1.3rem","margin-right":".3rem"},attrs:{"aria-hidden":"true"}}):_vm._e(),_vm._v(_vm._s(this.score.toLocaleString(undefined, {maximumFractionDigits: 2}))),(_vm.percent)?[_c('span',{staticClass:"sr-only"},[_vm._v("%")]),_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}})]:_vm._e()],2):_c('span',{attrs:{"aria-hidden":"true"},domProps:{"innerHTML":_vm._s('&nbsp;')}})}
@@ -26724,8 +26733,8 @@ RubricEntryvue_type_script_lang_ts_RubricEntry = __decorate([vue_class_component
 // EXTERNAL MODULE: ./src/Views/RubricEntry.vue?vue&type=style&index=0&lang=scss&
 var RubricEntryvue_type_style_index_0_lang_scss_ = __webpack_require__("6bbe");
 
-// EXTERNAL MODULE: ./src/Views/RubricEntry.vue?vue&type=style&index=1&id=12ed4496&lang=scss&scoped=true&
-var RubricEntryvue_type_style_index_1_id_12ed4496_lang_scss_scoped_true_ = __webpack_require__("1e2d");
+// EXTERNAL MODULE: ./src/Views/RubricEntry.vue?vue&type=style&index=1&id=143ee1eb&lang=scss&scoped=true&
+var RubricEntryvue_type_style_index_1_id_143ee1eb_lang_scss_scoped_true_ = __webpack_require__("3a22");
 
 // EXTERNAL MODULE: ./src/Views/RubricEntry.vue?vue&type=custom&index=0&blockType=i18n
 var RubricEntryvue_type_custom_index_0_blockType_i18n = __webpack_require__("45fc");
@@ -26742,11 +26751,11 @@ var RubricEntryvue_type_custom_index_0_blockType_i18n = __webpack_require__("45f
 
 var RubricEntry_component = normalizeComponent(
   Views_RubricEntryvue_type_script_lang_ts_,
-  RubricEntryvue_type_template_id_12ed4496_scoped_true_render,
-  RubricEntryvue_type_template_id_12ed4496_scoped_true_staticRenderFns,
+  RubricEntryvue_type_template_id_143ee1eb_scoped_true_render,
+  RubricEntryvue_type_template_id_143ee1eb_scoped_true_staticRenderFns,
   false,
   null,
-  "12ed4496",
+  "143ee1eb",
   null
   
 )
@@ -33230,6 +33239,17 @@ $({ target: 'Array', proto: true, forced: [].forEach != forEach }, {
 
 /***/ }),
 
+/***/ "d6af":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_1_id_0f672eca_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("eea5");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_1_id_0f672eca_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_1_id_0f672eca_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RubricBuilderFull_vue_vue_type_style_index_1_id_0f672eca_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "d821":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -33515,13 +33535,6 @@ module.exports = axios;
 // Allow use of default import syntax in TypeScript
 module.exports.default = axios;
 
-
-/***/ }),
-
-/***/ "e249":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -33862,6 +33875,13 @@ var userAgent = __webpack_require__("e4e7");
 
 module.exports = /(iphone|ipod|ipad).*applewebkit/i.test(userAgent);
 
+
+/***/ }),
+
+/***/ "eea5":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 

@@ -32,6 +32,7 @@ class PrintPresenceRegistrationQrComponent extends Manager
             Manager::context() . ':PresenceRegistrationQr.html.twig', [
                 'HEADER' => Application::render_header(),
                 'FOOTER' => Application::render_footer(),
+                'SELF_SERVICE_QR_CODE_URL' => $this->getRegisterPresenceUrl(false),
                 'SELF_SERVICE_QR_CODE' => $this->getRegisterPresenceUrl(true),
                 'PRESENCE_TITLE' => $this->getPresence()->get_title(),
                 'PRESENCE_CONTEXT' => $this->getPresenceServiceBridge()->getContextTitle()

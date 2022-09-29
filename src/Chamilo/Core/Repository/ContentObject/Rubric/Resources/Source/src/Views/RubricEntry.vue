@@ -46,7 +46,7 @@
 </i18n>
 
 <template>
-    <div class="rubric" @click.stop="" :class="[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, useScores ? 'mod-scores' : 'mod-grades', { 'mod-rel-weights': useScores && rubric.useRelativeWeights, 'mod-abs-weights': useScores && rubric.hasAbsoluteWeights }]" :style="{'--num-cols': rubric.rubricLevels.length}">
+    <div class="rubric" @click.stop="" :class="[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, useScores ? 'mod-scores' : 'mod-grades', { 'mod-rel-weights': useScores && rubric.useRelativeWeights, 'mod-abs-weights': useScores && rubric.hasAbsoluteWeights }]" :style="{'--num-cols': rubric.maxNumLevels}">
         <ul class="rubric-tools">
             <slot name="demoEvaluator"></slot>
             <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>

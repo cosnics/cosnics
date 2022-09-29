@@ -81,6 +81,7 @@ class PresenceRepository
             new PropertyConditionVariable($class_name, DataClass::PROPERTY_ID),
             new PropertyConditionVariable($class_name, PresenceResultPeriod::PROPERTY_LABEL),
             new PropertyConditionVariable($class_name, PresenceResultPeriod::PROPERTY_DATE),
+            new PropertyConditionVariable($class_name, PresenceResultPeriod::PROPERTY_PERIOD_SELF_REGISTRATION_DISABLED)
         ]);
 
         $orderBy = new OrderBy(new PropertyConditionVariable($class_name, PresenceResultPeriod::PROPERTY_DATE));

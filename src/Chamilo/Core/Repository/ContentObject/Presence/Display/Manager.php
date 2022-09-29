@@ -207,24 +207,15 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
+     * @param bool $qr
+     *
      * @return string
      * @throws UserException
      */
-    protected function getRegisterPresenceUrl($qr = false): string
+    protected function getRegisterPresenceUrl(bool $qr = false): string
     {
-        $publicationId = $this->getRequest()->getFromUrl(
-            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION
-        );
-
-        $treeNodeId = $this->getRequest()->getFromUrl(
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID
-        );
-
-        if(empty($publicationId) || empty($treeNodeId))
-            return '';
-
         $url = $this->getPresenceRegistrationService()->getPresenceRegistrationUrl(
-            $this->getPresence(), $publicationId, $treeNodeId
+            $this->getPresence(), $this->getPublicationId(), $this->getTreeNodeId(), $this->getPresencePeriodId()
         );
 
         if ($qr)
@@ -241,5 +232,33 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected function getPresenceRegistrationService()
     {
         return $this->getService(PresenceRegistrationService::class);
+    }
+
+    /**
+     * @return int|null
+     */
+    protected function getPublicationId(): ?int
+    {
+        return $this->getRequest()->getFromUrl(
+            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION
+        );
+    }
+
+    /**
+     * @return int|null
+     */
+    protected function getTreeNodeId(): ?int
+    {
+        return $this->getRequest()->getFromUrl(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID
+        );
+    }
+
+    /**
+     * @return int|null
+     */
+    protected function getPresencePeriodId(): ?int
+    {
+        return $this->getRequest()->getFromUrl(\Chamilo\Application\Presence\Manager::PARAM_PRESENCE_PERIOD_ID);
     }
 }

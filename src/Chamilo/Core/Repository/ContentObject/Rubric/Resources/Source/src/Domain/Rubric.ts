@@ -51,6 +51,18 @@ export default class Rubric extends TreeNode {
         return this.levels.length !== this.rubricLevels.length;
     }
 
+    get maxNumLevels(): number {
+        let num = this.rubricLevels.length;
+        if (!this.hasCustomLevels) { return num; }
+        this.getAllCriteria().forEach(criterium => {
+            const numCriteriumLevels = this.filterLevelsByCriterium(criterium).length;
+            if (numCriteriumLevels > num) {
+                num = numCriteriumLevels;
+            }
+        });
+        return num;
+    }
+
     public filterLevelsByCriterium(criterium: Criterium): Level[] {
         return this.levels.filter(level => level.criteriumId === criterium.id);
     }
