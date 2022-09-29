@@ -220,6 +220,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID
         );
 
+        if(empty($publicationId) || empty($treeNodeId))
+            return '';
+
         $url = $this->getPresenceRegistrationService()->getPresenceRegistrationUrl(
             $this->getPresence(), $publicationId, $treeNodeId
         );
