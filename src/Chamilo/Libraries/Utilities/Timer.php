@@ -11,9 +11,9 @@ namespace Chamilo\Libraries\Utilities;
 class Timer
 {
 
-    private int $startTime;
+    private float $startTime;
 
-    private int $stopTime;
+    private float $stopTime;
 
     public function __construct()
     {
@@ -23,7 +23,7 @@ class Timer
     /**
      * Returns the difference between the stop and start time in seconds
      */
-    public function getDurationInSeconds(): int
+    public function getDurationInSeconds(): float
     {
         return $this->stopTime - $this->startTime;
     }
@@ -35,7 +35,7 @@ class Timer
     {
         if ($this->getDurationInSeconds() / 3600 < 1 && $this->getDurationInSeconds() / 60 < 1)
         {
-            $convertedTime = $this->getDurationInSeconds() . 's';
+            $convertedTime = number_format($this->getDurationInSeconds(),3). 's';
         }
         else
         {
@@ -43,7 +43,7 @@ class Timer
             {
                 $minutes = (int) ($this->getDurationInSeconds() / 60);
                 $seconds = $this->getDurationInSeconds() % 60;
-                $convertedTime = $minutes . 'm ' . $seconds . 's';
+                $convertedTime = $minutes . 'm ' . number_format($seconds, 3) . 's';
             }
             else
             {
@@ -51,7 +51,7 @@ class Timer
                 $rest = $this->getDurationInSeconds() % 3600;
                 $minutes = (int) ($rest / 60);
                 $seconds = $rest % 60;
-                $convertedTime = $hours . 'h ' . $minutes . 'm ' . $seconds . 's';
+                $convertedTime = $hours . 'h ' . $minutes . 'm ' . number_format($seconds, 3) . 's';
             }
         }
 
@@ -60,9 +60,7 @@ class Timer
 
     private function getMicrotime(): float
     {
-        list($usec, $sec) = explode(' ', microtime());
-
-        return ((float) $usec + (float) $sec);
+        return microtime(true);
     }
 
     /**
