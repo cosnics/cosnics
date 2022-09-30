@@ -1,8 +1,5 @@
 <template>
     <div>
-        <!--<div class="banner">
-            <h1 class="banner-header">GradeBook</h1>
-        </div>-->
         <div class="gradebook-toolbar">
             <input class="form-control" type="text" placeholder="Zoek student">
             <grades-dropdown id="dropdown-main" :graded-items="gradeBook.gradedItemsWithCheckedStatus" @toggle="toggleGradeItem"></grades-dropdown>
@@ -14,6 +11,7 @@
                 <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>Categorie</button>
             </div>
             <grades-table :grade-book="gradeBook" @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"
+                          @update-score-comment="onUpdateScoreComment" @overwrite-result="onOverwriteResult" @revert-overwritten-result="onRevertOverwrittenResult"
                           @change-category="onChangeCategory" @move-category="onMoveCategory"
                           @change-gradecolumn="onChangeGradeColumn" @change-gradecolumn-category="onChangeGradeColumnCategory" @move-gradecolumn="onMoveGradeColumn"></grades-table>
         </div>
@@ -42,17 +40,26 @@
         @Prop({type: GradeBook, required: true}) readonly gradeBook!: GradeBook;
         @Prop(Connector) readonly connector!: Connector|null;
 
+        constructor() {
+            super();
+            this.updateResult = this.updateResult.bind(this);
+        }
+
+        updateGradeColumnWithScores(column: GradeColumn, id: ColumnId, scores: any) {
+            this.gradeBook.updateGradeColumnId(column, id);
+            const tscores = this.gradeBook.tscores;
+            scores.forEach((score: any) => {
+                if (!tscores[score.columnId]) {
+                    Vue.set(tscores, score.columnId, {});
+                }
+                tscores[score.columnId][score.targetUserId] = score;
+            });
+        }
+
         addGradeItem(item: GradeItem) {
             const column = this.gradeBook.addGradeColumnFromItem(item);
             this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: any) => {
-                this.gradeBook.updateGradeColumnId(column, id);
-                const tscores = this.gradeBook.tscores;
-                scores.forEach((score: any) => {
-                    if (!tscores[score.columnId]) {
-                        Vue.set(tscores, score.columnId, {});
-                    }
-                    tscores[score.columnId][score.targetUserId] = score;
-                });
+                this.updateGradeColumnWithScores(column, id, scores);
             });
         }
 
@@ -99,7 +106,10 @@
         }
 
         createNewScore() {
-            this.gradeBook.createNewScore();
+            const column = this.gradeBook.createNewScore();
+            this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: any) => {
+                this.updateGradeColumnWithScores(column, id, scores);
+            });
         }
 
         closeSelectedCategory() {
@@ -159,6 +169,24 @@
 
         onRemoveColumn(column: GradeColumn) {
             this.connector?.removeGradeColumn(column);
+        }
+
+        updateResult(result: any) {
+            const colScores = this.gradeBook.tscores[result.columnId];
+            if (!colScores) { return; }
+            colScores[result.targetUserId] = result;
+        }
+
+        onOverwriteResult(result: any) {
+            this.connector?.overwriteGradeResult(result, this.updateResult);
+        }
+
+        onRevertOverwrittenResult(result: any) {
+            this.connector?.revertOverwrittenGradeResult(result, this.updateResult);
+        }
+
+        onUpdateScoreComment(result: any) {
+            this.connector?.updateGradeResultComment(result, this.updateResult);
         }
     }
 </script>

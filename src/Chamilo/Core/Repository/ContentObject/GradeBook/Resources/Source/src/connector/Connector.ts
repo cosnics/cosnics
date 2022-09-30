@@ -188,6 +188,40 @@ export default class Connector {
         })*/
     }
 
+    overwriteGradeResult(result: any, callback: Function) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'gradeScoreId': result.id,
+                'newScore': result.newScore,
+                'newScoreAbsent': result.newScoreAbsent,
+                'newScoreAuthAbsent': result.newScoreAuthAbsent
+            };
+            const data = await this.executeAPIRequest(this.apiConfig.overwriteScoreURL, parameters);
+            callback(data.score);
+        });
+    }
+
+    revertOverwrittenGradeResult(result: any, callback: Function) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'gradeScoreId': result.id
+            };
+            const data = await this.executeAPIRequest(this.apiConfig.revertOverwrittenScoreURL, parameters);
+            callback(data.score);
+        });
+    }
+
+    updateGradeResultComment(result: any, callback: Function) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'gradeScoreId': result.id,
+                'comment': result.comment
+            };
+            const data = await this.executeAPIRequest(this.apiConfig.updateScoreCommentURL, parameters);
+            callback(data.score);
+        });
+    }
+
     protected addToQueue(callback: Function) {
         this.queue.add(async () => {
             await callback();

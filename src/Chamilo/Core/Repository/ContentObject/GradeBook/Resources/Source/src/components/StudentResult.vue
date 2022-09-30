@@ -1,9 +1,18 @@
 <template>
     <div @dblclick="$emit('edit')">
+        <a v-if="isOverwritten" style="margin-right: 4px;color:#5885a2;text-shadow:1px 1px #e2eaee;" @click.stop="$emit('revert')"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
         <div v-if="result === 'afw'" class="color-code deep-orange-500" title="Afwezig"><span>afw</span></div>
         <div v-else-if="result === 'gafw'" class="color-code amber-700" title="Gewettigd afwezig"><span>gafw</span></div>
         <div v-else-if="result === null" class="color-code mod-none"><span></span></div>
         <template v-else>{{ result }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></template>
+        <template v-if="comment">
+            <a :id="`result-comment-${id}`" class="comment" @click.stop="$emit('edit-comment')"><i class="fa fa-comment" aria-hidden="true"></i></a>
+            <b-popover :target="`result-comment-${id}`" triggers="hover" placement="right">
+                <div style="font-size: 13px;padding: 6px 8px;width: 200px;max-width: 200px;">
+                    {{ comment }}
+                </div>
+            </b-popover>
+        </template>
     </div>
 </template>
 
@@ -15,7 +24,10 @@ import {ResultType} from '../domain/GradeBook';
     name: 'student-result'
 })
 export default class StudentResult extends Vue {
+    @Prop({type: String, default: ''}) readonly id!: string;
     @Prop({type: [Number, String], default: null}) readonly result!: ResultType;
+    @Prop({type: Boolean, default: false}) readonly isOverwritten!: boolean;
+    @Prop({type: String, default: ''}) readonly comment!: string;
 }
 </script>
 
@@ -63,5 +75,13 @@ export default class StudentResult extends Vue {
     --color: #ffa000;
     --selected-color: #db8a00;
     --text-color: white;
+}
+
+.comment {
+        color: #5885a2;
+    /*color: #c4cbcf;*/
+    text-shadow:1px 1px #e2eaee;
+    margin-left: auto;
+    font-size:12px;
 }
 </style>

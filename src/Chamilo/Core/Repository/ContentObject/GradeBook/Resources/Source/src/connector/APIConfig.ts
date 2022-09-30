@@ -12,5 +12,8 @@ export default interface APIConfig {
     readonly removeColumnURL: string;
     readonly loadGradeItemScoresURL: string;
     readonly synchronizeGradeBookURL: string;
+    readonly overwriteScoreURL: string;
+    readonly revertOverwrittenScoreURL: string;
+    readonly updateScoreCommentURL: string;
     readonly csrfToken: string;
 }

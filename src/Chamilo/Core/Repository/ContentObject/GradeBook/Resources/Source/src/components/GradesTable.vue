@@ -43,26 +43,14 @@
                     <template v-for="category in displayedCategories">
                         <b-td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></b-td>
                         <b-td v-else v-for="columnId in category.columnIds" :key="`${category.id}-${columnId}-result`" :style="editStudentScoreId === user.id && editScoreId === columnId ? 'position: relative; z-index: 2' : ''">
-                            <student-result :result="getResult(columnId, user.id)"
-                                            style="cursor: pointer;" :style="gradeBook.countsForEndResult(columnId) ? '' : 'font-style: italic'"
-                                            @edit="showStudentScoreDialog(id, columnId)"></student-result>
+                            <student-result :id="`result-${columnId}-${user.id}`" :result="getResult(columnId, user.id)" :is-overwritten="isOverwrittenResult(columnId, user.id)" :comment="getResultComment(columnId, user.id)"
+                                            style="cursor: pointer;display: flex;align-items: center;" :style="gradeBook.countsForEndResult(columnId) ? '' : 'font-style: italic'"
+                                            @edit="showStudentScoreDialog(user.id, columnId)" @edit-comment="showStudentScoreDialog(user.id, columnId, 'comment')" @revert="revertOverwrittenResult(columnId, user.id)"></student-result>
+                            <score-input v-if="isStudentScoreDialogShown(user.id, columnId)" :menu-tab="scoreMenuTab" @menu-tab-changed="scoreMenuTab = $event" :score="getResult(columnId, user.id)" :comment="getResultComment(columnId, user.id)" @comment-updated="updateResultComment(columnId, user.id, $event)" @ok="overwriteResult(columnId, user.id, $event)" @cancel="hideStudentScoreDialog"></score-input>
                         </b-td>
                     </template>
                     <b-td class="col-sticky table-student-total"> {{ getEndResult(user.id)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></b-td>
                 </b-tr>
-                <!--<b-tr v-for="{id, student, results} in gradeBook.resultsData" :key="student" class="table-row table-body-row">
-                    <b-td class="col-sticky table-student">{{ student }}</b-td>
-                    <template v-for="category in displayedCategories">
-                        <b-td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></b-td>
-                        <b-td v-else v-for="columnId in category.columnIds" :key="`${category.id}-${columnId}-result`" :style="editStudentScoreId === id && editScoreId === columnId ? 'position: relative; z-index: 2' : ''">
-                            <student-result :result="gradeBook.getResult(results, columnId)"
-                                            style="cursor: pointer;" :style="gradeBook.countsForEndResult(columnId) ? '' : 'font-style: italic'"
-                                            @edit="showStudentScoreDialog(id, columnId)"></student-result>
-                            <score-input v-if="isStudentScoreDialogShown(id, columnId)" :score="gradeBook.getResult(results, columnId)" @ok="handleUpdatedScoreValue(results, columnId, $event)" @cancel="hideStudentScoreDialog"></score-input>
-                        </b-td>
-                    </template>
-                    <b-td class="col-sticky table-student-total"> {{ gradeBook.getEndResult(id)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></b-td>
-                </b-tr>-->
             </b-tbody>
         </b-table-simple>
     </div>
@@ -96,6 +84,7 @@ export default class GradesTable extends Vue {
     private weightEditItemId: ItemId|null = null;
     private editStudentScoreId: number|null = null;
     private editScoreId: ItemId|null = null;
+    private scoreMenuTab = 'score';
 
     @Prop({type: GradeBook, required: true}) readonly gradeBook!: GradeBook;
 
@@ -107,14 +96,81 @@ export default class GradesTable extends Vue {
         this.hideStudentScoreDialog();
     }
 
+    updateResultComment(columnId: ColumnId, userId: number, comment: string|null) {
+        if (!this.gradeBook.tscores[columnId]) { return; }
+        const score = this.gradeBook.tscores[columnId][userId];
+        if (!score) { return; }
+        score.comment = comment;
+        this.$emit('update-score-comment', score);
+        this.hideStudentScoreDialog();
+    }
+
+    overwriteResult(columnId: ColumnId, userId: number, value: ResultType) {
+        if (!this.gradeBook.tscores[columnId]) { return; }
+        const score = this.gradeBook.tscores[columnId][userId];
+        if (!score) { return; }
+        score.overwritten = true;
+        if (value === 'afw') {
+            score.newScoreAbsent = true;
+            score.newScoreAuthAbsent = false;
+            score.newScore = null;
+        } else if (value === 'gafw') {
+            score.newScoreAbsent = false;
+            score.newScoreAuthAbsent = true;
+            score.newScore = null;
+        } else {
+            score.newScoreAbsent = false;
+            score.newScoreAuthAbsent = false;
+            score.newScore = value;
+        }
+        this.$emit('overwrite-result', score);
+        this.hideStudentScoreDialog();
+    }
+
+    revertOverwrittenResult(columnId: ColumnId, userId: number) {
+        if (!this.gradeBook.tscores[columnId]) {
+            return;
+        }
+        const score = this.gradeBook.tscores[columnId][userId];
+        if (!score) {
+            return;
+        }
+        score.overwritten = false;
+        score.newScoreAbsent = false;
+        score.newScoreAuthAbsent = false;
+        score.newScore = null;
+        this.$emit('revert-overwritten-result', score);
+    }
+
+    isOverwrittenResult(columnId: ColumnId, userId: number): boolean {
+        if (!this.gradeBook.tscores[columnId]) { return false; }
+        const score = this.gradeBook.tscores[columnId][userId];
+        if (!score) { return false; }
+        return score.overwritten;
+    }
+
+    getResultComment(columnId: ColumnId, userId: number): string|null {
+        if (!this.gradeBook.tscores[columnId]) { return null; }
+        const score = this.gradeBook.tscores[columnId][userId];
+        if (!score) { return null; }
+        return score.comment;
+    }
+
     getResult(columnId: ColumnId, userId: number): ResultType {
         if (!this.gradeBook.tscores[columnId]) { return null; }
         const score = this.gradeBook.tscores[columnId][userId];
         if (!score) { return null; }
-        if (score.sourceScoreAbsent) { return 'afw'; }
-        if (score.sourceScoreAuthAbsent) { return 'gafw'; }
-        //console.log(columnId, userId, score.sourceScore);
-        return score.sourceScore;
+        if (!score.overwritten) {
+            if (score.sourceScoreAbsent) { return 'afw'; }
+            if (score.sourceScoreAuthAbsent) { return 'gafw'; }
+            //console.log(columnId, userId, score.sourceScore);
+            return score.sourceScore;
+        } else {
+            if (score.newScoreAbsent) { return 'afw'; }
+            if (score.newScoreAuthAbsent) { return 'gafw'; }
+            //console.log(columnId, userId, score.sourceScore);
+            return score.newScore;
+        }
     }
 
     getEndResult(userId: number) {
@@ -169,7 +225,8 @@ export default class GradesTable extends Vue {
         return this.gradeBook.categories;
     }
 
-    showStudentScoreDialog(id: number, itemId: ItemId) {
+    showStudentScoreDialog(id: number, itemId: ItemId, menuTab = 'score') {
+        this.scoreMenuTab = menuTab;
         this.editStudentScoreId = id;
         this.editScoreId = itemId;
     }

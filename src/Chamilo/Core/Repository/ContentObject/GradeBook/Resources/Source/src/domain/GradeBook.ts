@@ -317,13 +317,12 @@ export default class GradeBook {
         return this.createNewIdWithPrefix('sc');
     }
 
-    createNewScore() {
+    createNewScore(): GradeColumn {
         const id = this.createNewStandaloneScoreId();
-        this.gradeColumns.push({id, title: 'Score', type: 'standalone', subItemIds: [], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2});
+        const newScore = {id, title: 'Score', type: 'standalone', subItemIds: [], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2};
+        this.gradeColumns.push(newScore);
         this.nullCategory.columnIds.push(id);
-        this.resultsData.forEach(d => {
-            d.results.push({id, value: null, ref: null, overwritten: true});
-        });
+        return newScore;
     }
 
     createNewCategory() {

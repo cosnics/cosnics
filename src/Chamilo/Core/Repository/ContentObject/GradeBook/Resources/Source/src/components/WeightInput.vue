@@ -1,10 +1,12 @@
 <template>
     <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
-        <label for="weight">Gewicht:</label>
-        <div class="weight-input">
-            <input id="weight" class="percent-input" ref="weight-input" type="number" :value="itemWeight|formatNum" autocomplete="off" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
-            <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
-        </div>
+        <template v-slot:content>
+            <label for="weight">Gewicht:</label>
+            <div class="weight-input">
+                <input id="weight" class="percent-input" ref="weight-input" type="number" :value="itemWeight|formatNum" autocomplete="off" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
+                <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+            </div>
+        </template>
     </highlight-input>
 </template>
 

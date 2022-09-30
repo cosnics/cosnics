@@ -1,8 +1,9 @@
 <template>
     <div class="highlight-input">
         <div class="highlight-overlay"></div>
+        <slot name="menu"></slot>
         <div class="highlight-content">
-            <slot></slot>
+            <slot name="content"></slot>
             <div class="name-input-actions">
                 <button class="btn btn-primary btn-sm" @click="$emit('edit')">Wijzig</button>
                 <button class="btn btn-default btn-sm" @click="$emit('cancel')">Annuleer</button>

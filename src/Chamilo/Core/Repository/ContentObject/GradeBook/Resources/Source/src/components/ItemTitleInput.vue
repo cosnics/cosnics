@@ -1,6 +1,8 @@
 <template>
     <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
-        <input ref="title-input" type="text" :value="itemTitle" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
+        <template v-slot:content>
+            <input ref="title-input" type="text" :value="itemTitle" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
+        </template>
     </highlight-input>
 </template>
 
