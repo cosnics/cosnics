@@ -135,6 +135,24 @@ class BrowserComponent extends Manager
                     self::PARAM_ACTION => self::ACTION_AJAX,
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_SYNCHRONIZE_GRADEBOOK
                 ]
+            ),
+            'OVERWRITE_SCORE_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_OVERWRITE_SCORE
+                ]
+            ),
+            'REVERT_OVERWRITTEN_SCORE_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_REVERT_OVERWRITTEN_SCORE
+                ]
+            ),
+            'UPDATE_SCORE_COMMENT_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_UPDATE_SCORE_COMMENT
+                ]
             )
         ];
     }

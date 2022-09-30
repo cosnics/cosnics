@@ -40,6 +40,9 @@ abstract class Manager extends AjaxManager
     const ACTION_REMOVE_COLUMN = 'RemoveColumn';
     const ACTION_LOAD_GRADEITEM_SCORES = 'LoadGradeItemScores';
     const ACTION_SYNCHRONIZE_GRADEBOOK = 'SynchronizeGradeBook';
+    const ACTION_OVERWRITE_SCORE = 'OverwriteScore';
+    const ACTION_REVERT_OVERWRITTEN_SCORE = 'RevertOverwrittenScore';
+    const ACTION_UPDATE_SCORE_COMMENT = 'UpdateScoreComment';
 
     const PARAM_ACTION = 'gradebook_display_ajax_action';
 
@@ -51,6 +54,11 @@ abstract class Manager extends AjaxManager
     const PARAM_GRADECOLUMN_DATA = 'gradeColumnData';
     const PARAM_GRADECOLUMN_ID = 'gradeColumnId';
     const PARAM_GRADEITEM_ID = 'gradeItemId';
+    const PARAM_GRADESCORE_ID = 'gradeScoreId';
+    const PARAM_NEW_SCORE = 'newScore';
+    const PARAM_NEW_SCORE_ABSENT = 'newScoreAbsent';
+    const PARAM_NEW_SCORE_AUTH_ABSENT = 'newScoreAuthAbsent';
+    const PARAM_SCORE_COMMENT = 'comment';
 
     /**
      * @var AjaxComponent
@@ -306,17 +314,59 @@ abstract class Manager extends AjaxManager
     /**
      * @return int
      */
-    protected function getGradeColumnId()
+    protected function getGradeColumnId(): int
     {
         return (int) $this->getRequest()->getFromPost(self::PARAM_GRADECOLUMN_ID);
     }
 
     /**
+     * @return int
+     */
+    protected function getGradeScoreId(): int
+    {
+        return (int) $this->getRequest()->getFromPost(self::PARAM_GRADESCORE_ID);
+    }
+
+    /**
      * @return int|null
      */
-    protected function getCategoryId()
+    protected function getCategoryId(): ?int
     {
         $id = $this->getRequest()->getFromPost(self::PARAM_CATEGORY_ID);
         return $id == 'null' ? null : (int) $id;
+    }
+
+    /**
+     * @return float|null
+     */
+    protected function getNewScore(): ?float
+    {
+        $score = $this->getRequest()->getFromPost(self::PARAM_NEW_SCORE);
+        return $score == 'null' ? null : (float) $score;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function getNewScoreAbsent(): bool
+    {
+        return $this->getRequest()->getFromPost(self::PARAM_NEW_SCORE_ABSENT) == 'true';
+    }
+
+    /**
+     * @return bool
+     */
+    protected function getNewScoreAuthAbsent(): bool
+    {
+        return $this->getRequest()->getFromPost(self::PARAM_NEW_SCORE_AUTH_ABSENT) == 'true';
+    }
+
+    /**
+     * @return string|null
+     */
+    protected function getScoreComment(): ?string
+    {
+        $comment = $this->getRequest()->getFromPost(self::PARAM_SCORE_COMMENT);
+        return ($comment == 'null' || $comment == '') ? null : $comment;
     }
 }

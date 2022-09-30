@@ -62,6 +62,34 @@ class GradeBookScoreJSONModel
     protected $overwritten;
 
     /**
+     * @var float|null
+     *
+     * @Type("double")
+     */
+    protected $newScore;
+
+    /**
+     * @var bool
+     *
+     * @Type("bool")
+     */
+    protected $newScoreAbsent;
+
+    /**
+     * @var bool
+     *
+     * @Type("bool")
+     */
+    protected $newScoreAuthAbsent;
+
+    /**
+     * @var string|null
+     *
+     * @Type("string")
+     */
+    protected $comment;
+
+    /**
      * @param int $id
      * @param int $columnId
      * @param int $targetUserId
@@ -69,8 +97,12 @@ class GradeBookScoreJSONModel
      * @param bool $sourceScoreAbsent
      * @param bool $sourceScoreAuthAbsent
      * @param bool $overwritten
+     * @param float|null $newScore
+     * @param bool $newScoreAbsent
+     * @param bool $newScoreAuthAbsent
+     * @param string|null $comment
      */
-    public function __construct(int $id, int $columnId, int $targetUserId, ?float $sourceScore, bool $sourceScoreAbsent, bool $sourceScoreAuthAbsent, bool $overwritten)
+    public function __construct(int $id, int $columnId, int $targetUserId, ?float $sourceScore, bool $sourceScoreAbsent, bool $sourceScoreAuthAbsent, bool $overwritten, ?float $newScore, bool $newScoreAbsent, bool $newScoreAuthAbsent, ?string $comment)
     {
         $this->id = $id;
         $this->columnId = $columnId;
@@ -79,6 +111,10 @@ class GradeBookScoreJSONModel
         $this->sourceScoreAbsent = $sourceScoreAbsent;
         $this->sourceScoreAuthAbsent = $sourceScoreAuthAbsent;
         $this->overwritten = $overwritten;
+        $this->newScore = $newScore;
+        $this->newScoreAbsent = $newScoreAbsent;
+        $this->newScoreAuthAbsent = $newScoreAuthAbsent;
+        $this->comment = $comment;
     }
 
     /**
@@ -88,6 +124,6 @@ class GradeBookScoreJSONModel
      */
     public static function fromGradeBookScore(GradeBookScore $gradeBookScore): GradeBookScoreJSONModel
     {
-        return new self($gradeBookScore->getId(), $gradeBookScore->getGradeBookColumn()->getId(), $gradeBookScore->getTargetUserId(), $gradeBookScore->getSourceScore(), $gradeBookScore->isSourceScoreAbsent(), $gradeBookScore->isSourceScoreAuthAbsent(), $gradeBookScore->isOverwritten());
+        return new self($gradeBookScore->getId(), $gradeBookScore->getGradeBookColumn()->getId(), $gradeBookScore->getTargetUserId(), $gradeBookScore->getSourceScore(), $gradeBookScore->isSourceScoreAbsent(), $gradeBookScore->isSourceScoreAuthAbsent(), $gradeBookScore->isOverwritten(), $gradeBookScore->getNewScore(), $gradeBookScore->isNewScoreAbsent(), $gradeBookScore->isNewScoreAuthAbsent(), $gradeBookScore->getComment());
     }
 }

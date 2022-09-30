@@ -625,6 +625,27 @@ class GradeBookData
     }
 
     /**
+     * @param int $gradeBookScoreIdentifier
+     *
+     * @return GradeBookScore
+     *
+     * @throws ObjectNotExistException
+     */
+    public function getGradeBookScoreById(int $gradeBookScoreIdentifier)
+    {
+        $gradeBookScore = $this->gradebookScores->filter(function(GradeBookScore $gradeBookScore) use ($gradeBookScoreIdentifier) {
+            return $gradeBookScore->getId() == $gradeBookScoreIdentifier;
+        })->first();
+
+        if (!$gradeBookScore instanceof GradeBookScore)
+        {
+            throw new ObjectNotExistException('gradebookscore', $gradeBookScoreIdentifier);
+        }
+
+        return $gradeBookScore;
+    }
+
+    /**
      * @param GradeBookScore $gradebookScore
      *
      * @return GradeBookData

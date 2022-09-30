@@ -97,6 +97,33 @@ class GradeBookScore
      */
     protected $overwritten = false;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="new_score", type="integer", nullable=true)
+     */
+    protected $newScore;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="new_absent", type="boolean")
+     */
+    protected $newScoreAbsent = false;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="new_auth_absent", type="boolean")
+     */
+    protected $newScoreAuthAbsent = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="text", nullable=true)
+     */
+    protected $comment;
 
     /**
      * @return int
@@ -233,7 +260,7 @@ class GradeBookScore
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getSourceScore(): ?float
     {
@@ -318,6 +345,96 @@ class GradeBookScore
     public function setOverwritten(bool $isOverwritten): GradeBookScore
     {
         $this->overwritten = $isOverwritten;
+
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getNewScore(): ?float
+    {
+        if (is_null($this->newScore))
+        {
+            return null;
+        }
+        return $this->newScore / 100;
+    }
+
+    /**
+     * @param float|null $score
+     *
+     * @return GradeBookScore
+     */
+    public function setNewScore(?float $score): GradeBookScore
+    {
+        if (is_null($score))
+        {
+            $this->newScore = null;
+        }
+        else
+        {
+            $this->newScore = (int) round ($score * 100);
+        }
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNewScoreAbsent(): bool
+    {
+        return $this->newScoreAbsent;
+    }
+
+    /**
+     * @param bool $isAbsent
+     *
+     * @return GradeBookScore
+     */
+    public function setNewScoreAbsent(bool $isAbsent): GradeBookScore
+    {
+        $this->newScoreAbsent = $isAbsent;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNewScoreAuthAbsent(): bool
+    {
+        return $this->newScoreAuthAbsent;
+    }
+
+    /**
+     * @param bool $isAuthAbsent
+     *
+     * @return GradeBookScore
+     */
+    public function setNewScoreAuthAbsent(bool $isAuthAbsent): GradeBookScore
+    {
+        $this->newScoreAuthAbsent = $isAuthAbsent;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    /**
+     * @param string|null $comment
+     *
+     * @return GradeBookScore
+     */
+    public function setComment(?string $comment): GradeBookScore
+    {
+        $this->comment = $comment;
 
         return $this;
     }

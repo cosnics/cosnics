@@ -230,6 +230,26 @@ class GradeBookAjaxService
         $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
         $column = $jsonModel->toGradeBookColumn($gradebookData);
         $column->setGradeBookCategory(null);
+
+        if ($column->getType() == 'standalone')
+        {
+            $gradebookData->addGradeBookColumn($column);
+            foreach ($targetUserIds as $userId)
+            {
+                $this->addGradeBookScore($column, null, $userId, new NullScore());
+            }
+            $this->gradeBookService->saveGradeBook($gradebookData);
+
+            $scores = array_map(function(GradeBookScore $score) {
+                return $score->toJSONModel();
+            }, $column->getGradeBookScores()->toArray());
+
+            return [
+                'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+                'column' => GradeBookColumnJSONModel::fromGradeBookColumn($column), 'scores' => $scores
+            ];
+        }
+
         $gradebookItemId = $jsonModel->getSubItemIds()[0];
         $gradeItem = $gradebookData->getGradeBookItemById($gradebookItemId);
 
@@ -624,6 +644,7 @@ class GradeBookAjaxService
         $gradebookScore->setTargetUserId($userId);
         $gradebookScore->setSourceScoreAuthAbsent($score->isAuthAbsent());
         $gradebookScore->setSourceScoreAbsent($score->isAbsent());
+        $gradebookScore->setComment(null);
         if (!($score->isAbsent() || $score->isAuthAbsent()))
         {
             $gradebookScore->setSourceScore($score->getValue());
@@ -673,5 +694,86 @@ class GradeBookAjaxService
             $gradeScores[$gradeBookItem->getId()] = $this->gradeBookItemScoreService->getScores($gradeBookItem, $targetUserIds);
         }
         return $gradeScores;
+    }
+
+    /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param int $gradeBookScoreId
+     * @param float|null $newScore
+     * @param bool $isNewScoreAbsent
+     * @param bool $isNewScoreAuthAbsent
+     *
+     * @return array[]
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function overwriteGradeBookScore(int $gradeBookDataId, int $versionId, int $gradeBookScoreId, ?float $newScore, bool $isNewScoreAbsent, bool $isNewScoreAuthAbsent): array
+    {
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookScore = $gradebookData->getGradeBookScoreById($gradeBookScoreId);
+
+        $gradebookScore->setOverwritten(true);
+        $gradebookScore->setNewScore(($isNewScoreAbsent || $isNewScoreAuthAbsent) ? null : $newScore);
+        $gradebookScore->setNewScoreAbsent($isNewScoreAbsent);
+        $gradebookScore->setNewScoreAuthAbsent($isNewScoreAuthAbsent && !$isNewScoreAbsent);
+
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+            'score' => $gradebookScore->toJSONModel()
+        ];
+    }
+
+    /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param int $gradeBookScoreId
+     * @param string|null $comment
+     *
+     * @return array
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function updateGradeBookScoreComment(int $gradeBookDataId, int $versionId, int $gradeBookScoreId, ?string $comment): array
+    {
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookScore = $gradebookData->getGradeBookScoreById($gradeBookScoreId);
+        $gradebookScore->setComment($comment);
+
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+            'score' => $gradebookScore->toJSONModel()
+        ];
+    }
+
+    /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param int $gradeBookScoreId
+     *
+     * @return array
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function revertOverwrittenGradeBookScore(int $gradeBookDataId, int $versionId, int $gradeBookScoreId): array
+    {
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookScore = $gradebookData->getGradeBookScoreById($gradeBookScoreId);
+
+        $gradebookScore->setOverwritten(false);
+        $gradebookScore->setNewScore(null);
+        $gradebookScore->setNewScoreAbsent(false);
+        $gradebookScore->setNewScoreAuthAbsent(false);
+
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+            'score' => $gradebookScore->toJSONModel()
+        ];
     }
 }
