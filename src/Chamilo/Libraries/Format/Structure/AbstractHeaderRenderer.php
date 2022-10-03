@@ -120,9 +120,9 @@ class AbstractHeaderRenderer implements HeaderRendererInterface
      */
     public function addJavascriptCDNFiles()
     {
-        $this->getPageConfiguration()->addJavascriptFile(
-            'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML'
-        );
+        //        $this->getPageConfiguration()->addJavascriptFile(
+        //            'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML'
+        //        );
     }
 
     public function getBannerRenderer(): BannerRenderer
