@@ -5,6 +5,7 @@
         <property name="options" type="text" notnull="1" />
         <property name="has_checkout" type="boolean" notnull="1" default="0" />
         <property name="verify_icon" type="text" length="200" notnull="1" default="" />
+        <property name="global_self_registration_disabled" type="boolean" notnull="1" default="0" />
     </properties>
     <index name="id" type="primary">
         <indexproperty name="id"/>

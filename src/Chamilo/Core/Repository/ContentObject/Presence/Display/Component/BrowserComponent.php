@@ -72,6 +72,12 @@ class BrowserComponent extends Manager
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_UPDATE_PRESENCE
                 ]
             ),
+            'UPDATE_PRESENCE_GLOBAL_SELF_REGISTRATION_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_UPDATE_PRESENCE_GLOBAL_SELF_REGISTRATION
+                ]
+            ),
             'LOAD_PRESENCE_ENTRIES_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,

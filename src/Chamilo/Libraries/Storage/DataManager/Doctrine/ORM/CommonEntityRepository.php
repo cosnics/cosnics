@@ -21,7 +21,7 @@ abstract class CommonEntityRepository extends EntityRepository
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    protected function saveEntity($entity, $flush = true)
+    public function saveEntity($entity, $flush = true)
     {
         $this->getEntityManager()->persist($entity);
         if($flush)
@@ -36,7 +36,7 @@ abstract class CommonEntityRepository extends EntityRepository
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    protected function removeEntity($entity, $flush = true)
+    public function removeEntity($entity, $flush = true)
     {
         $this->getEntityManager()->remove($entity);
         if($flush)

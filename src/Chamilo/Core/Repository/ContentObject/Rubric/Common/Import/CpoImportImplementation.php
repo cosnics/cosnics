@@ -27,6 +27,11 @@ class CpoImportImplementation extends ImportImplementation
      */
     protected $createdLevels = [];
 
+    /**
+     * @var Level[][]
+     */
+    protected $criteriumLevels = [];
+
     public function import()
     {
         return ContentObjectImport::launch($this);
@@ -120,7 +125,14 @@ class CpoImportImplementation extends ImportImplementation
 
                     $choice->setLevel($level);
                     $treeNode->addChoice($choice);
+                }
 
+                if(array_key_exists($treeNodeJSONModel->getId(), $this->criteriumLevels))
+                {
+                    foreach($this->criteriumLevels[$treeNodeJSONModel->getId()] as $level)
+                    {
+                        $level->setCriterium($treeNode);
+                    }
                 }
             }
 
@@ -152,6 +164,10 @@ class CpoImportImplementation extends ImportImplementation
             $level = $levelJSONModel->toLevel($rubricData);
 
             $this->createdLevels[$levelArray['id']] = $level;
+            if($levelJSONModel->hasCriterium())
+            {
+                $this->criteriumLevels[$levelJSONModel->getCriteriumId()][] = $level;
+            }
         }
 
         foreach (array_values($this->createdLevels) as $index => $level)

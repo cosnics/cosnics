@@ -26,6 +26,11 @@ class UpdatePresencePeriodComponent extends Manager implements CsrfComponentInte
      */
     protected $presencePeriodLabel;
 
+    /**
+     * @var bool
+     */
+    protected $presencePeriodSelfRegistrationDisabled;
+
     function run()
     {
         try
@@ -35,17 +40,22 @@ class UpdatePresencePeriodComponent extends Manager implements CsrfComponentInte
                 throw new NotAllowedException();
             }
             $this->validatePresenceUserInput();
-            $this->getPresenceResultPeriodService()->setPresencePeriodResultLabel($this->presenceResultPeriod, $this->presencePeriodLabel);
+            $this->presenceResultPeriod->setLabel($this->presencePeriodLabel);
+            $this->presenceResultPeriod->setPeriodSelfRegistrationDisabled($this->presencePeriodSelfRegistrationDisabled);
+            $this->getPresenceResultPeriodService()->updatePresenceResultPeriod($this->presenceResultPeriod);
 
             $result = [
                 'status' => 'ok',
                 'id' => (int) $this->presenceResultPeriod->getId(),
-                'label' => $this->presenceResultPeriod->getLabel()
+                'label' => $this->presenceResultPeriod->getLabel(),
+                'period_self_registration_disabled' => $this->presenceResultPeriod->isPeriodSelfRegistrationDisabled()
             ];
 
             return new JsonResponse($this->serialize($result), 200, [], true);
 
-        } catch (\Exception $ex) {
+        }
+        catch (\Exception $ex)
+        {
             return new JsonResponse(['error' => ['code' => 500, 'message' => $ex->getMessage()]], 500);
         }
     }
@@ -67,6 +77,7 @@ class UpdatePresencePeriodComponent extends Manager implements CsrfComponentInte
         }
 
         $periodLabel = $this->getRequest()->getFromPostOrUrl('period_label');
+        $periodSelfRegistrationDisabled = $this->getRequest()->getFromPostOrUrl('period_self_registration_disabled') == 'true';
 
         $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
         $period = $this->getPresenceResultPeriodService()->findResultPeriodForPresence($this->getPresence(), $periodId, $contextIdentifier);
@@ -77,6 +88,7 @@ class UpdatePresencePeriodComponent extends Manager implements CsrfComponentInte
 
         $this->presenceResultPeriod = $period;
         $this->presencePeriodLabel = $periodLabel;
+        $this->presencePeriodSelfRegistrationDisabled = $periodSelfRegistrationDisabled;
     }
 }
 
