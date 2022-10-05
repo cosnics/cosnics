@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use http\Exception\InvalidArgumentException;
 use JMS\Serializer\Annotation\Type;
 
@@ -163,12 +164,18 @@ class LevelJSONModel
      * @param RubricData $rubricData
      *
      * @return Level
-     *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function toLevel(RubricData $rubricData)
     {
-        $criterium = !empty($this->criteriumId) ? $rubricData->getCriteriumById($this->criteriumId) : null;
+        try
+        {
+            $criterium = !empty($this->criteriumId) ? $rubricData->getCriteriumById($this->criteriumId) : null;
+        }
+        catch(ObjectNotExistException $ex)
+        {
+            $criterium = null;
+        }
+
         $level = new Level($rubricData, $criterium);
         $this->updateLevel($level);
 
@@ -203,5 +210,10 @@ class LevelJSONModel
         return new self(
             $level->getId(), $level->getTitle(), $level->getScore(), $level->usesRangeScore(), $level->getMinimumScore(), $level->isDefault(), $level->getDescription(), $level->getCriteriumId()
         );
+    }
+
+    public function hasCriterium()
+    {
+        return !empty($this->getCriteriumId());
     }
 }

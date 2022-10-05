@@ -7,9 +7,9 @@ export type PresenceStatus = {
 };
 
 export type Presence = {
-  id: number; title: string; statuses: PresenceStatus[]; has_checkout: boolean; verification_icon_data: any|null;
+  id: number; title: string; statuses: PresenceStatus[]; has_checkout: boolean; verification_icon_data: any|null; global_self_registration_disabled: boolean;
 };
 
 export type PresencePeriod = {
-  id: number; date: number; label: string;
+  id: number; date: number; label: string; period_self_registration_disabled: boolean;
 };

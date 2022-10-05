@@ -61,6 +61,11 @@ class CourseGroupService
         return $this->courseGroupRepository->countCourseGroupsInCourse($courseId);
     }
 
+    public function getCourseGroupsInCourse(int $courseId)
+    {
+        return $this->courseGroupRepository->getCourseGroupsInCourse($courseId);
+    }
+
     /**
      * @param CourseGroup $courseGroup
      * @param array $users

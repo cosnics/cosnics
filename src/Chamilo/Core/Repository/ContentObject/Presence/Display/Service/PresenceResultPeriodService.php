@@ -45,11 +45,12 @@ class PresenceResultPeriodService
         {
             $periods[$index]['date'] = (int) $period['date'];
             $periods[$index]['id'] = (int) $period['id'];
+            $periods[$index]['period_self_registration_disabled'] = (bool) $period['period_self_registration_disabled'];
         }
         if ($createPeriodIfEmpty && count($periods) == 0)
         {
             $period = $this->createPresenceResultPeriod($presence, $contextIdentifier);
-            $periods = [['date' => $period->getDate(), 'id' => (int) $period->getId()]];
+            $periods = [['date' => $period->getDate(), 'id' => (int) $period->getId(), 'period_self_registration_disabled' => (bool) $period->isPeriodSelfRegistrationDisabled()]];
         }
         return $periods;
     }
@@ -68,6 +69,7 @@ class PresenceResultPeriodService
         $presenceResultPeriod->setDate((new DateTime())->getTimestamp());
         $presenceResultPeriod->setContextClass($contextIdentifier->getContextClass());
         $presenceResultPeriod->setContextId($contextIdentifier->getContextId());
+        $presenceResultPeriod->setPeriodSelfRegistrationDisabled(false);
 
         $this->presenceRepository->createPresenceResultPeriod($presenceResultPeriod);
 
@@ -87,11 +89,9 @@ class PresenceResultPeriodService
 
     /**
      * @param PresenceResultPeriod $presenceResultPeriod
-     * @param string $label
      */
-    public function setPresencePeriodResultLabel(PresenceResultPeriod $presenceResultPeriod, string $label)
+    public function updatePresenceResultPeriod(PresenceResultPeriod $presenceResultPeriod)
     {
-        $presenceResultPeriod->setLabel($label);
         $this->presenceRepository->updatePresenceResultPeriod($presenceResultPeriod);
     }
 

@@ -125,6 +125,20 @@ class SiteService
      * @param string $siteId
      * @param string $listId
      * @param string $itemId
+     * @param string $contentTypeId
+     *
+     * @return \Microsoft\Graph\Model\Entity
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     */
+    public function updateListItemContentType(string $siteId, string $listId, string $itemId, string $contentTypeId)
+    {
+        return $this->siteRepository->updateListItemContentType($siteId, $listId, $itemId, $contentTypeId);
+    }
+
+    /**
+     * @param string $siteId
+     * @param string $listId
+     * @param string $itemId
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
