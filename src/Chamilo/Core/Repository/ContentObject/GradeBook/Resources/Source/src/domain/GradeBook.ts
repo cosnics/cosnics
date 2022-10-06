@@ -297,6 +297,13 @@ export default class GradeBook {
         }
     }
 
+    removeCategory(category: Category) {
+        if (category === this.nullCategory) { return; }
+        const columnIds = category.columnIds;
+        this.categories = this.categories.filter(c => c !== category);
+        this.nullCategory.columnIds = [...this.nullCategory.columnIds, ...columnIds];
+    }
+
     public updateGradeColumnId(column: GradeColumn, newId: ColumnId) {
         const oldId = column.id;
         column.id = newId;

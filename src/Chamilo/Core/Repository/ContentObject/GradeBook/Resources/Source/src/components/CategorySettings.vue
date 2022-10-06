@@ -2,7 +2,10 @@
     <div class="modal-wrapper">
         <div class="modal-content">
             <div class="modal-header">
-                <input type="text" v-model="category.title" autocomplete="off" @input="onCategoryChange">
+                <div>
+                    <input type="text" v-model="category.title" autocomplete="off" @input="onCategoryChange">
+                    <button class="btn btn-link" @click="showRemoveItemDialog = true">Verwijderen</button>
+                </div>
                 <button class="btn-close" @click="$emit('close')" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <div class="modal-body">
@@ -10,18 +13,30 @@
             </div>
         </div>
         <div class="modal-overlay" @click="$emit('close')"></div>
+        <div class="modal-remove" v-if="showRemoveItemDialog" @click.stop="">
+            <div class="modal-remove-content">
+                <div>Categorie verwijderen?</div>
+                <div class="modal-remove-actions">
+                    <button class="btn btn-default btn-sm" @click="removeCategory">Verwijder</button>
+                    <button class="btn btn-default btn-sm" @click="cancel">Annuleer</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
-import {Category} from '../domain/GradeBook';
+import GradeBook, {Category} from '../domain/GradeBook';
 import debounce from 'debounce';
 
 @Component({
     components: { }
 })
 export default class CategorySettings extends Vue {
+    private showRemoveItemDialog = false;
+
+    @Prop({type: GradeBook, required: true}) readonly gradeBook!: GradeBook;
     @Prop({type: Object, required: true}) readonly category!: Category;
 
     constructor() {
@@ -31,6 +46,18 @@ export default class CategorySettings extends Vue {
 
     onCategoryChange() {
         this.$emit('change-category', this.category);
+    }
+
+    removeCategory() {
+        const category = this.category;
+        this.gradeBook.removeCategory(category);
+        this.$emit('remove-category', category);
+        this.showRemoveItemDialog = false;
+        this.$emit('close');
+    }
+
+    cancel() {
+        this.showRemoveItemDialog = false;
     }
 }
 </script>
@@ -90,5 +117,33 @@ input:focus {
     top: 0;
     width: 100vw;
     z-index:-1;
+}
+
+.modal-remove {
+    background-color: rgba(0, 0, 0, 0.2);
+    inset: 0;
+    position: fixed;
+    z-index: 1000;
+}
+
+.modal-remove-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-remove-content {
+    align-items: center;
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: 0 6px 12px #666;
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    justify-content: center;
+    margin: 120px auto;
+    max-width: 90%;
+    padding: 20px;
+    width: 420px;
 }
 </style>

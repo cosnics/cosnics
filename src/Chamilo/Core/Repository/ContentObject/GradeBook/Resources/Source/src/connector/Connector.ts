@@ -104,6 +104,15 @@ export default class Connector {
         });
     }
 
+    removeCategory(category: Category) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'categoryData': JSON.stringify(category)
+            };
+            await this.executeAPIRequest(this.apiConfig.removeCategoryURL, parameters);
+        });
+    }
+
     addGradeColumn(gradeColumn: GradeColumn, callback: Function) {
         this.addToQueue(async () => {
             const parameters = {

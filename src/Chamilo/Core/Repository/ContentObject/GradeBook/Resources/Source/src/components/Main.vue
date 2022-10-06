@@ -7,7 +7,7 @@
         <div class="gradebook-table-container">
             <div class="gradebook-create-actions">
                 <button class="btn btn-default btn-sm" @click="synchronizeGradeBook"><i aria-hidden="true" class="fa fa-refresh"></i>Synchronizeer scores</button>
-                <button class="btn btn-default btn-sm" @click="updateTotalScores"><i aria-hidden="true" class="fa fa-refresh"></i>Update totalen</button>
+                <button class="btn btn-default btn-sm" @click="updateTotalScores"><i aria-hidden="true" class="fa fa-refresh"></i>Update eindcijfers</button>
                 <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>Nieuwe score</button>
                 <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>Categorie</button>
             </div>
@@ -18,7 +18,7 @@
         </div>
         <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null"
                        @item-settings="itemSettings = $event" @change-gradecolumn="onChangeGradeColumn" @add-subitem="onAddSubItem" @remove-subitem="onRemoveSubItem" @remove-column="onRemoveColumn"></item-settings>
-        <category-settings v-if="selectedCategory" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory"></category-settings>
+        <category-settings v-if="selectedCategory" :grade-book="gradeBook" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory" @remove-category="onRemoveCategory"></category-settings>
     </div>
 </template>
 
@@ -136,6 +136,10 @@
 
         onMoveCategory(category: Category) {
             this.connector?.moveCategory(category, this.gradeBook.categories.indexOf(category));
+        }
+
+        onRemoveCategory(category: Category) {
+            this.connector?.removeCategory(category);
         }
 
         onChangeGradeColumn(gradeColumn: GradeColumn) {
