@@ -31,6 +31,7 @@ abstract class Manager extends AjaxManager
     const ACTION_ADD_CATEGORY = 'AddCategory';
     const ACTION_UPDATE_CATEGORY = 'UpdateCategory';
     const ACTION_MOVE_CATEGORY = 'MoveCategory';
+    const ACTION_REMOVE_CATEGORY = 'RemoveCategory';
     const ACTION_ADD_COLUMN = 'AddColumn';
     const ACTION_UPDATE_COLUMN = 'UpdateColumn';
     const ACTION_UPDATE_COLUMN_CATEGORY = 'UpdateColumnCategory';

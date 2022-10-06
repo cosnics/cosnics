@@ -82,6 +82,12 @@ class BrowserComponent extends Manager
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_MOVE_CATEGORY
                 ]
             ),
+            'REMOVE_CATEGORY_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_REMOVE_CATEGORY
+                ]
+            ),
             'ADD_COLUMN_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,

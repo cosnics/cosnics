@@ -150,6 +150,35 @@ class GradeBookAjaxService
      *
      * @return array
      *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function removeCategory(int $gradeBookDataId, int $versionId, string $gradeBookCategoryJSONData)
+    {
+        $jsonModel = $this->parseGradeBookCategoryJSONModel($gradeBookCategoryJSONData);
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $category = $gradebookData->getGradeBookCategoryById($jsonModel->getId());
+
+        foreach ($category->getGradeBookColumns() as $column)
+        {
+            $gradebookData->updateGradeBookColumnCategory($column->getId(), null);
+        }
+
+        $gradebookData->removeGradeBookCategory($category);
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+        ];
+    }
+
+    /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param string $gradeBookCategoryJSONData
+     *
+     * @return array
+     *
      * @throws \Doctrine\ORM\ORMException
      */
     public function updateCategory(int $gradeBookDataId, int $versionId, string $gradeBookCategoryJSONData)
