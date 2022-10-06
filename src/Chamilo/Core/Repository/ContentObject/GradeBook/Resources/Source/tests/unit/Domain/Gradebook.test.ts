@@ -1,7 +1,7 @@
-import GradeBook from '@/domain/GradeBook';
+import GradeBook, {ColumnId, GradeScore, ResultsData} from '@/domain/GradeBook';
 
-function createGradeBookObject() {
-    return {
+function createGradeBook() {
+    const data = {
         gradeItems: [
             { id: 1, title: 'Opdracht 1', breadcrumb: ['Leerpaden', 'Categorie 1', 'Leerpad 2', 'Hoofdstuk 1'] },
             { id: 2, title: 'Opdracht 2', breadcrumb: ['Opdrachten', 'Categorie 1'] },
@@ -23,20 +23,32 @@ function createGradeBookObject() {
             { id: 2, color: '#ebf2e8', title: 'Categorie 2', columnIds: [4, 5] }
         ],
         nullCategory: { id: 0, color: 'none', title: '', columnIds: [] },
-        resultsData: [
+        /*resultsData: [
             { id: 1, 'student': 'Student 1', 'results': [{id: 1, value: null}, {id: 3, value: 20}, {id: 2, value: 60}, {id: 4, value: 80}, {id: 5, value: 50}, {id: 6, value: 75}, {id: 7, value: 50}] },
             { id: 2, 'student': 'Student 2', 'results': [{id: 1, value: 30}, {id: 3, value: null}, {id: 2, value: 50}, {id: 4, value: 40}, {id: 5, value: 80}, {id: 6, value: 65}, {id: 7, value: 50}] },
             { id: 3, 'student': 'Student 3', 'results': [{id: 1, value: null}, {id: 3, value: 50}, {id: 2, value: 30}, {id: 4, value: 70}, {id: 5, value: 80}, {id: 6, value: 95}, {id: 7, value: 50}] },
             { id: 4, 'student': 'Student 4', 'results': [{id: 1, value: 80}, {id: 3, value: null}, {id: 2, value: 40}, {id: 4, value: 40}, {id: 5, value: 30}, {id: 6, value: 75}, {id: 7, value: 50}] },
             { id: 5, 'student': 'Student 5', 'results': [{id: 1, value: null}, {id: 3, value: 60}, {id: 2, value: 10}, {id: 4, value: 90}, {id: 5, value: 40}, {id: 6, value: 25}, {id: 7, value: 50}] }
-        ]
+        ],*/
     };
+
+    const resultsData = [
+        { columnId: 1, results: [{ studentId: 1, result: 20 }, { studentId: 2, result: 30 }, { studentId: 3, result: 50 }, { studentId: 4, result: 80 }, { studentId: 5, result: 60}] },
+        { columnId: 2, results: [{ studentId: 1, result: 60 }, { studentId: 2, result: 50 }, { studentId: 3, result: 30 }, { studentId: 4, result: 40 }, { studentId: 5, result: 10}] },
+        { columnId: 3, results: [{ studentId: 1, result: 80 }, { studentId: 2, result: 40 }, { studentId: 3, result: 70 }, { studentId: 4, result: 40 }, { studentId: 5, result: 90}] },
+        { columnId: 4, results: [{ studentId: 1, result: 50 }, { studentId: 2, result: 80 }, { studentId: 3, result: 80 }, { studentId: 4, result: 30 }, { studentId: 5, result: 40}] },
+        { columnId: 5, results: [{ studentId: 1, result: 75 }, { studentId: 2, result: 65 }, { studentId: 3, result: 95 }, { studentId: 4, result: 75 }, { studentId: 5, result: 25}] },
+    ];
+
+    const gradeBook = GradeBook.from(data);
+    gradeBook.resultsData = createResultsData(resultsData);
+    return gradeBook;
 }
 
 let gradeBook: GradeBook;
 
 beforeEach(() => {
-    gradeBook = GradeBook.from(createGradeBookObject());
+    gradeBook = createGradeBook();
 });
 
 test('initial', () => {
@@ -44,18 +56,18 @@ test('initial', () => {
     expect(gradeBook.allCategories.length).toEqual(3);
 });
 
-/*test('endResult', () => {
+test('endResult', () => {
     expect(gradeBook.getEndResult(1)).toBeCloseTo(57);
     expect(gradeBook.getEndResult(3)).toBeCloseTo(65);
-});*/
+});
 
-/*test('endResultWithUpdatedWeight', () => {
+test('endResultWithUpdatedWeight', () => {
     gradeBook.setWeight(1, 60);
     expect(gradeBook.getEndResult(1)).toBeCloseTo(38.5);
     expect(gradeBook.getEndResult(3)).toBeCloseTo(57.5);
-});*/
+});
 
-/*test('endResultDontCountColumn', () => {
+test('endResultDontCountColumn', () => {
     gradeBook.getGradeColumn(4)!.countForEndResult = false;
     expect(gradeBook.getEndResult(1)).toBeCloseTo(58.75);
     expect(gradeBook.getEndResult(3)).toBeCloseTo(61.25);
@@ -63,15 +75,14 @@ test('initial', () => {
     gradeBook.setWeight(1, 70);
     expect(gradeBook.getEndResult(1)).toBeCloseTo(35.5);
     expect(gradeBook.getEndResult(3)).toBeCloseTo(54.5);
-});*/
+});
 
-/*test('endResultHandleAbsence', () => {
-    let student = gradeBook.resultsData.find(d => d.id === 1);
+test('endResultHandleAbsence', () => {
+    let studentScore = gradeBook.resultsData[2][1];
 
     // test authorized presence
-    let results = student!.results.find(r => r.id === 2);
-    results!.value = 'gafw';
-    results!.overwritten = true;
+    studentScore.newScoreAuthAbsent = true;
+    studentScore.overwritten = true;
 
     // don't count score
     expect(gradeBook.getEndResult(1)).toBeCloseTo(56.25);
@@ -85,35 +96,35 @@ test('initial', () => {
     expect(gradeBook.getEndResult(1)).toBeCloseTo(45);
 
     // test unauthorized presence
-    student = gradeBook.resultsData.find(d => d.id === 3);
-    results = student!.results.find(r => r.id === 3);
-    results!.value = 'afw';
-    results!.overwritten = true;
+    studentScore = gradeBook.resultsData[3][3];
+    studentScore.newScoreAbsent = true;
+    studentScore.overwritten = true;
 
     // min score
     expect(gradeBook.getEndResult(3)).toBeCloseTo(51);
 
-    // min score
+    // max score
     gradeBook.getGradeColumn(3)!.unauthPresenceEndResult = GradeBook.MAX_SCORE;
     expect(gradeBook.getEndResult(3)).toBeCloseTo(71);
 
     // don't count score
     gradeBook.getGradeColumn(3)!.unauthPresenceEndResult = GradeBook.NO_SCORE;
     expect(gradeBook.getEndResult(3)).toBeCloseTo(63.75);
-});*/
+});
 
-/*test('addScore', () => {
+test('addScore', () => {
     gradeBook.addGradeColumnFromItem(gradeBook.getGradeItem(7)!);
+    gradeBook.resultsData['col1'] = {1: createSimpleScore(100, 'col1', 1, 50)};
     expect(gradeBook.gradeColumns.length).toEqual(6);
     expect(gradeBook.gradeColumns[5].type).toEqual('item');
     expect(gradeBook.getEndResult(1)).toBeCloseTo(55.83);
-});*/
+});
 
-/*test('removeScore', () => {
+test('removeScore', () => {
     gradeBook.removeColumn(gradeBook.getGradeColumn(3)!);
     expect(gradeBook.gradeColumns.length).toEqual(4);
     expect(gradeBook.getEndResult(1)).toBeCloseTo(51.25);
-});*/
+});
 
 test('addGroupScore', () => {
     gradeBook.setWeight(4, 50);
@@ -134,26 +145,21 @@ test('addGroupScore', () => {
     expect(column!.unauthPresenceEndResult).toEqual(GradeBook.MAX_SCORE);
 });
 
-/*test('removeFromGroupScore', () => {
-    const student1 = gradeBook.resultsData.find(d => d.id === 1);
-    const student2 = gradeBook.resultsData.find(d => d.id === 2);
+test('removeFromGroupScore', () => {
     expect(gradeBook.getGradeColumn(1)!.subItemIds?.length).toEqual(2);
-    let result = student1!.results.find(r => r.id === 1);
-    expect(result!.value).toEqual(20);
+    let studentScore = gradeBook.resultsData[1][1];// student1!.results.find(r => r.id === 1);
+    expect(studentScore.sourceScore).toEqual(20);
     gradeBook.removeSubItem(gradeBook.getGradeItem(3)!);
     expect(gradeBook.getGradeColumn(1)!.subItemIds?.length).toEqual(1);
-    result = student1!.results.find(r => r.id === 1);
-    expect(result!.value).toEqual(null);
-    result = student2!.results.find(r => r.id === 1);
-    expect(result!.value).toEqual(30);
+    studentScore.sourceScore = null;
     expect(gradeBook.getEndResult(1)).toBeCloseTo(53);
+    studentScore = gradeBook.resultsData[1][2];
+    expect(studentScore.sourceScore).toEqual(30);
     gradeBook.removeSubItem(gradeBook.getGradeItem(1)!);
     expect(gradeBook.getGradeColumn(1)!.subItemIds?.length).toEqual(0);
-    result = student2!.results.find(r => r.id === 1);
-    expect(result!.value).toEqual(null);
-});*/
+});
 
-/*test('addNewScore', () => {
+test('addNewScore', () => {
     gradeBook.createNewScore();
     expect(gradeBook.nullCategory.columnIds).toEqual(['sc1']);
     expect(gradeBook.gradeColumns.length).toEqual(6);
@@ -161,16 +167,17 @@ test('addGroupScore', () => {
     expect(column.id).toEqual('sc1');
     expect(column.title).toEqual('Score');
     expect(column.type).toEqual('standalone');
-    const student1 = gradeBook.resultsData.find(d => d.id === 1);
-    const student3 = gradeBook.resultsData.find(d => d.id === 3);
-    expect(student1!.results.find(r => r.id === 'sc1')).toEqual({ id: 'sc1', value: null, ref: null, overwritten: true});
+    gradeBook.resultsData['sc1'] = {
+        1: createSimpleScore(100, 'col1', 1, null),
+        3: createSimpleScore(101, 'col1', 1, null)
+    };
     expect(gradeBook.getEndResult(1)).toBeCloseTo(47.5);
     expect(gradeBook.getEndResult(3)).toBeCloseTo(54.17);
-    const results = student3!.results.find(r => r.id === 'sc1');
-    results!.value = 50;
-    results!.overwritten = true;
+    const studentScore = gradeBook.resultsData['sc1'][3];
+    studentScore.newScore = 50;
+    studentScore.overwritten = true;
     expect(gradeBook.getEndResult(3)).toBeCloseTo(62.5);
-});*/
+});
 
 test('moveScore', () => {
     gradeBook.addItemToCategory(2, 3);
@@ -185,3 +192,34 @@ test('addCategory', () => {
     expect(category.color).toEqual('#92eded');
     expect(category.columnIds.length).toEqual(0);
 });
+
+function createSimpleScore(scoreId: number, columnId: ColumnId, studentId: number, score: number|null): GradeScore {
+    return {
+        id: scoreId,
+        columnId: columnId,
+        targetUserId: studentId,
+        comment: null,
+        isTotal: false,
+        newScore: null,
+        newScoreAbsent: false,
+        newScoreAuthAbsent: false,
+        overwritten: false,
+        sourceScore: score,
+        sourceScoreAbsent: false,
+        sourceScoreAuthAbsent: false
+    };
+}
+
+function createResultsData(data: any) {
+    const resultsData: ResultsData = {};
+    let scoreId = 1;
+    data.forEach((column: any) => {
+        const students: Record<number, GradeScore> = {};
+        column.results.forEach((result: any) => {
+            students[result.studentId] = createSimpleScore(scoreId, column.columnId, result.studentId, result.result);
+            scoreId++;
+        });
+        resultsData[column.columnId] = students;
+    });
+    return resultsData;
+}
