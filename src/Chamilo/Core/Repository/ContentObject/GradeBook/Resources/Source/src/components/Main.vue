@@ -7,6 +7,7 @@
         <div class="gradebook-table-container">
             <div class="gradebook-create-actions">
                 <button class="btn btn-default btn-sm" @click="synchronizeGradeBook"><i aria-hidden="true" class="fa fa-refresh"></i>Synchronizeer scores</button>
+                <button class="btn btn-default btn-sm" @click="updateTotalScores"><i aria-hidden="true" class="fa fa-refresh"></i>Update totalen</button>
                 <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>Nieuwe score</button>
                 <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>Categorie</button>
             </div>
@@ -25,7 +26,7 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import GradesDropdown from './GradesDropdown.vue';
     import GradesTable from './GradesTable.vue';
-    import GradeBook, {Category, GradeColumn, GradeItem, ColumnId} from '../domain/GradeBook';
+    import GradeBook, {Category, GradeColumn, GradeItem, ColumnId, GradeScore} from '../domain/GradeBook';
     import ItemSettings from './ItemSettings.vue';
     import CategorySettings from './CategorySettings.vue';
     import Connector from '../connector/Connector';
@@ -45,20 +46,20 @@
             this.updateResult = this.updateResult.bind(this);
         }
 
-        updateGradeColumnWithScores(column: GradeColumn, id: ColumnId, scores: any) {
+        updateGradeColumnWithScores(column: GradeColumn, id: ColumnId, scores: GradeScore[]) {
             this.gradeBook.updateGradeColumnId(column, id);
-            const tscores = this.gradeBook.tscores;
-            scores.forEach((score: any) => {
-                if (!tscores[score.columnId]) {
-                    Vue.set(tscores, score.columnId, {});
+            const resultsData = this.gradeBook.resultsData;
+            scores.forEach(score => {
+                if (!resultsData[score.columnId]) {
+                    Vue.set(resultsData, score.columnId, {});
                 }
-                tscores[score.columnId][score.targetUserId] = score;
+                resultsData[score.columnId][score.targetUserId] = score;
             });
         }
 
         addGradeItem(item: GradeItem) {
             const column = this.gradeBook.addGradeColumnFromItem(item);
-            this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: any) => {
+            this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: GradeScore[]) => {
                 this.updateGradeColumnWithScores(column, id, scores);
             });
         }
@@ -94,20 +95,33 @@
         }
 
         async synchronizeGradeBook() {
-            await this.connector?.synchronizeGradeBook((scores: any) => {
-                const tscores = this.gradeBook.tscores;
-                scores.forEach((score: any) => {
-                    if (!tscores[score.columnId]) {
-                        Vue.set(tscores, score.columnId, {});
+            await this.connector?.synchronizeGradeBook((scores: GradeScore[]) => {
+                const resultsData = this.gradeBook.resultsData;
+                scores.forEach(score => {
+                    if (!resultsData[score.columnId]) {
+                        Vue.set(resultsData, score.columnId, {});
                     }
-                    tscores[score.columnId][score.targetUserId] = score;
+                    resultsData[score.columnId][score.targetUserId] = score;
                 });
+            });
+        }
+
+        async updateTotalScores() {
+            await this.connector?.calculateTotalScores((scores: GradeScore[]) => {
+                const resultsData = this.gradeBook.resultsData;
+                if (!resultsData['totals']) {
+                    Vue.set(resultsData, 'totals', {});
+                }
+                scores.forEach(score => {
+                    resultsData['totals'][score.targetUserId] = score;
+                });
+                console.log(this.gradeBook);
             });
         }
 
         createNewScore() {
             const column = this.gradeBook.createNewScore();
-            this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: any) => {
+            this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: GradeScore[]) => {
                 this.updateGradeColumnWithScores(column, id, scores);
             });
         }
@@ -140,29 +154,29 @@
         }
 
         onAddSubItem(item: GradeItem, columnId: ColumnId) {
-            this.connector?.addColumnSubItem(columnId, item.id, (column: GradeColumn, scores: any) => {
+            this.connector?.addColumnSubItem(columnId, item.id, (column: GradeColumn, scores: GradeScore[]) => {
                 console.log('scores', scores);
-                const tscores = this.gradeBook.tscores;
-                delete tscores[columnId];
-                scores.forEach((score: any) => {
-                    if (!tscores[columnId]) {
-                        Vue.set(tscores, columnId, {});
+                const resultsData = this.gradeBook.resultsData;
+                delete resultsData[columnId];
+                scores.forEach(score => {
+                    if (!resultsData[columnId]) {
+                        Vue.set(resultsData, columnId, {});
                     }
-                    tscores[columnId][score.targetUserId] = score;
+                    resultsData[columnId][score.targetUserId] = score;
                 });
             });
         }
 
         onRemoveSubItem(item: GradeItem, columnId: ColumnId) {
-            this.connector?.removeColumnSubItem(columnId, item.id, (column: GradeColumn, scores: any) => {
+            this.connector?.removeColumnSubItem(columnId, item.id, (column: GradeColumn, scores: GradeScore[]) => {
                 console.log('scores', scores);
-                const tscores = this.gradeBook.tscores;
-                delete tscores[columnId];
-                scores.forEach((score: any) => {
-                    if (!tscores[columnId]) {
-                        Vue.set(tscores, columnId, {});
+                const resultsData = this.gradeBook.resultsData;
+                delete resultsData[columnId];
+                scores.forEach(score => {
+                    if (!resultsData[columnId]) {
+                        Vue.set(resultsData, columnId, {});
                     }
-                    tscores[columnId][score.targetUserId] = score;
+                    resultsData[columnId][score.targetUserId] = score;
                 });
             });
         }
@@ -171,21 +185,21 @@
             this.connector?.removeGradeColumn(column);
         }
 
-        updateResult(result: any) {
-            const colScores = this.gradeBook.tscores[result.columnId];
+        updateResult(result: GradeScore) {
+            const colScores = this.gradeBook.resultsData[result.columnId];
             if (!colScores) { return; }
             colScores[result.targetUserId] = result;
         }
 
-        onOverwriteResult(result: any) {
+        onOverwriteResult(result: GradeScore) {
             this.connector?.overwriteGradeResult(result, this.updateResult);
         }
 
-        onRevertOverwrittenResult(result: any) {
+        onRevertOverwrittenResult(result: GradeScore) {
             this.connector?.revertOverwrittenGradeResult(result, this.updateResult);
         }
 
-        onUpdateScoreComment(result: any) {
+        onUpdateScoreComment(result: GradeScore) {
             this.connector?.updateGradeResultComment(result, this.updateResult);
         }
     }

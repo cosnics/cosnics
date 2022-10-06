@@ -15,5 +15,6 @@ export default interface APIConfig {
     readonly overwriteScoreURL: string;
     readonly revertOverwrittenScoreURL: string;
     readonly updateScoreCommentURL: string;
+    readonly calculateTotalScoresURL: string;
     readonly csrfToken: string;
 }

@@ -63,6 +63,7 @@ export default class StudentResult extends Vue {
     background: transparent linear-gradient(135deg,var(--color) 10%,transparent 0,transparent 50%,var(--color) 0,var(--color) 60%,transparent 0,transparent) 0 0/7px 7px;
     border-radius: 5px;
     min-width: 40px;
+    width: 100%;
 }
 
 .deep-orange-500 {

@@ -23,21 +23,6 @@ export interface GradeColumn {
     subItemIds: ItemId[];
 }
 
-export interface ResultValue {
-    id: ColumnId;
-    value: ResultType;
-    ref: ItemId|null;
-    overwritten: boolean;
-}
-
-export type Results = ResultValue[];
-
-export interface ResultsData {
-    readonly id: number;
-    readonly student: string;
-    results: Results;
-}
-
 export interface Category {
     id: number;
     color: string;
@@ -50,6 +35,23 @@ export interface User {
     firstName: string;
     lastName: string;
 }
+
+export interface GradeScore {
+    id: number;
+    columnId: ColumnId;
+    targetUserId: number;
+    sourceScore: number|null;
+    sourceScoreAbsent: false;
+    sourceScoreAuthAbsent: false;
+    overwritten: boolean;
+    newScore: number|null;
+    newScoreAbsent: boolean;
+    newScoreAuthAbsent: boolean;
+    isTotal: boolean;
+    comment: string|null;
+}
+
+export type ResultsData = Record<ColumnId, Record<number, GradeScore>>;
 
 const COUNT_FOR_END_RESULT_DEFAULT = true;
 const AUTH_PRESENCE_END_RESULT_DEFAULT = 0;
@@ -64,10 +66,8 @@ export default class GradeBook {
     public gradeColumns: GradeColumn[] = [];
     public categories: Category[] = [];
     public nullCategory: Category = {id: 0, title: '', color: '', columnIds: []};
-    public originalResultsData: any[] = [];
-    public resultsData: ResultsData[] = [];
     public users: User[] = [];
-    public tscores: any = {};
+    public resultsData: ResultsData = {};
 
     public readonly dataId;
     public currentVersion: number|null;
@@ -179,20 +179,25 @@ export default class GradeBook {
         return column.subItemIds.map(itemId => this.getGradeItem(itemId)!);
     }
 
-    getResult(results: Results, columnId: ColumnId): ResultType {
-        const result = results.find(r => r.id === columnId);
-        if (typeof result === 'undefined') { return null; }
-        return result.value;
+    getResult(columnId: ColumnId, userId: number): ResultType {
+        if (!this.resultsData[columnId]) { return null; }
+        const score: GradeScore = this.resultsData[columnId][userId];
+        if (!score) { return null; }
+        if (score.overwritten) {
+            if (score.newScoreAbsent) { return 'afw'; }
+            if (score.newScoreAuthAbsent) { return 'gafw'; }
+            return score.newScore;
+        }
+        if (score.sourceScoreAbsent) { return 'afw'; }
+        if (score.sourceScoreAuthAbsent) { return 'gafw'; }
+        return score.sourceScore;
     }
 
-    getEndResult(studentId: number) {
-        const r = this.resultsData.find(res => res.id === studentId);
-        if (!r) { return 0; }
-        const results = r.results;
+    getEndResult(userId: number) {
         let endResult = 0;
         let maxWeight = 0;
         this.gradeColumns.filter(column => column.countForEndResult).forEach(column => {
-            let result = this.getResult(results, column.id);
+            let result = this.getResult(column.id, userId);
             if (result === null) {
                 result = 'afw';
             }
@@ -226,6 +231,60 @@ export default class GradeBook {
         return endResult / maxWeight * 100;
     }
 
+    isOverwrittenResult(columnId: ColumnId, userId: number): boolean {
+        if (!this.resultsData[columnId]) { return false; }
+        const score = this.resultsData[columnId][userId];
+        if (!score) { return false; }
+        return score.overwritten;
+    }
+
+    overwriteResult(columnId: ColumnId, userId: number, value: ResultType): GradeScore|false {
+        if (!this.resultsData[columnId]) { return false; }
+        const score: GradeScore = this.resultsData[columnId][userId];
+        if (!score) { return false; }
+        score.overwritten = true;
+        if (value === 'afw') {
+            score.newScoreAbsent = true;
+            score.newScoreAuthAbsent = false;
+            score.newScore = null;
+        } else if (value === 'gafw') {
+            score.newScoreAbsent = false;
+            score.newScoreAuthAbsent = true;
+            score.newScore = null;
+        } else {
+            score.newScoreAbsent = false;
+            score.newScoreAuthAbsent = false;
+            score.newScore = value;
+        }
+        return score;
+    }
+
+    revertOverwrittenResult(columnId: ColumnId, userId: number): GradeScore|false {
+        if (!this.resultsData[columnId]) { return false; }
+        const score: GradeScore = this.resultsData[columnId][userId];
+        if (!score) { return false; }
+        score.overwritten = false;
+        score.newScoreAbsent = false;
+        score.newScoreAuthAbsent = false;
+        score.newScore = null;
+        return score;
+    }
+
+    getResultComment(columnId: ColumnId, userId: number): string|null {
+        if (!this.resultsData[columnId]) { return null; }
+        const score: GradeScore = this.resultsData[columnId][userId];
+        if (!score) { return null; }
+        return score.comment;
+    }
+
+    updateResultComment(columnId: ColumnId, userId: number, comment: string|null): GradeScore|false {
+        if (!this.resultsData[columnId]) { return false; }
+        const score = this.resultsData[columnId][userId];
+        if (!score) { return false; }
+        score.comment = comment;
+        return score;
+    }
+
     addItemToCategory(categoryId: number, columnId: ColumnId) {
         const category = categoryId === 0 ? this.nullCategory : this.getCategory(categoryId);
         if (category?.columnIds.indexOf(columnId) === -1) {
@@ -247,12 +306,6 @@ export default class GradeBook {
                 cat.columnIds[index] = newId;
             }
         });
-        this.resultsData.forEach(d => {
-            const result = d.results.find(r => r.id === oldId);
-            if (result) {
-                result.id = newId;
-            }
-        });
     }
 
     addGradeColumnFromItem(item: GradeItem) {
@@ -267,12 +320,6 @@ export default class GradeBook {
         this.gradeColumns.push(column);
         this.addItemToCategory(0, newId);
 
-        /*this.originalResultsData.forEach(data => {
-            const r = this.resultsData.find(d => d.id === data.id);
-            if (r) {
-                r.results.push({ id: newId, value: data.results.find((r: any) => r.id === item.id)?.value || null, ref: item.id, overwritten: false });
-            }
-        });*/
         return column;
     }
 
@@ -286,16 +333,6 @@ export default class GradeBook {
             if (column.subItemIds.length) {
                 column.subItemIds = column.subItemIds.filter(id => id !== item.id);
             }
-        });
-
-        this.resultsData.forEach(d => {
-            d.results.forEach(res => {
-                if (res.ref === item.id) {
-                    res.value = null;
-                    res.ref = null;
-                    res.overwritten = false;
-                }
-            })
         });
     }
 
@@ -338,126 +375,33 @@ export default class GradeBook {
         const srcColumn = this.findGradeColumnWithGradeItem(item.id);
         column.title = this.getTitle(columnId);
         column.type = 'group';
-        //this.updateResultsData(item, columnId);
         column.subItemIds.push(item.id);
         if (srcColumn) {
             this.gradeColumns = this.gradeColumns.filter(column => column !== srcColumn);
             this.allCategories.forEach(cat => {
                 cat.columnIds = cat.columnIds.filter(id => id !== srcColumn.id);
             });
-            delete this.tscores[srcColumn.id];
+            delete this.resultsData[srcColumn.id];
         }
     }
-
-    private static replaceByNewResult(origResult: ResultValue, newResult: ResultValue): boolean {
-        const origValue = origResult.value;
-        const newValue = newResult.value;
-        if (newValue === null) {
-            return false;
-        }
-        if (origValue === null) {
-            return true;
-        }
-        if (!origResult.overwritten && newResult.overwritten) {
-            return true;
-        }
-        if (origResult.overwritten && !newResult.overwritten) {
-            return false;
-        }
-        if (typeof newValue === 'number') {
-            if (typeof origValue === 'number' && newValue > origValue) {
-                return true;
-            }
-            if (origValue === 'afw' || origValue === 'gafw') {
-                return true;
-            }
-        }
-        if (newValue === 'gafw' && origValue === 'afw') {
-            return true;
-        }
-        return false;
-    }
-
-    /*private updateResultsData(item: GradeItem, columnId: ItemId) {
-
-        const srcColumn = this.findGradeColumnWithGradeItem(item.id);
-
-        this.originalResultsData.forEach(d => {
-            const value = d.results.find((r: any) => r.id === item.id)?.value || null;
-            if (value !== null) {
-                const studentResults = this.resultsData.find(data => data.id === d.id);
-                if (!studentResults) { return; }
-                let newResult;
-                if (srcColumn) {
-                    newResult = studentResults.results.find(r => r.id === srcColumn.id) || undefined;
-                }
-                if (newResult === undefined) {
-                    newResult = { id: columnId, value, ref: item.id, overwritten: false };
-                }
-                const resultValue = studentResults.results.find(r => r.id === columnId);
-                if (resultValue && GradeBook.replaceByNewResult(resultValue, newResult)) {
-                    resultValue.value = newResult.value;
-                    resultValue.ref = newResult.ref;
-                    resultValue.overwritten = newResult.overwritten;
-                }
-                if (srcColumn) {
-                    studentResults.results = studentResults.results.filter(r => r.id !== srcColumn.id);
-                }
-            }
-        });
-    }*/
 
     removeColumn(column: GradeColumn) {
         column.subItemIds.forEach(itemId => {
             this.removeSubItem(this.getGradeItem(itemId)!);
         });
-        delete this.tscores[column.id];
+        delete this.resultsData[column.id];
         this.gradeColumns = this.gradeColumns.filter(col => col !== column);
         this.allCategories.forEach(cat => {
             cat.columnIds = cat.columnIds.filter(id => id !== column.id);
         });
-        this.resultsData.forEach(d => {
-            d.results = d.results.filter(r => r.id !== column.id);
-        });
     }
 
     static from(gradeBookObject: any): GradeBook {
-
-        function convertedResultsData(columns: GradeColumn[], data: any[]) : ResultsData[] {
-            return data.map(resultsData => {
-                const results: Results = [];
-                columns.forEach(column => {
-                    if (column.subItemIds.length) {
-                        let value: ResultType = null;
-                        let ref = null;
-                        column.subItemIds.forEach(itemId => {
-                            const v = resultsData.results.find((r: any) => r.id === itemId)?.value || null;
-                            if (v !== null && (value === null
-                            || (value === 'afw' && v === 'gafw')
-                            || ((value === 'afw' || value === 'gafw') && typeof v === 'number'))
-                            || (typeof v === 'number' && typeof value === 'number' && v > value)) {
-                                value = v;
-                                ref = itemId;
-                            }
-                        });
-                        results.push({id: column.id, value, overwritten: false, ref});
-                    }/* else {
-                        results[column.id] = {value: resultsData.results[column.id], overwritten: false, ref: column.id};
-                    }*/
-                })
-                return {...resultsData, results};
-            });
-        }
-
         const gradeBook = new GradeBook(gradeBookObject.dataId, gradeBookObject.version, gradeBookObject.title);
         gradeBook.gradeItems = gradeBookObject.gradeItems;
         gradeBook.gradeColumns = gradeBookObject.gradeColumns;
         gradeBook.categories = gradeBookObject.categories;
         gradeBook.nullCategory = gradeBookObject.nullCategory;
-        gradeBook.originalResultsData = gradeBookObject.resultsData;
-        //gradeBook.resultsData = convertedResultsData(gradeBook.gradeColumns, gradeBookObject.resultsData);
-        gradeBook.resultsData = [];
-
         return gradeBook;
     }
 }

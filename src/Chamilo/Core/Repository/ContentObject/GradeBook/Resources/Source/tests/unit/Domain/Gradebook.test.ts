@@ -1,4 +1,4 @@
-import GradeBook, {ResultsData} from '@/domain/GradeBook';
+import GradeBook from '@/domain/GradeBook';
 
 function createGradeBookObject() {
     return {
@@ -44,18 +44,18 @@ test('initial', () => {
     expect(gradeBook.allCategories.length).toEqual(3);
 });
 
-test('endResult', () => {
+/*test('endResult', () => {
     expect(gradeBook.getEndResult(1)).toBeCloseTo(57);
     expect(gradeBook.getEndResult(3)).toBeCloseTo(65);
-});
+});*/
 
-test('endResultWithUpdatedWeight', () => {
+/*test('endResultWithUpdatedWeight', () => {
     gradeBook.setWeight(1, 60);
     expect(gradeBook.getEndResult(1)).toBeCloseTo(38.5);
     expect(gradeBook.getEndResult(3)).toBeCloseTo(57.5);
-});
+});*/
 
-test('endResultDontCountColumn', () => {
+/*test('endResultDontCountColumn', () => {
     gradeBook.getGradeColumn(4)!.countForEndResult = false;
     expect(gradeBook.getEndResult(1)).toBeCloseTo(58.75);
     expect(gradeBook.getEndResult(3)).toBeCloseTo(61.25);
@@ -63,9 +63,9 @@ test('endResultDontCountColumn', () => {
     gradeBook.setWeight(1, 70);
     expect(gradeBook.getEndResult(1)).toBeCloseTo(35.5);
     expect(gradeBook.getEndResult(3)).toBeCloseTo(54.5);
-});
+});*/
 
-test('endResultHandleAbsence', () => {
+/*test('endResultHandleAbsence', () => {
     let student = gradeBook.resultsData.find(d => d.id === 1);
 
     // test authorized presence
@@ -100,20 +100,20 @@ test('endResultHandleAbsence', () => {
     // don't count score
     gradeBook.getGradeColumn(3)!.unauthPresenceEndResult = GradeBook.NO_SCORE;
     expect(gradeBook.getEndResult(3)).toBeCloseTo(63.75);
-});
+});*/
 
-test('addScore', () => {
+/*test('addScore', () => {
     gradeBook.addGradeColumnFromItem(gradeBook.getGradeItem(7)!);
     expect(gradeBook.gradeColumns.length).toEqual(6);
     expect(gradeBook.gradeColumns[5].type).toEqual('item');
     expect(gradeBook.getEndResult(1)).toBeCloseTo(55.83);
-});
+});*/
 
-test('removeScore', () => {
+/*test('removeScore', () => {
     gradeBook.removeColumn(gradeBook.getGradeColumn(3)!);
     expect(gradeBook.gradeColumns.length).toEqual(4);
     expect(gradeBook.getEndResult(1)).toBeCloseTo(51.25);
-});
+});*/
 
 test('addGroupScore', () => {
     gradeBook.setWeight(4, 50);
@@ -134,7 +134,7 @@ test('addGroupScore', () => {
     expect(column!.unauthPresenceEndResult).toEqual(GradeBook.MAX_SCORE);
 });
 
-test('removeFromGroupScore', () => {
+/*test('removeFromGroupScore', () => {
     const student1 = gradeBook.resultsData.find(d => d.id === 1);
     const student2 = gradeBook.resultsData.find(d => d.id === 2);
     expect(gradeBook.getGradeColumn(1)!.subItemIds?.length).toEqual(2);
@@ -151,9 +151,9 @@ test('removeFromGroupScore', () => {
     expect(gradeBook.getGradeColumn(1)!.subItemIds?.length).toEqual(0);
     result = student2!.results.find(r => r.id === 1);
     expect(result!.value).toEqual(null);
-});
+});*/
 
-test('addNewScore', () => {
+/*test('addNewScore', () => {
     gradeBook.createNewScore();
     expect(gradeBook.nullCategory.columnIds).toEqual(['sc1']);
     expect(gradeBook.gradeColumns.length).toEqual(6);
@@ -170,7 +170,7 @@ test('addNewScore', () => {
     results!.value = 50;
     results!.overwritten = true;
     expect(gradeBook.getEndResult(3)).toBeCloseTo(62.5);
-});
+});*/
 
 test('moveScore', () => {
     gradeBook.addItemToCategory(2, 3);

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import APIConfig from './APIConfig';
 import PQueue from 'p-queue';
-import {Category, ColumnId, GradeColumn, GradeItem, ItemId} from '../domain/GradeBook';
+import {Category, ColumnId, GradeColumn, GradeItem, GradeScore, ItemId} from '../domain/GradeBook';
 
 const HTTP_FORBIDDEN = 403;
 const HTTP_NOT_FOUND = 404;
@@ -188,7 +188,7 @@ export default class Connector {
         })*/
     }
 
-    overwriteGradeResult(result: any, callback: Function) {
+    overwriteGradeResult(result: GradeScore, callback: Function) {
         this.addToQueue(async () => {
             const parameters = {
                 'gradeScoreId': result.id,
@@ -201,7 +201,7 @@ export default class Connector {
         });
     }
 
-    revertOverwrittenGradeResult(result: any, callback: Function) {
+    revertOverwrittenGradeResult(result: GradeScore, callback: Function) {
         this.addToQueue(async () => {
             const parameters = {
                 'gradeScoreId': result.id
@@ -211,7 +211,7 @@ export default class Connector {
         });
     }
 
-    updateGradeResultComment(result: any, callback: Function) {
+    updateGradeResultComment(result: GradeScore, callback: Function) {
         this.addToQueue(async () => {
             const parameters = {
                 'gradeScoreId': result.id,
@@ -219,6 +219,13 @@ export default class Connector {
             };
             const data = await this.executeAPIRequest(this.apiConfig.updateScoreCommentURL, parameters);
             callback(data.score);
+        });
+    }
+
+    calculateTotalScores(callback: Function) {
+        this.addToQueue(async () => {
+            const data = await this.executeAPIRequest(this.apiConfig.calculateTotalScoresURL);
+            callback(data.totalScores);
         });
     }
 

@@ -43,13 +43,13 @@
                     <template v-for="category in displayedCategories">
                         <b-td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></b-td>
                         <b-td v-else v-for="columnId in category.columnIds" :key="`${category.id}-${columnId}-result`" :style="editStudentScoreId === user.id && editScoreId === columnId ? 'position: relative; z-index: 2' : ''">
-                            <student-result :id="`result-${columnId}-${user.id}`" :result="getResult(columnId, user.id)" :is-overwritten="isOverwrittenResult(columnId, user.id)" :comment="getResultComment(columnId, user.id)"
+                            <student-result :id="`result-${columnId}-${user.id}`" :result="gradeBook.getResult(columnId, user.id)" :is-overwritten="gradeBook.isOverwrittenResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)"
                                             style="cursor: pointer;display: flex;align-items: center;" :style="gradeBook.countsForEndResult(columnId) ? '' : 'font-style: italic'"
                                             @edit="showStudentScoreDialog(user.id, columnId)" @edit-comment="showStudentScoreDialog(user.id, columnId, 'comment')" @revert="revertOverwrittenResult(columnId, user.id)"></student-result>
-                            <score-input v-if="isStudentScoreDialogShown(user.id, columnId)" :menu-tab="scoreMenuTab" @menu-tab-changed="scoreMenuTab = $event" :score="getResult(columnId, user.id)" :comment="getResultComment(columnId, user.id)" @comment-updated="updateResultComment(columnId, user.id, $event)" @ok="overwriteResult(columnId, user.id, $event)" @cancel="hideStudentScoreDialog"></score-input>
+                            <score-input v-if="isStudentScoreDialogShown(user.id, columnId)" :menu-tab="scoreMenuTab" @menu-tab-changed="scoreMenuTab = $event" :score="gradeBook.getResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)" @comment-updated="updateResultComment(columnId, user.id, $event)" @ok="overwriteResult(columnId, user.id, $event)" @cancel="hideStudentScoreDialog"></score-input>
                         </b-td>
                     </template>
-                    <b-td class="col-sticky table-student-total"> {{ getEndResult(user.id)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></b-td>
+                    <b-td class="col-sticky table-student-total" :class="{'mod-needs-update': totalsNeedUpdate(user.id) }">{{ gradeBook.getEndResult(user.id)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></b-td>
                 </b-tr>
             </b-tbody>
         </b-table-simple>
@@ -58,7 +58,7 @@
 
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
-import GradeBook, {Category, ColumnId, ItemId, Results, ResultType} from '../domain/GradeBook';
+import GradeBook, {Category, ColumnId, ItemId, ResultType} from '../domain/GradeBook';
 import ItemTitleInput from './ItemTitleInput.vue';
 import WeightInput from './WeightInput.vue';
 import ScoreInput from './ScoreInput.vue';
@@ -87,132 +87,6 @@ export default class GradesTable extends Vue {
     private scoreMenuTab = 'score';
 
     @Prop({type: GradeBook, required: true}) readonly gradeBook!: GradeBook;
-
-    handleUpdatedScoreValue(results: Results, itemId: ItemId, value: ResultType) {
-        const result = results.find(r => r.id === itemId);
-        if (!result) { return; }
-        result.value = value;
-        result.overwritten = true;
-        this.hideStudentScoreDialog();
-    }
-
-    updateResultComment(columnId: ColumnId, userId: number, comment: string|null) {
-        if (!this.gradeBook.tscores[columnId]) { return; }
-        const score = this.gradeBook.tscores[columnId][userId];
-        if (!score) { return; }
-        score.comment = comment;
-        this.$emit('update-score-comment', score);
-        this.hideStudentScoreDialog();
-    }
-
-    overwriteResult(columnId: ColumnId, userId: number, value: ResultType) {
-        if (!this.gradeBook.tscores[columnId]) { return; }
-        const score = this.gradeBook.tscores[columnId][userId];
-        if (!score) { return; }
-        score.overwritten = true;
-        if (value === 'afw') {
-            score.newScoreAbsent = true;
-            score.newScoreAuthAbsent = false;
-            score.newScore = null;
-        } else if (value === 'gafw') {
-            score.newScoreAbsent = false;
-            score.newScoreAuthAbsent = true;
-            score.newScore = null;
-        } else {
-            score.newScoreAbsent = false;
-            score.newScoreAuthAbsent = false;
-            score.newScore = value;
-        }
-        this.$emit('overwrite-result', score);
-        this.hideStudentScoreDialog();
-    }
-
-    revertOverwrittenResult(columnId: ColumnId, userId: number) {
-        if (!this.gradeBook.tscores[columnId]) {
-            return;
-        }
-        const score = this.gradeBook.tscores[columnId][userId];
-        if (!score) {
-            return;
-        }
-        score.overwritten = false;
-        score.newScoreAbsent = false;
-        score.newScoreAuthAbsent = false;
-        score.newScore = null;
-        this.$emit('revert-overwritten-result', score);
-    }
-
-    isOverwrittenResult(columnId: ColumnId, userId: number): boolean {
-        if (!this.gradeBook.tscores[columnId]) { return false; }
-        const score = this.gradeBook.tscores[columnId][userId];
-        if (!score) { return false; }
-        return score.overwritten;
-    }
-
-    getResultComment(columnId: ColumnId, userId: number): string|null {
-        if (!this.gradeBook.tscores[columnId]) { return null; }
-        const score = this.gradeBook.tscores[columnId][userId];
-        if (!score) { return null; }
-        return score.comment;
-    }
-
-    getResult(columnId: ColumnId, userId: number): ResultType {
-        if (!this.gradeBook.tscores[columnId]) { return null; }
-        const score = this.gradeBook.tscores[columnId][userId];
-        if (!score) { return null; }
-        if (!score.overwritten) {
-            if (score.sourceScoreAbsent) { return 'afw'; }
-            if (score.sourceScoreAuthAbsent) { return 'gafw'; }
-            //console.log(columnId, userId, score.sourceScore);
-            return score.sourceScore;
-        } else {
-            if (score.newScoreAbsent) { return 'afw'; }
-            if (score.newScoreAuthAbsent) { return 'gafw'; }
-            //console.log(columnId, userId, score.sourceScore);
-            return score.newScore;
-        }
-    }
-
-    getEndResult(userId: number) {
-        /*const r = this.resultsData.find(res => res.id === studentId);
-        if (!r) { return 0; }
-        const results = r.results;*/
-        let endResult = 0;
-        let maxWeight = 0;
-        this.gradeBook.gradeColumns.filter(column => column.countForEndResult).forEach(column => {
-            let result = this.getResult(column.id, userId);
-            if (result === null) {
-                result = 'afw';
-            }
-            const weight = this.gradeBook.getWeight(column.id);
-            if (typeof result === 'number') {
-                maxWeight += weight;
-            } else if (result === 'gafw') {
-                if (column.authPresenceEndResult !== GradeBook.NO_SCORE) {
-                    maxWeight += weight;
-                    if (column.authPresenceEndResult === GradeBook.MAX_SCORE) {
-                        endResult += weight;
-                    }
-                }
-            } else if (result === 'afw') {
-                if (column.unauthPresenceEndResult !== GradeBook.NO_SCORE) {
-                    maxWeight += weight;
-                    if (column.unauthPresenceEndResult === GradeBook.MAX_SCORE) {
-                        endResult += weight;
-                    }
-                }
-            }
-            if (typeof result === 'number') {
-                endResult += (result * weight * 0.01);
-            }
-        });
-
-        if (maxWeight === 0) {
-            return 0;
-        }
-
-        return endResult / maxWeight * 100;
-    }
 
     get showNullCategory() {
         return this.isDraggingColumn || this.gradeBook.nullCategory.columnIds.length > 0;
@@ -265,6 +139,32 @@ export default class GradesTable extends Vue {
             this.$emit('change-gradecolumn', gradeColumn);
         }
         this.weightEditItemId = null;
+    }
+
+    overwriteResult(columnId: ColumnId, userId: number, value: ResultType) {
+        const score = this.gradeBook.overwriteResult(columnId, userId, value);
+        if (!score) { return; }
+        this.$emit('overwrite-result', score);
+        this.hideStudentScoreDialog();
+    }
+
+    revertOverwrittenResult(columnId: ColumnId, userId: number) {
+        const score = this.gradeBook.revertOverwrittenResult(columnId, userId);
+        if (!score) { return; }
+        this.$emit('revert-overwritten-result', score);
+    }
+
+    updateResultComment(columnId: ColumnId, userId: number, comment: string|null) {
+        const score = this.gradeBook.updateResultComment(columnId, userId, comment);
+        if (!score) { return; }
+        this.$emit('update-score-comment', score);
+        this.hideStudentScoreDialog();
+    }
+
+    totalsNeedUpdate(userId: number) {
+        const total = this.gradeBook.getResult('totals', userId);
+        if (typeof total !== 'number') { return true; }
+        return total.toFixed(2) !== this.gradeBook.getEndResult(userId).toFixed(2);
     }
 
     startDragColumn(evt: DragEvent, id: ColumnId) {
@@ -428,12 +328,24 @@ export default class GradesTable extends Vue {
         color: #5885a2;
     }
 
+    /*.table-body-row td.no-value {
+        background: transparent linear-gradient(135deg, var(--color) 10%, transparent 0, transparent 50%, var(--color) 0, var(--color) 60%, transparent 0, transparent) 0 0/7px 7px
+    }*/
+
     .table-body-row:nth-child(even) td {
         background-color: #fff;
+
+        /*&.no-value {
+            --color: #e0ede3;
+        }*/
     }
 
     .table-body-row:nth-child(odd) td {
         background-color: #f9f9f9;
+
+        /*&.no-value {
+            --color: #e2eee5;
+        }*/
     }
 
     .table-body-row:first-child td {
@@ -479,14 +391,26 @@ export default class GradesTable extends Vue {
 
     .table-body-row:nth-child(even) .col-sticky {
         background-color: #fff;
+
+        &.table-student-total.mod-needs-update {
+            background-color: #faf8c6;
+        }
     }
 
     .table-body-row:nth-child(odd) .col-sticky {
         background-color: #f9f9f9;
+
+        &.table-student-total.mod-needs-update {
+            background-color: #faf8c6;
+        }
     }
 
     .table-body-row:first-child .col-sticky {
         background: linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%, linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%,linear-gradient(to bottom, #e3eaed 0, #f9f9f9 4px);
+
+        &.table-student-total.mod-needs-update {
+            background: linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%, linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%,linear-gradient(to bottom, #e3eaed 0, #faf8c6 4px);
+        }
     }
 
     .fa-percent {
