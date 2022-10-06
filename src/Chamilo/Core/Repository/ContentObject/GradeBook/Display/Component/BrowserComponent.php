@@ -153,6 +153,12 @@ class BrowserComponent extends Manager
                     self::PARAM_ACTION => self::ACTION_AJAX,
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_UPDATE_SCORE_COMMENT
                 ]
+            ),
+            'CALCULATE_TOTAL_SCORES_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_CALCULATE_TOTAL_SCORES
+                ]
             )
         ];
     }

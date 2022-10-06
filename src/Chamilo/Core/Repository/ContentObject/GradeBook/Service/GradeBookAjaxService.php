@@ -517,6 +517,10 @@ class GradeBookAjaxService
 
         foreach ($scoreSynchronizer->getAddScores() as list($gradeBookColumn, $userId, $gradeBookItem, $gradeScore))
         {
+            if ($gradeBookColumn->getType() == 'standalone')
+            {
+                $gradeScore = new NullScore();
+            }
             $this->addGradeBookScore($gradeBookColumn, $gradeBookItem, $userId, $gradeScore);
         }
 
@@ -644,6 +648,7 @@ class GradeBookAjaxService
         $gradebookScore->setTargetUserId($userId);
         $gradebookScore->setSourceScoreAuthAbsent($score->isAuthAbsent());
         $gradebookScore->setSourceScoreAbsent($score->isAbsent());
+        $gradebookScore->setIsTotalScore(false);
         $gradebookScore->setComment(null);
         if (!($score->isAbsent() || $score->isAuthAbsent()))
         {
@@ -774,6 +779,30 @@ class GradeBookAjaxService
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
             'score' => $gradebookScore->toJSONModel()
+        ];
+    }
+
+    /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     *
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function calculateTotalScores(int $gradeBookDataId, int $versionId): array
+    {
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $totalScoreCalculator = new TotalScoreCalculator($gradebookData);
+        $totals = $totalScoreCalculator->calculateTotals();
+        $this->gradeBookService->saveGradeBook($gradebookData);
+
+        $totalScores = array_map(function(GradeBookScore $score) {
+            return $score->toJSONModel();
+        }, $totals);
+
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
+            'totalScores' => $totalScores
         ];
     }
 }

@@ -112,15 +112,24 @@ class ScoreSynchronizer
      */
     protected function synchronizeExistingScore(GradeBookScore $score)
     {
+        if ($score->isTotalScore())
+        {
+            return;
+        }
         $userId = $score->getTargetUserId();
         if (!in_array($userId, $this->targetUserIds) || is_null($score->getGradeBookColumn()))
         {
             $this->toRemoveScores[] = $score;
             return;
         }
-        $columnId = $score->getGradeBookColumn()->getId();
+        $column = $score->getGradeBookColumn();
+        $columnId = $column->getId();
         $subItems = $this->columnSubItems[$columnId];
         $this->userColumnUserIds[$columnId][] = $userId;
+        if ($column->getType() == 'standalone')
+        {
+            return;
+        }
         list($gradeBookItem, $gradeScore) = $this->getGradeScoreForUser($userId, $subItems);
         if ($this->shouldUpdate($score, $gradeScore))
         {

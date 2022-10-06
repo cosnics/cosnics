@@ -47,7 +47,7 @@ class GradeBookScore
      * @var GradeBookColumn
      *
      * @ORM\ManyToOne(targetEntity="GradeBookColumn")
-     * @ORM\JoinColumn(name="gradebook_column_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="gradebook_column_id", referencedColumnName="id", nullable=true)
      *
      */
     protected $gradebookColumn;
@@ -117,6 +117,13 @@ class GradeBookScore
      * @ORM\Column(name="new_auth_absent", type="boolean")
      */
     protected $newScoreAuthAbsent = false;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_total", type="boolean")
+     */
+    protected $isTotal = false;
 
     /**
      * @var string
@@ -415,6 +422,26 @@ class GradeBookScore
     public function setNewScoreAuthAbsent(bool $isAuthAbsent): GradeBookScore
     {
         $this->newScoreAuthAbsent = $isAuthAbsent;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTotalScore(): bool
+    {
+        return $this->isTotal;
+    }
+
+    /**
+     * @param bool $isTotal
+     *
+     * @return GradeBookScore
+     */
+    public function setIsTotalScore(bool $isTotal): GradeBookScore
+    {
+        $this->isTotal = $isTotal;
 
         return $this;
     }

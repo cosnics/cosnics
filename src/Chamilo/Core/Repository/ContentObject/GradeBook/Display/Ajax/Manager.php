@@ -43,6 +43,7 @@ abstract class Manager extends AjaxManager
     const ACTION_OVERWRITE_SCORE = 'OverwriteScore';
     const ACTION_REVERT_OVERWRITTEN_SCORE = 'RevertOverwrittenScore';
     const ACTION_UPDATE_SCORE_COMMENT = 'UpdateScoreComment';
+    const ACTION_CALCULATE_TOTAL_SCORES = 'CalculateTotalScores';
 
     const PARAM_ACTION = 'gradebook_display_ajax_action';
 

@@ -408,6 +408,22 @@ class GradeBookData
     }
 
     /**
+     * @return GradeBookColumn[]
+     */
+    public function getGradeBookColumnsForEndResult()
+    {
+        $columns = [];
+        foreach ($this->gradebookColumns as $column)
+        {
+            if ($column->getCountForEndResult())
+            {
+                $columns[] = $column;
+            }
+        }
+        return $columns;
+    }
+
+    /**
      * @param GradeBookCategory|null $category
      *
      * @return array|GradeBookColumn[]|ArrayCollection
