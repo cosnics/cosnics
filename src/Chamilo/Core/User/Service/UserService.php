@@ -9,6 +9,9 @@ use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -241,6 +244,24 @@ class UserService
     }
 
     /**
+     * @return string[]
+     */
+    public function findSettingsForUser(User $user): array
+    {
+        $userSettings = $this->getUserRepository()->findSettingsForUser($user);
+
+        $mappedUserSettings = [];
+
+        foreach ($userSettings as $userSetting)
+        {
+            $mappedUserSettings[$userSetting[Setting::PROPERTY_CONTEXT]][$userSetting[Setting::PROPERTY_VARIABLE]] =
+                $userSetting[UserSetting::PROPERTY_VALUE];
+        }
+
+        return $mappedUserSettings;
+    }
+
+    /**
      *
      * @param string $email
      *
@@ -318,7 +339,7 @@ class UserService
     /**
      * @param string[] $officialCodes
      *
-     * @return int
+     * @return int[]
      * @throws \Exception
      */
     public function findUserIdentifiersByOfficialCodes(array $officialCodes)
@@ -327,15 +348,17 @@ class UserService
     }
 
     /**
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?int $offset
+     * @param ?int $count
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findUsers($condition = null, $offset = 0, $count = - 1, $orderProperty = null)
+    public function findUsers(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderProperty = null
+    ): ArrayCollection
     {
         return $this->getUserRepository()->findUsers($condition, $count, $offset, $orderProperty);
     }
@@ -462,24 +485,6 @@ class UserService
     public function setPropertyMapper(PropertyMapper $propertyMapper): void
     {
         $this->propertyMapper = $propertyMapper;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function findSettingsForUser(User $user): array
-    {
-        $userSettings = $this->getUserRepository()->findSettingsForUser($user);
-
-        $mappedUserSettings = [];
-
-        foreach ($userSettings as $userSetting)
-        {
-            $mappedUserSettings[$userSetting[Setting::PROPERTY_CONTEXT]][$userSetting[Setting::PROPERTY_VARIABLE]] =
-                $userSetting[UserSetting::PROPERTY_VALUE];
-        }
-
-        return $mappedUserSettings;
     }
 
     /**

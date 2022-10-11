@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Table\Publication\Table;
 
 use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
+use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 
 /**
@@ -19,12 +20,7 @@ class ObjectPublicationTable extends RecordTable implements TableFormActionsSupp
      */
     const TABLE_IDENTIFIER = Manager::PARAM_PUBLICATION_ID;
 
-    /**
-     * Returns the implemented form actions
-     * 
-     * @return TableFormActions
-     */
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         return $this->get_component()->get_actions();
     }

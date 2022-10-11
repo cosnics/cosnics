@@ -17,7 +17,7 @@ class CourseGroupTable extends DataClassTable implements TableFormActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_COURSE_GROUP;
 
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         $actions = new TableFormActions(Manager::context(), self::TABLE_IDENTIFIER);
         if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))

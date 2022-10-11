@@ -19,7 +19,7 @@ class UnsubscribedGroupTable extends DataClassTable implements TableFormActionsS
 {
     const TABLE_IDENTIFIER = Manager::PARAM_OBJECTS;
 
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {

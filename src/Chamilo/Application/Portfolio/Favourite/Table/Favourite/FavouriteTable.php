@@ -22,7 +22,7 @@ class FavouriteTable extends RecordTable implements TableFormActionsSupport
      *
      * @return TableFormActions
      */
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         $actions = new TableFormActions(Manager::context(), Manager::PARAM_FAVOURITE_ID);
 

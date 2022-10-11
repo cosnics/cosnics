@@ -17,7 +17,7 @@ class SubscribedUserTable extends RecordTable implements TableFormActionsSupport
 {
     const TABLE_IDENTIFIER = \Chamilo\Application\Weblcms\Manager::PARAM_USERS;
 
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         $browser = $this->get_component();

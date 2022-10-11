@@ -48,7 +48,7 @@ class ContentObjectTable extends DataClassTable implements TableFormActionsSuppo
         $this->set_query($query);
     }
 
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         

@@ -5,6 +5,8 @@ use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Interface for the user repository
@@ -14,6 +16,63 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  */
 interface UserRepositoryInterface
 {
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return int
+     */
+    public function countUsers(Condition $condition = null);
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return bool
+     */
+    public function createUser(User $user);
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\UserSetting $userSetting
+     *
+     * @return bool
+     */
+    public function createUserSetting(UserSetting $userSetting);
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return bool
+     */
+    public function deleteUser(User $user);
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\UserSetting $userSetting
+     *
+     * @return bool
+     */
+    public function deleteUserSetting(UserSetting $userSetting);
+
+    /**
+     *
+     * @param int $status
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     */
+    public function findActiveUsersByStatus($status);
+
+    /**
+     * Finds a user by a given email
+     *
+     * @param string $email
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User;
+     */
+    public function findUserByEmail($email);
 
     /**
      * Finds a user by a given id
@@ -26,14 +85,6 @@ interface UserRepositoryInterface
 
     /**
      *
-     * @param string $securityToken
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function findUserBySecurityToken($securityToken);
-
-    /**
-     *
      * @param string $officialCode
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
@@ -41,45 +92,18 @@ interface UserRepositoryInterface
     public function findUserByOfficialCode($officialCode);
 
     /**
-     * Finds a user by a list of parameters
      *
-     * @param Condition $condition
-     * @param int $count
-     * @param int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
+     * @param string $securityToken
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
-    public function findUsers(Condition $condition, $count = null, $offset = null, $order_by = null);
-
-    /**
-     *
-     * @param int[] $userIdentifiers
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
-     */
-    public function findUsersByIdentifiersOrderedByName($userIdentifiers);
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @return integer
-     */
-    public function countUsers(Condition $condition = null);
-
-    /**
-     * Finds a user by a given email
-     *
-     * @param string $email
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User;
-     */
-    public function findUserByEmail($email);
+    public function findUserBySecurityToken($securityToken);
 
     /**
      * Finds a user by a given username
      *
      * @param string $username
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function findUserByUsername($username);
@@ -93,59 +117,48 @@ interface UserRepositoryInterface
     public function findUserByUsernameOrEmail($usernameOrEmail);
 
     /**
+     * Finds a user by a list of parameters
      *
-     * @param integer $status
+     * @param ?Condition $condition
+     * @param ?int $count
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     */
+    public function findUsers(?Condition $condition, int $count = null, int $offset = null, ?OrderBy $orderBy = null
+    ): ArrayCollection;
+
+    /**
+     *
+     * @param int[] $userIdentifiers
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
-    public function findActiveUsersByStatus($status);
+    public function findUsersByIdentifiersOrderedByName($userIdentifiers);
 
     /**
      *
      * @param \Chamilo\Configuration\Storage\DataClass\Setting $setting
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\UserSetting
      */
     public function getUserSettingForSettingAndUser(Setting $setting, User $user);
 
     /**
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\UserSetting $userSetting
-     * @return boolean
-     */
-    public function createUserSetting(UserSetting $userSetting);
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\UserSetting $userSetting
-     * @return boolean
-     */
-    public function updateUserSetting(UserSetting $userSetting);
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\UserSetting $userSetting
-     * @return boolean
-     */
-    public function deleteUserSetting(UserSetting $userSetting);
-
-    /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @return boolean
-     */
-    public function createUser(User $user);
-
-    /**
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @return boolean
+     * @return bool
      */
     public function updateUser(User $user);
 
     /**
      *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @return boolean
+     * @param \Chamilo\Core\User\Storage\DataClass\UserSetting $userSetting
+     *
+     * @return bool
      */
-    public function deleteUser(User $user);
+    public function updateUserSetting(UserSetting $userSetting);
 }

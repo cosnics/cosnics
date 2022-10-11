@@ -15,7 +15,7 @@ class SubscribeUserTable extends DataClassTable implements TableFormActionsSuppo
 {
     const TABLE_IDENTIFIER = Manager::PARAM_USER_ID;
 
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         $actions = new TableFormActions(Manager::context(), self::TABLE_IDENTIFIER);
         

@@ -17,7 +17,7 @@ class WikiPageTable extends DataClassTable implements TableFormActionsSupport
 {
     const TABLE_IDENTIFIER = \Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID;
 
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 

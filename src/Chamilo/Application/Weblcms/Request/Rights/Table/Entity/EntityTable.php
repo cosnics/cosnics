@@ -13,7 +13,7 @@ class EntityTable extends DataClassTable implements TableFormActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID;
 
-    function get_implemented_form_actions()
+    function get_implemented_form_actions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         $actions->add_form_action(

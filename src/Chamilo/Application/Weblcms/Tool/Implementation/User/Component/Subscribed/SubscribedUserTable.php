@@ -24,7 +24,7 @@ class SubscribedUserTable extends RecordTable implements TableFormActionsSupport
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         

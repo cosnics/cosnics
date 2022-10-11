@@ -78,25 +78,21 @@ class DatetimeUtilities
         {
             $converted_time = '000h 00m ' . str_pad($time, 2, '0', STR_PAD_LEFT) . 's';
         }
+        elseif ($time / 3600 < 1)
+        {
+            $min = (int) ($time / 60);
+            $sec = $time % 60;
+            $converted_time =
+                '000h ' . str_pad($min, 2, '0', STR_PAD_LEFT) . 'm ' . str_pad($sec, 2, '0', STR_PAD_LEFT) . 's';
+        }
         else
         {
-            if ($time / 3600 < 1)
-            {
-                $min = (int) ($time / 60);
-                $sec = $time % 60;
-                $converted_time =
-                    '000h ' . str_pad($min, 2, '0', STR_PAD_LEFT) . 'm ' . str_pad($sec, 2, '0', STR_PAD_LEFT) . 's';
-            }
-            else
-            {
-                $hour = (int) ($time / 3600);
-                $rest = $time % 3600;
-                $min = (int) ($rest / 60);
-                $sec = $rest % 60;
-                $converted_time =
-                    str_pad($hour, 3, '0', STR_PAD_LEFT) . 'h ' . str_pad($min, 2, '0', STR_PAD_LEFT) . 'm ' .
-                    str_pad($sec, 2, '0', STR_PAD_LEFT) . 's';
-            }
+            $hour = (int) ($time / 3600);
+            $rest = $time % 3600;
+            $min = (int) ($rest / 60);
+            $sec = $rest % 60;
+            $converted_time = str_pad($hour, 3, '0', STR_PAD_LEFT) . 'h ' . str_pad($min, 2, '0', STR_PAD_LEFT) . 'm ' .
+                str_pad($sec, 2, '0', STR_PAD_LEFT) . 's';
         }
 
         return $converted_time;
@@ -192,7 +188,7 @@ class DatetimeUtilities
 
         if (!($this->daysLong[$locale]))
         {
-            $this->daysLong[$locale] = array(
+            $this->daysLong[$locale] = [
                 $translator->trans('SundayLong', [], StringUtilities::LIBRARIES),
                 $translator->trans('MondayLong', [], StringUtilities::LIBRARIES),
                 $translator->trans('TuesdayLong', [], StringUtilities::LIBRARIES),
@@ -200,7 +196,7 @@ class DatetimeUtilities
                 $translator->trans('ThursdayLong', [], StringUtilities::LIBRARIES),
                 $translator->trans('FridayLong', [], StringUtilities::LIBRARIES),
                 $translator->trans('SaturdayLong', [], StringUtilities::LIBRARIES)
-            );
+            ];
         }
 
         return $this->daysLong[$locale];
@@ -218,7 +214,7 @@ class DatetimeUtilities
 
         if (!($this->daysShort[$locale]))
         {
-            $this->daysShort[$locale] = array(
+            $this->daysShort[$locale] = [
                 $translator->trans('SundayShort', [], StringUtilities::LIBRARIES),
                 $translator->trans('MondayShort', [], StringUtilities::LIBRARIES),
                 $translator->trans('TuesdayShort', [], StringUtilities::LIBRARIES),
@@ -226,7 +222,7 @@ class DatetimeUtilities
                 $translator->trans('ThursdayShort', [], StringUtilities::LIBRARIES),
                 $translator->trans('FridayShort', [], StringUtilities::LIBRARIES),
                 $translator->trans('SaturdayShort', [], StringUtilities::LIBRARIES)
-            );
+            ];
         }
 
         return $this->daysShort[$locale];
@@ -264,7 +260,7 @@ class DatetimeUtilities
 
         if (!($this->monthsShort[$locale]))
         {
-            $this->monthsShort[$locale] = array(
+            $this->monthsShort[$locale] = [
                 $translator->trans('JanuaryShort', [], StringUtilities::LIBRARIES),
                 $translator->trans('FebruaryShort', [], StringUtilities::LIBRARIES),
                 $translator->trans('MarchShort', [], StringUtilities::LIBRARIES),
@@ -277,7 +273,7 @@ class DatetimeUtilities
                 $translator->trans('OctoberShort', [], StringUtilities::LIBRARIES),
                 $translator->trans('NovemberShort', [], StringUtilities::LIBRARIES),
                 $translator->trans('DecemberShort', [], StringUtilities::LIBRARIES)
-            );
+            ];
         }
 
         return $this->monthsShort[$locale];
@@ -295,7 +291,7 @@ class DatetimeUtilities
 
         if (!($this->monthsLong[$locale]))
         {
-            $this->monthsLong[$locale] = array(
+            $this->monthsLong[$locale] = [
                 $translator->trans('JanuaryLong', [], StringUtilities::LIBRARIES),
                 $translator->trans('FebruaryLong', [], StringUtilities::LIBRARIES),
                 $translator->trans('MarchLong', [], StringUtilities::LIBRARIES),
@@ -308,7 +304,7 @@ class DatetimeUtilities
                 $translator->trans('OctoberLong', [], StringUtilities::LIBRARIES),
                 $translator->trans('NovemberLong', [], StringUtilities::LIBRARIES),
                 $translator->trans('DecemberLong', [], StringUtilities::LIBRARIES)
-            );
+            ];
         }
 
         return $this->monthsLong[$locale];

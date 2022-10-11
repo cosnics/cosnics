@@ -15,7 +15,7 @@ class UserApprovalTable extends DataClassTable implements TableFormActionsSuppor
 {
     const TABLE_IDENTIFIER = Manager::PARAM_USER_USER_ID;
 
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         $actions->add_form_action(

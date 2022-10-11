@@ -19,7 +19,7 @@ class EntryRequestTable extends DataClassTable implements TableFormActionsSuppor
     const TABLE_IDENTIFIER = Manager::PARAM_ENTRY_ID;
     const EPHORUS_TRANSLATION_CONTEXT = 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus';
 
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 

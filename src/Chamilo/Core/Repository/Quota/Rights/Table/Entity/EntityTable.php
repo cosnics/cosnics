@@ -126,7 +126,7 @@ class EntityTable extends RecordTable implements TableFormActionsSupport
     /**
      * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
      */
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         $deleteUrl = new Redirect(
             array(

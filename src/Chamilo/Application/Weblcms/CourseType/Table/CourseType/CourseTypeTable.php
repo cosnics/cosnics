@@ -29,7 +29,7 @@ class CourseTypeTable extends DataClassTable implements TableFormActionsSupport
     /**
      * Returns the available table actions
      */
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         

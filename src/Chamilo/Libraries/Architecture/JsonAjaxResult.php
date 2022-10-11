@@ -197,7 +197,7 @@ class JsonAjaxResult
     /**
      * Set all properties
      *
-     * @param string[] $properties
+     * @param array $properties
      */
     public function set_properties($properties)
     {

@@ -19,7 +19,7 @@ class UnsubscribedUserTable extends DataClassTable implements TableFormActionsSu
 {
     const TABLE_IDENTIFIER = Manager::PARAM_OBJECTS;
 
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         $translator = Translation::getInstance();
         if (! Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP))

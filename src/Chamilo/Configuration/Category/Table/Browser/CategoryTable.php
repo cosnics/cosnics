@@ -20,7 +20,7 @@ class CategoryTable extends DataClassTable implements TableFormActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_CATEGORY_ID;
 
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         $actions = new TableFormActions(Manager::context(), self::TABLE_IDENTIFIER);
 

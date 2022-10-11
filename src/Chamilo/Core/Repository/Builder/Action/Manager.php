@@ -52,7 +52,7 @@ abstract class Manager extends Application
 
     public function getButtonToolbarRenderer(ContentObject $content_object = null)
     {
-        return $this->get_parent()->getButtonToolbarRenderer($content_object);
+        return $this->get_parent()->getButtonToolBarRenderer($content_object);
     }
 
     public function get_additional_links()

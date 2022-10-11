@@ -688,7 +688,7 @@ class DataClassRepository
      * @param class-string<retrieveById> $dataClassName
      * @param string $identifier
      *
-     * @return retrieveById
+     * @return ?retrieveById
      */
     public function retrieveById(string $dataClassName, string $identifier)
     {

@@ -18,7 +18,7 @@ class RequestTable extends DataClassTable implements TableFormActionsSupport
     const TYPE_DENIED = 4;
     const DEFAULT_ROW_COUNT = 200;
 
-    function get_implemented_form_actions()
+    function get_implemented_form_actions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         

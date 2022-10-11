@@ -18,7 +18,7 @@ class SharedWorkspaceTable extends WorkspaceTable
      *
      * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTable::get_implemented_form_actions()
      */
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         return new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
     }

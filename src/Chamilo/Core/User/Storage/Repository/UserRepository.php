@@ -358,7 +358,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @param string[] $officialCodes
      *
-     * @return int
+     * @return int[]
      * @throws \Exception
      */
     public function findUserIdentifiersByOfficialCodes(array $officialCodes)
@@ -380,14 +380,17 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param int $count
-     * @param int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?int $count
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findUsers(Condition $condition = null, $count = null, $offset = null, $orderBy = null)
+    public function findUsers(
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+    ): ArrayCollection
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
 

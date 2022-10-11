@@ -318,8 +318,10 @@ abstract class Application
      * representing additional query string parameters; these will either be added to the parameters already present,
      * or override them if a value with the same name exists.
      *
-     * @param string[] $parameters
-     * @param string[] $filter
+     * @param array $parameters
+     * @param array $filter
+     *
+     * @return string
      */
     public function get_url(array $parameters = [], array $filter = []): string
     {

@@ -30,7 +30,7 @@ class DirectSubscribedPlatformGroupTable extends RecordTable implements TableFor
      * 
      * @return TableFormActions
      */
-    public function get_implemented_form_actions()
+    public function get_implemented_form_actions(): TableFormActions
     {
         if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
