@@ -70,8 +70,6 @@ class Translation
     }
 
     /**
-     * @throws \ReflectionException
-     * @throws \Exception
      * @deprecated Use getTranslation() now
      */
     public static function get(
