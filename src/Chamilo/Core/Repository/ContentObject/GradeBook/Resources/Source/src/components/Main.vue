@@ -1,17 +1,21 @@
 <template>
     <div>
         <div class="gradebook-toolbar">
-            <input class="form-control" type="text" placeholder="Zoek student">
+            <div class="input-group">
+                <input class="form-control" type="text" v-model="searchTerm" placeholder="Zoek student">
+                <div class="input-group-btn"><button name="clear" value="clear" class="btn btn-default" @click="searchTerm = ''"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></button></div>
+            </div>
             <grades-dropdown id="dropdown-main" :graded-items="gradeBook.gradedItemsWithCheckedStatus" @toggle="toggleGradeItem"></grades-dropdown>
-        </div>
-        <div class="gradebook-table-container">
             <div class="gradebook-create-actions">
                 <button class="btn btn-default btn-sm" @click="synchronizeGradeBook"><i aria-hidden="true" class="fa fa-refresh"></i>Synchronizeer scores</button>
                 <button class="btn btn-default btn-sm" @click="updateTotalScores"><i aria-hidden="true" class="fa fa-refresh"></i>Update eindcijfers</button>
                 <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>Nieuwe score</button>
                 <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>Categorie</button>
             </div>
-            <grades-table :grade-book="gradeBook" @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"
+        </div>
+        <div class="gradebook-table-container">
+            <grades-table :grade-book="gradeBook" :search-terms="studentSearchTerms" :busy="tableBusy" :save-column-id="saveColumnId" :save-category-id="saveCategoryId"
+                          @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"
                           @update-score-comment="onUpdateScoreComment" @overwrite-result="onOverwriteResult" @revert-overwritten-result="onRevertOverwrittenResult"
                           @change-category="onChangeCategory" @move-category="onMoveCategory"
                           @change-gradecolumn="onChangeGradeColumn" @change-gradecolumn-category="onChangeGradeColumnCategory" @move-gradecolumn="onMoveGradeColumn"></grades-table>
@@ -37,6 +41,11 @@
     export default class Main extends Vue {
         private itemSettings: number|null = null;
         private categorySettings: number|null = null;
+        private studentSearchTerm = '';
+        private studentSearchTerms: string[] = [];
+        private tableBusy = false;
+        private saveColumnId: ColumnId|null = null;
+        private saveCategoryId: number|null = null;
 
         @Prop({type: GradeBook, required: true}) readonly gradeBook!: GradeBook;
         @Prop(Connector) readonly connector!: Connector|null;
@@ -44,6 +53,15 @@
         constructor() {
             super();
             this.updateResult = this.updateResult.bind(this);
+        }
+
+        get searchTerm() {
+            return this.studentSearchTerm;
+        }
+
+        set searchTerm(term: string) {
+            this.studentSearchTerm = term;
+            this.studentSearchTerms = term.toLowerCase().split(' ').filter(s => s.length);
         }
 
         updateGradeColumnWithScores(column: GradeColumn, id: ColumnId, scores: GradeScore[]) {
@@ -59,8 +77,10 @@
 
         addGradeItem(item: GradeItem) {
             const column = this.gradeBook.addGradeColumnFromItem(item);
+            this.tableBusy = true;
             this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: GradeScore[]) => {
                 this.updateGradeColumnWithScores(column, id, scores);
+                this.tableBusy = false;
             });
         }
 
@@ -90,11 +110,16 @@
 
         createNewCategory() {
             const category = this.gradeBook.createNewCategory();
-            this.categorySettings = category.id;
-            this.connector?.addCategory(category);
+            this.tableBusy = true;
+            this.connector?.addCategory(category, (cat: any) => {
+                category.id = cat.id;
+                this.categorySettings = cat.id;
+                this.tableBusy = false;
+            });
         }
 
         async synchronizeGradeBook() {
+            this.tableBusy = true;
             await this.connector?.synchronizeGradeBook((scores: GradeScore[]) => {
                 const resultsData = this.gradeBook.resultsData;
                 scores.forEach(score => {
@@ -103,10 +128,12 @@
                     }
                     resultsData[score.columnId][score.targetUserId] = score;
                 });
+                this.tableBusy = false;
             });
         }
 
         async updateTotalScores() {
+            this.tableBusy = true;
             await this.connector?.calculateTotalScores((scores: GradeScore[]) => {
                 const resultsData = this.gradeBook.resultsData;
                 if (!resultsData['totals']) {
@@ -115,14 +142,16 @@
                 scores.forEach(score => {
                     resultsData['totals'][score.targetUserId] = score;
                 });
-                console.log(this.gradeBook);
+                this.tableBusy = false;
             });
         }
 
         createNewScore() {
             const column = this.gradeBook.createNewScore();
+            this.tableBusy = true;
             this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: GradeScore[]) => {
                 this.updateGradeColumnWithScores(column, id, scores);
+                this.tableBusy = false;
             });
         }
 
@@ -131,33 +160,52 @@
         }
 
         onChangeCategory(category: Category) {
-            this.connector?.updateCategory(category);
+            this.saveCategoryId = category.id;
+            this.connector?.updateCategory(category, () => {
+                this.saveCategoryId = null;
+            });
         }
 
-        onMoveCategory(category: Category) {
-            this.connector?.moveCategory(category, this.gradeBook.categories.indexOf(category));
+        async onMoveCategory(category: Category) {
+            this.tableBusy = true;
+            await this.connector?.moveCategory(category, this.gradeBook.categories.indexOf(category), () => {
+                this.tableBusy = false;
+            });
         }
 
         onRemoveCategory(category: Category) {
-            this.connector?.removeCategory(category);
+            this.tableBusy = true;
+            this.connector?.removeCategory(category, () => {
+                this.tableBusy = false;
+            });
         }
 
         onChangeGradeColumn(gradeColumn: GradeColumn) {
-            this.connector?.updateGradeColumn(gradeColumn);
+            this.saveColumnId = gradeColumn.id;
+            this.connector?.updateGradeColumn(gradeColumn, () => {
+                this.saveColumnId = null;
+            });
         }
 
         onChangeGradeColumnCategory(gradeColumn: GradeColumn, categoryId: number|null) {
-            this.connector?.updateGradeColumnCategory(gradeColumn, categoryId);
+            this.tableBusy = true;
+            this.connector?.updateGradeColumnCategory(gradeColumn, categoryId, () => {
+                this.tableBusy = false;
+            });
         }
 
         onMoveGradeColumn(column: GradeColumn) {
             const category = this.gradeBook.allCategories.find(category => category.columnIds.indexOf(column.id) !== -1);
             if (category) {
-                this.connector?.moveGradeColumn(column, category.columnIds.indexOf(column.id));
+                this.tableBusy = true;
+                this.connector?.moveGradeColumn(column, category.columnIds.indexOf(column.id), () => {
+                    this.tableBusy = false;
+                });
             }
         }
 
         onAddSubItem(item: GradeItem, columnId: ColumnId) {
+            this.tableBusy = true;
             this.connector?.addColumnSubItem(columnId, item.id, (column: GradeColumn, scores: GradeScore[]) => {
                 console.log('scores', scores);
                 const resultsData = this.gradeBook.resultsData;
@@ -168,10 +216,12 @@
                     }
                     resultsData[columnId][score.targetUserId] = score;
                 });
+                this.tableBusy = false;
             });
         }
 
         onRemoveSubItem(item: GradeItem, columnId: ColumnId) {
+            this.tableBusy = true;
             this.connector?.removeColumnSubItem(columnId, item.id, (column: GradeColumn, scores: GradeScore[]) => {
                 console.log('scores', scores);
                 const resultsData = this.gradeBook.resultsData;
@@ -182,28 +232,36 @@
                     }
                     resultsData[columnId][score.targetUserId] = score;
                 });
+                this.tableBusy = false;
             });
         }
 
         onRemoveColumn(column: GradeColumn) {
-            this.connector?.removeGradeColumn(column);
+            this.tableBusy = true;
+            this.connector?.removeGradeColumn(column, () => {
+                this.tableBusy = false;
+            });
         }
 
         updateResult(result: GradeScore) {
+            this.saveColumnId = null;
             const colScores = this.gradeBook.resultsData[result.columnId];
             if (!colScores) { return; }
             colScores[result.targetUserId] = result;
         }
 
         onOverwriteResult(result: GradeScore) {
+            this.saveColumnId = result.columnId;
             this.connector?.overwriteGradeResult(result, this.updateResult);
         }
 
         onRevertOverwrittenResult(result: GradeScore) {
+            this.saveColumnId = result.columnId;
             this.connector?.revertOverwrittenGradeResult(result, this.updateResult);
         }
 
         onUpdateScoreComment(result: GradeScore) {
+            this.saveColumnId = result.columnId;
             this.connector?.updateGradeResultComment(result, this.updateResult);
         }
     }
@@ -244,23 +302,27 @@
 <style lang="scss" scoped>
 .gradebook-toolbar {
     display: flex;
-    gap: 20px;
+    column-gap: 20px;
+    flex-flow: wrap;
     margin: 25px 20px 20px;
+    row-gap: 10px;
 
-    .form-control {
+    .input-group {
         flex: 1;
+        min-width: 200px;
+        z-index: 1;
     }
 }
 
 .gradebook-table-container {
-    margin: -10px 20px 20px;
+    margin: 0 20px 20px;
 }
 
 .gradebook-create-actions {
     display:flex;
     gap: 5px;
     justify-content: flex-end;
-    margin: 0 0 10px;
+    margin-left: auto;
 
     .btn {
         padding: 3px 9px 3px 7px;
@@ -277,3 +339,68 @@
 }
 </style>
 
+<style>
+.lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.lds-ellipsis div {
+    position: absolute;
+    top: 13px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: hsla(190, 40%, 45%, 1);
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.lds-ellipsis div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(4) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+}
+
+@keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
+
+@keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(24px, 0);
+    }
+}
+</style>

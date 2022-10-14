@@ -92,7 +92,7 @@ input:focus {
 .modal-wrapper {
     inset: 0;
     position: fixed;
-    z-index: 1;
+    z-index: 2;
 }
 
 .modal-content {

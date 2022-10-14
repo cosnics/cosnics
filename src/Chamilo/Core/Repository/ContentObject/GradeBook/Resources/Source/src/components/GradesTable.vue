@@ -1,64 +1,87 @@
 <template>
-    <div class="table-wrap">
-        <b-table-simple bordered striped class="gradebook-table" :class="{'is-dragging': isDraggingColumn, 'is-category-drop': categoryDropArea !== null }">
-            <b-thead>
-                <b-tr class="table-row table-head-row">
-                    <b-th class="col-sticky table-student"></b-th>
-                    <draggable :list="gradeBook.categories" tag="div" style="display: contents" @end="onDragEnd" :disabled="catEditItemId !== null">
-                        <template v-for="{id, title, color, columnIds} in gradeBook.categories">
-                            <b-th draggable :key="`category-${id}`" :colspan="Math.max(columnIds.length, 1)"
-                                  :class="{'is-droppable': categoryDropArea === id}" style="color:#3e5c6e" :style="`background-color: ${color};` + (catEditItemId === id ? 'position: relative; z-index: 2;' : '')"
-                                  @dragstart="startDragCategory($event, id)" @dragover.prevent="onDropAreaOverEnter($event, id)" @dragenter.prevent="onDropAreaOverEnter($event, id)" @dragleave="categoryDropArea = null" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, id)">
-                                <div v-if="id !== 0" style="display: flex; cursor: pointer; justify-content: space-between;align-items: center" @dblclick="catEditItemId = id">{{ title }}
-                                    <button style="padding:0; background: none; border: none;margin-left: 15px" @click="$emit('category-settings', id)"><i class="fa fa-gear" style="color:#55717c;margin-left: auto;display:inline-block"></i></button>
-                                </div>
-                                <item-title-input v-if="catEditItemId === id" :item-title="title" @cancel="catEditItemId = null" @ok="setCategoryTitle(id, $event)"></item-title-input>
-                            </b-th>
-                        </template>
-                    </draggable>
-                    <b-th v-if="showNullCategory" :colspan="Math.max(gradeBook.nullCategory.columnIds.length, 1)" class="mod-no-category-assigned" :class="{'is-droppable': categoryDropArea === 0}" title="Zonder categorie"
-                          @dragover.prevent="onDropAreaOverEnter($event, 0)" @dragenter.prevent="onDropAreaOverEnter($event, 0)" @dragleave="categoryDropArea = null" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, 0)"
-                    ></b-th>
-                    <b-th class="col-sticky table-student-total"></b-th>
-                </b-tr>
-                <b-tr class="table-row table-head-row">
-                    <b-th class="col-sticky table-student">Student</b-th>
-                    <draggable v-for="({id, columnIds}) in displayedCategories" :key="`category-score-${id}`" :list="columnIds" tag="div" style="display: contents" ghost-class="ghost" @end="onDragEnd" :disabled="editItemId !== null || weightEditItemId !== null">
-                        <b-th v-if="columnIds.length === 0" :key="`item-id-${id}`"></b-th>
-                        <b-th v-else v-for="(columnId) in columnIds" :key="`${columnId}-name`" draggable @dragstart="startDragColumn($event, columnId)" :style="(editItemId === columnId || weightEditItemId === columnId) ? 'position: relative; z-index: 2' : ''" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, -1)">
-                            <div style="cursor: pointer;display:flex;justify-content:space-between;align-items:center" @dblclick="editItemId = columnId"><span style="white-space: nowrap"><i v-if="gradeBook.isGrouped(columnId)" class="fa fa-group" style="margin-right: .5rem"></i>{{ gradeBook.getTitle(columnId) }}</span>
-                                <button style="padding:0; background: none; border: none;margin-left: 15px" @click="$emit('item-settings', columnId)"><i class="fa fa-gear" style="margin-left: auto;display:inline-block"></i></button>
-                            </div>
-                            <div class="weight" :class="{'mod-custom': gradeBook.getGradeColumn(columnId).weight !== null}" @dblclick="weightEditItemId = columnId" v-if="gradeBook.countsForEndResult(columnId)">{{ gradeBook.getWeight(columnId)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
-                            <item-title-input v-if="editItemId === columnId" :item-title="gradeBook.getTitle(columnId)" @cancel="editItemId = null" @ok="setTitle(columnId, $event)"></item-title-input>
-                            <weight-input v-if="weightEditItemId === columnId" :item-weight="gradeBook.getWeight(columnId)" @cancel="weightEditItemId = null" @ok="setWeight(columnId, $event)"></weight-input>
+    <div>
+        <div class="table-wrap">
+            <b-table-simple class="gradebook-table" :aria-busy="busy" :class="{'is-dragging': isDraggingColumn, 'is-category-drop': categoryDropArea !== null }">
+                <b-thead>
+                    <b-tr class="table-row table-head-row" :style="gradeBook.categories.length ? '' : 'visibility: collapse'">
+                        <b-th class="col-sticky table-student" style="background-color: #fff;background-clip: padding-box"></b-th>
+                        <draggable :list="gradeBook.categories" tag="div" style="display: contents" @end="onDragEnd" :disabled="catEditItemId !== null">
+                            <template v-for="{id, title, color, columnIds} in gradeBook.categories">
+                                <b-th draggable :key="`category-${id}`" :colspan="Math.max(columnIds.length, 1)"
+                                      :class="{'is-droppable': categoryDropArea === id}" class="category" style="padding-bottom:14px;" :style="`--color: ${color};` + (catEditItemId === id ? 'z-index: 3;' : '')"
+                                      @dragstart="startDragCategory($event, id)" @dragover.prevent="onDropAreaOverEnter($event, id)" @dragenter.prevent="onDropAreaOverEnter($event, id)" @dragleave="categoryDropArea = null" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, id)">
+                                    <div v-if="id !== 0" style="display: flex; cursor: pointer; justify-content: space-between;align-items: center" @dblclick="catEditItemId = id">{{ title }}
+                                        <div class="spin" v-if="isSavingCategoryWithId(id)" style="margin-left: auto; margin-right: -10px;">
+                                            <div class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                                        </div>
+                                        <button style="padding:0; background: none; border: none;margin-left: 15px" @click="$emit('category-settings', id)"><i class="fa fa-gear" style="margin-left: auto;display:inline-block"></i></button>
+                                    </div>
+                                    <item-title-input v-if="catEditItemId === id" :item-title="title" @cancel="catEditItemId = null" @ok="setCategoryTitle(id, $event)"></item-title-input>
+                                </b-th>
+                            </template>
+                        </draggable>
+                        <b-th v-if="showNullCategory" :colspan="Math.max(gradeBook.nullCategory.columnIds.length, 1)" class="mod-no-category-assigned" :class="{'is-droppable': categoryDropArea === 0}" title="Zonder categorie"
+                              @dragover.prevent="onDropAreaOverEnter($event, 0)" @dragenter.prevent="onDropAreaOverEnter($event, 0)" @dragleave="categoryDropArea = null" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, 0)"
+                        ></b-th>
+                        <b-th class="col-sticky table-student-total" style="background-color: #fff;background-clip: padding-box"></b-th>
+                    </b-tr>
+                    <b-tr class="table-row table-head-row" style="position: sticky; top: 0;z-index: 2;">
+                        <b-th class="col-sticky table-student">
+                            <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">FAMILIENAAM</a> <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">Voornaam</a>
                         </b-th>
-                    </draggable>
-                    <b-th class="col-sticky table-student-total">Eindcijfer</b-th>
-                </b-tr>
-            </b-thead>
-            <b-tbody>
-                <b-tr v-for="user in gradeBook.users" :key="'user-' + user.id" class="table-row table-body-row">
-                    <b-td class="col-sticky table-student">{{ user.firstName }} {{ user.lastName }}</b-td>
-                    <template v-for="category in displayedCategories">
-                        <b-td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></b-td>
-                        <b-td v-else v-for="columnId in category.columnIds" :key="`${category.id}-${columnId}-result`" :style="editStudentScoreId === user.id && editScoreId === columnId ? 'position: relative; z-index: 2' : ''">
-                            <student-result :id="`result-${columnId}-${user.id}`" :result="gradeBook.getResult(columnId, user.id)" :is-overwritten="gradeBook.isOverwrittenResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)"
-                                            style="cursor: pointer;display: flex;align-items: center;" :style="gradeBook.countsForEndResult(columnId) ? '' : 'font-style: italic'"
-                                            @edit="showStudentScoreDialog(user.id, columnId)" @edit-comment="showStudentScoreDialog(user.id, columnId, 'comment')" @revert="revertOverwrittenResult(columnId, user.id)"></student-result>
-                            <score-input v-if="isStudentScoreDialogShown(user.id, columnId)" :menu-tab="scoreMenuTab" @menu-tab-changed="scoreMenuTab = $event" :score="gradeBook.getResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)" @comment-updated="updateResultComment(columnId, user.id, $event)" @ok="overwriteResult(columnId, user.id, $event)" @cancel="hideStudentScoreDialog"></score-input>
+                        <draggable v-for="({id, columnIds}) in displayedCategories" :key="`category-score-${id}`" :list="columnIds" tag="div" style="display: contents" ghost-class="ghost" @end="onDragEnd" :disabled="editItemId !== null || weightEditItemId !== null">
+                            <b-th v-if="columnIds.length === 0" :key="`item-id-${id}`"></b-th>
+                            <b-th v-else v-for="(columnId) in columnIds" :key="`${columnId}-name`" draggable @dragstart="startDragColumn($event, columnId)" :style="(editItemId === columnId || weightEditItemId === columnId) ? 'position: relative; z-index: 2' : ''" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, -1)">
+                                <div style="cursor: pointer;display:flex;justify-content:space-between;align-items:center" @dblclick="editItemId = columnId"><span style="white-space: nowrap"><i v-if="gradeBook.isGrouped(columnId)" class="fa fa-group" style="margin-right: .5rem"></i>{{ gradeBook.getTitle(columnId) }}</span>
+                                    <button style="padding:0; background: none; border: none;margin-left: 15px" @click="$emit('item-settings', columnId)"><i class="fa fa-gear" style="margin-left: auto;display:inline-block"></i></button>
+                                </div>
+                                <div style="display: flex; align-items: center;" :style="gradeBook.countsForEndResult(columnId) ? 'justify-content: space-between' : 'justify-content: flex-end'">
+                                    <div class="weight" :class="{'mod-custom': gradeBook.getGradeColumn(columnId).weight !== null}" @dblclick="weightEditItemId = columnId" v-if="gradeBook.countsForEndResult(columnId)" title="Pas gewicht aan">{{ gradeBook.getWeight(columnId)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                                    <div class="spin">
+                                        <div v-if="isSavingColumnWithId(columnId)" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                                    </div>
+                                </div>
+                                <item-title-input v-if="editItemId === columnId" :item-title="gradeBook.getTitle(columnId)" @cancel="editItemId = null" @ok="setTitle(columnId, $event)"></item-title-input>
+                                <weight-input v-if="weightEditItemId === columnId" :item-weight="gradeBook.getWeight(columnId)" @cancel="weightEditItemId = null" @ok="setWeight(columnId, $event)"></weight-input>
+                            </b-th>
+                        </draggable>
+                        <b-th class="col-sticky table-student-total">Eindcijfer</b-th>
+                    </b-tr>
+                </b-thead>
+                <b-tbody>
+                    <b-tr v-for="user in displayedUsers" :key="'user-' + user.id" class="table-row table-body-row">
+                        <b-td class="col-sticky table-student">{{ user.lastName.toUpperCase() }}, {{ user.firstName }}</b-td>
+                        <template v-for="category in displayedCategories">
+                            <b-td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></b-td>
+                            <b-td v-else v-for="columnId in category.columnIds" :key="`${category.id}-${columnId}-result`" :style="editStudentScoreId === user.id && editScoreId === columnId ? 'position: relative; z-index: 2' : ''" :class="{'no-value': gradeBook.getResult(columnId, user.id) === null}">
+                                <student-result :id="`result-${columnId}-${user.id}`" :result="gradeBook.getResult(columnId, user.id)" :is-overwritten="gradeBook.isOverwrittenResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)"
+                                                style="cursor: pointer;display: flex;align-items: center;justify-content: flex-end" :style="gradeBook.countsForEndResult(columnId) ? '' : 'font-style: italic; color: #777'"
+                                                @edit="showStudentScoreDialog(user.id, columnId)" @edit-comment="showStudentScoreDialog(user.id, columnId, 'comment')" @revert="revertOverwrittenResult(columnId, user.id)"></student-result>
+                                <score-input v-if="isStudentScoreDialogShown(user.id, columnId)" :menu-tab="scoreMenuTab" @menu-tab-changed="scoreMenuTab = $event" :score="gradeBook.getResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)" @comment-updated="updateResultComment(columnId, user.id, $event)" @ok="overwriteResult(columnId, user.id, $event)" @cancel="hideStudentScoreDialog"></score-input>
+                            </b-td>
+                        </template>
+                        <b-td v-if="totalsNeedUpdate(user.id)" class="col-sticky table-student-total mod-needs-update">
+                            <i class="fa fa-exclamation-circle" title="Eindtotaal nog niet geüpdated" aria-hidden="true" style="margin-right: 5px;color: hsl(204deg 28% 56%);"></i><span class="sr-only">Eindtotaal nog niet geüpdated</span>{{ gradeBook.getEndResult(user.id)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span>
                         </b-td>
-                    </template>
-                    <b-td class="col-sticky table-student-total" :class="{'mod-needs-update': totalsNeedUpdate(user.id) }">{{ gradeBook.getEndResult(user.id)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></b-td>
-                </b-tr>
-            </b-tbody>
-        </b-table-simple>
+                        <b-td v-else class="col-sticky table-student-total">{{ gradeBook.getEndResult(user.id)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></b-td>
+                    </b-tr>
+                </b-tbody>
+            </b-table-simple>
+            <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+        </div>
+        <div class="pagination-container u-flex" style="justify-content: flex-end">
+            <b-pagination v-model="pagination.currentPage" :total-rows="sortedUsers.length" :per-page="pagination.perPage"
+                          aria-controls="data-table"></b-pagination>
+            <ul class="pagination">
+                <li class="page-item active"><a class="page-link">Totaal {{ sortedUsers.length }}</a></li>
+            </ul>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
-import GradeBook, {Category, ColumnId, ItemId, ResultType} from '../domain/GradeBook';
+import GradeBook, {Category, ColumnId, ItemId, ResultType, User} from '../domain/GradeBook';
 import ItemTitleInput from './ItemTitleInput.vue';
 import WeightInput from './WeightInput.vue';
 import ScoreInput from './ScoreInput.vue';
@@ -72,6 +95,10 @@ import draggable from 'vuedraggable';
         formatNum: function (v: number|null) {
             if (v === null) { return ''; }
             return v.toLocaleString(undefined, {maximumFractionDigits: 2});
+        },
+        formatNum2: function (v: number|null) {
+            if (v === null) { return ''; }
+            return v.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         }
     }
 })
@@ -85,8 +112,19 @@ export default class GradesTable extends Vue {
     private editStudentScoreId: number|null = null;
     private editScoreId: ItemId|null = null;
     private scoreMenuTab = 'score';
+    private sortBy = 'lastname';
+    private sortDesc = false;
+
+    private pagination = {
+        currentPage: 1,
+        perPage: 10
+    };
 
     @Prop({type: GradeBook, required: true}) readonly gradeBook!: GradeBook;
+    @Prop({type: Array, default: () => []}) readonly searchTerms!: string[];
+    @Prop({type: Boolean, default: false}) readonly busy!: boolean;
+    @Prop({type: [String, Number], default: null}) readonly saveColumnId!: ColumnId|null;
+    @Prop({type: Number, default: null}) readonly saveCategoryId!: number|null;
 
     get showNullCategory() {
         return this.isDraggingColumn || this.gradeBook.nullCategory.columnIds.length > 0;
@@ -97,6 +135,57 @@ export default class GradesTable extends Vue {
             return [...this.gradeBook.categories, this.gradeBook.nullCategory];
         }
         return this.gradeBook.categories;
+    }
+
+    get displayedUsers() {
+        const {currentPage, perPage} = this.pagination;
+
+        return this.sortedUsers.slice((currentPage - 1) * perPage, currentPage * perPage);
+    }
+
+    get filteredUsers() {
+        if (!this.searchTerms) { return this.gradeBook.users; }
+        return this.gradeBook.users.filter(user => {
+            const fullName = user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase();
+            return this.searchTerms.every(term => fullName.indexOf(term) !== -1);
+        });
+    }
+
+    get sortedUsers() {
+        let field: 'lastName'|'firstName';
+        if (this.sortBy === 'lastname') {
+            field = 'lastName';
+        } else if (this.sortBy === 'firstname') {
+            field = 'firstName';
+        } else {
+            return this.filteredUsers;
+        }
+        const users = [...this.filteredUsers];
+        const mul = this.sortDesc ? -1 : 1;
+        users.sort((u1: User, u2: User) => {
+            if (u1[field] > u2[field]) {
+                return 1 * mul;
+            }
+            if (u1[field] < u2[field]) {
+                return -1 * mul;
+            }
+            return 0;
+        });
+        return users;
+    }
+
+    getSortStatus(name: string) {
+        if (this.sortBy !== name) { return 'none'; }
+        return this.sortDesc ? 'descending' : 'ascending';
+    }
+
+    sortByNameField(namefield: string) {
+        if (this.sortBy === namefield) {
+            this.sortDesc = !this.sortDesc;
+            return;
+        }
+        this.sortBy = namefield;
+        this.sortDesc = false;
     }
 
     showStudentScoreDialog(id: number, itemId: ItemId, menuTab = 'score') {
@@ -167,6 +256,14 @@ export default class GradesTable extends Vue {
         return total.toFixed(2) !== this.gradeBook.getEndResult(userId).toFixed(2);
     }
 
+    isSavingColumnWithId(columnId: ColumnId) {
+        return this.saveColumnId === columnId;
+    }
+
+    isSavingCategoryWithId(categoryId: number) {
+        return this.saveCategoryId === categoryId;
+    }
+
     startDragColumn(evt: DragEvent, id: ColumnId) {
         if (!evt.dataTransfer) { return; }
         evt.dataTransfer.setData('__COLUMN_ID', JSON.stringify({id}));
@@ -226,8 +323,9 @@ export default class GradesTable extends Vue {
 <style lang="scss" scoped>
     .table-wrap {
         position: relative;
-        overflow-x: auto;
-        overflow-y: auto;
+        /*overflow-x: auto;*/
+        /*overflow-y: auto;
+        max-height: 60vh;*/
     }
 
     th {
@@ -235,6 +333,8 @@ export default class GradesTable extends Vue {
     }
 
     .gradebook-table {
+        margin-bottom: 0;
+
         &.is-dragging * {
             cursor: grab;
         }
@@ -256,16 +356,16 @@ export default class GradesTable extends Vue {
 
         th.mod-no-category-assigned {
             /*background-color: #f3f3f3;*/
-            --color: #e3e8e4;
+            min-width: 21px;
+            /*--color: #e3e8e4;
             background: transparent linear-gradient(135deg,var(--color) 10%,transparent 0,transparent 50%,var(--color) 0,var(--color) 60%,transparent 0,transparent) 0 0/5px 5px;
             color: #888;
             min-width: 21px;
-            text-shadow: 1px 2px 0 white;
+            text-shadow: 1px 2px 0 white;*/
         }
 
         .table-head-row:first-child th {
-            border-bottom-color: #eef1f3;
-            border-top: 1px solid #ebebeb;
+            /*border-bottom-color: #eef1f3;*/
 
             &:not(:first-child):not(.is-droppable) {
                 border-left: 1px double #eee;
@@ -276,8 +376,18 @@ export default class GradesTable extends Vue {
             }
 
             &:not(:last-child):not(.is-droppable) {
-                border-right: 1px double transparent;
+                /*border-right: 1px double transparent;*/
             }
+
+            &:not(.col-sticky) {
+                border-top: 1px solid white;
+                background:  linear-gradient(to bottom, transparent 0, transparent 1px, #f8fbfb 1px) 0 0 repeat, linear-gradient(to bottom, #ebebeb 0px, #ebebeb 1px, white 1px) 0 0 repeat-x;
+                background-clip: padding-box;
+            }
+        }
+
+        .table-head-row:first-child div th:nth-last-child(1):not(.is-droppable) {
+            /*border-right: 1px double transparent;*/
         }
 
         .table-head-row:last-child div:last-of-type th:last-child {
@@ -285,6 +395,7 @@ export default class GradesTable extends Vue {
         }
 
         .table-head-row:last-child th {
+            border-bottom: none;
             border-top: none;
         }
 
@@ -321,6 +432,22 @@ export default class GradesTable extends Vue {
                 }
             }
         }
+
+        + .lds-ellipsis {
+            display: none;
+        }
+
+        &[aria-busy=true] {
+            pointer-events: none;
+        }
+
+        &[aria-busy=true] + .lds-ellipsis {
+            display: inline-block;
+            left: calc(50% - 20px);
+            position: absolute;
+            top: 40px;
+            z-index: 2;
+        }
     }
 
     .table-head-row:last-child th {
@@ -328,28 +455,23 @@ export default class GradesTable extends Vue {
         color: #5885a2;
     }
 
-    /*.table-body-row td.no-value {
-        background: transparent linear-gradient(135deg, var(--color) 10%, transparent 0, transparent 50%, var(--color) 0, var(--color) 60%, transparent 0, transparent) 0 0/7px 7px
-    }*/
-
-    .table-body-row:nth-child(even) td {
-        background-color: #fff;
-
-        /*&.no-value {
-            --color: #e0ede3;
-        }*/
+    .table-body-row td.no-value {
+        --color: #ebebeb;
+        background: transparent linear-gradient(135deg, var(--color) 10%, transparent 0, transparent 50%, var(--color) 0, var(--color) 60%, transparent 0, transparent) 0 0/6px 6px;
     }
 
-    .table-body-row:nth-child(odd) td {
-        background-color: #f9f9f9;
+    .table-body-row:first-child td.no-value {
+        --color: #ebebeb;
+        background: linear-gradient(135deg, var(--color) 10%, transparent 0, transparent 50%, var(--color) 0, var(--color) 60%, transparent 0, transparent) 0 0/6px 6px, linear-gradient(to bottom, #e3eaed 0, #fff 4px);
+    }
 
-        /*&.no-value {
-            --color: #e2eee5;
-        }*/
+    .table-body-row td {
+        background-color: #fff;
     }
 
     .table-body-row:first-child td {
-        background: linear-gradient(to bottom, #e3eaed 0, #f9f9f9 4px);
+        background: linear-gradient(to bottom, #e3eaed 0, #fff 4px);
+        border-top: none;
     }
 
     .table-row .col-sticky {
@@ -367,6 +489,19 @@ export default class GradesTable extends Vue {
             border-left-color: transparent;
             border-right-color: #fff;
             right: 0;
+            text-align: right;
+        }
+    }
+
+    .table-head-row:first-child .col-sticky {
+        background-color: #fff;
+
+        &:first-child {
+            background: linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%;
+        }
+
+        &:last-child {
+            background: linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%;
         }
     }
 
@@ -389,28 +524,61 @@ export default class GradesTable extends Vue {
         background-color: #fff;
     }
 
-    .table-body-row:nth-child(even) .col-sticky {
+    .table-body-row .table-student, .table-body-row .table-student-total {
         background-color: #fff;
+    }
+
+    .table-body-row:nth-child(even) .col-sticky {
+        /*background-color: #fff;*/
 
         &.table-student-total.mod-needs-update {
-            background-color: #faf8c6;
+            /*background-color: #fdfce6;*/
         }
     }
 
     .table-body-row:nth-child(odd) .col-sticky {
-        background-color: #f9f9f9;
+        /*background-color: #f9f9f9;*/
 
         &.table-student-total.mod-needs-update {
-            background-color: #faf8c6;
+            /*background-color: #fdfce6;*/
         }
     }
 
     .table-body-row:first-child .col-sticky {
-        background: linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%, linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%,linear-gradient(to bottom, #e3eaed 0, #f9f9f9 4px);
+        background: linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%, linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%,linear-gradient(to bottom, #e3eaed 0, #fff 4px);
 
         &.table-student-total.mod-needs-update {
-            background: linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%, linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%,linear-gradient(to bottom, #e3eaed 0, #faf8c6 4px);
+            /*background: linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%,
+            linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%,
+            linear-gradient(to bottom, #e3eaed 0, #fdfce6 4px);*/
         }
+    }
+
+    .table-student-total.mod-needs-update {
+        color: #758895;
+        font-style: italic;
+    }
+
+    .category {
+        background-color: #f8fbfb;
+        color:#606060;
+        color: #5885a2;
+        font-weight: 500;
+        position: relative;
+    }
+
+    .category::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 7px;
+        background: var(--color);
+    }
+
+    .table-head-row:first-child .table-student + div > .category:first-child::before {
+        left: -1px;
     }
 
     .fa-percent {
@@ -437,6 +605,18 @@ export default class GradesTable extends Vue {
         padding-right: 8px;
     }
 
+    .pagination-container {
+        margin-top: 0;
+
+        > * {
+            z-index: 1;
+        }
+    }
+
+    .spin {
+        font-size: 12px;
+    }
+
 /*    .dropdown-scores .btn {
         width: 100%;
         text-align: right;
@@ -460,4 +640,26 @@ export default class GradesTable extends Vue {
         font-size: 0.80rem;
         margin-top: 0.4em;
     }*/
+</style>
+<style>
+.tbl-sort-option {
+    background-position: right calc(.75rem / 2) center;
+    background-repeat: no-repeat;
+    background-size: .65em 1em;
+    cursor: pointer;
+    padding-right: calc(.75rem + .85em);
+    pointer-events: all;
+}
+
+.tbl-sort-option[aria-sort=none] {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' opacity='.3' d='M51 1l25 23 24 22H1l25-22zM51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
+}
+
+.tbl-sort-option[aria-sort=ascending] {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' d='M51 1l25 23 24 22H1l25-22z'/%3e%3cpath fill='black' opacity='.3' d='M51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
+}
+
+.tbl-sort-option[aria-sort=descending] {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' opacity='.3' d='M51 1l25 23 24 22H1l25-22z'/%3e%3cpath fill='black' d='M51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
+}
 </style>

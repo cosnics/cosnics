@@ -300,8 +300,12 @@ export default class GradeBook {
     removeCategory(category: Category) {
         if (category === this.nullCategory) { return; }
         const columnIds = category.columnIds;
-        this.categories = this.categories.filter(c => c !== category);
-        this.nullCategory.columnIds = [...this.nullCategory.columnIds, ...columnIds];
+        const index = this.categories.indexOf(category);
+        if (index < 0) { return; }
+        this.categories.splice(index, 1);
+        if (columnIds.length) {
+            this.nullCategory.columnIds = [...this.nullCategory.columnIds, ...columnIds];
+        }
     }
 
     public updateGradeColumnId(column: GradeColumn, newId: ColumnId) {
@@ -370,7 +374,7 @@ export default class GradeBook {
     }
 
     createNewCategory() {
-        const id = Math.max.apply(null, this.categories.map(cat => cat.id)) + 1;
+        const id = this.categories.length ? Math.max.apply(null, this.categories.map(cat => cat.id)) + 1 : 1;
         const newCategory = { id, title: 'Categorie', color: '#92eded', columnIds: [] };
         this.categories.push(newCategory);
         return newCategory;

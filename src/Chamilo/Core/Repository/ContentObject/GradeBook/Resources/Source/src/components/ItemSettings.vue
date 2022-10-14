@@ -278,7 +278,7 @@ h5 {
     inset: 0;
     overflow-y: auto;
     position: fixed;
-    z-index: 1;
+    z-index: 2;
 }
 
 .modal-content {

@@ -75,41 +75,44 @@ export default class Connector {
         return res.data;
     }
 
-    addCategory(category: Category) {
+    addCategory(category: Category, callback: Function) {
         this.addToQueue(async () => {
             const parameters = {
                 'categoryData': JSON.stringify(category)
             };
             const data = await this.executeAPIRequest(this.apiConfig.addCategoryURL, parameters);
-            category.id = data.category.id;
+            callback(data.category);
         });
     }
 
-    updateCategory(category: Category) {
+    updateCategory(category: Category, callback: Function|undefined = undefined) {
         this.addToQueue(async () => {
             const parameters = {
                 'categoryData': JSON.stringify(category)
             };
             await this.executeAPIRequest(this.apiConfig.updateCategoryURL, parameters);
+            if (callback) { callback(); }
         });
     }
 
-    moveCategory(category: Category, newIndex: number) {
+    moveCategory(category: Category, newIndex: number, callback: Function|undefined = undefined) {
         this.addToQueue(async () => {
             const parameters = {
                 'categoryData': JSON.stringify(category),
                 'newSort': newIndex + 1
             };
             await this.executeAPIRequest(this.apiConfig.moveCategoryURL, parameters);
+            if (callback) { callback(); }
         });
     }
 
-    removeCategory(category: Category) {
+    removeCategory(category: Category, callback: Function|undefined = undefined) {
         this.addToQueue(async () => {
             const parameters = {
                 'categoryData': JSON.stringify(category)
             };
             await this.executeAPIRequest(this.apiConfig.removeCategoryURL, parameters);
+            if (callback) { callback(); }
         });
     }
 
@@ -145,16 +148,17 @@ export default class Connector {
         });
     }
 
-    updateGradeColumn(gradeColumn: GradeColumn) {
+    updateGradeColumn(gradeColumn: GradeColumn, callback: Function|undefined = undefined) {
         this.addToQueue(async () => {
             const parameters = {
                 'gradeColumnData': JSON.stringify(gradeColumn)
             };
             await this.executeAPIRequest(this.apiConfig.updateColumnURL, parameters);
+            if (callback) { callback(); }
         });
     }
 
-    updateGradeColumnCategory(gradeColumn: GradeColumn, categoryId: number|null)
+    updateGradeColumnCategory(gradeColumn: GradeColumn, categoryId: number|null, callback: Function|undefined = undefined)
     {
         this.addToQueue(async () => {
             const parameters = {
@@ -162,25 +166,28 @@ export default class Connector {
                 'categoryId': categoryId
             };
             await this.executeAPIRequest(this.apiConfig.updateColumnCategoryURL, parameters);
+            if (callback) { callback(); }
         });
     }
 
-    moveGradeColumn(gradeColumn: GradeColumn, newIndex: number) {
+    moveGradeColumn(gradeColumn: GradeColumn, newIndex: number, callback: Function|undefined = undefined) {
         this.addToQueue(async () => {
             const parameters = {
                 'gradeColumnId': gradeColumn.id,
                 'newSort': newIndex + 1
             };
             await this.executeAPIRequest(this.apiConfig.moveColumnURL, parameters);
+            if (callback) { callback(); }
         });
     }
 
-    removeGradeColumn(gradeColumn: GradeColumn) {
+    removeGradeColumn(gradeColumn: GradeColumn, callback: Function|undefined = undefined) {
         this.addToQueue(async () => {
             const parameters = {
                 'gradeColumnId': gradeColumn.id
             };
             await this.executeAPIRequest(this.apiConfig.removeColumnURL, parameters);
+            if (callback) { callback(); }
         });
     }
 

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <Main v-if="gradeBook" :grade-book="gradeBook" :connector="connector"></Main>
+    <div v-else class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
     <div id="server-response"></div>
   </div>
 </template>
@@ -49,3 +50,9 @@
         }
     }
 </script>
+
+<style scoped>
+.lds-ellipsis {
+    margin-left: 10px;
+}
+</style>
