@@ -92,11 +92,11 @@ class GradeBookCategory
     }
 
     /**
-     * @param int $id
+     * @param ?int $id
      *
      * @return GradeBookCategory
      */
-    public function setId(int $id): GradeBookCategory
+    public function setId(?int $id): GradeBookCategory
     {
         $this->id = $id;
 
