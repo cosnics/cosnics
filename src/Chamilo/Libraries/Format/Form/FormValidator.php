@@ -41,13 +41,11 @@ class FormValidator extends HTML_QuickForm
     private $html_editors;
 
     /**
-     *
      * @var bool
      */
     private $no_errors;
 
     /**
-     *
      * @var \HTML_QuickForm_Renderer_Default
      */
     private $renderer;
@@ -55,13 +53,13 @@ class FormValidator extends HTML_QuickForm
     /**
      * Constructor
      *
-     * @param string $formName Name of the form
-     * @param string $method Method (FormValidator::FORM_METHOD_POST (default) or FormValidator::FORM_METHOD_GET)
-     * @param string $action Action (default is $PHP_SELF)
-     * @param string $target Form's target defaults to '_self'
+     * @param string $formName     Name of the form
+     * @param string $method       Method (FormValidator::FORM_METHOD_POST (default) or FormValidator::FORM_METHOD_GET)
+     * @param string $action       Action (default is $PHP_SELF)
+     * @param string $target       Form's target defaults to '_self'
      * @param string[] $attributes (optional)Extra attributes for <form> tag
-     * @param bool $trackSubmit (optional)Whether to track if the form was submitted by adding a special hidden field
-     *        (default = true)
+     * @param bool $trackSubmit    (optional)Whether to track if the form was submitted by adding a special hidden field
+     *                             (default = true)
      */
     public function __construct(
         $formName = '', $method = self::FORM_METHOD_POST, $action = '', $target = '', $attributes = [],
@@ -139,7 +137,6 @@ EOT;
     }
 
     /**
-     *
      * @param string $elementName
      * @param string[] $dropzoneOptions
      * @param bool $includeLabel
@@ -215,9 +212,9 @@ EOT;
         $dropzoneHtml[] = '<div class="panel panel-default">';
         $dropzoneHtml[] = '<div class="panel-body text-center" role="button">';
 
-        $uploadGlyph = new FontAwesomeGlyph('upload', array('fa-3x', 'text-primary'), null, 'fas');
+        $uploadGlyph = new FontAwesomeGlyph('upload', ['fa-3x', 'text-primary'], null, 'fas');
         $plusGlyph = new FontAwesomeGlyph(
-            'plus-circle', array('fileinput-button', 'dz-clickable', 'fa-3x', 'text-primary'), null, 'fas'
+            'plus-circle', ['fileinput-button', 'dz-clickable', 'fa-3x', 'text-primary'], null, 'fas'
         );
 
         $dropzoneHtml[] =
@@ -250,7 +247,7 @@ EOT;
 
         if ($markRequired)
         {
-            $glyph = new FontAwesomeGlyph('star', array('text-danger', 'fa-xs'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('star', ['text-danger', 'fa-xs'], null, 'fas');
             $label .= '<span class="text-danger">&nbsp;' . $glyph->render() . '</span>';
         }
 
@@ -319,7 +316,6 @@ EOT;
     }
 
     /**
-     *
      * @param string $name
      * @param string $label
      */
@@ -330,7 +326,7 @@ EOT;
             'hidden', $name, null, ' id="' . $name . '" data-element="' . $name . '" class="image-uploader-data"'
         );
 
-        $glyph = new FontAwesomeGlyph('image', array('image-uploader-preview', 'fa-10x', 'text-muted'), null, 'fas');
+        $glyph = new FontAwesomeGlyph('image', ['image-uploader-preview', 'fa-10x', 'text-muted'], null, 'fas');
 
         $this->addElement(
             'static', null, $label, '<div class="thumbnail" data-element="' . $name . '">' . $glyph->render() . '</div>'
@@ -347,7 +343,6 @@ EOT;
     }
 
     /**
-     *
      * @param string $type
      * @param string $name
      * @param string $label
@@ -392,18 +387,17 @@ EOT;
         $buttons = [];
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', $this->getTranslation('Save', []), array('class' => 'positive')
+            'style_submit_button', 'submit', $this->getTranslation('Save', []), ['class' => 'positive']
         );
 
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', $this->getTranslation('Reset', []), array('class' => 'normal empty')
+            'style_reset_button', 'reset', $this->getTranslation('Reset', []), ['class' => 'normal empty']
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     /**
-     *
      * @param string $elementName
      * @param string[] $dropzoneOptions
      * @param bool $includeLabel
@@ -483,7 +477,7 @@ EOT;
     /**
      * Add a datepicker element to the form A rule is added to check if the date is a valid one
      *
-     * @param string $name The element name
+     * @param string $name  The element name
      * @param string $label The label for the form-element
      * @param bool $includeTimePicker
      *
@@ -492,7 +486,7 @@ EOT;
     public function add_datepicker($name, $label, $includeTimePicker = true)
     {
         $element = $this->addElement(
-            'datepicker', $this->getAttribute('name'), $name, $label, array('class' => $name), $includeTimePicker
+            'datepicker', $this->getAttribute('name'), $name, $label, ['class' => $name], $includeTimePicker
         );
         $this->addRule($name, $this->getTranslation('InvalidDate'), 'date');
 
@@ -575,10 +569,10 @@ EOT;
     /**
      * Adds a select control to the form.
      *
-     * @param string $name The element name.
-     * @param string $label The element label.
-     * @param string[] $values Associative array of possible values.
-     * @param bool $required <code>true</code> if required (default), <code>false</code> otherwise.
+     * @param string $name         The element name.
+     * @param string $label        The element label.
+     * @param string[] $values     Associative array of possible values.
+     * @param bool $required       <code>true</code> if required (default), <code>false</code> otherwise.
      * @param string[] $attributes Element attributes (optional).
      *
      * @return \HTML_QuickForm_select The element.
@@ -604,9 +598,9 @@ EOT;
      * Add a textfield to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string $name The element name
-     * @param string $label The label for the form-element
-     * @param bool $required Is the form-element required (default=true)
+     * @param string $name         The element name
+     * @param string $label        The label for the form-element
+     * @param bool $required       Is the form-element required (default=true)
      * @param string[] $attributes Optional list of attributes for the form-element
      *
      * @return \HTML_QuickForm_text The element.
@@ -636,9 +630,9 @@ EOT;
      * 2 datepicker elements are added and a rule to check if the first date is
      * before the second one.
      *
-     * @param string $firstName The element name
-     * @param string $secondName The element name
-     * @param string $firstLabel The label for the form-element
+     * @param string $firstName   The element name
+     * @param string $secondName  The element name
+     * @param string $firstLabel  The label for the form-element
      * @param string $secondLabel The label for the form-element
      * @param bool $includeTimePicker
      *
@@ -652,8 +646,7 @@ EOT;
         $elements[] = $this->add_datepicker($secondName, $secondLabel, $includeTimePicker);
 
         $this->addRule(
-            array($firstName, $secondName), $this->getTranslation('StartDateShouldBeBeforeEndDate'), 'date_compare',
-            'lte'
+            [$firstName, $secondName], $this->getTranslation('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte'
         );
 
         return $elements;
@@ -673,7 +666,6 @@ EOT;
     }
 
     /**
-     *
      * @param \HTML_QuickForm_element $elements
      * @param string $name
      * @param string $groupLabel
@@ -696,7 +688,6 @@ EOT;
     }
 
     /**
-     *
      * @param string $name
      * @param string $label
      * @param string[] $options
@@ -736,7 +727,6 @@ EOT;
     }
 
     /**
-     *
      * @param string $name
      * @param string $label
      * @param string[] $attributes
@@ -780,7 +770,6 @@ EOT;
     }
 
     /**
-     *
      * @param string $extraClasses
      *
      * @return string
@@ -788,7 +777,7 @@ EOT;
     public function getElementTemplate($extraClasses = null)
     {
         $html = [];
-        $glyph = new FontAwesomeGlyph('star', array('text-danger', 'fa-xs'), null, 'fas');
+        $glyph = new FontAwesomeGlyph('star', ['text-danger', 'fa-xs'], null, 'fas');
 
         $html[] = '<div class="form-row row ' . $extraClasses . '">';
         $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label control-label">';
@@ -860,7 +849,6 @@ EOT;
     }
 
     /**
-     *
      * @return string[]
      */
     public function get_html_editors()
@@ -879,7 +867,6 @@ EOT;
     }
 
     /**
-     *
      * @param \HTML_QuickForm_Renderer_Default $renderer
      */
     public function set_renderer($renderer)
@@ -924,7 +911,6 @@ EOT;
     }
 
     /**
-     *
      * @param int $value
      *
      * @return int
@@ -943,80 +929,37 @@ EOT;
 
     public function registerAdditionalElements()
     {
-        $dir = __DIR__ . '/';
-
         // Date and timepicker elements
-        $this->registerElementType(
-            'datepicker', $dir . 'Element/HTML_QuickForm_datepicker.php', 'HTML_QuickForm_datepicker'
-        );
+        $this->registerElementType('datepicker', 'HTML_QuickForm_datepicker');
 
         // Element finder elements
-        $this->registerElementType(
-            'advanced_element_finder', $dir . 'Element/HTML_QuickForm_advanced_element_finder.php',
-            'HTML_QuickForm_advanced_element_finder'
-        );
+        $this->registerElementType('advanced_element_finder', 'HTML_QuickForm_advanced_element_finder');
 
         // Button elements
-        $this->registerElementType(
-            'style_button', $dir . 'Element/HTML_QuickForm_stylebutton.php', 'HTML_QuickForm_stylebutton'
-        );
-        $this->registerElementType(
-            'style_submit_button', $dir . 'Element/HTML_QuickForm_stylesubmitbutton.php',
-            'HTML_QuickForm_stylesubmitbutton'
-        );
-        $this->registerElementType(
-            'style_reset_button', $dir . 'Element/HTML_QuickForm_styleresetbutton.php',
-            'HTML_QuickForm_styleresetbutton'
-        );
+        $this->registerElementType('style_button', 'HTML_QuickForm_stylebutton');
+        $this->registerElementType('style_submit_button', 'HTML_QuickForm_stylesubmitbutton');
+        $this->registerElementType('style_reset_button', 'HTML_QuickForm_styleresetbutton');
 
         // Replacing some default elements
-        $this->registerElementType(
-            'radio', $dir . 'Element/HTML_QuickForm_bootstrap_radio.php', 'HTML_QuickForm_bootstrap_radio'
-        );
-
-        $this->registerElementType(
-            'checkbox', $dir . 'Element/HTML_QuickForm_extended_checkbox.php', 'HTML_QuickForm_extended_checkbox'
-        );
-
-        $this->registerElementType(
-            'file', $dir . 'Element/HTML_QuickForm_stylefile.php', 'HTML_QuickForm_stylefile'
-        );
-
-        $this->registerElementType('toggle', $dir . 'Element/HTML_QuickForm_toggle.php', 'HTML_QuickForm_toggle');
-
-        $this->registerElementType('category', $dir . 'Element/HTML_QuickForm_category.php', 'HTML_QuickForm_category');
+        $this->registerElementType('radio', 'HTML_QuickForm_bootstrap_radio');
+        $this->registerElementType('checkbox', 'HTML_QuickForm_extended_checkbox');
+        $this->registerElementType('file', 'HTML_QuickForm_stylefile');
+        $this->registerElementType('toggle', 'HTML_QuickForm_toggle');
+        $this->registerElementType('category', 'HTML_QuickForm_category');
     }
 
     public function registerAdditionalRules()
     {
-        $dir = __DIR__ . '/';
-
-        $this->registerRule('date', null, 'HTML_QuickForm_Rule_Date', $dir . 'Rule/HTML_QuickForm_Rule_Date.php');
-        $this->registerRule(
-            'date_compare', null, 'HTML_QuickForm_Rule_DateCompare', $dir . 'Rule/HTML_QuickForm_Rule_DateCompare.php'
-        );
-        $this->registerRule(
-            'number_compare', null, 'HTML_QuickForm_Rule_NumberCompare',
-            $dir . 'Rule/HTML_QuickForm_Rule_NumberCompare.php'
-        );
-        $this->registerRule(
-            'username_available', null, 'HTML_QuickForm_Rule_UsernameAvailable',
-            $dir . 'Rule/HTML_QuickForm_Rule_UsernameAvailable.php'
-        );
-        $this->registerRule(
-            'username', null, 'HTML_QuickForm_Rule_Username', $dir . 'Rule/HTML_QuickForm_Rule_Username.php'
-        );
-        $this->registerRule(
-            'filetype', null, 'HTML_QuickForm_Rule_Filetype', $dir . 'Rule/HTML_QuickForm_Rule_Filetype.php'
-        );
-
-        $this->registerRule(
-            'disk_quota', null, 'HTML_QuickForm_Rule_DiskQuota', $dir . 'Rule/HTML_QuickForm_Rule_DiskQuota.php'
-        );
+        $this->registerRule('date', null, 'HTML_QuickForm_Rule_Date');
+        $this->registerRule('date_compare', null, 'HTML_QuickForm_Rule_DateCompare');
+        $this->registerRule('number_compare', null, 'HTML_QuickForm_Rule_NumberCompare');
+        $this->registerRule('username_available', null, 'HTML_QuickForm_Rule_UsernameAvailable');
+        $this->registerRule('username', null, 'HTML_QuickForm_Rule_Username');
+        $this->registerRule('filetype', null, 'HTML_QuickForm_Rule_Filetype');
+        $this->registerRule('disk_quota', null, 'HTML_QuickForm_Rule_DiskQuota');
     }
 
     /**
-     *
      * @param string $name
      */
     public function register_html_editor($name)
@@ -1026,7 +969,7 @@ EOT;
 
     public function setDefaultTemplates()
     {
-        $glyph = new FontAwesomeGlyph('star', array('text-danger', 'fa-xs'), null, 'fas');
+        $glyph = new FontAwesomeGlyph('star', ['text-danger', 'fa-xs'], null, 'fas');
 
         HTML_QuickForm::setRequiredNote(
             '<span class="text-danger">&nbsp;' . $glyph->render() . '&nbsp;<small>' .
@@ -1054,7 +997,6 @@ EOT;
     }
 
     /**
-     *
      * @param string $name
      */
     public function unregister_html_editor($name)

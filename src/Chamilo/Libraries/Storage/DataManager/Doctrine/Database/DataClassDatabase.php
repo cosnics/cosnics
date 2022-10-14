@@ -290,10 +290,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return $this->storageAliasGenerator;
     }
 
-    protected function handleError(Exception $exception)
+    protected function handleError(Throwable $throwable)
     {
         $this->getExceptionLogger()->logException(
-            new Exception('[Message: ' . $exception->getMessage() . ']')
+            new Exception('[Message: ' . $throwable->getMessage() . ']')
         );
     }
 

@@ -105,8 +105,7 @@ class CourseForm extends CommonCourseForm
         $this->registerRule(
             'course_type', 
             null, 
-            'HTML_QuickForm_Rule_Course_Type', 
-            __DIR__ . '/Rule/HTML_QuickForm_Rule_Course_Type.php');
+            'HTML_QuickForm_Rule_Course_Type');
         
         $this->addRule(Course::PROPERTY_COURSE_TYPE_ID, Translation::get('SelectAValidCourseType'), 'course_type');
         $this->addRule(Course::PROPERTY_COURSE_TYPE_ID, Translation::get('ThisFieldIsRequired'), 'required');
