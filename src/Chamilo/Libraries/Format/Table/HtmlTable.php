@@ -191,14 +191,7 @@ abstract class HtmlTable extends HTML_Table
         $this->headerAttributes = [];
     }
 
-    /**
-     * Returns the complete table HTML.
-     *
-     * @param bool $empty_table
-     *
-     * @return string
-     */
-    public function render(bool $empty_table = false): string
+    public function render(bool $emptyTable = false): string
     {
         if ($this->countSourceData() == 0)
         {
@@ -207,7 +200,7 @@ abstract class HtmlTable extends HTML_Table
 
         $html = [];
 
-        if (!$empty_table)
+        if (!$emptyTable)
         {
             $html[] = $this->renderTableHeader();
         }
@@ -222,7 +215,7 @@ abstract class HtmlTable extends HTML_Table
         $html[] = '</div>';
         $html[] = '</div>';
 
-        if (!$empty_table)
+        if (!$emptyTable)
         {
             $html[] = $this->renderTableFooter();
         }
@@ -1063,9 +1056,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     * @param bool $emptyTable
-     *
-     * @return string
      * @deprecated User render() now
      */
     public function toHtml(bool $emptyTable = false): string

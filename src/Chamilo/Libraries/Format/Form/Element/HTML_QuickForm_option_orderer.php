@@ -22,7 +22,7 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
      * @param ?string $name
      * @param ?string $label
      * @param string[] $options
-     * @param string $separator
+     * @param ?string $separator
      * @param ?array|?string $attributes Associative array of tag attributes or HTML attributes name="value" pairs
      */
     public function __construct(

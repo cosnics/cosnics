@@ -11,13 +11,11 @@ use Chamilo\Libraries\Format\Table\Column\TableColumn;
 class SortableTableFromArray extends SortableTable
 {
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     private $enableSorting;
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Table\Column\TableColumn[]
      */
     private $tableColumns;
@@ -30,23 +28,21 @@ class SortableTableFromArray extends SortableTable
     private $tableData;
 
     /**
-     *
      * @var string
      */
     private $tableName;
 
     /**
-     *
      * @param string[] $tableData
      * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
      * @param string[] $additionalParameters
-     * @param integer $defaultOrderColumn
-     * @param integer $defaultPerPage
-     * @param integer $defaultOrderDirection
+     * @param int $defaultOrderColumn
+     * @param int $defaultPerPage
+     * @param int $defaultOrderDirection
      * @param string $tableName
-     * @param boolean $allowPageSelection
-     * @param boolean $enableSorting
-     * @param boolean $allowPageNavigation
+     * @param bool $allowPageSelection
+     * @param bool $enableSorting
+     * @param bool $allowPageNavigation
      */
     public function __construct(
         $tableData, $tableColumns, $additionalParameters = [], $defaultOrderColumn = 1, $defaultPerPage = 20,
@@ -61,9 +57,8 @@ class SortableTableFromArray extends SortableTable
             $defaultPerPage = count($tableData);
         }
 
-        parent::__construct($tableName, array($this, 'countData'), array($this, 'getData'), $defaultOrderColumn,
-            $defaultPerPage, $defaultOrderDirection, $allowPageSelection, $allowPageNavigation
-        );
+        parent::__construct($tableName, [$this, 'countData'], [$this, 'getData'], $defaultOrderColumn, $defaultPerPage,
+            $defaultOrderDirection, $allowPageSelection, $allowPageNavigation);
 
         $this->tableData = $tableData;
         $this->tableColumns = $tableColumns;
@@ -72,14 +67,7 @@ class SortableTableFromArray extends SortableTable
         $this->setAdditionalParameters($additionalParameters);
     }
 
-    /**
-     * Returns the complete table HTML.
-     *
-     * @param boolean $emptyTable
-     *
-     * @return string
-     */
-    public function render($emptyTable = false)
+    public function render(bool $emptyTable = false): string
     {
         $this->initializeTable();
 
@@ -87,7 +75,6 @@ class SortableTableFromArray extends SortableTable
     }
 
     /**
-     *
      * @param string[] $dataRow
      */
     public function addTableData($dataRow)
@@ -96,8 +83,7 @@ class SortableTableFromArray extends SortableTable
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function countData()
     {
@@ -105,11 +91,10 @@ class SortableTableFromArray extends SortableTable
     }
 
     /**
-     *
-     * @param integer $offset
-     * @param integer $count
-     * @param integer[] $orderColumn
-     * @param integer[] $orderDirection
+     * @param int $offset
+     * @param int $count
+     * @param int $orderColumn
+     * @param int $orderDirection
      *
      * @return string[][]
      */
@@ -132,8 +117,7 @@ class SortableTableFromArray extends SortableTable
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function getEnableSorting()
     {
@@ -141,7 +125,6 @@ class SortableTableFromArray extends SortableTable
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Table\Column\TableColumn[]
      */
     public function getTableColumns()
@@ -150,7 +133,6 @@ class SortableTableFromArray extends SortableTable
     }
 
     /**
-     *
      * @param string[] $tableColumns
      */
     public function setTableColumns($tableColumns)
@@ -159,7 +141,6 @@ class SortableTableFromArray extends SortableTable
     }
 
     /**
-     *
      * @return string[][]
      */
     public function getTableData()
@@ -168,7 +149,6 @@ class SortableTableFromArray extends SortableTable
     }
 
     /**
-     *
      * @param string[][] $tableData
      */
     public function setTableData($tableData)
@@ -177,7 +157,6 @@ class SortableTableFromArray extends SortableTable
     }
 
     /**
-     *
      * @return string
      */
     public function getTableName()
@@ -186,7 +165,6 @@ class SortableTableFromArray extends SortableTable
     }
 
     /**
-     *
      * @param string $tableName
      */
     public function setTableName($tableName)
@@ -219,16 +197,5 @@ class SortableTableFromArray extends SortableTable
                 $key, $tableColumn->get_title(), $tableColumn->is_sortable(), $headerAttributes, $contentAttributes
             );
         }
-    }
-
-    /**
-     * @param boolean $emptyTable
-     *
-     * @return string
-     * @deprecated User render() now
-     */
-    public function toHtml($emptyTable = false)
-    {
-        return $this->render($emptyTable);
     }
 }

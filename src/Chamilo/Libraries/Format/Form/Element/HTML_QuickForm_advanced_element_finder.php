@@ -100,7 +100,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $this->_elements = [];
 
         $this->_elements[] = new HTML_QuickForm_hidden(
-            'active_hidden_' . $this->getName(), null, ['id' => $active_hidden_id]
+            'active_hidden_' . $this->getName(), '', ['id' => $active_hidden_id]
         );
 
         $element_types_array = [];
