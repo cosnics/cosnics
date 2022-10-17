@@ -69,12 +69,6 @@ export default class Connector {
         return res.data;
     }
 
-    async loadGradeItemScores(gradeItem: GradeItem) {
-        const res = await axios.get(this.apiConfig.loadGradeItemScoresURL, {params: {'gradeItemId': gradeItem.id}});
-        this.logResponse(res.data);
-        return res.data;
-    }
-
     addCategory(category: Category, callback: Function) {
         this.addToQueue(async () => {
             const parameters = {
@@ -273,13 +267,13 @@ export default class Connector {
                 this.gradebookDataId = res.data.gradebook.dataId;
                 this.currentVersion = res.data.gradebook.version;
                 return res.data;
-            } else if (typeof (res.data as unknown) === 'string' && res.data.indexOf('formLogin') !== -1) {
+            } else if (typeof (res.data as unknown) === 'string' && res.data.indexOf('login') !== -1) {
                 throw { 'type': 'LoggedOut' };
             } else {
                 throw { 'type': 'Unknown' };
             }
         } catch (err) {
-            console.log(err);
+            console.error(err);
             let error: any;
             if (err?.isAxiosError && err.message?.toLowerCase().indexOf('timeout') !== -1) {
                 error = { 'type': 'Timeout' };
@@ -296,12 +290,9 @@ export default class Connector {
 
     logResponse(data: any) {
         const responseEl = document.getElementById('server-response');
-        if (responseEl) {
-            if (typeof data === 'object') {
-                responseEl.innerHTML = JSON.stringify(data, null, 4);
-            } else {
-                responseEl.innerHTML = `<div>An error occurred:</div>${data}`;
-            }
-        }
+        if (!responseEl) { return; }
+        responseEl.innerHTML = typeof data === 'object' ?
+            JSON.stringify(data, null, 4) :
+            `<div>An error occurred:</div>${data}`;
     }
 }

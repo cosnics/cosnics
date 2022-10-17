@@ -70,7 +70,7 @@
             <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
         </div>
         <div class="pagination-container u-flex" style="justify-content: flex-end">
-            <b-pagination v-model="pagination.currentPage" :total-rows="sortedUsers.length" :per-page="pagination.perPage"
+            <b-pagination v-model="pagination.currentPage" :total-rows="sortedUsers.length" :per-page="itemsPerPage"
                           aria-controls="data-table"></b-pagination>
             <ul class="pagination">
                 <li class="page-item active"><a class="page-link">Totaal {{ sortedUsers.length }}</a></li>
@@ -116,8 +116,7 @@ export default class GradesTable extends Vue {
     private sortDesc = false;
 
     private pagination = {
-        currentPage: 1,
-        perPage: 10
+        currentPage: 1
     };
 
     @Prop({type: GradeBook, required: true}) readonly gradeBook!: GradeBook;
@@ -125,6 +124,7 @@ export default class GradesTable extends Vue {
     @Prop({type: Boolean, default: false}) readonly busy!: boolean;
     @Prop({type: [String, Number], default: null}) readonly saveColumnId!: ColumnId|null;
     @Prop({type: Number, default: null}) readonly saveCategoryId!: number|null;
+    @Prop({type: Number, default: 5}) readonly itemsPerPage!: number;
 
     get showNullCategory() {
         return this.isDraggingColumn || this.gradeBook.nullCategory.columnIds.length > 0;
@@ -138,7 +138,8 @@ export default class GradesTable extends Vue {
     }
 
     get displayedUsers() {
-        const {currentPage, perPage} = this.pagination;
+        const {currentPage} = this.pagination;
+        const perPage = this.itemsPerPage;
 
         return this.sortedUsers.slice((currentPage - 1) * perPage, currentPage * perPage);
     }
@@ -323,9 +324,10 @@ export default class GradesTable extends Vue {
 <style lang="scss" scoped>
     .table-wrap {
         position: relative;
-        /*overflow-x: auto;*/
-        /*overflow-y: auto;
-        max-height: 60vh;*/
+        overflow-x: auto;
+        max-height: 500px;
+        /*overflow-y: auto;*/
+        /*max-height: 60vh;*/
     }
 
     th {
@@ -552,6 +554,10 @@ export default class GradesTable extends Vue {
             linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%,
             linear-gradient(to bottom, #e3eaed 0, #fdfce6 4px);*/
         }
+    }
+
+    .table-student-total {
+        white-space: nowrap;
     }
 
     .table-student-total.mod-needs-update {

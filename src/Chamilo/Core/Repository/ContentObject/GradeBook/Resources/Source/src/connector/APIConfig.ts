@@ -11,7 +11,6 @@ export default interface APIConfig {
     readonly removeColumnSubItemURL: string;
     readonly moveColumnURL: string;
     readonly removeColumnURL: string;
-    readonly loadGradeItemScoresURL: string;
     readonly synchronizeGradeBookURL: string;
     readonly overwriteScoreURL: string;
     readonly revertOverwrittenScoreURL: string;

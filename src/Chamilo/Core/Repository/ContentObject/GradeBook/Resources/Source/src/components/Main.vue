@@ -1,28 +1,44 @@
 <template>
-    <div>
-        <div class="gradebook-toolbar">
-            <div class="input-group">
-                <input class="form-control" type="text" v-model="searchTerm" placeholder="Zoek student">
-                <div class="input-group-btn"><button name="clear" value="clear" class="btn btn-default" @click="searchTerm = ''"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></button></div>
+    <div style="display: contents">
+        <div v-if="gradeBook">
+            <div class="gradebook-toolbar">
+                <div class="input-group">
+                    <input class="form-control" type="text" v-model="searchTerm" placeholder="Zoek student">
+                    <div class="input-group-btn"><button name="clear" value="clear" class="btn btn-default" @click="searchTerm = ''"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></button></div>
+                </div>
+                <grades-dropdown id="dropdown-main" :graded-items="gradeBook.gradedItemsWithCheckedStatus" @toggle="toggleGradeItem"></grades-dropdown>
+                <div class="gradebook-create-actions">
+                    <button class="btn btn-default btn-sm" @click="synchronizeGradeBook"><i aria-hidden="true" class="fa fa-refresh"></i>Synchronizeer scores</button>
+                    <button class="btn btn-default btn-sm" @click="updateTotalScores"><i aria-hidden="true" class="fa fa-refresh"></i>Update eindcijfers</button>
+                    <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>Nieuwe score</button>
+                    <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>Categorie</button>
+                </div>
+                <div class="btn-group items-per-page-count">
+                    <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle" title="`Toon ${itemsPerPage} items`" style="line-height: 22px">
+                        <span>Toon {{itemsPerPage}} items</span> <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li v-for="count in [5, 10, 15, 20, 50]" :key="'per-page-' + count" style="cursor: pointer">
+                            <a :class="itemsPerPage === count ? 'selected' : 'not-selected'" :title="`Toon ${count} items`" @click="setItemsPerPage(count)">
+                                <span>Toon {{count}} items</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <grades-dropdown id="dropdown-main" :graded-items="gradeBook.gradedItemsWithCheckedStatus" @toggle="toggleGradeItem"></grades-dropdown>
-            <div class="gradebook-create-actions">
-                <button class="btn btn-default btn-sm" @click="synchronizeGradeBook"><i aria-hidden="true" class="fa fa-refresh"></i>Synchronizeer scores</button>
-                <button class="btn btn-default btn-sm" @click="updateTotalScores"><i aria-hidden="true" class="fa fa-refresh"></i>Update eindcijfers</button>
-                <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>Nieuwe score</button>
-                <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>Categorie</button>
+            <div class="gradebook-table-container">
+                <grades-table :grade-book="gradeBook" :search-terms="studentSearchTerms" :busy="tableBusy" :save-column-id="saveColumnId" :save-category-id="saveCategoryId" :items-per-page="itemsPerPage"
+                              @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"
+                              @update-score-comment="onUpdateScoreComment" @overwrite-result="onOverwriteResult" @revert-overwritten-result="onRevertOverwrittenResult"
+                              @change-category="onChangeCategory" @move-category="onMoveCategory"
+                              @change-gradecolumn="onChangeGradeColumn" @change-gradecolumn-category="onChangeGradeColumnCategory" @move-gradecolumn="onMoveGradeColumn"></grades-table>
             </div>
+            <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null"
+                           @item-settings="itemSettings = $event" @change-gradecolumn="onChangeGradeColumn" @add-subitem="onAddSubItem" @remove-subitem="onRemoveSubItem" @remove-column="onRemoveColumn"></item-settings>
+            <category-settings v-if="selectedCategory" :grade-book="gradeBook" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory" @remove-category="onRemoveCategory"></category-settings>
         </div>
-        <div class="gradebook-table-container">
-            <grades-table :grade-book="gradeBook" :search-terms="studentSearchTerms" :busy="tableBusy" :save-column-id="saveColumnId" :save-category-id="saveCategoryId"
-                          @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"
-                          @update-score-comment="onUpdateScoreComment" @overwrite-result="onOverwriteResult" @revert-overwritten-result="onRevertOverwrittenResult"
-                          @change-category="onChangeCategory" @move-category="onMoveCategory"
-                          @change-gradecolumn="onChangeGradeColumn" @change-gradecolumn-category="onChangeGradeColumnCategory" @move-gradecolumn="onMoveGradeColumn"></grades-table>
-        </div>
-        <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null"
-                       @item-settings="itemSettings = $event" @change-gradecolumn="onChangeGradeColumn" @add-subitem="onAddSubItem" @remove-subitem="onRemoveSubItem" @remove-column="onRemoveColumn"></item-settings>
-        <category-settings v-if="selectedCategory" :grade-book="gradeBook" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory" @remove-category="onRemoveCategory"></category-settings>
+        <div v-else class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+        <error-display v-if="errorData" @close="errorData = null">{{ errorData }}</error-display>
     </div>
 </template>
 
@@ -30,15 +46,21 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import GradesDropdown from './GradesDropdown.vue';
     import GradesTable from './GradesTable.vue';
-    import GradeBook, {Category, GradeColumn, GradeItem, ColumnId, GradeScore} from '../domain/GradeBook';
+    import GradeBook, {Category, GradeColumn, GradeItem, ColumnId, GradeScore, ResultsData} from '../domain/GradeBook';
     import ItemSettings from './ItemSettings.vue';
     import CategorySettings from './CategorySettings.vue';
     import Connector from '../connector/Connector';
+    import APIConfig from "@/connector/APIConfig";
+    import ErrorDisplay from './ErrorDisplay.vue';
+
+    const ITEMS_PER_PAGE_KEY = 'chamilo-gradebook.itemsPerPage';
 
     @Component({
-        components: { GradesTable, GradesDropdown, ItemSettings, CategorySettings }
+        components: {ErrorDisplay, GradesTable, GradesDropdown, ItemSettings, CategorySettings }
     })
     export default class Main extends Vue {
+        private gradeBook: GradeBook|null = null;
+        private connector: Connector|null = null;
         private itemSettings: number|null = null;
         private categorySettings: number|null = null;
         private studentSearchTerm = '';
@@ -46,9 +68,10 @@
         private tableBusy = false;
         private saveColumnId: ColumnId|null = null;
         private saveCategoryId: number|null = null;
+        private itemsPerPage: number = 5;
+        private errorData: string|null = null;
 
-        @Prop({type: GradeBook, required: true}) readonly gradeBook!: GradeBook;
-        @Prop(Connector) readonly connector!: Connector|null;
+        @Prop({type: Object, default: () => null}) readonly apiConfig!: APIConfig;
 
         constructor() {
             super();
@@ -65,6 +88,7 @@
         }
 
         updateGradeColumnWithScores(column: GradeColumn, id: ColumnId, scores: GradeScore[]) {
+            if (!this.gradeBook) { return; }
             this.gradeBook.updateGradeColumnId(column, id);
             const resultsData = this.gradeBook.resultsData;
             scores.forEach(score => {
@@ -76,6 +100,7 @@
         }
 
         addGradeItem(item: GradeItem) {
+            if (!this.gradeBook) { return; }
             const column = this.gradeBook.addGradeColumnFromItem(item);
             this.tableBusy = true;
             this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: GradeScore[]) => {
@@ -85,6 +110,7 @@
         }
 
         removeGradeItem(item: GradeItem) {
+            if (!this.gradeBook) { return; }
             const column = this.gradeBook.findGradeColumnWithGradeItem(item.id);
             if (!column) { return; }
             if (column.type === 'item') {
@@ -105,10 +131,11 @@
         }
 
         get selectedCategory() {
-            return this.gradeBook.categories.find(cat => cat.id === this.categorySettings) || null;
+            return this.gradeBook?.categories.find(cat => cat.id === this.categorySettings) || null;
         }
 
         createNewCategory() {
+            if (!this.gradeBook) { return; }
             const category = this.gradeBook.createNewCategory();
             this.tableBusy = true;
             this.connector?.addCategory(category, (cat: any) => {
@@ -119,9 +146,11 @@
         }
 
         async synchronizeGradeBook() {
+            if (!this.gradeBook) { return; }
+            const gradeBook = this.gradeBook;
             this.tableBusy = true;
             await this.connector?.synchronizeGradeBook((scores: GradeScore[]) => {
-                const resultsData = this.gradeBook.resultsData;
+                const resultsData = gradeBook.resultsData;
                 scores.forEach(score => {
                     if (!resultsData[score.columnId]) {
                         Vue.set(resultsData, score.columnId, {});
@@ -133,9 +162,11 @@
         }
 
         async updateTotalScores() {
+            if (!this.gradeBook) { return; }
+            const gradeBook = this.gradeBook;
             this.tableBusy = true;
             await this.connector?.calculateTotalScores((scores: GradeScore[]) => {
-                const resultsData = this.gradeBook.resultsData;
+                const resultsData = gradeBook.resultsData;
                 if (!resultsData['totals']) {
                     Vue.set(resultsData, 'totals', {});
                 }
@@ -147,6 +178,7 @@
         }
 
         createNewScore() {
+            if (!this.gradeBook) { return; }
             const column = this.gradeBook.createNewScore();
             this.tableBusy = true;
             this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: GradeScore[]) => {
@@ -167,6 +199,7 @@
         }
 
         async onMoveCategory(category: Category) {
+            if (!this.gradeBook) { return; }
             this.tableBusy = true;
             await this.connector?.moveCategory(category, this.gradeBook.categories.indexOf(category), () => {
                 this.tableBusy = false;
@@ -195,6 +228,7 @@
         }
 
         onMoveGradeColumn(column: GradeColumn) {
+            if (!this.gradeBook) { return; }
             const category = this.gradeBook.allCategories.find(category => category.columnIds.indexOf(column.id) !== -1);
             if (category) {
                 this.tableBusy = true;
@@ -205,10 +239,12 @@
         }
 
         onAddSubItem(item: GradeItem, columnId: ColumnId) {
+            if (!this.gradeBook) { return; }
+            const gradeBook = this.gradeBook;
             this.tableBusy = true;
             this.connector?.addColumnSubItem(columnId, item.id, (column: GradeColumn, scores: GradeScore[]) => {
                 console.log('scores', scores);
-                const resultsData = this.gradeBook.resultsData;
+                const resultsData = gradeBook.resultsData;
                 delete resultsData[columnId];
                 scores.forEach(score => {
                     if (!resultsData[columnId]) {
@@ -221,10 +257,12 @@
         }
 
         onRemoveSubItem(item: GradeItem, columnId: ColumnId) {
+            if (!this.gradeBook) { return; }
+            const gradeBook = this.gradeBook;
             this.tableBusy = true;
             this.connector?.removeColumnSubItem(columnId, item.id, (column: GradeColumn, scores: GradeScore[]) => {
                 console.log('scores', scores);
-                const resultsData = this.gradeBook.resultsData;
+                const resultsData = gradeBook.resultsData;
                 delete resultsData[columnId];
                 scores.forEach(score => {
                     if (!resultsData[columnId]) {
@@ -244,6 +282,7 @@
         }
 
         updateResult(result: GradeScore) {
+            if (!this.gradeBook) { return; }
             this.saveColumnId = null;
             const colScores = this.gradeBook.resultsData[result.columnId];
             if (!colScores) { return; }
@@ -263,6 +302,48 @@
         onUpdateScoreComment(result: GradeScore) {
             this.saveColumnId = result.columnId;
             this.connector?.updateGradeResultComment(result, this.updateResult);
+        }
+
+        loadItemsPerPage() {
+            this.itemsPerPage = parseInt(localStorage.getItem(ITEMS_PER_PAGE_KEY) || '5');
+        }
+
+        setItemsPerPage(count: number) {
+            this.itemsPerPage = count;
+            localStorage.setItem(ITEMS_PER_PAGE_KEY, String(count));
+        }
+
+        setError(data: any): void {
+            this.errorData = data;
+        }
+
+        async load(): Promise<void> {
+            const allData: any = await Connector.loadGradeBookData(this.apiConfig.loadGradeBookDataURL, this.apiConfig.csrfToken);
+            //console.log(allData);
+            if (allData) {
+                this.gradeBook = GradeBook.from(allData.gradebook);
+                this.gradeBook.users = allData.users;
+                this.connector = new Connector(this.apiConfig, this.gradeBook.dataId, this.gradeBook.currentVersion);
+                this.connector.addErrorListener(this);
+                const resultsData: ResultsData = {'totals': {}};
+                allData.scores.forEach((score: GradeScore) => {
+                    if (score.isTotal) {
+                        resultsData['totals'][score.targetUserId] = score;
+                        return;
+                    }
+                    if (!resultsData[score.columnId]) {
+                        resultsData[score.columnId] = {};
+                    }
+                    resultsData[score.columnId][score.targetUserId] = score;
+                });
+                this.gradeBook.resultsData = resultsData;
+            }
+            console.log(this.gradeBook);
+        }
+
+        mounted() {
+            this.load();
+            this.loadItemsPerPage();
         }
     }
 </script>
@@ -284,6 +365,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.u-justify-content-center {
+    justify-content: center;
 }
 
 /*.banner {
@@ -336,6 +421,10 @@
 
 #dropdown-main {
     flex: 1;
+}
+
+.lds-ellipsis {
+    margin-left: 10px;
 }
 </style>
 
