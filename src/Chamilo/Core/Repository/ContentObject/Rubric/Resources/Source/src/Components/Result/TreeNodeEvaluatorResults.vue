@@ -41,16 +41,16 @@
         </div>
         <template v-if="isCriterium">
             <template v-if="level">
-                <div class="treenode-evaluator-level-title" :class="{'mod-pointer': treeNodeLevelDescription}" @click.stop="descriptionVisible = !descriptionVisible">
+                <div class="treenode-evaluator-level-title">
                     {{ level.title }}
                     <span v-if="useScores && level.useRangeScore" :title="`${level.minimumScore} > ${level.score}`" style="color: #5a92b5"><i class="fa fa-info-circle"></i></span>
                 </div>
                 <!--<div v-if="level.useRangeScore" class="treenode-evaluator-score-range"><span>{{ level.minimumScore}} <i class="fa fa-caret-right"></i> {{ level.score }}<template v-if="useRelativeWeights"><span class="sr-only">%</span><i aria-hidden="true" class="fa fa-percent"></i></template></span></div>-->
-                <div v-if="descriptionVisible && treeNodeLevelDescription" class="treenode-evaluator-level-description">{{ treeNodeLevelDescription }}</div>
+                <div v-if="treeNodeLevelDescription" class="treenode-evaluator-level-description" v-html="toMarkDown(treeNodeLevelDescription)"></div>
             </template>
             <span v-else class="m-no-score">{{ $t('no-level') }}</span>
         </template>
-        <div class="treenode-evaluator-feedback" v-if="feedback"><i class="fa fa-comment-o" aria-hidden="true"></i>{{ feedback }}</div>
+        <div class="treenode-evaluator-feedback" v-if="feedback"><i class="fa fa-comment" aria-hidden="true"></i><i class="fa fa-comment-o" aria-hidden="true"></i>{{ feedback }}</div>
     </div>
 </template>
 
@@ -61,6 +61,7 @@
     import Category from '../../Domain/Category';
     import Criterium from '../../Domain/Criterium';
     import Level from '../../Domain/Level';
+    import {toMarkdown} from '../../Util/util';
 
     function pad(num: number) : string {
         return `${num < 10 ? '0' : ''}${num}`;
@@ -87,7 +88,6 @@
         }
     })
     export default class TreeNodeEvaluatorResults extends Vue {
-        private descriptionVisible = false;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
         @Prop({type: [Cluster, Category, Criterium]}) readonly treeNode!: Cluster|Category|Criterium;
@@ -121,6 +121,10 @@
         get weightedScore() {
             if (this.score === null) { return 0; }
             return this.rubric.getRelativeWeight(this.treeNode) * this.score / 100;
+        }
+
+        toMarkDown(s: string) {
+            return toMarkdown(s);
         }
     }
 </script>
@@ -194,16 +198,18 @@
 }
 
 .treenode-evaluator-level-description {
-    background: hsla(180, 45%, 98%, 1);
+/*    background: hsla(180, 45%, 98%, 1);
     border: 1px solid hsla(180, 38%, 94%, 1);
     margin: -.25rem -.5rem 1.2rem -.5rem;
-    padding: 0 0.5rem;
+    padding: 0 0.5rem;*/
 }
 
 .treenode-evaluator-feedback {
+    border-top: 1px dotted #bdd7db;
     margin-bottom: 10px;
-    margin-top: -1rem;
-    padding: .6rem 0;
+    margin-top: 0;
+    padding: .6rem 1.3rem;
+    position: relative;
 }
 </style>
 
@@ -223,13 +229,22 @@
     color: #666;
 }
 
-.fa-comment-o {
-    color: hsl(190, 33%, 85%);
-    float: left;
-    font-size: 1.8rem;
-    margin-right: 1rem;
-    margin-top: .25rem;
+.fa-comment {
+    color: #f6f7f8;
+    font-size: 24px;
+    left: -1.7rem;
+    position: absolute;
+    top: 4px;
 }
+
+.fa-comment-o {
+    color: #c9dbde;
+    font-size: 24px;
+    left: -1.7rem;
+    position: absolute;
+    top: 4px;
+}
+
 .m-no-score {
     font-style: oblique;
     color: hsl(190, 32%, 39%);
