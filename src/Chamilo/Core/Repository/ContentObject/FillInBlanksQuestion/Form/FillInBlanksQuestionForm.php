@@ -11,35 +11,34 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.question_types.fill_in_blanks_question
  */
 class FillInBlanksQuestionForm extends ContentObjectForm
 {
     // Tabs
-    const DEFAULT_FIELD_OPTION_SIZE = 15;
+    public const DEFAULT_FIELD_OPTION_SIZE = 15;
 
-    const DEFAULT_FIELD_OPTION_VARIATION = 0;
+    public const DEFAULT_FIELD_OPTION_VARIATION = 0;
 
     // Fields
 
-    const DEFAULT_UNIFORM_TYPE = self::UNIFORM_FIXED_ANSWER;
+    public const DEFAULT_UNIFORM_TYPE = self::UNIFORM_FIXED_ANSWER;
 
-    const FIELD_OPTION_SIZE = 'field_option_size';
+    public const FIELD_OPTION_SIZE = 'field_option_size';
 
-    const FIELD_OPTION_VARIATION = 'field_option_variation';
+    public const FIELD_OPTION_VARIATION = 'field_option_variation';
 
-    const TAB_BLANKS = 'Blanks';
+    public const TAB_BLANKS = 'Blanks';
 
-    const TAB_EXAMPLE = 'Example';
+    public const TAB_EXAMPLE = 'Example';
 
-    const UNIFORM_FIXED_ANSWER = 1;
+    public const UNIFORM_FIXED_ANSWER = 1;
 
-    const UNIFORM_INPUT_TYPE = 'uniform_input_type';
+    public const UNIFORM_INPUT_TYPE = 'uniform_input_type';
 
-    const UNIFORM_LONGEST_ANSWER = 0;
+    public const UNIFORM_LONGEST_ANSWER = 0;
 
-    const UNIFORM_UNLIMITED_ANSWER = - 1;
+    public const UNIFORM_UNLIMITED_ANSWER = - 1;
 
     /**
      * Adds the form-fields to the form to provide the possible options for this multiple choice question
@@ -131,17 +130,17 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         $type_options[] = $this->createElement(
             'radio', FillInBlanksQuestion::PROPERTY_QUESTION_TYPE, null, Translation::get('AutoTextField'),
             FillInBlanksQuestion::TYPE_SIZED_TEXT,
-            array('class' => 'type_' . FillInBlanksQuestion::TYPE_SIZED_TEXT . '_option_selector')
+            ['class' => 'type_' . FillInBlanksQuestion::TYPE_SIZED_TEXT . '_option_selector']
         );
         $type_options[] = $this->createElement(
             'radio', FillInBlanksQuestion::PROPERTY_QUESTION_TYPE, null, Translation::get('UniformTextField'),
             FillInBlanksQuestion::TYPE_UNIFORM_TEXT,
-            array('class' => 'type_' . FillInBlanksQuestion::TYPE_UNIFORM_TEXT . '_option_selector')
+            ['class' => 'type_' . FillInBlanksQuestion::TYPE_UNIFORM_TEXT . '_option_selector']
         );
         $type_options[] = $this->createElement(
             'radio', FillInBlanksQuestion::PROPERTY_QUESTION_TYPE, null, Translation::get('SelectBox'),
             FillInBlanksQuestion::TYPE_SELECT,
-            array('class' => 'type_' . FillInBlanksQuestion::TYPE_SELECT . '_option_selector')
+            ['class' => 'type_' . FillInBlanksQuestion::TYPE_SELECT . '_option_selector']
         );
         $this->addElement('group', null, Translation::get('UseSelectBox'), $type_options, '', false);
 
@@ -159,28 +158,28 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         // default scores
         $this->add_textfield(
             FillInBlanksQuestion::PROPERTY_DEFAULT_POSITIVE_SCORE, Translation::get('DefaultPositiveScore'), false,
-            array("size" => "5")
+            ['size' => '5']
         );
 
         $this->add_textfield(
             FillInBlanksQuestion::PROPERTY_DEFAULT_NEGATIVE_SCORE, Translation::get('DefaultNegativeScore'), false,
-            array("size" => "5")
+            ['size' => '5']
         );
 
         $this->addRule(
-            array(
+            [
                 FillInBlanksQuestion::PROPERTY_DEFAULT_POSITIVE_SCORE,
                 FillInBlanksQuestion::PROPERTY_DEFAULT_NEGATIVE_SCORE
-            ), Translation::get('DefaultPositiveScoreBiggerDefaultNegativeScore'), 'compare', '>'
+            ], Translation::get('DefaultPositiveScoreBiggerDefaultNegativeScore'), 'compare', '>'
         );
         $this->addRule(
-            array(FillInBlanksQuestion::PROPERTY_DEFAULT_POSITIVE_SCORE),
-            Translation::get('DefaultPositiveScoreBigger'), 'number_compare', '>', 0
+            [FillInBlanksQuestion::PROPERTY_DEFAULT_POSITIVE_SCORE], Translation::get('DefaultPositiveScoreBigger'),
+            'number_compare', '>', 0
         );
 
         // auto sized text field
         $this->addElement('html', '<div class="type_' . FillInBlanksQuestion::TYPE_SIZED_TEXT . '_options_box">');
-        $this->add_textfield(self::FIELD_OPTION_VARIATION, Translation::get('Variation'), false, array("size" => "5"));
+        $this->add_textfield(self::FIELD_OPTION_VARIATION, Translation::get('Variation'), false, ['size' => '5']);
         $this->addElement('html', '</div>');
 
         // uniform sized text field
@@ -224,7 +223,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
 
         $this->getTabsCollection()->add(
             new FormTab(
-                self::TAB_BLANKS, Translation::get(self::TAB_BLANKS), new FontAwesomeGlyph('edit', array('fa-sm')),
+                self::TAB_BLANKS, Translation::get(self::TAB_BLANKS), new FontAwesomeGlyph('edit', ['fa-sm']),
                 'buildBlanksForm'
             )
         );

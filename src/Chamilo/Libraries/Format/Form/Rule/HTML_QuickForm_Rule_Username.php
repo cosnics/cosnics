@@ -1,5 +1,9 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Rule;
+
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_QuickForm_Rule;
+
 /**
  * QuickForm rule to check if a username is of the correct format
  *
@@ -11,12 +15,14 @@ class HTML_QuickForm_Rule_Username extends HTML_QuickForm_Rule
     /**
      * Function to check if a username is of the correct format
      *
-     * @param string $username Wanted username
-     * @return boolean True if username is of the correct format
+     * @param string $value Wanted username
+     *
+     * @return bool True if username is of the correct format
      */
-    public function validate($username, $options = null)
+    public function validate($value, $options = null): bool
     {
-        $filteredUsername = StringUtilities::getInstance()->createString($username)->toAscii()->__toString();
-        return $filteredUsername == $username;
+        $filteredUsername = StringUtilities::getInstance()->createString($value)->toAscii()->__toString();
+
+        return $filteredUsername == $value;
     }
 }

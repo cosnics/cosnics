@@ -1,4 +1,8 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Rule;
+
+use HTML_QuickForm_Rule;
+
 /**
  * QuickForm rule to check a date
  *
@@ -10,11 +14,12 @@ class HTML_QuickForm_Rule_Date extends HTML_QuickForm_Rule
     /**
      * Function to check a date
      *
-     * @param string[] $date An array with keys F (month), d (day) and Y (year)
-     * @return boolean True if date is valid
+     * @param string[] $value An array with keys F (month), d (day) and Y (year)
+     *
+     * @return bool True if date is valid
      */
-    public function validate($date, $options = null)
+    public function validate($value, $options = null): bool
     {
-        return checkdate($date['F'], $date['d'], $date['Y']);
+        return checkdate($value['F'], $value['d'], $value['Y']);
     }
 }

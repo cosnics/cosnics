@@ -6,15 +6,13 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Table
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PropertiesTable extends HTML_Table
 {
 
     /**
-     *
      * @var string[]
      */
     private $properties;
@@ -27,7 +25,7 @@ class PropertiesTable extends HTML_Table
     public function __construct(array $properties)
     {
         parent::__construct(
-            array('class' => 'table table-striped table-bordered table-hover table-responsive')
+            ['class' => 'table table-striped table-bordered table-hover table-responsive']
         );
         $this->properties = $properties;
 
@@ -48,7 +46,7 @@ class PropertiesTable extends HTML_Table
 
                 if (!is_array($values))
                 {
-                    $values = array($values);
+                    $values = [$values];
                 }
 
                 if (count($values) > 0)
@@ -62,7 +60,7 @@ class PropertiesTable extends HTML_Table
                 $this->addRow($contents);
             }
 
-            $this->setColAttributes(0, array('class' => 'header', 'style' => 'vertical-align: middle;'));
+            $this->setColAttributes(0, ['class' => 'header', 'style' => 'vertical-align: middle;']);
         }
         else
         {
@@ -74,7 +72,6 @@ class PropertiesTable extends HTML_Table
     }
 
     /**
-     *
      * @return string[]
      */
     public function getProperties()
@@ -83,7 +80,6 @@ class PropertiesTable extends HTML_Table
     }
 
     /**
-     *
      * @param string[] $properties
      */
     public function setProperties($properties)

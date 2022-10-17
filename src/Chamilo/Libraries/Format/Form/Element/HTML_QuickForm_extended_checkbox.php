@@ -1,64 +1,47 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
+
+use HTML_QuickForm;
+use HTML_QuickForm_checkbox;
+use HTML_QuickForm_input;
+use ReflectionClass;
 
 /**
  * Extension on the HTML Quickform Checkbox element to support returnable values if the checkbox is not selected
  *
  * @package Chamilo\Libraries\Format\Form\Element
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
 {
 
     /**
      * The return value if the checkbox is not selected
-     *
-     * @var string
      */
-    private $return_value;
+    private ?string $return_value;
 
     /**
-     * Class constructor
-     *
-     * @param string $elementName (optional)Input field name attribute
-     * @param string $elementLabel (optional)Input field value
-     * @param string $text (optional)Checkbox display text
-     * @param string[] $attributes (optional)Either a typical HTML attribute string
-     *        or an associative array
-     * @param integer $value (optional)The value for the checkbox
-     * @param string $return_value (optional)The return value when the checkbox is not selected
-     *
-     * @return void
-     * @since 1.0
-     * @access public
+     * @param string $text               (optional)Checkbox display text
+     * @param ?array|?string $attributes Associative array of tag attributes or HTML attributes name="value" pairs
+     * @param int $value                 The value for the checkbox
+     * @param ?string $return_value      The return value when the checkbox is not selected
      */
     public function __construct(
-        $elementName = null, $elementLabel = null, $text = '', $attributes = null, $value = 1, $return_value = null
+        ?string $elementName = null, ?string $elementLabel = null, string $text = '', $attributes = null,
+        int $value = 1, ?string $return_value = null
     )
     {
-        HTML_QuickForm_checkbox::__construct($elementName, $elementLabel, $text, $attributes);
+        parent::__construct($elementName, $elementLabel, $text, $attributes);
 
-        if ($value && !is_null($value))
-        {
-            $this->setValue($value);
-        }
-        else
-        {
-            $this->setValue(1);
-        }
+        $this->setValue($value);
 
         $this->return_value = $return_value;
     }
 
     /**
      * Returns a 'safe' element's value
-     *
-     * @param array   array of submitted values to search
-     * @param bool    whether to return the value as associative array
-     *
-     * @access public
-     * @return mixed
      */
-    public function exportValue(&$submitValues, $assoc = false)
+    public function exportValue(array &$submitValues, bool $assoc = false)
     {
         $value = $this->_findValue($submitValues);
 
@@ -70,38 +53,22 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
         return $this->_prepareValue($value, $assoc);
     }
 
-    /**
-     *
-     * @return string
-     */
-    function getCheckboxClasses()
+    public function getCheckboxClasses(): string
     {
         return 'checkbox no-toggle-style';
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getReturnValue()
+    public function getReturnValue(): ?string
     {
         return $this->return_value;
     }
 
-    /**
-     *
-     * @param string $return_value
-     */
-    public function setReturnValue($return_value)
+    public function setReturnValue(?string $return_value)
     {
         $this->return_value = $return_value;
     }
 
-    /**
-     *
-     * @see HTML_QuickForm_checkbox::getValue()
-     */
-    function getValue()
+    public function getValue()
     {
         return $this->getAttribute('value');
     }
@@ -109,33 +76,29 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
     /**
      * Called by HTML_QuickForm whenever form event is made on this element
      *
-     * @param string $event Name of event
-     * @param mixed $arg event arguments
-     * @param object $caller calling object
-     *
-     * @return    boolean
-     * @since     1.0
-     * @access    public
+     * @param string $event            Name of event
+     * @param mixed $arg               event arguments
+     * @param ?\HTML_QuickForm $caller calling object
      */
-    function onQuickFormEvent($event, $arg, &$caller)
+    public function onQuickFormEvent(string $event, $arg, ?HTML_QuickForm $caller = null): bool
     {
         switch ($event)
         {
             case 'updateValue' :
                 // constant values override both default and submitted ones
                 // default values are overriden by submitted
-                $value = $this->_findValue($caller->_constantValues);
+                $value = $this->_findValue($caller->getConstantValues());
                 if (null === $value)
                 {
                     // if no boxes were checked, then there is no value in the array
                     // yet we don't want to display default value in this case
                     if ($caller->isSubmitted())
                     {
-                        $value = $this->_findValue($caller->_submitValues);
+                        $value = $this->_findValue($caller->getSubmitValues());
                     }
                     else
                     {
-                        $value = $this->_findValue($caller->_defaultValues);
+                        $value = $this->_findValue($caller->getDefaultValues());
                     }
                 }
                 if (null !== $value || $caller->isSubmitted())
@@ -149,47 +112,38 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
             default :
                 // do not use submit values for button-type elements
                 $type = $this->getType();
-                if (('updateValue' != $event) ||
-                    ('submit' != $type && 'reset' != $type && 'image' != $type && 'button' != $type))
+
+                if ('submit' != $type && 'reset' != $type && 'image' != $type && 'button' != $type)
                 {
                     switch ($event)
                     {
                         case 'createElement' :
+                            $class = new ReflectionClass($this);
+                            $parameters = $class->getConstructor()->getParameters();
+
+                            foreach ($parameters as $key => $parameter)
+                            {
+                                $arg[$key] = is_null($arg[$key]) ?
+                                    ($parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null) :
+                                    $arg[$key];
+                            }
+
                             $this->__construct($arg[0], $arg[1], $arg[2], $arg[3], $arg[4], $arg[5]);
                             break;
                         case 'addElement' :
                             $this->onQuickFormEvent('createElement', $arg, $caller);
                             $this->onQuickFormEvent('updateValue', null, $caller);
                             break;
-                        case 'updateValue' :
-                            // constant values override both default and submitted ones
-                            // default values are overriden by submitted
-                            $value = $this->_findValue($caller->_constantValues);
-                            if (null === $value)
-                            {
-                                $value = $this->_findValue($caller->_submitValues);
-                                if (null === $value)
-                                {
-                                    $value = $this->_findValue($caller->_defaultValues);
-                                }
-                            }
-                            if (null !== $value)
-                            {
-                                $this->setValue($value);
-                            }
-                            break;
-                        case 'setGroupValue' :
-                            $this->setValue($arg);
                     }
 
                     return true;
                 }
                 else
                 {
-                    $value = $this->_findValue($caller->_constantValues);
+                    $value = $this->_findValue($caller->getConstantValues());
                     if (null === $value)
                     {
-                        $value = $this->_findValue($caller->_defaultValues);
+                        $value = $this->_findValue($caller->getDefaultValues());
                     }
                     if (null !== $value)
                     {
@@ -203,25 +157,12 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
         return true;
     }
 
-    /**
-     * Sets the value of the form element
-     *
-     * @param string $value Default value of the form element
-     *
-     * @return    void
-     * @since     1.0
-     * @access    public
-     */
-    function setValue($value)
+    public function setValue($value)
     {
-        $this->updateAttributes(array('value' => $value));
+        $this->updateAttributes(['value' => $value]);
     }
 
-    /**
-     *
-     * @see HTML_QuickForm_checkbox::toHtml()
-     */
-    function toHtml()
+    public function toHtml(): string
     {
         if (!$this->isFrozen())
         {

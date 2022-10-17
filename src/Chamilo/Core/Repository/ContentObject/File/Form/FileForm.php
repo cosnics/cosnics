@@ -5,7 +5,9 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Quota\Calculator;
+use Chamilo\Core\Repository\Quota\Form\Rule\HTML_QuickForm_Rule_DiskQuota;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
@@ -14,7 +16,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.content_object.file
  */
 
@@ -25,14 +26,26 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class FileForm extends ContentObjectForm
 {
+    public function __construct(
+        $form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = self::FORM_METHOD_POST,
+        $action = null, $extra = null, $additional_elements, $allow_new_version = true
+    )
+    {
+        parent::__construct(
+            $form_type, $workspace, $content_object, $form_name, $method, $action, $extra, $additional_elements,
+            $allow_new_version
+        );
+
+        $this->registerRule('disk_quota', null, HTML_QuickForm_Rule_DiskQuota::class);
+    }
 
     private function allow_file_type($type)
     {
-        $filtering_type = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'type_of_filtering'));
+        $filtering_type = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'type_of_filtering']);
 
         if ($filtering_type == 'blacklist')
         {
-            $blacklist = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'blacklist'));
+            $blacklist = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'blacklist']);
             $items = explode(',', $blacklist);
 
             if (in_array($type, $items))
@@ -44,7 +57,7 @@ class FileForm extends ContentObjectForm
         }
         else
         {
-            $whitelist = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'whitelist'));
+            $whitelist = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'whitelist']);
             $items = explode(',', $whitelist);
 
             if (in_array($type, $items))
@@ -72,24 +85,24 @@ class FileForm extends ContentObjectForm
         );
 
         $this->addSingleFileDropzone(
-            'file', array(
+            'file', [
                 'maxFilesize' => $calculator->getMaximumUploadSize(),
                 'titleInputName' => ContentObject::PROPERTY_TITLE
-            )
+            ]
         );
 
         $this->addRule('file', Translation::get('DiskQuotaExceeded', null, StringUtilities::LIBRARIES), 'disk_quota');
 
         $calculator->addUploadWarningToForm($this);
 
-        $this->addFormRule(array($this, 'check_document_form'));
+        $this->addFormRule([$this, 'check_document_form']);
 
         $this->addElement(
             'checkbox', File::PROPERTY_SHOW_INLINE,
             Translation::getInstance()->getTranslation('ShowInline', null, 'Chamilo\Core\Repository\ContentObject\File')
         );
 
-        $this->setDefaults(array(File::PROPERTY_SHOW_INLINE => 1));
+        $this->setDefaults([File::PROPERTY_SHOW_INLINE => 1]);
     }
 
     protected function build_editing_form($htmleditor_options = [], $in_tab = false)
@@ -112,18 +125,18 @@ class FileForm extends ContentObjectForm
 
         $this->add_information_message(
             'current_selected_file', '', Translation::getInstance()->getTranslation(
-            'CurrentlySelectedFile', array(
+            'CurrentlySelectedFile', [
                 'FILENAME' => $content_object->get_filename(),
                 'FILESIZE' => Filesystem::format_file_size($content_object->get_filesize())
-            )
+            ]
         )
         );
 
         $this->addSingleFileDropzone(
-            'file', array(
+            'file', [
                 'maxFilesize' => $calculator->getMaximumUploadSize(),
                 'titleInputName' => ContentObject::PROPERTY_TITLE
-            )
+            ]
         );
 
         $javascriptHtml = [];
@@ -147,7 +160,7 @@ class FileForm extends ContentObjectForm
             Translation::getInstance()->getTranslation('ShowInline', null, 'Chamilo\Core\Repository\ContentObject\File')
         );
 
-        $this->setDefaults(array(File::PROPERTY_SHOW_INLINE => $content_object->getShowInline()));
+        $this->setDefaults([File::PROPERTY_SHOW_INLINE => $content_object->getShowInline()]);
     }
 
     protected function check_document_form($fields)
@@ -199,12 +212,12 @@ class FileForm extends ContentObjectForm
             if (!$fields['uncompress'] && !$this->allow_file_type($type))
             {
                 if (Configuration::getInstance()->get_setting(
-                        array('Chamilo\Core\Admin', 'rename_instead_of_disallow')
+                        ['Chamilo\Core\Admin', 'rename_instead_of_disallow']
                     ) == 1)
                 {
                     $name = $_FILES['file']['name'];
                     $_FILES['file']['name'] = $name . '.' .
-                        Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'replacement_extension'));
+                        Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'replacement_extension']);
                 }
                 else
                 {

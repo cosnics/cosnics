@@ -13,7 +13,7 @@ use HTML_Table;
  * also need to provide a cellrenderer so it's easy to add actions to a table row
  *
  * @package Chamilo\Libraries\Format\Table
- * @author Sven Vanpoucke
+ * @author  Sven Vanpoucke
  */
 class SimpleTable extends HTML_Table
 {
@@ -36,7 +36,6 @@ class SimpleTable extends HTML_Table
      * Properties that will be showed
      *
      * @var
-     *
      */
     private $defaultProperties;
 
@@ -48,14 +47,13 @@ class SimpleTable extends HTML_Table
     private $tablename;
 
     /**
-     *
      * @param string[][] $dataArray
      * @param \Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface $cellrenderer
      * @param string $tablename
      */
     public function __construct($dataArray, $cellrenderer, $tablename)
     {
-        parent::__construct(array('class' => 'table table-striped table-bordered table-hover table-responsive'));
+        parent::__construct(['class' => 'table table-striped table-bordered table-hover table-responsive']);
 
         $this->defaultProperties = $cellrenderer->getProperties();
         $this->dataArray = $dataArray;
@@ -63,16 +61,16 @@ class SimpleTable extends HTML_Table
         $this->tablename = $tablename;
 
         $this->buildTable();
-        $this->altRowAttributes(0, array('class' => 'row_odd'), array('class' => 'row_even'), true);
+        $this->altRowAttributes(0, ['class' => 'row_odd'], ['class' => 'row_even'], true);
     }
 
     /**
-     *
      * @return string
+     * @throws \TableException
      */
     public function render()
     {
-        return parent::toHTML();
+        return parent::toHtml();
     }
 
     /**
@@ -162,11 +160,10 @@ class SimpleTable extends HTML_Table
     }
 
     /**
-     *
      * @return string
      * @deprecated User render() now
      */
-    public function toHTML()
+    public function toHTML(): string
     {
         return $this->render();
     }

@@ -1,17 +1,15 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
+
+use HTML_QuickForm_html;
 
 /**
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HTML_QuickForm_category extends HTML_QuickForm_html
 {
 
-    /**
-     *
-     * @param string $title
-     */
-    public function __construct($title = null)
+    public function __construct(?string $title = null)
     {
         $html = '';
 

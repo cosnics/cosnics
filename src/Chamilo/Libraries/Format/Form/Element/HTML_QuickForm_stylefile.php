@@ -1,21 +1,25 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
 
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_QuickForm_file;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Form\Element
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class HTML_QuickForm_stylefile extends HTML_QuickForm_file
 {
+
     /**
-     * @return string
+     * @throws \ReflectionException
+     * @throws \Exception
      */
-    function toHtml()
+    public function toHtml(): string
     {
         if ($this->_flagFrozen)
         {
@@ -35,7 +39,7 @@ class HTML_QuickForm_stylefile extends HTML_QuickForm_file
             $html[] = '<label class="btn btn-default">';
             $html[] = $glyph->render();
             $html[] = ' ';
-            $html[] = Chamilo\Libraries\Translation\Translation::getInstance()->getTranslation(
+            $html[] = Translation::getInstance()->getTranslation(
                 'ChooseFileInputLabel', [], StringUtilities::LIBRARIES
             );
             $html[] = ' ';

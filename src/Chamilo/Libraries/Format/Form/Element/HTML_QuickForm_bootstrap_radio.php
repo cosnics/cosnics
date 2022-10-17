@@ -1,4 +1,8 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
+
+use HTML_QuickForm_input;
+use HTML_QuickForm_radio;
 
 /**
  * Base class for <input /> form elements
@@ -11,33 +15,28 @@
  * send a note to license@php.net so we can mail you a copy immediately.
  *
  * @category HTML
- * @package Chamilo\Libraries\Format\Form\Element
- * @author Adam Daniel <adaniel1@eesus.jnj.com>
- * @author Bertrand Mansion <bmansion@mamasam.com>
- * @version Release: 3.2.14
- * @since 1.0
+ * @package  Chamilo\Libraries\Format\Form\Element
+ * @author   Adam Daniel <adaniel1@eesus.jnj.com>
+ * @author   Bertrand Mansion <bmansion@mamasam.com>
  */
 class HTML_QuickForm_bootstrap_radio extends HTML_QuickForm_radio
 {
 
     /**
-     *
-     * @param string $elementName
-     * @param string $elementLabel
-     * @param string $text
-     * @param string $value
-     * @param string[] $attributes
+     * @param ?array|?string $attributes Associative array of tag attributes or HTML attributes name="value" pairs
      */
-    function __construct($elementName = null, $elementLabel = null, $text = null, $value = null, $attributes = null)
+    public function __construct(
+        ?string $elementName = null, ?string $elementLabel = null, ?string $text = null, ?string $value = null,
+        $attributes = null
+    )
     {
         parent::__construct($elementName, $elementLabel, $text, $value, $attributes);
     }
 
     /**
-     *
      * @see HTML_QuickForm_radio::toHtml()
      */
-    function toHtml()
+    public function toHtml(): string
     {
         if (!$this->isFrozen())
         {

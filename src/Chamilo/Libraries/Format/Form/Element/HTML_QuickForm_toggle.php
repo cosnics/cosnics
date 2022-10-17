@@ -1,29 +1,24 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
 
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Form\Element
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
 {
 
     /**
-     *
-     * @param string $elementName
-     * @param string $elementLabel
-     * @param string $text
-     * @param string[] $attributes
-     * @param integer $value
-     * @param string $return_value
+     * @param ?array|?string $attributes Associative array of tag attributes or HTML attributes name="value" pairs
      */
     public function __construct(
-        $elementName = null, $elementLabel = null, $text = '', $attributes = null, $value = 1, $return_value = null
+        ?string $elementName = null, ?string $elementLabel = null, string $text = '', $attributes = null,
+        int $value = 1, ?string $return_value = null
     )
     {
         parent::__construct($elementName, $elementLabel, $text, $attributes, $value, $return_value);
@@ -31,18 +26,14 @@ class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
     }
 
     /**
-     *
      * @see HTML_QuickForm_extended_checkbox::getCheckboxClasses()
      */
-    function getCheckboxClasses()
+    public function getCheckboxClasses(): string
     {
         return 'checkbox no-awesome-style';
     }
 
-    /**
-     * @return string
-     */
-    function toHtml()
+    public function toHtml(): string
     {
         $html = [];
 

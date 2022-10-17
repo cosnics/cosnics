@@ -15,23 +15,21 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Table
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class HtmlTable extends HTML_Table
 {
-    const PARAM_NUMBER_OF_ITEMS_PER_PAGE = 'per_page';
-    const PARAM_ORDER_COLUMN = 'column';
-    const PARAM_ORDER_DIRECTION = 'direction';
-    const PARAM_PAGE_NUMBER = 'page_nr';
-    const PARAM_SELECT_ALL = 'selectall';
+    public const PARAM_NUMBER_OF_ITEMS_PER_PAGE = 'per_page';
+    public const PARAM_ORDER_COLUMN = 'column';
+    public const PARAM_ORDER_DIRECTION = 'direction';
+    public const PARAM_PAGE_NUMBER = 'page_nr';
+    public const PARAM_SELECT_ALL = 'selectall';
 
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     protected $allowMultiSort = false;
 
@@ -43,32 +41,27 @@ abstract class HtmlTable extends HTML_Table
     private $additionalParameters;
 
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     private $allowPageNavigation = true;
 
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     private $allowPageSelection = true;
 
     /**
-     *
      * @var string[]
      */
     private $contentCellAttributes;
 
     /**
-     *
-     * @var integer
+     * @var int
      */
     private $defaultOrderColumn;
 
     /**
-     *
-     * @var integer
+     * @var int
      */
     private $defaultOrderDirection;
 
@@ -82,26 +75,24 @@ abstract class HtmlTable extends HTML_Table
     /**
      * Number of items to display per page
      *
-     * @var integer
+     * @var int
      */
     private $numberOfItemsPerPage;
 
     /**
-     *
-     * @var integer
+     * @var int
      */
     private $orderColumn;
 
     /**
      * SORT_ASC or SORT_DESC
      *
-     * @var integer
+     * @var int
      */
     private $orderDirection;
 
     /**
-     *
-     * @var integer
+     * @var int
      */
     private $pageNumber;
 
@@ -113,7 +104,6 @@ abstract class HtmlTable extends HTML_Table
     private $pager;
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Table\PagerRenderer
      */
     private $pagerRenderer;
@@ -126,7 +116,6 @@ abstract class HtmlTable extends HTML_Table
     private $sourceCountFunction;
 
     /**
-     *
      * @var string[][]
      */
     private $sourceData;
@@ -134,7 +123,7 @@ abstract class HtmlTable extends HTML_Table
     /**
      * The total number of items in the table
      *
-     * @var integer
+     * @var int
      */
     private $sourceDataCount;
 
@@ -153,22 +142,20 @@ abstract class HtmlTable extends HTML_Table
     private $tableFormActions;
 
     /**
-     *
      * @var string
      */
     private $tableName;
 
     /**
-     *
      * @param string $tableName
      * @param string[] $sourceCountFunction
      * @param string[] $sourceDataFunction
-     * @param integer $defaultOrderColumn
-     * @param integer $defaultNumberOfItemsPerPage
-     * @param integer $defaultOrderDirection
-     * @param boolean $allowPageSelection
-     * @param boolean $allowPageNavigation
-     * @param boolean $allowMultiSort
+     * @param int $defaultOrderColumn
+     * @param int $defaultNumberOfItemsPerPage
+     * @param int $defaultOrderDirection
+     * @param bool $allowPageSelection
+     * @param bool $allowPageNavigation
+     * @param bool $allowMultiSort
      */
     public function __construct(
         $tableName = 'table', $sourceCountFunction = null, $sourceDataFunction = null, $defaultOrderColumn = 1,
@@ -176,7 +163,7 @@ abstract class HtmlTable extends HTML_Table
         $allowPageNavigation = true, $allowMultiSort = false
     )
     {
-        parent::__construct(array('class' => $this->getTableClasses(), 'id' => $tableName), 0, true);
+        parent::__construct(['class' => $this->getTableClasses(), 'id' => $tableName], 0, true);
 
         $this->tableName = $tableName;
         $this->additionalParameters = [];
@@ -207,11 +194,11 @@ abstract class HtmlTable extends HTML_Table
     /**
      * Returns the complete table HTML.
      *
-     * @param boolean $empty_table
+     * @param bool $empty_table
      *
      * @return string
      */
-    public function render($empty_table = false)
+    public function render(bool $empty_table = false): string
     {
         if ($this->countSourceData() == 0)
         {
@@ -244,7 +231,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @return string
      * @deprecated Use render() now
      */
@@ -254,8 +240,7 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function countSourceData()
     {
@@ -268,9 +253,9 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     * @param integer $defaultNumberOfItemsPerPage
+     * @param int $defaultNumberOfItemsPerPage
      *
-     * @return integer
+     * @return int
      */
     protected function determineNumberOfItemsPerPage($defaultNumberOfItemsPerPage)
     {
@@ -281,8 +266,7 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
-     * @return integer[]
+     * @return int
      */
     protected function determineOrderColumn()
     {
@@ -291,17 +275,16 @@ abstract class HtmlTable extends HTML_Table
 
         if (!is_array($requestedOrderColumn))
         {
-            $requestedOrderColumn = array($requestedOrderColumn);
+            $requestedOrderColumn = [$requestedOrderColumn];
         }
 
-        return !empty($requestedOrderColumn) ? $requestedOrderColumn : array($this->getDefaultOrderColumn());
+        return !empty($requestedOrderColumn) ? $requestedOrderColumn : [$this->getDefaultOrderColumn()];
     }
 
     /**
+     * @param int $selectedOrderColumn
      *
-     * @param integer $selectedOrderColumn
-     *
-     * @return integer[][]
+     * @return int
      */
     protected function determineOrderColumnQueryParameters($selectedOrderColumn)
     {
@@ -348,12 +331,11 @@ abstract class HtmlTable extends HTML_Table
             }
         }
 
-        return array($currentOrderColumns, $currentOrderDirections);
+        return [$currentOrderColumns, $currentOrderDirections];
     }
 
     /**
-     *
-     * @return integer[]
+     * @return int
      */
     protected function determineOrderDirection()
     {
@@ -362,15 +344,14 @@ abstract class HtmlTable extends HTML_Table
 
         if (!is_array($requestedOrderDirection))
         {
-            $requestedOrderDirection = array($requestedOrderDirection);
+            $requestedOrderDirection = [$requestedOrderDirection];
         }
 
-        return !empty($requestedOrderDirection) ? $requestedOrderDirection : array($this->getDefaultOrderDirection());
+        return !empty($requestedOrderDirection) ? $requestedOrderDirection : [$this->getDefaultOrderDirection()];
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     protected function determinePageNumber()
     {
@@ -393,7 +374,6 @@ abstract class HtmlTable extends HTML_Table
     abstract public function filterData($row);
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
      */
     public function getActionsButtonToolbar()
@@ -429,7 +409,7 @@ abstract class HtmlTable extends HTML_Table
             $buttonToolBar->addItem(
                 new Button(
                     $firstAction->get_title(), null, $firstAction->get_action(), Button::DISPLAY_LABEL,
-                    $firstAction->getConfirmation(), ['btn-sm','btn-table-action']
+                    $firstAction->getConfirmation(), ['btn-sm', 'btn-table-action']
                 )
             );
         }
@@ -438,7 +418,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @return string[]
      */
     public function getAdditionalParameters()
@@ -447,7 +426,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @param string []
      */
     public function setAdditionalParameters($parameters)
@@ -456,8 +434,7 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
-     * @param integer $value
+     * @param int $value
      *
      * @return string
      */
@@ -482,13 +459,11 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     abstract public function getColumnCount();
 
     /**
-     *
      * @return string[]
      */
     public function getContentCellAttributes()
@@ -497,8 +472,7 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getDefaultOrderColumn()
     {
@@ -506,8 +480,7 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getDefaultOrderDirection()
     {
@@ -515,7 +488,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @return string
      */
     public function getEmptyTable()
@@ -535,13 +507,11 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @return string
      */
     abstract public function getFormClasses();
 
     /**
-     *
      * @return string[]
      */
     public function getHeaderAttributes()
@@ -550,8 +520,7 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getNumberOfItemsPerPage()
     {
@@ -559,8 +528,7 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getOrderColumn()
     {
@@ -568,8 +536,7 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getOrderDirection()
     {
@@ -577,8 +544,7 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getPageNumber()
     {
@@ -607,7 +573,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Table\PagerRenderer
      */
     public function getPagerRenderer()
@@ -621,7 +586,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @param string $parameter
      *
      * @return string
@@ -632,11 +596,10 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
-     * @param integer $pageNumber
-     * @param integer $numberOfItemsPerPage
-     * @param integer $orderColumn
-     * @param integer $orderDirection
+     * @param int $pageNumber
+     * @param int $numberOfItemsPerPage
+     * @param int $orderColumn
+     * @param int $orderDirection
      *
      * @return string[]
      */
@@ -670,7 +633,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @return string[]
      */
     public function getSourceCountFunction()
@@ -683,7 +645,7 @@ abstract class HtmlTable extends HTML_Table
      * This function calls the function given as 2nd argument in the constructor of a
      * SortableTable. Make sure your function has the same parameters as defined here.
      *
-     * @param integer $offset
+     * @param int $offset
      *
      * @return string[]
      */
@@ -706,7 +668,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @return string[]
      */
     public function getSourceDataFunction()
@@ -715,19 +676,16 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @return string
      */
     abstract public function getTableActionsJavascript();
 
     /**
-     *
      * @return string
      */
     abstract public function getTableClasses();
 
     /**
-     *
      * @return string
      */
     abstract public function getTableContainerClasses();
@@ -739,16 +697,15 @@ abstract class HtmlTable extends HTML_Table
      */
     public function getTableFilterParameters()
     {
-        return array(
+        return [
             $this->getParameterName(self::PARAM_PAGE_NUMBER) => $this->getPageNumber(),
             $this->getParameterName(self::PARAM_ORDER_COLUMN) => $this->getOrderColumn(),
             $this->getParameterName(self::PARAM_ORDER_DIRECTION) => $this->getOrderDirection(),
             $this->getParameterName(self::PARAM_NUMBER_OF_ITEMS_PER_PAGE) => $this->getNumberOfItemsPerPage()
-        );
+        ];
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
      */
     public function getTableFormActions()
@@ -757,7 +714,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Table\FormAction\TableFormActions $actions
      */
     public function setTableFormActions(TableFormActions $actions = null)
@@ -766,7 +722,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @return string
      */
     protected function getTableName()
@@ -775,8 +730,7 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function isPageNavigationAllowed()
     {
@@ -784,8 +738,7 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function isPageSelectionAllowed()
     {
@@ -834,7 +787,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @return string
      */
     public function renderActions()
@@ -852,7 +804,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @return string
      */
     public function renderNavigation()
@@ -903,16 +854,16 @@ abstract class HtmlTable extends HTML_Table
      * Get the HTML-code with the data-table.
      *
      * @return string
+     * @throws \TableException
      */
     public function renderTableBody()
     {
         $this->prepareTableData();
 
-        return HTML_Table::toHTML();
+        return HTML_Table::toHtml();
     }
 
     /**
-     *
      * @return string
      */
     public function renderTableFilters()
@@ -921,7 +872,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @return string
      */
     public function renderTableFooter()
@@ -978,7 +928,6 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
      * @return string
      */
     public function renderTableHeader()
@@ -1024,10 +973,9 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     *
-     * @param integer $orderColumn
+     * @param int $orderColumn
      * @param string $label
-     * @param boolean $isSortable
+     * @param bool $isSortable
      * @param string[] $headerAttributes
      * @param string[] $cellAttributes
      *
@@ -1115,12 +1063,12 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     * @param boolean $emptyTable
+     * @param bool $emptyTable
      *
      * @return string
      * @deprecated User render() now
      */
-    public function toHtml($emptyTable = false)
+    public function toHtml(bool $emptyTable = false): string
     {
         return $this->render($emptyTable);
     }

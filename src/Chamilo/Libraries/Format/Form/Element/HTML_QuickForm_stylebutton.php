@@ -1,42 +1,36 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
 
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
+use HTML_QuickForm;
+use HTML_QuickForm_element;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Form\Element
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
 {
 
-    /**
-     *
-     * @var string
-     */
-    private $styleButtonLabel;
+    private ?InlineGlyph $glyph;
+
+    private ?string $styleButtonLabel;
 
     /**
-     *
-     * @var string
-     */
-    private $glyph;
-
-    /**
-     *
-     * @param string $elementName
-     * @param string $elementLabel
-     * @param string[] $attributes
-     * @param string $value
-     * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $glyph
+     * @param ?string $elementName
+     * @param ?string $elementLabel
+     * @param ?array|?string $attributes Associative array of tag attributes or HTML attributes name="value" pairs
+     * @param ?string $value
+     * @param ?\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $glyph
      */
     public function __construct(
-        $elementName = null, $elementLabel = null, $attributes = null, $value = null, InlineGlyph $glyph = null
+        ?string $elementName = null, ?string $elementLabel = null, $attributes = null, ?string $value = null,
+        ?InlineGlyph $glyph = null
     )
     {
-        HTML_QuickForm_element::__construct($elementName, null, $attributes);
+        parent::__construct($elementName, null, $attributes);
 
         $defaultAttributes = [];
         $defaultAttributes[] = 'btn';
@@ -62,13 +56,12 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * Returns a 'safe' element's value
      *
      * @param array $submitValues array of submitted values to search
-     * @param bool $assoc whether to return the value as associative array
-     *
-     * @return mixed
+     * @param bool $assoc         whether to return the value as associative array
      */
-    public function exportValue(&$submitValues, $assoc = false)
+    public function exportValue(array &$submitValues, bool $assoc = false)
     {
         $type = $this->getType();
+
         if ('reset' == $type || 'button' == $type)
         {
             return null;
@@ -79,45 +72,26 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         }
     }
 
-    /**
-     * @return string
-     */
-    function getFrozenHtml()
+    public function getFrozenHtml(): string
     {
         return '';
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph
-     */
-    public function getGlyph()
+    public function getGlyph(): ?InlineGlyph
     {
         return $this->glyph;
     }
 
-    /**
-     *
-     * @see HTML_QuickForm_element::getName()
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->getAttribute('name');
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getStyleButtonLabel()
+    public function getStyleButtonLabel(): ?string
     {
         return $this->styleButtonLabel;
     }
 
-    /**
-     *
-     * @see HTML_QuickForm_element::getValue()
-     */
     public function getValue()
     {
         return $this->getAttribute('value');
@@ -126,29 +100,28 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
     /**
      * Called by HTML_QuickForm whenever form event is made on this element
      *
-     * @param string $event Name of event
-     * @param mixed $arg event arguments
-     * @param object $caller calling object
-     *
-     * @return    boolean
-     * @since     1.0
-     * @access    public
+     * @param string $event            Name of event
+     * @param mixed $arg               event arguments
+     * @param ?\HTML_QuickForm $caller calling object
      */
-    public function onQuickFormEvent($event, $arg, &$caller)
+    public function onQuickFormEvent(string $event, $arg, ?HTML_QuickForm $caller = null): bool
     {
         // do not use submit values for button-type elements
         $type = $this->getType();
+
         if (('updateValue' != $event) || ('submit' != $type && 'reset' != $type && 'button' != $type))
         {
             parent::onQuickFormEvent($event, $arg, $caller);
         }
         else
         {
-            $value = $this->_findValue($caller->_constantValues);
+            $value = $this->_findValue($caller->getConstantValues());
+
             if (null === $value)
             {
-                $value = $this->_findValue($caller->_defaultValues);
+                $value = $this->_findValue($caller->getDefaultValues());
             }
+
             if (null !== $value)
             {
                 $this->setValue($value);
@@ -158,48 +131,26 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         return true;
     }
 
-    /**
-     * Sets the input field name
-     *
-     * @param string $name Input field name attribute
-     *
-     * @return    void
-     * @since     1.0
-     * @access    public
-     */
-    public function setName($name)
+    public function setName(string $name)
     {
-        $this->updateAttributes(array('name' => $name));
+        $this->updateAttributes(['name' => $name]);
     }
 
-    /**
-     *
-     * @param string $type
-     */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->_type = $type;
-        $this->updateAttributes(array('type' => $type));
+        $this->updateAttributes(['type' => $type]);
     }
 
-    /**
-     * Sets the value of the form element
-     *
-     * @param string $value Default value of the form element
-     *
-     * @return    void
-     * @since     1.0
-     * @access    public
-     */
     public function setValue($value)
     {
-        $this->updateAttributes(array('value' => $value));
+        $this->updateAttributes(['value' => $value]);
     }
 
     /**
      * @return string
      */
-    public function toHtml()
+    public function toHtml(): string
     {
         if ($this->_flagFrozen)
         {

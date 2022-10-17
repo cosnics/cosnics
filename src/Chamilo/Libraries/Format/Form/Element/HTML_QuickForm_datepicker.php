@@ -1,10 +1,13 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
 
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_QuickForm_date;
+use HTML_QuickForm_element;
 
 /**
  * Form element to select a date and hour (with popup datepicker)
@@ -14,28 +17,16 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 {
 
-    /**
-     *
-     * @var boolean
-     */
-    private $includeTimePicker;
+    private ?string $formName;
+
+    private ?bool $includeTimePicker;
 
     /**
-     * @var string
-     */
-    private $formName;
-
-    /**
-     * HTML_QuickForm_datepicker constructor.
-     *
-     * @param string $formName
-     * @param string $elementName
-     * @param string $elementLabel
-     * @param string $attributes
-     * @param boolean $includeTimePicker
+     * @throws \Exception
      */
     public function __construct(
-        $formName = null, $elementName = null, $elementLabel = null, $attributes = null, $includeTimePicker = true
+        ?string $formName = null, ?string $elementName = null, ?string $elementLabel = null, $attributes = null,
+        ?bool $includeTimePicker = true
     )
     {
         if (!isset($formName))
@@ -61,11 +52,6 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $this->setValue(date('Y-m-d H:i:s'));
     }
 
-    /**
-     * @param string[] $attributes
-     *
-     * @return string[]
-     */
     protected function addFormControlToElementAttributes($attributes)
     {
         if (is_array($attributes))
@@ -98,15 +84,13 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
     /**
      * Returns a 'safe' element's value
      *
-     * @param array   array of submitted values to search
-     * @param bool    whether to return the value as associative array
-     *
-     * @access public
-     * @return mixed
+     * @param array $submitValues array of submitted values to search
+     * @param bool $assoc         whether to return the value as associative array
      */
-    function exportValue(&$submitValues, $assoc = false)
+    public function exportValue(array &$submitValues, bool $assoc = false)
     {
         $values = parent::getValue();
+
         $y = $values['Y'][0];
         $m = $values['F'][0];
         $d = $values['d'][0];
@@ -138,13 +122,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         return $result;
     }
 
-    /**
-     * @param string $elementName
-     * @param boolean $includeTimePicker
-     *
-     * @return string
-     */
-    public function getDateFormat($elementName, $includeTimePicker)
+    public function getDateFormat(string $elementName, bool $includeTimePicker): string
     {
         $js_form_name = $this->formName;
         $glyph = new FontAwesomeGlyph('calendar-alt');
@@ -152,10 +130,10 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $popupLink =
             '<a class="btn btn-default" href="javascript:openCalendar(\'' . $js_form_name . '\',\'' . $elementName .
             '\')">' . $glyph->render() . '</a>';
-        $specialCharacters = array('D', 'l', 'd', 'M', 'F', 'm', 'y', 'H', 'a', 'A', 's', 'i', 'h', 'g', 'W', '.', ' ');
+        $specialCharacters = ['D', 'l', 'd', 'M', 'F', 'm', 'y', 'H', 'a', 'A', 's', 'i', 'h', 'g', 'W', '.', ' '];
         $hourMinuteDivider = Translation::get('HourMinuteDivider', null, StringUtilities::LIBRARIES);
 
-        foreach ($specialCharacters as $index => $char)
+        foreach ($specialCharacters as $char)
         {
             $popupLink = str_replace($char, "\\" . $char, $popupLink);
             $hourMinuteDivider = str_replace($char, "\\" . $char, $hourMinuteDivider);
@@ -193,6 +171,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
             }
 
             $year = date('Y', (int) $value);
+
             if ($year > $this->_options['maxYear'])
             {
                 $value = mktime(23, 59, 59, 12, 31, $this->_options['maxYear']);
@@ -201,7 +180,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
             // might be a unix epoch, then we fill all possible values
             $arr = explode('-', date('w-j-n-Y-g-G-i-s-a-A-W', (int) $value));
 
-            $value = array(
+            $value = [
                 'D' => $arr[0],
                 'l' => $arr[0],
                 'd' => $arr[1],
@@ -218,20 +197,17 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
                 'a' => $arr[8],
                 'A' => $arr[9],
                 'W' => $this->_trimLeadingZeros($arr[10])
-            );
+            ];
         }
         else
         {
-            $value = array_map(array($this, '_trimLeadingZeros'), $value);
+            $value = array_map([$this, '_trimLeadingZeros'], $value);
         }
 
         parent::setValue($value);
     }
 
-    /**
-     * HTML code to display this datepicker
-     */
-    public function toHtml()
+    public function toHtml(): string
     {
         $pathBuilder = Path::getInstance();
         $resourceManager = ResourceManager::getInstance();

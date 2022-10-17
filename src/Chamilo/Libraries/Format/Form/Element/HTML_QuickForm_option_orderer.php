@@ -1,64 +1,54 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
 
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use HTML_QuickForm_hidden;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Form\Element
  */
 class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
 {
 
     /**
-     * @var string
-     */
-    private $separator;
-
-    /**
-     *
      * @var string[]
      */
-    private $options;
+    private ?array $options;
+
+    private ?string $separator;
 
     /**
-     *
-     * @param string $name
-     * @param string $label
+     * @param ?string $name
+     * @param ?string $label
      * @param string[] $options
      * @param string $separator
-     * @param string[] $attributes
+     * @param ?array|?string $attributes Associative array of tag attributes or HTML attributes name="value" pairs
      */
-    public function __construct($name = null, $label = null, $options = null, $separator = '|', $attributes = [])
+    public function __construct(
+        ?string $name = null, ?string $label = null, ?array $options = null, ?string $separator = '|', $attributes = null
+    )
     {
         $this->separator = $separator;
-        $value = (isset($_REQUEST[$name]) ? $_REQUEST[$name] : implode($this->separator, array_keys($options)));
+        $value = ($_REQUEST[$name] ?? implode($this->separator, array_keys($options)));
+
         parent::__construct($name, $value, $attributes);
+
         $this->options = $options;
     }
 
     /**
      * Returns a 'safe' element's value
      *
-     * @param array   array of submitted values to search
-     * @param bool    whether to return the value as associative array
-     *
-     * @access public
-     * @return mixed
+     * @param array $submitValues array of submitted values to search
+     * @param bool $assoc         whether to return the value as associative array
      */
-    function exportValue(&$submitValues, $assoc = false)
+    public function exportValue(array &$submitValues, bool $assoc = false)
     {
         return $this->getValue();
     }
 
-    /**
-     * Returns the value of field without HTML tags
-     *
-     * @return    string
-     * @since     1.0
-     * @access    public
-     */
-    public function getFrozenHtml()
+    public function getFrozenHtml(): string
     {
         $html = [];
 
@@ -75,26 +65,12 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Returns the value of the form element
-     *
-     * @return    string
-     * @since     1.0
-     * @access    public
-     */
     public function getValue()
     {
         return explode($this->separator, parent::getValue());
     }
 
-    /**
-     * Returns the input field in HTML
-     *
-     * @return    string
-     * @since     1.0
-     * @access    public
-     */
-    public function toHtml()
+    public function toHtml(): string
     {
         $html = [];
 
