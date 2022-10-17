@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Table;
 
+use Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
@@ -18,63 +19,50 @@ use HTML_Table;
 class SimpleTable extends HTML_Table
 {
 
-    /**
-     * Cellrenderer for the table
-     *
-     * @var \Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface
-     */
-    private $cellRenderer;
+    private SimpleTableCellRendererInterface $cellRenderer;
 
     /**
      * Data for the properties
      *
      * @var string[][]
      */
-    private $dataArray;
+    private array $dataArray;
 
     /**
      * Properties that will be showed
      *
-     * @var
+     * @var string[]
      */
-    private $defaultProperties;
-
-    /**
-     * Used for unique formname
-     *
-     * @var string
-     */
-    private $tablename;
+    private array $defaultProperties;
 
     /**
      * @param string[][] $dataArray
      * @param \Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface $cellrenderer
-     * @param string $tablename
+     *
+     * @throws \TableException
      */
-    public function __construct($dataArray, $cellrenderer, $tablename)
+    public function __construct(array $dataArray, SimpleTableCellRendererInterface $cellrenderer)
     {
         parent::__construct(['class' => 'table table-striped table-bordered table-hover table-responsive']);
 
         $this->defaultProperties = $cellrenderer->getProperties();
         $this->dataArray = $dataArray;
         $this->cellRenderer = $cellrenderer;
-        $this->tablename = $tablename;
 
         $this->buildTable();
         $this->altRowAttributes(0, ['class' => 'row_odd'], ['class' => 'row_even'], true);
     }
 
     /**
-     * @return string
      * @throws \TableException
      */
-    public function render()
+    public function render(): string
     {
         return parent::toHtml();
     }
 
     /**
-     * Builds the table with given parameters
+     * @throws \TableException
      */
     public function buildTable()
     {
@@ -85,6 +73,8 @@ class SimpleTable extends HTML_Table
     /**
      * Builds the table with given table data When a cellrenderer is available the system will add modification links
      * for each row
+     *
+     * @throws \TableException
      */
     public function buildTableData()
     {
@@ -125,6 +115,8 @@ class SimpleTable extends HTML_Table
 
     /**
      * Builds the table header and if a cellrenderer is available it adds an extra column
+     *
+     * @throws \TableException
      */
     public function buildTableHeader()
     {
@@ -160,10 +152,10 @@ class SimpleTable extends HTML_Table
     }
 
     /**
-     * @return string
+     * @throws \TableException
      * @deprecated User render() now
      */
-    public function toHTML(): string
+    public function toHtml(): string
     {
         return $this->render();
     }

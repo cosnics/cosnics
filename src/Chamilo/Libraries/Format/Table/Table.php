@@ -9,7 +9,6 @@ use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableAjaxSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
-use Chamilo\Libraries\Format\Table\Interfaces\TableMultiColumnSortSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TablePageSelectionProhibition;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface;
@@ -24,7 +23,7 @@ use Exception;
  * ObjectTable to split between a table based on a record and based on an object
  *
  * @package Chamilo\Libraries\Format\Table
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class Table
 {
@@ -33,56 +32,49 @@ abstract class Table
     /**
      * Suffix for checkbox name when using actions on selected learning objects.
      */
-    const CHECKBOX_NAME_SUFFIX = '_id';
+    public const CHECKBOX_NAME_SUFFIX = '_id';
 
     /**
      * The default row count
      */
-    const DEFAULT_ROW_COUNT = 20;
+    public const DEFAULT_ROW_COUNT = 20;
 
     /**
      * The identifier for the table (used for table actions)
      */
-    const TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
+    public const TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface
      */
     protected $searchForm;
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Table\SortableTable
      */
     protected $table;
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Table\TableCellRenderer
      */
     private $cell_renderer;
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Table\TableColumnModel
      */
     private $column_model;
 
     /**
-     *
      * @var \Chamilo\Libraries\Architecture\Application\Application
      */
     private $component;
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Table\TableDataProvider
      */
     private $data_provider;
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
      */
     private $form_actions;
@@ -164,10 +156,10 @@ abstract class Table
      */
     protected function constructTable()
     {
-        $this->table = new SortableTable($this->get_name(), array($this, 'countData'), array($this, 'getData'),
+        $this->table = new SortableTable($this->get_name(), [$this, 'countData'], [$this, 'getData'],
             $this->get_column_model()->get_default_order_column() + ($this->has_form_actions() ? 1 : 0),
             $this->get_default_row_count(), $this->get_column_model()->get_default_order_direction(),
-            !$this->prohibits_page_selection(), true, $this->get_column_model() instanceof TableMultiColumnSortSupport);
+            !$this->prohibits_page_selection(), true);
 
         $this->table->setAdditionalParameters($this->get_parameters());
     }
@@ -175,7 +167,7 @@ abstract class Table
     /**
      * Counts the number of rows that a full retrieve would provide
      *
-     * @return integer
+     * @return int
      */
     public function countData()
     {
@@ -183,9 +175,8 @@ abstract class Table
     }
 
     /**
-     *
-     * @param integer[] $orderColumns
-     * @param integer[] $orderDirections
+     * @param int $orderColumns
+     * @param int $orderDirections
      *
      * @return \Chamilo\Libraries\Storage\Query\OrderBy
      */
@@ -213,10 +204,10 @@ abstract class Table
      * Retrieves the data from the data provider, parses the data through the cell renderer and returns the data as an
      * array
      *
-     * @param integer $offset
-     * @param integer $count
-     * @param integer[] $orderColumns
-     * @param integer[] $orderDirections
+     * @param int $offset
+     * @param int $count
+     * @param int $orderColumns
+     * @param int $orderDirections
      *
      * @return string[][]
      */
@@ -371,7 +362,7 @@ abstract class Table
     /**
      * Gets the default row count of the table
      *
-     * @return integer
+     * @return int
      */
     protected function get_default_row_count()
     {
@@ -406,8 +397,8 @@ abstract class Table
     /**
      * Returns the order property as \Chamilo\Libraries\Storage\Query\OrderBy
      *
-     * @param integer $orderIndex
-     * @param integer $orderDirection
+     * @param int $orderIndex
+     * @param int $orderDirection
      *
      * @return \Chamilo\Libraries\Storage\Query\OrderProperty
      */
@@ -432,7 +423,7 @@ abstract class Table
     /**
      * Returns the selected ids
      *
-     * @return integer[]
+     * @return int
      */
     public static function get_selected_ids()
     {
@@ -444,7 +435,7 @@ abstract class Table
         }
         elseif (!is_array($selectedIds))
         {
-            $selectedIds = array($selectedIds);
+            $selectedIds = [$selectedIds];
         }
 
         return $selectedIds;
@@ -478,7 +469,7 @@ abstract class Table
     /**
      * Returns whether or not the table has form actions
      *
-     * @return boolean
+     * @return bool
      */
     public function has_form_actions()
     {
@@ -534,7 +525,6 @@ abstract class Table
     }
 
     /**
-     *
      * @return string
      */
     public static function package()
@@ -545,7 +535,7 @@ abstract class Table
     /**
      * Checks whether or not this table prohibits page selection
      *
-     * @return boolean
+     * @return bool
      */
     protected function prohibits_page_selection()
     {
@@ -577,7 +567,7 @@ abstract class Table
     /**
      * Checks whether or not this table supports ajax
      *
-     * @return boolean
+     * @return bool
      */
     protected function supports_ajax()
     {

@@ -29,11 +29,6 @@ abstract class HtmlTable extends HTML_Table
     public const PARAM_SELECT_ALL = 'selectall';
 
     /**
-     * @var bool
-     */
-    protected $allowMultiSort = false;
-
-    /**
      * Additional parameters to pass in the URL
      *
      * @var string[]
@@ -155,14 +150,18 @@ abstract class HtmlTable extends HTML_Table
      * @param int $defaultOrderDirection
      * @param bool $allowPageSelection
      * @param bool $allowPageNavigation
-     * @param bool $allowMultiSort
      */
     public function __construct(
         $tableName = 'table', $sourceCountFunction = null, $sourceDataFunction = null, $defaultOrderColumn = 1,
         $defaultNumberOfItemsPerPage = 20, $defaultOrderDirection = SORT_ASC, $allowPageSelection = true,
-        $allowPageNavigation = true, $allowMultiSort = false
+        $allowPageNavigation = true
     )
     {
+        var_dump(
+            $tableName, $defaultOrderColumn, $defaultNumberOfItemsPerPage,
+            $defaultOrderDirection, $allowPageSelection, $allowPageNavigation
+        );
+
         parent::__construct(['class' => $this->getTableClasses(), 'id' => $tableName], 0, true);
 
         $this->tableName = $tableName;
@@ -178,7 +177,6 @@ abstract class HtmlTable extends HTML_Table
 
         $this->allowPageSelection = $allowPageSelection;
         $this->allowPageNavigation = $allowPageNavigation;
-        $this->allowMultiSort = $allowMultiSort;
 
         $this->sourceCountFunction = $sourceCountFunction;
         $this->sourceDataFunction = $sourceDataFunction;
@@ -227,15 +225,12 @@ abstract class HtmlTable extends HTML_Table
      * @return string
      * @deprecated Use render() now
      */
-    public function as_html()
+    public function as_html(): string
     {
         return $this->render();
     }
 
-    /**
-     * @return int
-     */
-    public function countSourceData()
+    public function countSourceData(): int
     {
         if (is_null($this->sourceDataCount))
         {
@@ -245,12 +240,7 @@ abstract class HtmlTable extends HTML_Table
         return $this->sourceDataCount;
     }
 
-    /**
-     * @param int $defaultNumberOfItemsPerPage
-     *
-     * @return int
-     */
-    protected function determineNumberOfItemsPerPage($defaultNumberOfItemsPerPage)
+    protected function determineNumberOfItemsPerPage(int $defaultNumberOfItemsPerPage): int
     {
         $variableName = $this->getParameterName(self::PARAM_NUMBER_OF_ITEMS_PER_PAGE);
         $requestedNumberOfItemsPerPage = Request::get($variableName);
@@ -258,20 +248,12 @@ abstract class HtmlTable extends HTML_Table
         return $requestedNumberOfItemsPerPage ?: $defaultNumberOfItemsPerPage;
     }
 
-    /**
-     * @return int
-     */
-    protected function determineOrderColumn()
+    protected function determineOrderColumn(): int
     {
         $variableName = $this->getParameterName(self::PARAM_ORDER_COLUMN);
         $requestedOrderColumn = Request::get($variableName, []);
 
-        if (!is_array($requestedOrderColumn))
-        {
-            $requestedOrderColumn = [$requestedOrderColumn];
-        }
-
-        return !empty($requestedOrderColumn) ? $requestedOrderColumn : [$this->getDefaultOrderColumn()];
+        return !empty($requestedOrderColumn) ? $requestedOrderColumn : $this->getDefaultOrderColumn();
     }
 
     /**
@@ -279,74 +261,42 @@ abstract class HtmlTable extends HTML_Table
      *
      * @return int
      */
-    protected function determineOrderColumnQueryParameters($selectedOrderColumn)
+    protected function determineOrderColumnQueryParameters($selectedOrderColumn): array
     {
-        $currentOrderColumns = $this->getOrderColumn();
-        $currentOrderDirections = $this->getOrderDirection();
+        $currentOrderColumn = $this->getOrderColumn();
+        $currentOrderDirection = $this->getOrderDirection();
 
-        if (!in_array($selectedOrderColumn, $currentOrderColumns))
+        if ($selectedOrderColumn != $currentOrderColumn)
         {
-            if ($this->allowMultiSort)
-            {
-                $currentOrderColumns[] = $selectedOrderColumn;
-                $currentOrderDirections[] = SORT_ASC;
-            }
-            else
-            {
-                $currentOrderColumns = $selectedOrderColumn;
-                $currentOrderDirections = SORT_ASC;
-            }
+            $currentOrderColumn = $selectedOrderColumn;
+            $currentOrderDirection = SORT_ASC;
+        }
+        elseif ($currentOrderDirection == SORT_ASC)
+        {
+            $currentOrderDirection = SORT_DESC;
+        }
+        elseif ($selectedOrderColumn == $this->getDefaultOrderColumn())
+        {
+            $currentOrderDirection = SORT_ASC;
         }
         else
         {
-            $selectedOrderColumnIndex = array_search($selectedOrderColumn, $currentOrderColumns);
-
-            // If the column was sorted ascending, now sort it descending. If it was sorted descending, remove the
-            // sorting for that column
-            if ($currentOrderDirections[$selectedOrderColumnIndex] == SORT_ASC)
-            {
-                $currentOrderDirections[$selectedOrderColumnIndex] = SORT_DESC;
-            }
-            else
-            {
-                if ($selectedOrderColumn == $this->getDefaultOrderColumn() && count($currentOrderColumns) == 1)
-                {
-                    $currentOrderDirections[$selectedOrderColumnIndex] = SORT_ASC;
-                }
-                else
-                {
-                    unset($currentOrderColumns[$selectedOrderColumnIndex]);
-                    unset($currentOrderDirections[$selectedOrderColumnIndex]);
-
-                    $currentOrderColumns = array_values($currentOrderColumns);
-                    $currentOrderDirections = array_values($currentOrderDirections);
-                }
-            }
+            $currentOrderColumn = $this->getDefaultOrderColumn();
+            $currentOrderDirection = $this->getDefaultOrderDirection();
         }
 
-        return [$currentOrderColumns, $currentOrderDirections];
+        return [$currentOrderColumn, $currentOrderDirection];
     }
 
-    /**
-     * @return int
-     */
-    protected function determineOrderDirection()
+    protected function determineOrderDirection(): int
     {
         $variableName = $this->getParameterName(self::PARAM_ORDER_DIRECTION);
         $requestedOrderDirection = Request::get($variableName, []);
 
-        if (!is_array($requestedOrderDirection))
-        {
-            $requestedOrderDirection = [$requestedOrderDirection];
-        }
-
-        return !empty($requestedOrderDirection) ? $requestedOrderDirection : [$this->getDefaultOrderDirection()];
+        return !empty($requestedOrderDirection) ? $requestedOrderDirection : $this->getDefaultOrderDirection();
     }
 
-    /**
-     * @return int
-     */
-    protected function determinePageNumber()
+    protected function determinePageNumber(): int
     {
         $variableName = $this->getParameterName(self::PARAM_PAGE_NUMBER);
         $requestedPageNumber = Request::get($variableName);
@@ -364,12 +314,9 @@ abstract class HtmlTable extends HTML_Table
      *
      * @return string[]
      */
-    abstract public function filterData($row);
+    abstract public function filterData(array $row): array;
 
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
-     */
-    public function getActionsButtonToolbar()
+    public function getActionsButtonToolbar(): ButtonToolBar
     {
         $formActions = $this->getTableFormActions()->get_form_actions();
         $formActionsCount = count($formActions);
@@ -413,25 +360,20 @@ abstract class HtmlTable extends HTML_Table
     /**
      * @return string[]
      */
-    public function getAdditionalParameters()
+    public function getAdditionalParameters(): array
     {
         return $this->additionalParameters;
     }
 
     /**
-     * @param string []
+     * @param string [] $parameters
      */
-    public function setAdditionalParameters($parameters)
+    public function setAdditionalParameters(array $parameters)
     {
         $this->additionalParameters = $parameters;
     }
 
-    /**
-     * @param int $value
-     *
-     * @return string
-     */
-    public function getCheckboxHtml($value)
+    public function getCheckboxHtml(string $value): string
     {
         $html = [];
 
@@ -451,10 +393,7 @@ abstract class HtmlTable extends HTML_Table
         return implode('', $html);
     }
 
-    /**
-     * @return int
-     */
-    abstract public function getColumnCount();
+    abstract public function getColumnCount(): int;
 
     /**
      * @return string[]
@@ -464,10 +403,7 @@ abstract class HtmlTable extends HTML_Table
         return $this->contentCellAttributes;
     }
 
-    /**
-     * @return int
-     */
-    public function getDefaultOrderColumn()
+    public function getDefaultOrderColumn(): int
     {
         return $this->defaultOrderColumn;
     }
@@ -493,7 +429,7 @@ abstract class HtmlTable extends HTML_Table
         $html = [];
 
         $html[] = '<div class="table-responsive">';
-        $html[] = parent::toHTML();
+        $html[] = parent::toHtml();
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -521,7 +457,7 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     * @return int
+     * @return int|int[]
      */
     public function getOrderColumn()
     {

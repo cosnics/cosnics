@@ -254,7 +254,7 @@ abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
         $renderer = new TreeMenuRenderer($this->get_tree_name(), $this->get_search_url(), $this->get_url_format());
         $this->render($renderer, 'sitemap');
 
-        return $renderer->toHTML();
+        return $renderer->toHtml();
     }
 
     /**

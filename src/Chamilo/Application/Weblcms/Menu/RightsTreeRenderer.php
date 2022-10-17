@@ -91,7 +91,7 @@ class RightsTreeRenderer extends HtmlMenu
         $this->render($renderer, 'sitemap');
         $html = [];
         $html[] = '<div class="active_elements" style="overflow: auto; height: 300px; width: 310px;">';
-        $html[] = $renderer->toHTML();
+        $html[] = $renderer->toHtml();
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

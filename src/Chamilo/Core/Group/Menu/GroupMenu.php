@@ -272,6 +272,6 @@ class GroupMenu extends HtmlMenu
         $renderer = new TreeMenuRenderer($this->get_tree_name(), $redirect->getUrl(), $this->urlFmt);
         $this->render($renderer, 'sitemap');
 
-        return $renderer->toHTML();
+        return $renderer->toHtml();
     }
 }

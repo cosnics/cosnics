@@ -54,7 +54,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
     {
         $this->accept($this->renderer);
 
-        return $this->renderer->toHTML();
+        return $this->renderer->toHtml();
     }
 
     /**

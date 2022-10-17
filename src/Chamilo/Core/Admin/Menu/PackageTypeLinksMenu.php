@@ -104,6 +104,6 @@ class PackageTypeLinksMenu extends HtmlMenu
         $renderer = new TreeMenuRenderer(ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true));
         $this->render($renderer, 'sitemap');
 
-        return $renderer->toHTML();
+        return $renderer->toHtml();
     }
 }

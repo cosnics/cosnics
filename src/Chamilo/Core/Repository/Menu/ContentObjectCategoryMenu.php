@@ -249,6 +249,6 @@ class ContentObjectCategoryMenu extends HtmlMenu
         $renderer = new TreeMenuRenderer($this->get_tree_name());
         $this->render($renderer, 'sitemap');
 
-        return $renderer->toHTML();
+        return $renderer->toHtml();
     }
 }

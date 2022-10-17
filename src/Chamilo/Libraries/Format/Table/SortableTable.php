@@ -7,11 +7,10 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Table
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class SortableTable extends HtmlTable
 {
@@ -26,7 +25,7 @@ class SortableTable extends HtmlTable
      *
      * @return string[]
      */
-    public function filterData($row)
+    public function filterData(array $row): array
     {
         $hasActions = $this->getTableFormActions() instanceof TableFormActions &&
             $this->getTableFormActions()->has_form_actions();
@@ -51,16 +50,14 @@ class SortableTable extends HtmlTable
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Format\Table\HtmlTable::getColumnCount()
      */
-    public function getColumnCount()
+    public function getColumnCount(): int
     {
         return 1;
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Format\Table\HtmlTable::getFormClasses()
      */
     public function getFormClasses()
@@ -69,7 +66,6 @@ class SortableTable extends HtmlTable
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableActionsJavascript()
      */
     public function getTableActionsJavascript()
@@ -80,7 +76,6 @@ class SortableTable extends HtmlTable
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableClasses()
      */
     public function getTableClasses()
@@ -89,7 +84,6 @@ class SortableTable extends HtmlTable
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableContainerClasses()
      */
     public function getTableContainerClasses()

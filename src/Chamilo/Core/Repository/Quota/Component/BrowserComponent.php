@@ -407,7 +407,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         $table = new PropertiesTable($properties);
         $html[] = '<div class="quota_statistics">';
-        $html[] = $table->toHTML();
+        $html[] = $table->toHtml();
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

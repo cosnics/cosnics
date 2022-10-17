@@ -15,12 +15,14 @@ class PropertiesTable extends HTML_Table
     /**
      * @var string[]
      */
-    private $properties;
+    private array $properties;
 
     /**
      * Constructor creates the table
      *
      * @param string[] $properties
+     *
+     * @throws \TableException
      */
     public function __construct(array $properties)
     {
@@ -34,6 +36,8 @@ class PropertiesTable extends HTML_Table
 
     /**
      * Builds the table with given properties
+     *
+     * @throws \TableException
      */
     public function buildTable()
     {
@@ -74,7 +78,7 @@ class PropertiesTable extends HTML_Table
     /**
      * @return string[]
      */
-    public function getProperties()
+    public function getProperties(): array
     {
         return $this->properties;
     }
@@ -82,7 +86,7 @@ class PropertiesTable extends HTML_Table
     /**
      * @param string[] $properties
      */
-    public function setProperties($properties)
+    public function setProperties(array $properties)
     {
         $this->properties = $properties;
     }

@@ -197,6 +197,6 @@ class ItemMenu extends HtmlMenu
         $renderer = new TreeMenuRenderer('item-menu', '', '#', false);
         $this->render($renderer, 'sitemap');
 
-        return $renderer->toHTML();
+        return $renderer->toHtml();
     }
 }

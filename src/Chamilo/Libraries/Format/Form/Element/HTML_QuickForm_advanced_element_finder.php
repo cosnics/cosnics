@@ -207,7 +207,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $this->_elements[0]->setValue($encoded);
     }
 
-    public function toHTML(): string
+    public function toHtml(): string
     {
         // Create a safe name for the id (remove array values)
         $safe_name = str_replace('[', '_', $this->getName());
@@ -223,12 +223,12 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
         $html[] = '<div class="col-md-12">';
 
-        $html[] = $this->_elements[0]->toHTML();
+        $html[] = $this->_elements[0]->toHtml();
 
         $html[] = '<div class="element_finder_types">';
 
         $html[] = '<div class="form-group">';
-        $html[] = $this->_elements[1]->toHTML();
+        $html[] = $this->_elements[1]->toHtml();
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -247,7 +247,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $html[] = '<span class="input-group-addon"><span class="fas fa-search"></span></span>';
 
         $this->_elements[2]->setValue('');
-        $html[] = $this->_elements[2]->toHTML();
+        $html[] = $this->_elements[2]->toHtml();
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -267,7 +267,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $html[] = '</div>';
 
         $html[] = '<div class="element_finder_buttons form-group">';
-        $html[] = $this->_elements[3]->toHTML();
+        $html[] = $this->_elements[3]->toHtml();
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -281,7 +281,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $html[] = '</div>';
 
         $html[] = '<div class="element_finder_buttons form-group">';
-        $html[] = $this->_elements[4]->toHTML();
+        $html[] = $this->_elements[4]->toHtml();
         $html[] = '</div>';
 
         $html[] = '</div>';
