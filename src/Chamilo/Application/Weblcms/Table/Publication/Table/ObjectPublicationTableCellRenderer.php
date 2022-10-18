@@ -16,6 +16,7 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -50,12 +51,12 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
      */
     public function get_actions($publication)
     {
-        $table = $this->get_table();
-        $column_model = $table->get_column_model();
+        $table = $this->getTable();
+        $column_model = $table->getTableColumnModel();
 
         return $this->get_component()->get_publication_actions(
             $publication, $column_model->is_display_order_column(),
-            $column_model->get_default_order_direction() == SORT_ASC
+            $column_model->getDefaultOrderDirection() == SORT_ASC
         )->as_html();
     }
 
@@ -68,7 +69,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
      *
      * @return String
      */
-    public function render_cell($column, $publication)
+    public function renderCell(TableColumn $column, $publication): string
     {
         /**
          * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
@@ -114,7 +115,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
                         )
                     );
 
-                    return '<a href="' . $details_url . '">' . parent::render_cell($column, $publication) . '</a>';
+                    return '<a href="' . $details_url . '">' . parent::renderCell($column, $publication) . '</a>';
                 }
 
                 $details_url = $this->get_component()->get_url(
@@ -124,7 +125,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
                     )
                 );
 
-                return '<a href="' . $details_url . '">' . parent::render_cell($column, $publication) . '</a>';
+                return '<a href="' . $details_url . '">' . parent::renderCell($column, $publication) . '</a>';
 
                 break;
             case ContentObjectPublication::PROPERTY_PUBLICATION_DATE :
@@ -176,7 +177,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
             }
         }
 
-        return parent::render_cell($column, $publication);
+        return parent::renderCell($column, $publication);
     }
 
     /**

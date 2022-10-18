@@ -13,6 +13,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -165,9 +166,9 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer::render_cell()
+     * @see \Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer::renderCell()
      */
-    public function render_cell($column, $workspace)
+    public function renderCell(TableColumn $column, $workspace): string
     {
         switch ($column->get_name())
         {
@@ -185,9 +186,9 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
                 );
             case Workspace::PROPERTY_NAME:
                 return '<a href="' . $this->getWorkspaceUrl($workspace) . '">' .
-                    parent::render_cell($column, $workspace) . '</a>';
+                    parent::renderCell($column, $workspace) . '</a>';
         }
 
-        return parent::render_cell($column, $workspace);
+        return parent::renderCell($column, $workspace);
     }
 }

@@ -26,7 +26,7 @@ class TreeNodeTableDataProvider extends DataClassTableDataProvider
 
     public function retrieveData(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         /** @var TreeNode $treeNode */
         $treeNode = $this->get_component()->getCurrentTreeNode();

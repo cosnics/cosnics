@@ -31,12 +31,4 @@ class EntryTableColumnModel
     {
         return $this->getTable()->getLearningPathAssignmentService()->getScoreClassName();
     }
-
-    /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entry\EntryTable|\Chamilo\Libraries\Format\Table\Table
-     */
-    public function getTable()
-    {
-        return $this->get_table();
-    }
 }

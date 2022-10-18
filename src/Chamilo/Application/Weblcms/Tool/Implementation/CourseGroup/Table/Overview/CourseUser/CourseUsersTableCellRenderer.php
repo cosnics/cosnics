@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Over
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 
 /**
@@ -27,7 +28,7 @@ class CourseUsersTableCellRenderer extends RecordTableCellRenderer
      *
      * @return string
      */
-    public function render_cell($column, $course_user)
+    public function renderCell(TableColumn $column, $course_user): string
     {
         switch ($column->get_name())
         {
@@ -39,6 +40,6 @@ class CourseUsersTableCellRenderer extends RecordTableCellRenderer
                 }
         }
         
-        return parent::render_cell($column, $course_user);
+        return parent::renderCell($column, $course_user);
     }
 }

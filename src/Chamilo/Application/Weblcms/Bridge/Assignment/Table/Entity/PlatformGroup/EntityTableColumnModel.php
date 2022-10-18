@@ -18,11 +18,11 @@ class EntityTableColumnModel
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_NAME));
+        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_NAME));
 
-        parent::initialize_columns();
+        parent::initializeColumns();
 
     }
 }

@@ -9,6 +9,7 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -136,7 +137,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
         return $toolbar->render();
     }
 
-    public function render_cell($column, $object)
+    public function renderCell(TableColumn $column, $object): string
     {
         $calculator = new Calculator($object->get_user());
 
@@ -158,6 +159,6 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return Filesystem::format_file_size($calculator->getMaximumUserDiskQuota());
         }
 
-        return parent::render_cell($column, $object);
+        return parent::renderCell($column, $object);
     }
 }

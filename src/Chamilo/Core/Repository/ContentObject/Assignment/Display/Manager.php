@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\NotificationServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
@@ -71,7 +72,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
      */
-    public function getDataProvider()
+    public function getDataProvider(): AssignmentDataProvider
     {
         return $this->getApplicationConfiguration()->get(self::CONFIGURATION_DATA_PROVIDER);
     }

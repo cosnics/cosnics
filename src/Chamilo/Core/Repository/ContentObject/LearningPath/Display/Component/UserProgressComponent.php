@@ -79,7 +79,6 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         $html[] = '</div>';
 
         $table = new TargetUserProgressTable($this);
-        $table->setSearchForm($this->getSearchButtonToolbarRenderer()->getSearchForm());
 
         $html[] = $panelRenderer->render(
             $translator->getTranslation('UserProgress'),

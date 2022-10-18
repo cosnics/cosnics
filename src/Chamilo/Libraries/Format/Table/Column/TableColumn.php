@@ -11,15 +11,15 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * and based on an object
  *
  * @package Chamilo\Libraries\Format\Table\Column
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class TableColumn
 {
     use ClassContext;
 
-    const CSS_CLASSES_COLUMN_CONTENT = 'content';
+    public const CSS_CLASSES_COLUMN_CONTENT = 'content';
 
-    const CSS_CLASSES_COLUMN_HEADER = 'header';
+    public const CSS_CLASSES_COLUMN_HEADER = 'header';
 
     /**
      * The CSS Classes
@@ -36,27 +36,19 @@ abstract class TableColumn
     private $name;
 
     /**
-     * Whether or not the column is sortable
-     *
-     * @var boolean
-     */
-    private $sortable;
-
-    /**
      * The visible title of the column in the layout
      */
     private $title;
 
     /**
-     *
      * @param string $name
-     * @param string $title - [OPTIONAL] default null - translation of the column name
-     * @param boolean $sortable - [OPTIONAL] default null
+     * @param string $title  - [OPTIONAL] default null - translation of the column name
+     * @param bool $sortable - [OPTIONAL] default null
      * @param string $headerCssClasses
      * @param string $contentCssClasses
      */
     public function __construct(
-        $name = '', $title = null, $sortable = true, $headerCssClasses = null, $contentCssClasses = null
+        $name = '', $title = null, $headerCssClasses = null, $contentCssClasses = null
     )
     {
         $this->set_name($name);
@@ -81,16 +73,14 @@ abstract class TableColumn
         }
 
         $this->set_title($title);
-        $this->set_sortable($sortable);
 
-        $this->setCssClasses(array(
-                self::CSS_CLASSES_COLUMN_HEADER => $headerCssClasses,
-                self::CSS_CLASSES_COLUMN_CONTENT => $contentCssClasses
-            ));
+        $this->setCssClasses([
+            self::CSS_CLASSES_COLUMN_HEADER => $headerCssClasses,
+            self::CSS_CLASSES_COLUMN_CONTENT => $contentCssClasses
+        ]);
     }
 
     /**
-     *
      * @return string[]
      */
     public function getCssClasses()
@@ -99,7 +89,6 @@ abstract class TableColumn
     }
 
     /**
-     *
      * @param string[] $cssClasses
      */
     public function setCssClasses($cssClasses)
@@ -148,27 +137,6 @@ abstract class TableColumn
     }
 
     /**
-     * Returns if this column is sortable
-     *
-     * @return boolean
-     */
-    public function is_sortable()
-    {
-        return $this->sortable;
-    }
-
-    /**
-     * Sets if this column is sortable
-     *
-     * @param boolean $sortable
-     */
-    public function set_sortable($sortable)
-    {
-        $this->sortable = $sortable;
-    }
-
-    /**
-     *
      * @return string
      */
     public static function package()

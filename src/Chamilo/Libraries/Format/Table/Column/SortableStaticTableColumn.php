@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Table\Column;
 
-use Chamilo\Libraries\Storage\Query\Variable\StaticColumnConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
@@ -9,13 +9,12 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * based on a record and based on an object
  *
  * @package Chamilo\Libraries\Format\Table\Column
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
-class SortableStaticTableColumn extends TableColumn
+class SortableStaticTableColumn extends AbstractSortableTableColumn
 {
 
     /**
-     *
      * @param string $name
      * @param string $title - [OPTIONAL] default null - translation of the column name
      * @param string $headerCssClasses
@@ -27,10 +26,9 @@ class SortableStaticTableColumn extends TableColumn
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable
      */
-    public function getConditionVariable()
+    public function getConditionVariable(): ConditionVariable
     {
         return new StaticConditionVariable($this->get_name(), false);
     }

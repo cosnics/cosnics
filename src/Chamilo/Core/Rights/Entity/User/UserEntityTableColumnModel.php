@@ -7,20 +7,20 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 
 /**
  * Cell renderer for the user entity browser
- * 
- * @author Sven Vanpoucke
+ *
+ * @author     Sven Vanpoucke
  * @deprecated Should not be needed anymore
  */
 class UserEntityTableColumnModel extends LocationEntityTableColumnModel
 {
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_OFFICIAL_CODE));
-        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_USERNAME));
-        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_FIRSTNAME));
-        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_LASTNAME));
-        
-        parent::initialize_columns();
+        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_OFFICIAL_CODE));
+        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_USERNAME));
+        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_FIRSTNAME));
+        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_LASTNAME));
+
+        parent::initializeColumns();
     }
 }

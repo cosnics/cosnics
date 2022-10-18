@@ -20,15 +20,15 @@ class ItemBrowserTableColumnModel extends DataClassTableColumnModel implements T
     //const DEFAULT_ORDER_COLUMN_INDEX = 0;
     const PROPERTY_TYPE = 'Type';
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE));
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_TYPE));
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(Item::class, Item::PROPERTY_SORT, false)
         );
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ItemTitle::class, ItemTitle::PROPERTY_TITLE, false)
         );
     }

@@ -15,15 +15,15 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 class ExternalLinkTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
         $glyph = new FontAwesomeGlyph('link', [], null, 'fas');
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(
                 Instance::class, Instance::PROPERTY_IMPLEMENTATION, $glyph->render()
             )
         );
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(
                 Instance::class, Instance::PROPERTY_TITLE
             )

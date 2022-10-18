@@ -16,7 +16,7 @@ use Exception;
 abstract class GalleryTable extends Table
 {
     const DEFAULT_COLUMN_COUNT = 4;
-    const DEFAULT_ROW_COUNT = 5;
+    const DEFAULT_MAXIMUM_NUMBER_OF_RESULTS = 5;
 
     /**
      * The current row that is being processed
@@ -32,14 +32,14 @@ abstract class GalleryTable extends Table
     {
         $this->table = new GalleryHTMLTable(
             $this->get_name(), array($this, 'countData'), array($this, 'getData'), array($this, 'get_property_model'),
-            $this->get_property_model()->getDefaultOrderBy() + ($this->has_form_actions() ? 1 : 0),
-            $this->get_default_row_count(), $this->get_property_model()->get_default_order_direction(),
-            !$this->prohibits_order_direction(), !$this->prohibits_page_selection()
+            $this->get_property_model()->getDefaultOrderBy() + ($this->hasFormActions() ? 1 : 0),
+            $this->getDefaultMaximumNumberofResults(), $this->get_property_model()->getDefaultOrderDirection(),
+            !$this->prohibits_order_direction()
         );
 
-        if ($this->has_form_actions())
+        if ($this->hasFormActions())
         {
-            $this->table->setTableFormActions($this->get_form_actions());
+            $this->table->setTableFormActions($this->getFormActions());
         }
 
         $this->table->setAdditionalParameters($this->get_parameters());
@@ -74,9 +74,9 @@ abstract class GalleryTable extends Table
      * @return \Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTableCellRenderer
      * @throws \Exception
      */
-    public function get_cell_renderer()
+    public function getTableCellRenderer(): GalleryTableCellRenderer
     {
-        $cell_renderer = parent::get_cell_renderer();
+        $cell_renderer = parent::getTableCellRenderer();
 
         if (!$cell_renderer instanceof GalleryTableCellRenderer)
         {
@@ -104,9 +104,9 @@ abstract class GalleryTable extends Table
      *
      * @return \Chamilo\Libraries\Storage\Query\OrderProperty
      */
-    protected function get_order_property($orderIndex, $orderDirection)
+    protected function getOrderProperty($orderIndex, $orderDirection)
     {
-        return $this->get_property_model()->get_order_property($orderIndex, $orderDirection);
+        return $this->get_property_model()->getOrderProperty($orderIndex, $orderDirection);
     }
 
     /**
@@ -118,7 +118,7 @@ abstract class GalleryTable extends Table
     {
         if (!isset($this->property_model))
         {
-            $classname = $this->get_class('PropertyModel');
+            $classname = get_class($this) . 'PropertyModel';
             $this->property_model = new $classname($this);
         }
 
@@ -133,7 +133,7 @@ abstract class GalleryTable extends Table
      *
      * @throws \Exception
      */
-    protected function handle_result(&$tableData, $result)
+    protected function handleResult(array &$tableData, $result)
     {
         if (count($this->current_row) >= $this->get_default_column_count())
         {
@@ -142,16 +142,16 @@ abstract class GalleryTable extends Table
         }
 
         $this->current_row[] = array(
-            $this->get_cell_renderer()->render_id_cell($result),
-            $this->get_cell_renderer()->render_cell(null, $result)
+            $this->getTableCellRenderer()->renderIdentifierCell($result),
+            $this->getTableCellRenderer()->renderCell(null, $result)
         );
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\Table::initialize_table()
+     * @see \Chamilo\Libraries\Format\Table\Table::initializeTable()
      */
-    protected function initialize_table()
+    protected function initializeTable()
     {
     }
 

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Table\Activity;
 
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -23,7 +24,7 @@ class ActivityTableCellRenderer extends DataClassTableCellRenderer
      *
      * @return string
      */
-    public function render_cell($column, $result)
+    public function renderCell(TableColumn $column, $result): string
     {
         switch ($column->get_name())
         {
@@ -43,6 +44,6 @@ class ActivityTableCellRenderer extends DataClassTableCellRenderer
                 break;
         }
 
-        return parent::render_cell($column, $result);
+        return parent::renderCell($column, $result);
     }
 }

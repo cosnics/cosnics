@@ -18,11 +18,11 @@ class UserViewTableColumnModel extends DataClassTableColumnModel implements Tabl
 
     /**
      *
-     * @see \libraries\format\TableColumnModel::initialize_columns()
+     * @see \libraries\format\TableColumnModel::initializeColumns()
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(UserView::class, UserView::PROPERTY_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(UserView::class, UserView::PROPERTY_DESCRIPTION));
+        $this->addColumn(new DataClassPropertyTableColumn(UserView::class, UserView::PROPERTY_NAME));
+        $this->addColumn(new DataClassPropertyTableColumn(UserView::class, UserView::PROPERTY_DESCRIPTION));
     }
 }

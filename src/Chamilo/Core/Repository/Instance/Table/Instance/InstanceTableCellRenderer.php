@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -107,7 +108,7 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
      *
      * @return string
      */
-    public function render_cell($column, $result)
+    public function renderCell(TableColumn $column, $result): string
     {
         switch ($column->get_name())
         {
@@ -123,6 +124,6 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 break;
         }
 
-        return parent::render_cell($column, $result);
+        return parent::renderCell($column, $result);
     }
 }

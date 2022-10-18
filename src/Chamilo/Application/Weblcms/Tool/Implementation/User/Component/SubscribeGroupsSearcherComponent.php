@@ -35,7 +35,6 @@ class SubscribeGroupsSearcherComponent extends Manager implements TableSupport
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
         $table = new UnsubscribedGroupTable($this);
-        $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
 
         $html = [];
 

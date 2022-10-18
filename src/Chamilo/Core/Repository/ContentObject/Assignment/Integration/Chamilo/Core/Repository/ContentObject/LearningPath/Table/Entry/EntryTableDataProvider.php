@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\C
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -27,17 +28,9 @@ class EntryTableDataProvider
         );
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entry\EntryTable|\Chamilo\Libraries\Format\Table\Table
-     */
-    public function getTable()
-    {
-        return $this->get_table();
-    }
-
     public function retrieveData(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         $learningPathAssignmentService = $this->getTable()->getLearningPathAssignmentService();
 

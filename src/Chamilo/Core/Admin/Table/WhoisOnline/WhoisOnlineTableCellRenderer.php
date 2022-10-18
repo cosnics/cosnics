@@ -5,6 +5,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -19,7 +20,7 @@ class WhoisOnlineTableCellRenderer extends DataClassTableCellRenderer
 {
 
     // Inherited
-    public function render_cell($column, $user)
+    public function renderCell(TableColumn $column, $user): string
     {
         // Add special features here
         switch ($column->get_name())
@@ -65,6 +66,6 @@ class WhoisOnlineTableCellRenderer extends DataClassTableCellRenderer
                 }
                 return '';
         }
-        return parent::render_cell($column, $user);
+        return parent::renderCell($column, $user);
     }
 }

@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -30,7 +31,7 @@ class ShareTableCellRenderer extends DataClassTableCellRenderer implements Table
         return $toolbar->as_html();
     }
 
-    public function render_cell($column, $workspace)
+    public function renderCell(TableColumn $column, $workspace): string
     {
         switch ($column->get_name())
         {
@@ -43,6 +44,6 @@ class ShareTableCellRenderer extends DataClassTableCellRenderer implements Table
                 );
         }
 
-        return parent::render_cell($column, $workspace);
+        return parent::renderCell($column, $workspace);
     }
 }

@@ -84,7 +84,7 @@ class EntityTable extends RecordTable implements TableFormActionsSupport
     /**
      * @return \Chamilo\Core\Repository\Quota\Rights\Table\Entity\EntityTableDataProvider
      */
-    public function get_data_provider()
+    public function getTableDataProvider(): EntityTableDataProvider
     {
         if (!isset($this->dataProvider))
         {
@@ -98,7 +98,7 @@ class EntityTable extends RecordTable implements TableFormActionsSupport
      * @return \Chamilo\Core\Repository\Quota\Rights\Table\Entity\EntityTableCellRenderer|\Chamilo\Libraries\Format\Table\TableCellRenderer
      * @throws \Exception
      */
-    public function get_cell_renderer()
+    public function getTableCellRenderer(): EntityTableCellRenderer
     {
         if (!isset($this->cellRenderer))
         {
@@ -113,7 +113,7 @@ class EntityTable extends RecordTable implements TableFormActionsSupport
      *
      * @return \Chamilo\Libraries\Format\Table\TableColumnModel
      */
-    public function get_column_model()
+    public function getTableColumnModel(): EntityTableColumnModel
     {
         if (!isset($this->columnModel))
         {

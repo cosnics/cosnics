@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -152,7 +153,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
         return $toolbar->as_html();
     }
 
-    public function render_cell($column, $cloi)
+    public function renderCell(TableColumn $column, $cloi): string
     {
         $content_object = $cloi->get_ref_object();
         $glyph = new FontAwesomeGlyph('folder', [], Translation::get('Type'));
@@ -204,6 +205,6 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 return 0;
         }
 
-        return parent::render_cell($column, $cloi);
+        return parent::renderCell($column, $cloi);
     }
 }

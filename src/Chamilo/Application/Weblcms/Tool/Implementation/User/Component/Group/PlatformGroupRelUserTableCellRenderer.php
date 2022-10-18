@@ -9,6 +9,7 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -72,17 +73,17 @@ class PlatformGroupRelUserTableCellRenderer extends DataClassTableCellRenderer
         return $toolbar->as_html();
     }
 
-    public function render_cell($column, $groupreluser)
+    public function renderCell(TableColumn $column, $groupreluser): string
     {
         switch ($column->get_name())
         {
             case GroupRelUser::PROPERTY_USER_ID :
-                $user_id = parent::render_cell($column, $groupreluser);
+                $user_id = parent::renderCell($column, $groupreluser);
                 $user = DataManager::retrieve_by_id(User::class, $user_id);
 
                 return $user->get_fullname();
         }
 
-        return parent::render_cell($column, $groupreluser);
+        return parent::renderCell($column, $groupreluser);
     }
 }

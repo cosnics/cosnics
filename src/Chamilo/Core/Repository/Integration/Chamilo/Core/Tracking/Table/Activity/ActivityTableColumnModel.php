@@ -24,14 +24,14 @@ class ActivityTableColumnModel extends DataClassTableColumnModel
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
         $glyph = new FontAwesomeGlyph('mouse', [], Translation::get('ActivityType'), 'fas');
 
-        $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE_ICON, $glyph->render()));
-        $this->add_column(new DataClassPropertyTableColumn(Activity::class, Activity::PROPERTY_TYPE));
-        $this->add_column(new DataClassPropertyTableColumn(Activity::class, Activity::PROPERTY_CONTENT));
-        $this->add_column(new StaticTableColumn(self::PROPERTY_USER, Translation::get('User')));
-        $this->add_column(new DataClassPropertyTableColumn(Activity::class, Activity::PROPERTY_DATE));
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_TYPE_ICON, $glyph->render()));
+        $this->addColumn(new DataClassPropertyTableColumn(Activity::class, Activity::PROPERTY_TYPE));
+        $this->addColumn(new DataClassPropertyTableColumn(Activity::class, Activity::PROPERTY_CONTENT));
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_USER, Translation::get('User')));
+        $this->addColumn(new DataClassPropertyTableColumn(Activity::class, Activity::PROPERTY_DATE));
     }
 }

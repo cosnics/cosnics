@@ -32,7 +32,6 @@ class BrowserComponent extends TabComponent implements TableSupport
             $this, $this->getUserService(), $this->getRightsService(), $this->getPublicationService(),
             $this->getFavouriteService(), $this->getTranslator(), $this->getThemePathBuilder()
         );
-        $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
 
         $html = [];
 

@@ -12,7 +12,7 @@ class RepositoryTableColumnModel extends \Chamilo\Core\Repository\Table\ContentO
 
     public function add_type_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Webpage::class, Webpage::PROPERTY_EXTENSION));
-        $this->add_column(new DataClassPropertyTableColumn(Webpage::class, Webpage::PROPERTY_FILESIZE));
+        $this->addColumn(new DataClassPropertyTableColumn(Webpage::class, Webpage::PROPERTY_EXTENSION));
+        $this->addColumn(new DataClassPropertyTableColumn(Webpage::class, Webpage::PROPERTY_FILESIZE));
     }
 }

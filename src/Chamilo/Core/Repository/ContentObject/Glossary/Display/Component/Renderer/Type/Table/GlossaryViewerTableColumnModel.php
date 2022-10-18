@@ -9,11 +9,11 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 class GlossaryViewerTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE));
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION));
     }
 }

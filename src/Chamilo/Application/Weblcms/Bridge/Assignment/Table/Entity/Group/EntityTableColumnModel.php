@@ -19,9 +19,9 @@ class EntityTableColumnModel
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        parent::initialize_columns();
-        $this->add_column(new StaticTableColumn(self::PROPERTY_GROUP_MEMBERS), 1);
+        parent::initializeColumns();
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_GROUP_MEMBERS), 1);
     }
 }

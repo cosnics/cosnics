@@ -16,17 +16,17 @@ class ExportTableColumnModel extends DataClassTableColumnModel implements TableC
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
         $glyph = new FontAwesomeGlyph('folder', Translation::get('Type'));
-        $this->add_column(
+        $this->addColumn(
 
             new StaticTableColumn(self::PROPERTY_TYPE, $glyph->render())
         );
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
         );
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
         );
     }

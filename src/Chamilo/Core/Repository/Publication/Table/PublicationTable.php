@@ -7,5 +7,5 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 class PublicationTable extends DataClassTable
 {
     const TABLE_IDENTIFIER = Manager::PARAM_PUBLICATION_ID;
-    const DEFAULT_ROW_COUNT = 500;
+    const DEFAULT_MAXIMUM_NUMBER_OF_RESULTS = 500;
 }

@@ -7,6 +7,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -39,11 +40,6 @@ abstract class HtmlTable extends HTML_Table
      * @var bool
      */
     private $allowPageNavigation = true;
-
-    /**
-     * @var bool
-     */
-    private $allowPageSelection = true;
 
     /**
      * @var string[]
@@ -148,20 +144,13 @@ abstract class HtmlTable extends HTML_Table
      * @param int $defaultOrderColumn
      * @param int $defaultNumberOfItemsPerPage
      * @param int $defaultOrderDirection
-     * @param bool $allowPageSelection
      * @param bool $allowPageNavigation
      */
     public function __construct(
         $tableName = 'table', $sourceCountFunction = null, $sourceDataFunction = null, $defaultOrderColumn = 1,
-        $defaultNumberOfItemsPerPage = 20, $defaultOrderDirection = SORT_ASC, $allowPageSelection = true,
-        $allowPageNavigation = true
+        $defaultNumberOfItemsPerPage = 20, $defaultOrderDirection = SORT_ASC, $allowPageNavigation = true
     )
     {
-        var_dump(
-            $tableName, $defaultOrderColumn, $defaultNumberOfItemsPerPage,
-            $defaultOrderDirection, $allowPageSelection, $allowPageNavigation
-        );
-
         parent::__construct(['class' => $this->getTableClasses(), 'id' => $tableName], 0, true);
 
         $this->tableName = $tableName;
@@ -175,7 +164,6 @@ abstract class HtmlTable extends HTML_Table
         $this->orderDirection = $this->determineOrderDirection();
         $this->numberOfItemsPerPage = $this->determineNumberOfItemsPerPage($defaultNumberOfItemsPerPage);
 
-        $this->allowPageSelection = $allowPageSelection;
         $this->allowPageNavigation = $allowPageNavigation;
 
         $this->sourceCountFunction = $sourceCountFunction;
@@ -251,7 +239,7 @@ abstract class HtmlTable extends HTML_Table
     protected function determineOrderColumn(): int
     {
         $variableName = $this->getParameterName(self::PARAM_ORDER_COLUMN);
-        $requestedOrderColumn = Request::get($variableName, []);
+        $requestedOrderColumn = Request::get($variableName, null);
 
         return !empty($requestedOrderColumn) ? $requestedOrderColumn : $this->getDefaultOrderColumn();
     }
@@ -259,7 +247,7 @@ abstract class HtmlTable extends HTML_Table
     /**
      * @param int $selectedOrderColumn
      *
-     * @return int
+     * @return int[]
      */
     protected function determineOrderColumnQueryParameters($selectedOrderColumn): array
     {
@@ -275,14 +263,9 @@ abstract class HtmlTable extends HTML_Table
         {
             $currentOrderDirection = SORT_DESC;
         }
-        elseif ($selectedOrderColumn == $this->getDefaultOrderColumn())
-        {
-            $currentOrderDirection = SORT_ASC;
-        }
         else
         {
-            $currentOrderColumn = $this->getDefaultOrderColumn();
-            $currentOrderDirection = $this->getDefaultOrderDirection();
+            $currentOrderDirection = SORT_ASC;
         }
 
         return [$currentOrderColumn, $currentOrderDirection];
@@ -291,7 +274,7 @@ abstract class HtmlTable extends HTML_Table
     protected function determineOrderDirection(): int
     {
         $variableName = $this->getParameterName(self::PARAM_ORDER_DIRECTION);
-        $requestedOrderDirection = Request::get($variableName, []);
+        $requestedOrderDirection = Request::get($variableName, null);
 
         return !empty($requestedOrderDirection) ? $requestedOrderDirection : $this->getDefaultOrderDirection();
     }
@@ -318,7 +301,7 @@ abstract class HtmlTable extends HTML_Table
 
     public function getActionsButtonToolbar(): ButtonToolBar
     {
-        $formActions = $this->getTableFormActions()->get_form_actions();
+        $formActions = $this->getTableFormActions()->getFormActions();
         $formActionsCount = count($formActions);
 
         $firstAction = array_shift($formActions);
@@ -666,14 +649,6 @@ abstract class HtmlTable extends HTML_Table
         return $this->allowPageNavigation;
     }
 
-    /**
-     * @return bool
-     */
-    public function isPageSelectionAllowed()
-    {
-        return $this->allowPageSelection;
-    }
-
     public function prepareTableData()
     {
         $this->processSourceData();
@@ -758,25 +733,20 @@ abstract class HtmlTable extends HTML_Table
      */
     public function renderNumberOfItemsPerPageSelector()
     {
-        if ($this->isPageSelectionAllowed())
+        $sourceDataCount = $this->countSourceData();
+
+        if ($sourceDataCount <= Pager::DISPLAY_PER_INCREMENT)
         {
-            $sourceDataCount = $this->countSourceData();
-
-            if ($sourceDataCount <= Pager::DISPLAY_PER_INCREMENT)
-            {
-                return '';
-            }
-
-            $queryParameters = $this->getQueryParameters(
-                null, null, $this->getOrderColumn(), $this->getOrderDirection()
-            );
-
-            return $this->getPagerRenderer()->renderItemsPerPageSelector(
-                $queryParameters, $this->getParameterName(self::PARAM_NUMBER_OF_ITEMS_PER_PAGE)
-            );
+            return '';
         }
 
-        return '';
+        $queryParameters = $this->getQueryParameters(
+            null, null, $this->getOrderColumn(), $this->getOrderDirection()
+        );
+
+        return $this->getPagerRenderer()->renderItemsPerPageSelector(
+            $queryParameters, $this->getParameterName(self::PARAM_NUMBER_OF_ITEMS_PER_PAGE)
+        );
     }
 
     /**
@@ -805,9 +775,9 @@ abstract class HtmlTable extends HTML_Table
      */
     public function renderTableFooter()
     {
-        $hasFormActions = $this->getTableFormActions() instanceof TableFormActions &&
-            $this->getTableFormActions()->has_form_actions();
-        $allowNavigation = $this->isPageSelectionAllowed() || $this->isPageNavigationAllowed();
+        $hasFormActions =
+            $this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->hasFormActions();
+        $allowNavigation = $this->isPageNavigationAllowed();
 
         $html = [];
 
@@ -861,14 +831,14 @@ abstract class HtmlTable extends HTML_Table
      */
     public function renderTableHeader()
     {
-        $hasFormActions = $this->getTableFormActions() instanceof TableFormActions &&
-            $this->getTableFormActions()->has_form_actions();
+        $hasFormActions =
+            $this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->hasFormActions();
 
         $html = [];
 
         if ($hasFormActions)
         {
-            $tableFormActions = $this->getTableFormActions()->get_form_actions();
+            $tableFormActions = $this->getTableFormActions()->getFormActions();
             $firstFormAction = array_shift($tableFormActions);
 
             $html[] = '<form class="' . $this->getFormClasses() . '" method="post" action="' .
@@ -918,18 +888,13 @@ abstract class HtmlTable extends HTML_Table
 
         $header->setColAttributes($orderColumn, $headerAttributes);
 
-        // TODO: Make sure the order column index and direction index match
+        $requestedOrderColumn = $this->getOrderColumn();
+        $requestedOrderDirection = $this->getOrderDirection();
 
-        $requestedOrderColumns = $this->getOrderColumn();
-        $requestedOrderDirections = $this->getOrderDirection();
-
-        $isOrdercolumn = in_array($orderColumn, $requestedOrderColumns);
+        $isOrdercolumn = $orderColumn == $requestedOrderColumn;
 
         if ($isOrdercolumn)
         {
-            $orderColumnIndex = array_search($orderColumn, $requestedOrderColumns);
-            $requestedOrderDirection = $requestedOrderDirections[$orderColumnIndex];
-
             if ($requestedOrderDirection == SORT_ASC)
             {
                 $isOrderColumnAndAscending = true;
@@ -963,12 +928,15 @@ abstract class HtmlTable extends HTML_Table
             {
                 if ($isOrderColumnAndAscending)
                 {
-                    $link .= ' &#8595;';
+                    $glyphType = 'arrow-down-long';
                 }
                 else
                 {
-                    $link .= ' &#8593;';
+                    $glyphType = 'arrow-up-long';
                 }
+
+                $glyph = new FontAwesomeGlyph($glyphType);
+                $link .= ' ' . $glyph->render();
             }
         }
         else

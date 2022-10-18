@@ -21,8 +21,8 @@ class RelationTableColumnModel extends DataClassTableColumnModel implements Tabl
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Relation::class, Relation::PROPERTY_NAME));
+        $this->addColumn(new DataClassPropertyTableColumn(Relation::class, Relation::PROPERTY_NAME));
     }
 }

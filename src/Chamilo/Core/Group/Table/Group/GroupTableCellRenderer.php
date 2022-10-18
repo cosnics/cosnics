@@ -7,6 +7,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -81,13 +82,13 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
         return $toolbar->as_html();
     }
 
-    public function render_cell($column, $group)
+    public function renderCell(TableColumn $column, $group): string
     {
         switch ($column->get_name())
         {
             // Exceptions that need post-processing go here ...
             case Group::PROPERTY_NAME :
-                $title = parent::render_cell($column, $group);
+                $title = parent::renderCell($column, $group);
                 $title_short = $title;
                 if (strlen($title_short) > 53)
                 {
@@ -97,7 +98,7 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
                 return '<a href="' . htmlentities($this->get_component()->get_group_viewing_url($group)) . '" title="' .
                     $title . '">' . $title_short . '</a>';
             case Group::PROPERTY_DESCRIPTION :
-                $description = strip_tags(parent::render_cell($column, $group));
+                $description = strip_tags(parent::renderCell($column, $group));
                 if (strlen($description) > 175)
                 {
                     $description = mb_substr($description, 0, 170) . '&hellip;';
@@ -110,6 +111,6 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
                 return $group->count_subgroups(true, true);
         }
 
-        return parent::render_cell($column, $group);
+        return parent::renderCell($column, $group);
     }
 }

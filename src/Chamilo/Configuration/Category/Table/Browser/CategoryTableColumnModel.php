@@ -21,15 +21,15 @@ class CategoryTableColumnModel extends DataClassTableColumnModel implements Tabl
     const CATEGORY = 'Categorie';
     const SUBCATEGORIES = 'Subcategories';
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
         $category_class_name = get_class($this->get_component()->get_parent()->getCategory());
 
-        $this->add_column(new StaticTableColumn(Translation::get(self::CATEGORY)));
-        $this->add_column(new DataClassPropertyTableColumn($category_class_name, PlatformCategory::PROPERTY_NAME));
+        $this->addColumn(new StaticTableColumn(Translation::get(self::CATEGORY)));
+        $this->addColumn(new DataClassPropertyTableColumn($category_class_name, PlatformCategory::PROPERTY_NAME));
         if ($this->get_component()->get_subcategories_allowed())
         {
-            $this->add_column(new StaticTableColumn(Translation::get(self::SUBCATEGORIES)));
+            $this->addColumn(new StaticTableColumn(Translation::get(self::SUBCATEGORIES)));
         }
     }
 }

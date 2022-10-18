@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component\Browser;
 
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -14,7 +15,7 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
 {
 
     // Inherited
-    public function render_cell($column, $cloi)
+    public function renderCell(TableColumn $column, $cloi): string
     {
         switch ($column->get_name())
         {
@@ -22,6 +23,6 @@ class ComplexTableCellRenderer extends \Chamilo\Core\Repository\Table\Complex\Co
                 return $cloi->get_weight();
         }
 
-        return parent::render_cell($column, $cloi);
+        return parent::renderCell($column, $cloi);
     }
 }

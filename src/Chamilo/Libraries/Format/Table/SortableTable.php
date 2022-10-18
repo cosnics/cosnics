@@ -28,7 +28,7 @@ class SortableTable extends HtmlTable
     public function filterData(array $row): array
     {
         $hasActions = $this->getTableFormActions() instanceof TableFormActions &&
-            $this->getTableFormActions()->has_form_actions();
+            $this->getTableFormActions()->hasFormActions();
 
         if ($hasActions)
         {
@@ -98,7 +98,7 @@ class SortableTable extends HtmlTable
     {
         parent::setTableFormActions($actions);
 
-        if ($actions instanceof TableFormActions && $actions->has_form_actions())
+        if ($actions instanceof TableFormActions && $actions->hasFormActions())
         {
             $columnHeaderHtml =
                 '<div class="checkbox checkbox-primary"><input class="styled styled-primary sortableTableSelectToggle" type="checkbox" name="sortableTableSelectToggle" /><label></label></div>';

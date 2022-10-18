@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Table\Publication\Table\ObjectPublicationTableCe
 use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -31,7 +32,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
      *
      * @return String
      */
-    public function render_cell($column, $publication)
+    public function renderCell(TableColumn $column, $publication): string
     {
         switch ($column->get_name())
         {
@@ -64,6 +65,6 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                 }
         }
         
-        return parent::render_cell($column, $publication);
+        return parent::renderCell($column, $publication);
     }
 }

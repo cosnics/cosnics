@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Data provider for an all subscribed course user browser table, including users subscribed through (sub-)groups.
@@ -24,7 +25,7 @@ class AllSubscribedUserTableDataProvider extends RecordTableDataProvider
 
     public function retrieveData(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         return DataManager::retrieve_all_course_users(
             $this->get_component()->get_course_id(), $condition, $offset, $count, $orderBy

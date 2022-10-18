@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * DataProvider for the object publication table
@@ -63,7 +64,7 @@ class ObjectPublicationTableDataProvider extends RecordTableDataProvider
 
     public function retrieveData(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         $tool_browser = $this->get_component()->get_tool_browser();
 

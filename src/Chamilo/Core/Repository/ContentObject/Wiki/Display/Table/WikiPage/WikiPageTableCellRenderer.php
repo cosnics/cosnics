@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -106,7 +107,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
      * private function get_publish_links($wiki_page) { }
      */
 
-    public function render_cell($column, $publication)
+    public function renderCell(TableColumn $column, $publication): string
     {
         $this->publication_id = Request::get('publication_id');
 
@@ -144,7 +145,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 }
             }
 
-            return parent::render_cell($column, $this->wikiPage);
+            return parent::renderCell($column, $this->wikiPage);
         }
     }
 }

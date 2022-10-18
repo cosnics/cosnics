@@ -25,17 +25,17 @@ class AnswerFeedbackTypeTableColumnModel extends DataClassTableColumnModel
 
     /**
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
         $glyph = new FontAwesomeGlyph('folder', [], Translation::get(self::PROPERTY_TYPE));
 
-        $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE, $glyph->render()));
-        $this->add_column(
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_TYPE, $glyph->render()));
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE, false)
         );
 
         $glyph = new FontAwesomeGlyph('comment', [], Translation::get(self::PROPERTY_FEEDBACK_TYPE));
 
-        $this->add_column(new StaticTableColumn(self::PROPERTY_FEEDBACK_TYPE, $glyph->render()));
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_FEEDBACK_TYPE, $glyph->render()));
     }
 }

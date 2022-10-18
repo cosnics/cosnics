@@ -20,32 +20,32 @@ class RepositoryTableColumnModel extends DataClassTableColumnModel implements Ta
 
     const PROPERTY_VERSION = 'version';
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
         $typeGlyph = new FontAwesomeGlyph('folder', [], Translation::get('Type'));
 
-        $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE, $typeGlyph->render()));
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_TYPE, $typeGlyph->render()));
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
         );
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
         );
 
         if (!$this->get_component()->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
         {
-            $this->add_column(
+            $this->addColumn(
                 new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_OWNER_ID)
             );
         }
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE)
         );
 
         $versionGlyph = new FontAwesomeGlyph('undo', [], Translation::get('Versions'));
 
-        $this->add_column(new StaticTableColumn(self::PROPERTY_VERSION, $versionGlyph->render()));
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_VERSION, $versionGlyph->render()));
     }
 }

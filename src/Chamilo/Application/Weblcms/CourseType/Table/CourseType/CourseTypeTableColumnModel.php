@@ -17,18 +17,18 @@ class CourseTypeTableColumnModel extends DataClassTableColumnModel implements Ta
 {
     const DEFAULT_ORDER_COLUMN_INDEX = 3;
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(CourseType::class, CourseType::PROPERTY_TITLE, false)
         );
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(CourseType::class, CourseType::PROPERTY_DESCRIPTION, false)
         );
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(CourseType::class, CourseType::PROPERTY_ACTIVE, false)
         );
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER, false)
         );
     }

@@ -9,12 +9,12 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 class PublicationTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_TITLE));
-        $this->add_column(
+        $this->addColumn(new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_TITLE));
+        $this->addColumn(
             new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_APPLICATION));
-        $this->add_column(new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_LOCATION));
-        $this->add_column(new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_DATE));
+        $this->addColumn(new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_LOCATION));
+        $this->addColumn(new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_DATE));
     }
 }

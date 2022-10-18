@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\CourseType\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -108,7 +109,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
             );
         }
 
-        $max_objects = $this->get_table()->get_data_provider()->countData();
+        $max_objects = $this->getTable()->getTableDataProvider()->countData();
 
         if ($display_order < $max_objects)
         {
@@ -143,13 +144,13 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
      *
      * @return String
      */
-    public function render_cell($column, $course_type)
+    public function renderCell(TableColumn $column, $course_type): string
     {
         switch ($column->get_name())
         {
             // Exceptions that need post-processing go here ...
             case CourseType::PROPERTY_TITLE :
-                $name = parent::render_cell($column, $course_type);
+                $name = parent::renderCell($column, $course_type);
                 $name_short = $name;
                 if (strlen($name_short) > 53)
                 {
@@ -160,7 +161,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
                     '" title="' . htmlentities($name) . '">' . $name_short . '</a>';
 
             case CourseType::PROPERTY_DESCRIPTION :
-                $description = strip_tags(parent::render_cell($column, $course_type));
+                $description = strip_tags(parent::renderCell($column, $course_type));
                 if (strlen($description) > 175)
                 {
                     $description = mb_substr($description, 0, 170) . '&hellip;';
@@ -189,6 +190,6 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
                 return $glyph->render();
         }
 
-        return parent::render_cell($column, $course_type);
+        return parent::renderCell($column, $course_type);
     }
 }

@@ -21,10 +21,10 @@ class SchemaTableColumnModel extends DataClassTableColumnModel implements TableC
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Schema::class, Schema::PROPERTY_NAMESPACE));
-        $this->add_column(new DataClassPropertyTableColumn(Schema::class, Schema::PROPERTY_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Schema::class, Schema::PROPERTY_URL));
+        $this->addColumn(new DataClassPropertyTableColumn(Schema::class, Schema::PROPERTY_NAMESPACE));
+        $this->addColumn(new DataClassPropertyTableColumn(Schema::class, Schema::PROPERTY_NAME));
+        $this->addColumn(new DataClassPropertyTableColumn(Schema::class, Schema::PROPERTY_URL));
     }
 }

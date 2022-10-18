@@ -16,34 +16,34 @@ class VersionTableColumnModel extends DataClassTableColumnModel implements Table
 
     const USER = 'User';
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TYPE)
         );
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
         );
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
         );
 
-        $this->add_column(
+        $this->addColumn(
             new StaticTableColumn(Translation::get(self::USER, null, Manager::context()))
         );
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE)
         );
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_COMMENT)
         );
 
         $glyph = new FontAwesomeGlyph('folder', [], Translation::get('Type'));
-        $this->add_column(
+        $this->addColumn(
             new StaticTableColumn(self::PROPERTY_TYPE, $glyph->render())
         );
     }

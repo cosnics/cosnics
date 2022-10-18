@@ -107,7 +107,6 @@ class ViewerComponent extends Manager implements TableSupport
             $html[] = '<div class="panel-body">';
 
             $table = new GroupRelUserTable($this);
-            $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
             $html[] = $table->as_html();
             $html[] = '</div>';
             $html[] = '</div>';

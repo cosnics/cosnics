@@ -20,17 +20,17 @@ class AdminRequestTableColumnModel extends DataClassTableColumnModel implements 
     const USER_NAME = 'user_name';
     const COURSE_NAME = 'course_name';
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new StaticTableColumn(self::USER_NAME));
-        $this->add_column(new StaticTableColumn(self::COURSE_NAME));
-        $this->add_column(
+        $this->addColumn(new StaticTableColumn(self::USER_NAME));
+        $this->addColumn(new StaticTableColumn(self::COURSE_NAME));
+        $this->addColumn(
             new DataClassPropertyTableColumn(CourseRequest::class, CourseRequest::PROPERTY_SUBJECT));
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(CourseRequest::class, CourseRequest::PROPERTY_MOTIVATION));
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(CourseRequest::class, CourseRequest::PROPERTY_CREATION_DATE));
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(CourseRequest::class, CourseRequest::PROPERTY_DECISION_DATE));
     }
 }

@@ -8,6 +8,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class EntityTableDataProvider extends DataClassTableDataProvider
 {
@@ -21,7 +22,7 @@ class EntityTableDataProvider extends DataClassTableDataProvider
 
     public function retrieveData(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
 

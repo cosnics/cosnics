@@ -5,6 +5,7 @@ use Chamilo\Configuration\Form\Storage\DataClass\Element;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -59,7 +60,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
      *
      * @return string
      */
-    public function render_cell($column, $result)
+    public function renderCell(TableColumn $column, $result): string
     {
         switch ($column->get_name())
         {
@@ -76,6 +77,6 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 }
         }
 
-        return parent::render_cell($column, $result);
+        return parent::renderCell($column, $result);
     }
 }

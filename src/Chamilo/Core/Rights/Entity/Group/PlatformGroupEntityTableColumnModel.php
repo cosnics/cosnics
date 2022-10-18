@@ -17,13 +17,13 @@ class PlatformGroupEntityTableColumnModel extends LocationEntityTableColumnModel
     const COLUMN_USERS = 'users';
     const COLUMN_SUBGROUPS = 'subgroups';
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_DESCRIPTION));
-        $this->add_column(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_CODE));
-        $this->add_column(new StaticTableColumn(self::COLUMN_USERS));
-        $this->add_column(new StaticTableColumn(self::COLUMN_SUBGROUPS));
-        parent::initialize_columns();
+        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_NAME));
+        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_DESCRIPTION));
+        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_CODE));
+        $this->addColumn(new StaticTableColumn(self::COLUMN_USERS));
+        $this->addColumn(new StaticTableColumn(self::COLUMN_SUBGROUPS));
+        parent::initializeColumns();
     }
 }

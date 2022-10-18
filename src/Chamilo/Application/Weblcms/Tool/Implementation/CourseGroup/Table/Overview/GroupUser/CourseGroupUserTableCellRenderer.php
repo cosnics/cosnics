@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Over
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -18,7 +19,7 @@ class CourseGroupUserTableCellRenderer extends RecordTableCellRenderer
      *        includes his subscription status.
      * @return type
      */
-    public function render_cell($column, $user)
+    public function renderCell(TableColumn $column, $user): string
     {
         switch ($column->get_name())
         {
@@ -32,9 +33,9 @@ class CourseGroupUserTableCellRenderer extends RecordTableCellRenderer
                         $subscriptionTime);
                 }
                 
-                return null;
+                return '';
         }
         
-        return parent::render_cell($column, $user);
+        return parent::renderCell($column, $user);
     }
 }

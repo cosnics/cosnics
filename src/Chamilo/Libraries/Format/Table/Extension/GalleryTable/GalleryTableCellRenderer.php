@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Table\Extension\GalleryTable;
 
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Table\TableCellRenderer;
 use Chamilo\Libraries\Format\Table\TableComponent;
@@ -21,7 +22,7 @@ abstract class GalleryTableCellRenderer extends TableCellRenderer
      *
      * @throws \Exception
      */
-    public function __construct($table)
+    public function __construct(GalleryTable $table)
     {
         TableComponent::__construct($table);
     }
@@ -49,7 +50,7 @@ abstract class GalleryTableCellRenderer extends TableCellRenderer
      *
      * @return string
      */
-    public function render_cell($column, $result)
+    public function renderCell(TableColumn $column, $result): string
     {
         $html = [];
 
@@ -57,7 +58,7 @@ abstract class GalleryTableCellRenderer extends TableCellRenderer
 
         $html[] = '<div class="panel-heading">';
 
-        if ($this->get_table()->has_form_actions())
+        if ($this->getTable()->hasFormActions())
         {
             $html[] = '__CHECKBOX_PLACEHOLDER__';
         }

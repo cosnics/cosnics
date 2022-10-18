@@ -137,7 +137,7 @@ class PublicationTable extends RecordTable implements TableFormActionsSupport
      *
      * @return \Chamilo\Libraries\Format\Table\TableCellRenderer
      */
-    public function get_cell_renderer()
+    public function getTableCellRenderer(): PublicationTableCellRenderer
     {
         if (!isset($this->cellRenderer))
         {
@@ -150,10 +150,9 @@ class PublicationTable extends RecordTable implements TableFormActionsSupport
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\Table::get_data_provider()
+     * @see \Chamilo\Libraries\Format\Table\Table::getTableDataProvider()
      */
-    public function get_data_provider()
+    public function getTableDataProvider(): PublicationTableDataProvider
     {
         if (!isset($this->dataProvider))
         {

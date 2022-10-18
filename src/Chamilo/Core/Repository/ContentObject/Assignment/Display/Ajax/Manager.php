@@ -52,7 +52,7 @@ abstract class Manager extends AjaxManager
     /**
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider
      */
-    protected function getDataProvider()
+    protected function getDataProvider(): AssignmentDataProvider
     {
         return $this->ajaxComponent->getDataProvider();
     }

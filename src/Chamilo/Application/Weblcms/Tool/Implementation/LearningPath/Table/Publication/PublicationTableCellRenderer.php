@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\Tracking
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 
@@ -35,7 +36,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
      *
      * @return String
      */
-    public function render_cell($column, $publication)
+    public function renderCell(TableColumn $column, $publication): string
     {
         switch ($column->get_name())
         {
@@ -52,7 +53,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
             }
         }
 
-        return parent::render_cell($column, $publication);
+        return parent::renderCell($column, $publication);
     }
 
     /**

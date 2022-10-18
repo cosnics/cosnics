@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\File\Browser;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 
 /**
  * Cell rendere for the object browser table
@@ -10,7 +11,7 @@ use Chamilo\Libraries\File\Filesystem;
 class RepositoryTableCellRenderer extends \Chamilo\Core\Repository\Table\ContentObject\Table\RepositoryTableCellRenderer
 {
     // Inherited
-    public function render_cell($column, $content_object)
+    public function renderCell(TableColumn $column, $content_object): string
     {
         switch ($column->get_name())
         {
@@ -18,6 +19,6 @@ class RepositoryTableCellRenderer extends \Chamilo\Core\Repository\Table\Content
                 return Filesystem::format_file_size($content_object->get_filesize());
         }
         
-        return parent::render_cell($column, $content_object);
+        return parent::renderCell($column, $content_object);
     }
 }

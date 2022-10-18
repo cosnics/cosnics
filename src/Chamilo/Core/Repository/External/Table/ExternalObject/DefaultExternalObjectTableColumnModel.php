@@ -13,15 +13,15 @@ class DefaultExternalObjectTableColumnModel extends DataClassTableColumnModel im
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ExternalObject::class, ExternalObject::PROPERTY_TYPE));
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ExternalObject::class, ExternalObject::PROPERTY_TITLE));
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ExternalObject::class, ExternalObject::PROPERTY_DESCRIPTION));
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ExternalObject::class, ExternalObject::PROPERTY_CREATED));
     }
 }

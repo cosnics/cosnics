@@ -19,10 +19,10 @@ class ElementTableColumnModel extends DataClassTableColumnModel implements Table
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Element::class, Element::PROPERTY_TYPE));
-        $this->add_column(new DataClassPropertyTableColumn(Element::class, Element::PROPERTY_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Element::class, Element::PROPERTY_REQUIRED));
+        $this->addColumn(new DataClassPropertyTableColumn(Element::class, Element::PROPERTY_TYPE));
+        $this->addColumn(new DataClassPropertyTableColumn(Element::class, Element::PROPERTY_NAME));
+        $this->addColumn(new DataClassPropertyTableColumn(Element::class, Element::PROPERTY_REQUIRED));
     }
 }

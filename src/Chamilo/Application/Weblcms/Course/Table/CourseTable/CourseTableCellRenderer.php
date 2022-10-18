@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -75,7 +76,7 @@ class CourseTableCellRenderer extends RecordTableCellRenderer implements TableCe
      *
      * @return String
      */
-    public function render_cell($column, $course)
+    public function renderCell(TableColumn $column, $course): string
     {
         if ($column instanceof DataClassPropertyTableColumn)
         {
@@ -86,7 +87,7 @@ class CourseTableCellRenderer extends RecordTableCellRenderer implements TableCe
                     switch ($column->get_name())
                     {
                         case Course::PROPERTY_TITLE :
-                            $course_title = parent::render_cell($column, $course);
+                            $course_title = parent::renderCell($column, $course);
 
                             return $course_title;
                         case Course::PROPERTY_TITULAR_ID :
@@ -108,6 +109,6 @@ class CourseTableCellRenderer extends RecordTableCellRenderer implements TableCe
             }
         }
 
-        return parent::render_cell($column, $course);
+        return parent::renderCell($column, $course);
     }
 }

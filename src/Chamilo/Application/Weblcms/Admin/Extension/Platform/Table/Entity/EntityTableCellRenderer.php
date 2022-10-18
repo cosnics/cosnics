@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -54,9 +55,9 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
      *
      * @return string
      */
-    public function render_cell($column, $result)
+    public function renderCell(TableColumn $column, $result): string
     {
-        $helper_class = $this->get_table()->get_helper_class_name();
+        $helper_class = $this->getTable()->get_helper_class_name();
 
         $rendered = $helper_class::render_table_cell($this, $column, $result);
 
@@ -66,7 +67,7 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
         }
         else
         {
-            return parent::render_cell($column, $result);
+            return parent::renderCell($column, $result);
         }
     }
 }

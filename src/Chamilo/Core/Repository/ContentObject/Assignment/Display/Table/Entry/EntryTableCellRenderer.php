@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -39,7 +40,7 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
             Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES), $date
         );
 
-        if ($this->get_table()->getAssignmentDataProvider()->isDateAfterAssignmentEndTime($date))
+        if ($this->getTable()->getAssignmentDataProvider()->isDateAfterAssignmentEndTime($date))
         {
             return '<span style="color:red">' . $formatted_date . '</span>';
         }
@@ -57,10 +58,10 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
 
         $isCurrentEntry = $this->get_component()->getEntry()->getId() == $entry[Entry::PROPERTY_ID];
         $isUser = $entry[Entry::PROPERTY_USER_ID] == $this->get_component()->get_user_id();
-        $assignment = $this->get_table()->get_component()->get_root_content_object();
+        $assignment = $this->getTable()->get_component()->get_root_content_object();
 
         if (!$isCurrentEntry && ($isUser || $assignment->get_visibility_submissions() == 1 ||
-                $this->get_table()->getAssignmentDataProvider()->canEditAssignment()))
+                $this->getTable()->getAssignmentDataProvider()->canEditAssignment()))
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -106,7 +107,7 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
         return $toolbar->as_html();
     }
 
-    public function render_cell($column, $entry)
+    public function renderCell(TableColumn $column, $entry): string
     {
         if ($column instanceof ActionsTableColumn && $this instanceof TableCellRendererActionsColumnSupport)
         {
@@ -121,10 +122,10 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
                     StringUtilities::getInstance()->createString($title)->safeTruncate(50, ' &hellip;')->__toString();
 
                 $isUser = $entry[Entry::PROPERTY_USER_ID] == $this->get_component()->get_user_id();
-                $assignment = $this->get_table()->get_component()->get_root_content_object();
+                $assignment = $this->getTable()->get_component()->get_root_content_object();
 
                 if ($isUser || $assignment->get_visibility_submissions() == 1 ||
-                    $this->get_table()->getAssignmentDataProvider()->canEditAssignment())
+                    $this->getTable()->getAssignmentDataProvider()->canEditAssignment())
                 {
                     $url = $this->get_component()->get_url(
                         array(
@@ -158,21 +159,21 @@ abstract class EntryTableCellRenderer extends RecordTableCellRenderer implements
                 $score = $entry[Score::PROPERTY_SCORE];
                 if (is_null($score))
                 {
-                    return null;
+                    return '';
                 }
 
                 return $score . '%';
             case EntryTableColumnModel::PROPERTY_FEEDBACK_COUNT :
-                return $this->get_table()->getAssignmentDataProvider()->countFeedbackByEntryIdentifier(
+                return $this->getTable()->getAssignmentDataProvider()->countFeedbackByEntryIdentifier(
                     $entry[Entry::PROPERTY_ID]
                 );
                 break;
         }
 
-        return parent::render_cell($column, $entry);
+        return parent::renderCell($column, $entry);
     }
 
-    public function render_id_cell($row)
+    public function renderIdentifierCell($row): string
     {
         return $row[Entry::PROPERTY_ID];
     }

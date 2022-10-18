@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\TableCellRenderer;
 
 /**
@@ -21,11 +22,11 @@ abstract class DataClassTableCellRenderer extends TableCellRenderer
      *
      * @return string
      */
-    public function render_cell($column, $dataClass)
+    public function renderCell(TableColumn $column, $dataClass): string
     {
         if ($column instanceof ActionsTableColumn)
         {
-            return parent::render_cell($column, $dataClass);
+            return parent::renderCell($column, $dataClass);
         }
 
         return $dataClass->getDefaultProperty($column->get_name());
@@ -36,10 +37,8 @@ abstract class DataClassTableCellRenderer extends TableCellRenderer
      * checkboxes
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-     *
-     * @return integer
      */
-    public function render_id_cell($dataClass)
+    public function renderIdentifierCell($dataClass): string
     {
         return $dataClass->getId();
     }

@@ -4,19 +4,14 @@ namespace Chamilo\Libraries\Format\Table;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableAjaxSupport;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
-use Chamilo\Libraries\Format\Table\Interfaces\TablePageSelectionProhibition;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Security;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Exception;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * This class represents a table with the use of a column model, a data provider and a cell renderer Refactoring from
@@ -35,353 +30,110 @@ abstract class Table
     public const CHECKBOX_NAME_SUFFIX = '_id';
 
     /**
-     * The default row count
-     */
-    public const DEFAULT_ROW_COUNT = 20;
-
-    /**
      * The identifier for the table (used for table actions)
      */
     public const TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
 
-    /**
-     * @var \Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface
-     */
-    protected $searchForm;
+    protected SortableTable $table;
 
-    /**
-     * @var \Chamilo\Libraries\Format\Table\SortableTable
-     */
-    protected $table;
+    private Application $component;
 
-    /**
-     * @var \Chamilo\Libraries\Format\Table\TableCellRenderer
-     */
-    private $cell_renderer;
+    private ?TableFormActions $formActions;
 
-    /**
-     * @var \Chamilo\Libraries\Format\Table\TableColumnModel
-     */
-    private $column_model;
+    private ChamiloRequest $request;
 
-    /**
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    private $component;
+    private Security $security;
 
-    /**
-     * @var \Chamilo\Libraries\Format\Table\TableDataProvider
-     */
-    private $data_provider;
+    private TableCellRenderer $tableCellRenderer;
 
-    /**
-     * @var \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
-     */
-    private $form_actions;
+    private TableColumnModel $tableColumnModel;
 
-    /**
-     * Constructor
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $component
-     *
-     * @throws \Exception
-     */
-    public function __construct($component)
+    private TableDataProvider $tableDataProvider;
+
+    public function __construct(
+        ChamiloRequest $request, Security $security, TableDataProvider $tableDataProvider,
+        TableColumnModel $tableColumnModel, TableCellRenderer $tableCellRenderer
+    )
     {
-        if (!$component instanceof TableSupport)
-        {
-            throw new Exception(
-                ClassnameUtilities::getInstance()->getClassnameFromObject($component) .
-                " doesn't seem to support object tables, please implement the TableSupport interface"
-            );
-        }
-
-        $interfaceClass = $this->get_class('Interface');
-
-        if (interface_exists($interfaceClass))
-        {
-            if (!$component instanceof $interfaceClass)
-            {
-                throw new Exception(
-                    ClassnameUtilities::getInstance()->getClassnameFromObject($component) . ' must implement ' .
-                    $interfaceClass
-                );
-            }
-        }
-
-        $this->component = $component;
-
-        $this->constructTable();
+        $this->request = $request;
+        $this->tableDataProvider = $tableDataProvider;
+        $this->tableColumnModel = $tableColumnModel;
+        $this->tableCellRenderer = $tableCellRenderer;
     }
 
-    /**
-     * Creates an HTML representation of the table.
-     *
-     * @return string
-     */
-    public function render()
+    public function render(?Condition $condition = null): string
     {
-        $this->initialize_table();
+        return '';
 
-        return $this->table->render();
+        //        $this->table = new SortableTable($this->get_name(), [$this, 'countData'], [$this, 'getData'],
+        //            $this->getColumnModel()->getDefaultOrderColumn() + ($this->hasFormActions() ? 1 : 0),
+        //            $this->getDefaultMaximumNumberofResults(), $this->getColumnModel()->getDefaultOrderDirection(), true);
+        //
+        //        $this->table->setAdditionalParameters($this->get_parameters());
+        //
+        //        $this->constructTable();
+        //        $this->initializeTable();
+        //
+        //        return $this->table->render();
     }
 
-    /**
-     * Registers a new parameter and value in the array of parameters
-     *
-     * @param string $parameter
-     * @param string $value
-     */
-    public function addParameter($parameter, $value)
-    {
-        $parameters = $this->table->getAdditionalParameters();
-        $parameters[$parameter] = $value;
-
-        $this->table->setAdditionalParameters($parameters);
-    }
-
-    /**
-     * Creates an HTML representation of the table.
-     *
-     * @return string
-     * @deprecated User render() now
-     */
-    public function as_html()
-    {
-        return $this->render();
-    }
-
-    /**
-     * Constructs the sortable table
-     */
     protected function constructTable()
     {
-        $this->table = new SortableTable($this->get_name(), [$this, 'countData'], [$this, 'getData'],
-            $this->get_column_model()->get_default_order_column() + ($this->has_form_actions() ? 1 : 0),
-            $this->get_default_row_count(), $this->get_column_model()->get_default_order_direction(),
-            !$this->prohibits_page_selection(), true);
-
-        $this->table->setAdditionalParameters($this->get_parameters());
+        //        $this->table = new SortableTable($this->get_name(), [$this, 'countData'], [$this, 'getData'],
+        //            $this->getTableColumnModel()->getDefaultOrderColumnIndex() + ($this->hasFormActions() ? 1 : 0),
+        //            $this->getDefaultMaximumNumberofResults(), $this->getTableColumnModel()->getDefaultOrderDirection(), true);
+        //
+        //        $this->table->setAdditionalParameters($this->get_parameters());
     }
 
-    /**
-     * Counts the number of rows that a full retrieve would provide
-     *
-     * @return int
-     */
-    public function countData()
+    public function countData(?Condition $condition = null): int
     {
-        return $this->get_data_provider()->countData($this->get_condition());
+        return $this->getTableDataProvider()->countData($condition);
     }
 
-    /**
-     * @param int $orderColumns
-     * @param int $orderDirections
-     *
-     * @return \Chamilo\Libraries\Storage\Query\OrderBy
-     */
-    protected function determineOrderProperties($orderColumns, $orderDirections)
+    public function getData(?Condition $condition = null): ArrayCollection
     {
-        $orderProperties = [];
-
-        foreach ($orderColumns as $index => $orderColumn)
-        {
-            // Calculates the order column on whether or not the table uses form actions (because sortable
-            // table uses data arrays)
-            $calculatedOrderColumn = $orderColumn - ($this->has_form_actions() ? 1 : 0);
-            $orderProperty = $this->get_order_property($calculatedOrderColumn, $orderDirections[$index]);
-
-            if ($orderProperty)
-            {
-                $orderProperties[] = $orderProperty;
-            }
-        }
-
-        return new OrderBy($orderProperties);
+        return $this->getTableDataProvider()->getData($condition);
     }
 
-    /**
-     * Retrieves the data from the data provider, parses the data through the cell renderer and returns the data as an
-     * array
-     *
-     * @param int $offset
-     * @param int $count
-     * @param int $orderColumns
-     * @param int $orderDirections
-     *
-     * @return string[][]
-     */
-    public function getData($offset, $count, $orderColumns, $orderDirections)
+    public function getFormActions(): ?TableFormActions
     {
-        $resultSet = $this->get_data_provider()->retrieveData(
-            $this->get_condition(), $offset, $count, $this->determineOrderProperties($orderColumns, $orderDirections)
-        );
-
-        $tableData = [];
-
-        foreach ($resultSet as $result)
-        {
-            $this->handle_result($tableData, $result);
-        }
-
-        return $tableData;
+        return null;
     }
 
-    private function getSecurity(): Security
+    public function getRequest(): ChamiloRequest
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(Security::class);
+        return $this->request;
     }
 
-    /**
-     * Gets the table's cell renderer or builds one if it is not set
-     *
-     * @return \Chamilo\Libraries\Format\Table\TableCellRenderer
-     */
-    public function get_cell_renderer()
+    public function getSecurity(): Security
     {
-        if (!isset($this->cell_renderer))
-        {
-            $classname = $this->get_class('CellRenderer');
-            $this->cell_renderer = new $classname($this);
-        }
-
-        return $this->cell_renderer;
+        return $this->security;
     }
 
-    /**
-     * Sets the cell renderer
-     *
-     * @param \Chamilo\Libraries\Format\Table\TableCellRenderer $cellRenderer
-     */
-    public function set_cell_renderer($cellRenderer)
+    public function getTableCellRenderer(): TableCellRenderer
     {
-        $this->cell_renderer = $cellRenderer;
+        return $this->tableCellRenderer;
     }
 
-    /**
-     * Builds a class name starting from this class name and extending it with the given type
-     *
-     * @param string $type
-     *
-     * @return string
-     */
-    protected function get_class($type = null)
+    public function getTableColumnModel(): TableColumnModel
     {
-        $className = get_class($this);
-
-        if (!is_null($type))
-        {
-            $className .= $type;
-        }
-
-        return $className;
+        return $this->tableColumnModel;
     }
 
-    /**
-     * Gets the table's column model or builds one if it is not set
-     *
-     * @return \Chamilo\Libraries\Format\Table\TableColumnModel
-     */
-    public function get_column_model()
+    public function getTableDataProvider(): TableDataProvider
     {
-        if (!isset($this->column_model))
-        {
-            $classname = $this->get_class('ColumnModel');
-            $this->column_model = new $classname($this);
-        }
-
-        return $this->column_model;
+        return $this->tableDataProvider;
     }
 
-    /**
-     * Sets the column model
-     *
-     * @param \Chamilo\Libraries\Format\Table\TableColumnModel $columnModel
-     */
-    public function set_column_model($columnModel)
-    {
-        $this->column_model = $columnModel;
-    }
-
-    /**
-     * Returns the component
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function get_component()
+    public function get_component(): Application
     {
         return $this->component;
     }
 
-    /**
-     * Sets the component
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $component
-     */
     public function set_component(Application $component)
     {
         $this->component = $component;
-    }
-
-    /**
-     * Returns the condition for this table
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    protected function get_condition()
-    {
-        return $this->get_component()->get_table_condition(get_called_class());
-    }
-
-    /**
-     * Gets the table's data provider or builds one if it is not set
-     *
-     * @return \Chamilo\Libraries\Format\Table\TableDataProvider
-     */
-    public function get_data_provider()
-    {
-        if (!isset($this->data_provider))
-        {
-            $classname = $this->get_class('DataProvider');
-            $this->data_provider = new $classname($this);
-        }
-
-        return $this->data_provider;
-    }
-
-    /**
-     * Sets the data provider
-     *
-     * @param \Chamilo\Libraries\Format\Table\TableDataProvider $dataProvider
-     */
-    public function set_data_provider($dataProvider)
-    {
-        $this->data_provider = $dataProvider;
-    }
-
-    /**
-     * Gets the default row count of the table
-     *
-     * @return int
-     */
-    protected function get_default_row_count()
-    {
-        return static::DEFAULT_ROW_COUNT;
-    }
-
-    /**
-     * Gets the actions for the mass-update form at the bottom of the table.
-     *
-     * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
-     */
-    public function get_form_actions()
-    {
-        if (!isset($this->form_actions))
-        {
-            $this->form_actions = $this->get_implemented_form_actions();
-        }
-
-        return $this->form_actions;
     }
 
     /**
@@ -395,22 +147,6 @@ abstract class Table
     }
 
     /**
-     * Returns the order property as \Chamilo\Libraries\Storage\Query\OrderBy
-     *
-     * @param int $orderIndex
-     * @param int $orderDirection
-     *
-     * @return \Chamilo\Libraries\Storage\Query\OrderProperty
-     */
-    protected function get_order_property($orderIndex, $orderDirection)
-    {
-        $columnModel = $this->get_column_model();
-        $columnModel->addCurrentOrderedColumn($orderIndex, $orderDirection);
-
-        return $columnModel->get_column_object_table_order($orderIndex, $orderDirection);
-    }
-
-    /**
      * Returns the parameters for this table
      *
      * @return string[]
@@ -420,80 +156,27 @@ abstract class Table
         return $this->get_component()->get_parameters();
     }
 
-    /**
-     * Returns the selected ids
-     *
-     * @return int
-     */
-    public static function get_selected_ids()
+    public function hasFormActions(): bool
     {
-        $selectedIds = Request::post(static::get_name() . self::CHECKBOX_NAME_SUFFIX);
-
-        if (empty($selectedIds))
-        {
-            $selectedIds = [];
-        }
-        elseif (!is_array($selectedIds))
-        {
-            $selectedIds = [$selectedIds];
-        }
-
-        return $selectedIds;
-    }
-
-    /**
-     * Handles a single result of the data and adds it to the table data
-     *
-     * @param string[][] $table_data
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array[] $result
-     */
-    protected function handle_result(&$tableData, $result)
-    {
-        $columnCount = $this->get_column_model()->get_column_count();
-
-        $rowData = [];
-
-        if ($this->has_form_actions())
-        {
-            $rowData[] = $this->get_cell_renderer()->render_id_cell($result);
-        }
-
-        for ($i = 0; $i < $columnCount; $i ++)
-        {
-            $rowData[] = $this->get_cell_renderer()->render_cell($this->get_column_model()->get_column($i), $result);
-        }
-
-        $tableData[] = $rowData;
-    }
-
-    /**
-     * Returns whether or not the table has form actions
-     *
-     * @return bool
-     */
-    public function has_form_actions()
-    {
-        return ($this instanceof TableFormActionsSupport && $this->get_form_actions() instanceof TableFormActions &&
-            $this->get_form_actions()->has_form_actions());
+        return $this->getFormActions() instanceof TableFormActions && $this->getFormActions()->hasFormActions();
     }
 
     /**
      * Initializes the table
      */
-    protected function initialize_table()
+    protected function initializeTable()
     {
-        if ($this->has_form_actions())
+        if ($this->hasFormActions())
         {
-            $this->table->setTableFormActions($this->get_form_actions());
+            $this->table->setTableFormActions($this->getFormActions());
         }
 
-        // refactored the column model out of the loop.
-        $columnModel = $this->get_column_model();
-        $columnCount = $columnModel->get_column_count();
+        $columnModel = $this->getTableColumnModel();
+        $columnCount = $columnModel->getColumnCount();
 
         for ($i = 0; $i < $columnCount; $i ++)
         {
-            $column = $columnModel->get_column($i);
+            $column = $columnModel->getColumn($i);
 
             $headerAttributes = $contentAttributes = [];
 
@@ -510,67 +193,19 @@ abstract class Table
             }
 
             $this->table->setColumnHeader(
-                ($this->has_form_actions() ? $i + 1 : $i), $this->getSecurity()->removeXSS($column->get_title()),
-                $column->is_sortable(), $headerAttributes, $contentAttributes
+                ($this->hasFormActions() ? $i + 1 : $i), $this->getSecurity()->removeXSS($column->get_title()),
+                $column instanceof AbstractSortableTableColumn && $column->is_sortable(), $headerAttributes,
+                $contentAttributes
             );
         }
 
-        // store the actual direction of the sortable table in the table column
-        // model, to be used for a correct mover action implementation.
-        // The prefix 'default_' is not relevant.
         $direction = intval($this->table->getOrderDirection());
-        $columnModel->set_default_order_direction($direction);
-
-        $columnModel->set_default_order_column($this->table->getDefaultOrderColumn());
+        $columnModel->setDefaultOrderDirection($direction);
+        $columnModel->setDefaultOrderColumnIndex($this->table->getDefaultOrderColumn());
     }
 
-    /**
-     * @return string
-     */
     public static function package()
     {
         return static::context();
-    }
-
-    /**
-     * Checks whether or not this table prohibits page selection
-     *
-     * @return bool
-     */
-    protected function prohibits_page_selection()
-    {
-        return $this instanceof TablePageSelectionProhibition;
-    }
-
-    /**
-     * Connects a table supported search form to this table to share the parameters of the search form and the
-     * table
-     *
-     * @param \Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface $searchForm
-     */
-    public function setSearchForm(TableSupportedSearchFormInterface $searchForm)
-    {
-        $this->searchForm = $searchForm;
-        $searchForm->registerSearchFormParametersInTable($this);
-
-        $filterParameters = $this->table->getTableFilterParameters();
-
-        /**
-         * We don't want paging to be registered because the number of pages can be different
-         * depending on the search parameter
-         */
-        unset($filterParameters[$this->table->getParameterName(HtmlTable::PARAM_PAGE_NUMBER)]);
-
-        $searchForm->registerTableParametersInSearchForm($filterParameters);
-    }
-
-    /**
-     * Checks whether or not this table supports ajax
-     *
-     * @return bool
-     */
-    protected function supports_ajax()
-    {
-        return $this instanceof TableAjaxSupport;
     }
 }

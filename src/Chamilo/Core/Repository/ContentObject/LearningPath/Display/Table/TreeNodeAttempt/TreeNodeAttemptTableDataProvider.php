@@ -59,7 +59,7 @@ class TreeNodeAttemptTableDataProvider extends TableDataProvider
 
     public function retrieveData(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         return new ArrayCollection(array_slice($this->getAllData(), $offset, $count));
     }

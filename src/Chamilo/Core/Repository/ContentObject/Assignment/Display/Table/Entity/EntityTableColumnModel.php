@@ -29,12 +29,12 @@ abstract class EntityTableColumnModel extends RecordTableColumnModel implements 
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new SortableStaticTableColumn(self::PROPERTY_FIRST_ENTRY_DATE));
-        $this->add_column(new SortableStaticTableColumn(self::PROPERTY_LAST_ENTRY_DATE));
-        $this->add_column(new SortableStaticTableColumn(self::PROPERTY_ENTRY_COUNT));
-        $this->add_column(new StaticTableColumn(self::PROPERTY_FEEDBACK_COUNT));
-        $this->add_column(new StaticTableColumn(self::PROPERTY_LAST_SCORE));
+        $this->addColumn(new SortableStaticTableColumn(self::PROPERTY_FIRST_ENTRY_DATE));
+        $this->addColumn(new SortableStaticTableColumn(self::PROPERTY_LAST_ENTRY_DATE));
+        $this->addColumn(new SortableStaticTableColumn(self::PROPERTY_ENTRY_COUNT));
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_FEEDBACK_COUNT));
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_LAST_SCORE));
     }
 }

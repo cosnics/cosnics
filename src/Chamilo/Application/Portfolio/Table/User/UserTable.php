@@ -199,7 +199,7 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
      *
      * @return \Chamilo\Libraries\Format\Table\TableCellRenderer
      */
-    public function get_cell_renderer()
+    public function getTableCellRenderer(): UserTableCellRenderer
     {
         if (!isset($this->cellRenderer))
         {
@@ -213,10 +213,9 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\Table::get_data_provider()
+     * @see \Chamilo\Libraries\Format\Table\Table::getTableDataProvider()
      */
-    public function get_data_provider()
+    public function getTableDataProvider(): UserTableDataProvider
     {
         if (!isset($this->dataProvider))
         {

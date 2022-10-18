@@ -8,10 +8,10 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 class CoursePlatformGroupEntityTableColumnModel extends LocationEntityTableColumnModel
 {
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_CODE));
-        parent::initialize_columns();
+        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_NAME));
+        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_CODE));
+        parent::initializeColumns();
     }
 }

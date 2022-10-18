@@ -9,12 +9,12 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 class ShareTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_NAME));
-        $this->add_column(
+        $this->addColumn(new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_NAME));
+        $this->addColumn(
             new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_CREATOR_ID, null, false));
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_CREATION_DATE));
     }
 }

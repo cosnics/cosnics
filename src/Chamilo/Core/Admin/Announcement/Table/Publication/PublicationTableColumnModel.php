@@ -16,22 +16,22 @@ class PublicationTableColumnModel extends RecordTableColumnModel implements Tabl
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new StaticTableColumn(self::COLUMN_STATUS));
+        $this->addColumn(new StaticTableColumn(self::COLUMN_STATUS));
         
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE));
         
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION));
         
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(Publication::class, Publication::PROPERTY_PUBLICATION_DATE));
         
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(Publication::class, Publication::PROPERTY_PUBLISHER_ID));
         
-        $this->add_column(new StaticTableColumn(self::COLUMN_PUBLISHED_FOR));
+        $this->addColumn(new StaticTableColumn(self::COLUMN_PUBLISHED_FOR));
     }
 }

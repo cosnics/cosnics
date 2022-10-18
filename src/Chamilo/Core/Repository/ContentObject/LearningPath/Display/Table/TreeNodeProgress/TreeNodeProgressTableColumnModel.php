@@ -17,12 +17,12 @@ class TreeNodeProgressTableColumnModel extends TableColumnModel implements Table
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new StaticTableColumn('type'));
-        $this->add_column(new StaticTableColumn('title'));
-        $this->add_column(new StaticTableColumn('status'));
-        $this->add_column(new StaticTableColumn('score'));
-        $this->add_column(new StaticTableColumn('time'));
+        $this->addColumn(new StaticTableColumn('type'));
+        $this->addColumn(new StaticTableColumn('title'));
+        $this->addColumn(new StaticTableColumn('status'));
+        $this->addColumn(new StaticTableColumn('score'));
+        $this->addColumn(new StaticTableColumn('time'));
     }
 }

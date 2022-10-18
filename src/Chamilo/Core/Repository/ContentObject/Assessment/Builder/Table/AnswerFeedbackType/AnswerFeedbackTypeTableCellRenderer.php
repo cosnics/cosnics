@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -80,7 +81,7 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer
      * @return string
      * @throws \Exception
      */
-    public function render_cell($column, $complex_content_object_item)
+    public function renderCell(TableColumn $column, $complex_content_object_item): string
     {
         /**
          * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
@@ -92,7 +93,7 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer
             case AnswerFeedbackTypeTableColumnModel::PROPERTY_TYPE :
                 return $content_object->get_icon_image(IdentGlyph::SIZE_MINI);
             case ContentObject::PROPERTY_TITLE :
-                $title = parent::render_cell($column, $content_object);
+                $title = parent::renderCell($column, $content_object);
 
                 return StringUtilities::getInstance()->truncate($title, 53, false);
             case AnswerFeedbackTypeTableColumnModel::PROPERTY_FEEDBACK_TYPE :
@@ -102,6 +103,6 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer
                 return $glyph->render();
         }
 
-        return parent::render_cell($column, $complex_content_object_item);
+        return parent::renderCell($column, $complex_content_object_item);
     }
 }

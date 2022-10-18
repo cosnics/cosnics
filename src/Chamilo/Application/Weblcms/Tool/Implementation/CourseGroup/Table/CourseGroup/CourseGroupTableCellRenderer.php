@@ -127,7 +127,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
      *
      * @return string
      */
-    public function render_cell($column, $course_group)
+    public function renderCell(TableColumn $column, $course_group): string
     {
         // Add special features here
         switch ($column->get_name())
@@ -155,6 +155,6 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
                 return $course_group->count_members();
         }
 
-        return parent::render_cell($column, $course_group);
+        return parent::renderCell($column, $course_group);
     }
 }

@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Component\
 
 use Chamilo\Application\Weblcms\Table\Publication\Table\ObjectPublicationTableCellRenderer;
 use Chamilo\Application\Weblcms\Table\Publication\Table\ObjectPublicationTableColumnModel;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 
 /**
  *
@@ -22,13 +23,13 @@ class GeolocationCellRenderer extends ObjectPublicationTableCellRenderer
     /*
      * Inherited
      */
-    public function render_cell($column, $publication)
+    public function renderCell(TableColumn $column, $publication): string
     {
         if ($column === ObjectPublicationTableColumnModel::get_action_column())
         {
             return $this->get_actions($publication, null, true, false)->as_html();
         }
 
-        return parent::render_cell($column, $publication);
+        return parent::renderCell($column, $publication);
     }
 }

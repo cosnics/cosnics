@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CommonRequest;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Toolbar;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -29,7 +30,7 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
         return $toolbar->as_html();
     }
 
-    public function render_cell($column, $request)
+    public function renderCell(TableColumn $column, $request): string
     {
 
         // Add special features here
@@ -37,7 +38,7 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
         {
 
             case CommonRequest::PROPERTY_MOTIVATION :
-                $motivation = strip_tags(parent::render_cell($column, $request));
+                $motivation = strip_tags(parent::renderCell($column, $request));
                 if (strlen($motivation) > 175)
                 {
                     $motivation = mb_substr($motivation, 0, 200) . '&hellip;';
@@ -68,6 +69,6 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
                 }
         }
 
-        return parent::render_cell($column, $request);
+        return parent::renderCell($column, $request);
     }
 }

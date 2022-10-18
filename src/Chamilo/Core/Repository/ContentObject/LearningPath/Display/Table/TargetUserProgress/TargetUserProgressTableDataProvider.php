@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Targe
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserProgress\UserProgressTableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Shows the progress of some tree nodes for a user in the learning path
@@ -22,7 +23,7 @@ class TargetUserProgressTableDataProvider extends UserProgressTableDataProvider
 
     public function retrieveData(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         $this->cleanupOrderBy($orderBy);
 

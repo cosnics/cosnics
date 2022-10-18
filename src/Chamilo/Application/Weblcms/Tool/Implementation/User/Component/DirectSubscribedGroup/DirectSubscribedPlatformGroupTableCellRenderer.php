@@ -9,6 +9,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -113,13 +114,13 @@ class DirectSubscribedPlatformGroupTableCellRenderer extends RecordTableCellRend
      *
      * @return String
      */
-    public function render_cell($column, $group_with_subscription_status)
+    public function renderCell(TableColumn $column, $group_with_subscription_status): string
     {
         switch ($column->get_name())
         {
             // Exceptions that need post-processing go here ...
             case Group::PROPERTY_DESCRIPTION :
-                $description = strip_tags(parent::render_cell($column, $group_with_subscription_status));
+                $description = strip_tags(parent::renderCell($column, $group_with_subscription_status));
 
                 return StringUtilities::getInstance()->truncate($description);
             case CourseEntityRelation::PROPERTY_STATUS :
@@ -134,6 +135,6 @@ class DirectSubscribedPlatformGroupTableCellRenderer extends RecordTableCellRend
                 }
         }
 
-        return parent::render_cell($column, $group_with_subscription_status);
+        return parent::renderCell($column, $group_with_subscription_status);
     }
 }

@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\EphorusComponent;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use RuntimeException;
@@ -58,7 +59,7 @@ abstract class Manager extends Application
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider |
      *     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentEphorusSupportInterface
      */
-    public function getDataProvider()
+    public function getDataProvider(): AssignmentDataProvider
     {
         return $this->getEphorusComponent()->getDataProvider();
     }

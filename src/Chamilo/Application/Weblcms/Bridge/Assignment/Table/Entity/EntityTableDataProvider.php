@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity;
 
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -22,18 +23,9 @@ class EntityTableDataProvider
         );
     }
 
-    /**
-     * @return \Chamilo\Libraries\Format\Table\Table |
-     *     \Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity\User\EntityTable
-     */
-    protected function getTable()
-    {
-        return $this->get_table();
-    }
-
     public function retrieveData(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         return $this->getTable()->getEntityService()->retrieveEntities(
             $this->getTable()->getContentObjectPublication(), $condition, $offset, $count, $orderBy

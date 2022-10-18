@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\DataClassGalleryTable\DataClassGalleryTableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class GalleryTableDataProvider extends DataClassGalleryTableDataProvider
 {
@@ -27,7 +28,7 @@ class GalleryTableDataProvider extends DataClassGalleryTableDataProvider
 
     public function retrieveData(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         $filterData = FilterData::getInstance($this->get_component()->get_repository_browser()->getWorkspace());
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());

@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity\Group;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 
 /**
  *
@@ -16,14 +17,14 @@ abstract class EntityTableCellRenderer
     extends \Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity\EntityTableCellRenderer
 {
 
-    public function render_cell($column, $entity)
+    public function renderCell(TableColumn $column, $entity): string
     {
         if ($column->get_name() == EntityTableColumnModel::PROPERTY_GROUP_MEMBERS)
         {
             return $this->getGroupMembers($entity);
         }
 
-        return parent::render_cell($column, $entity);
+        return parent::renderCell($column, $entity);
     }
 
     /**

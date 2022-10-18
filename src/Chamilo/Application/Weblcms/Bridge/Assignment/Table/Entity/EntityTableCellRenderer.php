@@ -29,12 +29,4 @@ class EntityTableCellRenderer
             $user, $this->getTable()->getContentObjectPublication(), $entityId
         );
     }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Table\Table | \Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity\User\EntityTable
-     */
-    protected function getTable()
-    {
-        return $this->get_table();
-    }
 }

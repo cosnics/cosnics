@@ -22,9 +22,9 @@ class VocabularyTableColumnModel extends DataClassTableColumnModel implements Ta
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(
                 Vocabulary::class, Vocabulary::PROPERTY_VALUE, Translation::get(
                 (string) StringUtilities::getInstance()->createString(Vocabulary::PROPERTY_VALUE)->upperCamelize(),
@@ -37,7 +37,7 @@ class VocabularyTableColumnModel extends DataClassTableColumnModel implements Ta
             'check-circle', [], Translation::get('Default', null, $this->get_component()->package()), 'fas'
         );
 
-        $this->add_column(
+        $this->addColumn(
             new StaticTableColumn(
                 self::COLUMN_DEFAULT, $glyph->render()
             )

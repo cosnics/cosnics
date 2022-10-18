@@ -10,6 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -33,7 +34,7 @@ class CourseSectionsTableDataProvider extends DataClassTableDataProvider
 
     public function retrieveData(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         $orderBy = new OrderBy(array(
             new OrderProperty(

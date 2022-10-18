@@ -12,6 +12,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -206,7 +207,7 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
      *
      * @return string
      */
-    public function render_cell($column, $user_with_subscription_status)
+    public function renderCell(TableColumn $column, $user_with_subscription_status): string
     {
         // Add special features here
         switch ($column->get_name())
@@ -253,6 +254,6 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
                 return '<a href="' . $email_url . '">' . $email . '</a>';
         }
 
-        return parent::render_cell($column, $user_with_subscription_status);
+        return parent::renderCell($column, $user_with_subscription_status);
     }
 }

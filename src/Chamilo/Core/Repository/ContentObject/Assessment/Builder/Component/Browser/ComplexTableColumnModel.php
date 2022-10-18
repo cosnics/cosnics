@@ -16,9 +16,9 @@ class ComplexTableColumnModel extends \Chamilo\Core\Repository\Table\Complex\Com
 {
     const WEIGHT = 'weight';
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
         $this->addBasicColumns();
-        $this->add_column(new StaticTableColumn(Translation::get(self::WEIGHT)));
+        $this->addColumn(new StaticTableColumn(Translation::get(self::WEIGHT)));
     }
 }

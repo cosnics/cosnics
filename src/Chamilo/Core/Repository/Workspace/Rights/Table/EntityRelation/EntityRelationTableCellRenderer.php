@@ -10,6 +10,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
@@ -79,9 +80,9 @@ class EntityRelationTableCellRenderer extends DataClassTableCellRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer::render_cell()
+     * @see \Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer::renderCell()
      */
-    public function render_cell($column, $entityRelation)
+    public function renderCell(TableColumn $column, $entityRelation): string
     {
         switch ($column->get_name())
         {
@@ -114,6 +115,6 @@ class EntityRelationTableCellRenderer extends DataClassTableCellRenderer
                 return $this->getRightsIcon(RightsService::RIGHT_MANAGE, $entityRelation);
         }
 
-        return parent::render_cell($column, $entityRelation);
+        return parent::renderCell($column, $entityRelation);
     }
 }

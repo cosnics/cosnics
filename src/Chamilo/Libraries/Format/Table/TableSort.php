@@ -2,58 +2,45 @@
 namespace Chamilo\Libraries\Format\Table;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Table
- * @author digitaal-leren@hogent.be
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  digitaal-leren@hogent.be
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TableSort
 {
-    const SORT_DATE = 3;
-    const SORT_IMAGE = 4;
+    public const SORT_DATE = 3;
+    public const SORT_IMAGE = 4;
+
+    private int $column;
 
     /**
-     *
-     * @var integer[]
-     */
-    private array $columns;
-
-    /**
-     *
      * @var string[][]
      */
     private array $data;
 
-    /**
-     *
-     * @var integer[]
-     */
-    private array $directions;
+    private int $direction;
 
     /**
-     *
      * @param string[][] $data
-     * @param array $columns
-     * @param array $directions
      */
-    public function __construct(array $data, array $columns = [0], array $directions = [SORT_ASC])
+    public function __construct(array $data, int $column = 0, int $direction = SORT_ASC)
     {
         $this->data = $data;
-        $this->columns = $columns;
-        $this->directions = $directions;
+        $this->column = $column;
+        $this->direction = $direction;
     }
 
-    /**
-     *
-     * @return integer[]
-     */
-    public function getColumns(): array
+    public function getColumn(): int
     {
-        return $this->columns;
+        return $this->column;
+    }
+
+    public function setColumn(int $column)
+    {
+        $this->column = $column;
     }
 
     /**
-     *
      * @return string[][]
      */
     public function getData(): array
@@ -62,7 +49,6 @@ class TableSort
     }
 
     /**
-     *
      * @param string[][] $data
      */
     public function setData(array $data)
@@ -70,24 +56,25 @@ class TableSort
         $this->data = $data;
     }
 
-    /**
-     *
-     * @return integer[]
-     */
-    public function getDirections(): array
+    public function getDirection(): int
     {
-        return $this->directions;
+        return $this->direction;
+    }
+
+    public function setDirection(int $direction)
+    {
+        $this->direction = $direction;
     }
 
     /**
      * Checks whether a column of a 2D-array contains only dates (GNU date syntax)
      *
      * @param string[][] $data The data-array
-     * @param integer $column The index of the column to check
+     * @param int $column      The index of the column to check
      *
-     * @return boolean
+     * @return bool
      */
-    public function isDateColumn(array &$data, int $column): bool
+    public function isDateColumn(array $data, int $column): bool
     {
         $isDate = true;
 
@@ -118,11 +105,11 @@ class TableSort
      * Checks whether a column of a 2D-array contains only images (<img src=" path/file.ext" alt=".."/>)
      *
      * @param string[][] $data The data-array
-     * @param integer $column The index of the column to check
+     * @param int $column      The index of the column to check
      *
-     * @return boolean
+     * @return bool
      */
-    public function isImageColumn(array &$data, int $column): bool
+    public function isImageColumn(array $data, int $column): bool
     {
         $isImage = true;
 
@@ -143,11 +130,11 @@ class TableSort
      * Checks whether a column of a 2D-array contains only numeric values
      *
      * @param string[][] $data The data-array
-     * @param integer $column The index of the column to check
+     * @param int $column      The index of the column to check
      *
-     * @return boolean
+     * @return bool
      */
-    public function isNumericColumn(array &$data, int $column): bool
+    public function isNumericColumn(array $data, int $column): bool
     {
         $isNumeric = true;
 
@@ -165,66 +152,34 @@ class TableSort
     }
 
     /**
-     *
-     * @param integer[] $columns
-     */
-    public function setColumn(array $columns)
-    {
-        $this->columns = $columns;
-    }
-
-    /**
-     *
-     * @param integer[] $directions
-     */
-    public function setDirection(array $directions)
-    {
-        $this->directions = $directions;
-    }
-
-    /**
      * Sorts a 2-dimensional table.
      */
     public function sort(): array
     {
         $data = $this->getData();
 
-        if (!is_array($data) || empty($data))
+        if (empty($data))
         {
             return [];
         }
 
-        foreach ($this->getColumns() as $column)
+        if (!in_array($this->getDirection(), [SORT_ASC, SORT_DESC]))
         {
-            if ($column != strval(intval($column)))
-            {
-                // Probably an attack
-                return $data;
-            }
+            // Probably an attack
+            return $data;
         }
 
-        foreach ($this->getDirections() as $direction)
+        $column = $this->getColumn();
+        $direction = $this->getDirection();
+
+        if ($this->isImageColumn($data, $column))
         {
-            if (!in_array($direction, array(SORT_ASC, SORT_DESC)))
-            {
-                // Probably an attack
-                return $data;
-            }
-        }
-
-        $firstColumn = $this->getColumns()[0];
-        $firstDirection = $this->getDirections()[0];
-
-        $compare_operator = $this->getDirections()[0] == SORT_ASC ? '>' : '<=';
-
-        if ($this->isImageColumn($data, $firstColumn))
-        {
-            $compareFunction = function ($a, $b) use ($firstColumn, $firstDirection) {
+            $compareFunction = function ($a, $b) use ($column, $direction) {
                 $compareResult = strnatcmp(
-                    strip_tags($a[$firstColumn], '<img>'), strip_tags($b[$firstColumn], '<img>')
+                    strip_tags($a[$column], '<img>'), strip_tags($b[$column], '<img>')
                 );
 
-                if ($firstDirection == SORT_ASC)
+                if ($direction == SORT_ASC)
                 {
                     return $compareResult > 0;
                 }
@@ -234,13 +189,13 @@ class TableSort
                 }
             };
         }
-        elseif ($this->isDateColumn($data, $firstColumn))
+        elseif ($this->isDateColumn($data, $column))
         {
-            $compareFunction = function ($a, $b) use ($firstColumn, $firstDirection) {
-                $aTime = strtotime(strip_tags($a[$firstColumn]));
-                $bTime = strtotime(strip_tags($b[$firstColumn]));
+            $compareFunction = function ($a, $b) use ($column, $direction) {
+                $aTime = strtotime(strip_tags($a[$column]));
+                $bTime = strtotime(strip_tags($b[$column]));
 
-                if ($firstDirection == SORT_ASC)
+                if ($direction == SORT_ASC)
                 {
                     return $aTime > $bTime;
                 }
@@ -250,13 +205,13 @@ class TableSort
                 }
             };
         }
-        elseif ($this->isNumericColumn($data, $firstColumn))
+        elseif ($this->isNumericColumn($data, $column))
         {
-            $compareFunction = function ($a, $b) use ($firstColumn, $firstDirection) {
-                $aTime = strip_tags($a[$firstColumn]);
-                $bTime = strip_tags($b[$firstColumn]);
+            $compareFunction = function ($a, $b) use ($column, $direction) {
+                $aTime = strip_tags($a[$column]);
+                $bTime = strip_tags($b[$column]);
 
-                if ($firstDirection == SORT_ASC)
+                if ($direction == SORT_ASC)
                 {
                     return $aTime > $bTime;
                 }
@@ -268,12 +223,12 @@ class TableSort
         }
         else
         {
-            $compareFunction = function ($a, $b) use ($firstColumn, $firstDirection) {
+            $compareFunction = function ($a, $b) use ($column, $direction) {
                 $compareResult = strnatcmp(
-                    strip_tags($a[$firstColumn]), strip_tags($b[$firstColumn])
+                    strip_tags($a[$column]), strip_tags($b[$column])
                 );
 
-                if ($firstDirection == SORT_ASC)
+                if ($direction == SORT_ASC)
                 {
                     return $compareResult > 0;
                 }

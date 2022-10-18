@@ -12,6 +12,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -280,7 +281,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
      *
      * @return string
      */
-    public function render_cell($column, $item)
+    public function renderCell(TableColumn $column, $item): string
     {
         switch ($column->get_name())
         {
@@ -292,6 +293,6 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
                 return $item->getGlyph()->render();
         }
 
-        return parent::render_cell($column, $item);
+        return parent::renderCell($column, $item);
     }
 }

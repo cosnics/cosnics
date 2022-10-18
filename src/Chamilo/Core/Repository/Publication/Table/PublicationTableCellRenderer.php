@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -58,7 +59,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
         return $toolbar->as_html();
     }
 
-    public function render_cell($column, $publication_attributes)
+    public function renderCell(TableColumn $column, $publication_attributes): string
     {
 
         // Add special features here
@@ -82,6 +83,6 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                 return date('Y-m-d, H:i', $publication_attributes->get_date());
         }
 
-        return parent::render_cell($column, $publication_attributes);
+        return parent::renderCell($column, $publication_attributes);
     }
 }

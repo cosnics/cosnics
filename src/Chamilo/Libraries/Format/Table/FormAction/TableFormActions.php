@@ -78,7 +78,7 @@ class TableFormActions
      *
      * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormAction[] $form_actions
      */
-    public function get_form_actions()
+    public function getFormActions()
     {
         return $this->formActions;
     }
@@ -108,7 +108,7 @@ class TableFormActions
      *
      * @return boolean
      */
-    public function has_form_actions()
+    public function hasFormActions()
     {
         return count($this->formActions) >= 1;
     }

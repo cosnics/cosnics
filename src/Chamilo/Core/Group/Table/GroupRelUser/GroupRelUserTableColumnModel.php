@@ -9,9 +9,9 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 class GroupRelUserTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID));
     }
 }

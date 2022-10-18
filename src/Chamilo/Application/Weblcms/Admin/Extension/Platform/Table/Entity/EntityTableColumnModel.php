@@ -15,13 +15,13 @@ class EntityTableColumnModel extends RecordTableColumnModel implements TableColu
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $helper_class = $this->get_table()->get_helper_class_name();
+        $helper_class = $this->getTable()->get_helper_class_name();
         
         foreach ($helper_class::get_table_columns() as $column)
         {
-            $this->add_column($column);
+            $this->addColumn($column);
         }
     }
 }

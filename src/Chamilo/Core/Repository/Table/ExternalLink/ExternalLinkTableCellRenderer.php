@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -57,13 +58,13 @@ class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implement
         return $this->get_component()->get_url($parameters);
     }
 
-    public function render_cell($column, $object)
+    public function renderCell(TableColumn $column, $object): string
     {
         $external_instance = $object->get_external();
 
         if (!$external_instance)
         {
-            return null;
+            return '';
         }
 
         switch ($column->get_name())
@@ -79,6 +80,6 @@ class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implement
                 return StringUtilities::getInstance()->truncate($external_instance->get_title(), 50);
         }
 
-        return parent::render_cell($column, $object);
+        return parent::renderCell($column, $object);
     }
 }

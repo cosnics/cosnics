@@ -118,7 +118,7 @@ class TreeNodeAttemptTableCellRenderer extends TableCellRenderer implements Tabl
      *
      * @return String
      */
-    public function render_cell($column, $treeNodeAttempt)
+    public function renderCell(TableColumn $column, $treeNodeAttempt): string
     {
         $translator = Translation::getInstance();
 
@@ -141,7 +141,7 @@ class TreeNodeAttemptTableCellRenderer extends TableCellRenderer implements Tabl
                 return DatetimeUtilities::getInstance()->formatSecondsToHours($treeNodeAttempt->get_total_time());
         }
 
-        return parent::render_cell($column, $treeNodeAttempt);
+        return parent::renderCell($column, $treeNodeAttempt);
     }
 
     /**
@@ -149,11 +149,9 @@ class TreeNodeAttemptTableCellRenderer extends TableCellRenderer implements Tabl
      * checkboxes
      *
      * @param TreeNode $treeNode
-     *
-     * @return int
      */
-    public function render_id_cell($treeNode)
+    public function renderIdentifierCell($treeNode): string
     {
-        return $treeNode->getId();
+        return (string) $treeNode->getId();
     }
 }

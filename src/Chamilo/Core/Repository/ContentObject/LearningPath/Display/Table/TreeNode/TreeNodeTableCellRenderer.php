@@ -103,7 +103,7 @@ class TreeNodeTableCellRenderer extends DataClassTableCellRenderer implements Ta
      *
      * @return String
      */
-    public function render_cell($column, $node)
+    public function renderCell(TableColumn $column, $node): string
     {
         if ($column instanceof ActionsTableColumn && $this instanceof TableCellRendererActionsColumnSupport)
         {
@@ -131,11 +131,9 @@ class TreeNodeTableCellRenderer extends DataClassTableCellRenderer implements Ta
 
     /**
      * @param TreeNode $data_class
-     *
-     * @return int
      */
-    public function render_id_cell($data_class)
+    public function renderIdentifierCell($data_class): string
     {
-        return $data_class->getId();
+        return (string) $data_class->getId();
     }
 }

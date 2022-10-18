@@ -8,6 +8,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -128,7 +129,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
         return $toolbar->as_html();
     }
 
-    public function render_cell($column, $user)
+    public function renderCell(TableColumn $column, $user): string
     {
         $trueGlyph = new FontAwesomeGlyph('circle', array('text-success'));
         $falseGlyph = new FontAwesomeGlyph('circle', array('text-danger'));
@@ -152,6 +153,6 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
                 return $user->get_active() ? $trueGlyph->render() : $falseGlyph->render();
         }
 
-        return parent::render_cell($column, $user);
+        return parent::renderCell($column, $user);
     }
 }

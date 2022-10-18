@@ -12,12 +12,12 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 class UserApprovalTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_OFFICIAL_CODE));
-        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_USERNAME));
-        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_EMAIL));
-        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_LASTNAME));
-        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_FIRSTNAME));
+        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_OFFICIAL_CODE));
+        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_USERNAME));
+        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_EMAIL));
+        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_LASTNAME));
+        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_FIRSTNAME));
     }
 }

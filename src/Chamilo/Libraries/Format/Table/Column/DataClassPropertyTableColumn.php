@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Table\Column;
 
+use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -9,9 +10,9 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * This class represents a column for a table that is based on a property from the data class
  *
  * @package Chamilo\Libraries\Format\Table\Column
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
-class DataClassPropertyTableColumn extends TableColumn
+class DataClassPropertyTableColumn extends AbstractSortableTableColumn
 {
 
     /**
@@ -22,11 +23,10 @@ class DataClassPropertyTableColumn extends TableColumn
     private $className;
 
     /**
-     *
      * @param string $className - The class name
-     * @param string $property - The property or the property alias
-     * @param string $title - [OPTIONAL] default translated title from property
-     * @param boolean $sortable - Whether or not the column is sortable
+     * @param string $property  - The property or the property alias
+     * @param string $title     - [OPTIONAL] default translated title from property
+     * @param bool $sortable    - Whether or not the column is sortable
      * @param string $headerCssClasses
      * @param string $contentCssClasses
      */
@@ -48,11 +48,7 @@ class DataClassPropertyTableColumn extends TableColumn
         parent::__construct($property, $title, $sortable, $headerCssClasses, $contentCssClasses);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
-     */
-    public function getConditionVariable()
+    public function getConditionVariable(): ConditionVariable
     {
         return new PropertyConditionVariable($this->get_class_name(), $this->get_name());
     }

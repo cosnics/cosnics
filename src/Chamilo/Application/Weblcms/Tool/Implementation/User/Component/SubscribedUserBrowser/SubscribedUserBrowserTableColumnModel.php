@@ -30,18 +30,18 @@ class SubscribedUserBrowserTableColumnModel extends RecordTableColumnModel imple
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_USERNAME));
+        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_USERNAME));
 
         $showEmail = Configuration::getInstance()->get_setting(array('Chamilo\Core\User', 'show_email_addresses'));
 
         if($showEmail)
         {
-            $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_EMAIL));
+            $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_EMAIL));
         }
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_STATUS));
     }
 }

@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -85,15 +86,6 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Table\Table |
-     *     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
-     */
-    protected function getTable()
-    {
-        return $this->get_table();
-    }
-
-    /**
      *
      * @see \Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport::get_actions()
      */
@@ -105,7 +97,7 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
         $isEntity = $this->isEntity($entityId, $this->get_component()->get_user_id());
 
         /** @var Assignment $assignment */
-        $assignment = $this->get_table()->get_component()->get_root_content_object();
+        $assignment = $this->getTable()->get_component()->get_root_content_object();
 
         if ($this->canViewEntity($entity))
         {
@@ -162,7 +154,7 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
 
     abstract protected function isEntity($entityId, $userId);
 
-    public function render_cell($column, $entity)
+    public function renderCell(TableColumn $column, $entity): string
     {
         if ($column instanceof ActionsTableColumn && $this instanceof TableCellRendererActionsColumnSupport)
         {
@@ -198,17 +190,17 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
 
                 if (is_null($lastScore))
                 {
-                    return null;
+                    return '';
                 }
 
                 return '<div class="text-right">' . $lastScore . '%</div>';
                 break;
         }
 
-        return parent::render_cell($column, $entity);
+        return parent::renderCell($column, $entity);
     }
 
-    public function render_id_cell($row)
+    public function renderIdentifierCell($row): string
     {
         return $row[Entry::PROPERTY_ENTITY_ID];
     }

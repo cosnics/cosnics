@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -114,7 +115,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
      *
      * @return String
      */
-    public function render_cell($column, $node)
+    public function renderCell(TableColumn $column, $node): string
     {
         $content_object = $node->get_content_object();
 
@@ -134,6 +135,6 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
                 );
         }
 
-        return parent::render_cell($column, $node);
+        return parent::renderCell($column, $node);
     }
 }

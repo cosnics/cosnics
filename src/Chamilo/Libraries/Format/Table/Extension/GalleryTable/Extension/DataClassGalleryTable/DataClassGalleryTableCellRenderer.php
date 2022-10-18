@@ -18,9 +18,8 @@ abstract class DataClassGalleryTableCellRenderer extends GalleryTableCellRendere
      * checkboxes
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-     * @return integer
      */
-    public function render_id_cell($dataClass)
+    public function renderIdentifierCell($dataClass): string
     {
         return $dataClass->get_id();
     }

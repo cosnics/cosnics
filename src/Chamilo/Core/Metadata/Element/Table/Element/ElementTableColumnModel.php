@@ -25,9 +25,9 @@ class ElementTableColumnModel extends DataClassTableColumnModel implements Table
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(
+        $this->addColumn(
             new StaticTableColumn(
                 self::COLUMN_PREFIX, Translation::get(
                 (string) StringUtilities::getInstance()->createString(self::COLUMN_PREFIX)->upperCamelize(), null,
@@ -36,7 +36,7 @@ class ElementTableColumnModel extends DataClassTableColumnModel implements Table
             )
         );
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(
                 Element::class, Element::PROPERTY_NAME, Translation::get(
                 (string) StringUtilities::getInstance()->createString(Element::PROPERTY_NAME)->upperCamelize(), null,
@@ -45,7 +45,7 @@ class ElementTableColumnModel extends DataClassTableColumnModel implements Table
             )
         );
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(
                 Element::class, Element::PROPERTY_DISPLAY_NAME, Translation::get(
                 (string) StringUtilities::getInstance()->createString(Element::PROPERTY_DISPLAY_NAME)->upperCamelize(),
@@ -58,7 +58,7 @@ class ElementTableColumnModel extends DataClassTableColumnModel implements Table
             'pen-nib', [], Translation::get('FreeValues', null, $this->get_component()->package()), 'fas'
         );
 
-        $this->add_column(
+        $this->addColumn(
             new StaticTableColumn(
                 self::COLUMN_VALUE_FREE, $glyph->render()
             )
@@ -68,7 +68,7 @@ class ElementTableColumnModel extends DataClassTableColumnModel implements Table
             'globe', [], Translation::get('PredefinedValues', null, $this->get_component()->package()), 'fas'
         );
 
-        $this->add_column(
+        $this->addColumn(
             new StaticTableColumn(
                 self::COLUMN_VALUE_VOCABULARY_PREDEFINED, $glyph->render()
             )
@@ -78,7 +78,7 @@ class ElementTableColumnModel extends DataClassTableColumnModel implements Table
             'users', [], Translation::get('UserValues', null, $this->get_component()->package()), 'fas'
         );
 
-        $this->add_column(
+        $this->addColumn(
             new StaticTableColumn(
                 self::COLUMN_VALUE_VOCABULARY_USER, $glyph->render()
             )

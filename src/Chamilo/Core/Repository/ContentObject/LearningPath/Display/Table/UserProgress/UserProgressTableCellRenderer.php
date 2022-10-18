@@ -125,7 +125,7 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
      *
      * @return String
      */
-    public function render_cell($column, $record)
+    public function renderCell(TableColumn $column, $record): string
     {
         switch ($column->get_name())
         {
@@ -157,7 +157,7 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
                     return $glyph->render();
                 }
 
-                return null;
+                return '';
             case 'started':
                 $numberOfNodes = $record['nodes_completed'];
                 if ($numberOfNodes > 0)
@@ -169,14 +169,14 @@ class UserProgressTableCellRenderer extends RecordTableCellRenderer implements T
                     return $glyph->render();
                 }
 
-                return null;
+                return '';
 
             case User::PROPERTY_FIRSTNAME:
             case User::PROPERTY_LASTNAME:
                 return '<a href="' . $this->getReportingUrl($record['user_id']) . '">' .
-                    parent::render_cell($column, $record) . '</a>';
+                    parent::renderCell($column, $record) . '</a>';
         }
 
-        return parent::render_cell($column, $record);
+        return parent::renderCell($column, $record);
     }
 }

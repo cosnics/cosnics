@@ -21,16 +21,16 @@ class SelectTableColumnModel extends DataClassTableColumnModel implements TableC
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
         $glyph = new FontAwesomeGlyph(
             'folder', [], Translation::get('Type', null, $this->get_component()->package()), 'fas'
         );
 
-        $this->add_column(
+        $this->addColumn(
             new StaticTableColumn(self::COLUMN_TYPE, $glyph->render())
         );
 
-        $this->add_column(new DataClassPropertyTableColumn(Vocabulary::class, Vocabulary::PROPERTY_VALUE));
+        $this->addColumn(new DataClassPropertyTableColumn(Vocabulary::class, Vocabulary::PROPERTY_VALUE));
     }
 }

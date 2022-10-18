@@ -14,23 +14,23 @@ class RequestTableColumnModel extends DataClassTableColumnModel implements Table
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_CREATION_DATE));
+        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_CREATION_DATE));
         
         if ($this->get_component()->get_table_type() != RequestTable::TYPE_PERSONAL)
         {
-            $this->add_column(new StaticTableColumn(Translation::get('User')));
+            $this->addColumn(new StaticTableColumn(Translation::get('User')));
         }
         
-        $this->add_column(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_SUBJECT));
-        $this->add_column(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_MOTIVATION));
-        $this->add_column(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_CATEGORY_ID));
+        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_NAME));
+        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_SUBJECT));
+        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_MOTIVATION));
+        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_CATEGORY_ID));
         
         if ($this->get_component()->get_table_type() == RequestTable::TYPE_PERSONAL)
         {
-            $this->add_column(
+            $this->addColumn(
                 new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_DECISION, false));
         }
     }

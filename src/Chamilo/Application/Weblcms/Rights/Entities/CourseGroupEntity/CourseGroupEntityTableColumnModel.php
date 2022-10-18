@@ -16,14 +16,14 @@ class CourseGroupEntityTableColumnModel extends LocationEntityTableColumnModel
     const COLUMN_USERS = 'users';
     const COLUMN_SUBGROUPS = 'subgroups';
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME));
-        $this->add_column(
+        $this->addColumn(new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME));
+        $this->addColumn(
             new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_DESCRIPTION));
-        $this->add_column(new StaticTableColumn(self::COLUMN_USERS));
-        $this->add_column(new StaticTableColumn(self::COLUMN_SUBGROUPS));
+        $this->addColumn(new StaticTableColumn(self::COLUMN_USERS));
+        $this->addColumn(new StaticTableColumn(self::COLUMN_SUBGROUPS));
         
-        parent::initialize_columns();
+        parent::initializeColumns();
     }
 }

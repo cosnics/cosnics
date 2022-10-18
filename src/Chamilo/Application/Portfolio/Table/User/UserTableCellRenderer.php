@@ -94,7 +94,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
         }
 
         return $this->getRightsService()->isAllowedToViewUserPublication(
-            $userPublication, $this->get_table()->get_component()->getUser()
+            $userPublication, $this->getTable()->get_component()->getUser()
         );
     }
 

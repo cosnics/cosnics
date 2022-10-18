@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Viewer\Table\ContentObject;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -19,7 +20,7 @@ class ContentObjectTableCellRenderer extends DataClassTableCellRenderer implemen
         return $this->get_component()->get_default_browser_actions($content_object)->as_html();
     }
 
-    public function render_cell($column, $content_object)
+    public function renderCell(TableColumn $column, $content_object): string
     {
         switch ($column->get_name())
         {
@@ -33,6 +34,6 @@ class ContentObjectTableCellRenderer extends DataClassTableCellRenderer implemen
                 return DatetimeUtilities::getInstance()->formatLocaleDate(null, $content_object->get_modification_date());
         }
 
-        return parent::render_cell($column, $content_object);
+        return parent::renderCell($column, $content_object);
     }
 }

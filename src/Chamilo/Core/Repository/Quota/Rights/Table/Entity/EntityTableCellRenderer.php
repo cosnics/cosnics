@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityR
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -110,7 +111,7 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
      *
      * @return string
      */
-    public function render_cell($column, $record)
+    public function renderCell(TableColumn $column, $record): string
     {
         switch ($column->get_name())
         {
@@ -120,6 +121,6 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
                 return $glyph->render();
         }
 
-        return parent::render_cell($column, $record);
+        return parent::renderCell($column, $record);
     }
 }

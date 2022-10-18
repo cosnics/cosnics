@@ -22,10 +22,10 @@ class RelationTableColumnModel extends DataClassTableColumnModel implements Tabl
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new StaticTableColumn(self::PROPERTY_SOURCE));
-        $this->add_column(new StaticTableColumn(self::PROPERTY_RELATION));
-        $this->add_column(new StaticTableColumn(self::PROPERTY_TARGET));
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_SOURCE));
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_RELATION));
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_TARGET));
     }
 }

@@ -27,29 +27,29 @@ abstract class EntryTableColumnModel extends RecordTableColumnModel implements T
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
         );
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
         );
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(
                 $this->getEntryClassName(), Entry::PROPERTY_SUBMITTED, Translation::get('Submitted')
             )
         );
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(
                 $this->getScoreClassName(), Score::PROPERTY_SCORE, 'Score'
             )
         );
 
-        $this->add_column(new StaticTableColumn(self::PROPERTY_FEEDBACK_COUNT));
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_FEEDBACK_COUNT));
     }
 
     /**

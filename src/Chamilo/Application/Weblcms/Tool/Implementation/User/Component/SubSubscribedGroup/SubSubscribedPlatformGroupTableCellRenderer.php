@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\SubSubs
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Manager;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -16,7 +17,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class SubSubscribedPlatformGroupTableCellRenderer extends DataClassTableCellRenderer
 {
 
-    public function render_cell($column, $group)
+    public function renderCell(TableColumn $column, $group): string
     {
         // Add special features here
         switch ($column->get_name())
@@ -24,7 +25,7 @@ class SubSubscribedPlatformGroupTableCellRenderer extends DataClassTableCellRend
             // Exceptions that need post-processing go here ...
             
             case Group::PROPERTY_NAME :
-                $title = parent::render_cell($column, $group);
+                $title = parent::renderCell($column, $group);
                 $title_short = $title;
                 if (strlen($title_short) > 53)
                 {
@@ -33,7 +34,7 @@ class SubSubscribedPlatformGroupTableCellRenderer extends DataClassTableCellRend
                 return $title_short;
             
             case Group::PROPERTY_DESCRIPTION :
-                $description = strip_tags(parent::render_cell($column, $group));
+                $description = strip_tags(parent::renderCell($column, $group));
                 return StringUtilities::getInstance()->truncate($description);
             case Translation::get(
                 SubSubscribedPlatformGroupTableColumnModel::USERS, 
@@ -44,6 +45,6 @@ class SubSubscribedPlatformGroupTableCellRenderer extends DataClassTableCellRend
                 return $group->count_subgroups(true, true);
         }
         
-        return parent::render_cell($column, $group);
+        return parent::renderCell($column, $group);
     }
 }

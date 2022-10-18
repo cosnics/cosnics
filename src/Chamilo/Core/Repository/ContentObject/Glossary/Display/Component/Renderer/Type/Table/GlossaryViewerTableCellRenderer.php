@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -50,7 +51,7 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer
         return $toolbar->as_html();
     }
 
-    public function render_cell($column, $glossary_item)
+    public function renderCell(TableColumn $column, $glossary_item): string
     {
         $component = $this->get_component()->get_component();
 
@@ -73,6 +74,6 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer
                 );
         }
 
-        return parent::render_cell($column, $glossary_item);
+        return parent::renderCell($column, $glossary_item);
     }
 }

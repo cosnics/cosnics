@@ -16,8 +16,8 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 class CourseSectionsTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(CourseSection::class, CourseSection::PROPERTY_NAME));
+        $this->addColumn(new DataClassPropertyTableColumn(CourseSection::class, CourseSection::PROPERTY_NAME));
     }
 }

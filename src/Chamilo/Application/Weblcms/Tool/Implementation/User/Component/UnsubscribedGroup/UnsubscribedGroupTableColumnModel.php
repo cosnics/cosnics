@@ -21,13 +21,13 @@ class UnsubscribedGroupTableColumnModel extends DataClassTableColumnModel implem
     const USERS = 'Users';
     const SUBGROUPS = 'Subgroups';
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_CODE));
-        $this->add_column(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_DESCRIPTION));
-        $this->add_column(
+        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_NAME));
+        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_CODE));
+        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_DESCRIPTION));
+        $this->addColumn(
             new StaticTableColumn(Translation::get(self::USERS, null, Manager::context())));
-        $this->add_column(new StaticTableColumn(Translation::get(self::SUBGROUPS)));
+        $this->addColumn(new StaticTableColumn(Translation::get(self::SUBGROUPS)));
     }
 }

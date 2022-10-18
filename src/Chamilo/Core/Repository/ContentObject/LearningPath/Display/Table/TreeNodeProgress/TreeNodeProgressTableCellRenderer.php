@@ -52,9 +52,10 @@ class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements Tab
     protected function getReportingUrl(TreeNode $treeNode)
     {
         return $this->get_component()->get_url(
-            array(
-                Manager::PARAM_ACTION => Manager::ACTION_REPORTING, Manager::PARAM_CHILD_ID => $treeNode->getId()
-            )
+            [
+                Manager::PARAM_ACTION => Manager::ACTION_REPORTING,
+                Manager::PARAM_CHILD_ID => $treeNode->getId()
+            ]
         );
     }
 
@@ -112,11 +113,11 @@ class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements Tab
                 $trackingService->canDeleteLearningPathAttemptData($this->getUser(), $reportingUser))
             {
                 $delete_url = $this->get_component()->get_url(
-                    array(
+                    [
                         Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPTS_FOR_TREE_NODE,
                         Manager::PARAM_CHILD_ID => $record->getId(),
                         DeleteAttemptsForTreeNodeComponent::PARAM_SOURCE => Manager::ACTION_REPORTING
-                    )
+                    ]
                 );
 
                 $toolbar->add_item(
@@ -139,7 +140,7 @@ class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements Tab
      *
      * @return String
      */
-    public function render_cell($column, $record)
+    public function renderCell(TableColumn $column, $record): string
     {
         $translator = Translation::getInstance();
 
@@ -164,7 +165,7 @@ class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements Tab
             case 'score':
                 if (!$record->supportsScore())
                 {
-                    return null;
+                    return '';
                 }
 
                 $progressBarRenderer = new ProgressBarRenderer();
@@ -172,7 +173,7 @@ class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements Tab
                     $learningPath, $user, $record
                 );
 
-                return !is_null($averageScore) ? $progressBarRenderer->render((int) $averageScore) : null;
+                return !is_null($averageScore) ? $progressBarRenderer->render((int) $averageScore) : '';
             case 'time':
                 $totalTimeSpent = $trackingService->getTotalTimeSpentInTreeNode(
                     $learningPath, $user, $record
@@ -181,7 +182,7 @@ class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements Tab
                 return DatetimeUtilities::getInstance()->formatSecondsToHours($totalTimeSpent);
         }
 
-        return parent::render_cell($column, $record);
+        return parent::renderCell($column, $record);
     }
 
     /**
@@ -189,11 +190,9 @@ class TreeNodeProgressTableCellRenderer extends TableCellRenderer implements Tab
      * checkboxes
      *
      * @param TreeNode $treeNode
-     *
-     * @return int
      */
-    public function render_id_cell($treeNode)
+    public function renderIdentifierCell($treeNode): string
     {
-        return $treeNode->getId();
+        return (string) $treeNode->getId();
     }
 }

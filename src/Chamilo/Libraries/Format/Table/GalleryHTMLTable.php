@@ -61,13 +61,12 @@ class GalleryHTMLTable extends HtmlTable
     public function __construct(
         $tableName = 'gallery_table', $sourceCountFunction = null, $sourceDataFunction = null,
         $sourcePropertiesFunction = null, $defaultOrderColumn = 1, $defaultNumberOfItemsPerPage = 20,
-        $defaultOrderDirection = SORT_ASC, $allowOrderDirection = true, $allowPageSelection = true,
-        $allowPageNavigation = true
+        $defaultOrderDirection = SORT_ASC, $allowOrderDirection = true, $allowPageNavigation = true
     )
     {
         parent::__construct(
             $tableName, $sourceCountFunction, $sourceDataFunction, $defaultOrderColumn, $defaultNumberOfItemsPerPage,
-            $defaultOrderDirection, $allowPageSelection, $allowPageNavigation
+            $defaultOrderDirection, $allowPageNavigation
         );
 
         $this->allowOrderDirection = $allowOrderDirection;
@@ -96,7 +95,7 @@ class GalleryHTMLTable extends HtmlTable
             {
                 $row[$index] = $value[1];
                 $hasActions = $this->getTableFormActions() instanceof TableFormActions &&
-                    $this->getTableFormActions()->has_form_actions();
+                    $this->getTableFormActions()->hasFormActions();
 
                 if ($hasActions)
                 {
@@ -137,11 +136,7 @@ class GalleryHTMLTable extends HtmlTable
         return $buttonToolBar;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getColumnCount()
+    public function getColumnCount(): int
     {
         return self::DEFAULT_COLUMN_COUNT;
     }
@@ -285,7 +280,7 @@ class GalleryHTMLTable extends HtmlTable
             $currentFirstOrderDirection = $currentOrderDirections[0];
 
             $hasFormActions = $this->getTableFormActions() instanceof TableFormActions &&
-                $this->getTableFormActions()->has_form_actions();
+                $this->getTableFormActions()->hasFormActions();
 
             $propertyIndex = $currentFirstOrderColumn - ($hasFormActions ? 1 : 0);
 
@@ -342,7 +337,7 @@ class GalleryHTMLTable extends HtmlTable
     {
         $propertyModel = $this->getSourceProperties();
         $hasFormActions = $this->getTableFormActions() instanceof TableFormActions &&
-            $this->getTableFormActions()->has_form_actions();
+            $this->getTableFormActions()->hasFormActions();
         $currentOrderColumns = $this->getOrderColumn();
         $currentFirstOrderColumn = $currentOrderColumns[0];
         $subButtons = [];

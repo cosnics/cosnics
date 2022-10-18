@@ -8,6 +8,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -64,7 +65,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
         return $toolbar->as_html();
     }
 
-    public function render_cell($column, $user)
+    public function renderCell(TableColumn $column, $user): string
     {
         // Add special features here
         switch ($column->get_name())
@@ -83,9 +84,9 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
                     );
                 }
 
-                return null;
+                return '';
         }
 
-        return parent::render_cell($column, $user);
+        return parent::renderCell($column, $user);
     }
 }

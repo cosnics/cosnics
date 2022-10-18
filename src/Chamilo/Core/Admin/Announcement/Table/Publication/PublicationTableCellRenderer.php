@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -171,7 +172,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
         return $toolbar->as_html();
     }
 
-    public function render_cell($column, $publication)
+    public function renderCell(TableColumn $column, $publication): string
     {
         $content_object = DataManager::retrieve_by_id(
             ContentObject::class, $publication[Publication::PROPERTY_CONTENT_OBJECT_ID]
@@ -248,7 +249,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
             }
         }
 
-        return parent::render_cell($column, $publication);
+        return parent::renderCell($column, $publication);
     }
 
     /**

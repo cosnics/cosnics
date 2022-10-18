@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataManage
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Table data provider for the schema
@@ -21,7 +22,7 @@ class ActivityTableDataProvider extends DataClassTableDataProvider
 
     public function retrieveData(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         return DataManager::retrieve_activities(
             $this->get_component()->get_current_content_object(), $condition, $offset, $count, $orderBy

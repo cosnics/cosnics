@@ -14,22 +14,22 @@ class DoublesTableColumnModel extends DataClassTableColumnModel implements Table
     const DUPLICATES = 'Duplicates';
     const PROPERTY_TYPE = 'type';
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
         $typeGlyph = new FontAwesomeGlyph('folder', [], Translation::get('Type'));
 
-        $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE, $typeGlyph->render()));
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_TYPE, $typeGlyph->render()));
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
         );
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
         );
 
-        if (!$this->get_table()->is_detail())
+        if (!$this->getTable()->is_detail())
         {
-            $this->add_column(new StaticTableColumn(self::DUPLICATES));
+            $this->addColumn(new StaticTableColumn(self::DUPLICATES));
         }
     }
 }

@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Rights\Editor\Table\LocationEntity\LocationEntityTableCellRenderer;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -20,7 +21,7 @@ class CourseGroupEntityTableCellRenderer extends LocationEntityTableCellRenderer
      * @param $entity_item CourseGroup
      * @return String
      */
-    public function render_cell($column, $entity_item)
+    public function renderCell(TableColumn $column, $entity_item): string
     {
         switch ($column->get_name())
         {
@@ -33,6 +34,6 @@ class CourseGroupEntityTableCellRenderer extends LocationEntityTableCellRenderer
                 return $entity_item->count_descendants();
         }
         
-        return parent::render_cell($column, $entity_item);
+        return parent::renderCell($column, $entity_item);
     }
 }

@@ -28,7 +28,7 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
 
         if ($user->is_platform_admin())
         {
-            $um = $this->get_table()->get_component();
+            $um = $this->getTable()->get_component();
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Approve'), new FontAwesomeGlyph('check-circle'), $um->get_approve_user_url($user),
@@ -37,7 +37,7 @@ class UserApprovalTableCellRenderer extends DataClassTableCellRenderer implement
             );
 
             $toolbar->add_item(
-                new ToolbarItem(
+                new ToolbarItem(Translation::get('Deny'),
                     new FontAwesomeGlyph('times-circle'), $um->get_deny_user_url($user), ToolbarItem::DISPLAY_ICON
                 )
             );

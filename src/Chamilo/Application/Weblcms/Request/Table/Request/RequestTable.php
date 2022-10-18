@@ -16,7 +16,7 @@ class RequestTable extends DataClassTable implements TableFormActionsSupport
     const TYPE_PENDING = 2;
     const TYPE_GRANTED = 3;
     const TYPE_DENIED = 4;
-    const DEFAULT_ROW_COUNT = 200;
+    const DEFAULT_MAXIMUM_NUMBER_OF_RESULTS = 200;
 
     function get_implemented_form_actions(): TableFormActions
     {

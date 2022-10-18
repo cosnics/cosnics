@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\External\Table\ExternalObject;
 
 use Chamilo\Core\Repository\External\ExternalObject;
 use Chamilo\Libraries\Format\Structure\Toolbar;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -12,7 +13,7 @@ class DefaultExternalTableCellRenderer extends DataClassTableCellRenderer implem
     TableCellRendererActionsColumnSupport
 {
 
-    public function render_cell($column, $object)
+    public function renderCell(TableColumn $column, $object): string
     {
         switch ($column->get_name())
         {
@@ -28,7 +29,7 @@ class DefaultExternalTableCellRenderer extends DataClassTableCellRenderer implem
             case ExternalObject::PROPERTY_CREATED :
                 return DatetimeUtilities::getInstance()->formatLocaleDate(null, $object->get_created());
         }
-        return parent::render_cell($column, $object);
+        return parent::renderCell($column, $object);
     }
 
     public function get_actions($object)

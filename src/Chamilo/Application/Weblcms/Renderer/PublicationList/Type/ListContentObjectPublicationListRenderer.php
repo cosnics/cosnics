@@ -248,7 +248,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      */
     protected function hasActions()
     {
-        $hasActions = $this->get_actions() instanceof TableFormActions && $this->get_actions()->has_form_actions();
+        $hasActions = $this->get_actions() instanceof TableFormActions && $this->get_actions()->hasFormActions();
         $hasPublications = $this->getNumberOfItems() > 0;
         $hasRights = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
 
@@ -315,7 +315,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      */
     public function renderActions()
     {
-        $formActions = $this->get_actions()->get_form_actions();
+        $formActions = $this->get_actions()->getFormActions();
         $firstAction = array_shift($formActions);
 
         $buttonToolBar = new ButtonToolBar();
@@ -419,7 +419,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         if ($this->hasActions())
         {
-            $tableFormActions = $this->get_actions()->get_form_actions();
+            $tableFormActions = $this->get_actions()->getFormActions();
             $firstFormAction = array_shift($tableFormActions);
 
             $html[] = '<form class="form-list-view" method="post" action="' . $firstFormAction->get_action() .

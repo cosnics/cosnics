@@ -82,7 +82,7 @@ class RequestTable extends DataClassTable implements TableFormActionsSupport
      * @return \Chamilo\Core\Repository\Quota\Table\Request\RequestTableCellRenderer|\Chamilo\Libraries\Format\Table\TableCellRenderer
      * @throws \Exception
      */
-    public function get_cell_renderer()
+    public function getTableCellRenderer(): RequestTableCellRenderer
     {
         if (!isset($this->cellRenderer))
         {

@@ -35,35 +35,35 @@ class ObjectPublicationTableColumnModel extends RecordTableColumnModel implement
      *
      * @param bool $addActionsColumn
      */
-    public function initialize_columns($addActionsColumn = true)
+    public function initializeColumns($addActionsColumn = true)
     {
-        $this->add_column(new StaticTableColumn(self::COLUMN_STATUS, '', null, 'publication_table_status_column'));
+        $this->addColumn(new StaticTableColumn(self::COLUMN_STATUS, '', null, 'publication_table_status_column'));
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE));
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION));
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(
                 ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_PUBLICATION_DATE));
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE));
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(
                 ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_PUBLISHER_ID));
 
-        $this->add_column(
+        $this->addColumn(
             new StaticTableColumn(
                 self::COLUMN_PUBLISHED_FOR,
                 Translation::getInstance()->getTranslation('PublishedFor', null, Manager::context())));
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(
                 ContentObjectPublication::class,
                 ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX,
@@ -83,7 +83,7 @@ class ObjectPublicationTableColumnModel extends RecordTableColumnModel implement
      */
     protected function addActionsColumn()
     {
-        $this->add_column(new ActionsTableColumn('publication_table_actions_column'));
+        $this->addColumn(new ActionsTableColumn('publication_table_actions_column'));
     }
 
     /**
@@ -109,11 +109,10 @@ class ObjectPublicationTableColumnModel extends RecordTableColumnModel implement
      */
     public function is_display_order_column()
     {
-        $orderedColumns = $this->getCurrentOrderedColumns();
-        $firstOrderedColumnData = array_shift($orderedColumns);
+        $orderedColumn = $this->getCurrentOrderedColumn();
 
-        $firstOrderedColumn = $firstOrderedColumnData[self::ORDER_COLUMN];
-        $firstOrderedColumnOrder = $firstOrderedColumnData[self::ORDER_DIRECTION];
+        $firstOrderedColumn = $orderedColumn->getTableColumn();
+        $firstOrderedColumnOrder = $orderedColumn->getOrderDirection();
 
         $display_order_column_property = $this->get_display_order_column_property();
 

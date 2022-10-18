@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Course\OpenCourse\Service\OpenCourseService;
 use Chamilo\Application\Weblcms\Course\Table\CourseTable\CourseTableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * DataProvider for open courses
@@ -30,7 +31,7 @@ class OpenCourseTableDataProvider extends CourseTableDataProvider
 
     public function retrieveData(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         return $this->getOpenCourseService()->getOpenCourses(
             $this->get_component()->getUser(), $condition, $offset, $count, $orderBy

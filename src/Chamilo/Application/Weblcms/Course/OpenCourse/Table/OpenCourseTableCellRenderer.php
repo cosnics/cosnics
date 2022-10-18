@@ -84,7 +84,7 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
      *
      * @return String
      */
-    public function render_cell($column, $courseRecord)
+    public function renderCell(TableColumn $column, $courseRecord): string
     {
         if ($column instanceof DataClassPropertyTableColumn)
         {
@@ -95,7 +95,7 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
                     switch ($column->get_name())
                     {
                         case Course::PROPERTY_TITLE :
-                            $course_title = parent::render_cell($column, $courseRecord);
+                            $course_title = parent::renderCell($column, $courseRecord);
                             $courseViewerUrl = $this->get_component()->getViewCourseUrl(
                                 $courseRecord[Course::PROPERTY_ID]
                             );
@@ -128,6 +128,6 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
             }
         }
 
-        return parent::render_cell($column, $courseRecord);
+        return parent::renderCell($column, $courseRecord);
     }
 }

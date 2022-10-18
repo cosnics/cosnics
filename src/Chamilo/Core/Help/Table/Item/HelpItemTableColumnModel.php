@@ -9,11 +9,11 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 class HelpItemTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(HelpItem::class, HelpItem::PROPERTY_CONTEXT));
-        $this->add_column(new DataClassPropertyTableColumn(HelpItem::class, HelpItem::PROPERTY_IDENTIFIER));
-        $this->add_column(new DataClassPropertyTableColumn(HelpItem::class, HelpItem::PROPERTY_LANGUAGE));
-        $this->add_column(new DataClassPropertyTableColumn(HelpItem::class, HelpItem::PROPERTY_URL));
+        $this->addColumn(new DataClassPropertyTableColumn(HelpItem::class, HelpItem::PROPERTY_CONTEXT));
+        $this->addColumn(new DataClassPropertyTableColumn(HelpItem::class, HelpItem::PROPERTY_IDENTIFIER));
+        $this->addColumn(new DataClassPropertyTableColumn(HelpItem::class, HelpItem::PROPERTY_LANGUAGE));
+        $this->addColumn(new DataClassPropertyTableColumn(HelpItem::class, HelpItem::PROPERTY_URL));
     }
 }

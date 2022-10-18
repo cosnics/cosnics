@@ -156,7 +156,7 @@ class ItemBrowserTable extends DataClassTable implements TableFormActionsSupport
      * @return \Chamilo\Core\Menu\Table\Item\ItemBrowserTableCellRenderer
      * @throws \Exception
      */
-    public function get_cell_renderer()
+    public function getTableCellRenderer(): ItemBrowserTableCellRenderer
     {
         if (!isset($this->cellRenderer))
         {
@@ -172,7 +172,7 @@ class ItemBrowserTable extends DataClassTable implements TableFormActionsSupport
     /**
      * @return \Chamilo\Core\Menu\Table\Item\ItemBrowserTableDataProvider
      */
-    public function get_data_provider()
+    public function getTableDataProvider(): ItemBrowserTableDataProvider
     {
         if (!isset($this->dataProvider))
         {

@@ -32,19 +32,19 @@ class AssessmentAttemptTableColumnModel extends RecordTableColumnModel implement
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_FIRSTNAME));
-        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_LASTNAME));
-        $this->add_column(new DataClassPropertyTableColumn(User::class, User::PROPERTY_OFFICIAL_CODE));
+        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_FIRSTNAME));
+        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_LASTNAME));
+        $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_OFFICIAL_CODE));
         
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_START_TIME));
         
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_END_TIME));
         
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_TOTAL_TIME));
         
         $publication = $this->get_component()->get_publication();
@@ -57,13 +57,13 @@ class AssessmentAttemptTableColumnModel extends RecordTableColumnModel implement
         if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication) ||
              $assessment_publication->get_configuration()->show_score())
         {
-            $this->add_column(
+            $this->addColumn(
                 new DataClassPropertyTableColumn(
                     AssessmentAttempt::class,
                     AssessmentAttempt::PROPERTY_TOTAL_SCORE));
         }
         
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_STATUS));
     }
 }

@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -25,7 +26,7 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
         return $toolbar->as_html();
     }
 
-    public function render_cell($column, $content_object)
+    public function renderCell(TableColumn $column, $content_object): string
     {
         switch ($column->get_name())
         {
@@ -38,7 +39,7 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                         $this->get_component()->get_type_filter_url($content_object->get_template_registration_id())
                     ) . '" title="' . htmlentities($content_object->get_type_string()) . '">' . $image . '</a>';
             case ContentObject::PROPERTY_TITLE :
-                $title = parent::render_cell($column, $content_object);
+                $title = parent::renderCell($column, $content_object);
                 $title_short = StringUtilities::getInstance()->truncate($title, 50, true);
 
                 return '<a href="' .
@@ -102,6 +103,6 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                 }
         }
 
-        return parent::render_cell($column, $content_object);
+        return parent::renderCell($column, $content_object);
     }
 }

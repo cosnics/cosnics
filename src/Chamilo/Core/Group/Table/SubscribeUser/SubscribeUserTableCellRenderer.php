@@ -6,6 +6,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -45,7 +46,7 @@ class SubscribeUserTableCellRenderer extends DataClassTableCellRenderer implemen
         return $toolbar->as_html();
     }
 
-    public function render_cell($column, $user)
+    public function renderCell(TableColumn $column, $user): string
     {
 
         // Add special features here
@@ -75,6 +76,6 @@ class SubscribeUserTableCellRenderer extends DataClassTableCellRenderer implemen
                 return '<a href="mailto:' . $user->get_email() . '">' . $user->get_email() . '</a>';
         }
 
-        return parent::render_cell($column, $user);
+        return parent::renderCell($column, $user);
     }
 }

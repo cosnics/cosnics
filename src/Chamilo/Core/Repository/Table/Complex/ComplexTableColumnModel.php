@@ -24,7 +24,7 @@ class ComplexTableColumnModel extends DataClassTableColumnModel implements Table
     const SUBITEMS = 'subitems';
 
     /*
-     * (non-PHPdoc) @see \libraries\format\TableColumnModel::initialize_columns()
+     * (non-PHPdoc) @see \libraries\format\TableColumnModel::initializeColumns()
      */
 
     /**
@@ -34,18 +34,18 @@ class ComplexTableColumnModel extends DataClassTableColumnModel implements Table
     {
         $typeGlyph = new FontAwesomeGlyph('folder', [], Translation::get('Type'));
 
-        $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE, $typeGlyph->render()));
-        $this->add_column(
+        $this->addColumn(new StaticTableColumn(self::PROPERTY_TYPE, $typeGlyph->render()));
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE, false)
         );
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION, false)
         );
     }
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
         $this->addBasicColumns();
-        $this->add_column(new StaticTableColumn(Translation::get(self::SUBITEMS)));
+        $this->addColumn(new StaticTableColumn(Translation::get(self::SUBITEMS)));
     }
 }

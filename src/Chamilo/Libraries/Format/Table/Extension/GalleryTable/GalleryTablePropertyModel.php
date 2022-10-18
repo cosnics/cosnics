@@ -44,14 +44,14 @@ abstract class GalleryTablePropertyModel extends TableComponent
      *
      * @param \Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTable $table
      */
-    public function __construct($table)
+    public function __construct(GalleryTable $table)
     {
         parent::__construct($table);
 
         $this->initialize_properties();
 
         $this->set_default_order_property(static::DEFAULT_ORDER_PROPERTY_INDEX);
-        $this->set_default_order_direction(static::DEFAULT_ORDER_PROPERTY_DIRECTION);
+        $this->setDefaultOrderDirection(static::DEFAULT_ORDER_PROPERTY_DIRECTION);
     }
 
     /**
@@ -91,7 +91,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
      *
      * @return integer
      */
-    public function get_default_order_direction()
+    public function getDefaultOrderDirection()
     {
         return $this->orderDirection;
     }
@@ -106,7 +106,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
      *
      * @return \Chamilo\Libraries\Storage\Query\OrderProperty
      */
-    public function get_order_property($propertyNumber, $orderDirection)
+    public function getOrderProperty($propertyNumber, $orderDirection)
     {
         $property = $this->get_property($propertyNumber);
 
@@ -125,7 +125,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
 
             if ($propertyNumber != $defaultProperty)
             {
-                return $this->get_order_property($defaultProperty, $orderDirection);
+                return $this->getOrderProperty($defaultProperty, $orderDirection);
             }
         }
 
@@ -184,7 +184,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
      *
      * @param integer $direction
      */
-    public function set_default_order_direction($direction)
+    public function setDefaultOrderDirection($direction)
     {
         $this->orderDirection = $direction;
     }

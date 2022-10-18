@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -38,7 +39,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
      *
      * @return String
      */
-    public function render_cell($column, $publication)
+    public function renderCell(TableColumn $column, $publication): string
     {
         $content_object = $this->get_component()->get_content_object_from_publication($publication);
 
@@ -97,7 +98,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                 return $glyph->render();
         }
 
-        return parent::render_cell($column, $publication);
+        return parent::renderCell($column, $publication);
     }
 
     /**

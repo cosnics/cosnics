@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -26,7 +27,7 @@ class SharedWorkspaceTableDataProvider extends WorkspaceTableDataProvider
 
     public function retrieveData(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
 

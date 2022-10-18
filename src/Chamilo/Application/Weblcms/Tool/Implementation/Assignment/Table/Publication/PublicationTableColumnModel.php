@@ -27,19 +27,19 @@ class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
      *
      * @param bool $addActionsColumn
      */
-    public function initialize_columns($addActionsColumn = false)
+    public function initializeColumns($addActionsColumn = false)
     {
-        parent::initialize_columns($addActionsColumn);
+        parent::initializeColumns($addActionsColumn);
         
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(Assignment::class, Assignment::PROPERTY_END_TIME, null, false));
 
-        $this->add_column(
+        $this->addColumn(
             new StaticTableColumn(
                 Manager::PROPERTY_NUMBER_OF_SUBMISSIONS, 
                 Translation::getInstance()->getTranslation('NumberOfSubmissions', null, Manager::context())));
 
-        $this->add_column(new StaticTableColumn(Publication::PROPERTY_ENTITY_TYPE, ''), 1);
+        $this->addColumn(new StaticTableColumn(Publication::PROPERTY_ENTITY_TYPE, ''), 1);
 
         $this->addActionsColumn();
     }

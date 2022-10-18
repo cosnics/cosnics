@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Translation\Translation;
@@ -16,9 +17,9 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
-    public function render_cell($column, $data_class)
+    public function renderCell(TableColumn $column, $data_class): string
     {
-        $type = $this->get_table()->getType();
+        $type = $this->getTable()->getType();
 
         if ($type == LinkTable::TYPE_PARENTS)
         {
@@ -67,7 +68,7 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
                 return $object->get_icon_image();
         }
 
-        return parent::render_cell($column, $data_class);
+        return parent::renderCell($column, $data_class);
     }
 
     public function get_actions($object)
@@ -76,15 +77,15 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
         if ($object instanceof Attributes)
         {
-            $link_id = $object->get_application() . '|' . $this->render_id_cell($object) . '|' .
+            $link_id = $object->get_application() . '|' . $this->renderIdentifierCell($object) . '|' .
                 $object->getPublicationContext();
         }
         else
         {
-            $link_id = $this->render_id_cell($object);
+            $link_id = $this->renderIdentifierCell($object);
         }
 
-        $type = $this->get_table()->getType();
+        $type = $this->getTable()->getType();
 
         if ($type == LinkTable::TYPE_INCLUDES)
         {

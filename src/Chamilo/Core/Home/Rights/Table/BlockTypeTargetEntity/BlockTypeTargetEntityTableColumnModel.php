@@ -21,14 +21,14 @@ class BlockTypeTargetEntityTableColumnModel extends RecordTableColumnModel imple
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(
                 BlockTypeTargetEntity::class,
                 BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE));
         
-        $this->add_column(
+        $this->addColumn(
             new StaticTableColumn(
                 'target_entities', 
                 Translation::getInstance()->getTranslation('TargetEntities', null, Manager::context())));

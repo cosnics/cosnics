@@ -10,6 +10,7 @@ use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -113,7 +114,7 @@ class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableC
      *
      * @return String
      */
-    public function render_cell($column, $group_with_subscription_status)
+    public function renderCell(TableColumn $column, $group_with_subscription_status): string
     {
         switch ($column->get_name())
         {
@@ -135,6 +136,6 @@ class DirectSubscribedPlatformGroupBrowserTableCellRenderer extends RecordTableC
                 }
         }
 
-        return parent::render_cell($column, $group_with_subscription_status);
+        return parent::renderCell($column, $group_with_subscription_status);
     }
 }

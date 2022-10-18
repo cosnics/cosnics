@@ -373,7 +373,6 @@ class BrowserComponent extends Manager implements TableSupport
 
         // Subgroups table tab
         $table = new GroupTable($this);
-        $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
         $tabs->add(
             new ContentTab(
                 self::TAB_SUBGROUPS, $translator->trans('Subgroups'), $table->render(), new FontAwesomeGlyph(
@@ -383,7 +382,6 @@ class BrowserComponent extends Manager implements TableSupport
         );
 
         $table = new GroupRelUserTable($this);
-        $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
         $tabs->add(
             new ContentTab(
                 self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::context()),

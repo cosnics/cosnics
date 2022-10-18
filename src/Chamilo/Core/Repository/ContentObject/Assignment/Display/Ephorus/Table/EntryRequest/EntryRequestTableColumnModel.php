@@ -23,26 +23,26 @@ class EntryRequestTableColumnModel extends DataClassTableColumnModel implements
     /**
      * Gets the column names to use in the table.
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
         );
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION)
         );
-        $this->add_column(new StaticTableColumn(self::COLUMN_NAME_AUTHOR));
+        $this->addColumn(new StaticTableColumn(self::COLUMN_NAME_AUTHOR));
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(
                 Entry::class,
                 Entry::PROPERTY_SUBMITTED
             )
         );
-        $this->add_column(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_REQUEST_TIME));
-        $this->add_column(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_PERCENTAGE));
-        $this->add_column(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_STATUS));
-        $this->add_column(
+        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_REQUEST_TIME));
+        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_PERCENTAGE));
+        $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_STATUS));
+        $this->addColumn(
             new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_VISIBLE_IN_INDEX)
         );
     }

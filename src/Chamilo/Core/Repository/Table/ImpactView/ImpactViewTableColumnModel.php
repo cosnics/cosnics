@@ -19,20 +19,20 @@ class ImpactViewTableColumnModel extends DataClassTableColumnModel implements Ta
     const COLUMN_SAFE_DELETE = 'safe_delete';
     const COLUMN_CATEGORY = 'category';
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE));
         
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TYPE));
         
-        $this->add_column(
+        $this->addColumn(
             new StaticTableColumn(
                 self::COLUMN_CATEGORY, 
                 Translation::getInstance()->getTranslation('Category', [], Manager::context())));
         
-        $this->add_column(
+        $this->addColumn(
             new StaticTableColumn(
                 self::COLUMN_SAFE_DELETE, 
                 Translation::getInstance()->getTranslation('SafeDelete', [], Manager::context())));

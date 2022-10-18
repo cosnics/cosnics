@@ -6,6 +6,7 @@ use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -188,7 +189,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
         return $toolbar->as_html();
     }
 
-    public function render_cell($column, $category)
+    public function renderCell(TableColumn $column, $category): string
     {
         switch ($column->get_name())
         {
@@ -211,6 +212,6 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 return $count;
         }
 
-        return parent::render_cell($column, $category);
+        return parent::renderCell($column, $category);
     }
 }

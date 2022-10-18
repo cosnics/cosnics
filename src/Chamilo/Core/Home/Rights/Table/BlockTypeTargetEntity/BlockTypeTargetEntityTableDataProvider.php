@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider
 use Chamilo\Libraries\Format\Table\Table;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Builds the table for the BlockTypeTargetEntity data class
@@ -43,7 +44,7 @@ class BlockTypeTargetEntityTableDataProvider extends RecordTableDataProvider
 
     public function retrieveData(
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         $blockTypes = $this->blockTypeRightsService->getBlockTypesWithTargetEntities();
 

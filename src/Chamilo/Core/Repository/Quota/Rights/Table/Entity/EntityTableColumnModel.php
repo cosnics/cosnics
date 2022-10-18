@@ -51,38 +51,38 @@ class EntityTableColumnModel extends RecordTableColumnModel implements TableColu
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
         $translator = $this->getTranslator();
 
-        $this->add_column(
+        $this->addColumn(
             new SortableStaticTableColumn(
                 RightsLocationEntityRight::PROPERTY_ENTITY_TYPE,
                 $translator->trans('EntityType', [], 'Chamilo\Core\Repository\Quota\Rights')
             )
         );
 
-        $this->add_column(
+        $this->addColumn(
             new SortableStaticTableColumn(
                 self::PROPERTY_ENTITY_TITLE,
                 $translator->trans('EntityTitle', [], 'Chamilo\Core\Repository\Quota\Rights')
             )
         );
 
-        $this->add_column(
+        $this->addColumn(
             new SortableStaticTableColumn(
                 self::PROPERTY_ENTITY_DESCRIPTION,
                 $translator->trans('EntityDescription', [], 'Chamilo\Core\Repository\Quota\Rights')
             )
         );
 
-        $this->add_column(
+        $this->addColumn(
             new SortableStaticTableColumn(
                 self::PROPERTY_GROUP_NAME, $translator->trans('Group', [], 'Chamilo\Core\Repository\Quota\Rights')
             )
         );
 
-        $this->add_column(
+        $this->addColumn(
             new SortableStaticTableColumn(
                 self::PROPERTY_GROUP_PATH, $translator->trans('Path', [], 'Chamilo\Core\Repository\Quota\Rights')
             )

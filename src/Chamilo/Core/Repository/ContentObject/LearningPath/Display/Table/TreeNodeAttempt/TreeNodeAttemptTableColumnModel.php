@@ -16,16 +16,16 @@ class TreeNodeAttemptTableColumnModel extends TableColumnModel implements TableC
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new StaticTableColumn('last_start_time'));
-        $this->add_column(new StaticTableColumn('status'));
+        $this->addColumn(new StaticTableColumn('last_start_time'));
+        $this->addColumn(new StaticTableColumn('status'));
 
         if($this->get_component()->getCurrentTreeNode()->supportsScore())
         {
-            $this->add_column(new StaticTableColumn('score'));
+            $this->addColumn(new StaticTableColumn('score'));
         }
 
-        $this->add_column(new StaticTableColumn('time'));
+        $this->addColumn(new StaticTableColumn('time'));
     }
 }

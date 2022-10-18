@@ -46,19 +46,19 @@ class SortableTableFromArray extends SortableTable
      */
     public function __construct(
         $tableData, $tableColumns, $additionalParameters = [], $defaultOrderColumn = 1, $defaultPerPage = 20,
-        $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $allowPageSelection = true,
-        $enableSorting = true, $allowPageNavigation = true
+        $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $enableSorting = true,
+        $allowPageNavigation = true
     )
     {
         $this->tableName = $tableName;
 
-        if (!$allowPageSelection || !$allowPageNavigation)
+        if (!$allowPageNavigation)
         {
             $defaultPerPage = count($tableData);
         }
 
         parent::__construct($tableName, [$this, 'countData'], [$this, 'getData'], $defaultOrderColumn, $defaultPerPage,
-            $defaultOrderDirection, $allowPageSelection, $allowPageNavigation);
+            $defaultOrderDirection, $allowPageNavigation);
 
         $this->tableData = $tableData;
         $this->tableColumns = $tableColumns;
@@ -85,7 +85,7 @@ class SortableTableFromArray extends SortableTable
     /**
      * @return int
      */
-    public function countData()
+    public function countData(): int
     {
         return count($this->getTableData());
     }
@@ -108,12 +108,7 @@ class SortableTableFromArray extends SortableTable
             $content = $tableSorter->sort();
         }
 
-        if ($this->isPageSelectionAllowed())
-        {
-            $content = array_slice($content, $offset, $count);
-        }
-
-        return $content;
+        return array_slice($content, $offset, $count);
     }
 
     /**

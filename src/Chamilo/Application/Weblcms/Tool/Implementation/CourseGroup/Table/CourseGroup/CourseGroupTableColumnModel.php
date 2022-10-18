@@ -25,18 +25,18 @@ class CourseGroupTableColumnModel extends DataClassTableColumnModel implements T
     /**
      * Constructor
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME));
-        $this->add_column(
+        $this->addColumn(new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME));
+        $this->addColumn(
             new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_DESCRIPTION));
 
-        $this->add_column(
+        $this->addColumn(
             new StaticTableColumn(
                 self::COLUMN_NUMBER_OF_MEMBERS,
                 Translation::getInstance()->getTranslation('NumberOfMembers', [], Manager::context())));
 
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS));
     }
 }

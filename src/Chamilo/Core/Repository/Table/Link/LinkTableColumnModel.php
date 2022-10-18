@@ -10,25 +10,25 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 class LinkTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
 
-    public function initialize_columns()
+    public function initializeColumns()
     {
         $columns = [];
         
-        if ($this->get_table()->getType() == LinkTable::TYPE_PUBLICATIONS)
+        if ($this->getTable()->getType() == LinkTable::TYPE_PUBLICATIONS)
         {
-            $this->add_column(
+            $this->addColumn(
                 new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_APPLICATION));
-            $this->add_column(
+            $this->addColumn(
                 new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_LOCATION));
-            $this->add_column(new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_DATE));
+            $this->addColumn(new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_DATE));
         }
         else
         {
-            $this->add_column(
+            $this->addColumn(
                 new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TYPE, null, false));
-            $this->add_column(
+            $this->addColumn(
                 new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE, null, false));
-            $this->add_column(
+            $this->addColumn(
                 new DataClassPropertyTableColumn(
                     ContentObject::class,
                     ContentObject::PROPERTY_DESCRIPTION, 

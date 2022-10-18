@@ -27,15 +27,15 @@ class CourseTableColumnModel extends RecordTableColumnModel implements TableColu
     /**
      * Initializes the columns for the table
      */
-    public function initialize_columns()
+    public function initializeColumns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_VISUAL_CODE));
-        $this->add_column(new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_TITLE));
+        $this->addColumn(new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_VISUAL_CODE));
+        $this->addColumn(new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_TITLE));
         
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_TITULAR_ID, null, false));
         
-        $this->add_column(
+        $this->addColumn(
             new DataClassPropertyTableColumn(
                 CourseType::class,
                 CourseType::PROPERTY_TITLE, 

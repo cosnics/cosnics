@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -119,7 +120,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
      *
      * @return String
      */
-    public function render_cell($column, $assessment_attempt)
+    public function renderCell(TableColumn $column, $assessment_attempt): string
     {
         if ($column instanceof DataClassPropertyTableColumn)
         {
@@ -141,7 +142,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
                                 );
                             }
 
-                            return null;
+                            return '';
                         case AssessmentAttempt::PROPERTY_TOTAL_TIME :
                             if ($assessment_attempt[AssessmentAttempt::PROPERTY_STATUS] ==
                                 AssessmentAttempt::STATUS_COMPLETED)
@@ -151,7 +152,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
                                 );
                             }
 
-                            return null;
+                            return '';
                         case AssessmentAttempt::PROPERTY_TOTAL_SCORE :
                             if ($assessment_attempt[AssessmentAttempt::PROPERTY_STATUS] ==
                                 AssessmentAttempt::STATUS_COMPLETED)
@@ -161,7 +162,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
                                 return $total . '%';
                             }
 
-                            return null;
+                            return '';
                         case AssessmentAttempt::PROPERTY_STATUS :
                             return $assessment_attempt[AssessmentAttempt::PROPERTY_STATUS] ==
                             AssessmentAttempt::STATUS_COMPLETED ? Translation::get(
@@ -174,6 +175,6 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer
             }
         }
 
-        return parent::render_cell($column, $assessment_attempt);
+        return parent::renderCell($column, $assessment_attempt);
     }
 }

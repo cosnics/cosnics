@@ -110,13 +110,13 @@ class BlockTypeTargetEntityTableCellRenderer extends RecordTableCellRenderer
      *
      * @return String
      */
-    public function render_cell($column, $learningPathChildAttempt)
+    public function renderCell(TableColumn $column, $learningPathChildAttempt): string
     {
         if ($column->get_name() == 'target_entities')
         {
             return $this->renderTargetEntities($learningPathChildAttempt['target_entities']);
         }
 
-        return parent::render_cell($column, $learningPathChildAttempt);
+        return parent::renderCell($column, $learningPathChildAttempt);
     }
 }
