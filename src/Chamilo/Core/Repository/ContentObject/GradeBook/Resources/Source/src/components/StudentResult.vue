@@ -1,3 +1,24 @@
+<i18n>
+{
+    "en": {
+        "aabs": "aabs",
+        "abs": "abs",
+        "absent": "Absent",
+        "auth-absent": "Authorized absent",
+        "bring-to-source-result": "Bring back to source result",
+        "no-score-found": "No score found"
+    },
+    "nl": {
+        "aabs": "gafw",
+        "abs": "afw",
+        "absent": "Afwezig",
+        "auth-absent": "Gewettigd afwezig",
+        "bring-to-source-result": "Breng terug naar bronresultaat",
+        "no-score-found": "Geen score gevonden"
+    }
+}
+</i18n>
+
 <template>
     <div @dblclick="$emit('edit')" style="">
         <div style="display: flex;gap: 6px;align-items:center;">
@@ -11,12 +32,12 @@
             </template>
             <div v-else aria-hidden="true" style="width: 14px"></div>
             <div style="display: flex;align-items: center;" :style="typeof result === 'number' ? 'justify-content:flex-end;' : 'justify-content: center'">
-                <div v-if="result === 'afw'" class="color-code deep-orange-500" title="Afwezig"><span>afw</span></div>
-                <div v-else-if="result === 'gafw'" class="color-code amber-700" title="Gewettigd afwezig"><span>gafw</span></div>
-                <div v-else-if="result === null" class="color-code mod-none" title="Geen score gevonden"><span class="sr-only">Geen score gevonden</span></div>
+                <div v-if="result === 'afw'" class="color-code deep-orange-500" :title="$t('absent')"><span>{{ $t('abs') }}</span></div>
+                <div v-else-if="result === 'gafw'" class="color-code amber-700" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></div>
+                <div v-else-if="result === null" class="color-code mod-none" :title="$t('no-score-found')"><span class="sr-only">{{ $t('no-score-found') }}</span></div>
                 <div v-else style="">{{ result }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
             </div>
-            <a v-if="isOverwritten" style="color:#7ea2b9;text-shadow:1px 1px #e2eaee;" @click.stop="$emit('revert')" title="Breng terug naar bronresultaat"><i class="fa fa-undo" aria-hidden="true"></i><span class="sr-only">Breng terug naar bronresultaat</span></a>
+            <a v-if="isOverwritten" style="color:#7ea2b9;text-shadow:1px 1px #e2eaee;" @click.stop="$emit('revert')" :title="$t('bring-to-source-result')"><i class="fa fa-undo" aria-hidden="true"></i><span class="sr-only">{{ $t('bring-to-source-result') }}</span></a>
             <div v-else aria-hidden="true" style="width: 14px"></div>
         </div>
     </div>

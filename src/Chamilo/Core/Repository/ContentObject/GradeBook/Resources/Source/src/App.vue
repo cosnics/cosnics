@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Main :api-config="apiConfig"></Main>
-    <!--<div id="server-response"></div>-->
+    <div v-if="displayServerResponse" id="server-response"></div>
   </div>
 </template>
 
@@ -15,5 +15,6 @@
     })
     export default class App extends Vue {
         @Prop({type: Object, default: () => null}) readonly apiConfig!: APIConfig;
+        @Prop({type: Boolean, default: false}) readonly displayServerResponse!: boolean;
     }
 </script>

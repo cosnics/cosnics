@@ -1,11 +1,31 @@
+<i18n>
+{
+    "en": {
+        "aabs": "AABS",
+        "abs": "ABS",
+        "absent": "Absent",
+        "auth-absent": "Authorized absent",
+        "comments": "Comments",
+        "score": "Score"
+    },
+    "nl": {
+        "aabs": "GAFW",
+        "abs": "AFW",
+        "absent": "Afwezig",
+        "auth-absent": "Gewettigd afwezig",
+        "comments": "Opmerkingen",
+        "score": "Score"
+    }
+}
+</i18n>
 <template>
     <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
         <template v-slot:menu>
             <div class="highlight-content" style="top: -23px;padding: 0;font-size: 11px;right: 0;background-color: transparent;">
                 <div style="margin-left: auto;width: fit-content;">
                     <div style="text-align: end;display: flex;">
-                        <div style="padding: 2px 8px;border-top-left-radius: 3px;border-top-right-radius: 3px;cursor:pointer;" :style="menuTab === 'score' ? 'background: white;' : 'background-color: #e6e6e6;color:#2e6da4;'" @click="$emit('menu-tab-changed', 'score')">Score</div>
-                        <div style="padding: 2px 8px;border-top-right-radius: 3px;border-top-left-radius: 3px;cursor:pointer;" :style="menuTab === 'comment' ? 'background: white;' : 'background-color: #e6e6e6;color:#2e6da4;'" @click="$emit('menu-tab-changed', 'comment')">Comments</div>
+                        <div style="padding: 2px 8px;border-top-left-radius: 3px;border-top-right-radius: 3px;cursor:pointer;" :style="menuTab === 'score' ? 'background: white;' : 'background-color: #e6e6e6;color:#2e6da4;'" @click="$emit('menu-tab-changed', 'score')">{{ $t('score') }}</div>
+                        <div style="padding: 2px 8px;border-top-right-radius: 3px;border-top-left-radius: 3px;cursor:pointer;" :style="menuTab === 'comment' ? 'background: white;' : 'background-color: #e6e6e6;color:#2e6da4;'" @click="$emit('menu-tab-changed', 'comment')">{{  $t('comments') }}</div>
                     </div>
                 </div>
             </div>
@@ -16,8 +36,8 @@
                     <input id="score" class="percent-input" ref="score-input" type="number" :value="numValue|formatNum" autocomplete="off" @input="type = 'number'" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')" @focus="type = 'number'">
                     <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                 </div>
-                <button class="color-code deep-orange-500" :class="{'is-selected': type === 'afw'}" @click="setAbsent"><span>AFW</span></button>
-                <button class="color-code amber-700" :class="{'is-selected': type === 'gafw'}" @click="setAuthAbsent"><span>GAFW</span></button>
+                <button class="color-code deep-orange-500" :class="{'is-selected': type === 'afw'}" @click="setAbsent" :title="$t('absent')"><span>{{ $t('abs') }}</span></button>
+                <button class="color-code amber-700" :class="{'is-selected': type === 'gafw'}" @click="setAuthAbsent" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></button>
             </div>
             <div v-else-if="menuTab === 'comment'">
                 <textarea class="comment-field" ref="comment-input" v-model="commentValue"></textarea>

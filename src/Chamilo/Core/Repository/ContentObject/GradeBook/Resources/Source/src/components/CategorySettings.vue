@@ -1,12 +1,28 @@
+<i18n>
+{
+    "en": {
+        "cancel": "Cancel",
+        "close": "Close",
+        "remove": "Remove",
+        "remove-category": "Remove category?"
+    },
+    "nl": {
+        "cancel": "Annuleren",
+        "close": "Sluiten",
+        "remove": "Verwijderen",
+        "remove-category": "Categorie verwijderen?"
+    }
+}
+</i18n>
 <template>
     <div class="modal-wrapper">
         <div class="modal-content">
             <div class="modal-header">
                 <div>
                     <input type="text" v-model="category.title" autocomplete="off" @input="onCategoryChange">
-                    <button class="btn btn-link" @click="showRemoveItemDialog = true">Verwijderen</button>
+                    <button class="btn btn-link" @click="showRemoveItemDialog = true">{{ $t('remove') }}</button>
                 </div>
-                <button class="btn-close" @click="$emit('close')" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <button class="btn-close" @click="$emit('close')" :aria-label="$t('close')"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <div class="modal-body">
                 <input type="color" v-model="category.color" @input="onCategoryChange">
@@ -15,10 +31,10 @@
         <div class="modal-overlay" @click="$emit('close')"></div>
         <div class="modal-remove" v-if="showRemoveItemDialog" @click.stop="">
             <div class="modal-remove-content">
-                <div>Categorie verwijderen?</div>
+                <div>{{ $t('remove-category') }}</div>
                 <div class="modal-remove-actions">
-                    <button class="btn btn-default btn-sm" @click="removeCategory">Verwijder</button>
-                    <button class="btn btn-default btn-sm" @click="cancel">Annuleer</button>
+                    <button class="btn btn-default btn-sm" @click="removeCategory">{{ $t('remove') }}</button>
+                    <button class="btn btn-default btn-sm" @click="cancel">{{ $t('cancel') }}</button>
                 </div>
             </div>
         </div>

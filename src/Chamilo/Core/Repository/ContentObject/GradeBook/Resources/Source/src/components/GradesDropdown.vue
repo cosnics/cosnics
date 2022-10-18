@@ -1,7 +1,23 @@
+<i18n>
+{
+    "en": {
+        "add-remove-scores": "Add/Remove scores",
+        "cancel": "Cancel",
+        "remove": "Remove",
+        "remove-from-overview": "Remove score '{title}' from overview?"
+    },
+    "nl": {
+        "add-remove-scores": "Scores toevoegen/verwijderen",
+        "cancel": "Annuleren",
+        "remove": "Verwijderen",
+        "remove-from-overview": "Score '{title}' verwijderen uit overzicht?"
+    }
+}
+</i18n>
 <template>
     <div :id="id" class="btn-group" :class="{'open': isOpen}" v-click-outside="close">
-        <button aria-haspopup="true" :aria-expanded="isOpen" class="btn dropdown-toggle" title="Scores toevoegen" @click="isOpen = !isOpen">
-            <span>Scores toevoegen/verwijderen</span> <span class="caret"></span>
+        <button aria-haspopup="true" :aria-expanded="isOpen" class="btn dropdown-toggle" :title="$t('add-remove-scores')" @click="isOpen = !isOpen">
+            <span>{{ $t('add-remove-scores') }}</span> <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
             <li role="presentation" v-for="(item, index) in gradedItems" :key="`item-${index}`" @click.stop="">
@@ -15,10 +31,10 @@
         </ul>
         <div v-if="gradeItemToRemove" class="modal-wrapper" @click.stop="">
             <div class="modal-content">
-                <div class="modal-content-title">Score '{{ gradeItemToRemove.title }}' verwijderen uit overzicht?</div>
+                <div class="modal-content-title">{{ $t('remove-from-overview', {title: gradeItemToRemove.title}) }}</div>
                 <div class="actions">
-                    <button class="btn btn-default btn-sm" @click="remove">Verwijder</button>
-                    <button class="btn btn-default btn-sm" @click="cancel">Annuleer</button>
+                    <button class="btn btn-default btn-sm" @click="remove">{{ $t('remove') }}</button>
+                    <button class="btn btn-default btn-sm" @click="cancel">{{ $t('cancel') }}</button>
                 </div>
             </div>
         </div>

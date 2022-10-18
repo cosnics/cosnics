@@ -1,7 +1,17 @@
+<i18n>
+{
+    "en": {
+        "weight": "Weight"
+    },
+    "nl": {
+        "weight": "Gewicht"
+    }
+}
+</i18n>
 <template>
     <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
         <template v-slot:content>
-            <label for="weight">Gewicht:</label>
+            <label for="weight">{{ $t('weight') }}:</label>
             <div class="weight-input">
                 <input id="weight" class="percent-input" ref="weight-input" type="number" :value="itemWeight|formatNum" autocomplete="off" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
                 <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>

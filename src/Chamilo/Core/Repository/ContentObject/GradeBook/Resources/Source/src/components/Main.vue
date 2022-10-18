@@ -1,26 +1,46 @@
+<i18n>
+{
+    "en": {
+        "category": "Category",
+        "find-student": "Find student",
+        "new-score": "New score",
+        "show": "Show",
+        "synchronize-scores": "Synchronize scores",
+        "update-final-scores": "Update final scores"
+    },
+    "nl": {
+        "category": "Categorie",
+        "find-student": "Zoek student",
+        "new-score": "Nieuwe score",
+        "show": "Toon",
+        "synchronize-scores": "Synchronizeer scores",
+        "update-final-scores": "Update eindcijfers"
+    }
+}
+</i18n>
 <template>
     <div style="display: contents">
         <div v-if="gradeBook">
             <div class="gradebook-toolbar">
                 <div class="input-group">
-                    <input class="form-control" type="text" v-model="searchTerm" placeholder="Zoek student">
+                    <input class="form-control" type="text" v-model="searchTerm" :placeholder="$t('find-student')">
                     <div class="input-group-btn"><button name="clear" value="clear" class="btn btn-default" @click="searchTerm = ''"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></button></div>
                 </div>
                 <grades-dropdown id="dropdown-main" :graded-items="gradeBook.gradedItemsWithCheckedStatus" @toggle="toggleGradeItem"></grades-dropdown>
                 <div class="gradebook-create-actions">
-                    <button class="btn btn-default btn-sm" @click="synchronizeGradeBook"><i aria-hidden="true" class="fa fa-refresh"></i>Synchronizeer scores</button>
-                    <button class="btn btn-default btn-sm" @click="updateTotalScores"><i aria-hidden="true" class="fa fa-refresh"></i>Update eindcijfers</button>
-                    <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>Nieuwe score</button>
-                    <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>Categorie</button>
+                    <button class="btn btn-default btn-sm" @click="synchronizeGradeBook"><i aria-hidden="true" class="fa fa-refresh"></i>{{ $t('synchronize-scores') }}</button>
+                    <button class="btn btn-default btn-sm" @click="updateTotalScores"><i aria-hidden="true" class="fa fa-refresh"></i>{{ $t('update-final-scores') }}</button>
+                    <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>{{ $t('new-score') }}</button>
+                    <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>{{ $t('category') }}</button>
                 </div>
                 <div class="btn-group items-per-page-count">
-                    <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle" title="`Toon ${itemsPerPage} items`" style="line-height: 22px">
-                        <span>Toon {{itemsPerPage}} items</span> <span class="caret"></span>
+                    <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle" :title="`${$t('show')} ${itemsPerPage} items`" style="line-height: 22px">
+                        <span>{{ $t('show') }} {{itemsPerPage}} items</span> <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li v-for="count in [5, 10, 15, 20, 50]" :key="'per-page-' + count" style="cursor: pointer">
-                            <a :class="itemsPerPage === count ? 'selected' : 'not-selected'" :title="`Toon ${count} items`" @click="setItemsPerPage(count)">
-                                <span>Toon {{count}} items</span>
+                            <a :class="itemsPerPage === count ? 'selected' : 'not-selected'" :title="`${$t('show')} ${count} items`" @click="setItemsPerPage(count)">
+                                <span>{{ $t('show') }} {{count}} items</span>
                             </a>
                         </li>
                     </ul>
@@ -344,6 +364,7 @@
         mounted() {
             this.load();
             this.loadItemsPerPage();
+            console.log(this);
         }
     }
 </script>

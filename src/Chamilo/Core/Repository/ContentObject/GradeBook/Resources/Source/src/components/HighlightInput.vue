@@ -1,3 +1,15 @@
+<i18n>
+{
+    "en": {
+        "cancel": "Cancel",
+        "edit": "Edit"
+    },
+    "nl": {
+        "cancel": "Annuleren",
+        "edit": "Wijzigen"
+    }
+}
+</i18n>
 <template>
     <div class="highlight-input">
         <div class="highlight-overlay"></div>
@@ -5,8 +17,8 @@
         <div class="highlight-content">
             <slot name="content"></slot>
             <div class="name-input-actions">
-                <button class="btn btn-primary btn-sm" @click="$emit('edit')">Wijzig</button>
-                <button class="btn btn-default btn-sm" @click="$emit('cancel')">Annuleer</button>
+                <button class="btn btn-primary btn-sm" @click="$emit('edit')">{{ $t('edit') }}</button>
+                <button class="btn btn-default btn-sm" @click="$emit('cancel')">{{ $t('cancel') }}</button>
             </div>
         </div>
     </div>

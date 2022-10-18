@@ -1,3 +1,25 @@
+<i18n>
+{
+    "en": {
+        "adjust-weight": "Adjust weight",
+        "final-score": "Final score",
+        "first-name": "First name",
+        "last-name": "NAME",
+        "not-yet-updated": "Final score not yet updated",
+        "total": "Total",
+        "without-category": "Without category"
+    },
+    "nl": {
+        "adjust-weight": "Pas gewicht aan",
+        "final-score": "Eindcijfer",
+        "first-name": "Voornaam",
+        "last-name": "FAMILIENAAM",
+        "not-yet-updated": "Eindtotaal nog niet geüpdated",
+        "total": "Totaal",
+        "without-category": "Zonder categorie"
+    }
+}
+</i18n>
 <template>
     <div>
         <div class="table-wrap">
@@ -20,14 +42,14 @@
                                 </b-th>
                             </template>
                         </draggable>
-                        <b-th v-if="showNullCategory" :colspan="Math.max(gradeBook.nullCategory.columnIds.length, 1)" class="mod-no-category-assigned" :class="{'is-droppable': categoryDropArea === 0}" title="Zonder categorie"
+                        <b-th v-if="showNullCategory" :colspan="Math.max(gradeBook.nullCategory.columnIds.length, 1)" class="mod-no-category-assigned" :class="{'is-droppable': categoryDropArea === 0}" :title="$t('without-category')"
                               @dragover.prevent="onDropAreaOverEnter($event, 0)" @dragenter.prevent="onDropAreaOverEnter($event, 0)" @dragleave="categoryDropArea = null" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, 0)"
                         ></b-th>
                         <b-th class="col-sticky table-student-total" style="background-color: #fff;background-clip: padding-box"></b-th>
                     </b-tr>
                     <b-tr class="table-row table-head-row" style="position: sticky; top: 0;z-index: 2;">
                         <b-th class="col-sticky table-student">
-                            <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">FAMILIENAAM</a> <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">Voornaam</a>
+                            <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a> <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
                         </b-th>
                         <draggable v-for="({id, columnIds}) in displayedCategories" :key="`category-score-${id}`" :list="columnIds" tag="div" style="display: contents" ghost-class="ghost" @end="onDragEnd" :disabled="editItemId !== null || weightEditItemId !== null">
                             <b-th v-if="columnIds.length === 0" :key="`item-id-${id}`"></b-th>
@@ -36,7 +58,7 @@
                                     <button style="padding:0; background: none; border: none;margin-left: 15px" @click="$emit('item-settings', columnId)"><i class="fa fa-gear" style="margin-left: auto;display:inline-block"></i></button>
                                 </div>
                                 <div style="display: flex; align-items: center;" :style="gradeBook.countsForEndResult(columnId) ? 'justify-content: space-between' : 'justify-content: flex-end'">
-                                    <div class="weight" :class="{'mod-custom': gradeBook.getGradeColumn(columnId).weight !== null}" @dblclick="weightEditItemId = columnId" v-if="gradeBook.countsForEndResult(columnId)" title="Pas gewicht aan">{{ gradeBook.getWeight(columnId)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                                    <div class="weight" :class="{'mod-custom': gradeBook.getGradeColumn(columnId).weight !== null}" @dblclick="weightEditItemId = columnId" v-if="gradeBook.countsForEndResult(columnId)" :title="$t('adjust-weight')">{{ gradeBook.getWeight(columnId)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                                     <div class="spin">
                                         <div v-if="isSavingColumnWithId(columnId)" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                                     </div>
@@ -45,7 +67,7 @@
                                 <weight-input v-if="weightEditItemId === columnId" :item-weight="gradeBook.getWeight(columnId)" @cancel="weightEditItemId = null" @ok="setWeight(columnId, $event)"></weight-input>
                             </b-th>
                         </draggable>
-                        <b-th class="col-sticky table-student-total">Eindcijfer</b-th>
+                        <b-th class="col-sticky table-student-total">{{ $t('final-score') }}</b-th>
                     </b-tr>
                 </b-thead>
                 <b-tbody>
@@ -61,7 +83,7 @@
                             </b-td>
                         </template>
                         <b-td v-if="totalsNeedUpdate(user.id)" class="col-sticky table-student-total mod-needs-update">
-                            <i class="fa fa-exclamation-circle" title="Eindtotaal nog niet geüpdated" aria-hidden="true" style="margin-right: 5px;color: hsl(204deg 28% 56%);"></i><span class="sr-only">Eindtotaal nog niet geüpdated</span>{{ gradeBook.getEndResult(user.id)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span>
+                            <i class="fa fa-exclamation-circle" :title="$t('not-yet-updated')" aria-hidden="true" style="margin-right: 5px;color: hsl(204deg 28% 56%);"></i><span class="sr-only">Eindtotaal nog niet geüpdated</span>{{ gradeBook.getEndResult(user.id)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span>
                         </b-td>
                         <b-td v-else class="col-sticky table-student-total">{{ gradeBook.getEndResult(user.id)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></b-td>
                     </b-tr>
@@ -73,7 +95,7 @@
             <b-pagination v-model="pagination.currentPage" :total-rows="sortedUsers.length" :per-page="itemsPerPage"
                           aria-controls="data-table"></b-pagination>
             <ul class="pagination">
-                <li class="page-item active"><a class="page-link">Totaal {{ sortedUsers.length }}</a></li>
+                <li class="page-item active"><a class="page-link">{{ $t('total') }} {{ sortedUsers.length }}</a></li>
             </ul>
         </div>
     </div>

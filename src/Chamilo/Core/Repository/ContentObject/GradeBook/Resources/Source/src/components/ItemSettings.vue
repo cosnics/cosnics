@@ -1,68 +1,105 @@
+<i18n>
+{
+    "en": {
+        "authorized-absence": "In the event of authorized absence",
+        "cancel": "Cancel",
+        "close": "Close",
+        "count-towards-endresult": "Count towards end result",
+        "count-towards-endresult-not": "Score does not count towards final result",
+        "group-scores": "Group scores",
+        "grouped-scores": "Grouped scores",
+        "maximum-towards-endresult": "Maximum score (100%) counts towards final result",
+        "minimum-towards-endresult": "Minimum score (0%) counts towards final result",
+        "remove": "Remove",
+        "remove-from-overview": "Remove score '{title}' from overview?",
+        "settings": "Settings",
+        "unauthorized-absence": "In the absence of a score (without authorized absence)",
+        "weight": "Weight"
+    },
+    "nl": {
+        "authorized-absence": "Bij gewettigde afwezigheid",
+        "cancel": "Annuleren",
+        "close": "Sluiten",
+        "count-towards-endresult": "Meetellen voor eindresultaat",
+        "count-towards-endresult-not": "Score niet meetellen voor het eindresultaat",
+        "group-scores": "Scores groeperen",
+        "grouped-scores": "Gegroepeerde scores",
+        "maximum-towards-endresult": "Maximale score (100%) meetellen voor het eindresultaat",
+        "minimum-towards-endresult": "Minimale score (0%) meetellen voor het eindresultaat",
+        "remove": "Verwijderen",
+        "remove-from-overview": "Score '{title}' verwijderen uit overzicht?",
+        "settings": "Instellingen",
+        "unauthorized-absence": "Bij ontbreken van score (zonder gewettigde afwezigheid)",
+        "weight": "Gewicht"
+    }
+}
+</i18n>
+
 <template>
     <div class="modal-wrapper">
         <div class="modal-content">
             <div class="modal-header">
                 <div>
                     <input type="text" :value="title" @input="title = $event" autocomplete="off">
-                    <button class="btn btn-link" @click="showRemoveItemDialog = true">Verwijderen</button>
+                    <button class="btn btn-link" @click="showRemoveItemDialog = true">{{ $t('remove') }}</button>
                 </div>
-                <button class="btn-close" @click="$emit('close')" aria-label="Close"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <button class="btn-close" @click="$emit('close')" :aria-label="$t('close')"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <div class="modal-body">
                 <template v-if="column.type !== 'standalone'">
-                    <h5 v-if="isGrouped">Gegroepeerde scores</h5>
+                    <h5 v-if="isGrouped">{{ $t('grouped-scores') }}</h5>
                     <ul class="grouped-scores">
                         <li v-for="item in subItems" :key="item.id"><span>{{ item.title }}</span>
                             <div class="score-breadcrumb-trail">{{ item|breadcrumb }}</div>
                         </li>
                     </ul>
                     <div style="margin: 0 0 0 2rem">
-                        <button v-if="!(isGrouped || groupButtonPressed)" class="btn btn-default" @click="openGradesDropdown">Scores groeperen</button>
+                        <button v-if="!(isGrouped || groupButtonPressed)" class="btn btn-default" @click="openGradesDropdown">{{ $t('group-scores') }}</button>
                         <grades-dropdown id="dropdown-settings" ref="dropdown" v-else :graded-items="gradedItems" @toggle="toggleSubItem"></grades-dropdown>
                     </div>
                 </template>
-                <h5 :class="{'standalone': column.type === 'standalone'}">Instellingen</h5>
+                <h5 :class="{'standalone': column.type === 'standalone'}">{{ $t('settings') }}</h5>
                 <div class="settings">
                     <div>
                         <input type="checkbox" id="countForEndResult" v-model="column.countForEndResult" @input="onGradeColumnChange">
-                        <label class="settings-label" for="countForEndResult">Meetellen voor eindresultaat</label>
+                        <label class="settings-label" for="countForEndResult">{{ $t('count-towards-endresult') }}</label>
                     </div>
                     <div v-if="column.countForEndResult">
                         <div class="mt-10">
-                            <label for="weight" class="settings-label" style="display: block;">Gewicht:</label>
+                            <label for="weight" class="settings-label" style="display: block;">{{ $t('weight') }}:</label>
                             <div class="number-input">
                                 <input type="number" id="weight" :value="gradeBook.getWeight(column.id)|formatNum" @input="setWeight" autocomplete="off">
                                 <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                             </div>
                         </div>
                         <div class="mt-20">
-                            <label class="settings-label">Bij gewettigde afwezigheid:</label>
+                            <label class="settings-label">{{ $t('authorized-absence') }}:</label>
                             <div>
                                 <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange">
-                                <label for="gafw-option1">Score niet meetellen voor het eindresultaat</label>
+                                <label for="gafw-option1">{{ $t('count-towards-endresult-not') }}</label>
                             </div>
                             <div>
                                 <input type="radio" name="gafw-option" id="gafw-option2" value="1" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange">
-                                <label for="gafw-option2">Maximale score (100%) meetellen voor het eindresultaat</label>
+                                <label for="gafw-option2">{{ $t('maximum-towards-endresult') }}</label>
                             </div>
                             <div>
                                 <input type="radio" name="gafw-option" id="gafw-option3" value="2" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange">
-                                <label for="gafw-option3">Minimale score (0%) meetellen voor het eindresultaat</label>
+                                <label for="gafw-option3">{{ $t('minimum-towards-endresult') }}</label>
                             </div>
                         </div>
                         <div class="mt-20">
-                            <label class="settings-label">Bij ontbreken van score (zonder gewettigde afwezigheid):</label>
+                            <label class="settings-label">{{ $t('unauthorized-absence') }}:</label>
                             <div>
                                 <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange">
-                                <label for="nogafw-option1">Score niet meetellen voor het eindresultaat</label>
+                                <label for="nogafw-option1">{{ $t('count-towards-endresult-not') }}</label>
                             </div>
                             <div>
                                 <input type="radio" name="nogafw-option" id="nogafw-option2" value="1" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange">
-                                <label for="nogafw-option2">Maximale score (100%) meetellen voor het eindresultaat</label>
+                                <label for="nogafw-option2">{{ $t('maximum-towards-endresult') }}</label>
                             </div>
                             <div>
                                 <input type="radio" name="nogafw-option" id="nogafw-option3" value="2" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange">
-                                <label for="nogafw-option3">Minimale score (0%) meetellen voor het eindresultaat</label>
+                                <label for="nogafw-option3">{{ $t('minimum-towards-endresult') }}</label>
                             </div>
                         </div>
                     </div>
@@ -72,10 +109,10 @@
         <div class="modal-overlay" @click="$emit('close')"></div>
         <div class="modal-remove" v-if="showRemoveItemDialog" @click.stop="">
             <div class="modal-remove-content">
-                <div>Score '{{ title }}' verwijderen uit overzicht?</div>
+                <div>{{ $t('remove-from-overview', {title}) }}</div>
                 <div class="modal-remove-actions">
-                    <button class="btn btn-default btn-sm" @click="removeColumn">Verwijder</button>
-                    <button class="btn btn-default btn-sm" @click="cancel">Annuleer</button>
+                    <button class="btn btn-default btn-sm" @click="removeColumn">{{ $t('remove') }}</button>
+                    <button class="btn btn-default btn-sm" @click="cancel">{{ $t('cancel') }}</button>
                 </div>
             </div>
         </div>
