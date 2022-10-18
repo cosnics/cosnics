@@ -10,6 +10,18 @@
 <script src="http://localhost:8080/js/app.js"></script>
 
 <script>
+    Vue.use(VueI18n);
+    const messages = { 'en': {}, 'nl': {} };
+
+    let lang;
+    try {
+        lang = '{{ LANGUAGE|raw }}';
+    } catch (err) {
+        console.warn('Language could not be set, defaulting to English instead.');
+        lang = 'en';
+    }
+    const i18n = new VueI18n({ locale: lang, messages });
+
     const apiConfig = {
         loadGradeBookDataURL: '{{ LOAD_GRADEBOOK_DATA_URL|raw }}',
         addCategoryURL: '{{ ADD_CATEGORY_URL|raw }}',
@@ -32,5 +44,6 @@
     };
     new Vue({
         render: h => h(window.App, {attrs: {apiConfig}}),
+        i18n,
     }).$mount('#app');
 </script>
