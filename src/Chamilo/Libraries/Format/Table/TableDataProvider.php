@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 abstract class TableDataProvider
 {
-    public const DEFAULT_MAXIMUM_NUMBER_OF_RESULTS = 20;
+    public const DEFAULT_NUMBER_OF_RESULTS = 20;
 
     private TableCellRenderer $tableCellRenderer;
 
@@ -32,9 +32,9 @@ abstract class TableDataProvider
 
     abstract public function countData(?Condition $condition = null): int;
 
-    protected function determineMaximumNumberOfResults(): int
+    protected function determineNumberOfResults(): int
     {
-        return $this->getDefaultMaximumNumberofResults();
+        return $this->getDefaultNumberOfResults();
     }
 
     protected function determineOrderColumnIndex(): int
@@ -47,11 +47,11 @@ abstract class TableDataProvider
         return $this->getTableColumnModel()->getDefaultOrderDirection();
     }
 
-    protected function determineOrderProperties(): OrderBy
+    protected function determineOrderProperties(bool $hasTableActions = false): OrderBy
     {
         // Calculates the order column on whether or not the table uses form actions (because sortable
         // table uses data arrays)
-        $calculatedOrderColumn = $this->determineOrderColumnIndex() - ($this->hasFormActions() ? 1 : 0);
+        $calculatedOrderColumn = $this->determineOrderColumnIndex() - ($hasTableActions ? 1 : 0);
 
         $orderProperty =
             $this->getTableColumnModel()->getOrderProperty($calculatedOrderColumn, $this->determineOrderDirection());
@@ -71,26 +71,26 @@ abstract class TableDataProvider
         return 0;
     }
 
-    public function getData(?Condition $condition = null): ArrayCollection
+    public function getData(?Condition $condition = null, bool $hasTableActions = false): ArrayCollection
     {
-        $resultSet = $this->retrieveData(
-            $condition, $this->determineResultsOffset(), $this->determineMaximumNumberOfResults(),
-            $this->determineOrderProperties()
+        $results = $this->retrieveData(
+            $condition, $this->determineResultsOffset(), $this->determineNumberOfResults(),
+            $this->determineOrderProperties($hasTableActions)
         );
 
         $tableData = [];
 
-        foreach ($resultSet as $result)
+        foreach ($results as $result)
         {
-            $this->handleResult($tableData, $result);
+            $tableData[] = $this->processResult($result, $hasTableActions);
         }
 
         return new ArrayCollection($tableData);
     }
 
-    public function getDefaultMaximumNumberofResults(): int
+    public function getDefaultNumberOfResults(): int
     {
-        return static::DEFAULT_MAXIMUM_NUMBER_OF_RESULTS;
+        return static::DEFAULT_NUMBER_OF_RESULTS;
     }
 
     public function getTableCellRenderer(): TableCellRenderer
@@ -104,29 +104,25 @@ abstract class TableDataProvider
     }
 
     /**
-     * Handles a single result of the data and adds it to the table data
-     *
-     * @param string[][] $tableData
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array $result
+     *
+     * @return string[]
      */
-    protected function handleResult(array &$tableData, $result)
+    protected function processResult($result, bool $hasTableActions = false): array
     {
-        $columnCount = $this->getTableColumnModel()->getColumnCount();
-
         $rowData = [];
 
-        if ($this->hasFormActions())
+        if ($hasTableActions)
         {
             $rowData[] = $this->getTableCellRenderer()->renderIdentifierCell($result);
         }
 
-        for ($i = 0; $i < $columnCount; $i ++)
+        foreach ($this->getTableColumnModel()->getColumns() as $column)
         {
-            $rowData[] =
-                $this->getTableCellRenderer()->renderCell($this->getTableColumnModel()->getColumn($i), $result);
+            $rowData[] = $this->getTableCellRenderer()->renderCell($column, $result);
         }
 
-        $tableData[] = $rowData;
+        return $rowData;
     }
 
     abstract public function retrieveData(

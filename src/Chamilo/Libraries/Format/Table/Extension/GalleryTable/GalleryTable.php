@@ -32,14 +32,14 @@ abstract class GalleryTable extends Table
     {
         $this->table = new GalleryHTMLTable(
             $this->get_name(), array($this, 'countData'), array($this, 'getData'), array($this, 'get_property_model'),
-            $this->get_property_model()->getDefaultOrderBy() + ($this->hasFormActions() ? 1 : 0),
+            $this->get_property_model()->getDefaultOrderBy() + ($this->hasTableActions() ? 1 : 0),
             $this->getDefaultMaximumNumberofResults(), $this->get_property_model()->getDefaultOrderDirection(),
             !$this->prohibits_order_direction()
         );
 
-        if ($this->hasFormActions())
+        if ($this->hasTableActions())
         {
-            $this->table->setTableFormActions($this->getFormActions());
+            $this->table->setTableFormActions($this->getTableActions());
         }
 
         $this->table->setAdditionalParameters($this->get_parameters());

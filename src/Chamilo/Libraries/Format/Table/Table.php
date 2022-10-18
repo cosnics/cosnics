@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Table;
 
-use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
@@ -12,6 +12,7 @@ use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Translation\Translator;
 
 /**
  * This class represents a table with the use of a column model, a data provider and a cell renderer Refactoring from
@@ -25,40 +26,37 @@ abstract class Table
     use ClassContext;
 
     /**
-     * Suffix for checkbox name when using actions on selected learning objects.
-     */
-    public const CHECKBOX_NAME_SUFFIX = '_id';
-
-    /**
      * The identifier for the table (used for table actions)
      */
     public const TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
 
+    protected ChamiloRequest $request;
+
+    protected Security $security;
+
     protected SortableTable $table;
 
-    private Application $component;
+    protected ?TableFormActions $tableActions = null;
 
-    private ?TableFormActions $formActions;
+    protected TableColumnModel $tableColumnModel;
 
-    private ChamiloRequest $request;
+    protected TableDataProvider $tableDataProvider;
 
-    private Security $security;
+    protected Translator $translator;
 
-    private TableCellRenderer $tableCellRenderer;
-
-    private TableColumnModel $tableColumnModel;
-
-    private TableDataProvider $tableDataProvider;
+    protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        ChamiloRequest $request, Security $security, TableDataProvider $tableDataProvider,
-        TableColumnModel $tableColumnModel, TableCellRenderer $tableCellRenderer
+        ChamiloRequest $request, Security $security, Translator $translator, UrlGenerator $urlGenerator,
+        TableDataProvider $tableDataProvider, TableColumnModel $tableColumnModel
     )
     {
         $this->request = $request;
+        $this->security = $security;
+        $this->translator = $translator;
+        $this->urlGenerator = $urlGenerator;
         $this->tableDataProvider = $tableDataProvider;
         $this->tableColumnModel = $tableColumnModel;
-        $this->tableCellRenderer = $tableCellRenderer;
     }
 
     public function render(?Condition $condition = null): string
@@ -96,11 +94,6 @@ abstract class Table
         return $this->getTableDataProvider()->getData($condition);
     }
 
-    public function getFormActions(): ?TableFormActions
-    {
-        return null;
-    }
-
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
@@ -111,9 +104,9 @@ abstract class Table
         return $this->security;
     }
 
-    public function getTableCellRenderer(): TableCellRenderer
+    public function getTableActions(): ?TableFormActions
     {
-        return $this->tableCellRenderer;
+        return $this->tableActions;
     }
 
     public function getTableColumnModel(): TableColumnModel
@@ -126,39 +119,27 @@ abstract class Table
         return $this->tableDataProvider;
     }
 
-    public function get_component(): Application
+    public function getTranslator(): Translator
     {
-        return $this->component;
+        return $this->translator;
     }
 
-    public function set_component(Application $component)
+    public function getUrlGenerator(): UrlGenerator
     {
-        $this->component = $component;
-    }
-
-    /**
-     * Gets the name of the HTML table element
-     *
-     * @return string
-     */
-    public static function get_name()
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(static::class, true);
+        return $this->urlGenerator;
     }
 
     /**
-     * Returns the parameters for this table
-     *
-     * @return string[]
+     * @throws \ReflectionException
      */
-    protected function get_parameters()
+    public static function get_name(): string
     {
-        return $this->get_component()->get_parameters();
+        return ClassnameUtilities::getInstance()->getClassnameFromNamespace(static::class, true);
     }
 
-    public function hasFormActions(): bool
+    public function hasTableActions(): bool
     {
-        return $this->getFormActions() instanceof TableFormActions && $this->getFormActions()->hasFormActions();
+        return $this->getTableActions() instanceof TableFormActions && $this->getTableActions()->hasFormActions();
     }
 
     /**
@@ -166,9 +147,9 @@ abstract class Table
      */
     protected function initializeTable()
     {
-        if ($this->hasFormActions())
+        if ($this->hasTableActions())
         {
-            $this->table->setTableFormActions($this->getFormActions());
+            $this->table->setTableFormActions($this->getTableActions());
         }
 
         $columnModel = $this->getTableColumnModel();
@@ -193,19 +174,10 @@ abstract class Table
             }
 
             $this->table->setColumnHeader(
-                ($this->hasFormActions() ? $i + 1 : $i), $this->getSecurity()->removeXSS($column->get_title()),
+                ($this->hasTableActions() ? $i + 1 : $i), $this->getSecurity()->removeXSS($column->get_title()),
                 $column instanceof AbstractSortableTableColumn && $column->is_sortable(), $headerAttributes,
                 $contentAttributes
             );
         }
-
-        $direction = intval($this->table->getOrderDirection());
-        $columnModel->setDefaultOrderDirection($direction);
-        $columnModel->setDefaultOrderColumnIndex($this->table->getDefaultOrderColumn());
-    }
-
-    public static function package()
-    {
-        return static::context();
     }
 }

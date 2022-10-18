@@ -58,7 +58,7 @@ abstract class GalleryTableCellRenderer extends TableCellRenderer
 
         $html[] = '<div class="panel-heading">';
 
-        if ($this->getTable()->hasFormActions())
+        if ($this->getTable()->hasTableActions())
         {
             $html[] = '__CHECKBOX_PLACEHOLDER__';
         }
