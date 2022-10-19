@@ -6,7 +6,9 @@ namespace Chamilo\Libraries\Format\Table\Interfaces;
  * Without implementing
  * this interface you are not able to use a table
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Libraries\Format\Table\Interfaces
+ * @author  Sven Vanpoucke
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 interface TableSupport
 {

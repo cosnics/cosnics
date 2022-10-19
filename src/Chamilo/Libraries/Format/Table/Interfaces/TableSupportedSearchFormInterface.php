@@ -7,6 +7,10 @@ use Chamilo\Libraries\Format\Table\Table;
  * Interface to which a search form must comply if they support a table.
  * This interface will be used to connect
  * a table and a search form together so they can share their filter-parameters
+ *
+ * @package Chamilo\Libraries\Format\Table\Interfaces
+ * @author  Sven Vanpoucke
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 interface TableSupportedSearchFormInterface
 {

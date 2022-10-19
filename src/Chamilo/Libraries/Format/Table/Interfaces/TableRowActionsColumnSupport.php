@@ -4,18 +4,15 @@ namespace Chamilo\Libraries\Format\Table\Interfaces;
 /**
  * This interface determines whether or not your table supports an action column (cell renderer usage)
  *
- * @package \libraries;
- * @author Sven Vanpoucke
+ * @package Chamilo\Libraries\Format\Table\Interfaces
+ * @author  Sven Vanpoucke
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-interface TableCellRendererActionsColumnSupport
+interface TableRowActionsColumnSupport
 {
 
     /**
-     * Returns the actions toolbar
-     *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
-     *
-     * @return string
      */
-    public function get_actions($result);
+    public function getActions($result): string;
 }

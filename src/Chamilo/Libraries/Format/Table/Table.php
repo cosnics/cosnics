@@ -5,13 +5,20 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
+use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
+use Chamilo\Libraries\Format\Table\Column\OrderedTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsColumnSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Doctrine\Common\Collections\ArrayCollection;
+use Exception;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -25,10 +32,28 @@ abstract class Table
 {
     use ClassContext;
 
+    public const DEFAULT_NUMBER_OF_RESULTS = 20;
+    public const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_ASC;
+    public const DEFAULT_ORDER_COLUMN_INDEX = 0;
+
     /**
      * The identifier for the table (used for table actions)
      */
     public const TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
+
+    /**
+     * @var \Chamilo\Libraries\Format\Table\Column\TableColumn[]
+     */
+    protected array $columns;
+
+    /**
+     * The column that is currently ordered
+     */
+    protected ?OrderedTableColumn $currentOrderedColumn;
+
+    protected int $defaultDataOrderColumnIndex;
+
+    protected int $defaultDataOrderDirection;
 
     protected ChamiloRequest $request;
 
@@ -38,32 +63,33 @@ abstract class Table
 
     protected ?TableFormActions $tableActions = null;
 
-    protected TableColumnModel $tableColumnModel;
-
-    protected TableDataProvider $tableDataProvider;
-
     protected Translator $translator;
 
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        ChamiloRequest $request, Security $security, Translator $translator, UrlGenerator $urlGenerator,
-        TableDataProvider $tableDataProvider, TableColumnModel $tableColumnModel
+        ChamiloRequest $request, Security $security, Translator $translator, UrlGenerator $urlGenerator
     )
     {
         $this->request = $request;
         $this->security = $security;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
-        $this->tableDataProvider = $tableDataProvider;
-        $this->tableColumnModel = $tableColumnModel;
+
+        $this->initializeColumns();
+
+        if ($this instanceof TableColumnModelActionsColumnSupport)
+        {
+            $this->addActionColumn();
+        }
+
+        $this->defaultDataOrderColumnIndex = static::DEFAULT_ORDER_COLUMN_INDEX;
+        $this->defaultDataOrderDirection = static::DEFAULT_ORDER_COLUMN_DIRECTION;
     }
 
     public function render(?Condition $condition = null): string
     {
-        return '';
-
-        //        $this->table = new SortableTable($this->get_name(), [$this, 'countData'], [$this, 'getData'],
+        //        $this->table = new SortableTable($this->getTableName(), [$this, 'countData'], [$this, 'getData'],
         //            $this->getColumnModel()->getDefaultOrderColumn() + ($this->hasFormActions() ? 1 : 0),
         //            $this->getDefaultMaximumNumberofResults(), $this->getColumnModel()->getDefaultOrderDirection(), true);
         //
@@ -71,27 +97,199 @@ abstract class Table
         //
         //        $this->constructTable();
         //        $this->initializeTable();
-        //
-        //        return $this->table->render();
+
+        return $this->table->render();
     }
 
-    protected function constructTable()
+    /**
+     * Adds the action column only if the action column is not yet added
+     */
+    protected function addActionColumn()
     {
-        //        $this->table = new SortableTable($this->get_name(), [$this, 'countData'], [$this, 'getData'],
-        //            $this->getTableColumnModel()->getDefaultOrderColumnIndex() + ($this->hasFormActions() ? 1 : 0),
-        //            $this->getDefaultMaximumNumberofResults(), $this->getTableColumnModel()->getDefaultOrderDirection(), true);
-        //
-        //        $this->table->setAdditionalParameters($this->get_parameters());
+        foreach ($this->getColumns() as $column)
+        {
+            if ($column instanceof ActionsTableColumn)
+            {
+                return;
+            }
+        }
+
+        $this->addColumn(new ActionsTableColumn());
     }
 
-    public function countData(?Condition $condition = null): int
+    protected function addColumn(TableColumn $column, ?int $index = null)
     {
-        return $this->getTableDataProvider()->countData($condition);
+        if (is_null($index))
+        {
+            $this->columns[] = $column;
+        }
+        else
+        {
+            array_splice($this->columns, $index, 0, [$column]);
+        }
     }
 
-    public function getData(?Condition $condition = null): ArrayCollection
+    /**
+     * Adds a current ordered column to the list
+     */
+    protected function addCurrentOrderedColumnForColumnIndexAndOrderDirection(
+        int $columnIndex, ?int $orderDirection = SORT_ASC
+    )
     {
-        return $this->getTableDataProvider()->getData($condition);
+        $this->currentOrderedColumn = new OrderedTableColumn(
+            $this->getColumn($columnIndex), $orderDirection
+        );
+    }
+
+    abstract protected function countData(?Condition $condition = null): int;
+
+    protected function determineDataCount(): int
+    {
+        return $this->getDefaultDataCount();
+    }
+
+    protected function determineDataOffset(): int
+    {
+        return 0;
+    }
+
+    protected function determineDataOrderBy(bool $hasTableActions = false): OrderBy
+    {
+        // Calculates the order column on whether or not the table uses form actions (because sortable
+        // table uses data arrays)
+        $calculatedOrderColumn = $this->determineDataOrderColumnIndex() - ($hasTableActions ? 1 : 0);
+
+        $orderProperty = $this->getOrderProperty(
+            $calculatedOrderColumn, $this->determineDataOrderDirection()
+        );
+
+        $orderProperties = [];
+
+        if ($orderProperty)
+        {
+            $orderProperties[] = $orderProperty;
+        }
+
+        return new OrderBy($orderProperties);
+    }
+
+    protected function determineDataOrderColumnIndex(string $tableName): int
+    {
+        return $this->getRequest()->query->get(
+            $tableName, $this->getDefaultDataOrderColumnIndex()
+        );
+    }
+
+    protected function determineDataOrderDirection(): int
+    {
+        return $this->getDefaultDataOrderDirection();
+    }
+
+    protected function determineTableParameterName(string $parameterName): string
+    {
+        return static:: getTableName() . '_' . $parameterName;
+    }
+
+    /**
+     * Gets the column at the given index in the model.
+     */
+    public function getColumn(int $index): ?TableColumn
+    {
+        return $this->columns[$index];
+    }
+
+    public function getColumnCount(): int
+    {
+        return count($this->columns);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Table\Column\TableColumn[]
+     */
+    public function getColumns(): array
+    {
+        return $this->columns;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $columns
+     */
+    public function setColumns(array $columns)
+    {
+        $this->columns = $columns;
+    }
+
+    /**
+     * Returns the current ordered column
+     */
+    public function getCurrentOrderedColumn(): ?OrderedTableColumn
+    {
+        return $this->currentOrderedColumn;
+    }
+
+    public function setCurrentOrderedColumn(OrderedTableColumn $orderedTableColumn)
+    {
+        $this->currentOrderedColumn = $orderedTableColumn;
+    }
+
+    protected function getData(?Condition $condition = null, bool $hasTableActions = false): ArrayCollection
+    {
+        $results = $this->retrieveData(
+            $condition, $this->determineDataOffset(), $this->determineDataCount(),
+            $this->determineDataOrderBy($hasTableActions)
+        );
+
+        $tableData = [];
+
+        foreach ($results as $result)
+        {
+            $tableData[] = $this->processResult($result, $hasTableActions);
+        }
+
+        return new ArrayCollection($tableData);
+    }
+
+    public function getDefaultDataCount(): int
+    {
+        return static::DEFAULT_NUMBER_OF_RESULTS;
+    }
+
+    public function getDefaultDataOrderColumnIndex(): int
+    {
+        return $this->defaultDataOrderColumnIndex;
+    }
+
+    public function setDefaultDataOrderColumnIndex(int $columnIndex)
+    {
+        $this->defaultDataOrderColumnIndex = $columnIndex;
+    }
+
+    public function getDefaultDataOrderDirection(): int
+    {
+        return $this->defaultDataOrderDirection;
+    }
+
+    /**
+     * @param int $direction The direction. Either the PHP constant SORT_ASC or SORT_DESC.
+     */
+    public function setDefaultDataOrderDirection(int $direction)
+    {
+        $this->defaultDataOrderDirection = $direction;
+    }
+
+    /**
+     * Returns an object table order object by a given column number and order direction
+     */
+    public function getOrderProperty(int $columnNumber, int $orderDirection): ?OrderProperty
+    {
+        $column = $this->getSortableColumn($columnNumber);
+
+        if ($column instanceof AbstractSortableTableColumn)
+        {
+            return new OrderProperty($column->getConditionVariable(), $orderDirection);
+        }
+
+        return null;
     }
 
     public function getRequest(): ChamiloRequest
@@ -104,19 +302,43 @@ abstract class Table
         return $this->security;
     }
 
+    /**
+     * Returns a column by a given column index if it exists and is sortable, otherwise it returns the default column.
+     */
+    protected function getSortableColumn(int $columnNumber): ?AbstractSortableTableColumn
+    {
+        $column = $this->getColumn($columnNumber);
+
+        if (!$column instanceof AbstractSortableTableColumn || (!$column->is_sortable()))
+        {
+            if ($columnNumber != $this->getDefaultDataOrderColumnIndex())
+            {
+                return $this->getSortableColumn($this->getDefaultDataOrderColumnIndex());
+            }
+        }
+        else
+        {
+            return $column;
+        }
+
+        return null;
+    }
+
     public function getTableActions(): ?TableFormActions
     {
         return $this->tableActions;
     }
 
-    public function getTableColumnModel(): TableColumnModel
+    public static function getTableName(): string
     {
-        return $this->tableColumnModel;
-    }
-
-    public function getTableDataProvider(): TableDataProvider
-    {
-        return $this->tableDataProvider;
+        try
+        {
+            return ClassnameUtilities::getInstance()->getClassnameFromNamespace(static::class, true);
+        }
+        catch (Exception $exception)
+        {
+            return 'table';
+        }
     }
 
     public function getTranslator(): Translator
@@ -129,55 +351,99 @@ abstract class Table
         return $this->urlGenerator;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
-    public static function get_name(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassnameFromNamespace(static::class, true);
-    }
-
     public function hasTableActions(): bool
     {
         return $this->getTableActions() instanceof TableFormActions && $this->getTableActions()->hasFormActions();
     }
 
     /**
+     * Initializes the columns for the table
+     */
+    abstract protected function initializeColumns();
+
+    /**
      * Initializes the table
      */
     protected function initializeTable()
     {
-        if ($this->hasTableActions())
-        {
-            $this->table->setTableFormActions($this->getTableActions());
-        }
-
-        $columnModel = $this->getTableColumnModel();
-        $columnCount = $columnModel->getColumnCount();
-
-        for ($i = 0; $i < $columnCount; $i ++)
-        {
-            $column = $columnModel->getColumn($i);
-
-            $headerAttributes = $contentAttributes = [];
-
-            $cssClasses = $column->getCssClasses();
-
-            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
-            {
-                $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
-            }
-
-            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT]))
-            {
-                $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
-            }
-
-            $this->table->setColumnHeader(
-                ($this->hasTableActions() ? $i + 1 : $i), $this->getSecurity()->removeXSS($column->get_title()),
-                $column instanceof AbstractSortableTableColumn && $column->is_sortable(), $headerAttributes,
-                $contentAttributes
-            );
-        }
+        //        if ($this->hasTableActions())
+        //        {
+        //            $this->table->setTableFormActions($this->getTableActions());
+        //        }
+        //
+        //        $columnModel = $this->getTableColumnModel();
+        //        $columnCount = $columnModel->getColumnCount();
+        //
+        //        for ($i = 0; $i < $columnCount; $i ++)
+        //        {
+        //            $column = $columnModel->getColumn($i);
+        //
+        //            $headerAttributes = $contentAttributes = [];
+        //
+        //            $cssClasses = $column->getCssClasses();
+        //
+        //            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
+        //            {
+        //                $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
+        //            }
+        //
+        //            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT]))
+        //            {
+        //                $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
+        //            }
+        //
+        //            $this->table->setColumnHeader(
+        //                ($this->hasTableActions() ? $i + 1 : $i), $this->getSecurity()->removeXSS($column->get_title()),
+        //                $column instanceof AbstractSortableTableColumn && $column->is_sortable(), $headerAttributes,
+        //                $contentAttributes
+        //            );
+        //        }
     }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array $result
+     *
+     * @return string[]
+     */
+    protected function processResult($result, bool $hasTableActions = false): array
+    {
+        $rowData = [];
+
+        if ($hasTableActions)
+        {
+            $rowData[] = $this->renderIdentifierCell($result);
+        }
+
+        foreach ($this->getColumns() as $column)
+        {
+            $rowData[] = $this->renderCell($column, $result);
+        }
+
+        return $rowData;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array $result
+     */
+    protected function renderCell(TableColumn $column, $result): string
+    {
+        if ($column instanceof ActionsTableColumn && $this instanceof TableRowActionsColumnSupport)
+        {
+            return $this->getActions($result);
+        }
+
+        return '';
+    }
+
+    /**
+     * Define the unique identifier for the row needed for e.g.
+     * checkboxes
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array $result
+     */
+    abstract protected function renderIdentifierCell($result): string;
+
+    abstract protected function retrieveData(
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+    ): ArrayCollection;
 }
