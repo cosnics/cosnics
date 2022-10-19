@@ -27,8 +27,8 @@ class SortableTable extends HtmlTable
      */
     public function filterData(array $row): array
     {
-        $hasActions = $this->getTableFormActions() instanceof TableFormActions &&
-            $this->getTableFormActions()->hasFormActions();
+        $hasActions =
+            $this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->hasFormActions();
 
         if ($hasActions)
         {
@@ -47,14 +47,6 @@ class SortableTable extends HtmlTable
         }
 
         return $row;
-    }
-
-    /**
-     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getColumnCount()
-     */
-    public function getColumnCount(): int
-    {
-        return 1;
     }
 
     /**

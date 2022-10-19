@@ -5,11 +5,11 @@ use Chamilo\Application\Weblcms\Request\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-class RequestTable extends DataClassTable implements TableFormActionsSupport
+class RequestTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_REQUEST_ID;
     const TYPE_PERSONAL = 1;
@@ -18,7 +18,7 @@ class RequestTable extends DataClassTable implements TableFormActionsSupport
     const TYPE_DENIED = 4;
     const DEFAULT_MAXIMUM_NUMBER_OF_RESULTS = 200;
 
-    function get_implemented_form_actions(): TableFormActions
+    function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         

@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Format\Table\Extension\GalleryTable;
 
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
-use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsColumnSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\TableCellRenderer;
 use Chamilo\Libraries\Format\Table\TableComponent;
 
@@ -75,7 +75,7 @@ abstract class GalleryTableCellRenderer extends TableCellRenderer
         $html[] = $this->renderContent($result);
         $html[] = '</div>';
 
-        if ($this instanceof TableRowActionsColumnSupport)
+        if ($this instanceof TableRowActionsSupport)
         {
             $html[] = '<div class="panel-footer">';
             $html[] = $this->get_actions($result);

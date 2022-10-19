@@ -12,7 +12,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\DataClassGalleryTable\DataClassGalleryTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -22,7 +22,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class GalleryTable extends DataClassGalleryTable implements TableFormActionsSupport
+class GalleryTable extends DataClassGalleryTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_CONTENT_OBJECT_ID;
 
@@ -62,7 +62,7 @@ class GalleryTable extends DataClassGalleryTable implements TableFormActionsSupp
         );
     }
 
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 

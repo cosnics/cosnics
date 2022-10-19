@@ -10,7 +10,8 @@ use Chamilo\Libraries\Format\Table\Column\OrderedTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsColumnSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -61,7 +62,7 @@ abstract class Table
 
     protected Security $security;
 
-    protected SortableTable $table;
+    protected SortableTable $sortableTable;
 
     protected ?TableFormActions $tableActions = null;
 
@@ -70,7 +71,8 @@ abstract class Table
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        ChamiloRequest $request, Security $security, Translator $translator, UrlGenerator $urlGenerator, Pager $pager
+        ChamiloRequest $request, Security $security, Translator $translator, UrlGenerator $urlGenerator, Pager $pager,
+        SortableTable $sortableTable
     )
     {
         $this->request = $request;
@@ -78,10 +80,11 @@ abstract class Table
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->pager = $pager;
+        $this->sortableTable = $sortableTable;
 
         $this->initializeColumns();
 
-        if ($this instanceof TableRowActionsColumnSupport)
+        if ($this instanceof TableRowActionsSupport)
         {
             $this->addActionColumn();
         }
@@ -92,9 +95,12 @@ abstract class Table
 
     public function render(?Condition $condition = null): string
     {
-        var_dump($this->getData($condition));
+        return $this->getSortableTable()->render(
+            $this->countData($condition), $this->getData($condition), static::determineTableName(),
+            $this->determineDataCount(), $this->getColumnCount(), static::determineTableParameterNames(),
+            $this->determinePageNumber(), $this->getTableActions()
+        );
 
-        return '';
         //        $this->table = new SortableTable($this->getTableName(), [$this, 'countData'], [$this, 'getData'],
         //            $this->getColumnModel()->getDefaultOrderColumn() + ($this->hasFormActions() ? 1 : 0),
         //            $this->getDefaultMaximumNumberofResults(), $this->getColumnModel()->getDefaultOrderDirection(), true);
@@ -228,7 +234,22 @@ abstract class Table
 
     protected static function determineTableParameterName(string $parameterName): string
     {
-        return static::determineTableName() . '_' . $parameterName;
+        return static::determineTableParameterNames()[$parameterName];
+    }
+
+    /**
+     * @return string[]
+     */
+    protected static function determineTableParameterNames(): array
+    {
+        $tableName = static::determineTableName();
+
+        return [
+            HtmlTable::PARAM_NUMBER_OF_ITEMS_PER_PAGE => $tableName . '_' . HtmlTable::PARAM_NUMBER_OF_ITEMS_PER_PAGE,
+            HtmlTable::PARAM_ORDER_COLUMN => $tableName . '_' . HtmlTable::PARAM_ORDER_COLUMN,
+            HtmlTable::PARAM_ORDER_DIRECTION => $tableName . '_' . HtmlTable::PARAM_ORDER_DIRECTION,
+            HtmlTable::PARAM_PAGE_NUMBER => $tableName . '_' . HtmlTable::PARAM_PAGE_NUMBER
+        ];
     }
 
     /**
@@ -241,7 +262,7 @@ abstract class Table
 
     public function getColumnCount(): int
     {
-        return count($this->columns);
+        return 1;
     }
 
     /**
@@ -370,6 +391,11 @@ abstract class Table
         return null;
     }
 
+    public function getSortableTable(): SortableTable
+    {
+        return $this->sortableTable;
+    }
+
     public function getTableActions(): ?TableFormActions
     {
         return $this->tableActions;
@@ -387,7 +413,8 @@ abstract class Table
 
     public function hasTableActions(): bool
     {
-        return $this->getTableActions() instanceof TableFormActions && $this->getTableActions()->hasFormActions();
+        return $this instanceof TableActionsSupport && $this->getTableActions() instanceof TableFormActions &&
+            $this->getTableActions()->hasFormActions();
     }
 
     /**
@@ -461,7 +488,7 @@ abstract class Table
      */
     protected function renderCell(TableColumn $column, $result): string
     {
-        if ($column instanceof ActionsTableColumn && $this instanceof TableRowActionsColumnSupport)
+        if ($column instanceof ActionsTableColumn && $this instanceof TableRowActionsSupport)
         {
             return $this->renderTableRowActions($result);
         }

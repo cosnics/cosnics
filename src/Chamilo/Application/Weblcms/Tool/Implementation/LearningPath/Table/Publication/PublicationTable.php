@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 class PublicationTable extends ObjectPublicationTable
 {
 
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = $this->get_component()->get_actions();
         

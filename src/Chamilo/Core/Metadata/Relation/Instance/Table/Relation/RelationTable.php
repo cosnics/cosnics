@@ -5,7 +5,7 @@ use Chamilo\Core\Metadata\Relation\Instance\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class RelationTable extends DataClassTable implements TableFormActionsSupport
+class RelationTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_RELATION_INSTANCE_ID;
 
@@ -27,7 +27,7 @@ class RelationTable extends DataClassTable implements TableFormActionsSupport
      * 
      * @return TableFormActions
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         

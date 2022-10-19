@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\UserView\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -16,7 +16,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class UserViewTable extends DataClassTable implements TableFormActionsSupport
+class UserViewTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_USER_VIEW_ID;
 
@@ -24,7 +24,7 @@ class UserViewTable extends DataClassTable implements TableFormActionsSupport
      *
      * @see \libraries\format\TableFormActionsSupport::get_implemented_form_actions()
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         $actions->add_form_action(

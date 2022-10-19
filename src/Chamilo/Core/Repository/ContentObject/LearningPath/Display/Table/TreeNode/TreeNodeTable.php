@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class TreeNodeTable extends DataClassTable implements TableFormActionsSupport
+class TreeNodeTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_CHILD_ID;
 
@@ -23,7 +23,7 @@ class TreeNodeTable extends DataClassTable implements TableFormActionsSupport
      *
      * @return TableFormActions
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 

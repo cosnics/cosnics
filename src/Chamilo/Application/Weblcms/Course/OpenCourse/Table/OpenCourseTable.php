@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Course\OpenCourse\Manager;
 use Chamilo\Application\Weblcms\Course\Table\CourseTable\CourseTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -13,14 +13,14 @@ use Chamilo\Libraries\Translation\Translation;
  * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class OpenCourseTable extends CourseTable implements TableFormActionsSupport
+class OpenCourseTable extends CourseTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_COURSE_ID;
 
     /**
      * Returns the available table actions
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(Manager::context(), self::TABLE_IDENTIFIER);
         

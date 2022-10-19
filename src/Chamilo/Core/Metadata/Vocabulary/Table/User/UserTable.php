@@ -5,7 +5,7 @@ use Chamilo\Core\Metadata\Vocabulary\Manager;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserTable extends RecordTable implements TableFormActionsSupport
+class UserTable extends RecordTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_USER_ID;
 
@@ -23,7 +23,7 @@ class UserTable extends RecordTable implements TableFormActionsSupport
      * 
      * @return TableFormActions
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         

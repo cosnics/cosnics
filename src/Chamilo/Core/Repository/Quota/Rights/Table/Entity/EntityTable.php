@@ -9,7 +9,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -18,7 +18,7 @@ use Symfony\Component\Translation\Translator;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class EntityTable extends RecordTable implements TableFormActionsSupport
+class EntityTable extends RecordTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID;
 
@@ -126,7 +126,7 @@ class EntityTable extends RecordTable implements TableFormActionsSupport
     /**
      * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $deleteUrl = new Redirect(
             array(

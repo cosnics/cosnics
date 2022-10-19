@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -17,15 +17,14 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class WorkspaceTable extends DataClassTable implements TableFormActionsSupport
+class WorkspaceTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_WORKSPACE_ID;
 
     /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport::get_implemented_form_actions()
+     * @see \Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport::getTableActions()
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 

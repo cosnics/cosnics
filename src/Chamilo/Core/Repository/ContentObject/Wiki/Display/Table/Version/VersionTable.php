@@ -9,7 +9,7 @@ use Chamilo\Libraries\Translation\Translation;
 class VersionTable extends \Chamilo\Core\Repository\Table\ContentObject\Version\VersionTable
 {
 
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         $actions->add_form_action(

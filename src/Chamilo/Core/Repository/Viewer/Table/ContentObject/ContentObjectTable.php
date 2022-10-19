@@ -5,13 +5,13 @@ use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * This class represents a table with content objects which are candidates for publication.
  */
-class ContentObjectTable extends DataClassTable implements TableFormActionsSupport
+class ContentObjectTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_ID;
 
@@ -48,7 +48,7 @@ class ContentObjectTable extends DataClassTable implements TableFormActionsSuppo
         $this->set_query($query);
     }
 
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         

@@ -19,10 +19,9 @@ class FavouriteTable extends WorkspaceTable
 {
 
     /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport::get_implemented_form_actions()
+     * @see \Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport::getTableActions()
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         

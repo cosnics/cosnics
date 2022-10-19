@@ -9,7 +9,7 @@ use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Symfony\Component\Translation\Translator;
 
@@ -18,7 +18,7 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Application\Portfolio\Table\User
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserTable extends DataClassTable implements TableFormActionsSupport
+class UserTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = \Chamilo\Application\Portfolio\Manager::PARAM_USER_ID;
 
@@ -230,7 +230,7 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
      *
      * @return TableFormActions
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(Manager::context(), Manager::PARAM_FAVOURITE_USER_ID);
 

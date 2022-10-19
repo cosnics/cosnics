@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EntryTable extends RecordTable implements TableFormActionsSupport
+abstract class EntryTable extends RecordTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Entry::PROPERTY_ID;
 
@@ -89,7 +89,7 @@ abstract class EntryTable extends RecordTable implements TableFormActionsSupport
      *
      * @return TableFormActions
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, Manager::PARAM_ENTRY_ID);
 

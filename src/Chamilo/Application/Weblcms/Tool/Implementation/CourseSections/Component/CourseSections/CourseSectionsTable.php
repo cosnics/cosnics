@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -15,11 +15,11 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * Table to display a set of courses.
  */
-class CourseSectionsTable extends DataClassTable implements TableFormActionsSupport
+class CourseSectionsTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_COURSE_SECTION_ID;
 
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         $actions->add_form_action(

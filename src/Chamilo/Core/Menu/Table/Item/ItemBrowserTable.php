@@ -8,7 +8,7 @@ use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -19,7 +19,7 @@ use Symfony\Component\Translation\Translator;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ItemBrowserTable extends DataClassTable implements TableFormActionsSupport
+class ItemBrowserTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_ITEM;
 
@@ -186,7 +186,7 @@ class ItemBrowserTable extends DataClassTable implements TableFormActionsSupport
     /**
      * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         $actions->add_form_action(

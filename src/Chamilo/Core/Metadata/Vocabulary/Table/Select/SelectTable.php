@@ -5,7 +5,7 @@ use Chamilo\Core\Metadata\Element\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
  * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class SelectTable extends DataClassTable implements TableFormActionsSupport
+class SelectTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = \Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_VOCABULARY_ID;
 
@@ -22,7 +22,7 @@ class SelectTable extends DataClassTable implements TableFormActionsSupport
      * 
      * @return TableFormActions
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         

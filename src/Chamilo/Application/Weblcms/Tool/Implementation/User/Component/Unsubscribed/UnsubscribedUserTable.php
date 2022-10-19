@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -15,11 +15,11 @@ use Chamilo\Libraries\Translation\Translation;
  * 
  * @author Stijn Van Hoecke ****************************************************************************
  */
-class UnsubscribedUserTable extends DataClassTable implements TableFormActionsSupport
+class UnsubscribedUserTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_OBJECTS;
 
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $translator = Translation::getInstance();
         if (! Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP))

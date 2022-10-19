@@ -8,7 +8,7 @@ namespace Chamilo\Libraries\Format\Table\Interfaces;
  * @author  Sven Vanpoucke
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-interface TableRowActionsColumnSupport
+interface TableRowActionsSupport
 {
 
     /**

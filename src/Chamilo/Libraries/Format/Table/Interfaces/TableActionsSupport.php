@@ -11,8 +11,8 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
  * @author  Sven Vanpoucke
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-interface TableFormActionsSupport
+interface TableActionsSupport
 {
 
-    public function get_implemented_form_actions(): TableFormActions;
+    public function getTableActions(): TableFormActions;
 }

@@ -23,7 +23,9 @@
 
         <service id="Chamilo\Libraries\Format\Slideshow\SlideshowRenderer"/>
 
+        <service id="Chamilo\Libraries\Format\Table\SortableTable"/>
         <service id="Chamilo\Libraries\Format\Table\Pager"/>
+        <service id="Chamilo\Libraries\Format\Table\PagerRenderer"/>
 
         <service id="Chamilo\Libraries\Format\Tabs\Form\FormTabGenerator"/>
         <service id="Chamilo\Libraries\Format\Tabs\Form\FormTabsGenerator"/>

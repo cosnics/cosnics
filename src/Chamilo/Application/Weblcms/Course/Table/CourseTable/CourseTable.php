@@ -5,7 +5,7 @@ use Chamilo\Application\Weblcms\Course\Manager;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -16,7 +16,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author Yannick & Tristan
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
-class CourseTable extends RecordTable implements TableFormActionsSupport
+class CourseTable extends RecordTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_COURSE_ID;
 
@@ -29,7 +29,7 @@ class CourseTable extends RecordTable implements TableFormActionsSupport
     /**
      * Returns the available table actions
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         

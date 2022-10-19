@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 
 /**
  *
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class AnswerFeedbackTypeTable extends DataClassTable implements TableFormActionsSupport
+class AnswerFeedbackTypeTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_COMPLEX_QUESTION_ID;
 
@@ -23,7 +23,7 @@ class AnswerFeedbackTypeTable extends DataClassTable implements TableFormActions
      *
      * @see \libraries\format\TableFormActionsSupport::get_implemented_form_actions()
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         

@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -15,11 +15,11 @@ use Chamilo\Libraries\Translation\Translation;
  * 
  * @author Stijn Van Hoecke ****************************************************************************
  */
-class UnsubscribedGroupTable extends DataClassTable implements TableFormActionsSupport
+class UnsubscribedGroupTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_OBJECTS;
 
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {

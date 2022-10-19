@@ -5,7 +5,7 @@ use Chamilo\Application\Portfolio\Favourite\Manager;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class FavouriteTable extends RecordTable implements TableFormActionsSupport
+class FavouriteTable extends RecordTable implements TableActionsSupport
 {
 
     /**
@@ -22,7 +22,7 @@ class FavouriteTable extends RecordTable implements TableFormActionsSupport
      *
      * @return TableFormActions
      */
-    public function get_implemented_form_actions(): TableFormActions
+    public function getTableActions(): TableFormActions
     {
         $actions = new TableFormActions(Manager::context(), Manager::PARAM_FAVOURITE_ID);
 
