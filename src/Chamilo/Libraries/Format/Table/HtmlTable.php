@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException;
+use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -177,19 +178,16 @@ abstract class HtmlTable extends HTML_Table
         $this->headerAttributes = [];
     }
 
-    public function render(bool $emptyTable = false): string
+    public function render(bool $totalNumberOfItems, array $tableRows, ?TableFormActions $tableFormActions = null): string
     {
-        if ($this->countSourceData() == 0)
+        if ($totalNumberOfItems == 0)
         {
             return $this->getEmptyTable();
         }
 
         $html = [];
 
-        if (!$emptyTable)
-        {
-            $html[] = $this->renderTableHeader();
-        }
+        $html[] = $this->renderTableHeader();
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12">';
@@ -201,10 +199,7 @@ abstract class HtmlTable extends HTML_Table
         $html[] = '</div>';
         $html[] = '</div>';
 
-        if (!$emptyTable)
-        {
-            $html[] = $this->renderTableFooter();
-        }
+        $html[] = $this->renderTableFooter();
 
         return implode(PHP_EOL, $html);
     }

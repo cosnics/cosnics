@@ -14,5 +14,5 @@ interface TableRowActionsColumnSupport
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
      */
-    public function getActions($result): string;
+    public function renderRowActions($result): string;
 }

@@ -8,9 +8,9 @@ use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Column\OrderedTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
+use Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsColumnSupport;
-use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -55,6 +55,8 @@ abstract class Table
 
     protected int $defaultDataOrderDirection;
 
+    protected Pager $pager;
+
     protected ChamiloRequest $request;
 
     protected Security $security;
@@ -68,17 +70,18 @@ abstract class Table
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        ChamiloRequest $request, Security $security, Translator $translator, UrlGenerator $urlGenerator
+        ChamiloRequest $request, Security $security, Translator $translator, UrlGenerator $urlGenerator, Pager $pager
     )
     {
         $this->request = $request;
         $this->security = $security;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
+        $this->pager = $pager;
 
         $this->initializeColumns();
 
-        if ($this instanceof TableColumnModelActionsColumnSupport)
+        if ($this instanceof TableRowActionsColumnSupport)
         {
             $this->addActionColumn();
         }
@@ -89,6 +92,9 @@ abstract class Table
 
     public function render(?Condition $condition = null): string
     {
+        var_dump($this->getData($condition));
+
+        return '';
         //        $this->table = new SortableTable($this->getTableName(), [$this, 'countData'], [$this, 'getData'],
         //            $this->getColumnModel()->getDefaultOrderColumn() + ($this->hasFormActions() ? 1 : 0),
         //            $this->getDefaultMaximumNumberofResults(), $this->getColumnModel()->getDefaultOrderDirection(), true);
@@ -98,7 +104,7 @@ abstract class Table
         //        $this->constructTable();
         //        $this->initializeTable();
 
-        return $this->table->render();
+        //return $this->table->render();
     }
 
     /**
@@ -145,12 +151,28 @@ abstract class Table
 
     protected function determineDataCount(): int
     {
-        return $this->getDefaultDataCount();
+        return $this->getRequest()->query->get(
+            static::determineTableParameterName(HtmlTable::PARAM_NUMBER_OF_ITEMS_PER_PAGE), $this->getDefaultDataCount()
+        );
     }
 
-    protected function determineDataOffset(): int
+    protected function determineDataOffset(?Condition $condition = null): int
     {
-        return 0;
+        try
+        {
+            $numberOfItems = $this->countData($condition);
+            $numberOfItemsPerPage = $this->determineDataCount();
+            $actualNumberOfItemsPerPage =
+                $numberOfItemsPerPage == Pager::DISPLAY_ALL ? $numberOfItems : $numberOfItemsPerPage;
+
+            return $this->getPager()->getCurrentRangeOffset(
+                $this->determinePageNumber(), $actualNumberOfItemsPerPage, $this->getColumnCount(), $numberOfItems
+            );
+        }
+        catch (InvalidPageNumberException $exception)
+        {
+            return 0;
+        }
     }
 
     protected function determineDataOrderBy(bool $hasTableActions = false): OrderBy
@@ -173,21 +195,40 @@ abstract class Table
         return new OrderBy($orderProperties);
     }
 
-    protected function determineDataOrderColumnIndex(string $tableName): int
+    protected function determineDataOrderColumnIndex(): int
     {
         return $this->getRequest()->query->get(
-            $tableName, $this->getDefaultDataOrderColumnIndex()
+            static::determineTableParameterName(HtmlTable::PARAM_ORDER_COLUMN), $this->getDefaultDataOrderColumnIndex()
         );
     }
 
     protected function determineDataOrderDirection(): int
     {
-        return $this->getDefaultDataOrderDirection();
+        return $this->getRequest()->query->get(
+            static::determineTableParameterName(HtmlTable::PARAM_ORDER_DIRECTION), $this->getDefaultDataOrderDirection()
+        );
     }
 
-    protected function determineTableParameterName(string $parameterName): string
+    protected function determinePageNumber(): int
     {
-        return static:: getTableName() . '_' . $parameterName;
+        return $this->getRequest()->query->get(static::determineTableParameterName(HtmlTable::PARAM_PAGE_NUMBER), 1);
+    }
+
+    protected static function determineTableName(): string
+    {
+        try
+        {
+            return ClassnameUtilities::getInstance()->getClassnameFromNamespace(static::class, true);
+        }
+        catch (Exception $exception)
+        {
+            return 'table';
+        }
+    }
+
+    protected static function determineTableParameterName(string $parameterName): string
+    {
+        return static::determineTableName() . '_' . $parameterName;
     }
 
     /**
@@ -235,7 +276,7 @@ abstract class Table
     protected function getData(?Condition $condition = null, bool $hasTableActions = false): ArrayCollection
     {
         $results = $this->retrieveData(
-            $condition, $this->determineDataOffset(), $this->determineDataCount(),
+            $condition, $this->determineDataCount(), $this->determineDataOffset($condition),
             $this->determineDataOrderBy($hasTableActions)
         );
 
@@ -243,7 +284,7 @@ abstract class Table
 
         foreach ($results as $result)
         {
-            $tableData[] = $this->processResult($result, $hasTableActions);
+            $tableData[] = $this->processData($result, $hasTableActions);
         }
 
         return new ArrayCollection($tableData);
@@ -292,6 +333,11 @@ abstract class Table
         return null;
     }
 
+    public function getPager(): Pager
+    {
+        return $this->pager;
+    }
+
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
@@ -327,18 +373,6 @@ abstract class Table
     public function getTableActions(): ?TableFormActions
     {
         return $this->tableActions;
-    }
-
-    public static function getTableName(): string
-    {
-        try
-        {
-            return ClassnameUtilities::getInstance()->getClassnameFromNamespace(static::class, true);
-        }
-        catch (Exception $exception)
-        {
-            return 'table';
-        }
     }
 
     public function getTranslator(): Translator
@@ -405,7 +439,7 @@ abstract class Table
      *
      * @return string[]
      */
-    protected function processResult($result, bool $hasTableActions = false): array
+    protected function processData($result, bool $hasTableActions = false): array
     {
         $rowData = [];
 
@@ -429,7 +463,7 @@ abstract class Table
     {
         if ($column instanceof ActionsTableColumn && $this instanceof TableRowActionsColumnSupport)
         {
-            return $this->getActions($result);
+            return $this->renderRowActions($result);
         }
 
         return '';
