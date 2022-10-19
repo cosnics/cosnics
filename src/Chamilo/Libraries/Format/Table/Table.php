@@ -463,7 +463,7 @@ abstract class Table
     {
         if ($column instanceof ActionsTableColumn && $this instanceof TableRowActionsColumnSupport)
         {
-            return $this->renderRowActions($result);
+            return $this->renderTableRowActions($result);
         }
 
         return '';
