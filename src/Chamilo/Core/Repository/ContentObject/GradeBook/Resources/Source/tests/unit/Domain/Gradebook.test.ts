@@ -193,6 +193,18 @@ test('addCategory', () => {
     expect(category.columnIds.length).toEqual(0);
 });
 
+test('removeCategory', () => {
+    expect(gradeBook.allCategories.length).toEqual(3);
+    let category = gradeBook.getCategory(1)!;
+    gradeBook.removeCategory(category);
+    expect(gradeBook.allCategories.length).toEqual(2);
+    expect(gradeBook.nullCategory.columnIds).toEqual([1, 2, 3]);
+    category = gradeBook.getCategory(2)!;
+    gradeBook.removeCategory(category);
+    expect(gradeBook.allCategories.length).toEqual(1);
+    expect(gradeBook.nullCategory.columnIds).toEqual([1, 2, 3, 4, 5]);
+});
+
 function createSimpleScore(scoreId: number, columnId: ColumnId, studentId: number, score: number|null): GradeScore {
     return {
         id: scoreId,
