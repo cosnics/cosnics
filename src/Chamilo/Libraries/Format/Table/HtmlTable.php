@@ -1,16 +1,18 @@
 <?php
 namespace Chamilo\Libraries\Format\Table;
 
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException;
+use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
 use HTML_Table;
@@ -24,197 +26,94 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class HtmlTable extends HTML_Table
 {
-    public const PARAM_NUMBER_OF_ITEMS_PER_PAGE = 'per_page';
-    public const PARAM_ORDER_COLUMN = 'column';
-    public const PARAM_ORDER_DIRECTION = 'direction';
+    public const PARAM_NUMBER_OF_COLUMNS_PER_PAGE = 'columns_per_page';
+    public const PARAM_NUMBER_OF_ROWS_PER_PAGE = 'per_page';
+    public const PARAM_ORDER_COLUMN_DIRECTION = 'direction';
+    public const PARAM_ORDER_COLUMN_INDEX = 'column';
     public const PARAM_PAGE_NUMBER = 'page_nr';
     public const PARAM_SELECT_ALL = 'selectall';
-
-    /**
-     * Additional parameters to pass in the URL
-     *
-     * @var string[]
-     */
-    private $additionalParameters;
-
-    /**
-     * @var bool
-     */
-    private $allowPageNavigation = true;
+    public const PARAM_TOTAL_NUMBER_OF_ITEMS = 'total';
 
     /**
      * @var string[]
      */
-    private $contentCellAttributes;
+    protected array $contentCellAttributes;
 
     /**
-     * @var int
-     */
-    private $defaultOrderColumn;
-
-    /**
-     * @var int
-     */
-    private $defaultOrderDirection;
-
-    /**
-     * Additional attributes for the th-tags
-     *
      * @var string[]
      */
-    private $headerAttributes;
+    protected array $headerAttributes;
 
-    /**
-     * Number of items to display per page
-     *
-     * @var int
-     */
-    private $numberOfItemsPerPage;
+    protected Pager $pager;
 
-    /**
-     * @var int
-     */
-    private $orderColumn;
+    protected PagerRenderer $pagerRenderer;
 
-    /**
-     * SORT_ASC or SORT_DESC
-     *
-     * @var int
-     */
-    private $orderDirection;
+    protected Security $security;
 
-    /**
-     * @var int
-     */
-    private $pageNumber;
+    protected Translator $translator;
 
-    private Pager $pager;
+    protected UrlGenerator $urlGenerator;
 
-    private PagerRenderer $pagerRenderer;
-
-    /**
-     * The function to get the total number of items
-     *
-     * @var string[]
-     */
-    private $sourceCountFunction;
-
-    /**
-     * @var string[][]
-     */
-    private $sourceData;
-
-    /**
-     * The total number of items in the table
-     *
-     * @var int
-     */
-    private $sourceDataCount;
-
-    /**
-     * The function to the the data to display
-     *
-     * @var string[]
-     */
-    private $sourceDataFunction;
-
-    /**
-     * A list of actions which will be available through a select list
-     *
-     * @var \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
-     */
-    private $tableFormActions;
-
-    /**
-     * @var string
-     */
-    private $tableName;
-
-    private Translator $translator;
-
-    public function __construct(Translator $translator, Pager $pager, PagerRenderer $pagerRenderer)
+    public function __construct(
+        Translator $translator, UrlGenerator $urlGenerator, Pager $pager, PagerRenderer $pagerRenderer,
+        Security $security
+    )
     {
         parent::__construct(['class' => $this->getTableClasses()], 0, true);
 
+        $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
         $this->pager = $pager;
         $this->pagerRenderer = $pagerRenderer;
+        $this->security = $security;
 
         $this->contentCellAttributes = [];
         $this->headerAttributes = [];
     }
 
     /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     *
      * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
     public function render(
-        int $numberOfItems, ArrayCollection $tableRows, string $tableName, int $numberOfRows, int $numberOfColumns,
-        array $parameterNames, int $currentPageNumber, ?TableFormActions $tableFormActions = null
+        array $tableColumns, ArrayCollection $tableRows, string $tableName, array $parameterNames,
+        TableParameterValues $parameterValues, ?TableFormActions $tableFormActions = null
     ): string
     {
-        if ($numberOfItems == 0)
+        if ($parameterValues->getTotalNumberOfItems() == 0)
         {
             return $this->getEmptyTable();
         }
 
+        $this->setupTableColumns(
+            $tableColumns, $parameterNames, $parameterValues, $tableFormActions
+        );
+
         $html = [];
 
         $html[] = $this->renderTableHeader(
-            $tableName, $numberOfItems, $numberOfRows, $numberOfColumns, $parameterNames, $tableFormActions
+            $tableName, $parameterValues, $parameterNames, $tableFormActions
         );
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12">';
 
         $html[] = '<div class="' . $this->getTableContainerClasses() . '">';
-        //$html[] = $this->renderTableBody();
+        $html[] = $this->renderTableBody($tableRows, $parameterValues, $tableFormActions);
         $html[] = '</div>';
 
         $html[] = '</div>';
         $html[] = '</div>';
 
         $html[] = $this->renderTableFooter(
-            $tableName, $currentPageNumber, $numberOfRows, $numberOfColumns, $numberOfItems, $parameterNames,
-            $tableFormActions
+            $tableName, $parameterValues, $parameterNames, $tableFormActions
         );
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @return string
-     * @deprecated Use render() now
-     */
-    public function as_html(): string
-    {
-        return $this->render();
-    }
-
-    /**
-     * @param int $selectedOrderColumn
-     *
-     * @return int[]
-     */
-    protected function determineOrderColumnQueryParameters($selectedOrderColumn): array
-    {
-        $currentOrderColumn = $this->getOrderColumn();
-        $currentOrderDirection = $this->getOrderDirection();
-
-        if ($selectedOrderColumn != $currentOrderColumn)
-        {
-            $currentOrderColumn = $selectedOrderColumn;
-            $currentOrderDirection = SORT_ASC;
-        }
-        elseif ($currentOrderDirection == SORT_ASC)
-        {
-            $currentOrderDirection = SORT_DESC;
-        }
-        else
-        {
-            $currentOrderDirection = SORT_ASC;
-        }
-
-        return [$currentOrderColumn, $currentOrderDirection];
     }
 
     /**
@@ -227,7 +126,9 @@ abstract class HtmlTable extends HTML_Table
      *
      * @return string[]
      */
-    abstract public function filterData(array $row): array;
+    abstract public function filterData(
+        array $row, TableParameterValues $parameterValues, ?TableFormActions $tableFormActions = null
+    ): array;
 
     public function getActionsButtonToolbar(TableFormActions $tableFormActions): ButtonToolBar
     {
@@ -241,7 +142,7 @@ abstract class HtmlTable extends HTML_Table
         if ($formActionsCount > 1)
         {
             $button = new SplitDropdownButton(
-                $firstAction->get_title(), null, $firstAction->get_action(), Button::DISPLAY_LABEL,
+                $firstAction->get_title(), null, $firstAction->get_action(), AbstractButton::DISPLAY_LABEL,
                 $firstAction->getConfirmation(), ['btn-sm btn-table-action'], null, ['btn-table-action']
             );
 
@@ -249,7 +150,7 @@ abstract class HtmlTable extends HTML_Table
             {
                 $button->addSubButton(
                     new SubButton(
-                        $formAction->get_title(), null, $formAction->get_action(), Button::DISPLAY_LABEL,
+                        $formAction->get_title(), null, $formAction->get_action(), AbstractButton::DISPLAY_LABEL,
                         $formAction->getConfirmation()
                     )
                 );
@@ -261,7 +162,7 @@ abstract class HtmlTable extends HTML_Table
         {
             $buttonToolBar->addItem(
                 new Button(
-                    $firstAction->get_title(), null, $firstAction->get_action(), Button::DISPLAY_LABEL,
+                    $firstAction->get_title(), null, $firstAction->get_action(), AbstractButton::DISPLAY_LABEL,
                     $firstAction->getConfirmation(), ['btn-sm', 'btn-table-action']
                 )
             );
@@ -270,31 +171,18 @@ abstract class HtmlTable extends HTML_Table
         return $buttonToolBar;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getAdditionalParameters(): array
-    {
-        return $this->additionalParameters;
-    }
-
-    /**
-     * @param string [] $parameters
-     */
-    public function setAdditionalParameters(array $parameters)
-    {
-        $this->additionalParameters = $parameters;
-    }
-
-    public function getCheckboxHtml(string $value): string
+    public function getCheckboxHtml(
+        TableFormActions $tableFormActions, TableParameterValues $parameterValues, string $value
+    ): string
     {
         $html = [];
 
         $html[] = '<div class="checkbox checkbox-primary">';
-        $html[] = '<input class="styled styled-primary" type="checkbox" name="' .
-            $this->getTableFormActions()->getIdentifierName() . '[]" value="' . $value . '"';
+        $html[] =
+            '<input class="styled styled-primary" type="checkbox" name="' . $tableFormActions->getIdentifierName() .
+            '[]" value="' . $value . '"';
 
-        if (Request::get($this->getParameterName(self::PARAM_SELECT_ALL)))
+        if ($parameterValues->getSelectAll())
         {
             $html[] = ' checked="checked"';
         }
@@ -309,35 +197,21 @@ abstract class HtmlTable extends HTML_Table
     /**
      * @return string[]
      */
-    public function getContentCellAttributes()
+    public function getContentCellAttributes(): array
     {
         return $this->contentCellAttributes;
     }
 
-    public function getDefaultOrderColumn(): int
-    {
-        return $this->defaultOrderColumn;
-    }
-
     /**
-     * @return int
-     */
-    public function getDefaultOrderDirection()
-    {
-        return $this->defaultOrderDirection;
-    }
-
-    /**
-     * @return string
      * @throws \TableException
      */
-    public function getEmptyTable()
+    public function getEmptyTable(): string
     {
         $cols = $this->getHeader()->getColCount();
 
         $this->setCellAttributes(0, 0, 'style="font-style: italic;text-align:center;" colspan=' . $cols);
         $this->setCellContents(
-            0, 0, $this->getTranslator()->trans('NoSearchResults', null, StringUtilities::LIBRARIES)
+            0, 0, $this->getTranslator()->trans('NoSearchResults', [], StringUtilities::LIBRARIES)
         );
 
         $html = [];
@@ -349,138 +223,87 @@ abstract class HtmlTable extends HTML_Table
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @return string
-     */
-    abstract public function getFormClasses();
+    abstract public function getFormClasses(): string;
 
     /**
      * @return string[]
      */
-    public function getHeaderAttributes()
+    public function getHeaderAttributes(): array
     {
         return $this->headerAttributes;
     }
 
-    /**
-     * @return int
-     */
-    public function getNumberOfItemsPerPage()
-    {
-        return $this->numberOfItemsPerPage;
-    }
-
-    /**
-     * @return int|int[]
-     */
-    public function getOrderColumn()
-    {
-        return $this->orderColumn;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrderDirection()
-    {
-        return $this->orderDirection;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPageNumber()
-    {
-        return $this->pageNumber;
-    }
-
-    /**
-     * Get the Pager object to split the shown data into several pages
-     *
-     * @return \Chamilo\Libraries\Format\Table\Pager
-     */
-    public function getPager()
-    {
-        return $this->pager;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Table\PagerRenderer
-     */
-    public function getPagerRenderer()
+    public function getPagerRenderer(): PagerRenderer
     {
         return $this->pagerRenderer;
     }
 
-    /**
-     * @return string
-     */
-    abstract public function getTableActionsJavascript();
+    public function getSecurity(): Security
+    {
+        return $this->security;
+    }
 
-    /**
-     * @return string
-     */
-    abstract public function getTableClasses();
+    abstract public function getTableActionsJavascript(): string;
 
-    /**
-     * @return string
-     */
-    abstract public function getTableContainerClasses();
+    abstract public function getTableClasses(): string;
+
+    abstract public function getTableContainerClasses(): string;
 
     public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    /**
-     * @return bool
-     */
-    public function isPageNavigationAllowed()
+    public function getUrlGenerator(): UrlGenerator
     {
-        return $this->allowPageNavigation;
+        return $this->urlGenerator;
     }
 
-    public function prepareTableData()
+    /**
+     * @throws \TableException
+     */
+    public function prepareTableData(
+        ArrayCollection $tableRows, TableParameterValues $parameterValues, ?TableFormActions $tableFormActions = null
+    )
     {
-        $this->processSourceData();
+        $this->processSourceData($tableRows, $parameterValues, $tableFormActions);
         $this->processCellAttributes();
     }
 
+    /**
+     * @throws \TableException
+     */
     public function processCellAttributes()
     {
-        foreach ($this->headerAttributes as $column => & $attributes)
+        foreach ($this->headerAttributes as $column => $headerAttribute)
         {
-            $this->setCellAttributes(0, $column, $attributes);
+            $this->setCellAttributes(0, $column, $headerAttribute);
         }
 
-        foreach ($this->contentCellAttributes as $column => $attributes)
+        foreach ($this->contentCellAttributes as $column => $contentCellAttribute)
         {
-            $this->setColAttributes($column, $attributes);
+            $this->setColAttributes($column, $contentCellAttribute);
         }
     }
 
-    public function processSourceData()
+    /**
+     * @throws \TableException
+     */
+    public function processSourceData(
+        ArrayCollection $tableRows, TableParameterValues $parameterValues, ?TableFormActions $tableFormActions = null
+    )
     {
-        $pager = $this->getPager();
-
-        try
+        foreach ($tableRows as $row)
         {
-            $offset = $pager->getCurrentRangeOffset();
-        }
-        catch (InvalidPageNumberException $exception)
-        {
-            $offset = 0;
-        }
-
-        $table_data = $this->getSourceData($offset);
-
-        foreach ($table_data as $index => $row)
-        {
-            $row = $this->filterData($row);
+            $row = $this->filterData($row, $parameterValues, $tableFormActions);
             $this->addRow($row);
         }
     }
 
+    /**
+     * @throws \ReflectionException
+     * @throws \QuickformException
+     */
     public function renderActions(string $tableName, TableFormActions $tableFormActions): string
     {
         $buttonToolBarRenderer = new ButtonToolBarRenderer($this->getActionsButtonToolbar($tableFormActions));
@@ -496,67 +319,67 @@ abstract class HtmlTable extends HTML_Table
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     */
     public function renderNavigation(
-        int $currentPageNumber, int $numberOfRows, int $numberOfColumns, int $numberOfItems, array $parameterNames
+        TableParameterValues $parameterValues, array $parameterNames
     ): string
     {
-        //        $queryParameters = $this->getQueryParameters(
-        //            null, $this->getNumberOfItemsPerPage(), $this->getOrderColumn(), $this->getOrderDirection()
-        //        );
-
         return $this->getPagerRenderer()->renderPaginationWithPageLimit(
-            $currentPageNumber, $numberOfRows, $numberOfColumns, $numberOfItems, [],
-            $parameterNames[self::PARAM_PAGE_NUMBER]
-        );
-    }
-
-    public function renderNumberOfItemsPerPageSelector(
-        int $totalNumberOfitems, int $numberOfRows, int $numberOfColumns, array $parameterNames,
-        ?int $orderColumnIndex = null, ?int $orderDirection = SORT_ASC
-    ): string
-    {
-
-        if ($totalNumberOfitems <= Pager::DISPLAY_PER_INCREMENT)
-        {
-            return '';
-        }
-
-        //        $queryParameters = $this->getQueryParameters(
-        //            null, null, $this->getOrderColumn(), $this->getOrderDirection()
-        //        );
-
-        return $this->getPagerRenderer()->renderItemsPerPageSelector(
-            $totalNumberOfitems, $numberOfRows, $numberOfColumns, [],
-            $parameterNames[self::PARAM_NUMBER_OF_ITEMS_PER_PAGE]
+            $parameterValues, $parameterNames[TableParameterValues::PARAM_PAGE_NUMBER]
         );
     }
 
     /**
-     * Get the HTML-code with the data-table.
-     *
-     * @return string
+     * @throws \ReflectionException
+     * @throws \QuickformException
+     */
+    public function renderNumberOfItemsPerPageSelector(
+        TableParameterValues $parameterValues, array $parameterNames
+    ): string
+    {
+        if ($parameterValues->getTotalNumberOfItems() <= Pager::DISPLAY_PER_INCREMENT)
+        {
+            return '';
+        }
+
+        return $this->getPagerRenderer()->renderItemsPerPageSelector(
+            $parameterValues, $parameterNames[TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE]
+        );
+    }
+
+    /**
      * @throws \TableException
      */
-    public function renderTableBody()
+    public function renderTableBody(
+        ArrayCollection $tableRows, TableParameterValues $parameterValues, ?TableFormActions $tableFormActions = null
+    ): string
     {
-        $this->prepareTableData();
+        $this->prepareTableData($tableRows, $parameterValues, $tableFormActions);
 
         return HTML_Table::toHtml();
     }
 
+    /**
+     * @throws \ReflectionException
+     * @throws \QuickformException
+     */
     public function renderTableFilters(
-        int $totalNumberOfitems, int $numberOfRows, int $numberOfColumns, array $parameterNames,
-        ?int $orderColumnIndex = null, ?int $orderDirection = SORT_ASC
+        TableParameterValues $parameterValues, array $parameterNames
     ): string
     {
-        return $this->renderNumberOfItemsPerPageSelector(
-            $totalNumberOfitems, $numberOfRows, $numberOfColumns, $parameterNames, $orderColumnIndex, $orderDirection
-        );
+        return $this->renderNumberOfItemsPerPageSelector($parameterValues, $parameterNames);
     }
 
+    /**
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
     public function renderTableFooter(
-        string $tableName, int $currentPageNumber, int $numberOfRows, int $numberOfColumns, int $numberOfItems,
-        array $parameterNames, ?TableFormActions $tableFormActions = null
+        string $tableName, TableParameterValues $parameterValues, array $parameterNames,
+        ?TableFormActions $tableFormActions = null
     ): string
     {
         $hasFormActions = $tableFormActions instanceof TableFormActions && $tableFormActions->hasFormActions();
@@ -580,9 +403,7 @@ abstract class HtmlTable extends HTML_Table
         }
 
         $html[] = '<div class="' . $classes . ' table-navigation-pagination">';
-        $html[] = $this->renderNavigation(
-            $currentPageNumber, $numberOfRows, $numberOfColumns, $numberOfItems, $parameterNames
-        );
+        $html[] = $this->renderNavigation($parameterValues, $parameterNames);
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -598,11 +419,12 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     * @return string
+     * @throws \ReflectionException
+     * @throws \QuickformException
      */
     public function renderTableHeader(
-        string $tableName, int $totalNumberOfitems, int $numberOfRows, int $numberOfColumns, array $parameterNames,
-        ?TableFormActions $tableFormActions = null, ?int $orderColumnIndex = null, ?int $orderDirection = SORT_ASC
+        string $tableName, TableParameterValues $parameterValues, array $parameterNames,
+        ?TableFormActions $tableFormActions = null
     ): string
     {
         $hasFormActions = $tableFormActions instanceof TableFormActions && $tableFormActions->hasFormActions();
@@ -636,10 +458,7 @@ abstract class HtmlTable extends HTML_Table
         }
 
         $html[] = '<div class="' . $classes . ' table-navigation-search">';
-
-        $html[] = $this->renderTableFilters(
-            $totalNumberOfitems, $numberOfRows, $numberOfColumns, $parameterNames
-        );
+        $html[] = $this->renderTableFilters($parameterValues, $parameterNames);
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -648,106 +467,118 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
-     * @param int $orderColumn
-     * @param string $label
-     * @param bool $isSortable
+     * @param string[] $parameterNames
      * @param string[] $headerAttributes
      * @param string[] $cellAttributes
      *
-     * @return string
+     * @throws \TableException
      */
     public function setColumnHeader(
-        $orderColumn, $label, $isSortable = true, $headerAttributes = null, $cellAttributes = null
+        array $parameterNames, TableParameterValues $parameterValues, int $columnIndex, string $label,
+        bool $isSortable = true, ?array $headerAttributes = null, ?array $cellAttributes = null
     )
     {
         $header = $this->getHeader();
 
-        $header->setColAttributes($orderColumn, $headerAttributes);
-
-        $requestedOrderColumn = $this->getOrderColumn();
-        $requestedOrderDirection = $this->getOrderDirection();
-
-        $isOrdercolumn = $orderColumn == $requestedOrderColumn;
-
-        if ($isOrdercolumn)
-        {
-            if ($requestedOrderDirection == SORT_ASC)
-            {
-                $isOrderColumnAndAscending = true;
-            }
-            else
-            {
-                $isOrderColumnAndAscending = false;
-            }
-        }
-        else
-        {
-            $isOrderColumnAndAscending = false;
-        }
-
-        // TODO: Make sure these parameters RETAIN the already selected sorting columns
-
-        $orderColumnQueryParameters = $this->determineOrderColumnQueryParameters($orderColumn);
-
-        $queryParameters = $this->getQueryParameters(
-            $this->getPageNumber(), $this->getNumberOfItemsPerPage(), $orderColumnQueryParameters[0],
-            $orderColumnQueryParameters[1]
-        );
+        $header->setColAttributes($columnIndex, $headerAttributes);
 
         if ($isSortable)
         {
-            $headerUrl = new Redirect($queryParameters);
+            $currentOrderColumnIndex = $parameterValues->getOrderColumnIndex();
+            $currentOrderColumnDirection = $parameterValues->getOrderColumnDirection();
 
-            $link = '<a href="' . $headerUrl->getUrl() . '">' . $label . '</a>';
-
-            if ($isOrdercolumn)
+            if ($columnIndex != $currentOrderColumnIndex)
             {
-                if ($isOrderColumnAndAscending)
+                $currentOrderColumnIndex = $columnIndex;
+                $currentOrderColumnDirection = SORT_ASC;
+                $glyph = '';
+            }
+            else
+            {
+                if ($currentOrderColumnDirection == SORT_ASC)
                 {
+                    $currentOrderColumnDirection = SORT_DESC;
                     $glyphType = 'arrow-down-long';
                 }
                 else
                 {
+                    $currentOrderColumnDirection = SORT_ASC;
                     $glyphType = 'arrow-up-long';
                 }
 
                 $glyph = new FontAwesomeGlyph($glyphType);
-                $link .= ' ' . $glyph->render();
+                $glyph = $glyph->render();
             }
+
+            $queryParameters = [
+                $parameterNames[TableParameterValues::PARAM_PAGE_NUMBER] => $parameterValues->getPageNumber(),
+                $parameterNames[TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE] => $parameterValues->getNumberOfRowsPerPage(
+                ),
+                $parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_INDEX] => $currentOrderColumnIndex,
+                $parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION] => $currentOrderColumnDirection
+            ];
+
+            $content = '<a href="' . $this->getUrlGenerator()->fromRequest($queryParameters) . '">' . $label . '</a> ' .
+                $glyph;
         }
         else
         {
-            $link = $label;
+            $content = $label;
         }
 
-        $header->setHeaderContents(0, $orderColumn, $link);
+        $header->setHeaderContents(0, $columnIndex, $content);
 
         if (!is_null($cellAttributes))
         {
-            $this->contentCellAttributes[$orderColumn] = $cellAttributes;
+            $this->contentCellAttributes[$columnIndex] = $cellAttributes;
         }
 
         if (!is_null($headerAttributes))
         {
-            $this->headerAttributes[$orderColumn] = $headerAttributes;
+            $this->headerAttributes[$columnIndex] = $headerAttributes;
+        }
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     * @param string[] $parameterNames
+     *
+     * @throws \TableException
+     */
+    protected function setupTableColumns(
+        array $tableColumns, array $parameterNames, TableParameterValues $parameterValues,
+        ?TableFormActions $tableFormActions = null
+    )
+    {
+        if ($tableFormActions instanceof TableFormActions && $tableFormActions->hasFormActions())
+        {
+            $columnHeaderHtml =
+                '<div class="checkbox checkbox-primary"><input class="styled styled-primary sortableTableSelectToggle" type="checkbox" name="sortableTableSelectToggle" /><label></label></div>';
+            $this->setColumnHeader($parameterNames, $parameterValues, 0, $columnHeaderHtml, false);
         }
 
-        return $link;
-    }
+        foreach ($tableColumns as $key => $tableColumn)
+        {
+            $headerAttributes = $contentAttributes = [];
 
-    /**
-     * @param \Chamilo\Libraries\Format\Table\FormAction\TableFormActions $actions
-     */
-    public function setTableFormActions(TableFormActions $actions = null)
-    {
-        $this->tableFormActions = $actions;
-    }
+            $cssClasses = $tableColumn->getCssClasses();
 
-    /**
-     * @deprecated User render() now
-     */
-    public function toHtml(bool $emptyTable = false): string
-    {
-        return $this->render($emptyTable);
+            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
+            {
+                $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
+            }
+
+            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT]))
+            {
+                $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
+            }
+
+            $this->setColumnHeader(
+                $parameterNames, $parameterValues, ($tableFormActions instanceof TableFormActions ? $key + 1 : $key),
+                $this->getSecurity()->removeXSS($tableColumn->get_title()),
+                $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->is_sortable(), $headerAttributes,
+                $contentAttributes
+            );
+        }
     }
 }

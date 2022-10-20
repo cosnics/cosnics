@@ -6,14 +6,12 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
-use Chamilo\Libraries\Format\Table\Column\OrderedTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -28,12 +26,16 @@ use Symfony\Component\Translation\Translator;
  *
  * @package Chamilo\Libraries\Format\Table
  * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Table
 {
     use ClassContext;
 
-    public const DEFAULT_NUMBER_OF_RESULTS = 20;
+    public const DEFAULT_NUMBER_OF_COLUMNS_PER_PAGE = 1;
+
+    public const DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 20;
+
     public const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_ASC;
     public const DEFAULT_ORDER_COLUMN_INDEX = 0;
 
@@ -47,36 +49,22 @@ abstract class Table
      */
     protected array $columns;
 
-    /**
-     * The column that is currently ordered
-     */
-    protected ?OrderedTableColumn $currentOrderedColumn;
-
-    protected int $defaultDataOrderColumnIndex;
-
-    protected int $defaultDataOrderDirection;
-
     protected Pager $pager;
 
     protected ChamiloRequest $request;
 
-    protected Security $security;
-
     protected SortableTable $sortableTable;
-
-    protected ?TableFormActions $tableActions = null;
 
     protected Translator $translator;
 
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        ChamiloRequest $request, Security $security, Translator $translator, UrlGenerator $urlGenerator, Pager $pager,
+        ChamiloRequest $request, Translator $translator, UrlGenerator $urlGenerator, Pager $pager,
         SortableTable $sortableTable
     )
     {
         $this->request = $request;
-        $this->security = $security;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->pager = $pager;
@@ -88,29 +76,20 @@ abstract class Table
         {
             $this->addActionColumn();
         }
-
-        $this->defaultDataOrderColumnIndex = static::DEFAULT_ORDER_COLUMN_INDEX;
-        $this->defaultDataOrderDirection = static::DEFAULT_ORDER_COLUMN_DIRECTION;
     }
 
+    /**
+     * @throws \TableException
+     */
     public function render(?Condition $condition = null): string
     {
+        $parameterValues = $this->determineParameterValues($condition);
+        $tableActions = $this instanceof TableActionsSupport ? $this->getTableActions() : null;
+
         return $this->getSortableTable()->render(
-            $this->countData($condition), $this->getData($condition), static::determineTableName(),
-            $this->determineDataCount(), $this->getColumnCount(), static::determineTableParameterNames(),
-            $this->determinePageNumber(), $this->getTableActions()
+            $this->getColumns(), $this->getData($parameterValues, $condition), static::determineName(),
+            static::determineParameterNames(), $parameterValues, $tableActions
         );
-
-        //        $this->table = new SortableTable($this->getTableName(), [$this, 'countData'], [$this, 'getData'],
-        //            $this->getColumnModel()->getDefaultOrderColumn() + ($this->hasFormActions() ? 1 : 0),
-        //            $this->getDefaultMaximumNumberofResults(), $this->getColumnModel()->getDefaultOrderDirection(), true);
-        //
-        //        $this->table->setAdditionalParameters($this->get_parameters());
-        //
-        //        $this->constructTable();
-        //        $this->initializeTable();
-
-        //return $this->table->render();
     }
 
     /**
@@ -141,86 +120,9 @@ abstract class Table
         }
     }
 
-    /**
-     * Adds a current ordered column to the list
-     */
-    protected function addCurrentOrderedColumnForColumnIndexAndOrderDirection(
-        int $columnIndex, ?int $orderDirection = SORT_ASC
-    )
-    {
-        $this->currentOrderedColumn = new OrderedTableColumn(
-            $this->getColumn($columnIndex), $orderDirection
-        );
-    }
-
     abstract protected function countData(?Condition $condition = null): int;
 
-    protected function determineDataCount(): int
-    {
-        return $this->getRequest()->query->get(
-            static::determineTableParameterName(HtmlTable::PARAM_NUMBER_OF_ITEMS_PER_PAGE), $this->getDefaultDataCount()
-        );
-    }
-
-    protected function determineDataOffset(?Condition $condition = null): int
-    {
-        try
-        {
-            $numberOfItems = $this->countData($condition);
-            $numberOfItemsPerPage = $this->determineDataCount();
-            $actualNumberOfItemsPerPage =
-                $numberOfItemsPerPage == Pager::DISPLAY_ALL ? $numberOfItems : $numberOfItemsPerPage;
-
-            return $this->getPager()->getCurrentRangeOffset(
-                $this->determinePageNumber(), $actualNumberOfItemsPerPage, $this->getColumnCount(), $numberOfItems
-            );
-        }
-        catch (InvalidPageNumberException $exception)
-        {
-            return 0;
-        }
-    }
-
-    protected function determineDataOrderBy(bool $hasTableActions = false): OrderBy
-    {
-        // Calculates the order column on whether or not the table uses form actions (because sortable
-        // table uses data arrays)
-        $calculatedOrderColumn = $this->determineDataOrderColumnIndex() - ($hasTableActions ? 1 : 0);
-
-        $orderProperty = $this->getOrderProperty(
-            $calculatedOrderColumn, $this->determineDataOrderDirection()
-        );
-
-        $orderProperties = [];
-
-        if ($orderProperty)
-        {
-            $orderProperties[] = $orderProperty;
-        }
-
-        return new OrderBy($orderProperties);
-    }
-
-    protected function determineDataOrderColumnIndex(): int
-    {
-        return $this->getRequest()->query->get(
-            static::determineTableParameterName(HtmlTable::PARAM_ORDER_COLUMN), $this->getDefaultDataOrderColumnIndex()
-        );
-    }
-
-    protected function determineDataOrderDirection(): int
-    {
-        return $this->getRequest()->query->get(
-            static::determineTableParameterName(HtmlTable::PARAM_ORDER_DIRECTION), $this->getDefaultDataOrderDirection()
-        );
-    }
-
-    protected function determinePageNumber(): int
-    {
-        return $this->getRequest()->query->get(static::determineTableParameterName(HtmlTable::PARAM_PAGE_NUMBER), 1);
-    }
-
-    protected static function determineTableName(): string
+    protected static function determineName(): string
     {
         try
         {
@@ -232,24 +134,113 @@ abstract class Table
         }
     }
 
-    protected static function determineTableParameterName(string $parameterName): string
+    protected function determineNumberOfRowsPerPage(): int
     {
-        return static::determineTableParameterNames()[$parameterName];
+        return $this->getRequest()->query->get(
+            static::determineParameterName(TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE),
+            $this->getDefaultNumberOfRowsPerPage()
+        );
+    }
+
+    protected function determineOffset(TableParameterValues $parameterValues): int
+    {
+        try
+        {
+            return $this->getPager()->getCurrentRangeOffset($parameterValues);
+        }
+        catch (InvalidPageNumberException $exception)
+        {
+            return 0;
+        }
+    }
+
+    protected function determineOrderBy(TableParameterValues $parameterValues, bool $hasTableActions = false): OrderBy
+    {
+        // Calculates the order column on whether or not the table uses form actions (because sortable
+        // table uses data arrays)
+        $calculatedOrderColumn = $parameterValues->getOrderColumnIndex() - ($hasTableActions ? 1 : 0);
+
+        $orderProperty = $this->getOrderProperty($calculatedOrderColumn, $parameterValues->getOrderColumnDirection());
+
+        $orderProperties = [];
+
+        if ($orderProperty)
+        {
+            $orderProperties[] = $orderProperty;
+        }
+
+        return new OrderBy($orderProperties);
+    }
+
+    protected function determineOrderColumnDirection(): int
+    {
+        return $this->getRequest()->query->get(
+            static::determineParameterName(TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION),
+            $this->getDefaultOrderDirection()
+        );
+    }
+
+    protected function determineOrderColumnIndex(): int
+    {
+        return $this->getRequest()->query->get(
+            static::determineParameterName(TableParameterValues::PARAM_ORDER_COLUMN_INDEX),
+            $this->getDefaultOrderColumnIndex()
+        );
+    }
+
+    protected function determinePageNumber(): int
+    {
+        return $this->getRequest()->query->get(
+            static::determineParameterName(TableParameterValues::PARAM_PAGE_NUMBER), 1
+        );
+    }
+
+    protected static function determineParameterName(string $parameterName): string
+    {
+        return static::determineParameterNames()[$parameterName];
     }
 
     /**
      * @return string[]
      */
-    protected static function determineTableParameterNames(): array
+    protected static function determineParameterNames(): array
     {
-        $tableName = static::determineTableName();
+        $tableName = static::determineName();
 
         return [
-            HtmlTable::PARAM_NUMBER_OF_ITEMS_PER_PAGE => $tableName . '_' . HtmlTable::PARAM_NUMBER_OF_ITEMS_PER_PAGE,
-            HtmlTable::PARAM_ORDER_COLUMN => $tableName . '_' . HtmlTable::PARAM_ORDER_COLUMN,
-            HtmlTable::PARAM_ORDER_DIRECTION => $tableName . '_' . HtmlTable::PARAM_ORDER_DIRECTION,
-            HtmlTable::PARAM_PAGE_NUMBER => $tableName . '_' . HtmlTable::PARAM_PAGE_NUMBER
+            TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE => $tableName . '_' .
+                TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE,
+            TableParameterValues::PARAM_ORDER_COLUMN_INDEX => $tableName . '_' .
+                TableParameterValues::PARAM_ORDER_COLUMN_INDEX,
+            TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION => $tableName . '_' .
+                TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION,
+            TableParameterValues::PARAM_PAGE_NUMBER => $tableName . '_' . TableParameterValues::PARAM_PAGE_NUMBER,
+            TableParameterValues::PARAM_SELECT_ALL => $tableName . '_' . TableParameterValues::PARAM_SELECT_ALL
         ];
+    }
+
+    protected function determineParameterValues(?Condition $condition = null): TableParameterValues
+    {
+        $numberOfRowsPerPage = $this->determineNumberOfRowsPerPage();
+        $totalNumberOfItems = $this->countData($condition);
+
+        $tableParameterValues = new TableParameterValues();
+
+        $tableParameterValues->setTotalNumberOfItems($totalNumberOfItems);
+        $tableParameterValues->setNumberOfRowsPerPage(
+            $numberOfRowsPerPage == Pager::DISPLAY_ALL ? $totalNumberOfItems : $numberOfRowsPerPage
+        );
+        $tableParameterValues->setNumberOfColumnsPerPage($this->getDefaultNumberOfColumnsPerPage());
+        $tableParameterValues->setPageNumber($this->determinePageNumber());
+        $tableParameterValues->setSelectAll(
+            $this->getRequest()->query->get(
+                static::determineParameterName(TableParameterValues::PARAM_SELECT_ALL), 0
+            )
+        );
+        $tableParameterValues->setOrderColumnIndex($this->determineOrderColumnIndex());
+        $tableParameterValues->setOrderColumnDirection($this->determineOrderColumnDirection());
+
+        return $tableParameterValues;
     }
 
     /**
@@ -260,11 +251,6 @@ abstract class Table
         return $this->columns[$index];
     }
 
-    public function getColumnCount(): int
-    {
-        return 1;
-    }
-
     /**
      * @return \Chamilo\Libraries\Format\Table\Column\TableColumn[]
      */
@@ -273,32 +259,13 @@ abstract class Table
         return $this->columns;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $columns
-     */
-    public function setColumns(array $columns)
-    {
-        $this->columns = $columns;
-    }
-
-    /**
-     * Returns the current ordered column
-     */
-    public function getCurrentOrderedColumn(): ?OrderedTableColumn
-    {
-        return $this->currentOrderedColumn;
-    }
-
-    public function setCurrentOrderedColumn(OrderedTableColumn $orderedTableColumn)
-    {
-        $this->currentOrderedColumn = $orderedTableColumn;
-    }
-
-    protected function getData(?Condition $condition = null, bool $hasTableActions = false): ArrayCollection
+    protected function getData(
+        TableParameterValues $parameterValues, ?Condition $condition = null, bool $hasTableActions = false
+    ): ArrayCollection
     {
         $results = $this->retrieveData(
-            $condition, $this->determineDataCount(), $this->determineDataOffset($condition),
-            $this->determineDataOrderBy($hasTableActions)
+            $condition, $parameterValues->getNumberOfRowsPerPage(), $this->determineOffset($parameterValues),
+            $this->determineOrderBy($parameterValues, $hasTableActions)
         );
 
         $tableData = [];
@@ -311,32 +278,24 @@ abstract class Table
         return new ArrayCollection($tableData);
     }
 
-    public function getDefaultDataCount(): int
+    public function getDefaultNumberOfColumnsPerPage(): int
     {
-        return static::DEFAULT_NUMBER_OF_RESULTS;
+        return static::DEFAULT_NUMBER_OF_COLUMNS_PER_PAGE;
     }
 
-    public function getDefaultDataOrderColumnIndex(): int
+    public function getDefaultNumberOfRowsPerPage(): int
     {
-        return $this->defaultDataOrderColumnIndex;
+        return static::DEFAULT_NUMBER_OF_ROWS_PER_PAGE;
     }
 
-    public function setDefaultDataOrderColumnIndex(int $columnIndex)
+    public function getDefaultOrderColumnIndex(): int
     {
-        $this->defaultDataOrderColumnIndex = $columnIndex;
+        return static::DEFAULT_ORDER_COLUMN_INDEX;
     }
 
-    public function getDefaultDataOrderDirection(): int
+    public function getDefaultOrderDirection(): int
     {
-        return $this->defaultDataOrderDirection;
-    }
-
-    /**
-     * @param int $direction The direction. Either the PHP constant SORT_ASC or SORT_DESC.
-     */
-    public function setDefaultDataOrderDirection(int $direction)
-    {
-        $this->defaultDataOrderDirection = $direction;
+        return static::DEFAULT_ORDER_COLUMN_DIRECTION;
     }
 
     /**
@@ -364,11 +323,6 @@ abstract class Table
         return $this->request;
     }
 
-    public function getSecurity(): Security
-    {
-        return $this->security;
-    }
-
     /**
      * Returns a column by a given column index if it exists and is sortable, otherwise it returns the default column.
      */
@@ -378,9 +332,9 @@ abstract class Table
 
         if (!$column instanceof AbstractSortableTableColumn || (!$column->is_sortable()))
         {
-            if ($columnNumber != $this->getDefaultDataOrderColumnIndex())
+            if ($columnNumber != $this->getDefaultOrderColumnIndex())
             {
-                return $this->getSortableColumn($this->getDefaultDataOrderColumnIndex());
+                return $this->getSortableColumn($this->getDefaultOrderColumnIndex());
             }
         }
         else
@@ -394,11 +348,6 @@ abstract class Table
     public function getSortableTable(): SortableTable
     {
         return $this->sortableTable;
-    }
-
-    public function getTableActions(): ?TableFormActions
-    {
-        return $this->tableActions;
     }
 
     public function getTranslator(): Translator
@@ -417,49 +366,7 @@ abstract class Table
             $this->getTableActions()->hasFormActions();
     }
 
-    /**
-     * Initializes the columns for the table
-     */
     abstract protected function initializeColumns();
-
-    /**
-     * Initializes the table
-     */
-    protected function initializeTable()
-    {
-        //        if ($this->hasTableActions())
-        //        {
-        //            $this->table->setTableFormActions($this->getTableActions());
-        //        }
-        //
-        //        $columnModel = $this->getTableColumnModel();
-        //        $columnCount = $columnModel->getColumnCount();
-        //
-        //        for ($i = 0; $i < $columnCount; $i ++)
-        //        {
-        //            $column = $columnModel->getColumn($i);
-        //
-        //            $headerAttributes = $contentAttributes = [];
-        //
-        //            $cssClasses = $column->getCssClasses();
-        //
-        //            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
-        //            {
-        //                $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
-        //            }
-        //
-        //            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT]))
-        //            {
-        //                $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
-        //            }
-        //
-        //            $this->table->setColumnHeader(
-        //                ($this->hasTableActions() ? $i + 1 : $i), $this->getSecurity()->removeXSS($column->get_title()),
-        //                $column instanceof AbstractSortableTableColumn && $column->is_sortable(), $headerAttributes,
-        //                $contentAttributes
-        //            );
-        //        }
-    }
 
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array $result
@@ -497,9 +404,6 @@ abstract class Table
     }
 
     /**
-     * Define the unique identifier for the row needed for e.g.
-     * checkboxes
-     *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array $result
      */
     abstract protected function renderIdentifierCell($result): string;
@@ -507,4 +411,12 @@ abstract class Table
     abstract protected function retrieveData(
         ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
     ): ArrayCollection;
+
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $columns
+     */
+    public function setColumns(array $columns)
+    {
+        $this->columns = $columns;
+    }
 }

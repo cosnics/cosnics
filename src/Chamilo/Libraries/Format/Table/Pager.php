@@ -16,19 +16,16 @@ class Pager
     public const DISPLAY_PER_PAGE_LIMIT = 500;
 
     /**
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      */
-    public function getCurrentRangeEnd(
-        int $currentPageNumber, int $numberOfRows, int $numberOfColumns, int $numberOfItems
-    ): int
+    public function getCurrentRangeEnd(TableParameterValues $parameterValues): int
     {
-        $currentRangeStart =
-            $this->getCurrentRangeStart($currentPageNumber, $numberOfRows, $numberOfColumns, $numberOfItems);
-        $calculatedRangeEnd = $currentRangeStart + $this->getNumberOfItemsPerPage($numberOfRows, $numberOfColumns) - 1;
+        $currentRangeStart = $this->getCurrentRangeStart($parameterValues);
+        $calculatedRangeEnd = $currentRangeStart + $this->getNumberOfItemsPerPage($parameterValues) - 1;
 
-        if ($calculatedRangeEnd > $numberOfItems)
+        if ($calculatedRangeEnd > $parameterValues->getTotalNumberOfItems())
         {
-            return $numberOfItems;
+            return $parameterValues->getTotalNumberOfItems();
         }
 
         return $calculatedRangeEnd;
@@ -37,32 +34,26 @@ class Pager
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      */
-    public function getCurrentRangeOffset(
-        int $currentPageNumber, int $numberOfRows, int $numberOfColumns, int $numberOfItems
-    ): int
+    public function getCurrentRangeOffset(TableParameterValues $parameterValues): int
     {
-        return $this->getPreviousRangeEnd($currentPageNumber, $numberOfRows, $numberOfColumns, $numberOfItems);
+        return $this->getPreviousRangeEnd($parameterValues);
     }
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Exception
      */
-    public function getCurrentRangeStart(
-        int $currentPageNumber, int $numberOfRows, int $numberOfColumns, int $numberOfItems
-    ): int
+    public function getCurrentRangeStart(TableParameterValues $parameterValues): int
     {
         try
         {
-            $calculatedRangeStart =
-                $this->getPreviousRangeEnd($currentPageNumber, $numberOfRows, $numberOfColumns, $numberOfItems) + 1;
+            $calculatedRangeStart = $this->getPreviousRangeEnd($parameterValues) + 1;
         }
         catch (InvalidPageNumberException $exception)
         {
             $calculatedRangeStart = 0;
         }
 
-        if ($calculatedRangeStart > $numberOfItems)
+        if ($calculatedRangeStart > $parameterValues->getTotalNumberOfItems())
         {
             throw new InvalidPageNumberException();
         }
@@ -70,34 +61,34 @@ class Pager
         return $calculatedRangeStart;
     }
 
-    public function getNumberOfItemsPerPage(int $numberOfRows, int $numberOfColumns): int
+    public function getNumberOfItemsPerPage(TableParameterValues $parameterValues): int
     {
-        return $numberOfRows * $numberOfColumns;
+        return $parameterValues->getNumberOfRowsPerPage() * $parameterValues->getNumberOfColumnsPerPage();
     }
 
-    public function getNumberOfPages(int $numberOfRows, int $numberOfColumns, int $numberOfItems): int
+    public function getNumberOfPages(TableParameterValues $parameterValues): int
     {
-        if ($this->getNumberOfItemsPerPage($numberOfRows, $numberOfColumns) == Pager::DISPLAY_ALL)
+        if ($this->getNumberOfItemsPerPage($parameterValues) == Pager::DISPLAY_ALL)
         {
             return 1;
         }
         else
         {
-            return (int) ceil($numberOfItems / $this->getNumberOfItemsPerPage($numberOfRows, $numberOfColumns));
+            return (int) ceil(
+                $parameterValues->getTotalNumberOfItems() / $this->getNumberOfItemsPerPage($parameterValues)
+            );
         }
     }
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      */
-    public function getPreviousRangeEnd(
-        int $currentPageNumber, int $numberOfRows, int $numberOfColumns, int $numberOfItems
-    ): int
+    public function getPreviousRangeEnd(TableParameterValues $parameterValues): int
     {
         $calculatedRangeEnd =
-            ($currentPageNumber - 1) * $this->getNumberOfItemsPerPage($numberOfRows, $numberOfColumns);
+            ($parameterValues->getPageNumber() - 1) * $this->getNumberOfItemsPerPage($parameterValues);
 
-        if ($calculatedRangeEnd > $numberOfItems)
+        if ($calculatedRangeEnd > $parameterValues->getTotalNumberOfItems())
         {
             throw new InvalidPageNumberException();
         }

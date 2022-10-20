@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
@@ -56,27 +56,22 @@ class PagerRenderer
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Exception
      */
-    public function renderCurrentRange(
-        int $currentPageNumber, int $numberOfRows, int $numberOfColumns, int $numberOfItems
-    ): string
+    public function renderCurrentRange(TableParameterValues $parameterValues): string
     {
         $pager = $this->getPager();
         $variables = [];
 
-        $variables['{START}'] =
-            $pager->getCurrentRangeStart($currentPageNumber, $numberOfRows, $numberOfColumns, $numberOfItems);
-        $variables['{END}'] =
-            $pager->getCurrentRangeEnd($currentPageNumber, $numberOfRows, $numberOfColumns, $numberOfItems);
-        $variables['{TOTAL}'] = $numberOfItems;
+        $variables['{START}'] = $pager->getCurrentRangeStart($parameterValues);
+        $variables['{END}'] = $pager->getCurrentRangeEnd($parameterValues);
+        $variables['{TOTAL}'] = $parameterValues->getTotalNumberOfItems();
 
         return $this->getTranslator()->trans('ShowingStartToEndOfTotalEntries', $variables, StringUtilities::LIBRARIES);
     }
 
     protected function renderDirectionPaginationItem(
-        array $queryParameters, string $pageNumberParameterName, bool $isDisabled, InlineGlyph $inlineGlyph,
-        string $translation, ?int $targetPage = null
+        string $pageNumberParameterName, bool $isDisabled, InlineGlyph $inlineGlyph, string $translation,
+        ?int $targetPage = null
     ): string
     {
         $html = [];
@@ -90,8 +85,7 @@ class PagerRenderer
         }
         else
         {
-            $html[] = '<a href="' .
-                $this->getUrlGenerator()->fromRequest(/*$queryParameters,*/ [$pageNumberParameterName => $targetPage]) .
+            $html[] = '<a href="' . $this->getUrlGenerator()->fromRequest([$pageNumberParameterName => $targetPage]) .
                 '" aria-label="' . $translation . '">' . $symbolHtml . '</a>';
         }
 
@@ -101,15 +95,13 @@ class PagerRenderer
     }
 
     /**
-     * @param string[] $queryParameters
-     * @param string $itemsPerPageParameterName
      * @param string[] $translationVariables
      *
-     * @return string
+     * @throws \QuickformException
+     * @throws \ReflectionException
      */
     public function renderItemsPerPageSelector(
-        int $numberOfItems, int $numberOfRows, int $numberOfColumns, array $queryParameters,
-        string $itemsPerPageParameterName, array $translationVariables = []
+        TableParameterValues $parameterValues, string $itemsPerPageParameterName, array $translationVariables = []
     ): string
     {
 
@@ -126,9 +118,9 @@ class PagerRenderer
 
         $translationVariables = array_merge($defaultTranslationVariables, $translationVariables);
 
-        $numberOfItemsPerPage = $pager->getNumberOfItemsPerPage($numberOfRows, $numberOfColumns);
+        $numberOfItemsPerPage = $pager->getNumberOfItemsPerPage($parameterValues);
 
-        if ($numberOfItemsPerPage >= $numberOfItems)
+        if ($numberOfItemsPerPage >= $parameterValues->getTotalNumberOfItems())
         {
             $dropDownButtonLabel = $translator->trans(
                 $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL], [],
@@ -143,38 +135,41 @@ class PagerRenderer
             );
         }
 
-        $dropDownButton =
-            new DropdownButton($dropDownButtonLabel, null, Button::DISPLAY_LABEL, ['btn-sm'], ['dropdown-menu-right']);
+        $dropDownButton = new DropdownButton($dropDownButtonLabel, null, AbstractButton::DISPLAY_LABEL, ['btn-sm'],
+            ['dropdown-menu-right']);
         $buttonGroup->addButton($dropDownButton);
 
         for (
-            $nr = Pager::DISPLAY_PER_INCREMENT; $nr <= $numberOfItems && $nr <= 100; $nr += Pager::DISPLAY_PER_INCREMENT
+            $nr = Pager::DISPLAY_PER_INCREMENT; $nr <= $parameterValues->getTotalNumberOfItems() && $nr <= 100;
+            $nr += Pager::DISPLAY_PER_INCREMENT
         )
         {
-            $numberrOfRowsOption = ($nr / $numberOfColumns);
+            $numberrOfRowsOption = ($nr / $parameterValues->getNumberOfColumnsPerPage());
 
             $dropDownButton->addSubButton(
                 new SubButton(
                     $translator->trans(
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW], ['{NUMBER}' => $nr],
                         $translationVariables[Application::PARAM_CONTEXT]
-                    ), null, $this->getUrlGenerator()->fromRequest(/*$queryParameters,*/
+                    ), null, $this->getUrlGenerator()->fromRequest(
                     [$itemsPerPageParameterName => $numberrOfRowsOption]
-                ), SubButton::DISPLAY_LABEL, null, [], null, $numberrOfRowsOption == $numberOfRows
+                ), AbstractButton::DISPLAY_LABEL, null, [], null,
+                    $numberrOfRowsOption == $parameterValues->getNumberOfRowsPerPage()
                 )
             );
         }
 
-        if ($numberOfItems < Pager::DISPLAY_PER_PAGE_LIMIT)
+        if ($parameterValues->getTotalNumberOfItems() < Pager::DISPLAY_PER_PAGE_LIMIT)
         {
             $dropDownButton->addSubButton(
                 new SubButton(
                     $translator->trans(
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL], [],
                         $translationVariables[Application::PARAM_CONTEXT]
-                    ), null, $this->getUrlGenerator()->fromRequest(/*$queryParameters,*/
+                    ), null, $this->getUrlGenerator()->fromRequest(
                     [$itemsPerPageParameterName => Pager::DISPLAY_ALL]
-                ), SubButton::DISPLAY_LABEL, null, [], null, $numberOfItemsPerPage == $numberOfItems
+                ), AbstractButton::DISPLAY_LABEL, null, [], null,
+                    $numberOfItemsPerPage == $parameterValues->getTotalNumberOfItems()
                 )
             );
         }
@@ -191,24 +186,24 @@ class PagerRenderer
     }
 
     /**
-     * @param string[] $queryParameters
-     * @param string $pageNumberParameterName
-     * @param bool $includeRange
-     *
-     * @return string
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      */
     public function renderPagination(
-        $queryParameters = [], $pageNumberParameterName = 'page_nr', $includeRange = true
-    )
+        int $numberOfPages, TableParameterValues $parameterValues, string $pageNumberParameterName,
+        bool $includeRange = true
+    ): string
     {
         return $this->renderPaginationBetweenStartAndEnd(
-            $queryParameters, $pageNumberParameterName, 1, $this->getPager()->getNumberOfPages(), $includeRange
+            $numberOfPages, $parameterValues, $pageNumberParameterName, 1, $numberOfPages, $includeRange
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     */
     protected function renderPaginationBetweenStartAndEnd(
-        int $currentPageNumber, int $numberOfPages, int $numberOfRows, int $numberOfColumns, int $numberOfItems,
-        array $queryParameters, string $pageNumberParameterName, int $start, int $end, bool $includeRange = true
+        int $numberOfPages, TableParameterValues $parameterValues, string $pageNumberParameterName, int $start,
+        int $end, bool $includeRange = true
     ): string
     {
         $translator = $this->getTranslator();
@@ -220,38 +215,35 @@ class PagerRenderer
 
         if ($numberOfPages > 1)
         {
+            $currentPageNumber = $parameterValues->getPageNumber();
 
             $isDisabled = ($currentPageNumber == 1);
 
             $html[] = $this->renderDirectionPaginationItem(
-                $queryParameters, $pageNumberParameterName, $isDisabled,
-                new FontAwesomeGlyph('angles-left', ['fa-2xs']),
+                $pageNumberParameterName, $isDisabled, new FontAwesomeGlyph('angles-left', ['fa-2xs']),
                 $translator->trans('First', [], StringUtilities::LIBRARIES), 1
             );
 
             $html[] = $this->renderDirectionPaginationItem(
-                $queryParameters, $pageNumberParameterName, $isDisabled, new FontAwesomeGlyph('angle-left', ['fa-2xs']),
+                $pageNumberParameterName, $isDisabled, new FontAwesomeGlyph('angle-left', ['fa-2xs']),
                 $translator->trans('Previous', [], StringUtilities::LIBRARIES), $currentPageNumber - 1
             );
 
             for ($i = $start; $i <= $end; $i ++)
             {
                 $html[] = '<li' . ($currentPageNumber == $i ? ' class="active"' : '') . '><a href="' .
-                    $this->getUrlGenerator()->fromRequest(/*$queryParameters,*/ [$pageNumberParameterName => $i]) .
-                    '">' . $i . '</a></li>';
+                    $this->getUrlGenerator()->fromRequest([$pageNumberParameterName => $i]) . '">' . $i . '</a></li>';
             }
 
             $isDisabled = ($currentPageNumber == $numberOfPages);
 
             $html[] = $this->renderDirectionPaginationItem(
-                $queryParameters, $pageNumberParameterName, $isDisabled,
-                new FontAwesomeGlyph('angle-right', ['fa-2xs']),
+                $pageNumberParameterName, $isDisabled, new FontAwesomeGlyph('angle-right', ['fa-2xs']),
                 $translator->trans('Next', [], StringUtilities::LIBRARIES), $currentPageNumber + 1
             );
 
             $html[] = $this->renderDirectionPaginationItem(
-                $queryParameters, $pageNumberParameterName, $isDisabled,
-                new FontAwesomeGlyph('angles-right', ['fa-2xs']),
+                $pageNumberParameterName, $isDisabled, new FontAwesomeGlyph('angles-right', ['fa-2xs']),
                 $translator->trans('Last', [], StringUtilities::LIBRARIES), $numberOfPages
             );
         }
@@ -260,7 +252,7 @@ class PagerRenderer
         {
             $html[] = '<li class="disabled">';
             $html[] = '<span>';
-            $html[] = $this->renderCurrentRange($currentPageNumber, $numberOfRows, $numberOfColumns, $numberOfItems);
+            $html[] = $this->renderCurrentRange($parameterValues);
             $html[] = '</span>';
             $html[] = '</li>';
         }
@@ -271,14 +263,15 @@ class PagerRenderer
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     */
     public function renderPaginationWithPageLimit(
-        int $currentPageNumber, int $numberOfRows, int $numberOfColumns, int $numberOfItems,
-        array $queryParameters = [], string $pageNumberParameterName = 'page_nr', int $pageLimit = 7,
+        TableParameterValues $parameterValues, string $pageNumberParameterName = 'page_nr', int $pageLimit = 7,
         bool $includeRange = true
     ): string
     {
-        $pager = $this->getPager();
-        $numberOfPages = $pager->getNumberOfPages($numberOfRows, $numberOfColumns, $numberOfItems);
+        $numberOfPages = $this->getPager()->getNumberOfPages($parameterValues);
 
         if ($pageLimit % 2 == 0)
         {
@@ -290,8 +283,8 @@ class PagerRenderer
             $itemsBefore = $itemsAfter = ($pageLimit - 1) / 2;
         }
 
-        $calculatedStartPage = $currentPageNumber - $itemsBefore;
-        $calculatedEndPage = $currentPageNumber + $itemsAfter;
+        $calculatedStartPage = $parameterValues->getPageNumber() - $itemsBefore;
+        $calculatedEndPage = $parameterValues->getPageNumber() + $itemsAfter;
 
         if ($calculatedStartPage < 1 && $calculatedEndPage > $numberOfPages)
         {
@@ -303,14 +296,7 @@ class PagerRenderer
             $startPage = 1;
             $calculatedEndPage = $startPage + $pageLimit - 1;
 
-            if ($calculatedEndPage > $numberOfPages)
-            {
-                $endPage = $numberOfPages;
-            }
-            else
-            {
-                $endPage = $calculatedEndPage;
-            }
+            $endPage = min($calculatedEndPage, $numberOfPages);
         }
         elseif ($calculatedStartPage >= 1 && $calculatedEndPage > $numberOfPages)
         {
@@ -333,8 +319,7 @@ class PagerRenderer
         }
 
         return $this->renderPaginationBetweenStartAndEnd(
-            $currentPageNumber, $numberOfPages, $numberOfRows, $numberOfColumns, $numberOfItems, $queryParameters,
-            $pageNumberParameterName, $startPage, $endPage, $includeRange
+            $numberOfPages, $parameterValues, $pageNumberParameterName, $startPage, $endPage, $includeRange
         );
     }
 }

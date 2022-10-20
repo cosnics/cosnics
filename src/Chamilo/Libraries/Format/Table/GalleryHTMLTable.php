@@ -232,11 +232,11 @@ class GalleryHTMLTable extends HtmlTable
             count($propertyModel->get_properties()) > 0)
         {
             $queryParameters = [];
-            $queryParameters[$this->getParameterName(self::PARAM_PAGE_NUMBER)] = $this->getPageNumber();
-            $queryParameters[$this->getParameterName(self::PARAM_ORDER_COLUMN)] = $this->getOrderColumn();
+            $queryParameters[$this->getParameterName(TableParameterValues::PARAM_PAGE_NUMBER)] = $this->getPageNumber();
+            $queryParameters[$this->getParameterName(TableParameterValues::PARAM_ORDER_COLUMN_INDEX)] = $this->getOrderColumn();
             $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
 
-            $queryParameters[$this->getParameterName(self::PARAM_ORDER_DIRECTION)] = array(SORT_ASC);
+            $queryParameters[$this->getParameterName(TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION)] = array(SORT_ASC);
             $propertyUrl = new Redirect($queryParameters);
             $isSelected = $currentFirstOrderDirection == SORT_ASC;
 
@@ -245,7 +245,7 @@ class GalleryHTMLTable extends HtmlTable
                 $isSelected
             );
 
-            $queryParameters[$this->getParameterName(self::PARAM_ORDER_DIRECTION)] = SORT_DESC;
+            $queryParameters[$this->getParameterName(TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION)] = SORT_DESC;
             $propertyUrl = new Redirect($queryParameters);
             $isSelected = $currentFirstOrderDirection == SORT_DESC;
 
@@ -351,9 +351,9 @@ class GalleryHTMLTable extends HtmlTable
                 $propertyIndex = $index + ($hasFormActions ? 1 : 0);
 
                 $queryParameters = [];
-                $queryParameters[$this->getParameterName(self::PARAM_ORDER_DIRECTION)] = $this->getOrderDirection();
-                $queryParameters[$this->getParameterName(self::PARAM_PAGE_NUMBER)] = $this->getPageNumber();
-                $queryParameters[$this->getParameterName(self::PARAM_ORDER_COLUMN)] = array($propertyIndex);
+                $queryParameters[$this->getParameterName(TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION)] = $this->getOrderDirection();
+                $queryParameters[$this->getParameterName(TableParameterValues::PARAM_PAGE_NUMBER)] = $this->getPageNumber();
+                $queryParameters[$this->getParameterName(TableParameterValues::PARAM_ORDER_COLUMN_INDEX)] = array($propertyIndex);
                 $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
 
                 $propertyUrl = new Redirect($queryParameters);

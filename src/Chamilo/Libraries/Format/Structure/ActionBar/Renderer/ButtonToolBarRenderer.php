@@ -9,11 +9,10 @@ use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure\ActionBar\Renderer
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ButtonToolBarRenderer
 {
@@ -29,8 +28,8 @@ class ButtonToolBarRenderer
     }
 
     /**
+     * @throws \QuickformException
      * @throws \ReflectionException
-     * @throws \Exception
      */
     public function render(): string
     {
@@ -78,11 +77,6 @@ class ButtonToolBarRenderer
         return $this->buttonToolBar;
     }
 
-    public function setButtonToolBar(ButtonToolBar $buttonToolBar)
-    {
-        $this->buttonToolBar = $buttonToolBar;
-    }
-
     /**
      * @param \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[] $properties
      *
@@ -121,5 +115,10 @@ class ButtonToolBarRenderer
         }
 
         return $this->searchForm;
+    }
+
+    public function setButtonToolBar(ButtonToolBar $buttonToolBar)
+    {
+        $this->buttonToolBar = $buttonToolBar;
     }
 }
