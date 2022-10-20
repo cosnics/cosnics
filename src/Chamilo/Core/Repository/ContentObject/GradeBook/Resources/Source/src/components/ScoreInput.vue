@@ -21,19 +21,17 @@
 <template>
     <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
         <template v-slot:menu>
-            <div class="highlight-content" style="top: -23px;padding: 0;font-size: 11px;right: 0;background-color: transparent;">
-                <div style="margin-left: auto;width: fit-content;">
-                    <div style="text-align: end;display: flex;">
-                        <div style="padding: 2px 8px;border-top-left-radius: 3px;border-top-right-radius: 3px;cursor:pointer;" :style="menuTab === 'score' ? 'background: white;' : 'background-color: #e6e6e6;color:#2e6da4;'" @click="$emit('menu-tab-changed', 'score')">{{ $t('score') }}</div>
-                        <div style="padding: 2px 8px;border-top-right-radius: 3px;border-top-left-radius: 3px;cursor:pointer;" :style="menuTab === 'comment' ? 'background: white;' : 'background-color: #e6e6e6;color:#2e6da4;'" @click="$emit('menu-tab-changed', 'comment')">{{  $t('comments') }}</div>
-                    </div>
+            <div class="highlight-content">
+                <div class="u-flex u-justify-content-end u-text-end">
+                    <div class="menu-tab mod-left u-cursor-pointer" :class="{'mod-active': menuTab === 'score'}" @click="$emit('menu-tab-changed', 'score')">{{ $t('score') }}</div>
+                    <div class="menu-tab mod-right u-cursor-pointer" :class="{'mod-active': menuTab === 'comment'}" @click="$emit('menu-tab-changed', 'comment')">{{ $t('comments') }}</div>
                 </div>
             </div>
         </template>
         <template v-slot:content>
-            <div v-if="menuTab === 'score'" class="score-input-wrap">
-                <div class="number-input" :class="{'is-selected': type === 'number'}">
-                    <input id="score" class="percent-input" ref="score-input" type="number" :value="numValue|formatNum" autocomplete="off" @input="type = 'number'" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')" @focus="type = 'number'">
+            <div v-if="menuTab === 'score'" class="u-flex u-gap-small">
+                <div class="number-input u-relative" :class="{'is-selected': type === 'number'}">
+                    <input id="score" class="percent-input u-font-normal" ref="score-input" type="number" :value="numValue|formatNum" autocomplete="off" @input="type = 'number'" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')" @focus="type = 'number'">
                     <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                 </div>
                 <button class="color-code deep-orange-500" :class="{'is-selected': type === 'afw'}" @click="setAbsent" :title="$t('absent')"><span>{{ $t('abs') }}</span></button>
@@ -120,14 +118,37 @@ export default class ScoreInput extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.score-input-wrap {
-    display: flex;
-    gap: 5px;
+.highlight-content {
+    background-color: transparent;
+    font-size: 11px;
+    padding: 0;
+    right: 0;
+    top: -23px;
+}
+
+.menu-tab {
+    background-color: #e6e6e6;
+    color:#2e6da4;
+    padding: 2px 8px;
+
+    &.mod-active {
+        background-color: #fff;
+        color: #333;
+    }
+
+    &.mod-left {
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+
+    &.mod-right {
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
 }
 
 .number-input {
     opacity: .42;
-    position: relative;
 
     &.is-selected {
         opacity: 1;
@@ -144,7 +165,6 @@ export default class ScoreInput extends Vue {
     border: 1px solid #ced4da;
     border-radius: .2rem;
     color: #333;
-    font-weight: 400;
     min-height: 24px;
     padding: 2px 18px 2px 4px;
     width: 100%;

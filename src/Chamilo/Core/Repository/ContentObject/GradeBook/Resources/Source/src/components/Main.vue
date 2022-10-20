@@ -19,26 +19,26 @@
 }
 </i18n>
 <template>
-    <div style="display: contents">
+    <div class="u-contents">
         <div v-if="gradeBook">
-            <div class="gradebook-toolbar">
+            <div class="u-flex u-flex-wrap gradebook-toolbar">
                 <div class="input-group">
                     <input class="form-control" type="text" v-model="searchTerm" :placeholder="$t('find-student')">
                     <div class="input-group-btn"><button name="clear" value="clear" class="btn btn-default" @click="searchTerm = ''"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></button></div>
                 </div>
                 <grades-dropdown id="dropdown-main" :graded-items="gradeBook.gradedItemsWithCheckedStatus" @toggle="toggleGradeItem"></grades-dropdown>
-                <div class="gradebook-create-actions">
+                <div class="u-flex u-justify-content-end u-gap-small gradebook-create-actions">
                     <button class="btn btn-default btn-sm" @click="synchronizeGradeBook"><i aria-hidden="true" class="fa fa-refresh"></i>{{ $t('synchronize-scores') }}</button>
                     <button class="btn btn-default btn-sm" @click="updateTotalScores"><i aria-hidden="true" class="fa fa-refresh"></i>{{ $t('update-final-scores') }}</button>
                     <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>{{ $t('new-score') }}</button>
                     <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>{{ $t('category') }}</button>
                 </div>
                 <div class="btn-group items-per-page-count">
-                    <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle" :title="`${$t('show')} ${itemsPerPage} items`" style="line-height: 22px">
-                        <span>{{ $t('show') }} {{itemsPerPage}} items</span> <span class="caret"></span>
+                    <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle" :title="`${$t('show')} ${itemsPerPage} items`">
+                        <span>{{ $t('show') }} {{itemsPerPage}} items</span> <span class="caret" aria-hidden="true"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li v-for="count in [5, 10, 15, 20, 50]" :key="'per-page-' + count" style="cursor: pointer">
+                        <li v-for="count in [5, 10, 15, 20, 50]" :key="'per-page-' + count" class="u-cursor-pointer">
                             <a :class="itemsPerPage === count ? 'selected' : 'not-selected'" :title="`${$t('show')} ${count} items`" @click="setItemsPerPage(count)">
                                 <span>{{ $t('show') }} {{count}} items</span>
                             </a>
@@ -370,8 +370,32 @@
 </script>
 
 <style>
+.u-relative {
+    position: relative;
+}
+
+.u-block {
+    display: block;
+}
+
+.u-contents {
+    display: contents;
+}
+
+.u-inline-block {
+    display: inline-block;
+}
+
 .u-flex {
     display: flex;
+}
+
+.u-align-items-baseline {
+    align-items: baseline;
+}
+
+.u-align-items-center {
+    align-items: center;
 }
 
 .u-gap-small {
@@ -382,34 +406,52 @@
     flex-flow: wrap;
 }
 
+.u-justify-content-center {
+    justify-content: center;
+}
+
+.u-justify-content-end {
+    justify-content: flex-end;
+}
+
+.u-justify-content-between {
+    justify-content: space-between;
+}
+
+.u-ml-auto {
+    margin-left: auto;
+}
+
 .u-txt-truncate {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.u-justify-content-center {
-    justify-content: center;
+.u-text-center {
+    text-align: center;
 }
 
-/*.banner {
-    background-color: #2b6597;
-    border-bottom: 1px solid #14578f;
-    padding: 20px 15px;
+.u-text-end {
+    text-align: end;
 }
 
-.banner-header {
-    color: #fff;
-    font-size: 2.2rem;
-    margin: 0;
-}*/
+.u-font-normal {
+    font-weight: 400;
+}
+
+.u-font-medium {
+    font-weight: 500;
+}
+
+.u-cursor-pointer {
+    cursor: pointer;
+}
 </style>
 
 <style lang="scss" scoped>
 .gradebook-toolbar {
-    display: flex;
     column-gap: 20px;
-    flex-flow: wrap;
     margin: 25px 20px 20px;
     row-gap: 10px;
 
@@ -425,11 +467,6 @@
 }
 
 .gradebook-create-actions {
-    display:flex;
-    gap: 5px;
-    justify-content: flex-end;
-    margin-left: auto;
-
     .btn {
         padding: 3px 9px 3px 7px;
     }
@@ -438,6 +475,10 @@
         color: #406e8e;
         margin-right: 5px;
     }
+}
+
+.items-per-page-count .dropdown-toggle {
+    line-height: 22px;
 }
 
 #dropdown-main {

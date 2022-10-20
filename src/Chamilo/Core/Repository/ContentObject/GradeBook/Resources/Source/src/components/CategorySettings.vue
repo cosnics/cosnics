@@ -17,12 +17,12 @@
 <template>
     <div class="modal-wrapper">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="u-flex u-justify-content-between modal-header">
                 <div>
                     <input type="text" v-model="category.title" autocomplete="off" @input="onCategoryChange">
                     <button class="btn btn-link" @click="showRemoveItemDialog = true">{{ $t('remove') }}</button>
                 </div>
-                <button class="btn-close" @click="$emit('close')" :aria-label="$t('close')"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <button class="btn-close u-ml-auto" @click="$emit('close')" :aria-label="$t('close')"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <div class="modal-body">
                 <input type="color" v-model="category.color" @input="onCategoryChange">
@@ -30,9 +30,9 @@
         </div>
         <div class="modal-overlay" @click="$emit('close')"></div>
         <div class="modal-remove" v-if="showRemoveItemDialog" @click.stop="">
-            <div class="modal-remove-content">
+            <div class="u-flex u-align-items-center u-justify-content-center modal-remove-content">
                 <div>{{ $t('remove-category') }}</div>
-                <div class="modal-remove-actions">
+                <div class="u-flex modal-remove-actions">
                     <button class="btn btn-default btn-sm" @click="removeCategory">{{ $t('remove') }}</button>
                     <button class="btn btn-default btn-sm" @click="cancel">{{ $t('cancel') }}</button>
                 </div>
@@ -79,17 +79,13 @@ export default class CategorySettings extends Vue {
 </script>
 
 <style lang="scss" scoped>
-input[type="text"], input[type="number"] {
+input[type="text"] {
     border: 1px solid #ced4da;
     border-radius: .2rem;
     color: #333;
-    font-weight: 400;
+    font-size: 20px;
     min-height: 24px;
     padding: 4px 18px 4px 4px;
-}
-
-input[type="text"] {
-    font-size: 20px;
 }
 
 input:focus {
@@ -102,7 +98,6 @@ input:focus {
     background: none;
     border: none;
     font-size: 2rem;
-    margin-left: auto;
 }
 
 .modal-wrapper {
@@ -117,11 +112,6 @@ input:focus {
     box-shadow: 0 6px 12px #999;
     margin: 20px auto;
     max-width: 800px;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
 }
 
 .modal-overlay {
@@ -143,20 +133,16 @@ input:focus {
 }
 
 .modal-remove-actions {
-    display: flex;
     gap: 10px;
     margin-top: 20px;
 }
 
 .modal-remove-content {
-    align-items: center;
     background-color: #fff;
     border-radius: 3px;
     box-shadow: 0 6px 12px #666;
-    display: flex;
     flex-direction: column;
     height: 150px;
-    justify-content: center;
     margin: 120px auto;
     max-width: 90%;
     padding: 20px;

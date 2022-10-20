@@ -1,7 +1,7 @@
 <template>
     <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
         <template v-slot:content>
-            <input ref="title-input" type="text" :value="itemTitle" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
+            <input class="u-font-normal" ref="title-input" type="text" :value="itemTitle" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
         </template>
     </highlight-input>
 </template>
@@ -33,11 +33,15 @@ export default class ItemTitleInput extends Vue {
 
 <style scoped>
 input {
-    border: 1px solid silver;min-height: 24px;color: #333;padding: 2px 18px 2px 4px;font-weight: 400;width: 100%;
+    border: 1px solid silver;
+    color: #333;
+    min-height: 24px;
+    padding: 2px 18px 2px 4px;
+    width: 100%;
 }
 input:focus {
-    outline: 0;
     border: 1px solid #6ac;
     box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+    outline: 0;
 }
 </style>

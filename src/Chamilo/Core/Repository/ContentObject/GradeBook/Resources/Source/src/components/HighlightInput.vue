@@ -16,7 +16,7 @@
         <slot name="menu"></slot>
         <div class="highlight-content">
             <slot name="content"></slot>
-            <div class="name-input-actions">
+            <div class="u-flex name-input-actions">
                 <button class="btn btn-primary btn-sm" @click="$emit('edit')">{{ $t('edit') }}</button>
                 <button class="btn btn-default btn-sm" @click="$emit('cancel')">{{ $t('cancel') }}</button>
             </div>
@@ -56,13 +56,13 @@ export default class HighlightInput extends Vue {
     min-width: 170px;
     padding: 8px 6px;
     position: absolute;
-    top: -4px;
+    /*top: -4px;*/
+    top: 0;
     width: 104%;
 }
 
 .name-input-actions {
     gap: .4em;
-    display: flex;
     margin-top: .4em;
 
     .btn {

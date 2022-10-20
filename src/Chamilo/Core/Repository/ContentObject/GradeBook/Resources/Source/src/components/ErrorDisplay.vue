@@ -1,5 +1,5 @@
 <template>
-    <div style="display: contents">
+    <div class="u-contents">
         <div class="modal-overlay"></div>
         <div class="save-error u-flex u-justify-content-center">
             <div class="save-error-inner">
@@ -7,7 +7,7 @@
                     <i class="fa fa-exclamation-circle mod-icon"></i>
                     <div>
                         <slot></slot>
-                        <div style="text-align: center; margin-top: 5px"><button class="btn btn-success btn-sm" style="padding: 3px 10px" @click="$emit('close')">OK</button></div>
+                        <div class="u-text-center mt-5"><button class="btn btn-success btn-sm" @click="$emit('close')">OK</button></div>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@ export default class ErrorDisplay extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 .modal-overlay {
     background: rgba(55, 55, 55, 0.23);
     bottom: 0;
@@ -62,5 +62,13 @@ export default class ErrorDisplay extends Vue {
 }
 .errors-important > .fa.mod-icon {
     color: #d9534f;
+}
+
+.mt-5 {
+    margin-top: 5px;
+}
+
+.btn-success {
+    padding: 3px 10px;
 }
 </style>

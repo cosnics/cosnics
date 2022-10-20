@@ -16,8 +16,8 @@
 </i18n>
 <template>
     <div :id="id" class="btn-group" :class="{'open': isOpen}" v-click-outside="close">
-        <button aria-haspopup="true" :aria-expanded="isOpen" class="btn dropdown-toggle" :title="$t('add-remove-scores')" @click="isOpen = !isOpen">
-            <span>{{ $t('add-remove-scores') }}</span> <span class="caret"></span>
+        <button aria-haspopup="true" :aria-expanded="isOpen" class="u-flex u-align-items-center u-justify-content-between btn dropdown-toggle" :title="$t('add-remove-scores')" @click="isOpen = !isOpen">
+            <span>{{ $t('add-remove-scores') }}</span> <span class="caret" aria-hidden="true"></span>
         </button>
         <ul class="dropdown-menu">
             <li role="presentation" v-for="(item, index) in gradedItems" :key="`item-${index}`" @click.stop="">
@@ -30,9 +30,9 @@
             </li>
         </ul>
         <div v-if="gradeItemToRemove" class="modal-wrapper" @click.stop="">
-            <div class="modal-content">
+            <div class="u-flex u-align-items-center u-justify-content-center modal-content">
                 <div class="modal-content-title">{{ $t('remove-from-overview', {title: gradeItemToRemove.title}) }}</div>
-                <div class="actions">
+                <div class="u-flex actions">
                     <button class="btn btn-default btn-sm" @click="remove">{{ $t('remove') }}</button>
                     <button class="btn btn-default btn-sm" @click="cancel">{{ $t('cancel') }}</button>
                 </div>
@@ -124,12 +124,10 @@ export default class GradesDropdown extends Vue {
 }
 
 .btn.dropdown-toggle {
-    align-items: center;
     background-color: #efefef;
-    display: flex;
-    justify-content: space-between;
     width: 100%;
 }
+
 .custom-control.is-disabled {
     color: #999;
     font-style: italic;
@@ -143,14 +141,11 @@ export default class GradesDropdown extends Vue {
 }
 
 .modal-content {
-    align-items: center;
     background-color: #fff;
     border-radius: 3px;
     box-shadow: 0 6px 12px #666;
-    display: flex;
     flex-direction: column;
     height: 150px;
-    justify-content: center;
     margin: 120px auto;
     max-width: 90%;
     padding: 20px;
@@ -158,7 +153,6 @@ export default class GradesDropdown extends Vue {
 }
 
 .modal-content .actions {
-    display: flex;
     gap: 10px;
     margin-top: 20px;
 }

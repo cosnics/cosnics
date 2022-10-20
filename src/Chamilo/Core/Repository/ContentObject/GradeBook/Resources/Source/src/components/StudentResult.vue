@@ -6,6 +6,7 @@
         "absent": "Absent",
         "auth-absent": "Authorized absent",
         "bring-to-source-result": "Bring back to source result",
+        "edit-comment": "Edit comments",
         "no-score-found": "No score found"
     },
     "nl": {
@@ -14,31 +15,28 @@
         "absent": "Afwezig",
         "auth-absent": "Gewettigd afwezig",
         "bring-to-source-result": "Breng terug naar bronresultaat",
+        "edit-comment": "Wijzig opmerkingen",
         "no-score-found": "Geen score gevonden"
     }
 }
 </i18n>
 
 <template>
-    <div @dblclick="$emit('edit')" style="">
-        <div style="display: flex;gap: 6px;align-items:center;">
+    <div @dblclick="$emit('edit')">
+        <div class="u-flex u-align-items-center u-gap-small">
             <template v-if="comment">
-                <a :id="`result-comment-${id}`" class="comment" @click.stop="$emit('edit-comment')"><i class="fa fa-comment-o" aria-hidden="true"></i></a>
+                <a :id="`result-comment-${id}`" class="fa fa-comment-o" @click.stop="$emit('edit-comment')" :title="$t('edit-comment')"><span class="sr-only">{{ $t('edit-comment') }}</span></a>
                 <b-popover :target="`result-comment-${id}`" triggers="hover" placement="right">
-                    <div style="font-size: 13px;padding: 6px 8px;width: 200px;max-width: 200px;">
-                        {{ comment }}
-                    </div>
+                    <div class="comment">{{ comment }}</div>
                 </b-popover>
             </template>
-            <div v-else aria-hidden="true" style="width: 14px"></div>
-            <div style="display: flex;align-items: center;" :style="typeof result === 'number' ? 'justify-content:flex-end;' : 'justify-content: center'">
+            <div class="u-flex u-align-items-center" :class="[typeof result === 'number' ? 'u-justify-content-end' : 'u-justify-content-center', {'mr-19': !isOverwritten}]">
                 <div v-if="result === 'afw'" class="color-code deep-orange-500" :title="$t('absent')"><span>{{ $t('abs') }}</span></div>
                 <div v-else-if="result === 'gafw'" class="color-code amber-700" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></div>
                 <div v-else-if="result === null" class="color-code mod-none" :title="$t('no-score-found')"><span class="sr-only">{{ $t('no-score-found') }}</span></div>
-                <div v-else style="">{{ result }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                <div v-else>{{ result }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
             </div>
-            <a v-if="isOverwritten" style="color:#7ea2b9;text-shadow:1px 1px #e2eaee;" @click.stop="$emit('revert')" :title="$t('bring-to-source-result')"><i class="fa fa-undo" aria-hidden="true"></i><span class="sr-only">{{ $t('bring-to-source-result') }}</span></a>
-            <div v-else aria-hidden="true" style="width: 14px"></div>
+            <a v-if="isOverwritten" class="fa fa-undo" @click.stop="$emit('revert')" :title="$t('bring-to-source-result')"><span class="sr-only">{{ $t('bring-to-source-result') }}</span></a>
         </div>
     </div>
 </template>
@@ -86,10 +84,7 @@ export default class StudentResult extends Vue {
 }
 
 .color-code.mod-none {
-    /*--color: #d8e9db;
-    background: transparent linear-gradient(135deg,var(--color) 10%,transparent 0,transparent 50%,var(--color) 0,var(--color) 60%,transparent 0,transparent) 0 0/7px 7px;*/
     background: transparent;
-    /*border-radius: 5px;*/
     min-width: 40px;
     width: 100%;
 }
@@ -106,10 +101,27 @@ export default class StudentResult extends Vue {
     --text-color: white;
 }
 
+.mr-19 {
+    margin-right: 19px;
+}
+
 .comment {
-        color: #5885a2;
-    /*color: #c4cbcf;*/
-    text-shadow:1px 1px #e2eaee;
-    font-size:12px;
+    font-size: 13px;
+    max-width: 200px;
+    padding: 6px 8px;
+    width: 200px;
+}
+
+.fa-comment-o {
+    color: #5885a2;
+    font-size: 12px;
+}
+
+.fa-undo {
+    color: #7ea2b9;
+}
+
+.fa-comment-o, .fa-undo {
+    text-shadow: 1px 1px #e2eaee;
 }
 </style>

@@ -11,9 +11,9 @@
 <template>
     <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
         <template v-slot:content>
-            <label for="weight">{{ $t('weight') }}:</label>
-            <div class="weight-input">
-                <input id="weight" class="percent-input" ref="weight-input" type="number" :value="itemWeight|formatNum" autocomplete="off" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
+            <label for="weight" class="u-font-medium">{{ $t('weight') }}:</label>
+            <div class="u-relative">
+                <input id="weight" class="percent-input u-font-normal" ref="weight-input" type="number" :value="itemWeight|formatNum" autocomplete="off" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
                 <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
             </div>
         </template>
@@ -54,21 +54,15 @@ export default class WeightInput extends Vue {
 
 <style lang="scss" scoped>
 label {
-    font-weight: 500;
     font-size: 1.25rem;
     margin-bottom: 0;
     margin-left: .15rem;
-}
-
-.weight-input {
-    position: relative;
 }
 
 .percent-input {
     border: 1px solid #ced4da;
     border-radius: .2rem;
     color: #333;
-    font-weight: 400;
     min-height: 24px;
     padding: 2px 18px 2px 4px;
     width: 100%;

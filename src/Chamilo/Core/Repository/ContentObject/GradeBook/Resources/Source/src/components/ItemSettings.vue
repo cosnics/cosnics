@@ -38,12 +38,12 @@
 <template>
     <div class="modal-wrapper">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="u-flex u-justify-content-between modal-header">
                 <div>
                     <input type="text" :value="title" @input="title = $event" autocomplete="off">
                     <button class="btn btn-link" @click="showRemoveItemDialog = true">{{ $t('remove') }}</button>
                 </div>
-                <button class="btn-close" @click="$emit('close')" :aria-label="$t('close')"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <button class="btn-close u-ml-auto" @click="$emit('close')" :aria-label="$t('close')"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <div class="modal-body">
                 <template v-if="column.type !== 'standalone'">
@@ -53,7 +53,7 @@
                             <div class="score-breadcrumb-trail">{{ item|breadcrumb }}</div>
                         </li>
                     </ul>
-                    <div style="margin: 0 0 0 2rem">
+                    <div class="ml-20">
                         <button v-if="!(isGrouped || groupButtonPressed)" class="btn btn-default" @click="openGradesDropdown">{{ $t('group-scores') }}</button>
                         <grades-dropdown id="dropdown-settings" ref="dropdown" v-else :graded-items="gradedItems" @toggle="toggleSubItem"></grades-dropdown>
                     </div>
@@ -61,13 +61,13 @@
                 <h5 :class="{'standalone': column.type === 'standalone'}">{{ $t('settings') }}</h5>
                 <div class="settings">
                     <div>
-                        <input type="checkbox" id="countForEndResult" v-model="column.countForEndResult" @input="onGradeColumnChange">
-                        <label class="settings-label" for="countForEndResult">{{ $t('count-towards-endresult') }}</label>
+                        <input type="checkbox" id="countForEndResult" v-model="column.countForEndResult" @input="onGradeColumnChange" class="mr-5">
+                        <label class="settings-label u-font-medium" for="countForEndResult">{{ $t('count-towards-endresult') }}</label>
                     </div>
                     <div v-if="column.countForEndResult">
                         <div class="mt-10">
-                            <label for="weight" class="settings-label" style="display: block;">{{ $t('weight') }}:</label>
-                            <div class="number-input">
+                            <label for="weight" class="settings-label u-block">{{ $t('weight') }}:</label>
+                            <div class="number-input u-relative">
                                 <input type="number" id="weight" :value="gradeBook.getWeight(column.id)|formatNum" @input="setWeight" autocomplete="off">
                                 <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                             </div>
@@ -75,31 +75,31 @@
                         <div class="mt-20">
                             <label class="settings-label">{{ $t('authorized-absence') }}:</label>
                             <div>
-                                <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange">
-                                <label for="gafw-option1">{{ $t('count-towards-endresult-not') }}</label>
+                                <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
+                                <label class="u-font-normal" for="gafw-option1">{{ $t('count-towards-endresult-not') }}</label>
                             </div>
                             <div>
-                                <input type="radio" name="gafw-option" id="gafw-option2" value="1" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange">
-                                <label for="gafw-option2">{{ $t('maximum-towards-endresult') }}</label>
+                                <input type="radio" name="gafw-option" id="gafw-option2" value="1" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
+                                <label class="u-font-normal" for="gafw-option2">{{ $t('maximum-towards-endresult') }}</label>
                             </div>
                             <div>
-                                <input type="radio" name="gafw-option" id="gafw-option3" value="2" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange">
-                                <label for="gafw-option3">{{ $t('minimum-towards-endresult') }}</label>
+                                <input type="radio" name="gafw-option" id="gafw-option3" value="2" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
+                                <label class="u-font-normal" for="gafw-option3">{{ $t('minimum-towards-endresult') }}</label>
                             </div>
                         </div>
                         <div class="mt-20">
                             <label class="settings-label">{{ $t('unauthorized-absence') }}:</label>
                             <div>
-                                <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange">
-                                <label for="nogafw-option1">{{ $t('count-towards-endresult-not') }}</label>
+                                <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
+                                <label class="u-font-normal" for="nogafw-option1">{{ $t('count-towards-endresult-not') }}</label>
                             </div>
                             <div>
-                                <input type="radio" name="nogafw-option" id="nogafw-option2" value="1" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange">
-                                <label for="nogafw-option2">{{ $t('maximum-towards-endresult') }}</label>
+                                <input type="radio" name="nogafw-option" id="nogafw-option2" value="1" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
+                                <label class="u-font-normal" for="nogafw-option2">{{ $t('maximum-towards-endresult') }}</label>
                             </div>
                             <div>
-                                <input type="radio" name="nogafw-option" id="nogafw-option3" value="2" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange">
-                                <label for="nogafw-option3">{{ $t('minimum-towards-endresult') }}</label>
+                                <input type="radio" name="nogafw-option" id="nogafw-option3" value="2" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
+                                <label class="u-font-normal" for="nogafw-option3">{{ $t('minimum-towards-endresult') }}</label>
                             </div>
                         </div>
                     </div>
@@ -108,9 +108,9 @@
         </div>
         <div class="modal-overlay" @click="$emit('close')"></div>
         <div class="modal-remove" v-if="showRemoveItemDialog" @click.stop="">
-            <div class="modal-remove-content">
+            <div class="u-flex u-align-items-center u-justify-content-center modal-remove-content">
                 <div>{{ $t('remove-from-overview', {title}) }}</div>
-                <div class="modal-remove-actions">
+                <div class="u-flex modal-remove-actions">
                     <button class="btn btn-default btn-sm" @click="removeColumn">{{ $t('remove') }}</button>
                     <button class="btn btn-default btn-sm" @click="cancel">{{ $t('cancel') }}</button>
                 </div>
@@ -236,13 +236,20 @@ export default class ItemSettings extends Vue {
     margin-top: 20px;
 }
 
-input[type="text"], input[type="number"] {
-    border: 1px solid #ced4da;min-height: 24px;color: #333;padding: 4px 18px 4px 4px;font-weight: 400;
-    border-radius: .2rem;
+.ml-20 {
+    margin-left: 20px;
 }
 
-input[type="radio"], input[type="checkbox"] {
+.mr-5 {
     margin-right: 5px;
+}
+
+input[type="text"], input[type="number"] {
+    border: 1px solid #ced4da;
+    border-radius: .2rem;
+    color: #333;
+    min-height: 24px;
+    padding: 4px 18px 4px 4px;
 }
 
 input[type="text"] {
@@ -266,7 +273,6 @@ input:focus {
 
 label {
     font-size: 1.4rem;
-    font-weight: 400;
 }
 
 h5 {
@@ -285,7 +291,6 @@ h5 {
     background: none;
     border: none;
     font-size: 2rem;
-    margin-left: auto;
 }
 
 .grouped-scores {
@@ -308,7 +313,6 @@ h5 {
 
 .settings-label {
     color: #245c55;
-    font-weight: 500;
 }
 
 .modal-wrapper {
@@ -324,11 +328,6 @@ h5 {
     box-shadow: 0 6px 12px #999;
     margin: 20px auto;
     max-width: 800px;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
 }
 
 .modal-overlay {
@@ -350,20 +349,16 @@ h5 {
 }
 
 .modal-remove-actions {
-    display: flex;
     gap: 10px;
     margin-top: 20px;
 }
 
 .modal-remove-content {
-    align-items: center;
     background-color: #fff;
     border-radius: 3px;
     box-shadow: 0 6px 12px #666;
-    display: flex;
     flex-direction: column;
     height: 150px;
-    justify-content: center;
     margin: 120px auto;
     max-width: 90%;
     padding: 20px;
@@ -371,7 +366,6 @@ h5 {
 }
 
 .number-input {
-    position: relative;
     width: fit-content;
 }
 
