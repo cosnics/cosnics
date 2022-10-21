@@ -81,7 +81,7 @@ abstract class HtmlTable extends HTML_Table
             return $this->getEmptyTable();
         }
 
-        $this->setupTableColumns(
+        $this->processTableColumns(
             $tableColumns, $parameterNames, $parameterValues, $tableActions
         );
 
@@ -95,7 +95,7 @@ abstract class HtmlTable extends HTML_Table
         $html[] = '<div class="col-xs-12">';
 
         $html[] = '<div class="' . $this->getTableContainerClasses() . '">';
-        $html[] = $this->renderTableBody($tableRows, $parameterValues, $tableActions);
+        $html[] = $this->renderTableBody($tableColumns, $tableRows, $tableActions);
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -215,30 +215,39 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     *
      * @throws \TableException
      */
     public function prepareTableData(
-        ArrayCollection $tableRows, TableParameterValues $parameterValues, ?TableActions $tableActions = null
+        array $tableColumns, ArrayCollection $tableRows, ?TableActions $tableActions = null
     )
     {
-        $this->processSourceData($tableRows, $parameterValues, $tableActions);
-        $this->processCellAttributes();
+        $this->processSourceData($tableRows);
+        $this->processCellAttributes($tableColumns, $tableActions);
         $this->processEmptyCells();
     }
 
     /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     *
      * @throws \TableException
      */
-    public function processCellAttributes()
+    public function processCellAttributes(array $tableColumns, ?TableActions $tableActions = null)
     {
-        foreach ($this->headerAttributes as $column => $headerAttribute)
+        foreach ($tableColumns as $key => $tableColumn)
         {
-            $this->setCellAttributes(0, $column, $headerAttribute);
-        }
+            $cssClasses = $tableColumn->getCssClasses();
 
-        foreach ($this->contentCellAttributes as $column => $contentCellAttribute)
-        {
-            $this->setColAttributes($column, $contentCellAttribute);
+            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT]))
+            {
+                $contentAttributes = ['class' => $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]];
+
+                $this->setColAttributes(
+                    ($tableActions instanceof TableActions && $tableActions->hasActions() ? $key + 1 : $key),
+                    $contentAttributes
+                );
+            }
         }
     }
 
@@ -254,12 +263,50 @@ abstract class HtmlTable extends HTML_Table
      * @throws \TableException
      */
     public function processSourceData(
-        ArrayCollection $tableRows, TableParameterValues $parameterValues, ?TableActions $tableActions = null
+        ArrayCollection $tableRows
     )
     {
         foreach ($tableRows as $row)
         {
             $this->addRow($row);
+        }
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     * @param string[] $parameterNames
+     *
+     * @throws \TableException
+     */
+    protected function processTableColumns(
+        array $tableColumns, array $parameterNames, TableParameterValues $parameterValues,
+        ?TableActions $tableActions = null
+    )
+    {
+        if ($tableActions instanceof TableActions && $tableActions->hasActions())
+        {
+            $columnHeaderHtml =
+                '<div class="checkbox checkbox-primary"><input class="styled styled-primary sortableTableSelectToggle" type="checkbox" name="sortableTableSelectToggle" /><label></label></div>';
+            $this->setColumnHeader($parameterNames, $parameterValues, 0, $columnHeaderHtml, false);
+        }
+
+        foreach ($tableColumns as $key => $tableColumn)
+        {
+            $headerAttributes = [];
+
+            $cssClasses = $tableColumn->getCssClasses();
+
+            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
+            {
+                $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
+            }
+
+            $this->setColumnHeader(
+                $parameterNames, $parameterValues,
+                ($tableActions instanceof TableActions && $tableActions->hasActions() ? $key + 1 : $key),
+                $this->getSecurity()->removeXSS($tableColumn->get_title()),
+                $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->is_sortable(), $headerAttributes
+            );
         }
     }
 
@@ -312,13 +359,15 @@ abstract class HtmlTable extends HTML_Table
     }
 
     /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     *
      * @throws \TableException
      */
     public function renderTableBody(
-        ArrayCollection $tableRows, TableParameterValues $parameterValues, ?TableActions $tableActions = null
+        array $tableColumns, ArrayCollection $tableRows, ?TableActions $tableActions = null
     ): string
     {
-        $this->prepareTableData($tableRows, $parameterValues, $tableActions);
+        $this->prepareTableData($tableColumns, $tableRows, $tableActions);
 
         return HTML_Table::toHtml();
     }
@@ -432,18 +481,15 @@ abstract class HtmlTable extends HTML_Table
     /**
      * @param string[] $parameterNames
      * @param string[] $headerAttributes
-     * @param string[] $cellAttributes
      *
      * @throws \TableException
      */
     public function setColumnHeader(
         array $parameterNames, TableParameterValues $parameterValues, int $columnIndex, string $label,
-        bool $isSortable = true, ?array $headerAttributes = null, ?array $cellAttributes = null
+        bool $isSortable = true, ?array $headerAttributes = null
     )
     {
         $header = $this->getHeader();
-
-        $header->setColAttributes($columnIndex, $headerAttributes);
 
         if ($isSortable)
         {
@@ -490,58 +536,6 @@ abstract class HtmlTable extends HTML_Table
         }
 
         $header->setHeaderContents(0, $columnIndex, $content);
-
-        if (!is_null($cellAttributes))
-        {
-            $this->contentCellAttributes[$columnIndex] = $cellAttributes;
-        }
-
-        if (!is_null($headerAttributes))
-        {
-            $this->headerAttributes[$columnIndex] = $headerAttributes;
-        }
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
-     * @param string[] $parameterNames
-     *
-     * @throws \TableException
-     */
-    protected function setupTableColumns(
-        array $tableColumns, array $parameterNames, TableParameterValues $parameterValues,
-        ?TableActions $tableActions = null
-    )
-    {
-        if ($tableActions instanceof TableActions && $tableActions->hasActions())
-        {
-            $columnHeaderHtml =
-                '<div class="checkbox checkbox-primary"><input class="styled styled-primary sortableTableSelectToggle" type="checkbox" name="sortableTableSelectToggle" /><label></label></div>';
-            $this->setColumnHeader($parameterNames, $parameterValues, 0, $columnHeaderHtml, false);
-        }
-
-        foreach ($tableColumns as $key => $tableColumn)
-        {
-            $headerAttributes = $contentAttributes = [];
-
-            $cssClasses = $tableColumn->getCssClasses();
-
-            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
-            {
-                $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
-            }
-
-            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT]))
-            {
-                $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
-            }
-
-            $this->setColumnHeader(
-                $parameterNames, $parameterValues, ($tableActions instanceof TableActions ? $key + 1 : $key),
-                $this->getSecurity()->removeXSS($tableColumn->get_title()),
-                $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->is_sortable(), $headerAttributes,
-                $contentAttributes
-            );
-        }
+        $header->setColAttributes($columnIndex, $headerAttributes);
     }
 }
