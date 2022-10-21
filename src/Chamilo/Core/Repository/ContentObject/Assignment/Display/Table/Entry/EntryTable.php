@@ -6,8 +6,8 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\Assignme
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -87,14 +87,14 @@ abstract class EntryTable extends RecordTable implements TableActionsSupport
     /**
      * Returns the implemented form actions
      *
-     * @return TableFormActions
+     * @return TableActions
      */
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, Manager::PARAM_ENTRY_ID);
+        $actions = new TableActions(__NAMESPACE__, Manager::PARAM_ENTRY_ID);
 
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD

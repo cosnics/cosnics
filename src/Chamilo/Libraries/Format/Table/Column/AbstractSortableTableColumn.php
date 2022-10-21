@@ -3,18 +3,21 @@ namespace Chamilo\Libraries\Format\Table\Column;
 
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
+/**
+ * @package Chamilo\Libraries\Format\Table\Column
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 abstract class AbstractSortableTableColumn extends TableColumn
 {
     private bool $sortable;
 
     /**
-     * @param string $name
-     * @param string $title - [OPTIONAL] default null - translation of the column name
-     * @param string $headerCssClasses
-     * @param string $contentCssClasses
+     * @param string[] $headerCssClasses
+     * @param string[] $contentCssClasses
      */
     public function __construct(
-        $name = '', $title = null, bool $sortable = true, $headerCssClasses = null, $contentCssClasses = null
+        string $name = '', string $title, bool $sortable = true, ?array $headerCssClasses = null,
+        ?array $contentCssClasses = null
     )
     {
         parent::__construct($name, $title, $headerCssClasses, $contentCssClasses);

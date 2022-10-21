@@ -13,10 +13,10 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  */
 class ApplicationItem extends Item
 {
-    const PROPERTY_USE_TRANSLATION = 'use_translation';
-    const PROPERTY_APPLICATION = 'application';
-    const PROPERTY_COMPONENT = 'component';
-    const PROPERTY_EXTRA_PARAMETERS = 'extra_parameters';
+    public const PROPERTY_USE_TRANSLATION = 'use_translation';
+    public const PROPERTY_APPLICATION = 'application';
+    public const PROPERTY_COMPONENT = 'component';
+    public const PROPERTY_EXTRA_PARAMETERS = 'extra_parameters';
 
     /**
      * @param string[] $defaultProperties
@@ -47,7 +47,7 @@ class ApplicationItem extends Item
     }
 
     /**
-     * @return integer
+     * @return int
      * @deprecated Use ApplicationItem::getUseTranslation() now
      */
     public function get_use_translation()
@@ -56,7 +56,7 @@ class ApplicationItem extends Item
     }
 
     /**
-     * @param integer $useTranslation
+     * @param int $useTranslation
      *
      * @deprecated Use ApplicationItem::setUseTranslation() now
      */
@@ -66,7 +66,7 @@ class ApplicationItem extends Item
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getUseTranslation()
     {
@@ -74,7 +74,7 @@ class ApplicationItem extends Item
     }
 
     /**
-     * @param integer $useTranslation
+     * @param int $useTranslation
      */
     public function setUseTranslation($useTranslation = 0)
     {

@@ -24,7 +24,7 @@ use Exception;
  */
 class HomeService
 {
-    const PARAM_TAB_ID = 'tab';
+    public const PARAM_TAB_ID = 'tab';
 
     /**
      *
@@ -81,7 +81,7 @@ class HomeService
 
     /**
      *
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getElementsByUserIdentifier($userIdentifier)
@@ -91,8 +91,8 @@ class HomeService
 
     /**
      *
-     * @param integer $identifier
-     * @return integer
+     * @param int $identifier
+     * @return int
      */
     public function countElementsByUserIdentifier($userIdentifier)
     {
@@ -148,8 +148,8 @@ class HomeService
      *
      * @param string $elementType
      * @param \Chamilo\Core\Home\Storage\DataClass\Element[] $defaultElements
-     * @param integer[] $elementIdentifierMap
-     * @param integer $userIdentifier
+     * @param int $elementIdentifierMap
+     * @param int $userIdentifier
      */
     private function createDefaultElementsByUserIdentifier($elementType, $defaultElements, &$elementIdentifierMap, 
         $userIdentifier)
@@ -195,7 +195,7 @@ class HomeService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $type
-     * @param integer $parentIdentifier
+     * @param int $parentIdentifier
      */
     public function getElements(User $user = null, $type, $parentIdentifier = 0)
     {
@@ -233,7 +233,7 @@ class HomeService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @return integer
+     * @return int
      */
     public function determineHomeUserIdentifier(User $user = null)
     {
@@ -263,7 +263,7 @@ class HomeService
     /**
      *
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @return integer
+     * @return int
      */
     public function getCurrentTabIdentifier(ChamiloRequest $request)
     {
@@ -272,7 +272,7 @@ class HomeService
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function isUserHomeAllowed()
     {
@@ -281,7 +281,7 @@ class HomeService
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function isInGeneralMode()
     {
@@ -291,7 +291,7 @@ class HomeService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @return boolean
+     * @return bool
      */
     public function userHasMultipleTabs(User $user = null)
     {
@@ -308,9 +308,9 @@ class HomeService
     /**
      *
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param integer $tabKey
+     * @param int $tabKey
      * @param \Chamilo\Core\Home\Storage\DataClass\Tab $tab
-     * @return boolean
+     * @return bool
      */
     public function isActiveTab(ChamiloRequest $request, $tabKey, Tab $tab)
     {

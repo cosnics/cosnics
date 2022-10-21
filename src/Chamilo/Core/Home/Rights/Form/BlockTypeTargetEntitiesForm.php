@@ -12,7 +12,7 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class BlockTypeTargetEntitiesForm extends TargetEntitiesForm
 {
-    const PROPERTY_BLOCK_TYPE = 'block_type';
+    public const PROPERTY_BLOCK_TYPE = 'block_type';
 
     /**
      *

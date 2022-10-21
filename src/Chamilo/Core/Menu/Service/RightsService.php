@@ -22,9 +22,9 @@ use Symfony\Component\Translation\Translator;
  */
 class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService implements UserBasedCacheInterface
 {
-    const TYPE_ITEM = 1;
+    public const TYPE_ITEM = 1;
 
-    const VIEW_RIGHT = 1;
+    public const VIEW_RIGHT = 1;
 
     /**
      * @var \Chamilo\Configuration\Service\ConfigurationConsulter
@@ -63,7 +63,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function areRightsEnabled()
     {
@@ -76,7 +76,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function canUserViewItem(User $user, Item $item)
@@ -102,7 +102,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param bool $returnLocation
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createItemRightsLocation(Item $item, bool $returnLocation = false)
@@ -118,7 +118,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createItemRightsLocationWithViewRightForEveryone(Item $item)
@@ -152,7 +152,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteItemRightsLocation(Item $item)
     {
@@ -164,7 +164,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\RightsLocation $rightsLocation
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteViewRightForRightsLocationForEveryone(RightsLocation $rightsLocation)
     {
@@ -203,7 +203,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     }
 
     /**
-     * @param integer $itemIdentifier
+     * @param int $itemIdentifier
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\RightsLocation
      */
@@ -233,7 +233,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     }
 
     /**
-     * @return integer[]
+     * @return int
      */
     public function getAvailableRights()
     {
@@ -291,7 +291,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\RightsLocation $rightsLocation
      *
-     * @return integer[][][]
+     * @return int
      * @throws \Exception
      */
     public function getTargetUsersAndGroupsForRightsLocationAndAvailableRights(RightsLocation $rightsLocation)
@@ -338,7 +338,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      */
     public function moveItemRightsLocation(Item $item)
     {
@@ -349,11 +349,11 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     }
 
     /**
-     * @param integer $itemIdentifier
+     * @param int $itemIdentifier
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param integer[][][] $values
+     * @param int $values
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function saveRightsConfigurationForItemIdentifierAndUserFromValues(
@@ -368,7 +368,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\RightsLocation $rightsLocation
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function setRightsLocationViewRightForEveryone(RightsLocation $rightsLocation)

@@ -10,9 +10,9 @@ namespace Chamilo\Core\Home\Storage\DataClass;
  */
 class Block extends Element
 {
-    const CONFIGURATION_BLOCK_TYPE = 'block_type';
-    const CONFIGURATION_CONTEXT = 'context';
-    const CONFIGURATION_VISIBILITY = 'visibility';
+    public const CONFIGURATION_BLOCK_TYPE = 'block_type';
+    public const CONFIGURATION_CONTEXT = 'context';
+    public const CONFIGURATION_VISIBILITY = 'visibility';
 
     /**
      *
@@ -47,7 +47,7 @@ class Block extends Element
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function getVisibility()
     {
@@ -56,7 +56,7 @@ class Block extends Element
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function isVisible()
     {
@@ -83,7 +83,7 @@ class Block extends Element
 
     /**
      *
-     * @param boolean $visibility
+     * @param bool $visibility
      */
     public function setVisibility($visibility)
     {

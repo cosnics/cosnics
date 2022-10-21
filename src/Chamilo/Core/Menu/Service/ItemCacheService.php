@@ -14,8 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class ItemCacheService
 {
-    const KEY_ITEMS = 'items';
-    const KEY_ITEM_TITLES = 'titles';
+    public const KEY_ITEMS = 'items';
+    public const KEY_ITEM_TITLES = 'titles';
 
     /**
      * @var \Chamilo\Core\Menu\Service\ItemService
@@ -122,7 +122,7 @@ class ItemCacheService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      */
     public function doesItemHaveChildren(Item $item)
     {
@@ -216,7 +216,7 @@ class ItemCacheService
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function clear()
     {

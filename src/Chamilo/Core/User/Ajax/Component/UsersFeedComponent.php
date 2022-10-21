@@ -29,17 +29,17 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class UsersFeedComponent extends Manager
 {
-    const PARAM_OFFSET = 'offset';
+    public const PARAM_OFFSET = 'offset';
 
-    const PARAM_SEARCH_QUERY = 'query';
+    public const PARAM_SEARCH_QUERY = 'query';
 
-    const PROPERTY_ELEMENTS = 'elements';
+    public const PROPERTY_ELEMENTS = 'elements';
 
-    const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
+    public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     /**
      *
-     * @var integer
+     * @var int
      */
     private $userCount = 0;
 
@@ -136,7 +136,7 @@ class UsersFeedComponent extends Manager
     /**
      * Returns the selected offset
      *
-     * @return integer
+     * @return int
      */
     protected function getOffset()
     {

@@ -10,7 +10,7 @@ namespace Chamilo\Core\Home\Rights\Storage\DataClass;
  */
 class ElementTargetEntity extends HomeTargetEntity
 {
-    const PROPERTY_ELEMENT_ID = 'element_id';
+    public const PROPERTY_ELEMENT_ID = 'element_id';
 
     /**
      *
@@ -23,7 +23,7 @@ class ElementTargetEntity extends HomeTargetEntity
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function get_element_id()
     {
@@ -41,7 +41,7 @@ class ElementTargetEntity extends HomeTargetEntity
 
     /**
      *
-     * @param integer $element_id
+     * @param int $element_id
      */
     public function set_element_id($element_id)
     {

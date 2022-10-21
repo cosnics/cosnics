@@ -23,7 +23,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\PagerRenderer;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -248,7 +248,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      */
     protected function hasActions()
     {
-        $hasActions = $this->get_actions() instanceof TableFormActions && $this->get_actions()->hasFormActions();
+        $hasActions = $this->get_actions() instanceof TableActions && $this->get_actions()->hasActions();
         $hasPublications = $this->getNumberOfItems() > 0;
         $hasRights = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
 
@@ -315,7 +315,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      */
     public function renderActions()
     {
-        $formActions = $this->get_actions()->getFormActions();
+        $formActions = $this->get_actions()->getActions();
         $firstAction = array_shift($formActions);
 
         $buttonToolBar = new ButtonToolBar();
@@ -339,7 +339,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $actionButtonGroup = new ButtonGroup();
 
         $button = new SplitDropdownButton(
-            $firstAction->get_title(), null, $firstAction->get_action(), Button::DISPLAY_LABEL,
+            $firstAction->getTitle(), null, $firstAction->getAction(), Button::DISPLAY_LABEL,
             $firstAction->getConfirmation(), ['btn-sm','btn-table-action'],  null, ['btn-table-action']
         );
 
@@ -347,7 +347,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         {
             $button->addSubButton(
                 new SubButton(
-                    $formAction->get_title(), null, $formAction->get_action(), Button::DISPLAY_LABEL,
+                    $formAction->getTitle(), null, $formAction->getAction(), Button::DISPLAY_LABEL,
                     $formAction->getConfirmation()
                 )
             );
@@ -363,7 +363,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html[] = $buttonToolBarRenderer->render();
         $html[] = '<input type="hidden" name="' . $this->getListName() . '_namespace" value="' .
-            $this->get_actions()->get_namespace() . '"/>';
+            $this->get_actions()->getNamespace() . '"/>';
         $html[] = '<input type="hidden" name="table_name" value="' . $this->getListName() . '"/>';
 
         return implode(PHP_EOL, $html);
@@ -419,10 +419,10 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         if ($this->hasActions())
         {
-            $tableFormActions = $this->get_actions()->getFormActions();
+            $tableFormActions = $this->get_actions()->getActions();
             $firstFormAction = array_shift($tableFormActions);
 
-            $html[] = '<form class="form-list-view" method="post" action="' . $firstFormAction->get_action() .
+            $html[] = '<form class="form-list-view" method="post" action="' . $firstFormAction->getAction() .
                 '" name="form_' . $this->getListName() . '">';
         }
 

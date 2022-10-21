@@ -7,31 +7,22 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * This class represents a column for a table that is based on a property from the data class
- *
  * @package Chamilo\Libraries\Format\Table\Column
  * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DataClassPropertyTableColumn extends AbstractSortableTableColumn
 {
 
-    /**
-     * The class name of the dataclass
-     *
-     * @var string
-     */
-    private $className;
+    private string $className;
 
     /**
-     * @param string $className - The class name
-     * @param string $property  - The property or the property alias
-     * @param string $title     - [OPTIONAL] default translated title from property
-     * @param bool $sortable    - Whether or not the column is sortable
-     * @param string $headerCssClasses
-     * @param string $contentCssClasses
+     * @param string[] $headerCssClasses
+     * @param string[] $contentCssClasses
      */
     public function __construct(
-        $className, $property, $title = null, $sortable = true, $headerCssClasses = null, $contentCssClasses = null
+        string $className, string $property, ?string $title = null, bool $sortable = true,
+        ?array $headerCssClasses = null, ?array $contentCssClasses = null
     )
     {
         $this->className = $className;
@@ -53,22 +44,12 @@ class DataClassPropertyTableColumn extends AbstractSortableTableColumn
         return new PropertyConditionVariable($this->get_class_name(), $this->get_name());
     }
 
-    /**
-     * Returns the class name
-     *
-     * @return string
-     */
-    public function get_class_name()
+    public function get_class_name(): string
     {
         return $this->className;
     }
 
-    /**
-     * Sets the class name
-     *
-     * @param string $className
-     */
-    public function set_class_name($className)
+    public function set_class_name(string $className)
     {
         $this->className = $className;
     }

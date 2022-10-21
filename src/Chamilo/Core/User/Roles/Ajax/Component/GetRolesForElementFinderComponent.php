@@ -21,9 +21,9 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 class GetRolesForElementFinderComponent extends Manager implements AjaxResultDataProviderInterface
 {
-    const PARAM_OFFSET = 'offset';
+    public const PARAM_OFFSET = 'offset';
 
-    const PARAM_SEARCH_QUERY = 'query';
+    public const PARAM_SEARCH_QUERY = 'query';
 
     /**
      *

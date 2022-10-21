@@ -3,8 +3,8 @@ namespace Chamilo\Core\Group\Table\SubscribeUser;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -15,12 +15,12 @@ class SubscribeUserTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_USER_ID;
 
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(Manager::context(), self::TABLE_IDENTIFIER);
+        $actions = new TableActions(Manager::context(), self::TABLE_IDENTIFIER);
         
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(
                     array(Manager::PARAM_ACTION => Manager::ACTION_SUBSCRIBE_USER_TO_GROUP)), 
                 Translation::get('SubscribeSelected'), 

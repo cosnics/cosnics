@@ -10,5 +10,5 @@ use Chamilo\Libraries\Architecture\AjaxManager;
  */
 abstract class Manager extends AjaxManager
 {
-    const ACTION_GET_ROLES_FOR_ELEMENT_FINDER = 'GetRolesForElementFinder';
+    public const ACTION_GET_ROLES_FOR_ELEMENT_FINDER = 'GetRolesForElementFinder';
 }

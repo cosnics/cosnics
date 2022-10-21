@@ -6,8 +6,8 @@ use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
@@ -21,7 +21,7 @@ use Symfony\Component\Translation\Translator;
  */
 class ItemBrowserTable extends DataClassTable implements TableActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager::PARAM_ITEM;
+    public const TABLE_IDENTIFIER = Manager::PARAM_ITEM;
 
     /**
      * @var \Symfony\Component\Translation\Translator
@@ -44,7 +44,7 @@ class ItemBrowserTable extends DataClassTable implements TableActionsSupport
     private $itemRendererFactory;
 
     /**
-     * @var integer
+     * @var int
      */
     private $parentIdentifier;
 
@@ -54,7 +54,7 @@ class ItemBrowserTable extends DataClassTable implements TableActionsSupport
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
      * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
      * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
-     * @param integer $parentIdentifier
+     * @param int $parentIdentifier
      *
      * @throws \Exception
      */
@@ -105,7 +105,7 @@ class ItemBrowserTable extends DataClassTable implements TableActionsSupport
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getParentIdentifier(): int
     {
@@ -113,7 +113,7 @@ class ItemBrowserTable extends DataClassTable implements TableActionsSupport
     }
 
     /**
-     * @param integer $parentIdentifier
+     * @param int $parentIdentifier
      */
     public function setParentIdentifier(int $parentIdentifier): void
     {
@@ -184,13 +184,13 @@ class ItemBrowserTable extends DataClassTable implements TableActionsSupport
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
+     * @return \Chamilo\Libraries\Format\Table\FormAction\TableActions
      */
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)),
                 $this->getTranslator()->trans('RemoveSelected', [], StringUtilities::LIBRARIES)
             )

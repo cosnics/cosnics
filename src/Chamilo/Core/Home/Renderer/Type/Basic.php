@@ -38,7 +38,7 @@ class Basic extends Renderer
     /**
      * Caching variable to check if the home page is in general mode
      *
-     * @var boolean
+     * @var bool
      */
     protected $generalMode;
 
@@ -56,7 +56,7 @@ class Basic extends Renderer
 
     /**
      *
-     * @var integer
+     * @var int
      */
     private $homeUserIdentifier;
 

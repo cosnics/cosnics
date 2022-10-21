@@ -11,8 +11,8 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -61,21 +61,21 @@ class RepositoryTable extends DataClassTable implements TableActionsSupport
         );
     }
 
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
         if ($this->get_component()->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
         {
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(
                         array(Manager::PARAM_ACTION => Manager::ACTION_IMPACT_VIEW_RECYCLE)
                     ), Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES), false
                 )
             );
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(
                         array(Manager::PARAM_ACTION => Manager::ACTION_UNLINK_CONTENT_OBJECTS)
                     ), Translation::get('UnlinkSelected', null, StringUtilities::LIBRARIES)
@@ -83,14 +83,14 @@ class RepositoryTable extends DataClassTable implements TableActionsSupport
             );
         }
 
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_MOVE_CONTENT_OBJECTS)),
                 Translation::get('MoveSelected', null, StringUtilities::LIBRARIES), false
             )
         );
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_PUBLICATION,
@@ -99,8 +99,8 @@ class RepositoryTable extends DataClassTable implements TableActionsSupport
                 ), Translation::get('PublishSelected', null, StringUtilities::LIBRARIES), false
             )
         );
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_EXPORT_CONTENT_OBJECTS)),
                 Translation::get('ExportSelected', null, StringUtilities::LIBRARIES), false
             )
@@ -108,8 +108,8 @@ class RepositoryTable extends DataClassTable implements TableActionsSupport
 
         if ($this->get_component()->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
         {
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(
                         array(
                             Application::PARAM_ACTION => Manager::ACTION_WORKSPACE,
@@ -129,8 +129,8 @@ class RepositoryTable extends DataClassTable implements TableActionsSupport
 
             if ($canDelete)
             {
-                $actions->add_form_action(
-                    new TableFormAction(
+                $actions->addAction(
+                    new TableAction(
                         $this->get_component()->get_url(
                             array(
                                 Application::PARAM_ACTION => Manager::ACTION_WORKSPACE,

@@ -21,9 +21,9 @@ use RuntimeException;
  */
 class SetElementTargetEntitiesComponent extends Manager
 {
-    const PARAM_ELEMENT_ID = 'elementId';
-    const PARAM_TARGET_ENTITIES = 'targetEntities';
-    const RESULT_PROPERTY_BLOCK = 'block';
+    public const PARAM_ELEMENT_ID = 'elementId';
+    public const PARAM_TARGET_ENTITIES = 'targetEntities';
+    public const RESULT_PROPERTY_BLOCK = 'block';
 
     /*
      * Returns the required post parameters

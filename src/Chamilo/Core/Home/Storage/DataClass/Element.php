@@ -20,12 +20,12 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 abstract class Element extends CompositeDataClass implements DisplayOrderDataClassListenerSupport
 {
-    const PROPERTY_CONFIGURATION = 'configuration';
-    const PROPERTY_PARENT_ID = 'parent_id';
-    const PROPERTY_SORT = 'sort';
-    const PROPERTY_TITLE = 'title';
-    const PROPERTY_TYPE = 'type';
-    const PROPERTY_USER_ID = 'user_id';
+    public const PROPERTY_CONFIGURATION = 'configuration';
+    public const PROPERTY_PARENT_ID = 'parent_id';
+    public const PROPERTY_SORT = 'sort';
+    public const PROPERTY_TITLE = 'title';
+    public const PROPERTY_TYPE = 'type';
+    public const PROPERTY_USER_ID = 'user_id';
 
     /**
      * @throws \Exception
@@ -57,7 +57,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getConfiguration()
     {
@@ -91,7 +91,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getParentId()
     {
@@ -113,7 +113,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getSort()
     {
@@ -148,7 +148,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -209,7 +209,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
 
     /**
      *
-     * @param integer $configuration
+     * @param int $configuration
      */
     public function setConfiguration($configuration)
     {
@@ -218,7 +218,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
 
     /**
      *
-     * @param integer $parentId
+     * @param int $parentId
      */
     public function setParentId($parentId)
     {
@@ -240,7 +240,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
 
     /**
      *
-     * @param integer $sort
+     * @param int $sort
      */
     public function setSort($sort)
     {
@@ -269,7 +269,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
 
     /**
      *
-     * @param integer $userId
+     * @param int $userId
      */
     public function setUserId($userId)
     {

@@ -12,10 +12,10 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class ItemTitle extends DataClass
 {
-    const PROPERTY_ISOCODE = 'isocode';
-    const PROPERTY_ITEM_ID = 'item_id';
-    const PROPERTY_SORT = 'sort';
-    const PROPERTY_TITLE = 'title';
+    public const PROPERTY_ISOCODE = 'isocode';
+    public const PROPERTY_ITEM_ID = 'item_id';
+    public const PROPERTY_SORT = 'sort';
+    public const PROPERTY_TITLE = 'title';
 
     /**
      * @return string
@@ -26,7 +26,7 @@ class ItemTitle extends DataClass
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getItemId()
     {
@@ -34,7 +34,7 @@ class ItemTitle extends DataClass
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getSort()
     {
@@ -73,7 +73,7 @@ class ItemTitle extends DataClass
     }
 
     /**
-     * @return integer
+     * @return int
      * @deprecated Use ItemTitle::getItemId() now
      */
     public function get_item_id()
@@ -82,7 +82,7 @@ class ItemTitle extends DataClass
     }
 
     /**
-     * @return integer
+     * @return int
      * @deprecated Use ItemTitle::getSort() now
      */
     public function get_sort()
@@ -120,7 +120,7 @@ class ItemTitle extends DataClass
     }
 
     /**
-     * @param integer $sort
+     * @param int $sort
      *
      * @throws \Exception
      */
@@ -151,7 +151,7 @@ class ItemTitle extends DataClass
     }
 
     /**
-     * @param integer $itemIdentifier
+     * @param int $itemIdentifier
      *
      * @throws \Exception
      * @deprecated Use ItemTitle::setItemId() now
@@ -162,7 +162,7 @@ class ItemTitle extends DataClass
     }
 
     /**
-     * @param integer $sort
+     * @param int $sort
      *
      * @throws \Exception
      * @deprecated Use ItemTitle::setSort() now

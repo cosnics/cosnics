@@ -15,8 +15,8 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class BlockEditComponent extends Manager
 {
-    const PARAM_BLOCK = 'block';
-    const PARAM_TITLE = 'title';
+    public const PARAM_BLOCK = 'block';
+    public const PARAM_TITLE = 'title';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()

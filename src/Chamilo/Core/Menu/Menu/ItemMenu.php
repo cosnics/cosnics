@@ -18,7 +18,7 @@ use Symfony\Component\Translation\Translator;
  */
 class ItemMenu extends HtmlMenu
 {
-    const TREE_NAME = __CLASS__;
+    public const TREE_NAME = __CLASS__;
 
     /**
      * @var \Chamilo\Core\Menu\Service\ItemService
@@ -78,7 +78,7 @@ class ItemMenu extends HtmlMenu
     /**
      * Gets the URL of a given category
      *
-     * @param integer $itemIdentifier The id of the category
+     * @param int $itemIdentifier The id of the category
      *
      * @return string The requested URL
      */

@@ -44,7 +44,7 @@ class PublicationModifier implements PublicationModifierInterface
     }
 
     /**
-     * @param integer $publicationIdentifier
+     * @param int $publicationIdentifier
      *
      * @return bool
      */
@@ -54,7 +54,7 @@ class PublicationModifier implements PublicationModifierInterface
     }
 
     /**
-     * @param integer $publicationIdentifier
+     * @param int $publicationIdentifier
      *
      * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes
      * @throws \Exception
@@ -104,7 +104,7 @@ class PublicationModifier implements PublicationModifierInterface
     /**
      * @param \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes $publicationAttributes
      *
-     * @return boolean
+     * @return bool
      */
     public function updateContentObjectPublicationContentObjectIdentifier(Attributes $publicationAttributes)
     {

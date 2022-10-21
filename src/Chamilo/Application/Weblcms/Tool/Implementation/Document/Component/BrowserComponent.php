@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
@@ -95,7 +95,7 @@ class BrowserComponent extends Manager
     public function get_additional_form_actions()
     {
         return array(
-            new TableFormAction(
+            new TableAction(
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD_SELECTED_PUBLICATIONS

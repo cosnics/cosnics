@@ -31,7 +31,7 @@ class UserGroups
      * Constructor
      *
      * @param $user_id int
-     * @param $border boolean Indicates if a border should be included
+     * @param $border  bool Indicates if a border should be included
      */
     public function __construct($user_id, $border = true, $availableGroups = [])
     {

@@ -119,7 +119,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
+     * @return \Chamilo\Libraries\Format\Table\FormAction\TableActions
      */
     public function get_actions()
     {

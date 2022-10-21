@@ -10,8 +10,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 abstract class HomeTargetEntity extends DataClass
 {
-    const PROPERTY_ENTITY_ID = 'entity_id';
-    const PROPERTY_ENTITY_TYPE = 'entity_type';
+    public const PROPERTY_ENTITY_ID = 'entity_id';
+    public const PROPERTY_ENTITY_TYPE = 'entity_type';
 
     /**
      *
@@ -45,7 +45,7 @@ abstract class HomeTargetEntity extends DataClass
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function get_entity_id()
     {
@@ -54,7 +54,7 @@ abstract class HomeTargetEntity extends DataClass
 
     /**
      *
-     * @param integer $entity_id
+     * @param int $entity_id
      */
     public function set_entity_id($entity_id)
     {

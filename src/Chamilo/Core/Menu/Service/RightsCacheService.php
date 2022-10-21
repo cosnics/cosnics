@@ -44,7 +44,7 @@ class RightsCacheService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function canUserViewItem(User $user, Item $item)
@@ -67,7 +67,7 @@ class RightsCacheService
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function clear()
     {
@@ -125,7 +125,7 @@ class RightsCacheService
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean[]
+     * @return bool
      * @throws \Exception
      */
     protected function getUserRightsForAllItems(User $user)

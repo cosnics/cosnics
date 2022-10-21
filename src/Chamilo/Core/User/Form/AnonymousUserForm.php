@@ -14,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class AnonymousUserForm extends FormValidator
 {
-    const CAPTCHA_RESPONS_VALUE = 'g-recaptcha-response';
+    public const CAPTCHA_RESPONS_VALUE = 'g-recaptcha-response';
 
     /**
      * Constructor

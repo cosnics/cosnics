@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Table\Publication\Table;
 
 use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 
 /**
@@ -20,7 +20,7 @@ class ObjectPublicationTable extends RecordTable implements TableActionsSupport
      */
     const TABLE_IDENTIFIER = Manager::PARAM_PUBLICATION_ID;
 
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
         return $this->get_component()->get_actions();
     }

@@ -2,14 +2,14 @@
 namespace Chamilo\Core\Repository\Workspace\Table\SharedIn;
 
 use Chamilo\Core\Repository\Workspace\Table\Share\ShareTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 
 class SharedInTable extends ShareTable implements TableActionsSupport
 {
 
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        return new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        return new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
     }
 }

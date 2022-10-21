@@ -4,8 +4,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\DirectS
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -28,17 +28,17 @@ class DirectSubscribedPlatformGroupBrowserTable extends RecordTable implements T
     /**
      * Returns the implemented form actions
      * 
-     * @return TableFormActions
+     * @return TableActions
      */
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
         if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
-            $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+            $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
             
             // unsubscribe
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_UNSUBSCRIBE_GROUPS)), 
@@ -46,8 +46,8 @@ class DirectSubscribedPlatformGroupBrowserTable extends RecordTable implements T
                     false));
             
             // make teacher
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_CHANGE_PLATFORMGROUP_STATUS_TEACHER)), 
@@ -55,8 +55,8 @@ class DirectSubscribedPlatformGroupBrowserTable extends RecordTable implements T
                     false));
             
             // make student
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_CHANGE_PLATFORMGROUP_STATUS_STUDENT)), 

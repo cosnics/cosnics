@@ -10,5 +10,5 @@ namespace Chamilo\Core\Menu\Storage;
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'menu_';
+    public const PREFIX = 'menu_';
 }

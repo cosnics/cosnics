@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTablePropertyModel;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -94,7 +94,7 @@ class GalleryHTMLTable extends HtmlTable
             else
             {
                 $row[$index] = $value[1];
-                $hasActions = $this->getTableFormActions() instanceof TableFormActions &&
+                $hasActions = $this->getTableFormActions() instanceof TableActions &&
                     $this->getTableFormActions()->hasFormActions();
 
                 if ($hasActions)
@@ -279,7 +279,7 @@ class GalleryHTMLTable extends HtmlTable
             $currentOrderDirections = $this->getOrderDirection();
             $currentFirstOrderDirection = $currentOrderDirections[0];
 
-            $hasFormActions = $this->getTableFormActions() instanceof TableFormActions &&
+            $hasFormActions = $this->getTableFormActions() instanceof TableActions &&
                 $this->getTableFormActions()->hasFormActions();
 
             $propertyIndex = $currentFirstOrderColumn - ($hasFormActions ? 1 : 0);
@@ -336,7 +336,7 @@ class GalleryHTMLTable extends HtmlTable
     public function renderPropertySubButtons()
     {
         $propertyModel = $this->getSourceProperties();
-        $hasFormActions = $this->getTableFormActions() instanceof TableFormActions &&
+        $hasFormActions = $this->getTableFormActions() instanceof TableActions &&
             $this->getTableFormActions()->hasFormActions();
         $currentOrderColumns = $this->getOrderColumn();
         $currentFirstOrderColumn = $currentOrderColumns[0];

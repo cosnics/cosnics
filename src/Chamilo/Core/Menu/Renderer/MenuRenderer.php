@@ -282,7 +282,7 @@ class MenuRenderer
 
     /**
      * @param string $containerMode
-     * @param integer $numberOfItems
+     * @param int $numberOfItems
      *
      * @return string
      */

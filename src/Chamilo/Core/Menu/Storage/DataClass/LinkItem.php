@@ -13,12 +13,12 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  */
 class LinkItem extends Item
 {
-    const PROPERTY_URL = 'url';
-    const PROPERTY_TARGET = 'target';
-    const TARGET_BLANK = 0;
-    const TARGET_SELF = 1;
-    const TARGET_PARENT = 2;
-    const TARGET_TOP = 3;
+    public const PROPERTY_URL = 'url';
+    public const PROPERTY_TARGET = 'target';
+    public const TARGET_BLANK = 0;
+    public const TARGET_SELF = 1;
+    public const TARGET_PARENT = 2;
+    public const TARGET_TOP = 3;
 
     /**
      * @param string[] $defaultProperties
@@ -128,7 +128,7 @@ class LinkItem extends Item
     }
 
     /**
-     * @param integer $target
+     * @param int $target
      *
      * @return string
      */
@@ -154,7 +154,7 @@ class LinkItem extends Item
     }
 
     /**
-     * @param boolean $typesOnly
+     * @param bool $typesOnly
      *
      * @return string[]
      */

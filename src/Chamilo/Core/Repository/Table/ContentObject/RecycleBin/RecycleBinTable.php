@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\Table\ContentObject\RecycleBin;
 
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -13,16 +13,16 @@ class RecycleBinTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_CONTENT_OBJECT_ID;
 
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(
                     array(Manager::PARAM_ACTION => Manager::ACTION_RESTORE_CONTENT_OBJECTS)), 
                 Translation::get('RestoreSelected', null, StringUtilities::LIBRARIES)));
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_DELETE_CONTENT_OBJECTS, 

@@ -19,9 +19,9 @@ class HomeRepository
 
     /**
      *
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      *
-     * @return integer
+     * @return int
      */
     public function countElementsByUserIdentifier($userIdentifier)
     {
@@ -82,7 +82,7 @@ class HomeRepository
 
     /**
      *
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -100,7 +100,7 @@ class HomeRepository
 
     /**
      *
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
      */

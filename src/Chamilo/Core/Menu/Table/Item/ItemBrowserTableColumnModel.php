@@ -18,7 +18,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 class ItemBrowserTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
     //const DEFAULT_ORDER_COLUMN_INDEX = 0;
-    const PROPERTY_TYPE = 'Type';
+    public const PROPERTY_TYPE = 'Type';
 
     public function initializeColumns()
     {

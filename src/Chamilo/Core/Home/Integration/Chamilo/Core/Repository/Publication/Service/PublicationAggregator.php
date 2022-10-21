@@ -29,9 +29,9 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param integer[] $contentObjectIdentifiers
+     * @param int $contentObjectIdentifiers
      *
-     * @return boolean
+     * @return bool
      */
     public function areContentObjectsPublished(array $contentObjectIdentifiers)
     {
@@ -39,9 +39,9 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param integer $contentObjectIdentifier
+     * @param int $contentObjectIdentifier
      *
-     * @return boolean
+     * @return bool
      */
     public function canContentObjectBeEdited(int $contentObjectIdentifier)
     {
@@ -61,11 +61,11 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param integer $type
-     * @param integer $objectIdentifier
+     * @param int $type
+     * @param int $objectIdentifier
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return integer
+     * @return int
      */
     public function countPublicationAttributes(
         int $type, int $objectIdentifier, Condition $condition = null
@@ -77,7 +77,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteContentObjectPublications(ContentObject $contentObject)
     {
@@ -85,11 +85,11 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param integer $type
-     * @param integer $objectIdentifier
+     * @param int $type
+     * @param int $objectIdentifier
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $count
-     * @param integer $offset
+     * @param int $count
+     * @param int $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
@@ -105,9 +105,9 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param integer $contentObjectIdentifier
+     * @param int $contentObjectIdentifier
      *
-     * @return boolean
+     * @return bool
      */
     public function isContentObjectPublished(int $contentObjectIdentifier)
     {

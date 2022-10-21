@@ -14,7 +14,7 @@ interface UserPictureProviderInterface
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      */
     public function doesUserHavePicture(User $user);
 

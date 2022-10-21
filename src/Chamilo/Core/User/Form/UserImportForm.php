@@ -25,7 +25,7 @@ use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Exception;
 
 set_time_limit(0);
-ini_set("memory_limit", - 1);
+ini_set('memory_limit', - 1);
 
 /**
  *
@@ -35,7 +35,7 @@ class UserImportForm extends FormValidator
 {
     use DependencyInjectionContainerTrait;
 
-    const TYPE_IMPORT = 1;
+    public const TYPE_IMPORT = 1;
 
     private $failedcsv;
 
@@ -246,7 +246,7 @@ class UserImportForm extends FormValidator
                 $user->set_username($csvuser[User::PROPERTY_USERNAME]);
 
                 $password = $csvuser[User::PROPERTY_PASSWORD];
-                if (!$password || $password == "")
+                if (!$password || $password == '')
                 {
                     $password = uniqid();
                 }

@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Table\WikiPage;
 
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -17,12 +17,12 @@ class WikiPageTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = \Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID;
 
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(
                     array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM)),
                 Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES)));

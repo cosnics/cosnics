@@ -20,9 +20,9 @@ use Symfony\Component\Translation\Translator;
  */
 class ItemService
 {
-    const PARAM_DIRECTION_DOWN = 2;
+    public const PARAM_DIRECTION_DOWN = 2;
 
-    const PARAM_DIRECTION_UP = 1;
+    public const PARAM_DIRECTION_UP = 1;
 
     /**
      * @var \Chamilo\Libraries\Storage\Service\DisplayOrderHandler
@@ -87,9 +87,9 @@ class ItemService
 
     /**
      *
-     * @param integer $parentIdentifier
+     * @param int $parentIdentifier
      *
-     * @return integer
+     * @return int
      */
     public function countItemsByParentIdentifier(int $parentIdentifier)
     {
@@ -99,7 +99,7 @@ class ItemService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      * @throws \Exception
      */
@@ -167,7 +167,7 @@ class ItemService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createItemTitle(ItemTitle $itemTitle)
@@ -187,7 +187,7 @@ class ItemService
      * @param string $isocode
      * @param string $title
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createItemTitleForItemFromParameters(Item $item, string $isocode, string $title)
@@ -204,7 +204,7 @@ class ItemService
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param string[] $values
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createItemTitlesForItemFromValues(Item $item, array $values)
@@ -251,7 +251,7 @@ class ItemService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Exception
@@ -291,7 +291,7 @@ class ItemService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
@@ -313,7 +313,7 @@ class ItemService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteItemTitle(ItemTitle $itemTitle)
     {
@@ -330,7 +330,7 @@ class ItemService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteItemTitlesForItem(Item $item)
     {
@@ -385,7 +385,7 @@ class ItemService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      */
     public function doesItemHaveChildren(Item $item)
     {
@@ -393,7 +393,7 @@ class ItemService
     }
 
     /**
-     * @param integer $identifier
+     * @param int $identifier
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item
      */
@@ -411,7 +411,7 @@ class ItemService
     }
 
     /**
-     * @param integer $itemIdentifier
+     * @param int $itemIdentifier
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
      */
@@ -421,7 +421,7 @@ class ItemService
     }
 
     /**
-     * @param integer $itemIdentifier
+     * @param int $itemIdentifier
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
      */
@@ -441,7 +441,7 @@ class ItemService
     }
 
     /**
-     * @param integer[] $identifiers
+     * @param int $identifiers
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
@@ -452,9 +452,9 @@ class ItemService
 
     /**
      *
-     * @param integer $parentIdentifier
-     * @param integer $count
-     * @param integer $offset
+     * @param int $parentIdentifier
+     * @param int $count
+     * @param int $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
@@ -572,9 +572,9 @@ class ItemService
     }
 
     /**
-     * @param integer $parentIdentifier
+     * @param int $parentIdentifier
      *
-     * @return integer
+     * @return int
      */
     public function getNextItemSortValueByParentIdentifier(int $parentIdentifier)
     {
@@ -647,9 +647,9 @@ class ItemService
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param integer $moveDirection
+     * @param int $moveDirection
      *
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function moveItemInDirection(Item $item, int $moveDirection)
@@ -664,7 +664,7 @@ class ItemService
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param string[] $values
      *
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     public function saveItemFromValues(Item $item, array $values)
@@ -704,7 +704,7 @@ class ItemService
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param string[] $values
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function saveItemTitlesForItemFromValues(Item $item, array $values)
@@ -753,7 +753,7 @@ class ItemService
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param string[] $values
      *
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      * @throws \Exception
      */
@@ -803,7 +803,7 @@ class ItemService
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
      *
-     * @return boolean
+     * @return bool
      */
     public function updateItemTitle(ItemTitle $itemTitle)
     {

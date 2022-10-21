@@ -9,10 +9,10 @@ namespace Chamilo\Core\User\Domain\UserImporter;
  */
 abstract class ImportData
 {
-    const ACTION_ADD = 'A';
-    const ACTION_UPDATE = 'U';
-    const ACTION_ADD_UPDATE = 'UA';
-    const ACTION_DELETE = 'D';
+    public const ACTION_ADD = 'A';
+    public const ACTION_UPDATE = 'U';
+    public const ACTION_ADD_UPDATE = 'UA';
+    public const ACTION_DELETE = 'D';
 
     /**
      * The imported data as a raw string. It is used to give the user the opportunity to retry the failed imports.

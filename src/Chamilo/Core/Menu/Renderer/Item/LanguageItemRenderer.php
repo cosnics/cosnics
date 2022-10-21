@@ -53,7 +53,7 @@ class LanguageItemRenderer extends ItemRenderer
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      */
     public function isItemVisibleForUser(User $user)
     {

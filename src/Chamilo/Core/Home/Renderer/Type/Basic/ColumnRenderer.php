@@ -144,8 +144,8 @@ class ColumnRenderer
 
     /**
      *
-     * @param integer $columnId
-     * @param boolean $isEmpty
+     * @param int $columnId
+     * @param bool $isEmpty
      *
      * @return string
      */

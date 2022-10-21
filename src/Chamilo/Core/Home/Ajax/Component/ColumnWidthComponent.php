@@ -13,8 +13,8 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class ColumnWidthComponent extends Manager
 {
-    const PARAM_COLUMN = 'column';
-    const PARAM_WIDTH = 'width';
+    public const PARAM_COLUMN = 'column';
+    public const PARAM_WIDTH = 'width';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()

@@ -25,7 +25,7 @@ class UserDetails
      * Constructor
      *
      * @param $user User
-     * @param $border boolean Indicates if a border should be included
+     * @param $border bool Indicates if a border should be included
      */
     public function __construct($user, $border = true)
     {

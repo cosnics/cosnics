@@ -7,8 +7,8 @@ use Chamilo\Core\Admin\Announcement\Service\RightsService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -163,16 +163,16 @@ class PublicationTable extends RecordTable implements TableActionsSupport
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
+     * @return \Chamilo\Libraries\Format\Table\FormAction\TableActions
      */
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
         if ($this->get_component()->get_user()->is_platform_admin())
         {
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)),
                     Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES)
                 )

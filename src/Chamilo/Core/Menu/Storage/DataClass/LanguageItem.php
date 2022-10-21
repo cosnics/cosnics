@@ -13,8 +13,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  */
 class LanguageItem extends Item
 {
-    const PROPERTY_LANGUAGE = 'language';
-    const PROPERTY_ISOCODE = 'isocode';
+    public const PROPERTY_LANGUAGE = 'language';
+    public const PROPERTY_ISOCODE = 'isocode';
 
     /**
      * @var string

@@ -10,8 +10,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class RoleRelation extends DataClass
 {
-    const PROPERTY_USER_ID = 'user_id';
-    const PROPERTY_ROLE_ID = 'role_id';
+    public const PROPERTY_USER_ID = 'user_id';
+    public const PROPERTY_ROLE_ID = 'role_id';
 
     /**
      * Get the default properties of all data classes.

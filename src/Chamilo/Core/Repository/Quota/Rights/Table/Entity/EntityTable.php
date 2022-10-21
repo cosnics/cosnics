@@ -7,8 +7,8 @@ use Chamilo\Core\Repository\Quota\Rights\Manager;
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
@@ -124,9 +124,9 @@ class EntityTable extends RecordTable implements TableActionsSupport
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
+     * @return \Chamilo\Libraries\Format\Table\FormAction\TableActions
      */
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
         $deleteUrl = new Redirect(
             array(
@@ -137,9 +137,9 @@ class EntityTable extends RecordTable implements TableActionsSupport
             )
         );
 
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions->addAction(
+            new TableAction(
                 $deleteUrl->getUrl(), $this->getTranslator()->trans('RemoveSelected', [], StringUtilities::LIBRARIES)
             )
         );

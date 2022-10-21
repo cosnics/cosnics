@@ -22,21 +22,21 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     /**
      *
-     * @var integer
+     * @var int
      */
     private $itemDisplay;
 
     /**
      *
-     * @var boolean
+     * @var bool
      */
     private $needsCategory;
 
     /**
      *
      * @param string[] $formValues
-     * @param integer $itemDisplay
-     * @param boolean $needsCategory
+     * @param int $itemDisplay
+     * @param bool $needsCategory
      */
     public function __construct($formValues, $itemDisplay = Item::DISPLAY_BOTH, $needsCategory = true)
     {
@@ -47,7 +47,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getItemDisplay()
     {
@@ -56,7 +56,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     /**
      *
-     * @param integer $itemDisplay
+     * @param int $itemDisplay
      */
     public function setItemDisplay($itemDisplay)
     {
@@ -65,7 +65,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function getNeedsCategory()
     {
@@ -74,7 +74,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     /**
      *
-     * @param boolean $needsCategory
+     * @param bool $needsCategory
      */
     public function setNeedsCategory($needsCategory)
     {
@@ -82,7 +82,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     }
 
     /**
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function extra()
@@ -122,7 +122,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      */
     public function setDefaultRights(Item $item)
     {
@@ -142,7 +142,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function isAvailableForEveryone()
     {

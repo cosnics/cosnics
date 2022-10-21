@@ -14,7 +14,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -79,7 +79,7 @@ class BrowserComponent extends Manager
     public function get_additional_form_actions()
     {
         return array(
-            new TableFormAction(
+            new TableAction(
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD_ENTRIES
@@ -88,7 +88,7 @@ class BrowserComponent extends Manager
                 Translation::get('DownloadEntriesSelectedAssignments'),
                 false
             ),
-            new TableFormAction(
+            new TableAction(
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD_ENTRIES,

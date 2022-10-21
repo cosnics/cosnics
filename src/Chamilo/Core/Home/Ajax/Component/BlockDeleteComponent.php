@@ -14,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class BlockDeleteComponent extends Manager
 {
-    const PARAM_BLOCK = 'block';
+    public const PARAM_BLOCK = 'block';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()

@@ -7,5 +7,5 @@ namespace Chamilo\Core\User\Roles\Storage;
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'user_';
+    public const PREFIX = 'user_';
 }

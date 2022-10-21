@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Role extends DataClass
 {
-    const PROPERTY_ROLE = 'role';
+    public const PROPERTY_ROLE = 'role';
 
     /**
      *

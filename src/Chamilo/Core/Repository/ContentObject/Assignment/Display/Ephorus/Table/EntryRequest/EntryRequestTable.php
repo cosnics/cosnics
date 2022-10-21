@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Table
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -19,12 +19,12 @@ class EntryRequestTable extends DataClassTable implements TableActionsSupport
     const TABLE_IDENTIFIER = Manager::PARAM_ENTRY_ID;
     const EPHORUS_TRANSLATION_CONTEXT = 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus';
 
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(
                     array(Manager::PARAM_ACTION => Manager::ACTION_CHANGE_INDEX_VISIBILITY)
                 ),
@@ -33,8 +33,8 @@ class EntryRequestTable extends DataClassTable implements TableActionsSupport
             )
         );
 
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_CREATE)),
                 Translation:: get('AddDocuments', null, self::EPHORUS_TRANSLATION_CONTEXT),
                 false

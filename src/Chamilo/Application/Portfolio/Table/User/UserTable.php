@@ -7,8 +7,8 @@ use Chamilo\Application\Portfolio\Service\PublicationService;
 use Chamilo\Application\Portfolio\Service\RightsService;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Symfony\Component\Translation\Translator;
@@ -228,14 +228,14 @@ class UserTable extends DataClassTable implements TableActionsSupport
     /**
      * Returns the implemented form actions
      *
-     * @return TableFormActions
+     * @return TableActions
      */
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(Manager::context(), Manager::PARAM_FAVOURITE_USER_ID);
+        $actions = new TableActions(Manager::context(), Manager::PARAM_FAVOURITE_USER_ID);
 
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(
                     array(
                         \Chamilo\Application\Portfolio\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Manager::ACTION_BROWSE_FAVOURITES,
