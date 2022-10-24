@@ -1,4 +1,5 @@
 export default interface APIConfig {
+    readonly gradeBookRootURL: string;
     readonly loadGradeBookDataURL: string;
     readonly addCategoryURL: string;
     readonly updateCategoryURL: string;

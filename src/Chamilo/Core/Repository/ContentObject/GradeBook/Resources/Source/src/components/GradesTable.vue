@@ -72,11 +72,14 @@
                 </b-thead>
                 <b-tbody>
                     <b-tr v-for="user in displayedUsers" :key="'user-' + user.id" class="table-row table-body-row">
-                        <b-td class="col-sticky table-student">{{ user.lastName.toUpperCase() }}, {{ user.firstName }}</b-td>
+                        <b-td class="col-sticky table-student">
+                            <a v-if="gradeBookRootUrl" :href="`${gradeBookRootUrl}&gradebook_display_action=UserScores&user_id=${user.id}`">{{ user.lastName.toUpperCase() }}, {{ user.firstName }}</a>
+                            <template v-else>{{ user.lastName.toUpperCase() }}, {{ user.firstName }}</template>
+                        </b-td>
                         <template v-for="category in displayedCategories">
                             <b-td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></b-td>
                             <b-td v-else v-for="columnId in category.columnIds" :key="`${category.id}-${columnId}-result`" :class="{'no-value': gradeBook.getResult(columnId, user.id) === null, 'u-relative mod-edit': editStudentScoreId === user.id && editScoreId === columnId}">
-                                <student-result :id="`result-${columnId}-${user.id}`" :result="gradeBook.getResult(columnId, user.id)" :is-overwritten="gradeBook.isOverwrittenResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)"
+                                <student-result :id="`result-${columnId}-${user.id}`" :result="gradeBook.getResult(columnId, user.id)" :use-overwritten-flag="true" :is-overwritten="gradeBook.isOverwrittenResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)"
                                                 class="u-flex u-align-items-center u-justify-content-end u-cursor-pointer" :class="{'unused-score': !gradeBook.countsForEndResult(columnId)}"
                                                 @edit="showStudentScoreDialog(user.id, columnId)" @edit-comment="showStudentScoreDialog(user.id, columnId, 'comment')" @revert="revertOverwrittenResult(columnId, user.id)"></student-result>
                                 <score-input v-if="isStudentScoreDialogShown(user.id, columnId)" :menu-tab="scoreMenuTab" @menu-tab-changed="scoreMenuTab = $event" :score="gradeBook.getResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)" @comment-updated="updateResultComment(columnId, user.id, $event)" @ok="overwriteResult(columnId, user.id, $event)" @cancel="hideStudentScoreDialog"></score-input>
@@ -147,6 +150,7 @@ export default class GradesTable extends Vue {
     @Prop({type: [String, Number], default: null}) readonly saveColumnId!: ColumnId|null;
     @Prop({type: Number, default: null}) readonly saveCategoryId!: number|null;
     @Prop({type: Number, default: 5}) readonly itemsPerPage!: number;
+    @Prop({type: String, default: ''}) readonly gradeBookRootUrl!: string;
 
     get showNullCategory() {
         return this.isDraggingColumn || this.gradeBook.nullCategory.columnIds.length > 0;

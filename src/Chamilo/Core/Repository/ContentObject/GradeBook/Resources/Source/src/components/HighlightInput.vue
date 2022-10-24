@@ -56,8 +56,8 @@ export default class HighlightInput extends Vue {
     min-width: 170px;
     padding: 8px 6px;
     position: absolute;
-    /*top: -4px;*/
-    top: 0;
+    top: -3px;
+    /*top: 0;*/
     width: 104%;
 }
 

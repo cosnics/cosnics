@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="gradebook-table-container">
-                <grades-table :grade-book="gradeBook" :search-terms="studentSearchTerms" :busy="tableBusy" :save-column-id="saveColumnId" :save-category-id="saveCategoryId" :items-per-page="itemsPerPage"
+                <grades-table :grade-book="gradeBook" :search-terms="studentSearchTerms" :busy="tableBusy" :save-column-id="saveColumnId" :save-category-id="saveCategoryId" :items-per-page="itemsPerPage" :grade-book-root-url="apiConfig.gradeBookRootURL"
                               @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"
                               @update-score-comment="onUpdateScoreComment" @overwrite-result="onOverwriteResult" @revert-overwritten-result="onRevertOverwrittenResult"
                               @change-category="onChangeCategory" @move-category="onMoveCategory"
