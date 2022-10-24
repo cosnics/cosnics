@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Manager as AjaxManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  *
@@ -26,6 +27,7 @@ class BrowserComponent extends Manager
     public function run()
     {
         $this->checkAccessRights();
+        BreadcrumbTrail::getInstance()->remove(count(BreadcrumbTrail::getInstance()->getBreadcrumbs()) - 1);
 
         return $this->getTwig()->render(
             Manager::context() . ':Browser.html.twig', $this->getTemplateProperties()
@@ -58,6 +60,11 @@ class BrowserComponent extends Manager
             'LANGUAGE' => $this->getTranslator()->getLocale(),
             'CONTENT_OBJECT_TITLE' => $gradebook->get_title(),
             'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
+            'GRADEBOOK_ROOT_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => null
+                ]
+            ),
             'LOAD_GRADEBOOK_DATA_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,

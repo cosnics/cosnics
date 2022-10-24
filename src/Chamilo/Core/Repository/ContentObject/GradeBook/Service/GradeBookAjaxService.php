@@ -67,9 +67,9 @@ class GradeBookAjaxService
     /**
      * @param GradeBookData $gradebookData
      * @param GradeBookItem[] $publicationItems
-     *
+     * @param bool $canUpdate
      */
-    public function updateGradeBookData(GradeBookData $gradebookData, array $publicationItems)
+    public function updateGradeBookData(GradeBookData $gradebookData, array $publicationItems, bool $canUpdate = false)
     {
         $shouldUpdate = false;
         $gradebookItems = array();
@@ -104,7 +104,7 @@ class GradeBookAjaxService
             // todo: update the corresponding data structure of the gradebook.
         }
 
-        if ($shouldUpdate)
+        if ($canUpdate && $shouldUpdate)
         {
             $this->gradeBookService->saveGradeBook($gradebookData);
         }

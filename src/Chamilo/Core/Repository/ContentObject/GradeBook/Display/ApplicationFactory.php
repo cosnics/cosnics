@@ -28,10 +28,8 @@ class ApplicationFactory extends \Chamilo\Libraries\Architecture\Factory\Applica
     public function getDefaultAction($context)
     {
         if ($this->gradebookServiceBridge->canEditGradeBook()) {
-            return 'Browser';
+            return Manager::ACTION_BROWSE;
         }
-        return '';
-        //return Manager::ACTION_USER_PRESENCES;
+        return Manager::ACTION_USER_SCORES;
     }
-
 }

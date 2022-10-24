@@ -20,7 +20,7 @@ class LoadGradeBookDataComponent extends Manager implements CsrfComponentInterfa
         $targetUsers = $this->getGradeBookServiceBridge()->getTargetUsers();
         $gradeBookData = $this->getGradeBookAjaxService()->getGradeBookData($this->getGradeBook());
         $gradebookItems = $this->getGradeBookServiceBridge()->findPublicationGradeBookItems();
-        $this->getGradeBookAjaxService()->updateGradeBookData($gradeBookData, $gradebookItems);
+        $this->getGradeBookAjaxService()->updateGradeBookData($gradeBookData, $gradebookItems, true);
 
         $users = array_map(function(User $user) {
             return GradeBookUserJSONModel::fromUser($user);
