@@ -149,7 +149,8 @@ class EventParser
             $this->getSource($this->getAvailableCalendar()->getName()), Manager::context()
         );
 
-        $event->setOffice365CalendarEvent($office365CalendarEvent);
+        // Trying to keep the objects a bit smaller
+        //$event->setOffice365CalendarEvent($office365CalendarEvent);
 
         return array($event);
     }
