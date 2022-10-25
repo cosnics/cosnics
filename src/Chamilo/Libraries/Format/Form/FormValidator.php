@@ -106,8 +106,9 @@ class FormValidator extends HTML_QuickForm
      * Returns the HTML representation of this form.
      *
      * @return string
+     * @throws \QuickformException
      */
-    public function render(?string $in_data = null)
+    public function render(?string $in_data = null): string
     {
         $error = false;
 
