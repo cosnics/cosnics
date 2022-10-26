@@ -4,8 +4,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Cour
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -17,13 +17,13 @@ class CourseGroupTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_COURSE_GROUP;
 
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(Manager::context(), self::TABLE_IDENTIFIER);
+        $actions = new TableActions(Manager::context(), self::TABLE_IDENTIFIER);
         if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COURSE_GROUP)),
                     Translation::get('RemoveSelectedCourseGroups')));
         }

@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Table\Item;
 
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -21,22 +21,22 @@ class ItemTable extends DataClassTable implements TableActionsSupport
     /**
      * Returns the implemented form actions
      * 
-     * @return TableFormActions
+     * @return TableActions
      */
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         
         if ($this->get_component()->canEditComplexContentObjectPathNode($this->get_component()->get_current_node()))
         {
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(
                         array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM)), 
                     Translation::get('RemoveSelected')));
             
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_MOVE)), 
                     Translation::get('MoveSelected'), 
                     false));
@@ -44,8 +44,8 @@ class ItemTable extends DataClassTable implements TableActionsSupport
         
         if ($this->get_component()->get_parent()->is_allowed_to_set_content_object_rights())
         {
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_RIGHTS)), 
                     Translation::get('ConfigureRightsSelected'), 
                     false));

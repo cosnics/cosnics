@@ -14,8 +14,8 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class BlockSortComponent extends Manager
 {
-    const PARAM_COLUMN = 'column';
-    const PARAM_ORDER = 'order';
+    public const PARAM_COLUMN = 'column';
+    public const PARAM_ORDER = 'order';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()

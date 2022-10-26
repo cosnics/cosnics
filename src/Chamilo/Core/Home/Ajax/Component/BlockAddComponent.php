@@ -19,10 +19,10 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class BlockAddComponent extends Manager
 {
-    const PARAM_BLOCK = 'block';
-    const PARAM_COLUMN = 'column';
-    const PARAM_ORDER = 'order';
-    const PROPERTY_BLOCK = 'block';
+    public const PARAM_BLOCK = 'block';
+    public const PARAM_COLUMN = 'column';
+    public const PARAM_ORDER = 'order';
+    public const PROPERTY_BLOCK = 'block';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()

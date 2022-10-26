@@ -3,8 +3,8 @@ namespace Chamilo\Application\Weblcms\Course\Table\CourseTable;
 
 use Chamilo\Application\Weblcms\Course\Manager;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -29,12 +29,12 @@ class CourseTable extends RecordTable implements TableActionsSupport
     /**
      * Returns the available table actions
      */
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)), 
                 Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES)));
         

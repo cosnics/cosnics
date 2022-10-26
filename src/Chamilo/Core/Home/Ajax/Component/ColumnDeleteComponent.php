@@ -14,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class ColumnDeleteComponent extends Manager
 {
-    const PARAM_COLUMN = 'column';
+    public const PARAM_COLUMN = 'column';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()

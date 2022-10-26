@@ -24,9 +24,9 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
  */
 class BlockConfigComponent extends Manager
 {
-    const PARAM_BLOCK = 'block';
-    const PARAM_DATA = 'data';
-    const PROPERTY_BLOCK = 'block';
+    public const PARAM_BLOCK = 'block';
+    public const PARAM_DATA = 'data';
+    public const PROPERTY_BLOCK = 'block';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()

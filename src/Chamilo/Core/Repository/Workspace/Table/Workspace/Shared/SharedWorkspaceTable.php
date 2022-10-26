@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Workspace\Table\Workspace\Shared;
 
 use Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 
 /**
  *
@@ -17,8 +17,8 @@ class SharedWorkspaceTable extends WorkspaceTable
     /**
      * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTable::getTableActions()
      */
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        return new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        return new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
     }
 }

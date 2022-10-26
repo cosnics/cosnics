@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeN
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -21,19 +21,19 @@ class TreeNodeTable extends DataClassTable implements TableActionsSupport
     /**
      * Returns the implemented form actions
      *
-     * @return TableFormActions
+     * @return TableActions
      */
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
         if ($this->get_component()->canEditTreeNode(
             $this->get_component()->getCurrentTreeNode()
         )
         )
         {
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(
                         array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM),
                         array(Manager::PARAM_CHILD_ID)
@@ -42,8 +42,8 @@ class TreeNodeTable extends DataClassTable implements TableActionsSupport
                 )
             );
 
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(
                         array(Manager::PARAM_ACTION => Manager::ACTION_MOVE)
                     ),

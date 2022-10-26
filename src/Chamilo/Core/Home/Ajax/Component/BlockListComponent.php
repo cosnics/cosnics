@@ -18,7 +18,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
  */
 class BlockListComponent extends Manager
 {
-    const PROPERTY_BLOCKS = 'blocks';
+    public const PROPERTY_BLOCKS = 'blocks';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()

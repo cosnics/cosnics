@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\Quota\Table\Request;
 use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -94,19 +94,19 @@ class RequestTable extends DataClassTable implements TableActionsSupport
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
+     * @return \Chamilo\Libraries\Format\Table\FormAction\TableActions
      */
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
         if ($this->getRightsService()->canUserViewAllQuotaRequests($this->get_component()->getUser()))
         {
             if ($this->get_component()->get_table_type() == self::TYPE_PENDING ||
                 $this->get_component()->get_table_type() == self::TYPE_DENIED)
             {
-                $actions->add_form_action(
-                    new TableFormAction(
+                $actions->addAction(
+                    new TableAction(
                         $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_GRANT)),
                         Translation::get('GrantSelected', null, StringUtilities::LIBRARIES)
                     )
@@ -115,8 +115,8 @@ class RequestTable extends DataClassTable implements TableActionsSupport
 
             if ($this->get_component()->get_table_type() == self::TYPE_PENDING)
             {
-                $actions->add_form_action(
-                    new TableFormAction(
+                $actions->addAction(
+                    new TableAction(
                         $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DENY)),
                         Translation::get('DenySelected', null, StringUtilities::LIBRARIES)
                     )
@@ -124,8 +124,8 @@ class RequestTable extends DataClassTable implements TableActionsSupport
             }
         }
 
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)),
                 Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES)
             )

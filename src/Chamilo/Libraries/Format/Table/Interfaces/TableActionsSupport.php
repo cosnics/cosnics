@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Table\Interfaces;
 
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 
 /**
  * This interface determines whether or not your table supports form actions
@@ -14,5 +14,5 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 interface TableActionsSupport
 {
 
-    public function getTableActions(): TableFormActions;
+    public function getTableActions(): TableActions;
 }

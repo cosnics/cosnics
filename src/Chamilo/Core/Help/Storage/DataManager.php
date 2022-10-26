@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'help_';
+    public const PREFIX = 'help_';
 
     public static function retrieve_help_item_by_context($context, $identifier, $language)
     {

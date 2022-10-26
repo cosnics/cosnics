@@ -1,109 +1,83 @@
 <?php
 namespace Chamilo\Libraries\Format\Table\Column;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * This class represents a column for a table Refactoring from ObjectTable to split between a table based on a record
- * and based on an object
- *
  * @package Chamilo\Libraries\Format\Table\Column
  * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class TableColumn
 {
     use ClassContext;
 
     public const CSS_CLASSES_COLUMN_CONTENT = 'content';
-
     public const CSS_CLASSES_COLUMN_HEADER = 'header';
 
     /**
-     * The CSS Classes
-     *
-     * @var string[]
+     * @var string[][]
      */
-    protected $cssClasses;
+    protected array $cssClasses = [];
+
+    private string $name;
+
+    private string $title;
 
     /**
-     * The name of the column
-     *
-     * @var string
-     */
-    private $name;
-
-    /**
-     * The visible title of the column in the layout
-     */
-    private $title;
-
-    /**
-     * @param string $name
-     * @param string $title  - [OPTIONAL] default null - translation of the column name
-     * @param bool $sortable - [OPTIONAL] default null
-     * @param string $headerCssClasses
-     * @param string $contentCssClasses
+     * @param string[] $headerCssClasses
+     * @param string[] $contentCssClasses
      */
     public function __construct(
-        $name = '', $title = null, $headerCssClasses = null, $contentCssClasses = null
+        string $name, string $title, ?array $headerCssClasses = null, ?array $contentCssClasses = null
     )
     {
-        $this->set_name($name);
+        $this->name = $name;
+        $this->title = $title;
 
-        if (is_null($title))
+        if ($headerCssClasses)
         {
-            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-
-            $index = 1;
-
-            do
-            {
-                $called_class = $backtrace[$index]['class'];
-                $context = ClassnameUtilities::getInstance()->getNamespaceFromClassname($called_class);
-                $index ++;
-            }
-            while ($context == __NAMESPACE__);
-
-            $title = Translation::get(
-                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), [], $context
-            );
+            $this->cssClasses[self::CSS_CLASSES_COLUMN_HEADER] = $headerCssClasses;
         }
 
-        $this->set_title($title);
-
-        $this->setCssClasses([
-            self::CSS_CLASSES_COLUMN_HEADER => $headerCssClasses,
-            self::CSS_CLASSES_COLUMN_CONTENT => $contentCssClasses
-        ]);
+        if ($contentCssClasses)
+        {
+            $this->cssClasses[self::CSS_CLASSES_COLUMN_CONTENT] = $contentCssClasses;
+        }
     }
 
     /**
-     * @return string[]
+     * @return string[][]
      */
-    public function getCssClasses()
+    public function getCssClasses(): array
     {
         return $this->cssClasses;
     }
 
-    /**
-     * @param string[] $cssClasses
-     */
-    public function setCssClasses($cssClasses)
+    public function get_name(): string
     {
-        $this->cssClasses = $cssClasses;
+        return $this->name;
+    }
+
+    public function get_title(): string
+    {
+        return $this->title;
     }
 
     /**
-     * Returns the name of this column
-     *
-     * @return string
+     * @throws \ReflectionException
      */
-    public function get_name()
+    public static function package(): string
     {
-        return $this->name;
+        return static::context();
+    }
+
+    /**
+     * @param string[][] $cssClasses
+     */
+    public function setCssClasses(?array $cssClasses)
+    {
+        $this->cssClasses = $cssClasses;
     }
 
     /**
@@ -111,36 +85,13 @@ abstract class TableColumn
      *
      * @param string $name
      */
-    public function set_name($name)
+    public function set_name(string $name)
     {
         $this->name = $name;
     }
 
-    /**
-     * Returns the title of this column
-     *
-     * @return string
-     */
-    public function get_title()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Sets the title of this column
-     *
-     * @param string $title
-     */
-    public function set_title($title)
+    public function set_title(string $title)
     {
         $this->title = $title;
-    }
-
-    /**
-     * @return string
-     */
-    public static function package()
-    {
-        return static::context();
     }
 }

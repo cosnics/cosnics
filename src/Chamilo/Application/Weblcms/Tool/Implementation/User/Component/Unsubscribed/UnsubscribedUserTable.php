@@ -3,8 +3,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Unsubsc
 
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -19,24 +19,24 @@ class UnsubscribedUserTable extends DataClassTable implements TableActionsSuppor
 {
     const TABLE_IDENTIFIER = Manager::PARAM_OBJECTS;
 
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
         $translator = Translation::getInstance();
         if (! Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP))
         {
             // add subscribe options
-            $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+            $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
             
             // Allowed to subscribe an user
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(
                         array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_SUBSCRIBE)), 
                     $translator->getTranslation('SubscribeSelectedAsStudent', null, Manager::context()), 
                     false));
             
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_SUBSCRIBE_AS_ADMIN)), 
@@ -44,8 +44,8 @@ class UnsubscribedUserTable extends DataClassTable implements TableActionsSuppor
                     false));
             
             // Allowed to request to subscribe an user
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_REQUEST_SUBSCRIBE_USERS)), 

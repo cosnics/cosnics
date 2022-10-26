@@ -3,8 +3,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Subscri
 
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -24,17 +24,17 @@ class SubscribedUserBrowserTable extends RecordTable implements TableActionsSupp
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         
         if ($this->get_component()->is_course_admin($this->get_component()->get_user()))
         {
             // if we are not editing groups
             if (! Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP))
             {
-                $actions->add_form_action(
-                    new TableFormAction(
+                $actions->addAction(
+                    new TableAction(
                         $this->get_component()->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_UNSUBSCRIBE)), 
@@ -42,8 +42,8 @@ class SubscribedUserBrowserTable extends RecordTable implements TableActionsSupp
                         false));
                 
                 // make teacher
-                $actions->add_form_action(
-                    new TableFormAction(
+                $actions->addAction(
+                    new TableAction(
                         $this->get_component()->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_CHANGE_USER_STATUS_TEACHER)), 
@@ -51,8 +51,8 @@ class SubscribedUserBrowserTable extends RecordTable implements TableActionsSupp
                         false));
                 
                 // make student
-                $actions->add_form_action(
-                    new TableFormAction(
+                $actions->addAction(
+                    new TableAction(
                         $this->get_component()->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_CHANGE_USER_STATUS_STUDENT)), 

@@ -21,9 +21,9 @@ use Exception;
  */
 class ColumnAddComponent extends Manager
 {
-    const PARAM_TAB = 'tab';
-    const PROPERTY_HTML = 'html';
-    const PROPERTY_WIDTH = 'width';
+    public const PARAM_TAB = 'tab';
+    public const PROPERTY_HTML = 'html';
+    public const PROPERTY_WIDTH = 'width';
 
     /**
      *

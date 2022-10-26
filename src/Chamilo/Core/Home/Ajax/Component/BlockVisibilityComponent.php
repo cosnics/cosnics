@@ -13,8 +13,8 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class BlockVisibilityComponent extends Manager
 {
-    const PARAM_BLOCK = 'block';
-    const PARAM_VISIBILITY = 'visibility';
+    public const PARAM_BLOCK = 'block';
+    public const PARAM_VISIBILITY = 'visibility';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()

@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -26,14 +26,6 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class HtmlTable
 {
-    public const PARAM_NUMBER_OF_COLUMNS_PER_PAGE = 'columns_per_page';
-    public const PARAM_NUMBER_OF_ROWS_PER_PAGE = 'per_page';
-    public const PARAM_ORDER_COLUMN_DIRECTION = 'direction';
-    public const PARAM_ORDER_COLUMN_INDEX = 'column';
-    public const PARAM_PAGE_NUMBER = 'page_nr';
-    public const PARAM_SELECT_ALL = 'selectall';
-    public const PARAM_TOTAL_NUMBER_OF_ITEMS = 'total';
-
     /**
      * @var string[]
      */
@@ -79,7 +71,7 @@ abstract class HtmlTable
      */
     public function render(
         array $tableColumns, ArrayCollection $tableRows, string $tableName, array $parameterNames,
-        TableParameterValues $parameterValues, ?TableFormActions $tableFormActions = null
+        TableParameterValues $parameterValues, ?TableActions $tableActions = null
     ): string
     {
         $htmlTable = new HTML_Table(['class' => $this->getTableClasses()], 0, true);
@@ -89,50 +81,36 @@ abstract class HtmlTable
             return $this->getEmptyTable($htmlTable);
         }
 
-        $this->setupTableColumns(
-            $htmlTable, $tableColumns, $parameterNames, $parameterValues, $tableFormActions
+        $this->processTableColumns(
+            $htmlTable, $tableColumns, $parameterNames, $parameterValues, $tableActions
         );
 
         $html = [];
 
         $html[] = $this->renderTableHeader(
-            $tableName, $parameterValues, $parameterNames, $tableFormActions
+            $tableName, $parameterValues, $parameterNames, $tableActions
         );
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12">';
 
         $html[] = '<div class="' . $this->getTableContainerClasses() . '">';
-        $html[] = $this->renderTableBody($htmlTable, $tableRows, $parameterValues, $tableFormActions);
+        $html[] = $this->renderTableBody($htmlTable, $tableColumns, $tableRows, $tableActions);
         $html[] = '</div>';
 
         $html[] = '</div>';
         $html[] = '</div>';
 
         $html[] = $this->renderTableFooter(
-            $tableName, $parameterValues, $parameterNames, $tableFormActions
+            $tableName, $parameterValues, $parameterNames, $tableActions
         );
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Transform all data in a table-row, using the filters defined by the function set_column_filter(...) defined
-     * elsewhere in this class.
-     * If you've defined actions, the first element of the given row will be converted into a
-     * checkbox
-     *
-     * @param string[] $row
-     *
-     * @return string[]
-     */
-    abstract public function filterData(
-        array $row, TableParameterValues $parameterValues, ?TableFormActions $tableFormActions = null
-    ): array;
-
-    public function getActionsButtonToolbar(TableFormActions $tableFormActions): ButtonToolBar
+    public function getActionsButtonToolbar(TableActions $tableActions): ButtonToolBar
     {
-        $formActions = $tableFormActions->getFormActions();
+        $formActions = $tableActions->getActions();
         $formActionsCount = count($formActions);
 
         $firstAction = array_shift($formActions);
@@ -142,16 +120,16 @@ abstract class HtmlTable
         if ($formActionsCount > 1)
         {
             $button = new SplitDropdownButton(
-                $firstAction->get_title(), null, $firstAction->get_action(), AbstractButton::DISPLAY_LABEL,
-                $firstAction->getConfirmation(), ['btn-sm btn-table-action'], null, ['btn-table-action']
+                $firstAction->getTitle(), null, $firstAction->getAction(), AbstractButton::DISPLAY_LABEL,
+                $firstAction->getConfirmationMessage(), ['btn-sm btn-table-action'], null, ['btn-table-action']
             );
 
             foreach ($formActions as $formAction)
             {
                 $button->addSubButton(
                     new SubButton(
-                        $formAction->get_title(), null, $formAction->get_action(), AbstractButton::DISPLAY_LABEL,
-                        $formAction->getConfirmation()
+                        $formAction->getTitle(), null, $formAction->getAction(), AbstractButton::DISPLAY_LABEL,
+                        $formAction->getConfirmationMessage()
                     )
                 );
             }
@@ -162,36 +140,13 @@ abstract class HtmlTable
         {
             $buttonToolBar->addItem(
                 new Button(
-                    $firstAction->get_title(), null, $firstAction->get_action(), AbstractButton::DISPLAY_LABEL,
-                    $firstAction->getConfirmation(), ['btn-sm', 'btn-table-action']
+                    $firstAction->getTitle(), null, $firstAction->getAction(), AbstractButton::DISPLAY_LABEL,
+                    $firstAction->getConfirmationMessage(), ['btn-sm', 'btn-table-action']
                 )
             );
         }
 
         return $buttonToolBar;
-    }
-
-    public function getCheckboxHtml(
-        TableFormActions $tableFormActions, TableParameterValues $parameterValues, string $value
-    ): string
-    {
-        $html = [];
-
-        $html[] = '<div class="checkbox checkbox-primary">';
-        $html[] =
-            '<input class="styled styled-primary" type="checkbox" name="' . $tableFormActions->getIdentifierName() .
-            '[]" value="' . $value . '"';
-
-        if ($parameterValues->getSelectAll())
-        {
-            $html[] = ' checked="checked"';
-        }
-
-        $html[] = '/>';
-        $html[] = '<label></label>';
-        $html[] = '</div>';
-
-        return implode('', $html);
     }
 
     /**
@@ -263,42 +218,92 @@ abstract class HtmlTable
      * @throws \TableException
      */
     public function prepareTableData(
-        HTML_Table $htmlTable, ArrayCollection $tableRows, TableParameterValues $parameterValues,
-        ?TableFormActions $tableFormActions = null
+        HTML_Table $htmlTable, array $tableColumns, ArrayCollection $tableRows, ?TableActions $tableActions = null
     )
     {
-        $this->processSourceData($htmlTable, $tableRows, $parameterValues, $tableFormActions);
-        $this->processCellAttributes($htmlTable);
+        $this->processSourceData($htmlTable, $tableRows);
+        $this->processCellAttributes($htmlTable, $tableColumns, $tableActions);
+        $this->processEmptyCells($htmlTable);
     }
 
     /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     *
      * @throws \TableException
      */
-    public function processCellAttributes(HTML_Table $htmlTable)
+    public function processCellAttributes(HTML_Table $htmlTable, array $tableColumns, ?TableActions $tableActions = null
+    )
     {
-//        foreach ($this->headerAttributes as $column => $headerAttribute)
-//        {
-//            $htmlTable->setCellAttributes(0, $column, $headerAttribute);
-//        }
-
-        foreach ($this->contentCellAttributes as $column => $contentCellAttribute)
+        foreach ($tableColumns as $key => $tableColumn)
         {
-            $htmlTable->setColAttributes($column, $contentCellAttribute);
+            $cssClasses = $tableColumn->getCssClasses();
+
+            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT]))
+            {
+                $contentAttributes = ['class' => $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]];
+
+                $htmlTable->setColAttributes(
+                    ($tableActions instanceof TableActions && $tableActions->hasActions() ? $key + 1 : $key),
+                    $contentAttributes
+                );
+            }
         }
     }
 
     /**
      * @throws \TableException
      */
-    public function processSourceData(
-        HTML_Table $htmlTable, ArrayCollection $tableRows, TableParameterValues $parameterValues,
-        ?TableFormActions $tableFormActions = null
-    )
+    protected function processEmptyCells(HTML_Table $htmlTable)
+    {
+        $htmlTable->setAutoFill('-');
+    }
+
+    /**
+     * @throws \TableException
+     */
+    public function processSourceData(HTML_Table $htmlTable, ArrayCollection $tableRows)
     {
         foreach ($tableRows as $row)
         {
-            $row = $this->filterData($row, $parameterValues, $tableFormActions);
             $htmlTable->addRow($row);
+        }
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     * @param string[] $parameterNames
+     *
+     * @throws \TableException
+     */
+    protected function processTableColumns(
+        HTML_Table $htmlTable, array $tableColumns, array $parameterNames, TableParameterValues $parameterValues,
+        ?TableActions $tableActions = null
+    )
+    {
+        if ($tableActions instanceof TableActions && $tableActions->hasActions())
+        {
+            $columnHeaderHtml =
+                '<div class="checkbox checkbox-primary"><input class="styled styled-primary sortableTableSelectToggle" type="checkbox" name="sortableTableSelectToggle" /><label></label></div>';
+            $this->setColumnHeader($htmlTable, $parameterNames, $parameterValues, 0, $columnHeaderHtml, false);
+        }
+
+        foreach ($tableColumns as $key => $tableColumn)
+        {
+            $headerAttributes = [];
+
+            $cssClasses = $tableColumn->getCssClasses();
+
+            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
+            {
+                $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
+            }
+
+            $this->setColumnHeader(
+                $htmlTable, $parameterNames, $parameterValues,
+                ($tableActions instanceof TableActions && $tableActions->hasActions() ? $key + 1 : $key),
+                $this->getSecurity()->removeXSS($tableColumn->get_title()),
+                $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->is_sortable(), $headerAttributes
+            );
         }
     }
 
@@ -306,16 +311,15 @@ abstract class HtmlTable
      * @throws \ReflectionException
      * @throws \QuickformException
      */
-    public function renderActions(string $tableName, TableFormActions $tableFormActions): string
+    public function renderActions(string $tableName, TableActions $tableActions): string
     {
-        $buttonToolBarRenderer = new ButtonToolBarRenderer($this->getActionsButtonToolbar($tableFormActions));
+        $buttonToolBarRenderer = new ButtonToolBarRenderer($this->getActionsButtonToolbar($tableActions));
 
         $html = [];
 
         $html[] = $buttonToolBarRenderer->render();
         $html[] =
-            '<input type="hidden" name="' . $tableName . '_namespace" value="' . $tableFormActions->get_namespace() .
-            '"/>';
+            '<input type="hidden" name="' . $tableName . '_namespace" value="' . $tableActions->getNamespace() . '"/>';
         $html[] = '<input type="hidden" name="table_name" value="' . $tableName . '"/>';
 
         return implode(PHP_EOL, $html);
@@ -355,11 +359,10 @@ abstract class HtmlTable
      * @throws \TableException
      */
     public function renderTableBody(
-        HTML_Table $htmlTable, ArrayCollection $tableRows, TableParameterValues $parameterValues,
-        ?TableFormActions $tableFormActions = null
+        HTML_Table $htmlTable, array $tableColumns, ArrayCollection $tableRows, ?TableActions $tableActions = null
     ): string
     {
-        $this->prepareTableData($htmlTable, $tableRows, $parameterValues, $tableFormActions);
+        $this->prepareTableData($htmlTable, $tableColumns, $tableRows, $tableActions);
 
         return $htmlTable->toHtml();
     }
@@ -382,10 +385,10 @@ abstract class HtmlTable
      */
     public function renderTableFooter(
         string $tableName, TableParameterValues $parameterValues, array $parameterNames,
-        ?TableFormActions $tableFormActions = null
+        ?TableActions $tableFormActions = null
     ): string
     {
-        $hasFormActions = $tableFormActions instanceof TableFormActions && $tableFormActions->hasFormActions();
+        $hasFormActions = $tableFormActions instanceof TableActions && $tableFormActions->hasActions();
 
         $html = [];
 
@@ -427,20 +430,21 @@ abstract class HtmlTable
      */
     public function renderTableHeader(
         string $tableName, TableParameterValues $parameterValues, array $parameterNames,
-        ?TableFormActions $tableFormActions = null
+        ?TableActions $tableActions = null
     ): string
     {
-        $hasFormActions = $tableFormActions instanceof TableFormActions && $tableFormActions->hasFormActions();
+        $hasFormActions = $tableActions instanceof TableActions && $tableActions->hasActions();
 
         $html = [];
 
         if ($hasFormActions)
         {
-            $formActions = $tableFormActions->getFormActions();
+            $formActions = $tableActions->getActions();
             $firstFormAction = array_shift($formActions);
 
-            $html[] = '<form class="' . $this->getFormClasses() . '" method="post" action="' .
-                $firstFormAction->get_action() . '" name="form_' . $tableName . '">';
+            $html[] =
+                '<form class="' . $this->getFormClasses() . '" method="post" action="' . $firstFormAction->getAction() .
+                '" name="form_' . $tableName . '">';
         }
 
         $html[] = '<div class="row">';
@@ -448,7 +452,7 @@ abstract class HtmlTable
 
         if ($hasFormActions)
         {
-            $html[] = $this->renderActions($tableName, $tableFormActions);
+            $html[] = $this->renderActions($tableName, $tableActions);
         }
 
         $html[] = '</div>';
@@ -472,18 +476,15 @@ abstract class HtmlTable
     /**
      * @param string[] $parameterNames
      * @param string[] $headerAttributes
-     * @param string[] $cellAttributes
      *
      * @throws \TableException
      */
     public function setColumnHeader(
         HTML_Table $htmlTable, array $parameterNames, TableParameterValues $parameterValues, int $columnIndex,
-        string $label, bool $isSortable = true, ?array $headerAttributes = null, ?array $cellAttributes = null
+        string $label, bool $isSortable = true, ?array $headerAttributes = null
     )
     {
         $header = $htmlTable->getHeader();
-
-        $header->setColAttributes($columnIndex, $headerAttributes);
 
         if ($isSortable)
         {
@@ -530,59 +531,6 @@ abstract class HtmlTable
         }
 
         $header->setHeaderContents(0, $columnIndex, $content);
-
-        if (!is_null($cellAttributes))
-        {
-            $this->contentCellAttributes[$columnIndex] = $cellAttributes;
-        }
-
-        if (!is_null($headerAttributes))
-        {
-            $this->headerAttributes[$columnIndex] = $headerAttributes;
-        }
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
-     * @param string[] $parameterNames
-     *
-     * @throws \TableException
-     */
-    protected function setupTableColumns(
-        HTML_Table $htmlTable, array $tableColumns, array $parameterNames, TableParameterValues $parameterValues,
-        ?TableFormActions $tableFormActions = null
-    )
-    {
-        if ($tableFormActions instanceof TableFormActions && $tableFormActions->hasFormActions())
-        {
-            $columnHeaderHtml =
-                '<div class="checkbox checkbox-primary"><input class="styled styled-primary sortableTableSelectToggle" type="checkbox" name="sortableTableSelectToggle" /><label></label></div>';
-            $this->setColumnHeader($htmlTable, $parameterNames, $parameterValues, 0, $columnHeaderHtml, false);
-        }
-
-        foreach ($tableColumns as $key => $tableColumn)
-        {
-            $headerAttributes = $contentAttributes = [];
-
-            $cssClasses = $tableColumn->getCssClasses();
-
-            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
-            {
-                $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
-            }
-
-            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT]))
-            {
-                $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
-            }
-
-            $this->setColumnHeader(
-                $htmlTable, $parameterNames, $parameterValues,
-                ($tableFormActions instanceof TableFormActions ? $key + 1 : $key),
-                $this->getSecurity()->removeXSS($tableColumn->get_title()),
-                $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->is_sortable(), $headerAttributes,
-                $contentAttributes
-            );
-        }
+        $header->setColAttributes($columnIndex, $headerAttributes);
     }
 }

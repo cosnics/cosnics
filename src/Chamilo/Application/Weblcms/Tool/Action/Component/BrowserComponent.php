@@ -28,8 +28,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -729,7 +729,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->get_parent()->get_browser_type(), $this
         );
 
-        $actions = new TableFormActions(
+        $actions = new TableActions(
             'Chamilo\Application\Weblcms\Table\Publication\Table',
             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
         );
@@ -740,14 +740,14 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             foreach ($additional_form_actions as $form_action)
             {
-                $actions->add_form_action($form_action);
+                $actions->addAction($form_action);
             }
         }
 
         if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE
@@ -756,8 +756,8 @@ class BrowserComponent extends Manager implements DelegateComponent
                 )
             );
 
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_TOGGLE_VISIBILITY
@@ -769,8 +769,8 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT) && $this->get_parent() instanceof Categorizable)
         {
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_TO_CATEGORY

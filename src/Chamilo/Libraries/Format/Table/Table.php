@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Platform\ChamiloRequest;
@@ -152,8 +152,10 @@ abstract class Table
         }
     }
 
-    protected function determineOrderBy(TableParameterValues $parameterValues, bool $hasTableActions = false): OrderBy
+    protected function determineOrderBy(TableParameterValues $parameterValues, ?TableActions $tableActions = null
+    ): OrderBy
     {
+		$hasTableActions = $tableActions instanceof TableActions && $tableActions->hasActions();
         // Calculates the order column on whether or not the table uses form actions (because sortable
         // table uses data arrays)
         $calculatedOrderColumn = $parameterValues->getOrderColumnIndex() - ($hasTableActions ? 1 : 0);
@@ -241,6 +243,28 @@ abstract class Table
         return $tableParameterValues;
     }
 
+    public function getCheckboxHtml(
+        TableActions $tableActions, TableParameterValues $parameterValues, string $value
+    ): string
+    {
+        $html = [];
+
+        $html[] = '<div class="checkbox checkbox-primary">';
+        $html[] = '<input class="styled styled-primary" type="checkbox" name="' . $tableActions->getIdentifierName() .
+            '[]" value="' . $value . '"';
+
+        if ($parameterValues->getSelectAll())
+        {
+            $html[] = ' checked="checked"';
+        }
+
+        $html[] = '/>';
+        $html[] = '<label></label>';
+        $html[] = '</div>';
+
+        return implode('', $html);
+    }
+
     /**
      * Gets the column at the given index in the model.
      */
@@ -258,19 +282,19 @@ abstract class Table
     }
 
     protected function getData(
-        TableParameterValues $parameterValues, ?Condition $condition = null, bool $hasTableActions = false
+        TableParameterValues $parameterValues, ?Condition $condition = null, ?TableActions $tableActions = null
     ): ArrayCollection
     {
         $results = $this->retrieveData(
             $condition, $parameterValues->getNumberOfRowsPerPage(), $this->determineOffset($parameterValues),
-            $this->determineOrderBy($parameterValues, $hasTableActions)
+            $this->determineOrderBy($parameterValues, $tableActions)
         );
 
         $tableData = [];
 
         foreach ($results as $result)
         {
-            $tableData[] = $this->processData($result, $hasTableActions);
+            $tableData[] = $this->processData($result, $parameterValues, $tableActions);
         }
 
         return new ArrayCollection($tableData);
@@ -360,8 +384,8 @@ abstract class Table
 
     public function hasTableActions(): bool
     {
-        return $this instanceof TableActionsSupport && $this->getTableActions() instanceof TableFormActions &&
-            $this->getTableActions()->hasFormActions();
+        return $this instanceof TableActionsSupport && $this->getTableActions() instanceof TableActions &&
+            $this->getTableActions()->hasActions();
     }
 
     abstract protected function initializeColumns();
@@ -371,13 +395,22 @@ abstract class Table
      *
      * @return string[]
      */
-    protected function processData($result, bool $hasTableActions = false): array
+    protected function processData($result, TableParameterValues $parameterValues, ?TableActions $tableActions = null
+    ): array
     {
         $rowData = [];
 
-        if ($hasTableActions)
+        if ($tableActions instanceof TableActions && $tableActions->hasActions())
         {
-            $rowData[] = $this->renderIdentifierCell($result);
+            $identifierCellContent = $this->renderIdentifierCell($result);
+
+            if (strlen($identifierCellContent) > 0)
+            {
+                $identifierCellContent =
+                    $this->getCheckboxHtml($tableActions, $parameterValues, $identifierCellContent);
+            }
+
+            $rowData[] = $identifierCellContent;
         }
 
         foreach ($this->getColumns() as $column)

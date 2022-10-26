@@ -3,8 +3,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Compone
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -19,11 +19,11 @@ class CourseSectionsTable extends DataClassTable implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_COURSE_SECTION_ID;
 
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
-        $actions->add_form_action(
-            new TableFormAction(
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions->addAction(
+            new TableAction(
                 $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_REMOVE_COURSE_SECTION)),
                 Translation::get('RemoveSelected')));
         return $actions;

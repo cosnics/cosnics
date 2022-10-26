@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Table\AnswerF
 use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 
 /**
@@ -23,9 +23,9 @@ class AnswerFeedbackTypeTable extends DataClassTable implements TableActionsSupp
      *
      * @see \libraries\format\TableFormActionsSupport::get_implemented_form_actions()
      */
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         
         $types = array(
             Configuration::ANSWER_FEEDBACK_TYPE_NONE, 
@@ -38,8 +38,8 @@ class AnswerFeedbackTypeTable extends DataClassTable implements TableActionsSupp
         
         foreach ($types as $type)
         {
-            $actions->add_form_action(
-                new TableFormAction(
+            $actions->addAction(
+                new TableAction(
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_ANSWER_FEEDBACK_TYPE, 

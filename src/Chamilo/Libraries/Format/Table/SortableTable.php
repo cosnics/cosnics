@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -14,36 +13,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class SortableTable extends HtmlTable
 {
-
-    /**
-     * @param string[] $row
-     *
-     * @return string[]
-     */
-    public function filterData(
-        array $row, TableParameterValues $parameterValues, ?TableFormActions $tableFormActions = null
-    ): array
-    {
-        $hasActions = $tableFormActions instanceof TableFormActions && $tableFormActions->hasFormActions();
-
-        if ($hasActions)
-        {
-            if (strlen($row[0]) > 0)
-            {
-                $row[0] = $this->getCheckboxHtml($tableFormActions, $parameterValues, $row[0]);
-            }
-        }
-
-        foreach ($row as $index => & $value)
-        {
-            if (!is_numeric($value) && empty($value))
-            {
-                $value = '-';
-            }
-        }
-
-        return $row;
-    }
 
     public function getFormClasses(): string
     {

@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Table\Publication\Gallery;
 
 use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\RecordGalleryTable\RecordGalleryTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 
 /**
@@ -22,9 +22,9 @@ class ObjectPublicationGalleryTable extends RecordGalleryTable implements TableA
     /**
      * Returns the implemented form actions
      *
-     * @return TableFormActions
+     * @return TableActions
      */
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
         return $this->get_component()->get_actions();
     }

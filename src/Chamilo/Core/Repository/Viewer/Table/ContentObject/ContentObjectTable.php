@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\Viewer\Table\ContentObject;
 
 use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -48,14 +48,14 @@ class ContentObjectTable extends DataClassTable implements TableActionsSupport
         $this->set_query($query);
     }
 
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
-        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         
         if ($this->get_component()->get_maximum_select() != Manager::SELECT_SINGLE)
         {
-            $actions->add_form_action(
-                new TableFormAction($this->get_component()->get_url(), Translation::get('PublishSelected'), false));
+            $actions->addAction(
+                new TableAction($this->get_component()->get_url(), Translation::get('PublishSelected'), false));
         }
         
         return $actions;

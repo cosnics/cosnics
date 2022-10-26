@@ -4,7 +4,7 @@
     "description": "Cas authentication",
     "require": {
         "php": ">=7.4.0",
-        "apereo/phpcas": "1.5.*"
+        "apereo/phpcas": "1.8.*"
     },
     "require-dev": {
     },

@@ -10,10 +10,10 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class HelpItem extends DataClass
 {
-    const PROPERTY_CONTEXT = 'context';
-    const PROPERTY_IDENTIFIER = 'identifier';
-    const PROPERTY_LANGUAGE = 'language';
-    const PROPERTY_URL = 'url';
+    public const PROPERTY_CONTEXT = 'context';
+    public const PROPERTY_IDENTIFIER = 'identifier';
+    public const PROPERTY_LANGUAGE = 'language';
+    public const PROPERTY_URL = 'url';
 
     /**
      * Get the default properties of all groups.

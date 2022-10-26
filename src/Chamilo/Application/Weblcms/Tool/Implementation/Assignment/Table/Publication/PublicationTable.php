@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\Publication;
 
 use Chamilo\Application\Weblcms\Table\Publication\Table\ObjectPublicationTable;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 
 /**
  * Extension on the content object publication table for this tool
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 class PublicationTable extends ObjectPublicationTable
 {
 
-    public function getTableActions(): TableFormActions
+    public function getTableActions(): TableActions
     {
         $actions = $this->get_component()->get_actions();
         

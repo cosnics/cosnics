@@ -15,8 +15,8 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class BlockMoveComponent extends Manager
 {
-    const PARAM_COLUMN = 'column';
-    const PARAM_BLOCK = 'block';
+    public const PARAM_COLUMN = 'column';
+    public const PARAM_BLOCK = 'block';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
