@@ -2,7 +2,6 @@
 {
     "en": {
         "aabs": "AABS",
-        "abs": "ABS",
         "absent": "Absent",
         "auth-absent": "Authorized absent",
         "comments": "Comments",
@@ -10,7 +9,6 @@
     },
     "nl": {
         "aabs": "GAFW",
-        "abs": "AFW",
         "absent": "Afwezig",
         "auth-absent": "Gewettigd afwezig",
         "comments": "Opmerkingen",
@@ -34,8 +32,7 @@
                     <input id="score" class="percent-input u-font-normal" ref="score-input" type="number" :value="numValue|formatNum" autocomplete="off" @input="type = 'number'" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')" @focus="type = 'number'">
                     <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                 </div>
-                <button class="color-code deep-orange-500" :class="{'is-selected': type === 'afw'}" @click="setAbsent" :title="$t('absent')"><span>{{ $t('abs') }}</span></button>
-                <button class="color-code amber-700" :class="{'is-selected': type === 'gafw'}" @click="setAuthAbsent" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></button>
+                <button class="color-code amber-700" :class="{'is-selected': type === 'aabs'}" @click="setAuthAbsent" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></button>
             </div>
             <div v-else-if="menuTab === 'comment'">
                 <textarea class="comment-field" ref="comment-input" v-model="commentValue"></textarea>
@@ -60,7 +57,7 @@ import {ResultType} from '../domain/GradeBook';
     }
 })
 export default class ScoreInput extends Vue {
-    private type: 'number'|'afw'|'gafw' = 'number';
+    private type: 'number'|'aabs' = 'number';
     private numValue: number|string = '';
     private commentValue: string = '';
 
@@ -84,26 +81,18 @@ export default class ScoreInput extends Vue {
         if (this.type === 'number') {
             const value = parseFloat(this.scoreInput.value);
             this.$emit('ok', isNaN(value) ? null : value);
-        } else if (this.type === 'afw') {
-            this.$emit('ok', 'afw');
-        } else if (this.type === 'gafw') {
-            this.$emit('ok', 'gafw');
+        } else if (this.type === 'aabs') {
+            this.$emit('ok', 'aabs');
         }
     }
 
-    setAbsent() {
-        this.type = 'afw';
-        this.$nextTick(() => this.numValue = '');
-    }
-
     setAuthAbsent() {
-        this.type = 'gafw';
+        this.type = 'aabs';
         this.$nextTick(() => this.numValue = '');
     }
 
     mounted() {
-        if (this.score === 'afw') { this.type = 'afw'; return; }
-        if (this.score === 'gafw') { this.type = 'gafw'; return; }
+        if (this.score === 'aabs') { this.type = 'aabs'; return; }
         this.type = 'number';
         this.numValue = String(this.score);
         this.commentValue = this.comment || '';

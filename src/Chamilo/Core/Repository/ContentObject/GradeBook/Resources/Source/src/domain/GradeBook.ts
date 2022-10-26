@@ -2,7 +2,7 @@ import APIConfig from "@/connector/APIConfig";
 
 export type ItemId = string|number;
 export type ColumnId = string|number;
-export type ResultType = number|'gafw'|'afw'|null;
+export type ResultType = number|'aabs'|null;
 
 export interface GradeItem {
     readonly id: ItemId;
@@ -41,11 +41,9 @@ export interface GradeScore {
     columnId: ColumnId;
     targetUserId: number;
     sourceScore: number|null;
-    sourceScoreAbsent: false;
     sourceScoreAuthAbsent: false;
     overwritten: boolean;
     newScore: number|null;
-    newScoreAbsent: boolean;
     newScoreAuthAbsent: boolean;
     isTotal: boolean;
     comment: string|null;
@@ -184,12 +182,10 @@ export default class GradeBook {
         const score: GradeScore = this.resultsData[columnId][userId];
         if (!score) { return null; }
         if (score.overwritten) {
-            if (score.newScoreAbsent) { return 'afw'; }
-            if (score.newScoreAuthAbsent) { return 'gafw'; }
+            if (score.newScoreAuthAbsent) { return 'aabs'; }
             return score.newScore;
         }
-        if (score.sourceScoreAbsent) { return 'afw'; }
-        if (score.sourceScoreAuthAbsent) { return 'gafw'; }
+        if (score.sourceScoreAuthAbsent) { return 'aabs'; }
         return score.sourceScore;
     }
 
@@ -197,21 +193,18 @@ export default class GradeBook {
         let endResult = 0;
         let maxWeight = 0;
         this.gradeColumns.filter(column => column.countForEndResult).forEach(column => {
-            let result = this.getResult(column.id, userId);
-            if (result === null) {
-                result = 'afw';
-            }
+            const result = this.getResult(column.id, userId);
             const weight = this.getWeight(column.id);
             if (typeof result === 'number') {
                 maxWeight += weight;
-            } else if (result === 'gafw') {
+            } else if (result === 'aabs') {
                 if (column.authPresenceEndResult !== GradeBook.NO_SCORE) {
                     maxWeight += weight;
                     if (column.authPresenceEndResult === GradeBook.MAX_SCORE) {
                         endResult += weight;
                     }
                 }
-            } else if (result === 'afw') {
+            } else if (result === null) {
                 if (column.unauthPresenceEndResult !== GradeBook.NO_SCORE) {
                     maxWeight += weight;
                     if (column.unauthPresenceEndResult === GradeBook.MAX_SCORE) {
@@ -243,16 +236,10 @@ export default class GradeBook {
         const score: GradeScore = this.resultsData[columnId][userId];
         if (!score) { return false; }
         score.overwritten = true;
-        if (value === 'afw') {
-            score.newScoreAbsent = true;
-            score.newScoreAuthAbsent = false;
-            score.newScore = null;
-        } else if (value === 'gafw') {
-            score.newScoreAbsent = false;
+        if (value === 'aabs') {
             score.newScoreAuthAbsent = true;
             score.newScore = null;
         } else {
-            score.newScoreAbsent = false;
             score.newScoreAuthAbsent = false;
             score.newScore = value;
         }
@@ -264,7 +251,6 @@ export default class GradeBook {
         const score: GradeScore = this.resultsData[columnId][userId];
         if (!score) { return false; }
         score.overwritten = false;
-        score.newScoreAbsent = false;
         score.newScoreAuthAbsent = false;
         score.newScore = null;
         return score;

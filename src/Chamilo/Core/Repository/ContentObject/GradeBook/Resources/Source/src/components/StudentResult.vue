@@ -31,9 +31,8 @@
                 </b-popover>
             </template>
             <div class="u-flex u-align-items-center" :class="[typeof result === 'number' ? 'u-justify-content-end' : 'u-justify-content-center', {'mr-19': useOverwrittenFlag && !isOverwritten}]">
-                <div v-if="result === 'afw'" class="color-code deep-orange-500" :title="$t('absent')"><span>{{ $t('abs') }}</span></div>
-                <div v-else-if="result === 'gafw'" class="color-code amber-700" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></div>
-                <div v-else-if="result === null" class="color-code mod-none" :title="$t('no-score-found')"><span class="sr-only">{{ $t('no-score-found') }}</span></div>
+                <div v-if="result === 'aabs'" class="color-code amber-700" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></div>
+                <div v-else-if="result === null" class="color-code mod-none" :title="$t('no-score-found')"><i class="fa fa-user-times" aria-hidden="true"></i><span class="sr-only">{{ $t('no-score-found') }}</span></div>
                 <div v-else>{{ result }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
             </div>
             <a v-if="useOverwrittenFlag && isOverwritten" class="fa fa-undo" @click.stop="$emit('revert')" :title="$t('bring-to-source-result')"><span class="sr-only">{{ $t('bring-to-source-result') }}</span></a>

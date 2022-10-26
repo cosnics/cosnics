@@ -203,7 +203,6 @@ export default class Connector {
             const parameters = {
                 'gradeScoreId': result.id,
                 'newScore': result.newScore,
-                'newScoreAbsent': result.newScoreAbsent,
                 'newScoreAuthAbsent': result.newScoreAuthAbsent
             };
             const data = await this.executeAPIRequest(this.apiConfig.overwriteScoreURL, parameters);

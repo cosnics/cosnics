@@ -80,7 +80,7 @@ test('endResultDontCountColumn', () => {
 test('endResultHandleAbsence', () => {
     let studentScore = gradeBook.resultsData[2][1];
 
-    // test authorized presence
+    // test authorized absence
     studentScore.newScoreAuthAbsent = true;
     studentScore.overwritten = true;
 
@@ -95,9 +95,10 @@ test('endResultHandleAbsence', () => {
     gradeBook.getGradeColumn(2)!.authPresenceEndResult = GradeBook.MIN_SCORE;
     expect(gradeBook.getEndResult(1)).toBeCloseTo(45);
 
-    // test unauthorized presence
+    // test unauthorized absence
     studentScore = gradeBook.resultsData[3][3];
-    studentScore.newScoreAbsent = true;
+    //studentScore.newScoreAbsent = true;
+    studentScore.newScoreAuthAbsent = false;
     studentScore.overwritten = true;
 
     // min score
@@ -213,11 +214,11 @@ function createSimpleScore(scoreId: number, columnId: ColumnId, studentId: numbe
         comment: null,
         isTotal: false,
         newScore: null,
-        newScoreAbsent: false,
+        //newScoreAbsent: false,
         newScoreAuthAbsent: false,
         overwritten: false,
         sourceScore: score,
-        sourceScoreAbsent: false,
+        //sourceScoreAbsent: false,
         sourceScoreAuthAbsent: false
     };
 }
