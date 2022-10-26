@@ -3,21 +3,17 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface;
-use Chamilo\Libraries\Format\Table\Table;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm_Renderer_Default;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure\ActionBar
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ButtonSearchForm extends FormValidator implements TableSupportedSearchFormInterface
+class ButtonSearchForm extends FormValidator
 {
     public const FORM_NAME = 'search';
 
@@ -28,7 +24,6 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
     private HTML_QuickForm_Renderer_Default $renderer;
 
     /**
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public function __construct(string $url)
@@ -50,7 +45,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
         $this->buildForm();
     }
 
-    public function render(): string
+    public function render(?string $in_data = null): string
     {
         $this->accept($this->renderer);
 
@@ -58,7 +53,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \QuickformException
      */
     private function buildForm()
     {
@@ -67,7 +62,8 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
         $this->addElement('html', '<div class="action-bar input-group pull-right">');
 
         $this->addElement(
-            'text', self::PARAM_SIMPLE_SEARCH_QUERY, Translation::get('Search', null, StringUtilities::LIBRARIES),
+            'text', self::PARAM_SIMPLE_SEARCH_QUERY,
+            $this->getTranslator()->trans('Search', [], StringUtilities::LIBRARIES),
             ['class' => 'form-group form-control action-bar-search']
         );
 
@@ -103,11 +99,11 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
 
     public function getQuery(): ?string
     {
-        $query = Request::post(self::PARAM_SIMPLE_SEARCH_QUERY);
+        $query = $this->getRequest()->request->get(self::PARAM_SIMPLE_SEARCH_QUERY);
 
         if (!$query)
         {
-            $query = Request::get(self::PARAM_SIMPLE_SEARCH_QUERY);
+            $query = $this->getRequest()->query->get(self::PARAM_SIMPLE_SEARCH_QUERY);
         }
 
         return $query;
@@ -119,23 +115,5 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
     public function get_query(): string
     {
         return $this->getQuery();
-    }
-
-    public function registerSearchFormParametersInTable(Table $table)
-    {
-        $table->addParameter(self::PARAM_SIMPLE_SEARCH_QUERY, $this->getQuery());
-    }
-
-    /**
-     * @param string[] $tableParameters
-     */
-    public function registerTableParametersInSearchForm(array $tableParameters = [])
-    {
-        foreach ($tableParameters as $tableParameter => $value)
-        {
-            $this->actionUrl .= '&' . $tableParameter . '=' . $value;
-        }
-
-        $this->updateAttributes(['action' => $this->actionUrl]);
     }
 }
