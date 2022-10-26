@@ -171,7 +171,14 @@
             this.tableBusy = true;
             await this.connector?.synchronizeGradeBook((scores: GradeScore[]) => {
                 const resultsData = gradeBook.resultsData;
+                if (!resultsData['totals']) {
+                    Vue.set(resultsData, 'totals', {});
+                }
                 scores.forEach(score => {
+                    if (score.isTotal) {
+                        resultsData['totals'][score.targetUserId] = score;
+                        return;
+                    }
                     if (!resultsData[score.columnId]) {
                         Vue.set(resultsData, score.columnId, {});
                     }
