@@ -101,26 +101,22 @@ class GradeBookScoreJSONModel
      * @param int|null $columnId
      * @param int $targetUserId
      * @param float|null $sourceScore
-     * @param bool $sourceScoreAbsent
      * @param bool $sourceScoreAuthAbsent
      * @param bool $overwritten
      * @param float|null $newScore
-     * @param bool $newScoreAbsent
      * @param bool $newScoreAuthAbsent
      * @param bool $isTotal
      * @param string|null $comment
      */
-    public function __construct(int $id, ?int $columnId, int $targetUserId, ?float $sourceScore, bool $sourceScoreAbsent, bool $sourceScoreAuthAbsent, bool $overwritten, ?float $newScore, bool $newScoreAbsent, bool $newScoreAuthAbsent, bool $isTotal, ?string $comment)
+    public function __construct(int $id, ?int $columnId, int $targetUserId, ?float $sourceScore, bool $sourceScoreAuthAbsent, bool $overwritten, ?float $newScore, bool $newScoreAuthAbsent, bool $isTotal, ?string $comment)
     {
         $this->id = $id;
         $this->columnId = $columnId;
         $this->targetUserId = $targetUserId;
         $this->sourceScore = $sourceScore;
-        $this->sourceScoreAbsent = $sourceScoreAbsent;
         $this->sourceScoreAuthAbsent = $sourceScoreAuthAbsent;
         $this->overwritten = $overwritten;
         $this->newScore = $newScore;
-        $this->newScoreAbsent = $newScoreAbsent;
         $this->newScoreAuthAbsent = $newScoreAuthAbsent;
         $this->isTotal = $isTotal;
         $this->comment = $comment;
@@ -135,6 +131,6 @@ class GradeBookScoreJSONModel
     {
         $column = $gradeBookScore->getGradeBookColumn();
         $columnId = empty($column) ? null : $column->getId();
-        return new self($gradeBookScore->getId(), $columnId, $gradeBookScore->getTargetUserId(), $gradeBookScore->getSourceScore(), $gradeBookScore->isSourceScoreAbsent(), $gradeBookScore->isSourceScoreAuthAbsent(), $gradeBookScore->isOverwritten(), $gradeBookScore->getNewScore(), $gradeBookScore->isNewScoreAbsent(), $gradeBookScore->isNewScoreAuthAbsent(), $gradeBookScore->isTotalScore(), $gradeBookScore->getComment());
+        return new self($gradeBookScore->getId(), $columnId, $gradeBookScore->getTargetUserId(), $gradeBookScore->getSourceScore(), $gradeBookScore->isSourceScoreAuthAbsent(), $gradeBookScore->isOverwritten(), $gradeBookScore->getNewScore(), $gradeBookScore->isNewScoreAuthAbsent(), $gradeBookScore->isTotalScore(), $gradeBookScore->getComment());
     }
 }

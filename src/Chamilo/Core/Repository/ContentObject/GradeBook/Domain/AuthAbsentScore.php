@@ -37,14 +37,6 @@ class AuthAbsentScore implements GradeScoreInterface
     /**
      * @return bool
      */
-    public function isAbsent(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
     public function isAuthAbsent(): bool
     {
         return true;
@@ -57,6 +49,6 @@ class AuthAbsentScore implements GradeScoreInterface
      */
     public function hasPresedenceOver(GradeScoreInterface $gradeScore): bool
     {
-        return $gradeScore->isAbsent() || $gradeScore->isNull();
+        return $gradeScore->isNull();
     }
 }

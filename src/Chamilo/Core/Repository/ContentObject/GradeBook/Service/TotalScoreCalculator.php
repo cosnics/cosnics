@@ -193,19 +193,11 @@ class TotalScoreCalculator
         }
         if ($score->isOverwritten())
         {
-            if ($score->isNewScoreAbsent())
-            {
-                return 'abs';
-            }
             if ($score->isNewScoreAuthAbsent())
             {
                 return 'authabs';
             }
             return $score->getNewScore();
-        }
-        if ($score->isSourceScoreAbsent())
-        {
-            return 'abs';
         }
         if ($score->isSourceScoreAuthAbsent())
         {

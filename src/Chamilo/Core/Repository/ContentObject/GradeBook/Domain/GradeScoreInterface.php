@@ -27,11 +27,6 @@ interface GradeScoreInterface
     /**
      * @return bool
      */
-    public function isAbsent(): bool;
-
-    /**
-     * @return bool
-     */
     public function isAuthAbsent(): bool;
 
     /**

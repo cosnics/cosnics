@@ -19,6 +19,6 @@ class OverwriteScoreComponent extends Manager implements CsrfComponentInterface
      */
     function runAjaxComponent()
     {
-        return $this->getGradeBookAjaxService()->overwriteGradeBookScore($this->getGradeBookDataId(), $this->getVersion(), $this->getGradeScoreId(), $this->getNewScore(), $this->getNewScoreAbsent(), $this->getNewScoreAuthAbsent());
+        return $this->getGradeBookAjaxService()->overwriteGradeBookScore($this->getGradeBookDataId(), $this->getVersion(), $this->getGradeScoreId(), $this->getNewScore(), $this->getNewScoreAuthAbsent());
     }
 }

@@ -36,14 +36,6 @@ class NullScore implements GradeScoreInterface
     /**
      * @return bool
      */
-    public function isAbsent(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
     public function isAuthAbsent(): bool
     {
         return false;

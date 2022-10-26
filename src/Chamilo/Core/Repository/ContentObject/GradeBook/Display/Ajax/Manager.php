@@ -349,14 +349,6 @@ abstract class Manager extends AjaxManager
     /**
      * @return bool
      */
-    protected function getNewScoreAbsent(): bool
-    {
-        return $this->getRequest()->getFromPost(self::PARAM_NEW_SCORE_ABSENT) == 'true';
-    }
-
-    /**
-     * @return bool
-     */
     protected function getNewScoreAuthAbsent(): bool
     {
         return $this->getRequest()->getFromPost(self::PARAM_NEW_SCORE_AUTH_ABSENT) == 'true';

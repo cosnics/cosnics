@@ -401,7 +401,6 @@ class GradeBookAjaxService
             if (!is_null($fromScore) && $fromScore->toGradeScore()->hasPresedenceOver($destScore->toGradeScore()))
             {
                 $destScore->setSourceScore($fromScore->getSourceScore());
-                $destScore->setSourceScoreAbsent($fromScore->isSourceScoreAbsent());
                 $destScore->setSourceScoreAuthAbsent($fromScore->isSourceScoreAuthAbsent());
                 $destScore->setGradeBookItem($fromScore->getGradeBookItem());
             }
@@ -438,7 +437,6 @@ class GradeBookAjaxService
             if (!is_null($fromGradeScore) && $fromGradeScore->hasPresedenceOver($destScore->toGradeScore()))
             {
                 $destScore->setSourceScoreAuthAbsent($fromGradeScore->isAuthAbsent());
-                $destScore->setSourceScoreAbsent($fromGradeScore->isAbsent());
                 $destScore->setSourceScore($fromGradeScore->hasValue() ? $fromGradeScore->getValue() : null);
                 $destScore->setGradeBookItem($gradeBookItem);
             }
@@ -475,7 +473,6 @@ class GradeBookAjaxService
             if ($score->getGradeBookItem() === $gradeItem)
             {
                 $score->setSourceScore(null);
-                $score->setSourceScoreAbsent(false);
                 $score->setSourceScoreAuthAbsent(false);
                 $score->setGradeBookItem(null);
             }
@@ -676,10 +673,9 @@ class GradeBookAjaxService
         $gradebookScore->setOverwritten(false);
         $gradebookScore->setTargetUserId($userId);
         $gradebookScore->setSourceScoreAuthAbsent($score->isAuthAbsent());
-        $gradebookScore->setSourceScoreAbsent($score->isAbsent());
         $gradebookScore->setIsTotalScore(false);
         $gradebookScore->setComment(null);
-        if (!($score->isAbsent() || $score->isAuthAbsent()))
+        if (!$score->isAuthAbsent())
         {
             $gradebookScore->setSourceScore($score->getValue());
         }
@@ -695,7 +691,6 @@ class GradeBookAjaxService
      */
     protected function updateGradeBookScore(GradeBookScore $gradeBookScore, ?GradeBookItem $gradeBookItem, GradeScoreInterface $gradeScore): GradeBookScore
     {
-        $gradeBookScore->setSourceScoreAbsent($gradeScore->isAbsent());
         $gradeBookScore->setSourceScoreAuthAbsent($gradeScore->isAuthAbsent());
         $gradeBookScore->setSourceScore($gradeScore->hasValue() ? $gradeScore->getValue() : null);
         $gradeBookScore->setGradeBookItem($gradeBookItem);
@@ -735,21 +730,19 @@ class GradeBookAjaxService
      * @param int $versionId
      * @param int $gradeBookScoreId
      * @param float|null $newScore
-     * @param bool $isNewScoreAbsent
      * @param bool $isNewScoreAuthAbsent
      *
      * @return array[]
      * @throws \Doctrine\ORM\ORMException
      */
-    public function overwriteGradeBookScore(int $gradeBookDataId, int $versionId, int $gradeBookScoreId, ?float $newScore, bool $isNewScoreAbsent, bool $isNewScoreAuthAbsent): array
+    public function overwriteGradeBookScore(int $gradeBookDataId, int $versionId, int $gradeBookScoreId, ?float $newScore, bool $isNewScoreAuthAbsent): array
     {
         $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
         $gradebookScore = $gradebookData->getGradeBookScoreById($gradeBookScoreId);
 
         $gradebookScore->setOverwritten(true);
-        $gradebookScore->setNewScore(($isNewScoreAbsent || $isNewScoreAuthAbsent) ? null : $newScore);
-        $gradebookScore->setNewScoreAbsent($isNewScoreAbsent);
-        $gradebookScore->setNewScoreAuthAbsent($isNewScoreAuthAbsent && !$isNewScoreAbsent);
+        $gradebookScore->setNewScore($isNewScoreAuthAbsent ? null : $newScore);
+        $gradebookScore->setNewScoreAuthAbsent($isNewScoreAuthAbsent);
 
         $this->gradeBookService->saveGradeBook($gradebookData);
 
@@ -800,7 +793,6 @@ class GradeBookAjaxService
 
         $gradebookScore->setOverwritten(false);
         $gradebookScore->setNewScore(null);
-        $gradebookScore->setNewScoreAbsent(false);
         $gradebookScore->setNewScoreAuthAbsent(false);
 
         $this->gradeBookService->saveGradeBook($gradebookData);

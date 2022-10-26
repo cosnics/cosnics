@@ -147,8 +147,6 @@ class ScoreSynchronizer
     {
         switch (true)
         {
-            case $score->isSourceScoreAbsent() && !$gradeScore->isAbsent():
-            case !$score->isSourceScoreAbsent() && $gradeScore->isAbsent():
             case $score->isSourceScoreAuthAbsent() && !$gradeScore->isAuthAbsent():
             case !$score->isSourceScoreAuthAbsent() && $gradeScore->isAuthAbsent():
             case is_null($score->getSourceScore()) && $gradeScore->hasValue():

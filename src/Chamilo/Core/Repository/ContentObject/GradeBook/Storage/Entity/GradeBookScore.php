@@ -3,7 +3,6 @@
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookScoreJSONModel;
-use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\AbsentScore;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\AuthAbsentScore;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScore;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
@@ -79,13 +78,6 @@ class GradeBookScore
     /**
      * @var bool
      *
-     * @ORM\Column(name="source_absent", type="boolean")
-     */
-    protected $sourceScoreAbsent = false;
-
-    /**
-     * @var bool
-     *
      * @ORM\Column(name="source_auth_absent", type="boolean")
      */
     protected $sourceScoreAuthAbsent = false;
@@ -103,13 +95,6 @@ class GradeBookScore
      * @ORM\Column(name="new_score", type="integer", nullable=true)
      */
     protected $newScore;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="new_absent", type="boolean")
-     */
-    protected $newScoreAbsent = false;
 
     /**
      * @var bool
@@ -299,26 +284,6 @@ class GradeBookScore
     /**
      * @return bool
      */
-    public function isSourceScoreAbsent(): bool
-    {
-        return $this->sourceScoreAbsent;
-    }
-
-    /**
-     * @param bool $isAbsent
-     *
-     * @return GradeBookScore
-     */
-    public function setSourceScoreAbsent(bool $isAbsent): GradeBookScore
-    {
-        $this->sourceScoreAbsent = $isAbsent;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
     public function isSourceScoreAuthAbsent(): bool
     {
         return $this->sourceScoreAuthAbsent;
@@ -383,26 +348,6 @@ class GradeBookScore
         {
             $this->newScore = (int) round ($score * 100);
         }
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isNewScoreAbsent(): bool
-    {
-        return $this->newScoreAbsent;
-    }
-
-    /**
-     * @param bool $isAbsent
-     *
-     * @return GradeBookScore
-     */
-    public function setNewScoreAbsent(bool $isAbsent): GradeBookScore
-    {
-        $this->newScoreAbsent = $isAbsent;
-
         return $this;
     }
 
@@ -479,10 +424,6 @@ class GradeBookScore
      */
     public function toGradeScore(): GradeScoreInterface
     {
-        if ($this->sourceScoreAbsent)
-        {
-            return new AbsentScore();
-        }
         if ($this->sourceScoreAuthAbsent)
         {
             return new AuthAbsentScore();

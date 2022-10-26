@@ -2,7 +2,6 @@
 
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Test\Unit\Service;
 
-use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\AbsentScore;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\AuthAbsentScore;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScore;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
@@ -114,7 +113,6 @@ class ScoreSynchronizerTest extends ChamiloTestCase
     {
         $gradeScore = new GradeScore(85);
         $nullScore = new NullScore();
-        $absentScore = new AbsentScore();
         $authAbsentScore = new AuthAbsentScore();
 
         $score = new GradeBookScore();
@@ -122,28 +120,22 @@ class ScoreSynchronizerTest extends ChamiloTestCase
         $score->setGradeBookColumn($this->column);
         $score->setTargetUserId(22);
         $score->setSourceScore(null);
-        $score->setSourceScoreAbsent(true);
 
         $this->_testScoreToBeUpdatedWithGradeScore($score, $gradeScore);
-        $this->_testScoreToBeUpdatedWithGradeScore($score, $nullScore);
+        $this->_testScoreToBeUpdatedWithGradeScore($score, $nullScore, true);
         $this->_testScoreToBeUpdatedWithGradeScore($score, $authAbsentScore);
-        $this->_testScoreToBeUpdatedWithGradeScore($score, $absentScore, true);
 
-        $score->setSourceScoreAbsent(false);
         $score->setSourceScoreAuthAbsent(true);
         $this->_testScoreToBeUpdatedWithGradeScore($score, $gradeScore);
         $this->_testScoreToBeUpdatedWithGradeScore($score, $nullScore);
-        $this->_testScoreToBeUpdatedWithGradeScore($score, $absentScore);
         $this->_testScoreToBeUpdatedWithGradeScore($score, $authAbsentScore, true);
 
         $score->setSourceScoreAuthAbsent(false);
         $this->_testScoreToBeUpdatedWithGradeScore($score, $gradeScore);
-        $this->_testScoreToBeUpdatedWithGradeScore($score, $absentScore);
         $this->_testScoreToBeUpdatedWithGradeScore($score, $authAbsentScore);
         $this->_testScoreToBeUpdatedWithGradeScore($score, $nullScore, true);
 
         $score->setSourceScore(85);
-        $this->_testScoreToBeUpdatedWithGradeScore($score, $absentScore);
         $this->_testScoreToBeUpdatedWithGradeScore($score, $authAbsentScore);
         $this->_testScoreToBeUpdatedWithGradeScore($score, $nullScore);
         $this->_testScoreToBeUpdatedWithGradeScore($score, $gradeScore, true);
