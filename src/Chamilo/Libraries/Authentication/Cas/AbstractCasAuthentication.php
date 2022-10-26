@@ -14,11 +14,10 @@ use phpCAS;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Libraries\Authentication\Cas
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class AbstractCasAuthentication extends Authentication implements AuthenticationInterface
 {
@@ -166,40 +165,49 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
             return null;
         }
 
-        phpCAS::forceAuthentication();
-
-        $userAttributes = phpCAS::getAttributes();
-        $userIdentifier = $this->getCasUserIdentifierFromAttributes(phpCAS::getUser(), $userAttributes);
-
-        if ($userIdentifier)
-        {
-            $user = $this->getUserByCasUserIdentifier($userIdentifier);
-
-            if (!$user instanceof User)
-            {
-                $user = $this->registerUser(phpCAS::getUser(), $userAttributes);
-            }
-
-            if ($userAttributes && isset($userAttributes['surrogatePrincipal']))
-            {
-                $surrogateUserName = array_pop($userAttributes['surrogatePrincipal']);
-                $surrogateUser = $this->userService->findUserByUsername($surrogateUserName);
-                $this->getSessionUtilities()->register('_as_admin', $surrogateUser->getId());
-            }
-
-            return $user;
-        }
-        else
-        {
-            throw new AuthenticationException(
-                $this->translator->trans(
-                    'CasAuthenticationError', [
-                    'PLATFORM' => $this->configurationConsulter->getSetting(
-                        ['Chamilo\Core\Admin', 'site_name']
-                    )
-                ], 'Chamilo\Libraries'
+        $authenticationException = new AuthenticationException(
+            $this->translator->trans(
+                'CasAuthenticationError', [
+                'PLATFORM' => $this->configurationConsulter->getSetting(
+                    ['Chamilo\Core\Admin', 'site_name']
                 )
-            );
+            ], 'Chamilo\Libraries'
+            )
+        );
+
+        try
+        {
+            phpCAS::forceAuthentication();
+
+            $userAttributes = phpCAS::getAttributes();
+            $userIdentifier = $this->getCasUserIdentifierFromAttributes(phpCAS::getUser(), $userAttributes);
+
+            if ($userIdentifier)
+            {
+                $user = $this->getUserByCasUserIdentifier($userIdentifier);
+
+                if (!$user instanceof User)
+                {
+                    $user = $this->registerUser(phpCAS::getUser(), $userAttributes);
+                }
+
+                if ($userAttributes && isset($userAttributes['surrogatePrincipal']))
+                {
+                    $surrogateUserName = array_pop($userAttributes['surrogatePrincipal']);
+                    $surrogateUser = $this->userService->findUserByUsername($surrogateUserName);
+                    $this->getSessionUtilities()->register('_as_admin', $surrogateUser->getId());
+                }
+
+                return $user;
+            }
+            else
+            {
+                throw $authenticationException;
+            }
+        }
+        catch (Exception $exception)
+        {
+            throw $authenticationException;
         }
     }
 
