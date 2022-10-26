@@ -157,11 +157,6 @@ abstract class HtmlTable extends HTML_Table
         $allowPageNavigation = true
     )
     {
-        var_dump(
-            $tableName, $defaultOrderColumn, $defaultNumberOfItemsPerPage,
-            $defaultOrderDirection, $allowPageSelection, $allowPageNavigation
-        );
-
         parent::__construct(['class' => $this->getTableClasses(), 'id' => $tableName], 0, true);
 
         $this->tableName = $tableName;
