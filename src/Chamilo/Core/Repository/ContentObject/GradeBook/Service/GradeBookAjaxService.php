@@ -549,6 +549,8 @@ class GradeBookAjaxService
             }
             $this->addGradeBookScore($gradeBookColumn, $gradeBookItem, $userId, $gradeScore);
         }
+        $totalScoreCalculator = new TotalScoreCalculator($gradebookData);
+        $totalScoreCalculator->calculateTotals();
 
         $this->gradeBookService->saveGradeBook($gradebookData);
 
