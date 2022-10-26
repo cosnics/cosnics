@@ -109,7 +109,7 @@ class ItemForm extends FormValidator
         foreach ($activeLanguages as $isocode => $language)
         {
             $this->addElement(
-                'text', ItemTitle::PROPERTY_TITLE . '[' . $isocode . ']', $language, array("class" => "form-control")
+                'text', ItemTitle::PROPERTY_TITLE . '[' . $isocode . ']', $language, array('class' => 'form-control')
             );
 
             if ($isocode == $platformLanguage)

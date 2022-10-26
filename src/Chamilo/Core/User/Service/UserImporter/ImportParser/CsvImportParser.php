@@ -50,7 +50,7 @@ class CsvImportParser implements ImportParserInterface
 
         $userImporterResult->setRawImportDataHeader(implode(';', $keys));
 
-        while (($row_tmp = fgetcsv($handle, 1000, ";")) !== false)
+        while (($row_tmp = fgetcsv($handle, 1000, ';')) !== false)
         {
             $rowData = [];
 

@@ -14,8 +14,8 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class TabEditComponent extends Manager
 {
-    const PARAM_TAB = 'tab';
-    const PARAM_TITLE = 'title';
+    public const PARAM_TAB = 'tab';
+    public const PARAM_TITLE = 'title';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()

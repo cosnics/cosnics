@@ -16,25 +16,22 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class ConfigurationForm extends FormValidator
 {
-    const RESULT_SUCCESS = 'ObjectUpdated';
-    const RESULT_ERROR = 'ObjectUpdateFailed';
+    public const RESULT_SUCCESS = 'ObjectUpdated';
+    public const RESULT_ERROR = 'ObjectUpdateFailed';
 
     /**
-     *
      * @var \Chamilo\Core\Home\Storage\DataClass\Block
      */
     private $block;
 
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     private $hasStaticTitle;
 
     /**
-     *
      * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
-     * @param boolean $hasStaticTitle
+     * @param bool $hasStaticTitle
      * @param string $action
      */
     public function __construct(Block $block, $hasStaticTitle)
@@ -49,7 +46,6 @@ abstract class ConfigurationForm extends FormValidator
     }
 
     /**
-     *
      * @return \Chamilo\Core\Home\Storage\DataClass\Block
      */
     public function getBlock()
@@ -58,8 +54,7 @@ abstract class ConfigurationForm extends FormValidator
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function getHasStaticTitle()
     {
@@ -71,7 +66,7 @@ abstract class ConfigurationForm extends FormValidator
         if (!$this->hasStaticTitle)
         {
             $this->addElement(
-                'text', Block::PROPERTY_TITLE, Translation::get('Title'), array('class' => 'form-control')
+                'text', Block::PROPERTY_TITLE, Translation::get('Title'), ['class' => 'form-control']
             );
         }
 
@@ -88,16 +83,15 @@ abstract class ConfigurationForm extends FormValidator
         );
         $buttons[] = $this->createElement(
             'style_submit_button', 'cancel', Translation::get('Cancel', null, StringUtilities::LIBRARIES),
-            array('class' => 'btn-danger'), null, new FontAwesomeGlyph('times')
+            ['class' => 'btn-danger'], null, new FontAwesomeGlyph('times')
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    abstract function addSettings();
+    public abstract function addSettings();
 
     /**
-     *
      * @see HTML_QuickForm::setDefaults()
      */
     public function setDefaults($defaults = [], $filter = null)

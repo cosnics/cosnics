@@ -16,9 +16,9 @@ use Chamilo\Libraries\Cache\ParameterBag;
  */
 class UserGroupMembershipCacheService extends DoctrinePhpFileCacheService implements UserBasedCacheInterface
 {
-    const PARAM_TYPE = 'type';
+    public const PARAM_TYPE = 'type';
 
-    const PARAM_USER_IDENTIFIER = 'user_identifier';
+    public const PARAM_USER_IDENTIFIER = 'user_identifier';
 
     /**
      *
@@ -41,7 +41,7 @@ class UserGroupMembershipCacheService extends DoctrinePhpFileCacheService implem
     /**
      *
      * @param User $user
-     * @param boolean $type
+     * @param bool $type
      *
      * @return mixed
      */

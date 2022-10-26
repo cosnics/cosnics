@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Column extends Element
 {
-    const CONFIGURATION_WIDTH = 'width';
+    public const CONFIGURATION_WIDTH = 'width';
 
     /**
      *
@@ -31,7 +31,7 @@ class Column extends Element
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getWidth()
     {
@@ -52,7 +52,7 @@ class Column extends Element
 
     /**
      *
-     * @param integer $width
+     * @param int $width
      */
     public function setWidth($width)
     {

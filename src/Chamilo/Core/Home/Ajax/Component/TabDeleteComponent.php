@@ -14,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class TabDeleteComponent extends Manager
 {
-    const PARAM_TAB = 'tab';
+    public const PARAM_TAB = 'tab';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()

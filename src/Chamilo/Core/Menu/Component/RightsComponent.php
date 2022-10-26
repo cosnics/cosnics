@@ -23,7 +23,7 @@ class RightsComponent extends Manager implements DelegateComponent
     private $item;
 
     /**
-     * @var integer
+     * @var int
      */
     private $itemIdentifier;
 
@@ -114,7 +114,7 @@ class RightsComponent extends Manager implements DelegateComponent
     }
 
     /**
-     * @return integer
+     * @return int
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     protected function getItemIdentifier()

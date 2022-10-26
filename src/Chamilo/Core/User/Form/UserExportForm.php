@@ -11,12 +11,12 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @package user.lib.forms
  */
-ini_set("max_execution_time", - 1);
-ini_set("memory_limit", - 1);
+ini_set('max_execution_time', - 1);
+ini_set('memory_limit', - 1);
 
 class UserExportForm extends FormValidator
 {
-    const TYPE_EXPORT = 1;
+    public const TYPE_EXPORT = 1;
 
     private $current_tag;
 

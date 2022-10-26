@@ -59,7 +59,7 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      */
     public function doesUserHavePicture(User $user)
     {
@@ -142,7 +142,7 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
         $type = exif_imagetype($filePath);
         $mime = image_type_to_mime_type($type);
 
-        $fileResource = fopen($filePath, "r");
+        $fileResource = fopen($filePath, 'r');
         $imageBinary = fread($fileResource, filesize($filePath));
         $imgString = base64_encode($imageBinary);
 
@@ -211,7 +211,7 @@ class UserPictureProvider implements UserPictureProviderInterface, UserPictureUp
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param boolean $useFallback
+     * @param bool $useFallback
      *
      * @return string
      * @throws \Exception

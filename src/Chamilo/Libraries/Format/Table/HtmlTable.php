@@ -215,6 +215,8 @@ abstract class HtmlTable
     }
 
     /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     *
      * @throws \TableException
      */
     public function prepareTableData(
@@ -356,6 +358,8 @@ abstract class HtmlTable
     }
 
     /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     *
      * @throws \TableException
      */
     public function renderTableBody(
@@ -385,10 +389,10 @@ abstract class HtmlTable
      */
     public function renderTableFooter(
         string $tableName, TableParameterValues $parameterValues, array $parameterNames,
-        ?TableActions $tableFormActions = null
+        ?TableActions $tableActions = null
     ): string
     {
-        $hasFormActions = $tableFormActions instanceof TableActions && $tableFormActions->hasActions();
+        $hasFormActions = $tableActions instanceof TableActions && $tableActions->hasActions();
 
         $html = [];
 
@@ -397,7 +401,7 @@ abstract class HtmlTable
         if ($hasFormActions)
         {
             $html[] = '<div class="col-xs-12 col-md-6 table-navigation-actions">';
-            $html[] = $this->renderActions($tableName, $tableFormActions);
+            $html[] = $this->renderActions($tableName, $tableActions);
             $html[] = '</div>';
         }
 

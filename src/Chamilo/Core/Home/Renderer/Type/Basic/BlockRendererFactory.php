@@ -14,8 +14,8 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 class BlockRendererFactory
 {
-    const SOURCE_DEFAULT = 1;
-    const SOURCE_AJAX = 2;
+    public const SOURCE_DEFAULT = 1;
+    public const SOURCE_AJAX = 2;
 
     /**
      *

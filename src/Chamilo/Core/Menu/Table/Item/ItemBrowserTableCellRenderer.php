@@ -92,7 +92,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param integer $sortDirection
+     * @param int $sortDirection
      *
      * @return string
      */

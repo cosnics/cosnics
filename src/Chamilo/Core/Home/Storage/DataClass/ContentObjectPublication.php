@@ -10,7 +10,7 @@ use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
  */
 class ContentObjectPublication extends Publication
 {
-    const PROPERTY_ELEMENT_ID = 'element_id';
+    public const PROPERTY_ELEMENT_ID = 'element_id';
 
     /**
      *
@@ -23,7 +23,7 @@ class ContentObjectPublication extends Publication
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function get_element_id()
     {
@@ -41,7 +41,7 @@ class ContentObjectPublication extends Publication
 
     /**
      *
-     * @param integer $element_id
+     * @param int $element_id
      */
     public function set_element_id($element_id)
     {

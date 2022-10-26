@@ -17,7 +17,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class TargetEntitiesForm extends FormValidator
 {
-    const PROPERTY_RIGHTS = 'rights';
+    public const PROPERTY_RIGHTS = 'rights';
 
     /**
      *

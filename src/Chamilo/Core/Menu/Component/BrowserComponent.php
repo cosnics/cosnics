@@ -162,7 +162,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getParentIdentifier()
     {

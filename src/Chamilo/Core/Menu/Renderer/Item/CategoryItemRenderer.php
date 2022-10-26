@@ -116,7 +116,7 @@ class CategoryItemRenderer extends ItemRenderer
     }
 
     /**
-     * @param boolean $isSelected
+     * @param bool $isSelected
      * @param string[] $existingClasses
      *
      * @return string[]
@@ -155,7 +155,7 @@ class CategoryItemRenderer extends ItemRenderer
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      */
     public function isSelected(Item $item)
     {

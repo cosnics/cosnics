@@ -14,7 +14,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  */
 abstract class Renderer
 {
-    const TYPE_BASIC = 'Basic';
+    public const TYPE_BASIC = 'Basic';
 
     /**
      *
@@ -85,7 +85,7 @@ abstract class Renderer
      * Gets a link to the personal calendar application
      * 
      * @param array $parameters
-     * @param boolean $encode
+     * @param bool $encode
      */
     public function get_link($parameters = array (), $filter = [], $encode_entities = false)
     {

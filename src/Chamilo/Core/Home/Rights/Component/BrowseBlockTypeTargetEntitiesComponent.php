@@ -18,38 +18,39 @@ class BrowseBlockTypeTargetEntitiesComponent extends Manager implements TableSup
     /**
      * Executes this component and renders it's output
      */
-    function run()
+    public function run()
     {
-        if (! $this->getUser()->is_platform_admin())
+        if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
-        
+
         $html = [];
-        
+
         $tableContent = $this->renderTable();
-        
+
         $html[] = $this->render_header();
         $html[] = $tableContent;
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Renders the table
-     * 
+     *
      * @return string
      */
     protected function renderTable()
     {
         $table = new BlockTypeTargetEntityTable($this);
+
         return $table->as_html();
     }
 
     /**
      * Returns the condition
-     * 
+     *
      * @param string $table_class_name
      *
      * @return Condition

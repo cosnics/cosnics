@@ -25,13 +25,13 @@ class AccountForm extends FormValidator
 {
     use DependencyInjectionContainerTrait;
 
-    const NEW_PASSWORD = 'new_password';
-    const NEW_PASSWORD_CONFIRMATION = 'new_password_confirmation';
+    public const NEW_PASSWORD = 'new_password';
+    public const NEW_PASSWORD_CONFIRMATION = 'new_password_confirmation';
 
-    const RESULT_ERROR = 'UserUpdateFailed';
-    const RESULT_SUCCESS = 'UserUpdated';
+    public const RESULT_ERROR = 'UserUpdateFailed';
+    public const RESULT_SUCCESS = 'UserUpdated';
 
-    const TYPE_EDIT = 2;
+    public const TYPE_EDIT = 2;
 
     /**
      * @var AuthenticationValidator
@@ -73,8 +73,8 @@ class AccountForm extends FormValidator
 
         $this->addElement('category', Translation::get('PersonalDetails'));
         // Name
-        $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), array("size" => "50"));
-        $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), array("size" => "50"));
+        $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), array('size' => '50'));
+        $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), array('size' => '50'));
 
         if ($configurationConsulter->get_setting(array(Manager::context(), 'allow_change_firstname')) == 0)
         {
@@ -122,7 +122,7 @@ class AccountForm extends FormValidator
         }
         // Official Code
         $this->addElement(
-            'text', User::PROPERTY_OFFICIAL_CODE, Translation::get('OfficialCode'), array("size" => "50")
+            'text', User::PROPERTY_OFFICIAL_CODE, Translation::get('OfficialCode'), array('size' => '50')
         );
 
         if ($configurationConsulter->get_setting(array(Manager::context(), 'allow_change_official_code')) == 0)
@@ -143,7 +143,7 @@ class AccountForm extends FormValidator
         }
 
         // Email
-        $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), array("size" => "50"));
+        $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), array('size' => '50'));
 
         if ($configurationConsulter->get_setting(array(Manager::context(), 'allow_change_email')) == 0)
         {
@@ -174,7 +174,7 @@ class AccountForm extends FormValidator
         $this->applyFilter(User::PROPERTY_EMAIL, 'trim');
 
         // Username
-        $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), array("size" => "50"));
+        $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), array('size' => '50'));
 
         if ($configurationConsulter->get_setting(array(Manager::context(), 'allow_change_username')) == 0 ||
             !$this->authenticationValidator->getAuthenticationByType($this->user->get_auth_source()) instanceof
@@ -308,7 +308,7 @@ class AccountForm extends FormValidator
     /**
      * @param string $newPassword
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function checkAllowedToChangePassword($newPassword = null)

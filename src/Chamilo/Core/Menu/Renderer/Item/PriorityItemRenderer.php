@@ -11,7 +11,7 @@ use Chamilo\Core\Menu\Renderer\ItemRenderer;
 abstract class PriorityItemRenderer extends ItemRenderer
 {
     /**
-     * @param boolean $isSelected
+     * @param bool $isSelected
      * @param string[] $existingClasses
      *
      * @return string[]

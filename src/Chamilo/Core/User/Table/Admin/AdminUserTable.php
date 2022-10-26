@@ -15,7 +15,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class AdminUserTable extends DataClassTable implements TableActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager::PARAM_USER_USER_ID;
+    public const TABLE_IDENTIFIER = Manager::PARAM_USER_USER_ID;
 
     public function getTableActions(): TableActions
     {

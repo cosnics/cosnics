@@ -25,7 +25,7 @@ class ItemBrowserTableDataProvider extends DataClassTableDataProvider
     private $itemService;
 
     /**
-     * @var integer
+     * @var int
      */
     private $parentIdentifier;
 
@@ -34,7 +34,7 @@ class ItemBrowserTableDataProvider extends DataClassTableDataProvider
      *
      * @param \Chamilo\Libraries\Format\Table\Table $table
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     * @param integer $parentIdentifier
+     * @param int $parentIdentifier
      */
     public function __construct($table, ItemService $itemService, int $parentIdentifier)
     {
@@ -65,7 +65,7 @@ class ItemBrowserTableDataProvider extends DataClassTableDataProvider
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getParentIdentifier(): int
     {
@@ -73,7 +73,7 @@ class ItemBrowserTableDataProvider extends DataClassTableDataProvider
     }
 
     /**
-     * @param integer $parentIdentifier
+     * @param int $parentIdentifier
      */
     public function setParentIdentifier(int $parentIdentifier): void
     {

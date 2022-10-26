@@ -22,7 +22,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
 
     /**
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      * @throws \Exception
      */

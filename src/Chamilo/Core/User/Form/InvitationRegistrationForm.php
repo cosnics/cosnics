@@ -25,8 +25,8 @@ class InvitationRegistrationForm extends FormValidator
     use DependencyInjectionContainerTrait;
 
     // Constants
-    const PASSWORD = 'password';
-    const PASSWORD_CONFIRMATION = 'password_confirmation';
+    public const PASSWORD = 'password';
+    public const PASSWORD_CONFIRMATION = 'password_confirmation';
 
     /**
      *
@@ -58,7 +58,7 @@ class InvitationRegistrationForm extends FormValidator
 
         $this->addElement('category', Translation::get('Profile'));
 
-        $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), array("size" => "50"));
+        $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), array('size' => '50'));
         $this->addRule(
             User::PROPERTY_USERNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
@@ -86,20 +86,20 @@ class InvitationRegistrationForm extends FormValidator
 
         $this->addElement('category', Translation::get('BasicProfile'));
 
-        $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), array("size" => "50"));
+        $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), array('size' => '50'));
         $this->addRule(
             User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
-        $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), array("size" => "50"));
+        $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), array('size' => '50'));
         $this->addRule(
             User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
 
         // Email
-        $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), array("size" => "50"));
+        $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), array('size' => '50'));
         // $this->addRule(User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES), 'required');
         // $this->addRule(User::PROPERTY_EMAIL, Translation::get('WrongEmail'), 'email');
         $this->freeze(User::PROPERTY_EMAIL);

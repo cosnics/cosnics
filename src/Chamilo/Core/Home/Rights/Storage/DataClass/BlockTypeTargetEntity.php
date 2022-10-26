@@ -10,7 +10,7 @@ namespace Chamilo\Core\Home\Rights\Storage\DataClass;
  */
 class BlockTypeTargetEntity extends HomeTargetEntity
 {
-    const PROPERTY_BLOCK_TYPE = 'block_type';
+    public const PROPERTY_BLOCK_TYPE = 'block_type';
 
     /**
      *

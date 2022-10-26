@@ -40,9 +40,9 @@ class ItemRepository
 
     /**
      *
-     * @param integer $parentIdentifier
+     * @param int $parentIdentifier
      *
-     * @return integer
+     * @return int
      */
     public function countItemsByParentIdentifier(int $parentIdentifier)
     {
@@ -59,7 +59,7 @@ class ItemRepository
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createItem(Item $item)
@@ -70,7 +70,7 @@ class ItemRepository
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     public function createItemTitle(ItemTitle $itemTitle)
@@ -81,7 +81,7 @@ class ItemRepository
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteItem(Item $item)
     {
@@ -91,7 +91,7 @@ class ItemRepository
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteItemTitle(ItemTitle $itemTitle)
     {
@@ -101,7 +101,7 @@ class ItemRepository
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteItemTitlesForItem(Item $item)
     {
@@ -114,7 +114,7 @@ class ItemRepository
     }
 
     /**
-     * @param integer $identifier
+     * @param int $identifier
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item
      */
@@ -132,7 +132,7 @@ class ItemRepository
     }
 
     /**
-     * @param integer $itemIdentifier
+     * @param int $itemIdentifier
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
      */
@@ -163,7 +163,7 @@ class ItemRepository
     }
 
     /**
-     * @param integer[] $identifiers
+     * @param int $identifiers
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
@@ -178,9 +178,9 @@ class ItemRepository
 
     /**
      *
-     * @param integer $parentIdentifier
-     * @param integer $count
-     * @param integer $offset
+     * @param int $parentIdentifier
+     * @param int $count
+     * @param int $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
@@ -251,9 +251,9 @@ class ItemRepository
     }
 
     /**
-     * @param integer $parentIdentifier
+     * @param int $parentIdentifier
      *
-     * @return integer
+     * @return int
      */
     public function getNextItemSortValueByParentIdentifier(int $parentIdentifier)
     {
@@ -268,7 +268,7 @@ class ItemRepository
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return boolean
+     * @return bool
      */
     public function updateItem(Item $item)
     {
@@ -278,7 +278,7 @@ class ItemRepository
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
      *
-     * @return boolean
+     * @return bool
      */
     public function updateItemTitle(ItemTitle $itemTitle)
     {

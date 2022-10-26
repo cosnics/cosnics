@@ -17,29 +17,29 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     /**
      * Display options
      */
-    const DISPLAY_BOTH = 3;
-    const DISPLAY_ICON = 1;
-    const DISPLAY_TEXT = 2;
+    public const DISPLAY_BOTH = 3;
+    public const DISPLAY_ICON = 1;
+    public const DISPLAY_TEXT = 2;
 
     /**
      * Properties
      */
-    const PROPERTY_DISPLAY = 'display';
-    const PROPERTY_HIDDEN = 'hidden';
-    const PROPERTY_ICON_CLASS = 'icon_class';
-    const PROPERTY_PARENT = 'parent';
-    const PROPERTY_SORT = 'sort';
+    public const PROPERTY_DISPLAY = 'display';
+    public const PROPERTY_HIDDEN = 'hidden';
+    public const PROPERTY_ICON_CLASS = 'icon_class';
+    public const PROPERTY_PARENT = 'parent';
+    public const PROPERTY_SORT = 'sort';
 
     /**
      * Item types
      */
-    const TYPE_APPLICATION = 1;
-    const TYPE_CATEGORY = 3;
-    const TYPE_LINK = 2;
-    const TYPE_LINK_APPLICATION = 4;
+    public const TYPE_APPLICATION = 1;
+    public const TYPE_CATEGORY = 3;
+    public const TYPE_LINK = 2;
+    public const TYPE_LINK_APPLICATION = 4;
 
     /**
-     * @return integer
+     * @return int
      */
     public function getDisplay()
     {
@@ -68,7 +68,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getHidden()
     {
@@ -84,7 +84,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getParentId()
     {
@@ -92,7 +92,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getSort()
     {
@@ -121,7 +121,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @return integer
+     * @return int
      * @deprecated Use Item::getDisplay() now
      */
     public function get_display()
@@ -130,7 +130,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @return integer
+     * @return int
      * @deprecated Use Item::getHidden() now
      */
     public function get_hidden()
@@ -139,7 +139,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @return integer
+     * @return int
      * @deprecated Use Item::getParent() now
      */
     public function get_parent()
@@ -148,7 +148,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @return integer
+     * @return int
      * @deprecated Use Item::getSort() now
      */
     public function get_sort()
@@ -165,7 +165,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @return boolean
+     * @return bool
      * @deprecated Use Item::hadParentId() now
      */
     public function hasParent()
@@ -174,7 +174,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasParentId()
     {
@@ -183,7 +183,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public function isHidden()
     {
@@ -192,7 +192,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
 
     /**
      *
-     * @return boolean
+     * @return bool
      * @deprecated Use Item::isHidden() now
      */
     public function is_hidden()
@@ -201,7 +201,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @param integer $display
+     * @param int $display
      */
     public function setDisplay($display = self::DISPLAY_ICON)
     {
@@ -209,7 +209,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @param integer $hidden
+     * @param int $hidden
      */
     public function setHidden($hidden = 0)
     {
@@ -225,7 +225,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @param integer $parent
+     * @param int $parent
      */
     public function setParentId($parent)
     {
@@ -233,7 +233,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @param integer $sort
+     * @param int $sort
      */
     public function setSort($sort)
     {
@@ -241,7 +241,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @param integer $display
+     * @param int $display
      *
      * @deprecated Use Item::setDisplay() now
      */
@@ -251,7 +251,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @param integer $hidden
+     * @param int $hidden
      *
      * @deprecated User Item::setHidden() now
      */
@@ -261,7 +261,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @param integer $parent
+     * @param int $parent
      *
      * @deprecated Use Item::setParent() now
      */
@@ -271,7 +271,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @param integer $sort
+     * @param int $sort
      *
      * @deprecated Use Item::setSort() now
      */
@@ -281,7 +281,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function showIcon()
     {
@@ -289,7 +289,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function showTitle()
     {
@@ -297,7 +297,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @return boolean
+     * @return bool
      * @deprecated Use Item::showIcon() now
      */
     public function show_icon()
@@ -306,7 +306,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @return boolean
+     * @return bool
      * @deprecated Use Item::showTitle() now
      */
     public function show_title()

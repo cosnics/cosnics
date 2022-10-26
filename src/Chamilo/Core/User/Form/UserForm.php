@@ -29,13 +29,13 @@ class UserForm extends FormValidator
 {
     use DependencyInjectionContainerTrait;
 
-    const RESULT_ERROR = 'UserUpdateFailed';
+    public const RESULT_ERROR = 'UserUpdateFailed';
 
-    const RESULT_SUCCESS = 'UserUpdated';
+    public const RESULT_SUCCESS = 'UserUpdated';
 
-    const TYPE_CREATE = 1;
+    public const TYPE_CREATE = 1;
 
-    const TYPE_EDIT = 2;
+    public const TYPE_EDIT = 2;
 
     private $form_type;
 
@@ -77,19 +77,19 @@ class UserForm extends FormValidator
     public function build_basic_form()
     {
         // Lastname
-        $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), array("size" => "50"));
+        $this->addElement('text', User::PROPERTY_LASTNAME, Translation::get('LastName'), array('size' => '50'));
         $this->addRule(
             User::PROPERTY_LASTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
         // Firstname
-        $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), array("size" => "50"));
+        $this->addElement('text', User::PROPERTY_FIRSTNAME, Translation::get('FirstName'), array('size' => '50'));
         $this->addRule(
             User::PROPERTY_FIRSTNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
         );
         // Email
-        $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), array("size" => "50"));
+        $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), array('size' => '50'));
         if (Configuration::getInstance()->get_setting(array(Manager::context(), 'require_email')))
         {
             $this->addRule(
@@ -99,7 +99,7 @@ class UserForm extends FormValidator
         }
         $this->addRule(User::PROPERTY_EMAIL, Translation::get('WrongEmail'), 'email');
         // Username
-        $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), array("size" => "50"));
+        $this->addElement('text', User::PROPERTY_USERNAME, Translation::get('Username'), array('size' => '50'));
         $this->addRule(
             User::PROPERTY_USERNAME, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
             'required'
@@ -144,7 +144,7 @@ class UserForm extends FormValidator
 
         // Official Code
         $this->addElement(
-            'text', User::PROPERTY_OFFICIAL_CODE, Translation::get('OfficialCode'), array("size" => "50")
+            'text', User::PROPERTY_OFFICIAL_CODE, Translation::get('OfficialCode'), array('size' => '50')
         );
         // put restrictions on the official code
         if (Configuration::getInstance()->get_setting(array(Manager::context(), 'require_official_code')) &&
@@ -174,17 +174,17 @@ class UserForm extends FormValidator
         $this->addElement('static', null, null, Translation::get('AllowedProfileImageFormats'));
 
         // Phone Number
-        $this->addElement('text', User::PROPERTY_PHONE, Translation::get('PhoneNumber'), array("size" => "50"));
+        $this->addElement('text', User::PROPERTY_PHONE, Translation::get('PhoneNumber'), array('size' => '50'));
 
         // Disk Quota
-        $this->addElement('text', User::PROPERTY_DISK_QUOTA, Translation::get('DiskQuota'), array("size" => "50"));
+        $this->addElement('text', User::PROPERTY_DISK_QUOTA, Translation::get('DiskQuota'), array('size' => '50'));
         $this->addRule(
             User::PROPERTY_DISK_QUOTA, Translation::get('ThisFieldMustBeNumeric', null, StringUtilities::LIBRARIES),
             'numeric'
         );
         // Database Quota
         $this->addElement(
-            'text', User::PROPERTY_DATABASE_QUOTA, Translation::get('DatabaseQuota'), array("size" => "50")
+            'text', User::PROPERTY_DATABASE_QUOTA, Translation::get('DatabaseQuota'), array('size' => '50')
         );
         $this->addRule(
             User::PROPERTY_DATABASE_QUOTA,

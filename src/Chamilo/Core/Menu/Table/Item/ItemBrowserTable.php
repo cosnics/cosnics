@@ -21,7 +21,7 @@ use Symfony\Component\Translation\Translator;
  */
 class ItemBrowserTable extends DataClassTable implements TableActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager::PARAM_ITEM;
+    public const TABLE_IDENTIFIER = Manager::PARAM_ITEM;
 
     /**
      * @var \Symfony\Component\Translation\Translator
@@ -44,7 +44,7 @@ class ItemBrowserTable extends DataClassTable implements TableActionsSupport
     private $itemRendererFactory;
 
     /**
-     * @var integer
+     * @var int
      */
     private $parentIdentifier;
 
@@ -54,7 +54,7 @@ class ItemBrowserTable extends DataClassTable implements TableActionsSupport
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
      * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
      * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
-     * @param integer $parentIdentifier
+     * @param int $parentIdentifier
      *
      * @throws \Exception
      */
@@ -105,7 +105,7 @@ class ItemBrowserTable extends DataClassTable implements TableActionsSupport
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getParentIdentifier(): int
     {
@@ -113,7 +113,7 @@ class ItemBrowserTable extends DataClassTable implements TableActionsSupport
     }
 
     /**
-     * @param integer $parentIdentifier
+     * @param int $parentIdentifier
      */
     public function setParentIdentifier(int $parentIdentifier): void
     {

@@ -38,11 +38,11 @@ class SettingsConnector
         return $this->getService(UserPictureProviderFactory::class)->getAvailablePictureProviders();
     }
 
-    function get_date_terms_and_conditions_update()
+    public function get_date_terms_and_conditions_update()
     {
         $date_format = '%e-%m-%Y';
 
-        return array(Strftime($date_format, Manager::get_date_terms_and_conditions_last_modified()));
+        return [Strftime($date_format, Manager::get_date_terms_and_conditions_last_modified())];
     }
 
     public function get_fullname_formats()

@@ -15,8 +15,8 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class TabAddComponent extends Manager
 {
-    const PROPERTY_HTML = 'html';
-    const PROPERTY_TITLE = 'title';
+    public const PROPERTY_HTML = 'html';
+    public const PROPERTY_TITLE = 'title';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()

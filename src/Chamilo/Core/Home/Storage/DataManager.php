@@ -29,7 +29,7 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'home_';
+    public const PREFIX = 'home_';
 
     public static function determine_user_id()
     {
@@ -130,9 +130,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /**
      *
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      *
-     * @return boolean
+     * @return bool
      */
     public static function truncateHome($userIdentifier)
     {

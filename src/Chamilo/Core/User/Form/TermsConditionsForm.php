@@ -9,9 +9,9 @@ use function Strftime;
 
 class TermsConditionsForm extends FormValidator
 {
-    const TYPE_EDIT = 'edit';
+    public const TYPE_EDIT = 'edit';
 
-    const TYPE_VIEW = 'view';
+    public const TYPE_VIEW = 'view';
 
     private $parent;
 

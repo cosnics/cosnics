@@ -9,8 +9,8 @@ namespace Chamilo\Core\User\Domain\UserImporter;
  */
 class ImportDataResult
 {
-    const STATUS_SUCCESS = 1;
-    const STATUS_FAILED = 2;
+    public const STATUS_SUCCESS = 1;
+    public const STATUS_FAILED = 2;
 
     /**
      * @var int

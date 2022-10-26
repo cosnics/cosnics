@@ -173,7 +173,7 @@ class ColumnAddComponent extends Manager
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function getCurrentTotalWidth()
     {
@@ -189,7 +189,7 @@ class ColumnAddComponent extends Manager
 
     /**
      *
-     * @return integer
+     * @return int
      */
     public function determineNewColumnWidth()
     {
