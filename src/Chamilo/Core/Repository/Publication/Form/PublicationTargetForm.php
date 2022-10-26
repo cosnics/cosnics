@@ -17,7 +17,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -168,7 +168,7 @@ class PublicationTargetForm extends FormValidator
             Translation::get('Title', null, Manager::context())
         );
 
-        $table = new SortableTableFromArray(
+        $table = new ArrayCollectionTableRenderer(
             $table_data, $header, [], 1, count($table_data), SORT_ASC, 'selected-content-objects'
         );
         $this->addElement('html', $table->render());

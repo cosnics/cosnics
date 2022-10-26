@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Unsubscribed;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;

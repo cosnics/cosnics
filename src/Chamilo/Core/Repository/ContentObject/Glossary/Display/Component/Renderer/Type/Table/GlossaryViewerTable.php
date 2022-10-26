@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Glossary\Display\Component\Renderer\Type\Table;
 
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 
 class GlossaryViewerTable extends DataClassTable
 {

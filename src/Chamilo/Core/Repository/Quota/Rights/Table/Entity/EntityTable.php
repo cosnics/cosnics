@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Quota\Manager as QuotaManager;
 use Chamilo\Core\Repository\Quota\Rights\Manager;
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;

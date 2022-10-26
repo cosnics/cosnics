@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Metadata\Vocabulary\Table\User;
 
 use Chamilo\Core\Metadata\Vocabulary\Manager;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;

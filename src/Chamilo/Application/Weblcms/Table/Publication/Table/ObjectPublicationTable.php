@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Table\Publication\Table;
 
 use Chamilo\Application\Weblcms\Tool\Manager;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 

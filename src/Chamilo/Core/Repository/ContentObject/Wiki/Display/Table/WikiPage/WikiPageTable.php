@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Table\WikiPage;
 
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;

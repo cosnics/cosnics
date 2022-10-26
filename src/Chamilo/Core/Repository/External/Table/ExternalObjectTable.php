@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\External\Table;
 
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 
 class ExternalObjectTable extends DataClassTable
 {

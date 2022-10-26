@@ -4,7 +4,7 @@ namespace Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Component;
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager;
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\LoginTemplate;
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\UserTemplate;
-use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
 use Chamilo\Libraries\Translation\Translation;
 
 class BrowserComponent extends Manager
@@ -23,7 +23,7 @@ class BrowserComponent extends Manager
 
     function get_table()
     {
-        $table = new SortableTableFromArray($this->get_table_data());
+        $table = new ArrayCollectionTableRenderer($this->get_table_data());
         
         $html[] = $table->toHtml();
         

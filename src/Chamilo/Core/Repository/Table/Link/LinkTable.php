@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Table\Link;
 
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 
 class LinkTable extends DataClassTable
 {

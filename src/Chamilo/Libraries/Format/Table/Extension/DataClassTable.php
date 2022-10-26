@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+namespace Chamilo\Libraries\Format\Table\Extension;
 
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;

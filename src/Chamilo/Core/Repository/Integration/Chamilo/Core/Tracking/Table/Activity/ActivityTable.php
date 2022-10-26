@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Table\Activity;
 
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 
 /**
  * Table for the schema

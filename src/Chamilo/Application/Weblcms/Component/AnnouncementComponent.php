@@ -15,7 +15,7 @@ use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announc
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
-use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -194,7 +194,7 @@ class AnnouncementComponent extends Manager
         $headers[] = new SortableStaticTableColumn(Translation::get('Course'));
         $headers[] = new SortableStaticTableColumn(Translation::get('Announcement'));
 
-        $table = new SortableTableFromArray($data, $headers, $this->get_parameters());
+        $table = new ArrayCollectionTableRenderer($data, $headers, $this->get_parameters());
 
         $html[] = $table->toHtml();
 

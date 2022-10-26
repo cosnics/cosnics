@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Help\Table\Item;
 
 use Chamilo\Core\Help\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 
 class HelpItemTable extends DataClassTable
 {

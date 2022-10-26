@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\Table\Export;
 
-use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use HTML_Table;
 
-class ExportTable extends SortableTableFromArray
+class ExportTable extends ArrayCollectionTableRenderer
 {
 
     public function toHtml($totalValue = null, $totalColumn = null)

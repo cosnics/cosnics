@@ -21,9 +21,6 @@ use Exception;
 use Symfony\Component\Translation\Translator;
 
 /**
- * This class represents a table with the use of a column model, a data provider and a cell renderer Refactoring from
- * ObjectTable to split between a table based on a record and based on an object
- *
  * @package Chamilo\Libraries\Format\Table
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -33,9 +30,7 @@ abstract class Table
     use ClassContext;
 
     public const DEFAULT_NUMBER_OF_COLUMNS_PER_PAGE = 1;
-
     public const DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 20;
-
     public const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_ASC;
     public const DEFAULT_ORDER_COLUMN_INDEX = 0;
 
@@ -80,6 +75,9 @@ abstract class Table
 
     /**
      * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
     public function render(?Condition $condition = null): string
     {

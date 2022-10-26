@@ -24,7 +24,7 @@
         "chamilo/pear-libraries": "dev-refactor/database",
         "composer/composer": "2.3.*",
         "doctrine/cache": "1.13.*",
-        "doctrine/collections": "1.6.*",
+        "doctrine/collections": "1.8.*",
         "doctrine/dbal": "3.3.*",
         "doctrine/orm": "2.11.*",
         "adodb/adodb-php": "5.*",

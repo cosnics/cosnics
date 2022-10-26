@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\External\Table\Export;
 
 use Chamilo\Core\Repository\External\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 

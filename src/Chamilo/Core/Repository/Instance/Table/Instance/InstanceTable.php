@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Instance\Table\Instance;
 
 use Chamilo\Core\Repository\Instance\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 
 /**
  * Table for the schema

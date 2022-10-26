@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Table\User;
 
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 
 /**
  * Table representing a set of users which can be emulated

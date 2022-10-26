@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Home;
 
-use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
 
 /**
  *
@@ -10,6 +10,6 @@ use Chamilo\Libraries\Format\Table\SortableTableFromArray;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class SortableTable extends SortableTableFromArray
+class SortableTable extends ArrayCollectionTableRenderer
 {
 }

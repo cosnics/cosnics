@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Publication\Table;
 
 use Chamilo\Core\Repository\Publication\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 
 class PublicationTable extends DataClassTable
 {

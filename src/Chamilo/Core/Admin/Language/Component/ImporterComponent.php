@@ -7,7 +7,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
-use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -363,7 +363,7 @@ class ImporterComponent extends Manager
         $glyph = new FontAwesomeGlyph('circle', [], Translation::get('LocalNonEmptyCount'), 'far');
         $headers[] = new SortableStaticTableColumn('empty', $glyph->render());
 
-        $table = new SortableTableFromArray(
+        $table = new ArrayCollectionTableRenderer(
             $data, $headers, $this->get_parameters(), 0, 20, SORT_ASC, 'language_import_' . time()
         );
 

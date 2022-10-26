@@ -18,7 +18,7 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
@@ -135,7 +135,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $headers[] = new SortableStaticTableColumn(Translation::get('Package'));
         $headers[] = new StaticTableColumn('');
 
-        $table = new SortableTableFromArray(
+        $table = new ArrayCollectionTableRenderer(
             $table_data, $headers, $this->get_parameters(), 0, 20, SORT_ASC, 'available_packages'
         );
 
@@ -295,7 +295,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $headers[] = new SortableStaticTableColumn(Translation::get('Package'));
         $headers[] = new StaticTableColumn('');
 
-        $table = new SortableTableFromArray(
+        $table = new ArrayCollectionTableRenderer(
             $table_data, $headers, $this->get_parameters(), 0, 20, SORT_ASC, 'registered_packages'
         );
 

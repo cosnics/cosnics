@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -151,7 +151,7 @@ class ConfigurerComponent extends Manager
         $headers[] = new SortableStaticTableColumn(Translation::get('EntityType'));
         $headers[] = new StaticTableColumn('');
 
-        $table = new SortableTableFromArray($this->getEntityTypeSelectionTableData(), $headers);
+        $table = new ArrayCollectionTableRenderer($this->getEntityTypeSelectionTableData(), $headers);
 
         $html = [];
 

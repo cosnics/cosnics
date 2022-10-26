@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Table\WhoisOnline;
 
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 
 /**
  *

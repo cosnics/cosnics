@@ -24,7 +24,7 @@ use Symfony\Component\Translation\Translator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class HtmlTable extends HTML_Table
+abstract class HtmlTable
 {
     public const PARAM_NUMBER_OF_COLUMNS_PER_PAGE = 'columns_per_page';
     public const PARAM_NUMBER_OF_ROWS_PER_PAGE = 'per_page';
@@ -59,8 +59,6 @@ abstract class HtmlTable extends HTML_Table
         Security $security
     )
     {
-        parent::__construct(['class' => $this->getTableClasses()], 0, true);
-
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
         $this->pager = $pager;
@@ -84,13 +82,15 @@ abstract class HtmlTable extends HTML_Table
         TableParameterValues $parameterValues, ?TableFormActions $tableFormActions = null
     ): string
     {
+        $htmlTable = new HTML_Table(['class' => $this->getTableClasses()], 0, true);
+
         if ($parameterValues->getTotalNumberOfItems() == 0)
         {
-            return $this->getEmptyTable();
+            return $this->getEmptyTable($htmlTable);
         }
 
         $this->setupTableColumns(
-            $tableColumns, $parameterNames, $parameterValues, $tableFormActions
+            $htmlTable, $tableColumns, $parameterNames, $parameterValues, $tableFormActions
         );
 
         $html = [];
@@ -103,7 +103,7 @@ abstract class HtmlTable extends HTML_Table
         $html[] = '<div class="col-xs-12">';
 
         $html[] = '<div class="' . $this->getTableContainerClasses() . '">';
-        $html[] = $this->renderTableBody($tableRows, $parameterValues, $tableFormActions);
+        $html[] = $this->renderTableBody($htmlTable, $tableRows, $parameterValues, $tableFormActions);
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -205,19 +205,19 @@ abstract class HtmlTable extends HTML_Table
     /**
      * @throws \TableException
      */
-    public function getEmptyTable(): string
+    public function getEmptyTable(HTML_Table $htmlTable): string
     {
-        $cols = $this->getHeader()->getColCount();
+        $cols = $htmlTable->getHeader()->getColCount();
 
-        $this->setCellAttributes(0, 0, 'style="font-style: italic;text-align:center;" colspan=' . $cols);
-        $this->setCellContents(
+        $htmlTable->setCellAttributes(0, 0, 'style="font-style: italic;text-align:center;" colspan=' . $cols);
+        $htmlTable->setCellContents(
             0, 0, $this->getTranslator()->trans('NoSearchResults', [], StringUtilities::LIBRARIES)
         );
 
         $html = [];
 
         $html[] = '<div class="table-responsive">';
-        $html[] = parent::toHtml();
+        $html[] = $htmlTable->toHtml();
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -263,26 +263,27 @@ abstract class HtmlTable extends HTML_Table
      * @throws \TableException
      */
     public function prepareTableData(
-        ArrayCollection $tableRows, TableParameterValues $parameterValues, ?TableFormActions $tableFormActions = null
+        HTML_Table $htmlTable, ArrayCollection $tableRows, TableParameterValues $parameterValues,
+        ?TableFormActions $tableFormActions = null
     )
     {
-        $this->processSourceData($tableRows, $parameterValues, $tableFormActions);
-        $this->processCellAttributes();
+        $this->processSourceData($htmlTable, $tableRows, $parameterValues, $tableFormActions);
+        $this->processCellAttributes($htmlTable);
     }
 
     /**
      * @throws \TableException
      */
-    public function processCellAttributes()
+    public function processCellAttributes(HTML_Table $htmlTable)
     {
-        foreach ($this->headerAttributes as $column => $headerAttribute)
-        {
-            $this->setCellAttributes(0, $column, $headerAttribute);
-        }
+//        foreach ($this->headerAttributes as $column => $headerAttribute)
+//        {
+//            $htmlTable->setCellAttributes(0, $column, $headerAttribute);
+//        }
 
         foreach ($this->contentCellAttributes as $column => $contentCellAttribute)
         {
-            $this->setColAttributes($column, $contentCellAttribute);
+            $htmlTable->setColAttributes($column, $contentCellAttribute);
         }
     }
 
@@ -290,13 +291,14 @@ abstract class HtmlTable extends HTML_Table
      * @throws \TableException
      */
     public function processSourceData(
-        ArrayCollection $tableRows, TableParameterValues $parameterValues, ?TableFormActions $tableFormActions = null
+        HTML_Table $htmlTable, ArrayCollection $tableRows, TableParameterValues $parameterValues,
+        ?TableFormActions $tableFormActions = null
     )
     {
         foreach ($tableRows as $row)
         {
             $row = $this->filterData($row, $parameterValues, $tableFormActions);
-            $this->addRow($row);
+            $htmlTable->addRow($row);
         }
     }
 
@@ -353,12 +355,13 @@ abstract class HtmlTable extends HTML_Table
      * @throws \TableException
      */
     public function renderTableBody(
-        ArrayCollection $tableRows, TableParameterValues $parameterValues, ?TableFormActions $tableFormActions = null
+        HTML_Table $htmlTable, ArrayCollection $tableRows, TableParameterValues $parameterValues,
+        ?TableFormActions $tableFormActions = null
     ): string
     {
-        $this->prepareTableData($tableRows, $parameterValues, $tableFormActions);
+        $this->prepareTableData($htmlTable, $tableRows, $parameterValues, $tableFormActions);
 
-        return HTML_Table::toHtml();
+        return $htmlTable->toHtml();
     }
 
     /**
@@ -474,11 +477,11 @@ abstract class HtmlTable extends HTML_Table
      * @throws \TableException
      */
     public function setColumnHeader(
-        array $parameterNames, TableParameterValues $parameterValues, int $columnIndex, string $label,
-        bool $isSortable = true, ?array $headerAttributes = null, ?array $cellAttributes = null
+        HTML_Table $htmlTable, array $parameterNames, TableParameterValues $parameterValues, int $columnIndex,
+        string $label, bool $isSortable = true, ?array $headerAttributes = null, ?array $cellAttributes = null
     )
     {
-        $header = $this->getHeader();
+        $header = $htmlTable->getHeader();
 
         $header->setColAttributes($columnIndex, $headerAttributes);
 
@@ -546,7 +549,7 @@ abstract class HtmlTable extends HTML_Table
      * @throws \TableException
      */
     protected function setupTableColumns(
-        array $tableColumns, array $parameterNames, TableParameterValues $parameterValues,
+        HTML_Table $htmlTable, array $tableColumns, array $parameterNames, TableParameterValues $parameterValues,
         ?TableFormActions $tableFormActions = null
     )
     {
@@ -554,7 +557,7 @@ abstract class HtmlTable extends HTML_Table
         {
             $columnHeaderHtml =
                 '<div class="checkbox checkbox-primary"><input class="styled styled-primary sortableTableSelectToggle" type="checkbox" name="sortableTableSelectToggle" /><label></label></div>';
-            $this->setColumnHeader($parameterNames, $parameterValues, 0, $columnHeaderHtml, false);
+            $this->setColumnHeader($htmlTable, $parameterNames, $parameterValues, 0, $columnHeaderHtml, false);
         }
 
         foreach ($tableColumns as $key => $tableColumn)
@@ -574,7 +577,8 @@ abstract class HtmlTable extends HTML_Table
             }
 
             $this->setColumnHeader(
-                $parameterNames, $parameterValues, ($tableFormActions instanceof TableFormActions ? $key + 1 : $key),
+                $htmlTable, $parameterNames, $parameterValues,
+                ($tableFormActions instanceof TableFormActions ? $key + 1 : $key),
                 $this->getSecurity()->removeXSS($tableColumn->get_title()),
                 $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->is_sortable(), $headerAttributes,
                 $contentAttributes

@@ -6,7 +6,7 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
 
 /**
  *
@@ -40,7 +40,7 @@ class Table extends Html
                                                                     // $this->td_attributes);
         }
         
-        $table = new SortableTableFromArray(
+        $table = new ArrayCollectionTableRenderer(
             $this->convert_reporting_data($reporting_data), 
             $headers, 
             $parameters, 
