@@ -8,6 +8,18 @@
                   public="true"/>
 
         <service id="Chamilo\Libraries\Support\Diagnoser"/>
+        <service id="Chamilo\Libraries\Support\DiagnoserCellRenderer"/>
+        <service id="Chamilo\Libraries\Support"/>
+
+        <service id="Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface $cellRenderer"
+                 alias="Chamilo\Libraries\Support\DiagnoserCellRenderer"/>
+
+        <service id="Chamilo\Libraries\Support\DiagnoserTableRenderer"
+                 class="Chamilo\Libraries\Format\Table\SimpleTableRenderer">
+            <argument key="$cellRenderer"
+                      type="service"
+                      id="Chamilo\Libraries\Support\DiagnoserCellRenderer"/>
+        </service>
 
     </services>
 </container>

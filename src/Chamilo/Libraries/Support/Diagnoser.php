@@ -5,9 +5,9 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\SimpleTable;
+use Chamilo\Libraries\Format\Table\SimpleTableRenderer;
+use Chamilo\Libraries\Format\Tabs\AbstractTab;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
-use Chamilo\Libraries\Format\Tabs\Tab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Platform\ChamiloRequest;
@@ -17,9 +17,8 @@ use Doctrine\DBAL\Connection;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Libraries\Support
- * @author spou595 Class that is responsible for generating diagnostic information about the system
+ * @author  spou595 Class that is responsible for generating diagnostic information about the system
  */
 class Diagnoser
 {
@@ -36,6 +35,8 @@ class Diagnoser
 
     protected DatetimeUtilities $datetimeUtilities;
 
+    protected SimpleTableRenderer $diagnoserTableRenderer;
+
     protected PathBuilder $pathBuilder;
 
     protected ChamiloRequest $request;
@@ -47,7 +48,7 @@ class Diagnoser
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Connection $connection, ChamiloRequest $request,
         PathBuilder $pathBuilder, ConfigurablePathBuilder $configurablePathBuilder, Translator $translator,
-        DatetimeUtilities $datetimeUtilities, TabsRenderer $tabsRenderer
+        DatetimeUtilities $datetimeUtilities, TabsRenderer $tabsRenderer, SimpleTableRenderer $diagnoserTableRenderer
     )
     {
         $this->configurationConsulter = $configurationConsulter;
@@ -58,6 +59,7 @@ class Diagnoser
         $this->translator = $translator;
         $this->datetimeUtilities = $datetimeUtilities;
         $this->tabsRenderer = $tabsRenderer;
+        $this->diagnoserTableRenderer = $diagnoserTableRenderer;
     }
 
     public function render(): string
@@ -69,12 +71,12 @@ class Diagnoser
         foreach ($sections as $section)
         {
             $data = call_user_func([$this, 'get' . $section . 'Data']);
-            $table = new SimpleTable($data, new DiagnoserCellRenderer(), 'diagnoser');
+            $table = $this->getDiagnoserTableRenderer()->render($data);
 
             $tabs->add(
                 new ContentTab(
-                    $section, $this->getTranslation(ucfirst($section) . 'Title'), $table->render(), null,
-                    ContentTab::DISPLAY_TITLE
+                    $section, $this->getTranslation(ucfirst($section) . 'Title'), $table, null,
+                    AbstractTab::DISPLAY_TITLE
                 )
             );
         }
@@ -230,6 +232,16 @@ class Diagnoser
         );
 
         return $array;
+    }
+
+    public function getDiagnoserTableRenderer(): SimpleTableRenderer
+    {
+        return $this->diagnoserTableRenderer;
+    }
+
+    public function getLink(string $title, string $url): string
+    {
+        return '<a href="' . $url . '" target="about:bank">' . $title . '</a>';
     }
 
     /**
@@ -500,10 +512,5 @@ class Diagnoser
         );
 
         return $array;
-    }
-
-    public function getLink(string $title, string $url): string
-    {
-        return '<a href="' . $url . '" target="about:bank">' . $title . '</a>';
     }
 }

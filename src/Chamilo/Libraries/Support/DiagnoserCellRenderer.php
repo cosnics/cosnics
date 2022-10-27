@@ -2,16 +2,20 @@
 namespace Chamilo\Libraries\Support;
 
 use Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Libraries\Support
  */
 class DiagnoserCellRenderer implements SimpleTableCellRendererInterface
 {
 
+    public function getNamespace(): string
+    {
+        return StringUtilities::LIBRARIES;
+    }
+
     /**
-     *
      * @see \Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface::get_prefix()
      */
     public function getPrefix(): string
@@ -20,12 +24,11 @@ class DiagnoserCellRenderer implements SimpleTableCellRendererInterface
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface::get_properties()
      */
     public function getProperties(): array
     {
-        return array('', 'Section', 'Setting', 'Current', 'Expected', 'Comment');
+        return ['', 'Section', 'Setting', 'Current', 'Expected', 'Comment'];
     }
 
     public function renderCell(string $defaultProperty, array $data): string

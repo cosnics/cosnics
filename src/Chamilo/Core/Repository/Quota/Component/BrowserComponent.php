@@ -15,7 +15,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Table\PropertiesTable;
+use Chamilo\Libraries\Format\Table\PropertiesTableRenderer;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
@@ -31,14 +31,12 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
  * @package Chamilo\Core\Repository\Quota\Component
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BrowserComponent extends Manager implements TableSupport
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -76,7 +74,7 @@ class BrowserComponent extends Manager implements TableSupport
             $tabs->add(
                 new ContentTab(
                     'personal', Translation::get('Personal'), $this->getUserQuota(),
-                    new FontAwesomeGlyph('comments', array('fa-lg'), null, 'fas')
+                    new FontAwesomeGlyph('comments', ['fa-lg'], null, 'fas')
                 )
             );
 
@@ -89,7 +87,7 @@ class BrowserComponent extends Manager implements TableSupport
                     $tabs->add(
                         new ContentTab(
                             'personal_request', Translation::get('YourRequests'), $table->as_html(),
-                            new FontAwesomeGlyph('inbox', array('fa-lg'), null, 'fas')
+                            new FontAwesomeGlyph('inbox', ['fa-lg'], null, 'fas')
                         )
                     );
                 }
@@ -133,7 +131,7 @@ class BrowserComponent extends Manager implements TableSupport
                     $tabs->add(
                         new ContentTab(
                             'platform', Translation::get('Platform'), implode(PHP_EOL, $platform_quota),
-                            new FontAwesomeGlyph('tools', array('fa-lg'), null, 'fas')
+                            new FontAwesomeGlyph('tools', ['fa-lg'], null, 'fas')
                         )
                     );
                 }
@@ -176,7 +174,7 @@ class BrowserComponent extends Manager implements TableSupport
                         $tabs->add(
                             new ContentTab(
                                 RequestTable::TYPE_PENDING, Translation::get('PendingRequests'), $table->as_html(),
-                                new FontAwesomeGlyph('hourglass-half', array('fa-lg'), null, 'fas')
+                                new FontAwesomeGlyph('hourglass-half', ['fa-lg'], null, 'fas')
                             )
                         );
                     }
@@ -201,7 +199,7 @@ class BrowserComponent extends Manager implements TableSupport
                         $tabs->add(
                             new ContentTab(
                                 RequestTable::TYPE_GRANTED, Translation::get('GrantedRequests'), $table->as_html(),
-                                new FontAwesomeGlyph('check-square', array('fa-lg'), null, 'fas')
+                                new FontAwesomeGlyph('check-square', ['fa-lg'], null, 'fas')
                             )
                         );
                     }
@@ -226,7 +224,7 @@ class BrowserComponent extends Manager implements TableSupport
                         $tabs->add(
                             new ContentTab(
                                 RequestTable::TYPE_DENIED, Translation::get('DeniedRequests'), $table->as_html(),
-                                new FontAwesomeGlyph('times-circle', array('fa-lg'), null, 'fas')
+                                new FontAwesomeGlyph('times-circle', ['fa-lg'], null, 'fas')
                             )
                         );
                     }
@@ -258,7 +256,7 @@ class BrowserComponent extends Manager implements TableSupport
                 $commonActions->addButton(
                     new Button(
                         Translation::get('UpgradeQuota'), new FontAwesomeGlyph('angle-double-up', [], null, 'fas'),
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPGRADE))
+                        $this->get_url([self::PARAM_ACTION => self::ACTION_UPGRADE])
                     )
                 );
             }
@@ -268,7 +266,7 @@ class BrowserComponent extends Manager implements TableSupport
                 $commonActions->addButton(
                     new Button(
                         Translation::get('RequestUpgrade'), new FontAwesomeGlyph('question-circle', [], null, 'fas'),
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))
+                        $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE])
                     )
                 );
             }
@@ -281,7 +279,7 @@ class BrowserComponent extends Manager implements TableSupport
                         new Button(
                             Translation::get('ConfigureManagementRights'),
                             new FontAwesomeGlyph('lock', [], null, 'fas'),
-                            $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS))
+                            $this->get_url([self::PARAM_ACTION => self::ACTION_RIGHTS])
                         )
                     );
                 }
@@ -289,7 +287,7 @@ class BrowserComponent extends Manager implements TableSupport
                 $toolActions->addButton(
                     new Button(
                         Translation::get('ResetTotal'), new FontAwesomeGlyph('undo', [], null, 'fas'),
-                        $this->get_url(array(self::PARAM_RESET_CACHE => 1))
+                        $this->get_url([self::PARAM_RESET_CACHE => 1])
                     )
                 );
             }
@@ -301,6 +299,11 @@ class BrowserComponent extends Manager implements TableSupport
         }
 
         return $this->buttonToolbarRenderer;
+    }
+
+    protected function getPropertiesTableRenderer(): PropertiesTableRenderer
+    {
+        return $this->getService(PropertiesTableRenderer::class);
     }
 
     protected function getTabsRenderer(): TabsRenderer
@@ -405,16 +408,14 @@ class BrowserComponent extends Manager implements TableSupport
                 DatetimeUtilities::getInstance()->formatLocaleDate(null, $oldest_object->get_creation_date());
         }
 
-        $table = new PropertiesTable($properties);
         $html[] = '<div class="quota_statistics">';
-        $html[] = $table->toHtml();
+        $html[] = $this->getPropertiesTableRenderer()->render($properties);
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
 
     /**
-     *
      * @see @see common\libraries.NewObjectTableSupport::get_object_table_condition()
      */
     public function get_table_condition($object_table_class_name)

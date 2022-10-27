@@ -139,8 +139,7 @@ class ArrayCollectionTableRenderer
         if ($this->isSortable($tableColumns, $parameterValues->getOrderColumnIndex()))
         {
             $tableData = $this->sortData(
-                $tableData->toArray(), $parameterValues->getOrderColumnIndex(),
-                $parameterValues->getOrderColumnDirection()
+                $tableData, $parameterValues->getOrderColumnIndex(), $parameterValues->getOrderColumnDirection()
             );
         }
 

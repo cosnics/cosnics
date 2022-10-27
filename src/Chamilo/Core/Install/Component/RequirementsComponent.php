@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\SimpleTable;
+use Chamilo\Libraries\Format\Table\SimpleTableRenderer;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Support\Diagnoser;
 use Chamilo\Libraries\Support\DiagnoserCellRenderer;
@@ -38,7 +38,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
     {
         $this->checkInstallationAllowed();
 
-        $table = new SimpleTable($this->get_data(), new DiagnoserCellRenderer(), 'diagnoser');
+        $table = new SimpleTableRenderer($this->get_data(), new DiagnoserCellRenderer(), 'diagnoser');
 
         $html = [];
 

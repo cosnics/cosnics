@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\External;
 
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\PropertiesTable;
+use Chamilo\Libraries\Format\Table\PropertiesTableRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -11,13 +12,11 @@ abstract class ExternalObjectDisplay
 {
 
     /**
-     *
      * @var ExternalObject
      */
     private $object;
 
     /**
-     *
      * @param $object ExternalObject
      */
     public function __construct($object)
@@ -26,7 +25,6 @@ abstract class ExternalObjectDisplay
     }
 
     /**
-     *
      * @return string
      */
     public function as_html()
@@ -40,7 +38,6 @@ abstract class ExternalObjectDisplay
     }
 
     /**
-     *
      * @param $object ExternalObject
      *
      * @return ExternalObjectDisplay
@@ -52,8 +49,14 @@ abstract class ExternalObjectDisplay
         return new $class($object);
     }
 
+    public function getPropertiesTableRenderer(): PropertiesTableRenderer
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            PropertiesTableRenderer::class
+        );
+    }
+
     /**
-     *
      * @return array
      */
     public function get_display_properties()
@@ -65,8 +68,7 @@ abstract class ExternalObjectDisplay
 
         if ($object->get_description())
         {
-            $properties[Translation::get('Description', null, StringUtilities::LIBRARIES)] =
-                $object->get_description();
+            $properties[Translation::get('Description', null, StringUtilities::LIBRARIES)] = $object->get_description();
         }
 
         if ($object->get_created() > 0)
@@ -89,7 +91,6 @@ abstract class ExternalObjectDisplay
     }
 
     /**
-     *
      * @return ExternalObject
      */
     public function get_object()
@@ -98,14 +99,13 @@ abstract class ExternalObjectDisplay
     }
 
     /**
-     *
-     * @param $is_thumbnail boolean
+     * @param $is_thumbnail bool
      *
      * @return string
      */
     public function get_preview($is_thumbnail = false)
     {
-        $glyph = new FontAwesomeGlyph('image', array('fa-5x'), null, 'fas');
+        $glyph = new FontAwesomeGlyph('image', ['fa-5x'], null, 'fas');
 
         if ($is_thumbnail)
         {
@@ -131,7 +131,6 @@ abstract class ExternalObjectDisplay
     }
 
     /**
-     *
      * @return string
      */
     public function get_properties_table()
@@ -141,15 +140,11 @@ abstract class ExternalObjectDisplay
         $properties = $this->get_display_properties();
         if (count($properties) > 0)
         {
-            $table = new PropertiesTable($properties);
-            $table->setAttribute('style', 'margin-top: 1em; margin-bottom: 0;');
-
-            return $table->toHtml();
+            return $this->getPropertiesTableRenderer()->render($properties);
         }
     }
 
     /**
-     *
      * @return string
      */
     public function get_title()
