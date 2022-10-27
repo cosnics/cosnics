@@ -19,7 +19,6 @@ use Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTablePropertyMo
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Security;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
 use HTML_Table;
@@ -135,9 +134,11 @@ class GalleryHTMLTable
             );
         }
 
+        $translator = $this->getTranslator();
+
         $buttonToolBar->prependItem(
             new Button(
-                Translation::get('SelectAll', null, StringUtilities::LIBRARIES),
+                $translator->trans('SelectAll', [], StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('check-square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, null,
                 ['btn-sm select-all']
             )
@@ -145,7 +146,7 @@ class GalleryHTMLTable
 
         $buttonToolBar->prependItem(
             new Button(
-                Translation::get('UnselectAll', null, StringUtilities::LIBRARIES),
+                $translator->trans('UnselectAll', [], StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, null,
                 ['btn-sm select-none']
             )
@@ -333,6 +334,7 @@ class GalleryHTMLTable
         $currentOrderDirections = $this->getOrderDirection();
         $currentFirstOrderDirection = $currentOrderDirections[0];
         $subButtons = [];
+        $translator = $this->getTranslator();
 
         if ($this->allowOrderDirection && $propertyModel instanceof GalleryTablePropertyModel &&
             count($propertyModel->get_properties()) > 0)
@@ -348,7 +350,7 @@ class GalleryHTMLTable
             $isSelected = $currentFirstOrderDirection == SORT_ASC;
 
             $subButtons[] = new SubButton(
-                Translation::get('ASC'), null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, null, [], null,
+                $translator->trans('ASC'), null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, null, [], null,
                 $isSelected
             );
 
@@ -357,7 +359,7 @@ class GalleryHTMLTable
             $isSelected = $currentFirstOrderDirection == SORT_DESC;
 
             $subButtons[] = new SubButton(
-                Translation::get('DESC'), null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, null, [], null,
+                $translator->trans('DESC'), null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, null, [], null,
                 $isSelected
             );
         }
@@ -379,6 +381,7 @@ class GalleryHTMLTable
             $buttonToolBar = new ButtonToolBar();
             $dropDownButton = new DropdownButton();
             $properties = $propertyModel->get_properties();
+            $translator = $this->getTranslator();
 
             $currentOrderColumns = $this->getOrderColumn();
             $currentFirstOrderColumn = $currentOrderColumns[0];
@@ -392,25 +395,25 @@ class GalleryHTMLTable
 
             $orderProperty = $properties[$propertyIndex];
 
-            $dropDownButton->addSubButton(new SubButtonHeader(Translation::get('SortingProperty')));
+            $dropDownButton->addSubButton(new SubButtonHeader($translator->trans('SortingProperty')));
             $dropDownButton->addSubButtons($this->renderPropertySubButtons());
             $dropDownButton->setClasses(['btn-sm']);
             $dropDownButton->setDropdownClasses(['dropdown-menu-right']);
 
-            $orderPropertyName = Translation::get(
+            $orderPropertyName = $translator->trans(
                 (string) StringUtilities::getInstance()->createString($orderProperty->get_name())->upperCamelize()
             );
 
             if ($this->allowOrderDirection)
             {
                 $dropDownButton->addSubButton(new SubButtonDivider());
-                $dropDownButton->addSubButton(new SubButtonHeader(Translation::get('SortingDirection')));
+                $dropDownButton->addSubButton(new SubButtonHeader($translator->trans('SortingDirection')));
                 $dropDownButton->addSubButtons($this->renderPropertyDirectionSubButtons());
 
-                $orderDirection = Translation::get(($currentFirstOrderDirection == SORT_ASC ? 'ASC' : 'DESC'));
+                $orderDirection = $translator->trans(($currentFirstOrderDirection == SORT_ASC ? 'ASC' : 'DESC'));
 
                 $dropDownButton->setLabel(
-                    Translation::get(
+                    $translator->trans(
                         'GalleryTableOrderPropertyWithDirection',
                         ['PROPERTY' => $orderPropertyName, 'DIRECTION' => $orderDirection]
                     )
@@ -419,7 +422,7 @@ class GalleryHTMLTable
             else
             {
                 $dropDownButton->setLabel(
-                    Translation::get('GalleryTableOrderProperty', ['PROPERTY' => $orderPropertyName])
+                    $translator->trans('GalleryTableOrderProperty', ['PROPERTY' => $orderPropertyName])
                 );
             }
 
@@ -466,7 +469,7 @@ class GalleryHTMLTable
 
                 $propertyUrl = new Redirect($queryParameters);
 
-                $label = Translation::get(
+                $label = $this->getTranslator()->trans(
                     (string) StringUtilities::getInstance()->createString($property->get_name())->upperCamelize()
                 );
                 $isSelected = $currentFirstOrderColumn == $propertyIndex;
@@ -604,66 +607,5 @@ class GalleryHTMLTable
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @param string[] $parameterNames
-     * @param string[] $headerAttributes
-     *
-     * @throws \TableException
-     */
-    public function setColumnHeader(
-        HTML_Table $htmlTable, array $parameterNames, TableParameterValues $parameterValues, int $columnIndex,
-        string $label, bool $isSortable = true, ?array $headerAttributes = null
-    )
-    {
-        $header = $htmlTable->getHeader();
-
-        if ($isSortable)
-        {
-            $currentOrderColumnIndex = $parameterValues->getOrderColumnIndex();
-            $currentOrderColumnDirection = $parameterValues->getOrderColumnDirection();
-
-            if ($columnIndex != $currentOrderColumnIndex)
-            {
-                $currentOrderColumnIndex = $columnIndex;
-                $currentOrderColumnDirection = SORT_ASC;
-                $glyph = '';
-            }
-            else
-            {
-                if ($currentOrderColumnDirection == SORT_ASC)
-                {
-                    $currentOrderColumnDirection = SORT_DESC;
-                    $glyphType = 'arrow-down-long';
-                }
-                else
-                {
-                    $currentOrderColumnDirection = SORT_ASC;
-                    $glyphType = 'arrow-up-long';
-                }
-
-                $glyph = new FontAwesomeGlyph($glyphType);
-                $glyph = $glyph->render();
-            }
-
-            $queryParameters = [
-                $parameterNames[TableParameterValues::PARAM_PAGE_NUMBER] => $parameterValues->getPageNumber(),
-                $parameterNames[TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE] => $parameterValues->getNumberOfRowsPerPage(
-                ),
-                $parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_INDEX] => $currentOrderColumnIndex,
-                $parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION] => $currentOrderColumnDirection
-            ];
-
-            $content = '<a href="' . $this->getUrlGenerator()->fromRequest($queryParameters) . '">' . $label . '</a> ' .
-                $glyph;
-        }
-        else
-        {
-            $content = $label;
-        }
-
-        $header->setHeaderContents(0, $columnIndex, $content);
-        $header->setColAttributes($columnIndex, $headerAttributes);
     }
 }
