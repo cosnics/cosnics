@@ -20,9 +20,7 @@ class ArrayCollectionTableRenderer
 
     protected SortableTable $sortableTable;
 
-    public function __construct(
-        ChamiloRequest $request, Pager $pager, SortableTable $sortableTable
-    )
+    public function __construct(ChamiloRequest $request, Pager $pager, SortableTable $sortableTable)
     {
         $this->request = $request;
         $this->pager = $pager;
@@ -140,12 +138,10 @@ class ArrayCollectionTableRenderer
     {
         if ($this->isSortable($tableColumns, $parameterValues->getOrderColumnIndex()))
         {
-            $tableSorter = new TableSort(
+            $tableData = $this->sortData(
                 $tableData->toArray(), $parameterValues->getOrderColumnIndex(),
                 $parameterValues->getOrderColumnDirection()
             );
-
-            $tableData = new ArrayCollection($tableSorter->sort());
         }
 
         return new ArrayCollection(
@@ -168,6 +164,68 @@ class ArrayCollectionTableRenderer
         return $this->sortableTable;
     }
 
+    public function isDateColumn(ArrayCollection $data, int $column): bool
+    {
+        $isDate = true;
+
+        foreach ($data as $row)
+        {
+            if (strlen(strip_tags($row[$column])) != 0)
+            {
+                $check_date = strtotime(strip_tags($row[$column]));
+                // strtotime Returns a timestamp on success, FALSE otherwise.
+                // Previous to PHP 5.1.0, this function would return -1 on failure.
+                $isDate &= ($check_date != - 1 && $check_date != false);
+            }
+            else
+            {
+                $isDate &= false;
+            }
+
+            if (!$isDate)
+            {
+                break;
+            }
+        }
+
+        return $isDate;
+    }
+
+    public function isImageColumn(ArrayCollection $data, int $column): bool
+    {
+        $isImage = true;
+
+        foreach ($data as $row)
+        {
+            $isImage &= strlen(trim(strip_tags($row[$column], '<img>'))) > 0; // at least one img-tag
+            $isImage &= strlen(trim(strip_tags($row[$column]))) == 0; // and no text outside attribute-values
+
+            if (!$isImage)
+            {
+                break;
+            }
+        }
+
+        return $isImage;
+    }
+
+    public function isNumericColumn(ArrayCollection $data, int $column): bool
+    {
+        $isNumeric = true;
+
+        foreach ($data as $row)
+        {
+            $isNumeric &= is_numeric(strip_tags($row[$column]));
+
+            if (!$isNumeric)
+            {
+                break;
+            }
+        }
+
+        return $isNumeric;
+    }
+
     /**
      * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
      */
@@ -181,5 +239,58 @@ class ArrayCollectionTableRenderer
         }
 
         return false;
+    }
+
+    protected function sortData(ArrayCollection $data, int $ordercolumnIndex, int $orderColumnDirection
+    ): ArrayCollection
+    {
+        if ($data->isEmpty() || !in_array($orderColumnDirection, [SORT_ASC, SORT_DESC]))
+        {
+            return $data;
+        }
+
+        if ($this->isImageColumn($data, $ordercolumnIndex))
+        {
+            $compareFunction = function ($a, $b) use ($ordercolumnIndex, $orderColumnDirection) {
+                $compareResult = strnatcmp(
+                    strip_tags($a[$ordercolumnIndex], '<img>'), strip_tags($b[$ordercolumnIndex], '<img>')
+                );
+
+                return $orderColumnDirection == SORT_ASC ? $compareResult > 0 : $compareResult <= 0;
+            };
+        }
+        elseif ($this->isDateColumn($data, $ordercolumnIndex))
+        {
+            $compareFunction = function ($a, $b) use ($ordercolumnIndex, $orderColumnDirection) {
+                $aTime = strtotime(strip_tags($a[$ordercolumnIndex]));
+                $bTime = strtotime(strip_tags($b[$ordercolumnIndex]));
+
+                return $orderColumnDirection == SORT_ASC ? $aTime > $bTime : $aTime <= $bTime;
+            };
+        }
+        elseif ($this->isNumericColumn($data, $ordercolumnIndex))
+        {
+            $compareFunction = function ($a, $b) use ($ordercolumnIndex, $orderColumnDirection) {
+                $aNumber = strip_tags($a[$ordercolumnIndex]);
+                $bNumber = strip_tags($b[$ordercolumnIndex]);
+
+                return $orderColumnDirection == SORT_ASC ? $aNumber > $bNumber : $aNumber <= $bNumber;
+            };
+        }
+        else
+        {
+            $compareFunction = function ($a, $b) use ($ordercolumnIndex, $orderColumnDirection) {
+                $compareResult = strnatcmp(
+                    strip_tags($a[$ordercolumnIndex]), strip_tags($b[$ordercolumnIndex])
+                );
+
+                return $orderColumnDirection == SORT_ASC ? $compareResult > 0 : $compareResult <= 0;
+            };
+        }
+
+        $iterator = $data->getIterator();
+        $iterator->uasort($compareFunction);
+
+        return new ArrayCollection($iterator->getArrayCopy());
     }
 }
