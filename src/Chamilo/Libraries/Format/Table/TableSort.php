@@ -12,11 +12,7 @@ class TableSort
     const SORT_DATE = 3;
     const SORT_IMAGE = 4;
 
-    /**
-     *
-     * @var integer[]
-     */
-    private array $columns;
+    private int $columns;
 
     /**
      *
@@ -24,30 +20,20 @@ class TableSort
      */
     private array $data;
 
-    /**
-     *
-     * @var integer[]
-     */
-    private array $directions;
+    private int $directions;
 
     /**
      *
      * @param string[][] $data
-     * @param array $columns
-     * @param array $directions
      */
-    public function __construct(array $data, array $columns = [0], array $directions = [SORT_ASC])
+    public function __construct(array $data, int $columns = 0, int $directions = SORT_ASC)
     {
         $this->data = $data;
         $this->columns = $columns;
         $this->directions = $directions;
     }
 
-    /**
-     *
-     * @return integer[]
-     */
-    public function getColumns(): array
+    public function getColumns(): int
     {
         return $this->columns;
     }
@@ -70,11 +56,7 @@ class TableSort
         $this->data = $data;
     }
 
-    /**
-     *
-     * @return integer[]
-     */
-    public function getDirections(): array
+    public function getDirections(): int
     {
         return $this->directions;
     }
@@ -164,20 +146,12 @@ class TableSort
         return $isNumeric;
     }
 
-    /**
-     *
-     * @param integer[] $columns
-     */
-    public function setColumn(array $columns)
+    public function setColumn(int $columns)
     {
         $this->columns = $columns;
     }
 
-    /**
-     *
-     * @param integer[] $directions
-     */
-    public function setDirection(array $directions)
+    public function setDirection(int $directions)
     {
         $this->directions = $directions;
     }
@@ -212,10 +186,10 @@ class TableSort
             }
         }
 
-        $firstColumn = $this->getColumns()[0];
-        $firstDirection = $this->getDirections()[0];
+        $firstColumn = $this->getColumns();
+        $firstDirection = $this->getDirections();
 
-        $compare_operator = $this->getDirections()[0] == SORT_ASC ? '>' : '<=';
+        $compare_operator = $this->getDirections() == SORT_ASC ? '>' : '<=';
 
         if ($this->isImageColumn($data, $firstColumn))
         {
