@@ -35,11 +35,6 @@ class TableSort
         return $this->column;
     }
 
-    public function setColumn(int $column)
-    {
-        $this->column = $column;
-    }
-
     /**
      * @return string[][]
      */
