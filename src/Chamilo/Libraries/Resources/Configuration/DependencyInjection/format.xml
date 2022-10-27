@@ -27,6 +27,7 @@
         <service id="Chamilo\Libraries\Format\Table\PropertiesTableRenderer"/>
         <service id="Chamilo\Libraries\Format\Table\SimpleTableRenderer"/>
         <service id="Chamilo\Libraries\Format\Table\SortableTable"/>
+        <service id="Chamilo\Libraries\Format\Table\GalleryHTMLTable"/>
         <service id="Chamilo\Libraries\Format\Table\Pager"/>
         <service id="Chamilo\Libraries\Format\Table\PagerRenderer"/>
 

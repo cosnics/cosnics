@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Format\Table\Extension\GalleryTable;
 
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Interfaces\GalleryTableOrderDirectionProhibition;
 use Chamilo\Libraries\Format\Table\GalleryHTMLTable;
+use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\Table;
 use Exception;
 
@@ -32,8 +34,8 @@ abstract class GalleryTable extends Table
     {
         $this->table = new GalleryHTMLTable(
             $this->get_name(), array($this, 'countData'), array($this, 'getData'), array($this, 'get_property_model'),
-            $this->get_property_model()->getDefaultOrderBy() + ($this->hasTableActions() ? 1 : 0),
-            $this->getDefaultMaximumNumberofResults(), $this->get_property_model()->getDefaultOrderDirection(),
+            $this->getDefaultOrderBy() + ($this->hasTableActions() ? 1 : 0),
+            $this->getDefaultMaximumNumberofResults(), $this->getDefaultOrderDirection(),
             !$this->prohibits_order_direction()
         );
 
@@ -69,24 +71,6 @@ abstract class GalleryTable extends Table
     }
 
     /**
-     * Gets the table's cell renderer or builds one if it is not set
-     *
-     * @return \Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTableCellRenderer
-     * @throws \Exception
-     */
-    public function getTableCellRenderer(): GalleryTableCellRenderer
-    {
-        $cell_renderer = parent::getTableCellRenderer();
-
-        if (!$cell_renderer instanceof GalleryTableCellRenderer)
-        {
-            throw new Exception('The cell renderer must be of type GalleryTableCellRenderer');
-        }
-
-        return $cell_renderer;
-    }
-
-    /**
      * Gets the default column count of the table.
      *
      * @return integer
@@ -104,7 +88,7 @@ abstract class GalleryTable extends Table
      *
      * @return \Chamilo\Libraries\Storage\Query\OrderProperty
      */
-    protected function getOrderProperty($orderIndex, $orderDirection)
+    public function getOrderProperty(int $orderIndex, int $orderDirection)
     {
         return $this->get_property_model()->getOrderProperty($orderIndex, $orderDirection);
     }
@@ -142,8 +126,8 @@ abstract class GalleryTable extends Table
         }
 
         $this->current_row[] = array(
-            $this->getTableCellRenderer()->renderIdentifierCell($result),
-            $this->getTableCellRenderer()->renderCell(null, $result)
+            $this->renderIdentifierCell($result),
+            $this->renderCell(null, $result)
         );
     }
 
@@ -163,5 +147,65 @@ abstract class GalleryTable extends Table
     public function prohibits_order_direction()
     {
         return $this instanceof GalleryTableOrderDirectionProhibition;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
+     *
+     * @return string
+     */
+    abstract public function renderContent($result);
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
+     *
+     * @return string
+     */
+    abstract public function renderTitle($result);
+
+    /**
+     * Renders a single cell
+     *
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
+     *
+     * @return string
+     */
+    public function renderCell(TableColumn $column, $result): string
+    {
+        $html = [];
+
+        $html[] = '<div class="panel panel-default panel-gallery">';
+
+        $html[] = '<div class="panel-heading">';
+
+        if ($this->getTable()->hasTableActions())
+        {
+            $html[] = '__CHECKBOX_PLACEHOLDER__';
+        }
+
+        $title = $this->renderTitle($result);
+
+        $html[] = '<h3 class="panel-title" title="' . $title . '">';
+        $html[] = $title;
+        $html[] = '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body panel-body-thumbnail text-center">';
+
+        $html[] = $this->renderContent($result);
+        $html[] = '</div>';
+
+        if ($this instanceof TableRowActionsSupport)
+        {
+            $html[] = '<div class="panel-footer">';
+            $html[] = $this->get_actions($result);
+            $html[] = '</div>';
+        }
+
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 }

@@ -16,106 +16,19 @@ use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
+use HTML_Table;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Table
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class GalleryHTMLTable extends HtmlTable
 {
-    const DEFAULT_COLUMN_COUNT = 4;
-
-    /**
-     *
-     * @var boolean
-     */
-    private $allowOrderDirection;
-
-    /**
-     *
-     * @var string[]
-     */
-    private $sourcePropertiesFunction;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTablePropertyModel
-     */
-    private $sourceProperties;
-
-    /**
-     *
-     * @param string $tableName
-     * @param string[] $sourceCountFunction
-     * @param string[] $sourceDataFunction
-     * @param string[] $sourcePropertiesFunction
-     * @param integer $defaultOrderColumn
-     * @param integer $defaultNumberOfItemsPerPage
-     * @param integer $defaultOrderDirection
-     * @param boolean $allowOrderDirection
-     * @param boolean $allowPageSelection
-     * @param boolean $allowPageNavigation
-     */
-    public function __construct(
-        $tableName = 'gallery_table', $sourceCountFunction = null, $sourceDataFunction = null,
-        $sourcePropertiesFunction = null, $defaultOrderColumn = 1, $defaultNumberOfItemsPerPage = 20,
-        $defaultOrderDirection = SORT_ASC, $allowOrderDirection = true, $allowPageNavigation = true
-    )
+    public function getActionsButtonToolbar(TableActions $tableActions): ButtonToolBar
     {
-        parent::__construct(
-            $tableName, $sourceCountFunction, $sourceDataFunction, $defaultOrderColumn, $defaultNumberOfItemsPerPage,
-            $defaultOrderDirection, $allowPageNavigation
-        );
-
-        $this->allowOrderDirection = $allowOrderDirection;
-        $this->sourcePropertiesFunction = $sourcePropertiesFunction;
-    }
-
-    /**
-     * Transform all data in a table-row, using the filters defined by the function set_column_filter(...) defined
-     * elsewhere in this class.
-     * If you've defined actions, the first element of the given row will be converted into a
-     * checkbox
-     *
-     * @param string[] $row
-     *
-     * @return string[]
-     */
-    public function filterData($row)
-    {
-        foreach ($row as $index => $value)
-        {
-            if (strlen($value[0]) == 0)
-            {
-                $row[$index] = '';
-            }
-            else
-            {
-                $row[$index] = $value[1];
-                $hasActions = $this->getTableFormActions() instanceof TableActions &&
-                    $this->getTableFormActions()->hasFormActions();
-
-                if ($hasActions)
-                {
-                    $row[$index] = str_replace(
-                        '__CHECKBOX_PLACEHOLDER__', $this->getCheckboxHtml($value[0]), $row[$index]
-                    );
-                }
-            }
-        }
-
-        return $row;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
-     */
-    public function getActionsButtonToolbar()
-    {
-        $buttonToolBar = parent::getActionsButtonToolbar();
+        $buttonToolBar = parent::getActionsButtonToolbar($tableActions);
 
         $buttonToolBar->prependItem(
             new Button(
@@ -136,89 +49,43 @@ class GalleryHTMLTable extends HtmlTable
         return $buttonToolBar;
     }
 
-    public function getColumnCount(): int
-    {
-        return self::DEFAULT_COLUMN_COUNT;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getFormClasses()
+    public function getFormClasses(): string
     {
         return 'form-gallery-table';
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTablePropertyModel
-     */
-    public function getSourceProperties()
-    {
-        if (!is_null($this->getSourcePropertiesFunction()))
-        {
-            if (is_null($this->sourceProperties))
-            {
-                $this->sourceProperties = call_user_func($this->getSourcePropertiesFunction());
-            }
-
-            return $this->sourceProperties;
-        }
-
-        return null;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function getSourcePropertiesFunction()
-    {
-        return $this->sourcePropertiesFunction;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getTableActionsJavascript()
+    public function getTableActionsJavascript(): string
     {
         return ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath(StringUtilities::LIBRARIES, true) . 'GalleryTable.js'
         );
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getTableClasses()
+    public function getTableClasses(): string
     {
         return 'table-gallery col-xs-12';
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getTableContainerClasses()
+    public function getTableContainerClasses(): string
     {
         return 'table-gallery-container';
     }
 
-    public function prepareTableData()
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     *
+     * @throws \TableException
+     */
+    public function prepareTableData(
+        HTML_Table $htmlTable, array $tableColumns, ArrayCollection $tableRows, ?TableActions $tableActions = null
+    )
     {
-        $this->processSourceData();
+        parent::prepareTableData($htmlTable, $tableColumns, $tableRows, $tableActions);
 
-        $this->altRowAttributes(0, array('class' => 'row'), array('class' => 'row'), true);
-        $this->setAllAttributes(array('class' => 'col-xs-6 col-lg-3'));
-
-        $this->processCellAttributes();
+        $htmlTable->setAllAttributes(['class' => 'col-xs-6 col-lg-3']);
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
      */
     public function renderPropertyDirectionSubButtons()
@@ -233,10 +100,11 @@ class GalleryHTMLTable extends HtmlTable
         {
             $queryParameters = [];
             $queryParameters[$this->getParameterName(TableParameterValues::PARAM_PAGE_NUMBER)] = $this->getPageNumber();
-            $queryParameters[$this->getParameterName(TableParameterValues::PARAM_ORDER_COLUMN_INDEX)] = $this->getOrderColumn();
+            $queryParameters[$this->getParameterName(TableParameterValues::PARAM_ORDER_COLUMN_INDEX)] =
+                $this->getOrderColumn();
             $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
 
-            $queryParameters[$this->getParameterName(TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION)] = array(SORT_ASC);
+            $queryParameters[$this->getParameterName(TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION)] = [SORT_ASC];
             $propertyUrl = new Redirect($queryParameters);
             $isSelected = $currentFirstOrderDirection == SORT_ASC;
 
@@ -259,7 +127,6 @@ class GalleryHTMLTable extends HtmlTable
     }
 
     /**
-     *
      * @return string
      */
     public function renderPropertySorting()
@@ -279,8 +146,8 @@ class GalleryHTMLTable extends HtmlTable
             $currentOrderDirections = $this->getOrderDirection();
             $currentFirstOrderDirection = $currentOrderDirections[0];
 
-            $hasFormActions = $this->getTableFormActions() instanceof TableActions &&
-                $this->getTableFormActions()->hasFormActions();
+            $hasFormActions =
+                $this->getTableFormActions() instanceof TableActions && $this->getTableFormActions()->hasFormActions();
 
             $propertyIndex = $currentFirstOrderColumn - ($hasFormActions ? 1 : 0);
 
@@ -306,14 +173,14 @@ class GalleryHTMLTable extends HtmlTable
                 $dropDownButton->setLabel(
                     Translation::get(
                         'GalleryTableOrderPropertyWithDirection',
-                        array('PROPERTY' => $orderPropertyName, 'DIRECTION' => $orderDirection)
+                        ['PROPERTY' => $orderPropertyName, 'DIRECTION' => $orderDirection]
                     )
                 );
             }
             else
             {
                 $dropDownButton->setLabel(
-                    Translation::get('GalleryTableOrderProperty', array('PROPERTY' => $orderPropertyName))
+                    Translation::get('GalleryTableOrderProperty', ['PROPERTY' => $orderPropertyName])
                 );
             }
 
@@ -330,14 +197,13 @@ class GalleryHTMLTable extends HtmlTable
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
      */
     public function renderPropertySubButtons()
     {
         $propertyModel = $this->getSourceProperties();
-        $hasFormActions = $this->getTableFormActions() instanceof TableActions &&
-            $this->getTableFormActions()->hasFormActions();
+        $hasFormActions =
+            $this->getTableFormActions() instanceof TableActions && $this->getTableFormActions()->hasFormActions();
         $currentOrderColumns = $this->getOrderColumn();
         $currentFirstOrderColumn = $currentOrderColumns[0];
         $subButtons = [];
@@ -351,9 +217,12 @@ class GalleryHTMLTable extends HtmlTable
                 $propertyIndex = $index + ($hasFormActions ? 1 : 0);
 
                 $queryParameters = [];
-                $queryParameters[$this->getParameterName(TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION)] = $this->getOrderDirection();
-                $queryParameters[$this->getParameterName(TableParameterValues::PARAM_PAGE_NUMBER)] = $this->getPageNumber();
-                $queryParameters[$this->getParameterName(TableParameterValues::PARAM_ORDER_COLUMN_INDEX)] = array($propertyIndex);
+                $queryParameters[$this->getParameterName(TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION)] =
+                    $this->getOrderDirection();
+                $queryParameters[$this->getParameterName(TableParameterValues::PARAM_PAGE_NUMBER)] =
+                    $this->getPageNumber();
+                $queryParameters[$this->getParameterName(TableParameterValues::PARAM_ORDER_COLUMN_INDEX)] =
+                    [$propertyIndex];
                 $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
 
                 $propertyUrl = new Redirect($queryParameters);
@@ -373,16 +242,33 @@ class GalleryHTMLTable extends HtmlTable
     }
 
     /**
-     *
-     * @return string
+     * @throws \ReflectionException
+     * @throws \QuickformException
      */
-    public function renderTableFilters()
+    public function renderTableFilters(
+        TableParameterValues $parameterValues, array $parameterNames
+    ): string
     {
         $html = [];
 
-        $html[] = parent::renderTableFilters();
-        $html[] = $this->renderPropertySorting();
+        $html[] = parent::renderTableFilters($parameterValues, $parameterNames);
+
+        //$html[] = $this->renderPropertySorting();
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     * @param string[] $parameterNames
+     *
+     * @throws \TableException
+     */
+    protected function processTableColumns(
+        HTML_Table $htmlTable, array $tableColumns, array $parameterNames, TableParameterValues $parameterValues,
+        ?TableActions $tableActions = null
+    )
+    {
+
     }
 }
