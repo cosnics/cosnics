@@ -26,16 +26,6 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class HtmlTable
 {
-    /**
-     * @var string[]
-     */
-    protected array $contentCellAttributes;
-
-    /**
-     * @var string[]
-     */
-    protected array $headerAttributes;
-
     protected Pager $pager;
 
     protected PagerRenderer $pagerRenderer;
@@ -56,9 +46,6 @@ abstract class HtmlTable
         $this->pager = $pager;
         $this->pagerRenderer = $pagerRenderer;
         $this->security = $security;
-
-        $this->contentCellAttributes = [];
-        $this->headerAttributes = [];
     }
 
     /**
@@ -150,14 +137,6 @@ abstract class HtmlTable
     }
 
     /**
-     * @return string[]
-     */
-    public function getContentCellAttributes(): array
-    {
-        return $this->contentCellAttributes;
-    }
-
-    /**
      * @throws \TableException
      */
     public function getEmptyTable(HTML_Table $htmlTable): string
@@ -179,14 +158,6 @@ abstract class HtmlTable
     }
 
     abstract public function getFormClasses(): string;
-
-    /**
-     * @return string[]
-     */
-    public function getHeaderAttributes(): array
-    {
-        return $this->headerAttributes;
-    }
 
     public function getPagerRenderer(): PagerRenderer
     {
