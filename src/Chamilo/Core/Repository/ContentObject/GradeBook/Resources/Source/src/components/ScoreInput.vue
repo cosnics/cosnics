@@ -5,14 +5,16 @@
         "absent": "Absent",
         "auth-absent": "Authorized absent",
         "comments": "Comments",
-        "score": "Score"
+        "score": "Score",
+        "use-source-result": "Use source result"
     },
     "nl": {
         "aabs": "GAFW",
         "absent": "Afwezig",
         "auth-absent": "Gewettigd afwezig",
         "comments": "Opmerkingen",
-        "score": "Score"
+        "score": "Score",
+        "use-source-result": "Gebruik bronresultaat"
     }
 }
 </i18n>
@@ -28,11 +30,12 @@
         </template>
         <template v-slot:content>
             <div v-if="menuTab === 'score'" class="u-flex u-gap-small">
-                <div class="number-input u-relative" :class="{'is-selected': type === 'number'}">
-                    <input id="score" class="percent-input u-font-normal" ref="score-input" type="number" :value="numValue|formatNum" autocomplete="off" @input="type = 'number'" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')" @focus="type = 'number'">
+                <div class="number-input u-relative" :class="{'is-selected': type === 'number'}" style="flex: 1">
+                    <input id="score" class="percent-input u-font-normal" ref="score-input" type="number" min="0" max="100" :value="numValue|formatNum" autocomplete="off" @input="type = 'number'" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')" @focus="type = 'number'">
                     <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                 </div>
                 <button class="color-code amber-700" :class="{'is-selected': type === 'aabs'}" @click="setAuthAbsent" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></button>
+                <button v-if="useRevert" class="btn btn-secundary btn-sm btn-revert" @click="setRevert" :title="$t('use-source-result')"><i class="fa fa-undo" aria-hidden="true"></i><span class="sr-only">{{ $t('use-source-result') }}</span></button>
             </div>
             <div v-else-if="menuTab === 'comment'">
                 <textarea class="comment-field" ref="comment-input" v-model="commentValue"></textarea>
@@ -57,13 +60,14 @@ import {ResultType} from '../domain/GradeBook';
     }
 })
 export default class ScoreInput extends Vue {
-    private type: 'number'|'aabs' = 'number';
+    private type: 'number'|'aabs'|'revert' = 'number';
     private numValue: number|string = '';
     private commentValue: string = '';
 
     @Prop({type: [Number, String], default: null}) readonly score!: ResultType;
     @Prop({type: String, default: null}) readonly comment!: string;
     @Prop({type: String, default: 'score'}) readonly menuTab!: string;
+    @Prop({type: Boolean, default: false}) readonly useRevert!: boolean;
 
     get scoreInput() {
         return this.$refs['score-input'] as HTMLInputElement;
@@ -79,15 +83,27 @@ export default class ScoreInput extends Vue {
             return;
         }
         if (this.type === 'number') {
+            const el = this.scoreInput as HTMLInputElement;
+            if (!el.checkValidity()) {
+                el.reportValidity();
+                return;
+            }
             const value = parseFloat(this.scoreInput.value);
             this.$emit('ok', isNaN(value) ? null : value);
         } else if (this.type === 'aabs') {
             this.$emit('ok', 'aabs');
+        } else if (this.type === 'revert') {
+            this.$emit('revert');
         }
     }
 
     setAuthAbsent() {
         this.type = 'aabs';
+        this.$nextTick(() => this.numValue = '');
+    }
+
+    setRevert() {
+        this.type = 'revert';
         this.$nextTick(() => this.numValue = '');
     }
 
@@ -115,24 +131,29 @@ export default class ScoreInput extends Vue {
     top: -23px;
 }
 
+.highlight-content::v-deep + .highlight-content {
+    border-top-right-radius: 0;
+}
+
 .menu-tab {
-    background-color: #e6e6e6;
     color:#2e6da4;
     padding: 2px 8px;
 
-    &.mod-active {
-        background-color: #fff;
-        color: #333;
-    }
-
     &.mod-left {
+        background: linear-gradient(to left, #dedede 0, transparent 2px),linear-gradient(to top, #e0e0e0 0, #e6e6e6 4px);
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
     }
 
     &.mod-right {
+        background: linear-gradient(to right, #dedede 0, transparent 2px),linear-gradient(to top, #e0e0e0 0, #e6e6e6 4px);
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
+    }
+
+    &.mod-active {
+        background: #fff;
+        color: #333;
     }
 }
 
@@ -233,5 +254,21 @@ export default class ScoreInput extends Vue {
     --color: #ffa000;
     --selected-color: #db8a00;
     --text-color: white;
+}
+
+.btn-revert {
+    color: #b8b9bc;
+    padding: 2px 4px;
+
+    &:hover {
+        background-color: #e3e3e3;
+        color: #919297;
+    }
+
+    &:focus {
+        background-color: #337ab7;
+        color: white;
+        outline: 0;
+    }
 }
 </style>

@@ -1,6 +1,8 @@
 <i18n>
 {
     "en": {
+        "aabs": "aabs",
+        "auth-absent": "Authorized absent",
         "authorized-absence": "In the event of authorized absence",
         "cancel": "Cancel",
         "close": "Close",
@@ -10,6 +12,7 @@
         "grouped-scores": "Grouped scores",
         "maximum-towards-endresult": "Maximum score (100%) counts towards final result",
         "minimum-towards-endresult": "Minimum score (0%) counts towards final result",
+        "no-score-found": "No score found",
         "remove": "Remove",
         "remove-from-overview": "Remove score '{title}' from overview?",
         "settings": "Settings",
@@ -17,6 +20,8 @@
         "weight": "Weight"
     },
     "nl": {
+        "aabs": "gafw",
+        "auth-absent": "Gewettigd afwezig",
         "authorized-absence": "Bij gewettigde afwezigheid",
         "cancel": "Annuleren",
         "close": "Sluiten",
@@ -26,6 +31,7 @@
         "grouped-scores": "Gegroepeerde scores",
         "maximum-towards-endresult": "Maximale score (100%) meetellen voor het eindresultaat",
         "minimum-towards-endresult": "Minimale score (0%) meetellen voor het eindresultaat",
+        "no-score-found": "Geen score gevonden",
         "remove": "Verwijderen",
         "remove-from-overview": "Score '{title}' verwijderen uit overzicht?",
         "settings": "Instellingen",
@@ -43,7 +49,7 @@
                     <input type="text" :value="title" @input="title = $event" autocomplete="off">
                     <button class="btn btn-link" @click="showRemoveItemDialog = true">{{ $t('remove') }}</button>
                 </div>
-                <button class="btn-close u-ml-auto" @click="$emit('close')" :aria-label="$t('close')"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <button class="btn-close u-ml-auto" @click="$emit('close')" :title="$t('close')"><i class="fa fa-times" aria-hidden="true"></i><span class="sr-only">{{ $t('close') }}</span></button>
             </div>
             <div class="modal-body">
                 <template v-if="column.type !== 'standalone'">
@@ -73,7 +79,7 @@
                             </div>
                         </div>
                         <div class="mt-20">
-                            <label class="settings-label">{{ $t('authorized-absence') }}:</label>
+                            <label class="settings-label">{{ $t('authorized-absence') }} <div aria-hidden="true" class="color-code amber-700" style="margin-inline: 3px" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></div>:</label>
                             <div>
                                 <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
                                 <label class="u-font-normal" for="gafw-option1">{{ $t('count-towards-endresult-not') }}</label>
@@ -88,7 +94,7 @@
                             </div>
                         </div>
                         <div class="mt-20">
-                            <label class="settings-label">{{ $t('unauthorized-absence') }}:</label>
+                            <label class="settings-label">{{ $t('unauthorized-absence') }} <div class="color-code mod-none" :title="$t('no-score-found')" style="margin-inline: 3px; width: 30px; background-color: #f8fbfb;border-color: #e6ecef; justify-content: end"><i aria-hidden="true" class="fa fa-question" style="color: #777"></i></div>:</label>
                             <div>
                                 <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
                                 <label class="u-font-normal" for="nogafw-option1">{{ $t('count-towards-endresult-not') }}</label>
@@ -388,5 +394,30 @@ h5 {
 
 #dropdown-settings {
     width: 100%;
+}
+
+.color-code {
+    background-color: var(--color);
+    border: 1px solid transparent;
+    border-radius: 3px;
+    color: var(--text-color);
+    display: inline-flex;
+    height: 20px;
+    justify-content: center;
+    padding: 2px 4px;
+    transition: background 75ms linear,color 75ms linear,opacity 75ms linear;
+    width: 40px;
+}
+
+.color-code > span {
+    font-size: 14px;
+    font-variant: all-small-caps;
+    font-weight: 900;
+    line-height: 12px;
+}
+
+.amber-700 {
+    --color: #ffa000;
+    --text-color: white;
 }
 </style>

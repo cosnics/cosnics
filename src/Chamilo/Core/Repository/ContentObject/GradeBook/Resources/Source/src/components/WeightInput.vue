@@ -8,12 +8,13 @@
     }
 }
 </i18n>
+
 <template>
     <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
         <template v-slot:content>
             <label for="weight" class="u-font-medium">{{ $t('weight') }}:</label>
             <div class="u-relative">
-                <input id="weight" class="percent-input u-font-normal" ref="weight-input" type="number" :value="itemWeight|formatNum" autocomplete="off" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
+                <input id="weight" class="percent-input u-font-normal" ref="weight-input" type="number" min="0" max="100" :value="itemWeight|formatNum" autocomplete="off" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
                 <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
             </div>
         </template>
@@ -42,6 +43,11 @@ export default class WeightInput extends Vue {
     }
 
     onEdit() {
+        const el = this.weightInput as HTMLInputElement;
+        if (!el.checkValidity()) {
+            el.reportValidity();
+            return;
+        }
         const value = parseFloat(this.weightInput.value);
         this.$emit('ok', isNaN(value) ? null : value);
     }

@@ -3,17 +3,21 @@
     "en": {
         "category": "Category",
         "find-student": "Find student",
+        "import": "Import",
+        "new-category": "New category",
         "new-score": "New score",
         "show": "Show",
-        "synchronize-scores": "Synchronize scores",
+        "synchronize-scores": "Synchronize",
         "update-final-scores": "Update final scores"
     },
     "nl": {
         "category": "Categorie",
         "find-student": "Zoek student",
+        "import": "Importeer",
+        "new-category": "Nieuwe categorie",
         "new-score": "Nieuwe score",
         "show": "Toon",
-        "synchronize-scores": "Synchronizeer scores",
+        "synchronize-scores": "Synchronizeer",
         "update-final-scores": "Update eindcijfers"
     }
 }
@@ -27,23 +31,33 @@
                     <div class="input-group-btn"><button name="clear" value="clear" class="btn btn-default" @click="searchTerm = ''"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></button></div>
                 </div>
                 <grades-dropdown id="dropdown-main" :graded-items="gradeBook.gradedItemsWithCheckedStatus" @toggle="toggleGradeItem"></grades-dropdown>
-                <div class="u-flex u-justify-content-end u-gap-small gradebook-create-actions">
+                <div class="u-flex u-justify-content-end u-gap-small u-ml-auto gradebook-create-actions">
                     <button class="btn btn-default btn-sm" @click="synchronizeGradeBook"><i aria-hidden="true" class="fa fa-refresh"></i>{{ $t('synchronize-scores') }}</button>
-                    <button class="btn btn-default btn-sm" @click="updateTotalScores"><i aria-hidden="true" class="fa fa-refresh"></i>{{ $t('update-final-scores') }}</button>
-                    <button class="btn btn-default btn-sm" @click="createNewScore"><i aria-hidden="true" class="fa fa-plus"></i>{{ $t('new-score') }}</button>
-                    <button class="btn btn-default btn-sm" @click="createNewCategory"><i aria-hidden="true" class="fa fa-plus"></i>{{ $t('category') }}</button>
-                </div>
-                <div class="btn-group items-per-page-count">
-                    <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle" :title="`${$t('show')} ${itemsPerPage} items`">
-                        <span>{{ $t('show') }} {{itemsPerPage}} items</span> <span class="caret" aria-hidden="true"></span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li v-for="count in [5, 10, 15, 20, 50]" :key="'per-page-' + count" class="u-cursor-pointer">
-                            <a :class="itemsPerPage === count ? 'selected' : 'not-selected'" :title="`${$t('show')} ${count} items`" @click="setItemsPerPage(count)">
-                                <span>{{ $t('show') }} {{count}} items</span>
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="btn-group">
+                        <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle" title="">
+                            <i aria-hidden="true" class="fa fa-plus"></i><span>Nieuw</span> <span class="caret" aria-hidden="true"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" @click.prevent="createNewScore">{{ $t('new-score') }}</a></li>
+                            <li><a href="#" @click.prevent="createNewCategory">{{ $t('new-category') }}</a></li>
+                            <!--<li><a href="#" @click.prevent>{{ $t('import') }}</a></li>-->
+                        </ul>
+                    </div>
+                    <button v-if="gradeBook.totalsNeedUpdating" class="btn btn-primary btn-sm" @click="updateTotalScores" style="font-weight: 500;margin-inline: 10px;padding-inline: 30px;text-transform: uppercase">
+                        <i aria-hidden="true" class="fa fa-exclamation-circle" style="color: white;font-size: larger;margin-right: 5px"></i>{{ $t('update-final-scores') }}
+                    </button>
+                    <div class="btn-group">
+                        <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle" :title="`${$t('show')} ${itemsPerPage} items`">
+                            <span>{{ $t('show') }} {{itemsPerPage}} items</span> <span class="caret" aria-hidden="true"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li v-for="count in [5, 10, 15, 20, 50]" :key="'per-page-' + count" class="u-cursor-pointer">
+                                <a :class="itemsPerPage === count ? 'selected' : 'not-selected'" :title="`${$t('show')} ${count} items`" @click="setItemsPerPage(count)">
+                                    <span>{{ $t('show') }} {{count}} items</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="gradebook-table-container">
@@ -125,6 +139,7 @@
             this.tableBusy = true;
             this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: GradeScore[]) => {
                 this.updateGradeColumnWithScores(column, id, scores);
+                this.resetGradeBook();
                 this.tableBusy = false;
             });
         }
@@ -154,6 +169,12 @@
             return this.gradeBook?.categories.find(cat => cat.id === this.categorySettings) || null;
         }
 
+        resetGradeBook() {
+            const gradeBook = this.gradeBook;
+            this.gradeBook = null;
+            this.$nextTick(() => { this.gradeBook = gradeBook; });
+        }
+
         createNewCategory() {
             if (!this.gradeBook) { return; }
             const category = this.gradeBook.createNewCategory();
@@ -161,6 +182,7 @@
             this.connector?.addCategory(category, (cat: any) => {
                 category.id = cat.id;
                 this.categorySettings = cat.id;
+                this.resetGradeBook();
                 this.tableBusy = false;
             });
         }
@@ -210,6 +232,7 @@
             this.tableBusy = true;
             this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: GradeScore[]) => {
                 this.updateGradeColumnWithScores(column, id, scores);
+                this.resetGradeBook();
                 this.tableBusy = false;
             });
         }
@@ -484,8 +507,8 @@
     }
 }
 
-.items-per-page-count .dropdown-toggle {
-    line-height: 22px;
+.dropdown-toggle {
+    line-height: 26px;
 }
 
 #dropdown-main {

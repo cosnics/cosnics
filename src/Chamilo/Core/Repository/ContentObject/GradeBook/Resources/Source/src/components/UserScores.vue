@@ -42,7 +42,7 @@
                                         <i class="fa fa-comment-o" style="color: #5885a2;font-size:12px;line-height:14px;text-shadow:1px 1px #e2eaee;margin-right: 5px"></i>
                                     </template>
                                     <student-result :id="`result-${columnId}`" :result="gradeBook.getResult(columnId, userId)"
-                                                    class="u-flex u-align-items-center u-justify-content-end" :class="{'unused-score': !gradeBook.countsForEndResult(columnId)}"></student-result>
+                                                    class="u-flex u-align-items-center u-justify-content-end" :class="{'uncounted-score': !gradeBook.countsForEndResult(columnId)}"></student-result>
                                     <!--{{ gradeBook.getResult(columnId, userId)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span>-->
                                 </div>
                             </b-td>
@@ -160,7 +160,7 @@ export default class UserScores extends Vue {
     top: 0;
 }
 
-.unused-score {
+.uncounted-score {
     color: #777;
     font-style: italic;
 }

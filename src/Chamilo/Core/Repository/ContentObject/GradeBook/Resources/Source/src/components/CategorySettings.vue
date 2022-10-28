@@ -22,7 +22,7 @@
                     <input type="text" v-model="category.title" autocomplete="off" @input="onCategoryChange">
                     <button class="btn btn-link" @click="showRemoveItemDialog = true">{{ $t('remove') }}</button>
                 </div>
-                <button class="btn-close u-ml-auto" @click="$emit('close')" :aria-label="$t('close')"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <button class="btn-close u-ml-auto" @click="$emit('close')" :title="$t('close')"><i class="fa fa-times" aria-hidden="true"></i><span class="sr-only">{{ $t('close') }}</span></button>
             </div>
             <div class="modal-body">
                 <input type="color" v-model="category.color" @input="onCategoryChange">

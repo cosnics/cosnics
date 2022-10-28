@@ -2,20 +2,18 @@
 {
     "en": {
         "aabs": "aabs",
-        "abs": "abs",
-        "absent": "Absent",
         "auth-absent": "Authorized absent",
-        "bring-to-source-result": "Bring back to source result",
         "edit-comment": "Edit comments",
+        "no-score": "No score",
+        "no-score-abbr": "n/a",
         "no-score-found": "No score found"
     },
     "nl": {
         "aabs": "gafw",
-        "abs": "afw",
-        "absent": "Afwezig",
         "auth-absent": "Gewettigd afwezig",
-        "bring-to-source-result": "Breng terug naar bronresultaat",
         "edit-comment": "Wijzig opmerkingen",
+        "no-score": "Geen score",
+        "no-score-abbr": "n.b.",
         "no-score-found": "Geen score gevonden"
     }
 }
@@ -24,18 +22,21 @@
 <template>
     <div @dblclick="$emit('edit')">
         <div class="u-flex u-align-items-center u-gap-small">
+            <!--<a v-if="useOverwrittenFlag && isOverwritten" class="fa fa-undo" @click.stop="$emit('revert')" :title="$t('bring-to-source-result')"><span class="sr-only">{{ $t('bring-to-source-result') }}</span></a>-->
             <template v-if="comment">
                 <a :id="`result-comment-${id}`" class="fa fa-comment-o" @click.stop="$emit('edit-comment')" :title="$t('edit-comment')"><span class="sr-only">{{ $t('edit-comment') }}</span></a>
-                <b-popover :target="`result-comment-${id}`" triggers="hover" placement="right">
-                    <div class="comment">{{ comment }}</div>
+                <b-popover custom-class="gradebook-comment-popover" :target="`result-comment-${id}`" triggers="hover" placement="top">
+                    <div class="comment">
+                        <div style="font-size: 10px;color: #5885a3;margin-bottom: 2px;">Feedback:</div>
+                        {{ comment }}
+                    </div>
                 </b-popover>
             </template>
-            <div class="u-flex u-align-items-center" :class="[typeof result === 'number' ? 'u-justify-content-end' : 'u-justify-content-center', {'mr-19': useOverwrittenFlag && !isOverwritten}]">
+            <div class="u-flex u-align-items-center u-justify-content-end" :class="{'overwritten-score': !isStandaloneScore && useOverwrittenFlag && isOverwritten, 'mod-aabs': result === 'aabs'}" style="width: 43px">
                 <div v-if="result === 'aabs'" class="color-code amber-700" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></div>
-                <div v-else-if="result === null" class="color-code mod-none" :title="$t('no-score-found')"><i class="fa fa-user-times" aria-hidden="true"></i><span class="sr-only">{{ $t('no-score-found') }}</span></div>
+                <div v-else-if="result === null" class="color-code mod-none" :title="$t('no-score-found')"><i aria-hidden="true" class="fa fa-question" :style="!isStandaloneScore && useOverwrittenFlag && isOverwritten ? '' : 'color: #777'"></i><span class="sr-only">{{ $t('no-score-found') }}</span></div>
                 <div v-else>{{ result }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
             </div>
-            <a v-if="useOverwrittenFlag && isOverwritten" class="fa fa-undo" @click.stop="$emit('revert')" :title="$t('bring-to-source-result')"><span class="sr-only">{{ $t('bring-to-source-result') }}</span></a>
         </div>
     </div>
 </template>
@@ -52,11 +53,31 @@ export default class StudentResult extends Vue {
     @Prop({type: [Number, String], default: null}) readonly result!: ResultType;
     @Prop({type: Boolean, default: false}) readonly useOverwrittenFlag!: boolean;
     @Prop({type: Boolean, default: false}) readonly isOverwritten!: boolean;
+    @Prop({type: Boolean, default: false}) readonly isStandaloneScore!: boolean;
     @Prop({type: String, default: ''}) readonly comment!: string;
 }
 </script>
 
 <style scoped lang="scss">
+a {
+    text-decoration: none;
+
+    &.fa-undo {
+        opacity: 0.5;
+
+        &:hover, &:focus {
+            color: #5e8ba6;
+            opacity: 1;
+        }
+    }
+
+    &.fa-comment-o {
+        &:hover, &:focus {
+            color: #476c85;
+        }
+    }
+}
+
 .fa-percent {
     font-size: 1.1rem;
     margin-left: .15rem;
@@ -84,25 +105,35 @@ export default class StudentResult extends Vue {
 }
 
 .color-code.mod-none {
-    background: transparent;
-    min-width: 40px;
+    justify-content: end;
     width: 100%;
+    /*text-shadow: 1px 1px #e1eaef;*/
+    /*--text-color: #f89690;*/
+
+    > span {
+        font-weight: 500;
+    }
 }
 
 .deep-orange-500 {
     --color: #ff5722;
-    --selected-color: #d53300;
     --text-color: white;
 }
 
 .amber-700 {
     --color: #ffa000;
-    --selected-color: #db8a00;
     --text-color: white;
 }
 
-.mr-19 {
+/*.mr-19 {
     margin-right: 19px;
+}*/
+
+.overwritten-score:not(.mod-aabs) {
+    background-color: #f8fbfb;
+    border: 1px solid #e6ecef;
+    border-radius: 3px;
+    color: #4086b5;
 }
 
 .comment {
@@ -123,5 +154,27 @@ export default class StudentResult extends Vue {
 
 .fa-comment-o, .fa-undo {
     text-shadow: 1px 1px #e2eaee;
+}
+</style>
+<style>
+.gradebook-comment-popover {
+    border-color: #ebebeb;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
+}
+
+.gradebook-comment-popover.bs-popover-left {
+    left: -5px!important;
+}
+
+.gradebook-comment-popover.bs-popover-right {
+    left: 5px!important;
+}
+
+.gradebook-comment-popover.bs-popover-top {
+    top: -10px!important;
+}
+
+.gradebook-comment-popover.bs-popover-bottom {
+    top: 5px!important;
 }
 </style>

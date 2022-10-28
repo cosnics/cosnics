@@ -89,6 +89,10 @@ export default class GradeBook {
         return this.gradeColumns.find(column => column.id === columnId);
     }
 
+    isStandaloneScore(columnId: ColumnId) {
+        return this.getGradeColumn(columnId)?.type === 'standalone';
+    }
+
     getCategory(categoryId: number) {
         return this.allCategories.find(category => category.id === categoryId);
     }
@@ -127,19 +131,23 @@ export default class GradeBook {
         const column = this.getGradeColumn(columnId);
         const weight = column ? column.weight : null;
         if (weight === null) {
-            let rest = 100;
-            let noRest = 0;
-            this.gradeColumns.filter(column => column.countForEndResult)
-                .forEach(column => {
-                    if (column.weight !== null) {
-                        rest -= column.weight;
-                    } else {
-                        noRest += 1;
-                    }
-            });
-            return rest / noRest;
+            return this.eqRestWeight;
         }
         return weight;
+    }
+
+    get eqRestWeight() {
+        let rest = 100;
+        let noRest = 0;
+        this.gradeColumns.filter(column => column.countForEndResult)
+            .forEach(column => {
+                if (column.weight !== null) {
+                    rest -= column.weight;
+                } else {
+                    noRest += 1;
+                }
+            });
+        return rest / noRest;
     }
 
     setWeight(columnId: ColumnId, weight: number|null) {
@@ -254,6 +262,16 @@ export default class GradeBook {
         score.newScoreAuthAbsent = false;
         score.newScore = null;
         return score;
+    }
+
+    userTotalNeedsUpdating(user: User): boolean {
+        const total = this.getResult('totals', user.id);
+        if (typeof total !== 'number') { return true; }
+        return total.toFixed(2) !== this.getEndResult(user.id).toFixed(2);
+    }
+
+    get totalsNeedUpdating(): boolean {
+        return this.users.some(user => this.userTotalNeedsUpdating(user));
     }
 
     getResultComment(columnId: ColumnId, userId: number): string|null {
