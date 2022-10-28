@@ -6,7 +6,7 @@ use Chamilo\Application\Portfolio\Favourite\Service\FavouriteService;
 use Chamilo\Application\Portfolio\Service\PublicationService;
 use Chamilo\Application\Portfolio\Service\RightsService;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -18,7 +18,7 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Application\Portfolio\Table\User
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserTable extends DataClassTable implements TableActionsSupport
+class UserTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = \Chamilo\Application\Portfolio\Manager::PARAM_USER_ID;
 
@@ -213,7 +213,7 @@ class UserTable extends DataClassTable implements TableActionsSupport
     }
 
     /**
-     * @see \Chamilo\Libraries\Format\Table\Table::getTableDataProvider()
+     * @see \Chamilo\Libraries\Format\Table\ListTableRenderer::getTableDataProvider()
      */
     public function getTableDataProvider(): UserTableDataProvider
     {

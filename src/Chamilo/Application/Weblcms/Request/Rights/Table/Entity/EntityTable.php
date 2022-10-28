@@ -2,14 +2,14 @@
 namespace Chamilo\Application\Weblcms\Request\Rights\Table\Entity;
 
 use Chamilo\Application\Weblcms\Request\Rights\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-class EntityTable extends DataClassTable implements TableActionsSupport
+class EntityTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID;
 

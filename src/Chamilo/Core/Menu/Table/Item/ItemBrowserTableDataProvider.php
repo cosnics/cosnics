@@ -32,7 +32,7 @@ class ItemBrowserTableDataProvider extends DataClassTableDataProvider
     /**
      * Constructor
      *
-     * @param \Chamilo\Libraries\Format\Table\Table $table
+     * @param \Chamilo\Libraries\Format\Table\ListTableRenderer $table
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
      * @param int $parentIdentifier
      */

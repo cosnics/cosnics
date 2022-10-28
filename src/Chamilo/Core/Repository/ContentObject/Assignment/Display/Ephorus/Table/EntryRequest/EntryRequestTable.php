@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Table\EntryRequest;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @author Tom Goethals - Hogeschool Gent
  */
-class EntryRequestTable extends DataClassTable implements TableActionsSupport
+class EntryRequestTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_ENTRY_ID;
     const EPHORUS_TRANSLATION_CONTEXT = 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus';

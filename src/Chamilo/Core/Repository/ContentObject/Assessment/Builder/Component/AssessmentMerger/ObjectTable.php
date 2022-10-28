@@ -2,14 +2,14 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component\AssessmentMerger;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
-class ObjectTable extends DataClassTable implements TableActionsSupport
+class ObjectTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_QUESTION_ID;
 

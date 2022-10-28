@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Portfolio\Favourite\Table\Favourite;
 
 use Chamilo\Application\Portfolio\Favourite\Manager;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class FavouriteTable extends RecordTable implements TableActionsSupport
+class FavouriteTable extends RecordListTableRenderer implements TableActionsSupport
 {
 
     /**

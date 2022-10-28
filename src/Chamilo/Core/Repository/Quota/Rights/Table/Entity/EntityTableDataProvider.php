@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Quota\Rights\Table\Entity;
 
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
-use Chamilo\Libraries\Format\Table\Table;
+use Chamilo\Libraries\Format\Table\ListTableRenderer;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,10 +16,10 @@ class EntityTableDataProvider extends RecordTableDataProvider
     private $rightsService;
 
     /**
-     * @param \Chamilo\Libraries\Format\Table\Table $table
+     * @param \Chamilo\Libraries\Format\Table\ListTableRenderer $table
      * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
      */
-    public function __construct(Table $table, RightsService $rightsService)
+    public function __construct(ListTableRenderer $table, RightsService $rightsService)
     {
         parent::__construct($table);
 

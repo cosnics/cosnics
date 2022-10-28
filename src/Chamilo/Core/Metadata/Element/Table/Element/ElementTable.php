@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Metadata\Element\Table\Element;
 
 use Chamilo\Core\Metadata\Element\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ElementTable extends DataClassTable implements TableActionsSupport
+class ElementTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_ELEMENT_ID;
 

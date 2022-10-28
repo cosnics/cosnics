@@ -5,7 +5,7 @@ use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Service\RightsService;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -19,7 +19,7 @@ use Symfony\Component\Translation\Translator;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ItemBrowserTable extends DataClassTable implements TableActionsSupport
+class ItemBrowserTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     public const TABLE_IDENTIFIER = Manager::PARAM_ITEM;
 

@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Unsubscribed;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Translation\Translation;
  * 
  * @author Stijn Van Hoecke ****************************************************************************
  */
-class UnsubscribedUserTable extends DataClassTable implements TableActionsSupport
+class UnsubscribedUserTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_OBJECTS;
 

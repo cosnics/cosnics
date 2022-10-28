@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Table\Link;
 
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 
-class LinkTable extends DataClassTable
+class LinkTable extends DataClassListTableRenderer
 {
     const TYPE_PUBLICATIONS = 1;
     const TYPE_PARENTS = 2;

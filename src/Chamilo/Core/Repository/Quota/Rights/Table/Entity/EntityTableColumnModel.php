@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityR
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
-use Chamilo\Libraries\Format\Table\Table;
+use Chamilo\Libraries\Format\Table\ListTableRenderer;
 use Symfony\Component\Translation\Translator;
 
 class EntityTableColumnModel extends RecordTableColumnModel implements TableColumnModelActionsColumnSupport
@@ -22,10 +22,10 @@ class EntityTableColumnModel extends RecordTableColumnModel implements TableColu
     private $translator;
 
     /**
-     * @param \Chamilo\Libraries\Format\Table\Table $table
+     * @param \Chamilo\Libraries\Format\Table\ListTableRenderer $table
      * @param \Symfony\Component\Translation\Translator $translator
      */
-    public function __construct(Table $table, Translator $translator)
+    public function __construct(ListTableRenderer $table, Translator $translator)
     {
         $this->translator = $translator;
 

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Metadata\Vocabulary\Table\Vocabulary;
 
 use Chamilo\Core\Metadata\Vocabulary\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class VocabularyTable extends DataClassTable implements TableActionsSupport
+class VocabularyTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_VOCABULARY_ID;
 

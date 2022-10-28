@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Metadata\Relation\Instance\Table\Relation;
 
 use Chamilo\Core\Metadata\Relation\Instance\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class RelationTable extends DataClassTable implements TableActionsSupport
+class RelationTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_RELATION_INSTANCE_ID;
 

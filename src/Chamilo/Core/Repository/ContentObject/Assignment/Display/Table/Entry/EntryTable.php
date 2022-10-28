@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EntryTable extends RecordTable implements TableActionsSupport
+abstract class EntryTable extends RecordListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Entry::PROPERTY_ID;
 

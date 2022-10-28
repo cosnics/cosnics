@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Table\Item;
 
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ItemTable extends DataClassTable implements TableActionsSupport
+class ItemTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_STEP;
 

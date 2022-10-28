@@ -3,7 +3,7 @@ namespace Chamilo\Core\User\Table\Admin;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 /**
  * Table to display a set of users.
  */
-class AdminUserTable extends DataClassTable implements TableActionsSupport
+class AdminUserTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     public const TABLE_IDENTIFIER = Manager::PARAM_USER_USER_ID;
 

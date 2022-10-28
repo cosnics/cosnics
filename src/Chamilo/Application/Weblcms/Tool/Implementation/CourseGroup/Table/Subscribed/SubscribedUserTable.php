@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Subs
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @package application.lib.weblcms.tool.course_group.component.user_table
  */
-class SubscribedUserTable extends RecordTable implements TableActionsSupport
+class SubscribedUserTable extends RecordListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = \Chamilo\Application\Weblcms\Manager::PARAM_USERS;
 

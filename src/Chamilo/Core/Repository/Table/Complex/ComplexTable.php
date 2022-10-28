@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Table\Complex;
 
 use Chamilo\Core\Repository\Builder\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @package repository.lib.repository_manager.component.complex_browser
  */
-class ComplexTable extends DataClassTable implements TableActionsSupport
+class ComplexTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID;
 

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Metadata\Vocabulary\Table\Select;
 
 use Chamilo\Core\Metadata\Element\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
  * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class SelectTable extends DataClassTable implements TableActionsSupport
+class SelectTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = \Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_VOCABULARY_ID;
 

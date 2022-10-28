@@ -6,7 +6,7 @@ use Chamilo\Core\Admin\Announcement\Service\PublicationService;
 use Chamilo\Core\Admin\Announcement\Service\RightsService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class PublicationTable extends RecordTable implements TableActionsSupport
+class PublicationTable extends RecordListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID;
 
@@ -150,7 +150,7 @@ class PublicationTable extends RecordTable implements TableActionsSupport
     }
 
     /**
-     * @see \Chamilo\Libraries\Format\Table\Table::getTableDataProvider()
+     * @see \Chamilo\Libraries\Format\Table\ListTableRenderer::getTableDataProvider()
      */
     public function getTableDataProvider(): PublicationTableDataProvider
     {

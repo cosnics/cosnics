@@ -2,14 +2,14 @@
 namespace Chamilo\Core\Repository\Workspace\Table\Share;
 
 use Chamilo\Core\Repository\Workspace\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-class ShareTable extends DataClassTable implements TableActionsSupport
+class ShareTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_SELECTED_WORKSPACE_ID;
 

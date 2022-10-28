@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Table\Extension;
 
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
-use Chamilo\Libraries\Format\Table\Table;
+use Chamilo\Libraries\Format\Table\ListTableRenderer;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop>
  */
-abstract class RecordTable extends Table
+abstract class RecordListTableRenderer extends ListTableRenderer
 {
     /**
      * @param string[] $record

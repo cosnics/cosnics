@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Quota\Manager as QuotaManager;
 use Chamilo\Core\Repository\Quota\Rights\Manager;
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -18,7 +18,7 @@ use Symfony\Component\Translation\Translator;
  *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class EntityTable extends RecordTable implements TableActionsSupport
+class EntityTable extends RecordListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID;
 

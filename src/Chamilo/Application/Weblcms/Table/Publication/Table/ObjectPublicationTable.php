@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Table\Publication\Table;
 
 use Chamilo\Application\Weblcms\Tool\Manager;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
  * @author Original Author Unknown
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring to record table
  */
-class ObjectPublicationTable extends RecordTable implements TableActionsSupport
+class ObjectPublicationTable extends RecordListTableRenderer implements TableActionsSupport
 {
     /**
      * The identifier for the table (used for table actions)

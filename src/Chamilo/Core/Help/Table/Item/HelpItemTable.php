@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Help\Table\Item;
 
 use Chamilo\Core\Help\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 
-class HelpItemTable extends DataClassTable
+class HelpItemTable extends DataClassListTableRenderer
 {
     public const TABLE_IDENTIFIER = Manager::PARAM_HELP_ITEM;
 }

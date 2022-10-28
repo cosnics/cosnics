@@ -3,8 +3,8 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeAttempt\TreeNodeAttemptTable;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeProgress\TreeNodeProgressTable;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeAttempt\TreeNodeAttemptTableRenderer;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeProgress\TreeNodeProgressTableRenderer;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
@@ -80,7 +80,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
         if ($this->getCurrentTreeNode()->hasChildNodes())
         {
-            $table = new TreeNodeProgressTable($this);
+            $table = new TreeNodeProgressTableRenderer($this);
             $panelHtml = [];
 
             $panelHtml[] = $this->getTreeNodeProgressButtonToolbar($translator)->render();
@@ -89,7 +89,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
             $html[] = $panelRenderer->render($translator->getTranslation('Children'), implode(PHP_EOL, $panelHtml));
         }
 
-        $table = new TreeNodeAttemptTable($this);
+        $table = new TreeNodeAttemptTableRenderer($this);
         $panelHtml = [];
 
         $panelHtml[] = $this->getTreeNodeAttemptsButtonToolbar($translator)->render();

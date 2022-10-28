@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Table\WhoisOnline;
 
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 
 /**
  *
@@ -11,6 +11,6 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
 /**
  * Table to display a set of users.
  */
-class WhoisOnlineTable extends DataClassTable
+class WhoisOnlineTable extends DataClassListTableRenderer
 {
 }

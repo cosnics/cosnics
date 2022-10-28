@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Subscribed;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Stijn Van Hoecke
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring from ObjectTable to RecordTable
  */
-class SubscribedUserTable extends RecordTable implements TableActionsSupport
+class SubscribedUserTable extends RecordListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_OBJECTS;
 

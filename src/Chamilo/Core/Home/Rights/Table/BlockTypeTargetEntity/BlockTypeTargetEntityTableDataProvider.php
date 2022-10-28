@@ -6,7 +6,7 @@ use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Service\BlockTypeRightsService;
 use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
-use Chamilo\Libraries\Format\Table\Table;
+use Chamilo\Libraries\Format\Table\ListTableRenderer;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -28,9 +28,9 @@ class BlockTypeTargetEntityTableDataProvider extends RecordTableDataProvider
     /**
      * BlockTypeTargetEntityTableDataProvider constructor.
      *
-     * @param Table $table
+     * @param ListTableRenderer $table
      */
-    public function __construct(Table $table)
+    public function __construct(ListTableRenderer $table)
     {
         parent::__construct($table);
 

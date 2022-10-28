@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Flickr\Table\ExternalObjectGallery;
 
-use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\DataClassGalleryTable\DataClassGalleryTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassGalleryTableRenderer;
 
-class ExternalObjectGalleryTable extends DataClassGalleryTable
+class ExternalObjectGalleryTable extends DataClassGalleryTableRenderer
 {
 }

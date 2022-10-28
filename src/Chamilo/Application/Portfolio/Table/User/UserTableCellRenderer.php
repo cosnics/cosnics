@@ -54,7 +54,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
     private $themePathBuilder;
 
     /**
-     * @param \Chamilo\Libraries\Format\Table\Table $table
+     * @param \Chamilo\Libraries\Format\Table\ListTableRenderer $table
      * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
      * @param \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService $favouriteService
      * @param \Symfony\Component\Translation\Translator $translator

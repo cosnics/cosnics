@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Component\CourseSections;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * Table to display a set of courses.
  */
-class CourseSectionsTable extends DataClassTable implements TableActionsSupport
+class CourseSectionsTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_COURSE_SECTION_ID;
 

@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Translation\Translation;
  * 
  * @author Tom Goethals - Hogeschool Gent
  */
-class RequestTable extends DataClassTable implements TableActionsSupport
+class RequestTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_REQUEST_IDS;
 

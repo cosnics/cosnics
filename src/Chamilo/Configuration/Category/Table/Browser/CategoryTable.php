@@ -2,7 +2,7 @@
 namespace Chamilo\Configuration\Category\Table\Browser;
 
 use Chamilo\Configuration\Category\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -16,7 +16,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 /**
  * Table to display a set of learning objects.
  */
-class CategoryTable extends DataClassTable implements TableActionsSupport
+class CategoryTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_CATEGORY_ID;
 

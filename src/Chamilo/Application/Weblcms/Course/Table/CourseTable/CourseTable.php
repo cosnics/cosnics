@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Course\Table\CourseTable;
 
 use Chamilo\Application\Weblcms\Course\Manager;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -16,7 +16,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author Yannick & Tristan
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
-class CourseTable extends RecordTable implements TableActionsSupport
+class CourseTable extends RecordListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_COURSE_ID;
 

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\External\Table;
 
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 
-class ExternalObjectTable extends DataClassTable
+class ExternalObjectTable extends DataClassListTableRenderer
 {
 
     public static function factory($component)

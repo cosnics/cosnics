@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Group\Table\SubscribeUser;
 
 use Chamilo\Core\Group\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * Table to display a list of users not subscribed to a course.
  */
-class SubscribeUserTable extends DataClassTable implements TableActionsSupport
+class SubscribeUserTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_USER_ID;
 

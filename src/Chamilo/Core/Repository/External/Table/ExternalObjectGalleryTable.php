@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\External\Table;
 
-use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\DataClassGalleryTable\DataClassGalleryTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassGalleryTableRenderer;
 
-class ExternalObjectGalleryTable extends DataClassGalleryTable
+class ExternalObjectGalleryTable extends DataClassGalleryTableRenderer
 {
 
     public static function factory($component)

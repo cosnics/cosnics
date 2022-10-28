@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Viewer\Table\ContentObject;
 
 use Chamilo\Core\Repository\Viewer\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * This class represents a table with content objects which are candidates for publication.
  */
-class ContentObjectTable extends DataClassTable implements TableActionsSupport
+class ContentObjectTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_ID;
 

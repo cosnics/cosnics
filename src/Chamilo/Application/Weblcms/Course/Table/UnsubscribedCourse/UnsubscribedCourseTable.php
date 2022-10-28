@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Course\Table\UnsubscribedCourse;
 
-use Chamilo\Libraries\Format\Table\Extension\RecordTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 
 /**
  * This class describes a table to view all the courses where the user is not
@@ -12,6 +12,6 @@ use Chamilo\Libraries\Format\Table\Extension\RecordTable;
  * @author Yannick & Tristan
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
-class UnsubscribedCourseTable extends RecordTable
+class UnsubscribedCourseTable extends RecordListTableRenderer
 {
 }

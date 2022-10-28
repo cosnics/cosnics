@@ -25,12 +25,12 @@ use Symfony\Component\Translation\Translator;
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class GalleryTable
+abstract class ListTableRenderer
 {
     use ClassContext;
 
-    public const DEFAULT_NUMBER_OF_COLUMNS_PER_PAGE = 4;
-    public const DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 5;
+    public const DEFAULT_NUMBER_OF_COLUMNS_PER_PAGE = 1;
+    public const DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 20;
     public const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_ASC;
     public const DEFAULT_ORDER_COLUMN_INDEX = 0;
 
@@ -44,7 +44,7 @@ abstract class GalleryTable
      */
     protected array $columns;
 
-    protected GalleryHTMLTable $galleryHTMLTable;
+    protected ListHtmlTableRenderer $listHtmlTableRenderer;
 
     protected Pager $pager;
 
@@ -56,16 +56,21 @@ abstract class GalleryTable
 
     public function __construct(
         ChamiloRequest $request, Translator $translator, UrlGenerator $urlGenerator, Pager $pager,
-        GalleryHTMLTable $galleryHTMLTable
+        ListHtmlTableRenderer $listHtmlTableRenderer
     )
     {
         $this->request = $request;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->pager = $pager;
-        $this->galleryHTMLTable = $galleryHTMLTable;
+        $this->listHtmlTableRenderer = $listHtmlTableRenderer;
 
         $this->initializeColumns();
+
+        if ($this instanceof TableRowActionsSupport)
+        {
+            $this->addActionColumn();
+        }
     }
 
     /**
@@ -79,10 +84,26 @@ abstract class GalleryTable
         $parameterValues = $this->determineParameterValues($condition);
         $tableActions = $this instanceof TableActionsSupport ? $this->getTableActions() : null;
 
-        return $this->getGalleryHTMLTable()->render(
+        return $this->getListHtmlTableRenderer()->render(
             $this->getColumns(), $this->getData($parameterValues, $condition), static::determineName(),
             static::determineParameterNames(), $parameterValues, $tableActions
         );
+    }
+
+    /**
+     * Adds the action column only if the action column is not yet added
+     */
+    protected function addActionColumn()
+    {
+        foreach ($this->getColumns() as $column)
+        {
+            if ($column instanceof ActionsTableColumn)
+            {
+                return;
+            }
+        }
+
+        $this->addColumn(new ActionsTableColumn());
     }
 
     protected function addColumn(TableColumn $column, ?int $index = null)
@@ -107,7 +128,7 @@ abstract class GalleryTable
         }
         catch (Exception $exception)
         {
-            return 'galleryTable';
+            return 'table';
         }
     }
 
@@ -265,8 +286,8 @@ abstract class GalleryTable
     ): ArrayCollection
     {
         $results = $this->retrieveData(
-            $condition, $parameterValues->getNumberOfRowsPerPage() * $this->getDefaultNumberOfColumnsPerPage(),
-            $this->determineOffset($parameterValues), $this->determineOrderBy($parameterValues, $tableActions)
+            $condition, $parameterValues->getNumberOfRowsPerPage(), $this->determineOffset($parameterValues),
+            $this->determineOrderBy($parameterValues, $tableActions)
         );
 
         $tableData = [];
@@ -299,9 +320,9 @@ abstract class GalleryTable
         return static::DEFAULT_ORDER_COLUMN_DIRECTION;
     }
 
-    public function getGalleryHTMLTable(): GalleryHTMLTable
+    public function getListHtmlTableRenderer(): ListHtmlTableRenderer
     {
-        return $this->galleryHTMLTable;
+        return $this->listHtmlTableRenderer;
     }
 
     /**
@@ -377,7 +398,27 @@ abstract class GalleryTable
     protected function processData($result, TableParameterValues $parameterValues, ?TableActions $tableActions = null
     ): array
     {
-        return [$this->renderGalleryCell($result, $parameterValues, $tableActions)];
+        $rowData = [];
+
+        if ($tableActions instanceof TableActions && $tableActions->hasActions())
+        {
+            $identifierCellContent = $this->renderIdentifierCell($result);
+
+            if (strlen($identifierCellContent) > 0)
+            {
+                $identifierCellContent =
+                    $this->getCheckboxHtml($tableActions, $parameterValues, $identifierCellContent);
+            }
+
+            $rowData[] = $identifierCellContent;
+        }
+
+        foreach ($this->getColumns() as $column)
+        {
+            $rowData[] = $this->renderCell($column, $result);
+        }
+
+        return $rowData;
     }
 
     /**
@@ -394,66 +435,9 @@ abstract class GalleryTable
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
-     */
-    abstract public function renderContent($result): string;
-
-    public function renderGalleryCell(
-        $result, TableParameterValues $parameterValues, ?TableActions $tableActions = null
-    ): string
-    {
-        $html = [];
-
-        $html[] = '<div class="panel panel-default panel-gallery">';
-
-        $html[] = '<div class="panel-heading">';
-
-        if ($tableActions instanceof TableActions && $tableActions->hasActions())
-        {
-            $identifierCellContent = $this->renderIdentifierCell($result);
-
-            if (strlen($identifierCellContent) > 0)
-            {
-                $identifierCellContent =
-                    $this->getCheckboxHtml($tableActions, $parameterValues, $identifierCellContent);
-            }
-
-            $html[] = $identifierCellContent;
-        }
-
-        $title = $this->renderTitle($result);
-
-        $html[] = '<h3 class="panel-title" title="' . $title . '">';
-        $html[] = $title;
-        $html[] = '</h3>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="panel-body panel-body-thumbnail text-center">';
-
-        $html[] = $this->renderContent($result);
-        $html[] = '</div>';
-
-        if ($this instanceof TableRowActionsSupport)
-        {
-            $html[] = '<div class="panel-footer">';
-            $html[] = $this->renderTableRowActions($result);
-            $html[] = '</div>';
-        }
-
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array $result
      */
     abstract protected function renderIdentifierCell($result): string;
-
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
-     */
-    abstract public function renderTitle($result): string;
 
     abstract protected function retrieveData(
         ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null

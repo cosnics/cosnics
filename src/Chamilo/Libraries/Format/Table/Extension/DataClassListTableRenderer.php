@@ -3,14 +3,14 @@ namespace Chamilo\Libraries\Format\Table\Extension;
 
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
-use Chamilo\Libraries\Format\Table\Table;
+use Chamilo\Libraries\Format\Table\ListTableRenderer;
 
 /**
  * @package Chamilo\Libraries\Format\Table\Extension\DataClassTable
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  * @author  Hans De Bisschop <hans.de.bisschop>
  */
-abstract class DataClassTable extends Table
+abstract class DataClassListTableRenderer extends ListTableRenderer
 {
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass

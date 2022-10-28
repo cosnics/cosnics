@@ -18,7 +18,7 @@ class PublicationTableDataProvider extends RecordTableDataProvider
     /**
      * Constructor
      *
-     * @param \Chamilo\Libraries\Format\Table\Table $table
+     * @param \Chamilo\Libraries\Format\Table\ListTableRenderer $table
      * @param \Chamilo\Core\Admin\Announcement\Service\PublicationService $publicationService
      */
     public function __construct($table, PublicationService $publicationService)

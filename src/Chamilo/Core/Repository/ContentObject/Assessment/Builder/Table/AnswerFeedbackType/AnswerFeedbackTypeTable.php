@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Table\AnswerF
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class AnswerFeedbackTypeTable extends DataClassTable implements TableActionsSupport
+class AnswerFeedbackTypeTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_COMPLEX_QUESTION_ID;
 

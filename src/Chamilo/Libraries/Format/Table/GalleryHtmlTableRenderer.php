@@ -2,16 +2,21 @@
 namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,9 +27,8 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Libraries\Format\Table
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
- * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class HtmlTable
+class GalleryHtmlTableRenderer
 {
     protected Pager $pager;
 
@@ -68,14 +72,10 @@ abstract class HtmlTable
             return $this->getEmptyTable($htmlTable);
         }
 
-        $this->processTableColumns(
-            $htmlTable, $tableColumns, $parameterNames, $parameterValues, $tableActions
-        );
-
         $html = [];
 
         $html[] = $this->renderTableHeader(
-            $tableName, $parameterValues, $parameterNames, $tableActions
+            $tableColumns, $tableName, $parameterValues, $parameterNames, $tableActions
         );
 
         $html[] = '<div class="row">';
@@ -133,6 +133,24 @@ abstract class HtmlTable
             );
         }
 
+        $translator = $this->getTranslator();
+
+        $buttonToolBar->prependItem(
+            new Button(
+                $translator->trans('SelectAll', [], StringUtilities::LIBRARIES),
+                new FontAwesomeGlyph('check-square', [], null, 'far'), '#', AbstractButton::DISPLAY_ICON_AND_LABEL,
+                null, ['btn-sm select-all']
+            )
+        );
+
+        $buttonToolBar->prependItem(
+            new Button(
+                $translator->trans('UnselectAll', [], StringUtilities::LIBRARIES),
+                new FontAwesomeGlyph('square', [], null, 'far'), '#', AbstractButton::DISPLAY_ICON_AND_LABEL, null,
+                ['btn-sm select-none']
+            )
+        );
+
         return $buttonToolBar;
     }
 
@@ -157,7 +175,10 @@ abstract class HtmlTable
         return implode(PHP_EOL, $html);
     }
 
-    abstract public function getFormClasses(): string;
+    public function getFormClasses(): string
+    {
+        return 'form-gallery-table';
+    }
 
     public function getPagerRenderer(): PagerRenderer
     {
@@ -169,11 +190,22 @@ abstract class HtmlTable
         return $this->security;
     }
 
-    abstract public function getTableActionsJavascript(): string;
+    public function getTableActionsJavascript(): string
+    {
+        return ResourceManager::getInstance()->getResourceHtml(
+            Path::getInstance()->getJavascriptPath(StringUtilities::LIBRARIES, true) . 'GalleryTable.js'
+        );
+    }
 
-    abstract public function getTableClasses(): string;
+    public function getTableClasses(): string
+    {
+        return 'table-gallery col-xs-12';
+    }
 
-    abstract public function getTableContainerClasses(): string;
+    public function getTableContainerClasses(): string
+    {
+        return 'table-gallery-container';
+    }
 
     public function getTranslator(): Translator
     {
@@ -183,6 +215,22 @@ abstract class HtmlTable
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     */
+    protected function hasSortableColumns(array $tableColumns): bool
+    {
+        foreach ($tableColumns as $tableColumn)
+        {
+            if ($tableColumn instanceof AbstractSortableTableColumn && $tableColumn->is_sortable())
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -197,6 +245,8 @@ abstract class HtmlTable
         $this->processSourceData($htmlTable, $tableRows);
         $this->processCellAttributes($htmlTable, $tableColumns, $tableActions);
         $this->processEmptyCells($htmlTable);
+
+        $htmlTable->setAllAttributes(['class' => 'col-xs-6 col-lg-3']);
     }
 
     /**
@@ -239,44 +289,6 @@ abstract class HtmlTable
         foreach ($tableRows as $row)
         {
             $htmlTable->addRow($row);
-        }
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
-     * @param string[] $parameterNames
-     *
-     * @throws \TableException
-     */
-    protected function processTableColumns(
-        HTML_Table $htmlTable, array $tableColumns, array $parameterNames, TableParameterValues $parameterValues,
-        ?TableActions $tableActions = null
-    )
-    {
-        if ($tableActions instanceof TableActions && $tableActions->hasActions())
-        {
-            $columnHeaderHtml =
-                '<div class="checkbox checkbox-primary"><input class="styled styled-primary sortableTableSelectToggle" type="checkbox" name="sortableTableSelectToggle" /><label></label></div>';
-            $this->setColumnHeader($htmlTable, $parameterNames, $parameterValues, 0, $columnHeaderHtml, false);
-        }
-
-        foreach ($tableColumns as $key => $tableColumn)
-        {
-            $headerAttributes = [];
-
-            $cssClasses = $tableColumn->getCssClasses();
-
-            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
-            {
-                $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
-            }
-
-            $this->setColumnHeader(
-                $htmlTable, $parameterNames, $parameterValues,
-                ($tableActions instanceof TableActions && $tableActions->hasActions() ? $key + 1 : $key),
-                $this->getSecurity()->removeXSS($tableColumn->get_title()),
-                $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->is_sortable(), $headerAttributes
-            );
         }
     }
 
@@ -331,6 +343,138 @@ abstract class HtmlTable
     /**
      * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
      *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
+     */
+    public function renderPropertyDirectionSubButtons(
+        array $tableColumns, TableParameterValues $parameterValues, array $parameterNames
+    ): array
+    {
+        $currentFirstOrderDirection = $parameterValues->getOrderColumnDirection();
+        $subButtons = [];
+        $translator = $this->getTranslator();
+
+        if ($this->hasSortableColumns($tableColumns))
+        {
+            $propertyUrl = $this->getUrlGenerator()->fromRequest(
+                [$parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION] => SORT_ASC]
+            );
+            $isSelected = $currentFirstOrderDirection == SORT_ASC;
+
+            $subButtons[] = new SubButton(
+                $translator->trans('ASC'), null, $propertyUrl, AbstractButton::DISPLAY_LABEL, null, [], null,
+                $isSelected
+            );
+
+            $propertyUrl = $this->getUrlGenerator()->fromRequest(
+                [$parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION] => SORT_DESC]
+            );
+            $isSelected = $currentFirstOrderDirection == SORT_DESC;
+
+            $subButtons[] = new SubButton(
+                $translator->trans('DESC'), null, $propertyUrl, AbstractButton::DISPLAY_LABEL, null, [], null,
+                $isSelected
+            );
+        }
+
+        return $subButtons;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     *
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     */
+    public function renderPropertySorting(
+        array $tableColumns, TableParameterValues $parameterValues, array $parameterNames
+    ): string
+    {
+        $html = [];
+
+        if ($this->hasSortableColumns($tableColumns))
+        {
+            $buttonToolBar = new ButtonToolBar();
+            $dropDownButton = new DropdownButton();
+            $translator = $this->getTranslator();
+
+            $currentFirstOrderColumn = $parameterValues->getOrderColumnIndex();
+            $currentFirstOrderDirection = $parameterValues->getOrderColumnDirection();
+
+            $orderProperty = $tableColumns[$currentFirstOrderColumn];
+
+            $dropDownButton->addSubButton(new SubButtonHeader($translator->trans('SortingProperty')));
+            $dropDownButton->addSubButtons(
+                $this->renderPropertySubButtons($tableColumns, $parameterValues, $parameterNames)
+            );
+            $dropDownButton->setClasses(['btn-sm']);
+            $dropDownButton->setDropdownClasses(['dropdown-menu-right']);
+
+            $orderPropertyName = $translator->trans(
+                (string) StringUtilities::getInstance()->createString($orderProperty->get_name())->upperCamelize()
+            );
+
+            $dropDownButton->addSubButton(new SubButtonDivider());
+            $dropDownButton->addSubButton(new SubButtonHeader($translator->trans('SortingDirection')));
+            $dropDownButton->addSubButtons(
+                $this->renderPropertyDirectionSubButtons($tableColumns, $parameterValues, $parameterNames)
+            );
+
+            $orderDirection = $translator->trans(($currentFirstOrderDirection == SORT_ASC ? 'ASC' : 'DESC'));
+
+            $dropDownButton->setLabel(
+                $translator->trans(
+                    'GalleryTableOrderPropertyWithDirection',
+                    ['PROPERTY' => $orderPropertyName, 'DIRECTION' => $orderDirection]
+                )
+            );
+
+            $buttonToolBar->addItem($dropDownButton);
+
+            $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
+            $html[] = '<div class="pull-right table-order-property">';
+            $html[] = $buttonToolBarRenderer->render();
+            $html[] = '</div>';
+        }
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
+     */
+    public function renderPropertySubButtons(
+        array $tableColumns, TableParameterValues $parameterValues, array $parameterNames
+    ): array
+    {
+        $currentOrderColumnIndex = $parameterValues->getOrderColumnIndex();
+        $subButtons = [];
+
+        if ($this->hasSortableColumns($tableColumns))
+        {
+            foreach ($tableColumns as $index => $tableColumn)
+            {
+                $propertyUrl = $this->getUrlGenerator()->fromRequest(
+                    [$parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_INDEX] => $index]
+                );
+
+                $isSelected = $currentOrderColumnIndex == $index;
+
+                $subButtons[] = new SubButton(
+                    $this->getSecurity()->removeXSS($tableColumn->get_title()), null, $propertyUrl,
+                    AbstractButton::DISPLAY_LABEL, null, [], null, $isSelected
+                );
+            }
+        }
+
+        return $subButtons;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     *
      * @throws \TableException
      */
     public function renderTableBody(
@@ -343,14 +487,21 @@ abstract class HtmlTable
     }
 
     /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     *
      * @throws \ReflectionException
      * @throws \QuickformException
      */
     public function renderTableFilters(
-        TableParameterValues $parameterValues, array $parameterNames
+        array $tableColumns, TableParameterValues $parameterValues, array $parameterNames
     ): string
     {
-        return $this->renderNumberOfItemsPerPageSelector($parameterValues, $parameterNames);
+        $html = [];
+
+        $html[] = $this->renderNumberOfItemsPerPageSelector($parameterValues, $parameterNames);
+        $html[] = $this->renderPropertySorting($tableColumns, $parameterValues, $parameterNames);
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -400,11 +551,13 @@ abstract class HtmlTable
     }
 
     /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
+     *
      * @throws \ReflectionException
      * @throws \QuickformException
      */
     public function renderTableHeader(
-        string $tableName, TableParameterValues $parameterValues, array $parameterNames,
+        array $tableColumns, string $tableName, TableParameterValues $parameterValues, array $parameterNames,
         ?TableActions $tableActions = null
     ): string
     {
@@ -440,72 +593,11 @@ abstract class HtmlTable
         }
 
         $html[] = '<div class="' . $classes . ' table-navigation-search">';
-        $html[] = $this->renderTableFilters($parameterValues, $parameterNames);
+        $html[] = $this->renderTableFilters($tableColumns, $parameterValues, $parameterNames);
         $html[] = '</div>';
 
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @param string[] $parameterNames
-     * @param string[] $headerAttributes
-     *
-     * @throws \TableException
-     */
-    public function setColumnHeader(
-        HTML_Table $htmlTable, array $parameterNames, TableParameterValues $parameterValues, int $columnIndex,
-        string $label, bool $isSortable = true, ?array $headerAttributes = null
-    )
-    {
-        $header = $htmlTable->getHeader();
-
-        if ($isSortable)
-        {
-            $currentOrderColumnIndex = $parameterValues->getOrderColumnIndex();
-            $currentOrderColumnDirection = $parameterValues->getOrderColumnDirection();
-
-            if ($columnIndex != $currentOrderColumnIndex)
-            {
-                $currentOrderColumnIndex = $columnIndex;
-                $currentOrderColumnDirection = SORT_ASC;
-                $glyph = '';
-            }
-            else
-            {
-                if ($currentOrderColumnDirection == SORT_ASC)
-                {
-                    $currentOrderColumnDirection = SORT_DESC;
-                    $glyphType = 'arrow-down-long';
-                }
-                else
-                {
-                    $currentOrderColumnDirection = SORT_ASC;
-                    $glyphType = 'arrow-up-long';
-                }
-
-                $glyph = new FontAwesomeGlyph($glyphType);
-                $glyph = $glyph->render();
-            }
-
-            $queryParameters = [
-                $parameterNames[TableParameterValues::PARAM_PAGE_NUMBER] => $parameterValues->getPageNumber(),
-                $parameterNames[TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE] => $parameterValues->getNumberOfRowsPerPage(
-                ),
-                $parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_INDEX] => $currentOrderColumnIndex,
-                $parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION] => $currentOrderColumnDirection
-            ];
-
-            $content = '<a href="' . $this->getUrlGenerator()->fromRequest($queryParameters) . '">' . $label . '</a> ' .
-                $glyph;
-        }
-        else
-        {
-            $content = $label;
-        }
-
-        $header->setHeaderContents(0, $columnIndex, $content);
-        $header->setColAttributes($columnIndex, $headerAttributes);
     }
 }

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Metadata\Vocabulary\Table\User;
 
 use Chamilo\Core\Metadata\Vocabulary\Manager;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserTable extends RecordTable implements TableActionsSupport
+class UserTable extends RecordListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_USER_ID;
 

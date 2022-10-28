@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Cour
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @package application.lib.weblcms.tool.course_group.component.user_table
  */
-class CourseGroupTable extends DataClassTable implements TableActionsSupport
+class CourseGroupTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_COURSE_GROUP;
 

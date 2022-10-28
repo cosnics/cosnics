@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Table\Approval;
 
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * Table to display a set of users.
  */
-class UserApprovalTable extends DataClassTable implements TableActionsSupport
+class UserApprovalTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     public const TABLE_IDENTIFIER = Manager::PARAM_USER_USER_ID;
 

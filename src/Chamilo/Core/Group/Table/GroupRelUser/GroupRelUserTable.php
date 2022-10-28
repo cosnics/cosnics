@@ -2,13 +2,13 @@
 namespace Chamilo\Core\Group\Table\GroupRelUser;
 
 use Chamilo\Core\Group\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
-class GroupRelUserTable extends DataClassTable implements TableActionsSupport
+class GroupRelUserTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_GROUP_REL_USER_ID;
 

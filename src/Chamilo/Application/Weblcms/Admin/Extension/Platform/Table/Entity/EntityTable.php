@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Table\Entity;
 
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
-use Chamilo\Libraries\Format\Table\Extension\RecordTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class EntityTable extends RecordTable implements TableActionsSupport
+class EntityTable extends RecordListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_ENTITY_ID;
 

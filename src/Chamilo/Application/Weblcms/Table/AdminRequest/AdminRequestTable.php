@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Table\AdminRequest;
 
 use Chamilo\Application\Weblcms\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
@@ -16,7 +16,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 /**
  * Table to display a set of course_types.
  */
-class AdminRequestTable extends DataClassTable implements TableActionsSupport
+class AdminRequestTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_REQUEST;
 

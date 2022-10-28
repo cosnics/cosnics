@@ -2,14 +2,14 @@
 namespace Chamilo\Application\Weblcms\Request\Table\Request;
 
 use Chamilo\Application\Weblcms\Request\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-class RequestTable extends DataClassTable implements TableActionsSupport
+class RequestTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_REQUEST_ID;
     const TYPE_PERSONAL = 1;

@@ -3,13 +3,13 @@ namespace Chamilo\Core\Repository\Table\ContentObject\Version;
 
 use Chamilo\Core\Repository\Component\ComparerComponent;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
-class VersionTable extends DataClassTable implements TableActionsSupport
+class VersionTable extends DataClassListTableRenderer implements TableActionsSupport
 {
     const TABLE_IDENTIFIER = Manager::PARAM_CONTENT_OBJECT_ID;
 

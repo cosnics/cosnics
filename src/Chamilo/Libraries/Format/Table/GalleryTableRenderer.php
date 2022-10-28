@@ -25,12 +25,12 @@ use Symfony\Component\Translation\Translator;
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class Table
+abstract class GalleryTableRenderer
 {
     use ClassContext;
 
-    public const DEFAULT_NUMBER_OF_COLUMNS_PER_PAGE = 1;
-    public const DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 20;
+    public const DEFAULT_NUMBER_OF_COLUMNS_PER_PAGE = 4;
+    public const DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 5;
     public const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_ASC;
     public const DEFAULT_ORDER_COLUMN_INDEX = 0;
 
@@ -44,11 +44,11 @@ abstract class Table
      */
     protected array $columns;
 
+    protected GalleryHtmlTableRenderer $galleryHtmlTableRenderer;
+
     protected Pager $pager;
 
     protected ChamiloRequest $request;
-
-    protected SortableTable $sortableTable;
 
     protected Translator $translator;
 
@@ -56,21 +56,16 @@ abstract class Table
 
     public function __construct(
         ChamiloRequest $request, Translator $translator, UrlGenerator $urlGenerator, Pager $pager,
-        SortableTable $sortableTable
+        GalleryHtmlTableRenderer $galleryHtmlTableRenderer
     )
     {
         $this->request = $request;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->pager = $pager;
-        $this->sortableTable = $sortableTable;
+        $this->galleryHtmlTableRenderer = $galleryHtmlTableRenderer;
 
         $this->initializeColumns();
-
-        if ($this instanceof TableRowActionsSupport)
-        {
-            $this->addActionColumn();
-        }
     }
 
     /**
@@ -84,26 +79,10 @@ abstract class Table
         $parameterValues = $this->determineParameterValues($condition);
         $tableActions = $this instanceof TableActionsSupport ? $this->getTableActions() : null;
 
-        return $this->getSortableTable()->render(
+        return $this->getGalleryHtmlTableRenderer()->render(
             $this->getColumns(), $this->getData($parameterValues, $condition), static::determineName(),
             static::determineParameterNames(), $parameterValues, $tableActions
         );
-    }
-
-    /**
-     * Adds the action column only if the action column is not yet added
-     */
-    protected function addActionColumn()
-    {
-        foreach ($this->getColumns() as $column)
-        {
-            if ($column instanceof ActionsTableColumn)
-            {
-                return;
-            }
-        }
-
-        $this->addColumn(new ActionsTableColumn());
     }
 
     protected function addColumn(TableColumn $column, ?int $index = null)
@@ -128,7 +107,7 @@ abstract class Table
         }
         catch (Exception $exception)
         {
-            return 'table';
+            return 'galleryTable';
         }
     }
 
@@ -155,7 +134,7 @@ abstract class Table
     protected function determineOrderBy(TableParameterValues $parameterValues, ?TableActions $tableActions = null
     ): OrderBy
     {
-		$hasTableActions = $tableActions instanceof TableActions && $tableActions->hasActions();
+        $hasTableActions = $tableActions instanceof TableActions && $tableActions->hasActions();
         // Calculates the order column on whether or not the table uses form actions (because sortable
         // table uses data arrays)
         $calculatedOrderColumn = $parameterValues->getOrderColumnIndex() - ($hasTableActions ? 1 : 0);
@@ -286,15 +265,22 @@ abstract class Table
     ): ArrayCollection
     {
         $results = $this->retrieveData(
-            $condition, $parameterValues->getNumberOfRowsPerPage(), $this->determineOffset($parameterValues),
-            $this->determineOrderBy($parameterValues, $tableActions)
+            $condition, $parameterValues->getNumberOfRowsPerPage() * $this->getDefaultNumberOfColumnsPerPage(),
+            $this->determineOffset($parameterValues), $this->determineOrderBy($parameterValues, $tableActions)
         );
 
         $tableData = [];
+        $tableRow = [];
 
         foreach ($results as $result)
         {
-            $tableData[] = $this->processData($result, $parameterValues, $tableActions);
+            $tableRow[] = $this->processData($result, $parameterValues, $tableActions);
+
+            if (count($tableRow) >= $parameterValues->getNumberOfColumnsPerPage())
+            {
+                $tableData[] = $tableRow;
+                $tableRow = [];
+            }
         }
 
         return new ArrayCollection($tableData);
@@ -318,6 +304,11 @@ abstract class Table
     public function getDefaultOrderDirection(): int
     {
         return static::DEFAULT_ORDER_COLUMN_DIRECTION;
+    }
+
+    public function getGalleryHtmlTableRenderer(): GalleryHtmlTableRenderer
+    {
+        return $this->galleryHtmlTableRenderer;
     }
 
     /**
@@ -367,11 +358,6 @@ abstract class Table
         return null;
     }
 
-    public function getSortableTable(): SortableTable
-    {
-        return $this->sortableTable;
-    }
-
     public function getTranslator(): Translator
     {
         return $this->translator;
@@ -398,27 +384,7 @@ abstract class Table
     protected function processData($result, TableParameterValues $parameterValues, ?TableActions $tableActions = null
     ): array
     {
-        $rowData = [];
-
-        if ($tableActions instanceof TableActions && $tableActions->hasActions())
-        {
-            $identifierCellContent = $this->renderIdentifierCell($result);
-
-            if (strlen($identifierCellContent) > 0)
-            {
-                $identifierCellContent =
-                    $this->getCheckboxHtml($tableActions, $parameterValues, $identifierCellContent);
-            }
-
-            $rowData[] = $identifierCellContent;
-        }
-
-        foreach ($this->getColumns() as $column)
-        {
-            $rowData[] = $this->renderCell($column, $result);
-        }
-
-        return $rowData;
+        return [$this->renderGalleryCell($result, $parameterValues, $tableActions)];
     }
 
     /**
@@ -435,9 +401,66 @@ abstract class Table
     }
 
     /**
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
+     */
+    abstract public function renderContent($result): string;
+
+    public function renderGalleryCell(
+        $result, TableParameterValues $parameterValues, ?TableActions $tableActions = null
+    ): string
+    {
+        $html = [];
+
+        $html[] = '<div class="panel panel-default panel-gallery">';
+
+        $html[] = '<div class="panel-heading">';
+
+        if ($tableActions instanceof TableActions && $tableActions->hasActions())
+        {
+            $identifierCellContent = $this->renderIdentifierCell($result);
+
+            if (strlen($identifierCellContent) > 0)
+            {
+                $identifierCellContent =
+                    $this->getCheckboxHtml($tableActions, $parameterValues, $identifierCellContent);
+            }
+
+            $html[] = $identifierCellContent;
+        }
+
+        $title = $this->renderTitle($result);
+
+        $html[] = '<h3 class="panel-title" title="' . $title . '">';
+        $html[] = $title;
+        $html[] = '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body panel-body-thumbnail text-center">';
+
+        $html[] = $this->renderContent($result);
+        $html[] = '</div>';
+
+        if ($this instanceof TableRowActionsSupport)
+        {
+            $html[] = '<div class="panel-footer">';
+            $html[] = $this->renderTableRowActions($result);
+            $html[] = '</div>';
+        }
+
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array $result
      */
     abstract protected function renderIdentifierCell($result): string;
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
+     */
+    abstract public function renderTitle($result): string;
 
     abstract protected function retrieveData(
         ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
