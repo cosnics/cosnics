@@ -43,11 +43,11 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
-import ClickOutside from 'vue-click-outside';
+//import ClickOutside from 'vue-click-outside';
 import {GradeItem} from '../domain/GradeBook';
 
 @Component({
-    directives: { ClickOutside },
+    //directives: { ClickOutside },
     filters: {
         breadcrumb: function (gradedItem: GradeItem) {
             return gradedItem.breadcrumb.join(' » ');

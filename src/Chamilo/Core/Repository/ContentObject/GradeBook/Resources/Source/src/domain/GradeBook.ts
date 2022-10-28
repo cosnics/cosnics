@@ -67,9 +67,9 @@ export default class GradeBook {
     public users: User[] = [];
     public resultsData: ResultsData = {};
 
-    public readonly dataId;
+    public readonly dataId: number;
     public currentVersion: number|null;
-    public readonly title;
+    public readonly title: string;
 
     constructor(dataId: number, currentVersion: number|null, title: string) {
         this.dataId = dataId;
