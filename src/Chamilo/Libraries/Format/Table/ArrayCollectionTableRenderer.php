@@ -14,17 +14,17 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class ArrayCollectionTableRenderer
 {
+    protected ListTableRenderer $listTableRenderer;
+
     protected Pager $pager;
 
     protected ChamiloRequest $request;
 
-    protected SortableTable $sortableTable;
-
-    public function __construct(ChamiloRequest $request, Pager $pager, SortableTable $sortableTable)
+    public function __construct(ChamiloRequest $request, Pager $pager, ListTableRenderer $listTableRenderer)
     {
         $this->request = $request;
         $this->pager = $pager;
-        $this->sortableTable = $sortableTable;
+        $this->listTableRenderer = $listTableRenderer;
     }
 
     public function render(
@@ -36,7 +36,7 @@ class ArrayCollectionTableRenderer
             $tableData, $defaultOrderColumnIndex, $defaultOrderDirection, $defaultNumberOfItemsPerPage
         );
 
-        return $this->getSortableTable()->render(
+        return $this->getListTableRenderer()->render(
             $tableColumns, $this->getData($parameterValues, $tableColumns, $tableData), $tableName,
             $this->determineParameterNames($tableName), $parameterValues
         );
@@ -148,6 +148,11 @@ class ArrayCollectionTableRenderer
         );
     }
 
+    public function getListTableRenderer(): SortableTable
+    {
+        return $this->listTableRenderer;
+    }
+
     public function getPager(): Pager
     {
         return $this->pager;
@@ -156,11 +161,6 @@ class ArrayCollectionTableRenderer
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
-    }
-
-    public function getSortableTable(): SortableTable
-    {
-        return $this->sortableTable;
     }
 
     public function isDateColumn(ArrayCollection $data, int $column): bool
