@@ -234,15 +234,6 @@ abstract class Manager extends AjaxManager
         return $this->getService(FilterParametersBuilder::class);
     }
 
-/*    /**
-     * @throws UserException
-     * @throws NotAllowedException
-     */
-/*    protected function validatePresenceUserInput()
-    {
-        $this->ajaxComponent->validatePresenceUserInput();
-    }*/
-
     /**
      * @throws UserException
      */
@@ -250,27 +241,6 @@ abstract class Manager extends AjaxManager
     {
         $this->ajaxComponent->throwUserException($key);
     }
-
-/*    /**
-     * @throws NotAllowedException
-     * @throws UserException
-     */
-/*    protected function validatePresenceResultEntryInput()
-    {
-        $this->validatePresenceUserInput();
-
-        $periodId = $this->getRequest()->getFromPostOrUrl('period_id');
-        $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
-        $period = $this->getPresenceResultPeriodService()->findResultPeriodForPresence($this->getPresence(), $periodId, $contextIdentifier);
-        if (empty($period)) {
-            $this->throwUserException('PresenceResultPeriodNotFound');
-        }
-
-        $statusId = $this->getRequest()->getFromPostOrUrl('status_id');
-        if (!$this->getPresenceService()->isValidStatusId($this->getPresence(), $statusId)) {
-            $this->throwUserException('InvalidStatus');
-        }
-    }*/
 
     /**
      * @return int

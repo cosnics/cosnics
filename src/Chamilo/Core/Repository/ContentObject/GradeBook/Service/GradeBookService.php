@@ -7,7 +7,11 @@ use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBook
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookItemJSONModel;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookScore;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Repository\GradeBookDataRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * Class GradeBookService
@@ -22,21 +26,6 @@ class GradeBookService
      * @var GradeBookDataRepository
      */
     protected $gradeBookDataRepository;
-
-    /*/**
-     * @var RubricValidator
-     */
-    //protected $rubricValidator;
-
-    /*/**
-     * @var RubricTreeBuilder
-     */
-    //protected $rubricTreeBuilder;
-
-    /*/**
-     * @var RubricResultService
-     */
-    //protected $rubricResultService;
 
     /**
      * GradeBookService constructor.
@@ -69,13 +58,7 @@ class GradeBookService
      */
     public function saveGradeBook(GradeBookData $gradeBookData)
     {
-        /*if(!$this->canChangeRubric($gradeBookData))
-        {
-            throw new RubricHasResultsException();
-        }*/
-
         $gradeBookData->setLastUpdated(new \DateTime());
-        //$this->rubricValidator->validateRubric($rubricData);
 
         $this->gradeBookDataRepository->saveGradeBookData($gradeBookData);
     }
@@ -91,5 +74,15 @@ class GradeBookService
         $this->gradeBookDataRepository->deleteGradeBookData($gradeBookData);
     }
 
-
+    /**
+     * @param GradeBookData $gradeBookData
+     * @param int $userId
+     *
+     * @return GradeBookScore[]|ArrayCollection|Collection
+     */
+    public function getGradeBookScoresByUserId(GradeBookData $gradeBookData, int $userId)
+    {
+        $criteria = Criteria::create()->where(Criteria::expr()->eq('targetUserId', $userId));
+        return $gradeBookData->getGradeBookScores()->matching($criteria);
+    }
 }
