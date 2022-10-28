@@ -77,7 +77,14 @@ abstract class ListTableRenderer extends AbstractTableRenderer
 
             foreach ($this->getColumns() as $column)
             {
-                $rowData[] = $this->renderCell($column, $result);
+                if ($column instanceof ActionsTableColumn && $this instanceof TableRowActionsSupport)
+                {
+                    $rowData[] = $this->renderTableRowActions($result);
+                }
+                else
+                {
+                    $rowData[] = $this->renderCell($column, $result);
+                }
             }
 
             $tableData[] = $rowData;
@@ -89,13 +96,5 @@ abstract class ListTableRenderer extends AbstractTableRenderer
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array $result
      */
-    protected function renderCell(TableColumn $column, $result): string
-    {
-        if ($column instanceof ActionsTableColumn && $this instanceof TableRowActionsSupport)
-        {
-            return $this->renderTableRowActions($result);
-        }
-
-        return '';
-    }
+    abstract protected function renderCell(TableColumn $column, $result): string;
 }

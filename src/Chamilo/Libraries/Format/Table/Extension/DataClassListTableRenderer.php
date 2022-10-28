@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Table\Extension;
 
-use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\ListTableRenderer;
 
@@ -17,11 +16,6 @@ abstract class DataClassListTableRenderer extends ListTableRenderer
      */
     protected function renderCell(TableColumn $column, $dataClass): string
     {
-        if ($column instanceof ActionsTableColumn)
-        {
-            return parent::renderCell($column, $dataClass);
-        }
-
         return $dataClass->getDefaultProperty($column->get_name());
     }
 
