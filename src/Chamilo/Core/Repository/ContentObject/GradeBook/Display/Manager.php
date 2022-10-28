@@ -29,8 +29,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_BROWSE = 'Browser';
     const ACTION_USER_SCORES = 'UserScores';
 
-    //const ACTION_USER_PRESENCES = 'UserPresences';
-
     /**
      *
      * @var integer
@@ -64,22 +62,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
         return $this->rightsService;
     }
-
-/*    /**
-     * @return ExportService
-     */
-/*    protected function getExportService(): ExportService
-    {
-        return $this->getService(ExportService::class);
-    }
-
-    /**
-     * @return QRService
-     */
-/*    protected function getQRService(): QRService
-    {
-        return $this->getService(QRService::class);
-    }*/
 
     /**
      * @return mixed
@@ -209,38 +191,4 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $this->getTranslator()->trans($key, [], Manager::context())
         );
     }
-
-/*    /**
-     * @return string
-     * @throws UserException
-     */
-/*    protected function getRegisterPresenceUrl($qr = false): string
-    {
-        $publicationId = $this->getRequest()->getFromUrl(
-            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION
-        );
-
-        $treeNodeId = $this->getRequest()->getFromUrl(
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID
-        );
-
-        $url = $this->getPresenceRegistrationService()->getPresenceRegistrationUrl(
-            $this->getPresence(), $publicationId, $treeNodeId
-        );
-
-        if ($qr)
-        {
-            return $this->getQRService()->getQRForURL($url, 500, true);
-        }
-
-        return $url;
-    }
-*/
-/*    /**
-     * @return PresenceRegistrationService
-     */
-/*    protected function getPresenceRegistrationService()
-    {
-        return $this->getService(PresenceRegistrationService::class);
-    }*/
 }

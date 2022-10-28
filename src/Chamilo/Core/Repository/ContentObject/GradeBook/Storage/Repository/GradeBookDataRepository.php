@@ -67,29 +67,6 @@ class GradeBookDataRepository extends CommonEntityRepository
      */
     function deleteGradeBookData(GradeBookData $gradeBookData)
     {
-        /*try
-        {
-            $rubricData->setRootNode(null);
-        }
-        catch (InvalidChildTypeException $e) {}
-
-        foreach($rubricData->getTreeNodes() as $treeNode)
-        {
-            $this->removeEntity($treeNode, false);
-        }
-
-        foreach($rubricData->getLevels() as $level)
-        {
-            $this->removeEntity($level, false);
-        }
-
-        foreach($rubricData->getChoices() as $choice)
-        {
-            $this->removeEntity($choice, false);
-        }
-
-        $this->flush();*/
-
         $this->removeEntity($gradeBookData);
     }
 
@@ -105,18 +82,8 @@ class GradeBookDataRepository extends CommonEntityRepository
      */
     public function findEntireGradeBookById(int $gradeBookDataId, int $expectedVersion = null)
     {
-        //$this->getEntityManager()->getConnection()->getConfiguration()->setSQLLogger(new EchoSQLLogger());
-
         $qb = $this->createQueryBuilder('gbd')
-            /*->addSelect('tn')
-            ->addSelect('rn')
-            ->addSelect('cn')
-            ->join('gbd.treeNodes', 'tn')
-            ->join('gbd.rootNode', 'rn')
-            ->leftJoin('tn.children', 'cn')*/
             ->where('gbd.id = :id')
-            //->orderBy('tn.depth')
-            //->addOrderBy('tn.sort')
             ->setParameter('id', $gradeBookDataId);
 
         /** @var GradeBookData $gradeBookData */
@@ -138,12 +105,12 @@ class GradeBookDataRepository extends CommonEntityRepository
         $gradeBookData->getGradeBookCategories()[0];
         $gradeBookData->getGradeBookItems()[0];
         $gradeBookData->getGradeBookColumns()[0];
-        $gradeBookData->getGradeBookScores()[0];
+        //$gradeBookData->getGradeBookScores()[0];
 
         foreach ($gradeBookData->getGradeBookColumns() as $column)
         {
             $column->getGradeBookColumnSubItems()[0];
-            $column->getGradeBookScores()[0];
+            //$column->getGradeBookScores()[0];
         }
 
         foreach ($gradeBookData->getGradeBookCategories() as $category)
@@ -151,52 +118,9 @@ class GradeBookDataRepository extends CommonEntityRepository
             $category->getGradeBookColumns()[0];
         }
 
-        /*$choices = $rubricData->getChoices();
-        foreach($choices as $choice)
-        {
-            $criteriumChoices = $choice->getCriterium()->getChoices();
-
-            if($criteriumChoices instanceof PersistentCollection && !$criteriumChoices->isInitialized())
-            {
-                $criteriumChoices->setInitialized(true);
-                $criteriumChoices->clear();
-            }
-
-            $criteriumChoices->add($choice);
-        }*/
         // end preload for performance - thank you doctrine for not caching on foreign keys and not being able to join on a subclass of an inheritance
         // (maybe we should change the domain model?)
 
         return $gradeBookData;
     }
-
-/*    /**
-     * @param TreeNode $treeNode
-     *
-     * @throws \Doctrine\ORM\ORMException
-     */
-/*    public function removeTreeNode(TreeNode $treeNode)
-    {
-        $this->removeEntity($treeNode);
-    }*/
-
-/*    /**
-     * @param Level $level
-     *
-     * @throws \Doctrine\ORM\ORMException
-     */
-/*    public function removeLevel(Level $level)
-    {
-        $this->removeEntity($level);
-    }*/
-
-/*    /**
-     * @param Choice $choice
-     *
-     * @throws \Doctrine\ORM\ORMException
-     */
-/*    public function removeChoice(Choice $choice)
-    {
-        $this->removeEntity($choice);
-    }*/
 }

@@ -75,7 +75,6 @@ class UserScoresComponent extends Manager
         $gradebookItems = $this->getGradeBookServiceBridge()->findPublicationGradeBookItems();
         $this->getGradeBookAjaxService()->updateGradeBookData($gradeBookData, $gradebookItems);
 
-        $userScores = [];
         if ($this->getRightsService()->canUserEditGradeBook())
         {
             $userId = $this->getRequest()->getFromPostOrUrl(self::PARAM_USER_ID);
@@ -86,20 +85,12 @@ class UserScoresComponent extends Manager
             $user = $this->getUser();
         }
 
-        $userId = $user->getId();
-        foreach ($gradeBookData->getGradeBookScores() as $score)
-        {
-            if ($score->getTargetUserId() == $userId)
-            {
-                $userScores[] = $score;
-            }
-        }
-
         $users = [GradeBookUserJSONModel::fromUser($user)];
+        $userScores = $this->getGradeBookService()->getGradeBookScoresByUserId($gradeBookData, $user->getId());
 
         $scores = array_map(function(GradeBookScore $score) {
             return $score->toJSONModel();
-        }, $userScores);
+        }, $userScores->toArray());
 
         return [
             'HEADER' => $this->render_header(),
