@@ -15,7 +15,7 @@
 }
 </i18n>
 <template>
-    <div :id="id" class="btn-group" :class="{'open': isOpen}" v-click-outside="close">
+    <div :id="id" class="btn-group" :class="{'open': isOpen}" xxx-v-click-outside="close">
         <button aria-haspopup="true" :aria-expanded="isOpen" class="u-flex u-align-items-center u-justify-content-between btn dropdown-toggle" :title="$t('add-remove-scores')" @click="isOpen = !isOpen">
             <span>{{ $t('add-remove-scores') }}</span> <span class="caret" aria-hidden="true"></span>
         </button>

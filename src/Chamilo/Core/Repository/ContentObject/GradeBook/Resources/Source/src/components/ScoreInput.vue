@@ -21,7 +21,7 @@
 <template>
     <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
         <template v-slot:menu>
-            <div class="highlight-content">
+            <div class="highlight-content content-tabs">
                 <div class="u-flex u-justify-content-end u-text-end">
                     <div class="menu-tab mod-left u-cursor-pointer" :class="{'mod-active': menuTab === 'score'}" @click="$emit('menu-tab-changed', 'score')">{{ $t('score') }}</div>
                     <div class="menu-tab mod-right u-cursor-pointer" :class="{'mod-active': menuTab === 'comment'}" @click="$emit('menu-tab-changed', 'comment')">{{ $t('comments') }}</div>
@@ -123,7 +123,7 @@ export default class ScoreInput extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.highlight-content {
+.highlight-content.content-tabs {
     background-color: transparent;
     font-size: 11px;
     padding: 0;
@@ -131,22 +131,22 @@ export default class ScoreInput extends Vue {
     top: -23px;
 }
 
-.highlight-content::v-deep + .highlight-content {
+.highlight-content.content-tabs::v-deep + .highlight-content {
     border-top-right-radius: 0;
 }
 
 .menu-tab {
-    color:#2e6da4;
-    padding: 2px 8px;
+    color: #2e6da4;
+    padding: 2px 8px 3px;
 
     &.mod-left {
-        background: linear-gradient(to left, #dedede 0, transparent 2px),linear-gradient(to top, #e0e0e0 0, #e6e6e6 4px);
+        background: linear-gradient(to left, #dedede 0, transparent 2px),linear-gradient(to top, #dcdcdc 0, #e6e6e6 4px);
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
     }
 
     &.mod-right {
-        background: linear-gradient(to right, #dedede 0, transparent 2px),linear-gradient(to top, #e0e0e0 0, #e6e6e6 4px);
+        background: linear-gradient(to right, #dedede 0, transparent 2px),linear-gradient(to top, #dcdcdc 0, #e6e6e6 4px);
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
     }

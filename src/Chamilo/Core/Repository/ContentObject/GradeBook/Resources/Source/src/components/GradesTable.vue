@@ -504,6 +504,10 @@ export default class GradesTable extends Vue {
         }
     }
 
+    .table-body-row:last-child td.u-relative.mod-edit {
+        top: -32px;
+    }
+
     .table-row.row-sticky {
         position: sticky;
         top: 0;
