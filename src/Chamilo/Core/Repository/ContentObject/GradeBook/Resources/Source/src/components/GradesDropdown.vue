@@ -15,7 +15,7 @@
 }
 </i18n>
 <template>
-    <div :id="id" class="btn-group" :class="{'open': isOpen}" xxx-v-click-outside="close">
+    <div :id="id" class="btn-group" :class="{'open': isOpen}" v-clickoutside="close">
         <button aria-haspopup="true" :aria-expanded="isOpen" class="u-flex u-align-items-center u-justify-content-between btn dropdown-toggle" :title="$t('add-remove-scores')" @click="isOpen = !isOpen">
             <span>{{ $t('add-remove-scores') }}</span> <span class="caret" aria-hidden="true"></span>
         </button>
@@ -43,11 +43,27 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
-//import ClickOutside from 'vue-click-outside';
 import {GradeItem} from '../domain/GradeBook';
 
+Vue.directive('clickoutside', {
+    inserted: (el: any, binding: any, vnode: any) => {
+        el.clickOutsideEvent = function (event: any) {
+            // here we check if the click event is outside the element and it's children
+            if (!(el == event.target || el.contains(event.target))) {
+                // if clicked outside, call the provided method
+                vnode.context[binding.expression](event);
+            }
+        };
+        document.body.addEventListener('click', el.clickOutsideEvent);
+        document.body.addEventListener('touchstart', el.clickOutsideEvent);
+    },
+    unbind: function (el: any) {
+        document.body.removeEventListener('click', el.clickOutsideEvent);
+        document.body.removeEventListener('touchstart', el.clickOutsideEvent);
+    }
+});
+
 @Component({
-    //directives: { ClickOutside },
     filters: {
         breadcrumb: function (gradedItem: GradeItem) {
             return gradedItem.breadcrumb.join(' » ');
