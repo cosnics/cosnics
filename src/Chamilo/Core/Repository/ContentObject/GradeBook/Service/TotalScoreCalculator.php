@@ -59,13 +59,14 @@ class TotalScoreCalculator
         foreach ($this->gradeBookData->getGradeBookScores() as $score)
         {
             $userId = $score->getTargetUserId();
+            $userIds[] = $userId;
+
             if ($score->isTotalScore())
             {
                 $resultsData['totals'][$userId] = $score;
             }
             else
             {
-                $userIds[] = $userId;
                 $columnId = $score->getGradeBookColumn()->getId();
                 if (!array_key_exists($columnId, $resultsData))
                 {
@@ -74,8 +75,9 @@ class TotalScoreCalculator
                 $resultsData[$columnId][$userId] = $score;
             }
         }
+
         $this->resultsData = $resultsData;
-        $this->userIds = $userIds;
+        $this->userIds = array_unique($userIds);
     }
 
     /**
@@ -83,11 +85,13 @@ class TotalScoreCalculator
      */
     public function calculateTotals(): array
     {
+        $totals = $this->resultsData['totals'];
         foreach ($this->userIds as $userId)
         {
-            $totalScore = $resultsData['totals'][$userId] = $this->getOrCreateTotalScore($userId);
+            $totalScore = $totals[$userId] = $this->getOrCreateTotalScore($userId);
             $totalScore->setNewScore($this->getEndResult($userId));
         }
+        $this->resultsData['totals'] = $totals;
         return $this->getTotals();
     }
 

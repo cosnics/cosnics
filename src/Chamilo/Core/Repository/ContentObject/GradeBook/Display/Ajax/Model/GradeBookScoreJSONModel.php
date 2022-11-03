@@ -45,13 +45,6 @@ class GradeBookScoreJSONModel
      *
      * @Type("bool")
      */
-    protected $sourceScoreAbsent;
-
-    /**
-     * @var bool
-     *
-     * @Type("bool")
-     */
     protected $sourceScoreAuthAbsent;
 
     /**
@@ -67,13 +60,6 @@ class GradeBookScoreJSONModel
      * @Type("double")
      */
     protected $newScore;
-
-    /**
-     * @var bool
-     *
-     * @Type("bool")
-     */
-    protected $newScoreAbsent;
 
     /**
      * @var bool

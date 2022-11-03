@@ -557,7 +557,6 @@ class GradeBookAjaxService
         $scores = array_map(function(GradeBookScore $score) {
             return $score->toJSONModel();
         }, $gradebookData->getGradeBookScores()->toArray());
-        $scores = array_values($scores);
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
