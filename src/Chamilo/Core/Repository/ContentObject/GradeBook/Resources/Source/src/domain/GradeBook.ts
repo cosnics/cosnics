@@ -185,6 +185,12 @@ export default class GradeBook {
         return column.subItemIds.map(itemId => this.getGradeItem(itemId)!);
     }
 
+    hasResult(columnId: ColumnId, userId: number) {
+        if (!this.resultsData[columnId]) { return false; }
+        const score: GradeScore = this.resultsData[columnId][userId];
+        return !!score;
+    }
+
     getResult(columnId: ColumnId, userId: number): ResultType {
         if (!this.resultsData[columnId]) { return null; }
         const score: GradeScore = this.resultsData[columnId][userId];
@@ -266,6 +272,8 @@ export default class GradeBook {
 
     userTotalNeedsUpdating(user: User): boolean {
         const total = this.getResult('totals', user.id);
+        if (user.id === 151) { console.log(total, typeof total); }
+        if (total === null) { return false; } // unsynchronized user, cannot update
         if (typeof total !== 'number') { return true; }
         return total.toFixed(2) !== this.getEndResult(user.id).toFixed(2);
     }

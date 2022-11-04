@@ -9,6 +9,7 @@
         "first-name": "First name",
         "last-name": "NAME",
         "item-settings": "Score Settings",
+        "not-synchronized": "Not synchronized",
         "not-yet-updated": "Final score not yet updated",
         "total": "Total",
         "uncounted": "Not counted",
@@ -23,6 +24,7 @@
         "first-name": "Voornaam",
         "item-settings": "Score-instellingen",
         "last-name": "FAMILIENAAM",
+        "not-synchronized": "Niet gesynchronizeerd",
         "not-yet-updated": "Eindcijfer nog niet geüpdated",
         "total": "Totaal",
         "uncounted": "Niet meegeteld",
@@ -86,19 +88,22 @@
                             <a v-if="gradeBookRootUrl" :href="`${gradeBookRootUrl}&gradebook_display_action=UserScores&user_id=${user.id}`">{{ user.lastName.toUpperCase() }}, {{ user.firstName }}</a>
                             <template v-else>{{ user.lastName.toUpperCase() }}, {{ user.firstName }}</template>
                         </b-td>
-                        <template v-for="category in displayedCategories">
-                            <b-td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></b-td>
-                            <b-td v-else v-for="columnId in category.columnIds" :key="`${category.id}-${columnId}-result`" :class="{'uncounted-score-cell': !gradeBook.countsForEndResult(columnId), 'u-relative mod-edit': editStudentScoreId === user.id && editScoreId === columnId}">
-                                <student-result :id="`result-${columnId}-${user.id}`" :result="gradeBook.getResult(columnId, user.id)" :use-overwritten-flag="true" :is-standalone-score="gradeBook.isStandaloneScore(columnId)" :is-overwritten="gradeBook.isOverwrittenResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)"
-                                                class="u-flex u-align-items-center u-justify-content-end u-cursor-pointer" :class="{'uncounted-score': !gradeBook.countsForEndResult(columnId)}"
-                                                @edit="showStudentScoreDialog(user.id, columnId)" @edit-comment="showStudentScoreDialog(user.id, columnId, 'comment')"></student-result>
-                                <score-input v-if="isStudentScoreDialogShown(user.id, columnId)" :menu-tab="scoreMenuTab" @menu-tab-changed="scoreMenuTab = $event" :use-revert="gradeBook.isOverwrittenResult(columnId, user.id) && !gradeBook.isStandaloneScore(columnId)" :score="gradeBook.getResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)" @comment-updated="updateResultComment(columnId, user.id, $event)" @ok="overwriteResult(columnId, user.id, $event)" @cancel="hideStudentScoreDialog" @revert="revertOverwrittenResult(columnId, user.id)"></score-input>
+                        <b-td v-if="isUnsynchronized(user.id)" :colspan="gradeBook.gradeColumns.length + 1" class="table-student-unsychronized"><div class="u-flex u-align-items-center u-justify-content-center">{{ $t('not-synchronized') }}</div></b-td>
+                        <template v-else>
+                            <template v-for="category in displayedCategories">
+                                <b-td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></b-td>
+                                <b-td v-else v-for="columnId in category.columnIds" :key="`${category.id}-${columnId}-result`" :class="{'uncounted-score-cell': !gradeBook.countsForEndResult(columnId), 'u-relative mod-edit': editStudentScoreId === user.id && editScoreId === columnId}">
+                                    <student-result v-if="gradeBook.hasResult(columnId, user.id)" :id="`result-${columnId}-${user.id}`" :result="gradeBook.getResult(columnId, user.id)" :use-overwritten-flag="true" :is-standalone-score="gradeBook.isStandaloneScore(columnId)" :is-overwritten="gradeBook.isOverwrittenResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)"
+                                                    class="u-flex u-align-items-center u-justify-content-end u-cursor-pointer" :class="{'uncounted-score': !gradeBook.countsForEndResult(columnId)}"
+                                                    @edit="showStudentScoreDialog(user.id, columnId)" @edit-comment="showStudentScoreDialog(user.id, columnId, 'comment')"></student-result>
+                                    <score-input v-if="isStudentScoreDialogShown(user.id, columnId)" :menu-tab="scoreMenuTab" @menu-tab-changed="scoreMenuTab = $event" :use-revert="gradeBook.isOverwrittenResult(columnId, user.id) && !gradeBook.isStandaloneScore(columnId)" :score="gradeBook.getResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)" @comment-updated="updateResultComment(columnId, user.id, $event)" @ok="overwriteResult(columnId, user.id, $event)" @cancel="hideStudentScoreDialog" @revert="revertOverwrittenResult(columnId, user.id)"></score-input>
+                                </b-td>
+                            </template>
+                            <b-td v-if="gradeBook.userTotalNeedsUpdating(user)" class="col-sticky table-student-total u-text-end mod-needs-update">
+                                <i class="fa fa-exclamation-circle" :title="$t('not-yet-updated')" aria-hidden="true"></i><span class="sr-only">{{ $t('not-yet-updated') }}</span>{{ gradeBook.getEndResult(user.id)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span>
                             </b-td>
+                            <b-td v-else class="col-sticky table-student-total u-text-end">{{ gradeBook.getEndResult(user.id)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></b-td>
                         </template>
-                        <b-td v-if="gradeBook.userTotalNeedsUpdating(user)" class="col-sticky table-student-total u-text-end mod-needs-update">
-                            <i class="fa fa-exclamation-circle" :title="$t('not-yet-updated')" aria-hidden="true"></i><span class="sr-only">{{ $t('not-yet-updated') }}</span>{{ gradeBook.getEndResult(user.id)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span>
-                        </b-td>
-                        <b-td v-else class="col-sticky table-student-total u-text-end">{{ gradeBook.getEndResult(user.id)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></b-td>
                     </b-tr>
                 </b-tbody>
             </b-table-simple>
@@ -157,6 +162,7 @@ export default class GradesTable extends Vue {
     @Prop({type: GradeBook, required: true}) readonly gradeBook!: GradeBook;
     @Prop({type: Array, default: () => []}) readonly searchTerms!: string[];
     @Prop({type: Boolean, default: false}) readonly busy!: boolean;
+    @Prop({type: [String, Number], default: null}) readonly addColumnId!: ColumnId|null;
     @Prop({type: [String, Number], default: null}) readonly saveColumnId!: ColumnId|null;
     @Prop({type: Number, default: null}) readonly saveCategoryId!: number|null;
     @Prop({type: Number, default: 5}) readonly itemsPerPage!: number;
@@ -238,6 +244,10 @@ export default class GradesTable extends Vue {
 
     isStudentScoreDialogShown(id: number, itemId: ItemId) {
         return this.editStudentScoreId === id && this.editScoreId === itemId;
+    }
+
+    isUnsynchronized(userId: number) {
+        return this.gradeBook.gradeColumns.filter(column => column.id !== this.addColumnId).some(column => !this.gradeBook.hasResult(column.id, userId));
     }
 
     setCategoryTitle(id: number, title: string) {
@@ -499,6 +509,10 @@ export default class GradesTable extends Vue {
         background: linear-gradient(to bottom, #e3eaed 0, #fff 4px);
         border-top: none;
 
+        &.table-student-unsychronized {
+            background: linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%, linear-gradient(to bottom, #e3eaed 0, #fff 4px);
+        }
+
         &.uncounted-score-cell {
             background: linear-gradient(to bottom, #dde5e9 0, #fafafa 4px);
         }
@@ -554,6 +568,15 @@ export default class GradesTable extends Vue {
             background: #fff linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%;
             background-clip: padding-box;
         }
+    }
+
+    .gradebook-table .table-student-unsychronized {
+        border-left-color: transparent;
+        border-right-color: transparent;
+        color: #8f0000;
+        font-style: italic;
+        font-weight: 500;
+        background: linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%;
     }
 
     @-moz-document url-prefix() {

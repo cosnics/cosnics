@@ -61,7 +61,7 @@
                 </div>
             </div>
             <div class="gradebook-table-container">
-                <grades-table :grade-book="gradeBook" :search-terms="studentSearchTerms" :busy="tableBusy" :save-column-id="saveColumnId" :save-category-id="saveCategoryId" :items-per-page="itemsPerPage" :grade-book-root-url="apiConfig.gradeBookRootURL"
+                <grades-table :grade-book="gradeBook" :search-terms="studentSearchTerms" :busy="tableBusy" :add-column-id="addColumnId" :save-column-id="saveColumnId" :save-category-id="saveCategoryId" :items-per-page="itemsPerPage" :grade-book-root-url="apiConfig.gradeBookRootURL"
                               @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"
                               @update-score-comment="onUpdateScoreComment" @overwrite-result="onOverwriteResult" @revert-overwritten-result="onRevertOverwrittenResult"
                               @change-category="onChangeCategory" @move-category="onMoveCategory"
@@ -104,6 +104,7 @@
         private saveCategoryId: number|null = null;
         private itemsPerPage: number = 5;
         private errorData: string|null = null;
+        private addColumnId: ColumnId|null = null;
 
         @Prop({type: Object, default: () => null}) readonly apiConfig!: APIConfig;
 
@@ -136,11 +137,13 @@
         addGradeItem(item: GradeItem) {
             if (!this.gradeBook) { return; }
             const column = this.gradeBook.addGradeColumnFromItem(item);
+            this.addColumnId = column.id;
             this.tableBusy = true;
             this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: GradeScore[]) => {
                 this.updateGradeColumnWithScores(column, id, scores);
                 this.resetGradeBook();
                 this.tableBusy = false;
+                this.addColumnId = null;
             });
         }
 
@@ -229,11 +232,13 @@
         createNewScore() {
             if (!this.gradeBook) { return; }
             const column = this.gradeBook.createNewScore();
+            this.addColumnId = column.id;
             this.tableBusy = true;
             this.connector?.addGradeColumn(column, ({id}: {id: ColumnId}, scores: GradeScore[]) => {
                 this.updateGradeColumnWithScores(column, id, scores);
                 this.resetGradeBook();
                 this.tableBusy = false;
+                this.addColumnId = null;
             });
         }
 
