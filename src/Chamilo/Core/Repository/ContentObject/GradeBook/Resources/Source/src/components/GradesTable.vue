@@ -403,8 +403,11 @@ export default class GradesTable extends Vue {
             visibility: collapse;
         }
 
-        .table-head-row:first-child th {
+        .table-head-row:not(.mod-no-categories):first-child th {
             border-top: none;
+        }
+
+        .table-head-row:first-child th {
             padding-bottom: 14px;
 
             &:not(:first-child):not(.is-droppable) {
