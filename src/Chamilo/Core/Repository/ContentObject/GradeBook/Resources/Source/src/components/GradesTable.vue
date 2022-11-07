@@ -7,10 +7,8 @@
         "count-towards-endresult-not": "Score does not count towards final result",
         "final-score": "Final score",
         "first-name": "First name",
-        "last-name": "NAME",
         "item-settings": "Score Settings",
-        "not-synchronized": "Not synchronized",
-        "not-yet-updated": "Final score not yet updated",
+        "last-name": "NAME",
         "total": "Total",
         "uncounted": "Not counted",
         "without-category": "Without category"
@@ -24,8 +22,6 @@
         "first-name": "Voornaam",
         "item-settings": "Score-instellingen",
         "last-name": "FAMILIENAAM",
-        "not-synchronized": "Niet gesynchronizeerd",
-        "not-yet-updated": "Eindcijfer nog niet geüpdated",
         "total": "Totaal",
         "uncounted": "Niet meegeteld",
         "without-category": "Zonder categorie"
@@ -35,12 +31,12 @@
 <template>
     <div>
         <div class="table-wrap u-relative">
-            <b-table-simple class="gradebook-table" :aria-busy="busy" :class="{'is-dragging': isDraggingColumn, 'is-category-drop': categoryDropArea !== null }">
-                <b-thead>
-                    <b-tr class="table-row table-head-row" :class="{'mod-no-categories': !gradeBook.categories.length}">
-                        <b-th class="col-sticky table-student"></b-th>
+            <table class="gradebook-table" :aria-busy="busy" :class="{'is-dragging': isDraggingColumn, 'is-category-drop': categoryDropArea !== null }">
+                <thead>
+                    <tr class="table-row table-head-row" :class="{'mod-no-categories': !gradeBook.categories.length}">
+                        <th class="col-sticky table-student"></th>
                         <draggable :list="gradeBook.categories" tag="div" class="u-contents" @end="onDragEnd" :disabled="catEditItemId !== null">
-                                <b-th v-for="{id, title, color, columnIds} in gradeBook.categories" draggable :key="`category-${id}`" :colspan="Math.max(columnIds.length, 1)"
+                                <th v-for="{id, title, color, columnIds} in gradeBook.categories" draggable :key="`category-${id}`" :colspan="Math.max(columnIds.length, 1)"
                                       class="category u-relative u-font-medium" :class="{'mod-edit-cat': catEditItemId === id, 'is-droppable': categoryDropArea === id}" :style="`--color: ${color};`"
                                       @dragstart="startDragCategory($event, id)" @dragover.prevent="onDropAreaOverEnter($event, id)" @dragenter.prevent="onDropAreaOverEnter($event, id)" @dragleave="categoryDropArea = null" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, id)">
                                     <div class="u-flex u-align-items-center u-justify-content-between u-cursor-pointer" v-if="id !== 0" @dblclick="catEditItemId = id" :title="$t('adjust-title')">{{ title }}
@@ -50,24 +46,23 @@
                                         <button class="btn-settings" :title="$t('category-settings')" @click="$emit('category-settings', id)"><i class="fa fa-gear u-inline-block"></i><span class="sr-only">{{ $t('category-settings') }}</span></button>
                                     </div>
                                     <item-title-input v-if="catEditItemId === id" :item-title="title" @cancel="catEditItemId = null" @ok="setCategoryTitle(id, $event)"></item-title-input>
-                                </b-th>
+                                </th>
                         </draggable>
-                        <b-th v-if="showNullCategory" :colspan="Math.max(gradeBook.nullCategory.columnIds.length, 1)" class="mod-no-category-assigned" :class="{'is-droppable': categoryDropArea === 0}" :title="$t('without-category')"
+                        <th v-if="showNullCategory" :colspan="Math.max(gradeBook.nullCategory.columnIds.length, 1)" class="mod-no-category-assigned" :class="{'is-droppable': categoryDropArea === 0}" :title="$t('without-category')"
                               @dragover.prevent="onDropAreaOverEnter($event, 0)" @dragenter.prevent="onDropAreaOverEnter($event, 0)" @dragleave="categoryDropArea = null" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, 0)"
-                        ></b-th>
-                        <b-th class="col-sticky table-student-total"></b-th>
-                    </b-tr>
-                    <b-tr class="table-row table-head-row row-sticky" :class="{'mod-moz-sticky': (editItemId === null && weightEditItemId === null)}">
-                        <b-th class="col-sticky table-student">
+                        ></th>
+                        <th class="col-sticky table-student-total"></th>
+                    </tr>
+                    <tr class="table-row table-head-row row-sticky" :class="{'mod-moz-sticky': (editItemId === null && weightEditItemId === null)}">
+                        <th class="col-sticky table-student">
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a> <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
-                        </b-th>
+                        </th>
                         <draggable v-for="({id, columnIds}) in displayedCategories" :key="`category-score-${id}`" :list="columnIds" tag="div" class="u-contents" ghost-class="ghost" @end="onDragEnd" :disabled="editItemId !== null || weightEditItemId !== null">
-                            <b-th v-if="columnIds.length === 0" :key="`item-id-${id}`"></b-th>
-                            <b-th v-else v-for="columnId in columnIds" :key="`item-id-${id}--${columnId}-name`" draggable @dragstart="startDragColumn($event, columnId)" :class="{'uncounted-score-cell': !gradeBook.countsForEndResult(columnId), 'u-relative mod-edit': (editItemId === columnId || weightEditItemId === columnId)}" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, -1)">
+                            <th v-if="columnIds.length === 0" :key="`item-id-${id}`"></th>
+                            <th v-else v-for="columnId in columnIds" :key="`item-id-${id}--${columnId}-name`" draggable @dragstart="startDragColumn($event, columnId)" :class="{'uncounted-score-cell': !gradeBook.countsForEndResult(columnId), 'u-relative mod-edit': (editItemId === columnId || weightEditItemId === columnId)}" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, -1)">
                                 <div class="u-flex u-align-items-center u-justify-content-between u-cursor-pointer" @dblclick="editItemId = columnId" :title="$t('adjust-title')"><span class="column-title"><i v-if="gradeBook.isGrouped(columnId)" class="fa fa-group"></i>{{ gradeBook.getTitle(columnId) }}</span>
                                     <button class="btn-settings" @click="$emit('item-settings', columnId)" :title="$t('item-settings')"><i class="fa fa-gear u-inline-block" aria-hidden="true"></i><span class="sr-only">{{$t('item-settings')}}</span></button>
                                 </div>
-                                <!--<div class="u-flex u-align-items-center" :class="[gradeBook.countsForEndResult(columnId) ? 'u-justify-content-between' : 'u-justify-content-end']">-->
                                 <div class="u-flex u-align-items-center u-justify-content-between">
                                     <div v-if="gradeBook.countsForEndResult(columnId)" class="weight u-font-normal u-cursor-pointer" :class="{'mod-custom': gradeBook.getGradeColumn(columnId).weight !== null , 'is-error': gradeBook.eqRestWeight < 0}" @dblclick="weightEditItemId = columnId" :title="$t('adjust-weight')">{{ gradeBook.getWeight(columnId)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                                     <div v-else class="weight u-font-normal" style="font-style: italic" :title="$t('count-towards-endresult-not')"><span aria-hidden="true">{{ $t('uncounted') }}</span><span class="sr-only">{{ $t('count-towards-endresult-not') }}</span></div>
@@ -77,36 +72,19 @@
                                 </div>
                                 <item-title-input v-if="editItemId === columnId" :item-title="gradeBook.getTitle(columnId)" @cancel="editItemId = null" @ok="setTitle(columnId, $event)"></item-title-input>
                                 <weight-input v-if="weightEditItemId === columnId" :item-weight="gradeBook.getWeight(columnId)" @cancel="weightEditItemId = null" @ok="setWeight(columnId, $event)"></weight-input>
-                            </b-th>
+                            </th>
                         </draggable>
-                        <b-th class="col-sticky table-student-total u-text-end">{{ $t('final-score') }}</b-th>
-                    </b-tr>
-                </b-thead>
-                <b-tbody>
-                    <b-tr v-for="user in displayedUsers" :key="'user-' + user.id" class="table-row table-body-row">
-                        <b-td class="col-sticky table-student">
-                            <a v-if="gradeBookRootUrl" :href="`${gradeBookRootUrl}&gradebook_display_action=UserScores&user_id=${user.id}`">{{ user.lastName.toUpperCase() }}, {{ user.firstName }}</a>
-                            <template v-else>{{ user.lastName.toUpperCase() }}, {{ user.firstName }}</template>
-                        </b-td>
-                        <b-td v-if="isUnsynchronized(user.id)" :colspan="gradeBook.gradeColumns.length + 1" class="table-student-unsychronized"><div class="u-flex u-align-items-center u-justify-content-center">{{ $t('not-synchronized') }}</div></b-td>
-                        <template v-else>
-                            <template v-for="category in displayedCategories">
-                                <b-td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></b-td>
-                                <b-td v-else v-for="columnId in category.columnIds" :key="`${category.id}-${columnId}-result`" :class="{'uncounted-score-cell': !gradeBook.countsForEndResult(columnId), 'u-relative mod-edit': editStudentScoreId === user.id && editScoreId === columnId}">
-                                    <student-result v-if="gradeBook.hasResult(columnId, user.id)" :id="`result-${columnId}-${user.id}`" :result="gradeBook.getResult(columnId, user.id)" :use-overwritten-flag="true" :is-standalone-score="gradeBook.isStandaloneScore(columnId)" :is-overwritten="gradeBook.isOverwrittenResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)"
-                                                    class="u-flex u-align-items-center u-justify-content-end u-cursor-pointer" :class="{'uncounted-score': !gradeBook.countsForEndResult(columnId)}"
-                                                    @edit="showStudentScoreDialog(user.id, columnId)" @edit-comment="showStudentScoreDialog(user.id, columnId, 'comment')"></student-result>
-                                    <score-input v-if="isStudentScoreDialogShown(user.id, columnId)" :menu-tab="scoreMenuTab" @menu-tab-changed="scoreMenuTab = $event" :use-revert="gradeBook.isOverwrittenResult(columnId, user.id) && !gradeBook.isStandaloneScore(columnId)" :score="gradeBook.getResult(columnId, user.id)" :comment="gradeBook.getResultComment(columnId, user.id)" @comment-updated="updateResultComment(columnId, user.id, $event)" @ok="overwriteResult(columnId, user.id, $event)" @cancel="hideStudentScoreDialog" @revert="revertOverwrittenResult(columnId, user.id)"></score-input>
-                                </b-td>
-                            </template>
-                            <b-td v-if="gradeBook.userTotalNeedsUpdating(user)" class="col-sticky table-student-total u-text-end mod-needs-update">
-                                <i class="fa fa-exclamation-circle" :title="$t('not-yet-updated')" aria-hidden="true"></i><span class="sr-only">{{ $t('not-yet-updated') }}</span>{{ gradeBook.getEndResult(user.id)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span>
-                            </b-td>
-                            <b-td v-else class="col-sticky table-student-total u-text-end">{{ gradeBook.getEndResult(user.id)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></b-td>
-                        </template>
-                    </b-tr>
-                </b-tbody>
-            </b-table-simple>
+                        <th class="col-sticky table-student-total u-text-end">{{ $t('final-score') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <student-result-row v-for="user in displayedUsers" :key="'user-' + user.id"
+                        :grade-book="gradeBook" :user="user" :grade-book-root-url="gradeBookRootUrl" :exclude-column-id="addColumnId"
+                        :categories="displayedCategories" :edit-score-id="editScoreId" :edit-student-score-id="editStudentScoreId" :score-menu-tab="scoreMenuTab"
+                        @edit-score="showStudentScoreDialog(user.id, $event)" @edit-canceled="hideStudentScoreDialog" @edit-comment="showStudentScoreDialog(user.id, $event, 'comment')"
+                        @menu-tab-changed="scoreMenuTab = $event" @result-updated="overwriteResult(user.id, $event)" @result-reverted="revertOverwrittenResult(user.id, $event)" @comment-updated="updateResultComment(user.id, $event)" />
+                </tbody>
+            </table>
             <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
         </div>
         <div class="pagination-container u-flex u-justify-content-end">
@@ -120,8 +98,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
+import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
 import GradeBook, {Category, ColumnId, ItemId, ResultType, User} from '../domain/GradeBook';
+import StudentResultRow from './StudentResultRow.vue';
 import ItemTitleInput from './ItemTitleInput.vue';
 import WeightInput from './WeightInput.vue';
 import ScoreInput from './ScoreInput.vue';
@@ -130,15 +109,11 @@ import draggable from 'vuedraggable';
 
 @Component({
     name: 'grades-table',
-    components: { draggable, ItemTitleInput, WeightInput, ScoreInput, StudentResult },
+    components: {StudentResultRow, ItemTitleInput, WeightInput, ScoreInput, StudentResult, draggable },
     filters: {
         formatNum: function (v: number|null) {
             if (v === null) { return ''; }
             return v.toLocaleString(undefined, {maximumFractionDigits: 2});
-        },
-        formatNum2: function (v: number|null) {
-            if (v === null) { return ''; }
-            return v.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         }
     }
 })
@@ -231,23 +206,15 @@ export default class GradesTable extends Vue {
         this.sortDesc = false;
     }
 
-    showStudentScoreDialog(id: number, itemId: ItemId, menuTab = 'score') {
+    showStudentScoreDialog(userId: number, itemId: ItemId, menuTab = 'score') {
         this.scoreMenuTab = menuTab;
-        this.editStudentScoreId = id;
+        this.editStudentScoreId = userId;
         this.editScoreId = itemId;
     }
 
     hideStudentScoreDialog() {
         this.editStudentScoreId = null;
         this.editScoreId = null;
-    }
-
-    isStudentScoreDialogShown(id: number, itemId: ItemId) {
-        return this.editStudentScoreId === id && this.editScoreId === itemId;
-    }
-
-    isUnsynchronized(userId: number) {
-        return this.gradeBook.gradeColumns.filter(column => column.id !== this.addColumnId).some(column => !this.gradeBook.hasResult(column.id, userId));
     }
 
     setCategoryTitle(id: number, title: string) {
@@ -277,21 +244,21 @@ export default class GradesTable extends Vue {
         this.weightEditItemId = null;
     }
 
-    overwriteResult(columnId: ColumnId, userId: number, value: ResultType) {
+    overwriteResult(userId: number, {columnId, value}: {columnId: ColumnId, value: ResultType}) {
         const score = this.gradeBook.overwriteResult(columnId, userId, value);
         if (!score) { return; }
         this.$emit('overwrite-result', score);
         this.hideStudentScoreDialog();
     }
 
-    revertOverwrittenResult(columnId: ColumnId, userId: number) {
+    revertOverwrittenResult(userId: number, columnId: ColumnId) {
         const score = this.gradeBook.revertOverwrittenResult(columnId, userId);
         if (!score) { return; }
         this.$emit('revert-overwritten-result', score);
         this.hideStudentScoreDialog();
     }
 
-    updateResultComment(columnId: ColumnId, userId: number, comment: string|null) {
+    updateResultComment(userId: number, {columnId, comment}: {columnId: ColumnId, comment: string|null}) {
         const score = this.gradeBook.updateResultComment(columnId, userId, comment);
         if (!score) { return; }
         this.$emit('update-score-comment', score);
@@ -364,35 +331,50 @@ export default class GradesTable extends Vue {
 
 <style lang="scss" scoped>
     .table-wrap {
-        overflow-x: auto;
         max-height: 500px;
+        overflow-x: auto;
     }
 
     .gradebook-table {
         margin-bottom: 0;
+        max-width: 100%;
+        width: 100%;
 
-        &.is-dragging * {
-            cursor: grab;
+        &.is-dragging {
+            * {
+                cursor: grab;
+            }
+
+            .table-head-row:last-child th {
+                border-bottom: 1px solid #ebebeb;
+            }
+
+            &.is-category-drop {
+                * {
+                    cursor: copy;
+                }
+
+                .table-head-row > div > th.ghost {
+                    border: none;
+                }
+            }
+
+            &::v-deep .table-body-row td {
+                border-color: transparent;
+                opacity: 0.15;
+            }
         }
 
-        &.is-dragging.is-category-drop * {
-            cursor: copy;
-        }
-
-        &.is-dragging .table-body-row td {
-            border-color: transparent;
-            opacity: 0.15;
-        }
-
-        &.is-dragging .table-head-row:last-child th {
-            border-bottom: 1px solid #ebebeb;
-        }
-
-        th, td {
+        th, &::v-deep td {
             border: 1px solid #ebebeb;
             font-size: 1.35rem;
+            padding: 8px;
             vertical-align: top;
             z-index: 0;
+
+            &:nth-last-child(2) {
+                border-right: none;
+            }
 
             &.mod-edit {
                 z-index: 2;
@@ -400,6 +382,16 @@ export default class GradesTable extends Vue {
 
             &.mod-edit-cat {
                 z-index: 3;
+            }
+        }
+
+        .table-row {
+            th, &::v-deep td {
+                background-clip: padding-box;
+
+                &:nth-last-child(2) {
+                    border-right: none;
+                }
             }
         }
 
@@ -412,6 +404,7 @@ export default class GradesTable extends Vue {
         }
 
         .table-head-row:first-child th {
+            border-top: none;
             padding-bottom: 14px;
 
             &:not(:first-child):not(.is-droppable) {
@@ -423,7 +416,6 @@ export default class GradesTable extends Vue {
             }
 
             &:not(.col-sticky) {
-                border-top: 1px solid white;
                 background:  linear-gradient(to bottom, transparent 0, transparent 1px, #f8fbfb 1px) 0 0 repeat, linear-gradient(to bottom, #ebebeb 0px, #ebebeb 1px, white 1px) 0 0 repeat-x;
                 background-clip: padding-box;
             }
@@ -457,20 +449,6 @@ export default class GradesTable extends Vue {
             }
         }
 
-        &.is-dragging.is-category-drop .table-head-row > div > th.ghost {
-            border: none;
-        }
-
-        .table-row {
-            th, td {
-                background-clip: padding-box;
-
-                &:nth-last-child(2) {
-                    border-right: none;
-                }
-            }
-        }
-
         + .lds-ellipsis {
             display: none;
         }
@@ -497,31 +475,6 @@ export default class GradesTable extends Vue {
         }
     }
 
-    .table-body-row td {
-        background-color: #fff;
-
-        &.uncounted-score-cell {
-            background-color: #fafafa;
-        }
-    }
-
-    .table-body-row:first-child td {
-        background: linear-gradient(to bottom, #e3eaed 0, #fff 4px);
-        border-top: none;
-
-        &.table-student-unsychronized {
-            background: linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%, linear-gradient(to bottom, #e3eaed 0, #fff 4px);
-        }
-
-        &.uncounted-score-cell {
-            background: linear-gradient(to bottom, #dde5e9 0, #fafafa 4px);
-        }
-    }
-
-    .table-body-row:last-child td.u-relative.mod-edit {
-        top: -32px;
-    }
-
     .table-row.row-sticky {
         position: sticky;
         top: 0;
@@ -538,7 +491,7 @@ export default class GradesTable extends Vue {
         }
     }
 
-    .table-row .col-sticky {
+    .table-row::v-deep .col-sticky {
         background: linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%, linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%;
         position: sticky;
         z-index: 1;
@@ -557,8 +510,6 @@ export default class GradesTable extends Vue {
     }
 
     .table-head-row:first-child .col-sticky {
-        background-color: #fff;
-
         &.table-student {
             background: #fff linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%;
             background-clip: padding-box;
@@ -568,15 +519,6 @@ export default class GradesTable extends Vue {
             background: #fff linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%;
             background-clip: padding-box;
         }
-    }
-
-    .gradebook-table .table-student-unsychronized {
-        border-left-color: transparent;
-        border-right-color: transparent;
-        color: #8f0000;
-        font-style: italic;
-        font-weight: 500;
-        background: linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%;
     }
 
     @-moz-document url-prefix() {
@@ -595,50 +537,23 @@ export default class GradesTable extends Vue {
         }
     }
 
-    .table-body-row .table-student, .table-body-row .table-student-total {
-        background-color: #fff;
-    }
-
-    .table-body-row:first-child .col-sticky {
-        background: linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%, linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%,linear-gradient(to bottom, #e3eaed 0, #fff 4px);
-    }
-
-    .table-student-total {
-        white-space: nowrap;
-
-        &.mod-needs-update {
-            color: #758895;
-            font-style: italic;
-        }
-
-        .fa-exclamation-circle {
-            color: #6f95ae;
-            margin-right: 5px;
-        }
-    }
-
     .category {
         background-color: #f8fbfb;
         color: #5885a2;
-    }
 
-    .category::before {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 7px;
-        background: var(--color);
+        &::before {
+            background-color: var(--color);
+            bottom: 0;
+            content: '';
+            height: 7px;
+            left: 0;
+            position: absolute;
+            right: 0;
+        }
     }
 
     .column-title {
         white-space: nowrap;
-    }
-
-    .uncounted-score {
-        color: #777;
-        font-style: italic;
     }
 
     .fa-group {
@@ -663,29 +578,27 @@ export default class GradesTable extends Vue {
     }
 
     .weight {
-        margin-top: 2px;
         color: #477b7b;
         font-size: 1.2rem;
+        margin-top: 2px;
         padding: 3px 0 1px 0;
         width: fit-content;
 
-        &.is-error {
-            &:not(.mod-custom) {
-                color: #ff8080;
+        &.mod-custom {
+            background-color: rgb(211, 238, 224);
+            border-radius: 3px;
+            color: #466981;
+            padding-left: 6px;
+            padding-right: 8px;
+
+            &.is-error {
+                background-color: #feecea;
+                border: 1px solid #ff8080;
             }
         }
-    }
 
-    .weight.mod-custom {
-        background-color: rgb(211, 238, 224);
-        border-radius: 3px;
-        color: #466981;
-        padding-left: 6px;
-        padding-right: 8px;
-
-        &.is-error {
-            border: 1px solid #ff8080;
-            background-color: #feecea;
+        &:not(.mod-custom).is-error {
+            color: #ff8080;
         }
     }
 
@@ -705,7 +618,8 @@ export default class GradesTable extends Vue {
         margin-inline: auto -10px;
     }
 </style>
-<style>
+
+<style lang="scss" scoped>
 .tbl-sort-option {
     background-position: right calc(.75rem / 2) center;
     background-repeat: no-repeat;
