@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Service;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\GradeScoreInterface;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Domain\NullScore;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookColumn;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookData;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookItem;
@@ -112,14 +113,14 @@ class ScoreSynchronizer
      */
     protected function synchronizeExistingScore(GradeBookScore $score)
     {
-        if ($score->isTotalScore())
-        {
-            return;
-        }
         $userId = $score->getTargetUserId();
-        if (!in_array($userId, $this->targetUserIds) || is_null($score->getGradeBookColumn()))
+        if (!in_array($userId, $this->targetUserIds) || (is_null($score->getGradeBookColumn()) && !$score->isTotalScore()))
         {
             $this->toRemoveScores[] = $score;
+            return;
+        }
+        if ($score->isTotalScore())
+        {
             return;
         }
         $column = $score->getGradeBookColumn();
@@ -189,7 +190,7 @@ class ScoreSynchronizer
     {
         $itemId = array_key_first($gradeBookItems);
         $gradeBookItem = $gradeBookItems[$itemId];
-        $gradeScore = $this->gradeScores[$itemId][$userId];
+        $gradeScore = $this->gradeScores[$itemId][$userId] ?? new NullScore();
 
         if (count($gradeBookItems) > 1)
         {

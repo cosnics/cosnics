@@ -70,6 +70,28 @@ class ScoreSynchronizerTest extends ChamiloTestCase
         $this->assertEquals([$score], $scoreSynchronizer->getRemoveScores());
     }
 
+    public function testScoreSynchronizerWithoutGradesScores()
+    {
+        $scoreSynchronizer = new ScoreSynchronizer($this->gradeBookData, [], [22]);
+        $this->assertEquals([[$this->column, 22, $this->item, new NullScore()]], $scoreSynchronizer->getAddScores());
+        $this->assertEmpty($scoreSynchronizer->getUpdateScores());
+        $this->assertEmpty($scoreSynchronizer->getRemoveScores());
+    }
+
+    public function testScoreSynchronizerTotalScore()
+    {
+        $this->gradeBookData->removeGradeBookColumn($this->column);
+        $score = new GradeBookScore();
+        $score->setGradeBookData($this->gradeBookData);
+        $score->setGradeBookColumn(null);
+        $score->setTargetUserId(22);
+        $score->setIsTotalScore(true);
+        $scoreSynchronizer = new ScoreSynchronizer($this->gradeBookData, [], [22]);
+        $this->assertEmpty($scoreSynchronizer->getAddScores());
+        $this->assertEmpty($scoreSynchronizer->getUpdateScores());
+        $this->assertEmpty($scoreSynchronizer->getRemoveScores());
+    }
+
     public function testScoreSynchronizerItemPresedence()
     {
         $this->column->setType('group');
