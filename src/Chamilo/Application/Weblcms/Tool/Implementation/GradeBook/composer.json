@@ -26,7 +26,7 @@
 	},
 	"extra": {
 		"cosnics": {
-			"name": "Presence",
+			"name": "GradeBook",
 			"context": "Chamilo\\Application\\Weblcms\\Tool\\Implementation\\GradeBook",
 			"type": "Chamilo\\Application\\Weblcms\\Tool",
 			"install": {
