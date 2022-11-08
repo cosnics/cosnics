@@ -28,7 +28,7 @@
                         class="u-flex u-align-items-center u-justify-content-end u-cursor-pointer" :class="{'uncounted-score': !col.countsForEndResult}" />
                     <score-input v-if="col.isEditing" :menu-tab="scoreMenuTab" :score="col.result" :comment="col.comment" :use-revert="col.isOverwrittenResult && !col.isStandaloneScore"
                         @menu-tab-changed="$emit('menu-tab-changed', $event)" @cancel="$emit('edit-canceled')"
-                        @comment-updated="$emit('comment-updated', {columnId: col.columnId, value: $event})"
+                        @comment-updated="$emit('comment-updated', {columnId: col.columnId, comment: $event})"
                         @ok="$emit('result-updated', {columnId: col.columnId, value: $event})" @revert="$emit('result-reverted', col.columnId)" />
                 </td>
             </template>
