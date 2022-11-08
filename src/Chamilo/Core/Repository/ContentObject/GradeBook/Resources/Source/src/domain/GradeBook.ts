@@ -272,7 +272,6 @@ export default class GradeBook {
 
     userTotalNeedsUpdating(user: User): boolean {
         const total = this.getResult('totals', user.id);
-        if (user.id === 151) { console.log(total, typeof total); }
         if (total === null) { return false; } // unsynchronized user, cannot update
         if (typeof total !== 'number') { return true; }
         return total.toFixed(2) !== this.getEndResult(user.id).toFixed(2);
