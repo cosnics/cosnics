@@ -33,7 +33,7 @@
         <div class="table-wrap u-relative">
             <table class="gradebook-table" :aria-busy="busy" :class="{'is-dragging': isDraggingColumn, 'is-category-drop': categoryDropArea !== null }">
                 <thead>
-                    <tr class="table-row table-head-row" :class="{'mod-no-categories': !gradeBook.categories.length}">
+                    <tr class="table-row table-head-row table-categories-row" v-if="gradeBook.categories.length">
                         <th class="col-sticky table-student"></th>
                         <draggable :list="gradeBook.categories" tag="div" class="u-contents" @end="onDragEnd" :disabled="catEditItemId !== null">
                                 <th v-for="{id, title, color, columnIds} in gradeBook.categories" draggable :key="`category-${id}`" :colspan="Math.max(columnIds.length, 1)"
@@ -53,7 +53,7 @@
                         ></th>
                         <th class="col-sticky table-student-total"></th>
                     </tr>
-                    <tr class="table-row table-head-row row-sticky" :class="{'mod-moz-sticky': (editItemId === null && weightEditItemId === null)}">
+                    <tr class="table-row table-head-row table-scores-row row-sticky" :class="{'mod-moz-sticky': (editItemId === null && weightEditItemId === null)}">
                         <th class="col-sticky table-student">
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a> <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
                         </th>
@@ -345,7 +345,7 @@ export default class GradesTable extends Vue {
                 cursor: grab;
             }
 
-            .table-head-row:last-child th {
+            .table-scores-row:last-child th {
                 border-bottom: 1px solid #ebebeb;
             }
 
@@ -399,15 +399,11 @@ export default class GradesTable extends Vue {
             min-width: 21px;
         }
 
-        .table-head-row.mod-no-categories {
-            visibility: collapse;
-        }
-
-        .table-head-row:not(.mod-no-categories):first-child th {
+        .table-categories-row th {
             border-top: none;
         }
 
-        .table-head-row:first-child th {
+        .table-categories-row th {
             padding-bottom: 14px;
 
             &:not(:first-child):not(.is-droppable) {
@@ -419,25 +415,28 @@ export default class GradesTable extends Vue {
             }
 
             &:not(.col-sticky) {
-                background:  linear-gradient(to bottom, transparent 0, transparent 1px, #f8fbfb 1px) 0 0 repeat, linear-gradient(to bottom, #ebebeb 0px, #ebebeb 1px, white 1px) 0 0 repeat-x;
+                background: linear-gradient(to bottom, transparent 0, transparent 1px, #f8fbfb 1px) 0 0 repeat, linear-gradient(to bottom, #ebebeb 0px, #ebebeb 1px, white 1px) 0 0 repeat-x;
                 background-clip: padding-box;
             }
         }
 
-        .table-head-row:last-child div:last-of-type th:last-child {
+        .table-scores-row div:last-of-type th:last-child {
             border-right: none;
         }
 
-        .table-head-row:last-child th {
+        .table-scores-row th {
             border-bottom: none;
+        }
+
+        .table-categories-row + .table-scores-row th {
             border-top: none;
         }
 
-        .table-row.table-head-row .is-droppable {
+        .table-row.table-head-row.table-categories-row .is-droppable {
             border: 1px double #aaa;
         }
 
-        .table-head-row > div > th {
+        .table-head-row.table-scores-row > div > th {
             padding: 8px;
             line-height: 1.42857143;
 
@@ -469,7 +468,7 @@ export default class GradesTable extends Vue {
         }
     }
 
-    .table-head-row:last-child th {
+    .table-scores-row th {
         background-color: #f8fbfb;
         color: #5885a2;
 
@@ -494,6 +493,7 @@ export default class GradesTable extends Vue {
         }
     }
 
+
     .table-row::v-deep .col-sticky {
         background: linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%, linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%;
         position: sticky;
@@ -512,7 +512,13 @@ export default class GradesTable extends Vue {
         }
     }
 
-    .table-head-row:first-child .col-sticky {
+    .table-scores-row .col-sticky {
+        &.table-student, &.table-student-total {
+            background-color: #f8fbfb;
+        }
+    }
+
+    .table-categories-row .col-sticky {
         &.table-student {
             background: #fff linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%;
             background-clip: padding-box;
@@ -570,7 +576,7 @@ export default class GradesTable extends Vue {
         padding: 0;
     }
 
-    .table-head-row:first-child .table-student + div > .category:first-child::before {
+    .table-categories-row .table-student + div > .category:first-child::before {
         left: -1px;
     }
 
