@@ -487,7 +487,7 @@
 <style lang="scss" scoped>
 .gradebook-toolbar {
     column-gap: 20px;
-    margin: 25px 20px 20px;
+    margin: 25px 20px 16px;
     row-gap: 10px;
 
     .input-group {

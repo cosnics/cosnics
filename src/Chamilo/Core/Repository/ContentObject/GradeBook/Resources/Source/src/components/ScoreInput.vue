@@ -165,11 +165,19 @@ export default class ScoreInput extends Vue {
     }
 }
 
-.comment-field:focus {
-    outline: 0;
-    border: 1px solid #6ac;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 8px rgba(102, 175, 233, 0.6);
+.comment-field {
+    height: 52px;
+    line-height: 1.1;
+    resize: none;
+    width: 100%;
+
+    &:focus {
+        border: 1px solid #6ac;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 8px rgba(102, 175, 233, 0.6);
+        outline: 0;
+    }
 }
+
 
 .percent-input {
     border: 1px solid #ced4da;

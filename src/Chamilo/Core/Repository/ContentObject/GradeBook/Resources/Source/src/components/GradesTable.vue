@@ -331,8 +331,9 @@ export default class GradesTable extends Vue {
 
 <style lang="scss" scoped>
     .table-wrap {
-        max-height: 500px;
+        max-height: 540px;
         overflow-x: auto;
+        padding-block: 4px 64px;
     }
 
     .gradebook-table {
@@ -363,6 +364,16 @@ export default class GradesTable extends Vue {
                 border-color: transparent;
                 opacity: 0.15;
             }
+        }
+
+        &:not(.is-dragging) .table-categories-row th.mod-no-category-assigned {
+            &, & + th {
+                background: #fff;
+            }
+        }
+
+        &:not(.is-dragging) .table-categories-row .u-contents + th.table-student-total {
+            background: #fff;
         }
 
         th, &::v-deep td {
@@ -406,7 +417,7 @@ export default class GradesTable extends Vue {
         .table-categories-row th {
             padding-bottom: 14px;
 
-            &:not(:first-child):not(.is-droppable) {
+            &:not(:first-child):not(.table-student-total):not(.is-droppable) {
                 border-left: 1px double #eee;
             }
 
@@ -612,7 +623,7 @@ export default class GradesTable extends Vue {
     }
 
     .pagination-container {
-        margin-top: 0;
+        margin-top: -64px;
 
         > * {
             z-index: 1;

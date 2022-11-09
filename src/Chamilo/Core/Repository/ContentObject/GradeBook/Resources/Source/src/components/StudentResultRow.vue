@@ -158,9 +158,9 @@ export default class StudentResultRow extends Vue {
         }
     }
 
-    &:last-child td.u-relative.mod-edit {
+    /*&:last-child td.u-relative.mod-edit {
         top: -32px;
-    }
+    }*/
 
     .table-student-total {
         white-space: nowrap;
