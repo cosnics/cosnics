@@ -145,7 +145,7 @@ class EventParser
             $office365CalendarEvent->getEnd()->getDateTime(), $office365CalendarEvent->getEnd()->getTimeZone(),
             $office365CalendarEvent->getIsAllDay()
         ), $this->getRecurrence($office365CalendarEvent->getRecurrence()), $url, $office365CalendarEvent->getSubject(),
-            $office365CalendarEvent->getBody()->getContent(), $office365CalendarEvent->getLocation()->getDisplayName(),
+            strip_tags($office365CalendarEvent->getBody()->getContent(), '<br>'), $office365CalendarEvent->getLocation()->getDisplayName(),
             $this->getSource($this->getAvailableCalendar()->getName()), Manager::context()
         );
 
