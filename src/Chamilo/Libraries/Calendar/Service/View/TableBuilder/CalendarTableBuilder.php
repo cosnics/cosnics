@@ -32,7 +32,7 @@ abstract class CalendarTableBuilder
     {
         array_unshift($classes, 'table-calendar');
 
-        $attributes = ['class' => implode(' ', $classes), 'cellspacing' => 0];
+        $attributes = ['class' => $classes, 'cellspacing' => 0];
 
         $table = new HTML_Table();
         $table->setAttributes($attributes);

@@ -54,7 +54,7 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
         $header = $table->getHeader();
         $header->setRowType(0, 'th');
         $header->setHeaderContents(0, 0, '');
-        $header->updateCellAttributes(0, 0, 'class="table-calendar-day-hours"');
+        $header->setCellAttributes(0, 0, ['class' => 'table-calendar-day-hours']);
 
         $header->setHeaderContents(
             0, 1,
@@ -86,7 +86,7 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
                 $classes[] = 'table-calendar-alternate';
             }
 
-            $table->updateCellAttributes($rowId, 0, 'class="' . implode(' ', $classes) . '"');
+            $table->setCellAttributes($rowId, 0, ['class' =>$classes]);
         }
 
         for ($hour = $startHour; $hour < $endHour; $hour += $this->getHourStep())
@@ -99,7 +99,7 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
 
             if (count($classes) > 0)
             {
-                $table->updateCellAttributes($rowId, 1, 'class="' . implode(' ', $classes) . '"');
+                $table->setCellAttributes($rowId, 1, ['class' =>$classes]);
             }
         }
 
