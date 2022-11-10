@@ -70,7 +70,7 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
 
                 if (count($classes) > 0)
                 {
-                    $table->updateCellAttributes($row, $column, 'class="' . implode(' ', $classes) . '"');
+                    $table->setCellAttributes($row, $column, ['class' => $classes]);
                 }
 
                 $table->setCellContents($row, $column, $this->determineCellContent($tableDate, $dayUrlTemplate));

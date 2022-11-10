@@ -67,7 +67,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
         $header = $table->getHeader();
         $header->setRowType(0, 'th');
         $header->setHeaderContents(0, 0, '');
-        $header->updateCellAttributes(0, 0, 'class="table-calendar-week-hours"');
+        $header->setCellAttributes(0, 0, ['class' => 'table-calendar-week-hours']);
 
         // Go 1 week back end them jump to the next monday to reach the first day of this week
         $firstDay = $this->getTableStartTime($displayTime);
@@ -99,7 +99,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
                 $classes[] = 'table-calendar-alternate';
             }
 
-            $table->updateCellAttributes($rowId, 0, 'class="' . implode(' ', $classes) . '"');
+            $table->setCellAttributes($rowId, 0, ['class' =>$classes]);
         }
 
         $today = date('Y-m-d');
@@ -117,7 +117,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
 
                 if (count($classes) > 0)
                 {
-                    $table->updateCellAttributes($row, $day + 1, 'class="' . implode(' ', $classes) . '"');
+                    $table->setCellAttributes($row, $day + 1, ['class' =>$classes]);
                 }
 
                 $table->setCellContents($row, $day + 1, '');
