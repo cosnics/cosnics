@@ -60,7 +60,12 @@
                         <draggable v-for="({id, columnIds}) in displayedCategories" :key="`category-score-${id}`" :list="columnIds" tag="div" class="u-contents" ghost-class="ghost" @end="onDragEnd" :disabled="editItemId !== null || weightEditItemId !== null">
                             <th v-if="columnIds.length === 0" :key="`item-id-${id}`"></th>
                             <th v-else v-for="columnId in columnIds" :key="`item-id-${id}--${columnId}-name`" draggable @dragstart="startDragColumn($event, columnId)" :class="{'uncounted-score-cell': !gradeBook.countsForEndResult(columnId), 'u-relative mod-edit': (editItemId === columnId || weightEditItemId === columnId)}" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, -1)">
-                                <div class="u-flex u-align-items-center u-justify-content-between u-cursor-pointer" @dblclick="editItemId = columnId" :title="$t('adjust-title')"><span class="column-title"><i v-if="gradeBook.isGrouped(columnId)" class="fa fa-group"></i>{{ gradeBook.getTitle(columnId) }}</span>
+                                <div class="u-flex u-align-items-center u-justify-content-between u-cursor-pointer" @dblclick="editItemId = columnId" :title="$t('adjust-title')">
+                                    <span class="column-title" :id="`${columnId}-title`"><i v-if="gradeBook.isGrouped(columnId)" class="fa fa-group"></i>{{ gradeBook.getTitle(columnId) }}
+                                        <i v-if="gradeBook.hasRemovedSourceData(columnId)" class="fa fa-exclamation-circle" style="margin-left: 5px;color: #e24a03;"></i></span>
+                                    <b-popover v-if="gradeBook.hasRemovedSourceData(columnId)" :target="`${columnId}-title`" triggers="hover" placement="bottom">
+                                        <p style="margin: 6px;font-size: 11.5px;">De resultaten in deze kolom verwijzen naar brondata die niet meer bestaat. Je kan de data verder blijven gebruiken maar synchronizeren zal op deze kolom geen effect hebben. Als je de kolom verwijdert zijn de resultaten ervan voorgoed weg.</p>
+                                    </b-popover>
                                     <button class="btn-settings" @click="$emit('item-settings', columnId)" :title="$t('item-settings')"><i class="fa fa-gear u-inline-block" aria-hidden="true"></i><span class="sr-only">{{$t('item-settings')}}</span></button>
                                 </div>
                                 <div class="u-flex u-align-items-center u-justify-content-between">

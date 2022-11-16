@@ -21,8 +21,8 @@
         </button>
         <ul class="dropdown-menu">
             <li role="presentation" v-for="(item, index) in gradedItems" :key="`item-${index}`" @click.stop="">
-                <a role="menuitem" href="#" target="_self" class="dropdown-item">
-                    <b-form-checkbox :id="`${id}-item-${index}`" :checked="item.checked" :disabled="item.disabled" @change="toggleItem(item, index)" :class="{'is-disabled': item.disabled}">
+                <a role="menuitem" href="#" target="_self" class="dropdown-item" :class="{'mod-removed': item.removed, 'mod-checked': item.checked}">
+                    <b-form-checkbox :id="`${id}-item-${index}`" :checked="item.checked" :disabled="item.disabled || (item.removed && !item.checked)" @change="toggleItem(item, index)" :class="{'is-disabled': item.disabled}">
                         {{ item.title }}
                         <div class="score-breadcrumb-trail">{{ item|breadcrumb }}</div>
                     </b-form-checkbox>
@@ -133,6 +133,16 @@ export default class GradesDropdown extends Vue {
 
 .dropdown-menu >>> .dropdown-item {
     padding: 3px 10px;
+}
+
+.dropdown-item.mod-removed {
+    font-style: italic;
+    color: #d45e66;
+
+}
+
+.dropdown-item.mod-removed.mod-checked {
+    color: #d60000;
 }
 
 .score-breadcrumb-trail {

@@ -374,7 +374,7 @@
 
         async load(): Promise<void> {
             const allData: any = await Connector.loadGradeBookData(this.apiConfig.loadGradeBookDataURL, this.apiConfig.csrfToken);
-            //console.log(allData);
+            console.log(allData);
             if (allData) {
                 this.gradeBook = GradeBook.from(allData.gradebook);
                 this.gradeBook.users = allData.users;
@@ -393,7 +393,7 @@
                 });
                 this.gradeBook.resultsData = resultsData;
             }
-            //console.log(this.gradeBook);
+            console.log(this.gradeBook);
         }
 
         mounted() {

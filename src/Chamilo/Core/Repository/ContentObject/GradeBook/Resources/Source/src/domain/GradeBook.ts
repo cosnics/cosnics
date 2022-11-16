@@ -8,6 +8,7 @@ export interface GradeItem {
     readonly id: ItemId;
     readonly title: string;
     readonly breadcrumb: string[];
+    readonly removed: boolean;
     checked?: boolean;
     disabled?: boolean;
 }
@@ -101,7 +102,7 @@ export default class GradeBook {
         const itemIds = this.gradeColumns.reduce((ids: ItemId[], column: GradeColumn) => ids.concat(column.subItemIds), []);
 
         return this.gradeItems.map(item => ({
-            id: item.id, title: item.title, breadcrumb: item.breadcrumb, checked: itemIds.indexOf(item.id) !== -1
+            id: item.id, title: item.title, breadcrumb: item.breadcrumb, removed: item.removed, checked: itemIds.indexOf(item.id) !== -1
         }));
     }
 
@@ -157,15 +158,15 @@ export default class GradeBook {
         }
     }
 
-    getTitle(columnId: ColumnId): string|null {
+    getTitle(columnId: ColumnId): string {
         const column = this.getGradeColumn(columnId);
         if (column) {
             if (column.title) { return column.title; }
             if (column.type === 'item' || column.type === 'group') {
-                return this.getGradeItem(column.subItemIds[0])!.title;
+                return this.getGradeItem(column.subItemIds[0])?.title || '';
             }
         }
-        return null;
+        return '';
     }
 
     setTitle(columnId: ColumnId, title: string) {
@@ -177,6 +178,11 @@ export default class GradeBook {
 
     isGrouped(columnId: ColumnId) {
         return this.getGradeColumn(columnId)?.type === 'group';
+    }
+
+    hasRemovedSourceData(columnId: ColumnId) {
+        const subItems = this.getColumnSubItems(columnId);
+        return subItems.some(item => item.removed);
     }
 
     getColumnSubItems(columnId: ColumnId): GradeItem[] {
@@ -356,6 +362,9 @@ export default class GradeBook {
                 column.subItemIds = column.subItemIds.filter(id => id !== item.id);
             }
         });
+        if (item.removed) {
+            this.gradeItems = this.gradeItems.filter(gradeItem => gradeItem !== item);
+        }
     }
 
     createNewIdWithPrefix(prefix: string): string {
