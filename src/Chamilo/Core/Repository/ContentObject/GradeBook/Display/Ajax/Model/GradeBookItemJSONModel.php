@@ -35,17 +35,26 @@ class GradeBookItemJSONModel
     protected $breadcrumb;
 
     /**
+     * @var bool
+     *
+     * @Type("bool")
+     */
+    protected $removed;
+
+    /**
      * GradeBookItemJSONModel constructor.
      *
      * @param int $id
      * @param string $title
      * @param array $breadcrumb
+     * @param bool $removed
      */
-    public function __construct(int $id, string $title, array $breadcrumb)
+    public function __construct(int $id, string $title, array $breadcrumb, bool $removed)
     {
         $this->id = $id;
         $this->title = $title;
         $this->breadcrumb = $breadcrumb;
+        $this->removed = $removed;
     }
 
     /**
@@ -73,6 +82,14 @@ class GradeBookItemJSONModel
     }
 
     /**
+     * @return bool
+     */
+    public function isRemoved(): bool
+    {
+        return $this->removed;
+    }
+
+    /**
      * @param GradeBookItem $gradebookItem
      *
      * @return GradeBookItemJSONModel
@@ -80,7 +97,7 @@ class GradeBookItemJSONModel
     public static function fromGradeBookItem(GradeBookItem $gradebookItem)
     {
         return new self(
-            $gradebookItem->getId(), $gradebookItem->getTitle(), $gradebookItem->getBreadcrumb()
+            $gradebookItem->getId(), $gradebookItem->getTitle(), $gradebookItem->getBreadcrumb(), $gradebookItem->isRemoved()
         );
     }
 }

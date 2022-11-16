@@ -60,6 +60,8 @@ class GradeBookItem
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="title", type="string")
      */
     protected $title = '';
 
@@ -81,6 +83,14 @@ class GradeBookItem
      * @ORM\Column(name="context_id", type="integer")
      */
     protected $contextId;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="removed", type="boolean")
+     */
+    protected $removed = false;
+
 
     /**
      * GradeBookItem constructor.
@@ -205,6 +215,18 @@ class GradeBookItem
         return $this;
     }
 
+    /*public function getSourceTitle(): ?string
+    {
+        return $this->sourceTitle;
+    }
+
+    public function setSourceTitle(string $title): GradeBookItem
+    {
+        $this->sourceTitle = $title;
+
+        return $this;
+    }*/
+
     /**
      * @return string
      */
@@ -304,6 +326,26 @@ class GradeBookItem
     public function getContextIdentifier(): ContextIdentifier
     {
         return new ContextIdentifier($this->getContextClass(), $this->getContextId());
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRemoved(): bool
+    {
+        return $this->removed;
+    }
+
+    /**
+     * @param bool $removed
+     *
+     * @return GradeBookItem
+     */
+    public function setIsRemoved(bool $removed): GradeBookItem
+    {
+        $this->removed = $removed;
+
+        return $this;
     }
 
     /**

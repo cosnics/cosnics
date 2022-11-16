@@ -86,6 +86,10 @@ class GradeBookAjaxService
             if (!empty($gradebookItem))
             {
                 $gradebookItem->setType($publicationItem->getType());
+                if ($gradebookItem->getTitle() != $publicationItem->getTitle())
+                {
+                    $shouldUpdate = true;
+                }
                 $gradebookItem->setTitle($publicationItem->getTitle());
                 $gradebookItem->setBreadcrumb($publicationItem->getBreadcrumb());
                 unset($gradebookItems[$hash]);
@@ -95,13 +99,23 @@ class GradeBookAjaxService
                 // add new items to the gradebook.
                 $gradebookItem = $publicationItem;
                 $gradebookItem->setGradeBookData($gradebookData);
+                $gradebookItem->setTitle($publicationItem->getTitle());
                 $shouldUpdate = true;
             }
         }
-        foreach ($gradebookItems as $key => $gradebookItem)
+
+        foreach ($gradebookItems as $key => $gradebookItem) // $gradebookItems still in the array refer to items that have been removed
         {
-            // $gradebookItems still in the array refer to items that have been removed
-            // todo: update the corresponding data structure of the gradebook.
+            if (empty($gradebookItem->getGradeBookColumn())) // should be safe to remove from database
+            {
+                $gradebookData->removeGradeBookItem($gradebookItem);
+                $shouldUpdate = true;
+            }
+            elseif (!$gradebookItem->isRemoved())
+            {
+                $gradebookItem->setIsRemoved(true);
+                $shouldUpdate = true;
+            }
         }
 
         if ($canUpdate && $shouldUpdate)
@@ -721,6 +735,10 @@ class GradeBookAjaxService
         $gradeScores = array();
         foreach ($gradebookData->getGradeBookItems() as $gradeBookItem)
         {
+            if ($gradeBookItem->isRemoved())
+            {
+                continue;
+            }
             $gradeScores[$gradeBookItem->getId()] = $this->gradeBookItemScoreService->getScores($gradeBookItem, $targetUserIds);
         }
         return $gradeScores;

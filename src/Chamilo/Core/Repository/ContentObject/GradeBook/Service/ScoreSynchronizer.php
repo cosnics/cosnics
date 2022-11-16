@@ -127,10 +127,20 @@ class ScoreSynchronizer
         $columnId = $column->getId();
         $subItems = $this->columnSubItems[$columnId];
         $this->userColumnUserIds[$columnId][] = $userId;
+
+        foreach ($subItems as $subItem)
+        {
+            if ($subItem->isRemoved())
+            {
+                return;
+            }
+        }
+
         if ($column->getType() == 'standalone')
         {
             return;
         }
+
         list($gradeBookItem, $gradeScore) = $this->getGradeScoreForUser($userId, $subItems);
         if ($this->shouldUpdate($score, $gradeScore))
         {
