@@ -11,8 +11,7 @@
 }
 </i18n>
 <template>
-    <div class="highlight-input">
-        <div class="highlight-overlay"></div>
+    <div>
         <slot name="menu"></slot>
         <div class="highlight-content">
             <slot name="content"></slot>
@@ -35,30 +34,11 @@ export default class HighlightInput extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.highlight-input {
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-
-.highlight-overlay {
-    background-color: rgba(0, 0, 0, .2);
-    inset: 0;
-    position: fixed;
-}
-
 .highlight-content {
-    background-color: white;
     border-radius: 3px;
-    left: -2%;
-    max-width: 260px;
-    min-width: 170px;
+    max-width: 160px;
+    min-width: 70px;
     padding: 8px 6px;
-    position: absolute;
-    top: -3px;
-    /*top: 0;*/
-    width: 104%;
 }
 
 .name-input-actions {

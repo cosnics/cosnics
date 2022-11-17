@@ -21,8 +21,8 @@
             <template v-for="category in categories">
                 <td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></td>
                 <td v-else v-for="col in getColumnDataByCategory(category)" :key="`${category.id}-${col.columnId}-result`"
-                      :class="{'uncounted-score-cell': !col.countsForEndResult, 'u-relative mod-edit': col.isEditing}">
-                    <student-result v-if="col.hasResult" :id="`result-${col.columnId}-${userId}`" :result="col.result" :comment="col.comment"
+                      :class="{'uncounted-score-cell': !col.countsForEndResult, 'u-relative': col.isEditing}">
+                    <student-result v-if="col.hasResult && !col.isEditing" :id="`result-${col.columnId}-${userId}`" :result="col.result" :comment="col.comment"
                         :is-standalone-score="col.isStandaloneScore" :use-overwritten-flag="true" :is-overwritten="col.isOverwrittenResult"
                         @edit="$emit('edit-score', col.columnId)" @edit-comment="$emit('edit-comment', col.columnId)"
                         class="u-flex u-align-items-center u-justify-content-end u-cursor-pointer" :class="{'uncounted-score': !col.countsForEndResult}" />
@@ -157,10 +157,6 @@ export default class StudentResultRow extends Vue {
             background: linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%, linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%,linear-gradient(to bottom, #e3eaed 0, #fff 4px);
         }
     }
-
-    /*&:last-child td.u-relative.mod-edit {
-        top: -32px;
-    }*/
 
     .table-student-total {
         white-space: nowrap;

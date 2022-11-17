@@ -37,15 +37,15 @@
                         <th class="col-sticky table-student"></th>
                         <draggable :list="gradeBook.categories" tag="div" class="u-contents" @end="onDragEnd" :disabled="catEditItemId !== null">
                                 <th v-for="{id, title, color, columnIds} in gradeBook.categories" draggable :key="`category-${id}`" :colspan="Math.max(columnIds.length, 1)"
-                                      class="category u-relative u-font-medium" :class="{'mod-edit-cat': catEditItemId === id, 'is-droppable': categoryDropArea === id}" :style="`--color: ${color};`"
+                                      class="category u-relative u-font-medium" :class="{'is-droppable': categoryDropArea === id}" :style="`--color: ${color};`"
                                       @dragstart="startDragCategory($event, id)" @dragover.prevent="onDropAreaOverEnter($event, id)" @dragenter.prevent="onDropAreaOverEnter($event, id)" @dragleave="categoryDropArea = null" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, id)">
-                                    <div class="u-flex u-align-items-center u-justify-content-between u-cursor-pointer" v-if="id !== 0" @dblclick="catEditItemId = id" :title="$t('adjust-title')">{{ title }}
+                                    <item-title-input v-if="catEditItemId === id" :item-title="title" @cancel="catEditItemId = null" @ok="setCategoryTitle(id, $event)" style="margin: -6px -8px"></item-title-input>
+                                    <div v-else-if="id !== 0" class="u-flex u-align-items-center u-justify-content-between u-cursor-pointer" @dblclick="showCategoryTitleDialog(id)" :title="$t('adjust-title')">{{ title }}
                                         <div class="spin" v-if="isSavingCategoryWithId(id)">
                                             <div class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                                         </div>
-                                        <button class="btn-settings" :title="$t('category-settings')" @click="$emit('category-settings', id)"><i class="fa fa-gear u-inline-block"></i><span class="sr-only">{{ $t('category-settings') }}</span></button>
+                                        <button class="btn-settings" :title="$t('category-settings')" @click="showCategorySettings(id)"><i class="fa fa-gear u-inline-block"></i><span class="sr-only">{{ $t('category-settings') }}</span></button>
                                     </div>
-                                    <item-title-input v-if="catEditItemId === id" :item-title="title" @cancel="catEditItemId = null" @ok="setCategoryTitle(id, $event)"></item-title-input>
                                 </th>
                         </draggable>
                         <th v-if="showNullCategory" :colspan="Math.max(gradeBook.nullCategory.columnIds.length, 1)" class="mod-no-category-assigned" :class="{'is-droppable': categoryDropArea === 0}" :title="$t('without-category')"
@@ -53,30 +53,35 @@
                         ></th>
                         <th class="col-sticky table-student-total"></th>
                     </tr>
-                    <tr class="table-row table-head-row table-scores-row row-sticky" :class="{'mod-moz-sticky': (editItemId === null && weightEditItemId === null)}">
+                    <tr class="table-row table-head-row table-scores-row">
                         <th class="col-sticky table-student">
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a> <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
                         </th>
                         <draggable v-for="({id, columnIds}) in displayedCategories" :key="`category-score-${id}`" :list="columnIds" tag="div" class="u-contents" ghost-class="ghost" @end="onDragEnd" :disabled="editItemId !== null || weightEditItemId !== null">
                             <th v-if="columnIds.length === 0" :key="`item-id-${id}`"></th>
-                            <th v-else v-for="columnId in columnIds" :key="`item-id-${id}--${columnId}-name`" draggable @dragstart="startDragColumn($event, columnId)" :class="{'uncounted-score-cell': !gradeBook.countsForEndResult(columnId), 'u-relative mod-edit': (editItemId === columnId || weightEditItemId === columnId)}" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, -1)">
-                                <div class="u-flex u-align-items-center u-justify-content-between u-cursor-pointer" @dblclick="editItemId = columnId" :title="$t('adjust-title')">
+                            <th v-else v-for="columnId in columnIds" :key="`item-id-${id}--${columnId}-name`" draggable @dragstart="startDragColumn($event, columnId)" :class="{'uncounted-score-cell': !gradeBook.countsForEndResult(columnId), 'u-relative': (editItemId === columnId || weightEditItemId === columnId)}" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, -1)">
+                                <item-title-input v-if="editItemId === columnId" :item-title="gradeBook.getTitle(columnId)" @cancel="editItemId = null" @ok="setTitle(columnId, $event)" style="margin: -6px -8px"></item-title-input>
+                                <template v-else-if="weightEditItemId === columnId">
+                                    <span class="column-title"><i v-if="gradeBook.isGrouped(columnId)" class="fa fa-group"></i>{{ gradeBook.getTitle(columnId) }}</span>
+                                    <weight-input :item-weight="gradeBook.getWeight(columnId)" @cancel="weightEditItemId = null" @ok="setWeight(columnId, $event)" style="margin: -5px -8px -6px"></weight-input>
+                                </template>
+                                <template v-else>
+                                    <div class="u-flex u-align-items-center u-justify-content-between u-cursor-pointer" @dblclick="showColumnTitleDialog(columnId)" :title="$t('adjust-title')">
                                     <span class="column-title" :id="`${columnId}-title`"><i v-if="gradeBook.isGrouped(columnId)" class="fa fa-group"></i>{{ gradeBook.getTitle(columnId) }}
                                         <i v-if="gradeBook.hasRemovedSourceData(columnId)" class="fa fa-exclamation-circle" style="margin-left: 5px;color: #e24a03;"></i></span>
-                                    <b-popover v-if="gradeBook.hasRemovedSourceData(columnId)" :target="`${columnId}-title`" triggers="hover" placement="bottom">
-                                        <p style="margin: 6px;font-size: 11.5px;">De resultaten in deze kolom verwijzen naar brondata die niet meer bestaat. Je kan de data verder blijven gebruiken maar synchronizeren zal op deze kolom geen effect hebben. Als je de kolom verwijdert zijn de resultaten ervan voorgoed weg.</p>
-                                    </b-popover>
-                                    <button class="btn-settings" @click="$emit('item-settings', columnId)" :title="$t('item-settings')"><i class="fa fa-gear u-inline-block" aria-hidden="true"></i><span class="sr-only">{{$t('item-settings')}}</span></button>
-                                </div>
-                                <div class="u-flex u-align-items-center u-justify-content-between">
-                                    <div v-if="gradeBook.countsForEndResult(columnId)" class="weight u-font-normal u-cursor-pointer" :class="{'mod-custom': gradeBook.getGradeColumn(columnId).weight !== null , 'is-error': gradeBook.eqRestWeight < 0}" @dblclick="weightEditItemId = columnId" :title="$t('adjust-weight')">{{ gradeBook.getWeight(columnId)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
-                                    <div v-else class="weight u-font-normal" style="font-style: italic" :title="$t('count-towards-endresult-not')"><span aria-hidden="true">{{ $t('uncounted') }}</span><span class="sr-only">{{ $t('count-towards-endresult-not') }}</span></div>
-                                    <div class="spin">
-                                        <div v-if="isSavingColumnWithId(columnId)" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                                        <b-popover v-if="gradeBook.hasRemovedSourceData(columnId)" :target="`${columnId}-title`" triggers="hover" placement="bottom">
+                                            <p style="margin: 6px;font-size: 11.5px;">De resultaten in deze kolom verwijzen naar brondata die niet meer bestaat. Je kan de data verder blijven gebruiken maar synchronizeren zal op deze kolom geen effect hebben. Als je de kolom verwijdert zijn de resultaten ervan voorgoed weg.</p>
+                                        </b-popover>
+                                        <button class="btn-settings" @click="showColumnSettings(columnId)" :title="$t('item-settings')"><i class="fa fa-gear u-inline-block" aria-hidden="true"></i><span class="sr-only">{{$t('item-settings')}}</span></button>
                                     </div>
-                                </div>
-                                <item-title-input v-if="editItemId === columnId" :item-title="gradeBook.getTitle(columnId)" @cancel="editItemId = null" @ok="setTitle(columnId, $event)"></item-title-input>
-                                <weight-input v-if="weightEditItemId === columnId" :item-weight="gradeBook.getWeight(columnId)" @cancel="weightEditItemId = null" @ok="setWeight(columnId, $event)"></weight-input>
+                                    <div class="u-flex u-align-items-center u-justify-content-between">
+                                        <div v-if="gradeBook.countsForEndResult(columnId)" class="weight u-font-normal u-cursor-pointer" :class="{'mod-custom': gradeBook.getGradeColumn(columnId).weight !== null , 'is-error': gradeBook.eqRestWeight < 0}" @dblclick="showColumnWeightDialog(columnId)" :title="$t('adjust-weight')">{{ gradeBook.getWeight(columnId)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                                        <div v-else class="weight u-font-normal" style="font-style: italic" :title="$t('count-towards-endresult-not')"><span aria-hidden="true">{{ $t('uncounted') }}</span><span class="sr-only">{{ $t('count-towards-endresult-not') }}</span></div>
+                                        <div class="spin">
+                                            <div v-if="isSavingColumnWithId(columnId)" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                                        </div>
+                                    </div>
+                                </template>
                             </th>
                         </draggable>
                         <th class="col-sticky table-student-total u-text-end">{{ $t('final-score') }}</th>
@@ -211,7 +216,41 @@ export default class GradesTable extends Vue {
         this.sortDesc = false;
     }
 
+    resetDialogs() {
+        this.editItemId = null;
+        this.catEditItemId = null;
+        this.weightEditItemId = null;
+        this.editStudentScoreId = null;
+        this.editScoreId = null;
+    }
+
+    showCategorySettings(categoryId: number) {
+        this.resetDialogs();
+        this.$emit('category-settings', categoryId);
+    }
+
+    showColumnSettings(columnId: ColumnId) {
+        this.resetDialogs();
+        this.$emit('item-settings', columnId);
+    }
+
+    showCategoryTitleDialog(categoryId: number) {
+        this.resetDialogs();
+        this.catEditItemId = categoryId;
+    }
+
+    showColumnTitleDialog(columnId: ColumnId) {
+        this.resetDialogs();
+        this.editItemId = columnId;
+    }
+
+    showColumnWeightDialog(columnId: ColumnId) {
+        this.resetDialogs();
+        this.weightEditItemId = columnId;
+    }
+
     showStudentScoreDialog(userId: number, itemId: ItemId, menuTab = 'score') {
+        this.resetDialogs();
         this.scoreMenuTab = menuTab;
         this.editStudentScoreId = userId;
         this.editScoreId = itemId;
@@ -336,9 +375,8 @@ export default class GradesTable extends Vue {
 
 <style lang="scss" scoped>
     .table-wrap {
-        max-height: 540px;
+        /*max-height: 540px;*/
         overflow-x: auto;
-        padding-block: 4px 64px;
     }
 
     .gradebook-table {
@@ -390,14 +428,6 @@ export default class GradesTable extends Vue {
 
             &:nth-last-child(2) {
                 border-right: none;
-            }
-
-            &.mod-edit {
-                z-index: 2;
-            }
-
-            &.mod-edit-cat {
-                z-index: 3;
             }
         }
 
@@ -492,23 +522,6 @@ export default class GradesTable extends Vue {
             background-color: #f3f3f3;
         }
     }
-
-    .table-row.row-sticky {
-        position: sticky;
-        top: 0;
-        z-index: 2;
-
-        @-moz-document url-prefix() {
-            position: static!important;
-        }
-
-        &.mod-moz-sticky {
-            @-moz-document url-prefix() {
-                position: sticky!important;
-            }
-        }
-    }
-
 
     .table-row::v-deep .col-sticky {
         background: linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%, linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%;
@@ -628,8 +641,6 @@ export default class GradesTable extends Vue {
     }
 
     .pagination-container {
-        margin-top: -64px;
-
         > * {
             z-index: 1;
         }

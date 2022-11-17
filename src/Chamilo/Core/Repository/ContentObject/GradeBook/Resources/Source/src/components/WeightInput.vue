@@ -61,7 +61,7 @@ export default class WeightInput extends Vue {
 <style lang="scss" scoped>
 label {
     font-size: 1.25rem;
-    margin-bottom: 0;
+    margin-bottom: .15rem;
     margin-left: .15rem;
 }
 

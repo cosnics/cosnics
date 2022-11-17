@@ -126,33 +126,37 @@ export default class ScoreInput extends Vue {
 .highlight-content.content-tabs {
     background-color: transparent;
     font-size: 11px;
+    margin-left: auto;
     padding: 0;
-    right: 0;
-    top: -23px;
 }
 
 .highlight-content.content-tabs::v-deep + .highlight-content {
+    border: 1px solid #ced3d9;
     border-top-right-radius: 0;
+    margin-left: auto;
+    margin-top: -1px;
+    max-width: 210px;
+    min-width: 120px;
 }
 
 .menu-tab {
     color: #2e6da4;
-    padding: 2px 8px 3px;
+    padding: 2px 8px;
 
     &.mod-left {
-        background: linear-gradient(to left, #dedede 0, transparent 2px),linear-gradient(to top, #dcdcdc 0, #e6e6e6 4px);
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
     }
 
     &.mod-right {
-        background: linear-gradient(to right, #dedede 0, transparent 2px),linear-gradient(to top, #dcdcdc 0, #e6e6e6 4px);
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
     }
 
     &.mod-active {
         background: #fff;
+        border: 1px solid #cfd4da;
+        border-bottom: none;
         color: #333;
     }
 }
