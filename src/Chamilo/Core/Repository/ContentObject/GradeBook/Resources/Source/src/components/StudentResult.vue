@@ -105,7 +105,7 @@ a {
 }
 
 .color-code.mod-none {
-    justify-content: end;
+    justify-content: flex-end;
     width: 100%;
     /*text-shadow: 1px 1px #e1eaef;*/
     /*--text-color: #f89690;*/

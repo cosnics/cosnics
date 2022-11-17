@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <div class="mt-20">
-                            <label class="settings-label">{{ $t('unauthorized-absence') }} <div class="color-code mod-none" :title="$t('no-score-found')" style="margin-inline: 3px; width: 30px; background-color: #f8fbfb;border-color: #e6ecef; justify-content: end"><i aria-hidden="true" class="fa fa-question" style="color: #777"></i></div>:</label>
+                            <label class="settings-label">{{ $t('unauthorized-absence') }} <div class="color-code mod-none" :title="$t('no-score-found')" style="margin-inline: 3px; width: 30px; background-color: #f8fbfb;border-color: #e6ecef; justify-content: flex-end"><i aria-hidden="true" class="fa fa-question" style="color: #777"></i></div>:</label>
                             <div>
                                 <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
                                 <label class="u-font-normal" for="nogafw-option1">{{ $t('count-towards-endresult-not') }}</label>
