@@ -143,6 +143,13 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             return;
         }
 
+        if($this->getEntry() &&
+            ($this->getEntry()->getEntityId() != $this->getEntityIdentifier() || $this->getEntry()->getEntityType() != $this->getEntityType())
+        )
+        {
+            throw new NotAllowedException();
+        }
+
         if ($this->getRightsService()->canUserViewEntity(
             $this->getUser(), $this->getAssignment(), $this->getEntityType(), $this->getEntityIdentifier()
         ))
