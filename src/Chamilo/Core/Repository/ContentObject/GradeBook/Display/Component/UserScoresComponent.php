@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookScor
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
@@ -24,6 +25,11 @@ use JMS\Serializer\SerializerBuilder;
 class UserScoresComponent extends Manager
 {
     /**
+     * @var User|null
+     */
+    protected $user = null;
+
+    /**
      * @return string
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
@@ -35,12 +41,37 @@ class UserScoresComponent extends Manager
     {
 
         $this->checkAccessRights();
+
         BreadcrumbTrail::getInstance()->remove(count(BreadcrumbTrail::getInstance()->getBreadcrumbs()) - 1);
+
+        if ($this->getRightsService()->canUserEditGradeBook())
+        {
+            $user = $this->getUserEntity();
+            $title = $this->getTranslator()->trans('GradeBook', [], Manager::context()) . ' ' . $user->get_fullname();
+            BreadcrumbTrail::getInstance()->add(new Breadcrumb($this->get_url([self::PARAM_USER_ID => $user->getId()]), $title));
+        }
 
         return $this->getTwig()->render(
             \Chamilo\Core\Repository\ContentObject\GradeBook\Display\Manager::context() . ':UserScores.html.twig',
             $this->getTemplateProperties()
         );
+    }
+
+    protected function getUserEntity()
+    {
+        if (isset($this->user)) {
+            return $this->user;
+        }
+        if ($this->getRightsService()->canUserEditGradeBook())
+        {
+            $userId = $this->getRequest()->getFromPostOrUrl(self::PARAM_USER_ID);
+            $this->user = $this->getUserService()->findUserByIdentifier($userId);
+        }
+        else
+        {
+            $this->user = $this->getUser();
+        }
+        return $this->user;
     }
 
     /**
@@ -75,16 +106,7 @@ class UserScoresComponent extends Manager
         $gradebookItems = $this->getGradeBookServiceBridge()->findPublicationGradeBookItems();
         $this->getGradeBookAjaxService()->updateGradeBookData($gradeBookData, $gradebookItems);
 
-        if ($this->getRightsService()->canUserEditGradeBook())
-        {
-            $userId = $this->getRequest()->getFromPostOrUrl(self::PARAM_USER_ID);
-            $user = $this->getUserService()->findUserByIdentifier($userId);
-        }
-        else
-        {
-            $user = $this->getUser();
-        }
-
+        $user = $this->getUserEntity();
         $users = [GradeBookUserJSONModel::fromUser($user)];
         $userScores = $this->getGradeBookService()->getGradeBookScoresByUserId($gradeBookData, $user->getId());
 
@@ -100,7 +122,7 @@ class UserScoresComponent extends Manager
             'GRADEBOOK' => $this->getSerializer()->serialize($gradeBookData->toJSONModel(), 'json'),
             'USERS' => $this->getSerializer()->serialize($users, 'json'),
             'SCORES' => $this->getSerializer()->serialize($scores, 'json'),
-            'USER_FULLNAME' => $user->get_fullname(),
+            'USER_FULLNAME' => $this->user->get_fullname(),
             'GRADEBOOK_ROOT_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => null
