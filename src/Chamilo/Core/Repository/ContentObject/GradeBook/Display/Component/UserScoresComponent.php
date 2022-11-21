@@ -116,6 +116,7 @@ class UserScoresComponent extends Manager
 
         return [
             'HEADER' => $this->render_header(),
+            'FOOTER' => $this->render_footer(),
             'LANGUAGE' => $this->getTranslator()->getLocale(),
             'CONTENT_OBJECT_TITLE' => $gradebook->get_title(),
             'CAN_EDIT_GRADEBOOK' => $this->getRightsService()->canUserEditGradeBook(),
