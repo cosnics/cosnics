@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
@@ -302,8 +303,8 @@ abstract class AbstractHtmlTableRenderer
             $isSelected = $currentFirstOrderDirection == SORT_ASC;
 
             $subButtons[] = new SubButton(
-                $translator->trans('ASC'), null, $propertyUrl, AbstractButton::DISPLAY_LABEL, null, [], null,
-                $isSelected
+                $translator->trans('ASC', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-down'),
+                $propertyUrl, AbstractButton::DISPLAY_ICON_AND_LABEL, null, [], null, $isSelected
             );
 
             $propertyUrl = $this->getUrlGenerator()->fromRequest(
@@ -312,8 +313,8 @@ abstract class AbstractHtmlTableRenderer
             $isSelected = $currentFirstOrderDirection == SORT_DESC;
 
             $subButtons[] = new SubButton(
-                $translator->trans('DESC'), null, $propertyUrl, AbstractButton::DISPLAY_LABEL, null, [], null,
-                $isSelected
+                $translator->trans('DESC', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-up'),
+                $propertyUrl, AbstractButton::DISPLAY_ICON_AND_LABEL, null, [], null, $isSelected
             );
         }
 
@@ -343,7 +344,9 @@ abstract class AbstractHtmlTableRenderer
 
             $orderProperty = $tableColumns[$currentFirstOrderColumn];
 
-            $dropDownButton->addSubButton(new SubButtonHeader($translator->trans('SortingProperty')));
+            $dropDownButton->addSubButton(
+                new SubButtonHeader($translator->trans('SortingProperty', [], StringUtilities::LIBRARIES))
+            );
             $dropDownButton->addSubButtons(
                 $this->renderPropertySubButtons($tableColumns, $parameterValues, $parameterNames)
             );
@@ -351,7 +354,9 @@ abstract class AbstractHtmlTableRenderer
             $dropDownButton->setDropdownClasses(['dropdown-menu-right']);
 
             $dropDownButton->addSubButton(new SubButtonDivider());
-            $dropDownButton->addSubButton(new SubButtonHeader($translator->trans('SortingDirection')));
+            $dropDownButton->addSubButton(
+                new SubButtonHeader($translator->trans('SortingDirection', [], StringUtilities::LIBRARIES))
+            );
             $dropDownButton->addSubButtons(
                 $this->renderPropertyDirectionSubButtons($tableColumns, $parameterValues, $parameterNames)
             );

@@ -148,12 +148,12 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
                 if ($currentOrderColumnDirection == SORT_ASC)
                 {
                     $currentOrderColumnDirection = SORT_DESC;
-                    $glyphType = 'arrow-down-long';
+                    $glyphType = 'chevron-down';
                 }
                 else
                 {
                     $currentOrderColumnDirection = SORT_ASC;
-                    $glyphType = 'arrow-up-long';
+                    $glyphType = 'chevron-up';
                 }
 
                 $glyph = new FontAwesomeGlyph($glyphType);

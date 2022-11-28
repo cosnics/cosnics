@@ -14,19 +14,26 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class ArrayCollectionTableRenderer
 {
-    protected ListTableRenderer $listTableRenderer;
+    protected ListHtmlTableRenderer $htmlTableRenderer;
 
     protected Pager $pager;
 
     protected ChamiloRequest $request;
 
-    public function __construct(ChamiloRequest $request, Pager $pager, ListTableRenderer $listTableRenderer)
+    public function __construct(ChamiloRequest $request, Pager $pager, ListHtmlTableRenderer $htmlTableRenderer)
     {
         $this->request = $request;
         $this->pager = $pager;
-        $this->listTableRenderer = $listTableRenderer;
+        $this->htmlTableRenderer = $htmlTableRenderer;
     }
 
+    /**
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Exception
+     */
     public function render(
         array $tableColumns, ArrayCollection $tableData, int $defaultOrderColumnIndex = 0,
         int $defaultOrderDirection = SORT_ASC, int $defaultNumberOfItemsPerPage = 20, string $tableName = 'arrayTable'
@@ -36,7 +43,7 @@ class ArrayCollectionTableRenderer
             $tableData, $defaultOrderColumnIndex, $defaultOrderDirection, $defaultNumberOfItemsPerPage
         );
 
-        return $this->getListTableRenderer()->render(
+        return $this->getHtmlTableRenderer()->render(
             $tableColumns, $this->getData($parameterValues, $tableColumns, $tableData), $tableName,
             $this->determineParameterNames($tableName), $parameterValues
         );
@@ -132,6 +139,9 @@ class ArrayCollectionTableRenderer
         return $tableParameterValues;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getData(
         TableParameterValues $parameterValues, array $tableColumns, ArrayCollection $tableData
     ): ArrayCollection
@@ -148,9 +158,9 @@ class ArrayCollectionTableRenderer
         );
     }
 
-    public function getListTableRenderer(): SortableTable
+    public function getHtmlTableRenderer(): ListHtmlTableRenderer
     {
-        return $this->listTableRenderer;
+        return $this->htmlTableRenderer;
     }
 
     public function getPager(): Pager
@@ -240,6 +250,9 @@ class ArrayCollectionTableRenderer
         return false;
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function sortData(ArrayCollection $data, int $ordercolumnIndex, int $orderColumnDirection
     ): ArrayCollection
     {
