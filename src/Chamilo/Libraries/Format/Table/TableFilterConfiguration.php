@@ -2,8 +2,8 @@
 
 namespace Chamilo\Libraries\Format\Table;
 
+use Chamilo\Libraries\Format\Table\Interfaces\TableFilterConfigurationInterface;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use TableFilterConfigurationInterface;
 
 class TableFilterConfiguration implements TableFilterConfigurationInterface
 {

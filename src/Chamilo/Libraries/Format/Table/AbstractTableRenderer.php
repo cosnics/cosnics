@@ -9,9 +9,9 @@ use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableFilterConfigurationInterface;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -70,14 +70,14 @@ abstract class AbstractTableRenderer
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
-    public function render(?Condition $condition = null): string
+    public function render(?TableFilterConfigurationInterface $tableFilterConfiguration = null): string
     {
-        $parameterValues = $this->determineParameterValues($condition);
+        $parameterValues = $this->determineParameterValues($tableFilterConfiguration);
         $tableActions = $this instanceof TableActionsSupport ? $this->getTableActions() : null;
 
         return $this->getHtmlTableRenderer()->render(
-            $this->getColumns(), $this->getData($parameterValues, $condition, $tableActions), static::determineName(),
-            static::determineParameterNames(), $parameterValues, $tableActions
+            $this->getColumns(), $this->getData($parameterValues, $tableFilterConfiguration, $tableActions),
+            static::determineName(), static::determineParameterNames(), $parameterValues, $tableActions
         );
     }
 
@@ -93,7 +93,7 @@ abstract class AbstractTableRenderer
         }
     }
 
-    abstract protected function countData(?Condition $condition = null): int;
+    abstract protected function countData(?TableFilterConfigurationInterface $tableFilterConfiguration = null): int;
 
     protected static function determineName(): string
     {
@@ -194,10 +194,11 @@ abstract class AbstractTableRenderer
         ];
     }
 
-    protected function determineParameterValues(?Condition $condition = null): TableParameterValues
+    protected function determineParameterValues(?TableFilterConfigurationInterface $tableFilterConfiguration = null
+    ): TableParameterValues
     {
         $numberOfRowsPerPage = $this->determineNumberOfRowsPerPage();
-        $totalNumberOfItems = $this->countData($condition);
+        $totalNumberOfItems = $this->countData($tableFilterConfiguration);
 
         $tableParameterValues = new TableParameterValues();
 
@@ -257,11 +258,12 @@ abstract class AbstractTableRenderer
     }
 
     protected function getData(
-        TableParameterValues $parameterValues, ?Condition $condition = null, ?TableActions $tableActions = null
+        TableParameterValues $parameterValues, ?TableFilterConfigurationInterface $tableFilterConfiguration = null,
+        ?TableActions $tableActions = null
     ): ArrayCollection
     {
         $results = $this->retrieveData(
-            $condition, $this->getPager()->getNumberOfItemsPerPage($parameterValues),
+            $tableFilterConfiguration, $this->getPager()->getNumberOfItemsPerPage($parameterValues),
             $this->determineOffset($parameterValues), $this->determineOrderBy($parameterValues, $tableActions)
         );
 
@@ -368,7 +370,8 @@ abstract class AbstractTableRenderer
     abstract protected function renderIdentifierCell($result): string;
 
     abstract protected function retrieveData(
-        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+        ?TableFilterConfigurationInterface $tableFilterConfiguration = null, ?int $count = null, ?int $offset = null,
+        ?OrderBy $orderBy = null
     ): ArrayCollection;
 
     /**
