@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
@@ -18,8 +17,6 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class ListTableRenderer extends AbstractTableRenderer
 {
-    use ClassContext;
-
     public const DEFAULT_NUMBER_OF_COLUMNS_PER_PAGE = 1;
     public const DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 20;
 

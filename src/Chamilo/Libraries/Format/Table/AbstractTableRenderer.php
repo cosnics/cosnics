@@ -76,7 +76,7 @@ abstract class AbstractTableRenderer
         $tableActions = $this instanceof TableActionsSupport ? $this->getTableActions() : null;
 
         return $this->getHtmlTableRenderer()->render(
-            $this->getColumns(), $this->getData($parameterValues, $condition), static::determineName(),
+            $this->getColumns(), $this->getData($parameterValues, $condition, $tableActions), static::determineName(),
             static::determineParameterNames(), $parameterValues, $tableActions
         );
     }
