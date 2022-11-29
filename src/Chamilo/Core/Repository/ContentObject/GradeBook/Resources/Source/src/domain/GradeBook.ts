@@ -50,11 +50,23 @@ export interface GradeScore {
     comment: string|null;
 }
 
+export interface CSVImportField {
+    key: string;
+    label: string;
+    type: string;
+}
+
+export interface CSVImportResult {
+    lastname: string;
+    firstname: string;
+    id: string;
+    user_id: number;
+    [key: string]: string|number|null;
+}
+
 export type ResultsData = Record<ColumnId, Record<number, GradeScore>>;
 
 const COUNT_FOR_END_RESULT_DEFAULT = true;
-const AUTH_PRESENCE_END_RESULT_DEFAULT = 0;
-const UNAUTH_PRESENCE_END_RESULT_DEFAULT = 2;
 
 export default class GradeBook {
     static readonly NO_SCORE = 0;
@@ -342,8 +354,8 @@ export default class GradeBook {
         const column = {
             id: newId, type: 'item', title: null, subItemIds: [item.id], weight: null,
             countForEndResult: COUNT_FOR_END_RESULT_DEFAULT,
-            authPresenceEndResult: AUTH_PRESENCE_END_RESULT_DEFAULT,
-            unauthPresenceEndResult: UNAUTH_PRESENCE_END_RESULT_DEFAULT
+            authPresenceEndResult: GradeBook.NO_SCORE,
+            unauthPresenceEndResult: GradeBook.MIN_SCORE
         };
         this.gradeColumns.push(column);
         this.addItemToCategory(0, newId);
@@ -387,7 +399,7 @@ export default class GradeBook {
 
     createNewScore(): GradeColumn {
         const id = this.createNewStandaloneScoreId();
-        const newScore = {id, title: 'Score', type: 'standalone', subItemIds: [], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2};
+        const newScore = {id, title: 'Score', type: 'standalone', subItemIds: [], weight: null, countForEndResult: true, authPresenceEndResult: GradeBook.NO_SCORE, unauthPresenceEndResult: GradeBook.MIN_SCORE};
         this.gradeColumns.push(newScore);
         this.nullCategory.columnIds.push(id);
         return newScore;

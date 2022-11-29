@@ -31,7 +31,7 @@
 <template>
     <div>
         <div class="table-wrap u-relative">
-            <table class="gradebook-table" :aria-busy="busy" :class="{'is-dragging': isDraggingColumn, 'is-category-drop': categoryDropArea !== null }">
+            <table id="gradebook-table" class="gradebook-table" :aria-busy="busy" :class="{'is-dragging': isDraggingColumn, 'is-category-drop': categoryDropArea !== null }">
                 <thead>
                     <tr class="table-row table-head-row table-categories-row" v-if="gradeBook.categories.length">
                         <th class="col-sticky table-student"></th>
@@ -98,8 +98,7 @@
             <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
         </div>
         <div class="pagination-container u-flex u-justify-content-end">
-            <b-pagination v-model="pagination.currentPage" :total-rows="sortedUsers.length" :per-page="itemsPerPage"
-                          aria-controls="data-table"></b-pagination>
+            <b-pagination v-model="pagination.currentPage" :total-rows="sortedUsers.length" :per-page="itemsPerPage" aria-controls="gradebook-table"></b-pagination>
             <ul class="pagination">
                 <li class="page-item active"><a class="page-link">{{ $t('total') }} {{ sortedUsers.length }}</a></li>
             </ul>

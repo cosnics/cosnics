@@ -38,9 +38,9 @@
                             <i aria-hidden="true" class="fa fa-plus"></i><span>Nieuw</span> <span class="caret" aria-hidden="true"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#" @click.prevent="createNewScore">{{ $t('new-score') }}</a></li>
-                            <li><a href="#" @click.prevent="createNewCategory">{{ $t('new-category') }}</a></li>
-                            <!--<li><a href="#" @click.prevent>{{ $t('import') }}</a></li>-->
+                            <li><a @click.prevent="createNewScore">{{ $t('new-score') }}</a></li>
+                            <li><a @click.prevent="createNewCategory">{{ $t('new-category') }}</a></li>
+                            <li><a :href="apiConfig.gradeBookImportCsvURL">{{ $t('import') }}&mldr;</a></li>
                         </ul>
                     </div>
                     <button v-if="gradeBook.totalsNeedUpdating" class="btn btn-primary btn-sm" @click="updateTotalScores" style="font-weight: 500;margin-inline: 10px;padding-inline: 30px;text-transform: uppercase">
@@ -425,6 +425,10 @@
     display: flex;
 }
 
+.u-flex-column {
+    flex-direction: column;
+}
+
 .u-align-items-baseline {
     align-items: baseline;
 }
@@ -435,6 +439,10 @@
 
 .u-gap-small {
     gap: 5px;
+}
+
+.u-gap-small-2x {
+    gap: 10px;
 }
 
 .u-flex-wrap {
@@ -482,9 +490,17 @@
 .u-cursor-pointer {
     cursor: pointer;
 }
+
+.u-cursor-help {
+    cursor: help;
+}
 </style>
 
 <style lang="scss" scoped>
+.dropdown-menu a {
+    cursor: pointer;
+}
+
 .gradebook-toolbar {
     column-gap: 20px;
     margin: 25px 20px 16px;
