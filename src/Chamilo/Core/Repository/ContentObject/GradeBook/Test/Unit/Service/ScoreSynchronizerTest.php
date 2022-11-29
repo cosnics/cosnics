@@ -94,7 +94,7 @@ class ScoreSynchronizerTest extends ChamiloTestCase
 
     public function testScoreSynchronizerItemPresedence()
     {
-        $this->column->setType('group');
+        $this->column->setType(GradeBookColumn::TYPE_GROUP);
         $item2 = new GradeBookItem($this->gradeBookData, $this->column);
         $item2->setId(2);
 

@@ -136,7 +136,7 @@ class ScoreSynchronizer
             }
         }
 
-        if ($column->getType() == 'standalone')
+        if ($column->getType() == GradeBookColumn::TYPE_STANDALONE)
         {
             return;
         }

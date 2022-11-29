@@ -274,7 +274,7 @@ class GradeBookAjaxService
         $column = $jsonModel->toGradeBookColumn($gradebookData);
         $column->setGradeBookCategory(null);
 
-        if ($column->getType() == 'standalone')
+        if ($column->getType() == GradeBookColumn::TYPE_STANDALONE)
         {
             $gradebookData->addGradeBookColumn($column);
             foreach ($targetUserIds as $userId)
@@ -338,12 +338,12 @@ class GradeBookAjaxService
         $isGradeItemInColumn = $columnToMerge instanceof GradeBookColumn;
         $gradeBookColumn = $gradebookData->getGradeBookColumnById($gradeBookColumnId);
 
-        if ($isGradeItemInColumn && $columnToMerge->getType() == 'group')
+        if ($isGradeItemInColumn && $columnToMerge->getType() == GradeBookColumn::TYPE_GROUP)
         {
             throw new \RuntimeException('Grade item ' . $gradeItem->getId() . ' already belongs to a group');
         }
 
-        $gradeBookColumn->setType('group');
+        $gradeBookColumn->setType(GradeBookColumn::TYPE_GROUP);
         $gradeItem->setGradeBookColumn($gradeBookColumn);
 
         if ($isGradeItemInColumn)
@@ -557,7 +557,7 @@ class GradeBookAjaxService
 
         foreach ($scoreSynchronizer->getAddScores() as list($gradeBookColumn, $userId, $gradeBookItem, $gradeScore))
         {
-            if ($gradeBookColumn->getType() == 'standalone')
+            if ($gradeBookColumn->getType() == GradeBookColumn::TYPE_STANDALONE)
             {
                 $gradeScore = new NullScore();
             }

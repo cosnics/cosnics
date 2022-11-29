@@ -21,6 +21,14 @@ use JMS\Serializer\Annotation\Exclude;
  */
 class GradeBookColumn
 {
+    const TYPE_ITEM = 'item';
+    const TYPE_GROUP = 'group';
+    const TYPE_STANDALONE = 'standalone';
+
+    const NO_SCORE = 0;
+    const MAX_SCORE = 1;
+    const MIN_SCORE = 2;
+
     /**
      * @var int
      *
@@ -73,14 +81,14 @@ class GradeBookColumn
      *
      * @ORM\Column(name="auth_presence_end_result", type="integer")
      */
-    protected $authPresenceEndResult = 0;
+    protected $authPresenceEndResult = GradeBookColumn::NO_SCORE;
 
     /**
      * @var int
      *
      * @ORM\Column(name="unauth_presence_end_result", type="integer")
      */
-    protected $unauthPresenceEndResult = 2;
+    protected $unauthPresenceEndResult = GradeBookColumn::MIN_SCORE;
 
     /**
      * @var GradeBookCategory
