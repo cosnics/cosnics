@@ -1,0 +1,51 @@
+{{ HEADER|raw }}
+
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\GradeBook\\Display' %}
+{% set commonContext = 'Chamilo\\Libraries' %}
+
+<!--
+{{ getJavascript('cosnics-gradebook.umd.js', 'Chamilo\\Core\\Repository\\ContentObject\\GradeBook') }}
+{{ getCss('cosnics-gradebook.css', 'Chamilo\\Core\\Repository\\ContentObject\\GradeBook') }}
+
+-->
+<h3 style="margin-left: 15px;color: #507177;margin-top: 0;">{{ CONTENT_OBJECT_TITLE }}</h3>
+<!--<div id="app"></div>-->
+<div id="app">
+    <grade-book-app :api-config="apiConfig"></grade-book-app>
+</div>
+
+<script src="http://localhost:8080/js/chunk-vendors.js"></script>
+<script src="http://localhost:8080/js/app.js"></script>
+
+<script>
+    //Vue.use(BootstrapVue);
+    //Vue.use(this['cosnics-gradebook'].default);
+    Vue.use(VueI18n);
+
+    const messages = { 'en': {}, 'nl': {} };
+
+    let lang;
+    try {
+        lang = '{{ LANGUAGE|raw }}';
+    } catch (err) {
+        console.warn('Language could not be set, defaulting to English instead.');
+        lang = 'en';
+    }
+    const i18n = new VueI18n({ locale: lang, messages });
+
+    const gradebookDataId = {{ GRADEBOOK_DATA_ID|raw }};
+    const currentVersion = {{ GRADEBOOK_DATA_CURRENT_VERSION|raw }};
+
+    const apiConfig = {
+        gradeBookRootURL: '{{ GRADEBOOK_ROOT_URL|raw }}',
+        processCsvURL: '{{ PROCESS_CSV_URL|raw }}',
+        importCsvURL: '{{ IMPORT_URL|raw }}',
+        csrfToken: '{{ csrf_token('ComponentToken') }}'
+    };
+
+    new Vue({
+        render: h => h(window.ImporterApp, {attrs: {apiConfig, gradebookDataId, currentVersion}}),
+        i18n
+    }).$mount('#app');
+</script>
+{{ FOOTER|raw }}

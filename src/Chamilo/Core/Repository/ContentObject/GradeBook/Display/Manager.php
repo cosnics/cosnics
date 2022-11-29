@@ -27,6 +27,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_AJAX = 'Ajax';
     const ACTION_EXPORT = 'Export';
     const ACTION_BROWSE = 'Browser';
+    const ACTION_IMPORT_CSV = 'ImportCSV'; 
     const ACTION_USER_SCORES = 'UserScores';
 
     /**

@@ -1,1 +1,8 @@
 GradeBook = "Gradebook"
+InvalidHeaderException = "The header of the CSV file is not in the format of `lastname;firstname;id;...`"
+DuplicateResultException = "<b>Line {LINE}</b>: Duplicate result found for student <b>{LASTNAME} {FIRSTNAME}</b>"
+InvalidValueException = "<b>Line {LINE}, column {COLUMN}</b>: Non-{TYPE} value <b>{VALUE}</b> given for field <b>{FIELD}</b>"
+NotCSVFileException = "The uploaded file does not appear to be a csv file."
+NoValueException = "<b>Line {LINE}</b>: No value given for field <b>{FIELD}</b>"
+Typescore = "numeric (or AABS)"
+Typestring = "string"

@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Component\AjaxCompon
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookAjaxService;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Service\ImportFromCSVService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -44,6 +45,8 @@ abstract class Manager extends AjaxManager
     const ACTION_REVERT_OVERWRITTEN_SCORE = 'RevertOverwrittenScore';
     const ACTION_UPDATE_SCORE_COMMENT = 'UpdateScoreComment';
     const ACTION_CALCULATE_TOTAL_SCORES = 'CalculateTotalScores';
+    const ACTION_PROCESS_CSV = 'ProcessCSV';
+    const ACTION_IMPORT = 'Import';
 
     const PARAM_ACTION = 'gradebook_display_ajax_action';
 
@@ -57,9 +60,10 @@ abstract class Manager extends AjaxManager
     const PARAM_GRADEITEM_ID = 'gradeItemId';
     const PARAM_GRADESCORE_ID = 'gradeScoreId';
     const PARAM_NEW_SCORE = 'newScore';
-    const PARAM_NEW_SCORE_ABSENT = 'newScoreAbsent';
     const PARAM_NEW_SCORE_AUTH_ABSENT = 'newScoreAuthAbsent';
     const PARAM_SCORE_COMMENT = 'comment';
+    const PARAM_IMPORT_TYPE = 'importType';
+    const PARAM_IMPORT_SCORES = 'importScores';
 
     /**
      * @var AjaxComponent
@@ -214,6 +218,14 @@ abstract class Manager extends AjaxManager
     }
 
     /**
+     * @return ImportFromCSVService
+     */
+    protected function getImportFromCSVService()
+    {
+        return $this->getService(ImportFromCSVService::class);
+    }
+
+    /**
      * @return GradeBook
      * @throws UserException
      */
@@ -331,5 +343,22 @@ abstract class Manager extends AjaxManager
     {
         $comment = $this->getRequest()->getFromPost(self::PARAM_SCORE_COMMENT);
         return ($comment == 'null' || $comment == '') ? null : $comment;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getImportType(): string
+    {
+        $importType = $this->getRequest()->getFromPost(self::PARAM_IMPORT_TYPE);
+        return $importType == ImportFromCSVService::TYPE_SCORES_COMMENTS ? $importType : ImportFromCSVService::TYPE_SCORES;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getImportScores()
+    {
+        return $this->getRequest()->getFromPost(self::PARAM_IMPORT_SCORES);
     }
 }

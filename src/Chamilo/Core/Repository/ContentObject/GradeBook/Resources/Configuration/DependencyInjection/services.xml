@@ -4,5 +4,7 @@
     <services>
         <service id="Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookService" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookAjaxService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\GradeBook\Service\ImportFromCSVService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\GradeBook\Service\ImportFromGradeBookExceptionDisplayService" autowire="true" />
     </services>
 </container>
