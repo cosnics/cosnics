@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display\Component;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookUserJSONModel;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookAjaxService;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookColumn;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\Entity\GradeBookScore;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -108,11 +109,35 @@ class UserScoresComponent extends Manager
 
         $user = $this->getUserEntity();
         $users = [GradeBookUserJSONModel::fromUser($user)];
-        $userScores = $this->getGradeBookService()->getGradeBookScoresByUserId($gradeBookData, $user->getId());
+        $userScores = $this->getGradeBookService()->getGradeBookScoresByUserId($gradeBookData, $user->getId())->toArray();
+        $count = count($userScores);
 
-        $scores = array_map(function(GradeBookScore $score) {
+        $isReleased = function(GradeBookScore $score) {
+            $column = $score->getGradeBookColumn();
+            return !($column instanceof GradeBookColumn && !$column->isReleased());
+        };
+        $userScores = array_filter($userScores, $isReleased);
+
+        $isColumnScore = function(GradeBookScore $score) {
+            return !$score->isTotalScore();
+        };
+
+        if (count($userScores) != $count)
+        {
+            $userScores = array_filter($userScores, $isColumnScore);
+            /*foreach ($userScores as $userScore)
+            {
+                if ($userScore->isTotalScore())
+                {
+                    $userScore->setNewScore(null);
+                    $userScore->setComment(null);
+                }
+            }*/
+        }
+
+        $scores = array_values(array_map(function(GradeBookScore $score) {
             return $score->toJSONModel();
-        }, $userScores->toArray());
+        }, $userScores));
 
         return [
             'HEADER' => $this->render_header(),

@@ -52,6 +52,13 @@ class GradeBookColumnJSONModel
     protected $countForEndResult;
 
     /**
+     * @var bool
+     *
+     * @Type("bool")
+     */
+    protected $released;
+
+    /**
      * @var int
      *
      * @Type("integer")
@@ -81,17 +88,19 @@ class GradeBookColumnJSONModel
      * @param ?string $title
      * @param ?int $weight
      * @param bool $countForEndResult
+     * @param bool $released
      * @param int $authPresenceEndResult
      * @param int $unauthPresenceEndResult
      * @param GradeBookItem[]|ArrayCollection|array $subItems
      */
-    public function __construct(int $id, string $type, ?string $title, ?int $weight, bool $countForEndResult, int $authPresenceEndResult, int $unauthPresenceEndResult, $subItems)
+    public function __construct(int $id, string $type, ?string $title, ?int $weight, bool $countForEndResult, bool $released, int $authPresenceEndResult, int $unauthPresenceEndResult, $subItems)
     {
         $this->id = $id;
         $this->type = $type;
         $this->title = $title;
         $this->weight = $weight;
         $this->countForEndResult = $countForEndResult;
+        $this->released = $released;
         $this->authPresenceEndResult = $authPresenceEndResult;
         $this->unauthPresenceEndResult = $unauthPresenceEndResult;
         $this->subItemIds = array();
@@ -142,6 +151,14 @@ class GradeBookColumnJSONModel
     }
 
     /**
+     * @return bool
+     */
+    public function isReleased(): ?bool
+    {
+        return $this->released;
+    }
+
+    /**
      * @return int
      */
     public function getAuthPresenceEndResult(): ?int
@@ -174,7 +191,7 @@ class GradeBookColumnJSONModel
     {
         return new self(
             $gradebookColumn->getId(), $gradebookColumn->getType(), $gradebookColumn->getTitle(),
-            $gradebookColumn->getWeight(), $gradebookColumn->getCountForEndResult(),
+            $gradebookColumn->getWeight(), $gradebookColumn->getCountForEndResult(), $gradebookColumn->isReleased(),
             $gradebookColumn->getAuthPresenceEndResult(), $gradebookColumn->getUnauthPresenceEndResult(),
             $gradebookColumn->getGradeBookColumnSubItems()
         );
@@ -192,6 +209,7 @@ class GradeBookColumnJSONModel
         $column->setTitle($this->title);
         $column->setWeight($this->weight);
         $column->setCountForEndResult($this->countForEndResult);
+        $column->setIsReleased($this->released);
         $column->setAuthPresenceEndResult($this->authPresenceEndResult);
         $column->setUnauthPresenceEndResult($this->unauthPresenceEndResult);
 

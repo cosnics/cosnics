@@ -296,6 +296,7 @@ class ImportFromCSVService
         $column->setTitle($columnJsonModel->getLabel());
         $column->setWeight(null);
         $column->setCountForEndResult(true);
+        $column->setIsReleased(true);
         $column->setAuthPresenceEndResult(GradeBookColumn::NO_SCORE);
         $column->setUnauthPresenceEndResult(GradeBookColumn::MIN_SCORE);
         return $column;
@@ -320,7 +321,6 @@ class ImportFromCSVService
         $score->setComment($scoreJsonModel->getComment());
         return $score;
     }
-
 
     /**
      * @return Serializer

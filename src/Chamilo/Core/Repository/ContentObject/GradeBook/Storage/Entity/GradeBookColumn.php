@@ -77,6 +77,13 @@ class GradeBookColumn
     protected $countForEndResult = false;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="released", type="boolean")
+     */
+    protected $released = true;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="auth_presence_end_result", type="integer")
@@ -303,6 +310,26 @@ class GradeBookColumn
     public function setCountForEndResult(bool $countForEndResult): GradeBookColumn
     {
         $this->countForEndResult = $countForEndResult;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReleased(): ?bool
+    {
+        return $this->released;
+    }
+
+    /**
+     * @param bool $released
+     *
+     * @return GradeBookColumn
+     */
+    public function setIsReleased(bool $released): GradeBookColumn
+    {
+        $this->released = $released;
 
         return $this;
     }
