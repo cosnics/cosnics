@@ -21,7 +21,7 @@
             <template v-for="category in categories">
                 <td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></td>
                 <td v-else v-for="col in getColumnDataByCategory(category)" :key="`${category.id}-${col.columnId}-result`"
-                      :class="{'uncounted-score-cell': !col.countsForEndResult, 'u-relative': col.isEditing}">
+                      :class="{'unreleased-score-cell': !col.isReleased, 'uncounted-score-cell': !col.countsForEndResult, 'u-relative': col.isEditing}">
                     <student-result v-if="col.hasResult && !col.isEditing" :id="`result-${col.columnId}-${userId}`" :result="col.result" :comment="col.comment"
                         :is-standalone-score="col.isStandaloneScore" :use-overwritten-flag="true" :is-overwritten="col.isOverwrittenResult"
                         @edit="$emit('edit-score', col.columnId)" @edit-comment="$emit('edit-comment', col.columnId)"
@@ -32,7 +32,7 @@
                         @ok="$emit('result-updated', {columnId: col.columnId, value: $event})" @revert="$emit('result-reverted', col.columnId)" />
                 </td>
             </template>
-            <td class="col-sticky table-student-total u-text-end" :class="{'mod-needs-update': totalNeedsUpdate}">
+            <td class="col-sticky table-student-total u-text-end" :class="{'unreleased-score-cell': gradeBook.hasUnreleasedScores, 'mod-needs-update': totalNeedsUpdate}">
                 <i v-if="totalNeedsUpdate" class="fa fa-exclamation-circle" :title="$t('not-yet-updated')" aria-hidden="true"></i><span v-if="totalNeedsUpdate" class="sr-only">{{ $t('not-yet-updated') }}</span>{{ endResult|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span>
             </td>
         </template>
@@ -100,6 +100,7 @@ export default class StudentResultRow extends Vue {
         return {
             columnId,
             countsForEndResult: gradeBook.countsForEndResult(columnId),
+            isReleased: gradeBook.isReleased(columnId),
             isEditing: this.editStudentScoreId === userId && this.editScoreId === columnId,
             hasResult: gradeBook.hasResult(columnId, userId),
             result: gradeBook.getResult(columnId, userId),
@@ -131,7 +132,15 @@ export default class StudentResultRow extends Vue {
         }
 
         &.uncounted-score-cell {
+            background-color: #f7f9fd;
+        }
+
+        &.unreleased-score-cell {
             background-color: #fafafa;
+        }
+
+        &.unreleased-score-cell.uncounted-score-cell {
+            background-color: #f6f8fb;
         }
     }
 
@@ -144,7 +153,15 @@ export default class StudentResultRow extends Vue {
         }
 
         &.uncounted-score-cell {
+            background: linear-gradient(to bottom, #dde5e9 0, #f7f9fd 4px);
+        }
+
+        &.unreleased-score-cell {
             background: linear-gradient(to bottom, #dde5e9 0, #fafafa 4px);
+        }
+
+        &.unreleased-score-cell.uncounted-score-cell {
+            background: linear-gradient(to bottom, #dde5e9 0, #f6f8fb 4px);
         }
     }
 
@@ -153,8 +170,16 @@ export default class StudentResultRow extends Vue {
             background-color: #fff;
         }
 
+        .table-student-total.unreleased-score-cell {
+            background-color: #fafafa;
+        }
+
         &:first-child .col-sticky {
             background: linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%, linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%,linear-gradient(to bottom, #e3eaed 0, #fff 4px);
+        }
+
+        &:first-child .table-student-total.unreleased-score-cell {
+            background: linear-gradient(#ebebeb, #ebebeb) no-repeat left/1px 100%, linear-gradient(#ebebeb, #ebebeb) no-repeat right/1px 100%,linear-gradient(to bottom, #e3eaed 0, #fafafa 4px);
         }
     }
 

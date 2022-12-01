@@ -2,6 +2,12 @@
 {
     "en": {
         "category": "Category",
+        "error-Conflict": "The server responded with an error due to a conflict. Probably someone else is working on the same gradebook at this time. Please refresh the page and try again.",
+        "error-Forbidden": "The server responded with an error. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
+        "error-LoggedOut": "It looks like you have been logged out. Your changes have not been saved. Please reload the page after logging in and try again.",
+        "error-NotFound": "The server responded with an error. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
+        "error-Timeout": "The server took too long to respond. Your changes have possibly not been saved. You can try again later.",
+        "error-Unknown": "An unknown error happened. Possibly your last change(s) haven't been saved. Please refresh the page and try again.",
         "find-student": "Find student",
         "import": "Import",
         "new-category": "New category",
@@ -12,6 +18,12 @@
     },
     "nl": {
         "category": "Categorie",
+        "error-Conflict": "Serverfout vanwege een conflict. Misschien werkt iemand anders ook nog aan dit puntenboekje op dit moment. Gelieve de pagina te herladen en opnieuw te proberen.",
+        "error-Forbidden": "Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
+        "error-LoggedOut": "Het lijkt erop dat je uitgelogd bent. Je wijzigingen werden niet opgeslagen. Herlaad deze pagina nadat je opnieuw ingelogd bent en probeer het opnieuw.",
+        "error-NotFound": "Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
+        "error-Timeout": "De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
+        "error-Unknown": "Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de pagina te herladen en opnieuw te proberen.",
         "find-student": "Zoek student",
         "import": "Importeer",
         "new-category": "Nieuwe categorie",
@@ -72,7 +84,7 @@
             <category-settings v-if="selectedCategory" :grade-book="gradeBook" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory" @remove-category="onRemoveCategory"></category-settings>
         </div>
         <div v-else class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
-        <error-display v-if="errorData" @close="errorData = null">{{ errorData }}</error-display>
+        <error-display v-if="errorData" @close="closeErrorDisplay">{{ $t(`error-${errorData.type}`) }}</error-display>
     </div>
 </template>
 
@@ -370,6 +382,13 @@
 
         setError(data: any): void {
             this.errorData = data;
+        }
+
+        closeErrorDisplay() {
+            this.errorData = null;
+            this.saveColumnId = null;
+            this.saveCategoryId = null;
+            this.tableBusy = false;
         }
 
         async load(): Promise<void> {

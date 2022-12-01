@@ -1,13 +1,17 @@
 <i18n>
 {
     "en": {
+        "count-towards-endresult-not": "Score does not count towards final result",
         "final-score": "Final score",
+        "not-yet-released": "Not yet released",
         "title": "Title",
         "score": "Score",
         "weight": "Weight"
     },
     "nl": {
+        "count-towards-endresult-not": "Score telt niet mee voor het eindresultaat",
         "final-score": "Eindcijfer",
+        "not-yet-released": "Nog niet vrijgegeven",
         "title": "Titel",
         "score": "Score",
         "weight": "Gewicht"
@@ -37,19 +41,21 @@
                             </b-td>
                             <b-td v-else class="u-text-end" style="font-size: 12px;line-height:20px;color:#477b7b;border-right-color: transparent;"><i>Telt niet mee voor eindresultaat</i></b-td>-->
                             <b-td>
-                                <div class="u-flex u-align-items-center u-justify-content-end">
+                                <div v-if="gradeBook.isReleased(columnId)" class="u-flex u-align-items-center u-justify-content-end">
                                     <template v-if="gradeBook.getResultComment(columnId, userId)">
                                         <i class="fa fa-comment-o" style="color: #5885a2;font-size:12px;line-height:14px;text-shadow:1px 1px #e2eaee;margin-right: 5px"></i>
                                     </template>
                                     <student-result :id="`result-${columnId}`" :result="gradeBook.getResult(columnId, userId)"
                                                     class="u-flex u-align-items-center u-justify-content-end" :class="{'uncounted-score': !gradeBook.countsForEndResult(columnId)}"></student-result>
+                                    <!--<span style="font-size: 12px; color: #4d6b8f">Nog niet vrijgegeven</span>-->
                                     <!--{{ gradeBook.getResult(columnId, userId)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span>-->
                                 </div>
+                                <div v-else class="u-flex u-align-items-center u-justify-content-end" style="font-size: 12.5px;color:#4d748f;">{{ $t('not-yet-released') }}</div>
                             </b-td>
                             <b-popover custom-class="gradebook-score-popover" :target="`col-${category.id}-${columnId}`" triggers="hover" placement="rightbottom">
                                 <div class="score-info">
                                     <div v-if="gradeBook.countsForEndResult(columnId)" class="u-flex u-align-items-center" style="font-size: 12px;color:#477b7b;">Gewicht: {{ gradeBook.getWeight(columnId)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
-                                    <div v-else style="font-size: 12px;color:#477b7b"><i>Telt niet mee voor eindresultaat</i></div>
+                                    <div v-else style="font-size: 12px;color:#477b7b"><i>{{ $t('count-towards-endresult-not') }}</i></div>
                                     <template v-if="gradeBook.getResultComment(columnId, userId)">
                                         <div style="font-size: 10px;color: #5885a3;padding-top: 4px;margin-top: 4px;margin-bottom: 2px;border-top: 1px solid #ebebeb">Feedback:</div>
                                         {{ gradeBook.getResultComment(columnId, userId) }}
@@ -63,7 +69,8 @@
                 <b-tr class="table-row table-body-row">
                     <b-td style="color: #5885a2;font-weight: 700;background-color: #f5f9f9;border-color:#ebebeb;border-right-color: transparent;">{{ $t('final-score') }}</b-td>
                     <b-td style="background-color: #f5f9f9;font-weight: 500;border-color:#ebebeb;">
-                        <div class="u-flex u-align-items-center u-justify-content-end">{{ gradeBook.getEndResult(userId)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                        <div v-if="!gradeBook.hasUnreleasedScores" class="u-flex u-align-items-center u-justify-content-end">{{ gradeBook.getEndResult(userId)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                        <div v-else class="u-flex u-align-items-center u-justify-content-end" style="font-size: 12.5px;color:#4d748f;">{{ $t('not-yet-released') }}</div>
                     </b-td>
                     <!--<b-td style="border-color: transparent"></b-td>-->
                 </b-tr>

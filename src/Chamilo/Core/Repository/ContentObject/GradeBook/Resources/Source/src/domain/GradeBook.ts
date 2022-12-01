@@ -19,6 +19,7 @@ export interface GradeColumn {
     title?: string|null;
     weight: number|null;
     countForEndResult: boolean;
+    released: boolean;
     authPresenceEndResult: number;
     unauthPresenceEndResult: number;
     subItemIds: ItemId[];
@@ -65,8 +66,6 @@ export interface CSVImportResult {
 }
 
 export type ResultsData = Record<ColumnId, Record<number, GradeScore>>;
-
-const COUNT_FOR_END_RESULT_DEFAULT = true;
 
 export default class GradeBook {
     static readonly NO_SCORE = 0;
@@ -138,6 +137,14 @@ export default class GradeBook {
 
     countsForEndResult(columnId: ColumnId): boolean {
         return !!(this.getGradeColumn(columnId)?.countForEndResult);
+    }
+
+    isReleased(columnId: ColumnId): boolean {
+        return !!(this.getGradeColumn(columnId)?.released);
+    }
+
+    get hasUnreleasedScores() {
+        return this.gradeColumns.some(column => column.countForEndResult && !column.released);
     }
 
     getWeight(columnId: ColumnId): number {
@@ -353,7 +360,8 @@ export default class GradeBook {
 
         const column = {
             id: newId, type: 'item', title: null, subItemIds: [item.id], weight: null,
-            countForEndResult: COUNT_FOR_END_RESULT_DEFAULT,
+            countForEndResult: true,
+            released: true,
             authPresenceEndResult: GradeBook.NO_SCORE,
             unauthPresenceEndResult: GradeBook.MIN_SCORE
         };
@@ -399,7 +407,7 @@ export default class GradeBook {
 
     createNewScore(): GradeColumn {
         const id = this.createNewStandaloneScoreId();
-        const newScore = {id, title: 'Score', type: 'standalone', subItemIds: [], weight: null, countForEndResult: true, authPresenceEndResult: GradeBook.NO_SCORE, unauthPresenceEndResult: GradeBook.MIN_SCORE};
+        const newScore = {id, title: 'Score', type: 'standalone', subItemIds: [], weight: null, countForEndResult: true, released: true, authPresenceEndResult: GradeBook.NO_SCORE, unauthPresenceEndResult: GradeBook.MIN_SCORE};
         this.gradeColumns.push(newScore);
         this.nullCategory.columnIds.push(id);
         return newScore;

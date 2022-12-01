@@ -10,6 +10,7 @@
         "count-towards-endresult-not": "Score does not count towards final result",
         "group-scores": "Group scores",
         "grouped-scores": "Grouped scores",
+        "make-visible": "Show score to student",
         "maximum-towards-endresult": "Maximum score (100%) counts towards final result",
         "minimum-towards-endresult": "Minimum score (0%) counts towards final result",
         "no-score-found": "No score found",
@@ -29,6 +30,7 @@
         "count-towards-endresult-not": "Score niet meetellen voor het eindresultaat",
         "group-scores": "Scores groeperen",
         "grouped-scores": "Gegroepeerde scores",
+        "make-visible": "Score weergeven voor student",
         "maximum-towards-endresult": "Maximale score (100%) meetellen voor het eindresultaat",
         "minimum-towards-endresult": "Minimale score (0%) meetellen voor het eindresultaat",
         "no-score-found": "Geen score gevonden",
@@ -66,6 +68,10 @@
                 </template>
                 <h5 :class="{'standalone': column.type === 'standalone'}">{{ $t('settings') }}</h5>
                 <div class="settings">
+                    <div>
+                        <input type="checkbox" id="released" v-model="column.released" @input="onGradeColumnChange" class="mr-5">
+                        <label class="settings-label u-font-medium" for="released">{{ $t('make-visible') }}</label>
+                    </div>
                     <div>
                         <input type="checkbox" id="countForEndResult" v-model="column.countForEndResult" @input="onGradeColumnChange" class="mr-5">
                         <label class="settings-label u-font-medium" for="countForEndResult">{{ $t('count-towards-endresult') }}</label>

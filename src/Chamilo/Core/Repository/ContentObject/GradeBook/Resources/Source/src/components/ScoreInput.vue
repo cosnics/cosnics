@@ -131,6 +131,7 @@ export default class ScoreInput extends Vue {
 }
 
 .highlight-content.content-tabs::v-deep + .highlight-content {
+    background-color: white;
     border: 1px solid #ced3d9;
     border-top-right-radius: 0;
     margin-left: auto;

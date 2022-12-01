@@ -7,10 +7,14 @@
         "count-towards-endresult-not": "Score does not count towards final result",
         "final-score": "Final score",
         "first-name": "First name",
+        "invisible": "Final score is hidden",
         "item-settings": "Score Settings",
         "last-name": "NAME",
+        "make-invisible": "Score is shown. Click to hide.",
+        "make-visible": "Score is hidden. Click to show.",
         "total": "Total",
         "uncounted": "Not counted",
+        "visible": "Final score is shown",
         "without-category": "Without category"
     },
     "nl": {
@@ -20,10 +24,14 @@
         "count-towards-endresult-not": "Score wordt niet meegeteld voor het eindresultaat",
         "final-score": "Eindcijfer",
         "first-name": "Voornaam",
+        "invisible": "Eindscore is verborgen",
         "item-settings": "Score-instellingen",
         "last-name": "FAMILIENAAM",
+        "make-invisible": "Score wordt weergegeven. Klik om te verbergen.",
+        "make-visible": "Score is verborgen. Klik om te tonen.",
         "total": "Totaal",
         "uncounted": "Niet meegeteld",
+        "visible": "Eindscore wordt weergegeven",
         "without-category": "Zonder categorie"
     }
 }
@@ -59,7 +67,7 @@
                         </th>
                         <draggable v-for="({id, columnIds}) in displayedCategories" :key="`category-score-${id}`" :list="columnIds" tag="div" class="u-contents" ghost-class="ghost" @end="onDragEnd" :disabled="editItemId !== null || weightEditItemId !== null">
                             <th v-if="columnIds.length === 0" :key="`item-id-${id}`"></th>
-                            <th v-else v-for="columnId in columnIds" :key="`item-id-${id}--${columnId}-name`" draggable @dragstart="startDragColumn($event, columnId)" :class="{'uncounted-score-cell': !gradeBook.countsForEndResult(columnId), 'u-relative': (editItemId === columnId || weightEditItemId === columnId)}" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, -1)">
+                            <th v-else v-for="columnId in columnIds" :key="`item-id-${id}--${columnId}-name`" draggable @dragstart="startDragColumn($event, columnId)" :class="{'unreleased-score-cell': !gradeBook.isReleased(columnId), 'uncounted-score-cell': !gradeBook.countsForEndResult(columnId), 'u-relative': (editItemId === columnId || weightEditItemId === columnId)}" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, -1)">
                                 <item-title-input v-if="editItemId === columnId" :item-title="gradeBook.getTitle(columnId)" @cancel="editItemId = null" @ok="setTitle(columnId, $event)" style="margin: -6px -8px"></item-title-input>
                                 <template v-else-if="weightEditItemId === columnId">
                                     <span class="column-title"><i v-if="gradeBook.isGrouped(columnId)" class="fa fa-group"></i>{{ gradeBook.getTitle(columnId) }}</span>
@@ -77,6 +85,7 @@
                                     <div class="u-flex u-align-items-center u-justify-content-between">
                                         <div v-if="gradeBook.countsForEndResult(columnId)" class="weight u-font-normal u-cursor-pointer" :class="{'mod-custom': gradeBook.getGradeColumn(columnId).weight !== null , 'is-error': gradeBook.eqRestWeight < 0}" @dblclick="showColumnWeightDialog(columnId)" :title="$t('adjust-weight')">{{ gradeBook.getWeight(columnId)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                                         <div v-else class="weight u-font-normal" style="font-style: italic" :title="$t('count-towards-endresult-not')"><span aria-hidden="true">{{ $t('uncounted') }}</span><span class="sr-only">{{ $t('count-towards-endresult-not') }}</span></div>
+                                        <button class="btn-released" style="margin-left: auto;" v-if="!isSavingColumnWithId(columnId)" @click="toggleVisibility(columnId)" :title="gradeBook.isReleased(columnId) ? $t('make-invisible') : $t('make-visible')"><i class="fa" :class="{'fa-eye': gradeBook.isReleased(columnId), 'fa-eye-slash': !gradeBook.isReleased(columnId)}" aria-hidden="true"></i><span class="sr-only">{{gradeBook.isReleased(columnId) ? $t('make-invisible') : $t('make-visible')}}</span></button>
                                         <div class="spin">
                                             <div v-if="isSavingColumnWithId(columnId)" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                                         </div>
@@ -84,7 +93,10 @@
                                 </template>
                             </th>
                         </draggable>
-                        <th class="col-sticky table-student-total u-text-end">{{ $t('final-score') }}</th>
+                        <th class="col-sticky table-student-total u-text-end" :class="{'unreleased-score-cell': gradeBook.hasUnreleasedScores}">
+                            <div>{{ $t('final-score') }}</div>
+                            <div style="margin-top: 2px;color:#657681;" :title="gradeBook.hasUnreleasedScores ? $t('invisible') : $t('visible')"><i class="fa" :class="{'fa-eye': !gradeBook.hasUnreleasedScores, 'fa-eye-slash': gradeBook.hasUnreleasedScores}" aria-hidden="true"></i><span class="sr-only">{{gradeBook.hasUnreleasedScores ? $t('invisible') : $t('visible')}}</span></div>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -285,6 +297,14 @@ export default class GradesTable extends Vue {
             this.$emit('change-gradecolumn', gradeColumn);
         }
         this.weightEditItemId = null;
+    }
+
+    toggleVisibility(columnId: ColumnId) {
+        const gradeColumn = this.gradeBook.getGradeColumn(columnId);
+        if (gradeColumn) {
+            gradeColumn.released = !gradeColumn.released;
+            this.$emit('change-gradecolumn', gradeColumn);
+        }
     }
 
     overwriteResult(userId: number, {columnId, value}: {columnId: ColumnId, value: ResultType}) {
@@ -518,7 +538,15 @@ export default class GradesTable extends Vue {
         color: #5885a2;
 
         &.uncounted-score-cell {
+            background-color: #f0f4fa;
+        }
+
+        &.unreleased-score-cell {
             background-color: #f3f3f3;
+        }
+
+        &.unreleased-score-cell.uncounted-score-cell {
+            background-color: #eff2f6;
         }
     }
 
@@ -543,6 +571,10 @@ export default class GradesTable extends Vue {
     .table-scores-row .col-sticky {
         &.table-student, &.table-student-total {
             background-color: #f8fbfb;
+        }
+
+        &.table-student-total.unreleased-score-cell {
+            background-color: #f3f3f3;
         }
     }
 
@@ -601,6 +633,12 @@ export default class GradesTable extends Vue {
         background: none;
         border: none;
         margin-left: 15px;
+        padding: 0;
+    }
+
+    .btn-released {
+        background: none;
+        border: none;
         padding: 0;
     }
 

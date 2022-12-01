@@ -272,10 +272,20 @@ export default class Connector {
                 throw { 'type': 'Unknown' };
             }
         } catch (err) {
-            console.error(err);
             let error: any;
             if (err?.isAxiosError && err.message?.toLowerCase().indexOf('timeout') !== -1) {
                 error = { 'type': 'Timeout' };
+            } else if ([HTTP_FORBIDDEN, HTTP_NOT_FOUND, HTTP_CONFLICT, ERROR_UNKNOWN].includes(err?.response?.status)) {
+                const status = err.response.status;
+                if (status === HTTP_FORBIDDEN) {
+                    error = { 'type': 'Forbidden' };
+                } else if (status === HTTP_NOT_FOUND) {
+                    error = { 'type': 'NotFound' };
+                } else if (status === HTTP_CONFLICT) {
+                    error = { 'type': 'Conflict' };
+                } else {
+                    error = { 'type': 'Unknown' };
+                }
             } else if (err?.response?.data?.error) {
                 error = err.response.data.error;
             } else if (err?.type) {
@@ -283,6 +293,7 @@ export default class Connector {
             } else {
                 error = { 'type': 'Unknown' };
             }
+
             this.errorListeners.forEach(errorListener => errorListener.setError(error));
         }
     }
