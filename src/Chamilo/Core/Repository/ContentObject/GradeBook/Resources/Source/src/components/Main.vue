@@ -57,8 +57,8 @@
                             <li><a :href="apiConfig.gradeBookImportCsvURL">{{ $t('import') }}&mldr;</a></li>
                         </ul>
                     </div>
-                    <button v-if="gradeBook.totalsNeedUpdating" class="btn btn-primary btn-sm" @click="updateTotalScores" style="font-weight: 500;margin-inline: 10px;padding-inline: 30px;text-transform: uppercase">
-                        <i aria-hidden="true" class="fa fa-exclamation-circle" style="color: white;font-size: larger;margin-right: 5px"></i>{{ $t('update-final-scores') }}
+                    <button v-if="gradeBook.totalsNeedUpdating" class="btn btn-update-totals btn-primary btn-sm u-font-medium u-text-upper" @click="updateTotalScores">
+                        <i aria-hidden="true" class="fa fa-exclamation-circle"></i>{{ $t('update-final-scores') }}
                     </button>
                     <div class="btn-group">
                         <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle" :title="`${$t('show')} ${itemsPerPage} items`">
@@ -500,12 +500,20 @@
     text-align: end;
 }
 
+.u-text-upper {
+    text-transform: uppercase;
+}
+
 .u-font-normal {
     font-weight: 400;
 }
 
 .u-font-medium {
     font-weight: 500;
+}
+
+.u-font-italic {
+    font-style: italic;
 }
 
 .u-cursor-pointer {
@@ -555,6 +563,17 @@
 
 #dropdown-main {
     flex: 1;
+}
+
+.btn-update-totals {
+    margin-inline: 10px;
+    padding-inline: 30px;
+
+    .fa-exclamation-circle {
+        color: white;
+        font-size: 14px;
+        margin-right: 5px;
+    }
 }
 
 .lds-ellipsis {

@@ -1,7 +1,5 @@
 <template>
-    <div id="app">
-        <user-scores v-if="gradeBook" :grade-book="gradeBook"></user-scores>
-    </div>
+    <user-scores v-if="gradeBook" :grade-book="gradeBook" class="gradebook-user-scores"></user-scores>
 </template>
 
 <script lang="ts">
@@ -37,3 +35,12 @@ export default class UserScoresApp extends Vue {
     }
 }
 </script>
+
+<style scoped>
+.gradebook-user-scores {
+    margin-left: 15px;
+    margin-top: 20px;
+    min-width: fit-content;
+    width: 400px;
+}
+</style>

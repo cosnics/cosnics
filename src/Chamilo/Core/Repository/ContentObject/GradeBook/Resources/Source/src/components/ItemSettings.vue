@@ -85,7 +85,7 @@
                             </div>
                         </div>
                         <div class="mt-20">
-                            <label class="settings-label">{{ $t('authorized-absence') }} <div aria-hidden="true" class="color-code amber-700" style="margin-inline: 3px" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></div>:</label>
+                            <label class="settings-label">{{ $t('authorized-absence') }} <div aria-hidden="true" class="color-code amber-700 mi-3" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></div>:</label>
                             <div>
                                 <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
                                 <label class="u-font-normal" for="gafw-option1">{{ $t('count-towards-endresult-not') }}</label>
@@ -100,7 +100,7 @@
                             </div>
                         </div>
                         <div class="mt-20">
-                            <label class="settings-label">{{ $t('unauthorized-absence') }} <div class="color-code mod-none" :title="$t('no-score-found')" style="margin-inline: 3px; width: 30px; background-color: #f8fbfb;border-color: #e6ecef; justify-content: flex-end"><i aria-hidden="true" class="fa fa-question" style="color: #777"></i></div>:</label>
+                            <label class="settings-label">{{ $t('unauthorized-absence') }} <div class="color-code mod-none mi-3" :title="$t('no-score-found')"><i aria-hidden="true" class="fa fa-question"></i></div>:</label>
                             <div>
                                 <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
                                 <label class="u-font-normal" for="nogafw-option1">{{ $t('count-towards-endresult-not') }}</label>
@@ -254,6 +254,10 @@ export default class ItemSettings extends Vue {
 
 .mr-5 {
     margin-right: 5px;
+}
+
+.mi-3 {
+    margin-inline: 3px;
 }
 
 input[type="text"], input[type="number"] {
@@ -420,6 +424,17 @@ h5 {
     font-variant: all-small-caps;
     font-weight: 900;
     line-height: 12px;
+}
+
+.color-code.mod-none {
+    background-color: #f8fbfb;
+    border-color: #e6ecef;
+    justify-content: flex-end;
+    width: 30px;
+
+    .fa-question {
+        color: #777;
+    }
 }
 
 .amber-700 {

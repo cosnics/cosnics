@@ -19,45 +19,36 @@
 }
 </i18n>
 <template>
-    <div style="min-width: fit-content;width: 400px;margin-left: 15px;margin-top: 20px;">
-        <b-table-simple class="gradebook-table" style="margin-right:10px">
+    <div>
+        <b-table-simple class="gradebook-table">
             <b-thead>
                 <b-tr class="table-row table-head-row">
-                    <b-th style="border-right-color: transparent;">{{ $t('title') }}</b-th>
-                    <!--<b-th style="border-right-color: transparent;" class="u-text-end">{{ $t('weight') }}</b-th>-->
+                    <b-th>{{ $t('title') }}</b-th>
                     <b-th class="u-text-end">{{ $t('score') }}</b-th>
                 </b-tr>
             </b-thead>
             <b-tbody>
                 <template v-for="category in gradeBook.allCategories">
                     <b-tr class="table-row table-body-row" :key="`cat-${category.id}`" v-if="category.columnIds.length && gradeBook.allCategories.length && gradeBook.allCategories[0].id !== 0">
-                        <b-td colspan="2" class="u-font-medium" style="color: #5885a2;border-left-color: transparent;border-right-color: transparent;padding-bottom: 6px;padding-top:16px">{{ category.title }}</b-td>
+                        <b-td colspan="2" class="table-category u-font-medium">{{ category.title }}</b-td>
                     </b-tr>
                     <template v-for="columnId in category.columnIds">
                         <b-tr :key="`col-${category.id}-${columnId}`" :id="`col-${category.id}-${columnId}`" class="table-row table-body-row result-row">
-                            <b-td class="category-color u-relative" style="border-right-color: transparent" :style="`--color: ${category.color};`">{{ gradeBook.getTitle(columnId) }}</b-td>
-                            <!--<b-td v-if="gradeBook.countsForEndResult(columnId)" style="font-size: 12px;line-height:20px;color:#477b7b;border-right-color: transparent;">
-                                <div class="u-flex u-align-items-center u-justify-content-end">{{ gradeBook.getWeight(columnId)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
-                            </b-td>
-                            <b-td v-else class="u-text-end" style="font-size: 12px;line-height:20px;color:#477b7b;border-right-color: transparent;"><i>Telt niet mee voor eindresultaat</i></b-td>-->
+                            <b-td class="category-color u-relative" :style="`--color: ${category.color};`">{{ gradeBook.getTitle(columnId) }}</b-td>
                             <b-td>
                                 <div v-if="gradeBook.isReleased(columnId)" class="u-flex u-align-items-center u-justify-content-end">
-                                    <template v-if="gradeBook.getResultComment(columnId, userId)">
-                                        <i class="fa fa-comment-o" style="color: #5885a2;font-size:12px;line-height:14px;text-shadow:1px 1px #e2eaee;margin-right: 5px"></i>
-                                    </template>
+                                    <i v-if="gradeBook.getResultComment(columnId, userId)" class="fa fa-comment-o" aria-hidden="true"></i>
                                     <student-result :id="`result-${columnId}`" :result="gradeBook.getResult(columnId, userId)"
                                                     class="u-flex u-align-items-center u-justify-content-end" :class="{'uncounted-score': !gradeBook.countsForEndResult(columnId)}"></student-result>
-                                    <!--<span style="font-size: 12px; color: #4d6b8f">Nog niet vrijgegeven</span>-->
-                                    <!--{{ gradeBook.getResult(columnId, userId)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span>-->
                                 </div>
-                                <div v-else class="u-flex u-align-items-center u-justify-content-end" style="font-size: 12.5px;color:#4d748f;">{{ $t('not-yet-released') }}</div>
+                                <div v-else class="u-flex u-align-items-center u-justify-content-end not-yet-released">{{ $t('not-yet-released') }}</div>
                             </b-td>
                             <b-popover custom-class="gradebook-score-popover" :target="`col-${category.id}-${columnId}`" triggers="hover" placement="rightbottom">
                                 <div class="score-info">
-                                    <div v-if="gradeBook.countsForEndResult(columnId)" class="u-flex u-align-items-center" style="font-size: 12px;color:#477b7b;">{{ $t('weight') }}: {{ gradeBook.getWeight(columnId)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
-                                    <div v-else style="font-size: 12px;color:#477b7b"><i>{{ $t('count-towards-endresult-not') }}</i></div>
+                                    <div v-if="gradeBook.countsForEndResult(columnId)" class="u-flex u-align-items-center popover-weight-header">{{ $t('weight') }}: {{ gradeBook.getWeight(columnId)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                                    <div v-else class="popover-count-endresult-not"><i>{{ $t('count-towards-endresult-not') }}</i></div>
                                     <template v-if="gradeBook.getResultComment(columnId, userId)">
-                                        <div style="font-size: 10px;color: #5885a3;padding-top: 4px;margin-top: 4px;margin-bottom: 2px;border-top: 1px solid #ebebeb">Feedback:</div>
+                                        <div class="popover-feedback-header">Feedback:</div>
                                         {{ gradeBook.getResultComment(columnId, userId) }}
                                     </template>
                                 </div>
@@ -65,14 +56,13 @@
                         </b-tr>
                     </template>
                 </template>
-                <b-tr v-if="gradeBook.allCategories.length && gradeBook.allCategories[0].id !== 0"><b-td colspan="2" style="padding: 12px;border-left-color: transparent;border-right-color: transparent"></b-td></b-tr>
+                <b-tr v-if="gradeBook.allCategories.length && gradeBook.allCategories[0].id !== 0" class="table-row table-body-row"><b-td colspan="2" class="table-empty-cell"></b-td></b-tr>
                 <b-tr class="table-row table-body-row">
-                    <b-td style="color: #5885a2;font-weight: 700;background-color: #f5f9f9;border-color:#ebebeb;border-right-color: transparent;">{{ $t('final-score') }}</b-td>
-                    <b-td style="background-color: #f5f9f9;font-weight: 500;border-color:#ebebeb;">
+                    <b-td class="table-final-score-header">{{ $t('final-score') }}</b-td>
+                    <b-td class="table-final-score u-font-medium">
                         <div v-if="!gradeBook.hasUnreleasedScores" class="u-flex u-align-items-center u-justify-content-end">{{ gradeBook.getEndResult(userId)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
-                        <div v-else class="u-flex u-align-items-center u-justify-content-end" style="font-size: 12.5px;color:#4d748f;">{{ $t('not-yet-released') }}</div>
+                        <div v-else class="u-flex u-align-items-center u-justify-content-end not-yet-released">{{ $t('not-yet-released') }}</div>
                     </b-td>
-                    <!--<b-td style="border-color: transparent"></b-td>-->
                 </b-tr>
             </b-tbody>
         </b-table-simple>
@@ -132,11 +122,23 @@ export default class UserScores extends Vue {
     border: 1px solid #ebebeb;
     border-bottom: none;
     color: #5885a2;
+
+    &:first-child {
+        border-right-color: transparent;
+    }
 }
 
 .table-body-row:first-child td {
     background: linear-gradient(to bottom, #e3eaed 0, #fff 4px);
     border-top: none;
+}
+
+.table-body-row .table-category {
+    border-left-color: transparent;
+    border-right-color: transparent;
+    color: #5885a2;
+    padding-bottom: 6px;
+    padding-top: 16px;
 }
 
 .table-body-row.result-row:hover td {
@@ -153,6 +155,10 @@ export default class UserScores extends Vue {
     opacity: .8;
 }
 
+.table-body-row .category-color {
+    border-right-color: transparent;
+}
+
 .category-color:before {
     content: '';
     position: absolute;
@@ -167,6 +173,33 @@ export default class UserScores extends Vue {
     top: 0;
 }
 
+.table-body-row .table-empty-cell {
+    border-left-color: transparent;
+    border-right-color: transparent;
+    padding: 12px;
+}
+
+.table-body-row .table-final-score-header {
+    background-color: #f5f9f9;
+    border-color: #ebebeb;
+    border-right-color: transparent;
+    color: #5885a2;
+    font-weight: 700;
+}
+
+.table-body-row .table-final-score {
+    background-color: #f5f9f9;
+    border-color: #ebebeb;
+}
+
+.fa-comment-o {
+    color: #5885a2;
+    font-size: 12px;
+    line-height: 14px;
+    margin-right: 5px;
+    text-shadow: 1px 1px #e2eaee;
+}
+
 .uncounted-score {
     color: #777;
     font-style: italic;
@@ -174,9 +207,27 @@ export default class UserScores extends Vue {
 
 .score-info {
     font-size: 13px;
-    /*max-width: 200px;*/
     padding: 6px 8px;
     width: 300px;
+}
+
+.not-yet-released {
+    color: #4d748f;
+    font-size: 12.5px;
+}
+
+.popover-weight-header {
+    color: #477b7b;
+    font-size: 12px;
+}
+
+.popover-count-endresult-not {
+    color: #477b7b;
+    font-size: 12px;
+}
+
+.popover-feedback-header {
+    font-size: 10px;color: #5885a3;padding-top: 4px;margin-top: 4px;margin-bottom: 2px;border-top: 1px solid #ebebeb;
 }
 </style>
 <style>
