@@ -50,55 +50,59 @@
     }
 }
 </i18n>
+
 <template>
-    <div id="gradebook-import">
-        <ul class="nav nav-tabs mod-steps">
-            <li class="nav-item u-cursor-pointer" :class="{'active': chooseTypeActive, 'done': importType}"><a class="nav-link u-block" @click="reload"><span class="step u-inline-block">1</span>{{ $t('choose-type') }}</a></li>
-            <li class="nav-item" :class="{'active': chooseFileActive, 'done': imported || resultsLoaded}"><a class="nav-link u-block"><span class="step u-inline-block">2</span>{{ $t('choose-file') }}</a></li>
-            <li class="nav-item" :class="{'active': previewActive, 'done': resultsLoaded}"><a class="nav-link u-block"><span class="step u-inline-block">3</span>{{ $t('import-preview') }}</a></li>
-            <li class="nav-item" :class="{'active': importCompleteActive}"><a class="nav-link u-block"><span class="step u-inline-block">4</span>{{ $t('import-complete') }}</a></li>
-        </ul>
-        <div v-if="chooseTypeActive" style="border: 1px solid #f3f3f3;padding: 10px 10px 15px;max-width: 90ch;">
-            <p style="font-size: 14px;padding: 0 0 0 5px;border: none;color: #507e86;margin-bottom: 14px;font-weight: 500;">{{ $t('question-upload') }}</p>
-            <div class="u-flex u-gap-small-2x">
-                <a role="button" class="btn btn-light" @click="importType = 'scores'">{{ $t('type-scores') }}</a>
-                <a role="button" class="btn btn-default" style="font-size: 13px" @click="importType = 'scores_comments'">{{ $t('type-scores-comments') }}</a>
+    <div>
+        <div id="gradebook-import">
+            <ul class="nav nav-tabs mod-steps">
+                <li class="nav-item u-cursor-pointer" :class="{'active': chooseTypeActive, 'done': importType}"><a class="nav-link u-block" @click="reload"><span class="step u-inline-block">1</span>{{ $t('choose-type') }}</a></li>
+                <li class="nav-item" :class="{'active': chooseFileActive, 'done': imported || resultsLoaded}"><a class="nav-link u-block"><span class="step u-inline-block">2</span>{{ $t('choose-file') }}</a></li>
+                <li class="nav-item" :class="{'active': previewActive, 'done': resultsLoaded}"><a class="nav-link u-block"><span class="step u-inline-block">3</span>{{ $t('import-preview') }}</a></li>
+                <li class="nav-item" :class="{'active': importCompleteActive}"><a class="nav-link u-block"><span class="step u-inline-block">4</span>{{ $t('import-complete') }}</a></li>
+            </ul>
+            <div v-if="chooseTypeActive" style="border: 1px solid #f3f3f3;padding: 10px 10px 15px;max-width: 90ch;">
+                <p style="font-size: 14px;padding: 0 0 0 5px;border: none;color: #507e86;margin-bottom: 14px;font-weight: 500;">{{ $t('question-upload') }}</p>
+                <div class="u-flex u-gap-small-2x">
+                    <a role="button" class="btn btn-light" @click="importType = 'scores'">{{ $t('type-scores') }}</a>
+                    <a role="button" class="btn btn-default" style="font-size: 13px" @click="importType = 'scores_comments'">{{ $t('type-scores-comments') }}</a>
+                </div>
             </div>
-        </div>
-        <div v-if="chooseFileActive && !hasError">
-            <div style="color: #507e86;margin-bottom: 14px;font-weight: 500;">{{ $t('file-with') }} {{ importType === 'scores' ? $t('type-scores') : $t('type-scores-comments') }}</div>
-            <csv-import-info :import-type="importType" />
-            <input type="file" name="file" id="file" class="inputfile" ref="inputfile" @change="filename=$event.target.value.split('\\').pop()">
-            <div class="u-flex" style="margin-top: 5px;">
-                <label for="file" class="btn btn-default lbl-input-file u-font-normal" :class="{'mod-selected': !!filename}" :title="$t('select-file')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg> <span>{{ filename || $t('select-file') }}</span></label>
-                <button v-if="filename" id="uploadbutton" type="button" value="Upload" @click="uploadCSV" class="btn btn-primary" :disabled="hasError || !importType">{{ $t('upload') }}</button>
+            <div v-if="chooseFileActive && !hasError">
+                <div style="color: #507e86;margin-bottom: 14px;font-weight: 500;">{{ $t('file-with') }} {{ importType === 'scores' ? $t('type-scores') : $t('type-scores-comments') }}</div>
+                <csv-import-info :import-type="importType" />
+                <input type="file" name="file" id="file" class="inputfile" ref="inputfile" @change="filename=$event.target.value.split('\\').pop()">
+                <div class="u-flex" style="margin-top: 5px;">
+                    <label for="file" class="btn btn-default lbl-input-file u-font-normal" :class="{'mod-selected': !!filename}" :title="$t('select-file')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg> <span>{{ filename || $t('select-file') }}</span></label>
+                    <button v-if="filename" id="uploadbutton" type="button" value="Upload" @click="uploadCSV" class="btn btn-primary" :disabled="hasError || !importType">{{ $t('upload') }}</button>
+                </div>
             </div>
-        </div>
-        <div v-if="chooseFileActive && hasError" class="import-errors alert alert-danger">
-            <span class="error-filename u-inline-block u-font-medium" v-if="has500Error">{{ filename }}:</span>
-            <div class="errors" :class="{'mb-20': has500Error}" v-html="error"></div>
-            <div class="u-font-medium" v-if="has500Error">{{ $t('correct-mistakes') }} <a href="#" @click.stop="reload">{{ $t('reupload-results') }}</a>.</div>
-        </div>
-        <template v-if="previewActive && !hasError">
-            <div class="csv-import-info u-flex u-align-items-start">
-                <p>{{ $t('import-results-overview') }}</p>
-                <div><button :title="$t('import')" class="btn btn-primary" @click="uploadResults"><span aria-hidden="true" class="glyphicon glyphicon-arrow-right"></span> {{ $t('import') }}</button></div>
+            <div v-if="chooseFileActive && hasError" class="import-errors alert alert-danger">
+                <span class="error-filename u-inline-block u-font-medium" v-if="has500Error">{{ filename }}:</span>
+                <div class="errors" :class="{'mb-20': has500Error}" v-html="error"></div>
+                <div class="u-font-medium" v-if="has500Error">{{ $t('correct-mistakes') }} <a href="#" @click.stop="reload">{{ $t('reupload-results') }}</a>.</div>
             </div>
-            <imports-table :fields="fields" :results="results" />
-        </template>
-        <div v-if="previewActive && hasError" class="import-errors alert alert-danger">
-            <div class="errors" v-html="error"></div>
-        </div>
-        <template v-if="importCompleteActive" >
-            <div class="alert alert-info mod-import-completed">
-                <p>{{ $t('import-successful') }}</p>
-                <p v-if="missingUsers.length" v-html="$t('no-results-some-students')"></p>
-                <p><a :href="apiConfig.gradeBookRootURL" class="u-font-medium"><i class="fa fa-arrow-right"></i> {{ $t('go-to-gradebook') }}</a></p>
+            <template v-if="previewActive && !hasError">
+                <div class="csv-import-info u-flex u-align-items-start">
+                    <p>{{ $t('import-results-overview') }}</p>
+                    <div><button :title="$t('import')" class="btn btn-primary" @click="uploadResults"><span aria-hidden="true" class="glyphicon glyphicon-arrow-right"></span> {{ $t('import') }}</button></div>
+                </div>
+                <imports-table :fields="fields" :results="results" />
+            </template>
+            <div v-if="previewActive && hasError" class="import-errors alert alert-danger">
+                <div class="errors" v-html="error"></div>
             </div>
-            <p v-if="missingUsers.length" class="u-font-medium" style="color: #507e86;margin-left: 5px">{{ $t('without-results') }}:</p>
-            <missing-users-table v-if="missingUsers.length" :missing-users="missingUsers"></missing-users-table>
-        </template>
+            <template v-if="importCompleteActive" >
+                <div class="alert alert-info mod-import-completed">
+                    <p>{{ $t('import-successful') }}</p>
+                    <p v-if="missingUsers.length" v-html="$t('no-results-some-students')"></p>
+                    <p><a :href="apiConfig.gradeBookRootURL" class="u-font-medium"><i class="fa fa-arrow-right"></i> {{ $t('go-to-gradebook') }}</a></p>
+                </div>
+                <p v-if="missingUsers.length" class="u-font-medium" style="color: #507e86;margin-left: 5px">{{ $t('without-results') }}:</p>
+                <missing-users-table v-if="missingUsers.length" :missing-users="missingUsers"></missing-users-table>
+            </template>
+        </div>
+        <div v-if="debugServerResponse" id="server-response"></div>
     </div>
 </template>
 
@@ -109,6 +113,7 @@ import MissingUsersTable from './components/MissingUsersTable.vue';
 import CsvImportInfo from './components/CSVImportInfo.vue';
 import {CSVImportField, CSVImportResult} from './domain/GradeBook';
 import axios from 'axios';
+import {logResponse} from './domain/Log';
 
 interface APIConfig {
     processCsvURL: string;
@@ -135,6 +140,7 @@ export default class ImporterApp extends Vue {
     @Prop({type: Object, default: () => null}) readonly apiConfig!: APIConfig;
     @Prop({type: Number, required: true}) readonly gradebookDataId!: number;
     @Prop({type: Number, required: true}) readonly currentVersion!: number;
+    @Prop({type: Boolean, default: false}) readonly debugServerResponse!: boolean;
 
     get chooseTypeActive() {
         return !this.importType;
@@ -192,6 +198,7 @@ export default class ImporterApp extends Vue {
 
         try {
             const res = await axios.post(this.apiConfig.processCsvURL, formData, {timeout: TIMEOUT_SEC * 1000});
+            logResponse(res.data);
             if (res.data?.fields !== undefined && res.data?.results !== undefined) {
                 const {fields, results} = res.data;
                 this.fields = fields;
@@ -205,6 +212,7 @@ export default class ImporterApp extends Vue {
                 throw { 'type': 'Unknown' };
             }
         } catch (err) {
+            logResponse(err);
             this.handleError(err);
         }
     }
@@ -224,6 +232,7 @@ export default class ImporterApp extends Vue {
 
         try {
             const res: any = await axios.post(this.apiConfig.importCsvURL, formData, {timeout: TIMEOUT_SEC * 1000});
+            logResponse(res.data);
 
             if (res.data?.missing_users !== undefined) {
                 this.missingUsers = res.data.missing_users;
@@ -237,6 +246,7 @@ export default class ImporterApp extends Vue {
                 throw { 'type': 'Unknown' };
             }
         } catch (err) {
+            logResponse(err);
             this.handleError(err);
         }
     }

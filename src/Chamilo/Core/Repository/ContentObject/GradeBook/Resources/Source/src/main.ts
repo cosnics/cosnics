@@ -20,7 +20,3 @@ Vue.use(VueI18n);
 Vue.use(BootstrapVue);
 Vue.config.productionTip = false;
 Object.assign(window, {App, ImporterApp, UserScoresApp, VueI18n});
-
-/*new Vue({
-  render: h => h(App),
-}).$mount('#app');*/

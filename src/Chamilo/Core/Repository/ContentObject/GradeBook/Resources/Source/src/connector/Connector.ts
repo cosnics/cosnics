@@ -2,6 +2,7 @@ import axios from 'axios';
 import APIConfig from './APIConfig';
 import PQueue from 'p-queue';
 import {Category, ColumnId, GradeColumn, GradeItem, GradeScore, ItemId} from '../domain/GradeBook';
+import {logResponse} from '../domain/Log';
 
 const HTTP_FORBIDDEN = 403;
 const HTTP_NOT_FOUND = 404;
@@ -261,7 +262,7 @@ export default class Connector {
 
         try {
             const res = await axios.post(apiURL, formData, {timeout: TIMEOUT_SEC * 1000});
-            this.logResponse(res.data);
+            logResponse(res.data);
             if (typeof res.data === 'object') {
                 this.gradebookDataId = res.data.gradebook.dataId;
                 this.currentVersion = res.data.gradebook.version;
@@ -272,6 +273,7 @@ export default class Connector {
                 throw { 'type': 'Unknown' };
             }
         } catch (err) {
+            logResponse(err);
             let error: any;
             if (err?.isAxiosError && err.message?.toLowerCase().indexOf('timeout') !== -1) {
                 error = { 'type': 'Timeout' };
@@ -296,13 +298,5 @@ export default class Connector {
 
             this.errorListeners.forEach(errorListener => errorListener.setError(error));
         }
-    }
-
-    logResponse(data: any) {
-        const responseEl = document.getElementById('server-response');
-        if (!responseEl) { return; }
-        responseEl.innerHTML = typeof data === 'object' ?
-            JSON.stringify(data, null, 4) :
-            `<div>An error occurred:</div>${data}`;
     }
 }
