@@ -12,6 +12,7 @@
         "last-name": "NAME",
         "make-invisible": "Score is shown. Click to hide.",
         "make-visible": "Score is hidden. Click to show.",
+        "source-results-warning": "The results of this column refers to source data that no longer exists. You can keep on using this data but synchronizing will have no effect on this column. If you remove the column its results will be gone forever.",
         "total": "Total",
         "uncounted": "Not counted",
         "visible": "Final score is shown",
@@ -29,6 +30,7 @@
         "last-name": "FAMILIENAAM",
         "make-invisible": "Score wordt weergegeven. Klik om te verbergen.",
         "make-visible": "Score is verborgen. Klik om te tonen.",
+        "source-results-warning": "De resultaten in deze kolom verwijzen naar brondata die niet meer bestaat. Je kan de data verder blijven gebruiken maar synchronizeren zal op deze kolom geen effect hebben. Als je de kolom verwijdert zijn de resultaten ervan voorgoed weg.",
         "total": "Totaal",
         "uncounted": "Niet meegeteld",
         "visible": "Eindscore wordt weergegeven",
@@ -78,7 +80,7 @@
                                     <span class="column-title" :id="`${columnId}-title`"><i v-if="gradeBook.isGrouped(columnId)" class="fa fa-group"></i>{{ gradeBook.getTitle(columnId) }}
                                         <i v-if="gradeBook.hasRemovedSourceData(columnId)" class="fa fa-exclamation-circle" style="margin-left: 5px;color: #e24a03;"></i></span>
                                         <b-popover v-if="gradeBook.hasRemovedSourceData(columnId)" :target="`${columnId}-title`" triggers="hover" placement="bottom">
-                                            <p style="margin: 6px;font-size: 11.5px;">De resultaten in deze kolom verwijzen naar brondata die niet meer bestaat. Je kan de data verder blijven gebruiken maar synchronizeren zal op deze kolom geen effect hebben. Als je de kolom verwijdert zijn de resultaten ervan voorgoed weg.</p>
+                                            <p style="margin: 6px;font-size: 11.5px;">{{ $t('source-results-warning') }}</p>
                                         </b-popover>
                                         <button class="btn-settings" @click="showColumnSettings(columnId)" :title="$t('item-settings')"><i class="fa fa-gear u-inline-block" aria-hidden="true"></i><span class="sr-only">{{$t('item-settings')}}</span></button>
                                     </div>

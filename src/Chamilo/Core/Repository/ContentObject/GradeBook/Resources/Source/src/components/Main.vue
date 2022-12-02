@@ -10,6 +10,7 @@
         "error-Unknown": "An unknown error happened. Possibly your last change(s) haven't been saved. Please refresh the page and try again.",
         "find-student": "Find student",
         "import": "Import",
+        "new": "New",
         "new-category": "New category",
         "new-score": "New score",
         "show": "Show",
@@ -26,6 +27,7 @@
         "error-Unknown": "Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de pagina te herladen en opnieuw te proberen.",
         "find-student": "Zoek student",
         "import": "Importeer",
+        "new": "Nieuw",
         "new-category": "Nieuwe categorie",
         "new-score": "Nieuwe score",
         "show": "Toon",
@@ -47,7 +49,7 @@
                     <button class="btn btn-default btn-sm" @click="synchronizeGradeBook"><i aria-hidden="true" class="fa fa-refresh"></i>{{ $t('synchronize-scores') }}</button>
                     <div class="btn-group">
                         <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle" title="">
-                            <i aria-hidden="true" class="fa fa-plus"></i><span>Nieuw</span> <span class="caret" aria-hidden="true"></span>
+                            <i aria-hidden="true" class="fa fa-plus"></i><span>{{ $t('new') }}</span> <span class="caret" aria-hidden="true"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a @click.prevent="createNewScore">{{ $t('new-score') }}</a></li>

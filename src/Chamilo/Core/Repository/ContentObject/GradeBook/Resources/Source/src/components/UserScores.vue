@@ -54,7 +54,7 @@
                             </b-td>
                             <b-popover custom-class="gradebook-score-popover" :target="`col-${category.id}-${columnId}`" triggers="hover" placement="rightbottom">
                                 <div class="score-info">
-                                    <div v-if="gradeBook.countsForEndResult(columnId)" class="u-flex u-align-items-center" style="font-size: 12px;color:#477b7b;">Gewicht: {{ gradeBook.getWeight(columnId)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                                    <div v-if="gradeBook.countsForEndResult(columnId)" class="u-flex u-align-items-center" style="font-size: 12px;color:#477b7b;">{{ $t('weight') }}: {{ gradeBook.getWeight(columnId)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                                     <div v-else style="font-size: 12px;color:#477b7b"><i>{{ $t('count-towards-endresult-not') }}</i></div>
                                     <template v-if="gradeBook.getResultComment(columnId, userId)">
                                         <div style="font-size: 10px;color: #5885a3;padding-top: 4px;margin-top: 4px;margin-bottom: 2px;border-top: 1px solid #ebebeb">Feedback:</div>
