@@ -7,6 +7,7 @@
         "count-towards-endresult-not": "Score does not count towards final result",
         "final-score": "Final score",
         "first-name": "First name",
+        "grouped-score": "Grouped score",
         "invisible": "Final score is hidden",
         "item-settings": "Score Settings",
         "last-name": "NAME",
@@ -25,6 +26,7 @@
         "count-towards-endresult-not": "Score wordt niet meegeteld voor het eindresultaat",
         "final-score": "Eindcijfer",
         "first-name": "Voornaam",
+        "grouped-score": "Gegroepeerde score",
         "invisible": "Eindscore is verborgen",
         "item-settings": "Score-instellingen",
         "last-name": "FAMILIENAAM",
@@ -54,7 +56,7 @@
                                         <div class="spin" v-if="isSavingCategoryWithId(id)">
                                             <div class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                                         </div>
-                                        <button class="btn-settings" :title="$t('category-settings')" @click="showCategorySettings(id)"><i class="fa fa-gear u-inline-block"></i><span class="sr-only">{{ $t('category-settings') }}</span></button>
+                                        <button class="btn-settings" :title="$t('category-settings')" @click="showCategorySettings(id)"><i class="fa fa-gear u-inline-block" aria-hidden="true"></i><span class="sr-only">{{ $t('category-settings') }}</span></button>
                                     </div>
                                 </th>
                         </draggable>
@@ -72,13 +74,13 @@
                             <th v-else v-for="column in getColumns(category)" :key="`item-id-${category.id}--${column.id}-name`" draggable @dragstart="startDragColumn($event, column.id)" :class="{'unreleased-score-cell': !column.released, 'uncounted-score-cell': !column.countsForEndResult, 'u-relative': column.isEditing}" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, -1)">
                                 <item-title-input v-if="column.isEditingTitle" :item-title="column.title" @cancel="editItemId = null" @ok="setTitle(column.id, $event)" class="item-title-input"></item-title-input>
                                 <template v-else-if="column.isEditingWeight">
-                                    <span class="column-title"><i v-if="column.isGrouped" class="fa fa-group"></i>{{ column.title }}</span>
+                                    <span class="column-title"><i v-if="column.isGrouped" class="fa fa-group" aria-hidden="true"></i><span class="sr-only">{{ $t('grouped-score') }}</span>{{ column.title }}</span>
                                     <weight-input :item-weight="column.weight" @cancel="weightEditItemId = null" @ok="setWeight(column.id, $event)" class="weight-input"></weight-input>
                                 </template>
                                 <template v-else>
                                     <div class="u-flex u-align-items-center u-justify-content-between u-cursor-pointer" @dblclick="showColumnTitleDialog(column.id)" :title="$t('adjust-title')">
-                                    <span class="column-title" :id="`${column.id}-title`"><i v-if="column.isGrouped" class="fa fa-group"></i>{{ column.title }}
-                                        <i v-if="column.hasRemovedSourceData" class="fa fa-exclamation-circle"></i></span>
+                                        <span class="column-title" :id="`${column.id}-title`"><i v-if="column.isGrouped" class="fa fa-group" aria-hidden="true"></i><span class="sr-only">{{ $t('grouped-score') }}</span>{{ column.title }}
+                                            <i v-if="column.hasRemovedSourceData" class="fa fa-exclamation-circle" aria-hidden="true"></i></span>
                                         <b-popover v-if="column.hasRemovedSourceData" :target="`${column.id}-title`" triggers="hover" placement="bottom">
                                             <p class="source-results-warning">{{ $t('source-results-warning') }}</p>
                                         </b-popover>

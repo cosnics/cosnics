@@ -46,10 +46,10 @@
                 </div>
                 <grades-dropdown id="dropdown-main" :graded-items="gradeBook.gradedItemsWithCheckedStatus" @toggle="toggleGradeItem" />
                 <div class="u-flex u-justify-content-end u-gap-small u-ml-auto gradebook-create-actions">
-                    <button class="btn btn-default btn-sm" @click="synchronizeGradeBook"><i aria-hidden="true" class="fa fa-refresh"></i>{{ $t('synchronize-scores') }}</button>
+                    <button class="btn btn-default btn-sm" @click="synchronizeGradeBook"><i class="fa fa-refresh" aria-hidden="true"></i>{{ $t('synchronize-scores') }}</button>
                     <div class="btn-group">
                         <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle">
-                            <i aria-hidden="true" class="fa fa-plus"></i><span>{{ $t('new') }}</span> <span class="caret" aria-hidden="true"></span>
+                            <i class="fa fa-plus" aria-hidden="true"></i><span>{{ $t('new') }}</span> <span class="caret" aria-hidden="true"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="u-cursor-pointer"><a @click.prevent="createNewScore">{{ $t('new-score') }}</a></li>
@@ -58,7 +58,7 @@
                         </ul>
                     </div>
                     <button v-if="gradeBook.totalsNeedUpdating" class="btn btn-update-totals btn-primary btn-sm u-font-medium u-text-upper" @click="updateTotalScores">
-                        <i aria-hidden="true" class="fa fa-exclamation-circle"></i>{{ $t('update-final-scores') }}
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>{{ $t('update-final-scores') }}
                     </button>
                     <div class="btn-group">
                         <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle" :title="`${$t('show')} ${itemsPerPage} items`">

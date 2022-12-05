@@ -33,7 +33,7 @@
             </template>
             <div class="result u-flex u-align-items-center u-justify-content-end" :class="{'overwritten-score': !isStandaloneScore && useOverwrittenFlag && isOverwritten, 'mod-aabs': result === 'aabs'}">
                 <div v-if="result === 'aabs'" class="color-code amber-700" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></div>
-                <div v-else-if="result === null" class="color-code mod-none" :title="$t('no-score-found')"><i aria-hidden="true" class="fa fa-question" :class="{'mod-none': isStandaloneScore || !useOverwrittenFlag || !isOverwritten}"></i><span class="sr-only">{{ $t('no-score-found') }}</span></div>
+                <div v-else-if="result === null" class="color-code mod-none" :title="$t('no-score-found')"><i class="fa fa-question" :class="{'mod-none': isStandaloneScore || !useOverwrittenFlag || !isOverwritten}" aria-hidden="true"></i><span class="sr-only">{{ $t('no-score-found') }}</span></div>
                 <div v-else>{{ result }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
             </div>
         </div>

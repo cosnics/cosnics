@@ -43,7 +43,7 @@
                     <td v-for="(field, col_index) in fields" class="table-cell" :class="{'mod-score': field.type === 'score', 'mod-comment': col_index === 4 && field.type === 'string'}" :key="`result-${row_index}-${col_index}`" :title="(!result.valid && field.key === 'id') ? $t('user-not-in-course') : ((col_index === 4 && field.type === 'string') ? result[field.key] : '')">
                         <div v-if="(showAll || !hasInvalidResults) && field.key === 'id'" class="u-flex u-justify-content-between u-align-items-center">
                             {{ result[field.key] }}
-                            <i aria-hidden="true" class="fa" :class="result.valid ? 'fa-check-circle' : 'fa-exclamation-circle'"></i>
+                            <i class="fa" :class="result.valid ? 'fa-check-circle' : 'fa-exclamation-circle'" aria-hidden="true"></i>
                             <span v-if="!result.valid" class="sr-only">{{ $t('user-not-in-course') }}</span>
                         </div>
                         <div v-else-if="field.type === 'score' && isNullScore(result[field.key])" :title="$t('no-score-found')" class="color-code mod-none">

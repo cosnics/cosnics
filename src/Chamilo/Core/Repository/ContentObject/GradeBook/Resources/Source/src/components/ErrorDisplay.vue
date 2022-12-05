@@ -4,7 +4,7 @@
         <div class="save-error u-flex u-justify-content-center">
             <div class="save-error-inner">
                 <div class="errors-important u-flex u-align-items-baseline">
-                    <i class="fa fa-exclamation-circle mod-icon"></i>
+                    <i class="fa fa-exclamation-circle mod-icon" aria-hidden="true"></i>
                     <div>
                         <slot></slot>
                         <div class="u-text-center mt-5"><button class="btn btn-success btn-sm" @click="$emit('close')">OK</button></div>

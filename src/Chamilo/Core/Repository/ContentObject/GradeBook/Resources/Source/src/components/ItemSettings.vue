@@ -100,7 +100,7 @@
                             </div>
                         </div>
                         <div class="mt-20">
-                            <label class="settings-label">{{ $t('unauthorized-absence') }} <div class="color-code mod-none mi-3" :title="$t('no-score-found')"><i aria-hidden="true" class="fa fa-question"></i></div>:</label>
+                            <label class="settings-label">{{ $t('unauthorized-absence') }} <div class="color-code mod-none mi-3" :title="$t('no-score-found')"><i class="fa fa-question" aria-hidden="true"></i></div>:</label>
                             <div>
                                 <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
                                 <label class="u-font-normal" for="nogafw-option1">{{ $t('count-towards-endresult-not') }}</label>

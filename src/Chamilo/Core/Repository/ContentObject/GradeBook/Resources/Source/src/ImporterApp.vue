@@ -96,7 +96,7 @@
                 <div class="alert alert-info mod-import-completed">
                     <p>{{ $t('import-successful') }}</p>
                     <p v-if="missingUsers.length" v-html="$t('no-results-some-students')"></p>
-                    <p><a :href="apiConfig.gradeBookRootURL" class="u-font-medium"><i class="fa fa-arrow-right"></i> {{ $t('go-to-gradebook') }}</a></p>
+                    <p><a :href="apiConfig.gradeBookRootURL" class="u-font-medium"><i class="fa fa-arrow-right" aria-hidden="true"></i> {{ $t('go-to-gradebook') }}</a></p>
                 </div>
                 <p v-if="missingUsers.length" class="gradebook-import-missing-users u-font-medium">{{ $t('without-results') }}:</p>
                 <missing-users-table v-if="missingUsers.length" :missing-users="missingUsers"></missing-users-table>
