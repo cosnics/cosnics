@@ -26,9 +26,9 @@
 <template>
     <div>
         <ul v-if="hasInvalidResults" role="tablist" class="nav mod-imports u-flex u-align-items-baseline">
-            <li role="presentation" :class="{active: tab === 'all'}" @click="tab = 'all'"><a aria-controls="imports-table" role="tab">{{ $t('all-imports') }}</a></li>
-            <li role="presentation" :class="{active: tab === 'valid'}" @click="tab = 'valid'"><a aria-controls="imports-table" role="tab">{{ $t('valid-imports') }}</a></li>
-            <li role="presentation" :class="{active: tab === 'invalid'}" @click="tab = 'invalid'"><a aria-controls="imports-table" role="tab">{{ $t('not-subscribed') }}<span class="badge mod-invalid">{{ invalidResultRows.length }}</span></a></li>
+            <li role="presentation" :class="{active: tab === 'all'}" @click="tab = 'all'"><a :aria-selected="tab === 'all' ? 'true' : 'false'" aria-controls="imports-table" role="tab">{{ $t('all-imports') }}</a></li>
+            <li role="presentation" :class="{active: tab === 'valid'}" @click="tab = 'valid'"><a :aria-selected="tab === 'valid' ? 'true' : 'false'" aria-controls="imports-table" role="tab">{{ $t('valid-imports') }}</a></li>
+            <li role="presentation" :class="{active: tab === 'invalid'}" @click="tab = 'invalid'"><a :aria-selected="tab === 'invalid' ? 'true' : 'false'" aria-controls="imports-table" role="tab">{{ $t('not-subscribed') }}<span class="badge mod-invalid">{{ invalidResultRows.length }}</span></a></li>
         </ul>
         <table id="imports-table" class="imports-table">
             <thead>

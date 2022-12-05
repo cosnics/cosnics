@@ -1,5 +1,16 @@
+<i18n>
+{
+    "en": {
+        "errors": "Error(s)"
+    },
+    "nl": {
+        "errors": "Fout(en)"
+    }
+}
+</i18n>
+
 <template>
-    <div class="u-contents">
+    <div class="u-contents" role="alertdialog" aria-modal="true" :aria-label="$t('errors')">
         <div class="modal-overlay"></div>
         <div class="save-error u-flex u-justify-content-center">
             <div class="save-error-inner">
@@ -7,7 +18,7 @@
                     <i class="fa fa-exclamation-circle mod-icon" aria-hidden="true"></i>
                     <div>
                         <slot></slot>
-                        <div class="u-text-center mt-5"><button class="btn btn-success btn-sm" @click="$emit('close')">OK</button></div>
+                        <div class="u-text-center mt-5"><button class="btn btn-success btn-sm" ref="btn-ok" @click="$emit('close')">OK</button></div>
                     </div>
                 </div>
             </div>
@@ -22,6 +33,9 @@ import {Component, Vue} from 'vue-property-decorator';
     name: 'error-display'
 })
 export default class ErrorDisplay extends Vue {
+    mounted() {
+        (this.$refs['btn-ok'] as HTMLButtonElement).focus();
+    }
 }
 </script>
 

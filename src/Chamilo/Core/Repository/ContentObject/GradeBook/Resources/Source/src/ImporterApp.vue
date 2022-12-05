@@ -13,6 +13,7 @@
         "import-complete": "Import complete",
         "import-preview": "Preview",
         "import-results-overview": "You can find an overview of the results from the CSV file below. Click the button below to import. Only results that are valid will be imported.",
+        "import-steps": "Import steps",
         "import-successful": "The results have been successfully imported.",
         "no-results-some-students": "Careful! For some subscribed students no matching results have been found. See below.<br>You can still make manual adjustments.",
         "question-upload": "What kind of file do you want to upload?",
@@ -37,6 +38,7 @@
         "import-complete": "Importeren voltooid",
         "import-preview": "Voorbeeldweergave",
         "import-results-overview": "Hieronder vind je een overzicht van de resultaten uit het CSV-bestand. Klik op de knop hieronder om te importeren. Enkel de geldige resultaten zullen worden geïmporteerd.",
+        "import-steps": "Import-stappen",
         "import-successful": "De resultaten werden succesvol geïmporteerd.",
         "no-results-some-students": "Let op! Voor sommige ingeschreven studenten werden geen resultaten gevonden. Zie hieronder.<br>Gelieve deze handmatig aan te passen.",
         "question-upload": "Wat voor bestand wil je opladen?",
@@ -54,17 +56,17 @@
 <template>
     <div id="app">
         <div id="gradebook-import">
-            <ul class="nav nav-tabs mod-steps">
-                <li class="nav-item u-cursor-pointer" :class="{'active': chooseTypeActive, 'done': importType}"><a class="nav-link u-block" @click="reload"><span class="step u-inline-block">1</span>{{ $t('choose-type') }}</a></li>
-                <li class="nav-item" :class="{'active': chooseFileActive, 'done': imported || resultsLoaded}"><a class="nav-link u-block"><span class="step u-inline-block">2</span>{{ $t('choose-file') }}</a></li>
-                <li class="nav-item" :class="{'active': previewActive, 'done': resultsLoaded}"><a class="nav-link u-block"><span class="step u-inline-block">3</span>{{ $t('import-preview') }}</a></li>
-                <li class="nav-item" :class="{'active': importCompleteActive}"><a class="nav-link u-block"><span class="step u-inline-block">4</span>{{ $t('import-complete') }}</a></li>
-            </ul>
+            <ol role="navigation" class="nav nav-tabs mod-steps" :aria-label="$t('import-steps')">
+                <li class="nav-item u-cursor-pointer" :aria-current="chooseTypeActive ? 'step' : null" :class="{'active': chooseTypeActive, 'done': importType}"><a class="nav-link u-block" @click="reload"><span class="step u-inline-block">1</span>{{ $t('choose-type') }}</a></li>
+                <li class="nav-item" :aria-current="chooseFileActive ? 'step' : null" :class="{'active': chooseFileActive, 'done': imported || resultsLoaded}"><a class="nav-link u-block"><span class="step u-inline-block">2</span>{{ $t('choose-file') }}</a></li>
+                <li class="nav-item" :aria-current="previewActive ? 'step' : null" :class="{'active': previewActive, 'done': resultsLoaded}"><a class="nav-link u-block"><span class="step u-inline-block">3</span>{{ $t('import-preview') }}</a></li>
+                <li class="nav-item" :aria-current="importCompleteActive ? 'step' : null" :class="{'active': importCompleteActive}"><a class="nav-link u-block"><span class="step u-inline-block">4</span>{{ $t('import-complete') }}</a></li>
+            </ol>
             <div v-if="chooseTypeActive">
                 <p class="gradebook-import-type u-font-medium">{{ $t('question-upload') }}</p>
                 <div class="u-flex u-gap-small-2x">
-                    <a role="button" class="btn btn-light fs-13" @click="importType = 'scores'">{{ $t('type-scores') }}</a>
-                    <a role="button" class="btn btn-default fs-13" @click="importType = 'scores_comments'">{{ $t('type-scores-comments') }}</a>
+                    <button class="btn btn-light fs-13" @click="importType = 'scores'">{{ $t('type-scores') }}</button>
+                    <button class="btn btn-default fs-13" @click="importType = 'scores_comments'">{{ $t('type-scores-comments') }}</button>
                 </div>
             </div>
             <div v-if="chooseFileActive && !hasError">

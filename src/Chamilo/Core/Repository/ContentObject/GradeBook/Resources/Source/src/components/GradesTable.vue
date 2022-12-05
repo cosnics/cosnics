@@ -13,6 +13,7 @@
         "last-name": "NAME",
         "make-invisible": "Score is shown. Click to hide.",
         "make-visible": "Score is hidden. Click to show.",
+        "saving": "Saving",
         "source-results-warning": "The results of this column refers to source data that no longer exists. You can keep on using this data but synchronizing will have no effect on this column. If you remove the column its results will be gone forever.",
         "total": "Total",
         "uncounted": "Not counted",
@@ -32,6 +33,7 @@
         "last-name": "FAMILIENAAM",
         "make-invisible": "Score wordt weergegeven. Klik om te verbergen.",
         "make-visible": "Score is verborgen. Klik om te tonen.",
+        "saving": "Aan het opslaan",
         "source-results-warning": "De resultaten in deze kolom verwijzen naar brondata die niet meer bestaat. Je kan de data verder blijven gebruiken maar synchronizeren zal op deze kolom geen effect hebben. Als je de kolom verwijdert zijn de resultaten ervan voorgoed weg.",
         "total": "Totaal",
         "uncounted": "Niet meegeteld",
@@ -53,8 +55,8 @@
                                       @dragstart="startDragCategory($event, id)" @dragover.prevent="onDropAreaOverEnter($event, id)" @dragenter.prevent="onDropAreaOverEnter($event, id)" @dragleave="categoryDropArea = null" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, id)">
                                     <item-title-input v-if="catEditItemId === id" :item-title="title" @cancel="catEditItemId = null" @ok="setCategoryTitle(id, $event)" class="item-title-input"></item-title-input>
                                     <div v-else-if="id !== 0" class="u-flex u-align-items-center u-justify-content-between u-cursor-pointer" @dblclick="showCategoryTitleDialog(id)" :title="$t('adjust-title')">{{ title }}
-                                        <div class="spin" v-if="isSavingCategoryWithId(id)">
-                                            <div class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                                        <div class="spin" v-if="isSavingCategoryWithId(id)" role="status" aria-busy="true" :aria-label="$t('saving')">
+                                            <div aria-hidden="true" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                                         </div>
                                         <button class="btn-settings" :title="$t('category-settings')" @click="showCategorySettings(id)"><i class="fa fa-gear u-inline-block" aria-hidden="true"></i><span class="sr-only">{{ $t('category-settings') }}</span></button>
                                     </div>
@@ -90,8 +92,8 @@
                                         <div v-if="column.countsForEndResult" class="weight u-font-normal u-cursor-pointer" :class="{'mod-custom': column.hasWeightSet , 'is-error': gradeBook.eqRestWeight < 0}" @dblclick="showColumnWeightDialog(column.id)" :title="$t('adjust-weight')">{{ column.weight|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                                         <div v-else class="weight u-font-normal u-font-italic" :title="$t('count-towards-endresult-not')"><span aria-hidden="true">{{ $t('uncounted') }}</span><span class="sr-only">{{ $t('count-towards-endresult-not') }}</span></div>
                                         <button class="btn-released u-ml-auto" v-if="!column.isSaving" @click="toggleVisibility(column.id)" :title="column.released ? $t('make-invisible') : $t('make-visible')"><i class="fa" :class="{'fa-eye': column.released, 'fa-eye-slash': !column.released}" aria-hidden="true"></i><span class="sr-only">{{ column.released ? $t('make-invisible') : $t('make-visible') }}</span></button>
-                                        <div class="spin">
-                                            <div v-if="column.isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                                        <div class="spin" role="status" :aria-busy="column.isSaving" :aria-label="$t('saving')">
+                                            <div v-if="column.isSaving" aria-hidden="true" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                                         </div>
                                     </div>
                                 </template>

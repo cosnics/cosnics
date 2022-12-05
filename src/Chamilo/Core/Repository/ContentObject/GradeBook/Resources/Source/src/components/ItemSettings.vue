@@ -6,6 +6,7 @@
         "authorized-absence": "In the event of authorized absence",
         "cancel": "Cancel",
         "close": "Close",
+        "column-settings": "Column settings",
         "count-towards-endresult": "Count towards end result",
         "count-towards-endresult-not": "Score does not count towards final result",
         "group-scores": "Group scores",
@@ -26,6 +27,7 @@
         "authorized-absence": "Bij gewettigde afwezigheid",
         "cancel": "Annuleren",
         "close": "Sluiten",
+        "column-settings": "Kolominstellingen",
         "count-towards-endresult": "Meetellen voor eindresultaat",
         "count-towards-endresult-not": "Score niet meetellen voor het eindresultaat",
         "group-scores": "Scores groeperen",
@@ -44,11 +46,11 @@
 </i18n>
 
 <template>
-    <div class="modal-wrapper">
+    <div class="modal-wrapper" role="dialog" aria-modal="true" :aria-label="$t('column-settings')">
         <div class="modal-content">
             <div class="u-flex u-justify-content-between modal-header">
                 <div>
-                    <input type="text" :value="title" @input="title = $event" autocomplete="off">
+                    <input type="text" ref="column-title" :value="title" @input="title = $event" autocomplete="off">
                     <button class="btn btn-link" @click="showRemoveItemDialog = true">{{ $t('remove') }}</button>
                 </div>
                 <button class="btn-close u-ml-auto" @click="$emit('close')" :title="$t('close')"><i class="fa fa-times" aria-hidden="true"></i><span class="sr-only">{{ $t('close') }}</span></button>
@@ -84,8 +86,8 @@
                                 <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                             </div>
                         </div>
-                        <div class="mt-20">
-                            <label class="settings-label">{{ $t('authorized-absence') }} <div aria-hidden="true" class="color-code amber-700 mi-3" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></div>:</label>
+                        <div role="radiogroup" aria-labelledby="setting-aabs" class="mt-20">
+                            <label id="setting-aabs" class="settings-label">{{ $t('authorized-absence') }} <div aria-hidden="true" class="color-code amber-700 mi-3" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></div>:</label>
                             <div>
                                 <input type="radio" name="gafw-option" id="gafw-option1" value="0" v-model.number="column.authPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
                                 <label class="u-font-normal" for="gafw-option1">{{ $t('count-towards-endresult-not') }}</label>
@@ -99,8 +101,8 @@
                                 <label class="u-font-normal" for="gafw-option3">{{ $t('minimum-towards-endresult') }}</label>
                             </div>
                         </div>
-                        <div class="mt-20">
-                            <label class="settings-label">{{ $t('unauthorized-absence') }} <div class="color-code mod-none mi-3" :title="$t('no-score-found')"><i class="fa fa-question" aria-hidden="true"></i></div>:</label>
+                        <div role="radiogroup" aria-labelledby="setting-uaabs" class="mt-20">
+                            <label id="setting-uaabs" class="settings-label">{{ $t('unauthorized-absence') }} <div class="color-code mod-none mi-3" :title="$t('no-score-found')"><i class="fa fa-question" aria-hidden="true"></i></div>:</label>
                             <div>
                                 <input type="radio" name="nogafw-option" id="nogafw-option1" value="0" v-model.number="column.unauthPresenceEndResult" @input="onGradeColumnChange" class="mr-5">
                                 <label class="u-font-normal" for="nogafw-option1">{{ $t('count-towards-endresult-not') }}</label>
@@ -235,6 +237,10 @@ export default class ItemSettings extends Vue {
 
     onGradeColumnChange() {
         this.$emit('change-gradecolumn', this.column!);
+    }
+
+    mounted() {
+        (this.$refs['column-title'] as HTMLInputElement).focus();
     }
 }
 </script>

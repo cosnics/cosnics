@@ -22,22 +22,22 @@
     <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
         <template v-slot:menu>
             <div class="highlight-content content-tabs">
-                <div class="u-flex u-justify-content-end u-text-end">
-                    <div class="menu-tab mod-left u-cursor-pointer" :class="{'mod-active': menuTab === 'score'}" @click="$emit('menu-tab-changed', 'score')">{{ $t('score') }}</div>
-                    <div class="menu-tab mod-right u-cursor-pointer" :class="{'mod-active': menuTab === 'comment'}" @click="$emit('menu-tab-changed', 'comment')">{{ $t('comments') }}</div>
+                <div class="u-flex u-justify-content-end u-text-end" role="tablist">
+                    <div class="menu-tab mod-left u-cursor-pointer" role="tab" :aria-selected="menuTab === 'score' ? 'true' : 'false'" aria-controls="score-panel" :class="{'mod-active': menuTab === 'score'}" @click="$emit('menu-tab-changed', 'score')">{{ $t('score') }}</div>
+                    <div class="menu-tab mod-right u-cursor-pointer" role="tab" :aria-selected="menuTab === 'comment' ? 'true' : 'false'" aria-controls="score-panel" :class="{'mod-active': menuTab === 'comment'}" @click="$emit('menu-tab-changed', 'comment')">{{ $t('comments') }}</div>
                 </div>
             </div>
         </template>
         <template v-slot:content>
-            <div v-if="menuTab === 'score'" class="u-flex u-gap-small">
-                <div class="number-input u-relative" :class="{'is-selected': type === 'number'}" style="flex: 1">
+            <div v-if="menuTab === 'score'" class="u-flex u-gap-small" role="tabpanel" id="score-panel">
+                <div class="number-input u-relative" :class="{'is-selected': type === 'number'}">
                     <input id="score" class="percent-input u-font-normal" ref="score-input" type="number" min="0" max="100" :value="numValue|formatNum" autocomplete="off" @input="type = 'number'" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')" @focus="type = 'number'">
                     <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                 </div>
                 <button class="color-code amber-700" :class="{'is-selected': type === 'aabs'}" @click="setAuthAbsent" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></button>
                 <button v-if="useRevert" class="btn btn-secundary btn-sm btn-revert" @click="setRevert" :title="$t('use-source-result')"><i class="fa fa-undo" aria-hidden="true"></i><span class="sr-only">{{ $t('use-source-result') }}</span></button>
             </div>
-            <div v-else-if="menuTab === 'comment'">
+            <div v-if="menuTab === 'comment'" role="tabpanel" id="score-panel">
                 <textarea class="comment-field" ref="comment-input" v-model="commentValue"></textarea>
             </div>
         </template>
@@ -163,6 +163,7 @@ export default class ScoreInput extends Vue {
 }
 
 .number-input {
+    flex: 1;
     opacity: .42;
 
     &.is-selected {
@@ -182,7 +183,6 @@ export default class ScoreInput extends Vue {
         outline: 0;
     }
 }
-
 
 .percent-input {
     border: 1px solid #ced4da;

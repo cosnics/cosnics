@@ -2,12 +2,14 @@
 {
     "en": {
         "cancel": "Cancel",
+        "category-settings": "Category settings",
         "close": "Close",
         "remove": "Remove",
         "remove-category": "Remove category?"
     },
     "nl": {
         "cancel": "Annuleren",
+        "category-settings": "Categorie-instellingen",
         "close": "Sluiten",
         "remove": "Verwijderen",
         "remove-category": "Categorie verwijderen?"
@@ -15,11 +17,11 @@
 }
 </i18n>
 <template>
-    <div class="modal-wrapper">
+    <div class="modal-wrapper" role="dialog" aria-modal="true" :aria-label="$t('category-settings')">
         <div class="modal-content">
             <div class="u-flex u-justify-content-between modal-header">
                 <div>
-                    <input type="text" v-model="category.title" autocomplete="off" @input="onCategoryChange">
+                    <input type="text" ref="category-title" v-model="category.title" autocomplete="off" @input="onCategoryChange">
                     <button class="btn btn-link" @click="showRemoveItemDialog = true">{{ $t('remove') }}</button>
                 </div>
                 <button class="btn-close u-ml-auto" @click="$emit('close')" :title="$t('close')"><i class="fa fa-times" aria-hidden="true"></i><span class="sr-only">{{ $t('close') }}</span></button>
@@ -74,6 +76,10 @@ export default class CategorySettings extends Vue {
 
     cancel() {
         this.showRemoveItemDialog = false;
+    }
+
+    mounted() {
+        (this.$refs['category-title'] as HTMLInputElement).focus();
     }
 }
 </script>

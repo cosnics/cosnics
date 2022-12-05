@@ -38,7 +38,7 @@
 </i18n>
 <template>
     <div class="u-contents">
-        <div v-if="gradeBook">
+        <div v-if="gradeBook" :aria-hidden="(itemSettings !== null || !!selectedCategory || !!errorData)">
             <div class="u-flex u-flex-wrap gradebook-toolbar">
                 <div class="input-group">
                     <input class="form-control" type="text" v-model="searchTerm" :placeholder="$t('find-student')">
@@ -51,10 +51,10 @@
                         <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle">
                             <i class="fa fa-plus" aria-hidden="true"></i><span>{{ $t('new') }}</span> <span class="caret" aria-hidden="true"></span>
                         </a>
-                        <ul class="dropdown-menu">
-                            <li class="u-cursor-pointer"><a @click.prevent="createNewScore">{{ $t('new-score') }}</a></li>
-                            <li class="u-cursor-pointer"><a @click.prevent="createNewCategory">{{ $t('new-category') }}</a></li>
-                            <li class="u-cursor-pointer"><a :href="apiConfig.gradeBookImportCsvURL">{{ $t('import') }}&mldr;</a></li>
+                        <ul role="menu" class="dropdown-menu">
+                            <li role="presentation" class="u-cursor-pointer"><a role="menuitem" @click.prevent="createNewScore">{{ $t('new-score') }}</a></li>
+                            <li role="presentation" class="u-cursor-pointer"><a role="menuitem" @click.prevent="createNewCategory">{{ $t('new-category') }}</a></li>
+                            <li role="presentation" class="u-cursor-pointer"><a role="menuitem" :href="apiConfig.gradeBookImportCsvURL">{{ $t('import') }}&mldr;</a></li>
                         </ul>
                     </div>
                     <button v-if="gradeBook.totalsNeedUpdating" class="btn btn-update-totals btn-primary btn-sm u-font-medium u-text-upper" @click="updateTotalScores">
@@ -64,9 +64,9 @@
                         <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle" :title="`${$t('show')} ${itemsPerPage} items`">
                             <span>{{ $t('show') }} {{itemsPerPage}} items</span> <span class="caret" aria-hidden="true"></span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li v-for="count in [5, 10, 15, 20, 50]" :key="'per-page-' + count" class="u-cursor-pointer">
-                                <a :class="itemsPerPage === count ? 'selected' : 'not-selected'" @click="setItemsPerPage(count)">
+                        <ul role="listbox" class="dropdown-menu dropdown-menu-right">
+                            <li v-for="count in [5, 10, 15, 20, 50]" :key="'per-page-' + count" role="presentation" class="u-cursor-pointer">
+                                <a role="option" :aria-selected="itemsPerPage === count ? 'true' : 'false'" :class="itemsPerPage === count ? 'selected' : 'not-selected'" @click="setItemsPerPage(count)">
                                     <span>{{ $t('show') }} {{count}} items</span>
                                 </a>
                             </li>
@@ -81,11 +81,11 @@
                               @change-category="onChangeCategory" @move-category="onMoveCategory"
                               @change-gradecolumn="onChangeGradeColumn" @change-gradecolumn-category="onChangeGradeColumnCategory" @move-gradecolumn="onMoveGradeColumn"></grades-table>
             </div>
-            <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null"
-                           @item-settings="itemSettings = $event" @change-gradecolumn="onChangeGradeColumn" @add-subitem="onAddSubItem" @remove-subitem="onRemoveSubItem" @remove-column="onRemoveColumn" />
-            <category-settings v-if="selectedCategory" :grade-book="gradeBook" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory" @remove-category="onRemoveCategory" />
         </div>
         <div v-else class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+        <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null"
+                       @item-settings="itemSettings = $event" @change-gradecolumn="onChangeGradeColumn" @add-subitem="onAddSubItem" @remove-subitem="onRemoveSubItem" @remove-column="onRemoveColumn" />
+        <category-settings v-if="selectedCategory" :grade-book="gradeBook" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory" @remove-category="onRemoveCategory" />
         <error-display v-if="errorData" @close="closeErrorDisplay">{{ $t(`error-${errorData.type}`) }}</error-display>
     </div>
 </template>
