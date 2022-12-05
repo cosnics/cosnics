@@ -97,12 +97,8 @@ export default class GradeBook {
         return this.gradeItems.find(item => item.id === itemId);
     }
 
-    getGradeColumn(columnId: ColumnId) {
+    getGradeColumn(columnId: ColumnId): GradeColumn|undefined {
         return this.gradeColumns.find(column => column.id === columnId);
-    }
-
-    isStandaloneScore(columnId: ColumnId) {
-        return this.getGradeColumn(columnId)?.type === 'standalone';
     }
 
     getCategory(categoryId: number) {
@@ -135,25 +131,15 @@ export default class GradeBook {
         })
     }
 
-    countsForEndResult(columnId: ColumnId): boolean {
-        return !!(this.getGradeColumn(columnId)?.countForEndResult);
-    }
-
-    isReleased(columnId: ColumnId): boolean {
-        return !!(this.getGradeColumn(columnId)?.released);
-    }
-
     get hasUnreleasedScores() {
         return this.gradeColumns.some(column => column.countForEndResult && !column.released);
     }
 
-    getWeight(columnId: ColumnId): number {
-        const column = this.getGradeColumn(columnId);
-        const weight = column ? column.weight : null;
-        if (weight === null) {
+    getWeight(column: GradeColumn): number {
+        if (column.weight === null) {
             return this.eqRestWeight;
         }
-        return weight;
+        return column.weight;
     }
 
     get eqRestWeight() {
@@ -177,13 +163,10 @@ export default class GradeBook {
         }
     }
 
-    getTitle(columnId: ColumnId): string {
-        const column = this.getGradeColumn(columnId);
-        if (column) {
-            if (column.title) { return column.title; }
-            if (column.type === 'item' || column.type === 'group') {
-                return this.getGradeItem(column.subItemIds[0])?.title || '';
-            }
+    getTitle(column: GradeColumn): string {
+        if (column.title) { return column.title; }
+        if (column.type === 'item' || column.type === 'group') {
+            return this.getGradeItem(column.subItemIds[0])?.title || '';
         }
         return '';
     }
@@ -195,18 +178,12 @@ export default class GradeBook {
         }
     }
 
-    isGrouped(columnId: ColumnId) {
-        return this.getGradeColumn(columnId)?.type === 'group';
-    }
-
-    hasRemovedSourceData(columnId: ColumnId) {
-        const subItems = this.getColumnSubItems(columnId);
+    hasRemovedSourceData(column: GradeColumn) {
+        const subItems = this.getColumnSubItems(column);
         return subItems.some(item => item.removed);
     }
 
-    getColumnSubItems(columnId: ColumnId): GradeItem[] {
-        const column = this.getGradeColumn(columnId);
-        if (!column) return [];
+    getColumnSubItems(column: GradeColumn): GradeItem[] {
         return column.subItemIds.map(itemId => this.getGradeItem(itemId)!);
     }
 
@@ -233,7 +210,7 @@ export default class GradeBook {
         let maxWeight = 0;
         this.gradeColumns.filter(column => column.countForEndResult).forEach(column => {
             const result = this.getResult(column.id, userId);
-            const weight = this.getWeight(column.id);
+            const weight = this.getWeight(column);
             if (typeof result === 'number') {
                 maxWeight += weight;
             } else if (result === 'aabs') {
@@ -424,7 +401,7 @@ export default class GradeBook {
         const column = this.getGradeColumn(columnId);
         if (!column) { return; }
         const srcColumn = this.findGradeColumnWithGradeItem(item.id);
-        column.title = this.getTitle(columnId);
+        column.title = this.getTitle(column);
         column.type = 'group';
         column.subItemIds.push(item.id);
         if (srcColumn) {

@@ -80,7 +80,7 @@
                         <div class="mt-10">
                             <label for="weight" class="settings-label u-block">{{ $t('weight') }}:</label>
                             <div class="number-input u-relative">
-                                <input type="number" id="weight" :value="gradeBook.getWeight(column.id)|formatNum" @input="setWeight" autocomplete="off">
+                                <input type="number" id="weight" :value="gradeBook.getWeight(column)|formatNum" @input="setWeight" autocomplete="off">
                                 <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                             </div>
                         </div>
@@ -171,15 +171,15 @@ export default class ItemSettings extends Vue {
     }
 
     get isGrouped() {
-        return this.gradeBook.isGrouped(this.columnId);
+        return this.column?.type === 'group';
     }
 
     get subItems() {
-        return this.gradeBook.getColumnSubItems(this.columnId);
+        return this.column ? this.gradeBook.getColumnSubItems(this.column) : [];
     }
 
     get title() {
-        return this.gradeBook.getTitle(this.columnId);
+        return this.column ? this.gradeBook.getTitle(this.column) : '';
     }
 
     set title(event: any) {

@@ -67,29 +67,29 @@
                         <th class="col-sticky table-student">
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a> <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
                         </th>
-                        <draggable v-for="({id, columnIds}) in displayedCategories" :key="`category-score-${id}`" :list="columnIds" tag="div" class="u-contents" ghost-class="ghost" @end="onDragEnd" :disabled="editItemId !== null || weightEditItemId !== null">
-                            <th v-if="columnIds.length === 0" :key="`item-id-${id}`"></th>
-                            <th v-else v-for="columnId in columnIds" :key="`item-id-${id}--${columnId}-name`" draggable @dragstart="startDragColumn($event, columnId)" :class="{'unreleased-score-cell': !gradeBook.isReleased(columnId), 'uncounted-score-cell': !gradeBook.countsForEndResult(columnId), 'u-relative': (editItemId === columnId || weightEditItemId === columnId)}" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, -1)">
-                                <item-title-input v-if="editItemId === columnId" :item-title="gradeBook.getTitle(columnId)" @cancel="editItemId = null" @ok="setTitle(columnId, $event)" class="item-title-input"></item-title-input>
-                                <template v-else-if="weightEditItemId === columnId">
-                                    <span class="column-title"><i v-if="gradeBook.isGrouped(columnId)" class="fa fa-group"></i>{{ gradeBook.getTitle(columnId) }}</span>
-                                    <weight-input :item-weight="gradeBook.getWeight(columnId)" @cancel="weightEditItemId = null" @ok="setWeight(columnId, $event)" class="weight-input"></weight-input>
+                        <draggable v-for="category in displayedCategories" :key="`category-score-${category.id}`" :list="category.columnIds" tag="div" class="u-contents" ghost-class="ghost" @end="onDragEnd" :disabled="editItemId !== null || weightEditItemId !== null">
+                            <th v-if="category.columnIds.length === 0" :key="`item-id-${category.id}`"></th>
+                            <th v-else v-for="column in getColumns(category)" :key="`item-id-${category.id}--${column.id}-name`" draggable @dragstart="startDragColumn($event, column.id)" :class="{'unreleased-score-cell': !column.released, 'uncounted-score-cell': !column.countsForEndResult, 'u-relative': column.isEditing}" @drop="(isDraggingColumn || isDraggingCategory) && onDrop($event, -1)">
+                                <item-title-input v-if="column.isEditingTitle" :item-title="column.title" @cancel="editItemId = null" @ok="setTitle(column.id, $event)" class="item-title-input"></item-title-input>
+                                <template v-else-if="column.isEditingWeight">
+                                    <span class="column-title"><i v-if="column.isGrouped" class="fa fa-group"></i>{{ column.title }}</span>
+                                    <weight-input :item-weight="column.weight" @cancel="weightEditItemId = null" @ok="setWeight(column.id, $event)" class="weight-input"></weight-input>
                                 </template>
                                 <template v-else>
-                                    <div class="u-flex u-align-items-center u-justify-content-between u-cursor-pointer" @dblclick="showColumnTitleDialog(columnId)" :title="$t('adjust-title')">
-                                    <span class="column-title" :id="`${columnId}-title`"><i v-if="gradeBook.isGrouped(columnId)" class="fa fa-group"></i>{{ gradeBook.getTitle(columnId) }}
-                                        <i v-if="gradeBook.hasRemovedSourceData(columnId)" class="fa fa-exclamation-circle"></i></span>
-                                        <b-popover v-if="gradeBook.hasRemovedSourceData(columnId)" :target="`${columnId}-title`" triggers="hover" placement="bottom">
+                                    <div class="u-flex u-align-items-center u-justify-content-between u-cursor-pointer" @dblclick="showColumnTitleDialog(column.id)" :title="$t('adjust-title')">
+                                    <span class="column-title" :id="`${column.id}-title`"><i v-if="column.isGrouped" class="fa fa-group"></i>{{ column.title }}
+                                        <i v-if="column.hasRemovedSourceData" class="fa fa-exclamation-circle"></i></span>
+                                        <b-popover v-if="column.hasRemovedSourceData" :target="`${column.id}-title`" triggers="hover" placement="bottom">
                                             <p class="source-results-warning">{{ $t('source-results-warning') }}</p>
                                         </b-popover>
-                                        <button class="btn-settings" @click="showColumnSettings(columnId)" :title="$t('item-settings')"><i class="fa fa-gear u-inline-block" aria-hidden="true"></i><span class="sr-only">{{$t('item-settings')}}</span></button>
+                                        <button class="btn-settings" @click="showColumnSettings(column.id)" :title="$t('item-settings')"><i class="fa fa-gear u-inline-block" aria-hidden="true"></i><span class="sr-only">{{$t('item-settings')}}</span></button>
                                     </div>
                                     <div class="u-flex u-align-items-center u-justify-content-between">
-                                        <div v-if="gradeBook.countsForEndResult(columnId)" class="weight u-font-normal u-cursor-pointer" :class="{'mod-custom': gradeBook.getGradeColumn(columnId).weight !== null , 'is-error': gradeBook.eqRestWeight < 0}" @dblclick="showColumnWeightDialog(columnId)" :title="$t('adjust-weight')">{{ gradeBook.getWeight(columnId)|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                                        <div v-if="column.countsForEndResult" class="weight u-font-normal u-cursor-pointer" :class="{'mod-custom': column.hasWeightSet , 'is-error': gradeBook.eqRestWeight < 0}" @dblclick="showColumnWeightDialog(column.id)" :title="$t('adjust-weight')">{{ column.weight|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                                         <div v-else class="weight u-font-normal u-font-italic" :title="$t('count-towards-endresult-not')"><span aria-hidden="true">{{ $t('uncounted') }}</span><span class="sr-only">{{ $t('count-towards-endresult-not') }}</span></div>
-                                        <button class="btn-released u-ml-auto" v-if="!isSavingColumnWithId(columnId)" @click="toggleVisibility(columnId)" :title="gradeBook.isReleased(columnId) ? $t('make-invisible') : $t('make-visible')"><i class="fa" :class="{'fa-eye': gradeBook.isReleased(columnId), 'fa-eye-slash': !gradeBook.isReleased(columnId)}" aria-hidden="true"></i><span class="sr-only">{{gradeBook.isReleased(columnId) ? $t('make-invisible') : $t('make-visible')}}</span></button>
+                                        <button class="btn-released u-ml-auto" v-if="!column.isSaving" @click="toggleVisibility(column.id)" :title="column.released ? $t('make-invisible') : $t('make-visible')"><i class="fa" :class="{'fa-eye': column.released, 'fa-eye-slash': !column.released}" aria-hidden="true"></i><span class="sr-only">{{ column.released ? $t('make-invisible') : $t('make-visible') }}</span></button>
                                         <div class="spin">
-                                            <div v-if="isSavingColumnWithId(columnId)" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                                            <div v-if="column.isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                                         </div>
                                     </div>
                                 </template>
@@ -104,7 +104,7 @@
                 <tbody>
                     <student-result-row v-for="user in displayedUsers" :key="'user-' + user.id"
                         :grade-book="gradeBook" :user="user" :grade-book-root-url="gradeBookRootUrl" :exclude-column-id="addColumnId"
-                        :categories="displayedCategories" :edit-score-id="editScoreId" :edit-student-score-id="editStudentScoreId" :score-menu-tab="scoreMenuTab"
+                        :show-null-category="showNullCategory" :edit-score-id="editScoreId" :edit-student-score-id="editStudentScoreId" :score-menu-tab="scoreMenuTab"
                         @edit-score="showStudentScoreDialog(user.id, $event)" @edit-canceled="hideStudentScoreDialog" @edit-comment="showStudentScoreDialog(user.id, $event, 'comment')"
                         @menu-tab-changed="scoreMenuTab = $event" @result-updated="overwriteResult(user.id, $event)" @result-reverted="revertOverwrittenResult(user.id, $event)" @comment-updated="updateResultComment(user.id, $event)" />
                 </tbody>
@@ -129,6 +129,21 @@ import WeightInput from './WeightInput.vue';
 import ScoreInput from './ScoreInput.vue';
 import StudentResult from './StudentResult.vue';
 import draggable from 'vuedraggable';
+
+interface Column {
+    id: ColumnId;
+    released: boolean;
+    countsForEndResult: boolean;
+    isGrouped: boolean;
+    title: string;
+    hasWeightSet: boolean;
+    weight: number;
+    hasRemovedSourceData: boolean;
+    isEditingTitle: boolean;
+    isEditingWeight: boolean;
+    isEditing: boolean;
+    isSaving: boolean;
+}
 
 @Component({
     name: 'grades-table',
@@ -272,6 +287,31 @@ export default class GradesTable extends Vue {
     hideStudentScoreDialog() {
         this.editStudentScoreId = null;
         this.editScoreId = null;
+    }
+
+    getColumnData(columnId: ColumnId): Column {
+        const gradeBook = this.gradeBook;
+        const column = gradeBook.getGradeColumn(columnId);
+        if (!column) { throw new Error(`GradeColumn with id ${columnId} not found.`); }
+
+        return {
+            id: columnId,
+            released: column.released,
+            countsForEndResult: column.countForEndResult,
+            isGrouped: column.type === 'group',
+            title: gradeBook.getTitle(column),
+            hasWeightSet: column.weight !== null,
+            weight: gradeBook.getWeight(column),
+            hasRemovedSourceData: gradeBook.hasRemovedSourceData(column),
+            isEditingTitle: this.editItemId === columnId,
+            isEditingWeight: this.weightEditItemId === columnId,
+            isEditing: this.editItemId === columnId || this.weightEditItemId === columnId,
+            isSaving: this.isSavingColumnWithId(columnId)
+        };
+    }
+
+    getColumns(category: Category): Column[] {
+        return category.columnIds.map(columnId => this.getColumnData(columnId));
     }
 
     setCategoryTitle(id: number, title: string) {

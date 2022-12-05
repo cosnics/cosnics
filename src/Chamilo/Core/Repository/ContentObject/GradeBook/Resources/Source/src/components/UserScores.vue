@@ -32,29 +32,27 @@
                     <b-tr class="table-row table-body-row" :key="`cat-${category.id}`" v-if="category.columnIds.length && gradeBook.allCategories.length && gradeBook.allCategories[0].id !== 0">
                         <b-td colspan="2" class="table-category u-font-medium">{{ category.title }}</b-td>
                     </b-tr>
-                    <template v-for="columnId in category.columnIds">
-                        <b-tr :key="`col-${category.id}-${columnId}`" :id="`col-${category.id}-${columnId}`" class="table-row table-body-row result-row">
-                            <b-td class="category-color u-relative" :style="`--color: ${category.color};`">{{ gradeBook.getTitle(columnId) }}</b-td>
-                            <b-td>
-                                <div v-if="gradeBook.isReleased(columnId)" class="u-flex u-align-items-center u-justify-content-end">
-                                    <i v-if="gradeBook.getResultComment(columnId, userId)" class="fa fa-comment-o" aria-hidden="true"></i>
-                                    <student-result :id="`result-${columnId}`" :result="gradeBook.getResult(columnId, userId)"
-                                                    class="u-flex u-align-items-center u-justify-content-end" :class="{'uncounted-score': !gradeBook.countsForEndResult(columnId)}"></student-result>
-                                </div>
-                                <div v-else class="u-flex u-align-items-center u-justify-content-end not-yet-released">{{ $t('not-yet-released') }}</div>
-                            </b-td>
-                            <b-popover custom-class="gradebook-score-popover" :target="`col-${category.id}-${columnId}`" triggers="hover" placement="rightbottom">
-                                <div class="score-info">
-                                    <div v-if="gradeBook.countsForEndResult(columnId)" class="u-flex u-align-items-center popover-weight-header">{{ $t('weight') }}: {{ gradeBook.getWeight(columnId)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
-                                    <div v-else class="popover-count-endresult-not"><i>{{ $t('count-towards-endresult-not') }}</i></div>
-                                    <template v-if="gradeBook.getResultComment(columnId, userId)">
-                                        <div class="popover-feedback-header">Feedback:</div>
-                                        {{ gradeBook.getResultComment(columnId, userId) }}
-                                    </template>
-                                </div>
-                            </b-popover>
-                        </b-tr>
-                    </template>
+                    <b-tr v-for="column in getColumns(category)" :key="`col-${category.id}-${column.id}`" :id="`col-${category.id}-${column.id}`" class="table-row table-body-row result-row">
+                        <b-td class="category-color u-relative" :style="`--color: ${category.color};`">{{ column.title }}</b-td>
+                        <b-td>
+                            <div v-if="column.released" class="u-flex u-align-items-center u-justify-content-end">
+                                <i v-if="column.comment" class="fa fa-comment-o" aria-hidden="true"></i>
+                                <student-result :id="`result-${column.id}`" :result="column.result"
+                                                class="u-flex u-align-items-center u-justify-content-end" :class="{'uncounted-score': !column.countsForEndResult}"></student-result>
+                            </div>
+                            <div v-else class="u-flex u-align-items-center u-justify-content-end not-yet-released">{{ $t('not-yet-released') }}</div>
+                        </b-td>
+                        <b-popover custom-class="gradebook-score-popover" :target="`col-${category.id}-${column.id}`" triggers="hover" placement="rightbottom">
+                            <div class="score-info">
+                                <div v-if="column.countsForEndResult" class="u-flex u-align-items-center popover-weight-header">{{ $t('weight') }}: {{ column.weight|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                                <div v-else class="popover-count-endresult-not"><i>{{ $t('count-towards-endresult-not') }}</i></div>
+                                <template v-if="column.comment">
+                                    <div class="popover-feedback-header">Feedback:</div>
+                                    {{ column.comment }}
+                                </template>
+                            </div>
+                        </b-popover>
+                    </b-tr>
                 </template>
                 <b-tr v-if="gradeBook.allCategories.length && gradeBook.allCategories[0].id !== 0" class="table-row table-body-row"><b-td colspan="2" class="table-empty-cell"></b-td></b-tr>
                 <b-tr class="table-row table-body-row">
@@ -71,8 +69,18 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
-import GradeBook from '../domain/GradeBook';
+import GradeBook, {Category, ColumnId, ResultType} from '../domain/GradeBook';
 import StudentResult from './StudentResult.vue';
+
+interface Column {
+    id: ColumnId;
+    released: boolean;
+    countsForEndResult: boolean;
+    title: string;
+    weight: number;
+    result: ResultType;
+    comment: string|null;
+}
 
 @Component({
     components: { StudentResult },
@@ -94,8 +102,24 @@ export default class UserScores extends Vue {
         return this.gradeBook.users[0].id;
     }
 
-    mounted() {
-        console.log(this.gradeBook);
+    getColumnData(columnId: ColumnId): Column {
+        const gradeBook = this.gradeBook;
+        const column = gradeBook.getGradeColumn(columnId);
+        if (!column) { throw new Error(`GradeColumn with id ${columnId} not found.`); }
+
+        return {
+            id: columnId,
+            released: column.released,
+            countsForEndResult: column.countForEndResult,
+            title: gradeBook.getTitle(column),
+            weight: gradeBook.getWeight(column),
+            result: gradeBook.getResult(columnId, this.userId),
+            comment: gradeBook.getResultComment(columnId, this.userId)
+        };
+    }
+
+    getColumns(category: Category): Column[] {
+        return category.columnIds.map(columnId => this.getColumnData(columnId));
     }
 }
 </script>

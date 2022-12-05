@@ -18,19 +18,18 @@
             <template v-else>{{ lastName }}, {{ firstName }}</template>
         </td>
         <template v-if="isSynchronized">
-            <template v-for="category in categories">
-                <td v-if="category.columnIds.length === 0" :key="`category-results-${category.id}`"></td>
-                <td v-else v-for="col in getColumnDataByCategory(category)" :key="`${category.id}-${col.columnId}-result`"
-                      :class="{'unreleased-score-cell': !col.isReleased, 'uncounted-score-cell': !col.countsForEndResult, 'u-relative': col.isEditing}">
-                    <student-result v-if="col.hasResult && !col.isEditing" :id="`result-${col.columnId}-${userId}`" :result="col.result" :comment="col.comment"
-                        :is-standalone-score="col.isStandaloneScore" :use-overwritten-flag="true" :is-overwritten="col.isOverwrittenResult"
-                        @edit="$emit('edit-score', col.columnId)" @edit-comment="$emit('edit-comment', col.columnId)"
-                        class="u-flex u-align-items-center u-justify-content-end u-cursor-pointer" :class="{'uncounted-score': !col.countsForEndResult}" />
-                    <score-input v-if="col.isEditing" :menu-tab="scoreMenuTab" :score="col.result" :comment="col.comment" :use-revert="col.isOverwrittenResult && !col.isStandaloneScore"
-                        @menu-tab-changed="$emit('menu-tab-changed', $event)" @cancel="$emit('edit-canceled')"
-                        @comment-updated="$emit('comment-updated', {columnId: col.columnId, comment: $event})"
-                        @ok="$emit('result-updated', {columnId: col.columnId, value: $event})" @revert="$emit('result-reverted', col.columnId)" />
+            <template v-for="(column, index) in columns">
+                <td v-if="column.isScoreColumn" :key="`col-${index}`" :class="{'unreleased-score-cell': !column.released, 'uncounted-score-cell': !column.countsForEndResult, 'u-relative': column.isEditing}">
+                    <student-result v-if="column.hasResult && !column.isEditing" :id="`result-${column.id}-${userId}`" :result="column.result" :comment="column.comment"
+                                    :is-standalone-score="column.isStandaloneScore" :use-overwritten-flag="true" :is-overwritten="column.isOverwrittenResult"
+                                    @edit="$emit('edit-score', column.id)" @edit-comment="$emit('edit-comment', column.id)"
+                                    class="u-flex u-align-items-center u-justify-content-end u-cursor-pointer" :class="{'uncounted-score': !column.countsForEndResult}" />
+                    <score-input v-if="column.isEditing" :menu-tab="scoreMenuTab" :score="column.result" :comment="column.comment" :use-revert="column.isOverwrittenResult && !column.isStandaloneScore"
+                                 @menu-tab-changed="$emit('menu-tab-changed', $event)" @cancel="$emit('edit-canceled')"
+                                 @comment-updated="$emit('comment-updated', {columnId: column.id, comment: $event})"
+                                 @ok="$emit('result-updated', {columnId: column.id, value: $event})" @revert="$emit('result-reverted', column.id)" />
                 </td>
+                <td v-else :key="`col-${index}`"></td>
             </template>
             <td class="col-sticky table-student-total u-text-end" :class="{'unreleased-score-cell': gradeBook.hasUnreleasedScores, 'mod-needs-update': totalNeedsUpdate}">
                 <i v-if="totalNeedsUpdate" class="fa fa-exclamation-circle" :title="$t('not-yet-updated')" aria-hidden="true"></i><span v-if="totalNeedsUpdate" class="sr-only">{{ $t('not-yet-updated') }}</span>{{ endResult|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span>
@@ -43,9 +42,28 @@
 </template>
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
-import GradeBook, {Category, ColumnId, ItemId, User} from '../domain/GradeBook';
+import GradeBook, {Category, ColumnId, ItemId, ResultType, User} from '../domain/GradeBook';
 import ScoreInput from './ScoreInput.vue'
 import StudentResult from './StudentResult.vue'
+
+interface EmptyColumn {
+    isScoreColumn: false;
+}
+
+interface ScoreColumn {
+    id: ColumnId;
+    isScoreColumn: true;
+    released: boolean;
+    isStandaloneScore: boolean;
+    countsForEndResult: boolean;
+    isEditing: boolean;
+    hasResult: boolean;
+    result: ResultType;
+    isOverwrittenResult: boolean;
+    comment: string|null;
+}
+
+type Column = EmptyColumn|ScoreColumn;
 
 @Component({
     name: 'student-result-row',
@@ -65,10 +83,10 @@ export default class StudentResultRow extends Vue {
     @Prop({type: Object, required: true}) readonly user!: User;
     @Prop({type: String, default: ''}) readonly gradeBookRootUrl!: string;
     @Prop({type: [String, Number], default: null}) readonly excludeColumnId!: ColumnId|null;
-    @Prop({type: Array, required: true}) readonly categories!: Category[];
     @Prop({type: Number, default: null}) readonly editStudentScoreId!: number|null;
     @Prop({type: [String, Number], default: null}) readonly editScoreId!: ItemId|null;
     @Prop({type: String, default: 'score'}) readonly scoreMenuTab!: string;
+    @Prop({type: Boolean, default: false}) readonly showNullCategory!: boolean;
 
     get userId() {
         return this.user.id;
@@ -94,24 +112,40 @@ export default class StudentResultRow extends Vue {
         return this.gradeBook.getEndResult(this.userId);
     }
 
-    getColumnData(columnId: ColumnId) {
+    get displayedCategories(): Category[] {
+        if (this.showNullCategory) {
+            return [...this.gradeBook.categories, this.gradeBook.nullCategory];
+        }
+        return this.gradeBook.categories;
+    }
+
+    getColumnData(columnId: ColumnId): ScoreColumn {
         const gradeBook = this.gradeBook;
         const userId = this.userId;
+        const column = gradeBook.getGradeColumn(columnId);
+        if (!column) { throw new Error(`GradeColumn with id ${columnId} not found.`); }
+
         return {
-            columnId,
-            countsForEndResult: gradeBook.countsForEndResult(columnId),
-            isReleased: gradeBook.isReleased(columnId),
+            id: columnId,
+            isScoreColumn: true,
+            released: column.released,
+            isStandaloneScore: column.type === 'standalone',
+            countsForEndResult: column.countForEndResult,
             isEditing: this.editStudentScoreId === userId && this.editScoreId === columnId,
             hasResult: gradeBook.hasResult(columnId, userId),
             result: gradeBook.getResult(columnId, userId),
-            comment: gradeBook.getResultComment(columnId, userId),
-            isStandaloneScore: gradeBook.isStandaloneScore(columnId),
-            isOverwrittenResult: gradeBook.isOverwrittenResult(columnId, userId)
+            isOverwrittenResult: gradeBook.isOverwrittenResult(columnId, userId),
+            comment: gradeBook.getResultComment(columnId, userId)
         };
     }
 
-    getColumnDataByCategory(category: Category) {
-        return category.columnIds.map(columnId => this.getColumnData(columnId));
+    get columns(): Column[] {
+        return this.displayedCategories.reduce((columns: Column[], currentCategory) => {
+            if (currentCategory.columnIds.length) {
+                return [...columns, ...currentCategory.columnIds.map(columnId => this.getColumnData(columnId))];
+            }
+            return [...columns, {isScoreColumn: false}];
+        }, []);
     }
 }
 </script>
