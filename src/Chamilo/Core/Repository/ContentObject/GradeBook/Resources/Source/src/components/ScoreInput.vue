@@ -19,12 +19,12 @@
 }
 </i18n>
 <template>
-    <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
+    <table-cell-input @edit="onEdit" @cancel="$emit('cancel')">
         <template v-slot:menu>
-            <div class="highlight-content content-tabs">
+            <div class="cell-content content-tabs">
                 <div class="u-flex u-justify-content-end u-text-end" role="tablist">
-                    <div class="menu-tab mod-left u-cursor-pointer" role="tab" :aria-selected="menuTab === 'score' ? 'true' : 'false'" aria-controls="score-panel" :class="{'mod-active': menuTab === 'score'}" @click="$emit('menu-tab-changed', 'score')">{{ $t('score') }}</div>
-                    <div class="menu-tab mod-right u-cursor-pointer" role="tab" :aria-selected="menuTab === 'comment' ? 'true' : 'false'" aria-controls="score-panel" :class="{'mod-active': menuTab === 'comment'}" @click="$emit('menu-tab-changed', 'comment')">{{ $t('comments') }}</div>
+                    <div class="menu-tab u-cursor-pointer" role="tab" :aria-selected="menuTab === 'score' ? 'true' : 'false'" aria-controls="score-panel" :class="{'mod-active': menuTab === 'score'}" @click="$emit('menu-tab-changed', 'score')">{{ $t('score') }}</div>
+                    <div class="menu-tab u-cursor-pointer" role="tab" :aria-selected="menuTab === 'comment' ? 'true' : 'false'" aria-controls="score-panel" :class="{'mod-active': menuTab === 'comment'}" @click="$emit('menu-tab-changed', 'comment')">{{ $t('comments') }}</div>
                 </div>
             </div>
         </template>
@@ -41,17 +41,17 @@
                 <textarea class="comment-field" ref="comment-input" v-model="commentValue"></textarea>
             </div>
         </template>
-    </highlight-input>
+    </table-cell-input>
 </template>
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
-import HighlightInput from './HighlightInput.vue';
+import TableCellInput from './TableCellInput.vue';
 import {ResultType} from '../domain/GradeBook';
 
 @Component({
     name: 'score-input',
-    components: { HighlightInput },
+    components: { TableCellInput },
     filters: {
         formatNum: function (v: number|null) {
             if (v === null) { return ''; }
@@ -123,14 +123,14 @@ export default class ScoreInput extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.highlight-content.content-tabs {
+.cell-content.content-tabs {
     background-color: transparent;
     font-size: 11px;
     margin-left: auto;
     padding: 0;
 }
 
-.highlight-content.content-tabs::v-deep + .highlight-content {
+.cell-content.content-tabs::v-deep + .cell-content {
     background-color: white;
     border: 1px solid #ced3d9;
     border-top-right-radius: 0;
@@ -141,18 +141,10 @@ export default class ScoreInput extends Vue {
 }
 
 .menu-tab {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
     color: #2e6da4;
     padding: 2px 8px;
-
-    &.mod-left {
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-    }
-
-    &.mod-right {
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-    }
 
     &.mod-active {
         background: #fff;

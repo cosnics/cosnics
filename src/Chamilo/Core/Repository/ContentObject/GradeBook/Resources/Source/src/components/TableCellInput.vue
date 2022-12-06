@@ -13,7 +13,7 @@
 <template>
     <div>
         <slot name="menu"></slot>
-        <div class="highlight-content">
+        <div class="cell-content">
             <slot name="content"></slot>
             <div class="u-flex name-input-actions">
                 <button class="btn btn-primary btn-sm" @click="$emit('edit')">{{ $t('edit') }}</button>
@@ -27,14 +27,14 @@
 import {Component, Vue} from 'vue-property-decorator';
 
 @Component({
-    name: 'highlight-input'
+    name: 'table-cell-input'
 })
-export default class HighlightInput extends Vue {
+export default class TableCellInput extends Vue {
 }
 </script>
 
 <style lang="scss" scoped>
-.highlight-content {
+.cell-content {
     border-radius: 3px;
     max-width: 160px;
     min-width: 70px;

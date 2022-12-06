@@ -10,7 +10,7 @@
 </i18n>
 
 <template>
-    <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
+    <table-cell-input @edit="onEdit" @cancel="$emit('cancel')">
         <template v-slot:content>
             <label for="weight" class="u-font-medium">{{ $t('weight') }}:</label>
             <div class="u-relative">
@@ -18,16 +18,16 @@
                 <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
             </div>
         </template>
-    </highlight-input>
+    </table-cell-input>
 </template>
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
-import HighlightInput from './HighlightInput.vue';
+import TableCellInput from './TableCellInput.vue';
 
 @Component({
     name: 'weight-input',
-    components: { HighlightInput },
+    components: { TableCellInput },
     filters: {
         formatNum: function (v: number|null) {
             if (v === null) { return ''; }

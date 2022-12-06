@@ -1,18 +1,18 @@
 <template>
-    <highlight-input @edit="onEdit" @cancel="$emit('cancel')">
+    <table-cell-input @edit="onEdit" @cancel="$emit('cancel')">
         <template v-slot:content>
             <input class="u-font-normal" ref="title-input" type="text" :value="itemTitle" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')">
         </template>
-    </highlight-input>
+    </table-cell-input>
 </template>
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
-import HighlightInput from './HighlightInput.vue';
+import TableCellInput from './TableCellInput.vue';
 
 @Component({
     name: 'item-title-input',
-    components: { HighlightInput },
+    components: { TableCellInput },
 })
 export default class ItemTitleInput extends Vue {
     @Prop({type: String, default: ''}) readonly itemTitle!: string;
