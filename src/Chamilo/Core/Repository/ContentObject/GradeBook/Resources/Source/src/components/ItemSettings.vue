@@ -135,7 +135,7 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
-import GradeBook, {GradeItem, ColumnId} from '../domain/GradeBook';
+import GradeBook, {GradeItem, StatusGradedItem, ColumnId} from '../domain/GradeBook';
 import GradesDropdown from './GradesDropdown.vue';
 import debounce from 'debounce';
 
@@ -195,11 +195,11 @@ export default class ItemSettings extends Vue {
         this.onGradeColumnChange();
     }
 
-    get gradedItems(): GradeItem[] {
-        return this.gradeBook.getGradedItemsFilteredByColumn(this.columnId);
+    get gradedItems(): StatusGradedItem[] {
+        return this.gradeBook.getStatusGradedItemsByColumn(this.columnId);
     }
 
-    toggleSubItem(gradeItem: GradeItem, isAdding: boolean) {
+    toggleSubItem(gradeItem: StatusGradedItem, isAdding: boolean) {
         const item = this.gradeBook.gradeItems.find(item => item.id === gradeItem.id)!;
         if (isAdding) {
             this.addSubItem(item);

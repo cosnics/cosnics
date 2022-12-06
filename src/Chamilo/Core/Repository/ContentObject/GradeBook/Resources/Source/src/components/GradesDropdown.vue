@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
-import {GradeItem} from '../domain/GradeBook';
+import {GradeItem, StatusGradedItem} from '../domain/GradeBook';
 
 Vue.directive('clickoutside', {
     inserted: (el: any, binding: any, vnode: any) => {
@@ -72,13 +72,13 @@ Vue.directive('clickoutside', {
 })
 export default class GradesDropdown extends Vue {
     private isOpen = false;
-    private gradeItemToRemove: GradeItem|null = null;
+    private gradeItemToRemove: StatusGradedItem|null = null;
 
     @Prop({type: String, default: ''}) readonly id!: string;
-    @Prop({type: Array, required: true}) readonly gradedItems!: GradeItem[];
+    @Prop({type: Array, required: true}) readonly gradedItems!: StatusGradedItem[];
 
     // eslint-disable-next-line no-unused-vars
-    toggleItem(item: GradeItem, index: number) {
+    toggleItem(item: StatusGradedItem, index: number) {
         if (item.checked) {
             this.gradeItemToRemove = item;
             return;

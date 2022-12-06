@@ -9,8 +9,11 @@ export interface GradeItem {
     readonly title: string;
     readonly breadcrumb: string[];
     readonly removed: boolean;
-    checked?: boolean;
-    disabled?: boolean;
+}
+
+export interface StatusGradedItem extends GradeItem {
+    readonly checked: boolean;
+    readonly disabled: boolean;
 }
 
 export interface GradeColumn {
@@ -105,15 +108,15 @@ export default class GradeBook {
         return this.allCategories.find(category => category.id === categoryId);
     }
 
-    get gradedItemsWithCheckedStatus(): GradeItem[] {
+    get statusGradedItems(): StatusGradedItem[] {
         const itemIds = this.gradeColumns.reduce((ids: ItemId[], column: GradeColumn) => ids.concat(column.subItemIds), []);
 
         return this.gradeItems.map(item => ({
-            id: item.id, title: item.title, breadcrumb: item.breadcrumb, removed: item.removed, checked: itemIds.indexOf(item.id) !== -1
+            ...item, checked: itemIds.indexOf(item.id) !== -1, disabled: false
         }));
     }
 
-    getGradedItemsFilteredByColumn(columnId: ColumnId): GradeItem[] {
+    getStatusGradedItemsByColumn(columnId: ColumnId): StatusGradedItem[] {
         const column = this.getGradeColumn(columnId);
         if (!column) { return []; }
         return this.gradeItems.map(item => {

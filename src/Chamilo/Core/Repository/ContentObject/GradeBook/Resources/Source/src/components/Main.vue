@@ -44,7 +44,7 @@
                     <input class="form-control" type="text" v-model="searchTerm" :placeholder="$t('find-student')">
                     <div class="input-group-btn"><button name="clear" value="clear" class="btn btn-default" @click="searchTerm = ''"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></button></div>
                 </div>
-                <grades-dropdown id="dropdown-main" :graded-items="gradeBook.gradedItemsWithCheckedStatus" @toggle="toggleGradeItem" />
+                <grades-dropdown id="dropdown-main" :graded-items="gradeBook.statusGradedItems" @toggle="toggleGradeItem" />
                 <div class="u-flex u-justify-content-end u-gap-small u-ml-auto gradebook-create-actions">
                     <button class="btn btn-default btn-sm" @click="synchronizeGradeBook"><i class="fa fa-refresh" aria-hidden="true"></i>{{ $t('synchronize-scores') }}</button>
                     <div class="btn-group">
