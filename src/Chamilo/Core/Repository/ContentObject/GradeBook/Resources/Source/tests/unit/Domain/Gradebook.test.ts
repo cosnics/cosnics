@@ -3,33 +3,26 @@ import GradeBook, {ColumnId, GradeScore, ResultsData} from '@/domain/GradeBook';
 function createGradeBook() {
     const data = {
         gradeItems: [
-            { id: 1, title: 'Opdracht 1', breadcrumb: ['Leerpaden', 'Categorie 1', 'Leerpad 2', 'Hoofdstuk 1'] },
-            { id: 2, title: 'Opdracht 2', breadcrumb: ['Opdrachten', 'Categorie 1'] },
-            { id: 3, title: 'Opdracht 3', breadcrumb: ['Opdrachten' , 'Categorie 2'] },
-            { id: 4, title: 'Oefening 1', breadcrumb: ['Oefeningen'] },
-            { id: 5, title: 'Oefening 2', breadcrumb: ['Leerpaden', 'Leerpad 5', 'Hoofdstuk 4'] },
-            { id: 6, title: 'Evaluatie 1', breadcrumb: ['Evaluaties'] },
-            { id: 7, title: 'Evaluatie 2', breadcrumb: ['Leerpaden', 'Leerpad 3', 'Hoofdstuk 2'] }
+            { id: 1, removed: false, title: 'Opdracht 1', breadcrumb: ['Leerpaden', 'Categorie 1', 'Leerpad 2', 'Hoofdstuk 1'] },
+            { id: 2, removed: false, title: 'Opdracht 2', breadcrumb: ['Opdrachten', 'Categorie 1'] },
+            { id: 3, removed: false, title: 'Opdracht 3', breadcrumb: ['Opdrachten' , 'Categorie 2'] },
+            { id: 4, removed: false, title: 'Oefening 1', breadcrumb: ['Oefeningen'] },
+            { id: 5, removed: false, title: 'Oefening 2', breadcrumb: ['Leerpaden', 'Leerpad 5', 'Hoofdstuk 4'] },
+            { id: 6, removed: false, title: 'Evaluatie 1', breadcrumb: ['Evaluaties'] },
+            { id: 7, removed: false, title: 'Evaluatie 2', breadcrumb: ['Leerpaden', 'Leerpad 3', 'Hoofdstuk 2'] }
         ],
         gradeColumns: [
-            { id: 1, type: 'group', title: 'Groepsscore', subItemIds: [1, 3], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2 },
-            { id: 2, type: 'item', title: null, subItemIds: [2], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2 },
-            { id: 3, type: 'item', title: null, subItemIds: [4], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2 },
-            { id: 4, type: 'item', title: null, subItemIds: [5], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2 },
-            { id: 5, type: 'item', title: 'Mondeling examen', subItemIds: [6], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2 }
+            { id: 1, type: 'group', released: true, title: 'Groepsscore', subItemIds: [1, 3], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2 },
+            { id: 2, type: 'item', released: true, title: null, subItemIds: [2], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2 },
+            { id: 3, type: 'item', released: true, title: null, subItemIds: [4], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2 },
+            { id: 4, type: 'item', released: true, title: null, subItemIds: [5], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2 },
+            { id: 5, type: 'item', released: true, title: 'Mondeling examen', subItemIds: [6], weight: null, countForEndResult: true, authPresenceEndResult: 0, unauthPresenceEndResult: 2 }
         ],
         categories: [
             { id: 1, color: '#caf1eb', title: 'Categorie 1', columnIds: [1, 2, 3] },
             { id: 2, color: '#ebf2e8', title: 'Categorie 2', columnIds: [4, 5] }
         ],
         nullCategory: { id: 0, color: 'none', title: '', columnIds: [] },
-        /*resultsData: [
-            { id: 1, 'student': 'Student 1', 'results': [{id: 1, value: null}, {id: 3, value: 20}, {id: 2, value: 60}, {id: 4, value: 80}, {id: 5, value: 50}, {id: 6, value: 75}, {id: 7, value: 50}] },
-            { id: 2, 'student': 'Student 2', 'results': [{id: 1, value: 30}, {id: 3, value: null}, {id: 2, value: 50}, {id: 4, value: 40}, {id: 5, value: 80}, {id: 6, value: 65}, {id: 7, value: 50}] },
-            { id: 3, 'student': 'Student 3', 'results': [{id: 1, value: null}, {id: 3, value: 50}, {id: 2, value: 30}, {id: 4, value: 70}, {id: 5, value: 80}, {id: 6, value: 95}, {id: 7, value: 50}] },
-            { id: 4, 'student': 'Student 4', 'results': [{id: 1, value: 80}, {id: 3, value: null}, {id: 2, value: 40}, {id: 4, value: 40}, {id: 5, value: 30}, {id: 6, value: 75}, {id: 7, value: 50}] },
-            { id: 5, 'student': 'Student 5', 'results': [{id: 1, value: null}, {id: 3, value: 60}, {id: 2, value: 10}, {id: 4, value: 90}, {id: 5, value: 40}, {id: 6, value: 25}, {id: 7, value: 50}] }
-        ],*/
     };
 
     const resultsData = [
@@ -53,7 +46,70 @@ beforeEach(() => {
 
 test('initial', () => {
     expect(gradeBook.gradeColumns.length).toEqual(5);
+    expect(gradeBook.categories.length).toEqual(2);
     expect(gradeBook.allCategories.length).toEqual(3);
+});
+
+test('getters', () => {
+    expect(gradeBook.getGradeItem(3)!.title).toEqual('Opdracht 3');
+    expect(gradeBook.getGradeColumn(1)!.title).toEqual('Groepsscore');
+    expect(gradeBook.getCategory(1)!.title).toEqual('Categorie 1');
+});
+
+test('statusGradedItems', () => {
+    const checkedItems = gradeBook.statusGradedItems.filter(item => item.checked);
+    const uncheckedItems = gradeBook.statusGradedItems.filter(item => !item.checked);
+    expect(checkedItems.map(item => item.id)).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(uncheckedItems.map(item => item.id)).toEqual([7]);
+});
+
+test('getStatusGradedItemsByColumn', () => {
+    let items = gradeBook.getStatusGradedItemsByColumn(1);
+    expect(items.filter(item => !item.disabled).length).toEqual(7);
+    expect(items.filter(item => item.checked).map(item => item.id)).toEqual([1, 3]);
+    items = gradeBook.getStatusGradedItemsByColumn(2);
+    expect(items.filter(item => item.checked).map(item => item.id)).toEqual([2]);
+    expect(items.filter(item => item.disabled).map(item => item.id)).toEqual([1, 2, 3]);
+});
+
+test('hasUnreleasedScores', () => {
+    expect(gradeBook.hasUnreleasedScores).toEqual(false);
+    gradeBook.getGradeColumn(4)!.countForEndResult = false;
+    gradeBook.getGradeColumn(4)!.released = false;
+    expect(gradeBook.hasUnreleasedScores).toEqual(false);
+    gradeBook.getGradeColumn(4)!.countForEndResult = true;
+    expect(gradeBook.hasUnreleasedScores).toEqual(true);
+});
+
+test('getWeight', () => {
+    expect(gradeBook.getWeight(gradeBook.getGradeColumn(1)!)).toEqual(20);
+    gradeBook.setWeight(1, 30);
+    expect(gradeBook.getWeight(gradeBook.getGradeColumn(1)!)).toEqual(30);
+    expect(gradeBook.getWeight(gradeBook.getGradeColumn(2)!)).toEqual(17.5);
+});
+
+test('getTitle', () => {
+    expect(gradeBook.getTitle(gradeBook.getGradeColumn(1)!)).toEqual('Groepsscore');
+    gradeBook.setTitle(1, '');
+    expect(gradeBook.getTitle(gradeBook.getGradeColumn(1)!)).toEqual('Opdracht 1');
+    gradeBook.setTitle(1, 'Kolom 1');
+    expect(gradeBook.getTitle(gradeBook.getGradeColumn(1)!)).toEqual('Kolom 1');
+});
+
+test('hasRemovedSourceData', () => {
+    expect(gradeBook.hasRemovedSourceData(gradeBook.getGradeColumn(1)!)).toEqual(false);
+    gradeBook.gradeItems[0] = {...gradeBook.gradeItems[0], removed: true};
+    expect(gradeBook.hasRemovedSourceData(gradeBook.getGradeColumn(1)!)).toEqual(true);
+});
+
+test('getColumnSubItems', () => {
+    expect(gradeBook.getColumnSubItems(gradeBook.getGradeColumn(1)!).map(item => item.id)).toEqual([1, 3]);
+});
+
+test('hasResult', () => {
+    expect(gradeBook.hasResult(5, 1)).toEqual(true);
+    expect(gradeBook.hasResult(5, 100)).toEqual(false);
+    expect(gradeBook.hasResult(100, 1)).toEqual(false);
 });
 
 test('endResult', () => {

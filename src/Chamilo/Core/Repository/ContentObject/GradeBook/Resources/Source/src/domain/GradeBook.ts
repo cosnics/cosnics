@@ -174,7 +174,7 @@ export default class GradeBook {
         return '';
     }
 
-    setTitle(columnId: ColumnId, title: string) {
+    setTitle(columnId: ColumnId, title: string|null) {
         const column = this.getGradeColumn(columnId);
         if (column) {
             column.title = title || null;
