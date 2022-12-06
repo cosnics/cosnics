@@ -112,6 +112,44 @@ test('hasResult', () => {
     expect(gradeBook.hasResult(100, 1)).toEqual(false);
 });
 
+test('getResult', () => {
+    expect(gradeBook.getResult(100, 1)).toEqual(null);
+    expect(gradeBook.getResult(1, 100)).toEqual(null);
+    expect(gradeBook.getResult(1, 1)).toEqual(20);
+    const studentScore = gradeBook.resultsData[1][1]!;
+    studentScore.sourceScoreAuthAbsent = true;
+    expect(gradeBook.getResult(1, 1)).toEqual('aabs');
+    expect(gradeBook.isOverwrittenResult(1, 1)).toEqual(false);
+    gradeBook.overwriteResult(1, 1, 40);
+    expect(gradeBook.isOverwrittenResult(1, 1)).toEqual(true);
+    expect(gradeBook.getResult(1, 1)).toEqual(40);
+});
+
+test('revertOverwrittenResult', () => {
+    gradeBook.overwriteResult(1, 1, 'aabs');
+    expect(gradeBook.getResult(1, 1)).toEqual('aabs');
+    gradeBook.revertOverwrittenResult(1, 1);
+    expect(gradeBook.isOverwrittenResult(1, 1)).toEqual(false);
+    expect(gradeBook.getResult(1, 1)).toEqual(20);
+});
+
+test('userTotalNeedsUpdating', () => {
+    gradeBook.users = [1,2,3,4,5].map(id => ({id, firstName: 'F' + id, lastName: 'L' + id}));
+    const user = gradeBook.users[0];
+    expect(gradeBook.userTotalNeedsUpdating(user)).toEqual(false); // unsynchronized
+    const totalScore = createSimpleScore(100, 1, 1, null);
+    totalScore.overwritten = true;
+    totalScore.newScore = 50;
+    totalScore.isTotal = true;
+    gradeBook.resultsData['totals'] = {};
+    gradeBook.resultsData['totals'][1] = totalScore;
+    expect(gradeBook.userTotalNeedsUpdating(user)).toEqual(true);
+    expect(gradeBook.totalsNeedUpdating).toEqual(true);
+    totalScore.newScore = 57;
+    expect(gradeBook.userTotalNeedsUpdating(user)).toEqual(false);
+    expect(gradeBook.totalsNeedUpdating).toEqual(false);
+});
+
 test('endResult', () => {
     expect(gradeBook.getEndResult(1)).toBeCloseTo(57);
     expect(gradeBook.getEndResult(3)).toBeCloseTo(65);
@@ -153,7 +191,6 @@ test('endResultHandleAbsence', () => {
 
     // test unauthorized absence
     studentScore = gradeBook.resultsData[3][3];
-    //studentScore.newScoreAbsent = true;
     studentScore.newScoreAuthAbsent = false;
     studentScore.overwritten = true;
 
@@ -167,6 +204,12 @@ test('endResultHandleAbsence', () => {
     // don't count score
     gradeBook.getGradeColumn(3)!.unauthPresenceEndResult = GradeBook.NO_SCORE;
     expect(gradeBook.getEndResult(3)).toBeCloseTo(63.75);
+});
+
+test('getResultComment', () => {
+    expect(gradeBook.getResultComment(1, 1)).toEqual(null);
+    gradeBook.updateResultComment(1, 1, 'My comment');
+    expect(gradeBook.getResultComment(1, 1)).toEqual('My comment');
 });
 
 test('addScore', () => {
@@ -191,7 +234,6 @@ test('addGroupScore', () => {
     column!.unauthPresenceEndResult = GradeBook.MAX_SCORE;
     gradeBook.addSubItem(gradeBook.getGradeItem(5)!, 3);
     expect(gradeBook.gradeColumns.length).toEqual(4);
-    //column = gradeBook.gradeColumns[3];
     expect(column!.id).toEqual(3);
     expect(column!.type).toEqual('group');
     expect(column!.title).toEqual('Oefening 1');
@@ -262,6 +304,24 @@ test('removeCategory', () => {
     expect(gradeBook.nullCategory.columnIds).toEqual([1, 2, 3, 4, 5]);
 });
 
+test('updateGradeColumnId', () => {
+    gradeBook.updateGradeColumnId(gradeBook.gradeColumns[0], 45);
+    expect(gradeBook.gradeColumns[0]).toEqual(gradeBook.getGradeColumn(45)!);
+    expect(gradeBook.categories[0].columnIds).toEqual([45, 2, 3]);
+});
+
+test('findGradeColumnWithGradeItem', () => {
+    expect(gradeBook.findGradeColumnWithGradeItem(7)).toEqual(null);
+    expect(gradeBook.findGradeColumnWithGradeItem(3)).toEqual(gradeBook.getGradeColumn(1)!);
+});
+
+test('createNewColumnId', () => {
+    expect(gradeBook.createNewColumnId()).toEqual('col1');
+    gradeBook.gradeColumns[3].id = 'col1';
+    gradeBook.gradeColumns[2].id = 'col2';
+    expect(gradeBook.createNewColumnId()).toEqual('col3');
+});
+
 function createSimpleScore(scoreId: number, columnId: ColumnId, studentId: number, score: number|null): GradeScore {
     return {
         id: scoreId,
@@ -270,11 +330,9 @@ function createSimpleScore(scoreId: number, columnId: ColumnId, studentId: numbe
         comment: null,
         isTotal: false,
         newScore: null,
-        //newScoreAbsent: false,
         newScoreAuthAbsent: false,
         overwritten: false,
         sourceScore: score,
-        //sourceScoreAbsent: false,
         sourceScoreAuthAbsent: false
     };
 }

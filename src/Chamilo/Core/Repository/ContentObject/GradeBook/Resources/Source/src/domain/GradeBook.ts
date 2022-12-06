@@ -46,7 +46,7 @@ export interface GradeScore {
     columnId: ColumnId;
     targetUserId: number;
     sourceScore: number|null;
-    sourceScoreAuthAbsent: false;
+    sourceScoreAuthAbsent: boolean;
     overwritten: boolean;
     newScore: number|null;
     newScoreAuthAbsent: boolean;
