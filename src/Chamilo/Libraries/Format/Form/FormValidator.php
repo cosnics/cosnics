@@ -343,7 +343,7 @@ EOT;
         $glyph = new FontAwesomeGlyph('image', ['image-uploader-preview', 'fa-10x', 'text-muted'], null, 'fas');
 
         $this->addElement(
-            'static', null, $label, '<div class="thumbnail" data-element="' . $name . '">' . $glyph->render() . '</div>'
+            'static', 'thumbnail', $label, '<div class="thumbnail" data-element="' . $name . '">' . $glyph->render() . '</div>'
         );
         $this->addElement('file', $name . '-file', null, 'class="image-uploader-file" data-element="' . $name . '"');
 
