@@ -70,7 +70,7 @@ abstract class AbstractTableRenderer
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
-    public function render(?TableFilterConfigurationInterface $tableFilterConfiguration = null): string
+    public function render(TableFilterConfigurationInterface $tableFilterConfiguration): string
     {
         $parameterValues = $this->determineParameterValues($tableFilterConfiguration);
         $tableActions = $this instanceof TableActionsSupport ? $this->getTableActions() : null;
@@ -93,7 +93,7 @@ abstract class AbstractTableRenderer
         }
     }
 
-    abstract protected function countData(?TableFilterConfigurationInterface $tableFilterConfiguration = null): int;
+    abstract protected function countData(TableFilterConfigurationInterface $tableFilterConfiguration): int;
 
     protected static function determineName(): string
     {
@@ -194,7 +194,7 @@ abstract class AbstractTableRenderer
         ];
     }
 
-    protected function determineParameterValues(?TableFilterConfigurationInterface $tableFilterConfiguration = null
+    protected function determineParameterValues(TableFilterConfigurationInterface $tableFilterConfiguration
     ): TableParameterValues
     {
         $numberOfRowsPerPage = $this->determineNumberOfRowsPerPage();
@@ -258,7 +258,7 @@ abstract class AbstractTableRenderer
     }
 
     protected function getData(
-        TableParameterValues $parameterValues, ?TableFilterConfigurationInterface $tableFilterConfiguration = null,
+        TableParameterValues $parameterValues, TableFilterConfigurationInterface $tableFilterConfiguration,
         ?TableActions $tableActions = null
     ): ArrayCollection
     {
@@ -370,7 +370,7 @@ abstract class AbstractTableRenderer
     abstract protected function renderIdentifierCell($result): string;
 
     abstract protected function retrieveData(
-        ?TableFilterConfigurationInterface $tableFilterConfiguration = null, ?int $count = null, ?int $offset = null,
+        TableFilterConfigurationInterface $tableFilterConfiguration, ?int $count = null, ?int $offset = null,
         ?OrderBy $orderBy = null
     ): ArrayCollection;
 
