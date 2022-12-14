@@ -102,9 +102,9 @@ class ReportingExporterComponent extends BaseReportingComponent
             throw new \InvalidArgumentException(sprintf('The given export mode %s is not supported', $exportMode));
         }
 
-        if ($exportMode == self::EXPORT_USER_PROGRESS && !$this->canEditCurrentTreeNode())
+        /*if ($exportMode == self::EXPORT_USER_PROGRESS && !$this->canEditCurrentTreeNode())
         {
             throw new NotAllowedException();
-        }
+        }*/
     }
 }
