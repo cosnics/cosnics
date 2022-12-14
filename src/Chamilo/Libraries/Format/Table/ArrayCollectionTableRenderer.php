@@ -61,7 +61,8 @@ class ArrayCollectionTableRenderer
     {
         try
         {
-            return $this->getPager()->getCurrentRangeOffset($parameterValues);
+            return $this->getPager()->getCurrentRangeOffset($parameterValues->getPageNumber(), $parameterValues->getNumberOfItemsPerPage(),
+                $parameterValues->getTotalNumberOfItems());
         }
         catch (InvalidPageNumberException $exception)
         {

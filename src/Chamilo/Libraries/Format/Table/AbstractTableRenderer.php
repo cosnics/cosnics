@@ -6,11 +6,9 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
-use Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFilterConfigurationInterface;
-use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -44,18 +42,14 @@ abstract class AbstractTableRenderer
 
     protected Pager $pager;
 
-    protected ChamiloRequest $request;
-
     protected Translator $translator;
 
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        ChamiloRequest $request, Translator $translator, UrlGenerator $urlGenerator, Pager $pager,
-        AbstractHtmlTableRenderer $htmlTableRenderer
+        Translator $translator, UrlGenerator $urlGenerator, Pager $pager, AbstractHtmlTableRenderer $htmlTableRenderer
     )
     {
-        $this->request = $request;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->pager = $pager;
@@ -70,14 +64,15 @@ abstract class AbstractTableRenderer
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
-    public function render(TableFilterConfigurationInterface $tableFilterConfiguration): string
+    public function render(
+        TableParameterValues $parameterValues, TableFilterConfigurationInterface $tableFilterConfiguration
+    ): string
     {
-        $parameterValues = $this->determineParameterValues($tableFilterConfiguration);
         $tableActions = $this instanceof TableActionsSupport ? $this->getTableActions() : null;
 
         return $this->getHtmlTableRenderer()->render(
             $this->getColumns(), $this->getData($parameterValues, $tableFilterConfiguration, $tableActions),
-            static::determineName(), static::determineParameterNames(), $parameterValues, $tableActions
+            $this->determineName(), $this->determineParameterNames(), $parameterValues, $tableActions
         );
     }
 
@@ -95,7 +90,7 @@ abstract class AbstractTableRenderer
 
     abstract protected function countData(TableFilterConfigurationInterface $tableFilterConfiguration): int;
 
-    protected static function determineName(): string
+    protected function determineName(): string
     {
         try
         {
@@ -104,26 +99,6 @@ abstract class AbstractTableRenderer
         catch (Exception $exception)
         {
             return 'table';
-        }
-    }
-
-    protected function determineNumberOfRowsPerPage(): int
-    {
-        return $this->getRequest()->query->get(
-            static::determineParameterName(TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE),
-            $this->getDefaultNumberOfRowsPerPage()
-        );
-    }
-
-    protected function determineOffset(TableParameterValues $parameterValues): int
-    {
-        try
-        {
-            return $this->getPager()->getCurrentRangeOffset($parameterValues);
-        }
-        catch (InvalidPageNumberException $exception)
-        {
-            return 0;
         }
     }
 
@@ -147,40 +122,12 @@ abstract class AbstractTableRenderer
         return new OrderBy($orderProperties);
     }
 
-    protected function determineOrderColumnDirection(): int
-    {
-        return $this->getRequest()->query->get(
-            static::determineParameterName(TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION),
-            $this->getDefaultOrderDirection()
-        );
-    }
-
-    protected function determineOrderColumnIndex(): int
-    {
-        return $this->getRequest()->query->get(
-            static::determineParameterName(TableParameterValues::PARAM_ORDER_COLUMN_INDEX),
-            $this->getDefaultOrderColumnIndex()
-        );
-    }
-
-    protected function determinePageNumber(): int
-    {
-        return $this->getRequest()->query->get(
-            static::determineParameterName(TableParameterValues::PARAM_PAGE_NUMBER), 1
-        );
-    }
-
-    protected static function determineParameterName(string $parameterName): string
-    {
-        return static::determineParameterNames()[$parameterName];
-    }
-
     /**
      * @return string[]
      */
-    protected static function determineParameterNames(): array
+    public function determineParameterNames(): array
     {
-        $tableName = static::determineName();
+        $tableName = $this->determineName();
 
         return [
             TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE => $tableName . '_' .
@@ -192,31 +139,6 @@ abstract class AbstractTableRenderer
             TableParameterValues::PARAM_PAGE_NUMBER => $tableName . '_' . TableParameterValues::PARAM_PAGE_NUMBER,
             TableParameterValues::PARAM_SELECT_ALL => $tableName . '_' . TableParameterValues::PARAM_SELECT_ALL
         ];
-    }
-
-    protected function determineParameterValues(TableFilterConfigurationInterface $tableFilterConfiguration
-    ): TableParameterValues
-    {
-        $numberOfRowsPerPage = $this->determineNumberOfRowsPerPage();
-        $totalNumberOfItems = $this->countData($tableFilterConfiguration);
-
-        $tableParameterValues = new TableParameterValues();
-
-        $tableParameterValues->setTotalNumberOfItems($totalNumberOfItems);
-        $tableParameterValues->setNumberOfRowsPerPage(
-            $numberOfRowsPerPage == Pager::DISPLAY_ALL ? $totalNumberOfItems : $numberOfRowsPerPage
-        );
-        $tableParameterValues->setNumberOfColumnsPerPage($this->getDefaultNumberOfColumnsPerPage());
-        $tableParameterValues->setPageNumber($this->determinePageNumber());
-        $tableParameterValues->setSelectAll(
-            $this->getRequest()->query->get(
-                static::determineParameterName(TableParameterValues::PARAM_SELECT_ALL), 0
-            )
-        );
-        $tableParameterValues->setOrderColumnIndex($this->determineOrderColumnIndex());
-        $tableParameterValues->setOrderColumnDirection($this->determineOrderColumnDirection());
-
-        return $tableParameterValues;
     }
 
     public function getCheckboxHtml(
@@ -263,31 +185,24 @@ abstract class AbstractTableRenderer
     ): ArrayCollection
     {
         $results = $this->retrieveData(
-            $tableFilterConfiguration, $this->getPager()->getNumberOfItemsPerPage($parameterValues),
-            $this->determineOffset($parameterValues), $this->determineOrderBy($parameterValues, $tableActions)
+            $tableFilterConfiguration, $parameterValues->getNumberOfItemsPerPage(), $parameterValues->getOffset(),
+            $this->determineOrderBy($parameterValues, $tableActions)
         );
 
         return $this->processData($results, $parameterValues, $tableActions);
     }
 
-    public function getDefaultNumberOfColumnsPerPage(): int
+    /**
+     * @return int[]
+     */
+    public function getDefaultParameterValues(): array
     {
-        return static::DEFAULT_NUMBER_OF_COLUMNS_PER_PAGE;
-    }
-
-    public function getDefaultNumberOfRowsPerPage(): int
-    {
-        return static::DEFAULT_NUMBER_OF_ROWS_PER_PAGE;
-    }
-
-    public function getDefaultOrderColumnIndex(): int
-    {
-        return static::DEFAULT_ORDER_COLUMN_INDEX;
-    }
-
-    public function getDefaultOrderDirection(): int
-    {
-        return static::DEFAULT_ORDER_COLUMN_DIRECTION;
+        return [
+            TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION => static::DEFAULT_ORDER_COLUMN_DIRECTION,
+            TableParameterValues::PARAM_ORDER_COLUMN_INDEX => static::DEFAULT_ORDER_COLUMN_INDEX,
+            TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE => static::DEFAULT_NUMBER_OF_ROWS_PER_PAGE,
+            TableParameterValues::PARAM_NUMBER_OF_COLUMNS_PER_PAGE => static::DEFAULT_NUMBER_OF_COLUMNS_PER_PAGE,
+        ];
     }
 
     public function getHtmlTableRenderer(): AbstractHtmlTableRenderer
@@ -315,11 +230,6 @@ abstract class AbstractTableRenderer
         return $this->pager;
     }
 
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
-    }
-
     /**
      * Returns a column by a given column index if it exists and is sortable, otherwise it returns the default column.
      */
@@ -329,9 +239,9 @@ abstract class AbstractTableRenderer
 
         if (!$column instanceof AbstractSortableTableColumn || (!$column->is_sortable()))
         {
-            if ($columnNumber != $this->getDefaultOrderColumnIndex())
+            if ($columnNumber != static::DEFAULT_ORDER_COLUMN_INDEX)
             {
-                return $this->getSortableColumn($this->getDefaultOrderColumnIndex());
+                return $this->getSortableColumn(static::DEFAULT_ORDER_COLUMN_INDEX);
             }
         }
         else

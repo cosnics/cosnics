@@ -18,14 +18,14 @@ class Pager
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      */
-    public function getCurrentRangeEnd(TableParameterValues $parameterValues): int
+    public function getCurrentRangeEnd(int $pageNumber, int $numberOfItemsPerPage, int $totalNumberOfItems): int
     {
-        $currentRangeStart = $this->getCurrentRangeStart($parameterValues);
-        $calculatedRangeEnd = $currentRangeStart + $this->getNumberOfItemsPerPage($parameterValues) - 1;
+        $currentRangeStart = $this->getCurrentRangeStart($pageNumber, $numberOfItemsPerPage, $totalNumberOfItems);
+        $calculatedRangeEnd = $currentRangeStart + $numberOfItemsPerPage - 1;
 
-        if ($calculatedRangeEnd > $parameterValues->getTotalNumberOfItems())
+        if ($calculatedRangeEnd > $totalNumberOfItems)
         {
-            return $parameterValues->getTotalNumberOfItems();
+            return $totalNumberOfItems;
         }
 
         return $calculatedRangeEnd;
@@ -34,26 +34,27 @@ class Pager
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      */
-    public function getCurrentRangeOffset(TableParameterValues $parameterValues): int
+    public function getCurrentRangeOffset(int $pageNumber, int $numberOfItemsPerPage, int $totalNumberOfItems): int
     {
-        return $this->getPreviousRangeEnd($parameterValues);
+        return $this->getPreviousRangeEnd($pageNumber, $numberOfItemsPerPage, $totalNumberOfItems);
     }
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      */
-    public function getCurrentRangeStart(TableParameterValues $parameterValues): int
+    public function getCurrentRangeStart(int $pageNumber, int $numberOfItemsPerPage, int $totalNumberOfItems): int
     {
         try
         {
-            $calculatedRangeStart = $this->getPreviousRangeEnd($parameterValues) + 1;
+            $calculatedRangeStart =
+                $this->getPreviousRangeEnd($pageNumber, $numberOfItemsPerPage, $totalNumberOfItems) + 1;
         }
         catch (InvalidPageNumberException $exception)
         {
             $calculatedRangeStart = 0;
         }
 
-        if ($calculatedRangeStart > $parameterValues->getTotalNumberOfItems())
+        if ($calculatedRangeStart > $totalNumberOfItems)
         {
             throw new InvalidPageNumberException();
         }
@@ -61,21 +62,16 @@ class Pager
         return $calculatedRangeStart;
     }
 
-    public function getNumberOfItemsPerPage(TableParameterValues $parameterValues): int
+    public function getNumberOfPages(int $numberOfItemsPerPage, int $totalNumberOfItems): int
     {
-        return $parameterValues->getNumberOfRowsPerPage() * $parameterValues->getNumberOfColumnsPerPage();
-    }
-
-    public function getNumberOfPages(TableParameterValues $parameterValues): int
-    {
-        if ($this->getNumberOfItemsPerPage($parameterValues) == Pager::DISPLAY_ALL)
+        if ($numberOfItemsPerPage == Pager::DISPLAY_ALL)
         {
             return 1;
         }
         else
         {
             return (int) ceil(
-                $parameterValues->getTotalNumberOfItems() / $this->getNumberOfItemsPerPage($parameterValues)
+                $totalNumberOfItems / $numberOfItemsPerPage
             );
         }
     }
@@ -83,12 +79,11 @@ class Pager
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      */
-    public function getPreviousRangeEnd(TableParameterValues $parameterValues): int
+    public function getPreviousRangeEnd(int $pageNumber, int $numberOfItemsPerPage, int $totalNumberOfItems): int
     {
-        $calculatedRangeEnd =
-            ($parameterValues->getPageNumber() - 1) * $this->getNumberOfItemsPerPage($parameterValues);
+        $calculatedRangeEnd = ($pageNumber - 1) * $numberOfItemsPerPage;
 
-        if ($calculatedRangeEnd > $parameterValues->getTotalNumberOfItems())
+        if ($calculatedRangeEnd > $totalNumberOfItems)
         {
             throw new InvalidPageNumberException();
         }

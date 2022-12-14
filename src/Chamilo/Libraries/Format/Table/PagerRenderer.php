@@ -62,8 +62,14 @@ class PagerRenderer
         $pager = $this->getPager();
         $variables = [];
 
-        $variables['{START}'] = $pager->getCurrentRangeStart($parameterValues);
-        $variables['{END}'] = $pager->getCurrentRangeEnd($parameterValues);
+        $variables['{START}'] = $pager->getCurrentRangeStart(
+            $parameterValues->getPageNumber(), $parameterValues->getNumberOfItemsPerPage(),
+            $parameterValues->getTotalNumberOfItems()
+        );
+        $variables['{END}'] = $pager->getCurrentRangeEnd(
+            $parameterValues->getPageNumber(), $parameterValues->getNumberOfItemsPerPage(),
+            $parameterValues->getTotalNumberOfItems()
+        );
         $variables['{TOTAL}'] = $parameterValues->getTotalNumberOfItems();
 
         return $this->getTranslator()->trans('ShowingStartToEndOfTotalEntries', $variables, StringUtilities::LIBRARIES);
@@ -118,7 +124,7 @@ class PagerRenderer
 
         $translationVariables = array_merge($defaultTranslationVariables, $translationVariables);
 
-        $numberOfItemsPerPage = $pager->getNumberOfItemsPerPage($parameterValues);
+        $numberOfItemsPerPage = $parameterValues->getNumberOfItemsPerPage();
 
         if ($numberOfItemsPerPage >= $parameterValues->getTotalNumberOfItems())
         {
@@ -271,7 +277,9 @@ class PagerRenderer
         bool $includeRange = true
     ): string
     {
-        $numberOfPages = $this->getPager()->getNumberOfPages($parameterValues);
+        $numberOfPages = $this->getPager()->getNumberOfPages(
+            $parameterValues->getNumberOfItemsPerPage(), $parameterValues->getTotalNumberOfItems()
+        );
 
         if ($pageLimit % 2 == 0)
         {
