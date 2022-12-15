@@ -1,0 +1,54 @@
+Analysis of cache refactoring
+-----------------------------
+
+1. Needs
+
+
+The caches are tightly coupled with the cache provider by using inheritance. This makes it very hard to use different caching mechanisms.
+Almost every cache, with the exempt of one, uses a file based caching system. This caching system works very good and uses the native performance
+of the PHP OPCACHE system. However, this does not seem to work very good when using multiple instances on different machines / containers. Even if the cache folder is shared the
+system does not detect the file changes when one server (instance) changes the contents of the cache. This result in the need to redeploy the entire infrastructure to clear the cache everywhere.
+
+We can conclude that we can no longer couple the cache provider to the cache service directly but need to work with an injected cache provider so we can change the cache provider on the needs of
+the infrastructure.
+
+The second reason is that the doctrine caching system is deprecated and will be replaced by an implementation of PSR-6 or PSR-16 caching model, depending on our needs.
+
+2. Analysis
+
+
+2.1 Two types of caching
+
+We need to differentiate between two types of caching.
+
+The first type is code caching / optimization. Things like templates, annotations, dependency injection, ... Optimizations that do not change unless the code changes
+These type of caches can stay local inside the instance (container / machine). These caches do not need to be changed between deployments and can be warmed-up during deployment-phase.
+These type of caches can therefor still use their old, preffered method of optimized PHP file cache. The caches are:
+
+* Templates
+* Annotations
+* Dependency Injection
+* Doctrine ORM Proxies
+* Translations
+* Translation Bundles
+* Stylesheets
+* Javascripts
+
+The second type is data based caching. Things like settings, optimized rights calculations, ... These caches change regularly based on data changes in the platform. Especially in between
+code deployments. These type of caches should use an optimized shared caching system when using multiple instances. Preferably redis. The caches are:
+
+* Menu Item Rights
+* User Group Members
+* Quota Calculator Caching
+* Configuration
+* Registrations
+* Packages
+* Language
+* Repository Configuration
+* Local settings
+* Repository Type Selector
+* Google Events
+* Google Calendars
+* External Calendar
+
+
