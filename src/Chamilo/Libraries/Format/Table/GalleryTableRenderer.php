@@ -5,7 +5,6 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
-use Chamilo\Libraries\Platform\ChamiloRequest;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
@@ -22,23 +21,20 @@ abstract class GalleryTableRenderer extends AbstractTableRenderer
     public const DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 5;
 
     public function __construct(
-        ChamiloRequest $request, Translator $translator, UrlGenerator $urlGenerator, Pager $pager,
-        GalleryHtmlTableRenderer $htmlTableRenderer
+        Translator $translator, UrlGenerator $urlGenerator, GalleryHtmlTableRenderer $htmlTableRenderer
     )
     {
-        parent::__construct($request, $translator, $urlGenerator, $pager, $htmlTableRenderer);
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer);
     }
 
-    protected function processData(
-        ArrayCollection $results, TableParameterValues $parameterValues, ?TableActions $tableActions = null
-    ): ArrayCollection
+    protected function processData(ArrayCollection $results, TableParameterValues $parameterValues): ArrayCollection
     {
         $tableData = [];
         $tableRow = [];
 
         foreach ($results as $result)
         {
-            $tableRow[] = $this->renderCell($result, $parameterValues, $tableActions);
+            $tableRow[] = $this->renderCell($result, $parameterValues, $this->getTableActions());
 
             if (count($tableRow) >= $parameterValues->getNumberOfColumnsPerPage())
             {

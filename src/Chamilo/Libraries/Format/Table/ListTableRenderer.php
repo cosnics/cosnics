@@ -6,7 +6,6 @@ use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
-use Chamilo\Libraries\Platform\ChamiloRequest;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
@@ -21,11 +20,10 @@ abstract class ListTableRenderer extends AbstractTableRenderer
     public const DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 20;
 
     public function __construct(
-        ChamiloRequest $request, Translator $translator, UrlGenerator $urlGenerator, Pager $pager,
-        ListHtmlTableRenderer $htmlTableRenderer
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer
     )
     {
-        parent::__construct($request, $translator, $urlGenerator, $pager, $htmlTableRenderer);
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer);
 
         if ($this instanceof TableRowActionsSupport)
         {
@@ -49,10 +47,10 @@ abstract class ListTableRenderer extends AbstractTableRenderer
         $this->addColumn(new ActionsTableColumn());
     }
 
-    protected function processData(
-        ArrayCollection $results, TableParameterValues $parameterValues, ?TableActions $tableActions = null
-    ): ArrayCollection
+    protected function processData(ArrayCollection $results, TableParameterValues $parameterValues): ArrayCollection
     {
+        $tableActions = $this->getTableActions();
+
         $tableData = [];
 
         foreach ($results as $result)

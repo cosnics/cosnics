@@ -7,8 +7,6 @@ use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFilterConfigurationInterface;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -40,19 +38,16 @@ abstract class AbstractTableRenderer
 
     protected AbstractHtmlTableRenderer $htmlTableRenderer;
 
-    protected Pager $pager;
-
     protected Translator $translator;
 
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, Pager $pager, AbstractHtmlTableRenderer $htmlTableRenderer
+        Translator $translator, UrlGenerator $urlGenerator, AbstractHtmlTableRenderer $htmlTableRenderer
     )
     {
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
-        $this->pager = $pager;
         $this->htmlTableRenderer = $htmlTableRenderer;
 
         $this->initializeColumns();
@@ -65,14 +60,14 @@ abstract class AbstractTableRenderer
      * @throws \QuickformException
      */
     public function render(
-        TableParameterValues $parameterValues, TableFilterConfigurationInterface $tableFilterConfiguration
+        TableParameterValues $parameterValues, ArrayCollection $tableData, ?string $tableName = null
     ): string
     {
-        $tableActions = $this instanceof TableActionsSupport ? $this->getTableActions() : null;
+        $tableName = $tableName ?: $this->determineTableName();
 
         return $this->getHtmlTableRenderer()->render(
-            $this->getColumns(), $this->getData($parameterValues, $tableFilterConfiguration, $tableActions),
-            $this->determineName(), $this->determineParameterNames(), $parameterValues, $tableActions
+            $this->getColumns(), $this->processData($tableData, $parameterValues), $tableName,
+            $this->getParameterNames($tableName), $parameterValues, $this->getTableActions()
         );
     }
 
@@ -88,27 +83,11 @@ abstract class AbstractTableRenderer
         }
     }
 
-    abstract protected function countData(TableFilterConfigurationInterface $tableFilterConfiguration): int;
-
-    protected function determineName(): string
+    public function determineOrderBy(TableParameterValues $parameterValues): OrderBy
     {
-        try
-        {
-            return ClassnameUtilities::getInstance()->getClassnameFromNamespace(static::class, true);
-        }
-        catch (Exception $exception)
-        {
-            return 'table';
-        }
-    }
-
-    protected function determineOrderBy(TableParameterValues $parameterValues, ?TableActions $tableActions = null
-    ): OrderBy
-    {
-        $hasTableActions = $tableActions instanceof TableActions && $tableActions->hasActions();
         // Calculates the order column on whether or not the table uses form actions (because sortable
         // table uses data arrays)
-        $calculatedOrderColumn = $parameterValues->getOrderColumnIndex() - ($hasTableActions ? 1 : 0);
+        $calculatedOrderColumn = $parameterValues->getOrderColumnIndex() - ($this->hasTableActions() ? 1 : 0);
 
         $orderProperty = $this->getOrderProperty($calculatedOrderColumn, $parameterValues->getOrderColumnDirection());
 
@@ -122,23 +101,16 @@ abstract class AbstractTableRenderer
         return new OrderBy($orderProperties);
     }
 
-    /**
-     * @return string[]
-     */
-    public function determineParameterNames(): array
+    protected function determineTableName(): string
     {
-        $tableName = $this->determineName();
-
-        return [
-            TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE => $tableName . '_' .
-                TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE,
-            TableParameterValues::PARAM_ORDER_COLUMN_INDEX => $tableName . '_' .
-                TableParameterValues::PARAM_ORDER_COLUMN_INDEX,
-            TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION => $tableName . '_' .
-                TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION,
-            TableParameterValues::PARAM_PAGE_NUMBER => $tableName . '_' . TableParameterValues::PARAM_PAGE_NUMBER,
-            TableParameterValues::PARAM_SELECT_ALL => $tableName . '_' . TableParameterValues::PARAM_SELECT_ALL
-        ];
+        try
+        {
+            return ClassnameUtilities::getInstance()->getClassnameFromNamespace(static::class, true);
+        }
+        catch (Exception $exception)
+        {
+            return 'table';
+        }
     }
 
     public function getCheckboxHtml(
@@ -179,19 +151,6 @@ abstract class AbstractTableRenderer
         return $this->columns;
     }
 
-    protected function getData(
-        TableParameterValues $parameterValues, TableFilterConfigurationInterface $tableFilterConfiguration,
-        ?TableActions $tableActions = null
-    ): ArrayCollection
-    {
-        $results = $this->retrieveData(
-            $tableFilterConfiguration, $parameterValues->getNumberOfItemsPerPage(), $parameterValues->getOffset(),
-            $this->determineOrderBy($parameterValues, $tableActions)
-        );
-
-        return $this->processData($results, $parameterValues, $tableActions);
-    }
-
     /**
      * @return int[]
      */
@@ -225,9 +184,26 @@ abstract class AbstractTableRenderer
         return null;
     }
 
-    public function getPager(): Pager
+    /**
+     * @return string[]
+     */
+    public function getParameterNames(?string $tableName = null): array
     {
-        return $this->pager;
+        if (is_null($tableName))
+        {
+            $tableName = $this->determineTableName();
+        }
+
+        return [
+            TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE => $tableName . '_' .
+                TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE,
+            TableParameterValues::PARAM_ORDER_COLUMN_INDEX => $tableName . '_' .
+                TableParameterValues::PARAM_ORDER_COLUMN_INDEX,
+            TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION => $tableName . '_' .
+                TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION,
+            TableParameterValues::PARAM_PAGE_NUMBER => $tableName . '_' . TableParameterValues::PARAM_PAGE_NUMBER,
+            TableParameterValues::PARAM_SELECT_ALL => $tableName . '_' . TableParameterValues::PARAM_SELECT_ALL
+        ];
     }
 
     /**
@@ -252,6 +228,11 @@ abstract class AbstractTableRenderer
         return null;
     }
 
+    public function getTableActions(): ?TableActions
+    {
+        return null;
+    }
+
     public function getTranslator(): Translator
     {
         return $this->translator;
@@ -264,25 +245,18 @@ abstract class AbstractTableRenderer
 
     public function hasTableActions(): bool
     {
-        return $this instanceof TableActionsSupport && $this->getTableActions() instanceof TableActions &&
-            $this->getTableActions()->hasActions();
+        return $this->getTableActions() instanceof TableActions && $this->getTableActions()->hasActions();
     }
 
     abstract protected function initializeColumns();
 
-    abstract protected function processData(
-        ArrayCollection $results, TableParameterValues $parameterValues, ?TableActions $tableActions = null
+    abstract protected function processData(ArrayCollection $results, TableParameterValues $parameterValues
     ): ArrayCollection;
 
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array $result
      */
     abstract protected function renderIdentifierCell($result): string;
-
-    abstract protected function retrieveData(
-        TableFilterConfigurationInterface $tableFilterConfiguration, ?int $count = null, ?int $offset = null,
-        ?OrderBy $orderBy = null
-    ): ArrayCollection;
 
     /**
      * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $columns
