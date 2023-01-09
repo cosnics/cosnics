@@ -34,7 +34,7 @@ abstract class AbstractTableRenderer
     /**
      * @var \Chamilo\Libraries\Format\Table\Column\TableColumn[]
      */
-    protected array $columns;
+    protected array $columns = [];
 
     protected AbstractHtmlTableRenderer $htmlTableRenderer;
 
