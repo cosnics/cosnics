@@ -17,6 +17,10 @@
             type="integer"
             unsigned="1"
             notnull="1" />
+        <property
+            name="created"
+            type="integer"
+            notnull="1" />
     </properties>
     <index name="entry_id">
         <indexproperty name="entry_id" />
