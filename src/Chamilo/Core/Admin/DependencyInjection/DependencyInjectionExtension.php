@@ -11,8 +11,7 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Core\Admin\DependencyInjection
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     implements ExtensionInterface, ICompilerPassExtension
@@ -26,7 +25,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Core\Admin' => ['services.xml']];
+        return ['Chamilo\Core\Admin' => ['services.xml', 'tables.xml']];
     }
 
     public function registerCompilerPasses(ContainerBuilder $container)
