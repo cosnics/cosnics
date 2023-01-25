@@ -28,6 +28,7 @@
         </service>
 
         <service id="Chamilo\Core\User\Service\PasswordGenerator"/>
+        <service id="Chamilo\Core\User\Service\UserDetailsRenderer"/>
         <service id="Chamilo\Core\User\Storage\Repository\UserRepository"/>
 
         <service id="Chamilo\Core\User\Service\SessionHandler">

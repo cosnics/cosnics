@@ -1,13 +1,16 @@
 <?php
 namespace Chamilo\Core\Admin\Table;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
+use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Ehb\Application\TimeEdit\User
@@ -15,13 +18,38 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
  */
 class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
 {
+    protected ConfigurationConsulter $configurationConsulter;
+
+    protected User $user;
+
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter, User $user, Translator $translator, UrlGenerator $urlGenerator,
+        ListHtmlTableRenderer $htmlTableRenderer
+    )
+    {
+        $this->configurationConsulter = $configurationConsulter;
+        $this->user = $user;
+
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer);
+    }
+
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
     protected function initializeColumns()
     {
         $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_OFFICIAL_CODE));
         $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_LASTNAME));
         $this->addColumn(new DataClassPropertyTableColumn(User::class, User::PROPERTY_FIRSTNAME));
 
-        $showEmail = Configuration::getInstance()->get_setting(['Chamilo\Core\User', 'show_email_addresses']);
+        $showEmail = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'show_email_addresses']);
 
         if ($showEmail)
         {
@@ -44,9 +72,6 @@ class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
 
         switch ($column->get_name())
         {
-            case User::PROPERTY_OFFICIAL_CODE :
-                return $user->get_official_code();
-            // Exceptions that need post-processing go here ...
             case User::PROPERTY_STATUS :
                 if ($user->get_platformadmin() == '1')
                 {
@@ -70,7 +95,7 @@ class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
                     return '';
                 }
             case User::PROPERTY_PICTURE_URI :
-                if ($this->get_component()->get_user()->is_platform_admin())
+                if ($this->getUser()->is_platform_admin())
                 {
                     $profilePhotoUrl = $urlGenerator->fromParameters(
                         [
@@ -80,7 +105,13 @@ class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
                         ]
                     );
 
-                    return '<a href="' . $this->get_component()->get_url(['uid' => $user->getId()]) . '">' .
+                    $profileUrl = $this->getUrlGenerator()->fromParameters([
+                        Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                        Application::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_WHOIS_ONLINE,
+                        \Chamilo\Core\Admin\Manager::PARAM_USER_ID => $user->getId()
+                    ]);
+
+                    return '<a href="' . $profileUrl . '">' .
                         '<img style="max-width: 100px; max-height: 100px;" src="' . $profilePhotoUrl . '" alt="' .
                         $translator->trans('UserPicture', [], Manager::context()) . '" /></a>';
                 }

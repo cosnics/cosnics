@@ -17,10 +17,14 @@
         <service id="Chamilo\Core\Admin\Announcement\Storage\Repository\PublicationRepository"/>
         <service id="Chamilo\Core\Admin\Announcement\Storage\Repository\RightsRepository"/>
 
+        <service id="Chamilo\Core\Admin\Service\WhoIsOnlineService"/>
+        <service id="Chamilo\Core\Admin\Repository\WhoIsOnlineRepository"/>
+
         <service id="Chamilo\Core\Admin\Service\ActionProvider"/>
         <service id="Chamilo\Core\Admin\Service\ImportActionProvider"/>
         <service id="Chamilo\Core\Admin\Service\AdminActionProvider">
             <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
         </service>
+
     </services>
 </container>

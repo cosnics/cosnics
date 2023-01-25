@@ -5,23 +5,20 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Core\User\Ajax
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
 {
 
     /**
-     * Runs this component
-     *
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \ReflectionException
      */
     public function run()
     {
@@ -33,27 +30,28 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
-     * @throws NoObjectSelectedException
-     * @throws ObjectNotExistException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    protected function getUserFromRequest()
+    protected function getUserFromRequest(): User
     {
-        $userId = $this->getRequest()->get(Manager::PARAM_USER_USER_ID);
+        $translator = $this->getTranslator();
+        $userIdentifier = $this->getRequest()->query->get(Manager::PARAM_USER_USER_ID);
 
-        if (empty($userId))
+        if (empty($userIdentifier))
         {
             throw new NoObjectSelectedException(
-                Translation::getInstance()->getTranslation('User', null, Manager::context())
+                $translator->trans('User', [], Manager::context())
             );
         }
 
-        $user = DataManager:: retrieve_by_id(User::class, $userId);
+        $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
 
         if (empty($user))
         {
             throw new ObjectNotExistException(
-                Translation::getInstance()->getTranslation('User', null, Manager::context()), $userId
+                $translator->trans('User', [], Manager::context()), $userIdentifier
             );
         }
 

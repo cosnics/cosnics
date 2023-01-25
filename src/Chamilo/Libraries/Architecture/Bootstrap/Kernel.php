@@ -3,6 +3,7 @@
 namespace Chamilo\Libraries\Architecture\Bootstrap;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\WhoIsOnlineService;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit;
 use Chamilo\Core\User\Manager;
@@ -27,10 +28,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- *
  * @package Chamilo\Libraries\Architecture\Bootstrap
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class Kernel
 {
@@ -41,6 +41,8 @@ class Kernel
     protected AuthenticationValidator $authenticationValidator;
 
     protected SessionUtilities $sessionUtilities;
+
+    protected WhoIsOnlineService $whoIsOnlineService;
 
     private ?Application $application = null;
 
@@ -63,8 +65,8 @@ class Kernel
     public function __construct(
         ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
         SessionUtilities $sessionUtilities, ExceptionLoggerInterface $exceptionLogger,
-        AuthenticationValidator $authenticationValidator, UrlGenerator $urlGenerator,
-        PageConfiguration $pageConfiguration, User $user = null
+        WhoIsOnlineService $whoIsOnlineService, AuthenticationValidator $authenticationValidator,
+        UrlGenerator $urlGenerator, PageConfiguration $pageConfiguration, User $user = null
     )
     {
         $this->request = $request;
@@ -76,6 +78,7 @@ class Kernel
         $this->pageConfiguration = $pageConfiguration;
         $this->user = $user;
         $this->authenticationValidator = $authenticationValidator;
+        $this->whoIsOnlineService = $whoIsOnlineService;
     }
 
     /**
@@ -184,11 +187,6 @@ class Kernel
         return $this->application;
     }
 
-    public function setApplication(Application $application)
-    {
-        $this->application = $application;
-    }
-
     protected function getApplicationConfiguration(): ApplicationConfiguration
     {
         return new ApplicationConfiguration($this->getRequest(), $this->getUser());
@@ -199,19 +197,9 @@ class Kernel
         return $this->applicationFactory;
     }
 
-    public function setApplicationFactory(ApplicationFactory $applicationFactory)
-    {
-        $this->applicationFactory = $applicationFactory;
-    }
-
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
-    }
-
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
-    {
-        $this->configurationConsulter = $configurationConsulter;
     }
 
     public function getContext(): ?string
@@ -219,19 +207,9 @@ class Kernel
         return $this->context;
     }
 
-    public function setContext(string $context)
-    {
-        $this->context = $context;
-    }
-
     public function getExceptionLogger(): ExceptionLoggerInterface
     {
         return $this->exceptionLogger;
-    }
-
-    public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger)
-    {
-        $this->exceptionLogger = $exceptionLogger;
     }
 
     protected function getNotAuthenticatedResponse(): NotAuthenticatedResponse
@@ -261,21 +239,9 @@ class Kernel
         return $this->request;
     }
 
-    public function setRequest(ChamiloRequest $request)
-    {
-        $this->request = $request;
-    }
-
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
-    }
-
-    public function setUrlGenerator(UrlGenerator $urlGenerator): Kernel
-    {
-        $this->urlGenerator = $urlGenerator;
-
-        return $this;
     }
 
     public function getUser(): ?User
@@ -283,9 +249,9 @@ class Kernel
         return $this->user;
     }
 
-    public function setUser(User $user)
+    public function getWhoIsOnlineService(): WhoIsOnlineService
     {
-        $this->user = $user;
+        return $this->whoIsOnlineService;
     }
 
     /**
@@ -395,6 +361,55 @@ class Kernel
         $response->send();
     }
 
+    public function setApplication(Application $application)
+    {
+        $this->application = $application;
+    }
+
+    public function setApplicationFactory(ApplicationFactory $applicationFactory)
+    {
+        $this->applicationFactory = $applicationFactory;
+    }
+
+    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
+    {
+        $this->configurationConsulter = $configurationConsulter;
+    }
+
+    public function setContext(string $context)
+    {
+        $this->context = $context;
+    }
+
+    public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger)
+    {
+        $this->exceptionLogger = $exceptionLogger;
+    }
+
+    public function setRequest(ChamiloRequest $request)
+    {
+        $this->request = $request;
+    }
+
+    public function setUrlGenerator(UrlGenerator $urlGenerator): Kernel
+    {
+        $this->urlGenerator = $urlGenerator;
+
+        return $this;
+    }
+
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+    }
+
+    public function setWhoIsOnlineService(WhoIsOnlineService $whoIsOnlineService): Kernel
+    {
+        $this->whoIsOnlineService = $whoIsOnlineService;
+
+        return $this;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
      * @throws \Exception
@@ -412,8 +427,8 @@ class Kernel
         {
             if ($this->getUser() instanceof User)
             {
-                Event::trigger(
-                    'Online', \Chamilo\Core\Admin\Manager::context(), ['user' => $this->getUser()->getId()]
+                $this->getWhoIsOnlineService()->updateWhoIsOnlineForUserIdentifierWithCurrentTime(
+                    $this->getUser()->getId()
                 );
 
                 if ($this->getRequest()->query->get(Application::PARAM_CONTEXT) != 'Chamilo\Core\User\Ajax' &&

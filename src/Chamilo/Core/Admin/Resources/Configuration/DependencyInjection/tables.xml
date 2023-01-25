@@ -7,6 +7,10 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Core\Admin\Table\WhoIsOnlineTableRenderer"/>
+        <service id="Chamilo\Core\Admin\Table\WhoIsOnlineTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
     </services>
 </container>
