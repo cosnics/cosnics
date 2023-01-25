@@ -23,6 +23,7 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\Admin\Announcement\Storage\Repository
@@ -230,12 +231,11 @@ class PublicationRepository
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return string[]
      * @throws \Exception
      */
     public function findPublicationRecords(
         Condition $condition = null, int $count = null, int $offset = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         $retrieveProperties = [];
 
@@ -277,13 +277,12 @@ class PublicationRepository
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return string[]
      * @throws \Exception
      */
     public function findVisiblePublicationRecordsForPublicationIdentifiers(
         array $publicationIdentifiers, Condition $condition = null, int $count = null, int $offset = null,
         ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         $conditions = [];
 

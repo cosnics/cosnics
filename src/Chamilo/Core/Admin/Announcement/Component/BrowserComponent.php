@@ -3,8 +3,9 @@ namespace Chamilo\Core\Admin\Announcement\Component;
 
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
-use Chamilo\Core\Admin\Announcement\Table\Publication\PublicationTable;
+use Chamilo\Core\Admin\Announcement\Table\PublicationTableRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -13,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
@@ -26,31 +27,24 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-class BrowserComponent extends Manager implements TableSupport, DelegateComponent
+class BrowserComponent extends Manager implements DelegateComponent
 {
     public const FILTER_THIS_MONTH = 'month';
-
     public const FILTER_THIS_WEEK = 'week';
-
     public const FILTER_TODAY = 'today';
 
     public const PARAM_FILTER = 'filter';
-
     public const PARAM_PUBLICATION_TYPE = 'publication_type';
 
-    public const TYPE_ALL = 1;
+    public const TYPE_ALL = 'all';
+    public const TYPE_FOR_ME = 'for_me';
+    public const TYPE_FROM_ME = 'from_me';
 
-    public const TYPE_FOR_ME = 2;
-
-    public const TYPE_FROM_ME = 3;
-
-    /**
-     * @var \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * @return string
+     * @throws \ReflectionException
+     * @throws \QuickformException
      * @throws \Exception
      */
     public function run()
@@ -61,74 +55,117 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $publicationsTable;
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
+     * @throws \ReflectionException
      */
-    public function getButtonToolbarRenderer()
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
             $translator = $this->getTranslator();
+            $urlGenerator = $this->getUrlGenerator();
 
-            $buttonToolbar = new ButtonToolBar();
+            $searchUrl = $urlGenerator->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => self::package(),
+                    Manager::PARAM_ACTION => self:: ACTION_BROWSE
+                ]
+            );
+
+            $buttonToolbar = new ButtonToolBar($searchUrl);
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
 
             if ($this->getUser()->get_platformadmin())
             {
+                $createUrl = $urlGenerator->fromParameters(
+                    [
+                        Application::PARAM_CONTEXT => self::package(),
+                        Manager::PARAM_ACTION => self:: ACTION_CREATE
+                    ]
+                );
+
                 $commonActions->addButton(
                     new Button(
                         $translator->trans('Publish', [], StringUtilities::LIBRARIES),
-                        new FontAwesomeGlyph('share-square'),
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        new FontAwesomeGlyph('share-square'), $createUrl, ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
             }
 
+            $browseUrl = $urlGenerator->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => self::package(),
+                    Manager::PARAM_ACTION => self:: ACTION_BROWSE
+                ]
+            );
+
             $commonActions->addButton(
                 new Button(
                     $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
-                    $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $browseUrl, ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
+            );
+
+            $browseTodayUrl = $urlGenerator->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => self::package(),
+                    Manager::PARAM_ACTION => self:: ACTION_BROWSE,
+                    self::PARAM_FILTER => self::FILTER_TODAY
+                ]
             );
 
             $toolActions->addButton(
                 new Button(
                     $translator->trans('ShowToday', [], StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('calendar-day', [], null, 'fas'),
-                    $this->get_url(array(self::PARAM_FILTER => self::FILTER_TODAY)), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    new FontAwesomeGlyph('calendar-day', [], null, 'fas'), $browseTodayUrl,
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
+            );
+
+            $browseThisWeekUrl = $urlGenerator->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => self::package(),
+                    Manager::PARAM_ACTION => self:: ACTION_BROWSE,
+                    self::PARAM_FILTER => self::FILTER_THIS_WEEK
+                ]
             );
 
             $toolActions->addButton(
                 new Button(
                     $translator->trans('ShowThisWeek', [], StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('calendar-week', [], null, 'fas'),
-                    $this->get_url(array(self::PARAM_FILTER => self::FILTER_THIS_WEEK)),
+                    new FontAwesomeGlyph('calendar-week', [], null, 'fas'), $browseThisWeekUrl,
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
+            );
+
+            $browseThisMonthUrl = $urlGenerator->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => self::package(),
+                    Manager::PARAM_ACTION => self:: ACTION_BROWSE,
+                    self::PARAM_FILTER => self::FILTER_THIS_MONTH
+                ]
             );
 
             $toolActions->addButton(
                 new Button(
                     $translator->trans('ShowThisMonth', [], StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('calendar-alt', [], null, 'fas'),
-                    $this->get_url(array(self::PARAM_FILTER => self::FILTER_THIS_MONTH)),
+                    new FontAwesomeGlyph('calendar-alt', [], null, 'fas'), $browseThisMonthUrl,
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $buttonToolbar->addButtonGroup($commonActions);
             $buttonToolbar->addButtonGroup($toolActions);
+
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
 
@@ -138,6 +175,100 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     public function getLinkTabsRenderer(): LinkTabsRenderer
     {
         return $this->getService(LinkTabsRenderer::class);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function getPublicationCondition(): ?AndCondition
+    {
+        $conditions = [];
+
+        if ($this->getType() != self::TYPE_ALL)
+        {
+            $publisher_id = $this->getUser()->getId();
+
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLISHER_ID),
+                new StaticConditionVariable($publisher_id)
+            );
+        }
+
+        $searchCondition = $this->getSearchCondition();
+
+        if ($searchCondition instanceof OrCondition)
+        {
+            $conditions[] = $searchCondition;
+        }
+
+        $filter = $this->getRequest()->query->get(self::PARAM_FILTER);
+
+        switch ($filter)
+        {
+            case self::FILTER_TODAY :
+                $time = mktime(0, 0, 0, (int) date('m', time()), (int) date('d', time()), (int) date('Y', time()));
+                $conditions[] = new ComparisonCondition(
+                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_MODIFICATION_DATE),
+                    ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
+                );
+                break;
+            case self::FILTER_THIS_WEEK :
+                $time = strtotime('Next Monday', strtotime('-1 Week', time()));
+                $conditions[] = new ComparisonCondition(
+                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_MODIFICATION_DATE),
+                    ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
+                );
+                break;
+            case self::FILTER_THIS_MONTH :
+                $time = mktime(0, 0, 0, (int) date('m', time()), 1, (int) date('Y', time()));
+                $conditions[] = new ComparisonCondition(
+                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_MODIFICATION_DATE),
+                    ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
+                );
+                break;
+        }
+
+        if ($conditions)
+        {
+            return new AndCondition($conditions);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public function getPublicationTableRenderer(): PublicationTableRenderer
+    {
+        return $this->getService(PublicationTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function getSearchCondition(): ?OrCondition
+    {
+        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+
+        if (isset($query) && $query != '')
+        {
+            $conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE), $query
+            );
+
+            $conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION), $query
+            );
+
+            return new OrCondition($conditions);
+        }
+
+        return null;
     }
 
     public function getType()
@@ -163,12 +294,11 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
      * @return string
      * @throws \Exception
      */
-    private function get_publications_html()
+    private function get_publications_html(): string
     {
         $translator = $this->getTranslator();
-        $parameters = $this->get_parameters();
-        $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
-            $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        $urlGenerator = $this->getUrlGenerator();
+        $searchQuery = $this->getButtonToolbarRenderer()->getSearchForm()->getQuery();
 
         $type = $this->getType();
 
@@ -176,119 +306,108 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
         if ($this->getUser()->is_platform_admin())
         {
+            $publicationLinkUrl = $urlGenerator->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => self::package(),
+                    Manager::PARAM_ACTION => self:: ACTION_BROWSE,
+                    self::PARAM_PUBLICATION_TYPE => self::TYPE_ALL,
+                    ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY => $searchQuery
+                ]
+            );
+
             $tabs->add(
                 new LinkTab(
                     self::TYPE_ALL, $translator->trans('AllPublications', [], self::package()),
-                    new FontAwesomeGlyph('globe', array('fa-lg'), null, 'fas'),
-                    $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_ALL)), $type == self::TYPE_ALL
+                    new FontAwesomeGlyph('globe', ['fa-lg'], null, 'fas'), $publicationLinkUrl, $type == self::TYPE_ALL
                 )
             );
         }
 
+        $publicationLinkUrl = $urlGenerator->fromParameters(
+            [
+                Application::PARAM_CONTEXT => self::package(),
+                Manager::PARAM_ACTION => self:: ACTION_BROWSE,
+                self::PARAM_PUBLICATION_TYPE => self::TYPE_FOR_ME,
+                ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY => $searchQuery
+            ]
+        );
+
         $tabs->add(
             new LinkTab(
                 self::TYPE_FROM_ME, $translator->trans('PublishedForMe', [], self::package()),
-                new FontAwesomeGlyph('share-square', array('fa-lg'), null, 'fas'),
-                $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_FOR_ME)), $type == self::TYPE_FOR_ME
+                new FontAwesomeGlyph('share-square', ['fa-lg'], null, 'fas'), $publicationLinkUrl,
+                $type == self::TYPE_FOR_ME
             )
+        );
+
+        $publicationLinkUrl = $urlGenerator->fromParameters(
+            [
+                Application::PARAM_CONTEXT => self::package(),
+                Manager::PARAM_ACTION => self:: ACTION_BROWSE,
+                self::PARAM_PUBLICATION_TYPE => self::TYPE_FROM_ME,
+                ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY => $searchQuery
+            ]
         );
 
         $tabs->add(
             new LinkTab(
                 self::TYPE_FROM_ME, $translator->trans('MyPublications', [], self::package()),
-                new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'),
-                $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_FROM_ME)), $type == self::TYPE_FROM_ME
+                new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas'), $publicationLinkUrl, $type == self::TYPE_FROM_ME
             )
         );
 
-        $table = new PublicationTable(
-            $this, $this->getPublicationService(), $this->getRightsService(), $this->getUserService(),
-            $this->getGroupService()
-        );
-
-        return $this->getLinkTabsRenderer()->render($tabs, $table->render());
-    }
-
-    public function get_search_condition()
-    {
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        if (isset($query) && $query != '')
-        {
-            $conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE), $query
-            );
-
-            $conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION), $query
-            );
-
-            return new OrCondition($conditions);
-        }
-
-        return null;
-    }
-
-    public function get_table_condition($table_class_name)
-    {
-        $conditions = [];
-
-        if ($this->getType() != self::TYPE_ALL)
-        {
-            $publisher_id = $this->getUser()->getId();
-
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLISHER_ID),
-                new StaticConditionVariable($publisher_id)
-            );
-        }
-
-        if ($this->get_search_condition())
-        {
-            $conditions[] = $this->get_search_condition();
-        }
-
-        $filter = $this->getRequest()->query->get(self::PARAM_FILTER);
-
-        switch ($filter)
-        {
-            case self::FILTER_TODAY :
-                $time = mktime(0, 0, 0, date('m', time()), date('d', time()), date('Y', time()));
-                $conditions[] = new ComparisonCondition(
-                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_MODIFICATION_DATE),
-                    ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
-                );
-                break;
-            case self::FILTER_THIS_WEEK :
-                $time = strtotime('Next Monday', strtotime('-1 Week', time()));
-                $conditions[] = new ComparisonCondition(
-                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_MODIFICATION_DATE),
-                    ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
-                );
-                break;
-            case self::FILTER_THIS_MONTH :
-                $time = mktime(0, 0, 0, date('m', time()), 1, date('Y', time()));
-                $conditions[] = new ComparisonCondition(
-                    new PropertyConditionVariable(Publication::class, Publication::PROPERTY_MODIFICATION_DATE),
-                    ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($time)
-                );
-                break;
-        }
-
-        if ($conditions)
-        {
-            return new AndCondition($conditions);
-        }
-        else
-        {
-            return null;
-        }
+        return $this->getLinkTabsRenderer()->render($tabs, $this->renderPublicationTable());
     }
 
     /**
-     * @deprecated User BrowserComponent::getType() now
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Exception
      */
-    public function get_type()
+    protected function renderPublicationTable(): string
     {
-        return $this->getType();
+        $publicationTableRenderer = $this->getPublicationTableRenderer();
+
+        switch ($this->getType())
+        {
+            case BrowserComponent::TYPE_FROM_ME :
+            case BrowserComponent::TYPE_ALL :
+                $totalNumberOfItems =
+                    $this->getPublicationService()->countPublications($this->getPublicationCondition());
+                break;
+            default :
+                $totalNumberOfItems = $this->getPublicationService()->countVisiblePublicationsForUserIdentifier(
+                    (int) $this->getUser()->getId(), $this->getPublicationCondition()
+                );
+                break;
+        }
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $publicationTableRenderer->getParameterNames(), $publicationTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        switch ($this->getType())
+        {
+            case BrowserComponent::TYPE_FROM_ME :
+            case BrowserComponent::TYPE_ALL :
+                $publications = $this->getPublicationService()->findPublicationRecords(
+                    $this->getPublicationCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+                    $tableParameterValues->getOffset(),
+                    $publicationTableRenderer->determineOrderBy($tableParameterValues)
+                );
+                break;
+            default :
+                $publications = $this->getPublicationService()->findVisiblePublicationRecordsForUserIdentifier(
+                    (int) $this->getUser()->getId(), $this->getPublicationCondition(),
+                    $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
+                    $publicationTableRenderer->determineOrderBy($tableParameterValues)
+                );
+                break;
+        }
+
+        return $publicationTableRenderer->render($tableParameterValues, $publications);
     }
 }

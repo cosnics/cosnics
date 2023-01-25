@@ -12,5 +12,11 @@
                       type="service"
                       id="Chamilo\Core\User\User"/>
         </service>
+
+        <service id="Chamilo\Core\Admin\Announcement\Table\PublicationTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
     </services>
 </container>

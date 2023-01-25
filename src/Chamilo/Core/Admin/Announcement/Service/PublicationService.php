@@ -11,6 +11,7 @@ use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityPro
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
 class PublicationService
@@ -124,7 +125,7 @@ class PublicationService
     public function countVisiblePublicationsForUserIdentifier(int $userIdentifier, Condition $condition = null)
     {
         $publicationIdentifiers = $this->getRightsService()->findPublicationIdentifiersWithViewRightForUserIdentifier(
-            $this->getEntities(), $userIdentifier
+            $userIdentifier
         );
 
         return $this->getPublicationRepository()->countVisiblePublicationsForPublicationIdentifiers(
@@ -337,13 +338,12 @@ class PublicationService
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return string[]
      * @throws \Exception
      */
     public function findVisiblePublicationRecordsForUserIdentifier(
         int $userIdentifier, Condition $condition = null, int $count = null, int $offset = null,
         ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         $publicationIdentifiers =
             $this->getRightsService()->findPublicationIdentifiersWithViewRightForUserIdentifier($userIdentifier);
