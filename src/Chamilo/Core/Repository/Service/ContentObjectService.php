@@ -3,14 +3,14 @@ namespace Chamilo\Core\Repository\Service;
 
 use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Repository\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ContentObjectService
 {
@@ -53,15 +53,7 @@ class ContentObjectService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository $contentObjectRepository
-     */
-    public function setContentObjectRepository(ContentObjectRepository $contentObjectRepository): void
-    {
-        $this->contentObjectRepository = $contentObjectRepository;
-    }
-
-    /**
-     * @param boolean $alsoReturnInactiveTypes
+     * @param bool $alsoReturnInactiveTypes
      *
      * @return string[]
      */
@@ -93,14 +85,6 @@ class ContentObjectService
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
-     */
-    public function setRegistrationConsulter(RegistrationConsulter $registrationConsulter): void
-    {
-        $this->registrationConsulter = $registrationConsulter;
-    }
-
-    /**
      * @return \Chamilo\Libraries\Utilities\StringUtilities
      */
     public function getStringUtilities(): StringUtilities
@@ -109,15 +93,7 @@ class ContentObjectService
     }
 
     /**
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
-    public function setStringUtilities(StringUtilities $stringUtilities): void
-    {
-        $this->stringUtilities = $stringUtilities;
-    }
-
-    /**
-     * @return integer
+     * @return int
      * @throws \Exception
      * @see \Chamilo\Core\Repository\Storage\DataManager::get_used_disk_space()
      */
@@ -137,7 +113,7 @@ class ContentObjectService
     /**
      * @param string $contentObjectType
      *
-     * @return integer
+     * @return int
      * @throws \Exception
      */
     public function getUsedStorageSpaceForContentObjectType(string $contentObjectType)
@@ -151,7 +127,7 @@ class ContentObjectService
      * @param string $contentObjectType
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return integer
+     * @return int
      * @throws \Exception
      */
     public function getUsedStorageSpaceForContentObjectTypeAndUser(string $contentObjectType, User $user)
@@ -164,7 +140,7 @@ class ContentObjectService
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return integer
+     * @return int
      * @throws \Exception
      * @see \Chamilo\Core\Repository\Storage\DataManager::get_used_disk_space()
      */
@@ -179,6 +155,35 @@ class ContentObjectService
         }
 
         return $usedStorageSpace;
+    }
+
+    public function retrieveContentObjectByIdentifier(string $identifier): ?ContentObject
+    {
+        return $this->getContentObjectRepository()->retrieveContentObjectByIdentifier($identifier);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository $contentObjectRepository
+     */
+    public function setContentObjectRepository(ContentObjectRepository $contentObjectRepository): void
+    {
+        $this->contentObjectRepository = $contentObjectRepository;
+    }
+
+    /**
+     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
+     */
+    public function setRegistrationConsulter(RegistrationConsulter $registrationConsulter): void
+    {
+        $this->registrationConsulter = $registrationConsulter;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
+     */
+    public function setStringUtilities(StringUtilities $stringUtilities): void
+    {
+        $this->stringUtilities = $stringUtilities;
     }
 
 }

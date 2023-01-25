@@ -130,6 +130,11 @@ class ContentObjectRepository
         return $this->dataClassRepository;
     }
 
+    public function retrieveContentObjectByIdentifier(string $identifier): ?ContentObject
+    {
+        return $this->getDataClassRepository()->retrieveById(ContentObject::class, $identifier);
+    }
+
     /**
      *
      * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
