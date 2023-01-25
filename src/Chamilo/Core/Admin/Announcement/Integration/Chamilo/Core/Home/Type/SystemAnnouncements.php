@@ -16,7 +16,7 @@ use Chamilo\Libraries\Translation\Translation;
 
 class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
 {
-    const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
+    public const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
 
     private $publications;
 
@@ -39,8 +39,7 @@ class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
             );
 
             $icon = $content_object->get_icon_image(
-                IdentGlyph::SIZE_MINI,
-                !(boolean) $publication[Publication::PROPERTY_HIDDEN]
+                IdentGlyph::SIZE_MINI, !(boolean) $publication[Publication::PROPERTY_HIDDEN]
             );
 
             $href = htmlspecialchars($this->getPublicationLink($publication));
@@ -57,12 +56,11 @@ class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
     }
 
     /**
-     *
      * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
      */
     public function getConfigurationVariables()
     {
-        return array(self::CONFIGURATION_SHOW_EMPTY);
+        return [self::CONFIGURATION_SHOW_EMPTY];
     }
 
     public function getPublicationLink($publication)
@@ -116,7 +114,6 @@ class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
     }
 
     /**
-     *
      * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentFooter()
      */
     public function renderContentFooter()
@@ -125,7 +122,6 @@ class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
     }
 
     /**
-     *
      * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentHeader()
      */
     public function renderContentHeader()

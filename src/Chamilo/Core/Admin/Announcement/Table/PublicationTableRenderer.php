@@ -30,7 +30,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Ehb\Application\TimeEdit\User
+ * @package Chamilo\Core\Admin\Announcement\Table
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationTableRenderer extends RecordListTableRenderer implements TableRowActionsSupport
