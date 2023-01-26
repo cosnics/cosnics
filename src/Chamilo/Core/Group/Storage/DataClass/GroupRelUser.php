@@ -9,19 +9,14 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
- * @package group.lib
- */
-
-/**
- *
- * @author Hans de Bisschop
- * @author Dieter De Neef
+ * @package Chamilo\Core\Group\Storage\DataClass
+ * @author  Dieter De Neef
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GroupRelUser extends DataClass
 {
-    const PROPERTY_GROUP_ID = 'group_id';
-    const PROPERTY_USER_ID = 'user_id';
+    public const PROPERTY_GROUP_ID = 'group_id';
+    public const PROPERTY_USER_ID = 'user_id';
 
     public function delete(): bool
     {
@@ -47,12 +42,7 @@ class GroupRelUser extends DataClass
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_GROUP_ID, self::PROPERTY_USER_ID));
-    }
-
-    public function get_group_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_GROUP_ID);
+        return parent::getDefaultPropertyNames([self::PROPERTY_GROUP_ID, self::PROPERTY_USER_ID]);
     }
 
     /**
@@ -61,6 +51,11 @@ class GroupRelUser extends DataClass
     public static function getStorageUnitName(): string
     {
         return 'group_group_rel_user';
+    }
+
+    public function get_group_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_GROUP_ID);
     }
 
     public function get_user_id()

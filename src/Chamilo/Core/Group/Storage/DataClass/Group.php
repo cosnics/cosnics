@@ -78,7 +78,7 @@ class Group extends NestedSet
      * @param bool $recursive
      *
      * @return mixed
-     * @deprecated Use GroupService::countSubGroupsForGroup() now
+     * @deprecated Use GroupsTreeTraverser::countSubGroupsForGroup() now
      */
     public function count_subgroups($recursive = false)
     {
@@ -108,7 +108,7 @@ class Group extends NestedSet
      * @param bool $recursive_subgroups
      *
      * @return mixed
-     * @deprecated Use GroupService::countUsersForGroup() now
+     * @deprecated Use GroupsTreeTraverser::countUsersForGroup() now
      */
     public function count_users($include_subgroups = false, $recursive_subgroups = false)
     {

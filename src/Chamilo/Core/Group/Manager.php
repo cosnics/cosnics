@@ -22,7 +22,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package group.lib.group_manager
  */
 abstract class Manager extends Application
@@ -42,6 +41,7 @@ abstract class Manager extends Application
     public const ACTION_UNSUBSCRIBE_USER_FROM_GROUP = 'Unsubscriber';
     public const ACTION_VIEW_GROUP = 'Viewer';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE_GROUPS;
 
     public const PARAM_COMPONENT_ACTION = 'action';
@@ -86,7 +86,7 @@ abstract class Manager extends Application
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
-        $this->create_url = $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_GROUP));
+        $this->create_url = $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE_GROUP]);
 
         $this->checkAuthorization(Manager::context());
     }
@@ -113,87 +113,87 @@ abstract class Manager extends Application
     public function get_create_group_url($parent_id)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_CREATE_GROUP, self::PARAM_GROUP_ID => $parent_id)
+            [self::PARAM_ACTION => self::ACTION_CREATE_GROUP, self::PARAM_GROUP_ID => $parent_id]
         );
     }
 
     public function get_export_url()
     {
-        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT));
+        return $this->get_url([self::PARAM_ACTION => self::ACTION_EXPORT]);
     }
 
     public function get_group_delete_url($group)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_DELETE_GROUP, self::PARAM_GROUP_ID => $group->get_id())
+            [self::PARAM_ACTION => self::ACTION_DELETE_GROUP, self::PARAM_GROUP_ID => $group->get_id()]
         );
     }
 
     public function get_group_editing_url($group)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_EDIT_GROUP, self::PARAM_GROUP_ID => $group->get_id())
+            [self::PARAM_ACTION => self::ACTION_EDIT_GROUP, self::PARAM_GROUP_ID => $group->get_id()]
         );
     }
 
     public function get_group_emptying_url($group)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_TRUNCATE_GROUP, self::PARAM_GROUP_ID => $group->get_id())
+            [self::PARAM_ACTION => self::ACTION_TRUNCATE_GROUP, self::PARAM_GROUP_ID => $group->get_id()]
         );
     }
 
     public function get_group_metadata_url($group)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_MANAGE_METADATA, self::PARAM_GROUP_ID => $group->get_id())
+            [self::PARAM_ACTION => self::ACTION_MANAGE_METADATA, self::PARAM_GROUP_ID => $group->get_id()]
         );
     }
 
     public function get_group_rel_user_subscribing_url($group, $user)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_TO_GROUP,
                 self::PARAM_GROUP_ID => $group->get_id(),
                 self::PARAM_USER_ID => $user->get_id()
-            )
+            ]
         );
     }
 
     public function get_group_rel_user_unsubscribing_url(GroupRelUser $groupreluser)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_USER_FROM_GROUP,
                 self::PARAM_GROUP_REL_USER_ID => $groupreluser->getId()
-            )
+            ]
         );
     }
 
     public function get_group_suscribe_user_browser_url($group)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER, self::PARAM_GROUP_ID => $group->get_id())
+            [self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER, self::PARAM_GROUP_ID => $group->get_id()]
         );
     }
 
     public function get_group_viewing_url($group)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_VIEW_GROUP, self::PARAM_GROUP_ID => $group->get_id())
+            [self::PARAM_ACTION => self::ACTION_VIEW_GROUP, self::PARAM_GROUP_ID => $group->get_id()]
         );
     }
 
     public function get_import_url()
     {
-        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_IMPORT));
+        return $this->get_url([self::PARAM_ACTION => self::ACTION_IMPORT]);
     }
 
     public function get_move_group_url($group)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_MOVE_GROUP, self::PARAM_GROUP_ID => $group->get_id())
+            [self::PARAM_ACTION => self::ACTION_MOVE_GROUP, self::PARAM_GROUP_ID => $group->get_id()]
         );
     }
 
@@ -219,7 +219,6 @@ abstract class Manager extends Application
      *
      * @return Group
      * @throws \libraries\architecture\ObjectNotExistException
-     *
      * @throws \libraries\architecture\NoObjectSelectedException
      */
     protected function get_selected_group()

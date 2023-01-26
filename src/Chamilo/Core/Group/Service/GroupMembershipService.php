@@ -7,37 +7,25 @@ use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 use RuntimeException;
 
 /**
  * @package Chamilo\Core\Group\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GroupMembershipService
 {
-    /**
-     * @var \Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository
-     */
-    protected $groupMembershipRepository;
+    protected GroupEventNotifier $groupEventNotifier;
 
-    /**
-     * @var \Chamilo\Core\Group\Service\GroupEventNotifier
-     */
-    protected $groupEventNotifier;
+    protected GroupMembershipRepository $groupMembershipRepository;
 
-    /**
-     * @var \Chamilo\Core\Group\Service\GroupsTreeTraverser
-     */
-    protected $groupsTreeTraverser;
+    protected GroupsTreeTraverser $groupsTreeTraverser;
 
-    protected $userService;
+    protected UserService $userService;
 
-    /**
-     * @param \Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository $groupMembershipRepository
-     * @param \Chamilo\Core\Group\Service\GroupEventNotifier $groupEventNotifier
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     */
     public function __construct(
         GroupMembershipRepository $groupMembershipRepository, GroupEventNotifier $groupEventNotifier,
         UserService $userService
@@ -49,9 +37,9 @@ class GroupMembershipService
     }
 
     /**
-     * @param integer $groupIdentifier
+     * @param int $groupIdentifier
      *
-     * @return integer
+     * @return int
      * @throws \Exception
      */
     public function countSubscribedUsersForGroupIdentifier(int $groupIdentifier)
@@ -60,9 +48,9 @@ class GroupMembershipService
     }
 
     /**
-     * @param integer[] $groupIdentifiers
+     * @param int $groupIdentifiers
      *
-     * @return integer
+     * @return int
      * @throws \Exception
      */
     public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers)
@@ -91,26 +79,60 @@ class GroupMembershipService
     }
 
     /**
-     * @param integer $groupIdentifier
+     * @param int $groupIdentifier
      *
-     * @return integer[]
+     * @return int[]
      * @throws \Exception
      */
-    public function findSubscribedUserIdentifiersForGroupIdentifier(int $groupIdentifier)
+    public function findSubscribedUserIdentifiersForGroupIdentifier(int $groupIdentifier): array
     {
-        return $this->getGroupMembershipRepository()->findSubscribedUserIdentifiersForGroupIdentifier($groupIdentifier);
+        return $this->findSubscribedUserIdentifiersForGroupIdentifiers([$groupIdentifier]);
     }
 
     /**
-     * @param integer[] $groupIdentifiers
+     * @param int[] $groupIdentifiers
      *
-     * @return integer[]
+     * @return int[]
      * @throws \Exception
      */
-    public function findSubscribedUserIdentifiersForGroupIdentifiers(array $groupIdentifiers)
+    public function findSubscribedUserIdentifiersForGroupIdentifiers(array $groupIdentifiers): array
     {
         return $this->getGroupMembershipRepository()->findSubscribedUserIdentifiersForGroupIdentifiers(
             $groupIdentifiers
+        );
+    }
+
+    /**
+     * @param int[] $groupIdentifiers
+     * @param ?int $offset
+     * @param ?int $count
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\SubscribedUser>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findSubscribedUsersForGroupIdentifier(
+        int $groupIdentifier, ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    ): ArrayCollection
+    {
+        return $this->findSubscribedUsersForGroupIdentifiers([$groupIdentifier], $condition, $offset, $count, $orderBy);
+    }
+
+    /**
+     * @param int[] $groupIdentifiers
+     * @param ?int $offset
+     * @param ?int $count
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\SubscribedUser>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findSubscribedUsersForGroupIdentifiers(
+        array $groupIdentifiers, ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    ): ArrayCollection
+    {
+        return $this->getGroupMembershipRepository()->findSubscribedUsersForGroupIdentifiers(
+            $groupIdentifiers, $condition, $offset, $count, $orderBy
         );
     }
 
@@ -120,14 +142,6 @@ class GroupMembershipService
     public function getGroupMembershipRepository(): GroupMembershipRepository
     {
         return $this->groupMembershipRepository;
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository $groupMembershipRepository
-     */
-    public function setGroupMembershipRepository(GroupMembershipRepository $groupMembershipRepository): void
-    {
-        $this->groupMembershipRepository = $groupMembershipRepository;
     }
 
     /**
@@ -161,6 +175,29 @@ class GroupMembershipService
     }
 
     /**
+     * Shortcut method to remove the users from a group by the group identifiers, only directly after removal of the
+     * groups because no notifiers are called. This is due to the fact that a group removal already triggers an event
+     * and therefore this cleanup action of the users after a delete should not trigger a new event.
+     *
+     * @param int $groupIdentifiers
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function removeUsersFromGroupsByIdsAfterRemoval(array $groupIdentifiers)
+    {
+        return $this->groupMembershipRepository->unsubscribeUsersFromGroupIdentifiers($groupIdentifiers);
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository $groupMembershipRepository
+     */
+    public function setGroupMembershipRepository(GroupMembershipRepository $groupMembershipRepository): void
+    {
+        $this->groupMembershipRepository = $groupMembershipRepository;
+    }
+
+    /**
      * @param \Chamilo\Core\User\Service\UserService $userService
      *
      * @return GroupMembershipService
@@ -170,21 +207,6 @@ class GroupMembershipService
         $this->userService = $userService;
 
         return $this;
-    }
-
-    /**
-     * Shortcut method to remove the users from a group by the group identifiers, only directly after removal of the
-     * groups because no notifiers are called. This is due to the fact that a group removal already triggers an event
-     * and therefore this cleanup action of the users after a delete should not trigger a new event.
-     *
-     * @param integer[] $groupIdentifiers
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    public function removeUsersFromGroupsByIdsAfterRemoval(array $groupIdentifiers)
-    {
-        return $this->groupMembershipRepository->unsubscribeUsersFromGroupIdentifiers($groupIdentifiers);
     }
 
     /**
@@ -220,7 +242,7 @@ class GroupMembershipService
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param integer[] $userIdentifiers
+     * @param int $userIdentifiers
      *
      * @throws \Exception
      */

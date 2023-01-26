@@ -3,27 +3,27 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Menu\GroupMenu;
+use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
-use Chamilo\Core\Group\Table\Group\GroupTable;
-use Chamilo\Core\Group\Table\GroupRelUser\GroupRelUserTable;
+use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
+use Chamilo\Core\Group\Table\GroupTableRenderer;
+use Chamilo\Core\Group\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -33,14 +33,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package group.lib.group_manager.component
+ * @package Chamilo\Core\Group\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-
-/**
- * Weblcms component which allows the user to manage his or her user subscriptions
- */
-class BrowserComponent extends Manager implements TableSupport
+class BrowserComponent extends Manager
 {
     public const TAB_DETAILS = 2;
     public const TAB_SUBGROUPS = 0;
@@ -55,7 +51,6 @@ class BrowserComponent extends Manager implements TableSupport
     private $rootGroup;
 
     /**
-     * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Exception
      */
@@ -69,10 +64,10 @@ class BrowserComponent extends Manager implements TableSupport
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->getButtonToolbarRenderer()->render() . '<br />';
         $html[] = $this->get_user_html();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
@@ -93,8 +88,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $translator = $this->getTranslator();
 
-            $buttonToolbar =
-                new ButtonToolBar($this->get_url(array(self::PARAM_GROUP_ID => $this->getGroupIdentifier())));
+            $buttonToolbar = new ButtonToolBar($this->get_url([self::PARAM_GROUP_ID => $this->getGroupIdentifier()]));
             $commonActions = new ButtonGroup();
 
             $commonActions->addButton(
@@ -114,7 +108,7 @@ class BrowserComponent extends Manager implements TableSupport
             $commonActions->addButton(
                 new Button(
                     $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
-                    $this->get_url(array(self::PARAM_GROUP_ID => $this->getGroupIdentifier())),
+                    $this->get_url([self::PARAM_GROUP_ID => $this->getGroupIdentifier()]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -152,6 +146,30 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->groupIdentifier;
     }
 
+    protected function getGroupMembershipService(): GroupMembershipService
+    {
+        return $this->getService(GroupMembershipService::class);
+    }
+
+    protected function getGroupTableCondition()
+    {
+        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+
+        if (is_null($query))
+        {
+            return $this->get_subgroups_condition();
+        }
+        else
+        {
+            return $this->get_all_groups_condition();
+        }
+    }
+
+    public function getGroupTableRenderer(): GroupTableRenderer
+    {
+        return $this->getService(GroupTableRenderer::class);
+    }
+
     /**
      * @param string $query
      *
@@ -174,6 +192,11 @@ class BrowserComponent extends Manager implements TableSupport
         return new OrCondition($conditions);
     }
 
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
     /**
      * @return \Chamilo\Core\Group\Storage\DataClass\Group
      */
@@ -183,13 +206,45 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $this->rootGroup = $this->retrieve_groups(
                 new EqualityCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
                     new StaticConditionVariable(0)
                 )
             )->current();
         }
 
         return $this->rootGroup;
+    }
+
+    public function getSubscribedUserTableRenderer(): SubscribedUserTableRenderer
+    {
+        return $this->getService(SubscribedUserTableRenderer::class);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function getSubscribedUsersCondition(): ?OrCondition
+    {
+        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+
+        if (isset($query) && $query != '')
+        {
+            $conditions = [];
+
+            $conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_FIRSTNAME), $query
+            );
+            $conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_LASTNAME), $query
+            );
+            $conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_USERNAME), $query
+            );
+
+            return new OrCondition($conditions);
+        }
+
+        return null;
     }
 
     protected function getTabsRenderer(): TabsRenderer
@@ -267,7 +322,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->trans('TruncateNA'), new FontAwesomeGlyph('trash-alt', array('text-muted')), null,
+                    $translator->trans('TruncateNA'), new FontAwesomeGlyph('trash-alt', ['text-muted']), null,
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -314,7 +369,7 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_subgroups_condition()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->getGroupIdentifier())
         );
 
@@ -334,34 +389,6 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * @param string $table_class_name
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_table_condition($table_class_name)
-    {
-        switch ($table_class_name)
-        {
-            case GroupTable::class :
-                $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-
-                if (is_null($query))
-                {
-                    return $this->get_subgroups_condition();
-                }
-                else
-                {
-                    return $this->get_all_groups_condition();
-                }
-
-            case GroupRelUserTable::class :
-                return $this->get_users_condition();
-        }
-
-        return null;
-    }
-
-    /**
      * @return string
      * @throws \Exception
      */
@@ -372,20 +399,18 @@ class BrowserComponent extends Manager implements TableSupport
         $translator = $this->getTranslator();
 
         // Subgroups table tab
-        $table = new GroupTable($this);
         $tabs->add(
             new ContentTab(
-                self::TAB_SUBGROUPS, $translator->trans('Subgroups'), $table->render(), new FontAwesomeGlyph(
-                    'users', array('fa-lg'), null, 'fas'
+                self::TAB_SUBGROUPS, $translator->trans('Subgroups'), $this->renderGroupTable(), new FontAwesomeGlyph(
+                    'users', ['fa-lg'], null, 'fas'
                 )
             )
         );
 
-        $table = new GroupRelUserTable($this);
         $tabs->add(
             new ContentTab(
                 self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::context()),
-                $table->render(), new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas')
+                $this->renderSubscribedUsertable(), new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas')
             )
         );
 
@@ -393,7 +418,7 @@ class BrowserComponent extends Manager implements TableSupport
         $tabs->add(
             new ContentTab(
                 self::TAB_DETAILS, $translator->trans('Details'), $this->get_group_info(), new FontAwesomeGlyph(
-                    'info-circle', array('fa-lg'), null, 'fas'
+                    'info-circle', ['fa-lg'], null, 'fas'
                 )
             )
         );
@@ -401,63 +426,61 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->getTabsRenderer()->render($renderer_name, $tabs);
     }
 
-    public function get_users_condition()
-    {
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable($this->getGroupIdentifier())
-        );
-
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-
-        if (isset($query) && $query != '')
-        {
-            $or_conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), $query
-            );
-            $or_conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), $query
-            );
-            $or_conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), $query
-            );
-            $condition = new OrCondition($or_conditions);
-
-            $users = DataManager::retrieves(
-                User::class, new DataClassRetrievesParameters($condition)
-            );
-
-            $userconditions = [];
-
-            foreach ($users as $user)
-            {
-                $userconditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-                    new StaticConditionVariable($user->get_id())
-                );
-            }
-
-            if (count($userconditions))
-            {
-                $conditions[] = new OrCondition($userconditions);
-            }
-            else
-            {
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-                    new StaticConditionVariable(0)
-                );
-            }
-        }
-
-        $condition = new AndCondition($conditions);
-
-        return $condition;
-    }
-
     public function has_menu(): bool
     {
         return true;
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderGroupTable(): string
+    {
+        $totalNumberOfItems = $this->getGroupService()->countGroups($this->getGroupTableCondition());
+        $groupTableRenderer = $this->getGroupTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $groupTableRenderer->getParameterNames(), $groupTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $users = $this->getGroupService()->findGroups(
+            $this->getGroupTableCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $groupTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $groupTableRenderer->render($tableParameterValues, $users);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Exception
+     */
+    protected function renderSubscribedUsertable(): string
+    {
+        $totalNumberOfItems =
+            $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifier($this->getGroupIdentifier());
+        $subscribedUserTableRenderer = $this->getSubscribedUserTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $subscribedUserTableRenderer->getParameterNames(),
+            $subscribedUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $users = $this->getGroupMembershipService()->findSubscribedUsersForGroupIdentifier(
+            $this->getGroupIdentifier(), $this->getSubscribedUsersCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $subscribedUserTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $subscribedUserTableRenderer->render($tableParameterValues, $users);
     }
 }
