@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
- *
  * @package user.lib.user_manager
  */
 
@@ -54,6 +53,7 @@ abstract class Manager extends Application
     public const ACTION_VIEW_ACCOUNT = 'Account';
     public const ACTION_VIEW_QUOTA = 'QuotaViewer';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE_USERS;
 
     public const PARAM_ACTIVE = 'active';
@@ -73,12 +73,12 @@ abstract class Manager extends Application
     public function get_approve_user_url($user)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_CONTEXT => self::context(),
                 self::PARAM_ACTION => self::ACTION_USER_APPROVER,
                 self::PARAM_USER_USER_ID => $user->get_id(),
                 self::PARAM_CHOICE => UserApproverComponent::CHOICE_APPROVE
-            )
+            ]
         );
     }
 
@@ -90,7 +90,7 @@ abstract class Manager extends Application
     public function get_change_user_url($user)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_CHANGE_USER, self::PARAM_USER_USER_ID => $user->get_id())
+            [self::PARAM_ACTION => self::ACTION_CHANGE_USER, self::PARAM_USER_USER_ID => $user->get_id()]
         );
     }
 
@@ -111,32 +111,32 @@ abstract class Manager extends Application
     public function get_deny_user_url($user)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_CONTEXT => self::context(),
                 self::PARAM_ACTION => self::ACTION_USER_APPROVER,
                 self::PARAM_USER_USER_ID => $user->get_id(),
                 self::PARAM_CHOICE => UserApproverComponent::CHOICE_DENY
-            )
+            ]
         );
     }
 
     public function get_edit_metadata_url($user)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_MANAGE_METADATA, self::PARAM_USER_USER_ID => $user->get_id())
+            [self::PARAM_ACTION => self::ACTION_MANAGE_METADATA, self::PARAM_USER_USER_ID => $user->get_id()]
         );
     }
 
     public function get_email_user_url($user)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_EMAIL, self::PARAM_USER_USER_ID => $user->get_id())
+            [self::PARAM_ACTION => self::ACTION_EMAIL, self::PARAM_USER_USER_ID => $user->get_id()]
         );
     }
 
     public function get_reporting_url()
     {
-        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_REPORTING));
+        return $this->get_url([self::PARAM_ACTION => self::ACTION_REPORTING]);
     }
 
     /**
@@ -157,14 +157,14 @@ abstract class Manager extends Application
     public function get_user_delete_url($user)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_DELETE_USER, self::PARAM_USER_USER_ID => $user->get_id())
+            [self::PARAM_ACTION => self::ACTION_DELETE_USER, self::PARAM_USER_USER_ID => $user->get_id()]
         );
     }
 
     public function get_user_detail_url($user_id)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_USER_DETAIL, self::PARAM_USER_USER_ID => $user_id)
+            [self::PARAM_ACTION => self::ACTION_USER_DETAIL, self::PARAM_USER_USER_ID => $user_id]
         );
     }
 
@@ -176,14 +176,14 @@ abstract class Manager extends Application
     public function get_user_editing_url($user)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_UPDATE_USER, self::PARAM_USER_USER_ID => $user->get_id())
+            [self::PARAM_ACTION => self::ACTION_UPDATE_USER, self::PARAM_USER_USER_ID => $user->get_id()]
         );
     }
 
     public function get_user_reporting_url($user_id)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_REPORTING, self::PARAM_USER_USER_ID => $user_id)
+            [self::PARAM_ACTION => self::ACTION_REPORTING, self::PARAM_USER_USER_ID => $user_id]
         );
     }
 

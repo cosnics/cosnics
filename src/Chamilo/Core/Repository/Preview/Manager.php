@@ -28,6 +28,7 @@ abstract class Manager extends Application
     public const ACTION_RENDITION = 'Rendition';
     public const ACTION_RESET = 'Reset';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_DISPLAY;
 
     public const PARAM_CONTENT_OBJECT_ID = 'preview_content_object_id';
@@ -40,7 +41,6 @@ abstract class Manager extends Application
     private $buttonToolBarRenderer;
 
     /**
-     *
      * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
     private $content_object;
@@ -84,7 +84,7 @@ abstract class Manager extends Application
     {
         if (!isset($this->buttonToolBarRenderer))
         {
-            $buttonToolBar = new ButtonToolBar(null, [], array('pull-right'));
+            $buttonToolBar = new ButtonToolBar(null, [], ['pull-right']);
             $this->buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
             $dropdownButton = new DropdownButton(
@@ -103,8 +103,8 @@ abstract class Manager extends Application
                 $dropdownButton->addSubButton(
                     new SubButton(
                         Translation::get('DisplayPreview'), null,
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_DISPLAY)),
-                        SubButton::DISPLAY_ICON_AND_LABEL, null, [], null, (bool) $isDisplayAction
+                        $this->get_url([self::PARAM_ACTION => self::ACTION_DISPLAY]), SubButton::DISPLAY_ICON_AND_LABEL,
+                        null, [], null, (bool) $isDisplayAction
                     )
                 );
             }
@@ -114,8 +114,7 @@ abstract class Manager extends Application
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('ResetDisplayPreview'), new FontAwesomeGlyph('undo'),
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_RESET)),
-                        SubButton::DISPLAY_ICON_AND_LABEL,
+                        $this->get_url([self::PARAM_ACTION => self::ACTION_RESET]), SubButton::DISPLAY_ICON_AND_LABEL,
                         Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                     )
                 );
@@ -123,7 +122,7 @@ abstract class Manager extends Application
 
             $dropdownButton->addSubButton(new SubButtonDivider());
 
-            $views = array(
+            $views = [
                 ContentObjectRendition::VIEW_FULL,
                 ContentObjectRendition::VIEW_PREVIEW,
                 ContentObjectRendition::VIEW_THUMBNAIL,
@@ -131,7 +130,7 @@ abstract class Manager extends Application
                 ContentObjectRendition::VIEW_FULL_THUMBNAIL,
                 ContentObjectRendition::VIEW_INLINE,
                 ContentObjectRendition::VIEW_FORM
-            );
+            ];
 
             foreach ($views as $view)
             {
@@ -142,11 +141,11 @@ abstract class Manager extends Application
                     new SubButton(
                         Translation::get('View' . StringUtilities::getInstance()->createString($view)->upperCamelize()),
                         null, $this->get_url(
-                        array(
+                        [
                             self::PARAM_ACTION => self::ACTION_RENDITION,
                             self::PARAM_FORMAT => $this->getCurrentFormat(),
                             self::PARAM_VIEW => $view
-                        )
+                        ]
                     ), SubButton::DISPLAY_ICON_AND_LABEL, null, [], null, $isActive
                     )
                 );
@@ -242,11 +241,11 @@ abstract class Manager extends Application
         }
 
         $redirect = new Redirect(
-            array(
+            [
                 self::PARAM_CONTEXT => self::context(),
                 self::PARAM_ACTION => $action,
                 self::PARAM_CONTENT_OBJECT_ID => $contentObject->get_id()
-            )
+            ]
         );
 
         return $redirect->getUrl();

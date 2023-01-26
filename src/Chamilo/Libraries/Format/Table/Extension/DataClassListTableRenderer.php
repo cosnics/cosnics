@@ -16,7 +16,7 @@ abstract class DataClassListTableRenderer extends ListTableRenderer
      */
     protected function renderCell(TableColumn $column, $dataClass): string
     {
-        return $dataClass->getDefaultProperty($column->get_name());
+        return (string) $dataClass->getDefaultProperty($column->get_name());
     }
 
     /**

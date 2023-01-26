@@ -8,8 +8,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 
 /**
  * @package Chamilo\Core\Notification
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class Manager extends Application
 {
@@ -17,6 +16,7 @@ abstract class Manager extends Application
     public const ACTION_VIEW = 'Viewer';
     public const ACTION_VIEW_NOTIFICATION = 'NotificationViewer';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_VIEW;
 
     public const PROPERTY_NOTIFICATION_ID = 'NotificationId';

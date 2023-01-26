@@ -10,28 +10,25 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 {
-    const ACTION_LOGIN = 'Login';
+    public const ACTION_LOGIN = 'Login';
+    public const ACTION_LOGOUT = 'Logout';
 
-    const ACTION_LOGOUT = 'Logout';
+    public const CONTEXT = __NAMESPACE__;
 
-    const FEED_TYPE_GENERAL = 1;
+    public const FEED_TYPE_GENERAL = 1;
+    public const FEED_TYPE_MYVIDEOS = 2;
 
-    const FEED_TYPE_MYVIDEOS = 2;
+    public const PARAM_FEED_IDENTIFIER = 'identifier';
+    public const PARAM_FEED_TYPE = 'feed';
 
-    const PARAM_FEED_IDENTIFIER = 'identifier';
-
-    const PARAM_FEED_TYPE = 'feed';
-
-    const REPOSITORY_TYPE = 'youtube';
+    public const REPOSITORY_TYPE = 'youtube';
 
     /**
-     *
      * @param $applicationConfiguration ApplicationConfigurationInterface
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
@@ -46,7 +43,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     public function get_available_renderers()
     {
-        return array(Renderer::TYPE_GALLERY, Renderer::TYPE_SLIDESHOW, Renderer::TYPE_TABLE);
+        return [Renderer::TYPE_GALLERY, Renderer::TYPE_SLIDESHOW, Renderer::TYPE_TABLE];
     }
 
     /*
@@ -69,7 +66,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     public function get_external_repository_actions()
     {
-        $actions = array(self::ACTION_BROWSE_EXTERNAL_REPOSITORY);
+        $actions = [self::ACTION_BROWSE_EXTERNAL_REPOSITORY];
 
         if ($this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
@@ -101,7 +98,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
 
     /**
-     *
      * @param \core\repository\external\ExternalObject\Storage\DataClass $object
      *
      * @return string
@@ -128,8 +124,8 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
             $my_videos = [];
             $my_videos['title'] = Translation::get('MyChannel');
             $my_videos['url'] = $this->get_url(
-                array(self::PARAM_FEED_TYPE => self::FEED_TYPE_MYVIDEOS),
-                array(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, self::PARAM_FEED_IDENTIFIER)
+                [self::PARAM_FEED_TYPE => self::FEED_TYPE_MYVIDEOS],
+                [ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, self::PARAM_FEED_IDENTIFIER]
             );
 
             $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
@@ -141,8 +137,8 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         $browser = [];
         $browser['title'] = Translation::get('Public');
         $browser['url'] = $this->get_url(
-            array(self::PARAM_FEED_TYPE => self::FEED_TYPE_GENERAL),
-            array(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, self::PARAM_FEED_IDENTIFIER)
+            [self::PARAM_FEED_TYPE => self::FEED_TYPE_GENERAL],
+            [ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, self::PARAM_FEED_IDENTIFIER]
         );
 
         $glyph = new FontAwesomeGlyph('home', [], null, 'fas');

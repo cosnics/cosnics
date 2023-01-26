@@ -10,19 +10,19 @@ use RuntimeException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Ajax
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class Manager extends AjaxManager
 {
-    const ACTION_UPLOAD_ENTRY_ATTACHMENT = 'upload_entry_attachment';
-    const ACTION_DELETE_ENTRY_ATTACHMENT = 'delete_entry_attachment';
-    const ACTION_GET_NOTIFICATIONS = 'GetNotifications';
+    public const ACTION_DELETE_ENTRY_ATTACHMENT = 'delete_entry_attachment';
+    public const ACTION_GET_NOTIFICATIONS = 'GetNotifications';
+    public const ACTION_UPLOAD_ENTRY_ATTACHMENT = 'upload_entry_attachment';
 
-    const DEFAULT_ACTION = self::ACTION_UPLOAD_ENTRY_ATTACHMENT;
+    public const CONTEXT = __NAMESPACE__;
+    public const DEFAULT_ACTION = self::ACTION_UPLOAD_ENTRY_ATTACHMENT;
 
-    const PARAM_ACTION = 'assignment_display_ajax_action';
-    const PARAM_ENTRY_ATTACHMENT_ID = 'entry_attachment_id';
+    public const PARAM_ACTION = 'assignment_display_ajax_action';
+    public const PARAM_ENTRY_ATTACHMENT_ID = 'entry_attachment_id';
 
     /**
      * @var AjaxComponent

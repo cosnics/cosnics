@@ -8,7 +8,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @author Michael Kyndt
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -16,13 +15,13 @@ abstract class Manager extends Application
 {
     public const ATTACHMENT_VIEWER_COMPONENT = 'AttachmentViewer';
     public const CONTENT_OBJECT_UPDATER_COMPONENT = 'ContentObjectUpdater';
+    public const CONTEXT = __NAMESPACE__;
     public const CREATOR_COMPONENT = 'Creator';
+    public const DEFAULT_ACTION = \Chamilo\Core\Repository\Display\Manager::DEFAULT_ACTION;
     public const DELETER_COMPONENT = 'Deleter';
+    public const PARAM_ACTION = \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION;
     public const REPORTING_TEMPLATE_VIEWER_COMPONENT = 'ReportingTemplateViewer';
     public const UPDATER_COMPONENT = 'Updater';
-
-    public const DEFAULT_ACTION = \Chamilo\Core\Repository\Display\Manager::DEFAULT_ACTION;
-    public const PARAM_ACTION = \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION;
 
     public static function factory($type, $application)
     {
@@ -31,7 +30,7 @@ abstract class Manager extends Application
 
         if (!class_exists($class))
         {
-            throw new Exception(Translation::get('ComponentTypeDoesNotExist', array('type' => $type)));
+            throw new Exception(Translation::get('ComponentTypeDoesNotExist', ['type' => $type]));
         }
 
         return new $class($application);
@@ -78,7 +77,7 @@ abstract class Manager extends Application
     /**
      * Builds the attachment url
      *
-     * @param $attachment ContentObject
+     * @param $attachment                              ContentObject
      * @param $selected_complex_content_object_item_id int [OPTIONAL] default null
      *
      * @return string

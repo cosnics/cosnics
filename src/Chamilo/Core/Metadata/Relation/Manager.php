@@ -6,12 +6,11 @@ use Chamilo\Core\Metadata\Service\EntityTranslationService;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
- *
  * @package Chamilo\Core\Metadata\Schema
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class Manager extends Application
 {
@@ -21,6 +20,7 @@ abstract class Manager extends Application
     public const ACTION_ELEMENT = 'Element';
     public const ACTION_UPDATE = 'Updater';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public const PARAM_ACTION = 'relation_action';

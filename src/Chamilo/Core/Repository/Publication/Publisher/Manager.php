@@ -7,7 +7,9 @@ abstract class Manager extends Application
 {
     public const ACTION_PUBLISHER = 'publisher';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_PUBLISHER;
+
     public const PARAM_ACTION = 'publisher_action';
 
     /**

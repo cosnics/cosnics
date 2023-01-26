@@ -6,8 +6,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- *
- * @author Hans De Bisschop & Magali Gillard
+ * @author  Hans De Bisschop & Magali Gillard
  * @package reporting.viewer
  */
 abstract class Manager extends Application
@@ -15,6 +14,7 @@ abstract class Manager extends Application
     public const ACTION_SAVE = 'Saver';
     public const ACTION_VIEW = 'Viewer';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_VIEW;
 
     public const PARAM_ACTION = 'reporting_viewer_action';
@@ -25,13 +25,11 @@ abstract class Manager extends Application
     public const PARAM_VIEWS = 'views';
 
     /**
-     *
      * @var \core\reporting\ReportingTemplate
      */
     private $template;
 
     /**
-     *
      * @return int
      */
     public function get_current_block()
@@ -40,7 +38,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return string[]
      */
     public function get_current_view()
@@ -49,7 +46,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return \core\reporting\ReportingTemplate
      */
     public function get_template()
@@ -58,7 +54,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @param \core\reporting\ReportingTemplate $template
      */
     public function set_template(ReportingTemplate $template)
@@ -67,7 +62,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @param string $template_name
      */
     public function set_template_by_name($template_name)
@@ -76,7 +70,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return bool
      */
     public function show_all()

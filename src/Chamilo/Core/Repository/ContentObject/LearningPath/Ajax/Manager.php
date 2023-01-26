@@ -18,7 +18,8 @@ use Chamilo\Libraries\Translation\Translation;
  */
 abstract class Manager extends AjaxManager
 {
-    const PARAM_WORKSPACE_ID = 'workspace_id';
+    public const CONTEXT = __NAMESPACE__;
+    public const PARAM_WORKSPACE_ID = 'workspace_id';
 
     /**
      * @return ContentObjectRepository | object
@@ -40,7 +41,6 @@ abstract class Manager extends AjaxManager
      * Returns the workspace from the request
      *
      * @return WorkspaceInterface
-     *
      * @throws NotAllowedException
      * @throws ObjectNotExistException
      */

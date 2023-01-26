@@ -17,9 +17,8 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package core\repository\instance
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends Application
 {
@@ -32,6 +31,7 @@ abstract class Manager extends Application
     public const ACTION_RIGHTS = 'RightsEditor';
     public const ACTION_UPDATE = 'Updater';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public const PARAM_IMPLEMENTATION = 'implementation';
@@ -52,7 +52,7 @@ abstract class Manager extends Application
     /**
      * Get a series of links for all external repository instances of one or more types
      *
-     * @param $types array An array of external repository manager types
+     * @param $types     array An array of external repository manager types
      * @param $auto_open unknown_type if there is only one instance, should it be opened automatically
      *
      * @return string
@@ -65,7 +65,7 @@ abstract class Manager extends Application
         {
             if (!is_array($types))
             {
-                $types = array($types);
+                $types = [$types];
             }
 
             $type_names = [];
@@ -78,14 +78,14 @@ abstract class Manager extends Application
             if (count($types) > 1)
             {
                 $translation = Translation::get(
-                    'NoExternalInstanceTypeManagersAvailable', array('TYPES' => $type_names),
+                    'NoExternalInstanceTypeManagersAvailable', ['TYPES' => $type_names],
                     \Chamilo\Core\Repository\Manager::context()
                 );
             }
             else
             {
                 $translation = Translation::get(
-                    'NoExternalInstanceTypeManagerAvailable', array('TYPES' => $type_names),
+                    'NoExternalInstanceTypeManagerAvailable', ['TYPES' => $type_names],
                     \Chamilo\Core\Repository\Manager::context()
                 );
             }
@@ -106,7 +106,7 @@ abstract class Manager extends Application
                     \Chamilo\Core\Repository\Manager::PARAM_EXTERNAL_INSTANCE . '=' . $instance->get_id() . '&' .
                     \Chamilo\Core\Repository\External\Manager::PARAM_EMBEDDED . '=1';
                 $title = Translation::get(
-                    'BrowseObject', array('OBJECT' => $instance->get_title()), StringUtilities::LIBRARIES
+                    'BrowseObject', ['OBJECT' => $instance->get_title()], StringUtilities::LIBRARIES
                 );
 
                 $glyph = new FontAwesomeGlyph('upload', [], null, 'fas');
@@ -124,7 +124,7 @@ abstract class Manager extends Application
             if ($available_instances == 0)
             {
                 $translation = Translation::get(
-                    'NoExternalInstanceTypeManagerAvailable', array('TYPES' => $type_names),
+                    'NoExternalInstanceTypeManagerAvailable', ['TYPES' => $type_names],
                     \Chamilo\Core\Repository\Manager::context()
                 );
 

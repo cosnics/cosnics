@@ -20,6 +20,7 @@ abstract class Manager extends Application
     public const ACTION_RIGHTS = 'Rights';
     public const ACTION_UPDATE = 'Updater';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_CREATE;
 
     public const PARAM_ACTION = 'rights_action';

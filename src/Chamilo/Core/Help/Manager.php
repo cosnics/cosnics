@@ -19,7 +19,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package help.lib.help_manager
  */
 
@@ -31,9 +30,9 @@ use Chamilo\Libraries\Translation\Translation;
 abstract class Manager extends Application
 {
     public const ACTION_BROWSE_HELP_ITEMS = 'Browser';
-
     public const ACTION_UPDATE_HELP_ITEM = 'Updater';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE_HELP_ITEMS;
 
     public const PARAM_HELP_ITEM = 'help_item';
@@ -65,10 +64,10 @@ abstract class Manager extends Application
         $help_item = DataManager::retrieve_help_item_by_context($context, $identifier, $language);
 
         $autocomplete_page = Configuration::getInstance()->get_setting(
-            array(self::context(), 'autocomplete_missing_pages')
+            [self::context(), 'autocomplete_missing_pages']
         );
         $autocomplete_languages = Configuration::getInstance()->get_setting(
-            array(self::context(), 'autocomplete_all_languages')
+            [self::context(), 'autocomplete_all_languages']
         );
 
         if ($help_item instanceof HelpItem)
@@ -132,7 +131,7 @@ abstract class Manager extends Application
 
     public static function get_tool_bar_help_item($help_item)
     {
-        $hide_empty_pages = Configuration::getInstance()->get_setting(array(self::context(), 'hide_empty_pages'));
+        $hide_empty_pages = Configuration::getInstance()->get_setting([self::context(), 'hide_empty_pages']);
         $help_item = self::get_help_item_by_name($help_item[0], $help_item[1]);
 
         if ($help_item instanceof HelpItem && ($help_item->has_url() || $hide_empty_pages == '0'))

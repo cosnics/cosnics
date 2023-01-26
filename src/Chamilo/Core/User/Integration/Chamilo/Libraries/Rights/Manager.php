@@ -5,12 +5,12 @@ use Chamilo\Libraries\Architecture\AjaxManager;
 
 /**
  * @package Chamilo\Core\User\Integration\Chamilo\Libraries\Rights
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends AjaxManager
 {
-    const ACTION_USER_ENTITY_FEED = 'UserEntityFeed';
+    public const ACTION_USER_ENTITY_FEED = 'UserEntityFeed';
 
-    const DEFAULT_ACTION = self::ACTION_USER_ENTITY_FEED;
+    public const CONTEXT = __NAMESPACE__;
+    public const DEFAULT_ACTION = self::ACTION_USER_ENTITY_FEED;
 }

@@ -12,8 +12,7 @@ use RuntimeException;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class Manager extends Application
 {
@@ -24,6 +23,7 @@ abstract class Manager extends Application
     public const ACTION_PUBLISH_LATEST_DOCUMENTS = 'LatestDocumentsPublisher';
     public const ACTION_VIEW_RESULT = 'ResultViewer';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
     public const EPHORUS_TRANSLATION_CONTEXT = 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus';
 
@@ -32,7 +32,6 @@ abstract class Manager extends Application
     public const PARAM_SOURCE = 'source';
 
     /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)

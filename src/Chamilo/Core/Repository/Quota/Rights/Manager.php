@@ -16,6 +16,7 @@ abstract class Manager extends Application
     public const ACTION_CREATE = 'Creator';
     public const ACTION_DELETE = 'Deleter';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_CREATE;
 
     public const PARAM_ACTION = 'quota_rights_action';
@@ -40,22 +41,22 @@ abstract class Manager extends Application
 
         $tabs->add(
             new LinkTab(
-                self::ACTION_CREATE, Translation::get('Add'), new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)), $current_tab == self::ACTION_CREATE
+                self::ACTION_CREATE, Translation::get('Add'), new FontAwesomeGlyph('plus', ['fa-lg'], null, 'fas'),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE]), $current_tab == self::ACTION_CREATE
             )
         );
         $tabs->add(
             new LinkTab(
                 self::ACTION_ACCESS, Translation::get('GeneralAccess'),
-                new FontAwesomeGlyph('key', array('fa-lg'), null, 'fas'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_ACCESS)), $current_tab == self::ACTION_ACCESS
+                new FontAwesomeGlyph('key', ['fa-lg'], null, 'fas'),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_ACCESS]), $current_tab == self::ACTION_ACCESS
             )
         );
         $tabs->add(
             new LinkTab(
                 self::ACTION_BROWSE, Translation::get('Targets'),
-                new FontAwesomeGlyph('bullseye', array('fa-lg'), null, 'fas'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)), $current_tab == self::ACTION_BROWSE
+                new FontAwesomeGlyph('bullseye', ['fa-lg'], null, 'fas'),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE]), $current_tab == self::ACTION_BROWSE
             )
         );
 

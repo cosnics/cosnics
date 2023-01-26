@@ -12,7 +12,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends Application
@@ -25,9 +24,10 @@ abstract class Manager extends Application
     public const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
     public const ACTION_VIEW_COMPLEX_CONTENT_OBJECT = 'Viewer';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
-    public const PARAM_ACTION = 'display_action';
 
+    public const PARAM_ACTION = 'display_action';
     public const PARAM_ATTACHMENT_ID = 'attachment_id';
     public const PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID = 'cloi';
     public const PARAM_DIRECTION = 'direction';
@@ -51,7 +51,6 @@ abstract class Manager extends Application
     private $selected_complex_content_object_item;
 
     /**
-     *
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param unknown $user
      * @param unknown $parent
@@ -104,7 +103,7 @@ abstract class Manager extends Application
     {
         $this->menu = new \Chamilo\Core\Repository\Builder\Menu(
             $this->get_root_content_object(), $this->get_complex_content_object_item(),
-            $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT))
+            $this->get_url([self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT])
         );
     }
 
@@ -172,23 +171,14 @@ abstract class Manager extends Application
         return $this->complex_content_object_item;
     }
 
-    /**
-     *
-     * @param $complex_content_object_item ComplexContentObjectItem
-     */
-    public function set_complex_content_object_item(ComplexContentObjectItem $complex_content_object_item)
-    {
-        $this->complex_content_object_item = $complex_content_object_item;
-    }
-
     public function get_complex_content_object_item_delete_url($complex_content_object_item)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id(),
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
-            )
+            ]
         );
     }
 
@@ -203,15 +193,13 @@ abstract class Manager extends Application
     public function get_complex_content_object_item_update_url($complex_content_object_item)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id(),
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
-            )
+            ]
         );
     }
-
-    // Common Code
 
     public function get_complex_content_object_menu()
     {
@@ -223,10 +211,12 @@ abstract class Manager extends Application
         return $this->menu->render_as_tree();
     }
 
+    // Common Code
+
     /**
      * Builds the attachment url
      *
-     * @param $attachment ContentObject
+     * @param $attachment                              ContentObject
      * @param $selected_complex_content_object_item_id int [OPTIONAL] default null
      *
      * @return string
@@ -241,11 +231,11 @@ abstract class Manager extends Application
         }
 
         return $this->get_url(
-            array(
+            [
                 static::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
                 self::PARAM_ATTACHMENT_ID => $attachment->get_id(),
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item_id
-            )
+            ]
         );
     }
 
@@ -257,12 +247,12 @@ abstract class Manager extends Application
         return $this->get_parent()->get_root_content_object();
     }
 
-    // url building
-
     public function get_root_content_object_id()
     {
         return $this->get_parent()->get_root_content_object()->get_id();
     }
+
+    // url building
 
     public function get_selected_complex_content_object_item()
     {
@@ -280,5 +270,13 @@ abstract class Manager extends Application
     public function is_allowed($right)
     {
         return $this->get_parent()->is_allowed($right);
+    }
+
+    /**
+     * @param $complex_content_object_item ComplexContentObjectItem
+     */
+    public function set_complex_content_object_item(ComplexContentObjectItem $complex_content_object_item)
+    {
+        $this->complex_content_object_item = $complex_content_object_item;
     }
 }

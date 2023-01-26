@@ -9,25 +9,33 @@ use Exception;
 
 /**
  * @package Chamilo\Core\Repository\Builder\Action
- *
  * This class represents a basic complex builder structure.
  * When a builder is needed for a certain type of complex
  * object an extension should be written. We will make use of the repoviewer for selection, creation of objects
- *
- * @author vanpouckesven
+ * @author  vanpouckesven
  */
 abstract class Manager extends Application
 {
     public const ACTION_PREVIEW = 'Preview';
     public const ATTACHMENT_VIEWER_COMPONENT = 'AttachmentViewer';
     public const BROWSER_COMPONENT = 'Browser';
+
+    public const CONTEXT = __NAMESPACE__;
+
     public const CREATOR_COMPONENT = 'Creator';
+
     public const DEFAULT_ACTION = self::BROWSER_COMPONENT;
+
     public const DELETER_COMPONENT = 'Deleter';
+
     public const MOVER_COMPONENT = 'Mover';
+
     public const PARAM_ACTION = \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION;
+
     public const PARENT_CHANGER_COMPONENT = 'ParentChanger';
+
     public const UPDATER_COMPONENT = 'Updater';
+
     public const VIEWER_COMPONENT = 'Viewer';
 
     public static function factory($type, $application)
@@ -37,7 +45,7 @@ abstract class Manager extends Application
 
         if (!class_exists($class))
         {
-            throw new Exception(Translation::get('ComponentTypeDoesNotExist', array('TYPE' => $type)));
+            throw new Exception(Translation::get('ComponentTypeDoesNotExist', ['TYPE' => $type]));
         }
 
         return new $class($application);
@@ -105,7 +113,7 @@ abstract class Manager extends Application
     /**
      * Builds the attachment url
      *
-     * @param $attachment ContentObject
+     * @param $attachment                              ContentObject
      * @param $selected_complex_content_object_item_id int [OPTIONAL] default null
      *
      * @return string

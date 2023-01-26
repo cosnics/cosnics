@@ -16,15 +16,12 @@ use RuntimeException;
 abstract class Manager extends AjaxManager
 {
     public const ACTION_ADD_LEARNING_PATH_TREE_NODE = 'AddTreeNode';
-
     public const ACTION_DELETE_LEARNING_PATH_TREE_NODE = 'DeleteTreeNode';
-
     public const ACTION_GET_LEARNING_PATH_TREE_NODES = 'GetTreeNodes';
-
     public const ACTION_MOVE_LEARNING_PATH_TREE_NODE = 'MoveTreeNode';
-
     public const ACTION_UPDATE_LEARNING_PATH_TREE_NODE_TITLE = 'UpdateTreeNodeTitle';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_GET_LEARNING_PATH_TREE_NODES;
 
     public const PARAM_ACTION = 'LearningPathAjaxAction';

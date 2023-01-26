@@ -9,14 +9,15 @@ use Exception;
  * Rights editor manager for unlimited amount of entities.
  * With simple and advanced interface.
  *
- * @package application.common.rights_editor_manager
- * @author Sven Vanpoucke
+ * @package    application.common.rights_editor_manager
+ * @author     Sven Vanpoucke
  * @deprecated Should not be needed anymore
  */
 abstract class Manager extends Application
 {
     public const ACTION_EDIT_SIMPLE_RIGHTS = 'SimpleRightsEditor';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_EDIT_SIMPLE_RIGHTS;
 
     public const PARAM_ACTION = 'rights_action';
@@ -62,27 +63,10 @@ abstract class Manager extends Application
         return $this->context;
     }
 
-    public function set_context($context)
-    {
-        $this->context = $context;
-    }
-
     public function get_entities()
     {
         return $this->entities;
     }
-
-    public function set_entities($entities)
-    {
-        if (count($entities) == 0)
-        {
-            throw new Exception(Translation::get('NoEntitiesSelected'));
-        }
-
-        $this->entities = $entities;
-    }
-
-    // Url building
 
     /**
      * Builds the url to browse an entity
@@ -93,7 +77,7 @@ abstract class Manager extends Application
      */
     public function get_entity_url($entity_type)
     {
-        return $this->get_url(array(self::PARAM_ENTITY_TYPE => $entity_type));
+        return $this->get_url([self::PARAM_ENTITY_TYPE => $entity_type]);
     }
 
     public function get_locations()
@@ -101,15 +85,7 @@ abstract class Manager extends Application
         return $this->locations;
     }
 
-    public function set_locations($locations)
-    {
-        if (count($locations) == 0)
-        {
-            throw new Exception(Translation::get('NoLocationsSelected'));
-        }
-
-        $this->locations = $locations;
-    }
+    // Url building
 
     /**
      * Gets the selected entity type and if no type selected, uses the first available entity
@@ -137,5 +113,30 @@ abstract class Manager extends Application
         }
 
         return $this->selected_entity;
+    }
+
+    public function set_context($context)
+    {
+        $this->context = $context;
+    }
+
+    public function set_entities($entities)
+    {
+        if (count($entities) == 0)
+        {
+            throw new Exception(Translation::get('NoEntitiesSelected'));
+        }
+
+        $this->entities = $entities;
+    }
+
+    public function set_locations($locations)
+    {
+        if (count($locations) == 0)
+        {
+            throw new Exception(Translation::get('NoLocationsSelected'));
+        }
+
+        $this->locations = $locations;
     }
 }

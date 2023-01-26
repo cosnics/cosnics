@@ -6,7 +6,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
- *
  * @package home.lib.home_manager
  */
 
@@ -29,6 +28,7 @@ abstract class Manager extends Application
     public const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
     public const ACTION_VIEW_HOME = 'Home';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_VIEW_HOME;
 
     public const PARAM_DIRECTION = 'direction';

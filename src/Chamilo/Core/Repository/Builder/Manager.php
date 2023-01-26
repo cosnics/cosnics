@@ -35,9 +35,10 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     public const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
     public const ACTION_VIEW_COMPLEX_CONTENT_OBJECT_ITEM = 'Viewer';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
-    public const PARAM_ACTION = 'builder_action';
 
+    public const PARAM_ACTION = 'builder_action';
     public const PARAM_ATTACHMENT_ID = 'attachment_id';
     public const PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID = 'cloi';
     public const PARAM_DELETE_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM = 'delete_selected_cloi';
@@ -116,7 +117,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     {
         $this->menu = new Menu(
             $this->get_root_content_object(), $this->get_complex_content_object_item(),
-            $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE))
+            $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE])
         );
     }
 
@@ -148,7 +149,6 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     }
 
     /**
-     *
      * @return LinkTypeSelectorOption[]
      */
     public function get_additional_links()
@@ -159,10 +159,10 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     public function get_browse_url()
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_BROWSE,
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
-            )
+            ]
         );
     }
 
@@ -214,33 +214,33 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     public function get_complex_content_object_item_copy_url($selected_content_object_item_id)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_COPY_COMPLEX_CONTENT_OBJECT_ITEM,
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
-            )
+            ]
         );
     }
 
     public function get_complex_content_object_item_delete_url($selected_content_object_item_id)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
-            )
+            ]
         );
     }
 
     public function get_complex_content_object_item_edit_url($selected_content_object_item_id)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
-            )
+            ]
         );
     }
 
@@ -255,12 +255,12 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     public function get_complex_content_object_item_move_url($selected_content_object_item_id, $direction)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_MOVE_COMPLEX_CONTENT_OBJECT_ITEM,
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
                 self::PARAM_DIRECTION => $direction
-            )
+            ]
         );
     }
 
@@ -269,11 +269,11 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     public function get_complex_content_object_item_view_url($selected_content_object_item_id)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT_ITEM,
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
-            )
+            ]
         );
     }
 
@@ -290,11 +290,11 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     public function get_complex_content_object_parent_changer_url($selected_content_object_item_id)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_CHANGE_PARENT,
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
-            )
+            ]
         );
     }
 
@@ -342,31 +342,31 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     public function get_content_object_display_attachment_url($attachment)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
                 self::PARAM_ATTACHMENT_ID => $attachment->get_id()
-            )
+            ]
         );
     }
 
     public function get_content_object_type_creation_url($template_registration_id)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
                 TypeSelector::PARAM_SELECTION => $template_registration_id,
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
-            )
+            ]
         );
     }
 
     public function get_create_complex_content_object_item_url()
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
-            )
+            ]
         );
     }
 
@@ -382,10 +382,10 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
 
         $type_selector_renderer = new BasicTypeSelectorRenderer(
             $this, $type_selector, $this->get_additional_links(), false, $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
-            )
+            ]
         )
         );
 
@@ -421,7 +421,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
      */
     public function get_preview_content_object_url()
     {
-        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_PREVIEW));
+        return $this->get_url([self::PARAM_ACTION => self::ACTION_PREVIEW]);
     }
 
     public function get_root_content_object()
@@ -458,7 +458,6 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     }
 
     /**
-     *
      * @return bool
      * @deprecated Use instanceof MenuSupport directly from now on
      */

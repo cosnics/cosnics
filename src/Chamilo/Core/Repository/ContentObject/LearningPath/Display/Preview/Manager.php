@@ -18,14 +18,15 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package core\repository\content_object\learning_path\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class Manager extends Preview implements PreviewResetSupport
 {
+
+    public const CONTEXT = __NAMESPACE__;
 
     /**
      * @var TrackingRepository
@@ -100,7 +101,6 @@ abstract class Manager extends Preview implements PreviewResetSupport
     }
 
     /**
-     *
      * @return int
      */
     public function get_embedded_content_object_id()
@@ -198,7 +198,6 @@ abstract class Manager extends Preview implements PreviewResetSupport
     }
 
     /**
-     *
      * @return bool
      */
     public function is_embedded()

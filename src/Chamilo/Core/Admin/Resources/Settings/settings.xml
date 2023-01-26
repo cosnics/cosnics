@@ -413,6 +413,10 @@
         </category>
         <category name="cas_authentication">
             <setting
+                    name="cas_base_url"
+                    field="text"
+                    default="" />
+            <setting
                 name="cas_host"
                 field="text"
                 default="" />

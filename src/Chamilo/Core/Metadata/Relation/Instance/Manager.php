@@ -6,12 +6,11 @@ use Chamilo\Libraries\Translation\Translation;
 use InvalidArgumentException;
 
 /**
- *
  * @package Chamilo\Core\Metadata\Relation\Instance
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class Manager extends Application
 {
@@ -19,31 +18,28 @@ abstract class Manager extends Application
     public const ACTION_CREATE = 'Creator';
     public const ACTION_DELETE = 'Deleter';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public const PARAM_ACTION = 'relation_instance_action';
     public const PARAM_RELATION_INSTANCE_ID = 'relation_instance_id';
 
     /**
-     *
      * @var \Chamilo\Core\Metadata\Storage\DataClass\Relation[]
      */
     private $relations;
 
     /**
-     *
      * @var \Chamilo\Core\Metadata\Entity\EntityInterface[]
      */
     private $sourceEntities;
 
     /**
-     *
      * @var \Chamilo\Core\Metadata\Entity\EntityInterface[]
      */
     private $targetEntities;
 
     /**
-     *
      * @return \Chamilo\Core\Metadata\Storage\DataClass\Relation[]
      */
     public function getRelations()
@@ -52,16 +48,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Metadata\Storage\DataClass\Relation[] $relations
-     */
-    public function setRelations($relations)
-    {
-        $this->relations = $relations;
-    }
-
-    /**
-     *
      * @return \Chamilo\Core\Metadata\Entity\EntityInterface[]
      */
     public function getSourceEntities()
@@ -70,16 +56,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface[] $sourceEntities
-     */
-    public function setSourceEntities($sourceEntities)
-    {
-        $this->sourceEntities = $sourceEntities;
-    }
-
-    /**
-     *
      * @return \Chamilo\Core\Metadata\Entity\EntityInterface[]
      */
     public function getTargetEntities()
@@ -88,7 +64,22 @@ abstract class Manager extends Application
     }
 
     /**
-     *
+     * @param \Chamilo\Core\Metadata\Storage\DataClass\Relation[] $relations
+     */
+    public function setRelations($relations)
+    {
+        $this->relations = $relations;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Entity\EntityInterface[] $sourceEntities
+     */
+    public function setSourceEntities($sourceEntities)
+    {
+        $this->sourceEntities = $sourceEntities;
+    }
+
+    /**
      * @param \Chamilo\Core\Metadata\Entity\EntityInterface[] $targetEntities
      */
     public function setTargetEntities($targetEntities)

@@ -23,9 +23,11 @@ abstract class Manager extends Application
     public const ACTION_UPDATE = 'Updater';
 
     public const CONFIGURATION_SHOW_FEEDBACK_HEADER = 'showFeedbackHeader';
-    public const DEFAULT_ACTION = self::ACTION_BROWSE;
-    public const PARAM_ACTION = 'feedback_action';
 
+    public const CONTEXT = __NAMESPACE__;
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
+
+    public const PARAM_ACTION = 'feedback_action';
     public const PARAM_FEEDBACK_BRIDGE = 'FeedbackBridge';
     public const PARAM_FEEDBACK_ID = 'feedback_id';
     public const PARAM_FEEDBACK_RIGHTS_BRIDGE = 'FeedbackRightsBridge';

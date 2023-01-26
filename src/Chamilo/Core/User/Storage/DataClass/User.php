@@ -11,51 +11,48 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
-// use Chamilo\Core\User\Service\UserGroupMembershipCacheService;
-
 /**
- *
- * @package Chamilo\Core\User\Storage\DataClass$User
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Dieter De Neef
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @package Chamilo\Core\User\Storage\DataClass
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Dieter De Neef
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class User extends DataClass
 {
-    const ANONYMOUS_ID = "1";
+    public const ANONYMOUS_ID = '1';
 
-    const CONTEXT = __NAMESPACE__;
+    public const CONTEXT = __NAMESPACE__;
 
-    const NAME_FORMAT_FIRST = 0;
-    const NAME_FORMAT_LAST = 1;
+    public const NAME_FORMAT_FIRST = 0;
+    public const NAME_FORMAT_LAST = 1;
 
-    const PROPERTY_ACTIVATION_DATE = 'activation_date';
-    const PROPERTY_ACTIVE = 'active';
-    const PROPERTY_APPROVED = 'approved';
-    const PROPERTY_AUTH_SOURCE = 'auth_source';
-    const PROPERTY_CREATOR_ID = 'creator_id';
-    const PROPERTY_DATABASE_QUOTA = 'database_quota';
-    const PROPERTY_DISK_QUOTA = 'disk_quota';
-    const PROPERTY_EMAIL = 'email';
-    const PROPERTY_EXPIRATION_DATE = 'expiration_date';
-    const PROPERTY_EXTERNAL_UID = 'external_uid';
-    const PROPERTY_FIRSTNAME = 'firstname';
-    const PROPERTY_LASTNAME = 'lastname';
-    const PROPERTY_OFFICIAL_CODE = 'official_code';
-    const PROPERTY_PASSWORD = 'password';
-    const PROPERTY_PHONE = 'phone';
-    const PROPERTY_PICTURE_URI = 'picture_uri';
-    const PROPERTY_PLATFORMADMIN = 'admin';
-    const PROPERTY_REGISTRATION_DATE = 'registration_date';
-    const PROPERTY_SECURITY_TOKEN = 'security_token';
-    const PROPERTY_STATUS = 'status';
-    const PROPERTY_TERMS_DATE = 'terms_date';
-    const PROPERTY_USERNAME = 'username';
+    public const PROPERTY_ACTIVATION_DATE = 'activation_date';
+    public const PROPERTY_ACTIVE = 'active';
+    public const PROPERTY_APPROVED = 'approved';
+    public const PROPERTY_AUTH_SOURCE = 'auth_source';
+    public const PROPERTY_CREATOR_ID = 'creator_id';
+    public const PROPERTY_DATABASE_QUOTA = 'database_quota';
+    public const PROPERTY_DISK_QUOTA = 'disk_quota';
+    public const PROPERTY_EMAIL = 'email';
+    public const PROPERTY_EXPIRATION_DATE = 'expiration_date';
+    public const PROPERTY_EXTERNAL_UID = 'external_uid';
+    public const PROPERTY_FIRSTNAME = 'firstname';
+    public const PROPERTY_LASTNAME = 'lastname';
+    public const PROPERTY_OFFICIAL_CODE = 'official_code';
+    public const PROPERTY_PASSWORD = 'password';
+    public const PROPERTY_PHONE = 'phone';
+    public const PROPERTY_PICTURE_URI = 'picture_uri';
+    public const PROPERTY_PLATFORMADMIN = 'admin';
+    public const PROPERTY_REGISTRATION_DATE = 'registration_date';
+    public const PROPERTY_SECURITY_TOKEN = 'security_token';
+    public const PROPERTY_STATUS = 'status';
+    public const PROPERTY_TERMS_DATE = 'terms_date';
+    public const PROPERTY_USERNAME = 'username';
 
-    const STATUS_ANONYMOUS = 0;
-    const STATUS_STUDENT = 5;
-    const STATUS_TEACHER = 1;
+    public const STATUS_ANONYMOUS = 0;
+    public const STATUS_STUDENT = 5;
+    public const STATUS_TEACHER = 1;
 
     public static function admin()
     {
@@ -73,7 +70,7 @@ class User extends DataClass
     /**
      * Instructs the Datamanager to create this user.
      *
-     * @return boolean True if success, false otherwise
+     * @return bool True if success, false otherwise
      */
     public function create(): bool
     {
@@ -115,7 +112,7 @@ class User extends DataClass
      */
     public static function fullname($first_name, $last_name)
     {
-        $format = Configuration::getInstance()->get_setting(array(Manager::context(), 'fullname_format'));
+        $format = Configuration::getInstance()->get_setting([Manager::context(), 'fullname_format']);
 
         switch ($format)
         {
@@ -131,12 +128,66 @@ class User extends DataClass
     }
 
     /**
-     *
      * @return string
      */
     public function getAuthenticationSource()
     {
         return $this->getDefaultProperty(self::PROPERTY_AUTH_SOURCE);
+    }
+
+    /**
+     * Returns all (unique) properties by which a DataClass object can be cached
+     *
+     * @param $extendedPropertyNames string[]
+     *
+     * @return string[]
+     */
+    public static function getCacheablePropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getCacheablePropertyNames([self::PROPERTY_USERNAME]);
+    }
+
+    /**
+     * Get the default properties of all users.
+     *
+     * @return array The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            [
+                self::PROPERTY_LASTNAME,
+                self::PROPERTY_FIRSTNAME,
+                self::PROPERTY_USERNAME,
+                self::PROPERTY_PASSWORD,
+                self::PROPERTY_AUTH_SOURCE,
+                self::PROPERTY_EXTERNAL_UID,
+                self::PROPERTY_EMAIL,
+                self::PROPERTY_STATUS,
+                self::PROPERTY_PLATFORMADMIN,
+                self::PROPERTY_PHONE,
+                self::PROPERTY_OFFICIAL_CODE,
+                self::PROPERTY_PICTURE_URI,
+                self::PROPERTY_CREATOR_ID,
+                self::PROPERTY_DISK_QUOTA,
+                self::PROPERTY_DATABASE_QUOTA,
+                self::PROPERTY_ACTIVATION_DATE,
+                self::PROPERTY_EXPIRATION_DATE,
+                self::PROPERTY_REGISTRATION_DATE,
+                self::PROPERTY_ACTIVE,
+                self::PROPERTY_SECURITY_TOKEN,
+                self::PROPERTY_APPROVED,
+                self::PROPERTY_TERMS_DATE
+            ]
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'user_user';
     }
 
     public function get_activation_date()
@@ -166,18 +217,6 @@ class User extends DataClass
     }
 
     /**
-     * Returns all (unique) properties by which a DataClass object can be cached
-     *
-     * @param $extendedPropertyNames string[]
-     *
-     * @return string[]
-     */
-    public static function getCacheablePropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getCacheablePropertyNames([self::PROPERTY_USERNAME]);
-    }
-
-    /**
      * Returns the creator ID for this user.
      *
      * @return Int The ID
@@ -195,41 +234,6 @@ class User extends DataClass
     public function get_database_quota()
     {
         return $this->getDefaultProperty(self::PROPERTY_DATABASE_QUOTA);
-    }
-
-    /**
-     * Get the default properties of all users.
-     *
-     * @return array The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_LASTNAME,
-                self::PROPERTY_FIRSTNAME,
-                self::PROPERTY_USERNAME,
-                self::PROPERTY_PASSWORD,
-                self::PROPERTY_AUTH_SOURCE,
-                self::PROPERTY_EXTERNAL_UID,
-                self::PROPERTY_EMAIL,
-                self::PROPERTY_STATUS,
-                self::PROPERTY_PLATFORMADMIN,
-                self::PROPERTY_PHONE,
-                self::PROPERTY_OFFICIAL_CODE,
-                self::PROPERTY_PICTURE_URI,
-                self::PROPERTY_CREATOR_ID,
-                self::PROPERTY_DISK_QUOTA,
-                self::PROPERTY_DATABASE_QUOTA,
-                self::PROPERTY_ACTIVATION_DATE,
-                self::PROPERTY_EXPIRATION_DATE,
-                self::PROPERTY_REGISTRATION_DATE,
-                self::PROPERTY_ACTIVE,
-                self::PROPERTY_SECURITY_TOKEN,
-                self::PROPERTY_APPROVED,
-                self::PROPERTY_TERMS_DATE
-            )
-        );
     }
 
     /**
@@ -306,7 +310,7 @@ class User extends DataClass
     /**
      * @param false $only_retrieve_ids
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>|integer[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>|int
      */
     public function get_groups($only_retrieve_ids = false)
     {
@@ -427,17 +431,9 @@ class User extends DataClass
     }
 
     /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'user_user';
-    }
-
-    /**
      * Returns the date on wich the user has last accepted the terms and conditions
      *
-     * @return <integer> terms_date
+     * @return <int> terms_date
      */
     public function get_terms_date()
     {
@@ -483,7 +479,7 @@ class User extends DataClass
     /**
      * Checks if this user is a platform admin or not
      *
-     * @return boolean true if the user is a platforma admin, false otherwise
+     * @return bool true if the user is a platforma admin, false otherwise
      */
     public function is_platform_admin()
     {
@@ -493,7 +489,7 @@ class User extends DataClass
     /**
      * Checks if this user is a teacher or not
      *
-     * @return boolean true if the user is a teacher, false otherwise
+     * @return bool true if the user is a teacher, false otherwise
      */
     public function is_teacher()
     {
@@ -685,7 +681,7 @@ class User extends DataClass
     /**
      * Sets the date the user has accepted the terms and conditons
      *
-     * @param <integer> $date
+     * @param <int> $date
      */
     public function set_term_date($terms_date)
     {

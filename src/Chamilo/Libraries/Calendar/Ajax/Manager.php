@@ -9,4 +9,5 @@ use Chamilo\Libraries\Architecture\AjaxManager;
  */
 abstract class Manager extends AjaxManager
 {
+    public const CONTEXT = __NAMESPACE__;
 }

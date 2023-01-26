@@ -7,11 +7,12 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 
 /**
  * @package Chamilo\Core\Queue
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class Manager extends Application
 {
+    public const CONTEXT = __NAMESPACE__;
+
     /**
      * Constructor
      *

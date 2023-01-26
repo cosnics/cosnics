@@ -8,25 +8,24 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
- *
  * @author Hans De Bisschop
  */
 abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 {
-    const FEED_TYPE_GENERAL = 1;
 
-    const FEED_TYPE_MY_PHOTOS = 2;
+    public const CONTEXT = __NAMESPACE__;
 
-    const PARAM_FEED_TYPE = 'feed';
+    public const FEED_TYPE_GENERAL = 1;
+    public const FEED_TYPE_MY_PHOTOS = 2;
 
-    const REPOSITORY_TYPE = 'vimeo';
+    public const PARAM_FEED_TYPE = 'feed';
+
+    public const REPOSITORY_TYPE = 'vimeo';
 
     /**
-     *
      * @param $applicationConfiguration ApplicationConfigurationInterface
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
@@ -41,7 +40,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     public function get_available_renderers()
     {
-        return array(Renderer::TYPE_GALLERY, Renderer::TYPE_SLIDESHOW, Renderer::TYPE_TABLE);
+        return [Renderer::TYPE_GALLERY, Renderer::TYPE_SLIDESHOW, Renderer::TYPE_TABLE];
     }
 
     /*
@@ -55,8 +54,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         foreach ($video_types as $video_type)
         {
             $video_conditions[] = new EndsWithCondition(
-                new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), $video_type,
-                File::getTypeName()
+                new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), $video_type, File::getTypeName()
             );
         }
 
@@ -65,7 +63,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     public function get_external_repository_actions()
     {
-        $actions = array(self::ACTION_BROWSE_EXTERNAL_REPOSITORY);
+        $actions = [self::ACTION_BROWSE_EXTERNAL_REPOSITORY];
         // self::ACTION_UPLOAD_EXTERNAL_REPOSITORY,
         // self::ACTION_EXPORT_EXTERNAL_REPOSITORY);
 
@@ -86,7 +84,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
 
     /**
-     *
      * @param \core\repository\external\ExternalObject $object
      *
      * @return string
@@ -114,7 +111,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
 
     /**
-     *
      * @return string
      */
     public function get_repository_type()

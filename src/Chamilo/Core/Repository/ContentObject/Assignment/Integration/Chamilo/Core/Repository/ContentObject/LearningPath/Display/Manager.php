@@ -7,4 +7,5 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 abstract class Manager extends Application implements DelegateComponent
 {
+    public const CONTEXT = __NAMESPACE__;
 }

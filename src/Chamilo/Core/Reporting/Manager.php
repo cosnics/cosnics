@@ -5,9 +5,8 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
- *
  * @package reporting.lib.reporting_manager
- * @author Michael Kyndt
+ * @author  Michael Kyndt
  */
 
 /**
@@ -15,6 +14,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
  */
 abstract class Manager extends Application
 {
+
+    public const CONTEXT = __NAMESPACE__;
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {

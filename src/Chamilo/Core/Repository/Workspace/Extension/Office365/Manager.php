@@ -19,7 +19,9 @@ abstract class Manager extends Application implements WorkspaceExtensionSupport
     public const ACTION_SYNC_GROUP = 'SyncGroup';
     public const ACTION_VISIT_GROUP = 'VisitGroup';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_VISIT_GROUP;
+
     public const PARAM_ACTION = 'workspace_extension_action';
 
     /**

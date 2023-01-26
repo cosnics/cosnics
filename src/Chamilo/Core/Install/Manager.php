@@ -21,10 +21,9 @@ use DOMXPath;
 use Exception;
 
 /**
- *
  * @package Chamilo\Core\Install
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 abstract class Manager extends Application implements NoContextComponent
 {
@@ -34,14 +33,16 @@ abstract class Manager extends Application implements NoContextComponent
     public const ACTION_OVERVIEW = 'overview';
     public const ACTION_REQUIREMENTS = 'requirements';
     public const ACTION_SETTINGS = 'settings';
+
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_INTRODUCTION;
+
     public const PARAM_LANGUAGE = 'install_language';
     public const PARAM_SETTINGS = 'install_settings';
 
     private WizardHeader $wizardHeader;
 
     /**
-     *
      * @param ApplicationConfigurationInterface $applicationConfiguration
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
@@ -65,7 +66,7 @@ abstract class Manager extends Application implements NoContextComponent
         else
         {
             $installationBlocked = (bool) Configuration::getInstance()->get_setting(
-                array('Chamilo\Core\Admin', 'installation_blocked')
+                ['Chamilo\Core\Admin', 'installation_blocked']
             );
 
             if ($installationBlocked)
@@ -98,7 +99,6 @@ abstract class Manager extends Application implements NoContextComponent
     }
 
     /**
-     *
      * @return string
      */
     protected function getInfo()
@@ -136,7 +136,6 @@ abstract class Manager extends Application implements NoContextComponent
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader
      */
     protected function getWizardHeader()
@@ -148,14 +147,14 @@ abstract class Manager extends Application implements NoContextComponent
 
             $this->wizardHeader = new WizardHeader();
             $this->wizardHeader->setStepTitles(
-                array(
+                [
                     Translation::get('IntroductionComponentTitle'),
                     Translation::get('RequirementsComponentTitle'),
                     Translation::get('LicenseComponentTitle'),
                     Translation::get('SettingsComponentTitle'),
                     Translation::get('OverviewComponentTitle'),
                     Translation::get('InstallerComponentTitle')
-                )
+                ]
             );
 
             $this->wizardHeader->setSelectedStepIndex(array_search($currentAction, $wizardActions));
@@ -165,19 +164,18 @@ abstract class Manager extends Application implements NoContextComponent
     }
 
     /**
-     *
      * @return string[]
      */
     protected function getWizardHeaderActions()
     {
-        return array(
+        return [
             self::ACTION_INTRODUCTION,
             self::ACTION_REQUIREMENTS,
             self::ACTION_LICENSE,
             self::ACTION_SETTINGS,
             self::ACTION_OVERVIEW,
             self::ACTION_INSTALL_PLATFORM
-        );
+        ];
     }
 
     protected function initialize()
@@ -189,7 +187,6 @@ abstract class Manager extends Application implements NoContextComponent
     }
 
     /**
-     *
      * @return string
      */
     protected function renderWizardHeader()

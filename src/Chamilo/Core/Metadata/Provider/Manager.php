@@ -7,12 +7,11 @@ use Chamilo\Libraries\Translation\Translation;
 use InvalidArgumentException;
 
 /**
- *
  * @package Chamilo\Core\Metadata\Provider
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class Manager extends Application
 {
@@ -20,6 +19,7 @@ abstract class Manager extends Application
     public const ACTION_CONFIGURE = 'Configurer';
     public const ACTION_DELETE = 'Deleter';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public const PARAM_ACTION = 'provider_action';
@@ -27,33 +27,21 @@ abstract class Manager extends Application
     public const PARAM_PROVIDER_LINK_ID = 'provider_link_id';
 
     /**
-     *
      * @var \Chamilo\Core\Metadata\Entity\EntityInterface[]
      */
     private $entities;
 
     /**
-     *
      * @var \Chamilo\Core\Metadata\Entity\EntityInterface[]
      */
     private $expandedEntities;
 
     /**
-     *
      * @return \Chamilo\Core\Metadata\Entity\EntityInterface[]
      */
     public function getEntities()
     {
         return $this->entities;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Metadata\Entity\EntityInterface[] $entities
-     */
-    public function setEntities($entities)
-    {
-        $this->entities = $entities;
     }
 
     /**
@@ -76,6 +64,14 @@ abstract class Manager extends Application
         }
 
         return $this->expandedEntities;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Entity\EntityInterface[] $entities
+     */
+    public function setEntities($entities)
+    {
+        $this->entities = $entities;
     }
 
     public function verifySetup()

@@ -9,11 +9,10 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- *
  * @package Chamilo\Core\Repository\Viewer
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class Manager extends Application
 {
@@ -22,6 +21,7 @@ abstract class Manager extends Application
     public const ACTION_IMPORTER = 'Importer';
     public const ACTION_VIEWER = 'Viewer';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_CREATOR;
 
     public const PARAM_ACTION = 'viewer_action';
@@ -49,7 +49,6 @@ abstract class Manager extends Application
     public const TAB_WORKSPACE_BROWSER = 'WorkspaceBrowser';
 
     /**
-     *
      * @var string[]
      */
     private $actions;
@@ -68,7 +67,6 @@ abstract class Manager extends Application
     private $tabs;
 
     /**
-     *
      * @var string[]
      */
     private $types;
@@ -91,7 +89,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return bool
      */
     public static function any_object_selected()
@@ -108,78 +105,68 @@ abstract class Manager extends Application
     {
         $tabs = [];
 
-        $tabs[self::TAB_CREATOR] = array(
+        $tabs[self::TAB_CREATOR] = [
             'url' => $this->get_url(
-                array(self::PARAM_TAB => self::TAB_CREATOR, self::PARAM_ACTION => self::ACTION_CREATOR)
+                [self::PARAM_TAB => self::TAB_CREATOR, self::PARAM_ACTION => self::ACTION_CREATOR]
             ),
-            'glyph' => new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas')
-        );
+            'glyph' => new FontAwesomeGlyph('plus', ['fa-lg'], null, 'fas')
+        ];
 
-        $tabs[self::TAB_BROWSER] = array(
+        $tabs[self::TAB_BROWSER] = [
             'url' => $this->get_url(
-                array(
+                [
                     self::PARAM_TAB => self::TAB_BROWSER,
                     self::PARAM_ACTION => self::ACTION_BROWSER,
                     self::PARAM_IN_WORKSPACES => false
-                )
+                ]
             ),
-            'glyph' => new FontAwesomeGlyph('folder', array('fa-lg'), null, 'fas')
-        );
+            'glyph' => new FontAwesomeGlyph('folder', ['fa-lg'], null, 'fas')
+        ];
 
-        $tabs[self::TAB_WORKSPACE_BROWSER] = array(
+        $tabs[self::TAB_WORKSPACE_BROWSER] = [
             'url' => $this->get_url(
-                array(
+                [
                     self::PARAM_TAB => self::TAB_WORKSPACE_BROWSER,
                     self::PARAM_ACTION => self::ACTION_BROWSER,
                     self::PARAM_IN_WORKSPACES => true
-                )
+                ]
             ),
-            'glyph' => new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas')
-        );
+            'glyph' => new FontAwesomeGlyph('users', ['fa-lg'], null, 'fas')
+        ];
 
         if ($this->get_maximum_select() > 1)
         {
-            $tabs[self::TAB_IMPORTER] = array(
+            $tabs[self::TAB_IMPORTER] = [
                 'url' => $this->get_url(
-                    array(self::PARAM_TAB => self::TAB_IMPORTER, self::PARAM_ACTION => self::ACTION_IMPORTER)
+                    [self::PARAM_TAB => self::TAB_IMPORTER, self::PARAM_ACTION => self::ACTION_IMPORTER]
                 ),
-                'glyph' => new FontAwesomeGlyph('upload', array('fa-lg'), null, 'fas')
-            );
+                'glyph' => new FontAwesomeGlyph('upload', ['fa-lg'], null, 'fas')
+            ];
         }
 
         if ($this->get_action() == self::ACTION_VIEWER)
         {
-            $tabs[self::TAB_VIEWER] = array(
+            $tabs[self::TAB_VIEWER] = [
                 'url' => $this->get_url(
-                    array(
+                    [
                         self::PARAM_TAB => self::TAB_VIEWER,
                         self::PARAM_ACTION => self::ACTION_VIEWER,
                         self::PARAM_ID => $this->getRequest()->get(self::PARAM_ID)
-                    )
+                    ]
                 ),
-                'glyph' => new FontAwesomeGlyph('desktop', array('fa-lg'), null, 'fas')
-            );
+                'glyph' => new FontAwesomeGlyph('desktop', ['fa-lg'], null, 'fas')
+            ];
         }
 
         return $tabs;
     }
 
     /**
-     *
      * @return string[]
      */
     public function get_actions()
     {
         return $this->actions;
-    }
-
-    /**
-     *
-     * @param string[] $actions
-     */
-    public function set_actions($actions)
-    {
-        $this->actions = $actions;
     }
 
     public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
@@ -188,7 +175,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return int
      */
     public function get_excluded_objects()
@@ -197,16 +183,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
-     * @param int $excluded_objects
-     */
-    public function set_excluded_objects($excluded_objects)
-    {
-        $this->excluded_objects = $excluded_objects;
-    }
-
-    /**
-     *
      * @return int
      */
     public function get_maximum_select()
@@ -215,16 +191,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
-     * @param int $maximum_select
-     */
-    public function set_maximum_select($maximum_select)
-    {
-        $this->maximum_select = $maximum_select;
-    }
-
-    /**
-     *
      * @return int
      */
     public static function get_selected_objects()
@@ -255,12 +221,35 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return bool
      * @deprecated any_object_selected()
      */
     public static function is_ready_to_be_published()
     {
         return (self::any_object_selected());
+    }
+
+    /**
+     * @param string[] $actions
+     */
+    public function set_actions($actions)
+    {
+        $this->actions = $actions;
+    }
+
+    /**
+     * @param int $excluded_objects
+     */
+    public function set_excluded_objects($excluded_objects)
+    {
+        $this->excluded_objects = $excluded_objects;
+    }
+
+    /**
+     * @param int $maximum_select
+     */
+    public function set_maximum_select($maximum_select)
+    {
+        $this->maximum_select = $maximum_select;
     }
 }

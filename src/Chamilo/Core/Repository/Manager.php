@@ -41,14 +41,13 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Core\Repository
- * @author Bart Mollet
- * @author Tim De Pauw
- * @author Dieter De Neef
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Bart Mollet
+ * @author  Tim De Pauw
+ * @author  Dieter De Neef
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class Manager extends Application
 {
@@ -91,6 +90,7 @@ abstract class Manager extends Application
     public const ACTION_VIEW_REPO = 'AttachmentViewer';
     public const ACTION_WORKSPACE = 'Workspace';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE_CONTENT_OBJECTS;
 
     public const PARAM_ADD_OBJECTS = 'add_objects';
@@ -162,7 +162,6 @@ abstract class Manager extends Application
     private $category_menu;
 
     /**
-     *
      * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
      */
     private $currentWorkspace;
@@ -197,7 +196,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return bool
      */
     public function current_user_has_recycled_objects()
@@ -246,7 +244,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
      */
     public function getWorkspace()
@@ -273,7 +270,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return string[]
      */
     public function get_allowed_content_object_types()
@@ -306,10 +302,10 @@ abstract class Manager extends Application
     public function get_browse_complex_content_object_url($object)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_BUILD_COMPLEX_CONTENT_OBJECT,
                 self::PARAM_CONTENT_OBJECT_ID => $object->getId()
-            )
+            ]
         );
     }
 
@@ -320,13 +316,13 @@ abstract class Manager extends Application
      * performed)
      *
      * @param $force_search bool Whether the user is searching. If true, overrides the default, which is to request
-     *        this information from the search form.
+     *                      this information from the search form.
      *
      * @return \Chamilo\Core\Repository\Menu\ContentObjectCategoryMenu The menu
      */
     private function get_category_menu($force_search = false)
     {
-        $this->set_parameter(GenericTabsRenderer::PARAM_SELECTED_TAB, array(self::TABS_FILTER => self::TAB_CATEGORY));
+        $this->set_parameter(GenericTabsRenderer::PARAM_SELECTED_TAB, [self::TABS_FILTER => self::TAB_CATEGORY]);
 
         if (!isset($this->category_menu))
         {
@@ -358,10 +354,10 @@ abstract class Manager extends Application
     public function get_content_object_alternative_linker($content_object)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_LINK_CONTENT_OBJECT_ALTERNATIVE,
                 self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id()
-            )
+            ]
         );
     }
 
@@ -396,11 +392,11 @@ abstract class Manager extends Application
         }
 
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_DELETE_CONTENT_OBJECTS,
                 self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
                 $param => 1
-            )
+            ]
         );
     }
 
@@ -423,21 +419,21 @@ abstract class Manager extends Application
     public function get_content_object_editing_url($content_object)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_EDIT_CONTENT_OBJECTS,
                 self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id()
-            )
+            ]
         );
     }
 
     public function get_content_object_exporting_url($content_object, $type = null)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_EXPORT_CONTENT_OBJECTS,
                 self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
                 self::PARAM_EXPORT_TYPE => $type
-            ), array(self::PARAM_CATEGORY_ID)
+            ], [self::PARAM_CATEGORY_ID]
         );
     }
 
@@ -451,10 +447,10 @@ abstract class Manager extends Application
     public function get_content_object_moving_url($content_object)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_MOVE_CONTENT_OBJECTS,
                 self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id()
-            )
+            ]
         );
     }
 
@@ -468,10 +464,10 @@ abstract class Manager extends Application
     public function get_content_object_recycling_url($content_object, $force = false)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_IMPACT_VIEW_RECYCLE,
                 self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id()
-            )
+            ]
         );
     }
 
@@ -490,10 +486,10 @@ abstract class Manager extends Application
         }
 
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_RESTORE_CONTENT_OBJECTS,
                 self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id()
-            )
+            ]
         );
     }
 
@@ -512,15 +508,14 @@ abstract class Manager extends Application
         }
 
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_REVERT_CONTENT_OBJECTS,
                 self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id()
-            )
+            ]
         );
     }
 
     /**
-     *
      * @param string $content_object_type
      * @param string $template_registration_id
      *
@@ -528,7 +523,7 @@ abstract class Manager extends Application
      */
     public function get_content_object_type_creation_url($template_registration_id)
     {
-        return $this->get_url(array(TypeSelector::PARAM_SELECTION => $template_registration_id));
+        return $this->get_url([TypeSelector::PARAM_SELECTION => $template_registration_id]);
     }
 
     /**
@@ -543,31 +538,31 @@ abstract class Manager extends Application
         if ($content_object->get_state() == ContentObject::STATE_RECYCLED)
         {
             return $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_VIEW_CONTENT_OBJECTS,
                     self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
                     self::PARAM_CATEGORY_ID => null
-                )
+                ]
             );
         }
 
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_VIEW_CONTENT_OBJECTS,
                 self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
                 FilterData::FILTER_CATEGORY => $content_object->get_parent_id()
-            )
+            ]
         );
     }
 
     public function get_content_objects_exporting_url($type, $ids, $format)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_EXPORT_CONTENT_OBJECTS,
                 $type => $ids,
                 self::PARAM_EXPORT_TYPE => $format
-            )
+            ]
         );
     }
 
@@ -579,10 +574,10 @@ abstract class Manager extends Application
     public function get_copy_content_object_url($content_object_id)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_COPY_CONTENT_OBJECT,
                 self::PARAM_CONTENT_OBJECT_ID => $content_object_id
-            )
+            ]
         );
     }
 
@@ -625,12 +620,12 @@ abstract class Manager extends Application
         }
 
         $redirect = new Redirect(
-            array(
+            [
                 self::PARAM_CONTEXT => self::package(),
                 self::PARAM_ACTION => self::ACTION_DOWNLOAD_DOCUMENT,
                 self::PARAM_CONTENT_OBJECT_ID => $documentId,
                 ContentObject::PARAM_SECURITY_CODE => $securityCode
-            )
+            ]
         );
 
         return $redirect->getUrl();
@@ -648,26 +643,25 @@ abstract class Manager extends Application
         $tabs->add(
             new ContentTab(
                 self::TAB_CATEGORY, $translator->getTranslation('ViewCategoriesTab', null, Manager::context()),
-                $this->get_category_menu()->render_as_tree(),
-                new FontAwesomeGlyph('folder', array('fa-lg'), null, 'fas'), ContentTab::DISPLAY_ICON
+                $this->get_category_menu()->render_as_tree(), new FontAwesomeGlyph('folder', ['fa-lg'], null, 'fas'),
+                ContentTab::DISPLAY_ICON
             )
         );
 
         $filter_form = FormFilterRenderer::factory(
             FilterData::getInstance($this->getWorkspace()), $this->getWorkspace(), $this->get_user_id(),
             $this->get_allowed_content_object_types(), $this->get_url(
-            array(
-                GenericTabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_SEARCH),
+            [
+                GenericTabsRenderer::PARAM_SELECTED_TAB => [self::TABS_FILTER => self::TAB_SEARCH],
                 self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS
-            ), array(self::PARAM_CATEGORY_ID)
+            ], [self::PARAM_CATEGORY_ID]
         )
         );
 
         $tabs->add(
             new ContentTab(
                 self::TAB_SEARCH, $translator->getTranslation('SearchTab', null, Manager::context()),
-                $filter_form->render(), new FontAwesomeGlyph('search', array('fa-lg'), null, 'fas'),
-                ContentTab::DISPLAY_ICON
+                $filter_form->render(), new FontAwesomeGlyph('search', ['fa-lg'], null, 'fas'), ContentTab::DISPLAY_ICON
             )
         );
 
@@ -676,24 +670,24 @@ abstract class Manager extends Application
 
         $object_type = new ObjectTypeMenu(
             $this, $selected_type, $this->get_url(
-            array(
-                GenericTabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
+            [
+                GenericTabsRenderer::PARAM_SELECTED_TAB => [self::TABS_FILTER => self::TAB_OBJECT_TYPE],
                 FilterData::FILTER_TYPE => '__SELECTION__',
                 Application::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS
-            ), array(self::PARAM_CATEGORY_ID, self::PARAM_CONTENT_OBJECT_ID)
+            ], [self::PARAM_CATEGORY_ID, self::PARAM_CONTENT_OBJECT_ID]
         ), $selected_category, $this->get_url(
-            array(
-                GenericTabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_OBJECT_TYPE),
+            [
+                GenericTabsRenderer::PARAM_SELECTED_TAB => [self::TABS_FILTER => self::TAB_OBJECT_TYPE],
                 FilterData::FILTER_TYPE => '__CATEGORY__',
                 Application::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS
-            ), array(self::PARAM_CATEGORY_ID, self::PARAM_CONTENT_OBJECT_ID)
+            ], [self::PARAM_CATEGORY_ID, self::PARAM_CONTENT_OBJECT_ID]
         )
         );
 
         $tabs->add(
             new ContentTab(
                 self::TAB_OBJECT_TYPE, $translator->getTranslation('TypeTab', null, Manager::context()),
-                $object_type->render_as_tree(), new FontAwesomeGlyph('filter', array('fa-lg'), null, 'fas'),
+                $object_type->render_as_tree(), new FontAwesomeGlyph('filter', ['fa-lg'], null, 'fas'),
                 ContentTab::DISPLAY_ICON
             )
         );
@@ -701,16 +695,16 @@ abstract class Manager extends Application
         $current_user_view_id = FilterData::getInstance($this->getWorkspace())->get_user_view();
         $user_view = new UserViewMenu(
             $this, $current_user_view_id, $this->get_url(
-            array(
+            [
                 FilterData::FILTER_USER_VIEW => '__VIEW__',
-                GenericTabsRenderer::PARAM_SELECTED_TAB => array(self::TABS_FILTER => self::TAB_USERVIEW)
-            )
+                GenericTabsRenderer::PARAM_SELECTED_TAB => [self::TABS_FILTER => self::TAB_USERVIEW]
+            ]
         )
         );
         $tabs->add(
             new ContentTab(
                 self::TAB_USERVIEW, $translator->getTranslation('UserViewTab', null, Manager::context()),
-                $user_view->render_as_tree(), new FontAwesomeGlyph('object-group', array('fa-lg'), null, 'far'),
+                $user_view->render_as_tree(), new FontAwesomeGlyph('object-group', ['fa-lg'], null, 'far'),
                 ContentTab::DISPLAY_ICON
             )
         );
@@ -749,11 +743,11 @@ abstract class Manager extends Application
     public function get_publish_content_object_url($content_object)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_PUBLICATION,
                 Publication\Manager::PARAM_ACTION => Publication\Manager::ACTION_PUBLISH,
                 self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id()
-            )
+            ]
         );
     }
 
@@ -765,7 +759,7 @@ abstract class Manager extends Application
     public function get_recycle_bin_url()
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS, self::PARAM_CATEGORY_ID => null)
+            [self::PARAM_ACTION => self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS, self::PARAM_CATEGORY_ID => null]
         );
     }
 
@@ -808,7 +802,7 @@ abstract class Manager extends Application
 
             $html[] = '<div class="alert alert-warning" style="font-size: 12px; font-weight: bold;">';
             $html[] = Translation::getInstance()->get(
-                'CurrentlyWorkingInWorkspace', array('TITLE' => $workspace->getTitle())
+                'CurrentlyWorkingInWorkspace', ['TITLE' => $workspace->getTitle()]
             );
 
             if ($workspace->getDescription())

@@ -18,6 +18,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public const ACTION_LOGIN = 'Login';
     public const ACTION_LOGOUT = 'Logout';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_LOGIN;
 
     public const PARAM_EXPORT_FORMAT = 'export_format';
@@ -58,7 +59,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     public function get_external_repository_actions()
     {
-        $actions = array(self::ACTION_BROWSE_EXTERNAL_REPOSITORY);
+        $actions = [self::ACTION_BROWSE_EXTERNAL_REPOSITORY];
         if ($this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
             //$actions[] = self::ACTION_UPLOAD_EXTERNAL_REPOSITORY;
@@ -77,7 +78,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     }
 
     /**
-     *
      * @param $object ExternalObject
      *
      * @return array
@@ -105,13 +105,13 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
                 $actions[$export_type] = new ToolbarItem(
                     Translation::getInstance()->getTranslation(
-                        'ImportAs', array('TYPE' => $exportTypeExtension), self::context()
+                        'ImportAs', ['TYPE' => $exportTypeExtension], self::context()
                     ), FileType::getGlyphForExtension($camelizedExportTypeExtension), $this->get_url(
-                    array(
+                    [
                         self::PARAM_ACTION => self::ACTION_IMPORT_EXTERNAL_REPOSITORY,
                         self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id(),
                         self::PARAM_EXPORT_FORMAT => $export_type
-                    )
+                    ]
                 ), ToolbarItem::DISPLAY_ICON
                 );
             }
@@ -121,7 +121,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     }
 
     /**
-     *
      * @param \core\repository\external\ExternalObject $object
      *
      * @return string
@@ -153,7 +152,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
 
     /**
-     *
      * @return array
      */
     public function get_menu_items()
@@ -166,7 +164,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
             // Basic list of all documents
             $all_items = [];
             $all_items['title'] = Translation::get('AllItems');
-            $all_items['url'] = $this->get_url(array(self::PARAM_FOLDER => null));
+            $all_items['url'] = $this->get_url([self::PARAM_FOLDER => null]);
 
             $glyph = new FontAwesomeGlyph('home', [], null, 'fas');
             $all_items['class'] = $glyph->getClassNamesString();
@@ -186,7 +184,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
 
     /**
-     *
      * @return string
      */
     public function get_repository_type()

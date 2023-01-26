@@ -20,8 +20,7 @@ abstract class Manager extends Application
     public const ACTION_SELECT = 'Selecter';
     public const ACTION_VIEW = 'Viewer';
 
-    // Default action
-
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public function count_external_repository_objects($condition)
@@ -55,7 +54,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @param \core\repository\external\ExternalObject $object
      */
     public function get_external_repository_object_viewing_url($object)

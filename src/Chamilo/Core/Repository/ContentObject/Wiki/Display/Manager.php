@@ -28,8 +28,7 @@ use MediawikiParserContext;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Display
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
@@ -47,6 +46,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     public const ACTION_VIEW_WIKI = 'Viewer';
     public const ACTION_VIEW_WIKI_PAGE = 'WikiItemViewer';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_VIEW_WIKI;
 
     public const PARAM_WIKI_ID = 'wiki_id';
@@ -68,15 +68,15 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
         if ($displayAction != self::ACTION_CREATE_PAGE && $complex_wiki_page)
         {
-            $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
+            $buttonGroup = new ButtonGroup([], ['btn-group-vertical']);
             $buttonToolBar->addButtonGroup($buttonGroup);
 
             $classes = ($displayAction == self::ACTION_VIEW_WIKI_PAGE ? ['btn-primary', 'disabled'] : []);
             $read_url = $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()
-                )
+                ]
             );
 
             $buttonGroup->addButton(
@@ -88,11 +88,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
             $classes = ($displayAction == self::ACTION_DISCUSS ? ['btn-primary', 'disabled'] : []);
             $discuss_url = $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_DISCUSS,
                     'wiki_publication' => Request::get('wiki_publication'),
                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()
-                )
+                ]
             );
 
             $buttonGroup->addButton(
@@ -104,10 +104,10 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
             $classes = ($displayAction == self::ACTION_PAGE_STATISTICS ? ['btn-primary', 'disabled'] : []);
             $statistics_url = $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_PAGE_STATISTICS,
                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()
-                )
+                ]
             );
 
             $buttonGroup->addButton(
@@ -118,16 +118,16 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 )
             );
 
-            $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
+            $buttonGroup = new ButtonGroup([], ['btn-group-vertical']);
             $buttonToolBar->addButtonGroup($buttonGroup);
 
             $classes =
                 ($displayAction == self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM ? ['btn-primary', 'disabled'] : []);
             $edit_url = $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()
-                )
+                ]
             );
 
             $buttonGroup->addButton(
@@ -142,10 +142,10 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             ($displayAction == self::ACTION_VIEW_WIKI_PAGE && Request::get(self::PARAM_WIKI_VERSION_ID)) ?
                 ['btn-primary disabled'] : []);
             $history_url = $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_HISTORY,
                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()
-                )
+                ]
             );
 
             $buttonGroup->addButton(
@@ -159,10 +159,10 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $classes =
                 ($displayAction == self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM ? ['btn-primary disabled'] : []);
             $delete_url = $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_wiki_page->get_id()
-                )
+                ]
             );
 
             $buttonGroup->addButton(
@@ -180,32 +180,32 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         if (!isset($this->buttonToolBarRenderer))
         {
-            $buttonToolBar = new ButtonToolBar($this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_WIKI)));
+            $buttonToolBar = new ButtonToolBar($this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_WIKI]));
             $buttonToolBar->addClass('btn-action-toolbar-vertical');
 
-            $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
+            $buttonGroup = new ButtonGroup([], ['btn-group-vertical']);
             $buttonToolBar->addButtonGroup($buttonGroup);
 
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('AddWikiPage'), new FontAwesomeGlyph('plus'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_PAGE)),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE_PAGE]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $this->addDisplayActions($buttonToolBar, $complexWikiPage);
 
-            $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
+            $buttonGroup = new ButtonGroup([], ['btn-group-vertical']);
             $buttonToolBar->addButtonGroup($buttonGroup);
 
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('MainPage'), new FontAwesomeGlyph('home'), $this->get_url(
-                    array(
+                    [
                         self::PARAM_ACTION => self::ACTION_VIEW_WIKI,
                         self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => null
-                    )
+                    ]
                 ), Button::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -213,15 +213,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('Contents'), new FontAwesomeGlyph('folder'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_WIKI)),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_WIKI]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('Statistics'), new FontAwesomeGlyph('chart-bar'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_STATISTICS)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_STATISTICS]), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
@@ -236,7 +235,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT)),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT]),
                 $this->get_root_content_object()->get_title()
             )
         );
@@ -247,7 +246,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             case self::ACTION_CREATE_PAGE :
                 $trail->add(
                     new Breadcrumb(
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_PAGE)),
+                        $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE_PAGE]),
                         Translation::get('CreateWikiPage')
                     )
                 );
@@ -255,7 +254,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             case self::ACTION_UPDATE_CONTENT_OBJECT :
                 $trail->add(
                     new Breadcrumb(
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPDATE_CONTENT_OBJECT)),
+                        $this->get_url([self::PARAM_ACTION => self::ACTION_UPDATE_CONTENT_OBJECT]),
                         Translation::get('Edit', null, StringUtilities::LIBRARIES)
                     )
                 );
@@ -270,12 +269,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(
-                            array(
+                            [
                                 self::PARAM_ACTION => self::ACTION_PAGE_STATISTICS,
                                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
                                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
                                 )
-                            )
+                            ]
                         ), Translation::get('Reporting')
                     )
                 );
@@ -284,12 +283,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(
-                            array(
+                            [
                                 self::PARAM_ACTION => self::ACTION_ACCESS_DETAILS,
                                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
                                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
                                 )
-                            )
+                            ]
                         ), Translation::get('Reporting')
                     )
                 );
@@ -300,12 +299,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(
-                            array(
+                            [
                                 self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
                                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
                                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
                                 )
-                            )
+                            ]
                         ), $this->get_content_object_from_complex_id(
                         Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)
                     )->get_title()
@@ -316,12 +315,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(
-                            array(
+                            [
                                 self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
                                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
                                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
                                 )
-                            )
+                            ]
                         ), $this->get_content_object_from_complex_id(
                         Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID)
                     )->get_title()
@@ -330,12 +329,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(
-                            array(
+                            [
                                 self::PARAM_ACTION => Request::get(self::PARAM_ACTION),
                                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => Request::get(
                                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
                                 )
-                            )
+                            ]
                         ), Translation::get('WikiDiscuss')
                     )
                 );
@@ -398,7 +397,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $html = [];
 
         $wikiGlyph = $this->get_root_content_object()->getGlyph(
-            IdentGlyph::SIZE_BIG, true, array('fa-6x')
+            IdentGlyph::SIZE_BIG, true, ['fa-6x']
         );
 
         $html[] = '<div class="panel panel-default">';

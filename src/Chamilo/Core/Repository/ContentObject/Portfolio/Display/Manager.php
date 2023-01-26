@@ -10,31 +10,31 @@ use Exception;
  * Portfolio display manager which serves as a base for all matters related to the displaying of portfolios
  *
  * @package repository\content_object\portfolio\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
-    const ACTION_ACTIVITY = 'Activity';
-    const ACTION_BOOKMARK = 'Bookmarker';
-    const ACTION_FEEDBACK = 'Feedback';
-    const ACTION_MANAGE = 'Manager';
-    const ACTION_MOVE = 'Mover';
-    const ACTION_RIGHTS = 'Rights';
-    const ACTION_SORT = 'Sorter';
-    const ACTION_USER = 'User';
+    public const ACTION_ACTIVITY = 'Activity';
+    public const ACTION_BOOKMARK = 'Bookmarker';
+    public const ACTION_FEEDBACK = 'Feedback';
+    public const ACTION_MANAGE = 'Manager';
+    public const ACTION_MOVE = 'Mover';
+    public const ACTION_RIGHTS = 'Rights';
+    public const ACTION_SORT = 'Sorter';
+    public const ACTION_USER = 'User';
 
-    const DEFAULT_ACTION = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+    public const CONTEXT = __NAMESPACE__;
+    public const DEFAULT_ACTION = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
-    const PARAM_PORTFOLIO_ITEM_ID = 'portfolio_item_id';
-    const PARAM_SORT = 'sort';
-    const PARAM_STEP = 'step';
-    const PARAM_VIRTUAL_USER_ID = 'virtual_user_id';
+    public const PARAM_PORTFOLIO_ITEM_ID = 'portfolio_item_id';
+    public const PARAM_SORT = 'sort';
+    public const PARAM_STEP = 'step';
+    public const PARAM_VIRTUAL_USER_ID = 'virtual_user_id';
 
-    const SORT_DOWN = 'Down';
-    const SORT_UP = 'Up';
+    public const SORT_DOWN = 'Down';
+    public const SORT_UP = 'Up';
 
     /**
-     *
      * @var int
      */
     private $current_step;

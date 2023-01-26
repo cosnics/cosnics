@@ -6,11 +6,12 @@ use Chamilo\Libraries\Architecture\AjaxManager;
 
 /**
  * @package Chamilo\Core\Notification\Ajax
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class Manager extends AjaxManager
 {
-    const ACTION_GET_NOTIFICATIONS = 'GetNotifications';
-    const DEFAULT_ACTION = self::ACTION_GET_NOTIFICATIONS;
+    public const ACTION_GET_NOTIFICATIONS = 'GetNotifications';
+
+    public const CONTEXT = __NAMESPACE__;
+    public const DEFAULT_ACTION = self::ACTION_GET_NOTIFICATIONS;
 }

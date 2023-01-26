@@ -6,14 +6,15 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- *
  * @package application.common.email_manager
  */
 abstract class Manager extends Application
 {
     public const ACTION_EMAIL = 'Emailer';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_EMAIL;
+
     public const PARAM_ACTION = 'email_action';
 
     private $target_users;

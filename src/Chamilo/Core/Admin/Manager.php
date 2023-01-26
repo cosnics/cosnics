@@ -20,6 +20,7 @@ abstract class Manager extends Application
     public const ACTION_VIEW_LOGS = 'LogViewer';
     public const ACTION_WHOIS_ONLINE = 'WhoisOnline';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_ADMIN_BROWSER;
 
     public const PARAM_CONTEXT = 'context';

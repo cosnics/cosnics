@@ -14,11 +14,11 @@ abstract class Manager extends Application
     public const ACTION_SUBSCRIBE = 'Subscribe';
     public const ACTION_UNSUBSCRIBE = 'Unsubscribe';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_SUBSCRIBE;
     public const PARAM_ACTION = 'type_action';
 
     /**
-     *
      * @param ButtonGroup $primaryActions
      * @param ButtonGroup $secondaryActions
      * @param TreeNode $node
@@ -38,12 +38,12 @@ abstract class Manager extends Application
             $secondaryActions->addButton(
                 new Button(
                     $translator->getTranslation('Subscribe'), new FontAwesomeGlyph('envelope'), $this->get_url(
-                    array(
+                    [
                         \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
                         \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId(
                         ),
                         self::PARAM_ACTION => self::ACTION_SUBSCRIBE
-                    )
+                    ]
                 )
                 )
             );
@@ -54,12 +54,12 @@ abstract class Manager extends Application
                 new Button(
                     $translator->getTranslation('UnSubscribe'), new FontAwesomeGlyph('envelope', [], null, 'far'),
                     $this->get_url(
-                        array(
+                        [
                             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
                             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId(
                             ),
                             self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE
-                        )
+                        ]
                     )
                 )
             );

@@ -13,4 +13,5 @@ use Chamilo\Core\Repository\Display\Preview;
  */
 abstract class Manager extends Preview
 {
+    public const CONTEXT = __NAMESPACE__;
 }

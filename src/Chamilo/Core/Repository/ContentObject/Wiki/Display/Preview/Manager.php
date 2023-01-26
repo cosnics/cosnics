@@ -8,16 +8,7 @@ use Chamilo\Libraries\Translation\Translation;
 abstract class Manager extends Preview
 {
 
-    /**
-     * Preview mode, so always return true.
-     * 
-     * @param $right
-     * @return boolean
-     */
-    public function is_allowed($right)
-    {
-        return true;
-    }
+    public const CONTEXT = __NAMESPACE__;
 
     /**
      * Functionality is publication dependent, so not available in preview mode.
@@ -26,17 +17,20 @@ abstract class Manager extends Preview
     {
         $this->not_available(Translation::get('ImpossibleInPreviewMode'));
     }
-    
-    // FUNCTIONS FOR COMPLEX DISPLAY SUPPORT
-    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
+
+    /**
+     * Preview mode, so always return true.
+     *
+     * @param $right
+     *
+     * @return bool
+     */
+    public function is_allowed($right)
     {
         return true;
     }
 
-    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
-    {
-        return true;
-    }
+    // FUNCTIONS FOR COMPLEX DISPLAY SUPPORT
 
     public function is_allowed_to_add_child()
     {
@@ -53,7 +47,17 @@ abstract class Manager extends Preview
         return true;
     }
 
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
+    {
+        return true;
+    }
+
     public function is_allowed_to_edit_feedback()
+    {
+        return true;
+    }
+
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
     {
         return true;
     }

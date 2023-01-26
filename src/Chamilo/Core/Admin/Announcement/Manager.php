@@ -14,6 +14,7 @@ abstract class Manager extends Application
     public const ACTION_HIDE = 'Hider';
     public const ACTION_VIEW = 'Viewer';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public const PARAM_ACTION = 'announcement_action';
