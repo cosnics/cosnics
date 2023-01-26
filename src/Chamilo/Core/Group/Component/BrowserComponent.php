@@ -466,8 +466,9 @@ class BrowserComponent extends Manager
      */
     protected function renderSubscribedUsertable(): string
     {
-        $totalNumberOfItems =
-            $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifier($this->getGroupIdentifier());
+        $totalNumberOfItems = $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifier(
+            $this->getGroupIdentifier(), $this->getSubscribedUsersCondition()
+        );
         $subscribedUserTableRenderer = $this->getSubscribedUserTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(

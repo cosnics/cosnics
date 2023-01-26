@@ -38,25 +38,28 @@ class GroupMembershipService
 
     /**
      * @param int $groupIdentifier
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return int
      * @throws \Exception
      */
-    public function countSubscribedUsersForGroupIdentifier(int $groupIdentifier)
+    public function countSubscribedUsersForGroupIdentifier(int $groupIdentifier, ?Condition $condition = null): int
     {
-        return $this->getGroupMembershipRepository()->countSubscribedUsersForGroupIdentifier($groupIdentifier);
+        return $this->getGroupMembershipRepository()->countSubscribedUsersForGroupIdentifier(
+            $groupIdentifier, $condition
+        );
     }
 
     /**
-     * @param int $groupIdentifiers
+     * @param array $groupIdentifiers
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return int
-     * @throws \Exception
      */
-    public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers)
+    public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers, ?Condition $condition = null): int
     {
         return $this->getGroupMembershipRepository()->countSubscribedUsersForGroupIdentifiers(
-            $groupIdentifiers
+            $groupIdentifiers, $condition
         );
     }
 
@@ -112,7 +115,8 @@ class GroupMembershipService
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findSubscribedUsersForGroupIdentifier(
-        int $groupIdentifier, ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        int $groupIdentifier, ?Condition $condition = null, ?int $offset = null, ?int $count = null,
+        ?OrderBy $orderBy = null
     ): ArrayCollection
     {
         return $this->findSubscribedUsersForGroupIdentifiers([$groupIdentifier], $condition, $offset, $count, $orderBy);
@@ -128,7 +132,8 @@ class GroupMembershipService
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findSubscribedUsersForGroupIdentifiers(
-        array $groupIdentifiers, ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+        array $groupIdentifiers, ?Condition $condition = null, ?int $offset = null, ?int $count = null,
+        ?OrderBy $orderBy = null
     ): ArrayCollection
     {
         return $this->getGroupMembershipRepository()->findSubscribedUsersForGroupIdentifiers(

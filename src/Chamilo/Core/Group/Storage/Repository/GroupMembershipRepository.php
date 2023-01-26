@@ -46,28 +46,51 @@ class GroupMembershipRepository
 
     /**
      * @param int $groupIdentifier
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return int
      * @throws \Exception
      */
-    public function countSubscribedUsersForGroupIdentifier(int $groupIdentifier)
+    public function countSubscribedUsersForGroupIdentifier(int $groupIdentifier, ?Condition $condition = null): int
     {
-        return $this->countSubscribedUsersForGroupIdentifiers([$groupIdentifier]);
+        return $this->countSubscribedUsersForGroupIdentifiers([$groupIdentifier], $condition);
     }
 
     /**
-     * @param int $groupIdentifiers
+     * @param int[] $groupIdentifiers
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return int
-     * @throws \Exception
      */
-    public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers)
+    public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers, ?Condition $condition = null): int
     {
-        $condition = new InCondition(
+        $groupCondition = new InCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID), $groupIdentifiers
         );
 
-        return $this->getDataClassRepository()->count(GroupRelUser::class, new DataClassCountParameters($condition));
+        if ($condition instanceof Condition)
+        {
+            $condition = new AndCondition([$condition, $groupCondition]);
+        }
+        else
+        {
+            $condition = $groupCondition;
+        }
+
+        $joins = new Joins(
+            [
+                new Join(
+                    GroupRelUser::class, new EqualityCondition(
+                        new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
+                        new PropertyConditionVariable(SubscribedUser::class, SubscribedUser::PROPERTY_ID)
+                    )
+                )
+            ]
+        );
+
+        return $this->getDataClassRepository()->count(
+            SubscribedUser::class, new DataClassCountParameters($condition, $joins)
+        );
     }
 
     /**
