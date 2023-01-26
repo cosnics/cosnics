@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -64,10 +65,11 @@ abstract class AbstractTableRenderer
     ): string
     {
         $tableName = $tableName ?: $this->determineTableName();
+        $tableActions = $this instanceof TableActionsSupport ? $this->getTableActions() : null;
 
         return $this->getHtmlTableRenderer()->render(
             $this->getColumns(), $this->processData($tableData, $parameterValues), $tableName,
-            $this->getParameterNames($tableName), $parameterValues, $this->getTableActions()
+            $this->getParameterNames($tableName), $parameterValues, $tableActions
         );
     }
 
@@ -228,11 +230,6 @@ abstract class AbstractTableRenderer
         return null;
     }
 
-    public function getTableActions(): ?TableActions
-    {
-        return null;
-    }
-
     public function getTranslator(): Translator
     {
         return $this->translator;
@@ -245,7 +242,8 @@ abstract class AbstractTableRenderer
 
     public function hasTableActions(): bool
     {
-        return $this->getTableActions() instanceof TableActions && $this->getTableActions()->hasActions();
+        return $this instanceof TableActionsSupport && $this->getTableActions() instanceof TableActions &&
+            $this->getTableActions()->hasActions();
     }
 
     abstract protected function initializeColumns();

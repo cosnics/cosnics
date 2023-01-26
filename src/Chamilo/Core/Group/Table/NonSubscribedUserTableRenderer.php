@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
 use Symfony\Component\Translation\Translator;
@@ -21,7 +22,7 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Group\Table
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class NonSubscribedUserTableRenderer extends DataClassListTableRenderer implements TableRowActionsSupport
+class NonSubscribedUserTableRenderer extends DataClassListTableRenderer implements TableRowActionsSupport, TableActionsSupport
 {
     public const TABLE_IDENTIFIER = Manager::PARAM_USER_ID;
 
