@@ -86,6 +86,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
         elseif (!phpCAS::isInitialized())
         {
             $settings = $this->getConfiguration();
+            $request = $this->getRequest();
 
             // initialize phpCAS
             if ($settings['enable_log'])
@@ -98,13 +99,13 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
             if ($casVersion == 'SAML_VERSION_1_1')
             {
                 phpCAS::client(
-                    SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], (string) $settings['uri'], false
+                    SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], (string) $settings['uri'], $request->getSchemeAndHttpHost(),false
                 );
             }
             else
             {
                 phpCAS::client(
-                    CAS_VERSION_2_0, $settings['host'], (int) $settings['port'], (string) $settings['uri'], false
+                    CAS_VERSION_2_0, $settings['host'], (int) $settings['port'], (string) $settings['uri'], $request->getSchemeAndHttpHost(),false
                 );
             }
 
