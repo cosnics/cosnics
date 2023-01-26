@@ -4,7 +4,6 @@ namespace Chamilo\Core\Admin\Announcement\Table;
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Admin\Announcement\Service\RightsService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\Publication;
-use Chamilo\Core\Admin\Announcement\Table\Publication\PublicationTableColumnModel;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Repository\Service\ContentObjectService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -148,7 +147,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
 
         switch ($column->get_name())
         {
-            case PublicationTableColumnModel::COLUMN_STATUS :
+            case self::COLUMN_STATUS :
                 return $contentObject->get_icon_image(
                     IdentGlyph::SIZE_MINI, !$publication[Publication::PROPERTY_HIDDEN]
                 );
@@ -191,7 +190,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
 
                 return $publication[Publication::PROPERTY_HIDDEN] ? '<span style="color: gray">' . $data . '</span>' :
                     $data;
-            case PublicationTableColumnModel::COLUMN_PUBLISHED_FOR :
+            case self::COLUMN_PUBLISHED_FOR :
                 $data = '<div style="float: left;">' . $this->renderPublicationTargets($publication) . '</div>';
 
                 if ($publication[Publication::PROPERTY_EMAIL_SENT])
