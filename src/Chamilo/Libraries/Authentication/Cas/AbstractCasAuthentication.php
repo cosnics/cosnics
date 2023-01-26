@@ -7,6 +7,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Exception;
@@ -21,6 +22,8 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class AbstractCasAuthentication extends Authentication implements AuthenticationInterface
 {
+    protected PathBuilder $pathBuilder;
+
     protected SessionUtilities $sessionUtilities;
 
     /**
@@ -30,11 +33,12 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
-        UserService $userService, SessionUtilities $sessionUtilities
+        UserService $userService, SessionUtilities $sessionUtilities, PathBuilder $pathBuilder
     )
     {
         parent::__construct($configurationConsulter, $translator, $request, $userService);
         $this->sessionUtilities = $sessionUtilities;
+        $this->pathBuilder = $pathBuilder;
     }
 
     abstract public function getAuthenticationType(): string;
@@ -65,6 +69,11 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
         return $this->settings;
     }
 
+    public function getPathBuilder(): PathBuilder
+    {
+        return $this->pathBuilder;
+    }
+
     abstract public function getPriority(): int;
 
     public function getSessionUtilities(): SessionUtilities
@@ -79,6 +88,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
      */
     protected function initializeClient()
     {
+
         if (!$this->isConfigured())
         {
             throw new Exception($this->getTranslator()->trans('CheckCASConfiguration'));
@@ -86,6 +96,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
         elseif (!phpCAS::isInitialized())
         {
             $settings = $this->getConfiguration();
+            $request = $this->getRequest();
 
             // initialize phpCAS
             if ($settings['enable_log'])
@@ -98,13 +109,15 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
             if ($casVersion == 'SAML_VERSION_1_1')
             {
                 phpCAS::client(
-                    SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], (string) $settings['uri'], false
+                    SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], (string) $settings['uri'],
+                    $request->getSchemeAndHttpHost(), false
                 );
             }
             else
             {
                 phpCAS::client(
-                    CAS_VERSION_2_0, $settings['host'], (int) $settings['port'], (string) $settings['uri'], false
+                    CAS_VERSION_2_0, $settings['host'], (int) $settings['port'], (string) $settings['uri'],
+                    $request->getSchemeAndHttpHost(), false
                 );
             }
 
@@ -147,6 +160,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
      */
     public function login(): ?User
     {
+
         if (!$this->isAuthSourceActive())
         {
             return null;

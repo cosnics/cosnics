@@ -15,11 +15,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Libraries\Authentication
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AuthenticationValidator
 {
@@ -118,7 +117,7 @@ class AuthenticationValidator
      */
     public function logout(User $user)
     {
-        Event::trigger('Logout', Manager::context(), array('server' => $_SERVER, 'user' => $user));
+        Event::trigger('Logout', Manager::context(), ['server' => $_SERVER, 'user' => $user]);
         $this->sessionUtilities->destroy();
 
         foreach ($this->authentications as $authentication)
@@ -140,11 +139,11 @@ class AuthenticationValidator
         }
         else
         {
-            $parameters = array(
+            $parameters = [
                 Application::PARAM_CONTEXT => $this->configurationConsulter->getSetting(
-                    array('Chamilo\Core\Admin', 'page_after_login')
+                    ['Chamilo\Core\Admin', 'page_after_login']
                 )
-            );
+            ];
         }
 
         $redirect = new RedirectResponse(
@@ -156,7 +155,6 @@ class AuthenticationValidator
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
     protected function setAuthenticatedUser(User $user)
@@ -171,12 +169,11 @@ class AuthenticationValidator
      */
     protected function trackLogin(User $user)
     {
-        Event::trigger('Login', Manager::context(), array('server' => $_SERVER, 'user' => $user));
+        Event::trigger('Login', Manager::context(), ['server' => $_SERVER, 'user' => $user]);
     }
 
     /**
      * @return bool
-     *
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      * @throws \ReflectionException
      */
@@ -213,7 +210,6 @@ class AuthenticationValidator
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
