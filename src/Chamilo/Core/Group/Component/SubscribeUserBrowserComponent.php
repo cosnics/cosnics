@@ -2,8 +2,9 @@
 namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
-use Chamilo\Core\Group\Table\SubscribeUser\SubscribeUserTable;
+use Chamilo\Core\Group\Service\GroupMembershipService;
+use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Table\NonSubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -15,47 +16,39 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package group.lib.group_manager.component
+ * @package Chamilo\Core\Group\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class SubscribeUserBrowserComponent extends Manager implements TableSupport
+class SubscribeUserBrowserComponent extends Manager
 {
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
-
-    private $group;
+    private ?Group $group;
 
     /**
      * Runs this component and displays its output.
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
     public function run()
     {
-        $group_id = Request::get(self::PARAM_GROUP_ID);
-        $this->set_parameter(self::PARAM_GROUP_ID, $group_id);
-
-        if (isset($group_id))
-        {
-            $this->group = $this->retrieve_group($group_id);
-        }
-
-        if (!$this->get_user()->is_platform_admin())
+        if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -65,47 +58,50 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->buttonToolbarRenderer->render() . '<br />';
         $html[] = $output;
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
+        $translator = $this->getTranslator();
+
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)),
-                Translation::get('BrowserComponent')
+                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
+                $translator->trans('BrowserComponent', [], Manager::CONTEXT)
             )
         );
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(
+                    [
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID)
-                    )
-                ), Translation::get('ViewerComponent')
+                        self::PARAM_GROUP_ID => $this->getGroupIdentifier()
+                    ]
+                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
             )
         );
     }
 
-    public function getButtonToolbarRenderer()
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
-        $group = $this->group;
+        $group = $this->getGroup();
 
         if (!isset($this->buttonToolbarRenderer))
         {
-            $buttonToolbar = new ButtonToolBar($this->get_url(array(self::PARAM_GROUP_ID => $group->get_id())));
+            $buttonToolbar = new ButtonToolBar($this->get_url([self::PARAM_GROUP_ID => $group->getId()]));
             $commonActions = new ButtonGroup();
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
-                    $this->get_url(array(self::PARAM_GROUP_ID => $group->get_id())), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $this->getTranslator()->trans('ShowAll', [], StringUtilities::LIBRARIES),
+                    new FontAwesomeGlyph('folder'), $this->get_url([self::PARAM_GROUP_ID => $group->getId()]),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
@@ -116,30 +112,41 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    public function get_group()
+    protected function getGroup(): Group
     {
+        if (!isset($this->group))
+        {
+            $this->group = $this->getGroupService()->findGroupByIdentifier($this->getGroupIdentifier());
+        }
+
         return $this->group;
     }
 
-    public function get_table_condition($object_table_class_name)
+    protected function getGroupIdentifier(): int
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-            new StaticConditionVariable(Request::get(GroupRelUser::PROPERTY_GROUP_ID))
+        return $this->getRequest()->query->get(self::PARAM_GROUP_ID);
+    }
+
+    protected function getGroupMembershipService(): GroupMembershipService
+    {
+        return $this->getService(GroupMembershipService::class);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
+    public function getNonSubscribedUserCondition(): AndCondition
+    {
+        $conditions = [];
+
+        $userIdentifiers = $this->getGroupMembershipService()->findSubscribedUserIdentifiersForGroupIdentifier(
+            $this->getRequest()->query->get(Manager::PARAM_GROUP_ID)
         );
 
-        $users = $this->retrieve_group_rel_users($condition);
-
-        $conditions = [];
-        foreach ($users as $user)
-        {
-            $conditions[] = new NotCondition(
-                new EqualityCondition(
-                    new PropertyConditionVariable(User::class, User::PROPERTY_ID),
-                    new StaticConditionVariable($user->get_user_id())
-                )
-            );
-        }
+        $conditions[] = new NotCondition(
+            new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers)
+        );
 
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
@@ -157,23 +164,42 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
             $conditions[] = new OrCondition($or_conditions);
         }
 
-        if (count($conditions) == 0)
-        {
-            return null;
-        }
-
-        $condition = new AndCondition($conditions);
-
-        return $condition;
+        return new AndCondition($conditions);
     }
 
-    public function get_user_subscribe_html()
+    public function getNonSubscribedUserTableRenderer(): NonSubscribedUserTableRenderer
     {
-        $table = new SubscribeUserTable($this);
+        return $this->getService(NonSubscribedUserTableRenderer::class);
+    }
 
-        $html = [];
-        $html[] = $table->as_html();
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
 
-        return implode(PHP_EOL, $html);
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    public function get_user_subscribe_html(): string
+    {
+        $totalNumberOfItems = $this->getUserService()->countUsers($this->getNonSubscribedUserCondition());
+        $nonSubscribedUserTableRenderer = $this->getNonSubscribedUserTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $nonSubscribedUserTableRenderer->getParameterNames(),
+            $nonSubscribedUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $users = $this->getUserService()->findUsers(
+            $this->getNonSubscribedUserCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $nonSubscribedUserTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $nonSubscribedUserTableRenderer->render($tableParameterValues, $users);
     }
 }

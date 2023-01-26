@@ -9,5 +9,6 @@
 
         <service id="Chamilo\Core\Group\Table\GroupTableRenderer"/>
         <service id="Chamilo\Core\Group\Table\SubscribedUserTableRenderer"/>
+        <service id="Chamilo\Core\Group\Table\NonSubscribedUserTableRenderer"/>
     </services>
 </container>
