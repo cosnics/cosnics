@@ -3,7 +3,7 @@ namespace Chamilo\Core\Help\Component;
 
 use Chamilo\Core\Help\Manager;
 use Chamilo\Core\Help\Storage\DataClass\HelpItem;
-use Chamilo\Core\Help\Table\Item\HelpItemTable;
+use Chamilo\Core\Help\Table\ItemTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -12,36 +12,28 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package help.lib.help_manager.component
+ * @package Chamilo\Core\Help\Component
  */
-
-/**
- * Weblcms component which allows the user to manage his or her user subscriptions
- */
-class BrowserComponent extends Manager implements TableSupport
+class BrowserComponent extends Manager
 {
 
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
+     * @throws \ReflectionException
      */
     public function run()
     {
-        if (!$this->get_user()->is_platform_admin())
+        if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -51,27 +43,27 @@ class BrowserComponent extends Manager implements TableSupport
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = '<br />' . $this->buttonToolbarRenderer->render() . '<br />';
         $html[] = $output;
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function getButtonToolbarRenderer()
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar(
-                $this->get_url(array(Manager::PARAM_HELP_ITEM => $this->get_help_item()))
+                $this->get_url([Manager::PARAM_HELP_ITEM => $this->get_help_item()])
             );
             $commonActions = new ButtonGroup();
 
             $commonActions->addButton(
                 new Button(
                     Translation::get('ShowAll', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
-                    $this->get_url(array(Manager::PARAM_HELP_ITEM => $this->get_help_item())),
+                    $this->get_url([Manager::PARAM_HELP_ITEM => $this->get_help_item()]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -84,46 +76,65 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    public function get_condition()
+    public function getItemCondition(): ?ContainsCondition
     {
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+
         if (isset($query) && $query != '')
         {
-            $condition = new ContainsCondition(
+            return new ContainsCondition(
                 new PropertyConditionVariable(HelpItem::class, HelpItem::PROPERTY_IDENTIFIER), $query
             );
         }
 
-        return $condition;
+        return null;
+    }
+
+    public function getItemTableRenderer(): ItemTableRenderer
+    {
+        return $this->getService(ItemTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
     public function get_help_item()
     {
-        return (Request::get(Manager::PARAM_HELP_ITEM) ? Request::get(Manager::PARAM_HELP_ITEM) : 0);
+        return $this->getRequest()->query->get(Manager::PARAM_HELP_ITEM, 0);
     }
 
-    public function get_table_condition($table_class_name)
-    {
-        return $this->get_condition();
-    }
-
-    /*
-     * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
-     */
-
-    public function get_user_html()
+    public function get_user_html(): string
     {
         $parameters = $this->get_parameters();
         $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
             $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
-        $table = new HelpItemTable($this);
-
         $html = [];
         $html[] = '<div style="float: right; width: 100%;">';
-        $html[] = $table->as_html();
+        $html[] = $this->renderItemTable();
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    protected function renderItemTable(): string
+    {
+        $totalNumberOfItems = $this->count_help_items($this->getItemCondition());
+        $itemTableRenderer = $this->getItemTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $itemTableRenderer->getParameterNames(), $itemTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $users = $this->retrieve_help_items(
+            $this->getItemCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $itemTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $itemTableRenderer->render($tableParameterValues, $users);
     }
 }
