@@ -9,10 +9,10 @@ use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Core\Menu\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
@@ -35,7 +35,6 @@ class ItemService
     private $itemCacheProvider;
 
     /**
-     *
      * @var \Chamilo\Core\Menu\Storage\Repository\ItemRepository
      */
     private $itemRepository;
@@ -56,7 +55,6 @@ class ItemService
     private $stringUtilities;
 
     /**
-     *
      * @var \Symfony\Component\Translation\Translator
      */
     private $translator;
@@ -86,7 +84,6 @@ class ItemService
     }
 
     /**
-     *
      * @param int $parentIdentifier
      *
      * @return int
@@ -433,35 +430,36 @@ class ItemService
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      */
-    public function findItems()
+    public function findItems(): ArrayCollection
     {
         return $this->getItemRepository()->findItems();
     }
 
     /**
-     * @param int $identifiers
+     * @param int[] $identifiers
      *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findItemsByIdentifiers(array $identifiers)
+    public function findItemsByIdentifiers(array $identifiers): ArrayCollection
     {
         return $this->getItemRepository()->findItemsByIdentifiers($identifiers);
     }
 
     /**
-     *
      * @param int $parentIdentifier
-     * @param int $count
-     * @param int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param ?int $count
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findItemsByParentIdentifier(
-        int $parentIdentifier, int $count = null, int $offset = null, ?OrderBy $orderBy = null
-    )
+        int $parentIdentifier, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+    ): ArrayCollection
     {
         return $this->getItemRepository()->findItemsByParentIdentifier(
             $parentIdentifier, $count, $offset, $orderBy
@@ -469,19 +467,19 @@ class ItemService
     }
 
     /**
-     *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\CategoryItem[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\CategoryItem>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findRootCategoryItems()
+    public function findRootCategoryItems(): ArrayCollection
     {
         return $this->getItemRepository()->findRootCategoryItems();
     }
 
     /**
-     *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findRootItems()
+    public function findRootItems(): ArrayCollection
     {
         return $this->findItemsByParentIdentifier(0);
     }
@@ -495,14 +493,6 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Service\DisplayOrderHandler $displayOrderHandler
-     */
-    public function setDisplayOrderHandler(DisplayOrderHandler $displayOrderHandler): void
-    {
-        $this->displayOrderHandler = $displayOrderHandler;
-    }
-
-    /**
      * @return \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
      */
     public function getItemCacheProvider(): FilesystemCache
@@ -511,29 +501,11 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache $itemCacheProvider
-     */
-    public function setItemCacheProvider(FilesystemCache $itemCacheProvider): void
-    {
-        $this->itemCacheProvider = $itemCacheProvider;
-    }
-
-    /**
-     *
      * @return \Chamilo\Core\Menu\Storage\Repository\ItemRepository
      */
     public function getItemRepository()
     {
         return $this->itemRepository;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Menu\Storage\Repository\ItemRepository $itemRepository
-     */
-    public function setItemRepository(ItemRepository $itemRepository)
-    {
-        $this->itemRepository = $itemRepository;
     }
 
     /**
@@ -590,27 +562,11 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
-     */
-    public function setPropertyMapper(PropertyMapper $propertyMapper): void
-    {
-        $this->propertyMapper = $propertyMapper;
-    }
-
-    /**
      * @return \Chamilo\Core\Menu\Service\RightsService
      */
     public function getRightsService(): RightsService
     {
         return $this->rightsService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
-     */
-    public function setRightsService(RightsService $rightsService): void
-    {
-        $this->rightsService = $rightsService;
     }
 
     /**
@@ -622,27 +578,11 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
-    public function setStringUtilities(StringUtilities $stringUtilities): void
-    {
-        $this->stringUtilities = $stringUtilities;
-    }
-
-    /**
      * @return \Symfony\Component\Translation\Translator
      */
     public function getTranslator(): Translator
     {
         return $this->translator;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
     }
 
     /**
@@ -770,6 +710,62 @@ class ItemService
         }
 
         return true;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Service\DisplayOrderHandler $displayOrderHandler
+     */
+    public function setDisplayOrderHandler(DisplayOrderHandler $displayOrderHandler): void
+    {
+        $this->displayOrderHandler = $displayOrderHandler;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache $itemCacheProvider
+     */
+    public function setItemCacheProvider(FilesystemCache $itemCacheProvider): void
+    {
+        $this->itemCacheProvider = $itemCacheProvider;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Storage\Repository\ItemRepository $itemRepository
+     */
+    public function setItemRepository(ItemRepository $itemRepository)
+    {
+        $this->itemRepository = $itemRepository;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
+     */
+    public function setPropertyMapper(PropertyMapper $propertyMapper): void
+    {
+        $this->propertyMapper = $propertyMapper;
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
+     */
+    public function setStringUtilities(StringUtilities $stringUtilities): void
+    {
+        $this->stringUtilities = $stringUtilities;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 
     /**

@@ -7,31 +7,28 @@ use Chamilo\Core\Menu\Menu\ItemMenu;
 use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
 use Chamilo\Core\Menu\Storage\DataClass\CategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\LinkItem;
-use Chamilo\Core\Menu\Table\Item\ItemBrowserTable;
+use Chamilo\Core\Menu\Table\ItemTableRenderer;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Menu\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BrowserComponent extends Manager implements DelegateComponent, TableSupport
+class BrowserComponent extends Manager implements DelegateComponent
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -45,14 +42,9 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
     {
         $this->getRightsService()->isUserAllowedToAccessComponent($this->getUser());
 
-        $table = new ItemBrowserTable(
-            $this, $this->getTranslator(), $this->getItemService(), $this->getRightsService(),
-            $this->getItemRendererFactory(), $this->getParentIdentifier()
-        );
-
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
 
         $html[] = $this->getButtonToolbarRenderer()->render();
 
@@ -62,13 +54,23 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $html[] = '</div>';
 
         $html[] = '<div class="col-xs-12 col-lg-10">';
-        $html[] = $table->render();
+        $html[] = $this->renderTable();
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = Manager::PARAM_ITEM;
+
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**
@@ -88,9 +90,10 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                 new Button(
                     $translator->trans('AddApplicationItem', [], 'Chamilo\Core\Menu'),
                     new FontAwesomeGlyph('desktop', [], null, 'fas'), $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => ApplicationItem::class
-                    )
+                    [
+                        self::PARAM_ACTION => self::ACTION_CREATE,
+                        self::PARAM_TYPE => ApplicationItem::class
+                    ]
                 ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -99,9 +102,10 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                 new Button(
                     $translator->trans('AddCategoryItem', [], 'Chamilo\Core\Menu'),
                     new FontAwesomeGlyph('folder', [], null, 'fas'), $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => CategoryItem::class
-                    )
+                    [
+                        self::PARAM_ACTION => self::ACTION_CREATE,
+                        self::PARAM_TYPE => CategoryItem::class
+                    ]
                 ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -110,7 +114,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                 new Button(
                     $translator->trans('AddLinkItem', [], 'Chamilo\Core\Menu'),
                     new FontAwesomeGlyph('link', [], null, 'fas'), $this->get_url(
-                    array(self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => LinkItem::class)
+                    [self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => LinkItem::class]
                 ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -121,8 +125,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                     new Button(
 
                         $translator->trans('Rights', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS)),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        $this->get_url([self::PARAM_ACTION => self::ACTION_RIGHTS]), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
             }
@@ -144,6 +147,11 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         return $this->getService(ItemRendererFactory::class);
     }
 
+    public function getItemTableRenderer(): ItemTableRenderer
+    {
+        return $this->getService(ItemTableRenderer::class);
+    }
+
     /**
      * @return \Chamilo\Core\Menu\Menu\ItemMenu
      */
@@ -151,7 +159,8 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
     {
         $urlFormat = new Redirect(
             [
-                self::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => self::ACTION_BROWSE,
+                self::PARAM_CONTEXT => self::package(),
+                self::PARAM_ACTION => self::ACTION_BROWSE,
                 self::PARAM_PARENT => '__ITEM__'
             ]
         );
@@ -161,10 +170,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         );
     }
 
-    /**
-     * @return int
-     */
-    public function getParentIdentifier()
+    public function getParentIdentifier(): int
     {
         if (!isset($this->parentIdentifier))
         {
@@ -174,21 +180,33 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         return $this->parentIdentifier;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        $additionalParameters[] = Manager::PARAM_ITEM;
-        return parent::getAdditionalParameters($additionalParameters);
+        return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
     /**
-     * @param string $tableClassName
-     *
-     * @return void
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Exception
      */
-    public function get_table_condition($tableClassName)
+    protected function renderTable(): string
     {
+        $totalNumberOfItems = $this->getItemService()->countItemsByParentIdentifier($this->getParentIdentifier());
+        $itemTableRenderer = $this->getItemTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $itemTableRenderer->getParameterNames(), $itemTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $items = $this->getItemService()->findItemsByParentIdentifier(
+            $this->getParentIdentifier(), $tableParameterValues->getNumberOfItemsPerPage(),
+            $tableParameterValues->getOffset(), $itemTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $itemTableRenderer->render($tableParameterValues, $items);
     }
 }
