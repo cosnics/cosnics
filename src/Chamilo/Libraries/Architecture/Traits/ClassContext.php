@@ -11,6 +11,7 @@ trait ClassContext
 {
     /**
      * @throws \ReflectionException
+     * @deprecated Replace with the static constant Class::CONTEXT
      */
     public static function context(): string
     {
