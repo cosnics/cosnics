@@ -1,18 +1,21 @@
 <?php
 namespace Chamilo\Core\Home\Rights\Component;
 
+use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Manager;
-use Chamilo\Core\Home\Rights\Table\BlockTypeTargetEntity\BlockTypeTargetEntityTable;
+use Chamilo\Core\Home\Rights\Service\BlockTypeRightsService;
+use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
+use Chamilo\Core\Home\Rights\Table\BlockTypeTargetEntityTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Browses the target entities for the block types
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class BrowseBlockTypeTargetEntitiesComponent extends Manager implements TableSupport
+class BrowseBlockTypeTargetEntitiesComponent extends Manager
 {
 
     /**
@@ -29,33 +32,56 @@ class BrowseBlockTypeTargetEntitiesComponent extends Manager implements TableSup
 
         $tableContent = $this->renderTable();
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $tableContent;
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Renders the table
-     *
-     * @return string
-     */
-    protected function renderTable()
+    public function getBlockTypeTargetEntityTableRenderer(): BlockTypeTargetEntityTableRenderer
     {
-        $table = new BlockTypeTargetEntityTable($this);
+        return $this->getService(BlockTypeTargetEntityTableRenderer::class);
+    }
 
-        return $table->as_html();
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
     /**
-     * Returns the condition
-     *
-     * @param string $table_class_name
-     *
-     * @return Condition
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
-    public function get_table_condition($table_class_name)
+    protected function renderTable(): string
     {
+        $blockTypeRightsService = new BlockTypeRightsService(new RightsRepository(), new HomeRepository());
+        $blockTypes = $blockTypeRightsService->getBlockTypesWithTargetEntities();
+
+        $totalNumberOfItems = count($blockTypes);
+        $blockTypeTargetEntityTableRenderer = $this->getBlockTypeTargetEntityTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $blockTypeTargetEntityTableRenderer->getParameterNames(),
+            $blockTypeTargetEntityTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $orderBy = $blockTypeTargetEntityTableRenderer->determineOrderBy($tableParameterValues);
+        $offset = $tableParameterValues->getOffset();
+        $count = $tableParameterValues->getNumberOfItemsPerPage();
+
+        $compareModifier = $orderBy->getFirst()->getDirection() != SORT_DESC ? 1 : - 1;
+
+        usort(
+            $blockTypes, function ($item1, $item2) use ($compareModifier) {
+            return strcmp($item1['block_type'], $item2['block_type']) * $compareModifier;
+        }
+        );
+
+        $blockTypes = array_splice($blockTypes, $offset, $count);
+
+        return $blockTypeTargetEntityTableRenderer->render($tableParameterValues, new ArrayCollection($blockTypes));
     }
 }

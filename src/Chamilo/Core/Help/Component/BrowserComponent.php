@@ -129,12 +129,12 @@ class BrowserComponent extends Manager
             $totalNumberOfItems
         );
 
-        $users = $this->retrieve_help_items(
+        $items = $this->retrieve_help_items(
             $this->getItemCondition(), $tableParameterValues->getOffset(),
             $tableParameterValues->getNumberOfItemsPerPage(),
             $itemTableRenderer->determineOrderBy($tableParameterValues)
         );
 
-        return $itemTableRenderer->render($tableParameterValues, $users);
+        return $itemTableRenderer->render($tableParameterValues, $items);
     }
 }
