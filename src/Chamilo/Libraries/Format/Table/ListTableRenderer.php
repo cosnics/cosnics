@@ -5,6 +5,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
+use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
@@ -49,7 +50,7 @@ abstract class ListTableRenderer extends AbstractTableRenderer
 
     protected function processData(ArrayCollection $results, TableParameterValues $parameterValues): ArrayCollection
     {
-        $tableActions = $this->getTableActions();
+        $tableActions = $this instanceof TableActionsSupport ? $this->getTableActions() : null;
 
         $tableData = [];
 
