@@ -105,7 +105,7 @@ class ButtonToolBarRenderer
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \QuickformException
      */
     public function getSearchForm(): ButtonSearchForm
     {

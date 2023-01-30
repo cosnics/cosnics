@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm_Renderer_Default;
 
@@ -24,7 +23,7 @@ class ButtonSearchForm extends FormValidator
     private HTML_QuickForm_Renderer_Default $renderer;
 
     /**
-     * @throws \Exception
+     * @throws \QuickformException
      */
     public function __construct(string $url)
     {
@@ -89,7 +88,7 @@ class ButtonSearchForm extends FormValidator
 
     public function clearFormSubmitted(): bool
     {
-        return !is_null(Request::post('clear'));
+        return !is_null($this->getRequest()->request->get('clear'));
     }
 
     public function getActionUrl(): string
