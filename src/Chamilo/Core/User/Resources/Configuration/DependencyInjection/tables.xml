@@ -13,7 +13,11 @@
                       id="Chamilo\Core\User\User"/>
         </service>
 
-        <service id="Chamilo\Core\User\Table\UserApprovalTableRenderer"/>
+        <service id="Chamilo\Core\User\Table\UserApprovalTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
 
     </services>
 </container>
