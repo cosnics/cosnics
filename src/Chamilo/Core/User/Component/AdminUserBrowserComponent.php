@@ -3,7 +3,7 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Table\Admin\AdminUserTable;
+use Chamilo\Core\User\Table\AdminUserTableRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -11,90 +11,85 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package user.lib.user_manager.component
+ * @package Chamilo\Core\User\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class AdminUserBrowserComponent extends Manager implements TableSupport
+class AdminUserBrowserComponent extends Manager
 {
 
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
-
-    private $firstletter;
-
-    private $menu_breadcrumbs;
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        if (!$this->get_user()->is_platform_admin())
+        if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
 
-        $this->firstletter = Request::get(self::PARAM_FIRSTLETTER);
-
         $html = [];
 
-        $html[] = $this->render_header();
-        $html[] = $this->buttonToolbarRenderer->render() . '<br />';
+        $html[] = $this->renderHeader();
+        $html[] = $this->getButtonToolbarRenderer()->render() . '<br />';
         $html[] = $this->get_user_html();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function getButtonToolbarRenderer()
+    public function getAdminUserTableRenderer(): AdminUserTableRenderer
+    {
+        return $this->getService(AdminUserTableRenderer::class);
+    }
+
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
 
-            $buttonToolbar = new ButtonToolBar($this->get_url(parent::get_parameters()));
-            $commonActions = new ButtonGroup();
+            $buttonToolbar = new ButtonToolBar(
+                $this->getUrlGenerator()->fromParameters(
+                    [self::PARAM_CONTEXT => self::CONTEXT, self::PARAM_ACTION => self::ACTION_BROWSE_USERS]
+                )
+            );
 
-            if ($this->get_user()->is_platform_admin())
+            $commonActions = new ButtonGroup();
+            $translator = $this->getTranslator();
+
+            if ($this->getUser()->is_platform_admin())
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Add', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
-                        $this->get_url(array(Application::PARAM_ACTION => self::ACTION_CREATE_USER)),
+                        $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
+                        $this->get_url([Application::PARAM_ACTION => self::ACTION_CREATE_USER]),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Reporting', null, StringUtilities::LIBRARIES),
+                        $translator->trans('Reporting', [], StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('chart-pie', [], null, 'fas'), $this->get_reporting_url(),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
             }
-
-            $commonActions->addButton(
-                new Button(
-                    Translation::get('Show', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
-                    $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
 
             $buttonToolbar->addButtonGroup($commonActions);
 
@@ -104,21 +99,16 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    public function get_parameters(): array
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        $parameters = parent::get_parameters();
-        if (isset($this->buttonToolbarRenderer))
-        {
-            $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
-                $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        }
-
-        return $parameters;
+        return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
-    public function get_table_condition($class_name)
+    /**
+     * @throws \Exception
+     */
+    public function getUserTableCondition(): ?Condition
     {
-        // construct search properties
         $search_properties = [];
         $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME);
         $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME);
@@ -126,19 +116,52 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
         $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE);
         $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL);
 
-        // get conditions
-        return $this->buttonToolbarRenderer->getConditions($search_properties);
+        return $this->getButtonToolbarRenderer()->getConditions($search_properties);
     }
 
-    public function get_user_html()
+    /**
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    public function get_user_html(): string
     {
-        $table = new AdminUserTable($this);
-
         $html = [];
         $html[] = '<div style="float: right; width: 100%;">';
-        $html[] = $table->as_html();
+        $html[] = $this->renderTable();
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Exception
+     */
+    protected function renderTable(): string
+    {
+        $this->getRequest()->query->set(
+            ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $this->getButtonToolbarRenderer()->getSearchForm()->getQuery()
+        );
+
+        $totalNumberOfItems = $this->getUserService()->countUsers($this->getUserTableCondition());
+        $adminUserTableRenderer = $this->getAdminUserTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $adminUserTableRenderer->getParameterNames(), $adminUserTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $users = $this->getUserService()->findUsers(
+            $this->getUserTableCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $adminUserTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $adminUserTableRenderer->render($tableParameterValues, $users);
     }
 }

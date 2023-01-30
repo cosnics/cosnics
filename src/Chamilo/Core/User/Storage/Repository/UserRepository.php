@@ -31,30 +31,17 @@ use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * The repository wrapper for the user data manager
- *
- * @package user
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\User\Storage\Repository
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserRepository implements UserRepositoryInterface
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
-    private $dataClassRepository;
+    private DataClassRepository $dataClassRepository;
 
-    /**
-     * @var \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator
-     */
-    private $searchQueryConditionGenerator;
+    private SearchQueryConditionGenerator $searchQueryConditionGenerator;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     * @param \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator $searchQueryConditionGenerator
-     */
     public function __construct(
         DataClassRepository $dataClassRepository, SearchQueryConditionGenerator $searchQueryConditionGenerator
     )
@@ -63,22 +50,12 @@ class UserRepository implements UserRepositoryInterface
         $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function countUsers(Condition $condition = null)
+    public function countUsers(?Condition $condition = null): int
     {
         return $this->getDataClassRepository()->count(User::class, new DataClassCountParameters($condition));
     }
 
-    /**
-     * @param string $searchQuery
-     *
-     * @return int
-     */
-    public function countUsersForSearchQuery(string $searchQuery = null)
+    public function countUsersForSearchQuery(?string $searchQuery = null): int
     {
         return $this->getDataClassRepository()->count(
             User::class, new DataClassCountParameters($this->getUserConditionForSearchQuery($searchQuery))
@@ -86,14 +63,11 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param string $searchQuery
-     * @param int $userIdentifiers
-     *
-     * @return int
+     * @param string[] $userIdentifiers
      */
     public function countUsersForSearchQueryAndUserIdentifiers(
-        string $searchQuery = null, array $userIdentifiers = []
-    )
+        ?string $searchQuery = null, array $userIdentifiers = []
+    ): int
     {
         return $this->getDataClassRepository()->count(
             User::class, new DataClassCountParameters(
@@ -102,56 +76,53 @@ class UserRepository implements UserRepositoryInterface
         );
     }
 
-    public function create(DataClass $dataClass)
+    /**
+     * @throws \Exception
+     * @deprecated Use dedicated create-methods in the UserRepository instead
+     */
+    public function create(DataClass $dataClass): bool
     {
         return $dataClass->create();
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function createUser(User $user)
+    public function createUser(User $user): bool
     {
         return $this->getDataClassRepository()->create($user);
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\UserSetting $userSetting
-     *
-     * @return bool
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function createUserSetting(UserSetting $userSetting)
+    public function createUserSetting(UserSetting $userSetting): bool
     {
         return $this->getDataClassRepository()->create($userSetting);
     }
 
-    public function delete(DataClass $dataClass)
+    /**
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @deprecated Use dedicated delete-methods in the UserRepository instead
+     */
+    public function delete(DataClass $dataClass): bool
     {
         return $dataClass->delete();
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
-    public function deleteUser(User $user)
+    public function deleteUser(User $user): bool
     {
         // TODO: $user->delete() still implements some business logic
         // return $this->getDataClassRepository()->delete($user);
         return $user->delete();
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\UserSetting $userSetting
-     *
-     * @return bool
-     */
-    public function deleteUserSetting(UserSetting $userSetting)
+    public function deleteUserSetting(UserSetting $userSetting): bool
     {
         return $this->getDataClassRepository()->delete($userSetting);
     }
@@ -159,9 +130,10 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @param int $status
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findActiveUsersByStatus($status)
+    public function findActiveUsersByStatus(int $status): ArrayCollection
     {
         $conditions = [];
         $conditions[] = new ComparisonCondition(
@@ -179,10 +151,10 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findPlatformAdministrators()
+    public function findPlatformAdministrators(): ArrayCollection
     {
         $conditions = [];
 
@@ -199,6 +171,12 @@ class UserRepository implements UserRepositoryInterface
         );
     }
 
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function findSettingsForUser(User $user): ArrayCollection
     {
         $condition = new EqualityCondition(
@@ -212,7 +190,7 @@ class UserRepository implements UserRepositoryInterface
             new StaticConditionVariable($user->getId())
         );
         $joinConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_ID),
+            new PropertyConditionVariable(Setting::class, DataClass::PROPERTY_ID),
             new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID)
         );
 
@@ -250,12 +228,7 @@ class UserRepository implements UserRepositoryInterface
         );
     }
 
-    /**
-     * @param string $email
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function findUserByEmail($email)
+    public function findUserByEmail($email): ?User
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL), new StaticConditionVariable($email)
@@ -264,22 +237,12 @@ class UserRepository implements UserRepositoryInterface
         return $this->getDataClassRepository()->retrieve(User::class, new DataClassRetrieveParameters($condition));
     }
 
-    /**
-     * @param int $id
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User|\Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    public function findUserByIdentifier($id)
+    public function findUserByIdentifier(string $identifier): ?User
     {
-        return $this->getDataClassRepository()->retrieveById(User::class, $id);
+        return $this->getDataClassRepository()->retrieveById(User::class, $identifier);
     }
 
-    /**
-     * @param string $officialCode
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function findUserByOfficialCode($officialCode)
+    public function findUserByOfficialCode(string $officialCode): ?User
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE),
@@ -289,12 +252,7 @@ class UserRepository implements UserRepositoryInterface
         return $this->getDataClassRepository()->retrieve(User::class, new DataClassRetrieveParameters($condition));
     }
 
-    /**
-     * @param string $securityToken
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function findUserBySecurityToken($securityToken)
+    public function findUserBySecurityToken(string $securityToken): ?User
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_SECURITY_TOKEN),
@@ -304,12 +262,7 @@ class UserRepository implements UserRepositoryInterface
         return $this->getDataClassRepository()->retrieve(User::class, new DataClassRetrieveParameters($condition));
     }
 
-    /**
-     * @param string $username
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function findUserByUsername($username)
+    public function findUserByUsername(string $username): ?User
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), new StaticConditionVariable($username)
@@ -318,12 +271,7 @@ class UserRepository implements UserRepositoryInterface
         return $this->getDataClassRepository()->retrieve(User::class, new DataClassRetrieveParameters($condition));
     }
 
-    /**
-     * @param string $usernameOrEmail
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function findUserByUsernameOrEmail($usernameOrEmail)
+    public function findUserByUsernameOrEmail(string $usernameOrEmail): ?User
     {
         $conditions = [];
 
@@ -342,13 +290,12 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @return int
-     * @throws \Exception
+     * @return string[]
      */
-    public function findUserIdentifiers()
+    public function findUserIdentifiers(): array
     {
         $retrieveProperties = new RetrieveProperties();
-        $retrieveProperties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
+        $retrieveProperties->add(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID));
 
         return $this->getDataClassRepository()->distinct(
             User::class, new DataClassDistinctParameters(null, $retrieveProperties)
@@ -358,10 +305,9 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @param string[] $officialCodes
      *
-     * @return int[]
-     * @throws \Exception
+     * @return string[]
      */
-    public function findUserIdentifiersByOfficialCodes(array $officialCodes)
+    public function findUserIdentifiersByOfficialCodes(array $officialCodes): array
     {
         $condition =
             new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE), $officialCodes);
@@ -369,11 +315,11 @@ class UserRepository implements UserRepositoryInterface
         return $this->getDataClassRepository()->distinct(
             User::class, new DataClassDistinctParameters(
                 $condition, new RetrieveProperties(
-                    array(
+                    [
                         new PropertyConditionVariable(
-                            User::class, User::PROPERTY_ID
+                            User::class, DataClass::PROPERTY_ID
                         )
-                    )
+                    ]
                 )
             )
         );
@@ -398,18 +344,20 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param int $userIdentifiers
+     * @param string[] $userIdentifiers
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findUsersByIdentifiersOrderedByName($userIdentifiers)
+    public function findUsersByIdentifiersOrderedByName(array $userIdentifiers): ArrayCollection
     {
         $orderBy = new OrderBy();
 
         $orderBy->add(new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)));
         $orderBy->add(new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)));
 
-        $condition = new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $userIdentifiers);
+        $condition =
+            new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers);
 
         return $this->getDataClassRepository()->retrieves(
             User::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
@@ -417,20 +365,21 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param string $searchQuery
-     * @param int $offset
-     * @param int $count
+     * @param ?string $searchQuery
+     * @param ?int $offset
+     * @param ?int $count
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findUsersForSearchQuery(
-        string $searchQuery = null, int $offset = null, int $count = null
-    )
+        ?string $searchQuery = null, ?int $offset = null, ?int $count = null
+    ): ArrayCollection
     {
-        $orderProperties = array(
+        $orderProperties = [
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-        );
+        ];
 
         $parameters = new DataClassRetrievesParameters(
             $this->getUserConditionForSearchQuery($searchQuery), $count, $offset, new OrderBy($orderProperties)
@@ -440,21 +389,22 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param string $searchQuery
-     * @param int $userIdentifiers
-     * @param int $offset
-     * @param int $count
+     * @param ?string $searchQuery
+     * @param string[] $userIdentifiers
+     * @param ?int $offset
+     * @param ?int $count
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findUsersForSearchQueryAndUserIdentifiers(
-        string $searchQuery = null, array $userIdentifiers = [], int $offset = null, int $count = null
-    )
+        ?string $searchQuery = null, array $userIdentifiers = [], ?int $offset = null, ?int $count = null
+    ): ArrayCollection
     {
-        $orderProperties = array(
+        $orderProperties = [
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
             new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-        );
+        ];
 
         $parameters = new DataClassRetrievesParameters(
             $this->getUserConditionForSearchQueryAndUserIdentifiers($searchQuery, $userIdentifiers), $count, $offset,
@@ -464,41 +414,17 @@ class UserRepository implements UserRepositoryInterface
         return $this->getDataClassRepository()->retrieves(User::class, $parameters);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
-    protected function getDataClassRepository()
+    protected function getDataClassRepository(): DataClassRepository
     {
         return $this->dataClassRepository;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
-    protected function setDataClassRepository($dataClassRepository)
-    {
-        $this->dataClassRepository = $dataClassRepository;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator
-     */
     public function getSearchQueryConditionGenerator(): SearchQueryConditionGenerator
     {
         return $this->searchQueryConditionGenerator;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator $searchQueryConditionGenerator
-     */
-    public function setSearchQueryConditionGenerator(SearchQueryConditionGenerator $searchQueryConditionGenerator): void
-    {
-        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
-    }
-
-    protected function getUserConditionForSearchQuery(string $searchQuery = null)
+    protected function getUserConditionForSearchQuery(string $searchQuery = null): AndCondition
     {
         $conditions = [];
 
@@ -506,11 +432,11 @@ class UserRepository implements UserRepositoryInterface
         if ($searchQuery && $searchQuery != '')
         {
             $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
-                $searchQuery, array(
+                $searchQuery, [
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)
-                )
+                ]
             );
         }
 
@@ -523,31 +449,22 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param string $searchQuery
-     * @param int $userIdentifiers
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     * @param string[] $userIdentifiers
      */
     protected function getUserConditionForSearchQueryAndUserIdentifiers(
-        string $searchQuery = null, array $userIdentifiers = []
-    )
+        ?string $searchQuery = null, array $userIdentifiers = []
+    ): AndCondition
     {
         $conditions = [];
 
         $conditions[] = $this->getUserConditionForSearchQuery($searchQuery);
         $conditions[] =
-            new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $userIdentifiers);
+            new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers);
 
         return new AndCondition($conditions);
     }
 
-    /**
-     * @param \Chamilo\Configuration\Storage\DataClass\Setting $setting
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\UserSetting
-     */
-    public function getUserSettingForSettingAndUser(Setting $setting, User $user)
+    public function getUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting
     {
         $conditions = [];
 
@@ -568,27 +485,37 @@ class UserRepository implements UserRepositoryInterface
         );
     }
 
-    public function update(DataClass $dataClass)
+    protected function setDataClassRepository(DataClassRepository $dataClassRepository)
+    {
+        $this->dataClassRepository = $dataClassRepository;
+    }
+
+    public function setSearchQueryConditionGenerator(SearchQueryConditionGenerator $searchQueryConditionGenerator): void
+    {
+        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
+    }
+
+    /**
+     * @throws \Exception
+     * @deprecated Use dedicated update-methods in the UserRepository instead
+     */
+    public function update(DataClass $dataClass): bool
     {
         return $dataClass->update();
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function updateUser(User $user)
+    public function updateUser(User $user): bool
     {
         return $this->getDataClassRepository()->update($user);
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\UserSetting $userSetting
-     *
-     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function updateUserSetting(UserSetting $userSetting)
+    public function updateUserSetting(UserSetting $userSetting): bool
     {
         return $this->getDataClassRepository()->update($userSetting);
     }

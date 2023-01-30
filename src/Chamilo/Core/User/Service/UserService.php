@@ -9,51 +9,32 @@ use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
 use InvalidArgumentException;
 use RuntimeException;
 
 /**
- *
  * @package Chamilo\Core\User\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class UserService
 {
 
-    /**
-     *
-     * @var \Chamilo\Configuration\Service\ConfigurationService
-     */
-    private $configurationService;
+    private ConfigurationService $configurationService;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    private $hashingUtilities;
+    private HashingUtilities $hashingUtilities;
 
-    /**
-     * @var \Chamilo\Libraries\Storage\DataClass\PropertyMapper
-     */
-    private $propertyMapper;
+    private PropertyMapper $propertyMapper;
 
-    /**
-     *
-     * @var \Chamilo\Core\User\Storage\Repository\UserRepository
-     */
-    private $userRepository;
+    private UserRepository $userRepository;
 
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\Repository\UserRepository $userRepository
-     * @param \Chamilo\Libraries\Hashing\HashingUtilities $hashingUtilities
-     * @param \Chamilo\Configuration\Service\ConfigurationService $configurationService
-     * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
-     */
     public function __construct(
         UserRepository $userRepository, HashingUtilities $hashingUtilities, ConfigurationService $configurationService,
         PropertyMapper $propertyMapper
@@ -65,47 +46,48 @@ class UserService
         $this->propertyMapper = $propertyMapper;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function countUsers($condition)
+    public function countUsers(?Condition $condition = null): int
     {
         return $this->getUserRepository()->countUsers($condition);
     }
 
-    /**
-     * @param string $searchQuery
-     *
-     * @return int
-     */
-    public function countUsersForSearchQuery(string $searchQuery = null)
+    public function countUsersForSearchQuery(?string $searchQuery = null): int
     {
         return $this->getUserRepository()->countUsersForSearchQuery($searchQuery);
     }
 
     /**
-     * @param string $searchQuery
-     * @param int $userIdentifiers
-     *
-     * @return int
+     * @param string[] $userIdentifiers
      */
     public function countUsersForSearchQueryAndUserIdentifiers(
-        string $searchQuery = null, array $userIdentifiers = []
-    )
+        ?string $searchQuery = null, array $userIdentifiers = []
+    ): int
     {
         return $this->getUserRepository()->countUsersForSearchQueryAndUserIdentifiers($searchQuery, $userIdentifiers);
     }
 
+    public function countUsersWaitingForApproval(?Condition $condition = null): int
+    {
+        $conditions = [];
+
+        if ($condition instanceof Condition)
+        {
+            $conditions[] = $condition;
+        }
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User::class, User::PROPERTY_APPROVED), new StaticConditionVariable(0)
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->countUsers($condition);
+    }
+
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
      * @throws \Exception
      */
-    public function createUser(User $user)
+    public function createUser(User $user): bool
     {
         $user->set_registration_date(time());
         $user->set_security_token(sha1(time() . uniqid()));
@@ -114,23 +96,12 @@ class UserService
     }
 
     /**
-     *
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $username
-     * @param string $officialCode
-     * @param string $emailAddress
-     * @param string $password
-     * @param string $authSource
-     * @param string $status
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
      * @throws \Exception
      */
     public function createUserFromParameters(
-        $firstName, $lastName, $username, $officialCode, $emailAddress, $password, $authSource = 'Platform',
-        $status = User::STATUS_STUDENT
-    )
+        ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
+        string $password, ?string $authSource = 'Platform', ?int $status = User::STATUS_STUDENT
+    ): User
     {
         $requiredParameters = [
             'username' => $username,
@@ -173,16 +144,11 @@ class UserService
     }
 
     /**
-     *
-     * @param string $context
-     * @param string $variable
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $value
-     *
-     * @return bool
      * @throws \Exception
      */
-    public function createUserSettingForSettingAndUser($context, $variable, User $user, $value = null)
+    public function createUserSettingForSettingAndUser(
+        string $context, string $variable, User $user, ?string $value = null
+    ): bool
     {
         $userSetting = $this->getUserSettingForSettingContextVariableAndUser($context, $variable, $user);
 
@@ -206,45 +172,46 @@ class UserService
     }
 
     /**
-     *
-     * @return User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findActiveStudents()
+    public function findActiveStudents(): ArrayCollection
     {
         return $this->findActiveUsersByStatus(User::STATUS_STUDENT);
     }
 
     /**
-     *
-     * @return User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findActiveTeachers()
+    public function findActiveTeachers(): ArrayCollection
     {
         return $this->findActiveUsersByStatus(User::STATUS_TEACHER);
     }
 
     /**
-     *
      * @param int $status
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findActiveUsersByStatus($status)
+    public function findActiveUsersByStatus(int $status): ArrayCollection
     {
         return $this->getUserRepository()->findActiveUsersByStatus($status);
     }
 
     /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findPlatformAdministrators()
+    public function findPlatformAdministrators(): ArrayCollection
     {
         return $this->getUserRepository()->findPlatformAdministrators();
     }
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findSettingsForUser(User $user): array
     {
@@ -261,77 +228,40 @@ class UserService
         return $mappedUserSettings;
     }
 
-    /**
-     *
-     * @param string $email
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function findUserByEmail($email)
+    public function findUserByEmail(string $email): ?User
     {
         return $this->getUserRepository()->findUserByEmail($email);
     }
 
-    /**
-     *
-     * @param int $identifier
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function findUserByIdentifier($identifier)
+    public function findUserByIdentifier(string $identifier): ?User
     {
         return $this->getUserRepository()->findUserByIdentifier($identifier);
     }
 
-    /**
-     *
-     * @param string $officialCode
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function findUserByOfficialCode($officialCode)
+    public function findUserByOfficialCode(string $officialCode): ?User
     {
         return $this->getUserRepository()->findUserByOfficialCode($officialCode);
     }
 
-    /**
-     *
-     * @param string $securityToken
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function findUserBySecurityToken($securityToken)
+    public function findUserBySecurityToken(string $securityToken): ?User
     {
         return $this->getUserRepository()->findUserBySecurityToken($securityToken);
     }
 
-    /**
-     *
-     * @param string $username
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function findUserByUsername($username)
+    public function findUserByUsername(string $username): ?User
     {
         return $this->getUserRepository()->findUserByUsername($username);
     }
 
-    /**
-     *
-     * @param string $usernameOrEmail
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function findUserByUsernameOrEmail($usernameOrEmail)
+    public function findUserByUsernameOrEmail(string $usernameOrEmail): ?User
     {
         return $this->getUserRepository()->findUserByUsernameOrEmail($usernameOrEmail);
     }
 
     /**
-     * @return int
-     * @throws \Exception
+     * @return string[]
      */
-    public function findUserIdentifiers()
+    public function findUserIdentifiers(): array
     {
         return $this->getUserRepository()->findUserIdentifiers();
     }
@@ -339,10 +269,10 @@ class UserService
     /**
      * @param string[] $officialCodes
      *
-     * @return int[]
+     * @return string[]
      * @throws \Exception
      */
-    public function findUserIdentifiersByOfficialCodes(array $officialCodes)
+    public function findUserIdentifiersByOfficialCodes(array $officialCodes): array
     {
         return $this->getUserRepository()->findUserIdentifiersByOfficialCodes($officialCodes);
     }
@@ -364,55 +294,53 @@ class UserService
     }
 
     /**
+     * @param string[] $userIdentifiers
      *
-     * @param int $userIdentifiers
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findUsersByIdentifiers($userIdentifiers)
-    {
-        if (empty($userIdentifiers))
-        {
-            return [];
-        }
-
-        return $this->getUserRepository()->findUsersByIdentifiersOrderedByName($userIdentifiers);
-    }
-
-    /**
-     *
-     * @param int $userIdentifiers
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
-     */
-    public function findUsersByIdentifiersOrderedByName($userIdentifiers)
+    public function findUsersByIdentifiers(array $userIdentifiers = []): ArrayCollection
     {
         return $this->getUserRepository()->findUsersByIdentifiersOrderedByName($userIdentifiers);
     }
 
     /**
-     * @param string $searchQuery
-     * @param int $offset
-     * @param int $count
+     * @param string[] $userIdentifiers
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findUsersForSearchQuery(string $searchQuery = null, int $offset = null, int $count = null)
+    public function findUsersByIdentifiersOrderedByName(array $userIdentifiers): ArrayCollection
+    {
+        return $this->getUserRepository()->findUsersByIdentifiersOrderedByName($userIdentifiers);
+    }
+
+    /**
+     * @param ?string $searchQuery
+     * @param ?int $offset
+     * @param ?int $count
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findUsersForSearchQuery(?string $searchQuery = null, ?int $offset = null, ?int $count = null
+    ): ArrayCollection
     {
         return $this->getUserRepository()->findUsersForSearchQuery($searchQuery, $offset, $count);
     }
 
     /**
-     * @param string $searchQuery
-     * @param int $userIdentifiers
-     * @param int $offset
-     * @param int $count
+     * @param ?string $searchQuery
+     * @param string[] $userIdentifiers
+     * @param ?int $offset
+     * @param ?int $count
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findUsersForSearchQueryAndUserIdentifiers(
-        string $searchQuery = null, array $userIdentifiers = [], int $offset = null, int $count = null
-    )
+        ?string $searchQuery = null, array $userIdentifiers = [], ?int $offset = null, ?int $count = null
+    ): ArrayCollection
     {
         return $this->getUserRepository()->findUsersForSearchQueryAndUserIdentifiers(
             $searchQuery, $userIdentifiers, $offset, $count
@@ -420,115 +348,77 @@ class UserService
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
-     *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findUsersMappedByOfficialCode($condition = null, $offset = 0, $count = - 1, $orderProperty = null)
+    public function findUsersMappedByOfficialCode(
+        ?Condition $condition = null, ?int $offset = 0, ?int $count = - 1, ?OrderBy $orderProperty = null
+    ): array
     {
         return $this->getPropertyMapper()->mapDataClassByProperty(
-            $this->findUsers($condition = null, $offset = 0, $count = - 1, $orderProperty = null),
-            User::PROPERTY_OFFICIAL_CODE
+            $this->findUsers($condition, $offset, $count, $orderProperty), User::PROPERTY_OFFICIAL_CODE
         );
     }
 
     /**
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?int $offset
+     * @param ?int $count
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Configuration\Service\ConfigurationService
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function getConfigurationService()
+    public function findUsersWaitingForApproval(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderProperty = null
+    ): ArrayCollection
+    {
+        $conditions = [];
+
+        if ($condition instanceof Condition)
+        {
+            $conditions[] = $condition;
+        }
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User::class, User::PROPERTY_APPROVED), new StaticConditionVariable(0)
+        );
+        $condition = new AndCondition($conditions);
+
+        return $this->findUsers($condition, $count, $offset, $orderProperty);
+    }
+
+    public function getConfigurationService(): ConfigurationService
     {
         return $this->configurationService;
     }
 
-    /**
-     *
-     * @param \Chamilo\Configuration\Service\ConfigurationService $configurationService
-     */
-    public function setConfigurationService(ConfigurationService $configurationService)
-    {
-        $this->configurationService = $configurationService;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Hashing\HashingUtilities
-     */
-    protected function getHashingUtilities()
+    protected function getHashingUtilities(): HashingUtilities
     {
         return $this->hashingUtilities;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Hashing\HashingUtilities $hashingUtilities
-     */
-    protected function setHashingUtilities(HashingUtilities $hashingUtilities)
-    {
-        $this->hashingUtilities = $hashingUtilities;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\DataClass\PropertyMapper
-     */
     public function getPropertyMapper(): PropertyMapper
     {
         return $this->propertyMapper;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
-     */
-    public function setPropertyMapper(PropertyMapper $propertyMapper): void
-    {
-        $this->propertyMapper = $propertyMapper;
-    }
-
-    /**
-     * Retrieves a user by a given official code
-     *
-     * @param string $officialCode
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getUserByOfficialCode($officialCode)
+    public function getUserByOfficialCode(string $officialCode): ?User
     {
         return $this->getUserRepository()->findUserByOfficialCode($officialCode);
     }
 
-    /**
-     * Retrieves a user by a given security token
-     *
-     * @param string $securityToken
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getUserBySecurityToken($securityToken)
+    public function getUserBySecurityToken(string $securityToken): ?User
     {
         return $this->getUserRepository()->findUserBySecurityToken($securityToken);
     }
 
-    /**
-     *
-     * @param $usernameOrEmail
-     *
-     * @return User
-     */
-    public function getUserByUsernameOrEmail($usernameOrEmail)
+    public function getUserByUsernameOrEmail(string $usernameOrEmail): ?User
     {
         return $this->getUserRepository()->findUserByUsernameOrEmail($usernameOrEmail);
     }
 
-    /**
-     *
-     * @param int $identifier
-     *
-     * @return null|string
-     */
-    public function getUserFullNameByIdentifier($identifier)
+    public function getUserFullNameByIdentifier(string $identifier): ?string
     {
         $user = $this->findUserByIdentifier($identifier);
 
@@ -540,70 +430,63 @@ class UserService
         return $user->get_fullname();
     }
 
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\Repository\UserRepository
-     */
-    protected function getUserRepository()
+    protected function getUserRepository(): UserRepository
     {
         return $this->userRepository;
     }
 
     /**
-     *
-     * @param \Chamilo\Core\User\Storage\Repository\UserRepository $userRepository
-     */
-    protected function setUserRepository(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
-
-    /**
-     *
      * @param string $context
      * @param string $variable
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Chamilo\Core\User\Storage\DataClass\UserSetting
      */
-    public function getUserSettingForSettingContextVariableAndUser($context, $variable, User $user)
+    public function getUserSettingForSettingContextVariableAndUser(string $context, string $variable, User $user
+    ): ?UserSetting
     {
         return $this->getUserRepository()->getUserSettingForSettingAndUser(
             $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable), $user
         );
     }
 
-    /**
-     *
-     * @param string $username
-     *
-     * @return bool
-     */
-    public function isUsernameAvailable($username)
+    public function isUsernameAvailable(string $username): bool
     {
         return !$this->findUserByUsername($username) instanceof User;
     }
 
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $actionUser
-     * @param \Chamilo\Core\User\Storage\DataClass\User $targetUser
-     */
+    public function setConfigurationService(ConfigurationService $configurationService)
+    {
+        $this->configurationService = $configurationService;
+    }
+
+    protected function setHashingUtilities(HashingUtilities $hashingUtilities)
+    {
+        $this->hashingUtilities = $hashingUtilities;
+    }
+
+    public function setPropertyMapper(PropertyMapper $propertyMapper): void
+    {
+        $this->propertyMapper = $propertyMapper;
+    }
+
+    protected function setUserRepository(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     public function triggerImportEvent(User $actionUser, User $targetUser)
     {
-        event::trigger(
+        Event::trigger(
             'Import', 'Chamilo\Core\User',
             ['target_user_id' => $targetUser->getId(), 'action_user_id' => $actionUser->getId()]
         );
     }
 
     /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function updateUser(User $user)
+    public function updateUser(User $user): bool
     {
         return $this->getUserRepository()->updateUser($user);
     }
