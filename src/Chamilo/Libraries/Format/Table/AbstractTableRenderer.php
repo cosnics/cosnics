@@ -87,11 +87,9 @@ abstract class AbstractTableRenderer
 
     public function determineOrderBy(TableParameterValues $parameterValues): OrderBy
     {
-        // Calculates the order column on whether or not the table uses form actions (because sortable
-        // table uses data arrays)
-        $calculatedOrderColumn = $parameterValues->getOrderColumnIndex() - ($this->hasTableActions() ? 1 : 0);
-
-        $orderProperty = $this->getOrderProperty($calculatedOrderColumn, $parameterValues->getOrderColumnDirection());
+        $orderProperty = $this->getOrderProperty(
+            $parameterValues->getOrderColumnIndex(), $parameterValues->getOrderColumnDirection()
+        );
 
         $orderProperties = [];
 

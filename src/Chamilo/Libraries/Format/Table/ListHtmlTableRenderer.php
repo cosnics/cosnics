@@ -96,7 +96,7 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
         {
             $columnHeaderHtml =
                 '<div class="checkbox checkbox-primary"><input class="styled styled-primary sortableTableSelectToggle" type="checkbox" name="sortableTableSelectToggle" /><label></label></div>';
-            $this->setColumnHeader($htmlTable, $parameterNames, $parameterValues, 0, $columnHeaderHtml, false);
+            $this->setColumnHeader($htmlTable, $parameterNames, $parameterValues, 0, 0, $columnHeaderHtml, false);
         }
 
         foreach ($tableColumns as $key => $tableColumn)
@@ -111,7 +111,7 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
             }
 
             $this->setColumnHeader(
-                $htmlTable, $parameterNames, $parameterValues,
+                $htmlTable, $parameterNames, $parameterValues, $key,
                 ($tableActions instanceof TableActions && $tableActions->hasActions() ? $key + 1 : $key),
                 $this->getSecurity()->removeXSS($tableColumn->get_title()),
                 $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->is_sortable(), $headerAttributes
@@ -126,8 +126,8 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
      * @throws \TableException
      */
     public function setColumnHeader(
-        HTML_Table $htmlTable, array $parameterNames, TableParameterValues $parameterValues, int $columnIndex,
-        string $label, bool $isSortable = true, ?array $headerAttributes = null
+        HTML_Table $htmlTable, array $parameterNames, TableParameterValues $parameterValues, int $tableColumnIndex,
+        int $htmlColumnIndex, string $label, bool $isSortable = true, ?array $headerAttributes = null
     )
     {
         $header = $htmlTable->getHeader();
@@ -137,9 +137,9 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
             $currentOrderColumnIndex = $parameterValues->getOrderColumnIndex();
             $currentOrderColumnDirection = $parameterValues->getOrderColumnDirection();
 
-            if ($columnIndex != $currentOrderColumnIndex)
+            if ($tableColumnIndex != $currentOrderColumnIndex)
             {
-                $currentOrderColumnIndex = $columnIndex;
+                $currentOrderColumnIndex = $tableColumnIndex;
                 $currentOrderColumnDirection = SORT_ASC;
                 $glyph = '';
             }
@@ -176,7 +176,7 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
             $content = $label;
         }
 
-        $header->setHeaderContents(0, $columnIndex, $content);
-        $header->setColAttributes($columnIndex, $headerAttributes);
+        $header->setHeaderContents(0, $htmlColumnIndex, $content);
+        $header->setColAttributes($htmlColumnIndex, $headerAttributes);
     }
 }
