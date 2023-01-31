@@ -9,8 +9,7 @@ use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Authentication
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class Authentication implements AuthenticationInterface
 {
@@ -36,14 +35,14 @@ abstract class Authentication implements AuthenticationInterface
         $this->userService = $userService;
     }
 
+    public function getRequest(): ChamiloRequest
+    {
+        return $this->request;
+    }
+
     public function getTranslator(): Translator
     {
         return $this->translator;
-    }
-
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
     }
 
     /**
@@ -82,6 +81,11 @@ abstract class Authentication implements AuthenticationInterface
         return (bool) $this->configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'enable' . str_replace('\\', '', $this->getAuthenticationType())]
         );
+    }
+
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 
 }
