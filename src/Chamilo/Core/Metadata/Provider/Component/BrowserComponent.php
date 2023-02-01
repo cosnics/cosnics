@@ -139,8 +139,8 @@ class BrowserComponent extends Manager
 
         $providerLinks = DataManager::retrieves(
             ProviderLink::class, new DataClassRetrievesParameters(
-                $this->getProviderLinkCondition(), $tableParameterValues->getOffset(),
-                $tableParameterValues->getNumberOfItemsPerPage(),
+                $this->getProviderLinkCondition(),
+                $tableParameterValues->getNumberOfItemsPerPage(),$tableParameterValues->getOffset(),
                 $providerLinkTableRenderer->determineOrderBy($tableParameterValues)
             )
         );

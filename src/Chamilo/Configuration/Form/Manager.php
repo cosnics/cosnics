@@ -10,10 +10,9 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package configuration\form
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends Application
 {
@@ -22,6 +21,7 @@ abstract class Manager extends Application
     public const ACTION_DELETE_FORM_ELEMENT = 'DeleteElement';
     public const ACTION_UPDATE_FORM_ELEMENT = 'UpdateElement';
 
+    public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BUILD_DYNAMIC_FORM;
 
     public const PARAM_ACTION = 'form_action';
@@ -40,16 +40,16 @@ abstract class Manager extends Application
 
     public function get_add_element_url()
     {
-        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_ADD_FORM_ELEMENT));
+        return $this->get_url([self::PARAM_ACTION => self::ACTION_ADD_FORM_ELEMENT]);
     }
 
     public function get_delete_element_url($element)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_DELETE_FORM_ELEMENT,
                 self::PARAM_DYNAMIC_FORM_ELEMENT_ID => $element->get_id()
-            )
+            ]
         );
     }
 
@@ -63,28 +63,18 @@ abstract class Manager extends Application
         return $this->form;
     }
 
-    public function set_form($form)
-    {
-        $this->form = $form;
-    }
-
     public function get_target_user_id($target_user_id)
     {
         return $this->target_user_id;
     }
 
-    public function set_target_user_id($target_user_id)
-    {
-        $this->target_user_id = $target_user_id;
-    }
-
     public function get_update_element_url($element)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_UPDATE_FORM_ELEMENT,
                 self::PARAM_DYNAMIC_FORM_ELEMENT_ID => $element->get_id()
-            )
+            ]
         );
     }
 
@@ -112,8 +102,18 @@ abstract class Manager extends Application
         return $form;
     }
 
+    public function set_form($form)
+    {
+        $this->form = $form;
+    }
+
     public function set_form_by_name($name)
     {
         $this->set_form($this->retrieve_form($this->get_application()->context(), $name));
+    }
+
+    public function set_target_user_id($target_user_id)
+    {
+        $this->target_user_id = $target_user_id;
     }
 }

@@ -295,9 +295,8 @@ class SelectComponent extends Manager
 
         $vocabularies = DataManager::retrieves(
             Vocabulary::class, new DataClassRetrievesParameters(
-                $this->getSelectCondition(), $tableParameterValues->getOffset(),
-                $tableParameterValues->getNumberOfItemsPerPage(),
-                $selectTableRenderer->determineOrderBy($tableParameterValues)
+                $this->getSelectCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+                $tableParameterValues->getOffset(), $selectTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

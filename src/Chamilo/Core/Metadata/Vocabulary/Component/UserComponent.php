@@ -146,9 +146,8 @@ class UserComponent extends Manager
         );
 
         $vocabularies = DataManager::retrieve_vocabulary_users(
-            $this->getUserCondition(), $tableParameterValues->getOffset(),
-            $tableParameterValues->getNumberOfItemsPerPage(),
-            $userTableRenderer->determineOrderBy($tableParameterValues)
+            $this->getUserCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+            $tableParameterValues->getOffset(), $userTableRenderer->determineOrderBy($tableParameterValues)
 
         );
 

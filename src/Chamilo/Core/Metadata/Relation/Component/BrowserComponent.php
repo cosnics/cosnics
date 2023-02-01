@@ -134,9 +134,8 @@ class BrowserComponent extends Manager
 
         $relations = DataManager::retrieves(
             Relation::class, new DataClassRetrievesParameters(
-                $this->getRelationCondition(), $tableParameterValues->getOffset(),
-                $tableParameterValues->getNumberOfItemsPerPage(),
-                $relationTableRenderer->determineOrderBy($tableParameterValues)
+                $this->getRelationCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+                $tableParameterValues->getOffset(), $relationTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

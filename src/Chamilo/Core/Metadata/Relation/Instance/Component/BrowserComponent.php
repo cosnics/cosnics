@@ -180,8 +180,8 @@ class BrowserComponent extends Manager
 
         $relations = DataManager::retrieves(
             RelationInstance::class, new DataClassRetrievesParameters(
-                $this->getRelationCondition(), $tableParameterValues->getOffset(),
-                $tableParameterValues->getNumberOfItemsPerPage(),
+                $this->getRelationCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+                $tableParameterValues->getOffset(),
                 $relationInstanceTableRenderer->determineOrderBy($tableParameterValues)
             )
         );

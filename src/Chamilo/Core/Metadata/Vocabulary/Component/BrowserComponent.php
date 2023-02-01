@@ -192,9 +192,8 @@ class BrowserComponent extends Manager
 
         $vocabularies = DataManager::retrieves(
             Vocabulary::class, new DataClassRetrievesParameters(
-                $this->getVocabularyCondition(), $tableParameterValues->getOffset(),
-                $tableParameterValues->getNumberOfItemsPerPage(),
-                $vocabularyTableRenderer->determineOrderBy($tableParameterValues)
+                $this->getVocabularyCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+                $tableParameterValues->getOffset(), $vocabularyTableRenderer->determineOrderBy($tableParameterValues)
             )
         );
 

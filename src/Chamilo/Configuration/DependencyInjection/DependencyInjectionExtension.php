@@ -11,8 +11,8 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 /**
  * @package Chamilo\Configuration\DependencyInjection
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
 {
@@ -28,7 +28,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Configuration' => ['configuration.xml', 'registration.xml', 'language.xml']];
+        return ['Chamilo\Configuration' => ['configuration.xml', 'registration.xml', 'language.xml', 'tables.xml']];
     }
 
     public function load(array $configs, ContainerBuilder $container)
