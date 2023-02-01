@@ -4,8 +4,7 @@ namespace Chamilo\Core\Metadata\Vocabulary\Component;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\Metadata\Vocabulary\Manager;
 use Chamilo\Core\Metadata\Vocabulary\Storage\DataManager;
-use Chamilo\Core\Metadata\Vocabulary\Table\Vocabulary\VocabularyTable;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\Metadata\Vocabulary\Table\VocabularyTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -15,79 +14,77 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Metadata\Vocabulary\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BrowserComponent extends Manager implements TableSupport
+class BrowserComponent extends Manager
 {
 
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * Executes this controller
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \ReflectionException
+     * @throws \QuickformException
      */
     public function run()
     {
-        if (!$this->get_user()->is_platform_admin())
+        if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
 
         if (!$this->getSelectedElementId())
         {
-            throw new NoObjectSelectedException(Translation::get('Element', null, 'Chamilo\Core\Metadata\Element'));
+            throw new NoObjectSelectedException(
+                $this->getTranslator()->trans('Element', [], 'Chamilo\Core\Metadata\Element')
+            );
         }
 
         $content = $this->getContent();
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $content;
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Builds the action bar
-     *
-     * @return ButtonToolBarRenderer
-     */
-    protected function getButtonToolbarRenderer()
+    protected function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
-
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Create', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
-                    $this->get_url(
-                        array(
-                            self::PARAM_ACTION => self::ACTION_CREATE,
-                            \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID => $this->getSelectedElementId(),
-                            self::PARAM_USER_ID => $this->getSelectedUserId()
-                        )
-                    )
+                    $this->getTranslator()->trans('Create', [], StringUtilities::LIBRARIES),
+                    new FontAwesomeGlyph('plus'), $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_CREATE,
+                        \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID => $this->getSelectedElementId(),
+                        self::PARAM_USER_ID => $this->getSelectedUserId()
+                    ]
+                )
                 )
             );
 
@@ -98,47 +95,55 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    public function getContent()
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
+    public function getContent(): string
     {
-        $table = new VocabularyTable($this);
         $userId = $this->getSelectedUserId();
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
         if ($userId != 0)
         {
-            $user = DataManager::retrieve_by_id(User::class, $userId);
+            $user = $this->getUserService()->findUserByIdentifier($userId);
             $breadcrumbTitle = $user->get_fullname();
         }
         else
         {
-            $breadcrumbTitle = Translation::get('ValueTypePredefined', null, 'Chamilo\Core\Metadata\Element');
+            $breadcrumbTitle =
+                $this->getTranslator()->trans('ValueTypePredefined', [], 'Chamilo\Core\Metadata\Element');
         }
 
         BreadcrumbTrail::getInstance()->add(
-            new Breadcrumb($this->get_url(array(Manager::PARAM_USER_ID => $userId)), $breadcrumbTitle)
+            new Breadcrumb($this->get_url([Manager::PARAM_USER_ID => $userId]), $breadcrumbTitle)
         );
 
         $html = [];
 
         $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = $table->as_html();
+        $html[] = $this->renderTable();
 
         return implode(PHP_EOL, $html);
     }
 
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
     /**
-     * Returns the condition
-     *
-     * @param string $table_class_name
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @throws \Exception
      */
-    public function get_table_condition($table_class_name)
+    public function getVocabularyCondition(): AndCondition
     {
         $conditions = [];
 
         $searchCondition = $this->buttonToolbarRenderer->getConditions(
-            array(new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_VALUE))
+            [new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_VALUE)]
         );
 
         if ($searchCondition)
@@ -154,10 +159,45 @@ class BrowserComponent extends Manager implements TableSupport
         $userId = $this->getSelectedUserId();
 
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_USER_ID),
-            ComparisonCondition::EQUAL, new StaticConditionVariable($userId)
+            new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_USER_ID), ComparisonCondition::EQUAL,
+            new StaticConditionVariable($userId)
         );
 
         return new AndCondition($conditions);
+    }
+
+    public function getVocabularyTableRenderer(): VocabularyTableRenderer
+    {
+        return $this->getService(VocabularyTableRenderer::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Exception
+     */
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems =
+            DataManager::count(Vocabulary::class, new DataClassCountParameters($this->getVocabularyCondition()));
+        $vocabularyTableRenderer = $this->getVocabularyTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $vocabularyTableRenderer->getParameterNames(), $vocabularyTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $vocabularies = DataManager::retrieves(
+            Vocabulary::class, new DataClassRetrievesParameters(
+                $this->getVocabularyCondition(), $tableParameterValues->getOffset(),
+                $tableParameterValues->getNumberOfItemsPerPage(),
+                $vocabularyTableRenderer->determineOrderBy($tableParameterValues)
+            )
+        );
+
+        return $vocabularyTableRenderer->render($tableParameterValues, $vocabularies);
     }
 }

@@ -2,7 +2,9 @@
 namespace Chamilo\Core\Metadata\Element\Component;
 
 use Chamilo\Core\Metadata\Element\Manager;
+use Chamilo\Core\Metadata\Element\Storage\DataManager;
 use Chamilo\Core\Metadata\Element\Table\Element\ElementTable;
+use Chamilo\Core\Metadata\Element\Table\ElementTableRenderer;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -11,19 +13,21 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-class BrowserComponent extends Manager implements TableSupport
+class BrowserComponent extends Manager
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -63,7 +67,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html = [];
 
         $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = $table->as_html();
+        $html[] = $this->renderTable();
 
         return implode(PHP_EOL, $html);
     }
@@ -84,10 +88,10 @@ class BrowserComponent extends Manager implements TableSupport
                 new Button(
                     Translation::get('Create', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                     $this->get_url(
-                        array(
+                        [
                             self::PARAM_ACTION => self::ACTION_CREATE,
                             \Chamilo\Core\Metadata\Schema\Manager::PARAM_SCHEMA_ID => $this->getSchemaId()
-                        )
+                        ]
                     )
                 )
             );
@@ -100,19 +104,12 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    /**
-     * Returns the condition
-     *
-     * @param string $table_class_name
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_table_condition($table_class_name)
+    public function getElementTableCondition(): AndCondition
     {
         $conditions = [];
 
         $searchCondition = $this->getButtonToolbarRenderer()->getConditions(
-            array(new PropertyConditionVariable(Element::class, Element::PROPERTY_NAME))
+            [new PropertyConditionVariable(Element::class, Element::PROPERTY_NAME)]
         );
 
         if ($searchCondition)
@@ -121,10 +118,56 @@ class BrowserComponent extends Manager implements TableSupport
         }
 
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_SCHEMA_ID),
-            ComparisonCondition::EQUAL, new StaticConditionVariable($this->getSchemaId())
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_SCHEMA_ID), ComparisonCondition::EQUAL,
+            new StaticConditionVariable($this->getSchemaId())
         );
 
         return new AndCondition($conditions);
+    }
+
+    public function getElementTableRenderer(): ElementTableRenderer
+    {
+        return $this->getService(ElementTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Exception
+     */
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems =
+            DataManager::count(Element::class, new DataClassCountParameters($this->getElementTableCondition()));
+        $elementTableRenderer = $this->getElementTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $elementTableRenderer->getParameterNames(), $elementTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $orderBy = $elementTableRenderer->determineOrderBy($tableParameterValues);
+        $orderBy->add(
+            new OrderProperty(
+                new PropertyConditionVariable(Element::class, Element::PROPERTY_DISPLAY_ORDER)
+            )
+        );
+
+        $elements = DataManager::retrieves(
+            Element::class, new DataClassRetrievesParameters(
+                $this->getElementTableCondition(), $tableParameterValues->getOffset(),
+                $tableParameterValues->getNumberOfItemsPerPage(), $orderBy
+            )
+        );
+
+        return $elementTableRenderer->render($tableParameterValues, $elements);
     }
 }

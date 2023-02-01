@@ -7,39 +7,18 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 class DataClassEntityFactory
 {
 
-    /**
-     *
-     * @var \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
-     */
-    private static $instance;
+    private static ?DataClassEntityFactory $instance = null;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    private $classNameUtilities;
+    private ClassnameUtilities $classNameUtilities;
 
-    /**
-     *
-     * @var string[]
-     */
-    private $entityClassNameCache;
+    private array $entityClassNameCache;
 
-    /**
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classNameUtilities
-     */
     public function __construct(ClassnameUtilities $classNameUtilities)
     {
         $this->classNameUtilities = $classNameUtilities;
     }
 
-    /**
-     *
-     * @param string $dataClassName
-     *
-     * @return string
-     */
-    private function determineEntityClassName($dataClassName)
+    private function determineEntityClassName(string $dataClassName): string
     {
         if (!isset($this->entityClassNameCache[$dataClassName]))
         {
@@ -53,78 +32,36 @@ class DataClassEntityFactory
         return $this->entityClassNameCache[$dataClassName];
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    public function getClassNameUtilities()
+    public function getClassNameUtilities(): ClassnameUtilities
     {
         return $this->classNameUtilities;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classNameUtilities
-     */
-    public function setClassNameUtilities($classNameUtilities)
-    {
-        $this->classNameUtilities = $classNameUtilities;
-    }
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param integer $dataClassIdentifier
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-     *
-     * @return \Chamilo\Core\Metadata\Entity\EntityInterface
-     */
-    public function getEntity($dataClassName, $dataClassIdentifier = null, DataClass $dataClass = null)
+    public function getEntity(string $dataClassName, ?string $dataClassIdentifier = null, ?DataClass $dataClass = null
+    ): EntityInterface
     {
         $entityClassName = $this->determineEntityClassName($dataClassName);
 
         return new $entityClassName($dataClassName, $dataClassIdentifier, $dataClass);
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-     *
-     * @return \Chamilo\Core\Metadata\Entity\DataClassEntity
-     */
-    public function getEntityFromDataClass(DataClass $dataClass)
+    public function getEntityFromDataClass(DataClass $dataClass): DataClassEntity
     {
         return $this->getEntity(get_class($dataClass), $dataClass->getId(), $dataClass);
     }
 
-    /**
-     *
-     * @param string $dataClassName
-     *
-     * @return \Chamilo\Core\Metadata\Entity\EntityInterface
-     */
-    public function getEntityFromDataClassName($dataClassName)
+    public function getEntityFromDataClassName(string $dataClassName): EntityInterface
     {
-        return $this->getEntity($dataClassName, DataClassEntity::INSTANCE_IDENTIFIER);
+        return $this->getEntity($dataClassName, (string) DataClassEntity::INSTANCE_IDENTIFIER);
     }
 
-    /**
-     *
-     * @param string $dataClassName
-     * @param integer $dataClassIdentifier
-     *
-     * @return \Chamilo\Core\Metadata\Entity\EntityInterface
-     */
-    public function getEntityFromDataClassNameAndDataClassIdentifier($dataClassName, $dataClassIdentifier)
+    public function getEntityFromDataClassNameAndDataClassIdentifier(string $dataClassName, string $dataClassIdentifier
+    ): EntityInterface
     {
         return $this->getEntity($dataClassName, $dataClassIdentifier);
     }
 
-    /**
-     *
-     * @return \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
-     */
-    public static function getInstance()
+    public static function getInstance(): DataClassEntityFactory
     {
         if (!isset(self::$instance))
         {
@@ -132,5 +69,10 @@ class DataClassEntityFactory
         }
 
         return self::$instance;
+    }
+
+    public function setClassNameUtilities(ClassnameUtilities $classNameUtilities)
+    {
+        $this->classNameUtilities = $classNameUtilities;
     }
 }

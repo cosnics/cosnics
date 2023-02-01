@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Core\Metadata\Relation\Instance\Component;
 
+use Chamilo\Core\Metadata\Element\Storage\DataManager;
 use Chamilo\Core\Metadata\Relation\Instance\Manager;
-use Chamilo\Core\Metadata\Relation\Instance\Table\Relation\RelationTable;
+use Chamilo\Core\Metadata\Relation\Instance\Table\RelationInstanceTableRenderer;
 use Chamilo\Core\Metadata\Service\EntityConditionService;
 use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -11,33 +12,33 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Metadata\Relation\Instance\Component
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BrowserComponent extends Manager implements TableSupport
+class BrowserComponent extends Manager
 {
 
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
     public function run()
     {
@@ -50,35 +51,32 @@ class BrowserComponent extends Manager implements TableSupport
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->as_html();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
     /**
-     * Renders this components output as html
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
-    public function as_html()
+    public function as_html(): string
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $html = [];
 
         $html[] = $this->buttonToolbarRenderer->render();
-
-        $table = new RelationTable($this);
-        $html[] = $table->render();
+        $html[] = $this->renderTable();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Builds the action bar
-     *
-     * @return ButtonToolBarRenderer
-     */
-    protected function getButtonToolbarRenderer()
+    protected function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
@@ -87,8 +85,8 @@ class BrowserComponent extends Manager implements TableSupport
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Create', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))
+                    $this->getTranslator()->trans('Create', [], StringUtilities::LIBRARIES),
+                    new FontAwesomeGlyph('plus'), $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE])
                 )
             );
 
@@ -99,21 +97,15 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    /**
-     * @return \Chamilo\Core\Metadata\Service\EntityConditionService
-     */
-    public function getEntityConditionService()
+    public function getEntityConditionService(): EntityConditionService
     {
         return $this->getService(EntityConditionService::class);
     }
 
     /**
-     * @param string $table_class_name
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @throws \Exception
      */
-    public function get_table_condition($table_class_name)
+    public function getRelationCondition(): AndCondition
     {
         $conditions = [];
 
@@ -155,5 +147,45 @@ class BrowserComponent extends Manager implements TableSupport
         }
 
         return new AndCondition($conditions);
+    }
+
+    public function getRelationInstanceTableRenderer(): RelationInstanceTableRenderer
+    {
+        return $this->getService(RelationInstanceTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Exception
+     */
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems =
+            DataManager::count(RelationInstance::class, new DataClassCountParameters($this->getRelationCondition()));
+        $relationInstanceTableRenderer = $this->getRelationInstanceTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $relationInstanceTableRenderer->getParameterNames(),
+            $relationInstanceTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $relations = DataManager::retrieves(
+            RelationInstance::class, new DataClassRetrievesParameters(
+                $this->getRelationCondition(), $tableParameterValues->getOffset(),
+                $tableParameterValues->getNumberOfItemsPerPage(),
+                $relationInstanceTableRenderer->determineOrderBy($tableParameterValues)
+            )
+        );
+
+        return $relationInstanceTableRenderer->render($tableParameterValues, $relations);
     }
 }

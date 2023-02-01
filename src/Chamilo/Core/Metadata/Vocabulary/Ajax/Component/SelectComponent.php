@@ -4,16 +4,17 @@ namespace Chamilo\Core\Metadata\Vocabulary\Ajax\Component;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\Metadata\Vocabulary\Ajax\Manager;
-use Chamilo\Core\Metadata\Vocabulary\Table\Select\SelectTable;
+use Chamilo\Core\Metadata\Vocabulary\Table\SelectTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -21,53 +22,50 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use stdClass;
 
 /**
- *
- * @package Chamilo\Core\User\Ajax
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @package Chamilo\Core\Metadata\Vocabulary\Ajax
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class SelectComponent extends Manager implements TableSupport
+class SelectComponent extends Manager
 {
-    const PARAM_ELEMENT_ID = 'elementId';
-    const PARAM_SCHEMA_ID = 'schemaId';
-    const PARAM_SCHEMA_INSTANCE_ID = 'schemaInstanceId';
+    public const PARAM_ELEMENT_ID = 'elementId';
+    public const PARAM_SCHEMA_ID = 'schemaId';
+    public const PARAM_SCHEMA_INSTANCE_ID = 'schemaInstanceId';
 
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
-    /**
-     *
-     * @var \Chamilo\Core\Metadata\Element\Storage\DataClass\Element
-     */
     private $element;
 
-    /**
-     *
-     * @var integer
-     */
     private $elementId;
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Exception
+     */
     public function run()
     {
+        $translator = $this->getTranslator();
         $elementId = $this->getPostDataValue(\Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID);
 
         if (!$this->getSelectedElementId())
         {
-            throw new NoObjectSelectedException(Translation::get('Element', null, 'Chamilo\Core\Metadata\Element'));
+            throw new NoObjectSelectedException($translator->trans('Element', [], 'Chamilo\Core\Metadata\Element'));
         }
 
         if (!$this->getSelectedElement()->usesVocabulary())
         {
-            throw new Exception(Translation::get('NoVocabularyAllowed'));
+            throw new Exception($translator->trans('NoVocabularyAllowed', [], self::CONTEXT));
         }
 
         $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
@@ -76,19 +74,22 @@ class SelectComponent extends Manager implements TableSupport
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $content;
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Builds the action bar
-     *
-     * @return ButtonToolBarRenderer
-     */
-    protected function getButtonToolbarRenderer()
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID;
+        $additionalParameters[] = Manager::PARAM_ELEMENT_IDENTIFIER;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
+    protected function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
@@ -99,7 +100,14 @@ class SelectComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    public function getContent()
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \ReflectionException
+     * @throws \QuickformException
+     */
+    public function getContent(): string
     {
         $html = [];
         $vocabularyIds = $this->getSelectedVocabularyId();
@@ -113,7 +121,7 @@ class SelectComponent extends Manager implements TableSupport
             foreach ($vocabularyItems as $vocabularyItem)
             {
                 $item = new stdClass();
-                $item->id = $vocabularyItem->get_id();
+                $item->id = $vocabularyItem->getId();
                 $item->value = $vocabularyItem->get_value();
 
                 $vocabularyItemValues[] = $item;
@@ -139,123 +147,32 @@ class SelectComponent extends Manager implements TableSupport
         }
         else
         {
-            $table = new SelectTable($this);
-
             $html[] = $this->buttonToolbarRenderer->render();
-            $html[] = $table->as_html();
+            $html[] = $this->renderTable();
         }
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Get an array of parameters which should be set for this call to work
-     *
-     * @return array
-     */
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
     public function getRequiredPostParameters(): array
     {
-        return array(\Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID);
+        return [\Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID];
     }
 
     /**
-     *
-     * @return \Chamilo\Core\Metadata\Element\Storage\DataClass\Element
+     * @throws \Exception
      */
-    public function getSelectedElement()
-    {
-        if (!isset($this->element))
-        {
-            $this->element = DataManager::retrieve_by_id(
-                Element::class, $this->getSelectedElementId()
-            );
-        }
-
-        return $this->element;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getSelectedElementId()
-    {
-        if (!isset($this->elementId))
-        {
-            $this->elementId = $this->getPostDataValue(\Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID);
-        }
-
-        return $this->elementId;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getSelectedVocabularyId()
-    {
-        return (array) $this->getRequest()->get(\Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_VOCABULARY_ID);
-    }
-
-    public function getVocabularyCondition()
-    {
-        $element = $this->getSelectedElement();
-
-        $userConditions = [];
-
-        if ($element->isVocabularyUserDefined())
-        {
-            $userConditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_USER_ID),
-                ComparisonCondition::EQUAL, new StaticConditionVariable($this->get_user_id())
-            );
-        }
-
-        if ($element->isVocabularyPredefined())
-        {
-            $userConditions[] = new ComparisonCondition(
-                new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_USER_ID),
-                ComparisonCondition::EQUAL, new StaticConditionVariable(0)
-            );
-        }
-
-        return new OrCondition($userConditions);
-    }
-
-    public function getVocabularyItems($vocabularyIds)
-    {
-        $conditions = [];
-        $conditions[] = $this->getVocabularyCondition();
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_ID), $vocabularyIds
-        );
-
-        $condition = new AndCondition($conditions);
-
-        return DataManager::retrieves(Vocabulary::class, new DataClassRetrievesParameters($condition));
-    }
-
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID;
-        $additionalParameters[] = Manager::PARAM_ELEMENT_IDENTIFIER;
-
-        return parent::getAdditionalParameters($additionalParameters);
-    }
-
-    /**
-     * Returns the condition
-     *
-     * @param string $table_class_name
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_table_condition($table_class_name)
+    public function getSelectCondition(): AndCondition
     {
         $conditions = [];
 
         $searchCondition = $this->buttonToolbarRenderer->getConditions(
-            array(new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_VALUE))
+            [new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_VALUE)]
         );
 
         if ($searchCondition)
@@ -271,5 +188,119 @@ class SelectComponent extends Manager implements TableSupport
         $conditions[] = $this->getVocabularyCondition();
 
         return new AndCondition($conditions);
+    }
+
+    public function getSelectTableRenderer(): SelectTableRenderer
+    {
+        return $this->getService(SelectTableRenderer::class);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function getSelectedElement()
+    {
+        if (!isset($this->element))
+        {
+            $this->element = DataManager::retrieve_by_id(
+                Element::class, (int) $this->getSelectedElementId()
+            );
+        }
+
+        return $this->element;
+    }
+
+    public function getSelectedElementId()
+    {
+        if (!isset($this->elementId))
+        {
+            $this->elementId = $this->getPostDataValue(\Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID);
+        }
+
+        return $this->elementId;
+    }
+
+    public function getSelectedVocabularyId()
+    {
+        return (array) $this->getRequest()->get(\Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_VOCABULARY_ID);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function getVocabularyCondition()
+    {
+        $element = $this->getSelectedElement();
+
+        $userConditions = [];
+
+        if ($element->isVocabularyUserDefined())
+        {
+            $userConditions[] = new ComparisonCondition(
+                new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_USER_ID),
+                ComparisonCondition::EQUAL, new StaticConditionVariable($this->getUser()->getId())
+            );
+        }
+
+        if ($element->isVocabularyPredefined())
+        {
+            $userConditions[] = new ComparisonCondition(
+                new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_USER_ID),
+                ComparisonCondition::EQUAL, new StaticConditionVariable(0)
+            );
+        }
+
+        return new OrCondition($userConditions);
+    }
+
+    /**
+     * @param string[] $vocabularyIds
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Metadata\Storage\DataClass\Vocabulary>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     */
+    public function getVocabularyItems(array $vocabularyIds = []): ArrayCollection
+    {
+        $conditions = [];
+        $conditions[] = $this->getVocabularyCondition();
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(Vocabulary::class, DataClass::PROPERTY_ID), $vocabularyIds
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return DataManager::retrieves(Vocabulary::class, new DataClassRetrievesParameters($condition));
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Exception
+     */
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems = \Chamilo\Core\Metadata\Vocabulary\Storage\DataManager::count(
+            Vocabulary::class, new DataClassCountParameters($this->getSelectCondition())
+        );
+        $selectTableRenderer = $this->getSelectTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $selectTableRenderer->getParameterNames(), $selectTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $vocabularies = DataManager::retrieves(
+            Vocabulary::class, new DataClassRetrievesParameters(
+                $this->getSelectCondition(), $tableParameterValues->getOffset(),
+                $tableParameterValues->getNumberOfItemsPerPage(),
+                $selectTableRenderer->determineOrderBy($tableParameterValues)
+            )
+        );
+
+        return $selectTableRenderer->render($tableParameterValues, $vocabularies);
     }
 }
