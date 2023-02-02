@@ -7,16 +7,13 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package application.common.category_manager
  */
 abstract class PlatformCategory extends DataClass
 {
-    const PROPERTY_DISPLAY_ORDER = 'display_order';
-
-    const PROPERTY_NAME = 'name';
-
-    const PROPERTY_PARENT = 'parent_id';
+    public const PROPERTY_DISPLAY_ORDER = 'display_order';
+    public const PROPERTY_NAME = 'name';
+    public const PROPERTY_PARENT = 'parent_id';
 
     /**
      * Get the default properties of all contributions.
@@ -26,18 +23,18 @@ abstract class PlatformCategory extends DataClass
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(self::PROPERTY_NAME, self::PROPERTY_PARENT, self::PROPERTY_DISPLAY_ORDER)
+            [self::PROPERTY_NAME, self::PROPERTY_PARENT, self::PROPERTY_DISPLAY_ORDER]
         );
     }
 
     protected function getDependencies(array $dependencies = []): array
     {
-        return array(
+        return [
             get_class($this) => new EqualityCondition(
                 new PropertyConditionVariable(get_class($this), self::PROPERTY_PARENT),
                 new StaticConditionVariable($this->get_id())
             )
-        );
+        ];
     }
 
     public function get_display_order()

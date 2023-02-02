@@ -202,14 +202,12 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
 
                 return '<a href="' . $url . '" alt="' . $category->get_name() . '">' . $category->get_name() . '</a>';
             case CategoryTableColumnModel::SUBCATEGORIES :
-                $count = $this->get_component()->get_parent()->count_categories(
+                return $this->get_component()->get_parent()->count_categories(
                     new EqualityCondition(
                         new PropertyConditionVariable(get_class($category), PlatformCategory::PROPERTY_PARENT),
                         new StaticConditionVariable($category->get_id())
                     )
                 );
-
-                return $count;
         }
 
         return parent::renderCell($column, $category);

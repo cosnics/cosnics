@@ -1,9 +1,10 @@
 <?php
 namespace Chamilo\Configuration\Category\Table;
 
+use Chamilo\Configuration\Category\Interfaces\CategoryVisibilitySupported;
 use Chamilo\Configuration\Category\Manager;
+use Chamilo\Configuration\Category\Service\CategoryManagerImplementerInterface;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -12,9 +13,6 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -23,22 +21,36 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class CategoryTableRenderer extends DataClassListTableRenderer implements TableRowActionsSupport
 {
-    public const CATEGORY = 'Categorie';
+    public const CATEGORY = 'Category';
     public const SUBCATEGORIES = 'Subcategories';
 
     public const TABLE_IDENTIFIER = Manager::PARAM_CATEGORY_ID;
 
+    protected CategoryManagerImplementerInterface $categoryManagerImplementer;
+
+    public function getCategoryManagerImplementer(): CategoryManagerImplementerInterface
+    {
+        return $this->categoryManagerImplementer;
+    }
+
     protected function initializeColumns()
     {
         $translator = $this->getTranslator();
-        $category_class_name = get_class($this->get_component()->get_parent()->getCategory());
+        $categoryManagerImplementer = $this->getCategoryManagerImplementer();
+        $categoryClassName = $categoryManagerImplementer->getCategoryClassName();
 
-        $this->addColumn(new StaticTableColumn($translator->trans(self::CATEGORY, [])));
-        $this->addColumn(new DataClassPropertyTableColumn($category_class_name, PlatformCategory::PROPERTY_NAME));
+        $this->addColumn(
+            new StaticTableColumn(self::CATEGORY, $translator->trans(self::CATEGORY, [], $categoryClassName::context()))
+        );
+        $this->addColumn(new DataClassPropertyTableColumn($categoryClassName, PlatformCategory::PROPERTY_NAME));
 
-        if ($this->get_component()->get_subcategories_allowed())
+        if ($categoryManagerImplementer->areSubcategoriesAllowed())
         {
-            $this->addColumn(new StaticTableColumn($translator->trans(self::SUBCATEGORIES)));
+            $this->addColumn(
+                new StaticTableColumn(
+                    self::SUBCATEGORIES, $translator->trans(self::SUBCATEGORIES, [], $categoryClassName::context())
+                )
+            );
         }
     }
 
@@ -47,8 +59,7 @@ class CategoryTableRenderer extends DataClassListTableRenderer implements TableR
      */
     protected function renderCell(TableColumn $column, $category): string
     {
-        $translator = $this->getTranslator();
-        $urlGenerator = $this->getUrlGenerator();
+        $categoryManagerImplementer = $this->getCategoryManagerImplementer();
 
         switch ($column->get_name())
         {
@@ -57,63 +68,170 @@ class CategoryTableRenderer extends DataClassListTableRenderer implements TableR
 
                 return $glyph->render();
             case PlatformCategory::PROPERTY_NAME :
-                $url = $urlGenerator->fromRequest(
-                    [
-                        Manager::PARAM_ACTION => Manager::ACTION_BROWSE_CATEGORIES,
-                        Manager::PARAM_CATEGORY_ID => $category->getId()
-                    ]
-                );
-
-                return '<a href="' . $url . '" alt="' . $category->get_name() . '">' . $category->get_name() . '</a>';
+                return '<a href="' . $categoryManagerImplementer->getBrowseCategoriesUrl($category) . '" alt="' .
+                    $category->get_name() . '">' . $category->get_name() . '</a>';
             case self::SUBCATEGORIES :
-                $count = $this->get_component()->get_parent()->count_categories(
-                    new EqualityCondition(
-                        new PropertyConditionVariable(get_class($category), PlatformCategory::PROPERTY_PARENT),
-                        new StaticConditionVariable($category->get_id())
-                    )
-                );
-
-                return $count;
+                return (string) $categoryManagerImplementer->countSubCategories($category);
         }
 
-        return parent::renderCell($column, $element);
+        return parent::renderCell($column, $category);
     }
 
     /**
-     * @param \Chamilo\Configuration\Form\Storage\DataClass\Element $element
+     * @param \Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory $category
      */
-    public function renderTableRowActions($element): string
+    public function renderTableRowActions($category): string
     {
-        $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();
+        $categoryManagerImplementer = $this->getCategoryManagerImplementer();
 
         $toolbar = new Toolbar();
 
-        $updateUrl = $urlGenerator->fromParameters([
-            Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Manager::PARAM_ACTION => Manager::ACTION_UPDATE_FORM_ELEMENT,
-            Manager::PARAM_DYNAMIC_FORM_ELEMENT_ID => $element->getId()
-        ]);
+        $condition = $this->get_component()->get_condition();
 
-        $toolbar->add_item(
-            new ToolbarItem(
-                $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                $updateUrl, ToolbarItem::DISPLAY_ICON
-            )
-        );
+        $count = $this->get_component()->get_parent()->count_categories($condition);
+        $count_all = $this->get_component()->get_parent()->count_categories();
 
-        $deleteUrl = $urlGenerator->fromParameters([
-            Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Manager::PARAM_ACTION => Manager::ACTION_DELETE_FORM_ELEMENT,
-            Manager::PARAM_DYNAMIC_FORM_ELEMENT_ID => $element->getId()
-        ]);
+        if ($category instanceof CategoryVisibilitySupported)
+        {
+            if ($categoryManagerImplementer->isAllowedToChangeCategoryVisibility($category))
+            {
+                $glyph = new FontAwesomeGlyph('eye');
+                $text = 'Visible';
 
-        $toolbar->add_item(
-            new ToolbarItem(
-                $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'), $deleteUrl,
-                ToolbarItem::DISPLAY_ICON, true
-            )
-        );
+                if (!$category->get_visibility())
+                {
+                    $glyph = new FontAwesomeGlyph('eye', ['text-muted']);
+                    $text = 'Invisible';
+                }
+
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        $translator->trans($text, [], StringUtilities::LIBRARIES), $glyph,
+                        $categoryManagerImplementer->getToggleVisibilityCategoryUrl($category),
+                        ToolbarItem::DISPLAY_ICON
+                    )
+                );
+            }
+            else
+            {
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        $translator->trans('VisibleNA', [], StringUtilities::LIBRARIES),
+                        new FontAwesomeGlyph('eye', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
+                    )
+                );
+            }
+        }
+
+        if ($categoryManagerImplementer->isAllowedToEditCategory($category))
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                    $categoryManagerImplementer->getUpdateCategoryUrl($category), ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+        else
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    $translator->trans('EditNA', [], StringUtilities::LIBRARIES),
+                    new FontAwesomeGlyph('pencil-alt', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+
+        if ($categoryManagerImplementer->supportsImpactView())
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
+                    $categoryManagerImplementer->getImpactViewUrl($category), ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+        elseif ($categoryManagerImplementer->isAllowedToDeleteCategory($category))
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
+                    $categoryManagerImplementer->getDeleteCategoryUrl($category), ToolbarItem::DISPLAY_ICON, true
+                )
+            );
+        }
+        else
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    $translator->trans('Delete', [], StringUtilities::LIBRARIES),
+                    new FontAwesomeGlyph('times', ['text-muted']), null, ToolbarItem::DISPLAY_ICON, true
+                )
+            );
+        }
+
+        if ($category->get_display_order() > 1)
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    $translator->trans('MoveUp', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-up'),
+                    $categoryManagerImplementer->getMoveCategoryUrl($category, - 1), ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+        else
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    $translator->trans('MoveUpNA', [], StringUtilities::LIBRARIES),
+                    new FontAwesomeGlyph('sort-up', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+
+        if ($category->get_display_order() < $count)
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    $translator->trans('MoveDown', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-down'),
+                    $categoryManagerImplementer->getMoveCategoryUrl($category), ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+        else
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    $translator->trans('MoveDownNA', [], StringUtilities::LIBRARIES),
+                    new FontAwesomeGlyph('sort-down', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
+
+        if ($categoryManagerImplementer->areSubcategoriesAllowed())
+        {
+            if ($count_all > 1)
+            {
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        $translator->trans('Move', [], StringUtilities::LIBRARIES),
+                        new FontAwesomeGlyph('window-restore', ['fa-flip-horizontal'], null, 'fas'),
+                        $categoryManagerImplementer->getChangeCategoryParentUrl($category), ToolbarItem::DISPLAY_ICON
+                    )
+                );
+            }
+            else
+            {
+                $toolbar->add_item(
+                    new ToolbarItem(
+                        $translator->trans('MoveNA', [], StringUtilities::LIBRARIES),
+                        new FontAwesomeGlyph('window-restore', ['fa-flip-horizontal', 'text-muted'], null, 'fas'), null,
+                        ToolbarItem::DISPLAY_ICON
+                    )
+                );
+            }
+        }
 
         return $toolbar->render();
     }
