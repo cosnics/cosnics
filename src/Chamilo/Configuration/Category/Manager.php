@@ -26,8 +26,6 @@ abstract class Manager extends Application
     public const PARAM_ACTION = 'category_action';
     public const PARAM_CATEGORY_ID = 'category_id';
     public const PARAM_DIRECTION = 'direction';
-    public const PARAM_MOVE_SELECTED_CATEGORIES = 'move_selected_categories';
-    public const PARAM_REMOVE_SELECTED_CATEGORIES = 'remove_selected_categories';
 
     public const PROPERTY_DISPLAY_ORDER = 'display_order';
 
