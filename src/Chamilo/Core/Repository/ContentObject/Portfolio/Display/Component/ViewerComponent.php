@@ -11,8 +11,7 @@ use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Core\Repository\Feedback\Generator\ActionsGenerator;
 use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataManager;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Service\ActivityService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -26,9 +25,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -37,7 +33,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * Default viewer component that handles the visualization of the portfolio item or folder
  *
  * @package repository\content_object\portfolio\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ViewerComponent extends ItemComponent implements FeedbackSupport, FeedbackNotificationSupport
 {
@@ -83,7 +79,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\feedback\FeedbackSupport::count_feedbacks()
      */
     public function count_feedbacks()
@@ -105,8 +100,12 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
         return DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $date);
     }
 
+    public function getActivityService(): ActivityService
+    {
+        return $this->getService(ActivityService::class);
+    }
+
     /**
-     *
      * @see \Chamilo\Libraries\Architecture\Application\Application::getAdditionalParameters()
      */
     public function getAdditionalParameters(array $additionalParameters = []): array
@@ -168,10 +167,10 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
 
                     $editButton = new SplitDropdownButton(
                         $editTitle, $editImage, $this->get_url(
-                        array(
+                        [
                             self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
                             self::PARAM_STEP => $this->get_current_step()
-                        )
+                        ]
                     )
                     );
 
@@ -184,10 +183,10 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                             new SubButton(
                                 Translation::get('MoveToOtherFolder'), new FontAwesomeGlyph('folder-open'),
                                 $this->get_url(
-                                    array(
+                                    [
                                         self::PARAM_ACTION => self::ACTION_MOVE,
                                         self::PARAM_STEP => $this->get_current_step()
-                                    )
+                                    ]
                                 )
                             )
                         );
@@ -197,11 +196,11 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                             $editButton->addSubButton(
                                 new SubButton(
                                     Translation::get('MoveUp'), new FontAwesomeGlyph('chevron-up'), $this->get_url(
-                                    array(
+                                    [
                                         self::PARAM_ACTION => self::ACTION_SORT,
                                         self::PARAM_SORT => self::SORT_UP,
                                         self::PARAM_STEP => $this->get_current_step()
-                                    )
+                                    ]
                                 )
                                 )
                             );
@@ -212,11 +211,11 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                             $editButton->addSubButton(
                                 new SubButton(
                                     Translation::get('MoveDown'), new FontAwesomeGlyph('chevron-down'), $this->get_url(
-                                    array(
+                                    [
                                         self::PARAM_ACTION => self::ACTION_SORT,
                                         self::PARAM_SORT => self::SORT_DOWN,
                                         self::PARAM_STEP => $this->get_current_step()
-                                    )
+                                    ]
                                 )
                                 )
                             );
@@ -228,10 +227,10 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                             new SubButton(
                                 Translation::get('MoveToOtherFolder'), new FontAwesomeGlyph('folder-open'),
                                 $this->get_url(
-                                    array(
+                                    [
                                         self::PARAM_ACTION => self::ACTION_MOVE,
                                         self::PARAM_STEP => $this->get_current_step()
-                                    )
+                                    ]
                                 )
                             )
                         );
@@ -252,10 +251,10 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                             new SubButton(
                                 Translation::get('MoveToOtherFolder'), new FontAwesomeGlyph('folder-open'),
                                 $this->get_url(
-                                    array(
+                                    [
                                         self::PARAM_ACTION => self::ACTION_MOVE,
                                         self::PARAM_STEP => $this->get_current_step()
-                                    )
+                                    ]
                                 )
                             )
                         );
@@ -265,11 +264,11 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                             $moveButton->addSubButton(
                                 new SubButton(
                                     Translation::get('MoveUp'), new FontAwesomeGlyph('chevron-up'), $this->get_url(
-                                    array(
+                                    [
                                         self::PARAM_ACTION => self::ACTION_SORT,
                                         self::PARAM_SORT => self::SORT_UP,
                                         self::PARAM_STEP => $this->get_current_step()
-                                    )
+                                    ]
                                 )
                                 )
                             );
@@ -280,11 +279,11 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                             $moveButton->addSubButton(
                                 new SubButton(
                                     Translation::get('MoveDown'), new FontAwesomeGlyph('chevron-down'), $this->get_url(
-                                    array(
+                                    [
                                         self::PARAM_ACTION => self::ACTION_SORT,
                                         self::PARAM_SORT => self::SORT_DOWN,
                                         self::PARAM_STEP => $this->get_current_step()
-                                    )
+                                    ]
                                 )
                                 )
                             );
@@ -297,12 +296,12 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                         $contentItems->addButton(
                             new Button(
                                 Translation::get($variable), new FontAwesomeGlyph(
-                                'window-restore', array('fa-lg', 'fa-flip-horizontal'), null, 'fas'
+                                'window-restore', ['fa-lg', 'fa-flip-horizontal'], null, 'fas'
                             ), $this->get_url(
-                                array(
+                                [
                                     self::PARAM_ACTION => self::ACTION_MOVE,
                                     self::PARAM_STEP => $this->get_current_step()
-                                )
+                                ]
                             )
                             )
                         );
@@ -327,10 +326,10 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                     $contentItems->addButton(
                         new Button(
                             $editTitle, $editImage, $this->get_url(
-                            array(
+                            [
                                 self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
                                 self::PARAM_STEP => $this->get_current_step()
-                            )
+                            ]
                         ), Button::DISPLAY_ICON_AND_LABEL
                         )
                     );
@@ -353,10 +352,10 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                 $contentItems->addButton(
                     new Button(
                         Translation::get($variable), new FontAwesomeGlyph('times'), $this->get_url(
-                        array(
+                        [
                             self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
                             self::PARAM_STEP => $this->get_current_step()
-                        )
+                        ]
                     ), Button::DISPLAY_ICON_AND_LABEL,
                         Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                     )
@@ -373,20 +372,20 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
 
                     $rightsButton = new SplitDropdownButton(
                         Translation::get($variable), new FontAwesomeGlyph('lock'), $this->get_url(
-                        array(
+                        [
                             self::PARAM_ACTION => self::ACTION_RIGHTS,
                             self::PARAM_STEP => $this->get_current_step()
-                        )
+                        ]
                     )
                     );
 
                     $rightsButton->addSubButton(
                         new SubButton(
                             Translation::get('UserComponent'), new FontAwesomeGlyph('user'), $this->get_url(
-                            array(
+                            [
                                 self::PARAM_ACTION => self::ACTION_USER,
                                 self::PARAM_STEP => $this->get_current_step()
-                            )
+                            ]
                         )
                         )
                     );
@@ -395,13 +394,13 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                 {
 
                     $rightsButton = new Button(
-                        Translation::get('ReturnToYourPortfolio'),
-                        new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $this->get_url(
-                        array(
-                            self::PARAM_ACTION => self::ACTION_USER,
-                            self::PARAM_STEP => $this->get_current_step()
+                        Translation::get('ReturnToYourPortfolio'), new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas'),
+                        $this->get_url(
+                            [
+                                self::PARAM_ACTION => self::ACTION_USER,
+                                self::PARAM_STEP => $this->get_current_step()
+                            ]
                         )
-                    )
                     );
                 }
 
@@ -422,7 +421,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
         $extraButton->addSubButton(
             new SubButton(
                 Translation::get('ActivityComponent'), new FontAwesomeGlyph('mouse-pointer'), $this->get_url(
-                array(self::PARAM_ACTION => self::ACTION_ACTIVITY, self::PARAM_STEP => $this->get_current_step())
+                [self::PARAM_ACTION => self::ACTION_ACTIVITY, self::PARAM_STEP => $this->get_current_step()]
             )
             )
         );
@@ -434,13 +433,13 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
         {
             $extraButton->addSubButton(
                 new SubButton(
-                    Translation::get('BookmarkerComponent'),
-                    new FontAwesomeGlyph('bookmark', array('fa-lg'), null, 'fas'), $this->get_url(
-                    array(
-                        self::PARAM_ACTION => self::ACTION_BOOKMARK,
-                        self::PARAM_STEP => $this->get_current_step()
+                    Translation::get('BookmarkerComponent'), new FontAwesomeGlyph('bookmark', ['fa-lg'], null, 'fas'),
+                    $this->get_url(
+                        [
+                            self::PARAM_ACTION => self::ACTION_BOOKMARK,
+                            self::PARAM_STEP => $this->get_current_step()
+                        ]
                     )
-                )
                 )
             );
         }
@@ -455,10 +454,10 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                 $extraButton->addSubButton(
                     new SubButton(
                         Translation::get('ManagerComponent'), new FontAwesomeGlyph('cog'), $this->get_url(
-                        array(
+                        [
                             self::PARAM_ACTION => self::ACTION_MANAGE,
                             self::PARAM_STEP => $this->get_current_step()
-                        )
+                        ]
                     )
                     )
                 );
@@ -477,10 +476,10 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
 
         if ($isAllowedToViewFeedback || $isAllowedToCreateFeedback)
         {
-            $baseParameters = array(
+            $baseParameters = [
                 self::PARAM_ACTION => self::ACTION_FEEDBACK,
                 self::PARAM_STEP => $this->get_current_step()
-            );
+            ];
 
             if ($isAllowedToViewFeedback)
             {
@@ -506,7 +505,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     }
 
     /**
-     *
      * @param string $label
      * @param unknown $glyph
      * @param unknown $allowedContentObjectTypes
@@ -528,7 +526,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\feedback\FeedbackSupport::get_feedback()
      */
     public function get_feedback()
@@ -540,7 +537,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\feedback\FeedbackSupport::get_notification()
      */
     public function get_notification()
@@ -552,7 +548,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\feedback\FeedbackSupport::is_allowed_to_create_feedback()
      */
     public function is_allowed_to_create_feedback()
@@ -561,7 +556,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\feedback\FeedbackSupport::is_allowed_to_delete_feedback()
      */
     public function is_allowed_to_delete_feedback($feedback)
@@ -570,7 +564,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\feedback\FeedbackSupport::is_allowed_to_update_feedback()
      */
     public function is_allowed_to_update_feedback($feedback)
@@ -579,7 +572,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\feedback\FeedbackSupport::is_allowed_to_view_feedback()
      */
     public function is_allowed_to_view_feedback()
@@ -619,10 +611,8 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     {
         $html = [];
 
-        $last_activities = DataManager::retrieve_activities(
-            $this->get_current_content_object(), null, 0, 1, new OrderBy(
-                array(new OrderProperty(new PropertyConditionVariable(Activity::class, Activity::PROPERTY_DATE)))
-            )
+        $last_activities = $this->getActivityService()->retrieveActivitiesForContentObject(
+            $this->get_current_content_object(), null, 1
         );
 
         $last_activity = $last_activities->current();
@@ -635,18 +625,18 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
             $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
             $html[] = Translation::get(
-                'LastEditedOn', array(
+                'LastEditedOn', [
                     'DATE' => DatetimeUtilities::getInstance()->formatLocaleDate(
                         $date_format, $last_activity->get_date()
                     )
-                )
+                ]
             );
 
             $html[] = '<br />';
 
             $html[] = Translation::get(
                 'LastAction',
-                array('ACTION' => $last_activity->get_type_string(), 'CONTENT' => $last_activity->get_content())
+                ['ACTION' => $last_activity->get_type_string(), 'CONTENT' => $last_activity->get_content()]
             );
 
             $html[] = '</div>';
@@ -672,16 +662,16 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
         if ($this->get_user_id() == $content_object->get_owner_id())
         {
             $html[] = Translation::get(
-                'CreatedOn', array('DATE' => $this->format_date($content_object->get_creation_date()))
+                'CreatedOn', ['DATE' => $this->format_date($content_object->get_creation_date())]
             );
         }
         else
         {
             $html[] = Translation::get(
-                'CreatedOnBy', array(
+                'CreatedOnBy', [
                     'DATE' => $this->format_date($content_object->get_creation_date()),
                     'USER' => $content_object->get_owner()->get_fullname()
-                )
+                ]
             );
         }
 
@@ -689,7 +679,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
         {
             $html[] = '<br />';
             $html[] = Translation::get(
-                'LastModifiedOn', array('DATE' => $this->format_date($content_object->get_modification_date()))
+                'LastModifiedOn', ['DATE' => $this->format_date($content_object->get_modification_date())]
             );
         }
 
@@ -700,7 +690,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\feedback\FeedbackSupport::retrieve_feedback()
      */
     public function retrieve_feedback($feedback_id)
@@ -709,7 +698,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedbacks()
      */
     public function retrieve_feedbacks($count, $offset)
@@ -718,7 +706,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\feedback\FeedbackSupport::retrieve_notification()
      */
     public function retrieve_notification()

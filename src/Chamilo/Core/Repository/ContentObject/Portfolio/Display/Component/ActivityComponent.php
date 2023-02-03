@@ -1,47 +1,83 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Table\Activity\ActivityTable;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Service\ActivityService;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Table\ActivityTableRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 
 /**
  * Component to list activity on a portfolio item
- * 
+ *
  * @package repository\content_object\portfolio\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ActivityComponent extends ItemComponent implements TableSupport
+class ActivityComponent extends ItemComponent
 {
-
     /**
-     * Executes this component
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
     public function build()
     {
-        $activity_table = new ActivityTable($this);
-        
         $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_STEP => $this->get_current_step())), 
-                Translation::get('ActivityComponent')));
-        
+                $this->get_url([self::PARAM_STEP => $this->get_current_step()]),
+                $this->getTranslator()->trans('ActivityComponent', [], self::CONTEXT)
+            )
+        );
+
         $html = [];
-        
+
         $html[] = $this->render_header();
-        $html[] = $activity_table->as_html();
+        $html[] = $this->renderTable();
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
-    /*
-     * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
-     */
-    public function get_table_condition($table_class_name)
+    public function getActivityService(): ActivityService
     {
+        return $this->getService(ActivityService::class);
+    }
+
+    public function getActivityTableRenderer(): ActivityTableRenderer
+    {
+        return $this->getService(ActivityTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems =
+            $this->getActivityService()->countActivitiesForContentObject($this->get_current_content_object());
+        $activityTableRenderer = $this->getActivityTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $activityTableRenderer->getParameterNames(), $activityTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $activities = $this->getActivityService()->retrieveActivitiesForContentObject(
+            $this->get_current_content_object(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $activityTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $activityTableRenderer->render($tableParameterValues, $activities);
     }
 }

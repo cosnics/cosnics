@@ -8,57 +8,46 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 /**
  * Base repository class for data classes
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class CommonDataClassRepository
 {
-    /**
-     * @var DataClassRepository
-     */
-    protected $dataClassRepository;
+    protected DataClassRepository $dataClassRepository;
 
-    /**
-     * TreeNodeDataRepository constructor.
-     *
-     * @param DataClassRepository $dataClassRepository
-     */
     public function __construct(DataClassRepository $dataClassRepository)
     {
         $this->dataClassRepository = $dataClassRepository;
     }
 
-    /*****************************************************************************************************************
-     * Fallback functionality for dataclass methods                                                                  *
-     *****************************************************************************************************************/
-
     /**
-     * @param DataClass $dataClass
-     *
-     * @return bool
+     * @throws \Exception
      */
-    public function create(DataClass $dataClass)
+    public function create(DataClass $dataClass): bool
     {
         return $dataClass->create();
     }
 
     /**
-     * @param DataClass $dataClass
-     *
-     * @return bool
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function update(DataClass $dataClass)
+    public function delete(DataClass $dataClass): bool
+    {
+        return $dataClass->delete();
+    }
+
+    public function getDataClassRepository(): DataClassRepository
+    {
+        return $this->dataClassRepository;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function update(DataClass $dataClass): bool
     {
         return $dataClass->update();
     }
 
-    /**
-     * @param DataClass $dataClass
-     *
-     * @return bool
-     */
-    public function delete(DataClass $dataClass)
-    {
-        return $dataClass->delete();
-    }
-    
 }

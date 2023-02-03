@@ -4,40 +4,25 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Service;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\Repository\ActivityRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Service to manage activities of content objects
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Service
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ActivityService
 {
+    protected ActivityRepository $activityRepository;
 
-    /**
-     *
-     * @var ActivityRepository
-     */
-    protected $activityRepository;
-
-    /**
-     * ActivityService constructor.
-     *
-     * @param ActivityRepository $activityRepository
-     */
     public function __construct(ActivityRepository $activityRepository)
     {
         $this->activityRepository = $activityRepository;
     }
 
-    /**
-     * Counts the activities for a given content object
-     *
-     * @param ContentObject $contentObject
-     *
-     * @return int
-     */
-    public function countActivitiesForContentObject(ContentObject $contentObject)
+    public function countActivitiesForContentObject(ContentObject $contentObject): int
     {
         $activitiesCount = 0;
 
@@ -47,28 +32,34 @@ class ActivityService
 
             foreach ($complex_content_object_path->get_nodes() as $node)
             {
-                $activitiesCount += $this->activityRepository->countActivitiesForContentObject(
-                    $node->get_content_object());
+                $activitiesCount += $this->getActivityRepository()->countActivitiesForContentObject(
+                    $node->get_content_object()
+                );
             }
 
             return $activitiesCount;
         }
 
-        return $this->activityRepository->countActivitiesForContentObject($contentObject);
+        return $this->getActivityRepository()->countActivitiesForContentObject($contentObject);
+    }
+
+    public function getActivityRepository(): ActivityRepository
+    {
+        return $this->activityRepository;
     }
 
     /**
-     * Retrieves the activities for the given content object
-     *
      * @param ContentObject $contentObject
-     * @param int $offset
-     * @param int $count
-     * @param OrderProperty|null $orderBy
+     * @param ?int $offset
+     * @param ?int $count
+     * @param ?OrderBy $orderBy
      *
-     * @return Activity[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Event\Activity>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function retrieveActivitiesForContentObject(ContentObject $contentObject, $offset, $count,
-        OrderProperty $orderBy = null)
+    public function retrieveActivitiesForContentObject(
+        ContentObject $contentObject, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    ): ArrayCollection
     {
         $activities = [];
 
@@ -78,8 +69,9 @@ class ActivityService
 
             foreach ($complex_content_object_path->get_nodes() as $node)
             {
-                $contentObjectActivities = $this->activityRepository->retrieveActivitiesForContentObject(
-                    $node->get_content_object());
+                $contentObjectActivities = $this->getActivityRepository()->retrieveActivitiesForContentObject(
+                    $node->get_content_object()
+                );
 
                 foreach ($contentObjectActivities as $activity)
                 {
@@ -89,7 +81,8 @@ class ActivityService
                     if ($path)
                     {
                         $activity_instance->set_content(
-                            $node->get_fully_qualified_name(false, true) . ' > ' . $activity_instance->get_content());
+                            $node->get_fully_qualified_name(false, true) . ' > ' . $activity_instance->get_content()
+                        );
                     }
 
                     $activities[] = $activity_instance;
@@ -98,7 +91,7 @@ class ActivityService
         }
         else
         {
-            $activities = $this->activityRepository->retrieveActivitiesForContentObject($contentObject);
+            $activities = $this->getActivityRepository()->retrieveActivitiesForContentObject($contentObject);
 
             foreach ($activities as $activity)
             {
@@ -108,6 +101,8 @@ class ActivityService
 
         $orderBy = $orderBy[0];
 
-        return $this->activityRepository->filterActivities($activities, $offset, $count, $orderBy);
+        $filteredActivities = $this->getActivityRepository()->filterActivities($activities, $offset, $count, $orderBy);
+
+        return new ArrayCollection($filteredActivities);
     }
 }

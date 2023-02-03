@@ -1,35 +1,39 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Activity\ActivityTable;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Service\ActivityService;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Table\ActivityTableRenderer;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Component to list activity on a portfolio item
  *
  * @package repository\content_object\portfolio\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ActivityComponent extends BaseHtmlTreeComponent implements TableSupport, DelegateComponent
+class ActivityComponent extends BaseHtmlTreeComponent implements DelegateComponent
 {
 
     /**
-     * Executes this component
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
     public function build()
     {
         $this->validateSelectedTreeNodeData();
 
-        $activity_table = new ActivityTable($this);
-
         $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId())),
+                $this->get_url([self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()]),
                 Translation::get('ActivityComponent')
             )
         );
@@ -37,23 +41,52 @@ class ActivityComponent extends BaseHtmlTreeComponent implements TableSupport, D
         $html = [];
 
         $html[] = $this->render_header();
-        $html[] = $activity_table->as_html();
+        $html[] = $this->renderTable();
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Backwards Compatibility for the generic ActivityTable
-     *
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
-     */
-    public function get_current_content_object()
+    public function getActivityService(): ActivityService
     {
-        return $this->getCurrentContentObject();
+        return $this->getService(ActivityService::class);
     }
 
-    public function get_table_condition($table_class_name)
+    public function getActivityTableRenderer(): ActivityTableRenderer
     {
+        return $this->getService(ActivityTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems =
+            $this->getActivityService()->countActivitiesForContentObject($this->getCurrentContentObject());
+        $activityTableRenderer = $this->getActivityTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $activityTableRenderer->getParameterNames(), $activityTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $activities = $this->getActivityService()->retrieveActivitiesForContentObject(
+            $this->getCurrentContentObject(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $activityTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $activityTableRenderer->render($tableParameterValues, $activities);
     }
 }

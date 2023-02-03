@@ -5,100 +5,103 @@ use Chamilo\Core\Repository\Instance\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\PersonalInstance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\PlatformInstance;
-use Chamilo\Core\Repository\Instance\Table\Instance\InstanceTable;
+use Chamilo\Core\Repository\Instance\Storage\DataManager;
+use Chamilo\Core\Repository\Instance\Table\InstanceTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
+use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-class BrowserComponent extends Manager implements TableSupport
+class BrowserComponent extends Manager
 {
 
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
+
     /**
-     *
-     * @var ButtonToolBarRenderer
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \ReflectionException
+     * @throws \QuickformException
      */
-    private $buttonToolbarRenderer;
-
-    private $type;
-
     public function run()
     {
-        if (!$this->get_user()->is_platform_admin())
+        if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        $parameters = $this->get_parameters();
-        $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
-            $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+
+        $translator = $this->getTranslator();
 
         $tabs = new TabsCollection();
 
         $tabs->add(
             new ContentTab(
-                'personal_instance', Translation::get('PersonalInstance'), $this->get_table(PersonalInstance::class)
+                'personal_instance', $translator->trans('PersonalInstance', [], self::CONTEXT),
+                $this->renderTable(PersonalInstance::class)
             )
         );
 
-        if ($this->get_user()->is_platform_admin())
+        if ($this->getUser()->is_platform_admin())
         {
             $tabs->add(
                 new ContentTab(
-                    'platform_instance', Translation::get('PlatformInstance'), $this->get_table(PlatformInstance::class)
+                    'platform_instance', $translator->trans('PlatformInstance', [], self::CONTEXT),
+                    $this->renderTable(PlatformInstance::class)
                 )
             );
         }
 
         $html = [];
 
-        $html[] = $this->render_header();
-        $html[] = $this->buttonToolbarRenderer->render();
+        $html[] = $this->renderHeader();
+        $html[] = $this->getButtonToolbarRenderer()->render();
         $html[] = $this->getTabsRenderer()->render('instances', $tabs);
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function getButtonToolbarRenderer()
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
+            $translator = $this->getTranslator();
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('AddExternalInstance'), new FontAwesomeGlyph('plus'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $translator->trans('AddExternalInstance', [], self::CONTEXT), new FontAwesomeGlyph('plus'),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE]), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
+                    $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
                     $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ManageRights', null, \Chamilo\Core\Rights\Manager::package()),
-                    new FontAwesomeGlyph('lock'), $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS)),
+                    $translator->trans('ManageRights', [], \Chamilo\Core\Rights\Manager::CONTEXT),
+                    new FontAwesomeGlyph('lock'), $this->get_url([self::PARAM_ACTION => self::ACTION_RIGHTS]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -110,38 +113,24 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    protected function getTabsRenderer(): TabsRenderer
-    {
-        return $this->getService(TabsRenderer::class);
-    }
-
-    public function get_table($type)
-    {
-        $this->type = $type;
-        $table = new InstanceTable($this);
-
-        return $table->as_html();
-    }
-
     /**
-     *
-     * @see \common\libraries\format\TableSupport::get_table_condition()
+     * @throws \QuickformException
      */
-    public function get_table_condition($table_class_name)
+    public function getInstanceCondition(string $type): AndCondition
     {
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         $conditions = [];
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_TYPE),
-            new StaticConditionVariable($this->type)
+            new PropertyConditionVariable(Instance::class, CompositeDataClass::PROPERTY_TYPE),
+            new StaticConditionVariable($type)
         );
 
-        if ($this->type == PersonalInstance::class)
+        if ($type == PersonalInstance::class)
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(PersonalInstance::class, PersonalInstance::PROPERTY_USER_ID),
-                new StaticConditionVariable($this->get_user_id())
+                new StaticConditionVariable($this->getUser()->getId())
             );
         }
 
@@ -155,16 +144,46 @@ class BrowserComponent extends Manager implements TableSupport
         return new AndCondition($conditions);
     }
 
-    /**
-     * @deprecated Use BrowserComponent::getType() now
-     */
-    public function get_type()
+    public function getInstanceTableRenderer(): InstanceTableRenderer
     {
-        return $this->getType();
+        return $this->getService(InstanceTableRenderer::class);
     }
 
-    public function getType()
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        return $this->type;
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    protected function getTabsRenderer(): TabsRenderer
+    {
+        return $this->getService(TabsRenderer::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Exception
+     */
+    protected function renderTable(string $type): string
+    {
+        $totalNumberOfItems =
+            DataManager::count($type, new DataClassCountParameters($this->getInstanceCondition($type)));
+        $instanceTableRenderer = $this->getInstanceTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $instanceTableRenderer->getParameterNames(), $instanceTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $instances = DataManager::retrieves(
+            $type, new DataClassRetrievesParameters(
+                $this->getInstanceCondition($type), $tableParameterValues->getNumberOfItemsPerPage(),
+                $tableParameterValues->getOffset(), $instanceTableRenderer->determineOrderBy($tableParameterValues)
+            )
+        );
+
+        return $instanceTableRenderer->render($tableParameterValues, $instances);
     }
 }
