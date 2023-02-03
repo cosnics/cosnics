@@ -5,6 +5,7 @@ use Chamilo\Configuration\Category\Interfaces\CategoryVisibilitySupported;
 use Chamilo\Configuration\Category\Manager;
 use Chamilo\Configuration\Category\Service\CategoryManagerImplementerInterface;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -13,8 +14,11 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Configuration\Category\Table
@@ -28,6 +32,16 @@ class CategoryTableRenderer extends DataClassListTableRenderer implements TableR
     public const TABLE_IDENTIFIER = Manager::PARAM_CATEGORY_ID;
 
     protected CategoryManagerImplementerInterface $categoryManagerImplementer;
+
+    public function __construct(
+        CategoryManagerImplementerInterface $categoryManagerImplementer, Translator $translator,
+        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+    )
+    {
+        $this->categoryManagerImplementer = $categoryManagerImplementer;
+
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+    }
 
     public function getCategoryManagerImplementer(): CategoryManagerImplementerInterface
     {

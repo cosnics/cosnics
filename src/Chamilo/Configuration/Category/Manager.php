@@ -1,9 +1,12 @@
 <?php
 namespace Chamilo\Configuration\Category;
 
+use Chamilo\Configuration\Category\Interfaces\CategoryManagerSupport;
 use Chamilo\Configuration\Category\Interfaces\ImpactViewSupport;
+use Chamilo\Configuration\Category\Service\CategoryManagerImplementerInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Session\Request;
+use Exception;
 
 abstract class Manager extends Application
 {
@@ -40,31 +43,50 @@ abstract class Manager extends Application
         return parent::getAdditionalParameters($additionalParameters);
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function getCategoryManagerImplementer(): CategoryManagerImplementerInterface
+    {
+        $application = $this->get_application();
+
+        if ($application instanceof CategoryManagerSupport)
+        {
+            return $application->getCategoryManagerImplementer();
+        }
+        else
+        {
+            throw new Exception(
+                'Application must implement the CategoryManagerSupport interface and provide a CategoryManagerImplementer'
+            );
+        }
+    }
+
     public function get_browse_categories_url($category_id = 0)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES, self::PARAM_CATEGORY_ID => $category_id)
+            [self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES, self::PARAM_CATEGORY_ID => $category_id]
         );
     }
 
     public function get_change_category_parent_url($category_id)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_CHANGE_CATEGORY_PARENT, self::PARAM_CATEGORY_ID => $category_id)
+            [self::PARAM_ACTION => self::ACTION_CHANGE_CATEGORY_PARENT, self::PARAM_CATEGORY_ID => $category_id]
         );
     }
 
     public function get_create_category_url($category_id)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_CREATE_CATEGORY, self::PARAM_CATEGORY_ID => $category_id)
+            [self::PARAM_ACTION => self::ACTION_CREATE_CATEGORY, self::PARAM_CATEGORY_ID => $category_id]
         );
     }
 
     public function get_delete_category_url($category_id)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_DELETE_CATEGORY, self::PARAM_CATEGORY_ID => $category_id)
+            [self::PARAM_ACTION => self::ACTION_DELETE_CATEGORY, self::PARAM_CATEGORY_ID => $category_id]
         );
     }
 
@@ -78,24 +100,19 @@ abstract class Manager extends Application
     public function get_impact_view_url($category_id)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_IMPACT_VIEW, self::PARAM_CATEGORY_ID => $category_id)
+            [self::PARAM_ACTION => self::ACTION_IMPACT_VIEW, self::PARAM_CATEGORY_ID => $category_id]
         );
     }
 
     public function get_move_category_url($category_id, $direction = 1)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_MOVE_CATEGORY,
                 self::PARAM_CATEGORY_ID => $category_id,
                 self::PARAM_DIRECTION => $direction
-            )
+            ]
         );
-    }
-
-    public function get_parent(): ?Application
-    {
-        return parent::get_parent();
     }
 
     public function get_subcategories_allowed()
@@ -106,17 +123,17 @@ abstract class Manager extends Application
     public function get_toggle_visibility_category_url($category_id)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_TOGGLE_CATEGORY_VISIBILITY,
                 self::PARAM_CATEGORY_ID => $category_id
-            )
+            ]
         );
     }
 
     public function get_update_category_url($category_id)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_UPDATE_CATEGORY, self::PARAM_CATEGORY_ID => $category_id)
+            [self::PARAM_ACTION => self::ACTION_UPDATE_CATEGORY, self::PARAM_CATEGORY_ID => $category_id]
         );
     }
 
