@@ -3,38 +3,35 @@ namespace Chamilo\Core\Repository\UserView\Component;
 
 use Chamilo\Core\Repository\UserView\Manager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
-use Chamilo\Core\Repository\UserView\Table\UserView\UserViewTable;
+use Chamilo\Core\Repository\UserView\Table\UserViewTableRenderer;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package core\repository\user_view
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class BrowserComponent extends Manager implements TableSupport, DelegateComponent
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -44,20 +41,17 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
      */
     public function run()
     {
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        $output = $this->get_user_html();
         $html = [];
 
         $html[] = $this->render_header();
-        $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = $output;
+        $html[] = $this->getButtonToolbarRenderer()->render();
+        $html[] = $this->renderTable();
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
     }
 
     /**
-     *
      * @return ButtonToolBarRenderer
      */
     public function getButtonToolbarRenderer()
@@ -70,8 +64,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $commonActions->addButton(
                 new Button(
                     Translation::get('Add', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE]), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
             $commonActions->addButton(
@@ -88,18 +81,19 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         return $this->buttonToolbarRenderer;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_table_condition($table_class_name)
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    public function getUserViewTableCondition(): AndCondition
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(UserView::class, UserView::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id())
         );
 
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        $query = $this->getButtonToolbarRenderer()->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
             $or_conditions = [];
@@ -107,32 +101,48 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 new PropertyConditionVariable(UserView::class, UserView::PROPERTY_NAME), $query
             );
             $or_conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(UserView::class, UserView::PROPERTY_DESCRIPTION),
-                $query
+                new PropertyConditionVariable(UserView::class, UserView::PROPERTY_DESCRIPTION), $query
             );
             $or_condition = new OrCondition($or_conditions);
 
-            $and_conditions[] = [];
-            $and_conditions = $condition;
-            $and_conditions = $or_condition;
+            $and_conditions = [];
+            $and_conditions[] = $condition;
+            $and_conditions[] = $or_condition;
+
             $condition = new AndCondition($and_conditions);
         }
 
         return $condition;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_user_html()
+    public function getUserViewTableRenderer(): UserViewTableRenderer
     {
-        $parameters = $this->get_parameters();
-        $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
-            $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        return $this->getService(UserViewTableRenderer::class);
+    }
 
-        $table = new UserViewTable($this);
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Exception
+     */
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems = $this->getUserService()->countUsers($this->getUserViewTableCondition());
+        $userViewTableRenderer = $this->getUserViewTableRenderer();
 
-        return $table->as_html();
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $userViewTableRenderer->getParameterNames(), $userViewTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $users = $this->getUserService()->findUsers(
+            $this->getUserViewTableCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $userViewTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $userViewTableRenderer->render($tableParameterValues, $users);
     }
 }

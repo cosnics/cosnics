@@ -20,6 +20,7 @@ class ActivityComponent extends ItemComponent
      * @throws \QuickformException
      * @throws \ReflectionException
      * @throws \TableException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function build()
     {
@@ -60,6 +61,7 @@ class ActivityComponent extends ItemComponent
      * @throws \QuickformException
      * @throws \ReflectionException
      * @throws \TableException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function renderTable(): string
     {
