@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -32,7 +33,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     /**
      * @param \Chamilo\Core\Help\Storage\DataClass\HelpItem $helpItem
      */
-    public function renderTableRowActions($helpItem): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $helpItem): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();

@@ -21,6 +21,8 @@ use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Chamilo\Libraries\Format\Table\Pager;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -42,14 +44,14 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     public function __construct(
         ItemRendererFactory $itemRendererFactory, ItemService $itemService, RightsService $rightsService,
-        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
         $this->itemRendererFactory = $itemRendererFactory;
         $this->itemService = $itemService;
         $this->rightsService = $rightsService;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer);
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
     }
 
     public function getItemDeletingUrl(Item $item): string
@@ -136,7 +138,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
      *
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    protected function renderCell(TableColumn $column, $item): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $item): string
     {
         switch ($column->get_name())
         {
@@ -148,13 +150,13 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
                 return $item->getGlyph()->render();
         }
 
-        return parent::renderCell($column, $item);
+        return parent::renderCell($column, $resultPosition, $item);
     }
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      */
-    public function renderTableRowActions($item): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $item): string
     {
         $numberOfSiblings = $this->getItemService()->countItemsByParentIdentifier($item->getParentId());
         $areRightsEnabled = $this->getRightsService()->areRightsEnabled();

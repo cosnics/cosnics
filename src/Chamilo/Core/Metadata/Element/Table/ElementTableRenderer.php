@@ -18,6 +18,8 @@ use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Chamilo\Libraries\Format\Table\Pager;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -38,12 +40,12 @@ class ElementTableRenderer extends DataClassListTableRenderer implements TableRo
 
     public function __construct(
         StringUtilities $stringUtilities, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
         $this->stringUtilities = $stringUtilities;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer);
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
     }
 
     public function getStringUtilities(): StringUtilities
@@ -134,7 +136,7 @@ class ElementTableRenderer extends DataClassListTableRenderer implements TableRo
     /**
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
      */
-    protected function renderCell(TableColumn $column, $element): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $element): string
     {
         $translator = $this->getTranslator();
         $urlGenerator = $this->getUrlGenerator();
@@ -203,13 +205,13 @@ class ElementTableRenderer extends DataClassListTableRenderer implements TableRo
                 }
         }
 
-        return parent::renderCell($column, $element);
+        return parent::renderCell($column, $resultPosition, $element);
     }
 
     /**
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Element $element
      */
-    public function renderTableRowActions($element): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $element): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();

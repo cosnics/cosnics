@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -32,7 +33,7 @@ class ElementTableRenderer extends DataClassListTableRenderer implements TableRo
     /**
      * @param \Chamilo\Configuration\Form\Storage\DataClass\Element $element
      */
-    protected function renderCell(TableColumn $column, $element): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $element): string
     {
         $translator = $this->getTranslator();
 
@@ -51,13 +52,13 @@ class ElementTableRenderer extends DataClassListTableRenderer implements TableRo
                 }
         }
 
-        return parent::renderCell($column, $element);
+        return parent::renderCell($column, $resultPosition, $element);
     }
 
     /**
      * @param \Chamilo\Configuration\Form\Storage\DataClass\Element $element
      */
-    public function renderTableRowActions($element): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $element): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();

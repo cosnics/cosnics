@@ -15,6 +15,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -78,7 +79,7 @@ class VocabularyTableRenderer extends DataClassListTableRenderer implements Tabl
     /**
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Vocabulary $vocabulary
      */
-    protected function renderCell(TableColumn $column, $vocabulary): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $vocabulary): string
     {
         if ($column->get_name() == self::COLUMN_DEFAULT)
         {
@@ -110,13 +111,13 @@ class VocabularyTableRenderer extends DataClassListTableRenderer implements Tabl
             }
         }
 
-        return parent::renderCell($column, $vocabulary);
+        return parent::renderCell($column, $resultPosition, $vocabulary);
     }
 
     /**
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Vocabulary $vocabulary
      */
-    public function renderTableRowActions($vocabulary): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $vocabulary): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();

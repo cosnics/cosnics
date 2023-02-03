@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Format\Table\Extension;
 
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\ListTableRenderer;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -18,7 +19,7 @@ abstract class RecordListTableRenderer extends ListTableRenderer
     /**
      * @param string[] $record
      */
-    protected function renderCell(TableColumn $column, $record): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $record): string
     {
         return $record[$column->get_name()];
     }

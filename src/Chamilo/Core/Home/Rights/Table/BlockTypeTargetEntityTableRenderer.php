@@ -16,6 +16,7 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -45,17 +46,17 @@ class BlockTypeTargetEntityTableRenderer extends RecordListTableRenderer impleme
     /**
      * @param string[]|string[][] $learningPathChildAttempt
      */
-    public function renderCell(TableColumn $column, $learningPathChildAttempt): string
+    public function renderCell(TableColumn $column, TableResultPosition $resultPosition, $learningPathChildAttempt): string
     {
         if ($column->get_name() == 'target_entities')
         {
             return $this->renderTargetEntities((array) $learningPathChildAttempt['target_entities']);
         }
 
-        return parent::renderCell($column, $learningPathChildAttempt);
+        return parent::renderCell($column, $resultPosition, $learningPathChildAttempt);
     }
 
-    public function renderTableRowActions($result): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $result): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();

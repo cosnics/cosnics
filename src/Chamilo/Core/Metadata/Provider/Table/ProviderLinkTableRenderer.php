@@ -17,6 +17,8 @@ use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Chamilo\Libraries\Format\Table\Pager;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -43,14 +45,14 @@ class ProviderLinkTableRenderer extends DataClassListTableRenderer
     public function __construct(
         StringUtilities $stringUtilities, ClassnameUtilities $classnameUtilities,
         DataClassEntityFactory $dataClassEntityFactory, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
         $this->stringUtilities = $stringUtilities;
         $this->classnameUtilities = $classnameUtilities;
         $this->dataClassEntityFactory = $dataClassEntityFactory;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer);
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
     }
 
     public function getClassnameUtilities(): ClassnameUtilities
@@ -111,7 +113,7 @@ class ProviderLinkTableRenderer extends DataClassListTableRenderer
      *
      * @throws \Exception
      */
-    protected function renderCell(TableColumn $column, $providerLink): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $providerLink): string
     {
         $translator = $this->getTranslator();
         $stringUtilities = $this->getStringUtilities();
@@ -142,13 +144,13 @@ class ProviderLinkTableRenderer extends DataClassListTableRenderer
                 return $providerLink->getElement()->get_display_name();
         }
 
-        return parent::renderCell($column, $providerLink);
+        return parent::renderCell($column, $resultPosition, $providerLink);
     }
 
     /**
      * @param \Chamilo\Core\Metadata\Storage\DataClass\ProviderLink $providerLink
      */
-    public function renderTableRowActions($providerLink): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $providerLink): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();

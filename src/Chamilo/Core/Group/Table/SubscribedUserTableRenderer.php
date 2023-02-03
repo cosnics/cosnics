@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 
 /**
  * @package Chamilo\Core\Group\Table
@@ -53,7 +54,7 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer implements 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\SubscribedUser $subscribedUser
      */
-    public function renderTableRowActions($subscribedUser): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $subscribedUser): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();

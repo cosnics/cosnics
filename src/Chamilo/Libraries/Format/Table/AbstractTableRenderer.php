@@ -39,17 +39,20 @@ abstract class AbstractTableRenderer
 
     protected AbstractHtmlTableRenderer $htmlTableRenderer;
 
+    protected Pager $pager;
+
     protected Translator $translator;
 
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, AbstractHtmlTableRenderer $htmlTableRenderer
+        Translator $translator, UrlGenerator $urlGenerator, AbstractHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->htmlTableRenderer = $htmlTableRenderer;
+        $this->pager = $pager;
 
         $this->initializeColumns();
     }
@@ -184,6 +187,11 @@ abstract class AbstractTableRenderer
         return null;
     }
 
+    public function getPager(): Pager
+    {
+        return $this->pager;
+    }
+
     /**
      * @return string[]
      */
@@ -226,6 +234,24 @@ abstract class AbstractTableRenderer
         }
 
         return null;
+    }
+
+    protected function getTableResultPosition(int $resultPosition, TableParameterValues $parameterValues
+    ): TableResultPosition
+    {
+        $tableResultPosition = new TableResultPosition();
+
+        $tableResultPosition->setPosition($resultPosition);
+        $tableResultPosition->setPageNumber($parameterValues->getPageNumber());
+        $tableResultPosition->setNumberOfItemsPerPage($parameterValues->getNumberOfItemsPerPage());
+        $tableResultPosition->setTotalNumberOfItems($parameterValues->getTotalNumberOfItems());
+        $tableResultPosition->setTotalNumberOfPages(
+            $this->getPager()->getNumberOfPages(
+                $parameterValues->getNumberOfItemsPerPage(), $parameterValues->getTotalNumberOfItems()
+            )
+        );
+
+        return $tableResultPosition;
     }
 
     public function getTranslator(): Translator

@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Table\Interfaces;
 
+use Chamilo\Libraries\Format\Table\TableResultPosition;
+
 /**
  * This interface determines whether or not your table supports an action column (cell renderer usage)
  *
@@ -14,5 +16,5 @@ interface TableRowActionsSupport
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
      */
-    public function renderTableRowActions($result): string;
+    public function renderTableRowActions(TableResultPosition $resultPosition, $result): string;
 }

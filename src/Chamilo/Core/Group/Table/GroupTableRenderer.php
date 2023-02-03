@@ -19,6 +19,8 @@ use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Chamilo\Libraries\Format\Table\Pager;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -42,14 +44,14 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
     public function __construct(
         GroupsTreeTraverser $groupsTreeTraverser, GroupMembershipService $groupMembershipService,
         StringUtilities $stringUtilities, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
         $this->stringUtilities = $stringUtilities;
         $this->groupsTreeTraverser = $groupsTreeTraverser;
         $this->groupMembershipService = $groupMembershipService;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer);
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
     }
 
     public function getGroupMembershipService(): GroupMembershipService
@@ -126,7 +128,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
      *
      * @throws \Exception
      */
-    protected function renderCell(TableColumn $column, $group): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $group): string
     {
         $translator = $this->getTranslator();
         $urlGenerator = $this->getUrlGenerator();
@@ -163,12 +165,12 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
                 return $stringUtilities->truncate($description);
             case $translator->trans(self::COLUMN_USERS, [], 'Chamilo\Core\User\Manager') :
-                return $groupsTreeTraverser->countUsersForGroup($group);
+                return (string) $groupsTreeTraverser->countUsersForGroup($group);
             case $translator->trans(self::COLUMN_SUBGROUPS, [], 'Chamilo\Core\User\Manager') :
-                return $groupsTreeTraverser->countSubGroupsForGroup($group, true);
+                return (string) $groupsTreeTraverser->countSubGroupsForGroup($group, true);
         }
 
-        return parent::renderCell($column, $group);
+        return parent::renderCell($column, $resultPosition, $group);
     }
 
     /**
@@ -177,7 +179,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
      * @throws \ReflectionException
      * @throws \Exception
      */
-    public function renderTableRowActions($group): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $group): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();

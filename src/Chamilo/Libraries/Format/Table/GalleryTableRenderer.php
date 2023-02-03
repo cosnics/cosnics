@@ -21,10 +21,10 @@ abstract class GalleryTableRenderer extends AbstractTableRenderer
     public const DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 5;
 
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, GalleryHtmlTableRenderer $htmlTableRenderer
+        Translator $translator, UrlGenerator $urlGenerator, GalleryHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer);
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
     }
 
     protected function processData(ArrayCollection $results, TableParameterValues $parameterValues): ArrayCollection

@@ -16,6 +16,8 @@ use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Chamilo\Libraries\Format\Table\Pager;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
@@ -32,12 +34,12 @@ class UserTableRenderer extends RecordListTableRenderer implements TableRowActio
 
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
         $this->configurationConsulter = $configurationConsulter;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer);
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
     }
 
     public function getConfigurationConsulter(): ConfigurationConsulter
@@ -76,7 +78,7 @@ class UserTableRenderer extends RecordListTableRenderer implements TableRowActio
         }
     }
 
-    public function renderTableRowActions($record): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $record): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();

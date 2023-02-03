@@ -21,10 +21,10 @@ abstract class ListTableRenderer extends AbstractTableRenderer
     public const DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 20;
 
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer);
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
 
         if ($this instanceof TableRowActionsSupport)
         {
@@ -71,15 +71,17 @@ abstract class ListTableRenderer extends AbstractTableRenderer
                 $rowData[] = $identifierCellContent;
             }
 
+            $tableResultPosition = $this->getTableResultPosition($results->indexOf($result), $parameterValues);
+
             foreach ($this->getColumns() as $column)
             {
-                if ($column instanceof ActionsTableColumn && $this instanceof TableRowActionsSupport)
+                if ($this instanceof TableRowActionsSupport && $column instanceof ActionsTableColumn)
                 {
-                    $rowData[] = $this->renderTableRowActions($result);
+                    $rowData[] = $this->renderTableRowActions($tableResultPosition, $result);
                 }
                 else
                 {
-                    $rowData[] = $this->renderCell($column, $result);
+                    $rowData[] = $this->renderCell($column, $tableResultPosition, $result);
                 }
             }
 
@@ -92,5 +94,5 @@ abstract class ListTableRenderer extends AbstractTableRenderer
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array $result
      */
-    abstract protected function renderCell(TableColumn $column, $result): string;
+    abstract protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $result): string;
 }

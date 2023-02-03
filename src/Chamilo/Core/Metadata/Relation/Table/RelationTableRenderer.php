@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -48,7 +49,7 @@ class RelationTableRenderer extends DataClassListTableRenderer implements TableR
     /**
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Relation $relationType
      */
-    public function renderTableRowActions($relationType): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $relationType): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();

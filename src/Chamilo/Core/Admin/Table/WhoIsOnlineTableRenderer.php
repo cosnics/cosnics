@@ -10,6 +10,8 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Chamilo\Libraries\Format\Table\Pager;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -24,13 +26,13 @@ class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
 
     public function __construct(
         ConfigurationConsulter $configurationConsulter, User $user, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->user = $user;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer);
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
     }
 
     public function getConfigurationConsulter(): ConfigurationConsulter
@@ -65,7 +67,7 @@ class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
      *
      * @throws \ReflectionException
      */
-    protected function renderCell(TableColumn $column, $user): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $user): string
     {
         $translator = $this->getTranslator();
         $urlGenerator = $this->getUrlGenerator();
@@ -119,6 +121,6 @@ class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
                 return '';
         }
 
-        return parent::renderCell($column, $user);
+        return parent::renderCell($column, $resultPosition, $user);
     }
 }

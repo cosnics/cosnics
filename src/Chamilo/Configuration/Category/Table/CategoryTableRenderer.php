@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -57,7 +58,7 @@ class CategoryTableRenderer extends DataClassListTableRenderer implements TableR
     /**
      * @param \Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory $category
      */
-    protected function renderCell(TableColumn $column, $category): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $category): string
     {
         $categoryManagerImplementer = $this->getCategoryManagerImplementer();
 
@@ -74,23 +75,18 @@ class CategoryTableRenderer extends DataClassListTableRenderer implements TableR
                 return (string) $categoryManagerImplementer->countSubCategories($category);
         }
 
-        return parent::renderCell($column, $category);
+        return parent::renderCell($column, $resultPosition, $category);
     }
 
     /**
      * @param \Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory $category
      */
-    public function renderTableRowActions($category): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $category): string
     {
         $translator = $this->getTranslator();
         $categoryManagerImplementer = $this->getCategoryManagerImplementer();
 
         $toolbar = new Toolbar();
-
-        $condition = $this->get_component()->get_condition();
-
-        $count = $this->get_component()->get_parent()->count_categories($condition);
-        $count_all = $this->get_component()->get_parent()->count_categories();
 
         if ($category instanceof CategoryVisibilitySupported)
         {
@@ -190,7 +186,7 @@ class CategoryTableRenderer extends DataClassListTableRenderer implements TableR
             );
         }
 
-        if ($category->get_display_order() < $count)
+        if (!$resultPosition->isLast())
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -211,7 +207,7 @@ class CategoryTableRenderer extends DataClassListTableRenderer implements TableR
 
         if ($categoryManagerImplementer->areSubcategoriesAllowed())
         {
-            if ($count_all > 1)
+            if ($resultPosition->getTotalNumberOfItems() > 1)
             {
                 $toolbar->add_item(
                     new ToolbarItem(

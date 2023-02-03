@@ -23,6 +23,8 @@ use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordListTableRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Chamilo\Libraries\Format\Table\Pager;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -54,7 +56,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
     public function __construct(
         RightsService $rightsService, UserService $userService, GroupService $groupService,
         DatetimeUtilities $datetimeUtilities, ContentObjectService $contentObjectService, User $user,
-        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
         $this->rightsService = $rightsService;
@@ -64,7 +66,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
         $this->datetimeUtilities = $datetimeUtilities;
         $this->contentObjectService = $contentObjectService;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer);
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
     }
 
     public function getContentObjectService(): ContentObjectService
@@ -136,7 +138,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Exception
      */
-    protected function renderCell(TableColumn $column, $publication): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $publication): string
     {
         $translator = $this->getTranslator();
         $urlGenerator = $this->getUrlGenerator();
@@ -212,7 +214,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
                     $data;
         }
 
-        return parent::renderCell($column, $publication);
+        return parent::renderCell($column, $resultPosition, $publication);
     }
 
     /**
@@ -281,7 +283,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
      *
      * @throws \ReflectionException
      */
-    public function renderTableRowActions($publication): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $publication): string
     {
         $translator = $this->getTranslator();
         $urlGenerator = $this->getUrlGenerator();

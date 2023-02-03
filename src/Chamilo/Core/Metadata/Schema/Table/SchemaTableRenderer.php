@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -50,7 +51,7 @@ class SchemaTableRenderer extends DataClassListTableRenderer implements TableRow
     /**
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
      */
-    public function renderTableRowActions($schema): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $schema): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();

@@ -16,6 +16,8 @@ use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Chamilo\Libraries\Format\Table\Pager;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -36,12 +38,12 @@ class RelationInstanceTableRenderer extends DataClassListTableRenderer
 
     public function __construct(
         DataClassEntityFactory $dataClassEntityFactory, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
         $this->dataClassEntityFactory = $dataClassEntityFactory;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer);
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
     }
 
     public function getDataClassEntityFactory(): DataClassEntityFactory
@@ -86,7 +88,7 @@ class RelationInstanceTableRenderer extends DataClassListTableRenderer
      *
      * @throws \Exception
      */
-    protected function renderCell(TableColumn $column, $relationInstance): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $relationInstance): string
     {
         $translator = $this->getTranslator();
 
@@ -106,7 +108,7 @@ class RelationInstanceTableRenderer extends DataClassListTableRenderer
                 );
         }
 
-        return parent::renderCell($column, $relationInstance);
+        return parent::renderCell($column, $resultPosition, $relationInstance);
     }
 
     public function renderEntityByTypeAndIdentifier($entityType, $entityIdentifier = 0): string
@@ -120,7 +122,7 @@ class RelationInstanceTableRenderer extends DataClassListTableRenderer
     /**
      * @param \Chamilo\Core\Metadata\Storage\DataClass\RelationInstance $relationInstance
      */
-    public function renderTableRowActions($relationInstance): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $relationInstance): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();

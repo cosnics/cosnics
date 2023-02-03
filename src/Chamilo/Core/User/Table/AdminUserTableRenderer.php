@@ -18,6 +18,8 @@ use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Chamilo\Libraries\Format\Table\Pager;
+use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -35,13 +37,13 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
 
     public function __construct(
         ConfigurationConsulter $configurationConsulter, User $user, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->user = $user;
 
-        parent::__construct($translator, $urlGenerator, $htmlTableRenderer);
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
     }
 
     public function getConfigurationConsulter(): ConfigurationConsulter
@@ -135,7 +137,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
-    protected function renderCell(TableColumn $column, $user): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $user): string
     {
         $translator = $this->getTranslator();
 
@@ -161,13 +163,13 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
                 return $user->get_active() ? $trueGlyph->render() : $falseGlyph->render();
         }
 
-        return parent::renderCell($column, $user);
+        return parent::renderCell($column, $resultPosition, $user, $resultPosition);
     }
 
     /**
      * @throws \ReflectionException
      */
-    public function renderTableRowActions($user): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $user): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();
