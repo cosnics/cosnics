@@ -46,12 +46,12 @@ class GradeBookAjaxService
      * @param GradeBookService $gradeBookService
      * @param GradeBookItemScoreServiceInterface $gradeBookItemScoreService
      */
-    /*public function __construct(GradeBookService $gradeBookService, GradeBookItemScoreServiceInterface $gradeBookItemScoreService)
+    public function __construct(GradeBookService $gradeBookService, GradeBookItemScoreServiceInterface $gradeBookItemScoreService)
     {
         $this->gradeBookService = $gradeBookService;
         $this->gradeBookItemScoreService = $gradeBookItemScoreService;
         $this->serializer = $this->createSerializer();
-    }*/
+    }
 
     /**
      * @param GradeBook $gradebook
