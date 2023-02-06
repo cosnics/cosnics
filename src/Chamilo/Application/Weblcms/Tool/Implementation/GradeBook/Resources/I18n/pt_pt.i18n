@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\gradebook
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "GradeBook"
+InstallTypeName = "GradeBook Tool"
+BrowserComponent = "Browse gradebooks"
+ViewerComponent = "View gradebook"
+PublisherComponent = "Publish gradebook"
+UpdaterComponent = "Edit gradebook"
+IntroductionPublisherComponent = "Publish introduction"

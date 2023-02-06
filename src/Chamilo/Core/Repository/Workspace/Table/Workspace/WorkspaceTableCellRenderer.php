@@ -51,7 +51,7 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
                 );
             case Workspace::PROPERTY_NAME:
                 return '<a href="' . $this->getWorkspaceUrl($workspace) . '">' .
-                parent::render_cell($column, $workspace) . '</a>';
+                $workspace->getTitle() . '</a>';
         }
 
         return parent::render_cell($column, $workspace);

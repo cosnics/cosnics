@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\gradebook
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Notenbücher"
+InstallTypeName = ""
+BrowserComponent = "Notenbuch durchsuchen"
+ViewerComponent = "Notenbuch ansehen"
+PublisherComponent = "Notenbuch veröffentlichen"
+UpdaterComponent = "Notenbuch bearbeiten"
+IntroductionPublisherComponent = "Vorstellung veröffentlichen"

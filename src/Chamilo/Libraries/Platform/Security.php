@@ -61,6 +61,7 @@ class Security
 
             // Remove any attribute starting with "on" or xmlns
             $variable = preg_replace('#(<[^>]+?[\x00-\x20"\x2f\x5c\']+)(?:on|xmlns)[^>\x20=]*=[^>]*[>\b]?#iu', '$1>', $variable);
+            $variable = str_replace("onerror", "invalid", $variable);
 
             // Remove javascript: and vbscript: protocols
             $variable = preg_replace(
@@ -110,6 +111,7 @@ class Security
         {
             // only remove really bad parts
             $variable = preg_replace('#(<[^>]+?[\x00-\x20"\x2f\x5c\']+)(?:onerror|xmlns)[^>\x20=]*=[^>]*[>\b]?#iu', '$1>', $variable);
+            $variable = str_replace("onerror", "invalid", $variable);
         }
         return $variable;
     }

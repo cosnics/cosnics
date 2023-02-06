@@ -1,0 +1,8 @@
+GradeBook = "Puntenboekje"
+InvalidHeaderException = "De hoofding van het CSV-bestand is niet in het formaat `lastname;firstname;id;...`"
+DuplicateResultException = "<b>Regel {LINE}</b>: Dubbel resultaat gevonden voor student <b>{LASTNAME} {FIRSTNAME}</b>"
+InvalidValueException = "<b>Regel {LINE}, kolom {COLUMN}</b>: Niet-{TYPE} waarde <b>{VALUE}</b> opgegeven voor het veld <b>{FIELD}</b>"
+NotCSVFileException = "Het opgeladen bestand lijkt geen csv-bestand te zijn."
+NoValueException = "<b>Regel {LINE}</b>: Geen waarde opgegeven voor het veld <b>{FIELD}</b>"
+Typescore = "numerieke (of GAFW)"
+Typestring = "string"

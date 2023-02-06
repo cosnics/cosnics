@@ -78,6 +78,42 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
+     * Retrieve given course groups
+     *
+     * @param int[] $group_ids
+     * @param \libraries\storage\Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param \libraries\ObjectTableOrder[] $order_by
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    public static function retrieve_course_group_users_from_course_groups($group_ids, $condition = null, $offset = null, $count = null, $order_by = null)
+    {
+        $group_conditions = array();
+
+        if ($condition)
+        {
+            $group_conditions[] = $condition;
+        }
+
+        $group_conditions[] = new InCondition(
+            new PropertyConditionVariable(
+                CourseGroupUserRelation::class_name(),
+                CourseGroupUserRelation::PROPERTY_COURSE_GROUP
+            ),
+            $group_ids
+        );
+
+        $group_condition = new AndCondition($group_conditions);
+
+        return self::retrieves(
+            CourseGroupUserRelation::class_name(),
+            new DataClassRetrievesParameters($group_condition, $count, $offset, $order_by)
+        );
+    }
+
+    /**
      * Retrieve given course groups with their subgroups
      *
      * @param int[] $group_ids

@@ -438,6 +438,23 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param integer $entityType
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function getMaxScoresForContentObjectPublicationEntityType(
+        ContentObjectPublication $contentObjectPublication, $entityType
+    )
+    {
+        return $this->assignmentRepository->retrieveMaxScoreForContentObjectPublicationEntityType(
+            $contentObjectPublication,
+            $entityType
+        );
+    }
+
+    /**
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param integer $entityType
      * @param integer $entityId
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset

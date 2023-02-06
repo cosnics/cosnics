@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\gradebook
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Carnets de pointage"
+InstallTypeName = ""
+BrowserComponent = "Parcourir carnets de pointage"
+ViewerComponent = "Voir carnet de pointage"
+PublisherComponent = "Publier carnet de pointage"
+UpdaterComponent = "Modifier carnet de pointage"
+IntroductionPublisherComponent = "Publier le texte d'introduction"

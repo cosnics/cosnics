@@ -34,7 +34,7 @@ class LearningPathStepContextService
     public function getOrCreateLearningPathStepContext(int $stepId, string $contextClass, int $contextId): LearningPathStepContext
     {
         $learningPathStepContext = $this->learningPathStepContextRepository->findLearningPathStepContext($stepId, $contextClass, $contextId);
-        if (!$learningPathStepContext)
+        if (!$learningPathStepContext instanceof LearningPathStepContext)
         {
             $learningPathStepContext = new LearningPathStepContext();
             $learningPathStepContext->setLearningPathStepId($stepId);
