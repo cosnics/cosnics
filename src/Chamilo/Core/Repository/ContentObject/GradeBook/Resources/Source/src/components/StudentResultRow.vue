@@ -5,7 +5,7 @@
         "not-yet-updated": "Final score not yet updated"
     },
     "nl": {
-        "not-synchronized": "Niet gesynchronizeerd",
+        "not-synchronized": "Niet gesynchroniseerd",
         "not-yet-updated": "Eindcijfer nog niet geüpdated"
     }
 }
