@@ -59,23 +59,6 @@ class CourseGroupRepository extends CommonDataClassRepository
     }
 
     /**
-     * @param int $courseId
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function getCourseGroupsInCourse(int $courseId)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
-            new StaticConditionVariable($courseId)
-        );
-
-        return $this->dataClassRepository->retrieves(
-            CourseGroup::class_name(),
-            new DataClassRetrievesParameters($condition)
-        );
-    }
-
-    /**
      * @param CourseGroup $courseGroup
      *
      * @return int[]
