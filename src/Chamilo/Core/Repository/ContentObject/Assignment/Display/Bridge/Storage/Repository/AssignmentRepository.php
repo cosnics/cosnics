@@ -730,6 +730,52 @@ abstract class AssignmentRepository
     /**
      *
      * @param integer $entityType
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    protected function retrieveMaxScoreForEntityType($entityType, Condition $condition)
+    {
+        $joins = new Joins();
+
+        $joins->add(
+            new Join(
+                $this->getScoreClassName(),
+                new EqualityCondition(
+                    new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID),
+                    new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_ENTRY_ID)
+                )
+            )
+        );
+
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_ID));
+        $properties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::MAX,
+                new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_SCORE),
+                self::MAXIMUM_SCORE
+            )
+        );
+        $groupBy = new GroupBy();
+        $groupBy->add(new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_ID));
+
+        $parameters = new RecordRetrievesParameters(
+            $properties,
+            $this->getEntityTypeCondition($entityType, $condition),
+            null,
+            null,
+            array(),
+            $joins,
+            $groupBy
+        );
+
+        return $this->dataClassRepository->records($this->getEntryClassName(), $parameters);
+    }
+
+    /**
+     *
+     * @param integer $entityType
      * @param integer $entityId
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset

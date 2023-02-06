@@ -175,7 +175,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function getTitle()
     {
-        return $this->getName();
+        return htmlentities(strip_tags($this->getName()));
     }
 
     /**

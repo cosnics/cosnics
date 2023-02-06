@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\gradebook
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Gradebook"
+TypeCategory = "Content Objects"
+Title = "Subject"
+Description = "Message"
+GradeBookToolBrowserComponent = "Gradebooks"
+GradeBookToolIntroductionPublisherComponent = "Publish introduction"
+GradeBookToolPublisherComponent = "Publish"
+GradeBookToolUpdaterComponent = "Edit gradebook"
+GradeBookToolViewerComponent = "View gradebook"
+ImportCSVComponent = "Import CSV"

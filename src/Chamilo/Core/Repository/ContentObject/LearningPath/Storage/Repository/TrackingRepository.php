@@ -281,6 +281,16 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
                         TreeNodeAttempt::PROPERTY_TREE_NODE_DATA_ID)),
                 'nodes_completed'));
 
+        $properties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::MAX,
+                new PropertyConditionVariable(
+                    $this->trackingParameters->getTreeNodeAttemptClassName(),
+                    TreeNodeAttempt::PROPERTY_SCORE),
+                'max_score'
+            )
+        );
+
         return $properties;
     }
 

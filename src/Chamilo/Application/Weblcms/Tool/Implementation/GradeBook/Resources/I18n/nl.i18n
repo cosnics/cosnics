@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\gradebook
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Puntenboekjes"
+TypeNameSingle = "Puntenboekje"
+InstallTypeName = "Puntenboekjes"
+BrowserComponent = "Doorblader puntenboekjes"
+ViewerComponent = "Bekijk puntenboekje"
+PublisherComponent = "Publiceer puntenboekje"
+UpdaterComponent = "Bewerk puntenboekje"
+IntroductionPublisherComponent = "Publiceer introductietekst"
+SentByEmail = "Verstuurd via email"
+ViewPeriodHeader = "Selecteer periode"
