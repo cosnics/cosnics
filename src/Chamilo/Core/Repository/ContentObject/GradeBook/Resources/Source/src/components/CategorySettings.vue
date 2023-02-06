@@ -128,7 +128,7 @@ input:focus {
     opacity: .2;
     top: 0;
     width: 100vw;
-    z-index:-1;
+    z-index: -1;
 }
 
 .modal-remove {

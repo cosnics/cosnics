@@ -119,6 +119,7 @@ export default class GradesDropdown extends Vue {
     overflow-y: auto;
     overflow-x: hidden;
     width: 100%;
+    z-index: 999;
 }
 
 .dropdown-menu >>> input[type=checkbox] {
