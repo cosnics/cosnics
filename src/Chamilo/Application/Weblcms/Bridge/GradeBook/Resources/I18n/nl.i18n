@@ -1,0 +1,6 @@
+TypeName = "Weblcms puntenboekjes bridge"
+AssignmentToolTypeName = "Opdrachten"
+ExamAssignmentToolTypeName = "Examenopdrachten"
+EvaluationToolTypeName = "Evaluaties"
+AssessmentToolTypeName = "Oefeningen"
+LearningPathToolTypeName = "Leerpaden"
