@@ -34,7 +34,7 @@
         "make-invisible": "Score wordt weergegeven. Klik om te verbergen.",
         "make-visible": "Score is verborgen. Klik om te tonen.",
         "saving": "Aan het opslaan",
-        "source-results-warning": "De resultaten in deze kolom verwijzen naar brondata die niet meer bestaat. Je kan de data verder blijven gebruiken maar synchronizeren zal op deze kolom geen effect hebben. Als je de kolom verwijdert zijn de resultaten ervan voorgoed weg.",
+        "source-results-warning": "De resultaten in deze kolom verwijzen naar brondata die niet meer bestaat. Je kan de data verder blijven gebruiken maar synchroniseren zal op deze kolom geen effect hebben. Als je de kolom verwijdert zijn de resultaten ervan voorgoed weg.",
         "total": "Totaal",
         "uncounted": "Niet meegeteld",
         "visible": "Eindscore wordt weergegeven",

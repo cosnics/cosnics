@@ -31,7 +31,7 @@
         "new-category": "Nieuwe categorie",
         "new-score": "Nieuwe score",
         "show": "Toon",
-        "synchronize-scores": "Synchronizeer",
+        "synchronize-scores": "Synchroniseer",
         "update-final-scores": "Update eindcijfers"
     }
 }
