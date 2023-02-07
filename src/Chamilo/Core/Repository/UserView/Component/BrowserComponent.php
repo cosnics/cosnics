@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -19,22 +18,18 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * @package core\repository\user_view
+ * @package Chamilo\Core\Repository\UserView\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BrowserComponent extends Manager implements TableSupport, DelegateComponent
+class BrowserComponent extends Manager implements DelegateComponent
 {
 
-    /**
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
      * Runs this component and displays its output.
@@ -43,33 +38,31 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     {
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->getButtonToolbarRenderer()->render();
         $html[] = $this->renderTable();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @return ButtonToolBarRenderer
-     */
-    public function getButtonToolbarRenderer()
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
+            $translator = $this->getTranslator();
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Add', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
+                    $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                     $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE]), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
+                    $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
                     $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -86,6 +79,9 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
+    /**
+     * @throws \QuickformException
+     */
     public function getUserViewTableCondition(): AndCondition
     {
         $condition = new EqualityCondition(
