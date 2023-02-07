@@ -18,7 +18,13 @@
             unsigned="1"
             notnull="1"
             length="1"
-            default="6" />
+            default="0" />
+        <property
+            name="check_for_plagiarism"
+            type="integer"
+            unsigned="1"
+            length="3"
+            default="0" />
     </properties>
     <index
         name="publication_id"

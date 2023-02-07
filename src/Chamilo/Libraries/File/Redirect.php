@@ -235,6 +235,7 @@ class Redirect
         }
 
         $response = new RedirectResponse($url);
+        session_write_close();
         $response->send();
 
         exit();
