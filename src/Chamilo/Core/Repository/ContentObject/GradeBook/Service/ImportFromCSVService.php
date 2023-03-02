@@ -77,6 +77,7 @@ class ImportFromCSVService
         }
 
         $fields = array_merge(self::fields_validate, array());
+        $maxScores = null;
 
         $isScoresComments = $importType == self::TYPE_SCORES_COMMENTS;
 
@@ -109,6 +110,12 @@ class ImportFromCSVService
                 continue;
             }
 
+            if ($currentLine == 2 && $row_tmp[0] == 'totaal')
+            {
+                $maxScores = $this->processMaxScores($currentLine, $row_tmp, $fields, $isScoresComments);
+                continue;
+            }
+
             $result = $this->processResults($currentLine, $row_tmp, $fields);
             $user = $this->findUser($result['id'], $users);
             if (!isset($user))
@@ -129,7 +136,22 @@ class ImportFromCSVService
             $results[] = $result;
         }
 
-        return ['fields' => array_values($fields), 'results' => $results];
+        return ['fields' => array_values($fields), 'max_scores' => $maxScores, 'results' => $results];
+    }
+
+    protected function processMaxScores(int $line, array $row_tmp, array $fields, $isScoresComments): array
+    {
+        if ($isScoresComments) {
+            return ['col3' => (float) $row_tmp[3]];
+        }
+        $result = [];
+        foreach (array_keys($fields) as $index => $key)
+        {
+            if ($index >= 3) {
+                $result[$key] = (float) $row_tmp[$index];
+            }
+        }
+        return $result;
     }
 
     /**
@@ -261,7 +283,7 @@ class ImportFromCSVService
             {
                 if (array_key_exists($user->getId(), $scores))
                 {
-                    $this->createGradeBookScoreFromImport($gradeBookData, $column, $scores[$user->getId()]);
+                    $this->createGradeBookScoreFromImport($gradeBookData, $column, $scores[$user->getId()], $columnJsonModel->getMaxScore());
                 }
                 else
                 {
@@ -306,17 +328,29 @@ class ImportFromCSVService
      * @param GradeBookData $gradeBookData
      * @param GradeBookColumn $column
      * @param GradeBookCSVImportScoreJSONModel $scoreJsonModel
+     * @param float|null $maxScore
      *
      * @return GradeBookScore
      */
-    public function createGradeBookScoreFromImport(GradeBookData $gradeBookData, GradeBookColumn $column, GradeBookCSVImportScoreJSONModel $scoreJsonModel): GradeBookScore
+    public function createGradeBookScoreFromImport(GradeBookData $gradeBookData, GradeBookColumn $column, GradeBookCSVImportScoreJSONModel $scoreJsonModel, ?float $maxScore): GradeBookScore
     {
         $score = new GradeBookScore();
         $score->setGradeBookData($gradeBookData);
         $score->setGradeBookColumn($column);
         $score->setTargetUserId($scoreJsonModel->getId());
         $score->setOverwritten(true);
-        $score->setNewScore($scoreJsonModel->getScore());
+        if (empty($maxScore) || empty($scoreJsonModel->getScore()))
+        {
+            $score->setNewScore($scoreJsonModel->getScore());
+        }
+        if (!empty($maxScore) && !empty($scoreJsonModel->getScore()))
+        {
+            $score->setNewScore(($scoreJsonModel->getScore() / $maxScore) * 100);
+        }
+        else
+        {
+            $score->setNewScore($scoreJsonModel->getScore());
+        }
         $score->setNewScoreAuthAbsent($scoreJsonModel->isAuthAbsent());
         $score->setComment($scoreJsonModel->getComment());
         return $score;
