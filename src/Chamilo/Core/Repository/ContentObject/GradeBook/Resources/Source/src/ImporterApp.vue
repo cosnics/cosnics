@@ -89,7 +89,7 @@
                     <p>{{ $t('import-results-overview') }}</p>
                     <div><button :title="$t('import')" class="btn btn-primary" @click="uploadResults"><span aria-hidden="true" class="glyphicon glyphicon-arrow-right"></span> {{ $t('import') }}</button></div>
                 </div>
-                <imports-table :fields="fields" :results="results" />
+                <imports-table :fields="fields" :results="results" :max-scores="maxScores" />
             </template>
             <div v-if="previewActive && hasError" class="import-errors alert alert-danger">
                 <div class="errors" v-html="error"></div>
@@ -113,7 +113,7 @@ import {Component, Prop, Vue} from 'vue-property-decorator';
 import ImportsTable from './components/ImportsTable.vue';
 import MissingUsersTable from './components/MissingUsersTable.vue';
 import CsvImportInfo from './components/CSVImportInfo.vue';
-import {CSVImportField, CSVImportResult} from './domain/GradeBook';
+import {CSVImportField, CSVImportResult, CSVImportTotals} from './domain/GradeBook';
 import axios from 'axios';
 import {logResponse} from './domain/Log';
 
@@ -138,6 +138,7 @@ export default class ImporterApp extends Vue {
     private missingUsers: any[] = [];
     private results: CSVImportResult[] = [];
     private fields: CSVImportField[] = [];
+    private maxScores: CSVImportTotals = {};
 
     @Prop({type: Object, default: () => null}) readonly apiConfig!: APIConfig;
     @Prop({type: Number, required: true}) readonly gradebookDataId!: number;
@@ -202,8 +203,9 @@ export default class ImporterApp extends Vue {
             const res = await axios.post(this.apiConfig.processCsvURL, formData, {timeout: TIMEOUT_SEC * 1000});
             logResponse(res.data);
             if (res.data?.fields !== undefined && res.data?.results !== undefined) {
-                const {fields, results} = res.data;
+                const {fields, max_scores, results} = res.data;
                 this.fields = fields;
+                this.maxScores = max_scores || {};
                 this.results = results;
             } else if (res.data?.result_code === 500) {
                 this.has500Error = true;
@@ -256,6 +258,7 @@ export default class ImporterApp extends Vue {
     getResultsForField(scoreField: CSVImportField, commentField: CSVImportField|null = null) {
         return {
             label: scoreField.label,
+            maxScore: this.maxScores[scoreField.key] || null,
             results: this.results.filter(v => v.valid).map(v => {
                 const score = v[scoreField.key];
                 const comment = commentField === null ? null : (v[commentField.key] || null);

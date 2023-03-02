@@ -35,6 +35,9 @@
                 <tr class="table-row table-head-row">
                     <th v-for="field in fields" :key="`field-${field.key}`" class="table-cell" :class="{'mod-score': field.type === 'score'}">
                         {{ field.label }}
+                        <span v-if="maxScores[field.key]" class="total">
+                            {{ maxScores[field.key]}}
+                        </span>
                     </th>
                 </tr>
             </thead>
@@ -62,7 +65,7 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
-import {CSVImportField, CSVImportResult} from '../domain/GradeBook';
+import {CSVImportField, CSVImportResult, CSVImportTotals} from '../domain/GradeBook';
 
 @Component({})
 export default class ImportsTable extends Vue {
@@ -78,6 +81,7 @@ export default class ImportsTable extends Vue {
 
     @Prop({type: Array, default: () => []}) readonly fields!: CSVImportField[];
     @Prop({type: Array, default: () => []}) readonly results!: CSVImportResult[];
+    @Prop({type: Object}) readonly maxScores!: CSVImportTotals;
 
     isNullScore(score: number|string|null) {
         return score === null;
@@ -181,6 +185,16 @@ thead {
 
 .table-cell.mod-score {
     text-align: right;
+}
+
+.table-cell .total {
+    background-color: #eff6f6;
+    border: 1px solid #dfecec;
+    border-radius: 3px;
+    color: #549292;
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding-inline: 0.3rem;
 }
 
 .table-cell.mod-comment {

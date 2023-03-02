@@ -68,6 +68,10 @@ export interface CSVImportResult {
     [key: string]: string|number|null;
 }
 
+export interface CSVImportTotals {
+    [key: string]: number
+}
+
 export type ResultsData = Record<ColumnId, Record<number, GradeScore>>;
 
 export default class GradeBook {

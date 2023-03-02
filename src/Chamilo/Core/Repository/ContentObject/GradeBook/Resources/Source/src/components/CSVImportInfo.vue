@@ -8,6 +8,7 @@
         "import-score": "One of the following: <ul><li>number</li><li>aabs (authorized absent)</li></ul>",
         "import-score-title": "Choose a title for the column of scores you wish to import.",
         "mandatory-fields": "mandatory fields are marked in bold",
+        "max-score": "Max score (for example: 20)",
         "title": "title"
     },
     "nl": {
@@ -18,6 +19,7 @@
         "import-score": "Een van de volgende: <ul><li>cijfer</li><li>gafw (gewettigd afwezig)</li></ul>",
         "import-score-title": "Kies hier een titel voor de scorekolom die je wenst te importeren.",
         "mandatory-fields": "verplichte velden zijn in het vet aangeduid",
+        "max-score": "Maximumscore (bvb.: 20)",
         "title": "titel"
     }
 }
@@ -26,15 +28,20 @@
 <template>
     <div>
         <p>{{ $t('csv-must-look-like') }} ({{ $t('mandatory-fields') }}):</p>
-        <div class="csv-example">
-            <template v-if="importType === 'scores'">
-                <div><b>lastname</b>;<b>firstname</b>;<b class="csv-field csv-header-id">id</b>;<b id="csv-header-title-1" class="csv-field csv-header-title-1 u-cursor-help">{{ $t('title') }} 1</b>;<span id="csv-header-title-2" class="csv-field csv-header-title-2 u-cursor-help">{{ $t('title') }} 2</span>;&mldr;</div>
-                <div><b>xxx</b>;<b>xxx</b>;<b id="csv-expl-id" class="csv-field csv-field-id u-cursor-help">xxx</b>;<b id="csv-expl-title-1" class="csv-field csv-field-title-1 u-cursor-help">xxx</b>;<span id="csv-expl-title-2" class="csv-field csv-field-title-2 u-cursor-help">xxx</span>;&mldr;</div>
-            </template>
-            <template v-else>
-                <div><b>lastname</b>;<b>firstname</b>;<b class="csv-field csv-header-id">id</b>;<b id="csv-header-title-1" class="csv-field csv-header-title-1 u-cursor-help">{{ $t('title') }}</b>;<b id="csv-header-comment" class="csv-field csv-header-comment u-cursor-help">{{ $t('comment') }}</b></div>
-                <div><b>xxx</b>;<b>xxx</b>;<b id="csv-expl-id" class="csv-field csv-field-id u-cursor-help">xxx</b>;<b id="csv-expl-title-1" class="csv-field csv-field-title-1 u-cursor-help">xxx</b>;<b>xxx</b></div>
-            </template>
+        <div class="csv-example" v-if="importType === 'scores'">
+            <div><b>lastname</b>;<b>firstname</b>;<b class="csv-field csv-header-id">id</b>;<b id="csv-header-title-1" class="csv-field csv-header-title-1 u-cursor-help">{{ $t('title') }} 1</b>;<span id="csv-header-title-2" class="csv-field csv-header-title-2 u-cursor-help">{{ $t('title') }} 2</span>;&mldr;</div>
+            <div><b>xxx</b>;<b>xxx</b>;<b id="csv-expl-id" class="csv-field csv-field-id u-cursor-help">xxx</b>;<b id="csv-expl-title-1" class="csv-field csv-field-title-1 u-cursor-help">xxx</b>;<span id="csv-expl-title-2" class="csv-field csv-field-title-2 u-cursor-help">xxx</span>;&mldr;</div>
+        </div>
+        <div class="csv-example" v-else>
+            <div><b>lastname</b>;<b>firstname</b>;<b class="csv-field csv-header-id">id</b>;<b id="csv-header-title-1" class="csv-field csv-header-title-1 u-cursor-help">{{ $t('title') }}</b>;<b id="csv-header-comment" class="csv-field csv-header-comment u-cursor-help">{{ $t('comment') }}</b></div>
+            <div><b>xxx</b>;<b>xxx</b>;<b id="csv-expl-id" class="csv-field csv-field-id u-cursor-help">xxx</b>;<b id="csv-expl-title-1" class="csv-field csv-field-title-1 u-cursor-help">xxx</b>;<b>xxx</b></div>
+        </div>
+        <p style="max-width: 90ch">Indien je geen procentuele score wil importeren maar een andere totaalscore (bvb. op 20 punten) voeg je een extra tweede regel in die er als volgt uitziet:</p>
+        <div class="csv-example" v-if="importType === 'scores'">
+            <div><b>totaal</b>;;;<b id="csv-expl-max-1" class="csv-field csv-field-title-1 u-cursor-help">xxx</b>;<span id="csv-expl-max-2" class="csv-field csv-field-title-2 u-cursor-help">xxx</span>;&mldr;</div>
+        </div>
+        <div class="csv-example" v-else>
+            <div><b>totaal</b>;;;<b id="csv-expl-max-1" class="csv-field csv-field-title-1 u-cursor-help">xxx</b>;</div>
         </div>
         <b-popover target="csv-expl-id" triggers="hover" placement="bottom">
             <div class="csv-import-help mod-list">
@@ -48,11 +55,17 @@
         <b-popover target="csv-expl-title-1" triggers="hover" placement="bottom">
             <div class="csv-import-help mod-list" v-html="$t('import-score')"></div>
         </b-popover>
+        <b-popover target="csv-expl-max-1" triggers="hover" placement="bottom">
+            <div class="csv-import-help" v-html="$t('max-score')"></div>
+        </b-popover>
         <b-popover target="csv-header-title-2" triggers="hover" placement="bottom">
             <div class="csv-import-help" v-html="$t('import-score-title')"></div>
         </b-popover>
         <b-popover target="csv-expl-title-2" triggers="hover" placement="bottom">
             <div class="csv-import-help mod-list" v-html="$t('import-score')"></div>
+        </b-popover>
+        <b-popover target="csv-expl-max-2" triggers="hover" placement="bottom">
+            <div class="csv-import-help" v-html="$t('max-score')"></div>
         </b-popover>
         <b-popover target="csv-header-comment" triggers="hover" placement="bottom">
             <div class="csv-import-help" v-html="$t('import-comment-title')"></div>
