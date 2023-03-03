@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\UserView\Component;
 
 use Chamilo\Core\Repository\UserView\Manager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
+use Chamilo\Core\Repository\UserView\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Table\UserViewTableRenderer;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -12,6 +13,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -84,7 +87,9 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function getUserViewTableCondition(): AndCondition
     {
-        $condition = new EqualityCondition(
+        $and_conditions = [];
+
+        $and_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(UserView::class, UserView::PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id())
         );
@@ -101,14 +106,10 @@ class BrowserComponent extends Manager implements DelegateComponent
             );
             $or_condition = new OrCondition($or_conditions);
 
-            $and_conditions = [];
-            $and_conditions[] = $condition;
             $and_conditions[] = $or_condition;
-
-            $condition = new AndCondition($and_conditions);
         }
 
-        return $condition;
+        return new AndCondition($and_conditions);
     }
 
     public function getUserViewTableRenderer(): UserViewTableRenderer
@@ -125,7 +126,9 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     protected function renderTable(): string
     {
-        $totalNumberOfItems = $this->getUserService()->countUsers($this->getUserViewTableCondition());
+        $totalNumberOfItems =
+            DataManager::count(UserView::class, new DataClassCountParameters($this->getUserViewTableCondition()));
+
         $userViewTableRenderer = $this->getUserViewTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -133,12 +136,13 @@ class BrowserComponent extends Manager implements DelegateComponent
             $totalNumberOfItems
         );
 
-        $users = $this->getUserService()->findUsers(
-            $this->getUserViewTableCondition(), $tableParameterValues->getOffset(),
-            $tableParameterValues->getNumberOfItemsPerPage(),
-            $userViewTableRenderer->determineOrderBy($tableParameterValues)
+        $userViews = DataManager::retrieves(
+            UserView::class, new DataClassRetrievesParameters(
+                $this->getUserViewTableCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+                $tableParameterValues->getOffset(), $userViewTableRenderer->determineOrderBy($tableParameterValues)
+            )
         );
 
-        return $userViewTableRenderer->render($tableParameterValues, $users);
+        return $userViewTableRenderer->render($tableParameterValues, $userViews);
     }
 }

@@ -14,11 +14,10 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
  * Extension on the dependency injection container.
  * Loads local services and parameters for this package.
  *
- * @see http://symfony.com/doc/current/components/dependency_injection/compilation.html
- *
+ * @see     http://symfony.com/doc/current/components/dependency_injection/compilation.html
  * @package Chamilo\Libraries\DependencyInjection
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     implements ExtensionInterface, ICompilerPassExtension
@@ -41,6 +40,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'services.xml'
             ],
             'Chamilo\Core\Repository\Feedback' => ['services.xml'],
+            'Chamilo\Core\Repository\UserView' => ['tables.xml'],
             'Chamilo\Core\Repository\Workspace' => ['services.xml']
         ];
     }
