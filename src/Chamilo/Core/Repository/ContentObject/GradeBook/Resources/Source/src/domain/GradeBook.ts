@@ -89,11 +89,13 @@ export default class GradeBook {
     public readonly dataId: number;
     public currentVersion: number|null;
     public readonly title: string;
+    public displayTotal: number|null;
 
-    constructor(dataId: number, currentVersion: number|null, title: string) {
+    constructor(dataId: number, currentVersion: number|null, title: string, displayTotal: number|null) {
         this.dataId = dataId;
         this.title = title;
         this.currentVersion = currentVersion;
+        this.displayTotal = displayTotal;
     }
 
     get allCategories(): Category[] {
@@ -244,7 +246,14 @@ export default class GradeBook {
             return 0;
         }
 
-        return endResult / maxWeight * 100;
+        return (endResult / maxWeight) * this.getDisplayTotal();
+    }
+
+    getDisplayTotal(): number {
+        if (this.displayTotal !== null && this.displayTotal !== 100) {
+            return this.displayTotal;
+        }
+        return 100;
     }
 
     isOverwrittenResult(columnId: ColumnId, userId: number): boolean {
@@ -432,7 +441,7 @@ export default class GradeBook {
     }
 
     static from(gradeBookObject: any): GradeBook {
-        const gradeBook = new GradeBook(gradeBookObject.dataId, gradeBookObject.version, gradeBookObject.title);
+        const gradeBook = new GradeBook(gradeBookObject.dataId, gradeBookObject.version, gradeBookObject.title, gradeBookObject.displayTotal);
         gradeBook.gradeItems = gradeBookObject.gradeItems;
         gradeBook.gradeColumns = gradeBookObject.gradeColumns;
         gradeBook.categories = gradeBookObject.categories;

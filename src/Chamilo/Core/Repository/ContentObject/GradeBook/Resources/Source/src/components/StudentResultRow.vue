@@ -32,7 +32,7 @@
                 <td v-else :key="`col-${index}`"></td>
             </template>
             <td class="col-sticky table-student-total u-text-end" :class="{'unreleased-score-cell': gradeBook.hasUnreleasedScores, 'mod-needs-update': totalNeedsUpdate}">
-                <i v-if="totalNeedsUpdate" class="fa fa-exclamation-circle" :title="$t('not-yet-updated')" aria-hidden="true"></i><span v-if="totalNeedsUpdate" class="sr-only">{{ $t('not-yet-updated') }}</span>{{ endResult|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span>
+                <i v-if="totalNeedsUpdate" class="fa fa-exclamation-circle" :title="$t('not-yet-updated')" aria-hidden="true"></i><span v-if="totalNeedsUpdate" class="sr-only">{{ $t('not-yet-updated') }}</span>{{ endResult|formatNum2 }}<template v-if="gradeBook.getDisplayTotal() === 100"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></template>
             </td>
         </template>
         <td v-else :colspan="gradeBook.gradeColumns.length + 1" class="table-student-unsychronized">
@@ -73,7 +73,7 @@ type Column = EmptyColumn|ScoreColumn;
             if (v === null) {
                 return '';
             }
-            return v.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            return v.toLocaleString(undefined, {maximumFractionDigits: 2});
         }
     }
 })

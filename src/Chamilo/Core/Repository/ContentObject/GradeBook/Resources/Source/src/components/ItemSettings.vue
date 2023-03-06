@@ -189,8 +189,8 @@ export default class ItemSettings extends Vue {
         this.onGradeColumnChange();
     }
 
-    setWeight(event: any) {
-        const weight = parseFloat(event.target.value);
+    setWeight(event: Event) {
+        const weight = parseFloat((event!.target as HTMLInputElement).value);
         this.gradeBook.setWeight(this.columnId, isNaN(weight) ? null : weight);
         this.onGradeColumnChange();
     }

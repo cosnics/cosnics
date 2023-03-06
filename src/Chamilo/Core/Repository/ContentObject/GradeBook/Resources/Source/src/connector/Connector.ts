@@ -239,6 +239,15 @@ export default class Connector {
         });
     }
 
+    updateDisplayTotal(displayTotal: number|null) {
+        this.addToQueue(async () => {
+            const parameters = {
+                'displayTotal': displayTotal
+            };
+            await this.executeAPIRequest(this.apiConfig.updateDisplayTotalURL, parameters);
+        });
+    }
+
     protected addToQueue(callback: Function) {
         this.queue.add(async () => {
             await callback();

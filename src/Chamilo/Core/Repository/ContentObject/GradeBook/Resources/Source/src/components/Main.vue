@@ -76,16 +76,17 @@
             </div>
             <div class="gradebook-table-container">
                 <grades-table :grade-book="gradeBook" :search-terms="studentSearchTerms" :busy="tableBusy" :add-column-id="addColumnId" :save-column-id="saveColumnId" :save-category-id="saveCategoryId" :items-per-page="itemsPerPage" :grade-book-root-url="apiConfig.gradeBookRootURL"
-                              @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"
+                              @item-settings="itemSettings = $event" @category-settings="categorySettings = $event" @final-score-settings="showFinalScoreSettings = true"
                               @update-score-comment="onUpdateScoreComment" @overwrite-result="onOverwriteResult" @revert-overwritten-result="onRevertOverwrittenResult"
                               @change-category="onChangeCategory" @move-category="onMoveCategory"
-                              @change-gradecolumn="onChangeGradeColumn" @change-gradecolumn-category="onChangeGradeColumnCategory" @move-gradecolumn="onMoveGradeColumn"></grades-table>
+                              @change-gradecolumn="onChangeGradeColumn" @change-gradecolumn-category="onChangeGradeColumnCategory" @move-gradecolumn="onMoveGradeColumn" @change-display-total="onChangeDisplayTotal"></grades-table>
             </div>
         </div>
         <div v-else class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
         <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null"
                        @item-settings="itemSettings = $event" @change-gradecolumn="onChangeGradeColumn" @add-subitem="onAddSubItem" @remove-subitem="onRemoveSubItem" @remove-column="onRemoveColumn" />
         <category-settings v-if="selectedCategory" :grade-book="gradeBook" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory" @remove-category="onRemoveCategory" />
+        <final-score-settings v-if="showFinalScoreSettings" :grade-book="gradeBook" @close="showFinalScoreSettings = false" @change-display-total="onChangeDisplayTotal" />
         <error-display v-if="errorData" @close="closeErrorDisplay">{{ $t(`error-${errorData.type}`) }}</error-display>
     </div>
 </template>
@@ -97,6 +98,7 @@
     import GradeBook, {Category, GradeColumn, GradeItem, ColumnId, GradeScore, ResultsData} from '../domain/GradeBook';
     import ItemSettings from './ItemSettings.vue';
     import CategorySettings from './CategorySettings.vue';
+    import FinalScoreSettings from './FinalScoreSettings.vue';
     import Connector from '../connector/Connector';
     import APIConfig from "@/connector/APIConfig";
     import ErrorDisplay from './ErrorDisplay.vue';
@@ -104,13 +106,14 @@
     const ITEMS_PER_PAGE_KEY = 'chamilo-gradebook.itemsPerPage';
 
     @Component({
-        components: {ErrorDisplay, GradesTable, GradesDropdown, ItemSettings, CategorySettings }
+        components: {ErrorDisplay, GradesTable, GradesDropdown, ItemSettings, CategorySettings, FinalScoreSettings }
     })
     export default class Main extends Vue {
         private gradeBook: GradeBook|null = null;
         private connector: Connector|null = null;
         private itemSettings: number|null = null;
         private categorySettings: number|null = null;
+        private showFinalScoreSettings = false;
         private studentSearchTerm = '';
         private studentSearchTerms: string[] = [];
         private tableBusy = false;
@@ -265,6 +268,11 @@
             this.connector?.updateCategory(category, () => {
                 this.saveCategoryId = null;
             });
+        }
+
+        onChangeDisplayTotal() {
+            if (!this.gradeBook) { return; }
+            this.connector?.updateDisplayTotal(this.gradeBook.displayTotal);
         }
 
         async onMoveCategory(category: Category) {
