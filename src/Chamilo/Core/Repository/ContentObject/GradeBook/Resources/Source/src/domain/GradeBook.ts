@@ -214,7 +214,7 @@ export default class GradeBook {
         return score.sourceScore;
     }
 
-    getEndResult(userId: number) {
+    getEndResult(userId: number, useDisplayTotal = true) {
         let endResult = 0;
         let maxWeight = 0;
         this.gradeColumns.filter(column => column.countForEndResult).forEach(column => {
@@ -246,7 +246,11 @@ export default class GradeBook {
             return 0;
         }
 
-        return (endResult / maxWeight) * this.getDisplayTotal();
+        if (useDisplayTotal) {
+            return (endResult / maxWeight) * this.getDisplayTotal();
+        }
+
+        return (endResult / maxWeight) * 100;
     }
 
     getDisplayTotal(): number {
@@ -292,7 +296,7 @@ export default class GradeBook {
         const total = this.getResult('totals', user.id);
         if (total === null) { return false; } // unsynchronized user, cannot update
         if (typeof total !== 'number') { return true; }
-        return total.toFixed(2) !== this.getEndResult(user.id).toFixed(2);
+        return total.toFixed(2) !== this.getEndResult(user.id, false).toFixed(2);
     }
 
     get totalsNeedUpdating(): boolean {
