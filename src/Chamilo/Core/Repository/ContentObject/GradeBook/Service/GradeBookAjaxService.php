@@ -845,4 +845,22 @@ class GradeBookAjaxService
             'totalScores' => $totalScores
         ];
     }
+
+    /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param int|null $displayTotal
+     *
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function updateDisplayTotal(int $gradeBookDataId, int $versionId, ?int $displayTotal): array
+    {
+        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData->setDisplayTotal($displayTotal);
+        $this->gradeBookService->saveGradeBook($gradebookData);
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()]
+        ];
+    }
 }

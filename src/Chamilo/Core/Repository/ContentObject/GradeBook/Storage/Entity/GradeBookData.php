@@ -62,6 +62,13 @@ class GradeBookData
     protected $title;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="display_total", type="integer", nullable=true)
+     */
+    protected $displayTotal;
+
+    /**
      * @var GradeBookItem[] | ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="GradeBookItem", mappedBy="gradebookData")
@@ -109,6 +116,7 @@ class GradeBookData
     public function __construct(string $title)
     {
         $this->title = $title;
+        $this->displayTotal = null;
         $this->gradebookItems = new ArrayCollection();
         $this->gradebookColumns = new ArrayCollection();
         $this->gradebookCategories = new ArrayCollection();
@@ -212,6 +220,26 @@ class GradeBookData
     public function setTitle(string $title): GradeBookData
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDisplayTotal(): ?int
+    {
+        return $this->displayTotal;
+    }
+
+    /**
+     * @param int|null $displayTotal
+     *
+     * @return GradeBookData
+     */
+    public function setDisplayTotal(?int $displayTotal): GradeBookData
+    {
+        $this->displayTotal = $displayTotal;
 
         return $this;
     }

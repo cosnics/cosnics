@@ -45,6 +45,7 @@ abstract class Manager extends AjaxManager
     const ACTION_REVERT_OVERWRITTEN_SCORE = 'RevertOverwrittenScore';
     const ACTION_UPDATE_SCORE_COMMENT = 'UpdateScoreComment';
     const ACTION_CALCULATE_TOTAL_SCORES = 'CalculateTotalScores';
+    const ACTION_UPDATE_DISPLAY_TOTAL = 'UpdateDisplayTotal';
     const ACTION_PROCESS_CSV = 'ProcessCSV';
     const ACTION_IMPORT = 'Import';
 
@@ -64,6 +65,7 @@ abstract class Manager extends AjaxManager
     const PARAM_SCORE_COMMENT = 'comment';
     const PARAM_IMPORT_TYPE = 'importType';
     const PARAM_IMPORT_SCORES = 'importScores';
+    const PARAM_DISPLAY_TOTAL = 'displayTotal';
 
     /**
      * @var AjaxComponent
@@ -360,5 +362,14 @@ abstract class Manager extends AjaxManager
     protected function getImportScores()
     {
         return $this->getRequest()->getFromPost(self::PARAM_IMPORT_SCORES);
+    }
+
+    /**
+     * @return int|null
+     */
+    protected function getDisplayTotal(): ?int
+    {
+        $id = $this->getRequest()->getFromPost(self::PARAM_DISPLAY_TOTAL);
+        return $id == 'null' ? null : (int) $id;
     }
 }
