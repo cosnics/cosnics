@@ -31,7 +31,7 @@
         <template v-slot:content>
             <div v-if="menuTab === 'score'" class="u-flex u-gap-small" role="tabpanel" id="score-panel">
                 <div class="number-input u-relative" :class="{'is-selected': type === 'number'}">
-                    <input id="score" class="percent-input u-font-normal" ref="score-input" type="number" min="0" max="100" :value="numValue|formatNum" autocomplete="off" @input="type = 'number'" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')" @focus="type = 'number'">
+                    <input id="score" class="percent-input u-font-normal" ref="score-input" type="number" min="0" max="100" step=".01" :value="numValue|formatNum" autocomplete="off" @input="type = 'number'" @keyup.enter="onEdit" @keyup.esc="$emit('cancel')" @focus="type = 'number'">
                     <div class="percent"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                 </div>
                 <button class="color-code amber-700" :class="{'is-selected': type === 'aabs'}" @click="setAuthAbsent" :title="$t('auth-absent')"><span>{{ $t('aabs') }}</span></button>
