@@ -75,7 +75,7 @@
                 </div>
             </div>
             <div class="gradebook-table-container">
-                <grades-table :grade-book="gradeBook" :search-terms="studentSearchTerms" :busy="tableBusy" :add-column-id="addColumnId" :save-column-id="saveColumnId" :save-category-id="saveCategoryId" :items-per-page="itemsPerPage" :grade-book-root-url="apiConfig.gradeBookRootURL"
+                <grades-table :grade-book="gradeBook" :search-terms="studentSearchTerms" :busy="tableBusy" :add-column-id="addColumnId" :save-column-id="saveColumnId" :save-category-id="saveCategoryId" :save-display-total="saveDisplayTotal" :items-per-page="itemsPerPage" :grade-book-root-url="apiConfig.gradeBookRootURL"
                               @item-settings="itemSettings = $event" @category-settings="categorySettings = $event" @final-score-settings="showFinalScoreSettings = true"
                               @update-score-comment="onUpdateScoreComment" @overwrite-result="onOverwriteResult" @revert-overwritten-result="onRevertOverwrittenResult"
                               @change-category="onChangeCategory" @move-category="onMoveCategory"
@@ -119,6 +119,7 @@
         private tableBusy = false;
         private saveColumnId: ColumnId|null = null;
         private saveCategoryId: number|null = null;
+        private saveDisplayTotal: boolean = false;
         private itemsPerPage: number = 5;
         private errorData: string|null = null;
         private addColumnId: ColumnId|null = null;
@@ -272,7 +273,10 @@
 
         onChangeDisplayTotal() {
             if (!this.gradeBook) { return; }
-            this.connector?.updateDisplayTotal(this.gradeBook.displayTotal);
+            this.saveDisplayTotal = true;
+            this.connector?.updateDisplayTotal(this.gradeBook.displayTotal, () => {
+                this.saveDisplayTotal = false;
+            });
         }
 
         async onMoveCategory(category: Category) {
@@ -472,6 +476,10 @@
 
 .u-gap-small-2x {
     gap: 10px;
+}
+
+.u-gap-small-3x {
+    gap: 15px;
 }
 
 .u-flex-wrap {

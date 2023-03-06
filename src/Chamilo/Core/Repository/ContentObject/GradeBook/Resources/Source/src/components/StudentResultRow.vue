@@ -32,7 +32,14 @@
                 <td v-else :key="`col-${index}`"></td>
             </template>
             <td class="col-sticky table-student-total u-text-end" :class="{'unreleased-score-cell': gradeBook.hasUnreleasedScores, 'mod-needs-update': totalNeedsUpdate}">
-                <i v-if="totalNeedsUpdate" class="fa fa-exclamation-circle" :title="$t('not-yet-updated')" aria-hidden="true"></i><span v-if="totalNeedsUpdate" class="sr-only">{{ $t('not-yet-updated') }}</span>{{ endResult|formatNum2 }}<template v-if="gradeBook.getDisplayTotal() === 100"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></template>
+                <div class="u-flex u-align-items-baseline u-gap-small-3x" :class="gradeBook.getDisplayTotal() === 100 ? 'u-justify-content-end' : 'u-justify-content-between'">
+                    <div v-if="gradeBook.getDisplayTotal() !== 100" style="font-size: 1.1rem;color:#437070;width: 50px;text-align: right">
+                        ({{ endResultPct|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span>)
+                    </div>
+                    <div>
+                        <i v-if="totalNeedsUpdate" class="fa fa-exclamation-circle" :title="$t('not-yet-updated')" aria-hidden="true"></i><span v-if="totalNeedsUpdate" class="sr-only">{{ $t('not-yet-updated') }}</span>{{ endResult|formatNum2 }}<template v-if="gradeBook.getDisplayTotal() === 100"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></template>
+                    </div>
+                </div>
             </td>
         </template>
         <td v-else :colspan="gradeBook.gradeColumns.length + 1" class="table-student-unsychronized">
@@ -110,6 +117,10 @@ export default class StudentResultRow extends Vue {
 
     get endResult() {
         return this.gradeBook.getEndResult(this.userId);
+    }
+
+    get endResultPct() {
+        return this.gradeBook.getEndResult(this.userId, false);
     }
 
     get displayedCategories(): Category[] {

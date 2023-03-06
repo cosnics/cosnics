@@ -239,12 +239,13 @@ export default class Connector {
         });
     }
 
-    updateDisplayTotal(displayTotal: number|null) {
+    updateDisplayTotal(displayTotal: number|null, callback: Function) {
         this.addToQueue(async () => {
             const parameters = {
                 'displayTotal': displayTotal
             };
             await this.executeAPIRequest(this.apiConfig.updateDisplayTotalURL, parameters);
+            callback();
         });
     }
 

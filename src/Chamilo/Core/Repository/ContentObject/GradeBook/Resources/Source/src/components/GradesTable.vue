@@ -114,9 +114,14 @@
                                 <div class="u-flex u-align-items-center u-justify-content-end u-gap-small-2x">
                                     <div class="weight u-font-normal u-cursor-pointer" style="width: 40px" @dblclick="showFinalScoreDialog">
                                         <template v-if="gradeBook.getDisplayTotal() === 100"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></template>
-                                        <template v-else>{{ gradeBook.getDisplayTotal() }} pt.</template>
+                                        <template v-else>/ {{ gradeBook.getDisplayTotal() }}</template>
                                     </div>
-                                    <div class="final-score-released" :title="gradeBook.hasUnreleasedScores ? $t('invisible') : $t('visible')"><i class="fa" :class="{'fa-eye': !gradeBook.hasUnreleasedScores, 'fa-eye-slash': gradeBook.hasUnreleasedScores}" aria-hidden="true"></i><span class="sr-only">{{gradeBook.hasUnreleasedScores ? $t('invisible') : $t('visible')}}</span></div>
+                                    <div>
+                                        <div v-if="!saveDisplayTotal" class="final-score-released" :title="gradeBook.hasUnreleasedScores ? $t('invisible') : $t('visible')"><i class="fa" :class="{'fa-eye': !gradeBook.hasUnreleasedScores, 'fa-eye-slash': gradeBook.hasUnreleasedScores}" aria-hidden="true"></i><span class="sr-only">{{gradeBook.hasUnreleasedScores ? $t('invisible') : $t('visible')}}</span></div>
+                                        <div class="spin" role="status" :aria-busy="saveDisplayTotal" :aria-label="$t('saving')">
+                                            <div v-if="saveDisplayTotal" aria-hidden="true" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </template>
                         </th>
@@ -201,6 +206,7 @@ export default class GradesTable extends Vue {
     @Prop({type: [String, Number], default: null}) readonly addColumnId!: ColumnId|null;
     @Prop({type: [String, Number], default: null}) readonly saveColumnId!: ColumnId|null;
     @Prop({type: Number, default: null}) readonly saveCategoryId!: number|null;
+    @Prop({type: Boolean, default: false}) readonly saveDisplayTotal!: boolean;
     @Prop({type: Number, default: 5}) readonly itemsPerPage!: number;
     @Prop({type: String, default: ''}) readonly gradeBookRootUrl!: string;
 
