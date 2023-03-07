@@ -98,8 +98,11 @@ class ParametersHandler
         string $dataClassName, DataClassBasicRetrieveParameters $parameters
     ): ParametersHandler
     {
-        $this->setDataClassPropertiesClassName($dataClassName, $parameters);
-        $this->handleCompositeDataClassJoins($dataClassName, $parameters);
+        if (!$parameters->getRetrieveProperties() instanceof RetrieveProperties)
+        {
+            $this->setDataClassPropertiesClassName($dataClassName, $parameters);
+            $this->handleCompositeDataClassJoins($dataClassName, $parameters);
+        }
 
         return $this;
     }

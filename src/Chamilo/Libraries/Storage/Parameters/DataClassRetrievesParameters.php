@@ -19,12 +19,12 @@ class DataClassRetrievesParameters extends DataClassBasicRetrieveParameters
 
     public function __construct(
         ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null,
-        ?Joins $joins = null, ?bool $distinct = false, ?GroupBy $groupBy = null, ?Condition $havingCondition = null,
+        ?Joins $joins = null, ?GroupBy $groupBy = null, ?Condition $havingCondition = null,
         ?RetrieveProperties $retrieveProperties = null
     )
     {
         parent::__construct(
-            $condition, $joins, $retrieveProperties, $orderBy, $groupBy, $havingCondition, $count, $offset, $distinct
+            $condition, $joins, $retrieveProperties, $orderBy, $groupBy, $havingCondition, $count, $offset
         );
     }
 }

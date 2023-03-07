@@ -8,12 +8,11 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\Parameters
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be> - Added GroupBy
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be> - Added GroupBy
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class RecordRetrievesParameters extends DataClassRetrievesParameters
 {
@@ -25,7 +24,7 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
     )
     {
         parent::__construct(
-            $condition, $count, $offset, $orderBy, $joins, false, $groupBy, $havingCondition
+            $condition, $count, $offset, $orderBy, $joins, $groupBy, $havingCondition
         );
 
         $this->setRetrieveProperties($retrieveProperties);

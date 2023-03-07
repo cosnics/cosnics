@@ -35,12 +35,12 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
      */
     private array $configuration;
 
-    private ?AdvancedElementFinderElements $defaultValues;
+    private ?AdvancedElementFinderElements $defaultValues = null;
 
     /**
      * List of types of elements on which can be searched
      */
-    private ?AdvancedElementFinderElementTypes $element_types;
+    private ?AdvancedElementFinderElementTypes $element_types = null;
 
     private int $height;
 
