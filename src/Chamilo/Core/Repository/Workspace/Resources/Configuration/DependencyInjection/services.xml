@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
-        <defaults public="true"/>
 
-        <prototype namespace="Chamilo\Core\Repository\Workspace\"
-                   resource="../../../{Service,Repository}/*"/>
+        <service id="Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService"/>
+        <service id="Chamilo\Core\Repository\Workspace\Service\ContentObjectService"/>
+        <service id="Chamilo\Core\Repository\Workspace\Service\EntityRelationService"/>
+        <service id="Chamilo\Core\Repository\Workspace\Service\EntityService"/>
+        <service id="Chamilo\Core\Repository\Workspace\Service\RightsService"/>
+        <service id="Chamilo\Core\Repository\Workspace\Service\WorkspaceService"/>
+        <service id="Chamilo\Core\Repository\Workspace\Service\WorkspaceUserService"/>
+
+        <service id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository"/>
+        <service id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
+        <service id="Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository"/>
+        <service id="Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository"/>
 
     </services>
 

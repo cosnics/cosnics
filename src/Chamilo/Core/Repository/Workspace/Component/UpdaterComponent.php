@@ -3,8 +3,6 @@ namespace Chamilo\Core\Repository\Workspace\Component;
 
 use Chamilo\Core\Repository\Workspace\Form\WorkspaceForm;
 use Chamilo\Core\Repository\Workspace\Manager;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -15,11 +13,10 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package Chamilo\Core\Repository\Workspace\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class UpdaterComponent extends TabComponent
 {
@@ -35,7 +32,7 @@ class UpdaterComponent extends TabComponent
 
         $breadcrumb_trail->add(
             new Breadcrumb(
-                $this->get_url(array(Manager::PARAM_ACTION => $browserSource)),
+                $this->get_url([Manager::PARAM_ACTION => $browserSource]),
                 Translation::get($browserSource . 'Component')
             )
         );
@@ -51,7 +48,7 @@ class UpdaterComponent extends TabComponent
         /** @var Workspace $workspace */
         $workspace = DataManager::retrieve_by_id(Workspace::class, $workspaceId);
 
-        $form = new WorkspaceForm($this->get_url(array(self::PARAM_WORKSPACE_ID => $workspace->getId())), $workspace);
+        $form = new WorkspaceForm($this->get_url([self::PARAM_WORKSPACE_ID => $workspace->getId()]), $workspace);
 
         if ($form->validate())
         {
@@ -61,8 +58,7 @@ class UpdaterComponent extends TabComponent
                 $values[Workspace::PROPERTY_CREATOR_ID] = $workspace->getCreatorId();
                 $values[Workspace::PROPERTY_CREATION_DATE] = $workspace->getCreationDate();
 
-                $workspaceService = new WorkspaceService(new WorkspaceRepository());
-                $success = $workspaceService->updateWorkspace($workspace, $values);
+                $success = $this->getWorkspaceService()->updateWorkspace($workspace, $values);
 
                 if ($success)
                 {
@@ -72,7 +68,7 @@ class UpdaterComponent extends TabComponent
                 $translation = $success ? 'ObjectUpdated' : 'ObjectNotUpdated';
 
                 $message = Translation::get(
-                    $translation, array('OBJECT' => Translation::get('Workspace')), StringUtilities::LIBRARIES
+                    $translation, ['OBJECT' => Translation::get('Workspace')], StringUtilities::LIBRARIES
                 );
             }
             catch (Exception $ex)
@@ -84,7 +80,7 @@ class UpdaterComponent extends TabComponent
             $source = $this->getRequest()->get(self::PARAM_BROWSER_SOURCE);
             $returnComponent = isset($source) ? $source : self::ACTION_BROWSE;
 
-            $this->redirectWithMessage($message, !$success, array(self::PARAM_ACTION => $returnComponent));
+            $this->redirectWithMessage($message, !$success, [self::PARAM_ACTION => $returnComponent]);
         }
         else
         {

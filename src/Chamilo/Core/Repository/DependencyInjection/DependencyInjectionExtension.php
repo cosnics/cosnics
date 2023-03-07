@@ -41,7 +41,8 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
             ],
             'Chamilo\Core\Repository\Feedback' => ['services.xml'],
             'Chamilo\Core\Repository\UserView' => ['tables.xml'],
-            'Chamilo\Core\Repository\Workspace' => ['services.xml']
+            'Chamilo\Core\Repository\Workspace' => ['services.xml', 'tables.xml'],
+            'Chamilo\Core\Repository\Workspace\Favourite' => ['services.xml', 'tables.xml']
         ];
     }
 

@@ -51,7 +51,7 @@ class EntityRelationService
 
     /**
      *
-     * @param integer[] $entities
+     * @param integer[][] $entities
      * @param integer $right
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
      *

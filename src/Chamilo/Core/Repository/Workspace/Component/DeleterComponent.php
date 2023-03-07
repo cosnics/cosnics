@@ -38,8 +38,8 @@ class DeleterComponent extends Manager
                 $workspaceIdentifiers = array($workspaceIdentifiers);
             }
 
-            $workspaceService = new WorkspaceService(new WorkspaceRepository());
-            $rightsService = RightsService::getInstance();
+            $workspaceService = $this->getWorkspaceService();
+            $rightsService = $this->getRightsService();
 
             foreach ($workspaceIdentifiers as $workspaceIdentifier)
             {

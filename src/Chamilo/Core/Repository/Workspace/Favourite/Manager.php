@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Favourite;
 
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Core\Repository\Workspace\Favourite\Service\FavouriteService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
@@ -13,31 +14,31 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    public const ACTION_BROWSE = 'Browser';
     public const ACTION_CREATE = 'Creator';
     public const ACTION_DELETE = 'Deleter';
 
     public const CONTEXT = __NAMESPACE__;
-    public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public const PARAM_ACTION = 'favourite_action';
     public const PARAM_FAVOURITE_ID = 'favourite_id';
 
-    /**
-     * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
-     */
-    public function getCurrentWorkspace()
+    public function getCurrentWorkspace(): ?Workspace
     {
-        $workspaceService = new WorkspaceService(new WorkspaceRepository());
-
-        return $workspaceService->getWorkspaceByIdentifier($this->getCurrentWorkspaceIdentifier());
+        return $this->getWorkspaceService()->getWorkspaceByIdentifier($this->getCurrentWorkspaceIdentifier());
     }
 
-    /**
-     * @return \Symfony\Component\HttpFoundation\mixed
-     */
-    public function getCurrentWorkspaceIdentifier()
+    public function getCurrentWorkspaceIdentifier(): ?string
     {
         return $this->getRequest()->query->get(\Chamilo\Core\Repository\Workspace\Manager::PARAM_WORKSPACE_ID);
+    }
+
+    public function getFavouriteService(): FavouriteService
+    {
+        return $this->getService(FavouriteService::class);
+    }
+
+    public function getWorkspaceService(): WorkspaceService
+    {
+        return $this->getService(WorkspaceService::class);
     }
 }

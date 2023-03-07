@@ -2,6 +2,8 @@
 namespace Chamilo\Core\Repository\Workspace;
 
 use Chamilo\Core\Repository\Service\WorkspaceExtensionManager;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
@@ -32,11 +34,18 @@ abstract class Manager extends Application
     public const PARAM_SELECTED_WORKSPACE_ID = 'selected_workspace_id';
     public const PARAM_WORKSPACE_ID = 'workspace_id';
 
-    /**
-     * @return \Chamilo\Core\Repository\Service\WorkspaceExtensionManager
-     */
-    public function getWorkspaceExtensionManager()
+    public function getRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
+    }
+
+    public function getWorkspaceExtensionManager(): WorkspaceExtensionManager
     {
         return $this->getService(WorkspaceExtensionManager::class);
+    }
+
+    public function getWorkspaceService(): WorkspaceService
+    {
+        return $this->getService(WorkspaceService::class);
     }
 }

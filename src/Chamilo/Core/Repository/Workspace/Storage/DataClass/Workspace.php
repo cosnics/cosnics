@@ -11,35 +11,26 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package Chamilo\Core\Repository\Workspace\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Workspace extends DataClass implements WorkspaceInterface
 {
-    const PROPERTY_CREATION_DATE = 'creation_date';
-
-    // Properties
-
-    const PROPERTY_CREATOR_ID = 'creator_id';
-
-    const PROPERTY_DESCRIPTION = 'description';
-
-    const PROPERTY_NAME = 'name';
-
-    const WORKSPACE_TYPE = 2;
+    public const PROPERTY_CREATION_DATE = 'creation_date';
+    public const PROPERTY_CREATOR_ID = 'creator_id';
+    public const PROPERTY_DESCRIPTION = 'description';
+    public const PROPERTY_NAME = 'name';
+    public const WORKSPACE_TYPE = 2;
 
     /**
-     *
      * @var \Chamilo\Core\User\Storage\DataClass\User
      */
     private $creator;
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getCreationDate()
     {
@@ -47,7 +38,6 @@ class Workspace extends DataClass implements WorkspaceInterface
     }
 
     /**
-     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function getCreator()
@@ -61,8 +51,7 @@ class Workspace extends DataClass implements WorkspaceInterface
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getCreatorId()
     {
@@ -70,61 +59,23 @@ class Workspace extends DataClass implements WorkspaceInterface
     }
 
     /**
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getHash()
-     */
-    public function getHash()
-    {
-        return md5(serialize(array(__CLASS__, $this->getWorkspaceType(), $this->getId())));
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_NAME);
-    }
-
-    public function getTitle()
-    {
-        return $this->getName();
-    }
-
-    public function getWorkspaceType()
-    {
-        return self::WORKSPACE_TYPE;
-    }
-
-    /**
-     *
      * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_NAME,
                 self::PROPERTY_DESCRIPTION,
                 self::PROPERTY_CREATOR_ID,
                 self::PROPERTY_CREATION_DATE
-            )
+            ]
         );
     }
 
     public function getDependencies(array $dependencies = []): array
     {
-        return array(
+        return [
             WorkspaceEntityRelation::class => new EqualityCondition(
                 new PropertyConditionVariable(
                     WorkspaceEntityRelation::class, WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID
@@ -145,7 +96,31 @@ class Workspace extends DataClass implements WorkspaceInterface
                     WorkspaceUserFavourite::class, WorkspaceUserFavourite::PROPERTY_WORKSPACE_ID
                 ), new StaticConditionVariable($this->getId())
             )
-        );
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
+    }
+
+    /**
+     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getHash()
+     */
+    public function getHash()
+    {
+        return md5(serialize([__CLASS__, $this->getWorkspaceType(), $this->getId()]));
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
@@ -156,13 +131,22 @@ class Workspace extends DataClass implements WorkspaceInterface
         return 'repository_workspace';
     }
 
+    public function getTitle()
+    {
+        return $this->getName();
+    }
+
+    public function getWorkspaceType()
+    {
+        return self::WORKSPACE_TYPE;
+    }
+
     /*
      * (non-PHPdoc) @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getWorkspaceType()
      */
 
     /**
-     *
-     * @param integer $creationDate
+     * @param int $creationDate
      */
     public function setCreationDate($creationDate)
     {
@@ -174,8 +158,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
 
     /**
-     *
-     * @param integer $creatorId
+     * @param int $creatorId
      */
     public function setCreatorId($creatorId)
     {
@@ -183,7 +166,6 @@ class Workspace extends DataClass implements WorkspaceInterface
     }
 
     /**
-     *
      * @param string $description
      */
     public function setDescription($description)
@@ -192,7 +174,6 @@ class Workspace extends DataClass implements WorkspaceInterface
     }
 
     /**
-     *
      * @param string $name
      */
     public function setName($name)
