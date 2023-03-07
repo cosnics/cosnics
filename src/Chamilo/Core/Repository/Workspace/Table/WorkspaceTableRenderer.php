@@ -204,6 +204,7 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
         if ($this->getRightsService()->canManageWorkspace($this->getUser(), $workspace))
         {
             $updateUrl = $urlGenerator->fromParameters([
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Manager::PARAM_ACTION => Manager::ACTION_UPDATE,
                 Manager::PARAM_WORKSPACE_ID => $workspace->getId()
             ]);
@@ -216,9 +217,10 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
             );
 
             $createRightsUrl = $urlGenerator->fromParameters([
-                Manager::PARAM_ACTION => Manager::ACTION_RIGHTS,
-                Manager::PARAM_WORKSPACE_ID => $workspace->getId(),
-                \Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_CREATE
+                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Workspace\Rights\Manager::CONTEXT,
+                \Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_CREATE,
+                Manager::PARAM_WORKSPACE_ID => $workspace->getId()
+
             ]);
 
             $toolbar->add_item(
@@ -229,9 +231,9 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
             );
 
             $browseRightsUrl = $urlGenerator->fromParameters([
-                Manager::PARAM_ACTION => Manager::ACTION_RIGHTS,
-                Manager::PARAM_WORKSPACE_ID => $workspace->getId(),
-                \Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_BROWSE
+                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Workspace\Rights\Manager::CONTEXT,
+                \Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_BROWSE,
+                Manager::PARAM_WORKSPACE_ID => $workspace->getId()
             ]);
 
             $toolbar->add_item(
@@ -242,6 +244,7 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
             );
 
             $deleteUrl = $urlGenerator->fromParameters([
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Manager::PARAM_ACTION => Manager::ACTION_DELETE,
                 Manager::PARAM_WORKSPACE_ID => $workspace->getId()
             ]);

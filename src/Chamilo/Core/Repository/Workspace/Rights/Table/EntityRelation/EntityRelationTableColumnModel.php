@@ -11,11 +11,10 @@ use Chamilo\Libraries\Translation\Translation;
 
 class EntityRelationTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
-    const COLUMN_ENTITY = 'entity';
+    public const COLUMN_ENTITY = 'entity';
 
     /**
-     *
-     * @param integer $right
+     * @param int $right
      * @param string $translationVariable
      *
      * @return string
@@ -55,7 +54,6 @@ class EntityRelationTableColumnModel extends DataClassTableColumnModel implement
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Format\Table\TableColumnModel::initializeColumns()
      */
     public function initializeColumns()

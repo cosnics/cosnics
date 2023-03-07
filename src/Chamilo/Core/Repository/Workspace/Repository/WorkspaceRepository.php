@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -193,7 +194,14 @@ class WorkspaceRepository
         return $this->getDataClassRepository()->retrieves(
             Workspace::class, new DataClassRetrievesParameters(
                 $this->getWorkspaceFavouritesByUserCondition($user, $entities, RightsService::RIGHT_VIEW), $limit,
-                $offset, $orderProperty, $this->getWorkspaceFavouritesByUserJoins(), true
+                $offset, $orderProperty, $this->getWorkspaceFavouritesByUserJoins(), null, null,
+                new RetrieveProperties(
+                    [
+                        new FunctionConditionVariable(
+                            FunctionConditionVariable::DISTINCT, new PropertiesConditionVariable(Workspace::class)
+                        )
+                    ]
+                )
             )
         );
     }
@@ -221,7 +229,7 @@ class WorkspaceRepository
 
         return $this->getDataClassRepository()->retrieves(
             Workspace::class, new DataClassRetrievesParameters(
-                $condition, $limit, $offset, $orderProperty, $joins, true
+                $condition, $limit, $offset, $orderProperty, $joins
             )
         );
     }
@@ -433,7 +441,7 @@ class WorkspaceRepository
     {
         $andConditions = [];
 
-        if(!$user->is_platform_admin())
+        if (!$user->is_platform_admin())
         {
             $andConditions[] = $this->getWorkspaceByUserCondition($user, $entities, $right);
         }
@@ -486,7 +494,7 @@ class WorkspaceRepository
         return $this->getDataClassRepository()->retrieves(
             Workspace::class, new DataClassRetrievesParameters(
                 $this->getWorkspaceByUserCondition($user, $entities, $right, $condition), $limit, $offset,
-                $orderProperty, new Joins([$this->getSharedWorkspacesJoin(Join::TYPE_LEFT)]), true
+                $orderProperty, new Joins([$this->getSharedWorkspacesJoin(Join::TYPE_LEFT)])
             )
         );
     }

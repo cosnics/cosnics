@@ -993,7 +993,7 @@ abstract class AssignmentRepository
         $group_by->add($baseVariable);
 
         $parameters = new DataClassRetrievesParameters(
-            $condition, $count, $offset, $orderBy, $joins, false, $group_by, $havingCondition
+            $condition, $count, $offset, $orderBy, $joins, $group_by, $havingCondition
         );
 
         return $this->dataClassRepository->retrieves($baseClass, $parameters);
