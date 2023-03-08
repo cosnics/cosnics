@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
  */
 class ImportCSVComponent extends Manager
 {
-        /**
+    /**
      * @return string
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
@@ -42,15 +42,14 @@ class ImportCSVComponent extends Manager
         }
     }
 
-        /**
+    /**
      * @return array
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     protected function getTemplateProperties(): array
     {
-        $gradebook = $this->getGradeBook();
-        $gradeBookData = $this->getGradeBookService()->getGradeBook($gradebook->getActiveGradeBookDataId(), null);
+        $gradeBookData = $this->getGradeBookService()->getGradeBookData($this->getGradeBook());
 
         return [
             'HEADER' => $this->render_header(),

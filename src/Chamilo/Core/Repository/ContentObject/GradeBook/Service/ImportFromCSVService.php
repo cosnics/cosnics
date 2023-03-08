@@ -300,7 +300,7 @@ class ImportFromCSVService
             }
         }
 
-        $this->gradeBookService->saveGradeBook($gradeBookData);
+        $this->gradeBookService->saveGradeBookData($gradeBookData);
 
         return ['missing_users' => array_values($missingUsers)];
     }

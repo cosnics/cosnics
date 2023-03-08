@@ -70,6 +70,11 @@ class BrowserComponent extends Manager
                     self::PARAM_ACTION => self::ACTION_IMPORT_CSV
                 ]
             ),
+            'GRADEBOOK_EXPORT_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_EXPORT
+                ]
+            ),
             'LOAD_GRADEBOOK_DATA_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,

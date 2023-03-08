@@ -33,7 +33,7 @@ class GradeBookForm extends ContentObjectForm
         $gradeBookData = new GradeBookData($gradeBookObject->get_title());
         $gradeBookData->setContentObjectId($gradeBookObject->getId());
 
-        $this->getGradeBookService()->saveGradeBook($gradeBookData);
+        $this->getGradeBookService()->saveGradeBookData($gradeBookData);
 
         $gradeBookObject->setActiveGradeBookDataId($gradeBookData->getId());
         $gradeBookObject->update();

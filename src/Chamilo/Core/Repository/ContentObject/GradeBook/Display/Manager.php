@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\GradeBook\Display;
 
 use Chamilo\Core\Repository\ContentObject\GradeBook\Display\Bridge\Interfaces\GradeBookServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\GradeBook\Service\ExportService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Service\GradeBookService;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Storage\DataClass\GradeBook;
 use Chamilo\Core\Repository\ContentObject\GradeBook\Service\RightsService;
@@ -109,6 +110,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected function getGradeBookServiceBridge()
     {
         return $this->getBridgeManager()->getBridgeByInterface(GradeBookServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return ExportService
+     */
+    protected function getExportService()
+    {
+        return $this->getService(ExportService::class);
     }
 
     /**

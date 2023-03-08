@@ -20,8 +20,7 @@ class ImportComponent extends Manager implements CsrfComponentInterface
             throw new NotAllowedException();
         }
         $targetUsers = $this->getGradeBookServiceBridge()->getTargetUsers();
-        $gradebook = $this->getGradeBook();
-        $gradeBookData = $this->getGradeBookService()->getGradeBook($gradebook->getActiveGradeBookDataId(), null);
+        $gradeBookData = $this->getGradeBookService()->getGradeBookData($this->getGradeBook());
         return $this->getImportFromCSVService()->importResults($gradeBookData, $this->getImportScores(), $targetUsers);
     }
 }
