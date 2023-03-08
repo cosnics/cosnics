@@ -8,6 +8,7 @@
         "error-NotFound": "The server responded with an error. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
         "error-Timeout": "The server took too long to respond. Your changes have possibly not been saved. You can try again later.",
         "error-Unknown": "An unknown error happened. Possibly your last change(s) haven't been saved. Please refresh the page and try again.",
+        "export": "Export",
         "find-student": "Find student",
         "import": "Import",
         "new": "New",
@@ -15,7 +16,8 @@
         "new-score": "New score",
         "show": "Show",
         "synchronize-scores": "Synchronize",
-        "update-final-scores": "Update final scores"
+        "update-final-scores": "Update final scores",
+        "update-final-scores-before-exporting": "Update final scores before exporting"
     },
     "nl": {
         "category": "Categorie",
@@ -25,6 +27,7 @@
         "error-NotFound": "Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
         "error-Timeout": "De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
         "error-Unknown": "Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de pagina te herladen en opnieuw te proberen.",
+        "export": "Exporteer",
         "find-student": "Zoek student",
         "import": "Importeer",
         "new": "Nieuw",
@@ -32,7 +35,8 @@
         "new-score": "Nieuwe score",
         "show": "Toon",
         "synchronize-scores": "Synchroniseer",
-        "update-final-scores": "Update eindcijfers"
+        "update-final-scores": "Update eindcijfers",
+        "update-final-scores-before-exporting": "Update eindcijfers alvorens te exporteren"
     }
 }
 </i18n>
@@ -60,6 +64,7 @@
                     <button v-if="gradeBook.totalsNeedUpdating" class="btn btn-update-totals btn-primary btn-sm u-font-medium u-text-upper" @click="updateTotalScores">
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i>{{ $t('update-final-scores') }}
                     </button>
+                    <button @click="exportGradeBook" class="btn btn-default btn-sm" :disabled="gradeBook.totalsNeedUpdating" :title="gradeBook.totalsNeedUpdating && $t('update-final-scores-before-exporting')">{{ $t('export') }}</button>
                     <div class="btn-group">
                         <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle" :title="`${$t('show')} ${itemsPerPage} items`">
                             <span>{{ $t('show') }} {{itemsPerPage}} items</span> <span class="caret" aria-hidden="true"></span>
@@ -403,6 +408,10 @@
             this.saveColumnId = null;
             this.saveCategoryId = null;
             this.tableBusy = false;
+        }
+
+        exportGradeBook() {
+            window.open(this.apiConfig.gradeBookExportURL, '_blank');
         }
 
         async load(): Promise<void> {
