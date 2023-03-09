@@ -329,7 +329,6 @@
             const gradeBook = this.gradeBook;
             this.tableBusy = true;
             this.connector?.addColumnSubItem(columnId, item.id, (column: GradeColumn, scores: GradeScore[]) => {
-                //console.log('scores', scores);
                 const resultsData = gradeBook.resultsData;
                 delete resultsData[columnId];
                 scores.forEach(score => {
@@ -347,7 +346,6 @@
             const gradeBook = this.gradeBook;
             this.tableBusy = true;
             this.connector?.removeColumnSubItem(columnId, item.id, (column: GradeColumn, scores: GradeScore[]) => {
-                //console.log('scores', scores);
                 const resultsData = gradeBook.resultsData;
                 delete resultsData[columnId];
                 scores.forEach(score => {
@@ -416,7 +414,6 @@
 
         async load(): Promise<void> {
             const allData: any = await Connector.loadGradeBookData(this.apiConfig.loadGradeBookDataURL, this.apiConfig.csrfToken);
-            console.log(allData);
             if (allData) {
                 this.gradeBook = GradeBook.from(allData.gradebook);
                 this.gradeBook.users = allData.users;
@@ -435,13 +432,11 @@
                 });
                 this.gradeBook.resultsData = resultsData;
             }
-            console.log(this.gradeBook);
         }
 
         mounted() {
             this.load();
             this.loadItemsPerPage();
-            //console.log(this);
         }
     }
 </script>
