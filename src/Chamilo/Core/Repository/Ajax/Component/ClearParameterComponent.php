@@ -38,9 +38,8 @@ class ClearParameterComponent extends Manager
             {
                 $currentWorkspaceIdentifier = $this->getRequest()->request->get(self::PARAM_CURRENT_WORKSPACE_ID);
                 $currentWorkspaceIdentifier = $currentWorkspaceIdentifier ?: null;
-                
-                $workspaceService = new WorkspaceService(new WorkspaceRepository());
-                $currentWorkspace = $workspaceService->determineWorkspaceForUserByIdentifier(
+
+                $currentWorkspace = $this->getWorkspaceService()->determineWorkspaceForUserByIdentifier(
                     $this->get_user(), 
                     $currentWorkspaceIdentifier);
                 

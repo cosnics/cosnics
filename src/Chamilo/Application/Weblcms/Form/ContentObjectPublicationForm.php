@@ -16,7 +16,6 @@ use Chamilo\Core\Repository\Publication\Publisher\Form\BasePublicationForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -57,33 +56,30 @@ use Exception;
  */
 class ContentObjectPublicationForm extends BasePublicationForm
 {
-    const PROPERTY_FROM_DATE = 'from_date';
-    const PROPERTY_PUBLISH_AND_BUILD = 'publish_and_build';
-    const PROPERTY_PUBLISH_AND_VIEW = 'publish_and_view';
-    const PROPERTY_RIGHTS_SELECTOR = 'rights_selector';
-    const PROPERTY_TARGETS = 'targets';
-    const PROPERTY_TO_DATE = 'to_date';
+    public const PROPERTY_FROM_DATE = 'from_date';
+    public const PROPERTY_PUBLISH_AND_BUILD = 'publish_and_build';
+    public const PROPERTY_PUBLISH_AND_VIEW = 'publish_and_view';
+    public const PROPERTY_RIGHTS_SELECTOR = 'rights_selector';
+    public const PROPERTY_TARGETS = 'targets';
+    public const PROPERTY_TO_DATE = 'to_date';
 
-    const RIGHTS_FOR_ALL = 1;
-    const RIGHTS_FOR_ME = 2;
-    const RIGHTS_INHERIT = 0;
-    const RIGHTS_SELECT_SPECIFIC = 3;
+    public const RIGHTS_FOR_ALL = 1;
+    public const RIGHTS_FOR_ME = 2;
+    public const RIGHTS_INHERIT = 0;
+    public const RIGHTS_SELECT_SPECIFIC = 3;
 
-    const TYPE_CREATE = 1;
-    const TYPE_FILE = 'file';
-    const TYPE_UPDATE = 2;
+    public const TYPE_CREATE = 1;
+    public const TYPE_FILE = 'file';
+    public const TYPE_UPDATE = 2;
+
+    private $categories;
 
     /**
-     * The type of the form (create or edit)
+     * Is it possible to collaborate the selected objects?
      *
-     * @var int
+     * @var bool
      */
-    private $form_type;
-
-    /**
-     * The publications that will be created / edited
-     */
-    private $publications;
+    private $collaborate_possible;
 
     /**
      * Caching of the course so that it can be used in email publication
@@ -100,17 +96,18 @@ class ContentObjectPublicationForm extends BasePublicationForm
     private $entities;
 
     /**
-     * Is it possible to collaborate the selected objects?
+     * The type of the form (create or edit)
      *
-     * @var boolean
+     * @var int
      */
-    private $collaborate_possible;
+    private $form_type;
+
+    private $level = 1;
 
     /**
-     *
-     * @var \Chamilo\Core\User\Storage\DataClass\User
+     * The publications that will be created / edited
      */
-    private $user;
+    private $publications;
 
     /**
      * The tool context for the publication form
@@ -119,18 +116,18 @@ class ContentObjectPublicationForm extends BasePublicationForm
      */
     private $toolContext;
 
-    private $categories;
-
-    private $level = 1;
+    /**
+     * @var \Chamilo\Core\User\Storage\DataClass\User
+     */
+    private $user;
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param integer $form_type
+     * @param int $form_type
      * @param ContentObjectPublication[] $publications
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param string $action
-     * @param boolean $is_course_admin
+     * @param bool $is_course_admin
      *
      * @throws NoObjectSelectedException
      */
@@ -147,14 +144,12 @@ class ContentObjectPublicationForm extends BasePublicationForm
         }
         else
         {
-            $repositoryRightsService = RightsService::getInstance();
-
             // set collaborate right for course admins if we are owner of each
             // content object to share
             $owner = true;
             foreach ($publications as $publication)
             {
-                $owner &= $repositoryRightsService->isContentObjectOwner($user, $publication->get_content_object());
+                $owner &= $this->getRightsService()->isContentObjectOwner($user, $publication->get_content_object());
             }
 
             if ($owner)
@@ -215,7 +210,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $this->addElement(
             'checkbox', ContentObjectPublication::PROPERTY_EMAIL_SENT, Translation::get('SendByEMail'), null,
-            array('class' => 'send_by_email')
+            ['class' => 'send_by_email']
         );
 
         $this->addElement(
@@ -273,11 +268,10 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $this->addElement(
             'checkbox', ContentObjectPublication::PROPERTY_HIDDEN,
-            Translation::get('Hidden', null, StringUtilities::LIBRARIES), null, array('class' => 'hidden_publication')
+            Translation::get('Hidden', null, StringUtilities::LIBRARIES), null, ['class' => 'hidden_publication']
         );
 
-        $force_collaborate =
-            Configuration::getInstance()->get_setting(array(Manager::package(), 'force_collaborate')) === 1;
+        $force_collaborate = Configuration::getInstance()->get_setting([Manager::package(), 'force_collaborate']) === 1;
 
         // collaborate right for course admins if we are owner of each content
         // object to share
@@ -327,10 +321,9 @@ class ContentObjectPublicationForm extends BasePublicationForm
             $first_publication = $this->publications[0];
             $contentObject = $first_publication->get_content_object();
 
-            $repositoryRightsService = RightsService::getInstance();
             $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
-            $canEditContentObject = $repositoryRightsService->canEditContentObject($this->user, $contentObject);
+            $canEditContentObject = $this->getRightsService()->canEditContentObject($this->user, $contentObject);
             $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublication(
                 $this->user, $first_publication, $this->course
             );
@@ -379,7 +372,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $group[] = $this->createElement(
             'radio', null, null, Translation::get('InheritRights'), self::RIGHTS_INHERIT,
-            array('class' => 'rights_selector inherit_rights_selector')
+            ['class' => 'rights_selector inherit_rights_selector']
         );
 
         $html = [];
@@ -441,16 +434,15 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $group[] = $this->createElement(
             'radio', null, null, Translation::get('EveryoneCanView'), self::RIGHTS_FOR_ALL,
-            array('class' => 'rights_selector')
+            ['class' => 'rights_selector']
         );
         $group[] = $this->createElement(
-            'radio', null, null, Translation::get('OnlyMeCanView'), self::RIGHTS_FOR_ME,
-            array('class' => 'rights_selector')
+            'radio', null, null, Translation::get('OnlyMeCanView'), self::RIGHTS_FOR_ME, ['class' => 'rights_selector']
         );
 
         $group[] = $this->createElement(
             'radio', null, null, Translation::get('SelectSpecificEntitiesThatCanView'), self::RIGHTS_SELECT_SPECIFIC,
-            array('class' => 'rights_selector specific_rights_selector')
+            ['class' => 'rights_selector specific_rights_selector']
         );
 
         $this->addElement('html', '<div class="right">');
@@ -484,7 +476,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         )
         );
 
-        $this->addFormRule(array($this, 'validate_rights_settings'));
+        $this->addFormRule([$this, 'validate_rights_settings']);
     }
 
     /**
@@ -496,14 +488,24 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $buttons[] = $this->createElement(
             'style_submit_button', self::PARAM_SUBMIT, Translation::get('Update', null, StringUtilities::LIBRARIES),
-            array('class' => 'positive update')
+            ['class' => 'positive update']
         );
         $buttons[] = $this->createElement(
             'style_reset_button', self::PARAM_RESET, Translation::get('Reset', null, StringUtilities::LIBRARIES),
-            array('class' => 'normal empty')
+            ['class' => 'normal empty']
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+
+    protected function getRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
+    }
+
+    protected function getRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
     }
 
     /**
@@ -618,7 +620,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
     /**
      * Handles the submit of the form for both create and edit
      *
-     * @return boolean
+     * @return bool
      */
     public function handle_form_submit()
     {
@@ -753,12 +755,12 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         if ($content_object->has_attachments())
         {
-            $body .= '<br ><br >' . Translation::get('AttachmentWarning', array('LINK' => $link));
+            $body .= '<br ><br >' . Translation::get('AttachmentWarning', ['LINK' => $link]);
         }
 
         $body .= '</div></body></html>';
 
-        $log = "mail for publication " . $publication->get_id() . " in course ";
+        $log = 'mail for publication ' . $publication->get_id() . ' in course ';
         $log .= $this->course->get_title();
         $log .= " to: \n";
 
@@ -766,12 +768,12 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $subject = Translation::get(
             'NewPublicationMailSubject',
-            array('COURSE' => $this->course->get_title(), 'CONTENTOBJECT' => $content_object->get_title())
+            ['COURSE' => $this->course->get_title(), 'CONTENTOBJECT' => $content_object->get_title()]
         );
 
         $mail = new Mail(
-            $subject, $body, $unique_email, true, [], [], $user->get_fullname(), $user->get_email(), null,
-            null, $mailFiles
+            $subject, $body, $unique_email, true, [], [], $user->get_fullname(), $user->get_email(), null, null,
+            $mailFiles
         );
 
         $mailerFactory = new MailerFactory(Configuration::getInstance());
@@ -788,7 +790,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             $log .= " (unsuccessfull)\n";
         }
 
-        $logMails = Configuration::getInstance()->get_setting(array(Manager::package(), 'log_mails'));
+        $logMails = Configuration::getInstance()->get_setting([Manager::package(), 'log_mails']);
 
         if ($logMails)
         {
@@ -799,8 +801,8 @@ class ContentObjectPublicationForm extends BasePublicationForm
                 mkdir($dir);
             }
 
-            $today = date("Ymd", mktime());
-            $logfile = $dir . '//' . "mails_sent_$today" . ".log";
+            $today = date('Ymd', mktime());
+            $logfile = $dir . '//' . "mails_sent_$today" . '.log';
             $mail_log = new FileLogger($logfile, true);
             $mail_log->log_message($log, true);
         }
@@ -849,8 +851,8 @@ class ContentObjectPublicationForm extends BasePublicationForm
             }
 
             $force_collaborate = Configuration::getInstance()->get_setting(
-                array(Manager::package(), 'force_collaborate')
-            ) === 1;
+                    [Manager::package(), 'force_collaborate']
+                ) === 1;
 
             if ($this->collaborate_possible && !$force_collaborate)
             {
@@ -875,8 +877,8 @@ class ContentObjectPublicationForm extends BasePublicationForm
     /**
      * Sets the rights for the given content object publication
      *
-     * @param $publication ContentObjectPublication
-     * @param $category_changed boolean
+     * @param $publication      ContentObjectPublication
+     * @param $category_changed bool
      */
     public function set_publication_rights(ContentObjectPublication $publication, $category_changed = false)
     {
@@ -934,15 +936,17 @@ class ContentObjectPublicationForm extends BasePublicationForm
             switch ($option)
             {
                 case self::RIGHTS_FOR_ALL :
-                    if (!$weblcms_rights->invert_location_entity_right(Manager::context(),WeblcmsRights::VIEW_RIGHT, 0, 0, $location_id))
+                    if (!$weblcms_rights->invert_location_entity_right(
+                        Manager::context(), WeblcmsRights::VIEW_RIGHT, 0, 0, $location_id
+                    ))
                     {
                         return false;
                     }
                     break;
                 case self::RIGHTS_FOR_ME :
                     if (!$weblcms_rights->invert_location_entity_right(
-                        Manager::context(),
-                        WeblcmsRights::VIEW_RIGHT, Session::get_user_id(), CourseUserEntity::ENTITY_TYPE, $location_id
+                        Manager::context(), WeblcmsRights::VIEW_RIGHT, Session::get_user_id(),
+                        CourseUserEntity::ENTITY_TYPE, $location_id
                     ))
                     {
                         return false;
@@ -954,8 +958,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
                         foreach ($target_ids as $target_id)
                         {
                             if (!$weblcms_rights->invert_location_entity_right(
-                                Manager::context(),
-                                WeblcmsRights::VIEW_RIGHT, $target_id, $entity_type, $location_id
+                                Manager::context(), WeblcmsRights::VIEW_RIGHT, $target_id, $entity_type, $location_id
                             ))
                             {
                                 return false;
@@ -983,7 +986,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         if ($category > 0 && !array_key_exists($category, $this->categories))
         {
-            throw new UserException(Translation::get("PublicationInSelectedCategoryNotAllowed"));
+            throw new UserException(Translation::get('PublicationInSelectedCategoryNotAllowed'));
         }
 
         if ($values[self::PROPERTY_TIME_PERIOD_FOREVER] != 0)

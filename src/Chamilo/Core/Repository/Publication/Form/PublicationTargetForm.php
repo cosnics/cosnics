@@ -103,7 +103,7 @@ class PublicationTargetForm extends FormValidator
             }
 
             // Check the USE-right
-            if (!RightsService::getInstance()->canUseContentObject(
+            if (!R$this->getWorkspaceRightsService()->canUseContentObject(
                 $this->getApplication()->get_user(), $content_object
             ))
             {
@@ -130,6 +130,11 @@ class PublicationTargetForm extends FormValidator
         }
 
         $this->buildForm();
+    }
+
+    protected function getWorkspaceRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
     }
 
     /**

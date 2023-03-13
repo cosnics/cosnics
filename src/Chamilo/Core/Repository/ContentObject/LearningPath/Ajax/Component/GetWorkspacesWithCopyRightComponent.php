@@ -3,9 +3,6 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Manager;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,10 +21,9 @@ class GetWorkspacesWithCopyRightComponent extends Manager
     {
         try
         {
-            $workspaceService = new WorkspaceService(new WorkspaceRepository());
             $workspacesDataArray = [];
 
-            $workspaces = $workspaceService->getWorkspacesForUser($this->getUser());
+            $workspaces = $this->getWorkspaceService()->getWorkspacesForUser($this->getUser());
             $this->processWorkspaces($workspacesDataArray, $workspaces);
 
             return new JsonResponse($workspacesDataArray);
@@ -46,7 +42,7 @@ class GetWorkspacesWithCopyRightComponent extends Manager
      */
     protected function processWorkspaces(&$workspacesDataArray = [], ArrayCollection $workspaces)
     {
-        $rightService = RightsService::getInstance();
+        $rightService = $this->getWorkspaceRightsService();
 
         foreach ($workspaces as $workspace)
         {
@@ -58,12 +54,12 @@ class GetWorkspacesWithCopyRightComponent extends Manager
                 continue;
             }
 
-            $workspacesDataArray[] = array(
+            $workspacesDataArray[] = [
                 'id' => $workspace->getId(),
                 'name' => $workspace->getName(),
                 'use_right' => $canUse,
                 'copy_right' => $canCopy
-            );
+            ];
         }
     }
 

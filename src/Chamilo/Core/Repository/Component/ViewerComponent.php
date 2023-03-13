@@ -14,7 +14,6 @@ use Chamilo\Core\Repository\Table\Link\LinkTable;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Table\SharedIn\SharedInTable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -43,7 +42,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use InvalidArgumentException;
 
 /**
- *
  * @package repository.lib.repository_manager.component
  */
 
@@ -60,7 +58,6 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
     /**
      * @return string
-     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Exception
@@ -74,7 +71,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             throw new ObjectNotExistException($contentObject->getType());
         }
 
-        if (!RightsService::getInstance()->canViewContentObject(
+        if (!$this->getWorkspaceRightsService()->canViewContentObject(
             $this->getUser(), $contentObject, $this->getWorkspace()
         ))
         {
@@ -91,7 +88,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 null, $translator->trans(
-                'ViewContentObject', array('{CONTENT_OBJECT}' => $contentObject->get_title()), self::package()
+                'ViewContentObject', ['{CONTENT_OBJECT}' => $contentObject->get_title()], self::package()
             )
             )
         );
@@ -125,11 +122,11 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         $contentObject = $this->getContentObject();
         $translator = $this->getTranslator();
 
-        $parameters = array(
+        $parameters = [
             self::PARAM_CONTEXT => self::context(),
             self::PARAM_CONTENT_OBJECT_ID => $contentObject->getId(),
             self::PARAM_ACTION => self::ACTION_VIEW_CONTENT_OBJECTS
-        );
+        ];
 
         // EXTERNAL INSTANCES
         if ($contentObject->is_external())
@@ -139,7 +136,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $tabs->add(
                 new ContentTab(
                     'external_instances', $translator->trans('ExternalInstances', [], self::package()),
-                    $browser->render(), new FontAwesomeGlyph('globe', array('fa-lg'), null, 'fas')
+                    $browser->render(), new FontAwesomeGlyph('globe', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -152,7 +149,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $tabs->add(
                 new ContentTab(
                     LinkTable::TYPE_PUBLICATIONS, $translator->trans('Publications', [], self::package()),
-                    $browser->render(), new FontAwesomeGlyph('share-square', array('fa-lg'), null, 'fas')
+                    $browser->render(), new FontAwesomeGlyph('share-square', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -173,7 +170,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 $tabs->add(
                     new ContentTab(
                         $tabName, $translator->trans('SharedIn', [], self::package()), $browser->render(),
-                        new FontAwesomeGlyph('lock', array('fa-lg'), null, 'fas')
+                        new FontAwesomeGlyph('lock', ['fa-lg'], null, 'fas')
                     )
                 );
             }
@@ -187,7 +184,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $tabs->add(
                 new ContentTab(
                     LinkTable::TYPE_PARENTS, $translator->trans('UsedIn', [], self::package()), $browser->render(),
-                    new FontAwesomeGlyph('arrow-up', array('fa-lg'), null, 'fas')
+                    new FontAwesomeGlyph('arrow-up', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -200,7 +197,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $tabs->add(
                 new ContentTab(
                     LinkTable::TYPE_CHILDREN, $translator->trans('Uses', [], self::package()), $browser->render(),
-                    new FontAwesomeGlyph('arrow-down', array('fa-lg'), null, 'fas')
+                    new FontAwesomeGlyph('arrow-down', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -213,7 +210,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $tabs->add(
                 new ContentTab(
                     LinkTable::TYPE_ATTACHED_TO, $translator->trans('AttachedTo', [], self::package()),
-                    $browser->render(), new FontAwesomeGlyph('bookmark', array('fa-lg'), null, 'fas')
+                    $browser->render(), new FontAwesomeGlyph('bookmark', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -226,7 +223,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $tabs->add(
                 new ContentTab(
                     LinkTable::TYPE_ATTACHES, $translator->trans('Attaches', [], self::package()), $browser->render(),
-                    new FontAwesomeGlyph('paperclip', array('fa-lg'), null, 'fas')
+                    new FontAwesomeGlyph('paperclip', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -239,7 +236,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $tabs->add(
                 new ContentTab(
                     LinkTable::TYPE_INCLUDED_IN, $translator->trans('IncludedIn', [], self::package()),
-                    $browser->render(), new FontAwesomeGlyph('expand-arrows-alt', array('fa-lg'), null, 'fas')
+                    $browser->render(), new FontAwesomeGlyph('expand-arrows-alt', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -252,7 +249,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $tabs->add(
                 new ContentTab(
                     LinkTable::TYPE_INCLUDES, $translator->trans('Includes', [], self::package()), $browser->render(),
-                    new FontAwesomeGlyph('compress-arrows-alt', array('fa-lg'), null, 'fas')
+                    new FontAwesomeGlyph('compress-arrows-alt', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -265,9 +262,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
      */
     public function canDestroyContentObject(ContentObject $contentObject)
     {
-        $rightsService = RightsService::getInstance();
-
-        if (!$rightsService->canDestroyContentObject($this->getUser(), $contentObject, $this->getWorkspace()))
+        if (!$this->getWorkspaceRightsService()->canDestroyContentObject(
+            $this->getUser(), $contentObject, $this->getWorkspace()
+        ))
         {
             return false;
         }
@@ -287,7 +284,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         $publishActions = new ButtonGroup();
         $stateActions = new ButtonGroup();
 
-        $rightsService = RightsService::getInstance();
+        $rightsService = $this->getWorkspaceRightsService();
         $translator = $this->getTranslator();
 
         $contentObjectUnlinkAllowed = $this->getPublicationAggregator()->canContentObjectBeUnlinked($contentObject);
@@ -328,10 +325,10 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 if (!$contentObjectDeletionAllowed && !$isRecycled && $contentObjectUnlinkAllowed)
                 {
                     $unlink_url = $this->get_url(
-                        array(
+                        [
                             self::PARAM_ACTION => self::ACTION_UNLINK_CONTENT_OBJECTS,
                             self::PARAM_CONTENT_OBJECT_ID => $contentObject->getId()
-                        )
+                        ]
                     );
 
                     $stateActions->addButton(
@@ -464,11 +461,11 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     new Button(
                         $translator->trans('Share', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
                         $this->get_url(
-                            array(
+                            [
                                 Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
                                 Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId(),
                                 \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_SHARE
-                            )
+                            ]
                         )
                     )
                 );
@@ -478,11 +475,11 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 if ($rightsService->canDeleteContentObject($this->getUser(), $contentObject, $this->getWorkspace()))
                 {
                     $url = $this->get_url(
-                        array(
+                        [
                             Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
                             \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_UNSHARE,
                             Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId()
-                        )
+                        ]
                     );
 
                     $stateActions->addButton(
@@ -604,7 +601,6 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
     }
 
     /**
-     *
      * @param string $type
      *
      * @return string
@@ -647,7 +643,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $tabs->add(
                 new ContentTab(
                     'versions', $this->getTranslator()->trans('Versions', [], self::package()),
-                    implode(PHP_EOL, $versionTabContent), new FontAwesomeGlyph('undo', array('fa-lg'), null, 'fas')
+                    implode(PHP_EOL, $versionTabContent), new FontAwesomeGlyph('undo', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -677,7 +673,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
     {
         $contentObject = $this->getContentObject();
 
-        return RightsService::getInstance()->canEditContentObject(
+        return $this->getWorkspaceRightsService()->canEditContentObject(
                 $this->getUser(), $contentObject, $this->getWorkspace()
             ) && $this->getPublicationAggregator()->canContentObjectBeEdited($contentObject->getId());
     }

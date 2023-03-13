@@ -19,8 +19,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Admin\Announcement\Component
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CreatorComponent extends Manager implements ViewerInterface
 {
@@ -46,7 +45,7 @@ class CreatorComponent extends Manager implements ViewerInterface
 
             if (!is_array($contentObjectIdentifiers))
             {
-                $contentObjectIdentifiers = array($contentObjectIdentifiers);
+                $contentObjectIdentifiers = [$contentObjectIdentifiers];
             }
 
             $publicationForm = new PublicationForm(
@@ -61,11 +60,11 @@ class CreatorComponent extends Manager implements ViewerInterface
                     );
 
                 $message = Translation::get(
-                    ($success ? 'ObjectPublished' : 'ObjectNotPublished'),
-                    array('OBJECT' => Translation::get('Object')), StringUtilities::LIBRARIES
+                    ($success ? 'ObjectPublished' : 'ObjectNotPublished'), ['OBJECT' => Translation::get('Object')],
+                    StringUtilities::LIBRARIES
                 );
 
-                $parameters = array(self::PARAM_ACTION => self::ACTION_BROWSE);
+                $parameters = [self::PARAM_ACTION => self::ACTION_BROWSE];
 
                 $this->redirectWithMessage($message, !$success, $parameters);
             }
@@ -94,16 +93,21 @@ class CreatorComponent extends Manager implements ViewerInterface
         return parent::getAdditionalParameters($additionalParameters);
     }
 
+    protected function getWorkspaceRightsService(): RightsService
+    {
+        return this->getService(RightsService::class);
+    }
+
     /**
      * @return string[]
      */
     public function get_allowed_content_object_types()
     {
-        return array(SystemAnnouncement::class);
+        return [SystemAnnouncement::class];
     }
 
     /**
-     * @param integer[] $contentObjectIdentifiers
+     * @param int $contentObjectIdentifiers
      *
      * @return string
      */
@@ -135,12 +139,12 @@ class CreatorComponent extends Manager implements ViewerInterface
             $html[] = '</div>';
             $html[] = '<ul class="list-group">';
 
-            foreach($contentObjects as $contentObject)
+            foreach ($contentObjects as $contentObject)
             {
                 $namespace = ContentObject::get_content_object_type_namespace($contentObject->getType());
                 $glyph = $contentObject->getGlyph(IdentGlyph::SIZE_MINI);
 
-                if (RightsService::getInstance()->canUseContentObject($this->getUser(), $contentObject))
+                if ($this->getWorkspaceRightsService()->canUseContentObject($this->getUser(), $contentObject))
                 {
                     $html[] =
                         '<li class="list-group-item">' . $glyph->render() . ' ' . $contentObject->get_title() . '</li>';

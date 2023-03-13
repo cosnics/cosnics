@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -34,7 +33,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.repository_manager.component
  */
 
@@ -46,7 +44,6 @@ class BrowserComponent extends Manager implements DelegateComponent
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -61,7 +58,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
-        if (!RightsService::getInstance()->canViewContentObjects($this->get_user(), $this->getWorkspace()))
+        if (!$this->getWorkspaceRightsService()->canViewContentObjects($this->get_user(), $this->getWorkspace()))
         {
             throw new NotAllowedException();
         }
@@ -100,6 +97,15 @@ class BrowserComponent extends Manager implements DelegateComponent
         return implode(PHP_EOL, $html);
     }
 
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_RENDERER;
+        $additionalParameters[] = ContentObject::PROPERTY_PARENT_ID;
+        $additionalParameters[] = \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
     public function getButtonToolbarRenderer()
     {
         if (!isset($this->buttonToolbarRenderer))
@@ -116,12 +122,12 @@ class BrowserComponent extends Manager implements DelegateComponent
                     new Button(
                         Translation::get(
                             'CreateObjectType',
-                            array('TYPE' => $template_registration->get_template()->translate('TypeName'))
+                            ['TYPE' => $template_registration->get_template()->translate('TypeName')]
                         ), new FontAwesomeGlyph('plus'), $this->get_url(
-                        array(
+                        [
                             Application::PARAM_ACTION => self::ACTION_CREATE_CONTENT_OBJECTS,
                             TypeSelector::PARAM_SELECTION => $filter_type
-                        )
+                        ]
                     ), ToolbarItem::DISPLAY_ICON_AND_LABEL, null, ['btn-primary']
                     )
                 );
@@ -130,7 +136,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $buttonToolbar->addItem(
                 new Button(
                     Translation::get('ManageCategories'), new FontAwesomeGlyph('folder'),
-                    $this->get_url(array(Application::PARAM_ACTION => self::ACTION_MANAGE_CATEGORIES)),
+                    $this->get_url([Application::PARAM_ACTION => self::ACTION_MANAGE_CATEGORIES]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -138,13 +144,13 @@ class BrowserComponent extends Manager implements DelegateComponent
             $buttonToolbar->addItem(
                 new Button(
                     Translation::get('ExportCategory'), new FontAwesomeGlyph('download'), $this->get_url(
-                    array(
+                    [
                         Application::PARAM_ACTION => self::ACTION_EXPORT_CONTENT_OBJECTS,
                         FilterData::FILTER_CATEGORY => FilterData::getInstance($this->getWorkspace())
                             ->get_filter_property(
                                 FilterData::FILTER_CATEGORY
                             )
-                    )
+                    ]
                 ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -178,7 +184,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 {
                     if ($this->get_renderer() != $renderer)
                     {
-                        $action = $this->get_url(array(self::PARAM_RENDERER => $renderer));
+                        $action = $this->get_url([self::PARAM_RENDERER => $renderer]);
                         $isActive = false;
                     }
                     else
@@ -215,22 +221,13 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->getService(TemplateRegistrationConsulter::class);
     }
 
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_RENDERER;
-        $additionalParameters[] = ContentObject::PROPERTY_PARENT_ID;
-        $additionalParameters[] = \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID;
-
-        return parent::getAdditionalParameters($additionalParameters);
-    }
-
     public function get_available_renderers()
     {
-        return array(
+        return [
             ContentObjectRenderer::TYPE_TABLE,
             ContentObjectRenderer::TYPE_GALLERY,
             ContentObjectRenderer::TYPE_SLIDESHOW
-        );
+        ];
     }
 
     public function get_condition()
@@ -283,7 +280,6 @@ class BrowserComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @return int
      */
     public function get_filter_type()
@@ -313,8 +309,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function has_filter_type()
     {

@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -22,6 +23,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class Publisher
 {
+    use DependencyInjectionContainerTrait;
 
     /**
      * The html that displays the list of available content objects
@@ -45,12 +47,14 @@ class Publisher
     /**
      * Show the form or publish directly
      *
-     * @var boolean
+     * @var bool
      */
     private $show_form;
 
     public function __construct($parent, $content_object_ids, $show_form = true)
     {
+        $this->initializeContainer();
+
         $this->parent = $parent;
         $this->show_form = $show_form;
 
@@ -60,7 +64,7 @@ class Publisher
     /**
      * Creates the publications without the publications form
      *
-     * @return boolean
+     * @return bool
      */
     public function create_publications_without_form()
     {
@@ -96,6 +100,11 @@ class Publisher
         return $succes;
     }
 
+    protected function getWorkspaceRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
+    }
+
     /**
      * Returns the publications for the content objects
      *
@@ -117,7 +126,7 @@ class Publisher
 
         if (!is_array($content_object_ids))
         {
-            $content_object_ids = array($content_object_ids);
+            $content_object_ids = [$content_object_ids];
         }
 
         $items_to_publish = count($content_object_ids);
@@ -149,7 +158,7 @@ class Publisher
                 $namespace = ContentObject::get_content_object_type_namespace($content_object->getType());
                 $glyph = $content_object->getGlyph(IdentGlyph::SIZE_MINI);
 
-                if (RightsService::getInstance()->canUseContentObject($this->parent->get_user(), $content_object))
+                if ($this->getWorkspaceRightsService()->canUseContentObject($this->parent->get_user(), $content_object))
                 {
                     $html[] = '<li class="list-group-item">' . $glyph->render() . ' ' . $content_object->get_title() .
                         '</li>';
@@ -204,7 +213,7 @@ class Publisher
     /**
      * Handles the submit of the publication form
      *
-     * @return boolean
+     * @return bool
      */
     public function publish()
     {
@@ -219,7 +228,7 @@ class Publisher
     /**
      * Validates the publication form
      *
-     * @return boolean
+     * @return bool
      */
     public function ready_to_publish()
     {

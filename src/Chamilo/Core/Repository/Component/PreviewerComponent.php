@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Component;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -20,7 +19,7 @@ class PreviewerComponent extends Manager
     {
         $content_object = $this->get_root_content_object();
 
-        if (!RightsService::getInstance()->canViewContentObject(
+        if (!$this->getWorkspaceRightsService()->canViewContentObject(
             $this->get_user(), $content_object, $this->getWorkspace()
         ))
         {

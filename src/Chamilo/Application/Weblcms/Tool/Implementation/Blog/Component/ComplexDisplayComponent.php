@@ -16,7 +16,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.tool.blog.component
  */
 
@@ -40,10 +39,10 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
         if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
             $this->redirectWithMessage(
-                Translation::get("NotAllowed", null, StringUtilities::LIBRARIES), true, [], array(
+                Translation::get('NotAllowed', null, StringUtilities::LIBRARIES), true, [], [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
-                )
+                ]
             );
         }
 
@@ -67,23 +66,28 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
         return parent::getAdditionalParameters($additionalParameters);
     }
 
+    protected function getRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
+    }
+
+    // METHODS FOR COMPLEX DISPLAY RIGHTS
+
     public function get_root_content_object()
     {
         return $this->publication->get_content_object();
     }
 
-    // METHODS FOR COMPLEX DISPLAY RIGHTS
-
     public function is_allowed_to_add_child()
     {
-        return RightsService::getInstance()->canEditContentObject(
+        return $this->getRightsService()->canEditContentObject(
             $this->get_user(), $this->publication->get_content_object()
         );
     }
 
     public function is_allowed_to_delete_child()
     {
-        return RightsService::getInstance()->canEditContentObject(
+        return $this->getRightsService()->canEditContentObject(
             $this->get_user(), $this->publication->get_content_object()
         );
     }

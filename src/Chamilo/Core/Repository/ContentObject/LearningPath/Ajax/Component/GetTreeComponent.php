@@ -42,7 +42,7 @@ class GetTreeComponent extends Manager
                 );
             }
 
-            if (!$this->getRightsService()->canCopyContentObject($this->getUser(), $learningPath))
+            if (!$this->getWorkspaceRightsService()->canCopyContentObject($this->getUser(), $learningPath))
             {
                 throw new NotAllowedException();
             }

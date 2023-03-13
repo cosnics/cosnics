@@ -9,7 +9,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -54,7 +53,7 @@ class MoverComponent extends Manager
         {
             if (!is_array($ids))
             {
-                $ids = array($ids);
+                $ids = [$ids];
             }
 
             $object = DataManager::retrieve_by_id(ContentObject::class, $ids[0]);
@@ -68,7 +67,7 @@ class MoverComponent extends Manager
 
             $this->get_categories_for_select(0, $parent);
             $form = new FormValidator(
-                'move', FormValidator::FORM_METHOD_POST, $this->get_url(array(self::PARAM_CONTENT_OBJECT_ID => $ids))
+                'move', FormValidator::FORM_METHOD_POST, $this->get_url([self::PARAM_CONTENT_OBJECT_ID => $ids])
             );
             $form->addElement(
                 'select', self::PARAM_DESTINATION_CONTENT_OBJECT_ID, Translation::get('NewCategory'), $this->tree
@@ -84,7 +83,7 @@ class MoverComponent extends Manager
                 {
                     $object = DataManager::retrieve_by_id(ContentObject::class, $id);
 
-                    if (RightsService::getInstance()->canEditContentObject(
+                    if ($this->getWorkspaceRightsService()->canEditContentObject(
                         $this->get_user(), $object, $this->getWorkspace()
                     ))
                     {
@@ -147,14 +146,14 @@ class MoverComponent extends Manager
                     if (count($ids) == 1)
                     {
                         $message = Translation::get(
-                            'ObjectNotMoved', array('OBJECT' => Translation::get('ContentObject')),
+                            'ObjectNotMoved', ['OBJECT' => Translation::get('ContentObject')],
                             StringUtilities::LIBRARIES
                         );
                     }
                     else
                     {
                         $message = Translation::get(
-                            'ObjectsNotMoved', array('OBJECTS' => Translation::get('ContentObjects')),
+                            'ObjectsNotMoved', ['OBJECTS' => Translation::get('ContentObjects')],
                             StringUtilities::LIBRARIES
                         );
                     }
@@ -164,14 +163,13 @@ class MoverComponent extends Manager
                     if (count($ids) == 1)
                     {
                         $message = Translation::get(
-                            'ObjectMoved', array('OBJECT' => Translation::get('ContentObject')),
-                            StringUtilities::LIBRARIES
+                            'ObjectMoved', ['OBJECT' => Translation::get('ContentObject')], StringUtilities::LIBRARIES
                         );
                     }
                     else
                     {
                         $message = Translation::get(
-                            'ObjectsMoved', array('OBJECTS' => Translation::get('ContentObjects')),
+                            'ObjectsMoved', ['OBJECTS' => Translation::get('ContentObjects')],
                             StringUtilities::LIBRARIES
                         );
                     }
@@ -198,8 +196,7 @@ class MoverComponent extends Manager
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected', array('OBJECT' => Translation::get('ContentObject')),
-                        StringUtilities::LIBRARIES
+                        'NoObjectSelected', ['OBJECT' => Translation::get('ContentObject')], StringUtilities::LIBRARIES
                     )
                 )
             );
@@ -210,7 +207,7 @@ class MoverComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS]),
                 Translation::get('BrowserComponent')
             )
         );
@@ -236,7 +233,7 @@ class MoverComponent extends Manager
         $categories = DataManager::retrieve_categories($condition);
 
         $tree = [];
-        foreach($categories as $cat)
+        foreach ($categories as $cat)
         {
             $this->tree[$cat->get_id()] = str_repeat('--', $this->level) . ' ' . $cat->get_name();
 

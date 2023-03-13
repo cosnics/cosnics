@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Workspace\Interfaces\WorkspaceExtensionSupport;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -13,24 +12,21 @@ use Exception;
 
 /**
  * @package Chamilo\Core\Repository\Component
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class ExtensionLauncherComponent extends Manager implements DelegateComponent
 {
-    const PARAM_EXTENSION_CONTEXT = 'ExtensionContext';
+    public const PARAM_EXTENSION_CONTEXT = 'ExtensionContext';
 
     /**
-     *
      * @return string
-     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Exception
      */
-    function run()
+    public function run()
     {
-        if (! RightsService::getInstance()->canViewContentObjects($this->get_user(), $this->getWorkspace()))
+        if (!$this->getWorkspaceRightsService()->canViewContentObjects($this->get_user(), $this->getWorkspace()))
         {
             throw new NotAllowedException();
         }
@@ -42,13 +38,14 @@ class ExtensionLauncherComponent extends Manager implements DelegateComponent
         }
 
         $application = $this->getApplicationFactory()->getApplication(
-            $extensionContext,
-            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
+            $extensionContext, new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
         );
 
-        if(!$application instanceof WorkspaceExtensionSupport)
+        if (!$application instanceof WorkspaceExtensionSupport)
         {
-            throw new Exception(sprintf('The given context %s does not support the workspace extension', $extensionContext));
+            throw new Exception(
+                sprintf('The given context %s does not support the workspace extension', $extensionContext)
+            );
         }
 
         return $application->run();

@@ -7,83 +7,47 @@ use Chamilo\Libraries\Translation\Translation;
 
 class PersonalWorkspace implements WorkspaceInterface
 {
-    const WORKSPACE_TYPE = 1;
+    public const WORKSPACE_TYPE = 1;
 
-    /**
-     *
-     * @var \Chamilo\Core\User\Storage\DataClass\User
-     */
-    private $owner;
+    private User $owner;
 
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $owner
-     */
     public function __construct(User $owner)
     {
         $this->owner = $owner;
     }
 
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getOwner()
+    public function getCreatorId(): ?string
+    {
+        return $this->getOwner()->getId();
+    }
+
+    public function getHash(): string
+    {
+        return md5(serialize([__CLASS__, $this->getWorkspaceType(), $this->getId()]));
+    }
+
+    public function getId(): ?string
+    {
+        return $this->getOwner()->getId();
+    }
+
+    public function getOwner(): User
     {
         return $this->owner;
     }
 
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $owner
-     */
-    public function setOwner($owner)
-    {
-        $this->owner = $owner;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getCreatorId()
-     */
-    public function getCreatorId()
-    {
-        return $this->getOwner()->getId();
-    }
-
-    /*
-     * (non-PHPdoc)
-     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getId()
-     */
-    public function getId()
-    {
-        return $this->getOwner()->getId();
-    }
-
-    /*
-     * (non-PHPdoc)
-     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getWorkspaceType()
-     */
-    public function getWorkspaceType()
-    {
-        return self::WORKSPACE_TYPE;
-    }
-
-    /*
-     * (non-PHPdoc)
-     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getTitle()
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return Translation::get('MyRepository');
     }
 
-    /**
-     *
-     * @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getHash()
-     */
-    public function getHash()
+    public function getWorkspaceType(): int
     {
-        return md5(serialize(array(__CLASS__, $this->getWorkspaceType(), $this->getId())));
+        return self::WORKSPACE_TYPE;
+    }
+
+    public function setOwner(User $owner)
+    {
+        $this->owner = $owner;
     }
 }

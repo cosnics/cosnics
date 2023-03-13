@@ -10,10 +10,8 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\Export\ExportTable;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
@@ -30,7 +28,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.repository_manager.component
  */
 class ExporterComponent extends Manager
@@ -47,7 +44,7 @@ class ExporterComponent extends Manager
      */
     public function run()
     {
-        if (!RightsService::getInstance()->canCopyContentObjects($this->get_user(), $this->getWorkspace()))
+        if (!$this->getWorkspaceRightsService()->canCopyContentObjects($this->get_user(), $this->getWorkspace()))
         {
             throw new NotAllowedException();
         }
@@ -59,12 +56,12 @@ class ExporterComponent extends Manager
 
         if (!is_array($content_object_ids) && !is_null($content_object_ids))
         {
-            $content_object_ids = array($content_object_ids);
+            $content_object_ids = [$content_object_ids];
         }
 
         if (!is_array($category_ids) && !is_null($category_ids))
         {
-            $category_ids = array($category_ids);
+            $category_ids = [$category_ids];
         }
 
         if (count($content_object_ids) == 0 && count($category_ids) == 0)
@@ -89,7 +86,7 @@ class ExporterComponent extends Manager
             {
                 $table_data = $this->export_table($export_parameters->get_content_object_ids());
 
-                $table_row = array(' ', ' ', count($export_parameters->get_content_object_ids()));
+                $table_row = [' ', ' ', count($export_parameters->get_content_object_ids())];
 
                 foreach (ContentObjectExport::get_types() as $export_type)
                 {
@@ -114,7 +111,7 @@ class ExporterComponent extends Manager
                     else
                     {
                         $glyph = new FontAwesomeGlyph(
-                            'download', array('text-muted'), Translation::get('ExportNotAvailable')
+                            'download', ['text-muted'], Translation::get('ExportNotAvailable')
                         );
 
                         $table_row[] = $glyph->render();
@@ -162,8 +159,7 @@ class ExporterComponent extends Manager
             $html[] = $this->render_header();
             $html[] = $this->display_error_message(
                 Translation::get(
-                    'NoObjectsSelected', array('OBJECT' => Translation::get('ContentObject')),
-                    StringUtilities::LIBRARIES
+                    'NoObjectsSelected', ['OBJECT' => Translation::get('ContentObject')], StringUtilities::LIBRARIES
                 )
             );
             $html[] = $this->render_footer();
@@ -179,7 +175,7 @@ class ExporterComponent extends Manager
         );
         $parameters = new DataClassDistinctParameters(
             $condition, new RetrieveProperties(
-                array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE))
+                [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE)]
             )
         );
 
@@ -196,8 +192,8 @@ class ExporterComponent extends Manager
             $table_row = [];
 
             $glyph = new NamespaceIdentGlyph(
-                $type_namespace, true, false, false, IdentGlyph::SIZE_MINI,
-                array('fa-fw'), Translation::get('TypeName', null, $type_namespace)
+                $type_namespace, true, false, false, IdentGlyph::SIZE_MINI, ['fa-fw'],
+                Translation::get('TypeName', null, $type_namespace)
             );
 
             $table_row[] = $glyph->render();
@@ -205,8 +201,7 @@ class ExporterComponent extends Manager
 
             $conditions = [];
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                $content_object_ids
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $content_object_ids
             );
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
@@ -216,7 +211,7 @@ class ExporterComponent extends Manager
 
             $parameters = new DataClassDistinctParameters(
                 $condition, new RetrieveProperties(
-                    array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))
+                    [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
                 )
             );
             $ids = DataManager::distinct(ContentObject::class, $parameters);
@@ -229,11 +224,11 @@ class ExporterComponent extends Manager
                 {
                     $this->set_export_types_cache($export_type, $ids);
                     $this->is_exportable[$export_type] = true;
-                    $glyph = new FontAwesomeGlyph('check-circle', array('text-success'), null, 'fas');
+                    $glyph = new FontAwesomeGlyph('check-circle', ['text-success'], null, 'fas');
                 }
                 else
                 {
-                    $glyph = new FontAwesomeGlyph('minus-circle', array('text-danger'), null, 'fas');
+                    $glyph = new FontAwesomeGlyph('minus-circle', ['text-danger'], null, 'fas');
                 }
 
                 $table_row[] = $glyph->render();

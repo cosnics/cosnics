@@ -2,42 +2,21 @@
 namespace Chamilo\Core\Repository\Workspace\Architecture;
 
 /**
- *
  * @package Chamilo\Core\Repository\Workspace\Architecture
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 interface WorkspaceInterface
 {
 
-    /**
-     *
-     * @return integer
-     */
-    public function getId();
+    public function getCreatorId(): ?string;
 
-    /**
-     *
-     * @return integer
-     */
-    public function getCreatorId();
+    public function getHash(): string;
 
-    /**
-     *
-     * @return integer
-     */
-    public function getWorkspaceType();
+    public function getId(): ?string;
 
-    /**
-     *
-     * @return string
-     */
-    public function getTitle();
+    public function getTitle(): string;
 
-    /**
-     *
-     * @return string
-     */
-    public function getHash();
+    public function getWorkspaceType(): int;
 }

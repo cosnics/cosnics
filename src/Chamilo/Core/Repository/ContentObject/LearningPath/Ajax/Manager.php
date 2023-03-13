@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Ajax;
 
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\AjaxManager;
@@ -30,14 +29,6 @@ abstract class Manager extends AjaxManager
     }
 
     /**
-     * @return RightsService
-     */
-    protected function getRightsService()
-    {
-        return RightsService::getInstance();
-    }
-
-    /**
      * Returns the workspace from the request
      *
      * @return WorkspaceInterface
@@ -46,10 +37,9 @@ abstract class Manager extends AjaxManager
      */
     protected function getWorkspaceFromRequest(): WorkspaceInterface
     {
-        $workspaceService = new WorkspaceService(new WorkspaceRepository());
-
         $workspaceId = $this->getRequest()->get(self::PARAM_WORKSPACE_ID);
-        $workspace = $workspaceService->determineWorkspaceForUserByIdentifier($this->getUser(), $workspaceId);
+        $workspace =
+            $this->getWorkspaceService()->determineWorkspaceForUserByIdentifier($this->getUser(), $workspaceId);
 
         if (!$workspace instanceof WorkspaceInterface)
         {
@@ -58,12 +48,21 @@ abstract class Manager extends AjaxManager
             );
         }
 
-        $rightsService = RightsService::getInstance();
-        if (!$rightsService->canViewContentObjects($this->getUser(), $workspace))
+        if (!$this->getWorkspaceRightsService()->canViewContentObjects($this->getUser(), $workspace))
         {
             throw new NotAllowedException();
         }
 
         return $workspace;
+    }
+
+    protected function getWorkspaceRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
+    }
+
+    public function getWorkspaceService(): WorkspaceService
+    {
+        return $this->getService(WorkspaceService::class);
     }
 }

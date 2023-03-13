@@ -20,32 +20,31 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Repository\Menu
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class RepositoryMenu
 {
 
+    protected RightsService $rightsService;
+
     /**
-     *
      * @var \Chamilo\Core\Repository\Manager
      */
     private $repositoryManager;
 
     /**
-     *
      * @param \Chamilo\Core\Repository\Manager $repositoryManager
      */
-    public function __construct(Manager $repositoryManager)
+    public function __construct(Manager $repositoryManager, RightsService $rightsService)
     {
         $this->repositoryManager = $repositoryManager;
+        $this->rightsService = $rightsService;
     }
 
     /**
-     *
      * @return string
      */
     public function render()
@@ -54,22 +53,21 @@ class RepositoryMenu
         $buttonToolBar = new ButtonToolBar();
         $buttonToolBar->addClass('btn-action-toolbar-vertical');
 
-        $rightsService = RightsService::getInstance();
-        $canAddContentObjects = $rightsService->canAddContentObjects(
+        $canAddContentObjects = $this->getRightsService()->canAddContentObjects(
             $repositoryManager->get_user(), $repositoryManager->getWorkspace()
         );
 
         if ($canAddContentObjects)
         {
-            $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
+            $buttonGroup = new ButtonGroup([], ['btn-group-vertical']);
 
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('Create', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                     $repositoryManager->get_url(
-                        array(
+                        [
                             Manager::PARAM_ACTION => Manager::ACTION_CREATE_CONTENT_OBJECTS
-                        ), array(Manager::PARAM_IMPORT_TYPE)
+                        ], [Manager::PARAM_IMPORT_TYPE]
                     ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-primary']
                 )
             );
@@ -86,14 +84,14 @@ class RepositoryMenu
                     new Button(
                         Translation::get('AddExisting'), new FontAwesomeGlyph('hdd', [], null, 'far'),
                         $repositoryManager->get_url(
-                            array(
+                            [
 
                                 Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
                                 \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_PUBLISH,
                                 FilterData::FILTER_CATEGORY => FilterData::getInstance(
                                     $repositoryManager->getWorkspace()
                                 )->get_category()
-                            ), array(Manager::PARAM_IMPORT_TYPE)
+                            ], [Manager::PARAM_IMPORT_TYPE]
                         ), Button::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -102,16 +100,16 @@ class RepositoryMenu
             $buttonToolBar->addButtonGroup($buttonGroup);
         }
 
-        $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
+        $buttonGroup = new ButtonGroup([], ['btn-group-vertical']);
 
         if ($repositoryManager->getWorkspace() instanceof PersonalWorkspace)
         {
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('MyPublications'), new FontAwesomeGlyph('list'), $repositoryManager->get_url(
-                    array(
+                    [
                         Manager::PARAM_ACTION => Manager::ACTION_PUBLICATION
-                    ), array(\Chamilo\Core\Repository\Publication\Manager::PARAM_ACTION, Manager::PARAM_IMPORT_TYPE)
+                    ], [\Chamilo\Core\Repository\Publication\Manager::PARAM_ACTION, Manager::PARAM_IMPORT_TYPE]
                 )
                 )
             );
@@ -122,12 +120,12 @@ class RepositoryMenu
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('Quota'), new FontAwesomeGlyph('chart-bar'), $repositoryManager->get_url(
-                    array(
+                    [
                         Manager::PARAM_ACTION => Manager::ACTION_QUOTA,
                         Manager::PARAM_CATEGORY_ID => null,
                         \Chamilo\Core\Repository\Quota\Manager::PARAM_ACTION => null,
                         GenericTabsRenderer::PARAM_SELECTED_TAB => null
-                    ), array(Manager::PARAM_IMPORT_TYPE)
+                    ], [Manager::PARAM_IMPORT_TYPE]
                 )
                 )
             );
@@ -135,9 +133,9 @@ class RepositoryMenu
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('ViewDoubles'), new FontAwesomeGlyph('copy'), $repositoryManager->get_url(
-                    array(
+                    [
                         Manager::PARAM_ACTION => Manager::ACTION_VIEW_DOUBLES
-                    ), array(Manager::PARAM_IMPORT_TYPE)
+                    ], [Manager::PARAM_IMPORT_TYPE]
                 )
                 )
             );
@@ -152,7 +150,7 @@ class RepositoryMenu
 
         $buttonToolBar->addButtonGroup($buttonGroup);
 
-        $extensionsButtonGroup = new ButtonGroup([], array('btn-group-vertical'));
+        $extensionsButtonGroup = new ButtonGroup([], ['btn-group-vertical']);
         $buttonToolBar->addButtonGroup($extensionsButtonGroup);
 
         $this->getRepositoryManager()->getWorkspaceExtensionManager()->getWorkspaceActions(
@@ -166,7 +164,6 @@ class RepositoryMenu
     }
 
     /**
-     *
      * @return string[]
      */
     public function getImportTypes()
@@ -188,7 +185,6 @@ class RepositoryMenu
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\Manager
      */
     public function getRepositoryManager()
@@ -196,8 +192,12 @@ class RepositoryMenu
         return $this->repositoryManager;
     }
 
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
+    }
+
     /**
-     *
      * @param \Chamilo\Core\Repository\Manager $repositoryManager
      */
     public function setRepositoryManager(Manager $repositoryManager)

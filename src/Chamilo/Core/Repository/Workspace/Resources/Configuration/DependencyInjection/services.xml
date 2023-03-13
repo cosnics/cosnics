@@ -8,6 +8,12 @@
                   autoconfigure="true"
                   public="true"/>
 
+        <service id="Chamilo\Core\Repository\Workspace"
+                 class="Chamilo\Core\User\Storage\DataClass\User">
+            <factory service="Chamilo\Core\User\Factory\UserFactory"
+                     method="getUser"/>
+        </service>
+
         <service id="Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService"/>
         <service id="Chamilo\Core\Repository\Workspace\Service\ContentObjectService"/>
         <service id="Chamilo\Core\Repository\Workspace\Service\EntityRelationService"/>

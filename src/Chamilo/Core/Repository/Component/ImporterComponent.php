@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportService;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -11,7 +10,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.repository_manager.component
  */
 class ImporterComponent extends Manager
@@ -22,7 +20,7 @@ class ImporterComponent extends Manager
      */
     public function run()
     {
-        if (!RightsService::getInstance()->canAddContentObjects($this->get_user(), $this->getWorkspace()))
+        if (!$this->getWorkspaceRightsService()->canAddContentObjects($this->get_user(), $this->getWorkspace()))
         {
             throw new NotAllowedException();
         }
@@ -33,18 +31,18 @@ class ImporterComponent extends Manager
         if ($contentObjectImportService->hasFinished())
         {
             // Session::register(self::PARAM_MESSAGES, $controller->get_messages_for_url());
-            $this->redirect(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS));
+            $this->redirect([self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS]);
         }
         else
         {
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(), Translation::get(
-                    'ImportType', array(
+                    'ImportType', [
                         'TYPE' => Translation::get(
                             'ImportType' . StringUtilities::getInstance()->createString($type)->upperCamelize()
                         )
-                    )
+                    ]
                 )
                 )
             );

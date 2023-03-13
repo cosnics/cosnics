@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Component;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -15,7 +14,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.repository_manager.component
  */
 
@@ -36,7 +34,7 @@ class DeleterComponent extends Manager
         {
             if (!is_array($ids))
             {
-                $ids = array($ids);
+                $ids = [$ids];
             }
 
             $failures = 0;
@@ -49,7 +47,7 @@ class DeleterComponent extends Manager
                 $object = DataManager::retrieve_by_id(ContentObject::class, $object_id);
                 $unlinkAllowed = $this->getPublicationAggregator()->canContentObjectBeUnlinked($object);
 
-                if (RightsService::getInstance()->canDestroyContentObject(
+                if ($this->getWorkspaceRightsService()->canDestroyContentObject(
                     $this->get_user(), $object, $this->getWorkspace()
                 ))
                 {
@@ -66,13 +64,13 @@ class DeleterComponent extends Manager
                             else
                             {
                                 Event::trigger(
-                                    'Activity', Manager::context(), array(
+                                    'Activity', Manager::context(), [
                                         Activity::PROPERTY_TYPE => Activity::ACTIVITY_DELETED,
                                         Activity::PROPERTY_USER_ID => $this->get_user_id(),
                                         Activity::PROPERTY_DATE => time(),
                                         Activity::PROPERTY_CONTENT_OBJECT_ID => $object->get_id(),
                                         Activity::PROPERTY_CONTENT => $object->get_title()
-                                    )
+                                    ]
                                 );
                             }
                         }
@@ -97,13 +95,13 @@ class DeleterComponent extends Manager
                                     else
                                     {
                                         Event::trigger(
-                                            'Activity', Manager::context(), array(
+                                            'Activity', Manager::context(), [
                                                 Activity::PROPERTY_TYPE => Activity::ACTIVITY_DELETED,
                                                 Activity::PROPERTY_USER_ID => $this->get_user_id(),
                                                 Activity::PROPERTY_DATE => time(),
                                                 Activity::PROPERTY_CONTENT_OBJECT_ID => $version->get_id(),
                                                 Activity::PROPERTY_CONTENT => $version->get_title()
-                                            )
+                                            ]
                                         );
                                     }
                                 }
@@ -126,13 +124,13 @@ class DeleterComponent extends Manager
                                     else
                                     {
                                         Event::trigger(
-                                            'Activity', Manager::context(), array(
+                                            'Activity', Manager::context(), [
                                                 Activity::PROPERTY_TYPE => Activity::ACTIVITY_RECYCLE,
                                                 Activity::PROPERTY_USER_ID => $this->get_user_id(),
                                                 Activity::PROPERTY_DATE => time(),
                                                 Activity::PROPERTY_CONTENT_OBJECT_ID => $version->get_id(),
                                                 Activity::PROPERTY_CONTENT => $version->get_title()
-                                            )
+                                            ]
                                         );
                                     }
                                 }
@@ -168,17 +166,17 @@ class DeleterComponent extends Manager
                     if (count($ids) == 1)
                     {
                         $message = 'ObjectNot' . ($permanent ? 'Deleted' : 'MovedToRecycleBin');
-                        $parameter = array('OBJECT' => Translation::get('ContentObject'));
+                        $parameter = ['OBJECT' => Translation::get('ContentObject')];
                     }
                     elseif (count($ids) > $failures)
                     {
                         $message = 'SomeObjectsNot' . ($permanent ? 'Deleted' : 'MovedToRecycleBin');
-                        $parameter = array('OBJECTS' => Translation::get('ContentObjects'));
+                        $parameter = ['OBJECTS' => Translation::get('ContentObjects')];
                     }
                     else
                     {
                         $message = 'ObjectsNot' . ($permanent ? 'Deleted' : 'MovedToRecycleBin');
-                        $parameter = array('OBJECTS' => Translation::get('ContentObjects'));
+                        $parameter = ['OBJECTS' => Translation::get('ContentObjects')];
                     }
                 }
                 else
@@ -186,12 +184,12 @@ class DeleterComponent extends Manager
                     if (count($ids) == 1)
                     {
                         $message = 'Object' . ($permanent ? 'Deleted' : 'MovedToRecycleBin');
-                        $parameter = array('OBJECT' => Translation::get('ContentObject'));
+                        $parameter = ['OBJECT' => Translation::get('ContentObject')];
                     }
                     else
                     {
                         $message = 'Objects' . ($permanent ? 'Deleted' : 'MovedToRecycleBin');
-                        $parameter = array('OBJECTS' => Translation::get('ContentObjects'));
+                        $parameter = ['OBJECTS' => Translation::get('ContentObjects')];
                     }
                 }
             }
@@ -216,7 +214,7 @@ class DeleterComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS]),
                 Translation::get('BrowserComponent')
             )
         );

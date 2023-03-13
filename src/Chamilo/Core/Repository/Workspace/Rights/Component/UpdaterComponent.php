@@ -40,10 +40,8 @@ class UpdaterComponent extends Manager
             try
             {
                 $values = $form->exportValues();
-                
-                $rightsService = RightsService::getInstance();
-                
-                $right = $rightsService->getAggregatedRight(
+
+                $right = $this->getRightsService()->getAggregatedRight(
                     (int) $values[RightsForm::PROPERTY_VIEW], 
                     (int) $values[RightsForm::PROPERTY_USE], 
                     (int) $values[RightsForm::PROPERTY_COPY], 

@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -18,24 +19,24 @@ use Exception;
 
 abstract class ContentObjectRenderer implements TableSupport
 {
-    const TYPE_GALLERY = 'GalleryTable';
+    use DependencyInjectionContainerTrait;
 
-    const TYPE_SLIDESHOW = 'Slideshow';
-
-    const TYPE_TABLE = 'Table';
+    public const TYPE_GALLERY = 'GalleryTable';
+    public const TYPE_SLIDESHOW = 'Slideshow';
+    public const TYPE_TABLE = 'Table';
 
     /**
-     *
      * @var \Chamilo\Core\Repository\Component\BrowserComponent
      */
     protected $repository_browser;
 
     /**
-     *
      * @param \Chamilo\Core\Repository\Component\BrowserComponent $repository_browser
      */
     public function __construct($repository_browser)
     {
+        $this->initializeContainer();
+
         $this->repository_browser = $repository_browser;
     }
 
@@ -58,10 +59,15 @@ abstract class ContentObjectRenderer implements TableSupport
 
         if (!class_exists($class))
         {
-            throw new Exception(Translation::get('ContentObjectRendererTypeDoesNotExist', array('type' => $type)));
+            throw new Exception(Translation::get('ContentObjectRendererTypeDoesNotExist', ['type' => $type]));
         }
 
         return new $class($repository_browser);
+    }
+
+    protected function getWorkspaceRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
     }
 
     public function get_condition()
@@ -73,7 +79,7 @@ abstract class ContentObjectRenderer implements TableSupport
     {
         $actions = [];
 
-        $rightsService = RightsService::getInstance();
+        $rightsService = $this->getWorkspaceRightsService();
 
         $canEditContentObject = $rightsService->canEditContentObject(
             $this->get_user(), $content_object, $this->get_repository_browser()->getWorkspace()
@@ -114,15 +120,15 @@ abstract class ContentObjectRenderer implements TableSupport
             if ($url = $this->get_repository_browser()->get_content_object_recycling_url($content_object))
             {
                 $actions[] = new ToolbarItem(
-                    Translation::get('Remove', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('trash-alt'), $url,
-                    ToolbarItem::DISPLAY_ICON, true
+                    Translation::get('Remove', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('trash-alt'),
+                    $url, ToolbarItem::DISPLAY_ICON, true
                 );
             }
             else
             {
                 $actions[] = new ToolbarItem(
                     Translation::get('RemoveNotAvailable', null, StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('trash-alt', array('text-muted')), null, ToolbarItem::DISPLAY_ICON
+                    new FontAwesomeGlyph('trash-alt', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
                 );
             }
         }
@@ -144,11 +150,11 @@ abstract class ContentObjectRenderer implements TableSupport
             $actions[] = new ToolbarItem(
                 Translation::get('Share', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
                 $this->get_repository_browser()->get_url(
-                    array(
+                    [
                         Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
                         Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
                         \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_SHARE
-                    )
+                    ]
                 ), ToolbarItem::DISPLAY_ICON
             );
         }
@@ -157,16 +163,16 @@ abstract class ContentObjectRenderer implements TableSupport
             if ($canDeleteContentObject)
             {
                 $url = $this->get_repository_browser()->get_url(
-                    array(
+                    [
                         Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
                         \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_UNSHARE,
                         Manager::PARAM_CONTENT_OBJECT_ID => $content_object->getId()
-                    )
+                    ]
                 );
 
                 $actions[] = new ToolbarItem(
-                    Translation::get('Unshare', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('unlock'),
-                    $url, ToolbarItem::DISPLAY_ICON, true
+                    Translation::get('Unshare', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('unlock'), $url,
+                    ToolbarItem::DISPLAY_ICON, true
                 );
             }
         }
@@ -274,7 +280,6 @@ abstract class ContentObjectRenderer implements TableSupport
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\Component\BrowserComponent
      */
     public function get_repository_browser()
@@ -288,7 +293,6 @@ abstract class ContentObjectRenderer implements TableSupport
     }
 
     /**
-     *
      * @param int $template_registration_id
      */
     public function get_type_filter_url($template_registration_id)

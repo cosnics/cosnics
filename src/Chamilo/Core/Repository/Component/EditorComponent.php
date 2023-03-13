@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -23,7 +22,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.repository_manager.component
  */
 
@@ -59,12 +57,14 @@ class EditorComponent extends Manager implements DelegateComponent
 
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
-                    Translation::get('EditContentObject', array('CONTENT_OBJECT' => $object->get_title()))
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS]),
+                    Translation::get('EditContentObject', ['CONTENT_OBJECT' => $object->get_title()])
                 )
             );
 
-            if (!RightsService::getInstance()->canEditContentObject($this->get_user(), $object, $this->getWorkspace()))
+            if (!$this->getWorkspaceRightsService()->canEditContentObject(
+                $this->get_user(), $object, $this->getWorkspace()
+            ))
             {
                 throw new NotAllowedException();
             }
@@ -87,7 +87,7 @@ class EditorComponent extends Manager implements DelegateComponent
 
             $form = ContentObjectForm::factory(
                 ContentObjectForm::TYPE_EDIT, $this->getWorkspace(), $object, 'edit', FormValidator::FORM_METHOD_POST,
-                $this->get_url(array(self::PARAM_CONTENT_OBJECT_ID => $id))
+                $this->get_url([self::PARAM_CONTENT_OBJECT_ID => $id])
             );
 
             if ($form->validate())
@@ -103,13 +103,13 @@ class EditorComponent extends Manager implements DelegateComponent
                     $values = $form->exportValues();
 
                     Event::trigger(
-                        'Activity', Manager::context(), array(
+                        'Activity', Manager::context(), [
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_UPDATED,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),
                             Activity::PROPERTY_CONTENT_OBJECT_ID => $object->get_id(),
                             Activity::PROPERTY_CONTENT => $object->get_title()
-                        )
+                        ]
                     );
 
                     $addMetadataSchema = $values[InstanceService::PROPERTY_METADATA_ADD_SCHEMA];
@@ -117,9 +117,9 @@ class EditorComponent extends Manager implements DelegateComponent
                     {
                         $parameters[Application::PARAM_ACTION] = self::ACTION_EDIT_CONTENT_OBJECTS;
                         $parameters[self::PARAM_CONTENT_OBJECT_ID] = $object->get_id();
-                        $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = array(
+                        $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = [
                             self::TABS_CONTENT_OBJECT => $form->getSelectedTabIdentifier()
-                        );
+                        ];
 
                         $this->redirect($parameters);
                     }
@@ -134,7 +134,7 @@ class EditorComponent extends Manager implements DelegateComponent
                 $this->redirectWithMessage(
                     Translation::get(
                         $success == ContentObjectForm::RESULT_SUCCESS ? 'ObjectUpdated' : 'ObjectNotUpdated',
-                        array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
+                        ['OBJECT' => Translation::get('ContentObject')], StringUtilities::LIBRARIES
                     ), !($success == ContentObjectForm::RESULT_SUCCESS), $parameters
                 );
             }
@@ -154,8 +154,7 @@ class EditorComponent extends Manager implements DelegateComponent
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected', array('OBJECT' => Translation::get('ContentObject')),
-                        StringUtilities::LIBRARIES
+                        'NoObjectSelected', ['OBJECT' => Translation::get('ContentObject')], StringUtilities::LIBRARIES
                     )
                 )
             );

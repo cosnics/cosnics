@@ -6,22 +6,21 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.repository_manager.component
  */
+
 /**
  * Repository manager component to restore objects.
  * This means moving objects from the recycle bin to there original
@@ -37,21 +36,20 @@ class RestorerComponent extends Manager
     {
         $ids = $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID);
         $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $ids);
-        if (! empty($ids))
+        if (!empty($ids))
         {
-            if (! is_array($ids))
+            if (!is_array($ids))
             {
-                $ids = array($ids);
+                $ids = [$ids];
             }
             $failures = 0;
             foreach ($ids as $object_id)
             {
                 $object = DataManager::retrieve_by_id(ContentObject::class, $object_id);
 
-                if (RightsService::getInstance()->canDestroyContentObject(
-                    $this->get_user(),
-                    $object,
-                    $this->getWorkspace()))
+                if ($this->getWorkspaceRightsService()->canDestroyContentObject(
+                    $this->get_user(), $object, $this->getWorkspace()
+                ))
                 {
                     if ($object->get_state() == ContentObject::STATE_RECYCLED)
                     {
@@ -60,7 +58,7 @@ class RestorerComponent extends Manager
                         {
                             $version->set_state(ContentObject::STATE_NORMAL);
 
-                            if (! $this->repository_category_exists($version->get_parent_id()))
+                            if (!$this->repository_category_exists($version->get_parent_id()))
                             {
                                 $version->set_parent_id(0);
                             }
@@ -68,14 +66,14 @@ class RestorerComponent extends Manager
                             if ($version->update())
                             {
                                 Event::trigger(
-                                    'Activity',
-                                    Manager::context(),
-                                    array(
+                                    'Activity', Manager::context(), [
                                         Activity::PROPERTY_TYPE => Activity::ACTIVITY_RESTORE,
                                         Activity::PROPERTY_USER_ID => $this->get_user_id(),
                                         Activity::PROPERTY_DATE => time(),
                                         Activity::PROPERTY_CONTENT_OBJECT_ID => $version->get_id(),
-                                        Activity::PROPERTY_CONTENT => $version->get_title()));
+                                        Activity::PROPERTY_CONTENT => $version->get_title()
+                                    ]
+                                );
                             }
                             else
                             {
@@ -98,16 +96,15 @@ class RestorerComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = Translation::get(
-                        'ObjectNotRestored',
-                        array('OBJECT' => Translation::get('ContentObject')),
-                        StringUtilities::LIBRARIES);
+                        'ObjectNotRestored', ['OBJECT' => Translation::get('ContentObject')], StringUtilities::LIBRARIES
+                    );
                 }
                 else
                 {
                     $message = Translation::get(
-                        'ObjectNotRestored',
-                        array('OBJECTS' => Translation::get('ContentObjects')),
-                        StringUtilities::LIBRARIES);
+                        'ObjectNotRestored', ['OBJECTS' => Translation::get('ContentObjects')],
+                        StringUtilities::LIBRARIES
+                    );
                 }
             }
             else
@@ -115,51 +112,56 @@ class RestorerComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = Translation::get(
-                        'ObjectRestored',
-                        array('OBJECT' => Translation::get('ContentObject')),
-                        StringUtilities::LIBRARIES);
+                        'ObjectRestored', ['OBJECT' => Translation::get('ContentObject')], StringUtilities::LIBRARIES
+                    );
                 }
                 else
                 {
                     $message = Translation::get(
-                        'ObjectsRestored',
-                        array('OBJECTS' => Translation::get('ContentObjects')),
-                        StringUtilities::LIBRARIES);
+                        'ObjectsRestored', ['OBJECTS' => Translation::get('ContentObjects')], StringUtilities::LIBRARIES
+                    );
                 }
             }
 
             $this->redirectWithMessage(
-                $message, (bool) $failures,
-                array(Application::PARAM_ACTION => self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS));
+                $message, (bool) $failures, [Application::PARAM_ACTION => self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS]
+            );
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation::get('ContentObject')),
-                        StringUtilities::LIBRARIES)));
+                        'NoObjectSelected', ['OBJECT' => Translation::get('ContentObject')], StringUtilities::LIBRARIES
+                    )
+                )
+            );
         }
-    }
-
-    public function repository_category_exists($id)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_ID),
-            new StaticConditionVariable($id));
-        return (DataManager::count(RepositoryCategory::class, new DataClassCountParameters($condition)) > 0);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
-                Translation::get('BrowserComponent')));
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS]),
+                Translation::get('BrowserComponent')
+            )
+        );
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS)),
-                Translation::get('RepositoryManagerRecycleBinBrowserComponent')));
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS]),
+                Translation::get('RepositoryManagerRecycleBinBrowserComponent')
+            )
+        );
+    }
+
+    public function repository_category_exists($id)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_ID),
+            new StaticConditionVariable($id)
+        );
+
+        return (DataManager::count(RepositoryCategory::class, new DataClassCountParameters($condition)) > 0);
     }
 }

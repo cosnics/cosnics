@@ -239,7 +239,7 @@ class RightsService
 
     private function hasRightForWorkspace(int $right, User $user, WorkspaceInterface $workspaceImplementation): bool
     {
-        if ($this->hasWorkspaceImplementationCreatorRights($user, $workspaceImplementation))
+        if ($this->hasWorkspaceCreatorRights($user, $workspaceImplementation))
         {
             return true;
         }
@@ -249,8 +249,7 @@ class RightsService
         );
     }
 
-    public function hasWorkspaceImplementationCreatorRights(User $user, WorkspaceInterface $workspaceImplementation
-    ): bool
+    public function hasWorkspaceCreatorRights(User $user, WorkspaceInterface $workspaceImplementation): bool
     {
         // Check if the user is a platform administrator
         if ($user->is_platform_admin())
@@ -258,7 +257,7 @@ class RightsService
             return true;
         }
 
-        if ($this->isWorkspaceImplementationCreator($user, $workspaceImplementation))
+        if ($this->isWorkspaceCreator($user, $workspaceImplementation))
         {
             return true;
         }
@@ -273,8 +272,15 @@ class RightsService
         return $user->getId() == $contentObject->get_owner_id();
     }
 
-    public function isWorkspaceImplementationCreator(User $user, WorkspaceInterface $workspaceImplementation): bool
+    public function isWorkspaceCreator(User $user, WorkspaceInterface $workspaceImplementation): bool
     {
         return $user->getId() == $workspaceImplementation->getCreatorId();
+    }
+
+    public function isWorkspaceCreatorByWorkspaceIdentifier(User $user, string $workspaceIdentifier): bool
+    {
+        $workspace = $this->getWorkspaceService()->getWorkspaceByIdentifier($workspaceIdentifier);
+
+        return $this->isWorkspaceCreator($user, $workspace);
     }
 }

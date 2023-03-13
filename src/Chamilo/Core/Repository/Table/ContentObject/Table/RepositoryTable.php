@@ -18,14 +18,13 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Repository\Table\ContentObject\Table
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class RepositoryTable extends DataClassListTableRenderer implements TableActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager::PARAM_CONTENT_OBJECT_ID;
+    public const TABLE_IDENTIFIER = Manager::PARAM_CONTENT_OBJECT_ID;
 
     private $type;
 
@@ -50,17 +49,6 @@ class RepositoryTable extends DataClassListTableRenderer implements TableActions
         }
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
-     * @throws \Exception
-     */
-    public function getTemplateRegistrationConsulter()
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            TemplateRegistrationConsulter::class
-        );
-    }
-
     public function getTableActions(): TableActions
     {
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
@@ -70,14 +58,14 @@ class RepositoryTable extends DataClassListTableRenderer implements TableActions
             $actions->addAction(
                 new TableAction(
                     $this->get_component()->get_url(
-                        array(Manager::PARAM_ACTION => Manager::ACTION_IMPACT_VIEW_RECYCLE)
+                        [Manager::PARAM_ACTION => Manager::ACTION_IMPACT_VIEW_RECYCLE]
                     ), Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES), false
                 )
             );
             $actions->addAction(
                 new TableAction(
                     $this->get_component()->get_url(
-                        array(Manager::PARAM_ACTION => Manager::ACTION_UNLINK_CONTENT_OBJECTS)
+                        [Manager::PARAM_ACTION => Manager::ACTION_UNLINK_CONTENT_OBJECTS]
                     ), Translation::get('UnlinkSelected', null, StringUtilities::LIBRARIES)
                 )
             );
@@ -85,23 +73,23 @@ class RepositoryTable extends DataClassListTableRenderer implements TableActions
 
         $actions->addAction(
             new TableAction(
-                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_MOVE_CONTENT_OBJECTS)),
+                $this->get_component()->get_url([Manager::PARAM_ACTION => Manager::ACTION_MOVE_CONTENT_OBJECTS]),
                 Translation::get('MoveSelected', null, StringUtilities::LIBRARIES), false
             )
         );
         $actions->addAction(
             new TableAction(
                 $this->get_component()->get_url(
-                    array(
+                    [
                         Manager::PARAM_ACTION => Manager::ACTION_PUBLICATION,
                         \Chamilo\Core\Repository\Publication\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Publication\Manager::ACTION_PUBLISH
-                    )
+                    ]
                 ), Translation::get('PublishSelected', null, StringUtilities::LIBRARIES), false
             )
         );
         $actions->addAction(
             new TableAction(
-                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_EXPORT_CONTENT_OBJECTS)),
+                $this->get_component()->get_url([Manager::PARAM_ACTION => Manager::ACTION_EXPORT_CONTENT_OBJECTS]),
                 Translation::get('ExportSelected', null, StringUtilities::LIBRARIES), false
             )
         );
@@ -111,10 +99,10 @@ class RepositoryTable extends DataClassListTableRenderer implements TableActions
             $actions->addAction(
                 new TableAction(
                     $this->get_component()->get_url(
-                        array(
+                        [
                             Application::PARAM_ACTION => Manager::ACTION_WORKSPACE,
                             \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_SHARE
-                        )
+                        ]
                     ), Translation::get('ShareSelected', null, Manager::context()), false
                 )
             );
@@ -132,10 +120,10 @@ class RepositoryTable extends DataClassListTableRenderer implements TableActions
                 $actions->addAction(
                     new TableAction(
                         $this->get_component()->get_url(
-                            array(
+                            [
                                 Application::PARAM_ACTION => Manager::ACTION_WORKSPACE,
                                 \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_UNSHARE
-                            )
+                            ]
                         ), Translation::get('UnshareSelected', null, Manager::context()), false
                     )
                 );
@@ -143,6 +131,17 @@ class RepositoryTable extends DataClassListTableRenderer implements TableActions
         }
 
         return $actions;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     * @throws \Exception
+     */
+    public function getTemplateRegistrationConsulter()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            TemplateRegistrationConsulter::class
+        );
     }
 
     public function get_type()

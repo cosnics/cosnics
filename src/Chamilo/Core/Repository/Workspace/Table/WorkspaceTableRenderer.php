@@ -5,7 +5,9 @@ use Chamilo\Core\Repository\Workspace\Favourite\Service\FavouriteService;
 use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceUserDefault;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -40,11 +42,15 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
 
     protected User $user;
 
+    protected WorkspaceService $workspaceService;
+
     public function __construct(
-        FavouriteService $favouriteService, RightsService $rightsService, User $user, Translator $translator,
-        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        WorkspaceService $workspaceService, FavouriteService $favouriteService, RightsService $rightsService,
+        User $user, Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
+        Pager $pager
     )
     {
+        $this->workspaceService = $workspaceService;
         $this->favouriteService = $favouriteService;
         $this->rightsService = $rightsService;
         $this->user = $user;
@@ -102,6 +108,16 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
         return $this->user;
     }
 
+    public function getWorkspaceService(): WorkspaceService
+    {
+        return $this->workspaceService;
+    }
+
+    protected function getWorkspaceUserDefault(): ?WorkspaceUserDefault
+    {
+        return $this->getWorkspaceService()->findWorkspaceUserDefaultForUserIdentifier($this->getUser()->getId());
+    }
+
     protected function initializeColumns()
     {
         $this->addColumn(new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_NAME));
@@ -138,14 +154,26 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
                     $workspace->getCreationDate()
                 );
             case Workspace::PROPERTY_NAME:
-
                 $workspaceUrl = $urlGenerator->fromParameters([
                     Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Manager::CONTEXT,
                     \Chamilo\Core\Repository\Manager::PARAM_WORKSPACE_ID => $workspace->getId()
                 ]);
 
-                return '<a href="' . $workspaceUrl . '">' . parent::renderCell($column, $resultPosition, $workspace) .
-                    '</a>';
+                $workspaceUserDefault = $this->getWorkspaceUserDefault();
+
+                if ($workspaceUserDefault instanceof WorkspaceUserDefault &&
+                    $workspaceUserDefault->getWorkspaceIdentifier() == $workspace->getId())
+                {
+                    $glyph = new FontAwesomeGlyph('house', ['fa-lg']);
+                    $renderedGlyph = $glyph->render() . ' ';
+                }
+                else
+                {
+                    $renderedGlyph = '';
+                }
+
+                return '<a href="' . $workspaceUrl . '">' . $renderedGlyph .
+                    parent::renderCell($column, $resultPosition, $workspace) . '</a>';
         }
 
         return parent::renderCell($column, $resultPosition, $workspace);
@@ -160,6 +188,35 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
         $translator = $this->getTranslator();
 
         $toolbar = new Toolbar();
+
+        $existingDefaultWorkspace = $this->getWorkspaceUserDefault();
+
+        if ($this->getRightsService()->isWorkspaceCreator($this->getUser(), $workspace) &&
+            (!$existingDefaultWorkspace instanceof WorkspaceUserDefault ||
+                $existingDefaultWorkspace->getWorkspaceIdentifier() != $workspace->getId()))
+        {
+            $defaultUrl = $urlGenerator->fromParameters([
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Manager::PARAM_ACTION => Manager::ACTION_DEFAULT,
+                Manager::PARAM_WORKSPACE_ID => $workspace->getId()
+            ]);
+
+            $toolbar->add_item(
+                new ToolbarItem(
+                    $translator->trans('DefaultWorkspace', [], Manager::CONTEXT), new FontAwesomeGlyph('house'),
+                    $defaultUrl, ToolbarItem::DISPLAY_ICON, true
+                )
+            );
+        }
+        else
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    $translator->trans('DefaultWorkspace', [], Manager::CONTEXT),
+                    new FontAwesomeGlyph('house', ['disabled', 'text-muted']), null, ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
 
         $favouriteService = $this->getFavouriteService();
         $favourite = $favouriteService->getWorkspaceUserFavouriteByUserAndWorkspaceIdentifier(

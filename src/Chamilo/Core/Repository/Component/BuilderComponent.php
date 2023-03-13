@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -18,7 +17,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package repository.lib.repository_manager.component
  */
 
@@ -44,7 +42,7 @@ class BuilderComponent extends Manager implements ApplicationSupport
         {
             $this->content_object = DataManager::retrieve_by_id(ContentObject::class, $content_object_id);
 
-            if (!RightsService::getInstance()->canEditContentObject(
+            if (!$this->getWorkspaceRightsService()->canEditContentObject(
                 $this->get_user(), $this->content_object, $this->getWorkspace()
             ))
             {
@@ -53,10 +51,9 @@ class BuilderComponent extends Manager implements ApplicationSupport
 
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_BUILD_COMPLEX_CONTENT_OBJECT)),
-                    Translation::get(
-                        'BuildContentObject', array('CONTENT_OBJECT' => $this->content_object->get_title())
-                    )
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_BUILD_COMPLEX_CONTENT_OBJECT]), Translation::get(
+                    'BuildContentObject', ['CONTENT_OBJECT' => $this->content_object->get_title()]
+                )
                 )
             );
 
@@ -71,7 +68,7 @@ class BuilderComponent extends Manager implements ApplicationSupport
         {
             return $this->display_error_page(
                 Translation::get(
-                    'NoObjectSelected', array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
+                    'NoObjectSelected', ['OBJECT' => Translation::get('ContentObject')], StringUtilities::LIBRARIES
                 )
             );
         }
@@ -85,7 +82,7 @@ class BuilderComponent extends Manager implements ApplicationSupport
     public function redirect_away_from_complex_builder($message, $error_message)
     {
         $this->redirectWithMessage(
-            $message, $error_message, array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)
+            $message, $error_message, [self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS]
         );
     }
 

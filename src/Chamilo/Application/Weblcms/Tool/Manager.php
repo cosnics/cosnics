@@ -151,14 +151,13 @@ abstract class Manager extends Application
     {
         $breadcrumbTrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE), array(self::PARAM_PUBLICATION_ID)),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE], [self::PARAM_PUBLICATION_ID]),
                 Translation::getInstance()->getTranslation('BrowserComponent', [], __NAMESPACE__)
             )
         );
     }
 
     /**
-     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
@@ -199,10 +198,9 @@ abstract class Manager extends Application
             $toolbar = new ButtonToolBar();
             $buttonGroup = new ButtonGroup();
 
-            $repositoryRightsService = RightsService::getInstance();
             $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
-            $canEditContentObject = $repositoryRightsService->canEditContentObject(
+            $canEditContentObject = $this->getRightsService()->canEditContentObject(
                 $this->getUser(), $introduction_text->get_content_object()
             );
 
@@ -217,10 +215,10 @@ abstract class Manager extends Application
                     new Button(
                         Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                         $this->get_url(
-                            array(
+                            [
                                 self::PARAM_ACTION => self::ACTION_UPDATE_CONTENT_OBJECT,
                                 self::PARAM_PUBLICATION_ID => $introduction_text->get_id()
-                            )
+                            ]
                         ), Button::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -232,10 +230,10 @@ abstract class Manager extends Application
                     new Button(
                         Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $this->get_url(
-                            array(
+                            [
                                 self::PARAM_ACTION => self::ACTION_DELETE,
                                 self::PARAM_PUBLICATION_ID => $introduction_text->get_id()
-                            )
+                            ]
                         ), Button::DISPLAY_ICON_AND_LABEL,
                         Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                     )
@@ -276,7 +274,7 @@ abstract class Manager extends Application
     /**
      * Launches the tool with a given type
      *
-     * @param $type string
+     * @param $type        string
      * @param $application Application
      */
     public static function factory_and_launch($namespace, $application)
@@ -285,7 +283,7 @@ abstract class Manager extends Application
 
         if (!class_exists($class))
         {
-            throw new UserException(Translation::get('ToolTypeDoesNotExist', array('type' => $namespace)));
+            throw new UserException(Translation::get('ToolTypeDoesNotExist', ['type' => $namespace]));
         }
 
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
@@ -304,16 +302,21 @@ abstract class Manager extends Application
         return $this->getService(CategoryBreadcrumbsGenerator::class);
     }
 
+    protected function getRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
+    }
+
     public function get_access_details_toolbar_item($parent)
     {
         if (Request::get(self::PARAM_PUBLICATION_ID))
         {
             $url = $this->get_parent()->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_VIEW_REPORTING_TEMPLATE,
                     self::PARAM_PUBLICATION_ID => Request::get(self::PARAM_PUBLICATION_ID),
                     self::PARAM_TEMPLATE_NAME => PublicationDetailTemplate::class
-                )
+                ]
             );
 
             return new Button(
@@ -362,7 +365,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @see Application::get_category()
      */
     public function get_category($id)
@@ -373,26 +375,25 @@ abstract class Manager extends Application
     public function get_complex_builder_url($pid)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_BUILD_COMPLEX_CONTENT_OBJECT, self::PARAM_PUBLICATION_ID => $pid)
+            [self::PARAM_ACTION => self::ACTION_BUILD_COMPLEX_CONTENT_OBJECT, self::PARAM_PUBLICATION_ID => $pid]
         );
     }
 
     public function get_complex_display_url($pid)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT, self::PARAM_PUBLICATION_ID => $pid)
+            [self::PARAM_ACTION => self::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT, self::PARAM_PUBLICATION_ID => $pid]
         );
     }
 
     public function get_content_object_display_attachment_url($attachment)
     {
         return $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT, self::PARAM_OBJECT_ID => $attachment->get_id())
+            [self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT, self::PARAM_OBJECT_ID => $attachment->get_id()]
         );
     }
 
     /**
-     *
      * @return Course
      */
     public function get_course()
@@ -454,7 +455,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @see WeblcmsManager::get_last_visit_date()
      */
     public function get_last_visit_date()
@@ -500,7 +500,7 @@ abstract class Manager extends Application
         {
             if (!is_array($publications))
             {
-                $publications = array($publications);
+                $publications = [$publications];
             }
 
             foreach ($publications as $publication)
@@ -646,14 +646,12 @@ abstract class Manager extends Application
     /**
      * Check if the current user has a given right in this tool
      *
-     * @param $right int
+     * @param $right       int
      * @param $publication ContentObjectPublication
      * @param int $category_id
      *
      * @return bool True if the current user has the right
-     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function is_allowed($right, $publication = null, $category_id = null)
@@ -837,7 +835,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return string
      */
     public function renderHomeActions()
@@ -885,7 +882,7 @@ abstract class Manager extends Application
                     $parameters[self::PARAM_ACTION] = self::ACTION_PUBLISH_INTRODUCTION;
 
                     $actionSelector = new ActionSelector(
-                        $this, $this->getUser()->getId(), array(Introduction::class), $parameters
+                        $this, $this->getUser()->getId(), [Introduction::class], $parameters
                     );
 
                     $buttonToolbar->addItem(

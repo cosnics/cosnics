@@ -5,10 +5,12 @@ use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserF
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceUserDefault;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -130,6 +132,11 @@ class WorkspaceRepository
         return $this->getDataClassRepository()->create($workspace);
     }
 
+    public function createWorkspaceUserDefault(WorkspaceUserDefault $workspaceUserDefault): bool
+    {
+        return $this->getDataClassRepository()->create($workspaceUserDefault);
+    }
+
     public function deleteWorkspace(Workspace $workspace): bool
     {
         return $this->getDataClassRepository()->delete($workspace);
@@ -194,8 +201,7 @@ class WorkspaceRepository
         return $this->getDataClassRepository()->retrieves(
             Workspace::class, new DataClassRetrievesParameters(
                 $this->getWorkspaceFavouritesByUserCondition($user, $entities, RightsService::RIGHT_VIEW), $limit,
-                $offset, $orderProperty, $this->getWorkspaceFavouritesByUserJoins(), null, null,
-                new RetrieveProperties(
+                $offset, $orderProperty, $this->getWorkspaceFavouritesByUserJoins(), null, null, new RetrieveProperties(
                     [
                         new FunctionConditionVariable(
                             FunctionConditionVariable::DISTINCT, new PropertiesConditionVariable(Workspace::class)
@@ -472,6 +478,18 @@ class WorkspaceRepository
         );
     }
 
+    public function retrieveWorkspaceUserDefaultForUserIdentifier(string $userIdentifier): ?WorkspaceUserDefault
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(WorkspaceUserDefault::class, WorkspaceUserDefault::PROPERTY_USER_ID),
+            new StaticConditionVariable($userIdentifier)
+        );
+
+        return $this->getDataClassRepository()->retrieve(
+            WorkspaceUserDefault::class, new DataClassRetrieveParameters($condition)
+        );
+    }
+
     /**
      * Helper function to retrieve workspaces for a given user with a given condition
      *
@@ -505,5 +523,13 @@ class WorkspaceRepository
     public function updateWorkspace(Workspace $workspace): bool
     {
         return $this->getDataClassRepository()->update($workspace);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function updateWorkspaceUserDefault(WorkspaceUserDefault $workspaceUserDefault): bool
+    {
+        return $this->getDataClassRepository()->update($workspaceUserDefault);
     }
 }

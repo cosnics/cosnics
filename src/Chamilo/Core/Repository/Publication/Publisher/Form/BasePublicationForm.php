@@ -46,7 +46,7 @@ abstract class BasePublicationForm extends FormValidator
             );
             $glyph = $contentObject->getGlyph(IdentGlyph::SIZE_MINI);
 
-            if (RightsService::getInstance()->canUseContentObject($user, $contentObject))
+            if ($this->getWorkspaceRightsService()->canUseContentObject($user, $contentObject))
             {
                 $html[] =
                     '<li class="list-group-item">' . $glyph->render() . ' ' . $contentObject->get_title() . '</li>';
@@ -66,8 +66,12 @@ abstract class BasePublicationForm extends FormValidator
         );
     }
 
+    protected function getWorkspaceRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
+    }
+
     /**
-     *
      * @param ContentObject[] $selectedContentObjects
      */
     public function setSelectedContentObjects($selectedContentObjects = [])

@@ -6,14 +6,12 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.repository_manager.component
  */
 class AttachmentViewerComponent extends Manager
@@ -34,7 +32,9 @@ class AttachmentViewerComponent extends Manager
                 ContentObject::class, $object_id
             );
 
-            if (!RightsService::getInstance()->canViewContentObject($this->get_user(), $object, $this->getWorkspace()))
+            if (!$this->getWorkspaceRightsService()->canViewContentObject(
+                $this->get_user(), $object, $this->getWorkspace()
+            ))
             {
                 throw new NotAllowedException();
             }

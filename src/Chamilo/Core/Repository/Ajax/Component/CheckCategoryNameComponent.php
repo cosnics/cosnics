@@ -38,8 +38,7 @@ class CheckCategoryNameComponent extends Manager
         }
         else
         {
-            $workspaceService = new WorkspaceService(new WorkspaceRepository());
-            $workspace = $workspaceService->getWorkspaceByIdentifier($this->getPostDataValue(self::PARAM_WORKSPACE_ID));
+            $workspace = $this->getWorkspaceService()->getWorkspaceByIdentifier($this->getPostDataValue(self::PARAM_WORKSPACE_ID));
         }
         
         if (! DataManager::check_category_name($workspace, $parent_id, $category_name))

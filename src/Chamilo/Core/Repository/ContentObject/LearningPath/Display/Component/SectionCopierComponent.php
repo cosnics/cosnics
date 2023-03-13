@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeCopier;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
@@ -25,19 +24,18 @@ use Exception;
  */
 class SectionCopierComponent extends BaseHtmlTreeComponent
 {
-    const PARAM_SELECTED_CONTENT_OBJECT = 'selected_content_object';
-    const PARAM_SELECTED_WORKSPACE = 'selected_workspace';
-    const PARAM_SELECTED_LEARNING_PATH_NODES = 'learning_path_selected_nodes';
-    const PARAM_COPY_INSTEAD_OF_REUSE = 'copy_instead_of_reuse';
+    public const PARAM_COPY_INSTEAD_OF_REUSE = 'copy_instead_of_reuse';
+    public const PARAM_SELECTED_CONTENT_OBJECT = 'selected_content_object';
+    public const PARAM_SELECTED_LEARNING_PATH_NODES = 'learning_path_selected_nodes';
+    public const PARAM_SELECTED_WORKSPACE = 'selected_workspace';
 
     /**
      * Builds this component and returns it's response
      *
      * @return string
-     *
      * @throws NotAllowedException
      */
-    function build()
+    public function build()
     {
         if (!$this->canEditCurrentTreeNode())
         {
@@ -67,9 +65,8 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
                     );
                 }
 
-                $workspaceService = new WorkspaceService(new WorkspaceRepository());
-                $workspace = $workspaceService->determineWorkspaceForUserByIdentifier(
-                    $this->getUser(), (int) $selectedWorkspace
+                $workspace = $this->getWorkspaceService()->determineWorkspaceForUserByIdentifier(
+                    $this->getUser(), $selectedWorkspace
                 );
 
                 if (!$workspace instanceof WorkspaceInterface)
@@ -107,11 +104,37 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
 
             $this->redirectWithMessage(
                 Translation::getInstance()->getTranslation($message), !$success,
-                array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT)
+                [self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT]
             );
         }
 
         return $this->renderCopyForm();
+    }
+
+    /**
+     * @return ContentObjectRepository | object
+     */
+    protected function getContentObjectRepository()
+    {
+        return $this->getService(ContentObjectRepository::class);
+    }
+
+    protected function getRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
+    }
+
+    /**
+     * @return TreeNodeCopier | object
+     */
+    protected function getTreeNodeCopier()
+    {
+        return $this->getService(TreeNodeCopier::class);
+    }
+
+    public function getWorkspaceService(): WorkspaceService
+    {
+        return $this->getService(WorkspaceService::class);
     }
 
     /**
@@ -130,11 +153,13 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
 
         $html[] = $this->render_header();
 
-        $javascriptFiles = array(
-            'Repository/app.js', 'Repository/service/RepositoryService.js', 'LearningPathSectionCopier/app.js',
+        $javascriptFiles = [
+            'Repository/app.js',
+            'Repository/service/RepositoryService.js',
+            'LearningPathSectionCopier/app.js',
             'LearningPathSectionCopier/service/LearningPathService.js',
             'LearningPathSectionCopier/controller/MainController.js'
-        );
+        ];
 
         foreach ($javascriptFiles as $javascriptFile)
         {
@@ -147,7 +172,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
             $this->getPathBuilder()->getResourcesPath(Manager::context()) . 'Templates/SectionCopier.html'
         );
 
-        $parameters = array('FORM_URL' => $this->get_url());
+        $parameters = ['FORM_URL' => $this->get_url()];
 
         foreach ($parameters as $parameter => $value)
         {
@@ -158,32 +183,5 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return ContentObjectRepository | object
-     */
-    protected function getContentObjectRepository()
-    {
-        return $this->getService(ContentObjectRepository::class);
-    }
-
-    /**
-     *
-     * @return RightsService
-     */
-    protected function getRightsService()
-    {
-        return RightsService::getInstance();
-    }
-
-    /**
-     *
-     * @return TreeNodeCopier | object
-     */
-    protected function getTreeNodeCopier()
-    {
-        return $this->getService(TreeNodeCopier::class);
     }
 }

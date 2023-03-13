@@ -5,10 +5,10 @@ namespace Chamilo\Core\Repository\Viewer;
 use Chamilo\Core\Repository\Common\Import\ImportTypeSelector;
 use Chamilo\Core\Repository\Selector\Renderer\SubButtonTypeSelectorRenderer;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
@@ -19,71 +19,67 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Core\Repository\Viewer
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ActionSelector
 {
+    use DependencyInjectionContainerTrait;
 
     /**
-     *
      * @var string[]
      */
     protected $allowedContentObjectTypes;
 
     /**
-     *
      * @var \Chamilo\Libraries\Architecture\Application\Application
      */
     protected $application;
 
     /**
-     *
      * @var string[]
      */
     protected $classes;
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
      */
     protected $extraActions;
 
     /**
-     *
      * @var string[]
      */
     protected $parameters;
 
     /**
-     *
      * @var \Chamilo\Core\Repository\Selector\TypeSelector
      */
     protected $typeSelector;
 
     /**
-     *
-     * @var integer
+     * @var int
      */
     protected $userIdentifier;
 
     /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      * @param string[] $allowedContentObjectTypes
      * @param string[] $parameters
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[] extraActions
      * @param string[] $classes
+     *
+     * @throws \Exception
      */
     public function __construct(
         Application $application, $userIdentifier, $allowedContentObjectTypes = [], $parameters = [],
         $extraActions = [], array $classes = []
     )
     {
+        $this->initializeContainer();
+
         $this->application = $application;
         $this->userIdentifier = $userIdentifier;
         $this->allowedContentObjectTypes = $allowedContentObjectTypes;
@@ -93,7 +89,6 @@ class ActionSelector
     }
 
     /**
-     *
      * @param string $label
      * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph|string $image
      *
@@ -137,7 +132,6 @@ class ActionSelector
     }
 
     /**
-     *
      * @return string[] $allowedContentObjectTypes
      */
     public function getAllowedContentObjectTypes()
@@ -146,16 +140,6 @@ class ActionSelector
     }
 
     /**
-     *
-     * @param string[] $allowedContentObjectTypes
-     */
-    public function setAllowedContentObjectTypes($allowedContentObjectTypes = [])
-    {
-        $this->allowedContentObjectTypes = $allowedContentObjectTypes;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function getApplication()
@@ -164,16 +148,6 @@ class ActionSelector
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication(Application $application)
-    {
-        $this->application = $application;
-    }
-
-    /**
-     *
      * @return string[]
      */
     public function getClasses(): array
@@ -182,16 +156,6 @@ class ActionSelector
     }
 
     /**
-     *
-     * @param string[] $classes
-     */
-    public function setClasses(array $classes)
-    {
-        $this->classes = $classes;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
      */
     public function getCreationOptions()
@@ -220,7 +184,6 @@ class ActionSelector
     }
 
     /**
-     *
      * @param string $action
      *
      * @return string
@@ -241,7 +204,6 @@ class ActionSelector
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
      */
     public function getExistingOptions()
@@ -255,8 +217,7 @@ class ActionSelector
             $this->getExistingLink(Manager::ACTION_BROWSER), SubButton::DISPLAY_ICON_AND_LABEL
         );
 
-        $workspaceService = new WorkspaceService(new WorkspaceRepository());
-        $validWorkspaces = $workspaceService->countWorkspacesForUser(
+        $validWorkspaces = $this->getWorkspaceService()->countWorkspacesForUser(
             $this->application->getUser(), RightsService::RIGHT_USE
         );
 
@@ -272,7 +233,6 @@ class ActionSelector
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
      */
     public function getExtraActions()
@@ -281,16 +241,6 @@ class ActionSelector
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[] $extraActions
-     */
-    public function setExtraActions($extraActions)
-    {
-        $this->extraActions = $extraActions;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
      */
     public function getImportOptions()
@@ -319,21 +269,11 @@ class ActionSelector
     }
 
     /**
-     *
      * @return string[]
      */
     public function getParameters()
     {
         return $this->parameters;
-    }
-
-    /**
-     *
-     * @param string[] $parameters
-     */
-    public function setParameters($parameters)
-    {
-        $this->parameters = $parameters;
     }
 
     /**
@@ -353,7 +293,6 @@ class ActionSelector
     }
 
     /**
-     *
      * @return string
      */
     public function getSingleCreationOptionUrl()
@@ -367,7 +306,6 @@ class ActionSelector
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\Selector\Renderer\SubButtonTypeSelectorRenderer
      */
     public function getSubButtonTypeSelectorRenderer()
@@ -387,7 +325,6 @@ class ActionSelector
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\Selector\TypeSelector
      */
     public function getTypeSelector()
@@ -404,31 +341,73 @@ class ActionSelector
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getUserIdentifier()
     {
         return $this->userIdentifier;
     }
 
-    /**
-     *
-     * @param integer $userIdentifier
-     */
-    public function setUserIdentifier($userIdentifier)
+    public function getWorkspaceService(): WorkspaceService
     {
-        $this->userIdentifier = $userIdentifier;
+        return $this->getService(WorkspaceService::class);
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function hasExtraActions()
     {
         $extraActions = $this->getExtraActions();
 
         return count($extraActions) > 0;
+    }
+
+    /**
+     * @param string[] $allowedContentObjectTypes
+     */
+    public function setAllowedContentObjectTypes($allowedContentObjectTypes = [])
+    {
+        $this->allowedContentObjectTypes = $allowedContentObjectTypes;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     */
+    public function setApplication(Application $application)
+    {
+        $this->application = $application;
+    }
+
+    /**
+     * @param string[] $classes
+     */
+    public function setClasses(array $classes)
+    {
+        $this->classes = $classes;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[] $extraActions
+     */
+    public function setExtraActions($extraActions)
+    {
+        $this->extraActions = $extraActions;
+    }
+
+    /**
+     * @param string[] $parameters
+     */
+    public function setParameters($parameters)
+    {
+        $this->parameters = $parameters;
+    }
+
+    /**
+     * @param int $userIdentifier
+     */
+    public function setUserIdentifier($userIdentifier)
+    {
+        $this->userIdentifier = $userIdentifier;
     }
 }

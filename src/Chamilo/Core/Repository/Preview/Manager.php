@@ -65,9 +65,9 @@ abstract class Manager extends Application
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
 
-        $repositoryRightsService = RightsService::getInstance();
-
-        if (!$repositoryRightsService->hasContentObjectOwnerRights($this->get_user(), $this->get_content_object()))
+        if (!$this->getWorkspaceRightsService()->hasContentObjectOwnerRights(
+            $this->get_user(), $this->get_content_object()
+        ))
         {
             throw new NotAllowedException();
         }
@@ -201,6 +201,11 @@ abstract class Manager extends Application
         }
 
         return $translation;
+    }
+
+    protected function getWorkspaceRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
     }
 
     /**

@@ -45,7 +45,7 @@ class DeleterComponent extends Manager
             {
                 $workspace = $workspaceService->getWorkspaceByIdentifier($workspaceIdentifier);
 
-                if ($rightsService->hasWorkspaceImplementationCreatorRights($this->get_user(), $workspace))
+                if ($rightsService->hasWorkspaceCreatorRights($this->get_user(), $workspace))
                 {
                     if (! $workspaceService->deleteWorkspace($workspace))
                     {

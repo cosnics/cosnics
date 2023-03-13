@@ -32,7 +32,7 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
         {
             case RepositoryTableColumnModel::PROPERTY_TYPE :
                 $image = $content_object->get_icon_image(
-                    IdentGlyph::SIZE_MINI, true, array('fa-fw')
+                    IdentGlyph::SIZE_MINI, true, ['fa-fw']
                 );
 
                 return '<a href="' . htmlentities(
@@ -75,9 +75,9 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                     if ($content_object->has_versions())
                     {
                         $number = $content_object->get_version_count();
-                        $title = Translation::get('VersionsAvailable', array('NUMBER' => $number));
+                        $title = Translation::get('VersionsAvailable', ['NUMBER' => $number]);
                         $glyph = new FontAwesomeGlyph(
-                            'check', array('text-primary'), $title, 'fas'
+                            'check', ['text-primary'], $title, 'fas'
                         );
 
                         return $glyph->render();
@@ -86,7 +86,7 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                     {
                         $title = Translation::get('NoVersionsAvailable');
                         $glyph = new FontAwesomeGlyph(
-                            'check', array('text-muted'), $title, 'fas'
+                            'check', ['text-muted'], $title, 'fas'
                         );
 
                         return $glyph->render();
@@ -96,7 +96,7 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                 {
                     $title = Translation::get('NotVersionable');
                     $glyph = new FontAwesomeGlyph(
-                        'check', array('text-muted'), $title, 'fas'
+                        'check', ['text-muted'], $title, 'fas'
                     );
 
                     return $glyph->render();

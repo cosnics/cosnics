@@ -19,7 +19,6 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.component
  */
 class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
@@ -28,13 +27,14 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
     public function run()
     {
         $pid = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID) ? Request::get(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID) : Request::post(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+        ) : Request::post(
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+        );
 
         $contentObjectPublicationTranslation = Translation::getInstance()->getTranslation(
-            'ContentObjectPublication',
-            null,
-            'Chamilo\Application\Weblcms');
+            'ContentObjectPublication', null, 'Chamilo\Application\Weblcms'
+        );
 
         if (empty($pid))
         {
@@ -42,27 +42,25 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
         }
 
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $pid);
+            ContentObjectPublication::class, $pid
+        );
 
-        if (! $publication instanceof ContentObjectPublication)
+        if (!$publication instanceof ContentObjectPublication)
         {
             throw new ObjectNotExistException($contentObjectPublicationTranslation, $pid);
         }
 
-        $repositoryRightsService = RightsService::getInstance();
         $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
-        $canEditContentObject = $repositoryRightsService->canEditContentObject(
-            $this->get_user(),
-            $publication->get_content_object());
+        $canEditContentObject = $this->getRightsService()->canEditContentObject(
+            $this->get_user(), $publication->get_content_object()
+        );
         $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublication(
-            $this->get_user(),
-            $publication,
-            $this->get_course());
+            $this->get_user(), $publication, $this->get_course()
+        );
 
         $is_admin_introduction = $this->get_course()->is_course_admin($this->get_user()) &&
-             $publication->get_content_object()->getType() == Introduction::class;
+            $publication->get_content_object()->getType() == Introduction::class;
 
         if ($canEditContentObject || $canEditPublicationContentObject || $is_admin_introduction)
         {
@@ -76,15 +74,15 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(),
-                    Translation::get('ToolContentObjectUpdateComponent', array('TITLE' => $content_object->get_title()))));
+                    Translation::get('ToolContentObjectUpdateComponent', ['TITLE' => $content_object->get_title()])
+                )
+            );
 
             $form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_EDIT,
-                new PersonalWorkspace($this->get_user()),
-                $content_object,
-                'edit',
+                ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit',
                 FormValidator::FORM_METHOD_POST,
-                $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $pid)));
+                $this->get_url([\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $pid])
+            );
 
             if ($form->validate())
             {
@@ -102,14 +100,16 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
                     $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = null;
                     $params['display_action'] = 'view';
                     $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = Request::get(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+                    );
                 }
 
                 if ($tool != 'learning_path')
                 {
-                    $filter = array(
+                    $filter = [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+                    ];
                 }
                 else
                 {
@@ -132,9 +132,14 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
         else
         {
             $this->redirectWithMessage(
-                Translation::get("NotAllowed"),
-                true,
-                array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => null, 'tool_action' => null));
+                Translation::get('NotAllowed'), true,
+                [\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => null, 'tool_action' => null]
+            );
         }
+    }
+
+    protected function getRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
     }
 }

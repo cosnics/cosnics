@@ -31,11 +31,11 @@ class ViewerComponent extends Manager
                 ContentObject::class, $contentObjectIdentifier
             );
 
-            $canEditContentObject = RightsService::getInstance()->canEditContentObject(
+            $canEditContentObject = $this->getWorkspaceRightsService()->canEditContentObject(
                 $this->get_user(), $content_object
             );
             $canUseContentObject =
-                RightsService::getInstance()->canUseContentObject($this->get_user(), $content_object);
+                $this->getWorkspaceRightsService()->canUseContentObject($this->get_user(), $content_object);
 
             $buttonToolBar = new ButtonToolBar();
 
@@ -45,7 +45,7 @@ class ViewerComponent extends Manager
                     new Button(
                         Translation::get('Publish', null, StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('share-square'), $this->get_url(
-                        array_merge($this->get_parameters(), array(self::PARAM_ID => $content_object->get_id())), false
+                        array_merge($this->get_parameters(), [self::PARAM_ID => $content_object->get_id()]), false
                     ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-primary']
                     )
                 );
@@ -57,10 +57,11 @@ class ViewerComponent extends Manager
                     new Button(
                         Translation::get('EditAndPublish'), new FontAwesomeGlyph('edit'), $this->get_url(
                         array_merge(
-                            $this->get_parameters(), array(
-                                self::PARAM_TAB => self::TAB_CREATOR, self::PARAM_ACTION => self::ACTION_CREATOR,
+                            $this->get_parameters(), [
+                                self::PARAM_TAB => self::TAB_CREATOR,
+                                self::PARAM_ACTION => self::ACTION_CREATOR,
                                 self::PARAM_EDIT_ID => $content_object->get_id()
-                            )
+                            ]
                         )
                     )
                     )
@@ -86,9 +87,14 @@ class ViewerComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSER)), Translation::get('BrowserComponent')
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSER]), Translation::get('BrowserComponent')
             )
         );
+    }
+
+    protected function getWorkspaceRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
     }
 
     /**
@@ -106,12 +112,12 @@ class ViewerComponent extends Manager
         $contentObjectIdentifier = $this->getRequest()->query->get(self::PARAM_VIEW_ID);
 
         $redirect = new Redirect(
-            array(
+            [
                 Application::PARAM_CONTEXT => 'Chamilo\Core\Repository',
                 Application::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_VIEW_ATTACHMENT,
                 \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID => $contentObjectIdentifier,
                 \Chamilo\Core\Repository\Manager::PARAM_ATTACHMENT_ID => $attachment->getId()
-            )
+            ]
         );
 
         return $redirect->getUrl();

@@ -54,8 +54,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
         $categoryId = $this->getPostDataValue(self::PARAM_PARENT_ID);
 
         $workspaceId = $this->getRequest()->getFromPost(self::PARAM_WORKSPACE_ID);
-        $workspaceService = new WorkspaceService(new WorkspaceRepository());
-        $workspace = $workspaceService->getWorkspaceByIdentifier($workspaceId);
+        $workspace = $this->getWorkspaceService()->getWorkspaceByIdentifier($workspaceId);
 
         if (!$workspace instanceof Workspace)
         {

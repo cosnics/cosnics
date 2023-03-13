@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -25,40 +24,40 @@ use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
- *
  * @package Chamilo\Core\Repository\Workspace\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class PublisherComponent extends Manager
 {
 
     public function run()
     {
-        if (! $this->getCurrentWorkspace() instanceof Workspace)
+        if (!$this->getCurrentWorkspace() instanceof Workspace)
         {
             throw new Exception(Translation::get('NoValidWorkspace'));
         }
 
-        if (! RightsService::getInstance()->canAddContentObjects($this->get_user(), $this->getCurrentWorkspace()))
+        if (!$this->getRightsService()->canAddContentObjects($this->get_user(), $this->getCurrentWorkspace()))
         {
             throw new NotAllowedException();
         }
 
-        if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $this->getRequest()->query->set(
                 \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION,
-                \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER);
+                \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER
+            );
 
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
 
             $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Viewer\Manager::context(),
-                $applicationConfiguration);
+                \Chamilo\Core\Repository\Viewer\Manager::context(), $applicationConfiguration
+            );
             $component->set_excluded_objects($this->getExcludedObjects());
-            $component->set_actions(array(\Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER));
+            $component->set_actions([\Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER]);
 
             return $component->run();
         }
@@ -72,27 +71,67 @@ class PublisherComponent extends Manager
             foreach ($selectedContentObjectIdentifiers as $selectedContentObjectIdentifier)
             {
                 $contentObject = DataManager::retrieve_by_id(
-                    ContentObject::class,
-                    $selectedContentObjectIdentifier);
+                    ContentObject::class, $selectedContentObjectIdentifier
+                );
 
                 $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
                 $contentObjectRelationService->createContentObjectRelation(
-                    $this->getCurrentWorkspace()->getId(),
-                    $contentObject->get_object_number(),
-                    $parentId);
+                    $this->getCurrentWorkspace()->getId(), $contentObject->get_object_number(), $parentId
+                );
             }
 
             $this->redirectWithMessage(
-                Translation::get('ContentObjectsAddedToWorkspace'),
-                false,
-                array(
+                Translation::get('ContentObjectsAddedToWorkspace'), false, [
                     \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_BROWSE_CONTENT_OBJECTS,
-                    self::PARAM_ACTION => null));
+                    self::PARAM_ACTION => null
+                ]
+            );
         }
     }
 
+    public function getCurrentWorkspace()
+    {
+        return $this->get_application()->getWorkspace();
+    }
+
+    // TODO: This should return ALL ids of ALL content object ids attached to the object numbers
+
+    public function getExcludedObjects()
+    {
+        $workspace = $this->get_application()->getWorkspace();
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                WorkspaceContentObjectRelation::class, WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID
+            ), new StaticConditionVariable($workspace->getId())
+        );
+
+        $contentObjectNumbers = DataManager::distinct(
+            WorkspaceContentObjectRelation::class, new DataClassDistinctParameters(
+                $condition, new RetrieveProperties(
+                    [
+                        new PropertyConditionVariable(
+                            WorkspaceContentObjectRelation::class,
+                            WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID
+                        )
+                    ]
+                )
+            )
+        );
+
+        return DataManager::distinct(
+            ContentObject::class, new DataClassDistinctParameters(
+                new InCondition(
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
+                    $contentObjectNumbers
+                ), new RetrieveProperties(
+                    [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
+                )
+            )
+        );
+    }
+
     /**
-     *
      * @return string[]
      */
     public function get_allowed_content_object_types()
@@ -103,45 +142,9 @@ class PublisherComponent extends Manager
         {
             $namespace = $registration[Registration::PROPERTY_CONTEXT];
             $types[] = $namespace . '\Storage\DataClass\\' .
-                 ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
+                ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
         }
 
         return $types;
-    }
-
-    // TODO: This should return ALL ids of ALL content object ids attached to the object numbers
-    public function getExcludedObjects()
-    {
-        $workspace = $this->get_application()->getWorkspace();
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                WorkspaceContentObjectRelation::class,
-                WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID),
-            new StaticConditionVariable($workspace->getId()));
-
-        $contentObjectNumbers = DataManager::distinct(
-            WorkspaceContentObjectRelation::class,
-            new DataClassDistinctParameters(
-                $condition,
-                new RetrieveProperties(
-                    array(
-                        new PropertyConditionVariable(
-                            WorkspaceContentObjectRelation::class,
-                            WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID)))));
-
-        return DataManager::distinct(
-            ContentObject::class,
-            new DataClassDistinctParameters(
-                new InCondition(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
-                    $contentObjectNumbers),
-                new RetrieveProperties(
-                    array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)))));
-    }
-
-    public function getCurrentWorkspace()
-    {
-        return $this->get_application()->getWorkspace();
     }
 }

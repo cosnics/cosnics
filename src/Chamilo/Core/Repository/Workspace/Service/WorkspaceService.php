@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceUserDefault;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Service\UserService;
@@ -99,6 +100,18 @@ class WorkspaceService
         return $workspace;
     }
 
+    public function createWorkspaceUserDefaultForWorkspaceIdentifierAndUserIdentifier(
+        string $workspaceIdentifier, string $userIdentifier
+    ): bool
+    {
+        $workspaceUserDefault = new WorkspaceUserDefault();
+
+        $workspaceUserDefault->setUserIdentifier($userIdentifier);
+        $workspaceUserDefault->setWorkspaceIdentifier($workspaceIdentifier);
+
+        return $this->getWorkspaceRepository()->createWorkspaceUserDefault($workspaceUserDefault);
+    }
+
     public function deleteWorkspace(Workspace $workspace): bool
     {
         return $this->getWorkspaceRepository()->deleteWorkspace($workspace);
@@ -119,6 +132,11 @@ class WorkspaceService
         {
             return $this->getPersonalWorkspaceForUser($user);
         }
+    }
+
+    public function findWorkspaceUserDefaultForUserIdentifier(string $userIdentifier): ?WorkspaceUserDefault
+    {
+        return $this->getWorkspaceRepository()->retrieveWorkspaceUserDefaultForUserIdentifier($userIdentifier);
     }
 
     /**
@@ -330,6 +348,34 @@ class WorkspaceService
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function saveWorkspaceUserDefaultForWorkspaceIdentifierAndUserIdentifier(
+        string $workspaceIdentifier, string $userIdentifier
+    ): bool
+    {
+        $existingWorkspaceUserDefault = $this->findWorkspaceUserDefaultForUserIdentifier($userIdentifier);
+
+        if ($existingWorkspaceUserDefault instanceof WorkspaceUserDefault)
+        {
+            if ($existingWorkspaceUserDefault->getWorkspaceIdentifier() != $workspaceIdentifier)
+            {
+                $existingWorkspaceUserDefault->setWorkspaceIdentifier($workspaceIdentifier);
+
+                return $this->updateWorkspaceUserDefault($existingWorkspaceUserDefault);
+            }
+
+            return true;
+        }
+        else
+        {
+            return $this->createWorkspaceUserDefaultForWorkspaceIdentifierAndUserIdentifier(
+                $workspaceIdentifier, $userIdentifier
+            );
+        }
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
      * @param string[] $workspaceProperties
      */
@@ -337,8 +383,8 @@ class WorkspaceService
     {
         $workspace->setName($workspaceProperties[Workspace::PROPERTY_NAME]);
         $workspace->setDescription($workspaceProperties[Workspace::PROPERTY_DESCRIPTION]);
-        $workspace->setCreationDate($workspaceProperties[Workspace::PROPERTY_CREATION_DATE]);
-        $workspace->setCreatorId($workspaceProperties[Workspace::PROPERTY_CREATOR_ID]);
+        $workspace->setCreationDate((int) $workspaceProperties[Workspace::PROPERTY_CREATION_DATE]);
+        $workspace->setCreatorId((int) $workspaceProperties[Workspace::PROPERTY_CREATOR_ID]);
     }
 
     /**
@@ -353,6 +399,14 @@ class WorkspaceService
         $this->setWorkspaceProperties($workspace, $workspaceProperties);
 
         return $this->getWorkspaceRepository()->updateWorkspace($workspace);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    protected function updateWorkspaceUserDefault(WorkspaceUserDefault $workspaceUserDefault): bool
+    {
+        return $this->getWorkspaceRepository()->updateWorkspaceUserDefault($workspaceUserDefault);
     }
 
     public function userHasWorkspaceFavourites(User $user): bool

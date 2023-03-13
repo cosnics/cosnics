@@ -10,8 +10,6 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\Work
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceItem;
 use Chamilo\Core\Repository\Manager as RepositoryManager;
 use Chamilo\Core\Repository\Workspace\Manager as WorkspaceManager;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
-use Chamilo\Core\Repository\Workspace\Service\EntityService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -21,14 +19,15 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class WorkspaceCategoryItemRenderer extends ItemRenderer
 {
+
+    protected WorkspaceService $workspaceService;
 
     /**
      * @var \Chamilo\Core\Menu\Factory\ItemRendererFactory
@@ -44,13 +43,15 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
      * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
-        ThemePathBuilder $themePathBuilder, ChamiloRequest $request, ItemRendererFactory $itemRendererFactory
+        WorkspaceService $workspaceService, AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
+        ItemCacheService $itemCacheService, ThemePathBuilder $themePathBuilder, ChamiloRequest $request,
+        ItemRendererFactory $itemRendererFactory
     )
     {
         parent::__construct($authorizationChecker, $translator, $itemCacheService, $themePathBuilder, $request);
 
         $this->itemRendererFactory = $itemRendererFactory;
+        $this->workspaceService = $workspaceService;
     }
 
     /**
@@ -80,7 +81,7 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
         if ($item->showIcon())
         {
             $glyph = $item->getGlyph();
-            $glyph->setExtraClasses(array('fa-2x'));
+            $glyph->setExtraClasses(['fa-2x']);
             $glyph->setTitle($title);
 
             $html[] = $glyph->render();
@@ -109,10 +110,7 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
      */
     protected function findWorkspaces(User $user)
     {
-        $workspaceService = new WorkspaceService(new WorkspaceRepository());
-        $entityService = new EntityService();
-
-        return $workspaceService->getWorkspaceFavouritesByUserFast($user);
+        return $this->getWorkspaceService()->getWorkspaceFavouritesByUserFast($user);
     }
 
     /**
@@ -123,19 +121,16 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
         return $this->itemRendererFactory;
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
-     */
-    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
+    public function getWorkspaceService(): WorkspaceService
     {
-        $this->itemRendererFactory = $itemRendererFactory;
+        return $this->workspaceService;
     }
 
     /**
      * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceCategoryItem $item
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      */
     public function isItemVisibleForUser(WorkspaceCategoryItem $item, User $user)
     {
@@ -186,7 +181,7 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
 
         if ($workspaces->count())
         {
-            foreach($workspaces as $workspace)
+            foreach ($workspaces as $workspace)
             {
                 $workspaceItem = new WorkspaceItem();
                 $workspaceItem->setWorkspaceId($workspace->getId());
@@ -211,5 +206,13 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
         $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
+     */
+    public function setItemRendererFactory(ItemRendererFactory $itemRendererFactory): void
+    {
+        $this->itemRendererFactory = $itemRendererFactory;
     }
 }

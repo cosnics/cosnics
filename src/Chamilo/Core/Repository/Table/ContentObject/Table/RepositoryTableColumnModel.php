@@ -12,13 +12,10 @@ use Chamilo\Libraries\Translation\Translation;
 
 class RepositoryTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
-    const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_DESC;
-
-    const DEFAULT_ORDER_COLUMN_INDEX = 3;
-
-    const PROPERTY_TYPE = 'type';
-
-    const PROPERTY_VERSION = 'version';
+    public const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_DESC;
+    public const DEFAULT_ORDER_COLUMN_INDEX = 3;
+    public const PROPERTY_TYPE = 'type';
+    public const PROPERTY_VERSION = 'version';
 
     public function initializeColumns()
     {

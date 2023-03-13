@@ -14,7 +14,6 @@ use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Service\ContentObjectSaver;
 use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -28,7 +27,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.repository_manager.component
  */
 
@@ -47,7 +45,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
      */
     public function run()
     {
-        if (!RightsService::getInstance()->canAddContentObjects($this->get_user(), $this->getWorkspace()))
+        if (!$this->getWorkspaceRightsService()->canAddContentObjects($this->get_user(), $this->getWorkspace()))
         {
             throw new NotAllowedException();
         }
@@ -72,14 +70,14 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
 
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)), Translation::get(
-                    'CreateContentType', array(
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS]), Translation::get(
+                    'CreateContentType', [
                         'OBJECTTYPE' => strtolower(
                             Translation::get(
                                 $template->translate('TypeName'), null, $contentObject->package()
                             )
                         )
-                    )
+                    ]
                 )
                 )
             );
@@ -95,8 +93,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
 
             $content_object_form = ContentObjectForm::factory(
                 ContentObjectForm::TYPE_CREATE, $this->getWorkspace(), $contentObject, 'create_content_object',
-                FormValidator::FORM_METHOD_POST,
-                $this->get_url(array(TypeSelector::PARAM_SELECTION => $templateIdentifier))
+                FormValidator::FORM_METHOD_POST, $this->get_url([TypeSelector::PARAM_SELECTION => $templateIdentifier])
             );
 
             if ($content_object_form->validate())
@@ -108,21 +105,21 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                 {
                     $this->redirectWithMessage(
                         Translation::get(
-                            'ObjectNotCreated', array('OBJECT' => Translation::get('ContentObject')),
+                            'ObjectNotCreated', ['OBJECT' => Translation::get('ContentObject')],
                             StringUtilities::LIBRARIES
-                        ), true, array(self::PARAM_ACTION => self::ACTION_CREATE_CONTENT_OBJECTS, 'type' => $this->type)
+                        ), true, [self::PARAM_ACTION => self::ACTION_CREATE_CONTENT_OBJECTS, 'type' => $this->type]
                     );
                 }
                 else
                 {
                     Event::trigger(
-                        'Activity', Manager::context(), array(
+                        'Activity', Manager::context(), [
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_CREATED,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),
                             Activity::PROPERTY_CONTENT_OBJECT_ID => $contentObject->get_id(),
                             Activity::PROPERTY_CONTENT => $contentObject->get_title()
-                        )
+                        ]
                     );
 
                     $selectedTab = $this->getInstanceService()->updateInstances(
@@ -135,9 +132,9 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                         $parameters = [];
                         $parameters[Application::PARAM_ACTION] = self::ACTION_EDIT_CONTENT_OBJECTS;
                         $parameters[self::PARAM_CONTENT_OBJECT_ID] = $contentObject->get_id();
-                        $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = array(
+                        $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = [
                             self::TABS_CONTENT_OBJECT => $selectedTab
-                        );
+                        ];
 
                         $this->redirect($parameters);
                     }
@@ -160,7 +157,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
 
                 $this->redirectWithMessage(
                     Translation::get(
-                        'ObjectCreated', array('OBJECT' => Translation::get('TypeName', null, $typeContext)),
+                        'ObjectCreated', ['OBJECT' => Translation::get('TypeName', null, $typeContext)],
                         StringUtilities::LIBRARIES
                     ), false, $parameters
                 );

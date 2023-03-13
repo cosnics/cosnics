@@ -17,7 +17,7 @@ use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Menu\UserViewMenu;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -252,8 +252,7 @@ abstract class Manager extends Application
         {
             $workspaceIdentifier = $this->getRequest()->query->get(self::PARAM_WORKSPACE_ID);
 
-            $workspaceService = new WorkspaceService(new WorkspaceRepository());
-            $this->currentWorkspace = $workspaceService->determineWorkspaceForUserByIdentifier(
+            $this->currentWorkspace = $this->getWorkspaceService()->determineWorkspaceForUserByIdentifier(
                 $this->get_user(), $workspaceIdentifier
             );
         }
@@ -261,12 +260,19 @@ abstract class Manager extends Application
         return $this->currentWorkspace;
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Service\WorkspaceExtensionManager
-     */
-    public function getWorkspaceExtensionManager()
+    public function getWorkspaceExtensionManager(): WorkspaceExtensionManager
     {
         return $this->getService(WorkspaceExtensionManager::class);
+    }
+
+    public function getWorkspaceService(): WorkspaceService
+    {
+        return $this->getService(WorkspaceService::class);
+    }
+
+    protected function getWorkspaceRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
     }
 
     /**
@@ -719,7 +725,7 @@ abstract class Manager extends Application
 
         $html[] = $html_filter_renderer->render();
 
-        $repositoryMenu = new RepositoryMenu($this);
+        $repositoryMenu = new RepositoryMenu($this, $this->getWorkspaceRightsService());
         $html[] = $repositoryMenu->render();
 
         return implode(PHP_EOL, $html);

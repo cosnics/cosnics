@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Component;
 use Chamilo\Core\Repository\Common\ContentObjectDifferenceRenderer;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -15,7 +14,6 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package repository.lib.repository_manager.component
  */
 
@@ -24,7 +22,7 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class ComparerComponent extends Manager
 {
-    const PARAM_BASE_CONTENT_OBJECT_ID = 'base_content_object_id';
+    public const PARAM_BASE_CONTENT_OBJECT_ID = 'base_content_object_id';
 
     /**
      * Runs this component and displays its output.
@@ -69,11 +67,11 @@ class ComparerComponent extends Manager
             throw new ObjectNotExistException($contentObjectTranslation, $version_id);
         }
 
-        $isAllowedToViewObject = RightsService::getInstance()->canViewContentObject(
+        $isAllowedToViewObject = $this->getWorkspaceRightsService()->canViewContentObject(
             $this->get_user(), $contentObject, $this->getWorkspace()
         );
 
-        $isAllowedToViewVersion = RightsService::getInstance()->canViewContentObject(
+        $isAllowedToViewVersion = $this->getWorkspaceRightsService()->canViewContentObject(
             $this->get_user(), $contentObjectVersion, $this->getWorkspace()
         );
 
@@ -103,20 +101,29 @@ class ComparerComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(
+                    [
                         self::PARAM_ACTION => self::ACTION_VIEW_CONTENT_OBJECTS,
                         self::PARAM_CONTENT_OBJECT_ID => $baseContentObject->getId()
-                    ), array(self::PARAM_BASE_CONTENT_OBJECT_ID)
-                ), Translation::get('ViewContentObject', array('CONTENT_OBJECT' => $baseContentObject->get_title()))
+                    ], [self::PARAM_BASE_CONTENT_OBJECT_ID]
+                ), Translation::get('ViewContentObject', ['CONTENT_OBJECT' => $baseContentObject->get_title()])
             )
         );
+    }
+
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_BASE_CONTENT_OBJECT_ID;
+        $additionalParameters[] = self::PARAM_CONTENT_OBJECT_ID;
+        $additionalParameters[] = self::PARAM_COMPARE_OBJECT;
+        $additionalParameters[] = self::PARAM_COMPARE_VERSION;
+
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**
      * Returns the base content object
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
-     *
      * @throws NoObjectSelectedException
      * @throws ObjectNotExistException
      */
@@ -147,15 +154,5 @@ class ComparerComponent extends Manager
     protected function getContentObjectDifferenceRenderer()
     {
         return $this->getService(ContentObjectDifferenceRenderer::class);
-    }
-
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_BASE_CONTENT_OBJECT_ID;
-        $additionalParameters[] = self::PARAM_CONTENT_OBJECT_ID;
-        $additionalParameters[] = self::PARAM_COMPARE_OBJECT;
-        $additionalParameters[] = self::PARAM_COMPARE_VERSION;
-
-        return parent::getAdditionalParameters($additionalParameters);
     }
 }

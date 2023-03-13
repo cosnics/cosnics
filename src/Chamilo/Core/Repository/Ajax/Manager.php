@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax;
 
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\AjaxManager;
 
 /**
@@ -17,4 +18,9 @@ abstract class Manager extends AjaxManager
     public const ACTION_THUMBNAIL = 'Thumbnail';
 
     public const CONTEXT = __NAMESPACE__;
+
+    public function getWorkspaceService(): WorkspaceService
+    {
+        return $this->getService(WorkspaceService::class);
+    }
 }

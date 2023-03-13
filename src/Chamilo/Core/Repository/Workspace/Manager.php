@@ -18,6 +18,7 @@ abstract class Manager extends Application
     public const ACTION_BROWSE_PERSONAL = 'PersonalBrowser';
     public const ACTION_BROWSE_SHARED = 'SharedBrowser';
     public const ACTION_CREATE = 'Creator';
+    public const ACTION_DEFAULT = 'Default';
     public const ACTION_DELETE = 'Deleter';
     public const ACTION_FAVOURITE = 'Favourite';
     public const ACTION_PUBLISH = 'Publisher';
