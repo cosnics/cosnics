@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
 use InvalidArgumentException;
 use RuntimeException;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\User\Service
@@ -26,6 +27,8 @@ use RuntimeException;
  */
 class UserService
 {
+
+    protected Translator $translator;
 
     private ConfigurationService $configurationService;
 
@@ -37,13 +40,14 @@ class UserService
 
     public function __construct(
         UserRepository $userRepository, HashingUtilities $hashingUtilities, ConfigurationService $configurationService,
-        PropertyMapper $propertyMapper
+        PropertyMapper $propertyMapper, Translator $translator
     )
     {
         $this->userRepository = $userRepository;
         $this->hashingUtilities = $hashingUtilities;
         $this->configurationService = $configurationService;
         $this->propertyMapper = $propertyMapper;
+        $this->translator = $translator;
     }
 
     public function countUsers(?Condition $condition = null): int
@@ -403,6 +407,11 @@ class UserService
         return $this->propertyMapper;
     }
 
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
     public function getUserByOfficialCode(string $officialCode): ?User
     {
         return $this->getUserRepository()->findUserByOfficialCode($officialCode);
@@ -424,7 +433,7 @@ class UserService
 
         if (!$user instanceof User)
         {
-            return null;
+            return $this->getTranslator()->trans('UserUnknown', [], 'Chamilo\Core\User');
         }
 
         return $user->get_fullname();
