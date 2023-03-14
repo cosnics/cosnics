@@ -43,7 +43,7 @@ class ExportService
         $safeFirstName = StringUtilities::getInstance()->createString($user->get_firstname())->toAscii();
         $sortName = strtoupper(str_replace(' ', '', $safeLastName . ',' . $safeFirstName));
 
-        $results = [$sortName, $user->get_lastname(), $user->get_firstname()];
+        $results = [$sortName, $user->get_lastname(), $user->get_firstname(), $user->get_official_code()];
         foreach ($columns as $column)
         {
             $results[] = $this->getResult($resultsData, $column->getId(), $user->getId(), $aabsAbbr);

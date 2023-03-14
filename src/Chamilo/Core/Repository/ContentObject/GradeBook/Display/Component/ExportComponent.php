@@ -62,6 +62,7 @@ class ExportComponent extends Manager
             $this->getTranslator()->trans('SortName', [], 'Chamilo\Application\Weblcms'),
             $this->getTranslator()->trans('LastName', [], 'Chamilo\Core\User'),
             $this->getTranslator()->trans('FirstName', [], 'Chamilo\Core\User'),
+            $this->getTranslator()->trans('OfficialCode', [], 'Chamilo\Core\User')
         ];
 
         $scoreHeaders = $this->getExportService()->getColumnTitles($gradeBookData, $columns);
