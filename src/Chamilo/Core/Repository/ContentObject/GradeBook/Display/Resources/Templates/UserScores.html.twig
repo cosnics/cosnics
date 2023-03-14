@@ -28,9 +28,9 @@
 
     const messages = { 'en': {}, 'nl': {} };
 
-    const gradeBookData = '{{ GRADEBOOK|raw }}';
-    const scores = '{{ SCORES|raw }}';
-    const users = '{{ USERS|raw }}';
+    const gradeBookData = {{ GRADEBOOK|raw }};
+    const scores = {{ SCORES|raw }};
+    const users = {{ USERS|raw }};
 
     let lang;
     try {
@@ -45,9 +45,9 @@
         i18n: i18n,
         el: '#app',
         data: {
-            gradeBookData: JSON.parse(gradeBookData),
-            users: JSON.parse(users),
-            scores: JSON.parse(scores)
+            gradeBookData: gradeBookData,
+            users: users,
+            scores: scores
         }
     });
 
