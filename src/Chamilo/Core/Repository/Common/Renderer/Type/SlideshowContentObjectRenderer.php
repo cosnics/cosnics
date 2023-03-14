@@ -21,7 +21,7 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
      *
      * @see \Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer::as_html()
      */
-    public function as_html()
+    public function render(): string
     {
         $application = $this->get_repository_browser();
         $workspace = $application->getWorkspace();

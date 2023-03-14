@@ -7,9 +7,27 @@
                   autoconfigure="true"
                   public="true"/>
 
+        <service id="Chamilo\Core\Repository\Service\ContentObjectActionRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+            <argument key="$workspace"
+                      type="service"
+                      id="Chamilo\Core\Repository\Workspace"/>
+        </service>
+        <service id="Chamilo\Core\Repository\Service\ContentObjectUrlGenerator"/>
         <service id="Chamilo\Core\Repository\Service\WorkspaceExtensionManager"/>
         <service id="Chamilo\Core\Repository\Service\ContentObjectCopierWrapper"/>
         <service id="Chamilo\Core\Repository\Service\ContentObjectService"/>
+
+        <service id="Chamilo\Core\Repository\Common\Renderer\Type\TableContentObjectRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+            <argument key="$workspace"
+                      type="service"
+                      id="Chamilo\Core\Repository\Workspace"/>
+        </service>
 
         <service id="Chamilo\Core\Repository\Quota\Rights\Service\RightsService">
             <argument key="$rightsRepository"

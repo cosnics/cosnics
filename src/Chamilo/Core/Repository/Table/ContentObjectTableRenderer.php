@@ -3,18 +3,22 @@ namespace Chamilo\Core\Repository\Table;
 
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Repository\Service\ContentObjectActionRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
-use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
@@ -40,19 +44,51 @@ class ContentObjectTableRenderer extends DataClassListTableRenderer
 
     public const TABLE_IDENTIFIER = Manager::PARAM_CONTENT_OBJECT_ID;
 
+    protected ContentObjectActionRenderer $contentObjectActionRenderer;
+
+    protected DatetimeUtilities $datetimeUtilities;
+
+    protected RightsService $rightsService;
+
     protected StringUtilities $stringUtilities;
+
+    protected User $user;
 
     protected UserService $userService;
 
+    protected Workspace $workspace;
+
     public function __construct(
-        StringUtilities $stringUtilities, UserService $userService, Translator $translator, UrlGenerator $urlGenerator,
+        Workspace $workspace, User $user, RightsService $rightsService, DatetimeUtilities $datetimeUtilities,
+        ContentObjectActionRenderer $contentObjectActionRenderer, StringUtilities $stringUtilities,
+        UserService $userService, Translator $translator, UrlGenerator $urlGenerator,
         ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
         $this->stringUtilities = $stringUtilities;
         $this->userService = $userService;
+        $this->contentObjectActionRenderer = $contentObjectActionRenderer;
+        $this->datetimeUtilities = $datetimeUtilities;
+        $this->user = $user;
+        $this->workspace = $workspace;
+        $this->rightsService = $rightsService;
 
         parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+    }
+
+    public function getContentObjectActionRenderer(): ContentObjectActionRenderer
+    {
+        return $this->contentObjectActionRenderer;
+    }
+
+    public function getDatetimeUtilities(): DatetimeUtilities
+    {
+        return $this->datetimeUtilities;
+    }
+
+    public function getRightsService(): RightsService
+    {
+        return $this->rightsService;
     }
 
     public function getStringUtilities(): StringUtilities
@@ -62,17 +98,138 @@ class ContentObjectTableRenderer extends DataClassListTableRenderer
 
     public function getTableActions(): TableActions
     {
-        $urlGenerator = $this->getUrlGenerator();
+        $rightsService = $this->getRightsService();
         $translator = $this->getTranslator();
+        $urlGenerator = $this->getUrlGenerator();
+
+        $user = $this->getUser();
+        $workspace = $this->getWorkspace();
 
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
+        if ($rightsService->isWorkspaceCreator($user, $workspace))
+        {
+            $recycleUrl = $urlGenerator->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
+                    Application::PARAM_ACTION => Manager::ACTION_IMPACT_VIEW_RECYCLE
+                ]
+            );
+
+            $actions->addAction(
+                new TableAction(
+                    $recycleUrl, $translator->trans('RemoveSelected', [], StringUtilities::LIBRARIES), false
+                )
+            );
+
+            $unlinkUrl = $urlGenerator->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
+                    Application::PARAM_ACTION => Manager::ACTION_UNLINK_CONTENT_OBJECTS
+                ]
+            );
+
+            $actions->addAction(
+                new TableAction(
+                    $unlinkUrl, $translator->trans('UnlinkSelected', [], StringUtilities::LIBRARIES)
+                )
+            );
+        }
+
+        $moveUrl = $urlGenerator->fromParameters(
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => Manager::ACTION_MOVE_CONTENT_OBJECTS
+            ]
+        );
+
+        $actions->addAction(
+            new TableAction(
+                $moveUrl, $translator->trans('MoveSelected', [], StringUtilities::LIBRARIES), false
+            )
+        );
+
+        $publishUrl = $urlGenerator->fromParameters(
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => Manager::ACTION_PUBLICATION,
+                \Chamilo\Core\Repository\Publication\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Publication\Manager::ACTION_PUBLISH
+            ]
+        );
+
+        $actions->addAction(
+            new TableAction(
+                $publishUrl, $translator->trans('PublishSelected', [], StringUtilities::LIBRARIES), false
+            )
+        );
+
+        $exportUrl = $urlGenerator->fromParameters(
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => Manager::ACTION_EXPORT_CONTENT_OBJECTS
+            ]
+        );
+
+        $actions->addAction(
+            new TableAction(
+                $exportUrl, $translator->trans('ExportSelected', [], StringUtilities::LIBRARIES), false
+            )
+        );
+
+        if ($rightsService->isWorkspaceCreator($user, $workspace))
+        {
+            $shareUrl = $urlGenerator->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Workspace\Manager::CONTEXT,
+                    \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_SHARE
+                ]
+            );
+
+            $actions->addAction(
+                new TableAction(
+                    $shareUrl, $translator->trans('ShareSelected', [], Manager::CONTEXT), false
+                )
+            );
+        }
+        else
+        {
+            $canDelete = $rightsService->canDeleteContentObjects(
+                $user, $workspace
+            );
+
+            if ($canDelete)
+            {
+                $unshareUrl = $urlGenerator->fromParameters(
+                    [
+                        Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Workspace\Manager::CONTEXT,
+                        \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_UNSHARE
+                    ]
+                );
+
+                $actions->addAction(
+                    new TableAction(
+                        $unshareUrl, $translator->trans('UnshareSelected', [], Manager::CONTEXT), false
+                    )
+                );
+            }
+        }
+
         return $actions;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
     }
 
     public function getUserService(): UserService
     {
         return $this->userService;
+    }
+
+    public function getWorkspace(): Workspace
+    {
+        return $this->workspace;
     }
 
     protected function initializeColumns()
@@ -113,6 +270,7 @@ class ContentObjectTableRenderer extends DataClassListTableRenderer
         $translator = $this->getTranslator();
         $urlGenerator = $this->getUrlGenerator();
         $stringUtilities = $this->getStringUtilities();
+        $datetimeUtilities = $this->getDatetimeUtilities();
 
         switch ($column->get_name())
         {
@@ -151,12 +309,12 @@ class ContentObjectTableRenderer extends DataClassListTableRenderer
             case ContentObject::PROPERTY_OWNER_ID :
                 return $this->getUserService()->getUserFullNameByIdentifier((string) $contentObject->get_owner_id());
             case ContentObject::PROPERTY_CREATION_DATE :
-                return DatetimeUtilities::getInstance()->formatLocaleDate(
+                return $datetimeUtilities->formatLocaleDate(
                     $translator->trans('DateTimeFormatLong', [], StringUtilities::LIBRARIES),
                     $contentObject->get_creation_date()
                 );
             case ContentObject::PROPERTY_MODIFICATION_DATE :
-                return DatetimeUtilities::getInstance()->formatLocaleDate(
+                return $datetimeUtilities->formatLocaleDate(
                     $translator->trans('DateTimeFormatLong', [], StringUtilities::LIBRARIES),
                     $contentObject->get_modification_date()
                 );
@@ -178,8 +336,6 @@ class ContentObjectTableRenderer extends DataClassListTableRenderer
                             'check', ['text-muted'], $title, 'fas'
                         );
                     }
-
-                    return $glyph->render();
                 }
                 else
                 {
@@ -187,24 +343,19 @@ class ContentObjectTableRenderer extends DataClassListTableRenderer
                     $glyph = new FontAwesomeGlyph(
                         'check', ['text-muted'], $title, 'fas'
                     );
-
-                    return $glyph->render();
                 }
+
+                return $glyph->render();
         }
 
         return parent::renderCell($column, $resultPosition, $contentObject);
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      */
-    public function renderTableRowActions(TableResultPosition $resultPosition, $workspace): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $contentObject): string
     {
-        $urlGenerator = $this->getUrlGenerator();
-        $translator = $this->getTranslator();
-
-        $toolbar = new Toolbar();
-
-        return $toolbar->render();
+        return $this->getContentObjectActionRenderer()->renderActions($contentObject);
     }
 }

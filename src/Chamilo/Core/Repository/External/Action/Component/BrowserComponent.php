@@ -62,7 +62,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $html[] = '<div class="col-md-10">';
         }
 
-        $html[] = Renderer::factory($this->get_parent()->get_renderer(), $this)->as_html();
+        $html[] = Renderer::factory($this->get_parent()->getCurrentRendererType(), $this)->as_html();
 
         if ($menu)
         {
@@ -85,7 +85,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             if (count($renderers) > 1)
             {
-                $currentRenderer = $this->get_parent()->get_renderer();
+                $currentRenderer = $this->get_parent()->getCurrentRendererType();
 
                 switch ($currentRenderer)
                 {

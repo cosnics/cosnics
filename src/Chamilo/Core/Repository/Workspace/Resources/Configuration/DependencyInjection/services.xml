@@ -9,9 +9,9 @@
                   public="true"/>
 
         <service id="Chamilo\Core\Repository\Workspace"
-                 class="Chamilo\Core\User\Storage\DataClass\User">
-            <factory service="Chamilo\Core\User\Factory\UserFactory"
-                     method="getUser"/>
+                 class="Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace">
+            <factory service="Chamilo\Core\Repository\Workspace\Service\WorkspaceFactory"
+                     method="getWorkspace"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService"/>
@@ -19,6 +19,11 @@
         <service id="Chamilo\Core\Repository\Workspace\Service\EntityRelationService"/>
         <service id="Chamilo\Core\Repository\Workspace\Service\EntityService"/>
         <service id="Chamilo\Core\Repository\Workspace\Service\RightsService"/>
+        <service id="Chamilo\Core\Repository\Workspace\Service\WorkspaceFactory">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
         <service id="Chamilo\Core\Repository\Workspace\Service\WorkspaceService"/>
         <service id="Chamilo\Core\Repository\Workspace\Service\WorkspaceUserService"/>
 

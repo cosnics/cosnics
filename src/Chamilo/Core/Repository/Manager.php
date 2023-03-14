@@ -145,11 +145,7 @@ abstract class Manager extends Application
     public const PARAM_WORKSPACE_ID = 'workspace_id';
 
     public const SHARED_VIEW_ALL_OBJECTS = 2;
-
     public const SHARED_VIEW_OTHERS_OBJECTS = 0;
-
-    // Tabs
-
     public const SHARED_VIEW_OWN_OBJECTS = 1;
 
     public const TABS_CONTENT_OBJECT = 'content_object';

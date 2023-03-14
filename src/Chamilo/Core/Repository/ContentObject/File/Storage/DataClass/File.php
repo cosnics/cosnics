@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\File\Storage\DataClass;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Repository\Architecture\DownloadSupport;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataManager;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -21,34 +22,32 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
- *
- * @package repository.content_object.document
+ * @package Chamilo\Core\Repository\ContentObject\File\Storage\DataClass
  */
-class File extends ContentObject implements Versionable, Includeable, FileStorageSupport
+class File extends ContentObject implements Versionable, Includeable, FileStorageSupport, DownloadSupport
 {
 
-    const PROPERTY_EXTENSION = 'extension';
-    const PROPERTY_FILENAME = 'filename';
-    const PROPERTY_FILESIZE = 'filesize';
-    const PROPERTY_HASH = 'hash';
-    const PROPERTY_PATH = 'path';
-    const PROPERTY_SHOW_INLINE = 'show_inline';
-    const PROPERTY_STORAGE_PATH = 'storage_path';
+    public const PROPERTY_EXTENSION = 'extension';
+    public const PROPERTY_FILENAME = 'filename';
+    public const PROPERTY_FILESIZE = 'filesize';
+    public const PROPERTY_HASH = 'hash';
+    public const PROPERTY_PATH = 'path';
+    public const PROPERTY_SHOW_INLINE = 'show_inline';
+    public const PROPERTY_STORAGE_PATH = 'storage_path';
 
-
-    const TYPE_APPLICATION = 11;
-    const TYPE_ARCHIVE = 10;
-    const TYPE_AUDIO = 1;
-    const TYPE_CODE = 13;
-    const TYPE_DATABASE = 8;
-    const TYPE_FLASH = 12;
-    const TYPE_IMAGE = 3;
-    const TYPE_PDF = 4;
-    const TYPE_PRESENTATION = 7;
-    const TYPE_SPREADSHEET = 5;
-    const TYPE_TEXT = 6;
-    const TYPE_VIDEO = 2;
-    const TYPE_WEB = 9;
+    public const TYPE_APPLICATION = 11;
+    public const TYPE_ARCHIVE = 10;
+    public const TYPE_AUDIO = 1;
+    public const TYPE_CODE = 13;
+    public const TYPE_DATABASE = 8;
+    public const TYPE_FLASH = 12;
+    public const TYPE_IMAGE = 3;
+    public const TYPE_PDF = 4;
+    public const TYPE_PRESENTATION = 7;
+    public const TYPE_SPREADSHEET = 5;
+    public const TYPE_TEXT = 6;
+    public const TYPE_VIDEO = 2;
+    public const TYPE_WEB = 9;
 
     private $contents;
 
@@ -61,6 +60,13 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     private $in_memory_file;
 
     /**
+     * Indicates wether the File must be saved as a new version when its save() or update() method is called
+     *
+     * @var bool
+     */
+    private $save_as_new_version = false;
+
+    /**
      * Temporary file path.
      * A path to a file that has to be moved and renamed when the File is saved. Useful for
      * instance when a file is uploaded to the server.
@@ -68,21 +74,6 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      * @var string
      */
     private $temporary_file_path;
-
-    /**
-     * Indicates wether the File must be saved as a new version when its save() or update() method is called
-     *
-     * @var boolean
-     */
-    private $save_as_new_version = false;
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_file';
-    }
 
     /**
      * (non-PHPdoc)
@@ -98,7 +89,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         }
 
         $descriptionRequired = Configuration::getInstance()->get_setting(
-            array(Manager::context(), 'description_required')
+            [Manager::context(), 'description_required']
         );
 
         // Description
@@ -229,7 +220,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      * when a File is updated as a new version, without replacing the content Note: needed as when saving a new version
      * of a File, a new record is saved in the repository_document table, and the 'hash' field must be unique.
      *
-     * @return boolean
+     * @return bool
      */
     private function duplicate_current_file()
     {
@@ -257,9 +248,21 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         }
     }
 
+    public static function getAdditionalPropertyNames(): array
+    {
+        return [
+            self::PROPERTY_FILENAME,
+            self::PROPERTY_FILESIZE,
+            self::PROPERTY_PATH,
+            self::PROPERTY_HASH,
+            self::PROPERTY_STORAGE_PATH,
+            self::PROPERTY_SHOW_INLINE
+        ];
+    }
+
     /**
-     * @param integer $size
-     * @param boolean $isAvailable
+     * @param int $size
+     * @param bool $isAvailable
      * @param string[] $extraClasses
      *
      * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
@@ -297,16 +300,17 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         return self::PROPERTY_FILESIZE;
     }
 
-    public static function getAdditionalPropertyNames(): array
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
     {
-        return array(
-            self::PROPERTY_FILENAME,
-            self::PROPERTY_FILESIZE,
-            self::PROPERTY_PATH,
-            self::PROPERTY_HASH,
-            self::PROPERTY_STORAGE_PATH,
-            self::PROPERTY_SHOW_INLINE
-        );
+        return 'repository_file';
+    }
+
+    public static function getTypeName(): string
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /**
@@ -402,26 +406,6 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         return $this->in_memory_file;
     }
 
-    /**
-     * Set In memory file content.
-     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
-     *
-     * @return void
-     * @var $in_memory_file mixed
-     */
-    public function set_in_memory_file($in_memory_file)
-    {
-        if (StringUtilities::getInstance()->hasValue($in_memory_file))
-        {
-            if (StringUtilities::getInstance()->hasValue($this->get_temporary_file_path()))
-            {
-                throw new Exception('A File can not have a temporary file path and in memory content');
-            }
-
-            $this->in_memory_file = $in_memory_file;
-        }
-    }
-
     public function get_mime_type()
     {
         return FileType::get_mimetype($this->get_extension());
@@ -435,30 +419,16 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Get a value indicating wether the File must be saved as a new version if its save() or update() method is called
      *
-     * @return boolean
+     * @return bool
      */
     public function get_save_as_new_version()
     {
         return $this->save_as_new_version;
     }
 
-    /**
-     * Set a value indicating wether the File must be saved as a new version if its save() or update() method is called
-     *
-     * @return void
-     * @var $save_as_new_version boolean
-     */
-    public function set_save_as_new_version($save_as_new_version)
-    {
-        if (is_bool($save_as_new_version))
-        {
-            $this->save_as_new_version = $save_as_new_version;
-        }
-    }
-
     public static function get_searchable_property_names()
     {
-        return array(self::PROPERTY_FILENAME);
+        return [self::PROPERTY_FILENAME];
     }
 
     public static function get_showable_types()
@@ -499,34 +469,9 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         return $this->temporary_file_path;
     }
 
-    /**
-     * Set temporary file path.
-     * A path to a file that has to be moved and renamed when the File is saved
-     *
-     * @return void
-     * @var $temporary_file_path string
-     */
-    public function set_temporary_file_path($temporary_file_path)
-    {
-        if (StringUtilities::getInstance()->hasValue($temporary_file_path))
-        {
-            if (StringUtilities::getInstance()->hasValue($this->get_in_memory_file()))
-            {
-                throw new Exception('A File can not have a temporary file path and in memory content');
-            }
-
-            $this->temporary_file_path = $temporary_file_path;
-        }
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
-
     public function get_type_string(): string
     {
-        return Translation::get('TypeFile', array('EXTENSION' => strtoupper($this->get_extension())));
+        return Translation::get('TypeFile', ['EXTENSION' => strtoupper($this->get_extension())]);
     }
 
     public function get_url()
@@ -556,7 +501,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Determines if this document is an audio file
      *
-     * @return boolean True if the document is an audio file
+     * @return bool True if the document is an audio file
      */
     public function is_audio()
     {
@@ -571,7 +516,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Determines if this document is a flash movie
      *
-     * @return boolean True if the document is a flash movie
+     * @return bool True if the document is a flash movie
      */
     public function is_flash()
     {
@@ -581,7 +526,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Determines if this document is an image
      *
-     * @return boolean True if the document is an image
+     * @return bool True if the document is an image
      */
     public function is_image()
     {
@@ -591,7 +536,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Determines if this document is a video
      *
-     * @return boolean True if the document is a video
+     * @return bool True if the document is a video
      */
     public function is_video()
     {
@@ -605,7 +550,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         $file = $this->get_full_path();
         $response = new StreamedResponse();
         $response->headers->add(
-            array('Content-Type' => $this->get_mime_type(), 'Content-Length' => $this->get_filesize())
+            ['Content-Type' => $this->get_mime_type(), 'Content-Length' => $this->get_filesize()]
         );
 
         $safeFileName = StringUtilities::getInstance()->createString($fileName)->toAscii()->replace('/', '-')->replace(
@@ -639,7 +584,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      * Save the in memory file or the temporary file to the current user disk space Return true if the file could be
      * saved
      *
-     * @return boolean
+     * @return bool
      */
     private function save_file()
     {
@@ -719,7 +664,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                 {
                     Filesystem::chmod(
                         $path_to_save,
-                        Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'permissions_new_files'))
+                        Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'permissions_new_files'])
                     );
 
                     $file_bytes = Filesystem::get_disk_space($path_to_save);
@@ -751,7 +696,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         $file = $this->get_full_path();
         $response = new StreamedResponse();
         $response->headers->add(
-            array('Content-Type' => $this->get_mime_type(), 'Content-Length' => $this->get_filesize())
+            ['Content-Type' => $this->get_mime_type(), 'Content-Length' => $this->get_filesize()]
         );
 
         $safeFileName = StringUtilities::getInstance()->createString($fileName)->toAscii()->replace('/', '-')->replace(
@@ -803,14 +748,68 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         return $this->setAdditionalProperty(self::PROPERTY_HASH, $hash);
     }
 
+    /**
+     * Set In memory file content.
+     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
+     *
+     * @return void
+     * @var $in_memory_file mixed
+     */
+    public function set_in_memory_file($in_memory_file)
+    {
+        if (StringUtilities::getInstance()->hasValue($in_memory_file))
+        {
+            if (StringUtilities::getInstance()->hasValue($this->get_temporary_file_path()))
+            {
+                throw new Exception('A File can not have a temporary file path and in memory content');
+            }
+
+            $this->in_memory_file = $in_memory_file;
+        }
+    }
+
     public function set_path($path)
     {
         return $this->setAdditionalProperty(self::PROPERTY_PATH, $path);
     }
 
+    /**
+     * Set a value indicating wether the File must be saved as a new version if its save() or update() method is called
+     *
+     * @return void
+     * @var $save_as_new_version bool
+     */
+    public function set_save_as_new_version($save_as_new_version)
+    {
+        if (is_bool($save_as_new_version))
+        {
+            $this->save_as_new_version = $save_as_new_version;
+        }
+    }
+
     public function set_storage_path($storage_path)
     {
         return $this->setAdditionalProperty(self::PROPERTY_STORAGE_PATH, $storage_path);
+    }
+
+    /**
+     * Set temporary file path.
+     * A path to a file that has to be moved and renamed when the File is saved
+     *
+     * @return void
+     * @var $temporary_file_path string
+     */
+    public function set_temporary_file_path($temporary_file_path)
+    {
+        if (StringUtilities::getInstance()->hasValue($temporary_file_path))
+        {
+            if (StringUtilities::getInstance()->hasValue($this->get_in_memory_file()))
+            {
+                throw new Exception('A File can not have a temporary file path and in memory content');
+            }
+
+            $this->temporary_file_path = $temporary_file_path;
+        }
     }
 
     /**

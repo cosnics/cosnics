@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Repository\Architecture\DisplayAndBuildSupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 use Chamilo\Core\Repository\Manager;
@@ -15,16 +16,15 @@ use Chamilo\Libraries\Platform\Session\Session;
 use InvalidArgumentException;
 
 /**
- *
  * @package repository.lib.content_object.learning_path
  */
-class LearningPath extends ContentObject implements ComplexContentObjectSupport
+class LearningPath extends ContentObject implements ComplexContentObjectSupport, DisplayAndBuildSupport
 {
-    const AUTOMATIC_NUMBERING_DIGITS = 'digits';
-    const AUTOMATIC_NUMBERING_NONE = 'none';
+    public const AUTOMATIC_NUMBERING_DIGITS = 'digits';
+    public const AUTOMATIC_NUMBERING_NONE = 'none';
 
-    const PROPERTY_AUTOMATIC_NUMBERING = 'automatic_numbering';
-    const PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'enforce_default_traversing_order';
+    public const PROPERTY_AUTOMATIC_NUMBERING = 'automatic_numbering';
+    public const PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'enforce_default_traversing_order';
 
     // Currently not implemented options
     // const AUTOMATIC_NUMBERING_ALPHABETICAL = 'alphabetical';
@@ -57,7 +57,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
      *
      * @param bool $only_version
      *
-     * @return boolean Returns whether the delete was succesfull.
+     * @return bool Returns whether the delete was succesfull.
      */
     public function delete($only_version = false): bool
     {
@@ -80,6 +80,14 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
     }
 
     /**
+     * @return string[]
+     */
+    public static function getAdditionalPropertyNames(): array
+    {
+        return [self::PROPERTY_AUTOMATIC_NUMBERING, self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER];
+    }
+
+    /**
      * Returns the automatic numbering
      *
      * @return string
@@ -96,11 +104,10 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
      */
     public static function getAutomaticNumberingOptions()
     {
-        return array(self::AUTOMATIC_NUMBERING_NONE, self::AUTOMATIC_NUMBERING_DIGITS);
+        return [self::AUTOMATIC_NUMBERING_NONE, self::AUTOMATIC_NUMBERING_DIGITS];
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
      * @throws \Exception
      */
@@ -123,7 +130,14 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
     }
 
     /**
-     *
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_learning_path';
+    }
+
+    /**
      * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService
      * @throws \Exception
      */
@@ -133,16 +147,6 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
     }
 
     /**
-     *
-     * @return string[]
-     */
-    public static function getAdditionalPropertyNames(): array
-    {
-        return array(self::PROPERTY_AUTOMATIC_NUMBERING, self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
-    }
-
-    /**
-     *
      * @return array
      */
     public function get_allowed_types()
@@ -181,14 +185,6 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
         }
 
         return $types;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_learning_path';
     }
 
     /**

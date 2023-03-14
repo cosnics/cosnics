@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Workspace\Service;
 
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
@@ -10,11 +11,14 @@ use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Exception;
 use InvalidArgumentException;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Repository\Workspace\Service
@@ -29,14 +33,18 @@ class WorkspaceService
 
     protected EntityService $entityService;
 
+    protected Translator $translator;
+
     protected UserService $userService;
 
     private WorkspaceRepository $workspaceRepository;
 
     public function __construct(
-        UserService $userService, EntityService $entityService, WorkspaceRepository $workspaceRepository
+        Translator $translator, UserService $userService, EntityService $entityService,
+        WorkspaceRepository $workspaceRepository
     )
     {
+        $this->translator = $translator;
         $this->userService = $userService;
         $this->entityService = $entityService;
         $this->workspaceRepository = $workspaceRepository;
@@ -83,6 +91,48 @@ class WorkspaceService
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Exception
+     */
+    public function createDefaultWorkspaceForUserIdentifier(string $userIdentifier): Workspace
+    {
+        $translator = $this->getTranslator();
+
+        $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
+
+        if (!$user instanceof User)
+        {
+            throw new ObjectNotExistException($translator->trans('User', [], 'Chamilo\Core\User'), $userIdentifier);
+        }
+
+        $workspaceName =
+            $translator->trans('DefaultWorkspaceName', ['{USERNAME}' => $user->get_fullname()], Manager::CONTEXT);
+
+        $workspace = $this->createWorkspace(
+            [
+                Workspace::PROPERTY_CREATOR_ID => $userIdentifier,
+                Workspace::PROPERTY_CREATION_DATE => time(),
+                Workspace::PROPERTY_NAME => $workspaceName
+            ]
+        );
+
+        if (!$workspace instanceof Workspace)
+        {
+            throw new Exception('Workspace not created');
+        }
+
+        if (!$this->createWorkspaceUserDefaultForWorkspaceIdentifierAndUserIdentifier(
+            $workspace->getId(), $userIdentifier
+        ))
+        {
+            throw new Exception('Workspace User Default not created');
+        }
+
+        return $workspace;
+    }
+
+    /**
      * @param string[] $workspaceProperties
      *
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
@@ -100,6 +150,9 @@ class WorkspaceService
         return $workspace;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function createWorkspaceUserDefaultForWorkspaceIdentifierAndUserIdentifier(
         string $workspaceIdentifier, string $userIdentifier
     ): bool
@@ -134,6 +187,12 @@ class WorkspaceService
         }
     }
 
+    public function findDefaultWorkspaceForUserIdentifier(string $userIdentifier): ?Workspace
+    {
+        return $this->getWorkspaceRepository()->retrieveDefaultWorkspaceForUserIdentifier($userIdentifier);
+
+    }
+
     public function findWorkspaceUserDefaultForUserIdentifier(string $userIdentifier): ?WorkspaceUserDefault
     {
         return $this->getWorkspaceRepository()->retrieveWorkspaceUserDefaultForUserIdentifier($userIdentifier);
@@ -150,6 +209,22 @@ class WorkspaceService
     public function getAllWorkspaces(?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null): ArrayCollection
     {
         return $this->getWorkspaceRepository()->findAllWorkspaces($count, $offset, $orderBy);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function getDefaultWorkspaceForUserIdentifier(string $userIdentifier): Workspace
+    {
+        $defaultWorkspace = $this->findDefaultWorkspaceForUserIdentifier($userIdentifier);
+
+        if (!$defaultWorkspace instanceof Workspace)
+        {
+            $defaultWorkspace = $this->createDefaultWorkspaceForUserIdentifier($userIdentifier);
+        }
+
+        return $defaultWorkspace;
     }
 
     /**
@@ -192,6 +267,11 @@ class WorkspaceService
         return $this->getWorkspaceRepository()->findSharedWorkspacesForEntities(
             $this->getEntitiesForUser($user), $limit, $offset, $orderProperty
         );
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
     }
 
     public function getUserService(): UserService

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Repository\Architecture\BuildSupport;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -19,15 +20,15 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @package repository.lib.content_object.assessment
  */
-class Assessment extends ContentObject implements ComplexContentObjectSupport
+class Assessment extends ContentObject implements ComplexContentObjectSupport, BuildSupport
 {
-    const PROPERTY_AVERAGE_SCORE = 'average_score';
-    const PROPERTY_MAXIMUM_ATTEMPTS = 'max_attempts';
-    const PROPERTY_MAXIMUM_SCORE = 'maximum_score';
-    const PROPERTY_MAXIMUM_TIME = 'max_time';
-    const PROPERTY_QUESTIONS_PER_PAGE = 'questions_per_page';
-    const PROPERTY_RANDOM_QUESTIONS = 'random_questions';
-    const PROPERTY_TIMES_TAKEN = 'times_taken';
+    public const PROPERTY_AVERAGE_SCORE = 'average_score';
+    public const PROPERTY_MAXIMUM_ATTEMPTS = 'max_attempts';
+    public const PROPERTY_MAXIMUM_SCORE = 'maximum_score';
+    public const PROPERTY_MAXIMUM_TIME = 'max_time';
+    public const PROPERTY_QUESTIONS_PER_PAGE = 'questions_per_page';
+    public const PROPERTY_RANDOM_QUESTIONS = 'random_questions';
+    public const PROPERTY_TIMES_TAKEN = 'times_taken';
 
     /**
      * The number of questions in this assessment
@@ -63,12 +64,25 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(
+        return [
             self::PROPERTY_MAXIMUM_ATTEMPTS,
             self::PROPERTY_QUESTIONS_PER_PAGE,
             self::PROPERTY_MAXIMUM_TIME,
             self::PROPERTY_RANDOM_QUESTIONS
-        );
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_assessment';
+    }
+
+    public static function getTypeName(): string
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function get_allowed_types()
@@ -155,19 +169,6 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
     public function get_table()
     {
         return self::getTypeName();
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_assessment';
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function has_unlimited_attempts()

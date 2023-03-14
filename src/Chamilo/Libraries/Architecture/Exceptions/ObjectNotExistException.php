@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class ObjectNotExistException extends UserException
 {
 
-    public function __construct(string $objectTranslation, ?int $id = null)
+    public function __construct(string $objectTranslation, ?string $id = null)
     {
         $this->initializeContainer();
         parent::__construct(

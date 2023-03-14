@@ -132,6 +132,9 @@ class WorkspaceRepository
         return $this->getDataClassRepository()->create($workspace);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
     public function createWorkspaceUserDefault(WorkspaceUserDefault $workspaceUserDefault): bool
     {
         return $this->getDataClassRepository()->create($workspaceUserDefault);
@@ -475,6 +478,25 @@ class WorkspaceRepository
         return new EqualityCondition(
             new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_CREATOR_ID),
             new StaticConditionVariable($user->getId())
+        );
+    }
+
+    public function retrieveDefaultWorkspaceForUserIdentifier(string $userIdentifier): ?Workspace
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(WorkspaceUserDefault::class, WorkspaceUserDefault::PROPERTY_USER_ID),
+            new StaticConditionVariable($userIdentifier)
+        );
+
+        $join = new Join(
+            WorkspaceUserDefault::class, new EqualityCondition(
+                new PropertyConditionVariable(Workspace::class, DataClass::PROPERTY_ID),
+                new PropertyConditionVariable(WorkspaceUserDefault::class, WorkspaceUserDefault::PROPERTY_WORKSPACE_ID)
+            )
+        );
+
+        return $this->getDataClassRepository()->retrieve(
+            Workspace::class, new DataClassRetrieveParameters($condition, null, new Joins([$join]))
         );
     }
 

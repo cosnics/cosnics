@@ -288,7 +288,7 @@ class DataClassRepository
 
         if($dataClass instanceof UuidDataClassInterface && !$dataClass->isIdentified())
         {
-            $dataClass->setId(Uuid::v4());
+            $dataClass->setId(Uuid::v4()->__toString());
         }
 
         $objectProperties = $dataClass->getDefaultProperties();

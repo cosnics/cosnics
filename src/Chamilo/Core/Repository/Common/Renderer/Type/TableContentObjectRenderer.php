@@ -2,51 +2,91 @@
 namespace Chamilo\Core\Repository\Common\Renderer\Type;
 
 use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
-use Chamilo\Core\Repository\Manager;
-use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Core\Repository\Filter\FilterData;
+use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
+use Chamilo\Core\Repository\Table\ContentObjectTableRenderer;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 class TableContentObjectRenderer extends ContentObjectRenderer
 {
+    protected ContentObjectService $contentObjectService;
 
-    /**
-     * Returns the HTML output of this renderer.
-     *
-     * @return string
-     * @throws \ReflectionException
-     */
-    public function as_html()
+    protected ContentObjectTableRenderer $contentObjectTableRenderer;
+
+    protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler;
+
+    protected User $user;
+
+    protected Workspace $workspace;
+
+    public function __construct(
+        ContentObjectService $contentObjectService, ContentObjectTableRenderer $contentObjectTableRenderer,
+        RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler, User $user, Workspace $workspace
+    )
     {
-        if ($this->get_repository_browser()->has_filter_type())
-        {
-            $filter_type = $this->get_repository_browser()->get_filter_type();
-            $template_registration =
-                $this->getTemplateRegistrationConsulter()->getTemplateRegistrationByIdentifier($filter_type);
-
-            $classname = $template_registration->get_content_object_type() . '\RepositoryTable';
-            if (!class_exists($classname))
-            {
-                $classname = Manager::package() . '\Table\ContentObject\Table\RepositoryTable';
-            }
-        }
-        else
-        {
-            $classname = Manager::package() . '\Table\ContentObject\Table\RepositoryTable';
-        }
-
-        $table = new $classname($this, $this->get_parameters(), $this->get_condition());
-
-        return $table->as_html();
+        $this->contentObjectService = $contentObjectService;
+        $this->contentObjectTableRenderer = $contentObjectTableRenderer;
+        $this->requestTableParameterValuesCompiler = $requestTableParameterValuesCompiler;
+        $this->user = $user;
+        $this->workspace = $workspace;
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
-     * @throws \Exception
-     */
-    public function getTemplateRegistrationConsulter()
+    public function render(Condition $condition): string
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            TemplateRegistrationConsulter::class
+        $contentObjectService = $this->getContentObjectService();
+        $workspace = $this->getWorkspace();
+        
+        $filterData = FilterData::getInstance($workspace);
+
+        $totalNumberOfItems = $contentObjectService->countContentObjectsByTypeForWorkspace(
+            $filterData->getTypeDataClass(), $workspace, ConditionFilterRenderer::factory(
+            $filterData, $workspace
+        )
         );
+
+        $contentObjectTableRenderer = $this->getContentObjectTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $contentObjectTableRenderer->getParameterNames(), $contentObjectTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $contentObjects = $contentObjectService->getContentObjectsByTypeForWorkspace(
+            $filterData->getTypeDataClass(), $workspace, ConditionFilterRenderer::factory(
+            $filterData, $workspace
+        ), $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
+            $contentObjectTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $contentObjectTableRenderer->render($tableParameterValues, $contentObjects);
+    }
+
+    public function getContentObjectService(): ContentObjectService
+    {
+        return $this->contentObjectService;
+    }
+
+    public function getContentObjectTableRenderer(): ContentObjectTableRenderer
+    {
+        return $this->contentObjectTableRenderer;
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->requestTableParameterValuesCompiler;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function getWorkspace(): Workspace
+    {
+        return $this->workspace;
     }
 }

@@ -16,7 +16,7 @@ class GalleryTableContentObjectRenderer extends ContentObjectRenderer implements
      * 
      * @return string The HTML output
      */
-    public function as_html()
+    public function render(): string
     {
         $table = new GalleryTable($this);
         return $table->as_html();
