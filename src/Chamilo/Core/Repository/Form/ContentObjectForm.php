@@ -1010,13 +1010,13 @@ abstract class ContentObjectForm extends FormValidator
 
             if ($contentObjectRelation instanceof WorkspaceContentObjectRelation)
             {
-                $contentObjectRelationService->updateContentObjectRelation(
+                $contentObjectRelationService->updateContentObjectRelationFromParameters(
                     $contentObjectRelation, $this->workspace->getId(), $object->get_object_number(), $parent_id
                 );
             }
             else
             {
-                $contentObjectRelationService->createContentObjectRelation(
+                $contentObjectRelationService->createContentObjectRelationFromParameters(
                     $this->workspace->getId(), $object->get_object_number(), $parent_id
                 );
             }

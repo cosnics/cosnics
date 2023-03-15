@@ -17,10 +17,10 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
     public function get_description()
     {
         $html = [];
-        
+
         $lo = $this->get_content_object();
         $options = $lo->get_options();
-        
+
         $html[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $html[] = '<thead>';
         $html[] = '<tr>';
@@ -29,9 +29,9 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';
-        
+
         $order_options = $this->get_order_options();
-        
+
         foreach ($options as $index => $option)
         {
             $html[] = '<tr class="' . ($index % 2 == 0 ? 'row_even' : 'row_odd') . '">';
@@ -40,27 +40,28 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $html[] = $order_options;
             $html[] = '</select>';
             $html[] = '</td>';
-            
-            $renderer = new ContentObjectResourceRenderer($this->get_context(), $option->get_value());
+
+            $renderer = new ContentObjectResourceRenderer($option->get_value());
             $html[] = '<td>' . $renderer->run() . '</td>';
-            
+
             $html[] = '</tr>';
         }
         $html[] = '</tbody>';
         $html[] = '</table>';
+
         return implode(PHP_EOL, $html);
     }
 
     public function get_order_options()
     {
         $answer_count = count($this->get_content_object()->get_options());
-        
+
         $options = [];
         for ($i = 1; $i <= $answer_count; $i ++)
         {
             $options[] = '<option>' . $i . '</option>';
         }
-        
+
         return implode(PHP_EOL, $options);
     }
 }

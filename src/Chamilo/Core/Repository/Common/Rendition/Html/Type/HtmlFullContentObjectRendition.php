@@ -22,7 +22,7 @@ class HtmlFullContentObjectRendition extends HtmlContentObjectRendition
 
         $html[] = '<div class="panel-body">';
         $html[] = ContentObjectRenditionImplementation::launch(
-            $object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION, $this->get_context()
+            $object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION
         );
         $html[] = '</div>';
 

@@ -78,7 +78,7 @@ class ShareComponent extends Manager implements TableSupport
             {
                 foreach ($selectedContentObjectNumbers as $selectedContentObjectNumber)
                 {
-                    $contentObjectRelationService->createContentObjectRelation(
+                    $contentObjectRelationService->createContentObjectRelationFromParameters(
                         $selectedWorkspaceIdentifier, $selectedContentObjectNumber, 0
                     );
                 }

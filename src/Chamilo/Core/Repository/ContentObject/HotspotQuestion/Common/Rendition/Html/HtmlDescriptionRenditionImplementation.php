@@ -9,13 +9,12 @@ use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Nette\Utils\Image;
 
 class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 {
 
-    private $colours = array(
+    private $colours = [
         '#ff0000',
         '#f2ef00',
         '#00ff00',
@@ -27,7 +26,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         '#00ff80',
         '#ff8000',
         '#8000ff'
-    );
+    ];
 
     public function render()
     {
@@ -78,7 +77,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
                 ';"></div><div id="coordinates_' . $index . '" class="coordinates" style="display: none;">' .
                 $option->get_hotspot_coordinates() . '</div></td>';
 
-            $renderer = new ContentObjectResourceRenderer($this->get_context(), $option->get_answer());
+            $renderer = new ContentObjectResourceRenderer($option->get_answer());
             $html[] = '<td>' . $renderer->run() . '</td>';
 
             $html[] = '</tr>';

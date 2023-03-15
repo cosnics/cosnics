@@ -46,7 +46,7 @@ class ForumPostRendition
      */
     public function render()
     {
-        $renderer = new ContentObjectResourceRenderer($this, $this->getForumPost()->get_content());
+        $renderer = new ContentObjectResourceRenderer($this->getForumPost()->get_content());
         $renderedForumPost = $renderer->run();
 
         $renderedForumPost = preg_replace(

@@ -24,8 +24,7 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Repository\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ContentObjectSaver
 {
@@ -461,14 +460,6 @@ class ContentObjectSaver
     }
 
     /**
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     */
-    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities): void
-    {
-        $this->classnameUtilities = $classnameUtilities;
-    }
-
-    /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param int $attachmentIdentifier
      * @param string $type
@@ -529,27 +520,11 @@ class ContentObjectSaver
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService $contentObjectRelationService
-     */
-    public function setContentObjectRelationService(ContentObjectRelationService $contentObjectRelationService): void
-    {
-        $this->contentObjectRelationService = $contentObjectRelationService;
-    }
-
-    /**
      * @return \Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository
      */
     public function getContentObjectRepository(): ContentObjectRepository
     {
         return $this->contentObjectRepository;
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository $contentObjectRepository
-     */
-    public function setContentObjectRepository(ContentObjectRepository $contentObjectRepository): void
-    {
-        $this->contentObjectRepository = $contentObjectRepository;
     }
 
     /**
@@ -561,27 +536,11 @@ class ContentObjectSaver
     }
 
     /**
-     * @param \Chamilo\Core\Metadata\Entity\DataClassEntityFactory $dataClassEntityFactory
-     */
-    public function setDataClassEntityFactory(DataClassEntityFactory $dataClassEntityFactory): void
-    {
-        $this->dataClassEntityFactory = $dataClassEntityFactory;
-    }
-
-    /**
      * @return \Chamilo\Core\Repository\Service\IncludeParserManager
      */
     public function getIncludeParserManager(): IncludeParserManager
     {
         return $this->includeParserManager;
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Service\IncludeParserManager $includeParserManager
-     */
-    public function setIncludeParserManager(IncludeParserManager $includeParserManager): void
-    {
-        $this->includeParserManager = $includeParserManager;
     }
 
     /**
@@ -593,27 +552,11 @@ class ContentObjectSaver
     }
 
     /**
-     * @param \Chamilo\Core\Metadata\Service\EntityService $metadataEntityService
-     */
-    public function setMetadataEntityService(EntityService $metadataEntityService): void
-    {
-        $this->metadataEntityService = $metadataEntityService;
-    }
-
-    /**
      * @return \Chamilo\Core\Metadata\Service\InstanceService
      */
     public function getMetadataInstanceService(): InstanceService
     {
         return $this->metadataInstanceService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Metadata\Service\InstanceService $metadataInstanceService
-     */
-    public function setMetadataInstanceService(InstanceService $metadataInstanceService): void
-    {
-        $this->metadataInstanceService = $metadataInstanceService;
     }
 
     /**
@@ -625,29 +568,11 @@ class ContentObjectSaver
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface $publicationAggregator
-     */
-    public function setPublicationAggregator(PublicationAggregatorInterface $publicationAggregator): void
-    {
-        $this->publicationAggregator = $publicationAggregator;
-    }
-
-    /**
      * @return \Chamilo\Core\Repository\Service\RepositoryCategoryService
      */
     public function getRepositoryCategoryService(): RepositoryCategoryService
     {
         return $this->repositoryCategoryService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Service\RepositoryCategoryService $repositoryCategoryService
-     */
-    public function setRepositoryCategoryService(
-        RepositoryCategoryService $repositoryCategoryService
-    ): void
-    {
-        $this->repositoryCategoryService = $repositoryCategoryService;
     }
 
     /**
@@ -659,27 +584,11 @@ class ContentObjectSaver
     }
 
     /**
-     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
-     */
-    public function setSessionUtilities(SessionUtilities $sessionUtilities)
-    {
-        $this->sessionUtilities = $sessionUtilities;
-    }
-
-    /**
      * @return \Chamilo\Libraries\Utilities\StringUtilities
      */
     public function getStringUtilities(): StringUtilities
     {
         return $this->stringUtilities;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
-    public function setStringUtilities(StringUtilities $stringUtilities): void
-    {
-        $this->stringUtilities = $stringUtilities;
     }
 
     /**
@@ -691,27 +600,11 @@ class ContentObjectSaver
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter $templateRegistrationConsulter
-     */
-    public function setTemplateRegistrationConsulter(TemplateRegistrationConsulter $templateRegistrationConsulter): void
-    {
-        $this->templateRegistrationConsulter = $templateRegistrationConsulter;
-    }
-
-    /**
      * @return \Chamilo\Core\User\Service\UserService
      */
     public function getUserService(): UserService
     {
         return $this->userService;
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     */
-    public function setUserService(UserService $userService): void
-    {
-        $this->userService = $userService;
     }
 
     /**
@@ -783,16 +676,122 @@ class ContentObjectSaver
 
         if ($contentObjectRelation instanceof WorkspaceContentObjectRelation)
         {
-            $contentObjectRelationService->updateContentObjectRelation(
+            $contentObjectRelationService->updateContentObjectRelationFromParameters(
                 $contentObjectRelation, $workspace->getId(), $contentObject->get_object_number(), $categoryIdentifier
             );
         }
         else
         {
-            $contentObjectRelationService->createContentObjectRelation(
+            $contentObjectRelationService->createContentObjectRelationFromParameters(
                 $workspace->getId(), $contentObject->get_object_number(), $categoryIdentifier
             );
         }
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
+     */
+    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities): void
+    {
+        $this->classnameUtilities = $classnameUtilities;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService $contentObjectRelationService
+     */
+    public function setContentObjectRelationService(ContentObjectRelationService $contentObjectRelationService): void
+    {
+        $this->contentObjectRelationService = $contentObjectRelationService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository $contentObjectRepository
+     */
+    public function setContentObjectRepository(ContentObjectRepository $contentObjectRepository): void
+    {
+        $this->contentObjectRepository = $contentObjectRepository;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Entity\DataClassEntityFactory $dataClassEntityFactory
+     */
+    public function setDataClassEntityFactory(DataClassEntityFactory $dataClassEntityFactory): void
+    {
+        $this->dataClassEntityFactory = $dataClassEntityFactory;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Service\IncludeParserManager $includeParserManager
+     */
+    public function setIncludeParserManager(IncludeParserManager $includeParserManager): void
+    {
+        $this->includeParserManager = $includeParserManager;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Service\EntityService $metadataEntityService
+     */
+    public function setMetadataEntityService(EntityService $metadataEntityService): void
+    {
+        $this->metadataEntityService = $metadataEntityService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Metadata\Service\InstanceService $metadataInstanceService
+     */
+    public function setMetadataInstanceService(InstanceService $metadataInstanceService): void
+    {
+        $this->metadataInstanceService = $metadataInstanceService;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface $publicationAggregator
+     */
+    public function setPublicationAggregator(PublicationAggregatorInterface $publicationAggregator): void
+    {
+        $this->publicationAggregator = $publicationAggregator;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Service\RepositoryCategoryService $repositoryCategoryService
+     */
+    public function setRepositoryCategoryService(
+        RepositoryCategoryService $repositoryCategoryService
+    ): void
+    {
+        $this->repositoryCategoryService = $repositoryCategoryService;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
+     */
+    public function setSessionUtilities(SessionUtilities $sessionUtilities)
+    {
+        $this->sessionUtilities = $sessionUtilities;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
+     */
+    public function setStringUtilities(StringUtilities $stringUtilities): void
+    {
+        $this->stringUtilities = $stringUtilities;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter $templateRegistrationConsulter
+     */
+    public function setTemplateRegistrationConsulter(TemplateRegistrationConsulter $templateRegistrationConsulter): void
+    {
+        $this->templateRegistrationConsulter = $templateRegistrationConsulter;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     */
+    public function setUserService(UserService $userService): void
+    {
+        $this->userService = $userService;
     }
 
     /**

@@ -7,175 +7,207 @@ use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
-use InvalidArgumentException;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 use RuntimeException;
 
 /**
- *
  * @package Chamilo\Core\Repository\Workspace\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ContentObjectRelationService
 {
+    protected ContentObjectRelationRepository $contentObjectRelationRepository;
 
-    /**
-     *
-     * @var \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository
-     */
-    private $contentObjectRelationRepository;
+    protected WorkspaceService $workspaceService;
 
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository $contentObjectRelationRepository
-     */
     public function __construct(ContentObjectRelationRepository $contentObjectRelationRepository)
     {
         $this->contentObjectRelationRepository = $contentObjectRelationRepository;
     }
 
     /**
+     * @param ContentObject[] $contentObjects
      *
-     * @return \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository
+     * @throws \Exception
      */
-    public function getContentObjectRelationRepository()
+    public function countAvailableWorkspacesForContentObjectsAndUser(array $contentObjects, User $user): int
+    {
+        $workspaceIdentifiers = [];
+
+        foreach ($contentObjects as $contentObject)
+        {
+            $workspaceIdentifiers = array_merge(
+                $workspaceIdentifiers, $this->getWorkspaceIdentifiersForContentObject($contentObject)
+            );
+        }
+
+        return $this->getWorkspaceService()->countWorkspacesForUserWithExcludedWorkspaces(
+            $user, RightsService::RIGHT_ADD, $workspaceIdentifiers
+        );
+    }
+
+    public function countContentObjectInWorkspace(
+        ContentObject $contentObject, WorkspaceInterface $workspaceImplementation
+    ): int
+    {
+        return $this->getContentObjectRelationRepository()->countContentObjectInWorkspace(
+            $contentObject, $workspaceImplementation
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function countWorkspacesForContentObject(ContentObject $contentObject): int
+    {
+        return count($this->getWorkspaceIdentifiersForContentObject($contentObject));
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function createContentObjectRelation(WorkspaceContentObjectRelation $contentObjectRelation): bool
+    {
+        return $this->getContentObjectRelationRepository()->createContentObjectRelation($contentObjectRelation);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function createContentObjectRelationFromParameters(
+        string $workspaceId, string $contentObjectId, string $categoryId
+    ): ?WorkspaceContentObjectRelation
+    {
+        $contentObjectRelation = new WorkspaceContentObjectRelation();
+
+        $this->setContentObjectRelationProperties($contentObjectRelation, $workspaceId, $contentObjectId, $categoryId);
+
+        if (!$this->createContentObjectRelation($contentObjectRelation))
+        {
+            return null;
+        }
+
+        return $contentObjectRelation;
+    }
+
+    public function deleteContentObjectRelation(WorkspaceContentObjectRelation $contentObjectRelation): bool
+    {
+        return $this->getContentObjectRelationRepository()->deleteContentObjectRelation($contentObjectRelation);
+    }
+
+    public function deleteContentObjectRelationByWorkspaceAndContentObject(
+        Workspace $workspace, ContentObject $contentObject
+    ): bool
+    {
+        $contentObjectRelation =
+            $this->getContentObjectRelationForWorkspaceAndContentObject($workspace, $contentObject);
+
+        return $this->deleteContentObjectRelation($contentObjectRelation);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $contentObjects
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param ?int $limit
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Exception
+     */
+    public function getAvailableWorkspacesForContentObjectsAndUser(
+        array $contentObjects, User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderBy = null
+    ): ArrayCollection
+    {
+        $workspaceIdentifiers = [];
+
+        foreach ($contentObjects as $contentObject)
+        {
+            $workspaceIdentifiers = array_merge(
+                $workspaceIdentifiers, $this->getWorkspaceIdentifiersForContentObject($contentObject)
+            );
+        }
+
+        return $this->getWorkspaceService()->getWorkspacesForUserWithExcludedWorkspaces(
+            $user, RightsService::RIGHT_ADD, $workspaceIdentifiers, $limit, $offset, $orderBy
+        );
+    }
+
+    public function getContentObjectRelationForWorkspaceAndContentObject(
+        Workspace $workspace, ContentObject $contentObject
+    ): WorkspaceContentObjectRelation
+    {
+        return $this->getContentObjectRelationRepository()->findContentObjectRelationForWorkspaceAndContentObject(
+            $workspace, $contentObject
+        );
+    }
+
+    public function getContentObjectRelationRepository(): ContentObjectRelationRepository
     {
         return $this->contentObjectRelationRepository;
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository $contentObjectRelationRepository
-     */
-    public function setContentObjectRelationRepository($contentObjectRelationRepository)
-    {
-        $this->contentObjectRelationRepository = $contentObjectRelationRepository;
-    }
-
-    /**
-     *
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
      *
-     * @return boolean
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function isContentObjectInWorkspace(ContentObject $contentObject, WorkspaceInterface $workspaceImplementation)
-    {
-        return $this->getContentObjectRelationRepository()->findContentObjectInWorkspace(
-            $contentObject, 
-            $workspaceImplementation);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation
-     */
-    public function getContentObjectRelationForWorkspaceAndContentObject(Workspace $workspace, 
-        ContentObject $contentObject)
-    {
-        return $this->getContentObjectRelationRepository()->findContentObjectRelationForWorkspaceAndContentObject(
-            $workspace, 
-            $contentObject);
-    }
-
-    /**
-     *
-     * @param ContentObject $contentObject
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getContentObjectRelationsForContentObject(ContentObject $contentObject)
+    public function getContentObjectRelationsForContentObject(ContentObject $contentObject): ArrayCollection
     {
         return $this->getContentObjectRelationRepository()->findContentObjectRelationsForContentObject($contentObject);
     }
 
     /**
-     * Updates the content object id of all WorkspaceContentObjectRelations based on an old content object id
-     * 
-     * @param int $oldContentObjectId
-     * @param int $newContentObjectId
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return string[]
+     * @throws \Exception
      */
-    public function updateContentObjectIdInAllWorkspaces($oldContentObjectId, $newContentObjectId)
+    public function getWorkspaceIdentifiersForContentObject(ContentObject $contentObject): array
     {
-        if (empty($oldContentObjectId))
-        {
-            throw new InvalidArgumentException('The given old content object id can not be empty');
-        }
-        
-        if (empty($newContentObjectId))
-        {
-            throw new InvalidArgumentException('The given new content object id can not be empty');
-        }
-        
-        $contentObjectRelations = $this->getContentObjectRelationRepository()->findContentObjectRelationsForContentObjectById(
-            $oldContentObjectId);
-        
-        foreach($contentObjectRelations as $contentObjectRelation)
-        {
-            /** @var WorkspaceContentObjectRelation $contentObjectRelation */
-            $contentObjectRelation->setContentObjectId($newContentObjectId);
-            if (! $contentObjectRelation->update())
-            {
-                throw new RuntimeException(
-                    sprintf(
-                        'Could not update the WorkspaceContentObjectRelation object with id %s', 
-                        $contentObjectRelation->getId()));
-            }
-        }
+        return $this->getContentObjectRelationRepository()->findWorkspaceIdentifiersForContentObject($contentObject);
+    }
+
+    public function getWorkspaceService(): WorkspaceService
+    {
+        return $this->workspaceService;
     }
 
     /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
-     * @param integer $workspaceId
-     * @param integer $contentObjectId
-     * @param integer $categoryId
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Exception
      */
-    public function createContentObjectRelation($workspaceId, $contentObjectId, $categoryId)
+    public function getWorkspacesForContentObject(ContentObject $contentObject): ArrayCollection
     {
-        $contentObjectRelation = new WorkspaceContentObjectRelation();
-        $this->setContentObjectRelationProperties($contentObjectRelation, $workspaceId, $contentObjectId, $categoryId);
-        
-        if (! $contentObjectRelation->create())
-        {
-            return false;
-        }
-        
-        return $contentObjectRelation;
+        return $this->getWorkspaceService()->getWorkspacesByIdentifiers(
+            $this->getWorkspaceIdentifiersForContentObject($contentObject)
+        );
     }
 
     /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
      *
-     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation $contentObjectRelation
-     * @param integer $workspaceId
-     * @param integer $contentObjectId
-     * @param integer $categoryId
+     * @return bool
      */
-    public function updateContentObjectRelation(WorkspaceContentObjectRelation $contentObjectRelation, $workspaceId, 
-        $contentObjectId, $categoryId)
+    public function isContentObjectInWorkspace(ContentObject $contentObject, WorkspaceInterface $workspaceImplementation
+    ): bool
     {
-        $this->setContentObjectRelationProperties($contentObjectRelation, $workspaceId, $contentObjectId, $categoryId);
-        
-        if (! $contentObjectRelation->update())
-        {
-            return false;
-        }
-        
-        return $contentObjectRelation;
+        return $this->countContentObjectInWorkspace($contentObject, $workspaceImplementation) > 0;
     }
 
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation $contentObjectRelation
-     * @param integer $workspaceId
-     * @param integer $contentObjectId
-     * @param integer $categoryId
-     */
-    private function setContentObjectRelationProperties(WorkspaceContentObjectRelation $contentObjectRelation, 
-        $workspaceId, $contentObjectId, $categoryId)
+    private function setContentObjectRelationProperties(
+        WorkspaceContentObjectRelation $contentObjectRelation, string $workspaceId, string $contentObjectId,
+        string $categoryId
+    )
     {
         $contentObjectRelation->setWorkspaceId($workspaceId);
         $contentObjectRelation->setContentObjectId($contentObjectId);
@@ -183,114 +215,43 @@ class ContentObjectRelationService
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function deleteContentObjectRelationByWorkspaceAndContentObjectIdentifier(Workspace $workspace, 
-        ContentObject $contentObject)
+    public function updateContentObjectIdInAllWorkspaces(string $oldContentObjectId, string $newContentObjectId)
     {
-        $contentObjectRelation = $this->getContentObjectRelationForWorkspaceAndContentObject($workspace, $contentObject);
-        
-        if (! $contentObjectRelation->delete())
+        $contentObjectRelations =
+            $this->getContentObjectRelationRepository()->findContentObjectRelationsForContentObjectById(
+                $oldContentObjectId
+            );
+
+        foreach ($contentObjectRelations as $contentObjectRelation)
         {
-            return false;
+            $contentObjectRelation->setContentObjectId($newContentObjectId);
+
+            if (!$this->updateContentObjectRelation($contentObjectRelation))
+            {
+                throw new RuntimeException(
+                    sprintf(
+                        'Could not update the WorkspaceContentObjectRelation object with id %s',
+                        $contentObjectRelation->getId()
+                    )
+                );
+            }
         }
-        
-        return true;
     }
 
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Workspace\Service\WorkspaceService $workspaceService
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getWorkspacesForContentObject(WorkspaceService $workspaceService, ContentObject $contentObject)
+    public function updateContentObjectRelation(WorkspaceContentObjectRelation $contentObjectRelation): bool
     {
-        $workspaceIdentifiers = $this->getWorkspaceIdentifiersForContentObject($contentObject);
-        return $workspaceService->getWorkspacesByIdentifiers($workspaceIdentifiers);
+        return $this->getContentObjectRelationRepository()->updateContentObjectRelation($contentObjectRelation);
     }
 
-    /**
-     *
-     * @param ContentObject $contentObject
-     *
-     * @return int
-     */
-    public function countWorkspacesForContentObject(ContentObject $contentObject)
+    public function updateContentObjectRelationFromParameters(
+        WorkspaceContentObjectRelation $contentObjectRelation, string $workspaceId, string $contentObjectId,
+        string $categoryId
+    ): bool
     {
-        return count($this->getWorkspaceIdentifiersForContentObject($contentObject));
-    }
+        $this->setContentObjectRelationProperties($contentObjectRelation, $workspaceId, $contentObjectId, $categoryId);
 
-    /**
-     * Returns the available workspaces in which a given user can add the given content object
-     * 
-     * @param WorkspaceService $workspaceService
-     * @param ContentObject[] $contentObjects
-     * @param User $user
-     * @param int $limit
-     * @param int $offset
-     * @param OrderProperty $orderBy
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getAvailableWorkspacesForContentObjectsAndUser(WorkspaceService $workspaceService, $contentObjects, 
-        User $user, $limit = null, $offset = null, $orderBy = null)
-    {
-        $workspaceIdentifiers = [];
-        
-        foreach ($contentObjects as $contentObject)
-        {
-            $workspaceIdentifiers = array_merge(
-                $workspaceIdentifiers, 
-                $this->getWorkspaceIdentifiersForContentObject($contentObject));
-        }
-        
-        return $workspaceService->getWorkspacesForUserWithExcludedWorkspaces(
-            $user, 
-            RightsService::RIGHT_ADD, 
-            $workspaceIdentifiers, 
-            $limit, 
-            $offset, 
-            $orderBy);
-    }
-
-    /**
-     * Returns the available workspaces in which a given user can add the given content object
-     * 
-     * @param WorkspaceService $workspaceService
-     * @param ContentObject[] $contentObjects
-     * @param User $user
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function countAvailableWorkspacesForContentObjectsAndUser(WorkspaceService $workspaceService, $contentObjects, 
-        User $user)
-    {
-        $workspaceIdentifiers = [];
-        
-        foreach ($contentObjects as $contentObject)
-        {
-            $workspaceIdentifiers = array_merge(
-                $workspaceIdentifiers, 
-                $this->getWorkspaceIdentifiersForContentObject($contentObject));
-        }
-        
-        return $workspaceService->countWorkspacesForUserWithExcludedWorkspaces(
-            $user, 
-            RightsService::RIGHT_ADD, 
-            $workspaceIdentifiers);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @return integer[]
-     */
-    public function getWorkspaceIdentifiersForContentObject(ContentObject $contentObject)
-    {
-        return $this->getContentObjectRelationRepository()->findWorkspaceIdentifiersForContentObject($contentObject);
+        return $this->updateContentObjectRelation($contentObjectRelation);
     }
 }

@@ -664,7 +664,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
             }
 
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-            $contentObjectRelationService->createContentObjectRelation(
+            $contentObjectRelationService->createContentObjectRelationFromParameters(
                 $this->get_parameters()->getWorkspace()->getId(), $contentObject->getId(), $parentId
             );
         }

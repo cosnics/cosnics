@@ -31,9 +31,8 @@ class HtmlRenditionImplementation extends RenditionImplementation
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('DownloadFile', array('LABEL' => $label)),
-                new FontAwesomeGlyph('arrow-alt-circle-down'), $this->getDownloadUrl(), Button::DISPLAY_ICON_AND_LABEL,
-                null, $classes, '_blank'
+                Translation::get('DownloadFile', ['LABEL' => $label]), new FontAwesomeGlyph('arrow-alt-circle-down'),
+                $this->getDownloadUrl(), Button::DISPLAY_ICON_AND_LABEL, null, $classes, '_blank'
             )
         );
 
@@ -70,7 +69,6 @@ class HtmlRenditionImplementation extends RenditionImplementation
     }
 
     /**
-     *
      * @param string[] $classes
      *
      * @return string
@@ -95,7 +93,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
 
         $button = new Button(
         //Translation::get('DownloadFile', array('LABEL' => 'qsdf')),
-            Translation::get($file->get_filename(), array('LABEL' => 'qsdf')), $file->getGlyph(IdentGlyph::SIZE_MEDIUM),
+            Translation::get($file->get_filename(), ['LABEL' => 'qsdf']), $file->getGlyph(IdentGlyph::SIZE_MEDIUM),
             $this->getDownloadUrl(), Button::DISPLAY_ICON_AND_LABEL, null, [], '_blank'
         );
 
@@ -107,7 +105,6 @@ class HtmlRenditionImplementation extends RenditionImplementation
     }
 
     /**
-     *
      * @param array $parameters
      */
     public function renderInline($parameters = [])
@@ -121,9 +118,9 @@ class HtmlRenditionImplementation extends RenditionImplementation
 
             return $this->getTwig()->render(
                 'Chamilo\Core\Repository\ContentObject\File:full_thumbnail.html.twig', [
-                    "icon" => $object->getGlyph(IdentGlyph::SIZE_BIG)->render(),
-                    "title" => $object->get_title(),
-                    "download_url" => $this->getDownloadUrl()
+                    'icon' => $object->getGlyph(IdentGlyph::SIZE_BIG)->render(),
+                    'title' => $object->get_title(),
+                    'download_url' => $this->getDownloadUrl()
                 ]
             );
         }
@@ -140,7 +137,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
                 'RenditionImplementation';
         }
 
-        $rendition = new $class($this->get_context(), $this->get_content_object());
+        $rendition = new $class($this->get_content_object());
 
         return $rendition->render($parameters);
     }

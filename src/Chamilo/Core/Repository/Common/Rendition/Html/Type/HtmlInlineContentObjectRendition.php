@@ -77,7 +77,7 @@ class HtmlInlineContentObjectRendition extends HtmlContentObjectRendition
     public function get_description()
     {
         $html[] = '<div class="panel-body" style="overflow: auto;">';
-        $renderer = new ContentObjectResourceRenderer($this, $this->get_content_object()->get_description());
+        $renderer = new ContentObjectResourceRenderer($this->get_content_object()->get_description());
         $html[] = $renderer->run();
         $html[] = '<div class="clearfix"></div>';
 

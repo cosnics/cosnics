@@ -11,7 +11,6 @@ abstract class ContentObjectRendition
 {
     public const FORMAT_HTML = 'html';
     public const FORMAT_JSON = 'json';
-    public const FORMAT_XML = 'xml';
 
     public const VIEW_DESCRIPTION = 'description';
     public const VIEW_FORM = 'form';
@@ -52,14 +51,6 @@ abstract class ContentObjectRendition
     }
 
     /**
-     * @return the $context
-     */
-    public function get_context()
-    {
-        return $this->rendition_implementation->get_context();
-    }
-
-    /**
      * @return the $rendition_implementation
      */
     public function get_rendition_implementation()
@@ -78,14 +69,6 @@ abstract class ContentObjectRendition
     public function set_content_object($content_object)
     {
         $this->rendition_implementation->set_content_object($content_object);
-    }
-
-    /**
-     * @param $context the $context to set
-     */
-    public function set_context($context)
-    {
-        $this->rendition_implementation->set_context($context);
     }
 
     /**

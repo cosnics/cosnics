@@ -191,7 +191,7 @@ class WebpageContentObjectImportController extends ContentObjectImportController
         if ($this->get_parameters()->getWorkspace() instanceof Workspace)
         {
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-            $contentObjectRelationService->createContentObjectRelation(
+            $contentObjectRelationService->createContentObjectRelationFromParameters(
                 $this->get_parameters()->getWorkspace()->getId(), 
                 $contentObject->getId(), 
                 $this->get_parameters()->get_category());

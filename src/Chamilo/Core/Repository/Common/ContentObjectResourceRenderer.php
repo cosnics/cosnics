@@ -42,9 +42,8 @@ class ContentObjectResourceRenderer
      */
     protected $contentObjectResourceParser;
 
-    public function __construct($context, $description, $full_html = false)
+    public function __construct($description, $full_html = false)
     {
-        $this->context = $context;
         $this->description = $description;
         $this->full_html = $full_html;
 
@@ -178,8 +177,7 @@ class ContentObjectResourceRenderer
         $descriptionRendition = ContentObjectRenditionImplementation::factory(
             $object,
             ContentObjectRendition::FORMAT_HTML,
-            $type,
-            $this->context)->render($parameters);
+            $type)->render($parameters);
 
         $rendition = new DOMDocument();
         $rendition->loadHTML($descriptionRendition);

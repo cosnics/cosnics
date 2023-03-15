@@ -114,7 +114,7 @@ class MoverComponent extends Manager
 
                                 if ($contentObjectRelation instanceof WorkspaceContentObjectRelation)
                                 {
-                                    if (!$contentObjectRelationService->updateContentObjectRelation(
+                                    if (!$contentObjectRelationService->updateContentObjectRelationFromParameters(
                                         $contentObjectRelation, $this->getWorkspace()->getId(),
                                         $object->get_object_number(), $destination
                                     ))
@@ -124,7 +124,7 @@ class MoverComponent extends Manager
                                 }
                                 else
                                 {
-                                    if (!$contentObjectRelationService->createContentObjectRelation(
+                                    if (!$contentObjectRelationService->createContentObjectRelationFromParameters(
                                         $this->getWorkspace()->getId(), $object->get_object_number(), $destination
                                     ))
                                     {

@@ -40,7 +40,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '<tr class="' . ($index % 2 == 0 ? 'row_even' : 'row_odd') . '">';
             $html[] = '<td>' . $match_label . '</td>';
             
-            $renderer = new ContentObjectResourceRenderer($this->get_context(), $match);
+            $renderer = new ContentObjectResourceRenderer($match);
             $html[] = '<td>' . $renderer->run() . '</td>';
             
             $html[] = '</tr>';
@@ -72,7 +72,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '<tr class="' . ($index % 2 == 0 ? 'row_even' : 'row_odd') . '">';
             $html[] = '<td>' . $answer_number . '</td>';
             
-            $renderer = new ContentObjectResourceRenderer($this->get_context(), $option->get_value());
+            $renderer = new ContentObjectResourceRenderer($option->get_value());
             $html[] = '<td>' . $renderer->run() . '</td>';
             
             $html[] = '</tr>';

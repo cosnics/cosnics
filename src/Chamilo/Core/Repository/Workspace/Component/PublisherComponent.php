@@ -75,7 +75,7 @@ class PublisherComponent extends Manager
                 );
 
                 $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-                $contentObjectRelationService->createContentObjectRelation(
+                $contentObjectRelationService->createContentObjectRelationFromParameters(
                     $this->getCurrentWorkspace()->getId(), $contentObject->get_object_number(), $parentId
                 );
             }

@@ -13,7 +13,7 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
     public function render()
     {
         $html[] = '<div style="overflow: auto;">';
-        $renderer = new ContentObjectResourceRenderer($this, $this->get_content_object()->get_description());
+        $renderer = new ContentObjectResourceRenderer($this->get_content_object()->get_description());
         $html[] = $renderer->run();
         $html[] = '<div class="clearfix"></div>';
 

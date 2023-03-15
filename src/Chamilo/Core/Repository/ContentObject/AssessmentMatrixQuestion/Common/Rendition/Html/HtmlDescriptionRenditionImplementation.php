@@ -46,7 +46,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         {
             $html[] = '<tr class="' . ($index % 2 == 0 ? 'row_even' : 'row_odd') . '">';
 
-            $renderer = new ContentObjectResourceRenderer($this->get_context(), $option->get_value());
+            $renderer = new ContentObjectResourceRenderer($option->get_value());
             $html[] = '<td>' . $renderer->run() . '</td>';
 
             foreach ($matches as $j => $match)

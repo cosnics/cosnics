@@ -7,14 +7,13 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\Common\Rendition\Html\Type
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HtmlPreviewContentObjectRendition extends HtmlContentObjectRendition
 {
     public function render()
     {
-        $glyph = new FontAwesomeGlyph('image', array('fa-5x'), null, 'fas');
+        $glyph = new FontAwesomeGlyph('image', ['fa-5x'], null, 'fas');
         $html = [];
 
         $html[] = '<div class="no-preview">';

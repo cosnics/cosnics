@@ -15,9 +15,9 @@ class DummyContentObjectRenditionImplementation extends AbstractContentObjectRen
 
     private $view;
 
-    public function __construct($context, ContentObject $content_object, $format, $view)
+    public function __construct(ContentObject $content_object, $format, $view)
     {
-        parent::__construct($context, $content_object);
+        parent::__construct($content_object);
         $this->format = $format;
         $this->view = $view;
     }
@@ -27,13 +27,13 @@ class DummyContentObjectRenditionImplementation extends AbstractContentObjectRen
         return ContentObjectRendition::launch($this);
     }
 
-    public function get_view()
-    {
-        return $this->view;
-    }
-
     public function get_format()
     {
         return $this->format;
+    }
+
+    public function get_view()
+    {
+        return $this->view;
     }
 }

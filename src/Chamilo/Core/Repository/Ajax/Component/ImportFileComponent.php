@@ -78,7 +78,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
             if ($workspace instanceof Workspace)
             {
                 $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-                $contentObjectRelationService->createContentObjectRelation(
+                $contentObjectRelationService->createContentObjectRelationFromParameters(
                     $workspace->getId(), $document->get_object_number(), $categoryId
                 );
             }

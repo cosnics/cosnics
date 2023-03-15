@@ -54,7 +54,7 @@ class UnshareComponent extends Manager
         {
             $contentObject = DataManager::retrieve_by_id(ContentObject::class, $selectedContentObjectIdentifier);
 
-            $contentObjectRelationService->deleteContentObjectRelationByWorkspaceAndContentObjectIdentifier(
+            $contentObjectRelationService->deleteContentObjectRelationByWorkspaceAndContentObject(
                 $this->getCurrentWorkspace(), $contentObject
             );
         }
