@@ -144,9 +144,9 @@ class UserScoresComponent extends Manager
             'LANGUAGE' => $this->getTranslator()->getLocale(),
             'CONTENT_OBJECT_TITLE' => $this->getGradeBook()->get_title(),
             'CAN_EDIT_GRADEBOOK' => $this->getRightsService()->canUserEditGradeBook(),
-            'GRADEBOOK' => $this->getSerializer()->serialize($gradeBookData->toJSONModel(), 'json'),
-            'USERS' => $this->getSerializer()->serialize($users, 'json'),
-            'SCORES' => $this->getSerializer()->serialize($scores, 'json'),
+            'GRADEBOOK_USER_SCORES_JSON' => $this->getSerializer()->serialize([
+                'gradeBookData' => $gradeBookData->toJSONModel(), 'users' => $users, 'scores' => $scores
+            ], 'json'),
             'USER_FULLNAME' => $this->user->get_fullname(),
             'GRADEBOOK_ROOT_URL' => $this->get_url(
                 [
