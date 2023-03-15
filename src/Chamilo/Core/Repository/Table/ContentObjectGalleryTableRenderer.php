@@ -1,14 +1,19 @@
 <?php
 namespace Chamilo\Core\Repository\Table;
 
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Core\Repository\Component\BrowserComponent;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Service\ContentObjectActionRenderer;
+use Chamilo\Core\Repository\Service\ContentObjectUrlGenerator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassGalleryTableRenderer;
@@ -19,6 +24,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
@@ -35,6 +41,8 @@ class ContentObjectGalleryTableRenderer extends DataClassGalleryTableRenderer
 
     protected ContentObjectActionRenderer $contentObjectActionRenderer;
 
+    protected ContentObjectUrlGenerator $contentObjectUrlGenerator;
+
     protected DatetimeUtilities $datetimeUtilities;
 
     protected RightsService $rightsService;
@@ -49,14 +57,15 @@ class ContentObjectGalleryTableRenderer extends DataClassGalleryTableRenderer
 
     public function __construct(
         Workspace $workspace, User $user, RightsService $rightsService, DatetimeUtilities $datetimeUtilities,
-        ContentObjectActionRenderer $contentObjectActionRenderer, StringUtilities $stringUtilities,
-        UserService $userService, Translator $translator, UrlGenerator $urlGenerator,
+        ContentObjectActionRenderer $contentObjectActionRenderer, ContentObjectUrlGenerator $contentObjectUrlGenerator,
+        StringUtilities $stringUtilities, UserService $userService, Translator $translator, UrlGenerator $urlGenerator,
         GalleryHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
         $this->stringUtilities = $stringUtilities;
         $this->userService = $userService;
         $this->contentObjectActionRenderer = $contentObjectActionRenderer;
+        $this->contentObjectUrlGenerator = $contentObjectUrlGenerator;
         $this->datetimeUtilities = $datetimeUtilities;
         $this->user = $user;
         $this->workspace = $workspace;
@@ -68,6 +77,11 @@ class ContentObjectGalleryTableRenderer extends DataClassGalleryTableRenderer
     public function getContentObjectActionRenderer(): ContentObjectActionRenderer
     {
         return $this->contentObjectActionRenderer;
+    }
+
+    public function getContentObjectUrlGenerator(): ContentObjectUrlGenerator
+    {
+        return $this->contentObjectUrlGenerator;
     }
 
     public function getDatetimeUtilities(): DatetimeUtilities
@@ -232,9 +246,20 @@ class ContentObjectGalleryTableRenderer extends DataClassGalleryTableRenderer
         );
     }
 
-    public function renderContent($result): string
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     */
+    public function renderContent($contentObject): string
     {
-        return 'aa';
+        $display = ContentObjectRenditionImplementation::factory(
+            $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_THUMBNAIL,
+            new BrowserComponent(new ApplicationConfiguration(new ChamiloRequest(), new User()))
+        );
+
+        $html[] = '<a href="' . htmlentities($this->getContentObjectUrlGenerator()->getViewUrl($contentObject)) . '">' .
+            $display->render() . '</a>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
