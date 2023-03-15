@@ -17,6 +17,15 @@
                       id="Chamilo\Core\Repository\Workspace"/>
         </service>
 
+        <service id="Chamilo\Core\Repository\Table\ContentObjectGalleryTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+            <argument key="$workspace"
+                      type="service"
+                      id="Chamilo\Core\Repository\Workspace"/>
+        </service>
+
     </services>
 
 </container>

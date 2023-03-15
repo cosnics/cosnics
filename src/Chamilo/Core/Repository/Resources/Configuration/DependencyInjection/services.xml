@@ -20,10 +20,17 @@
         <service id="Chamilo\Core\Repository\Service\ContentObjectCopierWrapper"/>
         <service id="Chamilo\Core\Repository\Service\ContentObjectService"/>
 
-        <service id="Chamilo\Core\Repository\Common\Renderer\Type\TableContentObjectRenderer">
-            <argument key="$user"
+        <service id="Chamilo\Core\Repository\Common\Renderer\Type\GalleryTableContentObjectRenderer">
+            <argument key="$workspace"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\Repository\Workspace"/>
+        </service>
+        <service id="Chamilo\Core\Repository\Common\Renderer\Type\SlideshowContentObjectRenderer">
+            <argument key="$workspace"
+                      type="service"
+                      id="Chamilo\Core\Repository\Workspace"/>
+        </service>
+        <service id="Chamilo\Core\Repository\Common\Renderer\Type\TableContentObjectRenderer">
             <argument key="$workspace"
                       type="service"
                       id="Chamilo\Core\Repository\Workspace"/>

@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Table\ContentObjectTableRenderer;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
@@ -19,27 +18,24 @@ class TableContentObjectRenderer extends ContentObjectRenderer
 
     protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler;
 
-    protected User $user;
-
     protected Workspace $workspace;
 
     public function __construct(
         ContentObjectService $contentObjectService, ContentObjectTableRenderer $contentObjectTableRenderer,
-        RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler, User $user, Workspace $workspace
+        RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler, Workspace $workspace
     )
     {
         $this->contentObjectService = $contentObjectService;
         $this->contentObjectTableRenderer = $contentObjectTableRenderer;
         $this->requestTableParameterValuesCompiler = $requestTableParameterValuesCompiler;
-        $this->user = $user;
         $this->workspace = $workspace;
     }
 
-    public function render(Condition $condition): string
+    public function render(): string
     {
         $contentObjectService = $this->getContentObjectService();
         $workspace = $this->getWorkspace();
-        
+
         $filterData = FilterData::getInstance($workspace);
 
         $totalNumberOfItems = $contentObjectService->countContentObjectsByTypeForWorkspace(
@@ -78,11 +74,6 @@ class TableContentObjectRenderer extends ContentObjectRenderer
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
         return $this->requestTableParameterValuesCompiler;
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
     }
 
     public function getWorkspace(): Workspace

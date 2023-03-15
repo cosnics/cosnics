@@ -2,6 +2,9 @@
 namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
+use Chamilo\Core\Repository\Common\Renderer\Type\GalleryTableContentObjectRenderer;
+use Chamilo\Core\Repository\Common\Renderer\Type\SlideshowContentObjectRenderer;
+use Chamilo\Core\Repository\Common\Renderer\Type\TableContentObjectRenderer;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\FilterDataButtonSearchForm;
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
@@ -13,6 +16,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
@@ -31,12 +35,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * @package repository.lib.repository_manager.component
- */
-
-/**
- * Default repository manager component which allows the user to browse through the different categories and content
- * objects in the repository.
+ * @package Chamilo\Core\Repository\Component
  */
 class BrowserComponent extends Manager implements DelegateComponent
 {
@@ -44,8 +43,10 @@ class BrowserComponent extends Manager implements DelegateComponent
     private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function run()
     {
@@ -83,7 +84,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $html[] = $this->render_header();
         $html[] = $this->getButtonToolbarRenderer()->render();
-        $html[] = $this->getRenderer()->render($this->getContentObjectCondition());
+        $html[] = $this->renderContentObjects();
         $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
@@ -98,6 +99,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         return parent::getAdditionalParameters($additionalParameters);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
@@ -193,7 +197,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                             $translator->trans(
                                 $stringUtilities->createString($renderer)->upperCamelize()->toString() . 'View', [],
                                 StringUtilities::LIBRARIES
-                            ), null, $action, Button::DISPLAY_LABEL, null, [], null, $isActive
+                            ), null, $action, AbstractButton::DISPLAY_LABEL, null, [], null, $isActive
                         )
                     );
                 }
@@ -262,37 +266,50 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
     }
 
-    /**
-     * @return int
-     */
-    public function getFilterType()
+    public function getFilterType(): ?int
     {
         return TypeSelector::get_selection();
     }
 
-    protected function getRenderer(): ContentObjectRenderer
+    protected function getGalleryTableContentObjectRenderer(): GalleryTableContentObjectRenderer
     {
-        $rendererTypeClassName = 'Chamilo\Core\Repository\Common\Renderer\Type\\' . $this->getCurrentRendererType() .
-            'ContentObjectRenderer';
-
-        return $this->getService($rendererTypeClassName);
+        return $this->getService(GalleryTableContentObjectRenderer::class);
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
-     */
-    public function getTemplateRegistrationConsulter()
+    protected function getSlideshowContentObjectRenderer(): SlideshowContentObjectRenderer
+    {
+        return $this->getService(SlideshowContentObjectRenderer::class);
+    }
+
+    protected function getTableContentObjectRenderer(): TableContentObjectRenderer
+    {
+        return $this->getService(TableContentObjectRenderer::class);
+    }
+
+    public function getTemplateRegistrationConsulter(): TemplateRegistrationConsulter
     {
         return $this->getService(TemplateRegistrationConsulter::class);
     }
 
-    /**
-     * @return bool
-     */
-    public function hasFilterType()
+    public function hasFilterType(): bool
     {
         $filter_type = $this->getFilterType();
 
         return isset($filter_type);
+    }
+
+    protected function renderContentObjects(): string
+    {
+        switch ($this->getCurrentRendererType())
+        {
+            case ContentObjectRenderer::TYPE_GALLERY:
+                return $this->getGalleryTableContentObjectRenderer()->render();
+            case ContentObjectRenderer::TYPE_TABLE:
+                return $this->getTableContentObjectRenderer()->render();
+            case ContentObjectRenderer::TYPE_SLIDESHOW:
+                return $this->getSlideshowContentObjectRenderer()->render($this);
+            default:
+                return '';
+        }
     }
 }
