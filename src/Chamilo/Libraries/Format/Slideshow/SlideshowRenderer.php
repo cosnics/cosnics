@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Slideshow;
 
+use Chamilo\Core\Repository\Common\Rendition\AbstractContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -15,10 +16,9 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Slideshow
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class SlideshowRenderer
 {
@@ -116,7 +116,7 @@ class SlideshowRenderer
     }
 
     public function getContentObjectRenditionImplementation(ContentObject $contentObject, $contentObjectRenditionContext
-    ): ContentObjectRenditionImplementation
+    ): AbstractContentObjectRenditionImplementation
     {
         return ContentObjectRenditionImplementation::factory(
             $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_PREVIEW,

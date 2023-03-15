@@ -13,7 +13,7 @@ abstract class DataClassGalleryTableRenderer extends GalleryTableRenderer
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
      */
-    public function renderIdentifierCell($dataClass): string
+    protected function renderIdentifierCell($dataClass): string
     {
         return $dataClass->get_id();
     }

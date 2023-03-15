@@ -30,24 +30,20 @@ abstract class GalleryTableRenderer extends AbstractTableRenderer
     protected function processData(ArrayCollection $results, TableParameterValues $parameterValues): ArrayCollection
     {
         $tableData = [];
-        $tableRow = [];
 
         foreach ($results as $result)
         {
-            $tableRow[] = $this->renderCell($result, $parameterValues, $this->getTableActions());
+            $tableResultPosition = $this->getTableResultPosition($results->indexOf($result), $parameterValues);
 
-            if (count($tableRow) >= $parameterValues->getNumberOfColumnsPerPage())
-            {
-                $tableData[] = $tableRow;
-                $tableRow = [];
-            }
+            $tableData[] = $this->renderCell($tableResultPosition, $result, $parameterValues, $this->getTableActions());
         }
 
-        return new ArrayCollection($tableData);
+        return new ArrayCollection(array_chunk($tableData, $parameterValues->getNumberOfColumnsPerPage()));
     }
 
     public function renderCell(
-        $result, TableParameterValues $parameterValues, ?TableActions $tableActions = null
+        TableResultPosition $resultPosition, $result, TableParameterValues $parameterValues,
+        ?TableActions $tableActions = null
     ): string
     {
         $html = [];
@@ -84,7 +80,7 @@ abstract class GalleryTableRenderer extends AbstractTableRenderer
         if ($this instanceof TableRowActionsSupport)
         {
             $html[] = '<div class="panel-footer">';
-            $html[] = $this->renderTableRowActions($result);
+            $html[] = $this->renderTableRowActions($resultPosition, $result);
             $html[] = '</div>';
         }
 
