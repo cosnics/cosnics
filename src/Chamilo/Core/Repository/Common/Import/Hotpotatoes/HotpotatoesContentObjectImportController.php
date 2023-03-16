@@ -6,8 +6,6 @@ use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\File\Compression\Filecompression;
 use Chamilo\Libraries\File\Filesystem;
@@ -19,7 +17,7 @@ use Chamilo\Libraries\Utilities\String\Text;
 
 class HotpotatoesContentObjectImportController extends ContentObjectImportController
 {
-    const FORMAT = 'Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes';
+    public const FORMAT = 'Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes';
 
     private $created_objects = [];
 
@@ -33,14 +31,13 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
         {
             if (in_array($file->get_extension(), self::get_allowed_extensions()))
             {
-                if (in_array($file->get_extension(), array('htm', 'html')))
+                if (in_array($file->get_extension(), ['htm', 'html']))
                 {
                     $filename_hash = md5($file->get_path());
                     $relative_folder_path = Text::char_at($filename_hash, 0);
                     $full_folder_path = Path::getInstance()->getPublicStoragePath(
                             'Chamilo\Core\Repository\ContentObject\Hotpotatoes'
-                        ) . $this->get_parameters()->get_user() . '/' .
-                        $relative_folder_path;
+                        ) . $this->get_parameters()->get_user() . '/' . $relative_folder_path;
 
                     Filesystem::create_dir($full_folder_path);
                     $unique_hash = Filesystem::create_unique_name($full_folder_path, $filename_hash);
@@ -73,24 +70,59 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
             {
                 $this->add_message(
                     Translation::get(
-                        'UnsupportedFileFormat',
-                        array('TYPES' => implode(', ', self::get_allowed_extensions()))
-                    ),
-                    self::TYPE_ERROR
+                        'UnsupportedFileFormat', ['TYPES' => implode(', ', self::get_allowed_extensions())]
+                    ), self::TYPE_ERROR
                 );
             }
         }
         else
         {
             $this->add_message(
-                Translation::get('ObjectNotAvailable', array('OBJECT' => 'Hot Potatoes')),
-                self::TYPE_WARNING
+                Translation::get('ObjectNotAvailable', ['OBJECT' => 'Hot Potatoes']), self::TYPE_WARNING
             );
         }
     }
 
     /**
-     *
+     * @return int
+     */
+    public function determine_parent_id()
+    {
+        if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
+        {
+            return $this->get_parameters()->get_category();
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function get_allowed_extensions()
+    {
+        return ['zip', 'htm', 'html'];
+    }
+
+    public static function is_available()
+    {
+        return in_array(self::FORMAT, DataManager::get_registered_types(true));
+    }
+
+    public function process_archive($archive_path)
+    {
+        $htm_files = [];
+        $extra_files = [];
+
+        $zip = Filecompression::factory();
+        $extracted_files_dir = $zip->extract_file($archive_path, false);
+        $this->process_folder($extracted_files_dir);
+        Filesystem::remove($extracted_files_dir);
+    }
+
+    /**
      * @param string $exercise_path
      */
     public function process_content_object($exercise_path, $full_exercise_path)
@@ -144,17 +176,6 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
         }
     }
 
-    public function process_archive($archive_path)
-    {
-        $htm_files = [];
-        $extra_files = [];
-
-        $zip = Filecompression::factory();
-        $extracted_files_dir = $zip->extract_file($archive_path, false);
-        $this->process_folder($extracted_files_dir);
-        Filesystem::remove($extracted_files_dir);
-    }
-
     public function process_folder($folder_path)
     {
         $hotpotatoes_path = Path::getInstance()->getPublicStoragePath(
@@ -190,7 +211,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
                     }
                     else
                     {
-                        if (in_array($entry_properties->get_extension(), array('htm', 'html')))
+                        if (in_array($entry_properties->get_extension(), ['htm', 'html']))
                         {
                             $htm_files[] = $entry_properties;
                         }
@@ -227,8 +248,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
                 $relative_folder_path = Text::char_at($masher_hash, 0);
                 $full_folder_path = Path::getInstance()->getPublicStoragePath(
                         'Chamilo\Core\Repository\ContentObject\Hotpotatoes'
-                    ) . $this->get_parameters()->get_user() . '/' .
-                    $relative_folder_path;
+                    ) . $this->get_parameters()->get_user() . '/' . $relative_folder_path;
 
                 Filesystem::create_dir($full_folder_path);
                 $unique_hash = Filesystem::create_unique_name($full_folder_path, $masher_hash);
@@ -237,8 +257,8 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
                 {
                     $relative_path = $relative_folder_path . '/' . $unique_hash . '/' .
                         $masher_file_properties->get_name_extension();
-                    $path_to_save = $full_folder_path . '/' . $unique_hash . '/' .
-                        $masher_file_properties->get_name_extension();
+                    $path_to_save =
+                        $full_folder_path . '/' . $unique_hash . '/' . $masher_file_properties->get_name_extension();
                     Filesystem::move_file($masher_file_properties->get_path(), $path_to_save);
                 }
 
@@ -268,8 +288,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
                     $relative_folder_path = Text::char_at($hot_potatoes_hash, 0);
                     $full_folder_path = Path::getInstance()->getPublicStoragePath(
                             'Chamilo\Core\Repository\ContentObject\Hotpotatoes'
-                        ) . $this->get_parameters()->get_user() . '/' .
-                        $relative_folder_path;
+                        ) . $this->get_parameters()->get_user() . '/' . $relative_folder_path;
 
                     Filesystem::create_dir($full_folder_path);
                     $unique_hash = Filesystem::create_unique_name($full_folder_path, $hot_potatoes_hash);
@@ -286,47 +305,14 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
     }
 
     /**
-     *
-     * @return string[]
-     */
-    public static function get_allowed_extensions()
-    {
-        return array('zip', 'htm', 'html');
-    }
-
-    public static function is_available()
-    {
-        return in_array(self::FORMAT, DataManager::get_registered_types(true));
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function determine_parent_id()
-    {
-        if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
-        {
-            return $this->get_parameters()->get_category();
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    /**
-     *
      * @param ContentObject $contentObject
      */
     public function process_workspace(ContentObject $contentObject)
     {
         if ($this->get_parameters()->getWorkspace() instanceof Workspace)
         {
-            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-            $contentObjectRelationService->createContentObjectRelationFromParameters(
-                $this->get_parameters()->getWorkspace()->getId(),
-                $contentObject->getId(),
+            $this->getContentObjectRelationService()->createContentObjectRelationFromParameters(
+                $this->get_parameters()->getWorkspace()->getId(), $contentObject->getId(),
                 $this->get_parameters()->get_category()
             );
         }

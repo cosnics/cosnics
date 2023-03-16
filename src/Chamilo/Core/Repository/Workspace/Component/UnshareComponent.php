@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Workspace\Component;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Manager;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -48,13 +47,11 @@ class UnshareComponent extends Manager
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
 
-        $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-
         foreach ($selectedContentObjectIdentifiers as $selectedContentObjectIdentifier)
         {
             $contentObject = DataManager::retrieve_by_id(ContentObject::class, $selectedContentObjectIdentifier);
 
-            $contentObjectRelationService->deleteContentObjectRelationByWorkspaceAndContentObject(
+            $this->getContentObjectRelationService()->deleteContentObjectRelationByWorkspaceAndContentObject(
                 $this->getCurrentWorkspace(), $contentObject
             );
         }
@@ -76,6 +73,11 @@ class UnshareComponent extends Manager
         $additionalParameters[] = \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID;
 
         return parent::getAdditionalParameters($additionalParameters);
+    }
+
+    protected function getContentObjectRelationService(): ContentObjectRelationService
+    {
+        return $this->getService(ContentObjectRelationService::class);
     }
 
     public function getCurrentWorkspace()

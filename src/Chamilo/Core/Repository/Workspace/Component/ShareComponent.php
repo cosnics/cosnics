@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Workspace\Component;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Manager;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Table\Share\ShareTable;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -22,24 +21,21 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Core\Repository\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ShareComponent extends Manager implements TableSupport
 {
 
     /**
-     *
-     * @var integer[]
+     * @var int
      */
     private $selectedContentObjectIdentifiers;
 
     /**
-     *
-     * @var integer[]
+     * @var int
      */
     private $selectedWorkspaceIdentifiers;
 
@@ -65,30 +61,28 @@ class ShareComponent extends Manager implements TableSupport
                         new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                         $selectedContentObjectIdentifiers
                     ), new RetrieveProperties(
-                        array(
+                        [
                             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER)
-                        )
+                        ]
                     )
                 )
             );
-
-            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
 
             foreach ($selectedWorkspaceIdentifiers as $selectedWorkspaceIdentifier)
             {
                 foreach ($selectedContentObjectNumbers as $selectedContentObjectNumber)
                 {
-                    $contentObjectRelationService->createContentObjectRelationFromParameters(
+                    $this->getContentObjectRelationService()->createContentObjectRelationFromParameters(
                         $selectedWorkspaceIdentifier, $selectedContentObjectNumber, 0
                     );
                 }
             }
 
             $this->redirectWithMessage(
-                Translation::get('ContentObjectsShared'), false, array(
+                Translation::get('ContentObjectsShared'), false, [
                     self::PARAM_ACTION => null,
                     \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_BROWSE_CONTENT_OBJECTS
-                )
+                ]
             );
         }
         else
@@ -111,17 +105,17 @@ class ShareComponent extends Manager implements TableSupport
                 foreach ($contentObjects as $contentObject)
                 {
                     $viewUrl = new Redirect(
-                        array(
+                        [
                             Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Manager::context(),
                             \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_VIEW_CONTENT_OBJECTS,
                             \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId()
-                        )
+                        ]
                     );
 
                     $toolbar->add_item(
                         new ToolbarItem(
                             $contentObject->get_title(), $contentObject->getGlyph(
-                            IdentGlyph::SIZE_MINI, true, array('fa-fw')
+                            IdentGlyph::SIZE_MINI, true, ['fa-fw']
                         ), $viewUrl->getUrl(), ToolbarItem::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
                         )
                     );
@@ -157,7 +151,7 @@ class ShareComponent extends Manager implements TableSupport
             $url = $redirect->getUrl();
 
             $html[] = '<div class="alert alert-info" role="alert">' .
-                $this->getTranslation('ShareInformation', array('WORKSPACE_URL' => $url)) . '</div>';
+                $this->getTranslation('ShareInformation', ['WORKSPACE_URL' => $url]) . '</div>';
 
             $html[] = $selectedObjectsPreview;
             $html[] = '<h3 style="margin-bottom: 30px;">' . $this->getTranslation('ShareInWorkspaces') . '</h3>';
@@ -169,8 +163,22 @@ class ShareComponent extends Manager implements TableSupport
     }
 
     /**
-     *
-     * @return integer[]
+     * @see \Chamilo\Core\Repository\Manager::getAdditionalParameters()
+     */
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
+    protected function getContentObjectRelationService(): ContentObjectRelationService
+    {
+        return $this->getService(ContentObjectRelationService::class);
+    }
+
+    /**
+     * @return int
      */
     public function getSelectedContentObjectIdentifiers()
     {
@@ -185,8 +193,7 @@ class ShareComponent extends Manager implements TableSupport
     }
 
     /**
-     *
-     * @return integer[]
+     * @return int
      */
     public function getSelectedWorkspaceIdentifiers()
     {
@@ -214,18 +221,6 @@ class ShareComponent extends Manager implements TableSupport
     }
 
     /**
-     *
-     * @see \Chamilo\Core\Repository\Manager::getAdditionalParameters()
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID;
-
-        return parent::getAdditionalParameters($additionalParameters);
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Format\Table\Interfaces\TableSupport::get_table_condition()
      */
     public function get_table_condition($table_class_name)

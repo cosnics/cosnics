@@ -3,9 +3,7 @@ namespace Chamilo\Core\Repository\Workspace\Storage\DataClass;
 
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -24,21 +22,9 @@ class Workspace extends DataClass implements WorkspaceInterface
     public const PROPERTY_NAME = 'name';
     public const WORKSPACE_TYPE = 2;
 
-    private User $creator;
-
     public function getCreationDate(): int
     {
         return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
-    }
-
-    public function getCreator(): User
-    {
-        if (!isset($this->creator))
-        {
-            $this->creator = DataManager::retrieve_by_id(User::class, (int) $this->getCreatorId());
-        }
-
-        return $this->creator;
     }
 
     public function getCreatorId(): ?string
@@ -61,7 +47,7 @@ class Workspace extends DataClass implements WorkspaceInterface
         );
     }
 
-    public function getDependencies(array $dependencies = []): array
+    protected function getDependencies(array $dependencies = []): array
     {
         return [
             WorkspaceEntityRelation::class => new EqualityCondition(
@@ -87,7 +73,7 @@ class Workspace extends DataClass implements WorkspaceInterface
         ];
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
     }
@@ -127,7 +113,7 @@ class Workspace extends DataClass implements WorkspaceInterface
         $this->setDefaultProperty(self::PROPERTY_CREATOR_ID, $creatorId);
     }
 
-    public function setDescription(string $description)
+    public function setDescription(?string $description)
     {
         $this->setDefaultProperty(self::PROPERTY_DESCRIPTION, $description);
     }

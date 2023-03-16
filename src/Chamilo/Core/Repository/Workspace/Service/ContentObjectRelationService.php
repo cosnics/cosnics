@@ -58,6 +58,18 @@ class ContentObjectRelationService
         );
     }
 
+    public function countWorkspaceAndRelationForContentObject(ContentObject $contentObject): int
+    {
+        return $this->countWorkspaceAndRelationForContentObjectNumber($contentObject->get_object_number());
+    }
+
+    public function countWorkspaceAndRelationForContentObjectNumber(string $contentObjectNumber): int
+    {
+        return $this->getContentObjectRelationRepository()->countWorkspaceAndRelationForContentObjectIdentifier(
+            $contentObjectNumber
+        );
+    }
+
     /**
      * @throws \Exception
      */
@@ -160,6 +172,30 @@ class ContentObjectRelationService
     public function getContentObjectRelationsForContentObject(ContentObject $contentObject): ArrayCollection
     {
         return $this->getContentObjectRelationRepository()->findContentObjectRelationsForContentObject($contentObject);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function getWorkspaceAndRelationForContentObject(
+        ContentObject $contentObject, ?int $limit = null, ?int $count = null, ?OrderBy $orderBy = null
+    ): ArrayCollection
+    {
+        return $this->getWorkspaceAndRelationForContentObjectNumber(
+            $contentObject->get_object_number(), $limit, $count, $orderBy
+        );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function getWorkspaceAndRelationForContentObjectNumber(
+        string $contentObjectNumber, ?int $limit = null, ?int $count = null, ?OrderBy $orderBy = null
+    ): ArrayCollection
+    {
+        return $this->getContentObjectRelationRepository()->findWorkspaceAndRelationForContentObjectIdentifier(
+            $contentObjectNumber, $limit, $count, $orderBy
+        );
     }
 
     /**

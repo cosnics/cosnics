@@ -14,7 +14,7 @@ class PortalHome extends BlockRenderer
         $html = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'portal_home'));
         $html = $html ?: Translation::get('ConfigurePortalHomeFirst');
         
-        $renderer = new ContentObjectResourceRenderer($this, $html);
+        $renderer = new ContentObjectResourceRenderer($html);
         
         return $renderer->run();
     }

@@ -3,7 +3,6 @@
 namespace Chamilo\Core\Repository\Storage\DataClass;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Core\Repository\Common\ContentObjectDifference;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
@@ -12,7 +11,6 @@ use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Manager;
@@ -49,7 +47,6 @@ use Exception;
 use Symfony\Component\Uid\Uuid;
 
 /**
- *
  * @author Tim De Pauw
  * @author Hans De Bisschop
  * @author Dieter De Neef
@@ -95,7 +92,6 @@ class ContentObject extends CompositeDataClass
     private $attachments = [];
 
     /**
-     *
      * @var ComplexContentObjectPath
      */
     private $complex_content_object_path;
@@ -113,13 +109,11 @@ class ContentObject extends CompositeDataClass
     private $oldState;
 
     /**
-     *
      * @var \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData
      */
     private $synchronization_data;
 
     /**
-     *
      * @var TemplateRegistration
      */
     private $template_registration;
@@ -127,10 +121,11 @@ class ContentObject extends CompositeDataClass
     /**
      * Creates a new object.
      *
-     * @param $id int The numeric ID of the object. May be omitted if creating a new object.
-     * @param $defaultProperties array The default properties of the object. Associative array.
+     * @param $id                   int The numeric ID of the object. May be omitted if creating a new object.
+     * @param $defaultProperties    array The default properties of the object. Associative array.
      * @param $additionalProperties array The properties specific for this type of object. Associative array. Null if
-     *        they are unknown at construction of the object; in this case, they will be retrieved when needed.
+     *                              they are unknown at construction of the object; in this case, they will be
+     *                              retrieved when needed.
      */
     public function __construct($default_properties = [], $additionalProperties = [], array $optionalProperties = [])
     {
@@ -175,7 +170,7 @@ class ContentObject extends CompositeDataClass
 
         if (!is_array($ids))
         {
-            $ids = array($ids);
+            $ids = [$ids];
         }
 
         foreach ($ids as $id)
@@ -234,7 +229,7 @@ class ContentObject extends CompositeDataClass
             )
         );
 
-        $parameters = new DataClassCountParameters($condition, new Joins(array($join)));
+        $parameters = new DataClassCountParameters($condition, new Joins([$join]));
 
         return DataManager::count(ContentObjectAttachment::class, $parameters);
     }
@@ -255,7 +250,7 @@ class ContentObject extends CompositeDataClass
             )
         );
 
-        $parameters = new DataClassCountParameters($condition, new Joins(array($join)));
+        $parameters = new DataClassCountParameters($condition, new Joins([$join]));
 
         return DataManager::count(ContentObjectAttachment::class, $parameters);
     }
@@ -291,7 +286,7 @@ class ContentObject extends CompositeDataClass
             )
         );
 
-        $parameters = new DataClassCountParameters($condition, new Joins(array($join)));
+        $parameters = new DataClassCountParameters($condition, new Joins([$join]));
 
         return DataManager::count(ContentObjectInclude::class, $parameters);
     }
@@ -312,7 +307,7 @@ class ContentObject extends CompositeDataClass
             )
         );
 
-        $parameters = new DataClassCountParameters($condition, new Joins(array($join)));
+        $parameters = new DataClassCountParameters($condition, new Joins([$join]));
 
         return DataManager::count(ContentObjectInclude::class, $parameters);
     }
@@ -392,7 +387,7 @@ class ContentObject extends CompositeDataClass
                 }
 
                 if (!call_user_func_array(
-                    array($content_object, '\Chamilo\Libraries\Storage\DataClass\DataClass::create'), []
+                    [$content_object, '\Chamilo\Libraries\Storage\DataClass\DataClass::create'], []
                 ))
                 {
 
@@ -694,7 +689,7 @@ class ContentObject extends CompositeDataClass
     {
         if (!is_array($ids))
         {
-            $ids = array($ids);
+            $ids = [$ids];
         }
 
         foreach ($ids as $id)
@@ -744,6 +739,11 @@ class ContentObject extends CompositeDataClass
         }
     }
 
+    protected function getContentObjectRelationService(): ContentObjectRelationService
+    {
+        return $this->getService(ContentObjectRelationService::class);
+    }
+
     /**
      * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
      */
@@ -770,7 +770,7 @@ class ContentObject extends CompositeDataClass
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_OWNER_ID,
                 self::PROPERTY_TYPE,
                 self::PROPERTY_TITLE,
@@ -784,7 +784,7 @@ class ContentObject extends CompositeDataClass
                 self::PROPERTY_COMMENT,
                 self::PROPERTY_CONTENT_HASH,
                 self::PROPERTY_CURRENT
-            )
+            ]
         );
     }
 
@@ -920,10 +920,10 @@ class ContentObject extends CompositeDataClass
             return $this->getVirtualPathByCategoryId($this->get_parent_id());
         }
 
-        $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-        $contentObjectRelation = $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
-            $workspace, $this
-        );
+        $contentObjectRelation =
+            $this->getContentObjectRelationService()->getContentObjectRelationForWorkspaceAndContentObject(
+                $workspace, $this
+            );
 
         if (!$contentObjectRelation)
         {
@@ -935,7 +935,7 @@ class ContentObject extends CompositeDataClass
 
     public static function get_active_status_types()
     {
-        return array(self::STATE_NORMAL, self::STATE_RECYCLED, self::STATE_AUTOSAVE, self::STATE_BACKUP);
+        return [self::STATE_NORMAL, self::STATE_RECYCLED, self::STATE_AUTOSAVE, self::STATE_BACKUP];
     }
 
     /**
@@ -984,11 +984,11 @@ class ContentObject extends CompositeDataClass
 
             $parameters = new DataClassDistinctParameters(
                 $condition, new RetrieveProperties(
-                    array(
+                    [
                         new PropertyConditionVariable(
                             ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
                         )
-                    )
+                    ]
                 )
             );
             $this->attachment_ids[$type] = DataManager::distinct(ContentObjectAttachment::class, $parameters);
@@ -1013,7 +1013,7 @@ class ContentObject extends CompositeDataClass
             )
         );
 
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins(array($join)));
+        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins([$join]));
 
         return DataManager::retrieve_content_objects(ContentObject::class, $parameters);
     }
@@ -1047,7 +1047,7 @@ class ContentObject extends CompositeDataClass
             );
 
             $parameters = new DataClassRetrievesParameters(
-                $condition, $count, $offset, $order_by, new Joins(array($join))
+                $condition, $count, $offset, $order_by, new Joins([$join])
             );
             $this->attachments[$type] = DataManager::retrieve_content_objects(ContentObject::class, $parameters);
         }
@@ -1056,7 +1056,6 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
-     *
      * @param $content_object_id int
      *
      * @return ContentObject An object inheriting from ContentObject
@@ -1089,7 +1088,6 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
-     *
      * @return ComplexContentObjectPath
      */
     public function get_complex_content_object_path()
@@ -1187,6 +1185,7 @@ class ContentObject extends CompositeDataClass
 
     /**
      * Get all properties of this type of object that should be taken into account to calculate the used disk space.
+     *
      * @return mixed The property names. Either a string, an array of strings, or null if no properties affect disk
      *         quota.
      * @deprecated Use ContentObject::getStorageSpaceProperty() now
@@ -1226,12 +1225,12 @@ class ContentObject extends CompositeDataClass
 
     public static function get_inactive_status_types()
     {
-        return array(
+        return [
             self::STATE_NORMAL + self::STATE_INACTIVE,
             self::STATE_RECYCLED + self::STATE_INACTIVE,
             self::STATE_AUTOSAVE + self::STATE_INACTIVE,
             self::STATE_BACKUP + self::STATE_INACTIVE
-        );
+        ];
     }
 
     public function get_includers($order_by = null, $offset = null, $count = null)
@@ -1250,13 +1249,12 @@ class ContentObject extends CompositeDataClass
             )
         );
 
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins(array($join)));
+        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins([$join]));
 
         return DataManager::retrieve_content_objects(ContentObject::class, $parameters);
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      * @param null $offset
      * @param null $count
@@ -1282,7 +1280,7 @@ class ContentObject extends CompositeDataClass
             );
 
             $parameters = new DataClassRetrievesParameters(
-                $condition, $count, $offset, $order_by, new Joins(array($join))
+                $condition, $count, $offset, $order_by, new Joins([$join])
             );
             $this->includes = DataManager::retrieve_content_objects(ContentObject::class, $parameters);
         }
@@ -1301,7 +1299,6 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
-     *
      * @return array:
      */
     public static function get_managers()
@@ -1330,7 +1327,6 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
-     *
      * @return User
      */
     public function get_owner()
@@ -1433,7 +1429,6 @@ class ContentObject extends CompositeDataClass
     // XXX: Keep this around? Override? Make useful?
 
     /**
-     *
      * @return \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData
      */
     public function get_synchronization_data()
@@ -1453,11 +1448,6 @@ class ContentObject extends CompositeDataClass
         }
 
         return $this->synchronization_data;
-    }
-
-    public function set_synchronization_data($external_sync)
-    {
-        $this->synchronization_data = $external_sync;
     }
 
     public function get_template_registration()
@@ -1692,7 +1682,7 @@ class ContentObject extends CompositeDataClass
      * Recursive method to check all the attachments and includes of a content object to see if the check content object
      * is attached or included in the given content object
      *
-     * @param $content_object_id int
+     * @param $content_object_id       int
      * @param $check_content_object_id int
      *
      * @return bool
@@ -1936,6 +1926,11 @@ class ContentObject extends CompositeDataClass
         return $this->setDefaultProperty(self::PROPERTY_STATE, $state);
     }
 
+    public function set_synchronization_data($external_sync)
+    {
+        $this->synchronization_data = $external_sync;
+    }
+
     /**
      * Sets the template id of the content object
      *
@@ -2095,7 +2090,7 @@ class ContentObject extends CompositeDataClass
      * Function that updates the embedded links in fields like description
      *
      * @param $mapping array Each key(old_id) is mapped to its new object (an object is needed to calculate the security
-     *        code)
+     *                 code)
      */
     public function update_include_links(array $mapping)
     {

@@ -1,30 +1,67 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Export;
 
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib
  */
 abstract class ContentObjectExportController
 {
+    use DependencyInjectionContainerTrait;
 
     private $parameters;
 
     /**
-     *
      * @param ExportParameters $parameters
      */
     public function __construct(ExportParameters $parameters)
     {
+        $this->initializeContainer();
+
         $this->parameters = $parameters;
     }
 
     /**
-     *
+     * @return string
+     */
+    abstract public function run();
+
+    public function download()
+    {
+        $path = $this->run();
+
+        $file_properties = FileProperties::from_path($path);
+        Filesystem::file_send_for_download($path, true, $this->get_filename(), $file_properties->getType());
+        Filesystem::remove($path);
+    }
+
+    /**
+     * @param $parameters ExportParameters
+     */
+    public static function factory(ExportParameters $parameters)
+    {
+        $format = (string) StringUtilities::getInstance()->createString($parameters->get_format())->upperCamelize();
+        $class = __NAMESPACE__ . '\\' . $format . '\\' . $format . 'ContentObjectExportController';
+
+        return new $class($parameters);
+    }
+
+    protected function getContentObjectRelationService(): ContentObjectRelationService
+    {
+        return $this->getService(ContentObjectRelationService::class);
+    }
+
+    /**
+     * @return string
+     */
+    abstract public function get_filename();
+
+    /**
      * @var ExportParameters
      */
     public function get_parameters()
@@ -36,37 +73,4 @@ abstract class ContentObjectExportController
     {
         $this->parameters = $parameters;
     }
-
-    /**
-     *
-     * @param $parameters ExportParameters
-     */
-    public static function factory(ExportParameters $parameters)
-    {
-        $format = (string) StringUtilities::getInstance()->createString($parameters->get_format())->upperCamelize();
-        $class = __NAMESPACE__ . '\\' . $format . '\\' . $format . 'ContentObjectExportController';
-        
-        return new $class($parameters);
-    }
-
-    public function download()
-    {
-        $path = $this->run();
-        
-        $file_properties = FileProperties::from_path($path);
-        Filesystem::file_send_for_download($path, true, $this->get_filename(), $file_properties->getType());
-        Filesystem::remove($path);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    abstract public function run();
-
-    /**
-     *
-     * @return string
-     */
-    abstract public function get_filename();
 }

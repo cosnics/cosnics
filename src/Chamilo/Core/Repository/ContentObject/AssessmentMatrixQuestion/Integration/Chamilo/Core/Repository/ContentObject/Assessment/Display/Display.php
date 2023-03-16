@@ -56,7 +56,7 @@ class Display extends QuestionDisplay
             $group = [];
 
             $object_renderer = new ContentObjectResourceRenderer(
-                $this->get_formvalidator()->get_assessment_viewer(), $option->get_value()
+                $option->get_value()
             );
 
             $group[] = $formvalidator->createElement(

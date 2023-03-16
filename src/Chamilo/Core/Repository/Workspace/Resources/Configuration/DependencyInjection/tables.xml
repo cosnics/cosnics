@@ -14,6 +14,9 @@
                       id="Chamilo\Core\User\User"/>
         </service>
 
+        <service id="Chamilo\Core\Repository\Workspace\Table\SharedInTableRenderer"/>
+        <service id="Chamilo\Core\Repository\Workspace\Table\SharedTableRenderer"/>
+
     </services>
 
 </container>

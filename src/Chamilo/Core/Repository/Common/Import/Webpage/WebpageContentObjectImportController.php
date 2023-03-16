@@ -9,8 +9,6 @@ use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -18,15 +16,15 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 class WebpageContentObjectImportController extends ContentObjectImportController
 {
-    const FORMAT = 'Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage';
+    public const FORMAT = 'Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage';
 
     public function run()
     {
@@ -37,36 +35,40 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                 $file = $this->get_parameters()->get_file();
                 $calculator = new Calculator(
                     \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                        User::class,
-                        (int) $this->get_parameters()->get_user()));
-                
-                if (! $calculator->canUpload($file->get_size()))
+                        User::class, (int) $this->get_parameters()->get_user()
+                    )
+                );
+
+                if (!$calculator->canUpload($file->get_size()))
                 {
                     $this->add_message(Translation::get('InsufficientDiskQuota'), self::TYPE_ERROR);
+
                     return [];
                 }
             }
             else
             {
                 $file = FileProperties::from_url($this->get_parameters()->get_link());
-                
+
                 if ($file->get_path() && $file->get_name() && $file->get_extension() && (in_array(
-                    $file->get_extension(), 
-                    array('html', 'htm')) || strpos($file->getType(), 'text/html') !== false))
+                            $file->get_extension(), ['html', 'htm']
+                        ) || strpos($file->getType(), 'text/html') !== false))
                 {
                     $calculator = new Calculator(
                         \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                            User::class,
-                            (int) $this->get_parameters()->get_user()));
-                    
+                            User::class, (int) $this->get_parameters()->get_user()
+                        )
+                    );
+
                     if ($calculator->canUpload($file->get_size()))
                     {
                         $temp_path = Path::getInstance()->getTemporaryPath() . 'repository/import/webpage/' .
-                             $file->get_name_extension();
-                        
+                            $file->get_name_extension();
+
                         if (file_exists($temp_path))
                         {
                             $this->add_message(Translation::get('ObjectNotImported'), self::TYPE_ERROR);
+
                             return [];
                         }
                         else
@@ -81,6 +83,7 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                                 else
                                 {
                                     $this->add_message(Translation::get('ObjectNotImported'), self::TYPE_ERROR);
+
                                     return [];
                                 }
                             }
@@ -89,49 +92,55 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                     else
                     {
                         $this->add_message(Translation::get('InsufficientDiskQuota'), self::TYPE_ERROR);
+
                         return [];
                     }
                 }
                 else
                 {
                     $this->add_message(Translation::get('InvalidWebpageLink'), self::TYPE_ERROR);
+
                     return [];
                 }
             }
-            
+
             $document = new Webpage();
             $document->set_title($file->get_name());
             $document->set_description($file->get_name());
             $document->set_owner_id($this->get_parameters()->get_user());
             $document->set_parent_id($this->determine_parent_id());
             $document->set_filename($file->get_name_extension());
-            
+
             $hash = md5_file($file->get_path());
             $conditions = [];
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-                new StaticConditionVariable($this->get_parameters()->get_user()));
+                new StaticConditionVariable($this->get_parameters()->get_user())
+            );
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(Webpage::class, Webpage::PROPERTY_HASH),
-                new StaticConditionVariable($hash));
+                new StaticConditionVariable($hash)
+            );
             $condition = new AndCondition($conditions);
             $content_objects = DataManager::retrieve_active_content_objects(Webpage::class, $condition);
-            
+
             if ($content_objects->count() > 0)
             {
                 if ($content_objects->count() == 1)
                 {
                     $content_object = $content_objects->current();
-                    
+
                     $redirect = new Redirect(
-                        array(
-                            Application::PARAM_CONTEXT => Manager::package(), 
-                            Application::PARAM_ACTION => Manager::ACTION_VIEW_CONTENT_OBJECTS, 
-                            Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id()));
-                    
+                        [
+                            Application::PARAM_CONTEXT => Manager::package(),
+                            Application::PARAM_ACTION => Manager::ACTION_VIEW_CONTENT_OBJECTS,
+                            Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id()
+                        ]
+                    );
+
                     $this->add_message(
-                        Translation::get('ObjectAlreadyExists', array('LINK' => $redirect->getUrl())), 
-                        self::TYPE_ERROR);
+                        Translation::get('ObjectAlreadyExists', ['LINK' => $redirect->getUrl()]), self::TYPE_ERROR
+                    );
                 }
                 else
                 {
@@ -141,13 +150,14 @@ class WebpageContentObjectImportController extends ContentObjectImportController
             else
             {
                 $document->set_temporary_file_path($file->get_path());
-                
+
                 if ($document->create())
                 {
                     $this->process_workspace($document);
-                    
+
                     $this->add_message(Translation::get('ObjectImported'), self::TYPE_CONFIRM);
-                    return array($document->get_id());
+
+                    return [$document->get_id()];
                 }
                 else
                 {
@@ -161,14 +171,8 @@ class WebpageContentObjectImportController extends ContentObjectImportController
         }
     }
 
-    public static function is_available()
-    {
-        return in_array(self::FORMAT, DataManager::get_registered_types(true));
-    }
-
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function determine_parent_id()
     {
@@ -182,19 +186,22 @@ class WebpageContentObjectImportController extends ContentObjectImportController
         }
     }
 
+    public static function is_available()
+    {
+        return in_array(self::FORMAT, DataManager::get_registered_types(true));
+    }
+
     /**
-     *
      * @param ContentObject $contentObject
      */
     public function process_workspace(ContentObject $contentObject)
     {
         if ($this->get_parameters()->getWorkspace() instanceof Workspace)
         {
-            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-            $contentObjectRelationService->createContentObjectRelationFromParameters(
-                $this->get_parameters()->getWorkspace()->getId(), 
-                $contentObject->getId(), 
-                $this->get_parameters()->get_category());
+            $this->getContentObjectRelationService()->createContentObjectRelationFromParameters(
+                $this->get_parameters()->getWorkspace()->getId(), $contentObject->getId(),
+                $this->get_parameters()->get_category()
+            );
         }
     }
 }

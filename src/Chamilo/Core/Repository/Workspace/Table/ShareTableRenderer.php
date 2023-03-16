@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Workspace\Table;
 
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -30,12 +31,15 @@ class ShareTableRenderer extends DataClassListTableRenderer implements TableRowA
 {
     protected DatetimeUtilities $datetimeUtilities;
 
+    protected UserService $userService;
+
     public function __construct(
-        DatetimeUtilities $datetimeUtilities, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        UserService $userService, DatetimeUtilities $datetimeUtilities, Translator $translator,
+        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
         $this->datetimeUtilities = $datetimeUtilities;
+        $this->userService = $userService;
 
         parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
     }
@@ -68,6 +72,11 @@ class ShareTableRenderer extends DataClassListTableRenderer implements TableRowA
         return $actions;
     }
 
+    public function getUserService(): UserService
+    {
+        return $this->userService;
+    }
+
     protected function initializeColumns()
     {
         $this->addColumn(new DataClassPropertyTableColumn(Workspace::class, Workspace::PROPERTY_NAME));
@@ -92,7 +101,7 @@ class ShareTableRenderer extends DataClassListTableRenderer implements TableRowA
         switch ($column->get_name())
         {
             case Workspace::PROPERTY_CREATOR_ID :
-                return $workspace->getCreator()->get_fullname();
+                return $this->getUserService()->getUserFullNameByIdentifier($workspace->getCreatorId());
             case Workspace::PROPERTY_CREATION_DATE :
                 return $datetimeUtilities->formatLocaleDate(
                     $translator->trans('DateTimeFormatLong', [], StringUtilities::LIBRARIES),

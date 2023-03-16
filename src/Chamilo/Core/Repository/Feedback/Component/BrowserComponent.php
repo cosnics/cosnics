@@ -186,7 +186,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $content = $feedback->get_comment();
 
-        $descriptionRenderer = new ContentObjectResourceRenderer($this, $content);
+        $descriptionRenderer = new ContentObjectResourceRenderer($content);
 
         return $descriptionRenderer->run();
     }

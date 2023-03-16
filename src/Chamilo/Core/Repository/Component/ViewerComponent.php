@@ -12,9 +12,8 @@ use Chamilo\Core\Repository\Table\ContentObject\Version\VersionTable;
 use Chamilo\Core\Repository\Table\ExternalLink\ExternalLinkTable;
 use Chamilo\Core\Repository\Table\Link\LinkTable;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
-use Chamilo\Core\Repository\Workspace\Table\SharedIn\SharedInTable;
+use Chamilo\Core\Repository\Workspace\Table\SharedInTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
@@ -30,6 +29,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
@@ -156,20 +156,33 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
         if ($this->getWorkspace() instanceof PersonalWorkspace)
         {
-            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-            $workspaceCount = $contentObjectRelationService->countWorkspacesForContentObject($contentObject);
+            $totalNumberOfItems =
+                $this->getContentObjectRelationService()->countWorkspaceAndRelationForContentObject($contentObject);
 
-            if ($workspaceCount > 0)
+            if ($totalNumberOfItems > 0)
             {
                 $tabName = 'shared_in';
 
                 $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = $tabName;
 
-                $browser = new SharedInTable($this);
+                $sharedInTableRenderer = $this->getSharedInTableRenderer();
+
+                $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+                    $sharedInTableRenderer->getParameterNames(), $sharedInTableRenderer->getDefaultParameterValues(),
+                    $totalNumberOfItems
+                );
+
+                $sharedInWorkspaceRelations =
+                    $this->getContentObjectRelationService()->getWorkspaceAndRelationForContentObject(
+                        $contentObject, $tableParameterValues->getOffset(),
+                        $tableParameterValues->getNumberOfItemsPerPage(),
+                        $sharedInTableRenderer->determineOrderBy($tableParameterValues)
+                    );
 
                 $tabs->add(
                     new ContentTab(
-                        $tabName, $translator->trans('SharedIn', [], self::package()), $browser->render(),
+                        $tabName, $translator->trans('SharedIn', [], self::package()),
+                        $sharedInTableRenderer->render($tableParameterValues, $sharedInWorkspaceRelations),
                         new FontAwesomeGlyph('lock', ['fa-lg'], null, 'fas')
                     )
                 );
@@ -562,6 +575,11 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         return $contentObjectIdentifier;
     }
 
+    protected function getContentObjectRelationService(): ContentObjectRelationService
+    {
+        return $this->getService(ContentObjectRelationService::class);
+    }
+
     /**
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\Button|\Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton
      */
@@ -619,6 +637,16 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         }
 
         return $translation;
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    public function getSharedInTableRenderer(): SharedInTableRenderer
+    {
+        return $this->getService(SharedInTableRenderer::class);
     }
 
     /**

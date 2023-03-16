@@ -120,15 +120,14 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $html[] = '<td>' . $glyph->render() . '</td>';
             }
 
-            $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $answer->get_answer());
+            $object_renderer = new ContentObjectResourceRenderer($answer->get_answer());
             $html[] = '<td>' . $object_renderer->run() . '</td>';
 
             if (AnswerFeedbackDisplay::allowed(
                 $configuration, $this->get_complex_content_object_question(), true, $valid_answer
             ))
             {
-                $object_renderer = new ContentObjectResourceRenderer(
-                    $this->getViewerApplication(), $answer->get_comment()
+                $object_renderer = new ContentObjectResourceRenderer($answer->get_comment()
                 );
 
                 $html[] = '<td>' . $object_renderer->run() . '</td>';

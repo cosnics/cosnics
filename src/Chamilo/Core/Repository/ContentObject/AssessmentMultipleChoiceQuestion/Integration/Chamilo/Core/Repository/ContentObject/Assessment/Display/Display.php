@@ -75,8 +75,7 @@ class Display extends QuestionDisplay
         {
             $group = [];
 
-            $object_renderer = new ContentObjectResourceRenderer(
-                $this->get_formvalidator()->get_assessment_viewer(), $answer->get_value()
+            $object_renderer = new ContentObjectResourceRenderer($answer->get_value()
             );
 
             if ($type == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO)

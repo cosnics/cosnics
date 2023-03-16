@@ -66,7 +66,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             $label = $i + 1;
             $html[] = '<td>' . $label . '. </td>';
 
-            $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $option->get_value());
+            $object_renderer = new ContentObjectResourceRenderer($option->get_value());
             $html[] = '<td>' . $object_renderer->run() . '</td>';
 
             if ($configuration->show_correction() || $configuration->show_solution())
@@ -111,8 +111,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $configuration, $this->get_complex_content_object_question(), true, $valid_answer
             ))
             {
-                $object_renderer = new ContentObjectResourceRenderer(
-                    $this->getViewerApplication(), $option->get_feedback()
+                $object_renderer = new ContentObjectResourceRenderer($option->get_feedback()
                 );
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }
@@ -143,7 +142,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             if ($this->get_question()->get_display() == AssessmentMatchingQuestion::DISPLAY_LIST)
             {
 
-                $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $match);
+                $object_renderer = new ContentObjectResourceRenderer($match);
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }
             else

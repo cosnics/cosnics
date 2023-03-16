@@ -74,8 +74,7 @@ class Display extends QuestionDisplay
             $answer_name = $question_id . '_' . ($i + 1);
             $group[] = $formvalidator->createElement('select', $answer_name, null, $order_options);
 
-            $object_renderer = new ContentObjectResourceRenderer(
-                $this->get_formvalidator()->get_assessment_viewer(), $answer->get_value()
+            $object_renderer = new ContentObjectResourceRenderer($answer->get_value()
             );
 
             $group[] = $formvalidator->createElement('static', null, null, $object_renderer->run());

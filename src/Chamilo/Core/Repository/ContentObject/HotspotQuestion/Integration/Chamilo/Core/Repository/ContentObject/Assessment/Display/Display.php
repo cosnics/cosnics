@@ -117,8 +117,7 @@ class Display extends QuestionDisplay
                 $this->colours[$i] . ';"></div>'
             );
 
-            $object_renderer = new ContentObjectResourceRenderer(
-                $this->get_formvalidator()->get_assessment_viewer(), $answer->get_answer()
+            $object_renderer = new ContentObjectResourceRenderer($answer->get_answer()
             );
 
             $group[] = $formvalidator->createElement('static', null, null, $object_renderer->run());

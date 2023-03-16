@@ -119,7 +119,7 @@ abstract class AssessmentQuestionResultDisplay
         {
             $description = $this->question->get_description();
             $classes = $this->needsDescriptionBorder() ? 'panel-body panel-body-assessment-description' : 'panel-body';
-            $renderer = new ContentObjectResourceRenderer($this, $description);
+            $renderer = new ContentObjectResourceRenderer($description);
 
             $html[] = '<div class="' . $classes . '">';
             $html[] = $renderer->run();

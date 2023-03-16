@@ -20,7 +20,6 @@ use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
@@ -108,13 +107,11 @@ abstract class ContentObjectForm extends FormValidator
     private $owner_id;
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Form\FormTab>
      */
     private $tabsCollection;
 
     /**
-     *
      * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
      */
     private $workspace;
@@ -186,7 +183,7 @@ abstract class ContentObjectForm extends FormValidator
             $this->getTabsCollection()->add(
                 new FormTab(
                     'view-instructions', Translation::get('ViewInstructions'),
-                    new FontAwesomeGlyph('question-circle', array('fa-lg'), null, 'fas'), 'buildInstructionsForm'
+                    new FontAwesomeGlyph('question-circle', ['fa-lg'], null, 'fas'), 'buildInstructionsForm'
                 )
             );
         }
@@ -217,8 +214,8 @@ abstract class ContentObjectForm extends FormValidator
                 $this->getTabsCollection()->add(
                     new FormTab(
                         'schema-' . $schemaInstance->get_id(), $schema->get_name(),
-                        new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas'), 'build_metadata_form',
-                        array($schemaInstance)
+                        new FontAwesomeGlyph('info-circle', ['fa-lg'], null, 'fas'), 'build_metadata_form',
+                        [$schemaInstance]
                     )
                 );
             }
@@ -226,7 +223,7 @@ abstract class ContentObjectForm extends FormValidator
             $this->getTabsCollection()->add(
                 new FormTab(
                     'add-schema', Translation::get('AddMetadataSchema'),
-                    new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas'), 'build_metadata_choice_form'
+                    new FontAwesomeGlyph('plus', ['fa-lg'], null, 'fas'), 'build_metadata_choice_form'
                 )
             );
         }
@@ -275,20 +272,20 @@ abstract class ContentObjectForm extends FormValidator
             );
 
             $uploadUrl = new Redirect(
-                array(
+                [
                     Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
                     \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
-                )
+                ]
             );
 
-            $dropZoneParameters = array(
+            $dropZoneParameters = [
                 'name' => 'attachments_importer',
                 'maxFilesize' => $calculator->getMaximumUploadSize(),
                 'uploadUrl' => $uploadUrl->getUrl(),
                 'successCallbackFunction' => 'chamilo.core.repository.importAttachment.processUploadedFile',
                 'sendingCallbackFunction' => 'chamilo.core.repository.importAttachment.prepareRequest',
                 'removedfileCallbackFunction' => 'chamilo.core.repository.importAttachment.deleteUploadedFile'
-            );
+            ];
 
             $this->addElement(
                 'category', Translation::get('Attachments')
@@ -306,7 +303,7 @@ abstract class ContentObjectForm extends FormValidator
             $types->add_element_type(
                 new AdvancedElementFinderElementType(
                     'content_objects', Translation::get('ContentObjects'), 'Chamilo\Core\Repository\Ajax',
-                    'AttachmentContentObjectsFeed', array('exclude_content_object_ids' => array($object->getId()))
+                    'AttachmentContentObjectsFeed', ['exclude_content_object_ids' => [$object->getId()]]
                 )
             );
 
@@ -329,7 +326,7 @@ abstract class ContentObjectForm extends FormValidator
         );
 
         $omitContentObjectTitleCheck = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Repository', 'omit_content_object_title_check')
+            ['Chamilo\Core\Repository', 'omit_content_object_title_check']
         );
 
         if ($omitContentObjectTitleCheck != 1)
@@ -408,14 +405,14 @@ abstract class ContentObjectForm extends FormValidator
         $this->add_textfield(
             ContentObject::PROPERTY_TITLE,
             Translation::get('Title', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), true,
-            array('id' => 'title', 'class' => 'form-control')
+            ['id' => 'title', 'class' => 'form-control']
         );
 
         if ($this->allows_category_selection())
         {
             $this->addElement(
                 'select', ContentObject::PROPERTY_PARENT_ID, Translation::get('CategoryTypeName'),
-                $this->get_categories(), array('class' => 'form-control', 'id' => 'parent_id')
+                $this->get_categories(), ['class' => 'form-control', 'id' => 'parent_id']
             );
 
             $category_group = [];
@@ -428,18 +425,18 @@ abstract class ContentObjectForm extends FormValidator
             );
 
             $category_group[] = $this->createElement(
-                'text', self::NEW_CATEGORY, null, array(
+                'text', self::NEW_CATEGORY, null, [
                     'class' => 'form-control',
                     'data-workspace-type' => $this->get_workspace()->getWorkspaceType(),
                     'data-workspace-id' => $this->get_workspace()->getId()
-                )
+                ]
             );
             $category_group[] = $this->createElement('static', null, null, '</div>');
 
             $this->addGroup($category_group, 'category_form_group', null, ' ', false);
         }
 
-        $value = Configuration::getInstance()->get_setting(array(Manager::context(), 'description_required'));
+        $value = Configuration::getInstance()->get_setting([Manager::context(), 'description_required']);
         $required = $value == 1;
         $name = Translation::get('Description', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this));
         $this->add_html_editor(ContentObject::PROPERTY_DESCRIPTION, $name, $required, $htmleditor_options);
@@ -486,19 +483,19 @@ abstract class ContentObjectForm extends FormValidator
             {
                 if ($object instanceof ForcedVersionSupport)
                 {
-                    $this->addElement('hidden', self::PROPERTY_VERSION, null, array('class' => 'version'));
+                    $this->addElement('hidden', self::PROPERTY_VERSION, null, ['class' => 'version']);
                 }
                 else
                 {
                     $this->addElement(
                         'checkbox', self::PROPERTY_VERSION, Translation::get('CreateAsNewVersion'), null,
-                        array('class' => 'version')
+                        ['class' => 'version']
                     );
 
                     $this->addElement('html', '<div class="content-object-version-comment hidden">');
                     $this->addElement(
                         'text', ContentObject::PROPERTY_COMMENT, Translation::get('VersionComment'),
-                        array('size' => '50', 'class' => 'form-control')
+                        ['size' => '50', 'class' => 'form-control']
                     );
 
                     $this->addElement('html', '</div>');
@@ -506,9 +503,9 @@ abstract class ContentObjectForm extends FormValidator
             }
         }
 
-        $this->addElement('hidden', ContentObject::PROPERTY_ID, null, array('class' => 'content_object_id'));
+        $this->addElement('hidden', ContentObject::PROPERTY_ID, null, ['class' => 'content_object_id']);
         $this->addElement(
-            'hidden', ContentObject::PROPERTY_MODIFICATION_DATE, null, array('class' => 'modification_date')
+            'hidden', ContentObject::PROPERTY_MODIFICATION_DATE, null, ['class' => 'modification_date']
         );
 
         $this->addElement(
@@ -713,6 +710,11 @@ abstract class ContentObjectForm extends FormValidator
         $this->getFormTabsGenerator()->generate(Manager::TABS_CONTENT_OBJECT, $this, $this->getTabsCollection());
     }
 
+    protected function getContentObjectRelationService(): ContentObjectRelationService
+    {
+        return $this->getService(ContentObjectRelationService::class);
+    }
+
     /**
      * @return \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
      */
@@ -770,7 +772,6 @@ abstract class ContentObjectForm extends FormValidator
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Form\FormTab>
      */
     public function getTabsCollection(): TabsCollection
@@ -801,14 +802,6 @@ abstract class ContentObjectForm extends FormValidator
     public function get_content_object()
     {
         return $this->content_object;
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
-     */
-    protected function set_content_object($content_object)
-    {
-        $this->content_object = $content_object;
     }
 
     /**
@@ -873,15 +866,6 @@ abstract class ContentObjectForm extends FormValidator
     }
 
     /**
-     * @param int $owner_id
-     */
-    protected function set_owner_id($owner_id)
-    {
-        $this->owner_id = $owner_id;
-    }
-
-    /**
-     *
      * @return \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
      */
     public function get_workspace()
@@ -913,9 +897,8 @@ abstract class ContentObjectForm extends FormValidator
 
         if (!$this->workspace instanceof PersonalWorkspace)
         {
-            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $contentObjectRelation =
-                $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
+                $this->getContentObjectRelationService()->getContentObjectRelationForWorkspaceAndContentObject(
                     $this->workspace, $content_object
                 );
 
@@ -953,7 +936,7 @@ abstract class ContentObjectForm extends FormValidator
                 $defaultAttachments->add_element(
                     new AdvancedElementFinderElement(
                         'content_object_' . $attachment->getId(),
-                        $attachment->getGlyph(IdentGlyph::SIZE_MINI, true, array('fa-fw'))->getClassNamesString(),
+                        $attachment->getGlyph(IdentGlyph::SIZE_MINI, true, ['fa-fw'])->getClassNamesString(),
                         $attachment->get_title(), $attachment->get_type_string()
                     )
                 );
@@ -1002,7 +985,7 @@ abstract class ContentObjectForm extends FormValidator
         }
         else
         {
-            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+            $contentObjectRelationService = $this->getContentObjectRelationService();
             $contentObjectRelation =
                 $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
                     $this->workspace, $object
@@ -1021,6 +1004,22 @@ abstract class ContentObjectForm extends FormValidator
                 );
             }
         }
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
+     */
+    protected function set_content_object($content_object)
+    {
+        $this->content_object = $content_object;
+    }
+
+    /**
+     * @param int $owner_id
+     */
+    protected function set_owner_id($owner_id)
+    {
+        $this->owner_id = $owner_id;
     }
 
     /**

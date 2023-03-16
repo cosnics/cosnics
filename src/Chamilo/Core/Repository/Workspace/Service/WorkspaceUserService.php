@@ -12,8 +12,7 @@ use Chamilo\Core\User\Service\UserService;
 
 /**
  * @package Chamilo\Core\Repository\Workspace\Service
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class WorkspaceUserService
 {
@@ -55,7 +54,7 @@ class WorkspaceUserService
      */
     public function getAllUsersInWorkspace(Workspace $workspace)
     {
-        if($workspace instanceof PersonalWorkspace)
+        if ($workspace instanceof PersonalWorkspace)
         {
             return $workspace->getOwner();
         }
@@ -63,15 +62,15 @@ class WorkspaceUserService
         $userIds = [];
 
         $entityRelations = $this->entityRelationRepository->findEntityRelationsForWorkspace($workspace);
-        foreach($entityRelations as $entityRelation)
+        foreach ($entityRelations as $entityRelation)
         {
             $entityType = $entityRelation->get_entity_type();
 
-            if($entityType == UserEntity::ENTITY_TYPE)
+            if ($entityType == UserEntity::ENTITY_TYPE)
             {
                 $userIds[] = $entityRelation->get_entity_id();
             }
-            elseif($entityType == PlatformGroupEntity::ENTITY_TYPE)
+            elseif ($entityType == PlatformGroupEntity::ENTITY_TYPE)
             {
                 $group = $this->groupService->getGroupByIdentifier($entityRelation->get_entity_id());
                 $userIds = array_merge($userIds, $group->get_users(true, true));
@@ -79,7 +78,7 @@ class WorkspaceUserService
         }
 
         $workspaceUsers = $this->userService->findUsersByIdentifiers($userIds);
-        $workspaceUsers[] = $workspace->getCreator();
+        $workspaceUsers[] = $this->userService->findUserByIdentifier($workspace->getCreatorId());
 
         return $workspaceUsers;
     }

@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceUserDefault;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -44,12 +45,15 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
 
     protected WorkspaceService $workspaceService;
 
+    protected UserService $userService;
+
     public function __construct(
-        WorkspaceService $workspaceService, FavouriteService $favouriteService, RightsService $rightsService,
+        UserService $userService, WorkspaceService $workspaceService, FavouriteService $favouriteService, RightsService $rightsService,
         User $user, Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
         Pager $pager
     )
     {
+        $this->userService = $userService;
         $this->workspaceService = $workspaceService;
         $this->favouriteService = $favouriteService;
         $this->rightsService = $rightsService;
@@ -57,6 +61,13 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
 
         parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
     }
+
+    public function getUserService(): UserService
+    {
+        return $this->userService;
+    }
+
+
 
     public function getFavouriteService(): FavouriteService
     {
@@ -142,12 +153,7 @@ class WorkspaceTableRenderer extends DataClassListTableRenderer implements Table
         switch ($column->get_name())
         {
             case Workspace::PROPERTY_CREATOR_ID:
-                if ($workspace->getCreator() instanceof User)
-                {
-                    return $workspace->getCreator()->get_fullname();
-                }
-
-                return $translator->trans('Unknown', [], StringUtilities::LIBRARIES);
+                return $this->getUserService()->getUserFullNameByIdentifier($workspace->getCreatorId());
             case Workspace::PROPERTY_CREATION_DATE:
                 return DatetimeUtilities::getInstance()->formatLocaleDate(
                     $translator->trans('DateTimeFormatLong', [], StringUtilities::LIBRARIES),

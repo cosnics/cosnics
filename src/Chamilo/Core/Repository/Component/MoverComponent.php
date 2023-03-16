@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -104,9 +103,7 @@ class MoverComponent extends Manager
                             }
                             else
                             {
-                                $contentObjectRelationService = new ContentObjectRelationService(
-                                    new ContentObjectRelationRepository()
-                                );
+                                $contentObjectRelationService = $this->getContentObjectRelationService();
                                 $contentObjectRelation =
                                     $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
                                         $this->getWorkspace(), $object
@@ -211,6 +208,11 @@ class MoverComponent extends Manager
                 Translation::get('BrowserComponent')
             )
         );
+    }
+
+    protected function getContentObjectRelationService(): ContentObjectRelationService
+    {
+        return $this->getService(ContentObjectRelationService::class);
     }
 
     private function get_categories_for_select($parent_id, $current_parent)

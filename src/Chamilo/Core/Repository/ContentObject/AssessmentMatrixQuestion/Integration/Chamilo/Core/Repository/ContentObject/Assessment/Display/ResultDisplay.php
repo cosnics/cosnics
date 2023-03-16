@@ -52,7 +52,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         {
             $html[] = '<tr class="' . ($i % 2 == 0 ? 'row_even' : 'row_odd') . '">';
 
-            $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $option->get_value());
+            $object_renderer = new ContentObjectResourceRenderer($option->get_value());
             $html[] = '<td>' . $object_renderer->run() . '</td>';
 
             foreach ($matches as $j => $match)
@@ -202,8 +202,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                     $configuration, $this->get_complex_content_object_question(), true, $valid_answer
                 ))
                 {
-                    $object_renderer = new ContentObjectResourceRenderer(
-                        $this->getViewerApplication(), $option->get_feedback()
+                    $object_renderer = new ContentObjectResourceRenderer($option->get_feedback()
                     );
                     $html[] = '<td>' . $object_renderer->run() . '</td>';
                 }

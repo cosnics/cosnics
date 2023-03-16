@@ -410,7 +410,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
         if (!empty($links))
         {
-            $object_renderer = new ContentObjectResourceRenderer($this, $links);
+            $object_renderer = new ContentObjectResourceRenderer($links);
             $links = $object_renderer->run();
             $parser = new MediawikiParser(
                 new MediawikiParserContext($this->get_root_content_object(), '', $links, $this->get_parameters())

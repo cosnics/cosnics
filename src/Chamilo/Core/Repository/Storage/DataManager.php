@@ -16,10 +16,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -54,11 +52,11 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const ACTION_COUNT = 1;
+    public const ACTION_COUNT = 1;
 
-    const ACTION_RETRIEVES = 2;
+    public const ACTION_RETRIEVES = 2;
 
-    const PREFIX = 'repository_';
+    public const PREFIX = 'repository_';
 
     private static $applications = [];
 
@@ -122,7 +120,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Checks if there is a complex content object item for the given ref and parent id
      *
-     * @param $ref_id int
+     * @param $ref_id    int
      * @param $parent_id int
      */
     public static function complex_content_object_item_exists_for_ref_and_parent($ref_id, $parent_id)
@@ -275,7 +273,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         // Published in workspaces
 
-        $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+        /**
+         * @var \Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService $contentObjectRelationService
+         */
+        $contentObjectRelationService = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            ContentObjectRelationService::class
+        );
         $workspaceCount = $contentObjectRelationService->countWorkspacesForContentObject($object);
 
         if ($workspaceCount > 0)
@@ -409,7 +412,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Retrieves the relation object for a given user and content object
      *
-     * @param $user_id type
+     * @param $user_id           type
      * @param $content_object_id type
      *
      * @return DataClass
@@ -454,10 +457,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Deletes a category recursivly and unlinks all the contained content objects
      *
-     * @param $category type
+     * @param $category          type
      * @param $fix_display_order type
      *
-     * @return boolean
+     * @return bool
      */
     public static function delete_category_recursive(
         PublicationAggregatorInterface $publicationAggregator, $category, $fix_display_order = true
@@ -707,9 +710,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         if (!isset(self::$helper_types))
         {
 
-            self::$helper_types = array(
+            self::$helper_types = [
                 'Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem'
-            );
+            ];
         }
 
         return self::$helper_types;
@@ -804,7 +807,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         foreach ($types as $index => $type)
         {
             $class = $type;
-            $properties = call_user_func(array($class, 'get_disk_space_properties'));
+            $properties = call_user_func([$class, 'get_disk_space_properties']);
 
             if (is_null($properties))
             {
@@ -813,7 +816,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             if (!is_array($properties))
             {
-                $properties = array($properties);
+                $properties = [$properties];
             }
 
             $sum = [];
@@ -869,7 +872,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 );
                 $join = new Join(ContentObject::class, $condition);
 
-                $parameters->set_joins(new Joins(array($join)));
+                $parameters->set_joins(new Joins([$join]));
             }
             else
             {
@@ -880,7 +883,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
                 if (isset($condition_owner))
                 {
-                    $parameters->set_condition(new AndCondition(array($match, $condition_owner)));
+                    $parameters->set_condition(new AndCondition([$match, $condition_owner]));
                 }
                 else
                 {
@@ -903,7 +906,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $parameters = new DataClassDistinctParameters(
             $condition, new RetrieveProperties(
-                array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))
+                [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
             )
         );
         $version_ids = self::distinct(ContentObject::class, $parameters);
@@ -916,10 +919,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Recursive method to check all the children (complex content object items) of a content object to see if the check
      * content object is a child of the given content object
      *
-     * @param $content_object_id int
+     * @param $content_object_id       int
      * @param $check_content_object_id int
      *
-     * @return boolean
+     * @return bool
      */
     public static function is_child_of_content_object($content_object_id, $check_content_object_id)
     {
@@ -952,7 +955,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param $type String
      *
-     * @return boolean
+     * @return bool
      */
     public static function is_helper_type($type)
     {
@@ -964,7 +967,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Checks if the attachment id is attached to the given content object id
      *
-     * @param $attachment_id type
+     * @param $attachment_id     type
      * @param $content_object_id type
      *
      * @return Boolean
@@ -1112,11 +1115,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
         $parameters = new DataClassRetrieveParameters(
-            $condition, new OrderBy(array(
+            $condition, new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
                 )
-            ))
+            ])
         );
 
         return self::retrieve(ContentObject::class, $parameters);
@@ -1160,11 +1163,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
         $parameters->setOrderBy(
-            new OrderBy(array(
+            new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
                 )
-            ))
+            ])
         );
 
         return self::retrieve_content_objects(get_class($object), $parameters);
@@ -1270,7 +1273,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
 
         $parameters = new DataClassRetrieveParameters($condition);
-        $parameters->set_joins(new Joins(array($join)));
+        $parameters->set_joins(new Joins([$join]));
 
         return self::retrieve(SynchronizationData::class, $parameters);
     }
@@ -1286,7 +1289,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins(array($join)));
+        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins([$join]));
 
         return self::retrieves(SynchronizationData::class, $parameters);
     }
@@ -1308,11 +1311,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
         $parameters = new DataClassRetrieveParameters(
-            $condition, new OrderBy(array(
+            $condition, new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
                 )
-            ))
+            ])
         );
 
         return self::retrieve(get_class($object), $parameters);

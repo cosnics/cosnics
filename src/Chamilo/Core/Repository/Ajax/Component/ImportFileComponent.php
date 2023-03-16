@@ -5,10 +5,7 @@ use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -17,19 +14,13 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
 {
-    const PARAM_PARENT_ID = 'parentId';
-    const PARAM_WORKSPACE_ID = 'workspaceId';
-    const PROPERTY_CONTENT_OBJECT_ID = 'contentObjectId';
+    public const PARAM_PARENT_ID = 'parentId';
+    public const PARAM_WORKSPACE_ID = 'workspaceId';
 
-    const PROPERTY_CONTENT_OBJECT_TITLE = 'contentObjectTitle';
-
-    const PROPERTY_UPLOADED_MESSAGE = 'uploadedMessage';
-
-    const PROPERTY_VIEW_BUTTON = 'viewButton';
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
-     */
+    public const PROPERTY_CONTENT_OBJECT_ID = 'contentObjectId';
+    public const PROPERTY_CONTENT_OBJECT_TITLE = 'contentObjectTitle';
+    public const PROPERTY_UPLOADED_MESSAGE = 'uploadedMessage';
+    public const PROPERTY_VIEW_BUTTON = 'viewButton';
 
     public function run()
     {
@@ -77,8 +68,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
         {
             if ($workspace instanceof Workspace)
             {
-                $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-                $contentObjectRelationService->createContentObjectRelationFromParameters(
+                $this->getContentObjectRelationService()->createContentObjectRelationFromParameters(
                     $workspace->getId(), $document->get_object_number(), $categoryId
                 );
             }
@@ -103,18 +93,18 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
             $uploadedMessage = [];
             $uploadedMessage[] = '<div class="alert alert-success alert-import-success">';
             $uploadedMessage[] = Translation::getInstance()->getTranslation(
-                'FileImported', array('CATEGORY' => $this->getCategoryTitle($categoryId)), Manager::context()
+                'FileImported', ['CATEGORY' => $this->getCategoryTitle($categoryId)], Manager::context()
             );
             $uploadedMessage[] = '</div>';
 
             $jsonAjaxResult = new JsonAjaxResult();
             $jsonAjaxResult->set_properties(
-                array(
-                    self::PROPERTY_CONTENT_OBJECT_ID    => $document->getId(),
-                    self::PROPERTY_VIEW_BUTTON          => implode(PHP_EOL, $viewButton),
-                    self::PROPERTY_UPLOADED_MESSAGE     => implode(PHP_EOL, $uploadedMessage),
+                [
+                    self::PROPERTY_CONTENT_OBJECT_ID => $document->getId(),
+                    self::PROPERTY_VIEW_BUTTON => implode(PHP_EOL, $viewButton),
+                    self::PROPERTY_UPLOADED_MESSAGE => implode(PHP_EOL, $uploadedMessage),
                     self::PROPERTY_CONTENT_OBJECT_TITLE => $title
-                )
+                ]
             );
             $jsonAjaxResult->display();
         }
@@ -123,14 +113,10 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
             $jsonAjaxResult = new JsonAjaxResult();
             $jsonAjaxResult->set_result_code(500);
             $jsonAjaxResult->set_result_message(Translation::get('ObjectNotImported'));
-            $jsonAjaxResult->set_properties(array('object' => serialize($document)));
+            $jsonAjaxResult->set_properties(['object' => serialize($document)]);
             $jsonAjaxResult->display();
         }
     }
-
-    /*
-     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
-     */
 
     /**
      * Returns the title of a given category
@@ -158,8 +144,16 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
         return $category->get_name();
     }
 
+    /*
+     * (non-PHPdoc) @see common\libraries.AjaxManager::run()
+     */
+
+    protected function getContentObjectRelationService(): ContentObjectRelationService
+    {
+        return $this->getService(ContentObjectRelationService::class);
+    }
+
     /**
-     *
      * @return \Symfony\Component\HttpFoundation\File\UploadedFile
      */
     public function getFile()
@@ -171,6 +165,6 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
     public function getRequiredPostParameters(): array
     {
-        return array(self::PARAM_PARENT_ID);
+        return [self::PARAM_PARENT_ID];
     }
 }

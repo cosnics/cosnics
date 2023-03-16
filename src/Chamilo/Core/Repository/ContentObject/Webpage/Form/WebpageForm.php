@@ -130,7 +130,7 @@ class WebpageForm extends ContentObjectForm
         $object = new Webpage();
 
         $object->set_filename($values[Webpage::PROPERTY_TITLE] . '.html');
-        $renderer = new ContentObjectResourceRenderer($this, $values['html_content'], true);
+        $renderer = new ContentObjectResourceRenderer($values['html_content'], true);
 
         $object->set_in_memory_file($renderer->run());
 
@@ -165,7 +165,7 @@ class WebpageForm extends ContentObjectForm
         $values = $this->exportValues();
 
         $document->set_filename($document->get_title() . '.htm');
-        $renderer = new ContentObjectResourceRenderer($this, $values['html_content'], true);
+        $renderer = new ContentObjectResourceRenderer($values['html_content'], true);
 
         $document->set_in_memory_file($renderer->run());
 

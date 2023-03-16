@@ -115,7 +115,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             if (!is_null($answer_option))
             {
                 $object_renderer = new ContentObjectResourceRenderer(
-                    $this->getViewerApplication(), $answer_option->get_feedback()
+                    $answer_option->get_feedback()
                 );
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }
@@ -164,7 +164,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 if ($answer_feedback_display)
                 {
                     $object_renderer = new ContentObjectResourceRenderer(
-                        $this->getViewerApplication(), $best_option->get_feedback()
+                        $best_option->get_feedback()
                     );
                     $html[] = '<td>' . $object_renderer->run() . '</td>';
                 }

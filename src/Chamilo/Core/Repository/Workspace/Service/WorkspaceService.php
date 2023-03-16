@@ -234,7 +234,7 @@ class WorkspaceService
     {
         $entities = [];
 
-        $entities[UserEntity::ENTITY_TYPE] = [$user->get_id()];
+        $entities[UserEntity::ENTITY_TYPE] = [$user->getId()];
         $entities[PlatformGroupEntity::ENTITY_TYPE] = [];
 
         $userGroupIdentifiers = $user->get_groups(true);

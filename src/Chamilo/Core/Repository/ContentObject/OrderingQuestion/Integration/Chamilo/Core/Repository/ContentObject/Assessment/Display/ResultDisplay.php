@@ -94,7 +94,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $html[] = '<td style="text-align: center;">' . $answer->get_order() . '</td>';
             }
 
-            $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $answer->get_value());
+            $object_renderer = new ContentObjectResourceRenderer($answer->get_value());
 
             $html[] = '<td>' . $object_renderer->run() . '</td>';
 
@@ -102,8 +102,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $configuration, $this->get_complex_content_object_question(), true, $correct_answer
             ))
             {
-                $object_renderer = new ContentObjectResourceRenderer(
-                    $this->getViewerApplication(), $answer->get_feedback()
+                $object_renderer = new ContentObjectResourceRenderer($answer->get_feedback()
                 );
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }

@@ -72,7 +72,7 @@ class Display extends QuestionDisplay
             foreach($this->matches as $match)
             {
                 $object_renderer = new ContentObjectResourceRenderer(
-                    $this->get_formvalidator()->get_assessment_viewer(),
+
                     $match);
                 $table_header[] = '<tr>';
                 $table_header[] = '<td style="width: 10px">' . $matchLabel . '.</td>';
@@ -135,7 +135,6 @@ class Display extends QuestionDisplay
                 $formvalidator->addElement('html', '<td>' . $answer_number . '</td>');
 
                 $object_renderer = new ContentObjectResourceRenderer(
-                    $this->get_formvalidator()->get_assessment_viewer(),
                     $answer->get_value());
                 $formvalidator->addElement('html', '<td>' . $object_renderer->run() . '</td>');
                 $formvalidator->addElement('select', $answer_name, null, $options);

@@ -51,7 +51,6 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         if (AnswerFeedbackDisplay::allowed($configuration, $this->get_complex_content_object_question(), true, true))
         {
             $object_renderer = new ContentObjectResourceRenderer(
-                $this->getViewerApplication(),
                 $question->get_feedback()
             );
 

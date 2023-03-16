@@ -14,8 +14,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObjectInclude;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -29,28 +27,24 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-
 use DOMDocument;
 use DOMXPath;
 use InvalidArgumentException;
 
 class CpoContentObjectImportController extends ContentObjectImportController
 {
-    const FORMAT = 'cpo';
+    public const FORMAT = 'cpo';
 
-    const NODE_TYPE_ATTACHMENTS = 'attachments';
-    const NODE_TYPE_INCLUDES = 'includes';
-
-    const NODE_TYPE_SUB_ITEMS = 'sub_items';
+    public const NODE_TYPE_ATTACHMENTS = 'attachments';
+    public const NODE_TYPE_INCLUDES = 'includes';
+    public const NODE_TYPE_SUB_ITEMS = 'sub_items';
 
     /**
-     *
      * @var DOMDocument
      */
     private $dom_document;
 
     /**
-     *
      * @var DOMXPath
      */
     private $dom_xpath;
@@ -58,13 +52,11 @@ class CpoContentObjectImportController extends ContentObjectImportController
     private $id_cache;
 
     /**
-     *
-     * @var boolean[]
+     * @var bool
      */
     private $object_number_created;
 
     /**
-     *
      * @var string
      */
     private $temporary_directory;
@@ -72,8 +64,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
     private $version;
 
     /**
-     *
-     * @param $content_object_ids integer[]
+     * @param $content_object_ids int
      */
     public function __construct($parameters)
     {
@@ -119,7 +110,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
         {
             $this->add_message(
                 Translation::get(
-                    'UnsupportedFileFormat', array('TYPES' => implode(', ', self::get_allowed_extensions()))
+                    'UnsupportedFileFormat', ['TYPES' => implode(', ', self::get_allowed_extensions())]
                 ), self::TYPE_ERROR
             );
         }
@@ -158,7 +149,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
             $tags_content = $tags_node->nodeValue;
             $tags = explode(',', $tags_content);
             DataManager::set_tags_for_content_objects(
-                $tags, array($content_object->get_id()), $content_object->get_owner_id()
+                $tags, [$content_object->get_id()], $content_object->get_owner_id()
             );
         }
     }
@@ -274,8 +265,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function determine_parent_id($parent_id)
     {
@@ -291,7 +281,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public static function get_allowed_extensions()
     {
-        return array('cpo');
+        return ['cpo'];
     }
 
     public function get_cache()
@@ -341,7 +331,6 @@ class CpoContentObjectImportController extends ContentObjectImportController
     }
 
     /**
-     *
      * @return DOMDocument
      */
     public function get_dom_document()
@@ -350,30 +339,11 @@ class CpoContentObjectImportController extends ContentObjectImportController
     }
 
     /**
-     *
-     * @param $dom_document DOMDocument
-     */
-    public function set_dom_document($dom_document)
-    {
-        $this->dom_document = $dom_document;
-    }
-
-    /**
-     *
      * @return DOMXPath
      */
     public function get_dom_xpath()
     {
         return $this->dom_xpath;
-    }
-
-    /**
-     *
-     * @param $dom_xpath DOMXPath
-     */
-    public function set_dom_xpath($dom_xpath)
-    {
-        $this->dom_xpath = $dom_xpath;
     }
 
     public function get_external_instance_id_cache_id($old_external_instance_id)
@@ -388,19 +358,9 @@ class CpoContentObjectImportController extends ContentObjectImportController
         return $this->object_number_created[$id];
     }
 
-    public function set_object_number_created($id)
-    {
-        $this->object_number_created[$id] = true;
-    }
-
     public function get_version($id)
     {
         return $this->version[$id];
-    }
-
-    public function set_version($object_number, $creation_date)
-    {
-        $this->version[$object_number] = $creation_date;
     }
 
     public function get_xml_path()
@@ -490,7 +450,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
         $this->update_helpers($content_object_node, $content_object);
 
-        if (($configuration->get_setting(array('Chamilo\Core\Repository', 'description_required')) == '1') &&
+        if (($configuration->get_setting(['Chamilo\Core\Repository', 'description_required']) == '1') &&
             $content_object->get_description() == '')
         {
             $content_object->set_description($content_object->get_title());
@@ -663,8 +623,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
                 $parentId = $this->get_parameters()->get_category();
             }
 
-            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-            $contentObjectRelationService->createContentObjectRelationFromParameters(
+            $this->getContentObjectRelationService()->createContentObjectRelationFromParameters(
                 $this->get_parameters()->getWorkspace()->getId(), $contentObject->getId(), $parentId
             );
         }
@@ -697,6 +656,22 @@ class CpoContentObjectImportController extends ContentObjectImportController
         $this->set_cache_id(
             ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER, $old_object_number, $new_object_number
         );
+    }
+
+    /**
+     * @param $dom_document DOMDocument
+     */
+    public function set_dom_document($dom_document)
+    {
+        $this->dom_document = $dom_document;
+    }
+
+    /**
+     * @param $dom_xpath DOMXPath
+     */
+    public function set_dom_xpath($dom_xpath)
+    {
+        $this->dom_xpath = $dom_xpath;
     }
 
     public function set_external_instance_id_cache_id($old_external_instance_id, $new_external_instance_id)
@@ -737,6 +712,16 @@ class CpoContentObjectImportController extends ContentObjectImportController
         {
             return true;
         }
+    }
+
+    public function set_object_number_created($id)
+    {
+        $this->object_number_created[$id] = true;
+    }
+
+    public function set_version($object_number, $creation_date)
+    {
+        $this->version[$object_number] = $creation_date;
     }
 
     public function unzip()

@@ -82,8 +82,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             $configuration, $this->get_complex_content_object_question(), true, $correct_answer
         ))
         {
-            $object_renderer = new ContentObjectResourceRenderer(
-                $this->getViewerApplication(), $this->get_question()->get_feedback()
+            $object_renderer = new ContentObjectResourceRenderer($this->get_question()->get_feedback()
             );
 
             $html[] = '<div class="splitter">';
