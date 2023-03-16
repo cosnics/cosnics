@@ -28,6 +28,15 @@ class ContentObjectRelationService
         $this->contentObjectRelationRepository = $contentObjectRelationRepository;
     }
 
+    public function countAvailableWorkspacesForContentObjectIdentifiersAndUser(
+        array $contentObjectIdentifiers, User $user
+    ): int
+    {
+        // TODO: Get content objects for content object identifiers
+
+        return $this->countAvailableWorkspacesForContentObjectsAndUser($contentObjects, $user);
+    }
+
     /**
      * @param ContentObject[] $contentObjects
      *
@@ -118,6 +127,14 @@ class ContentObjectRelationService
             $this->getContentObjectRelationForWorkspaceAndContentObject($workspace, $contentObject);
 
         return $this->deleteContentObjectRelation($contentObjectRelation);
+    }
+
+    public function getAvailableWorkspacesForContentObjectIdentifiersAndUser(
+        array $contentObjectIdentifiers, User $user, ?int $limit = null, ?int $offset = null, ?OrderBy $orderBy = null
+    ): ArrayCollection
+    {
+        // TODO: Get content objects for content object identifiers
+        return $this->getAvailableWorkspacesForContentObjectsAndUser($contentObjects, $user, $limit, $offset, $orderBy);
     }
 
     /**
