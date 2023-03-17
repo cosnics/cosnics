@@ -5,27 +5,27 @@ use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Table\ContentObjectTableRenderer;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceContentObjectService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 class TableContentObjectRenderer extends ContentObjectRenderer
 {
-    protected ContentObjectService $contentObjectService;
-
     protected ContentObjectTableRenderer $contentObjectTableRenderer;
 
     protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler;
 
     protected Workspace $workspace;
 
+    protected WorkspaceContentObjectService $workspaceContentObjectService;
+
     public function __construct(
-        ContentObjectService $contentObjectService, ContentObjectTableRenderer $contentObjectTableRenderer,
+        WorkspaceContentObjectService $workspaceContentObjectService,
+        ContentObjectTableRenderer $contentObjectTableRenderer,
         RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler, Workspace $workspace
     )
     {
-        $this->contentObjectService = $contentObjectService;
+        $this->workspaceContentObjectService = $workspaceContentObjectService;
         $this->contentObjectTableRenderer = $contentObjectTableRenderer;
         $this->requestTableParameterValuesCompiler = $requestTableParameterValuesCompiler;
         $this->workspace = $workspace;
@@ -33,12 +33,12 @@ class TableContentObjectRenderer extends ContentObjectRenderer
 
     public function render(): string
     {
-        $contentObjectService = $this->getContentObjectService();
+        $workspaceContentObjectService = $this->getWorkspaceContentObjectService();
         $workspace = $this->getWorkspace();
 
         $filterData = FilterData::getInstance($workspace);
 
-        $totalNumberOfItems = $contentObjectService->countContentObjectsByTypeForWorkspace(
+        $totalNumberOfItems = $workspaceContentObjectService->countContentObjectsByTypeForWorkspace(
             $filterData->getTypeDataClass(), $workspace, ConditionFilterRenderer::factory(
             $filterData, $workspace
         )
@@ -51,7 +51,7 @@ class TableContentObjectRenderer extends ContentObjectRenderer
             $totalNumberOfItems
         );
 
-        $contentObjects = $contentObjectService->getContentObjectsByTypeForWorkspace(
+        $contentObjects = $workspaceContentObjectService->getContentObjectsByTypeForWorkspace(
             $filterData->getTypeDataClass(), $workspace, ConditionFilterRenderer::factory(
             $filterData, $workspace
         ), $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
@@ -59,11 +59,6 @@ class TableContentObjectRenderer extends ContentObjectRenderer
         );
 
         return $contentObjectTableRenderer->render($tableParameterValues, $contentObjects);
-    }
-
-    public function getContentObjectService(): ContentObjectService
-    {
-        return $this->contentObjectService;
     }
 
     public function getContentObjectTableRenderer(): ContentObjectTableRenderer
@@ -79,5 +74,10 @@ class TableContentObjectRenderer extends ContentObjectRenderer
     public function getWorkspace(): Workspace
     {
         return $this->workspace;
+    }
+
+    public function getWorkspaceContentObjectService(): WorkspaceContentObjectService
+    {
+        return $this->workspaceContentObjectService;
     }
 }

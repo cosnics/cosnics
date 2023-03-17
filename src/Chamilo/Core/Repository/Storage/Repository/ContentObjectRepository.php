@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\Storage\Repository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
@@ -23,42 +23,26 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\Repository\Storage\Repository
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ContentObjectRepository
 {
-    const PROPERTY_USED_STORAGE_SPACE = 'used_storage_space';
+    public const PROPERTY_USED_STORAGE_SPACE = 'used_storage_space';
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
-    private $dataClassRepository;
+    private DataClassRepository $dataClassRepository;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
     public function __construct(DataClassRepository $dataClassRepository)
     {
         $this->dataClassRepository = $dataClassRepository;
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param integer $attachmentIdentifier
-     * @param string $type
-     *
-     * @return integer
-     * @throws \ReflectionException
-     */
     public function countContentObjectAttachmentsByIdentifierAndType(
-        ContentObject $contentObject, int $attachmentIdentifier = null, string $type = ContentObject::ATTACHMENT_NORMAL
-    )
+        ContentObject $contentObject, ?int $attachmentIdentifier = null, string $type = ContentObject::ATTACHMENT_NORMAL
+    ): int
     {
         $conditions = [];
 
@@ -89,70 +73,34 @@ class ContentObjectRepository
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return boolean
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function createContentObject(ContentObject $contentObject)
+    public function createContentObject(ContentObject $contentObject): bool
     {
         return $this->getDataClassRepository()->create($contentObject);
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment $contentObjectAttachment
-     *
-     * @return boolean
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function createContentObjectAttachment(ContentObjectAttachment $contentObjectAttachment)
+    public function createContentObjectAttachment(ContentObjectAttachment $contentObjectAttachment): bool
     {
         return $this->getDataClassRepository()->create($contentObjectAttachment);
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment $contentObjectAttachment
-     *
-     * @return boolean
-     * @throws \ReflectionException
-     */
-    public function deleteContentObjectAttachment(ContentObjectAttachment $contentObjectAttachment)
+    public function deleteContentObjectAttachment(ContentObjectAttachment $contentObjectAttachment): bool
     {
         return $this->getDataClassRepository()->delete($contentObjectAttachment);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
-    protected function getDataClassRepository()
+    protected function getDataClassRepository(): DataClassRepository
     {
         return $this->dataClassRepository;
     }
 
-    public function retrieveContentObjectByIdentifier(string $identifier): ?ContentObject
-    {
-        return $this->getDataClassRepository()->retrieveById(ContentObject::class, $identifier);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
-    protected function setDataClassRepository($dataClassRepository)
-    {
-        $this->dataClassRepository = $dataClassRepository;
-    }
-
-    /**
-     * @param string $contentObjectType
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
-     */
     protected function getUsedStorageSpaceConditionForContentObjectTypeAndUser(
-        string $contentObjectType, User $user = null
-    )
+        string $contentObjectType, ?User $user = null
+    ): AndCondition
     {
         $conditions = [];
 
@@ -172,13 +120,7 @@ class ContentObjectRepository
         return new AndCondition($conditions);
     }
 
-    /**
-     * @param string $contentObjectType
-     *
-     * @return integer
-     * @throws \Exception
-     */
-    public function getUsedStorageSpaceForContentObjectType(string $contentObjectType)
+    public function getUsedStorageSpaceForContentObjectType(string $contentObjectType): int
     {
         return $this->getUsedStorageSpaceForContentObjectTypeAndCondition(
             $contentObjectType, $this->getUsedStorageSpaceConditionForContentObjectTypeAndUser($contentObjectType)
@@ -186,13 +128,10 @@ class ContentObjectRepository
     }
 
     /**
-     * @param string $contentObjectType
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return integer
-     * @throws \Exception
+     * @param class-string<\Chamilo\Core\Repository\Storage\DataClass\ContentObject> $contentObjectType
      */
-    public function getUsedStorageSpaceForContentObjectTypeAndCondition(string $contentObjectType, Condition $condition)
+    public function getUsedStorageSpaceForContentObjectTypeAndCondition(string $contentObjectType, Condition $condition
+    ): int
     {
         $storageSpaceProperty = $contentObjectType::getStorageSpaceProperty();
 
@@ -217,7 +156,7 @@ class ContentObjectRepository
                 [
                     new Join(
                         ContentObject::class, new EqualityCondition(
-                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
+                            new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID),
                             new PropertyConditionVariable(
                                 $contentObjectType, $contentObjectType::PROPERTY_ID
                             )
@@ -238,14 +177,7 @@ class ContentObjectRepository
         return $usedStorageSpaceRecord[ContentObjectRepository::PROPERTY_USED_STORAGE_SPACE];
     }
 
-    /**
-     * @param string $contentObjectType
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return integer
-     * @throws \Exception
-     */
-    public function getUsedStorageSpaceForContentObjectTypeAndUser(string $contentObjectType, User $user)
+    public function getUsedStorageSpaceForContentObjectTypeAndUser(string $contentObjectType, User $user): int
     {
         return $this->getUsedStorageSpaceForContentObjectTypeAndCondition(
             $contentObjectType,
@@ -253,41 +185,9 @@ class ContentObjectRepository
         );
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     *
-     * @return \Chamilo\Libraries\Storage\Parameters\DataClassParameters
-     */
-    public static function prepareContentObjectParameters(DataClassParameters $parameters)
-    {
-        $conditions = [];
-
-        if ($parameters->getCondition() instanceof Condition)
-        {
-            $conditions[] = $parameters->getCondition();
-        }
-
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
-            ContentObject::get_active_status_types()
-        );
-
-        $parameters->setCondition(new AndCondition($conditions));
-
-        return $parameters;
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param integer $attachmentIdentifier
-     * @param string $type
-     *
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment
-     * @throws \Exception
-     */
     public function retrieveContentObjectAttachmentByIdentifierAndType(
         ContentObject $contentObject, int $attachmentIdentifier, string $type = ContentObject::ATTACHMENT_NORMAL
-    )
+    ): ?ContentObjectAttachment
     {
         $conditions = [];
 
@@ -315,65 +215,107 @@ class ContentObjectRepository
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param string $type
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
-     * @param integer $offset
-     * @param integer $count
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param ?int $offset
+     * @param ?int $count
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      * @throws \Exception
      */
     public function retrieveContentObjectAttachments(
-        ContentObject $contentObject, $type = ContentObject::ATTACHMENT_NORMAL, $orderBy = null, $offset = null,
-        $count = null
-    )
+        ContentObject $contentObject, string $type = ContentObject::ATTACHMENT_NORMAL, ?OrderBy $orderBy = null,
+        ?int $offset = null, ?int $count = null
+    ): ArrayCollection
     {
-        $condition = new EqualityCondition(
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
             ), new StaticConditionVariable($contentObject->getId())
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_TYPE
+            ), new StaticConditionVariable($type)
         );
 
         $join = new Join(
             ContentObjectAttachment::class, new EqualityCondition(
                 new PropertyConditionVariable(
                     ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
-                ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
+                ), new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID)
             )
         );
 
         $parameters = new DataClassRetrievesParameters(
-            $condition, $count, $offset, $orderBy, new Joins(array($join))
+            new AndCondition($conditions), $count, $offset, $orderBy, new Joins([$join])
         );
 
         return $this->retrieveContentObjects(ContentObject::class, $parameters);
+    }
+
+    public function retrieveContentObjectByIdentifier(string $identifier): ?ContentObject
+    {
+        return $this->getDataClassRepository()->retrieveById(ContentObject::class, $identifier);
     }
 
     /**
      * @param string $contentObjectType
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     * @throws \Exception
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function retrieveContentObjects(string $contentObjectType, DataClassRetrievesParameters $parameters)
+    public function retrieveContentObjects(string $contentObjectType, DataClassRetrievesParameters $parameters
+    ): ArrayCollection
     {
+        if ($parameters->getCondition() instanceof Condition)
+        {
+            $conditions[] = $parameters->getCondition();
+        }
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
+            ContentObject::get_active_status_types()
+        );
+
+        $parameters->setCondition(new AndCondition($conditions));
+
         return $this->getDataClassRepository()->retrieves(
-            $contentObjectType, $this->prepareContentObjectParameters($parameters)
+            $contentObjectType, $parameters
+        );
+    }
+
+    /**
+     * @param string[] $identifiers
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function retrieveContentObjectsByIdentifiers(array $identifiers): ArrayCollection
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID), $identifiers
+        );
+
+        return $this->getDataClassRepository()->retrieves(
+            ContentObject::class, new DataClassRetrievesParameters($condition)
         );
     }
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param boolean $includeLast
-     * @param boolean $includeSelf
+     * @param bool $includeLast
+     * @param bool $includeSelf
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieveVersionsForContentObject(
         ContentObject $contentObject, bool $includeLast = true, bool $includeSelf = true
-    )
+    ): ArrayCollection
     {
         $conditions = [];
 
@@ -394,17 +336,17 @@ class ContentObjectRepository
         {
             $conditions[] = new NotCondition(
                 new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
+                    new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID),
                     new StaticConditionVariable($contentObject->getId())
                 )
             );
         }
 
-        $orderBy = new OrderBy(array(
+        $orderBy = new OrderBy([
             new OrderProperty(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
+                new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID), SORT_DESC
             )
-        ));
+        ]);
 
         $parameters = new DataClassRetrievesParameters(new AndCondition($conditions), null, null, $orderBy);
 
@@ -412,12 +354,9 @@ class ContentObjectRepository
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return boolean
-     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function updateContentObject(ContentObject $contentObject)
+    public function updateContentObject(ContentObject $contentObject): bool
     {
         return $this->getDataClassRepository()->update($contentObject);
     }

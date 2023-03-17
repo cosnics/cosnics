@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\Repository\Service
@@ -14,26 +15,12 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class ContentObjectService
 {
-    /**
-     * @var \Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository
-     */
-    private $contentObjectRepository;
+    private ContentObjectRepository $contentObjectRepository;
 
-    /**
-     * @var \Chamilo\Configuration\Service\RegistrationConsulter
-     */
-    private $registrationConsulter;
+    private RegistrationConsulter $registrationConsulter;
 
-    /**
-     * @var \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    private $stringUtilities;
+    private StringUtilities $stringUtilities;
 
-    /**
-     * @param \Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository $contentObjectRepository
-     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
     public function __construct(
         ContentObjectRepository $contentObjectRepository, RegistrationConsulter $registrationConsulter,
         StringUtilities $stringUtilities
@@ -44,20 +31,15 @@ class ContentObjectService
         $this->stringUtilities = $stringUtilities;
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository
-     */
     public function getContentObjectRepository(): ContentObjectRepository
     {
         return $this->contentObjectRepository;
     }
 
     /**
-     * @param bool $alsoReturnInactiveTypes
-     *
      * @return string[]
      */
-    public function getContentObjectTypes(bool $alsoReturnInactiveTypes = true)
+    public function getContentObjectTypes(bool $alsoReturnInactiveTypes = true): array
     {
         $contentObjectRegistrations =
             $this->getRegistrationConsulter()->getContentObjectRegistrations($alsoReturnInactiveTypes);
@@ -76,28 +58,20 @@ class ContentObjectService
         return $contentObjectTypes;
     }
 
-    /**
-     * @return \Chamilo\Configuration\Service\RegistrationConsulter
-     */
     public function getRegistrationConsulter(): RegistrationConsulter
     {
         return $this->registrationConsulter;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Utilities\StringUtilities
-     */
     public function getStringUtilities(): StringUtilities
     {
         return $this->stringUtilities;
     }
 
     /**
-     * @return int
      * @throws \Exception
-     * @see \Chamilo\Core\Repository\Storage\DataManager::get_used_disk_space()
      */
-    public function getUsedStorageSpace()
+    public function getUsedStorageSpace(): int
     {
         $contentObjectTypes = $this->getContentObjectTypes();
         $usedStorageSpace = 0;
@@ -111,12 +85,9 @@ class ContentObjectService
     }
 
     /**
-     * @param string $contentObjectType
-     *
-     * @return int
      * @throws \Exception
      */
-    public function getUsedStorageSpaceForContentObjectType(string $contentObjectType)
+    public function getUsedStorageSpaceForContentObjectType(string $contentObjectType): int
     {
         return $this->getContentObjectRepository()->getUsedStorageSpaceForContentObjectType(
             $contentObjectType
@@ -124,13 +95,9 @@ class ContentObjectService
     }
 
     /**
-     * @param string $contentObjectType
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return int
      * @throws \Exception
      */
-    public function getUsedStorageSpaceForContentObjectTypeAndUser(string $contentObjectType, User $user)
+    public function getUsedStorageSpaceForContentObjectTypeAndUser(string $contentObjectType, User $user): int
     {
         return $this->getContentObjectRepository()->getUsedStorageSpaceForContentObjectTypeAndUser(
             $contentObjectType, $user
@@ -138,13 +105,9 @@ class ContentObjectService
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return int
      * @throws \Exception
-     * @see \Chamilo\Core\Repository\Storage\DataManager::get_used_disk_space()
      */
-    public function getUsedStorageSpaceForUser(User $user)
+    public function getUsedStorageSpaceForUser(User $user): int
     {
         $contentObjectTypes = $this->getContentObjectTypes();
         $usedStorageSpace = 0;
@@ -163,27 +126,14 @@ class ContentObjectService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository $contentObjectRepository
+     * @param string[] $identifiers
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function setContentObjectRepository(ContentObjectRepository $contentObjectRepository): void
+    public function retrieveContentObjectsByIdentifiers(array $identifiers): ArrayCollection
     {
-        $this->contentObjectRepository = $contentObjectRepository;
-    }
-
-    /**
-     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
-     */
-    public function setRegistrationConsulter(RegistrationConsulter $registrationConsulter): void
-    {
-        $this->registrationConsulter = $registrationConsulter;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
-    public function setStringUtilities(StringUtilities $stringUtilities): void
-    {
-        $this->stringUtilities = $stringUtilities;
+        return $this->getContentObjectRepository()->retrieveContentObjectsByIdentifiers($identifiers);
     }
 
 }

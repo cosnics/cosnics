@@ -202,7 +202,6 @@ class ContentObjectRelationRepository
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @return string[]
-     * @throws \Exception
      */
     public function findWorkspaceIdentifiersForContentObject(ContentObject $contentObject): array
     {

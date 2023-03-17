@@ -15,10 +15,10 @@
         </service>
 
         <service id="Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService"/>
-        <service id="Chamilo\Core\Repository\Workspace\Service\ContentObjectService"/>
         <service id="Chamilo\Core\Repository\Workspace\Service\EntityRelationService"/>
         <service id="Chamilo\Core\Repository\Workspace\Service\EntityService"/>
         <service id="Chamilo\Core\Repository\Workspace\Service\RightsService"/>
+        <service id="Chamilo\Core\Repository\Workspace\Service\WorkspaceContentObjectService"/>
         <service id="Chamilo\Core\Repository\Workspace\Service\WorkspaceFactory">
             <argument key="$user"
                       type="service"

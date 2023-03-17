@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Table\ContentObjectGalleryTableRenderer;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceContentObjectService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 
@@ -16,19 +16,19 @@ class GalleryTableContentObjectRenderer extends ContentObjectRenderer
 {
     protected ContentObjectGalleryTableRenderer $contentObjectGalleryTableRenderer;
 
-    protected ContentObjectService $contentObjectService;
-
     protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler;
 
     protected Workspace $workspace;
 
+    protected WorkspaceContentObjectService $workspaceContentObjectService;
+
     public function __construct(
-        ContentObjectService $contentObjectService,
+        WorkspaceContentObjectService $workspaceContentObjectService,
         ContentObjectGalleryTableRenderer $contentObjectGalleryTableRenderer,
         RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler, Workspace $workspace
     )
     {
-        $this->contentObjectService = $contentObjectService;
+        $this->workspaceContentObjectService = $workspaceContentObjectService;
         $this->contentObjectGalleryTableRenderer = $contentObjectGalleryTableRenderer;
         $this->requestTableParameterValuesCompiler = $requestTableParameterValuesCompiler;
         $this->workspace = $workspace;
@@ -42,12 +42,12 @@ class GalleryTableContentObjectRenderer extends ContentObjectRenderer
      */
     public function render(): string
     {
-        $contentObjectService = $this->getContentObjectService();
+        $workspaceContentObjectService = $this->getWorkspaceContentObjectService();
         $workspace = $this->getWorkspace();
 
         $filterData = FilterData::getInstance($workspace);
 
-        $totalNumberOfItems = $contentObjectService->countContentObjectsByTypeForWorkspace(
+        $totalNumberOfItems = $workspaceContentObjectService->countContentObjectsByTypeForWorkspace(
             $filterData->getTypeDataClass(), $workspace, ConditionFilterRenderer::factory(
             $filterData, $workspace
         )
@@ -60,7 +60,7 @@ class GalleryTableContentObjectRenderer extends ContentObjectRenderer
             $contentObjectGalleryTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
         );
 
-        $contentObjects = $contentObjectService->getContentObjectsByTypeForWorkspace(
+        $contentObjects = $workspaceContentObjectService->getContentObjectsByTypeForWorkspace(
             $filterData->getTypeDataClass(), $workspace, ConditionFilterRenderer::factory(
             $filterData, $workspace
         ), $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
@@ -75,11 +75,6 @@ class GalleryTableContentObjectRenderer extends ContentObjectRenderer
         return $this->contentObjectGalleryTableRenderer;
     }
 
-    public function getContentObjectService(): ContentObjectService
-    {
-        return $this->contentObjectService;
-    }
-
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
         return $this->requestTableParameterValuesCompiler;
@@ -88,5 +83,10 @@ class GalleryTableContentObjectRenderer extends ContentObjectRenderer
     public function getWorkspace(): Workspace
     {
         return $this->workspace;
+    }
+
+    public function getWorkspaceContentObjectService(): WorkspaceContentObjectService
+    {
+        return $this->workspaceContentObjectService;
     }
 }

@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Service;
 
+use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceUserDefault;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -190,7 +190,6 @@ class WorkspaceService
     public function findDefaultWorkspaceForUserIdentifier(string $userIdentifier): ?Workspace
     {
         return $this->getWorkspaceRepository()->retrieveDefaultWorkspaceForUserIdentifier($userIdentifier);
-
     }
 
     public function findWorkspaceUserDefaultForUserIdentifier(string $userIdentifier): ?WorkspaceUserDefault
@@ -234,14 +233,14 @@ class WorkspaceService
     {
         $entities = [];
 
-        $entities[UserEntity::ENTITY_TYPE] = [$user->getId()];
-        $entities[PlatformGroupEntity::ENTITY_TYPE] = [];
+        $entities[UserEntityProvider::ENTITY_TYPE] = [$user->getId()];
+        $entities[GroupEntityProvider::ENTITY_TYPE] = [];
 
         $userGroupIdentifiers = $user->get_groups(true);
 
         foreach ($userGroupIdentifiers as $userGroupIdentifier)
         {
-            $entities[PlatformGroupEntity::ENTITY_TYPE][] = $userGroupIdentifier;
+            $entities[GroupEntityProvider::ENTITY_TYPE][] = $userGroupIdentifier;
         }
 
         return $entities;

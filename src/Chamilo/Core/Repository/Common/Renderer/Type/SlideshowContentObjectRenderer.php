@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Service\ContentObjectActionRenderer;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceContentObjectService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Slideshow\SlideshowRenderer;
@@ -22,21 +22,22 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
 {
     protected ContentObjectActionRenderer $contentObjectActionRenderer;
 
-    protected ContentObjectService $contentObjectService;
-
     protected ChamiloRequest $request;
 
     protected SlideshowRenderer $slideshowRenderer;
 
     protected Workspace $workspace;
 
+    protected WorkspaceContentObjectService $workspaceContentObjectService;
+
     public function __construct(
-        ContentObjectActionRenderer $contentObjectActionRenderer, ContentObjectService $contentObjectService,
-        ChamiloRequest $request, SlideshowRenderer $slideshowRenderer, Workspace $workspace
+        ContentObjectActionRenderer $contentObjectActionRenderer,
+        WorkspaceContentObjectService $workspaceContentObjectService, ChamiloRequest $request,
+        SlideshowRenderer $slideshowRenderer, Workspace $workspace
     )
     {
         $this->contentObjectActionRenderer = $contentObjectActionRenderer;
-        $this->contentObjectService = $contentObjectService;
+        $this->workspaceContentObjectService = $workspaceContentObjectService;
         $this->request = $request;
         $this->slideshowRenderer = $slideshowRenderer;
         $this->workspace = $workspace;
@@ -45,19 +46,19 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
     public function render(Application $application): string
     {
         $workspace = $this->getWorkspace();
-        $contentObjectService = $this->getContentObjectService();
+        $workspaceContentObjectService = $this->getWorkspaceContentObjectService();
 
         $slideshowIndex = $this->getRequest()->query->get(SlideshowRenderer::PARAM_INDEX, 0);
 
         $filterData = FilterData::getInstance($workspace);
 
-        $contentObjectCount = $contentObjectService->countContentObjectsByTypeForWorkspace(
+        $contentObjectCount = $workspaceContentObjectService->countContentObjectsByTypeForWorkspace(
             $filterData->getTypeDataClass(), $workspace, ConditionFilterRenderer::factory($filterData, $workspace)
         );
 
         if ($contentObjectCount)
         {
-            $contentObject = $contentObjectService->getContentObjectsByTypeForWorkspace(
+            $contentObject = $workspaceContentObjectService->getContentObjectsByTypeForWorkspace(
                 $filterData->getTypeDataClass(), $workspace, ConditionFilterRenderer::factory($filterData, $workspace),
                 1, $slideshowIndex
             )->current();
@@ -78,11 +79,6 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
         return $this->contentObjectActionRenderer;
     }
 
-    public function getContentObjectService(): ContentObjectService
-    {
-        return $this->contentObjectService;
-    }
-
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
@@ -96,6 +92,11 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
     public function getWorkspace(): Workspace
     {
         return $this->workspace;
+    }
+
+    public function getWorkspaceContentObjectService(): WorkspaceContentObjectService
+    {
+        return $this->workspaceContentObjectService;
     }
 
     public function get_parameters(Application $application, $include_search = false): array

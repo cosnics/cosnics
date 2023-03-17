@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 
 /**
  * @package Chamilo\Core\Repository\Workspace\Service
@@ -21,8 +22,6 @@ class RightsService
     public const RIGHT_MANAGE = 64;
     public const RIGHT_USE = 16;
     public const RIGHT_VIEW = 1;
-
-    private static ?RightsService $instance = null;
 
     private ContentObjectRelationService $contentObjectRelationService;
 
@@ -221,19 +220,25 @@ class RightsService
         // Is the contentObject in a workspace the user has the requested right for
         else
         {
-            $contentObjectWorkspaces = $this->getContentObjectRelationService()->getWorkspacesForContentObject(
-                $this->getWorkspaceService(), $contentObject
-            );
-
-            foreach ($contentObjectWorkspaces as $contentObjectWorkspace)
+            try
             {
-                if ($this->hasRightForWorkspace($right, $user, $contentObjectWorkspace))
-                {
-                    return true;
-                }
-            }
+                $contentObjectWorkspaces =
+                    $this->getContentObjectRelationService()->getWorkspacesForContentObject($contentObject);
 
-            return false;
+                foreach ($contentObjectWorkspaces as $contentObjectWorkspace)
+                {
+                    if ($this->hasRightForWorkspace($right, $user, $contentObjectWorkspace))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (DataClassNoResultException $dataClassNoResultException)
+            {
+                return false;
+            }
         }
     }
 

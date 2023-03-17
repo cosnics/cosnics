@@ -1,9 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Service;
 
+use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
+use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -15,20 +16,26 @@ use Chamilo\Core\User\Storage\DataClass\User;
 class EntityService
 {
 
+    protected GroupsTreeTraverser $groupsTreeTraverser;
+
+    public function __construct(GroupsTreeTraverser $groupsTreeTraverser)
+    {
+        $this->groupsTreeTraverser = $groupsTreeTraverser;
+    }
+
     /**
      * @return int[][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getEntitiesForGroup(Group $group): array
     {
         $entities = [];
-        $entities[PlatformGroupEntity::ENTITY_TYPE] = [];
+        $entities[GroupEntityProvider::ENTITY_TYPE] = [];
 
-        $ancestorGroups = $group->get_ancestors();
+        $ancestorGroups = $this->getGroupsTreeTraverser()->findParentGroupsForGroup($group);
 
         foreach ($ancestorGroups as $ancestorGroup)
         {
-            $entities[PlatformGroupEntity::ENTITY_TYPE][] = $ancestorGroup->getId();
+            $entities[GroupEntityProvider::ENTITY_TYPE][] = $ancestorGroup->getId();
         }
 
         return $entities;
@@ -41,16 +48,21 @@ class EntityService
     {
         $entities = [];
 
-        $entities[UserEntity::ENTITY_TYPE] = [$user->get_id()];
-        $entities[PlatformGroupEntity::ENTITY_TYPE] = [];
+        $entities[UserEntityProvider::ENTITY_TYPE] = [$user->getId()];
+        $entities[GroupEntityProvider::ENTITY_TYPE] = [];
 
         $userGroupIdentifiers = $user->get_groups(true);
 
         foreach ($userGroupIdentifiers as $userGroupIdentifier)
         {
-            $entities[PlatformGroupEntity::ENTITY_TYPE][] = $userGroupIdentifier;
+            $entities[GroupEntityProvider::ENTITY_TYPE][] = $userGroupIdentifier;
         }
 
         return $entities;
+    }
+
+    public function getGroupsTreeTraverser(): GroupsTreeTraverser
+    {
+        return $this->groupsTreeTraverser;
     }
 }
