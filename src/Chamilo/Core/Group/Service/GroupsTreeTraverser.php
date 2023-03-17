@@ -10,20 +10,34 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\Group\Service
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class GroupsTreeTraverser
 {
+    /**
+     * @var \Chamilo\Core\Group\Service\GroupMembershipService
+     */
+    protected $groupMembershipService;
+
     /**
      * @var \Chamilo\Core\Group\Storage\Repository\GroupRepository
      */
     protected $groupRepository;
 
     /**
-     * @var \Chamilo\Core\Group\Service\GroupMembershipService
+     * @var int[][]
      */
-    protected $groupMembershipService;
+    protected $groupUserIdentifiers = [];
+
+    /**
+     * @var int[]
+     */
+    protected $groupUsersCount = [];
+
+    /**
+     * @var int[][]
+     */
+    protected $parentGroupIdentifiers = [];
 
     /**
      * @var \Chamilo\Libraries\Storage\DataClass\PropertyMapper
@@ -31,44 +45,29 @@ class GroupsTreeTraverser
     protected $propertyMapper;
 
     /**
-     * @var \Chamilo\Core\Group\Storage\DataClass\Group[][]
-     */
-    protected $userSubscribedGroups = [];
-
-    /**
-     * @var integer[][]
-     */
-    protected $userSubscribedGroupIdentifiers = [];
-
-    /**
-     * @var integer[]
-     */
-    protected $subGroupsCount = [];
-
-    /**
-     * @var integer[][]
-     */
-    protected $groupUserIdentifiers = [];
-
-    /**
-     * @var integer[][]
+     * @var int[][]
      */
     protected $subGroupIdentifiers = [];
-
-    /**
-     * @var integer[][]
-     */
-    protected $parentGroupIdentifiers = [];
-
-    /**
-     * @var integer[]
-     */
-    protected $groupUsersCount = [];
 
     /**
      * @var \Chamilo\Core\Group\Storage\DataClass\Group[][]
      */
     protected $subGroups = [];
+
+    /**
+     * @var int[]
+     */
+    protected $subGroupsCount = [];
+
+    /**
+     * @var int[][]
+     */
+    protected $userSubscribedGroupIdentifiers = [];
+
+    /**
+     * @var \Chamilo\Core\Group\Storage\DataClass\Group[][]
+     */
+    protected $userSubscribedGroups = [];
 
     /**
      * @param \Chamilo\Core\Group\Storage\Repository\GroupRepository $groupRepository
@@ -86,9 +85,9 @@ class GroupsTreeTraverser
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $recursiveSubgroups
+     * @param bool $recursiveSubgroups
      *
-     * @return integer
+     * @return int
      */
     public function countSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false)
     {
@@ -123,10 +122,10 @@ class GroupsTreeTraverser
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $includeSubGroups
-     * @param boolean $recursiveSubgroups
+     * @param bool $includeSubGroups
+     * @param bool $recursiveSubgroups
      *
-     * @return integer
+     * @return int
      * @throws \Exception
      */
     public function countUsersForGroup(Group $group, bool $includeSubGroups = false, bool $recursiveSubgroups = false)
@@ -154,9 +153,9 @@ class GroupsTreeTraverser
     }
 
     /**
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      *
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     public function findAllSubscribedGroupIdentifiersForUserIdentifier(int $userIdentifier)
@@ -183,10 +182,9 @@ class GroupsTreeTraverser
     }
 
     /**
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      *
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|ArrayCollection
-     *
      * @throws \Exception
      */
     public function findAllSubscribedGroupsForUserIdentifier(int $userIdentifier)
@@ -213,7 +211,7 @@ class GroupsTreeTraverser
     }
 
     /**
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      *
      * @return string[][]|ArrayCollection
      * @throws \Exception
@@ -227,7 +225,7 @@ class GroupsTreeTraverser
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param bool $includeSelf
      *
-     * @return integer[]
+     * @return int
      * @throws \Exception
      */
     public function findParentGroupIdentifiersForGroup(Group $group, bool $includeSelf = true)
@@ -250,7 +248,7 @@ class GroupsTreeTraverser
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $includeSelf
+     * @param bool $includeSelf
      *
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|ArrayCollection
      */
@@ -261,10 +259,9 @@ class GroupsTreeTraverser
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $recursiveSubgroups
+     * @param bool $recursiveSubgroups
      *
-     * @return integer[]
-     * @throws \Exception
+     * @return int[]
      */
     public function findSubGroupIdentifiersForGroup(Group $group, bool $recursiveSubgroups = false)
     {
@@ -287,7 +284,7 @@ class GroupsTreeTraverser
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $recursiveSubgroups
+     * @param bool $recursiveSubgroups
      *
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|ArrayCollection
      */
@@ -307,15 +304,14 @@ class GroupsTreeTraverser
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $includeSubGroups
-     * @param boolean $recursiveSubgroups
+     * @param bool $includeSubGroups
+     * @param bool $recursiveSubgroups
      *
-     * @return integer[]
-     * @throws \Exception
+     * @return int[]
      */
     public function findUserIdentifiersForGroup(
         Group $group, bool $includeSubGroups = false, bool $recursiveSubgroups = false
-    )
+    ): array
     {
         $cacheKey = md5(serialize([$group->getId(), $includeSubGroups, $recursiveSubgroups]));
 
@@ -341,7 +337,7 @@ class GroupsTreeTraverser
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param boolean $includeSelf
+     * @param bool $includeSelf
      *
      * @return string
      */
@@ -364,7 +360,6 @@ class GroupsTreeTraverser
      *
      * @return string
      * @todo This should be rewritten when implementing the new NestedSetDataClassRepository for Group objects
-     *
      */
     public function getGroupPath(Group $group)
     {
@@ -374,7 +369,7 @@ class GroupsTreeTraverser
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return integer
+     * @return int
      * @throws \Exception
      */
     public function getHighestGroupQuotumForUser(User $user)
@@ -392,7 +387,7 @@ class GroupsTreeTraverser
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return integer
+     * @return int
      * @throws \Exception
      */
     public function getLowestGroupQuotumForUser(User $user)
