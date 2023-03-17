@@ -21,13 +21,13 @@ use Symfony\Component\Translation\Translator;
  */
 class UserEntityProvider implements RightsEntityProvider
 {
-    const ENTITY_NAME = 'user';
-    const ENTITY_TYPE = 1;
+    public const ENTITY_NAME = 'user';
+    public const ENTITY_TYPE = 1;
 
     /**
-     * @var \Chamilo\Core\User\Service\UserService
+     * @var \Chamilo\Libraries\Utilities\StringUtilities
      */
-    private $userService;
+    private $stringUtilities;
 
     /**
      * @var \Symfony\Component\Translation\Translator
@@ -35,9 +35,9 @@ class UserEntityProvider implements RightsEntityProvider
     private $translator;
 
     /**
-     * @var \Chamilo\Libraries\Utilities\StringUtilities
+     * @var \Chamilo\Core\User\Service\UserService
      */
-    private $stringUtilities;
+    private $userService;
 
     /**
      * @param \Chamilo\Core\User\Service\UserService $userService
@@ -56,7 +56,7 @@ class UserEntityProvider implements RightsEntityProvider
     /**
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
-     * @return integer
+     * @return int
      */
     public function countEntityItems(Condition $condition = null)
     {
@@ -65,8 +65,8 @@ class UserEntityProvider implements RightsEntityProvider
 
     /**
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $offset
-     * @param integer $count
+     * @param int $offset
+     * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
@@ -79,7 +79,7 @@ class UserEntityProvider implements RightsEntityProvider
     }
 
     /**
-     * @param integer $entityIdentifier
+     * @param int $entityIdentifier
      *
      * @return string
      */
@@ -96,7 +96,7 @@ class UserEntityProvider implements RightsEntityProvider
     }
 
     /**
-     * @param integer $entityIdentifier
+     * @param int $entityIdentifier
      *
      * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement
      */
@@ -138,11 +138,11 @@ class UserEntityProvider implements RightsEntityProvider
     /**
      * @param int $userIdentifier
      *
-     * @return integer[]
+     * @return int
      */
     public function getEntityItemIdentifiersForUserIdentifier($userIdentifier)
     {
-        return array($userIdentifier);
+        return [$userIdentifier];
     }
 
     /**
@@ -154,7 +154,7 @@ class UserEntityProvider implements RightsEntityProvider
     }
 
     /**
-     * @param integer $entityIdentifier
+     * @param int $entityIdentifier
      *
      * @return string
      */
@@ -197,14 +197,6 @@ class UserEntityProvider implements RightsEntityProvider
     }
 
     /**
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
-    public function setStringUtilities(StringUtilities $stringUtilities): void
-    {
-        $this->stringUtilities = $stringUtilities;
-    }
-
-    /**
      * @return \Symfony\Component\Translation\Translator
      */
     public function getTranslator(): Translator
@@ -213,19 +205,27 @@ class UserEntityProvider implements RightsEntityProvider
     }
 
     /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
      * @return \Chamilo\Core\User\Service\UserService
      */
     public function getUserService(): UserService
     {
         return $this->userService;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
+     */
+    public function setStringUtilities(StringUtilities $stringUtilities): void
+    {
+        $this->stringUtilities = $stringUtilities;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 
     /**
