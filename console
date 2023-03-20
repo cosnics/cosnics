@@ -9,6 +9,7 @@ use Chamilo\Libraries\Console;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 $autoloader = require __DIR__ . '/vendor/autoload.php';
 AnnotationRegistry::registerLoader([$autoloader, 'loadClass']);
@@ -18,25 +19,29 @@ $container->get(Bootstrap::class)->setup();
 
 /** @var \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter */
 $configurationConsulter = $container->get(ConfigurationConsulter::class);
-/** @var \Chamilo\Libraries\Platform\Session\SessionUtilities */
+/** @var \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities */
 $sessionUtilities = $container->get(SessionUtilities::class);
 
-/** @var \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator */
+/** @var \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $urlGenerator */
 $urlGenerator = $container->get(UrlGenerator::class);
 
 $exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter, $sessionUtilities, $urlGenerator);
 $exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
 
+/** @var \Symfony\Component\Console\Application $console */
+$console = $container->get('Chamilo\Libraries\Console');
+
 try
 {
-    /** @var \Symfony\Component\Console\Application $console */
-    $console = $container->get('Chamilo\Libraries\Console');
-    $console->setHelperSet($container->get('Chamilo\Libraries\Console\HelperSet'));
+    /** @var \Symfony\Component\Console\Helper\HelperSet $helperSet */
+    $helperSet = $container->get('Chamilo\Libraries\Console\HelperSet');
+
+    $console->setHelperSet($helperSet);
     $console->setCatchExceptions(false);
     $console->run();
 }
 catch (Throwable $ex)
 {
+    $console->renderThrowable($ex, new ConsoleOutput());
     $exceptionLogger->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
-    throw $ex;
 }
