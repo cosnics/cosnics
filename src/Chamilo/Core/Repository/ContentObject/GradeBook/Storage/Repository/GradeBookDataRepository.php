@@ -80,7 +80,7 @@ class GradeBookDataRepository extends CommonEntityRepository
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function findEntireGradeBookById(int $gradeBookDataId, int $expectedVersion = null)
+    public function findGradeBookDataById(int $gradeBookDataId, int $expectedVersion = null)
     {
         $qb = $this->createQueryBuilder('gbd')
             ->where('gbd.id = :id')

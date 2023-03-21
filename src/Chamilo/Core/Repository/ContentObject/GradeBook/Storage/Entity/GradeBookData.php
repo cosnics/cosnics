@@ -22,6 +22,8 @@ use JMS\Serializer\Annotation\Exclude;
  */
 class GradeBookData
 {
+    const PROPERTY_TOTALS = 'totals';
+
     /**
      * @var int
      *
@@ -60,6 +62,13 @@ class GradeBookData
      * @ORM\Column(name="title", type="string", length=255)
      */
     protected $title;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="display_total", type="integer", nullable=true)
+     */
+    protected $displayTotal;
 
     /**
      * @var GradeBookItem[] | ArrayCollection
@@ -109,6 +118,7 @@ class GradeBookData
     public function __construct(string $title)
     {
         $this->title = $title;
+        $this->displayTotal = 20;
         $this->gradebookItems = new ArrayCollection();
         $this->gradebookColumns = new ArrayCollection();
         $this->gradebookCategories = new ArrayCollection();
@@ -212,6 +222,26 @@ class GradeBookData
     public function setTitle(string $title): GradeBookData
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDisplayTotal(): ?int
+    {
+        return $this->displayTotal;
+    }
+
+    /**
+     * @param int|null $displayTotal
+     *
+     * @return GradeBookData
+     */
+    public function setDisplayTotal(?int $displayTotal): GradeBookData
+    {
+        $this->displayTotal = $displayTotal;
 
         return $this;
     }
@@ -410,6 +440,19 @@ class GradeBookData
     /**
      * @return GradeBookColumn[]
      */
+    public function getGradeBookColumnsOrderedByCategory(): array
+    {
+        $columns = [];
+        foreach ($this->gradebookCategories as $category)
+        {
+            $columns = array_merge($columns, $category->getGradeBookColumns()->toArray());
+        }
+        return array_merge($columns, $this->getGradeBookColumnsUncategorized());
+    }
+
+    /**
+     * @return GradeBookColumn[]
+     */
     public function getGradeBookColumnsForEndResult()
     {
         $columns = [];
@@ -586,6 +629,29 @@ class GradeBookData
     }
 
     /**
+     * @param GradeBookColumn $column
+     *
+     * @return string
+     */
+    public function getGradeBookColumnTitle(GradeBookColumn $column): string
+    {
+        $title = $column->getTitle();
+        if (!empty($title))
+        {
+            return $title;
+        }
+        if ($column->getType() == 'item' || $column->getType() == 'group')
+        {
+            $item = $column->getGradeBookColumnSubItems()->get(0);
+            if ($item instanceof GradeBookItem && !empty($item->getTitle()))
+            {
+                return $item->getTitle();
+            }
+        }
+        return '';
+    }
+
+    /**
      * @param int $gradeBookColumnId
      * @param int|null $categoryId
      *
@@ -699,6 +765,37 @@ class GradeBookData
         $this->getRemovedEntities()->add($gradeBookScoreToRemove);
 
         return $this;
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getResultsData(): array
+    {
+        $resultsData = [self::PROPERTY_TOTALS => []];
+
+        foreach ($this->gradebookScores as $score) {
+            if ($score->isTotalScore())
+            {
+                $resultsData[self::PROPERTY_TOTALS][$score->getTargetUserId()] = $score;
+                continue;
+            }
+            $column = $score->getGradeBookColumn();
+            if (!array_key_exists($column->getId(), $resultsData))
+            {
+                $resultsData[$column->getId()] = [];
+            }
+            $resultsData[$column->getId()][$score->getTargetUserId()] = $score;
+        }
+        return $resultsData;
+    }
+
+    /**
+     * @return bool
+     */
+    public function usesDisplayTotal(): bool
+    {
+        return !empty($this->displayTotal) && $this->displayTotal != 100;
     }
 
     /**

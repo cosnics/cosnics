@@ -19,6 +19,13 @@ class GradeBookCSVImportColumnJSONModel
     protected $label;
 
     /**
+     * @var float|null
+     *
+     * @Type("float")
+     */
+    protected $maxScore;
+
+    /**
      * @var GradeBookCSVImportScoreJSONModel[]
      *
      * @Type("array<Chamilo\Core\Repository\ContentObject\GradeBook\Display\Ajax\Model\GradeBookCSVImportScoreJSONModel>")
@@ -28,21 +35,31 @@ class GradeBookCSVImportColumnJSONModel
     /**
      * GradeBookCSVImportColumnJSONModel constructor.
      *
-     * @param ?string $label
+     * @param string|null $label
+     * @param float|null $maxScore
      * @param array $results
      */
-    public function __construct(?string $label, array $results = array())
+    public function __construct(?string $label, ?float $maxScore, array $results = array())
     {
         $this->label = $label;
+        $this->maxScore = $maxScore;
         $this->results = $results;
     }
 
     /**
-     * @return ?string
+     * @return string|null
      */
     public function getLabel(): ?string
     {
         return $this->label;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getMaxScore(): ?float
+    {
+        return $this->maxScore;
     }
 
     /**

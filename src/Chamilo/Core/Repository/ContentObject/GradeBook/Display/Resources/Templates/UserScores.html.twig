@@ -21,16 +21,16 @@
 <!--<script src="http://localhost:8080/js/chunk-vendors.js"></script>
 <script src="http://localhost:8080/js/app.js"></script>-->
 
+<script id="gradebook_user_scores_json" type="application/json">
+    {{ GRADEBOOK_USER_SCORES_JSON|raw }}
+</script>
+
 <script>
     Vue.use(BootstrapVue);
     Vue.use(this['cosnics-gradebook'].default);
     Vue.use(VueI18n);
 
     const messages = { 'en': {}, 'nl': {} };
-
-    const gradeBookData = '{{ GRADEBOOK|raw }}';
-    const scores = '{{ SCORES|raw }}';
-    const users = '{{ USERS|raw }}';
 
     let lang;
     try {
@@ -44,11 +44,7 @@
     new Vue({
         i18n: i18n,
         el: '#app',
-        data: {
-            gradeBookData: JSON.parse(gradeBookData),
-            users: JSON.parse(users),
-            scores: JSON.parse(scores)
-        }
+        data: JSON.parse(document.querySelector('#gradebook_user_scores_json').textContent)
     });
 
     /*new Vue({

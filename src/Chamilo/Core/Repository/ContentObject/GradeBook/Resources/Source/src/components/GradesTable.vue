@@ -6,6 +6,7 @@
         "category-settings": "Category Settings",
         "count-towards-endresult-not": "Score does not count towards final result",
         "final-score": "Final score",
+        "final-score-settings": "Final score Settings",
         "first-name": "First name",
         "grouped-score": "Grouped score",
         "invisible": "Final score is hidden",
@@ -26,6 +27,7 @@
         "category-settings": "Categorie-instellingen",
         "count-towards-endresult-not": "Score wordt niet meegeteld voor het eindresultaat",
         "final-score": "Eindcijfer",
+        "final-score-settings": "Eindcijfer instellingen",
         "first-name": "Voornaam",
         "grouped-score": "Gegroepeerde score",
         "invisible": "Eindscore is verborgen",
@@ -77,7 +79,7 @@
                                 <item-title-input v-if="column.isEditingTitle" :item-title="column.title" @cancel="editItemId = null" @ok="setTitle(column.id, $event)" class="item-title-input"></item-title-input>
                                 <template v-else-if="column.isEditingWeight">
                                     <span class="column-title"><i v-if="column.isGrouped" class="fa fa-group" aria-hidden="true"></i><span class="sr-only">{{ $t('grouped-score') }}</span>{{ column.title }}</span>
-                                    <weight-input :item-weight="column.weight" @cancel="weightEditItemId = null" @ok="setWeight(column.id, $event)" class="weight-input"></weight-input>
+                                    <weight-input :item-weight="column.weight" @cancel="weightEditItemId = null" @ok="setWeight(column.id, $event)" class="m-dialog"></weight-input>
                                 </template>
                                 <template v-else>
                                     <div class="u-flex u-align-items-center u-justify-content-between u-cursor-pointer" @dblclick="showColumnTitleDialog(column.id)" :title="$t('adjust-title')">
@@ -99,9 +101,29 @@
                                 </template>
                             </th>
                         </draggable>
-                        <th class="col-sticky table-student-total u-text-end" :class="{'unreleased-score-cell': gradeBook.hasUnreleasedScores}">
-                            <div>{{ $t('final-score') }}</div>
-                            <div class="final-score-released" :title="gradeBook.hasUnreleasedScores ? $t('invisible') : $t('visible')"><i class="fa" :class="{'fa-eye': !gradeBook.hasUnreleasedScores, 'fa-eye-slash': gradeBook.hasUnreleasedScores}" aria-hidden="true"></i><span class="sr-only">{{gradeBook.hasUnreleasedScores ? $t('invisible') : $t('visible')}}</span></div>
+                        <th class="col-sticky table-student-total" :class="{'unreleased-score-cell': gradeBook.hasUnreleasedScores, 'u-text-end': !editDisplayTotalDialog}">
+                            <template v-if="editDisplayTotalDialog">
+                                <div>{{ $t('final-score') }}</div>
+                                <display-total-input :display-total="gradeBook.getDisplayTotal()" @cancel="editDisplayTotalDialog = false" @ok="setDisplayTotal($event)" class="m-dialog"></display-total-input>
+                            </template>
+                            <template v-else>
+                                <div class="u-flex u-align-items-center u-justify-content-end">
+                                    <div>{{ $t('final-score') }}</div>
+                                    <button class="btn-settings" @click="showFinalScoreSettings" :title="$t('final-score-settings')"><i class="fa fa-gear u-inline-block" aria-hidden="true"></i><span class="sr-only">{{$t('final-score-settings')}}</span></button>
+                                </div>
+                                <div class="u-flex u-align-items-center u-justify-content-end u-gap-small-2x">
+                                    <div class="weight u-font-normal u-cursor-pointer" style="width: 40px" @dblclick="showFinalScoreDialog">
+                                        <template v-if="gradeBook.getDisplayTotal() === 100"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></template>
+                                        <template v-else>/ {{ gradeBook.getDisplayTotal() }}</template>
+                                    </div>
+                                    <div>
+                                        <div v-if="!saveDisplayTotal" class="final-score-released" :title="gradeBook.hasUnreleasedScores ? $t('invisible') : $t('visible')"><i class="fa" :class="{'fa-eye': !gradeBook.hasUnreleasedScores, 'fa-eye-slash': gradeBook.hasUnreleasedScores}" aria-hidden="true"></i><span class="sr-only">{{gradeBook.hasUnreleasedScores ? $t('invisible') : $t('visible')}}</span></div>
+                                        <div class="spin" role="status" :aria-busy="saveDisplayTotal" :aria-label="$t('saving')">
+                                            <div v-if="saveDisplayTotal" aria-hidden="true" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
                         </th>
                     </tr>
                 </thead>
@@ -130,6 +152,7 @@ import GradeBook, {Category, ColumnId, ItemId, ResultType, User} from '../domain
 import StudentResultRow from './StudentResultRow.vue';
 import ItemTitleInput from './ItemTitleInput.vue';
 import WeightInput from './WeightInput.vue';
+import DisplayTotalInput from './DisplayTotalInput.vue';
 import ScoreInput from './ScoreInput.vue';
 import StudentResult from './StudentResult.vue';
 import draggable from 'vuedraggable';
@@ -151,7 +174,7 @@ interface Column {
 
 @Component({
     name: 'grades-table',
-    components: {StudentResultRow, ItemTitleInput, WeightInput, ScoreInput, StudentResult, draggable },
+    components: {StudentResultRow, ItemTitleInput, WeightInput, DisplayTotalInput, ScoreInput, StudentResult, draggable },
     filters: {
         formatNum: function (v: number|null) {
             if (v === null) { return ''; }
@@ -168,6 +191,7 @@ export default class GradesTable extends Vue {
     private weightEditItemId: ItemId|null = null;
     private editStudentScoreId: number|null = null;
     private editScoreId: ItemId|null = null;
+    private editDisplayTotalDialog = false;
     private scoreMenuTab = 'score';
     private sortBy = 'lastname';
     private sortDesc = false;
@@ -182,6 +206,7 @@ export default class GradesTable extends Vue {
     @Prop({type: [String, Number], default: null}) readonly addColumnId!: ColumnId|null;
     @Prop({type: [String, Number], default: null}) readonly saveColumnId!: ColumnId|null;
     @Prop({type: Number, default: null}) readonly saveCategoryId!: number|null;
+    @Prop({type: Boolean, default: false}) readonly saveDisplayTotal!: boolean;
     @Prop({type: Number, default: 5}) readonly itemsPerPage!: number;
     @Prop({type: String, default: ''}) readonly gradeBookRootUrl!: string;
 
@@ -254,6 +279,7 @@ export default class GradesTable extends Vue {
         this.weightEditItemId = null;
         this.editStudentScoreId = null;
         this.editScoreId = null;
+        this.editDisplayTotalDialog = false;
     }
 
     showCategorySettings(categoryId: number) {
@@ -264,6 +290,11 @@ export default class GradesTable extends Vue {
     showColumnSettings(columnId: ColumnId) {
         this.resetDialogs();
         this.$emit('item-settings', columnId);
+    }
+
+    showFinalScoreSettings() {
+        this.resetDialogs();
+        this.$emit('final-score-settings');
     }
 
     showCategoryTitleDialog(categoryId: number) {
@@ -279,6 +310,11 @@ export default class GradesTable extends Vue {
     showColumnWeightDialog(columnId: ColumnId) {
         this.resetDialogs();
         this.weightEditItemId = columnId;
+    }
+
+    showFinalScoreDialog() {
+        this.resetDialogs();
+        this.editDisplayTotalDialog = true;
     }
 
     showStudentScoreDialog(userId: number, itemId: ItemId, menuTab = 'score') {
@@ -343,6 +379,12 @@ export default class GradesTable extends Vue {
             this.$emit('change-gradecolumn', gradeColumn);
         }
         this.weightEditItemId = null;
+    }
+
+    setDisplayTotal(displayTotal: number|null) {
+        this.gradeBook.displayTotal = displayTotal;
+        this.$emit('change-display-total');
+        this.editDisplayTotalDialog = false;
     }
 
     toggleVisibility(columnId: ColumnId) {
@@ -732,7 +774,7 @@ export default class GradesTable extends Vue {
         margin: -6px -8px;
     }
 
-    .weight-input {
+    .m-dialog {
         margin: -5px -8px -6px;
     }
 

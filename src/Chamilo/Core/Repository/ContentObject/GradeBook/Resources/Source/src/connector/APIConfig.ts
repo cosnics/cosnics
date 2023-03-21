@@ -1,6 +1,7 @@
 export default interface APIConfig {
     readonly gradeBookRootURL: string;
     readonly gradeBookImportCsvURL: string;
+    readonly gradeBookExportURL: string;
     readonly loadGradeBookDataURL: string;
     readonly addCategoryURL: string;
     readonly updateCategoryURL: string;
@@ -18,5 +19,6 @@ export default interface APIConfig {
     readonly revertOverwrittenScoreURL: string;
     readonly updateScoreCommentURL: string;
     readonly calculateTotalScoresURL: string;
+    readonly updateDisplayTotalURL: string;
     readonly csrfToken: string;
 }

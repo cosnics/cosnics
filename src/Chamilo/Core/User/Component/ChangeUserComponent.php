@@ -47,6 +47,7 @@ class ChangeUserComponent extends Manager
 
             $loginApplication = Configuration::get('Chamilo\Core\Admin', 'page_after_login');
             $response = new RedirectResponse($this->get_link(array(Application::PARAM_CONTEXT => $loginApplication)));
+            session_write_close();
             $response->send();
         }
         else

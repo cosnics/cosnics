@@ -8,6 +8,7 @@
         "error-NotFound": "The server responded with an error. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
         "error-Timeout": "The server took too long to respond. Your changes have possibly not been saved. You can try again later.",
         "error-Unknown": "An unknown error happened. Possibly your last change(s) haven't been saved. Please refresh the page and try again.",
+        "export": "Export",
         "find-student": "Find student",
         "import": "Import",
         "new": "New",
@@ -15,7 +16,8 @@
         "new-score": "New score",
         "show": "Show",
         "synchronize-scores": "Synchronize",
-        "update-final-scores": "Update final scores"
+        "update-final-scores": "Update final scores",
+        "update-final-scores-before-exporting": "Update final scores before exporting"
     },
     "nl": {
         "category": "Categorie",
@@ -25,6 +27,7 @@
         "error-NotFound": "Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
         "error-Timeout": "De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
         "error-Unknown": "Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de pagina te herladen en opnieuw te proberen.",
+        "export": "Exporteer",
         "find-student": "Zoek student",
         "import": "Importeer",
         "new": "Nieuw",
@@ -32,7 +35,8 @@
         "new-score": "Nieuwe score",
         "show": "Toon",
         "synchronize-scores": "Synchroniseer",
-        "update-final-scores": "Update eindcijfers"
+        "update-final-scores": "Update eindcijfers",
+        "update-final-scores-before-exporting": "Update eindcijfers alvorens te exporteren"
     }
 }
 </i18n>
@@ -60,6 +64,7 @@
                     <button v-if="gradeBook.totalsNeedUpdating" class="btn btn-update-totals btn-primary btn-sm u-font-medium u-text-upper" @click="updateTotalScores">
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i>{{ $t('update-final-scores') }}
                     </button>
+                    <button @click="exportGradeBook" class="btn btn-default btn-sm" :disabled="gradeBook.totalsNeedUpdating" :title="gradeBook.totalsNeedUpdating && $t('update-final-scores-before-exporting')">{{ $t('export') }}</button>
                     <div class="btn-group">
                         <a data-toggle="dropdown" aria-haspopup="true" class="btn btn-default btn-sm dropdown-toggle" :title="`${$t('show')} ${itemsPerPage} items`">
                             <span>{{ $t('show') }} {{itemsPerPage}} items</span> <span class="caret" aria-hidden="true"></span>
@@ -75,17 +80,18 @@
                 </div>
             </div>
             <div class="gradebook-table-container">
-                <grades-table :grade-book="gradeBook" :search-terms="studentSearchTerms" :busy="tableBusy" :add-column-id="addColumnId" :save-column-id="saveColumnId" :save-category-id="saveCategoryId" :items-per-page="itemsPerPage" :grade-book-root-url="apiConfig.gradeBookRootURL"
-                              @item-settings="itemSettings = $event" @category-settings="categorySettings = $event"
+                <grades-table :grade-book="gradeBook" :search-terms="studentSearchTerms" :busy="tableBusy" :add-column-id="addColumnId" :save-column-id="saveColumnId" :save-category-id="saveCategoryId" :save-display-total="saveDisplayTotal" :items-per-page="itemsPerPage" :grade-book-root-url="apiConfig.gradeBookRootURL"
+                              @item-settings="itemSettings = $event" @category-settings="categorySettings = $event" @final-score-settings="showFinalScoreSettings = true"
                               @update-score-comment="onUpdateScoreComment" @overwrite-result="onOverwriteResult" @revert-overwritten-result="onRevertOverwrittenResult"
                               @change-category="onChangeCategory" @move-category="onMoveCategory"
-                              @change-gradecolumn="onChangeGradeColumn" @change-gradecolumn-category="onChangeGradeColumnCategory" @move-gradecolumn="onMoveGradeColumn"></grades-table>
+                              @change-gradecolumn="onChangeGradeColumn" @change-gradecolumn-category="onChangeGradeColumnCategory" @move-gradecolumn="onMoveGradeColumn" @change-display-total="onChangeDisplayTotal"></grades-table>
             </div>
         </div>
         <div v-else class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
         <item-settings v-if="itemSettings !== null" :grade-book="gradeBook" :column-id="itemSettings" @close="itemSettings = null"
                        @item-settings="itemSettings = $event" @change-gradecolumn="onChangeGradeColumn" @add-subitem="onAddSubItem" @remove-subitem="onRemoveSubItem" @remove-column="onRemoveColumn" />
         <category-settings v-if="selectedCategory" :grade-book="gradeBook" :category="selectedCategory" @close="closeSelectedCategory" @change-category="onChangeCategory" @remove-category="onRemoveCategory" />
+        <final-score-settings v-if="showFinalScoreSettings" :grade-book="gradeBook" @close="showFinalScoreSettings = false" @change-display-total="onChangeDisplayTotal" />
         <error-display v-if="errorData" @close="closeErrorDisplay">{{ $t(`error-${errorData.type}`) }}</error-display>
     </div>
 </template>
@@ -97,6 +103,7 @@
     import GradeBook, {Category, GradeColumn, GradeItem, ColumnId, GradeScore, ResultsData} from '../domain/GradeBook';
     import ItemSettings from './ItemSettings.vue';
     import CategorySettings from './CategorySettings.vue';
+    import FinalScoreSettings from './FinalScoreSettings.vue';
     import Connector from '../connector/Connector';
     import APIConfig from "@/connector/APIConfig";
     import ErrorDisplay from './ErrorDisplay.vue';
@@ -104,18 +111,20 @@
     const ITEMS_PER_PAGE_KEY = 'chamilo-gradebook.itemsPerPage';
 
     @Component({
-        components: {ErrorDisplay, GradesTable, GradesDropdown, ItemSettings, CategorySettings }
+        components: {ErrorDisplay, GradesTable, GradesDropdown, ItemSettings, CategorySettings, FinalScoreSettings }
     })
     export default class Main extends Vue {
         private gradeBook: GradeBook|null = null;
         private connector: Connector|null = null;
         private itemSettings: number|null = null;
         private categorySettings: number|null = null;
+        private showFinalScoreSettings = false;
         private studentSearchTerm = '';
         private studentSearchTerms: string[] = [];
         private tableBusy = false;
         private saveColumnId: ColumnId|null = null;
         private saveCategoryId: number|null = null;
+        private saveDisplayTotal: boolean = false;
         private itemsPerPage: number = 5;
         private errorData: string|null = null;
         private addColumnId: ColumnId|null = null;
@@ -267,6 +276,14 @@
             });
         }
 
+        onChangeDisplayTotal() {
+            if (!this.gradeBook) { return; }
+            this.saveDisplayTotal = true;
+            this.connector?.updateDisplayTotal(this.gradeBook.displayTotal, () => {
+                this.saveDisplayTotal = false;
+            });
+        }
+
         async onMoveCategory(category: Category) {
             if (!this.gradeBook) { return; }
             this.tableBusy = true;
@@ -312,7 +329,6 @@
             const gradeBook = this.gradeBook;
             this.tableBusy = true;
             this.connector?.addColumnSubItem(columnId, item.id, (column: GradeColumn, scores: GradeScore[]) => {
-                //console.log('scores', scores);
                 const resultsData = gradeBook.resultsData;
                 delete resultsData[columnId];
                 scores.forEach(score => {
@@ -330,7 +346,6 @@
             const gradeBook = this.gradeBook;
             this.tableBusy = true;
             this.connector?.removeColumnSubItem(columnId, item.id, (column: GradeColumn, scores: GradeScore[]) => {
-                //console.log('scores', scores);
                 const resultsData = gradeBook.resultsData;
                 delete resultsData[columnId];
                 scores.forEach(score => {
@@ -393,9 +408,12 @@
             this.tableBusy = false;
         }
 
+        exportGradeBook() {
+            window.open(this.apiConfig.gradeBookExportURL, '_blank');
+        }
+
         async load(): Promise<void> {
             const allData: any = await Connector.loadGradeBookData(this.apiConfig.loadGradeBookDataURL, this.apiConfig.csrfToken);
-            console.log(allData);
             if (allData) {
                 this.gradeBook = GradeBook.from(allData.gradebook);
                 this.gradeBook.users = allData.users;
@@ -414,13 +432,11 @@
                 });
                 this.gradeBook.resultsData = resultsData;
             }
-            console.log(this.gradeBook);
         }
 
         mounted() {
             this.load();
             this.loadItemsPerPage();
-            //console.log(this);
         }
     }
 </script>
@@ -464,6 +480,10 @@
 
 .u-gap-small-2x {
     gap: 10px;
+}
+
+.u-gap-small-3x {
+    gap: 15px;
 }
 
 .u-flex-wrap {

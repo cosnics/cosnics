@@ -58,7 +58,7 @@
                 <b-tr class="table-row table-body-row">
                     <b-td class="table-final-score-header">{{ $t('final-score') }}</b-td>
                     <b-td class="table-final-score u-font-medium">
-                        <div v-if="!gradeBook.hasUnreleasedScores" class="u-flex u-align-items-center u-justify-content-end">{{ gradeBook.getEndResult(userId)|formatNum2 }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                        <div v-if="!gradeBook.hasUnreleasedScores" class="u-flex u-align-items-center u-justify-content-end">{{ gradeBook.getEndResult(userId)|formatNum2 }}<template v-if="gradeBook.getDisplayTotal() === 100"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></template><template v-else> / {{gradeBook.getDisplayTotal()}}</template></div>
                         <div v-else class="u-flex u-align-items-center u-justify-content-end not-yet-released">{{ $t('not-yet-released') }}</div>
                     </b-td>
                 </b-tr>
@@ -85,13 +85,9 @@ interface Column {
 @Component({
     components: { StudentResult },
     filters: {
-        formatNum: function (v: number|null) {
-            if (v === null) { return ''; }
-            return v.toLocaleString(undefined, {maximumFractionDigits: 2});
-        },
         formatNum2: function (v: number|null) {
             if (v === null) { return ''; }
-            return v.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            return v.toLocaleString(undefined, {maximumFractionDigits: 2});
         }
     }
 })

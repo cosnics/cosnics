@@ -68,6 +68,10 @@ export interface CSVImportResult {
     [key: string]: string|number|null;
 }
 
+export interface CSVImportTotals {
+    [key: string]: number
+}
+
 export type ResultsData = Record<ColumnId, Record<number, GradeScore>>;
 
 export default class GradeBook {
@@ -85,11 +89,13 @@ export default class GradeBook {
     public readonly dataId: number;
     public currentVersion: number|null;
     public readonly title: string;
+    public displayTotal: number|null;
 
-    constructor(dataId: number, currentVersion: number|null, title: string) {
+    constructor(dataId: number, currentVersion: number|null, title: string, displayTotal: number|null) {
         this.dataId = dataId;
         this.title = title;
         this.currentVersion = currentVersion;
+        this.displayTotal = displayTotal;
     }
 
     get allCategories(): Category[] {
@@ -208,7 +214,7 @@ export default class GradeBook {
         return score.sourceScore;
     }
 
-    getEndResult(userId: number) {
+    getEndResult(userId: number, useDisplayTotal = true) {
         let endResult = 0;
         let maxWeight = 0;
         this.gradeColumns.filter(column => column.countForEndResult).forEach(column => {
@@ -240,7 +246,18 @@ export default class GradeBook {
             return 0;
         }
 
-        return endResult / maxWeight * 100;
+        if (useDisplayTotal) {
+            return (endResult / maxWeight) * this.getDisplayTotal();
+        }
+
+        return (endResult / maxWeight) * 100;
+    }
+
+    getDisplayTotal(): number {
+        if (this.displayTotal !== null && this.displayTotal !== 100) {
+            return this.displayTotal;
+        }
+        return 100;
     }
 
     isOverwrittenResult(columnId: ColumnId, userId: number): boolean {
@@ -279,7 +296,7 @@ export default class GradeBook {
         const total = this.getResult('totals', user.id);
         if (total === null) { return false; } // unsynchronized user, cannot update
         if (typeof total !== 'number') { return true; }
-        return total.toFixed(2) !== this.getEndResult(user.id).toFixed(2);
+        return total.toFixed(2) !== this.getEndResult(user.id, false).toFixed(2);
     }
 
     get totalsNeedUpdating(): boolean {
@@ -428,7 +445,7 @@ export default class GradeBook {
     }
 
     static from(gradeBookObject: any): GradeBook {
-        const gradeBook = new GradeBook(gradeBookObject.dataId, gradeBookObject.version, gradeBookObject.title);
+        const gradeBook = new GradeBook(gradeBookObject.dataId, gradeBookObject.version, gradeBookObject.title, gradeBookObject.displayTotal);
         gradeBook.gradeItems = gradeBookObject.gradeItems;
         gradeBook.gradeColumns = gradeBookObject.gradeColumns;
         gradeBook.categories = gradeBookObject.categories;

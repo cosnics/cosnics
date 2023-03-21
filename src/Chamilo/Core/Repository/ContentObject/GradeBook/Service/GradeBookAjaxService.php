@@ -61,77 +61,23 @@ class GradeBookAjaxService
      */
     public function getGradeBookData(GradeBook $gradebook)
     {
-        return $this->gradeBookService->getGradeBook($gradebook->getActiveGradeBookDataId(), null);
+        return $this->gradeBookService->getGradeBookDataById($gradebook->getActiveGradeBookDataId(), null);
     }
 
     /**
      * @param GradeBookData $gradebookData
-     * @param GradeBookItem[] $publicationItems
-     * @param bool $canUpdate
-     */
-    public function updateGradeBookData(GradeBookData $gradebookData, array $publicationItems, bool $canUpdate = false)
-    {
-        $shouldUpdate = false;
-        $gradebookItems = array();
-        foreach ($gradebookData->getGradeBookItems() as $gradebookItem)
-        {
-            $hash = $this->getContextHash($gradebookItem->getContextIdentifier());
-            $gradebookItems[$hash] = $gradebookItem;
-        }
-
-        foreach ($publicationItems as $publicationItem)
-        {
-            $hash = $this->getContextHash($publicationItem->getContextIdentifier());
-            $gradebookItem = $gradebookItems[$hash];
-            if (!empty($gradebookItem))
-            {
-                $gradebookItem->setType($publicationItem->getType());
-                if ($gradebookItem->getTitle() != $publicationItem->getTitle())
-                {
-                    $shouldUpdate = true;
-                }
-                $gradebookItem->setTitle($publicationItem->getTitle());
-                $gradebookItem->setBreadcrumb($publicationItem->getBreadcrumb());
-                unset($gradebookItems[$hash]);
-            }
-            else
-            {
-                // add new items to the gradebook.
-                $gradebookItem = $publicationItem;
-                $gradebookItem->setGradeBookData($gradebookData);
-                $gradebookItem->setTitle($publicationItem->getTitle());
-                $shouldUpdate = true;
-            }
-        }
-
-        foreach ($gradebookItems as $key => $gradebookItem) // $gradebookItems still in the array refer to items that have been removed
-        {
-            if (empty($gradebookItem->getGradeBookColumn())) // should be safe to remove from database
-            {
-                $gradebookData->removeGradeBookItem($gradebookItem);
-                $shouldUpdate = true;
-            }
-            elseif (!$gradebookItem->isRemoved())
-            {
-                $gradebookItem->setIsRemoved(true);
-                $shouldUpdate = true;
-            }
-        }
-
-        if ($canUpdate && $shouldUpdate)
-        {
-            $this->gradeBookService->saveGradeBook($gradebookData);
-        }
-    }
-
-    /**
-     * @param ContextIdentifier $contextIdentifier
+     * @param array $publicationItems
      *
-     * @return string
+     * @throws \Doctrine\ORM\ORMException
      */
-    public function getContextHash(ContextIdentifier $contextIdentifier): string
+    public function updateGradeBookData(GradeBookData $gradebookData, array $publicationItems)
     {
-        return md5($contextIdentifier->getContextClass() . ':' . $contextIdentifier->getContextId());
+        $shouldUpdate = $this->gradeBookService->completeGradeBookData($gradebookData, $publicationItems);
+
+        if ($shouldUpdate)
+        {
+            $this->gradeBookService->saveGradeBookData($gradebookData);
+        }
     }
 
     /**
@@ -146,10 +92,10 @@ class GradeBookAjaxService
     public function addCategory(int $gradeBookDataId, int $versionId, string $gradeBookCategoryJSONData)
     {
         $gradebookCategoryJSONModel = $this->parseGradeBookCategoryJSONModel($gradeBookCategoryJSONData);
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
         $category = $gradebookCategoryJSONModel->toGradeBookCategory($gradebookData);
         $gradebookData->addGradeBookCategory($category);
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
@@ -170,7 +116,7 @@ class GradeBookAjaxService
     public function removeCategory(int $gradeBookDataId, int $versionId, string $gradeBookCategoryJSONData)
     {
         $jsonModel = $this->parseGradeBookCategoryJSONModel($gradeBookCategoryJSONData);
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
         $category = $gradebookData->getGradeBookCategoryById($jsonModel->getId());
 
         foreach ($category->getGradeBookColumns() as $column)
@@ -179,7 +125,7 @@ class GradeBookAjaxService
         }
 
         $gradebookData->removeGradeBookCategory($category);
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
@@ -198,12 +144,12 @@ class GradeBookAjaxService
     public function updateCategory(int $gradeBookDataId, int $versionId, string $gradeBookCategoryJSONData)
     {
         $jsonModel = $this->parseGradeBookCategoryJSONModel($gradeBookCategoryJSONData);
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
 
         $category = $gradebookData->getGradeBookCategoryById($jsonModel->getId());
         $jsonModel->updateGradeBookCategory($category);
 
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
@@ -225,12 +171,12 @@ class GradeBookAjaxService
     public function moveCategory(int $gradeBookDataId, int $versionId, string $gradeBookCategoryJSONData, int $newSort)
     {
         $gradebookCategoryJSONModel = $this->parseGradeBookCategoryJSONModel($gradeBookCategoryJSONData);
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
 
         $category = $gradebookData->getGradeBookCategoryById($gradebookCategoryJSONModel->getId());
         $gradebookData->moveGradeBookCategory($category, $newSort);
 
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
@@ -270,7 +216,7 @@ class GradeBookAjaxService
     public function addGradeBookColumn(int $gradeBookDataId, int $versionId, string $gradeBookColumnJSONData, array $targetUserIds)
     {
         $jsonModel = $this->parseGradeBookColumnJSONModel($gradeBookColumnJSONData);
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
         $column = $jsonModel->toGradeBookColumn($gradebookData);
         $column->setGradeBookCategory(null);
 
@@ -281,7 +227,7 @@ class GradeBookAjaxService
             {
                 $this->addGradeBookScore($column, null, $userId, new NullScore());
             }
-            $this->gradeBookService->saveGradeBook($gradebookData);
+            $this->gradeBookService->saveGradeBookData($gradebookData);
 
             $scores = array_map(function(GradeBookScore $score) {
                 return $score->toJSONModel();
@@ -306,7 +252,7 @@ class GradeBookAjaxService
             $this->addGradeBookScore($column, $gradeItem, $userId, $score);
         }
 
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         $scores = array_map(function(GradeBookScore $score) {
             return $score->toJSONModel();
@@ -332,7 +278,7 @@ class GradeBookAjaxService
      */
     public function addGradeBookColumnSubItem(int $gradeBookDataId, int $versionId, int $gradeBookColumnId, int $gradeItemId, array $targetUserIds)
     {
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
         $gradeItem = $gradebookData->getGradeBookItemById($gradeItemId);
         $columnToMerge = $gradeItem->getGradeBookColumn();
         $isGradeItemInColumn = $columnToMerge instanceof GradeBookColumn;
@@ -356,7 +302,7 @@ class GradeBookAjaxService
             $this->mergeColumnAndItemScores($gradeBookColumn, $gradeItem, $targetUserIds);
         }
 
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         $scores = array_map(function(GradeBookScore $score) {
             return $score->toJSONModel();
@@ -470,7 +416,7 @@ class GradeBookAjaxService
      */
     public function removeGradeBookColumnSubItem(int $gradeBookDataId, int $versionId, int $gradeBookColumnId, int $gradeItemId)
     {
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
         $gradeItem = $gradebookData->getGradeBookItemById($gradeItemId);
         $gradeItemColumn = $gradeItem->getGradeBookColumn();
         $gradeBookColumn = $gradebookData->getGradeBookColumnById($gradeBookColumnId);
@@ -494,7 +440,7 @@ class GradeBookAjaxService
         // possible todo: this doesn't restore to a possible previously "lower" score
 
         $gradeItem->setGradeBookColumn(null);
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         $scores = array_map(function(GradeBookScore $score) {
             return $score->toJSONModel();
@@ -518,12 +464,12 @@ class GradeBookAjaxService
     public function updateGradeBookColumn(int $gradeBookDataId, int $versionId, string $gradeBookColumnJSONData)
     {
         $jsonModel = $this->parseGradeBookColumnJSONModel($gradeBookColumnJSONData);
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
 
         $column = $gradebookData->getGradeBookColumnById($jsonModel->getId());
         $jsonModel->updateGradeBookColumn($column);
 
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
@@ -541,7 +487,7 @@ class GradeBookAjaxService
      */
     public function synchronizeGradeBook(int $gradeBookDataId, int $versionId, array $targetUserIds)
     {
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
         $gradeScores = $this->getGradeScores($gradebookData, $targetUserIds);
         $scoreSynchronizer = new ScoreSynchronizer($gradebookData, $gradeScores, $targetUserIds);
 
@@ -566,7 +512,7 @@ class GradeBookAjaxService
         $totalScoreCalculator = new TotalScoreCalculator($gradebookData);
         $totalScoreCalculator->calculateTotals();
 
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         $scores = array_map(function(GradeBookScore $score) {
             return $score->toJSONModel();
@@ -609,10 +555,10 @@ class GradeBookAjaxService
      */
     public function updateGradeBookColumnCategory(int $gradeBookDataId, int $versionId, int $gradeBookColumnId, ?int $categoryId)
     {
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
         $column = $gradebookData->updateGradeBookColumnCategory($gradeBookColumnId, $categoryId);
         $newCategory = $column->getGradeBookCategory();
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
@@ -635,12 +581,12 @@ class GradeBookAjaxService
      */
     public function moveGradeBookColumn(int $gradeBookDataId, int $versionId, int $gradeBookColumnId, int $newSort)
     {
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
 
         $gradeBookColumn = $gradebookData->getGradeBookColumnById($gradeBookColumnId);
         $gradebookData->moveGradeBookColumn($gradeBookColumn, $newSort);
 
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
@@ -661,10 +607,10 @@ class GradeBookAjaxService
      */
     public function removeGradeBookColumn(int $gradeBookDataId, int $versionId, int $gradeBookColumnId)
     {
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
         $gradeBookColumn = $gradebookData->getGradeBookColumnById($gradeBookColumnId);
         $gradebookData->removeGradeBookColumn($gradeBookColumn);
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()]
@@ -756,14 +702,14 @@ class GradeBookAjaxService
      */
     public function overwriteGradeBookScore(int $gradeBookDataId, int $versionId, int $gradeBookScoreId, ?float $newScore, bool $isNewScoreAuthAbsent): array
     {
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
         $gradebookScore = $gradebookData->getGradeBookScoreById($gradeBookScoreId);
 
         $gradebookScore->setOverwritten(true);
         $gradebookScore->setNewScore($isNewScoreAuthAbsent ? null : $newScore);
         $gradebookScore->setNewScoreAuthAbsent($isNewScoreAuthAbsent);
 
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
@@ -784,11 +730,11 @@ class GradeBookAjaxService
      */
     public function updateGradeBookScoreComment(int $gradeBookDataId, int $versionId, int $gradeBookScoreId, ?string $comment): array
     {
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
         $gradebookScore = $gradebookData->getGradeBookScoreById($gradeBookScoreId);
         $gradebookScore->setComment($comment);
 
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
@@ -807,14 +753,14 @@ class GradeBookAjaxService
      */
     public function revertOverwrittenGradeBookScore(int $gradeBookDataId, int $versionId, int $gradeBookScoreId): array
     {
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
         $gradebookScore = $gradebookData->getGradeBookScoreById($gradeBookScoreId);
 
         $gradebookScore->setOverwritten(false);
         $gradebookScore->setNewScore(null);
         $gradebookScore->setNewScoreAuthAbsent(false);
 
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
@@ -831,10 +777,10 @@ class GradeBookAjaxService
      */
     public function calculateTotalScores(int $gradeBookDataId, int $versionId): array
     {
-        $gradebookData = $this->gradeBookService->getGradeBook($gradeBookDataId, $versionId);
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
         $totalScoreCalculator = new TotalScoreCalculator($gradebookData);
         $totals = $totalScoreCalculator->calculateTotals();
-        $this->gradeBookService->saveGradeBook($gradebookData);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
 
         $totalScores = array_map(function(GradeBookScore $score) {
             return $score->toJSONModel();
@@ -843,6 +789,24 @@ class GradeBookAjaxService
         return [
             'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()],
             'totalScores' => $totalScores
+        ];
+    }
+
+    /**
+     * @param int $gradeBookDataId
+     * @param int $versionId
+     * @param int|null $displayTotal
+     *
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function updateDisplayTotal(int $gradeBookDataId, int $versionId, ?int $displayTotal): array
+    {
+        $gradebookData = $this->gradeBookService->getGradeBookDataById($gradeBookDataId, $versionId);
+        $gradebookData->setDisplayTotal($displayTotal);
+        $this->gradeBookService->saveGradeBookData($gradebookData);
+        return [
+            'gradebook' => ['dataId' => $gradebookData->getId(), 'version' => $gradebookData->getVersion()]
         ];
     }
 }

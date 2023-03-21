@@ -102,10 +102,9 @@ class UserScoresComponent extends Manager
 
     protected function getTemplateProperties(): array
     {
-        $gradebook = $this->getGradeBook();
-        $gradeBookData = $this->getGradeBookService()->getGradeBook($gradebook->getActiveGradeBookDataId(), null);
+        $gradeBookData = $this->getGradeBookService()->getGradeBookData($this->getGradeBook());
         $gradebookItems = $this->getGradeBookServiceBridge()->findPublicationGradeBookItems();
-        $this->getGradeBookAjaxService()->updateGradeBookData($gradeBookData, $gradebookItems);
+        $this->getGradeBookService()->completeGradeBookData($gradeBookData, $gradebookItems);
 
         $user = $this->getUserEntity();
         $users = [GradeBookUserJSONModel::fromUser($user)];
@@ -143,11 +142,11 @@ class UserScoresComponent extends Manager
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
             'LANGUAGE' => $this->getTranslator()->getLocale(),
-            'CONTENT_OBJECT_TITLE' => $gradebook->get_title(),
+            'CONTENT_OBJECT_TITLE' => $this->getGradeBook()->get_title(),
             'CAN_EDIT_GRADEBOOK' => $this->getRightsService()->canUserEditGradeBook(),
-            'GRADEBOOK' => $this->getSerializer()->serialize($gradeBookData->toJSONModel(), 'json'),
-            'USERS' => $this->getSerializer()->serialize($users, 'json'),
-            'SCORES' => $this->getSerializer()->serialize($scores, 'json'),
+            'GRADEBOOK_USER_SCORES_JSON' => $this->getSerializer()->serialize([
+                'gradeBookData' => $gradeBookData->toJSONModel(), 'users' => $users, 'scores' => $scores
+            ], 'json'),
             'USER_FULLNAME' => $this->user->get_fullname(),
             'GRADEBOOK_ROOT_URL' => $this->get_url(
                 [

@@ -139,6 +139,17 @@ module.exports = function (IteratorConstructor, NAME, next) {
 
 /***/ }),
 
+/***/ "0057":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_0_id_ad6ec30c_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("b6d1");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_0_id_ad6ec30c_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_0_id_ad6ec30c_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_0_id_ad6ec30c_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "0209":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -581,14 +592,14 @@ module.exports = global;
 
 /***/ }),
 
-/***/ "0c9e":
+/***/ "0c74":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CSVImportInfo_vue_vue_type_style_index_0_id_2ad3ace1_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("faa7");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CSVImportInfo_vue_vue_type_style_index_0_id_2ad3ace1_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CSVImportInfo_vue_vue_type_style_index_0_id_2ad3ace1_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DisplayTotalInput_vue_vue_type_style_index_0_id_0f03773a_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("d32b");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DisplayTotalInput_vue_vue_type_style_index_0_id_0f03773a_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DisplayTotalInput_vue_vue_type_style_index_0_id_0f03773a_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CSVImportInfo_vue_vue_type_style_index_0_id_2ad3ace1_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DisplayTotalInput_vue_vue_type_style_index_0_id_0f03773a_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -1064,6 +1075,24 @@ exports.BROKEN_CARET = fails(function () {
 
 /***/ }),
 
+/***/ "125a":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResultRow_vue_vue_type_style_index_0_id_4f7f9b61_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("169a");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResultRow_vue_vue_type_style_index_0_id_4f7f9b61_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResultRow_vue_vue_type_style_index_0_id_4f7f9b61_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResultRow_vue_vue_type_style_index_0_id_4f7f9b61_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "1302":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "15f8":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1185,6 +1214,13 @@ module.exports = InterceptorManager;
 
 /***/ }),
 
+/***/ "169a":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "1780":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1297,17 +1333,6 @@ module.exports = function buildURL(url, params, paramsSerializer) {
   return url;
 };
 
-
-/***/ }),
-
-/***/ "19f1":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResultRow_vue_vue_type_style_index_0_id_fa14301c_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("3875");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResultRow_vue_vue_type_style_index_0_id_fa14301c_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResultRow_vue_vue_type_style_index_0_id_fa14301c_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResultRow_vue_vue_type_style_index_0_id_fa14301c_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -6176,6 +6201,13 @@ Sortable.mount(Remove, Revert);
 
 /***/ }),
 
+/***/ "28f2":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "2ab9":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6801,13 +6833,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "3875":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "39e8":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6832,13 +6857,6 @@ if (v8) {
 
 module.exports = version && +version;
 
-
-/***/ }),
-
-/***/ "3aa4":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -7033,6 +7051,28 @@ exports.default = PriorityQueue;
 
 /***/ }),
 
+/***/ "4383":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResult_vue_vue_type_style_index_0_id_fa72a5ea_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("d31d");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResult_vue_vue_type_style_index_0_id_fa72a5ea_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResult_vue_vue_type_style_index_0_id_fa72a5ea_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResult_vue_vue_type_style_index_0_id_fa72a5ea_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "43ba":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CSVImportInfo_vue_vue_type_style_index_0_id_213fb475_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("affb");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CSVImportInfo_vue_vue_type_style_index_0_id_213fb475_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CSVImportInfo_vue_vue_type_style_index_0_id_213fb475_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CSVImportInfo_vue_vue_type_style_index_0_id_213fb475_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "43e9":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7124,6 +7164,17 @@ module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
   return !String(Symbol());
 });
 
+
+/***/ }),
+
+/***/ "49d5":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UserScores_vue_vue_type_style_index_0_id_a08a1ebe_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("54be");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UserScores_vue_vue_type_style_index_0_id_a08a1ebe_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UserScores_vue_vue_type_style_index_0_id_a08a1ebe_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UserScores_vue_vue_type_style_index_0_id_a08a1ebe_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -7248,6 +7299,13 @@ module.exports = !DESCRIPTORS && !fails(function () {
   }).a != 7;
 });
 
+
+/***/ }),
+
+/***/ "4c38":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -7430,14 +7488,10 @@ addToUnscopables('entries');
 
 /***/ }),
 
-/***/ "54a8":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "54be":
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImporterApp_vue_vue_type_style_index_0_id_a97afd16_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("f52b");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImporterApp_vue_vue_type_style_index_0_id_a97afd16_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImporterApp_vue_vue_type_style_index_0_id_a97afd16_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImporterApp_vue_vue_type_style_index_0_id_a97afd16_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -7460,17 +7514,6 @@ module.exports = ''.repeat || function repeat(count) {
   return result;
 };
 
-
-/***/ }),
-
-/***/ "5578":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_0_id_6708ba42_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("9273");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_0_id_6708ba42_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_0_id_6708ba42_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_0_id_6708ba42_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -7519,13 +7562,6 @@ module.exports = function (C, x) {
   return promiseCapability.promise;
 };
 
-
-/***/ }),
-
-/***/ "5849":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -7671,13 +7707,6 @@ $({ target: 'Number', proto: true, forced: FORCED }, {
   }
 });
 
-
-/***/ }),
-
-/***/ "5ab3":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -11099,6 +11128,17 @@ if (typeof window !== "undefined" && "Vue" in window) {
 
 /***/ }),
 
+/***/ "6483":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImportsTable_vue_vue_type_style_index_0_id_0c403b7c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("28f2");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImportsTable_vue_vue_type_style_index_0_id_0c403b7c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImportsTable_vue_vue_type_style_index_0_id_0c403b7c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImportsTable_vue_vue_type_style_index_0_id_0c403b7c_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "64f1":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11145,17 +11185,6 @@ $({ global: true, bind: true, forced: MSIE }, {
   setInterval: wrap(global.setInterval)
 });
 
-
-/***/ }),
-
-/***/ "682f":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UserScores_vue_vue_type_style_index_0_id_692ab328_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("d303");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UserScores_vue_vue_type_style_index_0_id_692ab328_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UserScores_vue_vue_type_style_index_0_id_692ab328_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UserScores_vue_vue_type_style_index_0_id_692ab328_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -11399,17 +11428,6 @@ module.exports = function (exec) {
 
 /***/ }),
 
-/***/ "725c":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ScoreInput_vue_vue_type_style_index_0_id_0ed11da2_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("3aa4");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ScoreInput_vue_vue_type_style_index_0_id_0ed11da2_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ScoreInput_vue_vue_type_style_index_0_id_0ed11da2_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ScoreInput_vue_vue_type_style_index_0_id_0ed11da2_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
 /***/ "72a2":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11442,6 +11460,13 @@ module.exports = Function.bind || function bind(that /* , ...args */) {
   return boundFunction;
 };
 
+
+/***/ }),
+
+/***/ "72a3":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -11488,6 +11513,17 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ "7479":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ScoreInput_vue_vue_type_style_index_0_id_063eddac_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("72a3");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ScoreInput_vue_vue_type_style_index_0_id_063eddac_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ScoreInput_vue_vue_type_style_index_0_id_063eddac_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ScoreInput_vue_vue_type_style_index_0_id_063eddac_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "764f":
 /***/ (function(module, exports) {
 
@@ -11501,7 +11537,7 @@ module.exports = false;
 
 module.exports = function (Component) {
   Component.options.__i18n = Component.options.__i18n || []
-  Component.options.__i18n.push('{"en":{"adjust-title":"Adjust title","adjust-weight":"Adjust weight","category-settings":"Category Settings","count-towards-endresult-not":"Score does not count towards final result","final-score":"Final score","first-name":"First name","grouped-score":"Grouped score","invisible":"Final score is hidden","item-settings":"Score Settings","last-name":"NAME","make-invisible":"Score is shown. Click to hide.","make-visible":"Score is hidden. Click to show.","saving":"Saving","source-results-warning":"The results of this column refers to source data that no longer exists. You can keep on using this data but synchronizing will have no effect on this column. If you remove the column its results will be gone forever.","total":"Total","uncounted":"Not counted","visible":"Final score is shown","without-category":"Without category"},"nl":{"adjust-title":"Pas titel aan","adjust-weight":"Pas gewicht aan","category-settings":"Categorie-instellingen","count-towards-endresult-not":"Score wordt niet meegeteld voor het eindresultaat","final-score":"Eindcijfer","first-name":"Voornaam","grouped-score":"Gegroepeerde score","invisible":"Eindscore is verborgen","item-settings":"Score-instellingen","last-name":"FAMILIENAAM","make-invisible":"Score wordt weergegeven. Klik om te verbergen.","make-visible":"Score is verborgen. Klik om te tonen.","saving":"Aan het opslaan","source-results-warning":"De resultaten in deze kolom verwijzen naar brondata die niet meer bestaat. Je kan de data verder blijven gebruiken maar synchroniseren zal op deze kolom geen effect hebben. Als je de kolom verwijdert zijn de resultaten ervan voorgoed weg.","total":"Totaal","uncounted":"Niet meegeteld","visible":"Eindscore wordt weergegeven","without-category":"Zonder categorie"}}')
+  Component.options.__i18n.push('{"en":{"adjust-title":"Adjust title","adjust-weight":"Adjust weight","category-settings":"Category Settings","count-towards-endresult-not":"Score does not count towards final result","final-score":"Final score","final-score-settings":"Final score Settings","first-name":"First name","grouped-score":"Grouped score","invisible":"Final score is hidden","item-settings":"Score Settings","last-name":"NAME","make-invisible":"Score is shown. Click to hide.","make-visible":"Score is hidden. Click to show.","saving":"Saving","source-results-warning":"The results of this column refers to source data that no longer exists. You can keep on using this data but synchronizing will have no effect on this column. If you remove the column its results will be gone forever.","total":"Total","uncounted":"Not counted","visible":"Final score is shown","without-category":"Without category"},"nl":{"adjust-title":"Pas titel aan","adjust-weight":"Pas gewicht aan","category-settings":"Categorie-instellingen","count-towards-endresult-not":"Score wordt niet meegeteld voor het eindresultaat","final-score":"Eindcijfer","final-score-settings":"Eindcijfer instellingen","first-name":"Voornaam","grouped-score":"Gegroepeerde score","invisible":"Eindscore is verborgen","item-settings":"Score-instellingen","last-name":"FAMILIENAAM","make-invisible":"Score wordt weergegeven. Klik om te verbergen.","make-visible":"Score is verborgen. Klik om te tonen.","saving":"Aan het opslaan","source-results-warning":"De resultaten in deze kolom verwijzen naar brondata die niet meer bestaat. Je kan de data verder blijven gebruiken maar synchroniseren zal op deze kolom geen effect hebben. Als je de kolom verwijdert zijn de resultaten ervan voorgoed weg.","total":"Totaal","uncounted":"Niet meegeteld","visible":"Eindscore wordt weergegeven","without-category":"Zonder categorie"}}')
   delete Component.options._Ctor
 }
 
@@ -11602,6 +11638,18 @@ module.exports = function (Iterable, NAME, IteratorConstructor, next, DEFAULT, I
 
   return methods;
 };
+
+
+/***/ }),
+
+/***/ "7ab9":
+/***/ (function(module, exports) {
+
+module.exports = function (Component) {
+  Component.options.__i18n = Component.options.__i18n || []
+  Component.options.__i18n.push('{"en":{"display-total":"Max score"},"nl":{"display-total":"Max score"}}')
+  delete Component.options._Ctor
+}
 
 
 /***/ }),
@@ -12730,6 +12778,17 @@ $({ target: PROMISE, stat: true, forced: INCORRECT_ITERATION }, {
 
 /***/ }),
 
+/***/ "88ef":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FinalScoreSettings_vue_vue_type_style_index_0_id_3d5a4434_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("f3e6");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FinalScoreSettings_vue_vue_type_style_index_0_id_3d5a4434_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FinalScoreSettings_vue_vue_type_style_index_0_id_3d5a4434_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FinalScoreSettings_vue_vue_type_style_index_0_id_3d5a4434_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "893b":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12932,13 +12991,6 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   return internalObjectKeys(O, hiddenKeys);
 };
 
-
-/***/ }),
-
-/***/ "9273":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -13202,7 +13254,7 @@ module.exports = patchedExec;
 
 module.exports = function (Component) {
   Component.options.__i18n = Component.options.__i18n || []
-  Component.options.__i18n.push('{"en":{"comment":"comment","csv-must-look-like":"The CSV file must look like this","import-comment-title":"Choose a title for the column of feedback you wish to import (can be left empty).","import-id":"One of the following: <ul><li>email address</li><li>username</li><li>official code</li></ul>","import-score":"One of the following: <ul><li>number</li><li>aabs (authorized absent)</li></ul>","import-score-title":"Choose a title for the column of scores you wish to import.","mandatory-fields":"mandatory fields are marked in bold","title":"title"},"nl":{"comment":"commentaar","csv-must-look-like":"Het CSV bestand moet er als volgt uit zien","import-comment-title":"Kies hier een titel voor de feedbackkolom die je wenst te importeren (mag ook leeggelaten worden).","import-id":"Een van de volgende: <ul><li>e-mailadres</li><li>gebruikersnaam</li><li>officiële code (stamboeknummer)</li></ul>","import-score":"Een van de volgende: <ul><li>cijfer</li><li>gafw (gewettigd afwezig)</li></ul>","import-score-title":"Kies hier een titel voor de scorekolom die je wenst te importeren.","mandatory-fields":"verplichte velden zijn in het vet aangeduid","title":"titel"}}')
+  Component.options.__i18n.push('{"en":{"comment":"comment","csv-must-look-like":"The CSV file must look like this","import-comment-title":"Choose a title for the column of feedback you wish to import (can be left empty).","import-id":"One of the following: <ul><li>email address</li><li>username</li><li>official code</li></ul>","import-score":"One of the following: <ul><li>number</li><li>aabs (authorized absent)</li></ul>","import-score-title":"Choose a title for the column of scores you wish to import.","mandatory-fields":"mandatory fields are marked in bold","max-score":"Max score (for example: 20)","title":"title"},"nl":{"comment":"commentaar","csv-must-look-like":"Het CSV bestand moet er als volgt uit zien","import-comment-title":"Kies hier een titel voor de feedbackkolom die je wenst te importeren (mag ook leeggelaten worden).","import-id":"Een van de volgende: <ul><li>e-mailadres</li><li>gebruikersnaam</li><li>officiële code (stamboeknummer)</li></ul>","import-score":"Een van de volgende: <ul><li>cijfer</li><li>gafw (gewettigd afwezig)</li></ul>","import-score-title":"Kies hier een titel voor de scorekolom die je wenst te importeren.","mandatory-fields":"verplichte velden zijn in het vet aangeduid","max-score":"Maximumscore (bvb.: 20)","title":"titel"}}')
   delete Component.options._Ctor
 }
 
@@ -13798,26 +13850,26 @@ module.exports = function (METHOD_NAME, argument) {
 
 /***/ }),
 
-/***/ "a07a":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResult_vue_vue_type_style_index_0_id_2ea6a10f_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("5849");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResult_vue_vue_type_style_index_0_id_2ea6a10f_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResult_vue_vue_type_style_index_0_id_2ea6a10f_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentResult_vue_vue_type_style_index_0_id_2ea6a10f_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
 /***/ "a0e5":
 /***/ (function(module, exports) {
 
 module.exports = function (Component) {
   Component.options.__i18n = Component.options.__i18n || []
-  Component.options.__i18n.push('{"en":{"category":"Category","error-Conflict":"The server responded with an error due to a conflict. Probably someone else is working on the same gradebook at this time. Please refresh the page and try again.","error-Forbidden":"The server responded with an error. Possibly your last change(s) haven\u0027t been saved correctly. Please refresh the page and try again.","error-LoggedOut":"It looks like you have been logged out. Your changes have not been saved. Please reload the page after logging in and try again.","error-NotFound":"The server responded with an error. Possibly your last change(s) haven\u0027t been saved correctly. Please refresh the page and try again.","error-Timeout":"The server took too long to respond. Your changes have possibly not been saved. You can try again later.","error-Unknown":"An unknown error happened. Possibly your last change(s) haven\u0027t been saved. Please refresh the page and try again.","find-student":"Find student","import":"Import","new":"New","new-category":"New category","new-score":"New score","show":"Show","synchronize-scores":"Synchronize","update-final-scores":"Update final scores"},"nl":{"category":"Categorie","error-Conflict":"Serverfout vanwege een conflict. Misschien werkt iemand anders ook nog aan dit puntenboekje op dit moment. Gelieve de pagina te herladen en opnieuw te proberen.","error-Forbidden":"Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.","error-LoggedOut":"Het lijkt erop dat je uitgelogd bent. Je wijzigingen werden niet opgeslagen. Herlaad deze pagina nadat je opnieuw ingelogd bent en probeer het opnieuw.","error-NotFound":"Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.","error-Timeout":"De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.","error-Unknown":"Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de pagina te herladen en opnieuw te proberen.","find-student":"Zoek student","import":"Importeer","new":"Nieuw","new-category":"Nieuwe categorie","new-score":"Nieuwe score","show":"Toon","synchronize-scores":"Synchroniseer","update-final-scores":"Update eindcijfers"}}')
+  Component.options.__i18n.push('{"en":{"category":"Category","error-Conflict":"The server responded with an error due to a conflict. Probably someone else is working on the same gradebook at this time. Please refresh the page and try again.","error-Forbidden":"The server responded with an error. Possibly your last change(s) haven\u0027t been saved correctly. Please refresh the page and try again.","error-LoggedOut":"It looks like you have been logged out. Your changes have not been saved. Please reload the page after logging in and try again.","error-NotFound":"The server responded with an error. Possibly your last change(s) haven\u0027t been saved correctly. Please refresh the page and try again.","error-Timeout":"The server took too long to respond. Your changes have possibly not been saved. You can try again later.","error-Unknown":"An unknown error happened. Possibly your last change(s) haven\u0027t been saved. Please refresh the page and try again.","export":"Export","find-student":"Find student","import":"Import","new":"New","new-category":"New category","new-score":"New score","show":"Show","synchronize-scores":"Synchronize","update-final-scores":"Update final scores","update-final-scores-before-exporting":"Update final scores before exporting"},"nl":{"category":"Categorie","error-Conflict":"Serverfout vanwege een conflict. Misschien werkt iemand anders ook nog aan dit puntenboekje op dit moment. Gelieve de pagina te herladen en opnieuw te proberen.","error-Forbidden":"Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.","error-LoggedOut":"Het lijkt erop dat je uitgelogd bent. Je wijzigingen werden niet opgeslagen. Herlaad deze pagina nadat je opnieuw ingelogd bent en probeer het opnieuw.","error-NotFound":"Serverfout. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.","error-Timeout":"De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.","error-Unknown":"Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de pagina te herladen en opnieuw te proberen.","export":"Exporteer","find-student":"Zoek student","import":"Importeer","new":"Nieuw","new-category":"Nieuwe categorie","new-score":"Nieuwe score","show":"Toon","synchronize-scores":"Synchroniseer","update-final-scores":"Update eindcijfers","update-final-scores-before-exporting":"Update eindcijfers alvorens te exporteren"}}')
   delete Component.options._Ctor
 }
 
+
+/***/ }),
+
+/***/ "a0f2":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Main_vue_vue_type_style_index_1_id_3736d770_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("1302");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Main_vue_vue_type_style_index_1_id_3736d770_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Main_vue_vue_type_style_index_1_id_3736d770_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Main_vue_vue_type_style_index_1_id_3736d770_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -13835,13 +13887,6 @@ module.exports = function (key, value) {
   } return value;
 };
 
-
-/***/ }),
-
-/***/ "a14c":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -13892,6 +13937,17 @@ module.exports = {
 
 /***/ }),
 
+/***/ "a406":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImporterApp_vue_vue_type_style_index_0_id_728e684b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("ac53");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImporterApp_vue_vue_type_style_index_0_id_728e684b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImporterApp_vue_vue_type_style_index_0_id_728e684b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImporterApp_vue_vue_type_style_index_0_id_728e684b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "a4c2":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13913,13 +13969,6 @@ $({ target: 'Array', proto: true, forced: !STRICT_METHOD || !USES_TO_LENGTH }, {
   }
 });
 
-
-/***/ }),
-
-/***/ "a549":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -14010,6 +14059,24 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
 
 /***/ }),
 
+/***/ "ac53":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "af7b":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemSettings_vue_vue_type_style_index_0_id_3ff67514_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("d859");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemSettings_vue_vue_type_style_index_0_id_3ff67514_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemSettings_vue_vue_type_style_index_0_id_3ff67514_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemSettings_vue_vue_type_style_index_0_id_3ff67514_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "afc5":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -14057,14 +14124,10 @@ module.exports = function settle(resolve, reject, response) {
 
 /***/ }),
 
-/***/ "b024":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "affb":
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_1_id_6708ba42_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("5ab3");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_1_id_6708ba42_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_1_id_6708ba42_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_1_id_6708ba42_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -14446,6 +14509,13 @@ module.exports = function (KEY, length, exec, sham) {
   if (sham) createNonEnumerableProperty(RegExp.prototype[SYMBOL], 'sham', true);
 };
 
+
+/***/ }),
+
+/***/ "b6d1":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -15089,17 +15159,6 @@ module.exports = function bind(fn, thisArg) {
 
 /***/ }),
 
-/***/ "c22f":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImportsTable_vue_vue_type_style_index_0_id_7e31a3f6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("a549");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImportsTable_vue_vue_type_style_index_0_id_7e31a3f6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImportsTable_vue_vue_type_style_index_0_id_7e31a3f6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImportsTable_vue_vue_type_style_index_0_id_7e31a3f6_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
 /***/ "c266":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -15152,17 +15211,6 @@ module.exports.f = function (C) {
   return new PromiseCapability(C);
 };
 
-
-/***/ }),
-
-/***/ "c67d":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemSettings_vue_vue_type_style_index_0_id_3c1dc36e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("d062");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemSettings_vue_vue_type_style_index_0_id_3c1dc36e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemSettings_vue_vue_type_style_index_0_id_3c1dc36e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemSettings_vue_vue_type_style_index_0_id_3c1dc36e_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -15221,6 +15269,18 @@ module.exports = function (exec) {
     return { error: true, value: error };
   }
 };
+
+
+/***/ }),
+
+/***/ "c820":
+/***/ (function(module, exports) {
+
+module.exports = function (Component) {
+  Component.options.__i18n = Component.options.__i18n || []
+  Component.options.__i18n.push('{"en":{"close":"Close","display-total":"Max score","final-score":"Final score","final-score-settings":"Final score settings","settings":"Settings"},"nl":{"close":"Sluiten","display-total":"Max score","final-score":"Eindcijfer","final-score-settings":"Eindscore-instellingen","settings":"Instellingen"}}')
+  delete Component.options._Ctor
+}
 
 
 /***/ }),
@@ -16226,12 +16286,12 @@ function isPromise(obj) {
     return obj instanceof Promise || (obj && typeof obj.then === 'function');
 }
 
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/Main.vue?vue&type=template&id=60f5f433&scoped=true&
-var Mainvue_type_template_id_60f5f433_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"u-contents"},[(_vm.gradeBook)?_c('div',{attrs:{"aria-hidden":(_vm.itemSettings !== null || !!_vm.selectedCategory || !!_vm.errorData)}},[_c('div',{staticClass:"u-flex u-flex-wrap gradebook-toolbar"},[_c('div',{staticClass:"input-group"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.searchTerm),expression:"searchTerm"}],staticClass:"form-control",attrs:{"type":"text","placeholder":_vm.$t('find-student')},domProps:{"value":(_vm.searchTerm)},on:{"input":function($event){if($event.target.composing){ return; }_vm.searchTerm=$event.target.value}}}),_c('div',{staticClass:"input-group-btn"},[_c('button',{staticClass:"btn btn-default",attrs:{"name":"clear","value":"clear"},on:{"click":function($event){_vm.searchTerm = ''}}},[_c('span',{staticClass:"glyphicon glyphicon-remove",attrs:{"aria-hidden":"true"}})])])]),_c('grades-dropdown',{attrs:{"id":"dropdown-main","graded-items":_vm.gradeBook.statusGradedItems},on:{"toggle":_vm.toggleGradeItem}}),_c('div',{staticClass:"u-flex u-justify-content-end u-gap-small u-ml-auto gradebook-create-actions"},[_c('button',{staticClass:"btn btn-default btn-sm",on:{"click":_vm.synchronizeGradeBook}},[_c('i',{staticClass:"fa fa-refresh",attrs:{"aria-hidden":"true"}}),_vm._v(_vm._s(_vm.$t('synchronize-scores')))]),_c('div',{staticClass:"btn-group"},[_c('a',{staticClass:"btn btn-default btn-sm dropdown-toggle",attrs:{"data-toggle":"dropdown","aria-haspopup":"true"}},[_c('i',{staticClass:"fa fa-plus",attrs:{"aria-hidden":"true"}}),_c('span',[_vm._v(_vm._s(_vm.$t('new')))]),_vm._v(" "),_c('span',{staticClass:"caret",attrs:{"aria-hidden":"true"}})]),_c('ul',{staticClass:"dropdown-menu",attrs:{"role":"menu"}},[_c('li',{staticClass:"u-cursor-pointer",attrs:{"role":"presentation"}},[_c('a',{attrs:{"role":"menuitem"},on:{"click":function($event){$event.preventDefault();return _vm.createNewScore($event)}}},[_vm._v(_vm._s(_vm.$t('new-score')))])]),_c('li',{staticClass:"u-cursor-pointer",attrs:{"role":"presentation"}},[_c('a',{attrs:{"role":"menuitem"},on:{"click":function($event){$event.preventDefault();return _vm.createNewCategory($event)}}},[_vm._v(_vm._s(_vm.$t('new-category')))])]),_c('li',{staticClass:"u-cursor-pointer",attrs:{"role":"presentation"}},[_c('a',{attrs:{"role":"menuitem","href":_vm.apiConfig.gradeBookImportCsvURL}},[_vm._v(_vm._s(_vm.$t('import'))+"…")])])])]),(_vm.gradeBook.totalsNeedUpdating)?_c('button',{staticClass:"btn btn-update-totals btn-primary btn-sm u-font-medium u-text-upper",on:{"click":_vm.updateTotalScores}},[_c('i',{staticClass:"fa fa-exclamation-circle",attrs:{"aria-hidden":"true"}}),_vm._v(_vm._s(_vm.$t('update-final-scores'))+" ")]):_vm._e(),_c('div',{staticClass:"btn-group"},[_c('a',{staticClass:"btn btn-default btn-sm dropdown-toggle",attrs:{"data-toggle":"dropdown","aria-haspopup":"true","title":((_vm.$t('show')) + " " + _vm.itemsPerPage + " items")}},[_c('span',[_vm._v(_vm._s(_vm.$t('show'))+" "+_vm._s(_vm.itemsPerPage)+" items")]),_vm._v(" "),_c('span',{staticClass:"caret",attrs:{"aria-hidden":"true"}})]),_c('ul',{staticClass:"dropdown-menu dropdown-menu-right",attrs:{"role":"listbox"}},_vm._l(([5, 10, 15, 20, 50]),function(count){return _c('li',{key:'per-page-' + count,staticClass:"u-cursor-pointer",attrs:{"role":"presentation"}},[_c('a',{class:_vm.itemsPerPage === count ? 'selected' : 'not-selected',attrs:{"role":"option","aria-selected":_vm.itemsPerPage === count ? 'true' : 'false'},on:{"click":function($event){return _vm.setItemsPerPage(count)}}},[_c('span',[_vm._v(_vm._s(_vm.$t('show'))+" "+_vm._s(count)+" items")])])])}),0)])])],1),_c('div',{staticClass:"gradebook-table-container"},[_c('grades-table',{attrs:{"grade-book":_vm.gradeBook,"search-terms":_vm.studentSearchTerms,"busy":_vm.tableBusy,"add-column-id":_vm.addColumnId,"save-column-id":_vm.saveColumnId,"save-category-id":_vm.saveCategoryId,"items-per-page":_vm.itemsPerPage,"grade-book-root-url":_vm.apiConfig.gradeBookRootURL},on:{"item-settings":function($event){_vm.itemSettings = $event},"category-settings":function($event){_vm.categorySettings = $event},"update-score-comment":_vm.onUpdateScoreComment,"overwrite-result":_vm.onOverwriteResult,"revert-overwritten-result":_vm.onRevertOverwrittenResult,"change-category":_vm.onChangeCategory,"move-category":_vm.onMoveCategory,"change-gradecolumn":_vm.onChangeGradeColumn,"change-gradecolumn-category":_vm.onChangeGradeColumnCategory,"move-gradecolumn":_vm.onMoveGradeColumn}})],1)]):_c('div',{staticClass:"lds-ellipsis",attrs:{"aria-hidden":"true"}},[_c('div'),_c('div'),_c('div'),_c('div')]),(_vm.itemSettings !== null)?_c('item-settings',{attrs:{"grade-book":_vm.gradeBook,"column-id":_vm.itemSettings},on:{"close":function($event){_vm.itemSettings = null},"item-settings":function($event){_vm.itemSettings = $event},"change-gradecolumn":_vm.onChangeGradeColumn,"add-subitem":_vm.onAddSubItem,"remove-subitem":_vm.onRemoveSubItem,"remove-column":_vm.onRemoveColumn}}):_vm._e(),(_vm.selectedCategory)?_c('category-settings',{attrs:{"grade-book":_vm.gradeBook,"category":_vm.selectedCategory},on:{"close":_vm.closeSelectedCategory,"change-category":_vm.onChangeCategory,"remove-category":_vm.onRemoveCategory}}):_vm._e(),(_vm.errorData)?_c('error-display',{on:{"close":_vm.closeErrorDisplay}},[_vm._v(_vm._s(_vm.$t(("error-" + (_vm.errorData.type)))))]):_vm._e()],1)}
-var Mainvue_type_template_id_60f5f433_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/Main.vue?vue&type=template&id=3736d770&scoped=true&
+var Mainvue_type_template_id_3736d770_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"u-contents"},[(_vm.gradeBook)?_c('div',{attrs:{"aria-hidden":(_vm.itemSettings !== null || !!_vm.selectedCategory || !!_vm.errorData)}},[_c('div',{staticClass:"u-flex u-flex-wrap gradebook-toolbar"},[_c('div',{staticClass:"input-group"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.searchTerm),expression:"searchTerm"}],staticClass:"form-control",attrs:{"type":"text","placeholder":_vm.$t('find-student')},domProps:{"value":(_vm.searchTerm)},on:{"input":function($event){if($event.target.composing){ return; }_vm.searchTerm=$event.target.value}}}),_c('div',{staticClass:"input-group-btn"},[_c('button',{staticClass:"btn btn-default",attrs:{"name":"clear","value":"clear"},on:{"click":function($event){_vm.searchTerm = ''}}},[_c('span',{staticClass:"glyphicon glyphicon-remove",attrs:{"aria-hidden":"true"}})])])]),_c('grades-dropdown',{attrs:{"id":"dropdown-main","graded-items":_vm.gradeBook.statusGradedItems},on:{"toggle":_vm.toggleGradeItem}}),_c('div',{staticClass:"u-flex u-justify-content-end u-gap-small u-ml-auto gradebook-create-actions"},[_c('button',{staticClass:"btn btn-default btn-sm",on:{"click":_vm.synchronizeGradeBook}},[_c('i',{staticClass:"fa fa-refresh",attrs:{"aria-hidden":"true"}}),_vm._v(_vm._s(_vm.$t('synchronize-scores')))]),_c('div',{staticClass:"btn-group"},[_c('a',{staticClass:"btn btn-default btn-sm dropdown-toggle",attrs:{"data-toggle":"dropdown","aria-haspopup":"true"}},[_c('i',{staticClass:"fa fa-plus",attrs:{"aria-hidden":"true"}}),_c('span',[_vm._v(_vm._s(_vm.$t('new')))]),_vm._v(" "),_c('span',{staticClass:"caret",attrs:{"aria-hidden":"true"}})]),_c('ul',{staticClass:"dropdown-menu",attrs:{"role":"menu"}},[_c('li',{staticClass:"u-cursor-pointer",attrs:{"role":"presentation"}},[_c('a',{attrs:{"role":"menuitem"},on:{"click":function($event){$event.preventDefault();return _vm.createNewScore($event)}}},[_vm._v(_vm._s(_vm.$t('new-score')))])]),_c('li',{staticClass:"u-cursor-pointer",attrs:{"role":"presentation"}},[_c('a',{attrs:{"role":"menuitem"},on:{"click":function($event){$event.preventDefault();return _vm.createNewCategory($event)}}},[_vm._v(_vm._s(_vm.$t('new-category')))])]),_c('li',{staticClass:"u-cursor-pointer",attrs:{"role":"presentation"}},[_c('a',{attrs:{"role":"menuitem","href":_vm.apiConfig.gradeBookImportCsvURL}},[_vm._v(_vm._s(_vm.$t('import'))+"…")])])])]),(_vm.gradeBook.totalsNeedUpdating)?_c('button',{staticClass:"btn btn-update-totals btn-primary btn-sm u-font-medium u-text-upper",on:{"click":_vm.updateTotalScores}},[_c('i',{staticClass:"fa fa-exclamation-circle",attrs:{"aria-hidden":"true"}}),_vm._v(_vm._s(_vm.$t('update-final-scores'))+" ")]):_vm._e(),_c('button',{staticClass:"btn btn-default btn-sm",attrs:{"disabled":_vm.gradeBook.totalsNeedUpdating,"title":_vm.gradeBook.totalsNeedUpdating && _vm.$t('update-final-scores-before-exporting')},on:{"click":_vm.exportGradeBook}},[_vm._v(_vm._s(_vm.$t('export')))]),_c('div',{staticClass:"btn-group"},[_c('a',{staticClass:"btn btn-default btn-sm dropdown-toggle",attrs:{"data-toggle":"dropdown","aria-haspopup":"true","title":((_vm.$t('show')) + " " + _vm.itemsPerPage + " items")}},[_c('span',[_vm._v(_vm._s(_vm.$t('show'))+" "+_vm._s(_vm.itemsPerPage)+" items")]),_vm._v(" "),_c('span',{staticClass:"caret",attrs:{"aria-hidden":"true"}})]),_c('ul',{staticClass:"dropdown-menu dropdown-menu-right",attrs:{"role":"listbox"}},_vm._l(([5, 10, 15, 20, 50]),function(count){return _c('li',{key:'per-page-' + count,staticClass:"u-cursor-pointer",attrs:{"role":"presentation"}},[_c('a',{class:_vm.itemsPerPage === count ? 'selected' : 'not-selected',attrs:{"role":"option","aria-selected":_vm.itemsPerPage === count ? 'true' : 'false'},on:{"click":function($event){return _vm.setItemsPerPage(count)}}},[_c('span',[_vm._v(_vm._s(_vm.$t('show'))+" "+_vm._s(count)+" items")])])])}),0)])])],1),_c('div',{staticClass:"gradebook-table-container"},[_c('grades-table',{attrs:{"grade-book":_vm.gradeBook,"search-terms":_vm.studentSearchTerms,"busy":_vm.tableBusy,"add-column-id":_vm.addColumnId,"save-column-id":_vm.saveColumnId,"save-category-id":_vm.saveCategoryId,"save-display-total":_vm.saveDisplayTotal,"items-per-page":_vm.itemsPerPage,"grade-book-root-url":_vm.apiConfig.gradeBookRootURL},on:{"item-settings":function($event){_vm.itemSettings = $event},"category-settings":function($event){_vm.categorySettings = $event},"final-score-settings":function($event){_vm.showFinalScoreSettings = true},"update-score-comment":_vm.onUpdateScoreComment,"overwrite-result":_vm.onOverwriteResult,"revert-overwritten-result":_vm.onRevertOverwrittenResult,"change-category":_vm.onChangeCategory,"move-category":_vm.onMoveCategory,"change-gradecolumn":_vm.onChangeGradeColumn,"change-gradecolumn-category":_vm.onChangeGradeColumnCategory,"move-gradecolumn":_vm.onMoveGradeColumn,"change-display-total":_vm.onChangeDisplayTotal}})],1)]):_c('div',{staticClass:"lds-ellipsis",attrs:{"aria-hidden":"true"}},[_c('div'),_c('div'),_c('div'),_c('div')]),(_vm.itemSettings !== null)?_c('item-settings',{attrs:{"grade-book":_vm.gradeBook,"column-id":_vm.itemSettings},on:{"close":function($event){_vm.itemSettings = null},"item-settings":function($event){_vm.itemSettings = $event},"change-gradecolumn":_vm.onChangeGradeColumn,"add-subitem":_vm.onAddSubItem,"remove-subitem":_vm.onRemoveSubItem,"remove-column":_vm.onRemoveColumn}}):_vm._e(),(_vm.selectedCategory)?_c('category-settings',{attrs:{"grade-book":_vm.gradeBook,"category":_vm.selectedCategory},on:{"close":_vm.closeSelectedCategory,"change-category":_vm.onChangeCategory,"remove-category":_vm.onRemoveCategory}}):_vm._e(),(_vm.showFinalScoreSettings)?_c('final-score-settings',{attrs:{"grade-book":_vm.gradeBook},on:{"close":function($event){_vm.showFinalScoreSettings = false},"change-display-total":_vm.onChangeDisplayTotal}}):_vm._e(),(_vm.errorData)?_c('error-display',{on:{"close":_vm.closeErrorDisplay}},[_vm._v(_vm._s(_vm.$t(("error-" + (_vm.errorData.type)))))]):_vm._e()],1)}
+var Mainvue_type_template_id_3736d770_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/Main.vue?vue&type=template&id=60f5f433&scoped=true&
+// CONCATENATED MODULE: ./src/components/Main.vue?vue&type=template&id=3736d770&scoped=true&
 
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/core-js/modules/es.array.filter.js
 var es_array_filter = __webpack_require__("e57b");
@@ -16583,17 +16643,17 @@ var component = normalizeComponent(
 if (typeof GradesDropdownvue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(GradesDropdownvue_type_custom_index_0_blockType_i18n["default"])(component)
 
 /* harmony default export */ var components_GradesDropdown = (component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/GradesTable.vue?vue&type=template&id=6708ba42&scoped=true&
-var GradesTablevue_type_template_id_6708ba42_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"table-wrap u-relative"},[_c('table',{staticClass:"gradebook-table",class:{'is-dragging': _vm.isDraggingColumn, 'is-category-drop': _vm.categoryDropArea !== null },attrs:{"id":"gradebook-table","aria-busy":_vm.busy}},[_c('thead',[(_vm.gradeBook.categories.length)?_c('tr',{staticClass:"table-row table-head-row table-categories-row"},[_c('th',{staticClass:"col-sticky table-student"}),_c('draggable',{staticClass:"u-contents",attrs:{"list":_vm.gradeBook.categories,"tag":"div","disabled":_vm.catEditItemId !== null},on:{"end":_vm.onDragEnd}},_vm._l((_vm.gradeBook.categories),function(ref){
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/GradesTable.vue?vue&type=template&id=ad6ec30c&scoped=true&
+var GradesTablevue_type_template_id_ad6ec30c_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"table-wrap u-relative"},[_c('table',{staticClass:"gradebook-table",class:{'is-dragging': _vm.isDraggingColumn, 'is-category-drop': _vm.categoryDropArea !== null },attrs:{"id":"gradebook-table","aria-busy":_vm.busy}},[_c('thead',[(_vm.gradeBook.categories.length)?_c('tr',{staticClass:"table-row table-head-row table-categories-row"},[_c('th',{staticClass:"col-sticky table-student"}),_c('draggable',{staticClass:"u-contents",attrs:{"list":_vm.gradeBook.categories,"tag":"div","disabled":_vm.catEditItemId !== null},on:{"end":_vm.onDragEnd}},_vm._l((_vm.gradeBook.categories),function(ref){
 var id = ref.id;
 var title = ref.title;
 var color = ref.color;
 var columnIds = ref.columnIds;
-return _c('th',{key:("category-" + id),staticClass:"category u-relative u-font-medium",class:{'is-droppable': _vm.categoryDropArea === id},style:(("--color: " + color + ";")),attrs:{"draggable":"","colspan":Math.max(columnIds.length, 1)},on:{"dragstart":function($event){return _vm.startDragCategory($event, id)},"dragover":function($event){$event.preventDefault();return _vm.onDropAreaOverEnter($event, id)},"dragenter":function($event){$event.preventDefault();return _vm.onDropAreaOverEnter($event, id)},"dragleave":function($event){_vm.categoryDropArea = null},"drop":function($event){(_vm.isDraggingColumn || _vm.isDraggingCategory) && _vm.onDrop($event, id)}}},[(_vm.catEditItemId === id)?_c('item-title-input',{staticClass:"item-title-input",attrs:{"item-title":title},on:{"cancel":function($event){_vm.catEditItemId = null},"ok":function($event){return _vm.setCategoryTitle(id, $event)}}}):(id !== 0)?_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-between u-cursor-pointer",attrs:{"title":_vm.$t('adjust-title')},on:{"dblclick":function($event){return _vm.showCategoryTitleDialog(id)}}},[_vm._v(_vm._s(title)+" "),(_vm.isSavingCategoryWithId(id))?_c('div',{staticClass:"spin",attrs:{"role":"status","aria-busy":"true","aria-label":_vm.$t('saving')}},[_c('div',{staticClass:"glyphicon glyphicon-repeat glyphicon-spin",attrs:{"aria-hidden":"true"}})]):_vm._e(),_c('button',{staticClass:"btn-settings",attrs:{"title":_vm.$t('category-settings')},on:{"click":function($event){return _vm.showCategorySettings(id)}}},[_c('i',{staticClass:"fa fa-gear u-inline-block",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('category-settings')))])])]):_vm._e()],1)}),0),(_vm.showNullCategory)?_c('th',{staticClass:"mod-no-category-assigned",class:{'is-droppable': _vm.categoryDropArea === 0},attrs:{"colspan":Math.max(_vm.gradeBook.nullCategory.columnIds.length, 1),"title":_vm.$t('without-category')},on:{"dragover":function($event){$event.preventDefault();return _vm.onDropAreaOverEnter($event, 0)},"dragenter":function($event){$event.preventDefault();return _vm.onDropAreaOverEnter($event, 0)},"dragleave":function($event){_vm.categoryDropArea = null},"drop":function($event){(_vm.isDraggingColumn || _vm.isDraggingCategory) && _vm.onDrop($event, 0)}}}):_vm._e(),_c('th',{staticClass:"col-sticky table-student-total"})],1):_vm._e(),_c('tr',{staticClass:"table-row table-head-row table-scores-row"},[_c('th',{staticClass:"col-sticky table-student"},[_c('a',{staticClass:"tbl-sort-option",attrs:{"aria-sort":_vm.getSortStatus('lastname')},on:{"click":function($event){return _vm.sortByNameField('lastname')}}},[_vm._v(_vm._s(_vm.$t('last-name')))]),_vm._v(" "),_c('a',{staticClass:"tbl-sort-option",attrs:{"aria-sort":_vm.getSortStatus('firstname')},on:{"click":function($event){return _vm.sortByNameField('firstname')}}},[_vm._v(_vm._s(_vm.$t('first-name')))])]),_vm._l((_vm.displayedCategories),function(category){return _c('draggable',{key:("category-score-" + (category.id)),staticClass:"u-contents",attrs:{"list":category.columnIds,"tag":"div","ghost-class":"ghost","disabled":_vm.editItemId !== null || _vm.weightEditItemId !== null},on:{"end":_vm.onDragEnd}},[(category.columnIds.length === 0)?_c('th',{key:("item-id-" + (category.id))}):_vm._l((_vm.getColumns(category)),function(column){return _c('th',{key:("item-id-" + (category.id) + "--" + (column.id) + "-name"),class:{'unreleased-score-cell': !column.released, 'uncounted-score-cell': !column.countsForEndResult, 'u-relative': column.isEditing},attrs:{"draggable":""},on:{"dragstart":function($event){return _vm.startDragColumn($event, column.id)},"drop":function($event){(_vm.isDraggingColumn || _vm.isDraggingCategory) && _vm.onDrop($event, -1)}}},[(column.isEditingTitle)?_c('item-title-input',{staticClass:"item-title-input",attrs:{"item-title":column.title},on:{"cancel":function($event){_vm.editItemId = null},"ok":function($event){return _vm.setTitle(column.id, $event)}}}):(column.isEditingWeight)?[_c('span',{staticClass:"column-title"},[(column.isGrouped)?_c('i',{staticClass:"fa fa-group",attrs:{"aria-hidden":"true"}}):_vm._e(),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('grouped-score')))]),_vm._v(_vm._s(column.title))]),_c('weight-input',{staticClass:"weight-input",attrs:{"item-weight":column.weight},on:{"cancel":function($event){_vm.weightEditItemId = null},"ok":function($event){return _vm.setWeight(column.id, $event)}}})]:[_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-between u-cursor-pointer",attrs:{"title":_vm.$t('adjust-title')},on:{"dblclick":function($event){return _vm.showColumnTitleDialog(column.id)}}},[_c('span',{staticClass:"column-title",attrs:{"id":((column.id) + "-title")}},[(column.isGrouped)?_c('i',{staticClass:"fa fa-group",attrs:{"aria-hidden":"true"}}):_vm._e(),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('grouped-score')))]),_vm._v(_vm._s(column.title)+" "),(column.hasRemovedSourceData)?_c('i',{staticClass:"fa fa-exclamation-circle",attrs:{"aria-hidden":"true"}}):_vm._e()]),(column.hasRemovedSourceData)?_c('b-popover',{attrs:{"target":((column.id) + "-title"),"triggers":"hover","placement":"bottom"}},[_c('p',{staticClass:"source-results-warning"},[_vm._v(_vm._s(_vm.$t('source-results-warning')))])]):_vm._e(),_c('button',{staticClass:"btn-settings",attrs:{"title":_vm.$t('item-settings')},on:{"click":function($event){return _vm.showColumnSettings(column.id)}}},[_c('i',{staticClass:"fa fa-gear u-inline-block",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('item-settings')))])])],1),_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-between"},[(column.countsForEndResult)?_c('div',{staticClass:"weight u-font-normal u-cursor-pointer",class:{'mod-custom': column.hasWeightSet , 'is-error': _vm.gradeBook.eqRestWeight < 0},attrs:{"title":_vm.$t('adjust-weight')},on:{"dblclick":function($event){return _vm.showColumnWeightDialog(column.id)}}},[_vm._v(_vm._s(_vm._f("formatNum")(column.weight))),_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])]):_c('div',{staticClass:"weight u-font-normal u-font-italic",attrs:{"title":_vm.$t('count-towards-endresult-not')}},[_c('span',{attrs:{"aria-hidden":"true"}},[_vm._v(_vm._s(_vm.$t('uncounted')))]),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('count-towards-endresult-not')))])]),(!column.isSaving)?_c('button',{staticClass:"btn-released u-ml-auto",attrs:{"title":column.released ? _vm.$t('make-invisible') : _vm.$t('make-visible')},on:{"click":function($event){return _vm.toggleVisibility(column.id)}}},[_c('i',{staticClass:"fa",class:{'fa-eye': column.released, 'fa-eye-slash': !column.released},attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(column.released ? _vm.$t('make-invisible') : _vm.$t('make-visible')))])]):_vm._e(),_c('div',{staticClass:"spin",attrs:{"role":"status","aria-busy":column.isSaving,"aria-label":_vm.$t('saving')}},[(column.isSaving)?_c('div',{staticClass:"glyphicon glyphicon-repeat glyphicon-spin",attrs:{"aria-hidden":"true"}}):_vm._e()])])]],2)})],2)}),_c('th',{staticClass:"col-sticky table-student-total u-text-end",class:{'unreleased-score-cell': _vm.gradeBook.hasUnreleasedScores}},[_c('div',[_vm._v(_vm._s(_vm.$t('final-score')))]),_c('div',{staticClass:"final-score-released",attrs:{"title":_vm.gradeBook.hasUnreleasedScores ? _vm.$t('invisible') : _vm.$t('visible')}},[_c('i',{staticClass:"fa",class:{'fa-eye': !_vm.gradeBook.hasUnreleasedScores, 'fa-eye-slash': _vm.gradeBook.hasUnreleasedScores},attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.gradeBook.hasUnreleasedScores ? _vm.$t('invisible') : _vm.$t('visible')))])])])],2)]),_c('tbody',_vm._l((_vm.displayedUsers),function(user){return _c('student-result-row',{key:'user-' + user.id,attrs:{"grade-book":_vm.gradeBook,"user":user,"grade-book-root-url":_vm.gradeBookRootUrl,"exclude-column-id":_vm.addColumnId,"show-null-category":_vm.showNullCategory,"edit-score-id":_vm.editScoreId,"edit-student-score-id":_vm.editStudentScoreId,"score-menu-tab":_vm.scoreMenuTab},on:{"edit-score":function($event){return _vm.showStudentScoreDialog(user.id, $event)},"edit-canceled":_vm.hideStudentScoreDialog,"edit-comment":function($event){return _vm.showStudentScoreDialog(user.id, $event, 'comment')},"menu-tab-changed":function($event){_vm.scoreMenuTab = $event},"result-updated":function($event){return _vm.overwriteResult(user.id, $event)},"result-reverted":function($event){return _vm.revertOverwrittenResult(user.id, $event)},"comment-updated":function($event){return _vm.updateResultComment(user.id, $event)}}})}),1)]),_vm._m(0)]),_c('div',{staticClass:"pagination-container u-flex u-justify-content-end"},[_c('b-pagination',{attrs:{"total-rows":_vm.sortedUsers.length,"per-page":_vm.itemsPerPage,"aria-controls":"gradebook-table"},model:{value:(_vm.pagination.currentPage),callback:function ($$v) {_vm.$set(_vm.pagination, "currentPage", $$v)},expression:"pagination.currentPage"}}),_c('ul',{staticClass:"pagination"},[_c('li',{staticClass:"page-item active"},[_c('a',{staticClass:"page-link"},[_vm._v(_vm._s(_vm.$t('total'))+" "+_vm._s(_vm.sortedUsers.length))])])])],1)])}
-var GradesTablevue_type_template_id_6708ba42_scoped_true_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"lds-ellipsis",attrs:{"aria-hidden":"true"}},[_c('div'),_c('div'),_c('div'),_c('div')])}]
+return _c('th',{key:("category-" + id),staticClass:"category u-relative u-font-medium",class:{'is-droppable': _vm.categoryDropArea === id},style:(("--color: " + color + ";")),attrs:{"draggable":"","colspan":Math.max(columnIds.length, 1)},on:{"dragstart":function($event){return _vm.startDragCategory($event, id)},"dragover":function($event){$event.preventDefault();return _vm.onDropAreaOverEnter($event, id)},"dragenter":function($event){$event.preventDefault();return _vm.onDropAreaOverEnter($event, id)},"dragleave":function($event){_vm.categoryDropArea = null},"drop":function($event){(_vm.isDraggingColumn || _vm.isDraggingCategory) && _vm.onDrop($event, id)}}},[(_vm.catEditItemId === id)?_c('item-title-input',{staticClass:"item-title-input",attrs:{"item-title":title},on:{"cancel":function($event){_vm.catEditItemId = null},"ok":function($event){return _vm.setCategoryTitle(id, $event)}}}):(id !== 0)?_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-between u-cursor-pointer",attrs:{"title":_vm.$t('adjust-title')},on:{"dblclick":function($event){return _vm.showCategoryTitleDialog(id)}}},[_vm._v(_vm._s(title)+" "),(_vm.isSavingCategoryWithId(id))?_c('div',{staticClass:"spin",attrs:{"role":"status","aria-busy":"true","aria-label":_vm.$t('saving')}},[_c('div',{staticClass:"glyphicon glyphicon-repeat glyphicon-spin",attrs:{"aria-hidden":"true"}})]):_vm._e(),_c('button',{staticClass:"btn-settings",attrs:{"title":_vm.$t('category-settings')},on:{"click":function($event){return _vm.showCategorySettings(id)}}},[_c('i',{staticClass:"fa fa-gear u-inline-block",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('category-settings')))])])]):_vm._e()],1)}),0),(_vm.showNullCategory)?_c('th',{staticClass:"mod-no-category-assigned",class:{'is-droppable': _vm.categoryDropArea === 0},attrs:{"colspan":Math.max(_vm.gradeBook.nullCategory.columnIds.length, 1),"title":_vm.$t('without-category')},on:{"dragover":function($event){$event.preventDefault();return _vm.onDropAreaOverEnter($event, 0)},"dragenter":function($event){$event.preventDefault();return _vm.onDropAreaOverEnter($event, 0)},"dragleave":function($event){_vm.categoryDropArea = null},"drop":function($event){(_vm.isDraggingColumn || _vm.isDraggingCategory) && _vm.onDrop($event, 0)}}}):_vm._e(),_c('th',{staticClass:"col-sticky table-student-total"})],1):_vm._e(),_c('tr',{staticClass:"table-row table-head-row table-scores-row"},[_c('th',{staticClass:"col-sticky table-student"},[_c('a',{staticClass:"tbl-sort-option",attrs:{"aria-sort":_vm.getSortStatus('lastname')},on:{"click":function($event){return _vm.sortByNameField('lastname')}}},[_vm._v(_vm._s(_vm.$t('last-name')))]),_vm._v(" "),_c('a',{staticClass:"tbl-sort-option",attrs:{"aria-sort":_vm.getSortStatus('firstname')},on:{"click":function($event){return _vm.sortByNameField('firstname')}}},[_vm._v(_vm._s(_vm.$t('first-name')))])]),_vm._l((_vm.displayedCategories),function(category){return _c('draggable',{key:("category-score-" + (category.id)),staticClass:"u-contents",attrs:{"list":category.columnIds,"tag":"div","ghost-class":"ghost","disabled":_vm.editItemId !== null || _vm.weightEditItemId !== null},on:{"end":_vm.onDragEnd}},[(category.columnIds.length === 0)?_c('th',{key:("item-id-" + (category.id))}):_vm._l((_vm.getColumns(category)),function(column){return _c('th',{key:("item-id-" + (category.id) + "--" + (column.id) + "-name"),class:{'unreleased-score-cell': !column.released, 'uncounted-score-cell': !column.countsForEndResult, 'u-relative': column.isEditing},attrs:{"draggable":""},on:{"dragstart":function($event){return _vm.startDragColumn($event, column.id)},"drop":function($event){(_vm.isDraggingColumn || _vm.isDraggingCategory) && _vm.onDrop($event, -1)}}},[(column.isEditingTitle)?_c('item-title-input',{staticClass:"item-title-input",attrs:{"item-title":column.title},on:{"cancel":function($event){_vm.editItemId = null},"ok":function($event){return _vm.setTitle(column.id, $event)}}}):(column.isEditingWeight)?[_c('span',{staticClass:"column-title"},[(column.isGrouped)?_c('i',{staticClass:"fa fa-group",attrs:{"aria-hidden":"true"}}):_vm._e(),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('grouped-score')))]),_vm._v(_vm._s(column.title))]),_c('weight-input',{staticClass:"m-dialog",attrs:{"item-weight":column.weight},on:{"cancel":function($event){_vm.weightEditItemId = null},"ok":function($event){return _vm.setWeight(column.id, $event)}}})]:[_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-between u-cursor-pointer",attrs:{"title":_vm.$t('adjust-title')},on:{"dblclick":function($event){return _vm.showColumnTitleDialog(column.id)}}},[_c('span',{staticClass:"column-title",attrs:{"id":((column.id) + "-title")}},[(column.isGrouped)?_c('i',{staticClass:"fa fa-group",attrs:{"aria-hidden":"true"}}):_vm._e(),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('grouped-score')))]),_vm._v(_vm._s(column.title)+" "),(column.hasRemovedSourceData)?_c('i',{staticClass:"fa fa-exclamation-circle",attrs:{"aria-hidden":"true"}}):_vm._e()]),(column.hasRemovedSourceData)?_c('b-popover',{attrs:{"target":((column.id) + "-title"),"triggers":"hover","placement":"bottom"}},[_c('p',{staticClass:"source-results-warning"},[_vm._v(_vm._s(_vm.$t('source-results-warning')))])]):_vm._e(),_c('button',{staticClass:"btn-settings",attrs:{"title":_vm.$t('item-settings')},on:{"click":function($event){return _vm.showColumnSettings(column.id)}}},[_c('i',{staticClass:"fa fa-gear u-inline-block",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('item-settings')))])])],1),_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-between"},[(column.countsForEndResult)?_c('div',{staticClass:"weight u-font-normal u-cursor-pointer",class:{'mod-custom': column.hasWeightSet , 'is-error': _vm.gradeBook.eqRestWeight < 0},attrs:{"title":_vm.$t('adjust-weight')},on:{"dblclick":function($event){return _vm.showColumnWeightDialog(column.id)}}},[_vm._v(_vm._s(_vm._f("formatNum")(column.weight))),_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])]):_c('div',{staticClass:"weight u-font-normal u-font-italic",attrs:{"title":_vm.$t('count-towards-endresult-not')}},[_c('span',{attrs:{"aria-hidden":"true"}},[_vm._v(_vm._s(_vm.$t('uncounted')))]),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('count-towards-endresult-not')))])]),(!column.isSaving)?_c('button',{staticClass:"btn-released u-ml-auto",attrs:{"title":column.released ? _vm.$t('make-invisible') : _vm.$t('make-visible')},on:{"click":function($event){return _vm.toggleVisibility(column.id)}}},[_c('i',{staticClass:"fa",class:{'fa-eye': column.released, 'fa-eye-slash': !column.released},attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(column.released ? _vm.$t('make-invisible') : _vm.$t('make-visible')))])]):_vm._e(),_c('div',{staticClass:"spin",attrs:{"role":"status","aria-busy":column.isSaving,"aria-label":_vm.$t('saving')}},[(column.isSaving)?_c('div',{staticClass:"glyphicon glyphicon-repeat glyphicon-spin",attrs:{"aria-hidden":"true"}}):_vm._e()])])]],2)})],2)}),_c('th',{staticClass:"col-sticky table-student-total",class:{'unreleased-score-cell': _vm.gradeBook.hasUnreleasedScores, 'u-text-end': !_vm.editDisplayTotalDialog}},[(_vm.editDisplayTotalDialog)?[_c('div',[_vm._v(_vm._s(_vm.$t('final-score')))]),_c('display-total-input',{staticClass:"m-dialog",attrs:{"display-total":_vm.gradeBook.getDisplayTotal()},on:{"cancel":function($event){_vm.editDisplayTotalDialog = false},"ok":function($event){return _vm.setDisplayTotal($event)}}})]:[_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-end"},[_c('div',[_vm._v(_vm._s(_vm.$t('final-score')))]),_c('button',{staticClass:"btn-settings",attrs:{"title":_vm.$t('final-score-settings')},on:{"click":_vm.showFinalScoreSettings}},[_c('i',{staticClass:"fa fa-gear u-inline-block",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('final-score-settings')))])])]),_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-end u-gap-small-2x"},[_c('div',{staticClass:"weight u-font-normal u-cursor-pointer",staticStyle:{"width":"40px"},on:{"dblclick":_vm.showFinalScoreDialog}},[(_vm.gradeBook.getDisplayTotal() === 100)?[_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])]:[_vm._v("/ "+_vm._s(_vm.gradeBook.getDisplayTotal()))]],2),_c('div',[(!_vm.saveDisplayTotal)?_c('div',{staticClass:"final-score-released",attrs:{"title":_vm.gradeBook.hasUnreleasedScores ? _vm.$t('invisible') : _vm.$t('visible')}},[_c('i',{staticClass:"fa",class:{'fa-eye': !_vm.gradeBook.hasUnreleasedScores, 'fa-eye-slash': _vm.gradeBook.hasUnreleasedScores},attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.gradeBook.hasUnreleasedScores ? _vm.$t('invisible') : _vm.$t('visible')))])]):_vm._e(),_c('div',{staticClass:"spin",attrs:{"role":"status","aria-busy":_vm.saveDisplayTotal,"aria-label":_vm.$t('saving')}},[(_vm.saveDisplayTotal)?_c('div',{staticClass:"glyphicon glyphicon-repeat glyphicon-spin",attrs:{"aria-hidden":"true"}}):_vm._e()])])])]],2)],2)]),_c('tbody',_vm._l((_vm.displayedUsers),function(user){return _c('student-result-row',{key:'user-' + user.id,attrs:{"grade-book":_vm.gradeBook,"user":user,"grade-book-root-url":_vm.gradeBookRootUrl,"exclude-column-id":_vm.addColumnId,"show-null-category":_vm.showNullCategory,"edit-score-id":_vm.editScoreId,"edit-student-score-id":_vm.editStudentScoreId,"score-menu-tab":_vm.scoreMenuTab},on:{"edit-score":function($event){return _vm.showStudentScoreDialog(user.id, $event)},"edit-canceled":_vm.hideStudentScoreDialog,"edit-comment":function($event){return _vm.showStudentScoreDialog(user.id, $event, 'comment')},"menu-tab-changed":function($event){_vm.scoreMenuTab = $event},"result-updated":function($event){return _vm.overwriteResult(user.id, $event)},"result-reverted":function($event){return _vm.revertOverwrittenResult(user.id, $event)},"comment-updated":function($event){return _vm.updateResultComment(user.id, $event)}}})}),1)]),_vm._m(0)]),_c('div',{staticClass:"pagination-container u-flex u-justify-content-end"},[_c('b-pagination',{attrs:{"total-rows":_vm.sortedUsers.length,"per-page":_vm.itemsPerPage,"aria-controls":"gradebook-table"},model:{value:(_vm.pagination.currentPage),callback:function ($$v) {_vm.$set(_vm.pagination, "currentPage", $$v)},expression:"pagination.currentPage"}}),_c('ul',{staticClass:"pagination"},[_c('li',{staticClass:"page-item active"},[_c('a',{staticClass:"page-link"},[_vm._v(_vm._s(_vm.$t('total'))+" "+_vm._s(_vm.sortedUsers.length))])])])],1)])}
+var GradesTablevue_type_template_id_ad6ec30c_scoped_true_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"lds-ellipsis",attrs:{"aria-hidden":"true"}},[_c('div'),_c('div'),_c('div'),_c('div')])}]
 
 
-// CONCATENATED MODULE: ./src/components/GradesTable.vue?vue&type=template&id=6708ba42&scoped=true&
+// CONCATENATED MODULE: ./src/components/GradesTable.vue?vue&type=template&id=ad6ec30c&scoped=true&
 
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/core-js/modules/es.array.every.js
 var es_array_every = __webpack_require__("a4c2");
@@ -16766,7 +16826,7 @@ function _objectSpread2(target) {
 var GradeBook_GradeBook =
 /*#__PURE__*/
 function () {
-  function GradeBook(dataId, currentVersion, title) {
+  function GradeBook(dataId, currentVersion, title, displayTotal) {
     _classCallCheck(this, GradeBook);
 
     this.gradeItems = [];
@@ -16783,6 +16843,7 @@ function () {
     this.dataId = dataId;
     this.title = title;
     this.currentVersion = currentVersion;
+    this.displayTotal = displayTotal;
   }
 
   _createClass(GradeBook, [{
@@ -16938,6 +16999,7 @@ function () {
     value: function getEndResult(userId) {
       var _this3 = this;
 
+      var useDisplayTotal = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
       var endResult = 0;
       var maxWeight = 0;
       this.gradeColumns.filter(function (column) {
@@ -16976,7 +17038,20 @@ function () {
         return 0;
       }
 
+      if (useDisplayTotal) {
+        return endResult / maxWeight * this.getDisplayTotal();
+      }
+
       return endResult / maxWeight * 100;
+    }
+  }, {
+    key: "getDisplayTotal",
+    value: function getDisplayTotal() {
+      if (this.displayTotal !== null && this.displayTotal !== 100) {
+        return this.displayTotal;
+      }
+
+      return 100;
     }
   }, {
     key: "isOverwrittenResult",
@@ -17050,7 +17125,7 @@ function () {
         return true;
       }
 
-      return total.toFixed(2) !== this.getEndResult(user.id).toFixed(2);
+      return total.toFixed(2) !== this.getEndResult(user.id, false).toFixed(2);
     }
   }, {
     key: "getResultComment",
@@ -17331,7 +17406,7 @@ function () {
   }], [{
     key: "from",
     value: function from(gradeBookObject) {
-      var gradeBook = new GradeBook(gradeBookObject.dataId, gradeBookObject.version, gradeBookObject.title);
+      var gradeBook = new GradeBook(gradeBookObject.dataId, gradeBookObject.version, gradeBookObject.title, gradeBookObject.displayTotal);
       gradeBook.gradeItems = gradeBookObject.gradeItems;
       gradeBook.gradeColumns = gradeBookObject.gradeColumns;
       gradeBook.categories = gradeBookObject.categories;
@@ -17347,19 +17422,19 @@ function () {
 GradeBook_GradeBook.NO_SCORE = 0;
 GradeBook_GradeBook.MAX_SCORE = 1;
 GradeBook_GradeBook.MIN_SCORE = 2;
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/StudentResultRow.vue?vue&type=template&id=fa14301c&scoped=true&
-var StudentResultRowvue_type_template_id_fa14301c_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',{staticClass:"table-row table-body-row"},[_c('td',{staticClass:"col-sticky table-student"},[(_vm.gradeBookRootUrl)?_c('a',{attrs:{"href":(_vm.gradeBookRootUrl + "&gradebook_display_action=UserScores&user_id=" + _vm.userId)}},[_vm._v(_vm._s(_vm.lastName)+", "+_vm._s(_vm.firstName))]):[_vm._v(_vm._s(_vm.lastName)+", "+_vm._s(_vm.firstName))]],2),(_vm.isSynchronized)?[_vm._l((_vm.columns),function(column,index){return [(column.isScoreColumn)?_c('td',{key:("col-" + index),class:{'unreleased-score-cell': !column.released, 'uncounted-score-cell': !column.countsForEndResult, 'u-relative': column.isEditing}},[(column.hasResult && !column.isEditing)?_c('student-result',{staticClass:"u-flex u-align-items-center u-justify-content-end u-cursor-pointer",class:{'uncounted-score': !column.countsForEndResult},attrs:{"id":("result-" + (column.id) + "-" + _vm.userId),"result":column.result,"comment":column.comment,"is-standalone-score":column.isStandaloneScore,"use-overwritten-flag":true,"is-overwritten":column.isOverwrittenResult},on:{"edit":function($event){return _vm.$emit('edit-score', column.id)},"edit-comment":function($event){return _vm.$emit('edit-comment', column.id)}}}):_vm._e(),(column.isEditing)?_c('score-input',{attrs:{"menu-tab":_vm.scoreMenuTab,"score":column.result,"comment":column.comment,"use-revert":column.isOverwrittenResult && !column.isStandaloneScore},on:{"menu-tab-changed":function($event){return _vm.$emit('menu-tab-changed', $event)},"cancel":function($event){return _vm.$emit('edit-canceled')},"comment-updated":function($event){return _vm.$emit('comment-updated', {columnId: column.id, comment: $event})},"ok":function($event){return _vm.$emit('result-updated', {columnId: column.id, value: $event})},"revert":function($event){return _vm.$emit('result-reverted', column.id)}}}):_vm._e()],1):_c('td',{key:("col-" + index)})]}),_c('td',{staticClass:"col-sticky table-student-total u-text-end",class:{'unreleased-score-cell': _vm.gradeBook.hasUnreleasedScores, 'mod-needs-update': _vm.totalNeedsUpdate}},[(_vm.totalNeedsUpdate)?_c('i',{staticClass:"fa fa-exclamation-circle",attrs:{"title":_vm.$t('not-yet-updated'),"aria-hidden":"true"}}):_vm._e(),(_vm.totalNeedsUpdate)?_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('not-yet-updated')))]):_vm._e(),_vm._v(_vm._s(_vm._f("formatNum2")(_vm.endResult))),_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])])]:_c('td',{staticClass:"table-student-unsychronized",attrs:{"colspan":_vm.gradeBook.gradeColumns.length + 1}},[_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-center"},[_vm._v(_vm._s(_vm.$t('not-synchronized')))])])],2)}
-var StudentResultRowvue_type_template_id_fa14301c_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/StudentResultRow.vue?vue&type=template&id=4f7f9b61&scoped=true&
+var StudentResultRowvue_type_template_id_4f7f9b61_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',{staticClass:"table-row table-body-row"},[_c('td',{staticClass:"col-sticky table-student"},[(_vm.gradeBookRootUrl)?_c('a',{attrs:{"href":(_vm.gradeBookRootUrl + "&gradebook_display_action=UserScores&user_id=" + _vm.userId)}},[_vm._v(_vm._s(_vm.lastName)+", "+_vm._s(_vm.firstName))]):[_vm._v(_vm._s(_vm.lastName)+", "+_vm._s(_vm.firstName))]],2),(_vm.isSynchronized)?[_vm._l((_vm.columns),function(column,index){return [(column.isScoreColumn)?_c('td',{key:("col-" + index),class:{'unreleased-score-cell': !column.released, 'uncounted-score-cell': !column.countsForEndResult, 'u-relative': column.isEditing}},[(column.hasResult && !column.isEditing)?_c('student-result',{staticClass:"u-flex u-align-items-center u-justify-content-end u-cursor-pointer",class:{'uncounted-score': !column.countsForEndResult},attrs:{"id":("result-" + (column.id) + "-" + _vm.userId),"result":column.result,"comment":column.comment,"is-standalone-score":column.isStandaloneScore,"use-overwritten-flag":true,"is-overwritten":column.isOverwrittenResult},on:{"edit":function($event){return _vm.$emit('edit-score', column.id)},"edit-comment":function($event){return _vm.$emit('edit-comment', column.id)}}}):_vm._e(),(column.isEditing)?_c('score-input',{attrs:{"menu-tab":_vm.scoreMenuTab,"score":column.result,"comment":column.comment,"use-revert":column.isOverwrittenResult && !column.isStandaloneScore},on:{"menu-tab-changed":function($event){return _vm.$emit('menu-tab-changed', $event)},"cancel":function($event){return _vm.$emit('edit-canceled')},"comment-updated":function($event){return _vm.$emit('comment-updated', {columnId: column.id, comment: $event})},"ok":function($event){return _vm.$emit('result-updated', {columnId: column.id, value: $event})},"revert":function($event){return _vm.$emit('result-reverted', column.id)}}}):_vm._e()],1):_c('td',{key:("col-" + index)})]}),_c('td',{staticClass:"col-sticky table-student-total u-text-end",class:{'unreleased-score-cell': _vm.gradeBook.hasUnreleasedScores, 'mod-needs-update': _vm.totalNeedsUpdate}},[_c('div',{staticClass:"u-flex u-align-items-baseline u-gap-small-3x",class:_vm.gradeBook.getDisplayTotal() === 100 ? 'u-justify-content-end' : 'u-justify-content-between'},[(_vm.gradeBook.getDisplayTotal() !== 100)?_c('div',{staticStyle:{"font-size":"1.1rem","color":"#437070","width":"50px","text-align":"right"}},[_vm._v(" ("+_vm._s(_vm._f("formatNum2")(_vm.endResultPct))),_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")]),_vm._v(") ")]):_vm._e(),_c('div',[(_vm.totalNeedsUpdate)?_c('i',{staticClass:"fa fa-exclamation-circle",attrs:{"title":_vm.$t('not-yet-updated'),"aria-hidden":"true"}}):_vm._e(),(_vm.totalNeedsUpdate)?_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('not-yet-updated')))]):_vm._e(),_vm._v(_vm._s(_vm._f("formatNum2")(_vm.endResult))),(_vm.gradeBook.getDisplayTotal() === 100)?[_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])]:_vm._e()],2)])])]:_c('td',{staticClass:"table-student-unsychronized",attrs:{"colspan":_vm.gradeBook.gradeColumns.length + 1}},[_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-center"},[_vm._v(_vm._s(_vm.$t('not-synchronized')))])])],2)}
+var StudentResultRowvue_type_template_id_4f7f9b61_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/StudentResultRow.vue?vue&type=template&id=fa14301c&scoped=true&
+// CONCATENATED MODULE: ./src/components/StudentResultRow.vue?vue&type=template&id=4f7f9b61&scoped=true&
 
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/ScoreInput.vue?vue&type=template&id=0ed11da2&scoped=true&
-var ScoreInputvue_type_template_id_0ed11da2_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('table-cell-input',{on:{"edit":_vm.onEdit,"cancel":function($event){return _vm.$emit('cancel')}},scopedSlots:_vm._u([{key:"menu",fn:function(){return [_c('div',{staticClass:"cell-content content-tabs"},[_c('div',{staticClass:"u-flex u-justify-content-end u-text-end",attrs:{"role":"tablist"}},[_c('div',{staticClass:"menu-tab u-cursor-pointer",class:{'mod-active': _vm.menuTab === 'score'},attrs:{"role":"tab","aria-selected":_vm.menuTab === 'score' ? 'true' : 'false',"aria-controls":"score-panel"},on:{"click":function($event){return _vm.$emit('menu-tab-changed', 'score')}}},[_vm._v(_vm._s(_vm.$t('score')))]),_c('div',{staticClass:"menu-tab u-cursor-pointer",class:{'mod-active': _vm.menuTab === 'comment'},attrs:{"role":"tab","aria-selected":_vm.menuTab === 'comment' ? 'true' : 'false',"aria-controls":"score-panel"},on:{"click":function($event){return _vm.$emit('menu-tab-changed', 'comment')}}},[_vm._v(_vm._s(_vm.$t('comments')))])])])]},proxy:true},{key:"content",fn:function(){return [(_vm.menuTab === 'score')?_c('div',{staticClass:"u-flex u-gap-small",attrs:{"role":"tabpanel","id":"score-panel"}},[_c('div',{staticClass:"number-input u-relative",class:{'is-selected': _vm.type === 'number'}},[_c('input',{ref:"score-input",staticClass:"percent-input u-font-normal",attrs:{"id":"score","type":"number","min":"0","max":"100","autocomplete":"off"},domProps:{"value":_vm._f("formatNum")(_vm.numValue)},on:{"input":function($event){_vm.type = 'number'},"keyup":[function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }return _vm.onEdit($event)},function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"esc",27,$event.key,["Esc","Escape"])){ return null; }return _vm.$emit('cancel')}],"focus":function($event){_vm.type = 'number'}}}),_c('div',{staticClass:"percent"},[_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])])]),_c('button',{staticClass:"color-code amber-700",class:{'is-selected': _vm.type === 'aabs'},attrs:{"title":_vm.$t('auth-absent')},on:{"click":_vm.setAuthAbsent}},[_c('span',[_vm._v(_vm._s(_vm.$t('aabs')))])]),(_vm.useRevert)?_c('button',{staticClass:"btn btn-secundary btn-sm btn-revert",attrs:{"title":_vm.$t('use-source-result')},on:{"click":_vm.setRevert}},[_c('i',{staticClass:"fa fa-undo",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('use-source-result')))])]):_vm._e()]):_vm._e(),(_vm.menuTab === 'comment')?_c('div',{attrs:{"role":"tabpanel","id":"score-panel"}},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.commentValue),expression:"commentValue"}],ref:"comment-input",staticClass:"comment-field",domProps:{"value":(_vm.commentValue)},on:{"input":function($event){if($event.target.composing){ return; }_vm.commentValue=$event.target.value}}})]):_vm._e()]},proxy:true}])})}
-var ScoreInputvue_type_template_id_0ed11da2_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/ScoreInput.vue?vue&type=template&id=063eddac&scoped=true&
+var ScoreInputvue_type_template_id_063eddac_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('table-cell-input',{on:{"edit":_vm.onEdit,"cancel":function($event){return _vm.$emit('cancel')}},scopedSlots:_vm._u([{key:"menu",fn:function(){return [_c('div',{staticClass:"cell-content content-tabs"},[_c('div',{staticClass:"u-flex u-justify-content-end u-text-end",attrs:{"role":"tablist"}},[_c('div',{staticClass:"menu-tab u-cursor-pointer",class:{'mod-active': _vm.menuTab === 'score'},attrs:{"role":"tab","aria-selected":_vm.menuTab === 'score' ? 'true' : 'false',"aria-controls":"score-panel"},on:{"click":function($event){return _vm.$emit('menu-tab-changed', 'score')}}},[_vm._v(_vm._s(_vm.$t('score')))]),_c('div',{staticClass:"menu-tab u-cursor-pointer",class:{'mod-active': _vm.menuTab === 'comment'},attrs:{"role":"tab","aria-selected":_vm.menuTab === 'comment' ? 'true' : 'false',"aria-controls":"score-panel"},on:{"click":function($event){return _vm.$emit('menu-tab-changed', 'comment')}}},[_vm._v(_vm._s(_vm.$t('comments')))])])])]},proxy:true},{key:"content",fn:function(){return [(_vm.menuTab === 'score')?_c('div',{staticClass:"u-flex u-gap-small",attrs:{"role":"tabpanel","id":"score-panel"}},[_c('div',{staticClass:"number-input u-relative",class:{'is-selected': _vm.type === 'number'}},[_c('input',{ref:"score-input",staticClass:"percent-input u-font-normal",attrs:{"id":"score","type":"number","min":"0","max":"100","step":".01","autocomplete":"off"},domProps:{"value":_vm._f("formatNum")(_vm.numValue)},on:{"input":function($event){_vm.type = 'number'},"keyup":[function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }return _vm.onEdit($event)},function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"esc",27,$event.key,["Esc","Escape"])){ return null; }return _vm.$emit('cancel')}],"focus":function($event){_vm.type = 'number'}}}),_c('div',{staticClass:"percent"},[_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])])]),_c('button',{staticClass:"color-code amber-700",class:{'is-selected': _vm.type === 'aabs'},attrs:{"title":_vm.$t('auth-absent')},on:{"click":_vm.setAuthAbsent}},[_c('span',[_vm._v(_vm._s(_vm.$t('aabs')))])]),(_vm.useRevert)?_c('button',{staticClass:"btn btn-secundary btn-sm btn-revert",attrs:{"title":_vm.$t('use-source-result')},on:{"click":_vm.setRevert}},[_c('i',{staticClass:"fa fa-undo",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('use-source-result')))])]):_vm._e()]):_vm._e(),(_vm.menuTab === 'comment')?_c('div',{attrs:{"role":"tabpanel","id":"score-panel"}},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.commentValue),expression:"commentValue"}],ref:"comment-input",staticClass:"comment-field",domProps:{"value":(_vm.commentValue)},on:{"input":function($event){if($event.target.composing){ return; }_vm.commentValue=$event.target.value}}})]):_vm._e()]},proxy:true}])})}
+var ScoreInputvue_type_template_id_063eddac_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/ScoreInput.vue?vue&type=template&id=0ed11da2&scoped=true&
+// CONCATENATED MODULE: ./src/components/ScoreInput.vue?vue&type=template&id=063eddac&scoped=true&
 
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/core-js/modules/es.parse-float.js
 var es_parse_float = __webpack_require__("c9b7");
@@ -17582,8 +17657,8 @@ ScoreInputvue_type_script_lang_ts_ScoreInput = __decorate([vue_class_component_e
 /* harmony default export */ var ScoreInputvue_type_script_lang_ts_ = (ScoreInputvue_type_script_lang_ts_ScoreInput);
 // CONCATENATED MODULE: ./src/components/ScoreInput.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_ScoreInputvue_type_script_lang_ts_ = (ScoreInputvue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/ScoreInput.vue?vue&type=style&index=0&id=0ed11da2&lang=scss&scoped=true&
-var ScoreInputvue_type_style_index_0_id_0ed11da2_lang_scss_scoped_true_ = __webpack_require__("725c");
+// EXTERNAL MODULE: ./src/components/ScoreInput.vue?vue&type=style&index=0&id=063eddac&lang=scss&scoped=true&
+var ScoreInputvue_type_style_index_0_id_063eddac_lang_scss_scoped_true_ = __webpack_require__("7479");
 
 // EXTERNAL MODULE: ./src/components/ScoreInput.vue?vue&type=custom&index=0&blockType=i18n
 var ScoreInputvue_type_custom_index_0_blockType_i18n = __webpack_require__("eade");
@@ -17599,11 +17674,11 @@ var ScoreInputvue_type_custom_index_0_blockType_i18n = __webpack_require__("eade
 
 var ScoreInput_component = normalizeComponent(
   components_ScoreInputvue_type_script_lang_ts_,
-  ScoreInputvue_type_template_id_0ed11da2_scoped_true_render,
-  ScoreInputvue_type_template_id_0ed11da2_scoped_true_staticRenderFns,
+  ScoreInputvue_type_template_id_063eddac_scoped_true_render,
+  ScoreInputvue_type_template_id_063eddac_scoped_true_staticRenderFns,
   false,
   null,
-  "0ed11da2",
+  "063eddac",
   null
   
 )
@@ -17613,12 +17688,12 @@ var ScoreInput_component = normalizeComponent(
 if (typeof ScoreInputvue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(ScoreInputvue_type_custom_index_0_blockType_i18n["default"])(ScoreInput_component)
 
 /* harmony default export */ var components_ScoreInput = (ScoreInput_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/StudentResult.vue?vue&type=template&id=2ea6a10f&scoped=true&
-var StudentResultvue_type_template_id_2ea6a10f_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{on:{"dblclick":function($event){return _vm.$emit('edit')}}},[_c('div',{staticClass:"u-flex u-align-items-center u-gap-small"},[(_vm.comment)?[_c('a',{staticClass:"fa fa-comment-o",attrs:{"id":("result-comment-" + _vm.id),"title":_vm.$t('edit-comment')},on:{"click":function($event){$event.stopPropagation();return _vm.$emit('edit-comment')}}},[_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('edit-comment')))])]),_c('b-popover',{attrs:{"custom-class":"gradebook-comment-popover","target":("result-comment-" + _vm.id),"triggers":"hover","placement":"top"}},[_c('div',{staticClass:"comment"},[_c('div',{staticClass:"comment-header"},[_vm._v("Feedback:")]),_vm._v(" "+_vm._s(_vm.comment)+" ")])])]:_vm._e(),_c('div',{staticClass:"result u-flex u-align-items-center u-justify-content-end",class:{'overwritten-score': !_vm.isStandaloneScore && _vm.useOverwrittenFlag && _vm.isOverwritten, 'mod-aabs': _vm.result === 'aabs'}},[(_vm.result === 'aabs')?_c('div',{staticClass:"color-code amber-700",attrs:{"title":_vm.$t('auth-absent')}},[_c('span',[_vm._v(_vm._s(_vm.$t('aabs')))])]):(_vm.result === null)?_c('div',{staticClass:"color-code mod-none",attrs:{"title":_vm.$t('no-score-found')}},[_c('i',{staticClass:"fa fa-question",class:{'mod-none': _vm.isStandaloneScore || !_vm.useOverwrittenFlag || !_vm.isOverwritten},attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('no-score-found')))])]):_c('div',[_vm._v(_vm._s(_vm.result)),_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])])])],2)])}
-var StudentResultvue_type_template_id_2ea6a10f_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/StudentResult.vue?vue&type=template&id=fa72a5ea&scoped=true&
+var StudentResultvue_type_template_id_fa72a5ea_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{on:{"dblclick":function($event){return _vm.$emit('edit')}}},[_c('div',{staticClass:"u-flex u-align-items-center u-gap-small"},[(_vm.comment)?[_c('a',{staticClass:"fa fa-comment-o",attrs:{"id":("result-comment-" + _vm.id),"title":_vm.$t('edit-comment')},on:{"click":function($event){$event.stopPropagation();return _vm.$emit('edit-comment')}}},[_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('edit-comment')))])]),_c('b-popover',{attrs:{"custom-class":"gradebook-comment-popover","target":("result-comment-" + _vm.id),"triggers":"hover","placement":"top"}},[_c('div',{staticClass:"comment"},[_c('div',{staticClass:"comment-header"},[_vm._v("Feedback:")]),_vm._v(" "+_vm._s(_vm.comment)+" ")])])]:_vm._e(),_c('div',{staticClass:"result u-flex u-align-items-center u-justify-content-end",class:{'overwritten-score': !_vm.isStandaloneScore && _vm.useOverwrittenFlag && _vm.isOverwritten, 'mod-none': _vm.result === null, 'mod-aabs': _vm.result === 'aabs'}},[(_vm.result === 'aabs')?_c('div',{staticClass:"color-code amber-700",attrs:{"title":_vm.$t('auth-absent')}},[_c('span',[_vm._v(_vm._s(_vm.$t('aabs')))])]):(_vm.result === null)?_c('div',{staticClass:"color-code mod-none",attrs:{"title":_vm.$t('no-score-found')}},[_c('i',{staticClass:"fa fa-question",class:{'mod-none': _vm.isStandaloneScore || !_vm.useOverwrittenFlag || !_vm.isOverwritten},attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('no-score-found')))])]):_c('div',[_vm._v(_vm._s(_vm._f("formatNum2")(_vm.result))),_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])])])],2)])}
+var StudentResultvue_type_template_id_fa72a5ea_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/StudentResult.vue?vue&type=template&id=2ea6a10f&scoped=true&
+// CONCATENATED MODULE: ./src/components/StudentResult.vue?vue&type=template&id=fa72a5ea&scoped=true&
 
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/StudentResult.vue?vue&type=script&lang=ts&
 
@@ -17674,13 +17749,24 @@ __decorate([Prop({
 })], StudentResultvue_type_script_lang_ts_StudentResult.prototype, "comment", void 0);
 
 StudentResultvue_type_script_lang_ts_StudentResult = __decorate([vue_class_component_esm({
-  name: 'student-result'
+  name: 'student-result',
+  filters: {
+    formatNum2: function formatNum2(v) {
+      if (v === null) {
+        return '';
+      }
+
+      return v.toLocaleString(undefined, {
+        maximumFractionDigits: 2
+      });
+    }
+  }
 })], StudentResultvue_type_script_lang_ts_StudentResult);
 /* harmony default export */ var StudentResultvue_type_script_lang_ts_ = (StudentResultvue_type_script_lang_ts_StudentResult);
 // CONCATENATED MODULE: ./src/components/StudentResult.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_StudentResultvue_type_script_lang_ts_ = (StudentResultvue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/StudentResult.vue?vue&type=style&index=0&id=2ea6a10f&scoped=true&lang=scss&
-var StudentResultvue_type_style_index_0_id_2ea6a10f_scoped_true_lang_scss_ = __webpack_require__("a07a");
+// EXTERNAL MODULE: ./src/components/StudentResult.vue?vue&type=style&index=0&id=fa72a5ea&scoped=true&lang=scss&
+var StudentResultvue_type_style_index_0_id_fa72a5ea_scoped_true_lang_scss_ = __webpack_require__("4383");
 
 // EXTERNAL MODULE: ./src/components/StudentResult.vue?vue&type=style&index=1&lang=css&
 var StudentResultvue_type_style_index_1_lang_css_ = __webpack_require__("b974");
@@ -17700,11 +17786,11 @@ var StudentResultvue_type_custom_index_0_blockType_i18n = __webpack_require__("d
 
 var StudentResult_component = normalizeComponent(
   components_StudentResultvue_type_script_lang_ts_,
-  StudentResultvue_type_template_id_2ea6a10f_scoped_true_render,
-  StudentResultvue_type_template_id_2ea6a10f_scoped_true_staticRenderFns,
+  StudentResultvue_type_template_id_fa72a5ea_scoped_true_render,
+  StudentResultvue_type_template_id_fa72a5ea_scoped_true_staticRenderFns,
   false,
   null,
-  "2ea6a10f",
+  "fa72a5ea",
   null
   
 )
@@ -17805,6 +17891,11 @@ function (_Vue) {
       return this.gradeBook.getEndResult(this.userId);
     }
   }, {
+    key: "endResultPct",
+    get: function get() {
+      return this.gradeBook.getEndResult(this.userId, false);
+    }
+  }, {
     key: "displayedCategories",
     get: function get() {
       if (this.showNullCategory) {
@@ -17888,7 +17979,6 @@ StudentResultRowvue_type_script_lang_ts_StudentResultRow = __decorate([vue_class
       }
 
       return v.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
         maximumFractionDigits: 2
       });
     }
@@ -17897,8 +17987,8 @@ StudentResultRowvue_type_script_lang_ts_StudentResultRow = __decorate([vue_class
 /* harmony default export */ var StudentResultRowvue_type_script_lang_ts_ = (StudentResultRowvue_type_script_lang_ts_StudentResultRow);
 // CONCATENATED MODULE: ./src/components/StudentResultRow.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_StudentResultRowvue_type_script_lang_ts_ = (StudentResultRowvue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/StudentResultRow.vue?vue&type=style&index=0&id=fa14301c&lang=scss&scoped=true&
-var StudentResultRowvue_type_style_index_0_id_fa14301c_lang_scss_scoped_true_ = __webpack_require__("19f1");
+// EXTERNAL MODULE: ./src/components/StudentResultRow.vue?vue&type=style&index=0&id=4f7f9b61&lang=scss&scoped=true&
+var StudentResultRowvue_type_style_index_0_id_4f7f9b61_lang_scss_scoped_true_ = __webpack_require__("125a");
 
 // EXTERNAL MODULE: ./src/components/StudentResultRow.vue?vue&type=custom&index=0&blockType=i18n
 var StudentResultRowvue_type_custom_index_0_blockType_i18n = __webpack_require__("2378");
@@ -17914,11 +18004,11 @@ var StudentResultRowvue_type_custom_index_0_blockType_i18n = __webpack_require__
 
 var StudentResultRow_component = normalizeComponent(
   components_StudentResultRowvue_type_script_lang_ts_,
-  StudentResultRowvue_type_template_id_fa14301c_scoped_true_render,
-  StudentResultRowvue_type_template_id_fa14301c_scoped_true_staticRenderFns,
+  StudentResultRowvue_type_template_id_4f7f9b61_scoped_true_render,
+  StudentResultRowvue_type_template_id_4f7f9b61_scoped_true_staticRenderFns,
   false,
   null,
-  "fa14301c",
+  "4f7f9b61",
   null
   
 )
@@ -18136,11 +18226,130 @@ var WeightInput_component = normalizeComponent(
 if (typeof WeightInputvue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(WeightInputvue_type_custom_index_0_blockType_i18n["default"])(WeightInput_component)
 
 /* harmony default export */ var components_WeightInput = (WeightInput_component.exports);
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/DisplayTotalInput.vue?vue&type=template&id=0f03773a&scoped=true&
+var DisplayTotalInputvue_type_template_id_0f03773a_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('table-cell-input',{on:{"edit":_vm.onEdit,"cancel":function($event){return _vm.$emit('cancel')}},scopedSlots:_vm._u([{key:"content",fn:function(){return [_c('label',{staticClass:"u-font-medium",attrs:{"for":"display-total"}},[_vm._v(_vm._s(_vm.$t('display-total'))+":")]),_c('div',{staticClass:"u-relative"},[_c('input',{ref:"display-total-input",staticClass:"percent-input u-font-normal",attrs:{"id":"display-total","type":"number","min":"0","max":"100","autocomplete":"off"},domProps:{"value":_vm._f("formatNum")(_vm.displayTotal)},on:{"keyup":[function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }return _vm.onEdit($event)},function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"esc",27,$event.key,["Esc","Escape"])){ return null; }return _vm.$emit('cancel')}]}})])]},proxy:true}])})}
+var DisplayTotalInputvue_type_template_id_0f03773a_scoped_true_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/DisplayTotalInput.vue?vue&type=template&id=0f03773a&scoped=true&
+
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/DisplayTotalInput.vue?vue&type=script&lang=ts&
+
+
+
+
+
+
+
+
+
+
+
+var DisplayTotalInputvue_type_script_lang_ts_WeightInput =
+/*#__PURE__*/
+function (_Vue) {
+  _inherits(WeightInput, _Vue);
+
+  function WeightInput() {
+    _classCallCheck(this, WeightInput);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(WeightInput).apply(this, arguments));
+  }
+
+  _createClass(WeightInput, [{
+    key: "onEdit",
+    value: function onEdit() {
+      var el = this.displayTotalInput;
+
+      if (!el.checkValidity()) {
+        el.reportValidity();
+        return;
+      }
+
+      var value = parseFloat(this.displayTotalInput.value);
+      this.$emit('ok', isNaN(value) ? null : value);
+    }
+  }, {
+    key: "mounted",
+    value: function mounted() {
+      var _this = this;
+
+      this.$nextTick(function () {
+        return _this.displayTotalInput.focus();
+      });
+    }
+  }, {
+    key: "displayTotalInput",
+    get: function get() {
+      return this.$refs['display-total-input'];
+    }
+  }]);
+
+  return WeightInput;
+}(external_commonjs_vue_commonjs2_vue_root_Vue_default.a);
+
+__decorate([Prop({
+  type: Number,
+  "default": ''
+})], DisplayTotalInputvue_type_script_lang_ts_WeightInput.prototype, "displayTotal", void 0);
+
+DisplayTotalInputvue_type_script_lang_ts_WeightInput = __decorate([vue_class_component_esm({
+  name: 'display-total-input',
+  components: {
+    TableCellInput: components_TableCellInput
+  },
+  filters: {
+    formatNum: function formatNum(v) {
+      if (v === null) {
+        return '';
+      }
+
+      return v.toLocaleString(undefined, {
+        maximumFractionDigits: 2
+      });
+    }
+  }
+})], DisplayTotalInputvue_type_script_lang_ts_WeightInput);
+/* harmony default export */ var DisplayTotalInputvue_type_script_lang_ts_ = (DisplayTotalInputvue_type_script_lang_ts_WeightInput);
+// CONCATENATED MODULE: ./src/components/DisplayTotalInput.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var components_DisplayTotalInputvue_type_script_lang_ts_ = (DisplayTotalInputvue_type_script_lang_ts_); 
+// EXTERNAL MODULE: ./src/components/DisplayTotalInput.vue?vue&type=style&index=0&id=0f03773a&lang=scss&scoped=true&
+var DisplayTotalInputvue_type_style_index_0_id_0f03773a_lang_scss_scoped_true_ = __webpack_require__("0c74");
+
+// EXTERNAL MODULE: ./src/components/DisplayTotalInput.vue?vue&type=custom&index=0&blockType=i18n
+var DisplayTotalInputvue_type_custom_index_0_blockType_i18n = __webpack_require__("e587");
+
+// CONCATENATED MODULE: ./src/components/DisplayTotalInput.vue
+
+
+
+
+
+
+/* normalize component */
+
+var DisplayTotalInput_component = normalizeComponent(
+  components_DisplayTotalInputvue_type_script_lang_ts_,
+  DisplayTotalInputvue_type_template_id_0f03773a_scoped_true_render,
+  DisplayTotalInputvue_type_template_id_0f03773a_scoped_true_staticRenderFns,
+  false,
+  null,
+  "0f03773a",
+  null
+  
+)
+
+/* custom blocks */
+
+if (typeof DisplayTotalInputvue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(DisplayTotalInputvue_type_custom_index_0_blockType_i18n["default"])(DisplayTotalInput_component)
+
+/* harmony default export */ var DisplayTotalInput = (DisplayTotalInput_component.exports);
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vuedraggable/dist/vuedraggable.common.js
 var vuedraggable_common = __webpack_require__("6431");
 var vuedraggable_common_default = /*#__PURE__*/__webpack_require__.n(vuedraggable_common);
 
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/GradesTable.vue?vue&type=script&lang=ts&
+
 
 
 
@@ -18185,6 +18394,7 @@ function (_Vue) {
     _this.weightEditItemId = null;
     _this.editStudentScoreId = null;
     _this.editScoreId = null;
+    _this.editDisplayTotalDialog = false;
     _this.scoreMenuTab = 'score';
     _this.sortBy = 'lastname';
     _this.sortDesc = false;
@@ -18222,6 +18432,7 @@ function (_Vue) {
       this.weightEditItemId = null;
       this.editStudentScoreId = null;
       this.editScoreId = null;
+      this.editDisplayTotalDialog = false;
     }
   }, {
     key: "showCategorySettings",
@@ -18234,6 +18445,12 @@ function (_Vue) {
     value: function showColumnSettings(columnId) {
       this.resetDialogs();
       this.$emit('item-settings', columnId);
+    }
+  }, {
+    key: "showFinalScoreSettings",
+    value: function showFinalScoreSettings() {
+      this.resetDialogs();
+      this.$emit('final-score-settings');
     }
   }, {
     key: "showCategoryTitleDialog",
@@ -18252,6 +18469,12 @@ function (_Vue) {
     value: function showColumnWeightDialog(columnId) {
       this.resetDialogs();
       this.weightEditItemId = columnId;
+    }
+  }, {
+    key: "showFinalScoreDialog",
+    value: function showFinalScoreDialog() {
+      this.resetDialogs();
+      this.editDisplayTotalDialog = true;
     }
   }, {
     key: "showStudentScoreDialog",
@@ -18337,6 +18560,13 @@ function (_Vue) {
       }
 
       this.weightEditItemId = null;
+    }
+  }, {
+    key: "setDisplayTotal",
+    value: function setDisplayTotal(displayTotal) {
+      this.gradeBook.displayTotal = displayTotal;
+      this.$emit('change-display-total');
+      this.editDisplayTotalDialog = false;
     }
   }, {
     key: "toggleVisibility",
@@ -18582,6 +18812,11 @@ __decorate([Prop({
 })], GradesTablevue_type_script_lang_ts_GradesTable.prototype, "saveCategoryId", void 0);
 
 __decorate([Prop({
+  type: Boolean,
+  "default": false
+})], GradesTablevue_type_script_lang_ts_GradesTable.prototype, "saveDisplayTotal", void 0);
+
+__decorate([Prop({
   type: Number,
   "default": 5
 })], GradesTablevue_type_script_lang_ts_GradesTable.prototype, "itemsPerPage", void 0);
@@ -18599,6 +18834,7 @@ GradesTablevue_type_script_lang_ts_GradesTable = __decorate([vue_class_component
     StudentResultRow: components_StudentResultRow,
     ItemTitleInput: components_ItemTitleInput,
     WeightInput: components_WeightInput,
+    DisplayTotalInput: DisplayTotalInput,
     ScoreInput: components_ScoreInput,
     StudentResult: components_StudentResult,
     draggable: vuedraggable_common_default.a
@@ -18618,11 +18854,11 @@ GradesTablevue_type_script_lang_ts_GradesTable = __decorate([vue_class_component
 /* harmony default export */ var GradesTablevue_type_script_lang_ts_ = (GradesTablevue_type_script_lang_ts_GradesTable);
 // CONCATENATED MODULE: ./src/components/GradesTable.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_GradesTablevue_type_script_lang_ts_ = (GradesTablevue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/GradesTable.vue?vue&type=style&index=0&id=6708ba42&lang=scss&scoped=true&
-var GradesTablevue_type_style_index_0_id_6708ba42_lang_scss_scoped_true_ = __webpack_require__("5578");
+// EXTERNAL MODULE: ./src/components/GradesTable.vue?vue&type=style&index=0&id=ad6ec30c&lang=scss&scoped=true&
+var GradesTablevue_type_style_index_0_id_ad6ec30c_lang_scss_scoped_true_ = __webpack_require__("0057");
 
-// EXTERNAL MODULE: ./src/components/GradesTable.vue?vue&type=style&index=1&id=6708ba42&lang=scss&scoped=true&
-var GradesTablevue_type_style_index_1_id_6708ba42_lang_scss_scoped_true_ = __webpack_require__("b024");
+// EXTERNAL MODULE: ./src/components/GradesTable.vue?vue&type=style&index=1&id=ad6ec30c&lang=scss&scoped=true&
+var GradesTablevue_type_style_index_1_id_ad6ec30c_lang_scss_scoped_true_ = __webpack_require__("d205");
 
 // EXTERNAL MODULE: ./src/components/GradesTable.vue?vue&type=custom&index=0&blockType=i18n
 var GradesTablevue_type_custom_index_0_blockType_i18n = __webpack_require__("f315");
@@ -18639,11 +18875,11 @@ var GradesTablevue_type_custom_index_0_blockType_i18n = __webpack_require__("f31
 
 var GradesTable_component = normalizeComponent(
   components_GradesTablevue_type_script_lang_ts_,
-  GradesTablevue_type_template_id_6708ba42_scoped_true_render,
-  GradesTablevue_type_template_id_6708ba42_scoped_true_staticRenderFns,
+  GradesTablevue_type_template_id_ad6ec30c_scoped_true_render,
+  GradesTablevue_type_template_id_ad6ec30c_scoped_true_staticRenderFns,
   false,
   null,
-  "6708ba42",
+  "ad6ec30c",
   null
   
 )
@@ -18653,12 +18889,12 @@ var GradesTable_component = normalizeComponent(
 if (typeof GradesTablevue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(GradesTablevue_type_custom_index_0_blockType_i18n["default"])(GradesTable_component)
 
 /* harmony default export */ var components_GradesTable = (GradesTable_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/ItemSettings.vue?vue&type=template&id=3c1dc36e&scoped=true&
-var ItemSettingsvue_type_template_id_3c1dc36e_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"modal-wrapper",attrs:{"role":"dialog","aria-modal":"true","aria-label":_vm.$t('column-settings')}},[_c('div',{staticClass:"modal-content"},[_c('div',{staticClass:"u-flex u-justify-content-between modal-header"},[_c('div',[_c('input',{ref:"column-title",attrs:{"type":"text","autocomplete":"off"},domProps:{"value":_vm.title},on:{"input":function($event){_vm.title = $event}}}),_c('button',{staticClass:"btn btn-link",on:{"click":function($event){_vm.showRemoveItemDialog = true}}},[_vm._v(_vm._s(_vm.$t('remove')))])]),_c('button',{staticClass:"btn-close u-ml-auto",attrs:{"title":_vm.$t('close')},on:{"click":function($event){return _vm.$emit('close')}}},[_c('i',{staticClass:"fa fa-times",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('close')))])])]),_c('div',{staticClass:"modal-body"},[(_vm.column.type !== 'standalone')?[(_vm.isGrouped)?_c('h5',[_vm._v(_vm._s(_vm.$t('grouped-scores')))]):_vm._e(),_c('ul',{staticClass:"grouped-scores"},_vm._l((_vm.subItems),function(item){return _c('li',{key:item.id},[_c('span',[_vm._v(_vm._s(item.title))]),_c('div',{staticClass:"score-breadcrumb-trail"},[_vm._v(_vm._s(_vm._f("breadcrumb")(item)))])])}),0),_c('div',{staticClass:"ml-20"},[(!(_vm.isGrouped || _vm.groupButtonPressed))?_c('button',{staticClass:"btn btn-default",on:{"click":_vm.openGradesDropdown}},[_vm._v(_vm._s(_vm.$t('group-scores')))]):_c('grades-dropdown',{ref:"dropdown",attrs:{"id":"dropdown-settings","graded-items":_vm.gradedItems},on:{"toggle":_vm.toggleSubItem}})],1)]:_vm._e(),_c('h5',{class:{'standalone': _vm.column.type === 'standalone'}},[_vm._v(_vm._s(_vm.$t('settings')))]),_c('div',{staticClass:"settings"},[_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.column.released),expression:"column.released"}],staticClass:"mr-5",attrs:{"type":"checkbox","id":"released"},domProps:{"checked":Array.isArray(_vm.column.released)?_vm._i(_vm.column.released,null)>-1:(_vm.column.released)},on:{"input":_vm.onGradeColumnChange,"change":function($event){var $$a=_vm.column.released,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.$set(_vm.column, "released", $$a.concat([$$v])))}else{$$i>-1&&(_vm.$set(_vm.column, "released", $$a.slice(0,$$i).concat($$a.slice($$i+1))))}}else{_vm.$set(_vm.column, "released", $$c)}}}}),_c('label',{staticClass:"settings-label u-font-medium",attrs:{"for":"released"}},[_vm._v(_vm._s(_vm.$t('make-visible')))])]),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.column.countForEndResult),expression:"column.countForEndResult"}],staticClass:"mr-5",attrs:{"type":"checkbox","id":"countForEndResult"},domProps:{"checked":Array.isArray(_vm.column.countForEndResult)?_vm._i(_vm.column.countForEndResult,null)>-1:(_vm.column.countForEndResult)},on:{"input":_vm.onGradeColumnChange,"change":function($event){var $$a=_vm.column.countForEndResult,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.$set(_vm.column, "countForEndResult", $$a.concat([$$v])))}else{$$i>-1&&(_vm.$set(_vm.column, "countForEndResult", $$a.slice(0,$$i).concat($$a.slice($$i+1))))}}else{_vm.$set(_vm.column, "countForEndResult", $$c)}}}}),_c('label',{staticClass:"settings-label u-font-medium",attrs:{"for":"countForEndResult"}},[_vm._v(_vm._s(_vm.$t('count-towards-endresult')))])]),(_vm.column.countForEndResult)?_c('div',[_c('div',{staticClass:"mt-10"},[_c('label',{staticClass:"settings-label u-block",attrs:{"for":"weight"}},[_vm._v(_vm._s(_vm.$t('weight'))+":")]),_c('div',{staticClass:"number-input u-relative"},[_c('input',{attrs:{"type":"number","id":"weight","autocomplete":"off"},domProps:{"value":_vm._f("formatNum")(_vm.gradeBook.getWeight(_vm.column))},on:{"input":_vm.setWeight}}),_vm._m(0)])]),_c('div',{staticClass:"mt-20",attrs:{"role":"radiogroup","aria-labelledby":"setting-aabs"}},[_c('label',{staticClass:"settings-label",attrs:{"id":"setting-aabs"}},[_vm._v(_vm._s(_vm.$t('authorized-absence'))+" "),_c('div',{staticClass:"color-code amber-700 mi-3",attrs:{"aria-hidden":"true","title":_vm.$t('auth-absent')}},[_c('span',[_vm._v(_vm._s(_vm.$t('aabs')))])]),_vm._v(":")]),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model.number",value:(_vm.column.authPresenceEndResult),expression:"column.authPresenceEndResult",modifiers:{"number":true}}],staticClass:"mr-5",attrs:{"type":"radio","name":"gafw-option","id":"gafw-option1","value":"0"},domProps:{"checked":_vm._q(_vm.column.authPresenceEndResult,_vm._n("0"))},on:{"input":_vm.onGradeColumnChange,"change":function($event){_vm.$set(_vm.column, "authPresenceEndResult", _vm._n("0"))}}}),_c('label',{staticClass:"u-font-normal",attrs:{"for":"gafw-option1"}},[_vm._v(_vm._s(_vm.$t('count-towards-endresult-not')))])]),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model.number",value:(_vm.column.authPresenceEndResult),expression:"column.authPresenceEndResult",modifiers:{"number":true}}],staticClass:"mr-5",attrs:{"type":"radio","name":"gafw-option","id":"gafw-option2","value":"1"},domProps:{"checked":_vm._q(_vm.column.authPresenceEndResult,_vm._n("1"))},on:{"input":_vm.onGradeColumnChange,"change":function($event){_vm.$set(_vm.column, "authPresenceEndResult", _vm._n("1"))}}}),_c('label',{staticClass:"u-font-normal",attrs:{"for":"gafw-option2"}},[_vm._v(_vm._s(_vm.$t('maximum-towards-endresult')))])]),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model.number",value:(_vm.column.authPresenceEndResult),expression:"column.authPresenceEndResult",modifiers:{"number":true}}],staticClass:"mr-5",attrs:{"type":"radio","name":"gafw-option","id":"gafw-option3","value":"2"},domProps:{"checked":_vm._q(_vm.column.authPresenceEndResult,_vm._n("2"))},on:{"input":_vm.onGradeColumnChange,"change":function($event){_vm.$set(_vm.column, "authPresenceEndResult", _vm._n("2"))}}}),_c('label',{staticClass:"u-font-normal",attrs:{"for":"gafw-option3"}},[_vm._v(_vm._s(_vm.$t('minimum-towards-endresult')))])])]),_c('div',{staticClass:"mt-20",attrs:{"role":"radiogroup","aria-labelledby":"setting-uaabs"}},[_c('label',{staticClass:"settings-label",attrs:{"id":"setting-uaabs"}},[_vm._v(_vm._s(_vm.$t('unauthorized-absence'))+" "),_c('div',{staticClass:"color-code mod-none mi-3",attrs:{"title":_vm.$t('no-score-found')}},[_c('i',{staticClass:"fa fa-question",attrs:{"aria-hidden":"true"}})]),_vm._v(":")]),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model.number",value:(_vm.column.unauthPresenceEndResult),expression:"column.unauthPresenceEndResult",modifiers:{"number":true}}],staticClass:"mr-5",attrs:{"type":"radio","name":"nogafw-option","id":"nogafw-option1","value":"0"},domProps:{"checked":_vm._q(_vm.column.unauthPresenceEndResult,_vm._n("0"))},on:{"input":_vm.onGradeColumnChange,"change":function($event){_vm.$set(_vm.column, "unauthPresenceEndResult", _vm._n("0"))}}}),_c('label',{staticClass:"u-font-normal",attrs:{"for":"nogafw-option1"}},[_vm._v(_vm._s(_vm.$t('count-towards-endresult-not')))])]),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model.number",value:(_vm.column.unauthPresenceEndResult),expression:"column.unauthPresenceEndResult",modifiers:{"number":true}}],staticClass:"mr-5",attrs:{"type":"radio","name":"nogafw-option","id":"nogafw-option2","value":"1"},domProps:{"checked":_vm._q(_vm.column.unauthPresenceEndResult,_vm._n("1"))},on:{"input":_vm.onGradeColumnChange,"change":function($event){_vm.$set(_vm.column, "unauthPresenceEndResult", _vm._n("1"))}}}),_c('label',{staticClass:"u-font-normal",attrs:{"for":"nogafw-option2"}},[_vm._v(_vm._s(_vm.$t('maximum-towards-endresult')))])]),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model.number",value:(_vm.column.unauthPresenceEndResult),expression:"column.unauthPresenceEndResult",modifiers:{"number":true}}],staticClass:"mr-5",attrs:{"type":"radio","name":"nogafw-option","id":"nogafw-option3","value":"2"},domProps:{"checked":_vm._q(_vm.column.unauthPresenceEndResult,_vm._n("2"))},on:{"input":_vm.onGradeColumnChange,"change":function($event){_vm.$set(_vm.column, "unauthPresenceEndResult", _vm._n("2"))}}}),_c('label',{staticClass:"u-font-normal",attrs:{"for":"nogafw-option3"}},[_vm._v(_vm._s(_vm.$t('minimum-towards-endresult')))])])])]):_vm._e()])],2)]),_c('div',{staticClass:"modal-overlay",on:{"click":function($event){return _vm.$emit('close')}}}),(_vm.showRemoveItemDialog)?_c('div',{staticClass:"modal-remove",on:{"click":function($event){$event.stopPropagation();}}},[_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-center modal-remove-content"},[_c('div',[_vm._v(_vm._s(_vm.$t('remove-from-overview', {title: _vm.title})))]),_c('div',{staticClass:"u-flex modal-remove-actions"},[_c('button',{staticClass:"btn btn-default btn-sm",on:{"click":_vm.removeColumn}},[_vm._v(_vm._s(_vm.$t('remove')))]),_c('button',{staticClass:"btn btn-default btn-sm",on:{"click":_vm.cancel}},[_vm._v(_vm._s(_vm.$t('cancel')))])])])]):_vm._e()])}
-var ItemSettingsvue_type_template_id_3c1dc36e_scoped_true_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"percent"},[_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])])}]
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/ItemSettings.vue?vue&type=template&id=3ff67514&scoped=true&
+var ItemSettingsvue_type_template_id_3ff67514_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"modal-wrapper",attrs:{"role":"dialog","aria-modal":"true","aria-label":_vm.$t('column-settings')}},[_c('div',{staticClass:"modal-content"},[_c('div',{staticClass:"u-flex u-justify-content-between modal-header"},[_c('div',[_c('input',{ref:"column-title",attrs:{"type":"text","autocomplete":"off"},domProps:{"value":_vm.title},on:{"input":function($event){_vm.title = $event}}}),_c('button',{staticClass:"btn btn-link",on:{"click":function($event){_vm.showRemoveItemDialog = true}}},[_vm._v(_vm._s(_vm.$t('remove')))])]),_c('button',{staticClass:"btn-close u-ml-auto",attrs:{"title":_vm.$t('close')},on:{"click":function($event){return _vm.$emit('close')}}},[_c('i',{staticClass:"fa fa-times",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('close')))])])]),_c('div',{staticClass:"modal-body"},[(_vm.column.type !== 'standalone')?[(_vm.isGrouped)?_c('h5',[_vm._v(_vm._s(_vm.$t('grouped-scores')))]):_vm._e(),_c('ul',{staticClass:"grouped-scores"},_vm._l((_vm.subItems),function(item){return _c('li',{key:item.id},[_c('span',[_vm._v(_vm._s(item.title))]),_c('div',{staticClass:"score-breadcrumb-trail"},[_vm._v(_vm._s(_vm._f("breadcrumb")(item)))])])}),0),_c('div',{staticClass:"ml-20"},[(!(_vm.isGrouped || _vm.groupButtonPressed))?_c('button',{staticClass:"btn btn-default",on:{"click":_vm.openGradesDropdown}},[_vm._v(_vm._s(_vm.$t('group-scores')))]):_c('grades-dropdown',{ref:"dropdown",attrs:{"id":"dropdown-settings","graded-items":_vm.gradedItems},on:{"toggle":_vm.toggleSubItem}})],1)]:_vm._e(),_c('h5',{class:{'standalone': _vm.column.type === 'standalone'}},[_vm._v(_vm._s(_vm.$t('settings')))]),_c('div',{staticClass:"settings"},[_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.column.released),expression:"column.released"}],staticClass:"mr-5",attrs:{"type":"checkbox","id":"released"},domProps:{"checked":Array.isArray(_vm.column.released)?_vm._i(_vm.column.released,null)>-1:(_vm.column.released)},on:{"input":_vm.onGradeColumnChange,"change":function($event){var $$a=_vm.column.released,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.$set(_vm.column, "released", $$a.concat([$$v])))}else{$$i>-1&&(_vm.$set(_vm.column, "released", $$a.slice(0,$$i).concat($$a.slice($$i+1))))}}else{_vm.$set(_vm.column, "released", $$c)}}}}),_c('label',{staticClass:"settings-label u-font-medium",attrs:{"for":"released"}},[_vm._v(_vm._s(_vm.$t('make-visible')))])]),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.column.countForEndResult),expression:"column.countForEndResult"}],staticClass:"mr-5",attrs:{"type":"checkbox","id":"countForEndResult"},domProps:{"checked":Array.isArray(_vm.column.countForEndResult)?_vm._i(_vm.column.countForEndResult,null)>-1:(_vm.column.countForEndResult)},on:{"input":_vm.onGradeColumnChange,"change":function($event){var $$a=_vm.column.countForEndResult,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.$set(_vm.column, "countForEndResult", $$a.concat([$$v])))}else{$$i>-1&&(_vm.$set(_vm.column, "countForEndResult", $$a.slice(0,$$i).concat($$a.slice($$i+1))))}}else{_vm.$set(_vm.column, "countForEndResult", $$c)}}}}),_c('label',{staticClass:"settings-label u-font-medium",attrs:{"for":"countForEndResult"}},[_vm._v(_vm._s(_vm.$t('count-towards-endresult')))])]),(_vm.column.countForEndResult)?_c('div',[_c('div',{staticClass:"mt-10"},[_c('label',{staticClass:"settings-label u-block",attrs:{"for":"weight"}},[_vm._v(_vm._s(_vm.$t('weight'))+":")]),_c('div',{staticClass:"number-input u-relative"},[_c('input',{attrs:{"type":"number","id":"weight","autocomplete":"off"},domProps:{"value":_vm._f("formatNum")(_vm.gradeBook.getWeight(_vm.column))},on:{"input":_vm.setWeight}}),_vm._m(0)])]),_c('div',{staticClass:"mt-20",attrs:{"role":"radiogroup","aria-labelledby":"setting-aabs"}},[_c('label',{staticClass:"settings-label",attrs:{"id":"setting-aabs"}},[_vm._v(_vm._s(_vm.$t('authorized-absence'))+" "),_c('div',{staticClass:"color-code amber-700 mi-3",attrs:{"aria-hidden":"true","title":_vm.$t('auth-absent')}},[_c('span',[_vm._v(_vm._s(_vm.$t('aabs')))])]),_vm._v(":")]),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model.number",value:(_vm.column.authPresenceEndResult),expression:"column.authPresenceEndResult",modifiers:{"number":true}}],staticClass:"mr-5",attrs:{"type":"radio","name":"gafw-option","id":"gafw-option1","value":"0"},domProps:{"checked":_vm._q(_vm.column.authPresenceEndResult,_vm._n("0"))},on:{"input":_vm.onGradeColumnChange,"change":function($event){_vm.$set(_vm.column, "authPresenceEndResult", _vm._n("0"))}}}),_c('label',{staticClass:"u-font-normal",attrs:{"for":"gafw-option1"}},[_vm._v(_vm._s(_vm.$t('count-towards-endresult-not')))])]),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model.number",value:(_vm.column.authPresenceEndResult),expression:"column.authPresenceEndResult",modifiers:{"number":true}}],staticClass:"mr-5",attrs:{"type":"radio","name":"gafw-option","id":"gafw-option2","value":"1"},domProps:{"checked":_vm._q(_vm.column.authPresenceEndResult,_vm._n("1"))},on:{"input":_vm.onGradeColumnChange,"change":function($event){_vm.$set(_vm.column, "authPresenceEndResult", _vm._n("1"))}}}),_c('label',{staticClass:"u-font-normal",attrs:{"for":"gafw-option2"}},[_vm._v(_vm._s(_vm.$t('maximum-towards-endresult')))])]),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model.number",value:(_vm.column.authPresenceEndResult),expression:"column.authPresenceEndResult",modifiers:{"number":true}}],staticClass:"mr-5",attrs:{"type":"radio","name":"gafw-option","id":"gafw-option3","value":"2"},domProps:{"checked":_vm._q(_vm.column.authPresenceEndResult,_vm._n("2"))},on:{"input":_vm.onGradeColumnChange,"change":function($event){_vm.$set(_vm.column, "authPresenceEndResult", _vm._n("2"))}}}),_c('label',{staticClass:"u-font-normal",attrs:{"for":"gafw-option3"}},[_vm._v(_vm._s(_vm.$t('minimum-towards-endresult')))])])]),_c('div',{staticClass:"mt-20",attrs:{"role":"radiogroup","aria-labelledby":"setting-uaabs"}},[_c('label',{staticClass:"settings-label",attrs:{"id":"setting-uaabs"}},[_vm._v(_vm._s(_vm.$t('unauthorized-absence'))+" "),_c('div',{staticClass:"color-code mod-none mi-3",attrs:{"title":_vm.$t('no-score-found')}},[_c('i',{staticClass:"fa fa-question",attrs:{"aria-hidden":"true"}})]),_vm._v(":")]),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model.number",value:(_vm.column.unauthPresenceEndResult),expression:"column.unauthPresenceEndResult",modifiers:{"number":true}}],staticClass:"mr-5",attrs:{"type":"radio","name":"nogafw-option","id":"nogafw-option1","value":"0"},domProps:{"checked":_vm._q(_vm.column.unauthPresenceEndResult,_vm._n("0"))},on:{"input":_vm.onGradeColumnChange,"change":function($event){_vm.$set(_vm.column, "unauthPresenceEndResult", _vm._n("0"))}}}),_c('label',{staticClass:"u-font-normal",attrs:{"for":"nogafw-option1"}},[_vm._v(_vm._s(_vm.$t('count-towards-endresult-not')))])]),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model.number",value:(_vm.column.unauthPresenceEndResult),expression:"column.unauthPresenceEndResult",modifiers:{"number":true}}],staticClass:"mr-5",attrs:{"type":"radio","name":"nogafw-option","id":"nogafw-option2","value":"1"},domProps:{"checked":_vm._q(_vm.column.unauthPresenceEndResult,_vm._n("1"))},on:{"input":_vm.onGradeColumnChange,"change":function($event){_vm.$set(_vm.column, "unauthPresenceEndResult", _vm._n("1"))}}}),_c('label',{staticClass:"u-font-normal",attrs:{"for":"nogafw-option2"}},[_vm._v(_vm._s(_vm.$t('maximum-towards-endresult')))])]),_c('div',[_c('input',{directives:[{name:"model",rawName:"v-model.number",value:(_vm.column.unauthPresenceEndResult),expression:"column.unauthPresenceEndResult",modifiers:{"number":true}}],staticClass:"mr-5",attrs:{"type":"radio","name":"nogafw-option","id":"nogafw-option3","value":"2"},domProps:{"checked":_vm._q(_vm.column.unauthPresenceEndResult,_vm._n("2"))},on:{"input":_vm.onGradeColumnChange,"change":function($event){_vm.$set(_vm.column, "unauthPresenceEndResult", _vm._n("2"))}}}),_c('label',{staticClass:"u-font-normal",attrs:{"for":"nogafw-option3"}},[_vm._v(_vm._s(_vm.$t('minimum-towards-endresult')))])])])]):_vm._e()])],2)]),_c('div',{staticClass:"modal-overlay",on:{"click":function($event){return _vm.$emit('close')}}}),(_vm.showRemoveItemDialog)?_c('div',{staticClass:"modal-remove",on:{"click":function($event){$event.stopPropagation();}}},[_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-center modal-remove-content"},[_c('div',[_vm._v(_vm._s(_vm.$t('remove-from-overview', {title: _vm.title})))]),_c('div',{staticClass:"u-flex modal-remove-actions"},[_c('button',{staticClass:"btn btn-default btn-sm",on:{"click":_vm.removeColumn}},[_vm._v(_vm._s(_vm.$t('remove')))]),_c('button',{staticClass:"btn btn-default btn-sm",on:{"click":_vm.cancel}},[_vm._v(_vm._s(_vm.$t('cancel')))])])])]):_vm._e()])}
+var ItemSettingsvue_type_template_id_3ff67514_scoped_true_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"percent"},[_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])])}]
 
 
-// CONCATENATED MODULE: ./src/components/ItemSettings.vue?vue&type=template&id=3c1dc36e&scoped=true&
+// CONCATENATED MODULE: ./src/components/ItemSettings.vue?vue&type=template&id=3ff67514&scoped=true&
 
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/debounce/index.js
 var debounce = __webpack_require__("2f23");
@@ -18839,8 +19075,8 @@ ItemSettingsvue_type_script_lang_ts_ItemSettings = __decorate([vue_class_compone
 /* harmony default export */ var ItemSettingsvue_type_script_lang_ts_ = (ItemSettingsvue_type_script_lang_ts_ItemSettings);
 // CONCATENATED MODULE: ./src/components/ItemSettings.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_ItemSettingsvue_type_script_lang_ts_ = (ItemSettingsvue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/ItemSettings.vue?vue&type=style&index=0&id=3c1dc36e&lang=scss&scoped=true&
-var ItemSettingsvue_type_style_index_0_id_3c1dc36e_lang_scss_scoped_true_ = __webpack_require__("c67d");
+// EXTERNAL MODULE: ./src/components/ItemSettings.vue?vue&type=style&index=0&id=3ff67514&lang=scss&scoped=true&
+var ItemSettingsvue_type_style_index_0_id_3ff67514_lang_scss_scoped_true_ = __webpack_require__("af7b");
 
 // EXTERNAL MODULE: ./src/components/ItemSettings.vue?vue&type=custom&index=0&blockType=i18n
 var ItemSettingsvue_type_custom_index_0_blockType_i18n = __webpack_require__("801a");
@@ -18856,11 +19092,11 @@ var ItemSettingsvue_type_custom_index_0_blockType_i18n = __webpack_require__("80
 
 var ItemSettings_component = normalizeComponent(
   components_ItemSettingsvue_type_script_lang_ts_,
-  ItemSettingsvue_type_template_id_3c1dc36e_scoped_true_render,
-  ItemSettingsvue_type_template_id_3c1dc36e_scoped_true_staticRenderFns,
+  ItemSettingsvue_type_template_id_3ff67514_scoped_true_render,
+  ItemSettingsvue_type_template_id_3ff67514_scoped_true_staticRenderFns,
   false,
   null,
-  "3c1dc36e",
+  "3ff67514",
   null
   
 )
@@ -18980,6 +19216,89 @@ var CategorySettings_component = normalizeComponent(
 if (typeof CategorySettingsvue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(CategorySettingsvue_type_custom_index_0_blockType_i18n["default"])(CategorySettings_component)
 
 /* harmony default export */ var components_CategorySettings = (CategorySettings_component.exports);
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/FinalScoreSettings.vue?vue&type=template&id=3d5a4434&scoped=true&
+var FinalScoreSettingsvue_type_template_id_3d5a4434_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"modal-wrapper",attrs:{"role":"dialog","aria-modal":"true","aria-label":_vm.$t('final-score-settings')}},[_c('div',{staticClass:"modal-content"},[_c('div',{staticClass:"u-flex u-align-items-baseline u-justify-content-between modal-header"},[_c('h4',{staticStyle:{"font-size":"20px","margin-block":"0"}},[_vm._v(_vm._s(_vm.$t('final-score')))]),_c('button',{staticClass:"btn-close u-ml-auto",attrs:{"title":_vm.$t('close')},on:{"click":function($event){return _vm.$emit('close')}}},[_c('i',{staticClass:"fa fa-times",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('close')))])])]),_c('div',{staticClass:"modal-body mb-5"},[_c('div',{staticClass:"mb-10"},[_c('label',{staticClass:"settings-label u-block",attrs:{"for":"display-total"}},[_vm._v(_vm._s(_vm.$t('display-total'))+":")]),_c('div',{staticClass:"number-input u-relative"},[_c('input',{attrs:{"type":"number","placeholder":"100","step":"1","id":"display-total","autocomplete":"off"},domProps:{"value":_vm.gradeBook.displayTotal},on:{"input":_vm.setDisplayTotal}})])])])]),_c('div',{staticClass:"modal-overlay",on:{"click":function($event){return _vm.$emit('close')}}})])}
+var FinalScoreSettingsvue_type_template_id_3d5a4434_scoped_true_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/FinalScoreSettings.vue?vue&type=template&id=3d5a4434&scoped=true&
+
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/FinalScoreSettings.vue?vue&type=script&lang=ts&
+
+
+
+
+
+
+
+
+
+
+var FinalScoreSettingsvue_type_script_lang_ts_FinalScoreSettings =
+/*#__PURE__*/
+function (_Vue) {
+  _inherits(FinalScoreSettings, _Vue);
+
+  function FinalScoreSettings() {
+    _classCallCheck(this, FinalScoreSettings);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(FinalScoreSettings).apply(this, arguments));
+  }
+
+  _createClass(FinalScoreSettings, [{
+    key: "setDisplayTotal",
+    value: function setDisplayTotal(event) {
+      var displayTotal = parseFloat(event.target.value);
+      this.gradeBook.displayTotal = isNaN(displayTotal) ? null : displayTotal;
+      this.$emit('change-display-total');
+    }
+  }]);
+
+  return FinalScoreSettings;
+}(external_commonjs_vue_commonjs2_vue_root_Vue_default.a);
+
+__decorate([Prop({
+  type: GradeBook_GradeBook,
+  required: true
+})], FinalScoreSettingsvue_type_script_lang_ts_FinalScoreSettings.prototype, "gradeBook", void 0);
+
+FinalScoreSettingsvue_type_script_lang_ts_FinalScoreSettings = __decorate([vue_class_component_esm({
+  components: {}
+})], FinalScoreSettingsvue_type_script_lang_ts_FinalScoreSettings);
+/* harmony default export */ var FinalScoreSettingsvue_type_script_lang_ts_ = (FinalScoreSettingsvue_type_script_lang_ts_FinalScoreSettings);
+// CONCATENATED MODULE: ./src/components/FinalScoreSettings.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var components_FinalScoreSettingsvue_type_script_lang_ts_ = (FinalScoreSettingsvue_type_script_lang_ts_); 
+// EXTERNAL MODULE: ./src/components/FinalScoreSettings.vue?vue&type=style&index=0&id=3d5a4434&lang=scss&scoped=true&
+var FinalScoreSettingsvue_type_style_index_0_id_3d5a4434_lang_scss_scoped_true_ = __webpack_require__("88ef");
+
+// EXTERNAL MODULE: ./src/components/FinalScoreSettings.vue?vue&type=custom&index=0&blockType=i18n
+var FinalScoreSettingsvue_type_custom_index_0_blockType_i18n = __webpack_require__("ddc6");
+
+// CONCATENATED MODULE: ./src/components/FinalScoreSettings.vue
+
+
+
+
+
+
+/* normalize component */
+
+var FinalScoreSettings_component = normalizeComponent(
+  components_FinalScoreSettingsvue_type_script_lang_ts_,
+  FinalScoreSettingsvue_type_template_id_3d5a4434_scoped_true_render,
+  FinalScoreSettingsvue_type_template_id_3d5a4434_scoped_true_staticRenderFns,
+  false,
+  null,
+  "3d5a4434",
+  null
+  
+)
+
+/* custom blocks */
+
+if (typeof FinalScoreSettingsvue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(FinalScoreSettingsvue_type_custom_index_0_blockType_i18n["default"])(FinalScoreSettings_component)
+
+/* harmony default export */ var components_FinalScoreSettings = (FinalScoreSettings_component.exports);
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/core-js/modules/es.array.includes.js
 var es_array_includes = __webpack_require__("7f6d");
 
@@ -19684,26 +20003,58 @@ function () {
       })));
     }
   }, {
+    key: "updateDisplayTotal",
+    value: function updateDisplayTotal(displayTotal, callback) {
+      var _this17 = this;
+
+      this.addToQueue(
+      /*#__PURE__*/
+      _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee17() {
+        var parameters;
+        return regeneratorRuntime.wrap(function _callee17$(_context17) {
+          while (1) {
+            switch (_context17.prev = _context17.next) {
+              case 0:
+                parameters = {
+                  'displayTotal': displayTotal
+                };
+                _context17.next = 3;
+                return _this17.executeAPIRequest(_this17.apiConfig.updateDisplayTotalURL, parameters);
+
+              case 3:
+                callback();
+
+              case 4:
+              case "end":
+                return _context17.stop();
+            }
+          }
+        }, _callee17);
+      })));
+    }
+  }, {
     key: "addToQueue",
     value: function addToQueue(callback) {
       this.queue.add(
       /*#__PURE__*/
       _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee17() {
-        return regeneratorRuntime.wrap(function _callee17$(_context17) {
+      regeneratorRuntime.mark(function _callee18() {
+        return regeneratorRuntime.wrap(function _callee18$(_context18) {
           while (1) {
-            switch (_context17.prev = _context17.next) {
+            switch (_context18.prev = _context18.next) {
               case 0:
-                _context17.next = 2;
+                _context18.next = 2;
                 return callback();
 
               case 2:
               case "end":
-                return _context17.stop();
+                return _context18.stop();
             }
           }
-        }, _callee17);
+        }, _callee18);
       })));
       this.queue.onIdle().then(this.finishSaving);
     }
@@ -19712,7 +20063,7 @@ function () {
     value: function () {
       var _executeAPIRequest = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee18(apiURL) {
+      regeneratorRuntime.mark(function _callee19(apiURL) {
         var parameters,
             formData,
             _i,
@@ -19727,13 +20078,13 @@ function () {
             _err$response2$data,
             error,
             status,
-            _args18 = arguments;
+            _args19 = arguments;
 
-        return regeneratorRuntime.wrap(function _callee18$(_context18) {
+        return regeneratorRuntime.wrap(function _callee19$(_context19) {
           while (1) {
-            switch (_context18.prev = _context18.next) {
+            switch (_context19.prev = _context19.next) {
               case 0:
-                parameters = _args18.length > 1 && _args18[1] !== undefined ? _args18[1] : {};
+                parameters = _args19.length > 1 && _args19[1] !== undefined ? _args19[1] : {};
                 this.beginSaving();
                 parameters['gradebookDataId'] = this.gradebookDataId;
                 parameters['version'] = this.currentVersion;
@@ -19748,28 +20099,28 @@ function () {
                   formData.set(key, value);
                 }
 
-                _context18.prev = 7;
-                _context18.next = 10;
+                _context19.prev = 7;
+                _context19.next = 10;
                 return axios_default.a.post(apiURL, formData, {
                   timeout: TIMEOUT_SEC * 1000
                 });
 
               case 10:
-                res = _context18.sent;
+                res = _context19.sent;
                 logResponse(res.data);
 
                 if (!(_typeof(res.data) === 'object')) {
-                  _context18.next = 18;
+                  _context19.next = 18;
                   break;
                 }
 
                 this.gradebookDataId = res.data.gradebook.dataId;
                 this.currentVersion = res.data.gradebook.version;
-                return _context18.abrupt("return", res.data);
+                return _context19.abrupt("return", res.data);
 
               case 18:
                 if (!(typeof res.data === 'string' && res.data.indexOf('login') !== -1)) {
-                  _context18.next = 22;
+                  _context19.next = 22;
                   break;
                 }
 
@@ -19783,20 +20134,20 @@ function () {
                 };
 
               case 23:
-                _context18.next = 30;
+                _context19.next = 30;
                 break;
 
               case 25:
-                _context18.prev = 25;
-                _context18.t0 = _context18["catch"](7);
-                logResponse(_context18.t0);
+                _context19.prev = 25;
+                _context19.t0 = _context19["catch"](7);
+                logResponse(_context19.t0);
 
-                if ((_context18.t0 === null || _context18.t0 === void 0 ? void 0 : _context18.t0.isAxiosError) && ((_err$message = _context18.t0.message) === null || _err$message === void 0 ? void 0 : _err$message.toLowerCase().indexOf('timeout')) !== -1) {
+                if ((_context19.t0 === null || _context19.t0 === void 0 ? void 0 : _context19.t0.isAxiosError) && ((_err$message = _context19.t0.message) === null || _err$message === void 0 ? void 0 : _err$message.toLowerCase().indexOf('timeout')) !== -1) {
                   error = {
                     'type': 'Timeout'
                   };
-                } else if ([HTTP_FORBIDDEN, HTTP_NOT_FOUND, HTTP_CONFLICT, ERROR_UNKNOWN].includes(_context18.t0 === null || _context18.t0 === void 0 ? void 0 : (_err$response = _context18.t0.response) === null || _err$response === void 0 ? void 0 : _err$response.status)) {
-                  status = _context18.t0.response.status;
+                } else if ([HTTP_FORBIDDEN, HTTP_NOT_FOUND, HTTP_CONFLICT, ERROR_UNKNOWN].includes(_context19.t0 === null || _context19.t0 === void 0 ? void 0 : (_err$response = _context19.t0.response) === null || _err$response === void 0 ? void 0 : _err$response.status)) {
+                  status = _context19.t0.response.status;
 
                   if (status === HTTP_FORBIDDEN) {
                     error = {
@@ -19815,10 +20166,10 @@ function () {
                       'type': 'Unknown'
                     };
                   }
-                } else if (_context18.t0 === null || _context18.t0 === void 0 ? void 0 : (_err$response2 = _context18.t0.response) === null || _err$response2 === void 0 ? void 0 : (_err$response2$data = _err$response2.data) === null || _err$response2$data === void 0 ? void 0 : _err$response2$data.error) {
-                  error = _context18.t0.response.data.error;
-                } else if (_context18.t0 === null || _context18.t0 === void 0 ? void 0 : _context18.t0.type) {
-                  error = _context18.t0;
+                } else if (_context19.t0 === null || _context19.t0 === void 0 ? void 0 : (_err$response2 = _context19.t0.response) === null || _err$response2 === void 0 ? void 0 : (_err$response2$data = _err$response2.data) === null || _err$response2$data === void 0 ? void 0 : _err$response2$data.error) {
+                  error = _context19.t0.response.data.error;
+                } else if (_context19.t0 === null || _context19.t0 === void 0 ? void 0 : _context19.t0.type) {
+                  error = _context19.t0;
                 } else {
                   error = {
                     'type': 'Unknown'
@@ -19831,10 +20182,10 @@ function () {
 
               case 30:
               case "end":
-                return _context18.stop();
+                return _context19.stop();
             }
           }
-        }, _callee18, this, [[7, 25]]);
+        }, _callee19, this, [[7, 25]]);
       }));
 
       function executeAPIRequest(_x) {
@@ -19858,30 +20209,30 @@ function () {
     value: function () {
       var _loadGradeBookData = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee19(loadAllURL, csrfToken) {
+      regeneratorRuntime.mark(function _callee20(loadAllURL, csrfToken) {
         var params, res;
-        return regeneratorRuntime.wrap(function _callee19$(_context19) {
+        return regeneratorRuntime.wrap(function _callee20$(_context20) {
           while (1) {
-            switch (_context19.prev = _context19.next) {
+            switch (_context20.prev = _context20.next) {
               case 0:
                 params = csrfToken ? {
                   '_csrf_token': csrfToken
                 } : {};
-                _context19.next = 3;
+                _context20.next = 3;
                 return axios_default.a.get(loadAllURL, {
                   params: params
                 });
 
               case 3:
-                res = _context19.sent;
-                return _context19.abrupt("return", res.data);
+                res = _context20.sent;
+                return _context20.abrupt("return", res.data);
 
               case 5:
               case "end":
-                return _context19.stop();
+                return _context20.stop();
             }
           }
-        }, _callee19);
+        }, _callee20);
       }));
 
       function loadGradeBookData(_x2, _x3) {
@@ -19997,6 +20348,7 @@ if (typeof ErrorDisplayvue_type_custom_index_0_blockType_i18n["default"] === 'fu
 
 
 
+
 var ITEMS_PER_PAGE_KEY = 'chamilo-gradebook.itemsPerPage';
 
 var Mainvue_type_script_lang_ts_Main =
@@ -20014,11 +20366,13 @@ function (_Vue) {
     _this.connector = null;
     _this.itemSettings = null;
     _this.categorySettings = null;
+    _this.showFinalScoreSettings = false;
     _this.studentSearchTerm = '';
     _this.studentSearchTerms = [];
     _this.tableBusy = false;
     _this.saveColumnId = null;
     _this.saveCategoryId = null;
+    _this.saveDisplayTotal = false;
     _this.itemsPerPage = 5;
     _this.errorData = null;
     _this.addColumnId = null;
@@ -20283,13 +20637,28 @@ function (_Vue) {
       });
     }
   }, {
+    key: "onChangeDisplayTotal",
+    value: function onChangeDisplayTotal() {
+      var _this$connector7,
+          _this9 = this;
+
+      if (!this.gradeBook) {
+        return;
+      }
+
+      this.saveDisplayTotal = true;
+      (_this$connector7 = this.connector) === null || _this$connector7 === void 0 ? void 0 : _this$connector7.updateDisplayTotal(this.gradeBook.displayTotal, function () {
+        _this9.saveDisplayTotal = false;
+      });
+    }
+  }, {
     key: "onMoveCategory",
     value: function () {
       var _onMoveCategory = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee3(category) {
-        var _this$connector7,
-            _this9 = this;
+        var _this$connector8,
+            _this10 = this;
 
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
@@ -20305,8 +20674,8 @@ function (_Vue) {
               case 2:
                 this.tableBusy = true;
                 _context3.next = 5;
-                return (_this$connector7 = this.connector) === null || _this$connector7 === void 0 ? void 0 : _this$connector7.moveCategory(category, this.gradeBook.categories.indexOf(category), function () {
-                  _this9.tableBusy = false;
+                return (_this$connector8 = this.connector) === null || _this$connector8 === void 0 ? void 0 : _this$connector8.moveCategory(category, this.gradeBook.categories.indexOf(category), function () {
+                  _this10.tableBusy = false;
                 });
 
               case 5:
@@ -20326,40 +20695,40 @@ function (_Vue) {
   }, {
     key: "onRemoveCategory",
     value: function onRemoveCategory(category) {
-      var _this$connector8,
-          _this10 = this;
+      var _this$connector9,
+          _this11 = this;
 
       this.tableBusy = true;
-      (_this$connector8 = this.connector) === null || _this$connector8 === void 0 ? void 0 : _this$connector8.removeCategory(category, function () {
-        _this10.tableBusy = false;
+      (_this$connector9 = this.connector) === null || _this$connector9 === void 0 ? void 0 : _this$connector9.removeCategory(category, function () {
+        _this11.tableBusy = false;
       });
     }
   }, {
     key: "onChangeGradeColumn",
     value: function onChangeGradeColumn(gradeColumn) {
-      var _this$connector9,
-          _this11 = this;
+      var _this$connector10,
+          _this12 = this;
 
       this.saveColumnId = gradeColumn.id;
-      (_this$connector9 = this.connector) === null || _this$connector9 === void 0 ? void 0 : _this$connector9.updateGradeColumn(gradeColumn, function () {
-        _this11.saveColumnId = null;
+      (_this$connector10 = this.connector) === null || _this$connector10 === void 0 ? void 0 : _this$connector10.updateGradeColumn(gradeColumn, function () {
+        _this12.saveColumnId = null;
       });
     }
   }, {
     key: "onChangeGradeColumnCategory",
     value: function onChangeGradeColumnCategory(gradeColumn, categoryId) {
-      var _this$connector10,
-          _this12 = this;
+      var _this$connector11,
+          _this13 = this;
 
       this.tableBusy = true;
-      (_this$connector10 = this.connector) === null || _this$connector10 === void 0 ? void 0 : _this$connector10.updateGradeColumnCategory(gradeColumn, categoryId, function () {
-        _this12.tableBusy = false;
+      (_this$connector11 = this.connector) === null || _this$connector11 === void 0 ? void 0 : _this$connector11.updateGradeColumnCategory(gradeColumn, categoryId, function () {
+        _this13.tableBusy = false;
       });
     }
   }, {
     key: "onMoveGradeColumn",
     value: function onMoveGradeColumn(column) {
-      var _this13 = this;
+      var _this14 = this;
 
       if (!this.gradeBook) {
         return;
@@ -20370,43 +20739,17 @@ function (_Vue) {
       });
 
       if (category) {
-        var _this$connector11;
+        var _this$connector12;
 
         this.tableBusy = true;
-        (_this$connector11 = this.connector) === null || _this$connector11 === void 0 ? void 0 : _this$connector11.moveGradeColumn(column, category.columnIds.indexOf(column.id), function () {
-          _this13.tableBusy = false;
+        (_this$connector12 = this.connector) === null || _this$connector12 === void 0 ? void 0 : _this$connector12.moveGradeColumn(column, category.columnIds.indexOf(column.id), function () {
+          _this14.tableBusy = false;
         });
       }
     }
   }, {
     key: "onAddSubItem",
     value: function onAddSubItem(item, columnId) {
-      var _this$connector12,
-          _this14 = this;
-
-      if (!this.gradeBook) {
-        return;
-      }
-
-      var gradeBook = this.gradeBook;
-      this.tableBusy = true;
-      (_this$connector12 = this.connector) === null || _this$connector12 === void 0 ? void 0 : _this$connector12.addColumnSubItem(columnId, item.id, function (column, scores) {
-        //console.log('scores', scores);
-        var resultsData = gradeBook.resultsData;
-        delete resultsData[columnId];
-        scores.forEach(function (score) {
-          if (!resultsData[columnId]) {
-            external_commonjs_vue_commonjs2_vue_root_Vue_default.a.set(resultsData, columnId, {});
-          }
-
-          resultsData[columnId][score.targetUserId] = score;
-        });
-        _this14.tableBusy = false;
-      });
-    }
-  }, {
-    key: "onRemoveSubItem",
-    value: function onRemoveSubItem(item, columnId) {
       var _this$connector13,
           _this15 = this;
 
@@ -20416,7 +20759,7 @@ function (_Vue) {
 
       var gradeBook = this.gradeBook;
       this.tableBusy = true;
-      (_this$connector13 = this.connector) === null || _this$connector13 === void 0 ? void 0 : _this$connector13.removeColumnSubItem(columnId, item.id, function (column, scores) {
+      (_this$connector13 = this.connector) === null || _this$connector13 === void 0 ? void 0 : _this$connector13.addColumnSubItem(columnId, item.id, function (column, scores) {
         //console.log('scores', scores);
         var resultsData = gradeBook.resultsData;
         delete resultsData[columnId];
@@ -20431,14 +20774,40 @@ function (_Vue) {
       });
     }
   }, {
-    key: "onRemoveColumn",
-    value: function onRemoveColumn(column) {
+    key: "onRemoveSubItem",
+    value: function onRemoveSubItem(item, columnId) {
       var _this$connector14,
           _this16 = this;
 
+      if (!this.gradeBook) {
+        return;
+      }
+
+      var gradeBook = this.gradeBook;
       this.tableBusy = true;
-      (_this$connector14 = this.connector) === null || _this$connector14 === void 0 ? void 0 : _this$connector14.removeGradeColumn(column, function () {
+      (_this$connector14 = this.connector) === null || _this$connector14 === void 0 ? void 0 : _this$connector14.removeColumnSubItem(columnId, item.id, function (column, scores) {
+        //console.log('scores', scores);
+        var resultsData = gradeBook.resultsData;
+        delete resultsData[columnId];
+        scores.forEach(function (score) {
+          if (!resultsData[columnId]) {
+            external_commonjs_vue_commonjs2_vue_root_Vue_default.a.set(resultsData, columnId, {});
+          }
+
+          resultsData[columnId][score.targetUserId] = score;
+        });
         _this16.tableBusy = false;
+      });
+    }
+  }, {
+    key: "onRemoveColumn",
+    value: function onRemoveColumn(column) {
+      var _this$connector15,
+          _this17 = this;
+
+      this.tableBusy = true;
+      (_this$connector15 = this.connector) === null || _this$connector15 === void 0 ? void 0 : _this$connector15.removeGradeColumn(column, function () {
+        _this17.tableBusy = false;
       });
     }
   }, {
@@ -20460,26 +20829,26 @@ function (_Vue) {
   }, {
     key: "onOverwriteResult",
     value: function onOverwriteResult(result) {
-      var _this$connector15;
+      var _this$connector16;
 
       this.saveColumnId = result.columnId;
-      (_this$connector15 = this.connector) === null || _this$connector15 === void 0 ? void 0 : _this$connector15.overwriteGradeResult(result, this.updateResult);
+      (_this$connector16 = this.connector) === null || _this$connector16 === void 0 ? void 0 : _this$connector16.overwriteGradeResult(result, this.updateResult);
     }
   }, {
     key: "onRevertOverwrittenResult",
     value: function onRevertOverwrittenResult(result) {
-      var _this$connector16;
+      var _this$connector17;
 
       this.saveColumnId = result.columnId;
-      (_this$connector16 = this.connector) === null || _this$connector16 === void 0 ? void 0 : _this$connector16.revertOverwrittenGradeResult(result, this.updateResult);
+      (_this$connector17 = this.connector) === null || _this$connector17 === void 0 ? void 0 : _this$connector17.revertOverwrittenGradeResult(result, this.updateResult);
     }
   }, {
     key: "onUpdateScoreComment",
     value: function onUpdateScoreComment(result) {
-      var _this$connector17;
+      var _this$connector18;
 
       this.saveColumnId = result.columnId;
-      (_this$connector17 = this.connector) === null || _this$connector17 === void 0 ? void 0 : _this$connector17.updateGradeResultComment(result, this.updateResult);
+      (_this$connector18 = this.connector) === null || _this$connector18 === void 0 ? void 0 : _this$connector18.updateGradeResultComment(result, this.updateResult);
     }
   }, {
     key: "loadItemsPerPage",
@@ -20504,6 +20873,11 @@ function (_Vue) {
       this.saveColumnId = null;
       this.saveCategoryId = null;
       this.tableBusy = false;
+    }
+  }, {
+    key: "exportGradeBook",
+    value: function exportGradeBook() {
+      window.open(this.apiConfig.gradeBookExportURL, '_blank');
     }
   }, {
     key: "load",
@@ -20583,10 +20957,10 @@ function (_Vue) {
     key: "selectedCategory",
     get: function get() {
       var _this$gradeBook,
-          _this17 = this;
+          _this18 = this;
 
       return ((_this$gradeBook = this.gradeBook) === null || _this$gradeBook === void 0 ? void 0 : _this$gradeBook.categories.find(function (cat) {
-        return cat.id === _this17.categorySettings;
+        return cat.id === _this18.categorySettings;
       })) || null;
     }
   }]);
@@ -20607,7 +20981,8 @@ Mainvue_type_script_lang_ts_Main = __decorate([vue_class_component_esm({
     GradesTable: components_GradesTable,
     GradesDropdown: components_GradesDropdown,
     ItemSettings: components_ItemSettings,
-    CategorySettings: components_CategorySettings
+    CategorySettings: components_CategorySettings,
+    FinalScoreSettings: components_FinalScoreSettings
   }
 })], Mainvue_type_script_lang_ts_Main);
 /* harmony default export */ var Mainvue_type_script_lang_ts_ = (Mainvue_type_script_lang_ts_Main);
@@ -20616,8 +20991,8 @@ Mainvue_type_script_lang_ts_Main = __decorate([vue_class_component_esm({
 // EXTERNAL MODULE: ./src/components/Main.vue?vue&type=style&index=0&lang=css&
 var Mainvue_type_style_index_0_lang_css_ = __webpack_require__("c266");
 
-// EXTERNAL MODULE: ./src/components/Main.vue?vue&type=style&index=1&id=60f5f433&lang=scss&scoped=true&
-var Mainvue_type_style_index_1_id_60f5f433_lang_scss_scoped_true_ = __webpack_require__("fbce");
+// EXTERNAL MODULE: ./src/components/Main.vue?vue&type=style&index=1&id=3736d770&lang=scss&scoped=true&
+var Mainvue_type_style_index_1_id_3736d770_lang_scss_scoped_true_ = __webpack_require__("a0f2");
 
 // EXTERNAL MODULE: ./src/components/Main.vue?vue&type=style&index=2&lang=css&
 var Mainvue_type_style_index_2_lang_css_ = __webpack_require__("59b0");
@@ -20638,11 +21013,11 @@ var Mainvue_type_custom_index_0_blockType_i18n = __webpack_require__("2c8b");
 
 var Main_component = normalizeComponent(
   components_Mainvue_type_script_lang_ts_,
-  Mainvue_type_template_id_60f5f433_scoped_true_render,
-  Mainvue_type_template_id_60f5f433_scoped_true_staticRenderFns,
+  Mainvue_type_template_id_3736d770_scoped_true_render,
+  Mainvue_type_template_id_3736d770_scoped_true_staticRenderFns,
   false,
   null,
-  "60f5f433",
+  "3736d770",
   null
   
 )
@@ -20719,19 +21094,19 @@ var App_component = normalizeComponent(
 )
 
 /* harmony default export */ var src_App = (App_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/ImporterApp.vue?vue&type=template&id=a97afd16&scoped=true&
-var ImporterAppvue_type_template_id_a97afd16_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app"}},[_c('div',{attrs:{"id":"gradebook-import"}},[_c('ol',{staticClass:"nav nav-tabs mod-steps",attrs:{"role":"navigation","aria-label":_vm.$t('import-steps')}},[_c('li',{staticClass:"nav-item u-cursor-pointer",class:{'active': _vm.chooseTypeActive, 'done': _vm.importType},attrs:{"aria-current":_vm.chooseTypeActive ? 'step' : null}},[_c('a',{staticClass:"nav-link u-block",on:{"click":_vm.reload}},[_c('span',{staticClass:"step u-inline-block"},[_vm._v("1")]),_vm._v(_vm._s(_vm.$t('choose-type')))])]),_c('li',{staticClass:"nav-item",class:{'active': _vm.chooseFileActive, 'done': _vm.imported || _vm.resultsLoaded},attrs:{"aria-current":_vm.chooseFileActive ? 'step' : null}},[_c('a',{staticClass:"nav-link u-block"},[_c('span',{staticClass:"step u-inline-block"},[_vm._v("2")]),_vm._v(_vm._s(_vm.$t('choose-file')))])]),_c('li',{staticClass:"nav-item",class:{'active': _vm.previewActive, 'done': _vm.resultsLoaded},attrs:{"aria-current":_vm.previewActive ? 'step' : null}},[_c('a',{staticClass:"nav-link u-block"},[_c('span',{staticClass:"step u-inline-block"},[_vm._v("3")]),_vm._v(_vm._s(_vm.$t('import-preview')))])]),_c('li',{staticClass:"nav-item",class:{'active': _vm.importCompleteActive},attrs:{"aria-current":_vm.importCompleteActive ? 'step' : null}},[_c('a',{staticClass:"nav-link u-block"},[_c('span',{staticClass:"step u-inline-block"},[_vm._v("4")]),_vm._v(_vm._s(_vm.$t('import-complete')))])])]),(_vm.chooseTypeActive)?_c('div',[_c('p',{staticClass:"gradebook-import-type u-font-medium"},[_vm._v(_vm._s(_vm.$t('question-upload')))]),_c('div',{staticClass:"u-flex u-gap-small-2x"},[_c('button',{staticClass:"btn btn-light fs-13",on:{"click":function($event){_vm.importType = 'scores'}}},[_vm._v(_vm._s(_vm.$t('type-scores')))]),_c('button',{staticClass:"btn btn-default fs-13",on:{"click":function($event){_vm.importType = 'scores_comments'}}},[_vm._v(_vm._s(_vm.$t('type-scores-comments')))])])]):_vm._e(),(_vm.chooseFileActive && !_vm.hasError)?_c('div',[_c('div',{staticClass:"gradebook-import-file u-font-medium"},[_vm._v(_vm._s(_vm.$t('file-with'))+" "+_vm._s(_vm.importType === 'scores' ? _vm.$t('type-scores') : _vm.$t('type-scores-comments')))]),_c('csv-import-info',{attrs:{"import-type":_vm.importType}}),_c('input',{ref:"inputfile",staticClass:"inputfile",attrs:{"type":"file","name":"file","id":"file"},on:{"change":function($event){_vm.filename=$event.target.value.split('\\').pop()}}}),_c('div',{staticClass:"u-flex"},[_c('label',{staticClass:"btn btn-default lbl-input-file u-font-normal",class:{'mod-selected': !!_vm.filename},attrs:{"for":"file","title":_vm.$t('select-file')}},[_c('svg',{attrs:{"xmlns":"http://www.w3.org/2000/svg","width":"20","height":"17","viewBox":"0 0 20 17"}},[_c('path',{attrs:{"d":"M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"}})]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.filename || _vm.$t('select-file')))])]),(_vm.filename)?_c('button',{staticClass:"btn btn-primary",attrs:{"id":"uploadbutton","type":"button","value":"Upload","disabled":_vm.hasError || !_vm.importType},on:{"click":_vm.uploadCSV}},[_vm._v(_vm._s(_vm.$t('upload')))]):_vm._e()])],1):_vm._e(),(_vm.chooseFileActive && _vm.hasError)?_c('div',{staticClass:"import-errors alert alert-danger"},[(_vm.has500Error)?_c('span',{staticClass:"error-filename u-inline-block u-font-medium"},[_vm._v(_vm._s(_vm.filename)+":")]):_vm._e(),_c('div',{staticClass:"errors",class:{'mb-20': _vm.has500Error},domProps:{"innerHTML":_vm._s(_vm.error)}}),(_vm.has500Error)?_c('div',{staticClass:"u-font-medium"},[_vm._v(_vm._s(_vm.$t('correct-mistakes'))+" "),_c('a',{attrs:{"href":"#"},on:{"click":function($event){$event.stopPropagation();return _vm.reload($event)}}},[_vm._v(_vm._s(_vm.$t('reupload-results')))]),_vm._v(".")]):_vm._e()]):_vm._e(),(_vm.previewActive && !_vm.hasError)?[_c('div',{staticClass:"csv-import-info u-flex u-align-items-start"},[_c('p',[_vm._v(_vm._s(_vm.$t('import-results-overview')))]),_c('div',[_c('button',{staticClass:"btn btn-primary",attrs:{"title":_vm.$t('import')},on:{"click":_vm.uploadResults}},[_c('span',{staticClass:"glyphicon glyphicon-arrow-right",attrs:{"aria-hidden":"true"}}),_vm._v(" "+_vm._s(_vm.$t('import')))])])]),_c('imports-table',{attrs:{"fields":_vm.fields,"results":_vm.results}})]:_vm._e(),(_vm.previewActive && _vm.hasError)?_c('div',{staticClass:"import-errors alert alert-danger"},[_c('div',{staticClass:"errors",domProps:{"innerHTML":_vm._s(_vm.error)}})]):_vm._e(),(_vm.importCompleteActive)?[_c('div',{staticClass:"alert alert-info mod-import-completed"},[_c('p',[_vm._v(_vm._s(_vm.$t('import-successful')))]),(_vm.missingUsers.length)?_c('p',{domProps:{"innerHTML":_vm._s(_vm.$t('no-results-some-students'))}}):_vm._e(),_c('p',[_c('a',{staticClass:"u-font-medium",attrs:{"href":_vm.apiConfig.gradeBookRootURL}},[_c('i',{staticClass:"fa fa-arrow-right",attrs:{"aria-hidden":"true"}}),_vm._v(" "+_vm._s(_vm.$t('go-to-gradebook')))])])]),(_vm.missingUsers.length)?_c('p',{staticClass:"gradebook-import-missing-users u-font-medium"},[_vm._v(_vm._s(_vm.$t('without-results'))+":")]):_vm._e(),(_vm.missingUsers.length)?_c('missing-users-table',{attrs:{"missing-users":_vm.missingUsers}}):_vm._e()]:_vm._e()],2),(_vm.debugServerResponse)?_c('div',{attrs:{"id":"server-response"}}):_vm._e()])}
-var ImporterAppvue_type_template_id_a97afd16_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/ImporterApp.vue?vue&type=template&id=728e684b&scoped=true&
+var ImporterAppvue_type_template_id_728e684b_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app"}},[_c('div',{attrs:{"id":"gradebook-import"}},[_c('ol',{staticClass:"nav nav-tabs mod-steps",attrs:{"role":"navigation","aria-label":_vm.$t('import-steps')}},[_c('li',{staticClass:"nav-item u-cursor-pointer",class:{'active': _vm.chooseTypeActive, 'done': _vm.importType},attrs:{"aria-current":_vm.chooseTypeActive ? 'step' : null}},[_c('a',{staticClass:"nav-link u-block",on:{"click":_vm.reload}},[_c('span',{staticClass:"step u-inline-block"},[_vm._v("1")]),_vm._v(_vm._s(_vm.$t('choose-type')))])]),_c('li',{staticClass:"nav-item",class:{'active': _vm.chooseFileActive, 'done': _vm.imported || _vm.resultsLoaded},attrs:{"aria-current":_vm.chooseFileActive ? 'step' : null}},[_c('a',{staticClass:"nav-link u-block"},[_c('span',{staticClass:"step u-inline-block"},[_vm._v("2")]),_vm._v(_vm._s(_vm.$t('choose-file')))])]),_c('li',{staticClass:"nav-item",class:{'active': _vm.previewActive, 'done': _vm.resultsLoaded},attrs:{"aria-current":_vm.previewActive ? 'step' : null}},[_c('a',{staticClass:"nav-link u-block"},[_c('span',{staticClass:"step u-inline-block"},[_vm._v("3")]),_vm._v(_vm._s(_vm.$t('import-preview')))])]),_c('li',{staticClass:"nav-item",class:{'active': _vm.importCompleteActive},attrs:{"aria-current":_vm.importCompleteActive ? 'step' : null}},[_c('a',{staticClass:"nav-link u-block"},[_c('span',{staticClass:"step u-inline-block"},[_vm._v("4")]),_vm._v(_vm._s(_vm.$t('import-complete')))])])]),(_vm.chooseTypeActive)?_c('div',[_c('p',{staticClass:"gradebook-import-type u-font-medium"},[_vm._v(_vm._s(_vm.$t('question-upload')))]),_c('div',{staticClass:"u-flex u-gap-small-2x"},[_c('button',{staticClass:"btn btn-light fs-13",on:{"click":function($event){_vm.importType = 'scores'}}},[_vm._v(_vm._s(_vm.$t('type-scores')))]),_c('button',{staticClass:"btn btn-default fs-13",on:{"click":function($event){_vm.importType = 'scores_comments'}}},[_vm._v(_vm._s(_vm.$t('type-scores-comments')))])])]):_vm._e(),(_vm.chooseFileActive && !_vm.hasError)?_c('div',[_c('div',{staticClass:"gradebook-import-file u-font-medium"},[_vm._v(_vm._s(_vm.$t('file-with'))+" "+_vm._s(_vm.importType === 'scores' ? _vm.$t('type-scores') : _vm.$t('type-scores-comments')))]),_c('csv-import-info',{attrs:{"import-type":_vm.importType}}),_c('input',{ref:"inputfile",staticClass:"inputfile",attrs:{"type":"file","name":"file","id":"file"},on:{"change":function($event){_vm.filename=$event.target.value.split('\\').pop()}}}),_c('div',{staticClass:"u-flex"},[_c('label',{staticClass:"btn btn-default lbl-input-file u-font-normal",class:{'mod-selected': !!_vm.filename},attrs:{"for":"file","title":_vm.$t('select-file')}},[_c('svg',{attrs:{"xmlns":"http://www.w3.org/2000/svg","width":"20","height":"17","viewBox":"0 0 20 17"}},[_c('path',{attrs:{"d":"M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"}})]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.filename || _vm.$t('select-file')))])]),(_vm.filename)?_c('button',{staticClass:"btn btn-primary",attrs:{"id":"uploadbutton","type":"button","value":"Upload","disabled":_vm.hasError || !_vm.importType},on:{"click":_vm.uploadCSV}},[_vm._v(_vm._s(_vm.$t('upload')))]):_vm._e()])],1):_vm._e(),(_vm.chooseFileActive && _vm.hasError)?_c('div',{staticClass:"import-errors alert alert-danger"},[(_vm.has500Error)?_c('span',{staticClass:"error-filename u-inline-block u-font-medium"},[_vm._v(_vm._s(_vm.filename)+":")]):_vm._e(),_c('div',{staticClass:"errors",class:{'mb-20': _vm.has500Error},domProps:{"innerHTML":_vm._s(_vm.error)}}),(_vm.has500Error)?_c('div',{staticClass:"u-font-medium"},[_vm._v(_vm._s(_vm.$t('correct-mistakes'))+" "),_c('a',{attrs:{"href":"#"},on:{"click":function($event){$event.stopPropagation();return _vm.reload($event)}}},[_vm._v(_vm._s(_vm.$t('reupload-results')))]),_vm._v(".")]):_vm._e()]):_vm._e(),(_vm.previewActive && !_vm.hasError)?[_c('div',{staticClass:"csv-import-info u-flex u-align-items-start"},[_c('p',[_vm._v(_vm._s(_vm.$t('import-results-overview')))]),_c('div',[_c('button',{staticClass:"btn btn-primary",attrs:{"title":_vm.$t('import')},on:{"click":_vm.uploadResults}},[_c('span',{staticClass:"glyphicon glyphicon-arrow-right",attrs:{"aria-hidden":"true"}}),_vm._v(" "+_vm._s(_vm.$t('import')))])])]),_c('imports-table',{attrs:{"fields":_vm.fields,"results":_vm.results,"max-scores":_vm.maxScores}})]:_vm._e(),(_vm.previewActive && _vm.hasError)?_c('div',{staticClass:"import-errors alert alert-danger"},[_c('div',{staticClass:"errors",domProps:{"innerHTML":_vm._s(_vm.error)}})]):_vm._e(),(_vm.importCompleteActive)?[_c('div',{staticClass:"alert alert-info mod-import-completed"},[_c('p',[_vm._v(_vm._s(_vm.$t('import-successful')))]),(_vm.missingUsers.length)?_c('p',{domProps:{"innerHTML":_vm._s(_vm.$t('no-results-some-students'))}}):_vm._e(),_c('p',[_c('a',{staticClass:"u-font-medium",attrs:{"href":_vm.apiConfig.gradeBookRootURL}},[_c('i',{staticClass:"fa fa-arrow-right",attrs:{"aria-hidden":"true"}}),_vm._v(" "+_vm._s(_vm.$t('go-to-gradebook')))])])]),(_vm.missingUsers.length)?_c('p',{staticClass:"gradebook-import-missing-users u-font-medium"},[_vm._v(_vm._s(_vm.$t('without-results'))+":")]):_vm._e(),(_vm.missingUsers.length)?_c('missing-users-table',{attrs:{"missing-users":_vm.missingUsers}}):_vm._e()]:_vm._e()],2),(_vm.debugServerResponse)?_c('div',{attrs:{"id":"server-response"}}):_vm._e()])}
+var ImporterAppvue_type_template_id_728e684b_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/ImporterApp.vue?vue&type=template&id=a97afd16&scoped=true&
+// CONCATENATED MODULE: ./src/ImporterApp.vue?vue&type=template&id=728e684b&scoped=true&
 
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/ImportsTable.vue?vue&type=template&id=7e31a3f6&scoped=true&
-var ImportsTablevue_type_template_id_7e31a3f6_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.hasInvalidResults)?_c('ul',{staticClass:"nav mod-imports u-flex u-align-items-baseline",attrs:{"role":"tablist"}},[_c('li',{class:{active: _vm.tab === 'all'},attrs:{"role":"presentation"},on:{"click":function($event){_vm.tab = 'all'}}},[_c('a',{attrs:{"aria-selected":_vm.tab === 'all' ? 'true' : 'false',"aria-controls":"imports-table","role":"tab"}},[_vm._v(_vm._s(_vm.$t('all-imports')))])]),_c('li',{class:{active: _vm.tab === 'valid'},attrs:{"role":"presentation"},on:{"click":function($event){_vm.tab = 'valid'}}},[_c('a',{attrs:{"aria-selected":_vm.tab === 'valid' ? 'true' : 'false',"aria-controls":"imports-table","role":"tab"}},[_vm._v(_vm._s(_vm.$t('valid-imports')))])]),_c('li',{class:{active: _vm.tab === 'invalid'},attrs:{"role":"presentation"},on:{"click":function($event){_vm.tab = 'invalid'}}},[_c('a',{attrs:{"aria-selected":_vm.tab === 'invalid' ? 'true' : 'false',"aria-controls":"imports-table","role":"tab"}},[_vm._v(_vm._s(_vm.$t('not-subscribed'))),_c('span',{staticClass:"badge mod-invalid"},[_vm._v(_vm._s(_vm.invalidResultRows.length))])])])]):_vm._e(),_c('table',{staticClass:"imports-table",attrs:{"id":"imports-table"}},[_c('thead',[_c('tr',{staticClass:"table-row table-head-row"},_vm._l((_vm.fields),function(field){return _c('th',{key:("field-" + (field.key)),staticClass:"table-cell",class:{'mod-score': field.type === 'score'}},[_vm._v(" "+_vm._s(field.label)+" ")])}),0)]),_c('tbody',_vm._l((_vm.filteredResultRows),function(result,row_index){return _c('tr',{key:("result-row-" + row_index),staticClass:"table-row table-body-row",class:{ 'mod-invalid': (_vm.showAll || !_vm.hasInvalidResults) ? !result.valid : _vm.showInvalid}},_vm._l((_vm.fields),function(field,col_index){return _c('td',{key:("result-" + row_index + "-" + col_index),staticClass:"table-cell",class:{'mod-score': field.type === 'score', 'mod-comment': col_index === 4 && field.type === 'string'},attrs:{"title":(!result.valid && field.key === 'id') ? _vm.$t('user-not-in-course') : ((col_index === 4 && field.type === 'string') ? result[field.key] : '')}},[((_vm.showAll || !_vm.hasInvalidResults) && field.key === 'id')?_c('div',{staticClass:"u-flex u-justify-content-between u-align-items-center"},[_vm._v(" "+_vm._s(result[field.key])+" "),_c('i',{staticClass:"fa",class:result.valid ? 'fa-check-circle' : 'fa-exclamation-circle',attrs:{"aria-hidden":"true"}}),(!result.valid)?_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('user-not-in-course')))]):_vm._e()]):(field.type === 'score' && _vm.isNullScore(result[field.key]))?_c('div',{staticClass:"color-code mod-none",attrs:{"title":_vm.$t('no-score-found')}},[_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('no-score-found')))])]):(field.type === 'score' && _vm.isAuthAbsentScore(result[field.key]))?_c('div',{staticClass:"color-code amber-700",attrs:{"title":_vm.$t('auth-absent')}},[_c('span',[_vm._v(_vm._s(result[field.key]))])]):[_c('span',[_vm._v(_vm._s(result[field.key]))])]],2)}),0)}),0)])])}
-var ImportsTablevue_type_template_id_7e31a3f6_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/ImportsTable.vue?vue&type=template&id=0c403b7c&scoped=true&
+var ImportsTablevue_type_template_id_0c403b7c_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.hasInvalidResults)?_c('ul',{staticClass:"nav mod-imports u-flex u-align-items-baseline",attrs:{"role":"tablist"}},[_c('li',{class:{active: _vm.tab === 'all'},attrs:{"role":"presentation"},on:{"click":function($event){_vm.tab = 'all'}}},[_c('a',{attrs:{"aria-selected":_vm.tab === 'all' ? 'true' : 'false',"aria-controls":"imports-table","role":"tab"}},[_vm._v(_vm._s(_vm.$t('all-imports')))])]),_c('li',{class:{active: _vm.tab === 'valid'},attrs:{"role":"presentation"},on:{"click":function($event){_vm.tab = 'valid'}}},[_c('a',{attrs:{"aria-selected":_vm.tab === 'valid' ? 'true' : 'false',"aria-controls":"imports-table","role":"tab"}},[_vm._v(_vm._s(_vm.$t('valid-imports')))])]),_c('li',{class:{active: _vm.tab === 'invalid'},attrs:{"role":"presentation"},on:{"click":function($event){_vm.tab = 'invalid'}}},[_c('a',{attrs:{"aria-selected":_vm.tab === 'invalid' ? 'true' : 'false',"aria-controls":"imports-table","role":"tab"}},[_vm._v(_vm._s(_vm.$t('not-subscribed'))),_c('span',{staticClass:"badge mod-invalid"},[_vm._v(_vm._s(_vm.invalidResultRows.length))])])])]):_vm._e(),_c('table',{staticClass:"imports-table",attrs:{"id":"imports-table"}},[_c('thead',[_c('tr',{staticClass:"table-row table-head-row"},_vm._l((_vm.fields),function(field){return _c('th',{key:("field-" + (field.key)),staticClass:"table-cell",class:{'mod-score': field.type === 'score'}},[_vm._v(" "+_vm._s(field.label)+" "),(_vm.maxScores[field.key])?_c('span',{staticClass:"total"},[_vm._v(" "+_vm._s(_vm.maxScores[field.key])+" ")]):_vm._e()])}),0)]),_c('tbody',_vm._l((_vm.filteredResultRows),function(result,row_index){return _c('tr',{key:("result-row-" + row_index),staticClass:"table-row table-body-row",class:{ 'mod-invalid': (_vm.showAll || !_vm.hasInvalidResults) ? !result.valid : _vm.showInvalid}},_vm._l((_vm.fields),function(field,col_index){return _c('td',{key:("result-" + row_index + "-" + col_index),staticClass:"table-cell",class:{'mod-score': field.type === 'score', 'mod-comment': col_index === 4 && field.type === 'string'},attrs:{"title":(!result.valid && field.key === 'id') ? _vm.$t('user-not-in-course') : ((col_index === 4 && field.type === 'string') ? result[field.key] : '')}},[((_vm.showAll || !_vm.hasInvalidResults) && field.key === 'id')?_c('div',{staticClass:"u-flex u-justify-content-between u-align-items-center"},[_vm._v(" "+_vm._s(result[field.key])+" "),_c('i',{staticClass:"fa",class:result.valid ? 'fa-check-circle' : 'fa-exclamation-circle',attrs:{"aria-hidden":"true"}}),(!result.valid)?_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('user-not-in-course')))]):_vm._e()]):(field.type === 'score' && _vm.isNullScore(result[field.key]))?_c('div',{staticClass:"color-code mod-none",attrs:{"title":_vm.$t('no-score-found')}},[_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('no-score-found')))])]):(field.type === 'score' && _vm.isAuthAbsentScore(result[field.key]))?_c('div',{staticClass:"color-code amber-700",attrs:{"title":_vm.$t('auth-absent')}},[_c('span',[_vm._v(_vm._s(result[field.key]))])]):[_c('span',[_vm._v(_vm._s(result[field.key]))])]],2)}),0)}),0)])])}
+var ImportsTablevue_type_template_id_0c403b7c_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/ImportsTable.vue?vue&type=template&id=7e31a3f6&scoped=true&
+// CONCATENATED MODULE: ./src/components/ImportsTable.vue?vue&type=template&id=0c403b7c&scoped=true&
 
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/ImportsTable.vue?vue&type=script&lang=ts&
 
@@ -20840,12 +21215,16 @@ __decorate([Prop({
   }
 })], ImportsTablevue_type_script_lang_ts_ImportsTable.prototype, "results", void 0);
 
+__decorate([Prop({
+  type: Object
+})], ImportsTablevue_type_script_lang_ts_ImportsTable.prototype, "maxScores", void 0);
+
 ImportsTablevue_type_script_lang_ts_ImportsTable = __decorate([vue_class_component_esm({})], ImportsTablevue_type_script_lang_ts_ImportsTable);
 /* harmony default export */ var ImportsTablevue_type_script_lang_ts_ = (ImportsTablevue_type_script_lang_ts_ImportsTable);
 // CONCATENATED MODULE: ./src/components/ImportsTable.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_ImportsTablevue_type_script_lang_ts_ = (ImportsTablevue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/ImportsTable.vue?vue&type=style&index=0&id=7e31a3f6&scoped=true&lang=css&
-var ImportsTablevue_type_style_index_0_id_7e31a3f6_scoped_true_lang_css_ = __webpack_require__("c22f");
+// EXTERNAL MODULE: ./src/components/ImportsTable.vue?vue&type=style&index=0&id=0c403b7c&scoped=true&lang=css&
+var ImportsTablevue_type_style_index_0_id_0c403b7c_scoped_true_lang_css_ = __webpack_require__("6483");
 
 // EXTERNAL MODULE: ./src/components/ImportsTable.vue?vue&type=custom&index=0&blockType=i18n
 var ImportsTablevue_type_custom_index_0_blockType_i18n = __webpack_require__("c085");
@@ -20861,11 +21240,11 @@ var ImportsTablevue_type_custom_index_0_blockType_i18n = __webpack_require__("c0
 
 var ImportsTable_component = normalizeComponent(
   components_ImportsTablevue_type_script_lang_ts_,
-  ImportsTablevue_type_template_id_7e31a3f6_scoped_true_render,
-  ImportsTablevue_type_template_id_7e31a3f6_scoped_true_staticRenderFns,
+  ImportsTablevue_type_template_id_0c403b7c_scoped_true_render,
+  ImportsTablevue_type_template_id_0c403b7c_scoped_true_staticRenderFns,
   false,
   null,
-  "7e31a3f6",
+  "0c403b7c",
   null
   
 )
@@ -20946,12 +21325,12 @@ var MissingUsersTable_component = normalizeComponent(
 if (typeof MissingUsersTablevue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(MissingUsersTablevue_type_custom_index_0_blockType_i18n["default"])(MissingUsersTable_component)
 
 /* harmony default export */ var components_MissingUsersTable = (MissingUsersTable_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/CSVImportInfo.vue?vue&type=template&id=2ad3ace1&scoped=true&
-var CSVImportInfovue_type_template_id_2ad3ace1_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v(_vm._s(_vm.$t('csv-must-look-like'))+" ("+_vm._s(_vm.$t('mandatory-fields'))+"):")]),_c('div',{staticClass:"csv-example"},[(_vm.importType === 'scores')?[_c('div',[_c('b',[_vm._v("lastname")]),_vm._v(";"),_c('b',[_vm._v("firstname")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-header-id"},[_vm._v("id")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-header-title-1 u-cursor-help",attrs:{"id":"csv-header-title-1"}},[_vm._v(_vm._s(_vm.$t('title'))+" 1")]),_vm._v(";"),_c('span',{staticClass:"csv-field csv-header-title-2 u-cursor-help",attrs:{"id":"csv-header-title-2"}},[_vm._v(_vm._s(_vm.$t('title'))+" 2")]),_vm._v(";…")]),_vm._m(0)]:[_c('div',[_c('b',[_vm._v("lastname")]),_vm._v(";"),_c('b',[_vm._v("firstname")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-header-id"},[_vm._v("id")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-header-title-1 u-cursor-help",attrs:{"id":"csv-header-title-1"}},[_vm._v(_vm._s(_vm.$t('title')))]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-header-comment u-cursor-help",attrs:{"id":"csv-header-comment"}},[_vm._v(_vm._s(_vm.$t('comment')))])]),_vm._m(1)]],2),_c('b-popover',{attrs:{"target":"csv-expl-id","triggers":"hover","placement":"bottom"}},[_c('div',{staticClass:"csv-import-help mod-list"},[_c('div',{staticClass:"u-font-medium",staticStyle:{"color":"#507e86"}},[_vm._v("id")]),_c('div',{domProps:{"innerHTML":_vm._s(_vm.$t('import-id'))}})])]),_c('b-popover',{attrs:{"target":"csv-header-title-1","triggers":"hover","placement":"bottom"}},[_c('div',{staticClass:"csv-import-help",domProps:{"innerHTML":_vm._s(_vm.$t('import-score-title'))}})]),_c('b-popover',{attrs:{"target":"csv-expl-title-1","triggers":"hover","placement":"bottom"}},[_c('div',{staticClass:"csv-import-help mod-list",domProps:{"innerHTML":_vm._s(_vm.$t('import-score'))}})]),_c('b-popover',{attrs:{"target":"csv-header-title-2","triggers":"hover","placement":"bottom"}},[_c('div',{staticClass:"csv-import-help",domProps:{"innerHTML":_vm._s(_vm.$t('import-score-title'))}})]),_c('b-popover',{attrs:{"target":"csv-expl-title-2","triggers":"hover","placement":"bottom"}},[_c('div',{staticClass:"csv-import-help mod-list",domProps:{"innerHTML":_vm._s(_vm.$t('import-score'))}})]),_c('b-popover',{attrs:{"target":"csv-header-comment","triggers":"hover","placement":"bottom"}},[_c('div',{staticClass:"csv-import-help",domProps:{"innerHTML":_vm._s(_vm.$t('import-comment-title'))}})])],1)}
-var CSVImportInfovue_type_template_id_2ad3ace1_scoped_true_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b',[_vm._v("xxx")]),_vm._v(";"),_c('b',[_vm._v("xxx")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-field-id u-cursor-help",attrs:{"id":"csv-expl-id"}},[_vm._v("xxx")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-field-title-1 u-cursor-help",attrs:{"id":"csv-expl-title-1"}},[_vm._v("xxx")]),_vm._v(";"),_c('span',{staticClass:"csv-field csv-field-title-2 u-cursor-help",attrs:{"id":"csv-expl-title-2"}},[_vm._v("xxx")]),_vm._v(";…")])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b',[_vm._v("xxx")]),_vm._v(";"),_c('b',[_vm._v("xxx")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-field-id u-cursor-help",attrs:{"id":"csv-expl-id"}},[_vm._v("xxx")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-field-title-1 u-cursor-help",attrs:{"id":"csv-expl-title-1"}},[_vm._v("xxx")]),_vm._v(";"),_c('b',[_vm._v("xxx")])])}]
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/CSVImportInfo.vue?vue&type=template&id=213fb475&scoped=true&
+var CSVImportInfovue_type_template_id_213fb475_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v(_vm._s(_vm.$t('csv-must-look-like'))+" ("+_vm._s(_vm.$t('mandatory-fields'))+"):")]),(_vm.importType === 'scores')?_c('div',{staticClass:"csv-example"},[_c('div',[_c('b',[_vm._v("lastname")]),_vm._v(";"),_c('b',[_vm._v("firstname")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-header-id"},[_vm._v("id")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-header-title-1 u-cursor-help",attrs:{"id":"csv-header-title-1"}},[_vm._v(_vm._s(_vm.$t('title'))+" 1")]),_vm._v(";"),_c('span',{staticClass:"csv-field csv-header-title-2 u-cursor-help",attrs:{"id":"csv-header-title-2"}},[_vm._v(_vm._s(_vm.$t('title'))+" 2")]),_vm._v(";…")]),_vm._m(0)]):_c('div',{staticClass:"csv-example"},[_c('div',[_c('b',[_vm._v("lastname")]),_vm._v(";"),_c('b',[_vm._v("firstname")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-header-id"},[_vm._v("id")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-header-title-1 u-cursor-help",attrs:{"id":"csv-header-title-1"}},[_vm._v(_vm._s(_vm.$t('title')))]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-header-comment u-cursor-help",attrs:{"id":"csv-header-comment"}},[_vm._v(_vm._s(_vm.$t('comment')))])]),_vm._m(1)]),_c('p',{staticStyle:{"max-width":"90ch"}},[_vm._v("Indien je geen procentuele score wil importeren maar een andere totaalscore (bvb. op 20 punten) voeg je een extra tweede regel in die er als volgt uitziet:")]),(_vm.importType === 'scores')?_c('div',{staticClass:"csv-example"},[_vm._m(2)]):_c('div',{staticClass:"csv-example"},[_vm._m(3)]),_c('b-popover',{attrs:{"target":"csv-expl-id","triggers":"hover","placement":"bottom"}},[_c('div',{staticClass:"csv-import-help mod-list"},[_c('div',{staticClass:"u-font-medium",staticStyle:{"color":"#507e86"}},[_vm._v("id")]),_c('div',{domProps:{"innerHTML":_vm._s(_vm.$t('import-id'))}})])]),_c('b-popover',{attrs:{"target":"csv-header-title-1","triggers":"hover","placement":"bottom"}},[_c('div',{staticClass:"csv-import-help",domProps:{"innerHTML":_vm._s(_vm.$t('import-score-title'))}})]),_c('b-popover',{attrs:{"target":"csv-expl-title-1","triggers":"hover","placement":"bottom"}},[_c('div',{staticClass:"csv-import-help mod-list",domProps:{"innerHTML":_vm._s(_vm.$t('import-score'))}})]),_c('b-popover',{attrs:{"target":"csv-expl-max-1","triggers":"hover","placement":"bottom"}},[_c('div',{staticClass:"csv-import-help",domProps:{"innerHTML":_vm._s(_vm.$t('max-score'))}})]),_c('b-popover',{attrs:{"target":"csv-header-title-2","triggers":"hover","placement":"bottom"}},[_c('div',{staticClass:"csv-import-help",domProps:{"innerHTML":_vm._s(_vm.$t('import-score-title'))}})]),_c('b-popover',{attrs:{"target":"csv-expl-title-2","triggers":"hover","placement":"bottom"}},[_c('div',{staticClass:"csv-import-help mod-list",domProps:{"innerHTML":_vm._s(_vm.$t('import-score'))}})]),_c('b-popover',{attrs:{"target":"csv-expl-max-2","triggers":"hover","placement":"bottom"}},[_c('div',{staticClass:"csv-import-help",domProps:{"innerHTML":_vm._s(_vm.$t('max-score'))}})]),_c('b-popover',{attrs:{"target":"csv-header-comment","triggers":"hover","placement":"bottom"}},[_c('div',{staticClass:"csv-import-help",domProps:{"innerHTML":_vm._s(_vm.$t('import-comment-title'))}})])],1)}
+var CSVImportInfovue_type_template_id_213fb475_scoped_true_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b',[_vm._v("xxx")]),_vm._v(";"),_c('b',[_vm._v("xxx")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-field-id u-cursor-help",attrs:{"id":"csv-expl-id"}},[_vm._v("xxx")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-field-title-1 u-cursor-help",attrs:{"id":"csv-expl-title-1"}},[_vm._v("xxx")]),_vm._v(";"),_c('span',{staticClass:"csv-field csv-field-title-2 u-cursor-help",attrs:{"id":"csv-expl-title-2"}},[_vm._v("xxx")]),_vm._v(";…")])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b',[_vm._v("xxx")]),_vm._v(";"),_c('b',[_vm._v("xxx")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-field-id u-cursor-help",attrs:{"id":"csv-expl-id"}},[_vm._v("xxx")]),_vm._v(";"),_c('b',{staticClass:"csv-field csv-field-title-1 u-cursor-help",attrs:{"id":"csv-expl-title-1"}},[_vm._v("xxx")]),_vm._v(";"),_c('b',[_vm._v("xxx")])])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b',[_vm._v("totaal")]),_vm._v(";;;"),_c('b',{staticClass:"csv-field csv-field-title-1 u-cursor-help",attrs:{"id":"csv-expl-max-1"}},[_vm._v("xxx")]),_vm._v(";"),_c('span',{staticClass:"csv-field csv-field-title-2 u-cursor-help",attrs:{"id":"csv-expl-max-2"}},[_vm._v("xxx")]),_vm._v(";…")])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b',[_vm._v("totaal")]),_vm._v(";;;"),_c('b',{staticClass:"csv-field csv-field-title-1 u-cursor-help",attrs:{"id":"csv-expl-max-1"}},[_vm._v("xxx")]),_vm._v(";")])}]
 
 
-// CONCATENATED MODULE: ./src/components/CSVImportInfo.vue?vue&type=template&id=2ad3ace1&scoped=true&
+// CONCATENATED MODULE: ./src/components/CSVImportInfo.vue?vue&type=template&id=213fb475&scoped=true&
 
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/CSVImportInfo.vue?vue&type=script&lang=ts&
 
@@ -20984,8 +21363,8 @@ CSVImportInfovue_type_script_lang_ts_CsvImportInfo = __decorate([vue_class_compo
 /* harmony default export */ var CSVImportInfovue_type_script_lang_ts_ = (CSVImportInfovue_type_script_lang_ts_CsvImportInfo);
 // CONCATENATED MODULE: ./src/components/CSVImportInfo.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_CSVImportInfovue_type_script_lang_ts_ = (CSVImportInfovue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/CSVImportInfo.vue?vue&type=style&index=0&id=2ad3ace1&scoped=true&lang=css&
-var CSVImportInfovue_type_style_index_0_id_2ad3ace1_scoped_true_lang_css_ = __webpack_require__("0c9e");
+// EXTERNAL MODULE: ./src/components/CSVImportInfo.vue?vue&type=style&index=0&id=213fb475&scoped=true&lang=css&
+var CSVImportInfovue_type_style_index_0_id_213fb475_scoped_true_lang_css_ = __webpack_require__("43ba");
 
 // EXTERNAL MODULE: ./src/components/CSVImportInfo.vue?vue&type=custom&index=0&blockType=i18n
 var CSVImportInfovue_type_custom_index_0_blockType_i18n = __webpack_require__("2ffb");
@@ -21001,11 +21380,11 @@ var CSVImportInfovue_type_custom_index_0_blockType_i18n = __webpack_require__("2
 
 var CSVImportInfo_component = normalizeComponent(
   components_CSVImportInfovue_type_script_lang_ts_,
-  CSVImportInfovue_type_template_id_2ad3ace1_scoped_true_render,
-  CSVImportInfovue_type_template_id_2ad3ace1_scoped_true_staticRenderFns,
+  CSVImportInfovue_type_template_id_213fb475_scoped_true_render,
+  CSVImportInfovue_type_template_id_213fb475_scoped_true_staticRenderFns,
   false,
   null,
-  "2ad3ace1",
+  "213fb475",
   null
   
 )
@@ -21057,6 +21436,7 @@ function (_Vue) {
     _this.missingUsers = [];
     _this.results = [];
     _this.fields = [];
+    _this.maxScores = {};
     return _this;
   }
 
@@ -21097,7 +21477,7 @@ function (_Vue) {
       var _uploadCSV = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee() {
-        var fileData, formData, _res$data, _res$data2, _res$data4, res, _res$data3, fields, results;
+        var fileData, formData, _res$data, _res$data2, _res$data4, res, _res$data3, fields, max_scores, results;
 
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -21131,30 +21511,31 @@ function (_Vue) {
                 logResponse(res.data);
 
                 if (!(((_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.fields) !== undefined && ((_res$data2 = res.data) === null || _res$data2 === void 0 ? void 0 : _res$data2.results) !== undefined)) {
-                  _context.next = 18;
+                  _context.next = 19;
                   break;
                 }
 
-                _res$data3 = res.data, fields = _res$data3.fields, results = _res$data3.results;
+                _res$data3 = res.data, fields = _res$data3.fields, max_scores = _res$data3.max_scores, results = _res$data3.results;
                 this.fields = fields;
+                this.maxScores = max_scores || {};
                 this.results = results;
-                _context.next = 28;
+                _context.next = 29;
                 break;
 
-              case 18:
+              case 19:
                 if (!(((_res$data4 = res.data) === null || _res$data4 === void 0 ? void 0 : _res$data4.result_code) === 500)) {
-                  _context.next = 23;
+                  _context.next = 24;
                   break;
                 }
 
                 this.has500Error = true;
                 this.setError(res.data.result_message);
-                _context.next = 28;
+                _context.next = 29;
                 break;
 
-              case 23:
+              case 24:
                 if (!(typeof res.data === 'string' && res.data.toLowerCase().indexOf('login') !== -1)) {
-                  _context.next = 27;
+                  _context.next = 28;
                   break;
                 }
 
@@ -21162,27 +21543,27 @@ function (_Vue) {
                   'type': 'LoggedOut'
                 };
 
-              case 27:
+              case 28:
                 throw {
                   'type': 'Unknown'
                 };
 
-              case 28:
-                _context.next = 34;
+              case 29:
+                _context.next = 35;
                 break;
 
-              case 30:
-                _context.prev = 30;
+              case 31:
+                _context.prev = 31;
                 _context.t0 = _context["catch"](7);
                 logResponse(_context.t0);
                 this.handleError(_context.t0);
 
-              case 34:
+              case 35:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[7, 30]]);
+        }, _callee, this, [[7, 31]]);
       }));
 
       function uploadCSV() {
@@ -21294,6 +21675,7 @@ function (_Vue) {
       var commentField = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       return {
         label: scoreField.label,
+        maxScore: this.maxScores[scoreField.key] || null,
         results: this.results.filter(function (v) {
           return v.valid;
         }).map(function (v) {
@@ -21381,8 +21763,8 @@ ImporterAppvue_type_script_lang_ts_ImporterApp = __decorate([vue_class_component
 /* harmony default export */ var ImporterAppvue_type_script_lang_ts_ = (ImporterAppvue_type_script_lang_ts_ImporterApp);
 // CONCATENATED MODULE: ./src/ImporterApp.vue?vue&type=script&lang=ts&
  /* harmony default export */ var src_ImporterAppvue_type_script_lang_ts_ = (ImporterAppvue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/ImporterApp.vue?vue&type=style&index=0&id=a97afd16&scoped=true&lang=css&
-var ImporterAppvue_type_style_index_0_id_a97afd16_scoped_true_lang_css_ = __webpack_require__("54a8");
+// EXTERNAL MODULE: ./src/ImporterApp.vue?vue&type=style&index=0&id=728e684b&scoped=true&lang=css&
+var ImporterAppvue_type_style_index_0_id_728e684b_scoped_true_lang_css_ = __webpack_require__("a406");
 
 // EXTERNAL MODULE: ./src/ImporterApp.vue?vue&type=custom&index=0&blockType=i18n
 var ImporterAppvue_type_custom_index_0_blockType_i18n = __webpack_require__("3c2e");
@@ -21398,11 +21780,11 @@ var ImporterAppvue_type_custom_index_0_blockType_i18n = __webpack_require__("3c2
 
 var ImporterApp_component = normalizeComponent(
   src_ImporterAppvue_type_script_lang_ts_,
-  ImporterAppvue_type_template_id_a97afd16_scoped_true_render,
-  ImporterAppvue_type_template_id_a97afd16_scoped_true_staticRenderFns,
+  ImporterAppvue_type_template_id_728e684b_scoped_true_render,
+  ImporterAppvue_type_template_id_728e684b_scoped_true_staticRenderFns,
   false,
   null,
-  "a97afd16",
+  "728e684b",
   null
   
 )
@@ -21419,12 +21801,12 @@ var UserScoresAppvue_type_template_id_022d871c_scoped_true_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/UserScoresApp.vue?vue&type=template&id=022d871c&scoped=true&
 
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/UserScores.vue?vue&type=template&id=692ab328&scoped=true&
-var UserScoresvue_type_template_id_692ab328_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b-table-simple',{staticClass:"gradebook-table"},[_c('b-thead',[_c('b-tr',{staticClass:"table-row table-head-row"},[_c('b-th',[_vm._v(_vm._s(_vm.$t('title')))]),_c('b-th',{staticClass:"u-text-end"},[_vm._v(_vm._s(_vm.$t('score')))])],1)],1),_c('b-tbody',[_vm._l((_vm.gradeBook.allCategories),function(category){return [(category.columnIds.length && _vm.gradeBook.allCategories.length && _vm.gradeBook.allCategories[0].id !== 0)?_c('b-tr',{key:("cat-" + (category.id)),staticClass:"table-row table-body-row"},[_c('b-td',{staticClass:"table-category u-font-medium",attrs:{"colspan":"2"}},[_vm._v(_vm._s(category.title))])],1):_vm._e(),_vm._l((_vm.getColumns(category)),function(column){return _c('b-tr',{key:("col-" + (category.id) + "-" + (column.id)),staticClass:"table-row table-body-row result-row",attrs:{"id":("col-" + (category.id) + "-" + (column.id))}},[_c('b-td',{staticClass:"category-color u-relative",style:(("--color: " + (category.color) + ";"))},[_vm._v(_vm._s(column.title))]),_c('b-td',[(column.released)?_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-end"},[(column.comment)?_c('i',{staticClass:"fa fa-comment-o",attrs:{"aria-hidden":"true"}}):_vm._e(),_c('student-result',{staticClass:"u-flex u-align-items-center u-justify-content-end",class:{'uncounted-score': !column.countsForEndResult},attrs:{"id":("result-" + (column.id)),"result":column.result}})],1):_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-end not-yet-released"},[_vm._v(_vm._s(_vm.$t('not-yet-released')))])]),_c('b-popover',{attrs:{"custom-class":"gradebook-score-popover","target":("col-" + (category.id) + "-" + (column.id)),"triggers":"hover","placement":"rightbottom"}},[_c('div',{staticClass:"score-info"},[(column.countsForEndResult)?_c('div',{staticClass:"u-flex u-align-items-center popover-weight-header"},[_vm._v(_vm._s(_vm.$t('weight'))+": "+_vm._s(_vm._f("formatNum2")(column.weight))),_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])]):_c('div',{staticClass:"popover-count-endresult-not"},[_c('i',[_vm._v(_vm._s(_vm.$t('count-towards-endresult-not')))])]),(column.comment)?[_c('div',{staticClass:"popover-feedback-header"},[_vm._v("Feedback:")]),_vm._v(" "+_vm._s(column.comment)+" ")]:_vm._e()],2)])],1)})]}),(_vm.gradeBook.allCategories.length && _vm.gradeBook.allCategories[0].id !== 0)?_c('b-tr',{staticClass:"table-row table-body-row"},[_c('b-td',{staticClass:"table-empty-cell",attrs:{"colspan":"2"}})],1):_vm._e(),_c('b-tr',{staticClass:"table-row table-body-row"},[_c('b-td',{staticClass:"table-final-score-header"},[_vm._v(_vm._s(_vm.$t('final-score')))]),_c('b-td',{staticClass:"table-final-score u-font-medium"},[(!_vm.gradeBook.hasUnreleasedScores)?_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-end"},[_vm._v(_vm._s(_vm._f("formatNum2")(_vm.gradeBook.getEndResult(_vm.userId)))),_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])]):_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-end not-yet-released"},[_vm._v(_vm._s(_vm.$t('not-yet-released')))])])],1)],2)],1)],1)}
-var UserScoresvue_type_template_id_692ab328_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0bbff2c8-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/UserScores.vue?vue&type=template&id=a08a1ebe&scoped=true&
+var UserScoresvue_type_template_id_a08a1ebe_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b-table-simple',{staticClass:"gradebook-table"},[_c('b-thead',[_c('b-tr',{staticClass:"table-row table-head-row"},[_c('b-th',[_vm._v(_vm._s(_vm.$t('title')))]),_c('b-th',{staticClass:"u-text-end"},[_vm._v(_vm._s(_vm.$t('score')))])],1)],1),_c('b-tbody',[_vm._l((_vm.gradeBook.allCategories),function(category){return [(category.columnIds.length && _vm.gradeBook.allCategories.length && _vm.gradeBook.allCategories[0].id !== 0)?_c('b-tr',{key:("cat-" + (category.id)),staticClass:"table-row table-body-row"},[_c('b-td',{staticClass:"table-category u-font-medium",attrs:{"colspan":"2"}},[_vm._v(_vm._s(category.title))])],1):_vm._e(),_vm._l((_vm.getColumns(category)),function(column){return _c('b-tr',{key:("col-" + (category.id) + "-" + (column.id)),staticClass:"table-row table-body-row result-row",attrs:{"id":("col-" + (category.id) + "-" + (column.id))}},[_c('b-td',{staticClass:"category-color u-relative",style:(("--color: " + (category.color) + ";"))},[_vm._v(_vm._s(column.title))]),_c('b-td',[(column.released)?_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-end"},[(column.comment)?_c('i',{staticClass:"fa fa-comment-o",attrs:{"aria-hidden":"true"}}):_vm._e(),_c('student-result',{staticClass:"u-flex u-align-items-center u-justify-content-end",class:{'uncounted-score': !column.countsForEndResult},attrs:{"id":("result-" + (column.id)),"result":column.result}})],1):_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-end not-yet-released"},[_vm._v(_vm._s(_vm.$t('not-yet-released')))])]),_c('b-popover',{attrs:{"custom-class":"gradebook-score-popover","target":("col-" + (category.id) + "-" + (column.id)),"triggers":"hover","placement":"rightbottom"}},[_c('div',{staticClass:"score-info"},[(column.countsForEndResult)?_c('div',{staticClass:"u-flex u-align-items-center popover-weight-header"},[_vm._v(_vm._s(_vm.$t('weight'))+": "+_vm._s(_vm._f("formatNum2")(column.weight))),_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])]):_c('div',{staticClass:"popover-count-endresult-not"},[_c('i',[_vm._v(_vm._s(_vm.$t('count-towards-endresult-not')))])]),(column.comment)?[_c('div',{staticClass:"popover-feedback-header"},[_vm._v("Feedback:")]),_vm._v(" "+_vm._s(column.comment)+" ")]:_vm._e()],2)])],1)})]}),(_vm.gradeBook.allCategories.length && _vm.gradeBook.allCategories[0].id !== 0)?_c('b-tr',{staticClass:"table-row table-body-row"},[_c('b-td',{staticClass:"table-empty-cell",attrs:{"colspan":"2"}})],1):_vm._e(),_c('b-tr',{staticClass:"table-row table-body-row"},[_c('b-td',{staticClass:"table-final-score-header"},[_vm._v(_vm._s(_vm.$t('final-score')))]),_c('b-td',{staticClass:"table-final-score u-font-medium"},[(!_vm.gradeBook.hasUnreleasedScores)?_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-end"},[_vm._v(_vm._s(_vm._f("formatNum2")(_vm.gradeBook.getEndResult(_vm.userId)))),(_vm.gradeBook.getDisplayTotal() === 100)?[_c('i',{staticClass:"fa fa-percent",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v("%")])]:[_vm._v(" / "+_vm._s(_vm.gradeBook.getDisplayTotal()))]],2):_c('div',{staticClass:"u-flex u-align-items-center u-justify-content-end not-yet-released"},[_vm._v(_vm._s(_vm.$t('not-yet-released')))])])],1)],2)],1)],1)}
+var UserScoresvue_type_template_id_a08a1ebe_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/UserScores.vue?vue&type=template&id=692ab328&scoped=true&
+// CONCATENATED MODULE: ./src/components/UserScores.vue?vue&type=template&id=a08a1ebe&scoped=true&
 
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/UserScores.vue?vue&type=script&lang=ts&
 
@@ -21498,22 +21880,12 @@ UserScoresvue_type_script_lang_ts_UserScores = __decorate([vue_class_component_e
     StudentResult: components_StudentResult
   },
   filters: {
-    formatNum: function formatNum(v) {
-      if (v === null) {
-        return '';
-      }
-
-      return v.toLocaleString(undefined, {
-        maximumFractionDigits: 2
-      });
-    },
     formatNum2: function formatNum2(v) {
       if (v === null) {
         return '';
       }
 
       return v.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
         maximumFractionDigits: 2
       });
     }
@@ -21522,8 +21894,8 @@ UserScoresvue_type_script_lang_ts_UserScores = __decorate([vue_class_component_e
 /* harmony default export */ var UserScoresvue_type_script_lang_ts_ = (UserScoresvue_type_script_lang_ts_UserScores);
 // CONCATENATED MODULE: ./src/components/UserScores.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_UserScoresvue_type_script_lang_ts_ = (UserScoresvue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/UserScores.vue?vue&type=style&index=0&id=692ab328&lang=scss&scoped=true&
-var UserScoresvue_type_style_index_0_id_692ab328_lang_scss_scoped_true_ = __webpack_require__("682f");
+// EXTERNAL MODULE: ./src/components/UserScores.vue?vue&type=style&index=0&id=a08a1ebe&lang=scss&scoped=true&
+var UserScoresvue_type_style_index_0_id_a08a1ebe_lang_scss_scoped_true_ = __webpack_require__("49d5");
 
 // EXTERNAL MODULE: ./src/components/UserScores.vue?vue&type=style&index=1&lang=css&
 var UserScoresvue_type_style_index_1_lang_css_ = __webpack_require__("53da");
@@ -21543,11 +21915,11 @@ var UserScoresvue_type_custom_index_0_blockType_i18n = __webpack_require__("993b
 
 var UserScores_component = normalizeComponent(
   components_UserScoresvue_type_script_lang_ts_,
-  UserScoresvue_type_template_id_692ab328_scoped_true_render,
-  UserScoresvue_type_template_id_692ab328_scoped_true_staticRenderFns,
+  UserScoresvue_type_template_id_a08a1ebe_scoped_true_render,
+  UserScoresvue_type_template_id_a08a1ebe_scoped_true_staticRenderFns,
   false,
   null,
-  "692ab328",
+  "a08a1ebe",
   null
   
 )
@@ -21763,13 +22135,6 @@ module.exports = Object.keys || function keys(O) {
 
 /***/ }),
 
-/***/ "d062":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "d0d3":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21804,7 +22169,25 @@ module.exports = {
 
 /***/ }),
 
-/***/ "d303":
+/***/ "d205":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_1_id_ad6ec30c_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("4c38");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_1_id_ad6ec30c_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_1_id_ad6ec30c_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GradesTable_vue_vue_type_style_index_1_id_ad6ec30c_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "d31d":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "d32b":
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
@@ -21884,6 +22267,13 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 /***/ }),
 
+/***/ "d859":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "da8c":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -21911,6 +22301,16 @@ module.exports = function (index, length) {
   return integer < 0 ? max(integer + length, 0) : min(integer, length);
 };
 
+
+/***/ }),
+
+/***/ "ddc6":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FinalScoreSettings_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("c820");
+/* harmony import */ var _node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FinalScoreSettings_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FinalScoreSettings_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0__);
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FinalScoreSettings_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -22153,6 +22553,16 @@ $({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT || !USES_TO_LENGT
   }
 });
 
+
+/***/ }),
+
+/***/ "e587":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DisplayTotalInput_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("7ab9");
+/* harmony import */ var _node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DisplayTotalInput_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DisplayTotalInput_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0__);
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DisplayTotalInput_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -22693,7 +23103,7 @@ fixRegExpWellKnownSymbolLogic('split', 2, function (SPLIT, nativeSplit, maybeCal
 
 /***/ }),
 
-/***/ "f52b":
+/***/ "f3e6":
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
@@ -22790,13 +23200,6 @@ var global = __webpack_require__("b5f1");
 
 module.exports = global.Promise;
 
-
-/***/ }),
-
-/***/ "faa7":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -23166,17 +23569,6 @@ setToStringTag($Symbol, SYMBOL);
 
 hiddenKeys[HIDDEN] = true;
 
-
-/***/ }),
-
-/***/ "fbce":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Main_vue_vue_type_style_index_1_id_60f5f433_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("a14c");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Main_vue_vue_type_style_index_1_id_60f5f433_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Main_vue_vue_type_style_index_1_id_60f5f433_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Main_vue_vue_type_style_index_1_id_60f5f433_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 

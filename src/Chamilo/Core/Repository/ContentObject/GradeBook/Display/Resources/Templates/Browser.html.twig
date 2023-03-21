@@ -34,6 +34,7 @@
     const apiConfig = {
         gradeBookRootURL: '{{ GRADEBOOK_ROOT_URL|raw }}',
         gradeBookImportCsvURL: '{{ GRADEBOOK_IMPORT_CSV_URL|raw }}',
+        gradeBookExportURL: '{{ GRADEBOOK_EXPORT_URL|raw }}',
         loadGradeBookDataURL: '{{ LOAD_GRADEBOOK_DATA_URL|raw }}',
         addCategoryURL: '{{ ADD_CATEGORY_URL|raw }}',
         updateCategoryURL: '{{ UPDATE_CATEGORY_URL|raw }}',
@@ -51,6 +52,7 @@
         revertOverwrittenScoreURL: '{{ REVERT_OVERWRITTEN_SCORE_URL|raw }}',
         updateScoreCommentURL: '{{ UPDATE_SCORE_COMMENT_URL|raw }}',
         calculateTotalScoresURL: '{{ CALCULATE_TOTAL_SCORES_URL|raw }}',
+        updateDisplayTotalURL: '{{ UPDATE_DISPLAY_TOTAL_URL|raw }}',
         csrfToken: '{{ csrf_token('ComponentToken') }}'
     };
 

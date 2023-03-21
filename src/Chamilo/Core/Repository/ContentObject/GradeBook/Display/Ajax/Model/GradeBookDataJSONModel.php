@@ -39,6 +39,13 @@ class GradeBookDataJSONModel
     protected $title;
 
     /**
+     * @var int|null
+     *
+     * @Type("integer")
+     */
+    protected $displayTotal;
+
+    /**
      * @var GradeBookItemJSONModel[]
      */
     protected $gradeItems;
@@ -62,16 +69,18 @@ class GradeBookDataJSONModel
      * @param int $id
      * @param int $version
      * @param string $title
+     * @param ?int $displayTotal
      * @param GradeBookItemJSONModel[] $gradeItems
      * @param GradeBookColumnJSONModel[] $gradeColumns
      * @param GradeBookCategoryJSONModel[] $categories
      * @param GradeBookCategoryJSONModel $nullCategory
      */
-    public function __construct(int $id, int $version, string $title, array $gradeItems, array $gradeColumns, array $categories, GradeBookCategoryJSONModel $nullCategory)
+    public function __construct(int $id, int $version, string $title, ?int $displayTotal, array $gradeItems, array $gradeColumns, array $categories, GradeBookCategoryJSONModel $nullCategory)
     {
         $this->dataId = $id;
         $this->version = $version;
         $this->title = $title;
+        $this->displayTotal = $displayTotal;
         $this->gradeItems = $gradeItems;
         $this->gradeColumns = $gradeColumns;
         $this->categories = $categories;
@@ -156,7 +165,7 @@ class GradeBookDataJSONModel
         $nullCategory = GradeBookCategory::nullCategoryToJSONModel($gradebookData->getGradeBookColumnsUncategorized());
 
         return new self(
-            $gradebookData->getId(), $gradebookData->getVersion(), $gradebookData->getTitle(), $gradebookItems, $gradebookColumns, $categories, $nullCategory
+            $gradebookData->getId(), $gradebookData->getVersion(), $gradebookData->getTitle(), $gradebookData->getDisplayTotal(), $gradebookItems, $gradebookColumns, $categories, $nullCategory
         );
     }
 }
