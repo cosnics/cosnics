@@ -62,7 +62,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function setName($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->set_default_property(self::PROPERTY_NAME, htmlentities($name));
     }
 
     /**
