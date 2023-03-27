@@ -38,10 +38,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Uid\Uuid;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\DataManager\Repository
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class DataClassRepository
 {
@@ -120,7 +119,6 @@ class DataClassRepository
     }
 
     /**
-     *
      * @template tInternalRetrieveClass
      *
      * @param class-string<tInternalRetrieveClass> $dataClassName
@@ -286,51 +284,54 @@ class DataClassRepository
             $objectTableName = $dataClass::getStorageUnitName();
         }
 
-        if($dataClass instanceof UuidDataClassInterface && !$dataClass->isIdentified())
+        if ($dataClass instanceof UuidDataClassInterface && !$dataClass->isIdentified())
         {
             $dataClass->setId(Uuid::v4()->__toString());
         }
 
         $objectProperties = $dataClass->getDefaultProperties();
 
-        if(!$dataClass instanceof UuidDataClassInterface)
+        if (!$dataClass instanceof UuidDataClassInterface)
         {
             unset($objectProperties[DataClass::PROPERTY_ID]);
         }
 
-        $dataClassCreated = $this->getDataClassDatabase()->create($objectTableName, $objectProperties);
-
-        if(!$dataClass instanceof UuidDataClassInterface)
+        if ($this->getDataClassDatabase()->create($objectTableName, $objectProperties))
         {
-            $dataClass->setId($this->getDataClassDatabase()->getLastInsertedIdentifier($objectTableName));
-        }
+            if (!$dataClass instanceof UuidDataClassInterface)
+            {
+                $dataClass->setId((string) $this->getDataClassDatabase()->getLastInsertedIdentifier($objectTableName));
+            }
 
-        if ($dataClassCreated === true && $dataClass instanceof CompositeDataClass && $dataClass::isExtended())
-        {
-            $objectProperties = $dataClass->getAdditionalProperties();
-            $objectProperties[DataClass::PROPERTY_ID] = $dataClass->getId();
+            if ($dataClass instanceof CompositeDataClass && $dataClass::isExtended())
+            {
+                $objectProperties = $dataClass->getAdditionalProperties();
+                $objectProperties[DataClass::PROPERTY_ID] = $dataClass->getId();
 
-            $dataClassCreated =
-                $this->getDataClassDatabase()->create($dataClass::getStorageUnitName(), $objectProperties);
-        }
+                if (!$this->getDataClassDatabase()->create($dataClass::getStorageUnitName(), $objectProperties))
+                {
+                    return false;
+                }
+            }
 
-        if ($dataClassCreated === true && $this->isQueryCacheEnabled())
-        {
-            $parentDataClassName = $this->determineCompositeDataClassParentClassName(get_class($dataClass));
+            if ($this->isQueryCacheEnabled())
+            {
+                $parentDataClassName = $this->determineCompositeDataClassParentClassName(get_class($dataClass));
 
-            return $this->getDataClassRepositoryCache()->addForDataClass(
-                $dataClass, new DataClassRetrieveParameters(
-                    new EqualityCondition(
-                        new PropertyConditionVariable($parentDataClassName, DataClass::PROPERTY_ID),
-                        new StaticConditionVariable($dataClass->getId())
+                return $this->getDataClassRepositoryCache()->addForDataClass(
+                    $dataClass, new DataClassRetrieveParameters(
+                        new EqualityCondition(
+                            new PropertyConditionVariable($parentDataClassName, DataClass::PROPERTY_ID),
+                            new StaticConditionVariable($dataClass->getId())
+                        )
                     )
-                )
-            );
-        }
-        else
-        {
+                );
+            }
+
             return true;
         }
+
+        return false;
     }
 
     /**

@@ -456,10 +456,7 @@ abstract class DataClass
 
     public function setId(?string $id): DataClass
     {
-        if (strlen($id) > 0)
-        {
-            $this->setDefaultProperty(static::PROPERTY_ID, $id);
-        }
+        $this->setDefaultProperty(static::PROPERTY_ID, $id);
 
         return $this;
     }
