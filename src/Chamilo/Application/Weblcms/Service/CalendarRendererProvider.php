@@ -129,6 +129,9 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
                 $object->set_id($publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
             }
 
+            if($object->get_end_date() < $startTime || $object->get_start_date() > $endTime)
+                continue;
+
             $publicationObject = new ContentObjectPublication();
             $publicationObject->set_default_properties($publication);
             $publicationObject->set_content_object($object);
