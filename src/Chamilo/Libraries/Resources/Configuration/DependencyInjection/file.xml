@@ -9,6 +9,8 @@
 
         <service id="Chamilo\Libraries\File\Path"/>
         <service id="Chamilo\Libraries\File\PathBuilder"/>
+        <service id="Chamilo\Libraries\File\SystemPathBuilder"/>
+        <service id="Chamilo\Libraries\File\WebPathBuilder"/>
         <service id="Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator"/>
 
         <service id="Chamilo\Libraries\File\ConfigurablePathBuilder">

@@ -71,7 +71,10 @@
         ]
     },
     "config": {
-        "bin-dir": "bin/"
+        "bin-dir": "bin/",
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "scripts": {
         "pre-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",

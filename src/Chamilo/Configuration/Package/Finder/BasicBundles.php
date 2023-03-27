@@ -4,35 +4,31 @@ namespace Chamilo\Configuration\Package\Finder;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Configuration\Package\Finder
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class BasicBundles
 {
 
     /**
-     *
-     * @var string
-     */
-    private $rootNamespace;
-
-    /**
-     *
      * @var string[]
      */
     private $packageNamespaces = [];
 
     /**
-     *
+     * @var string
+     */
+    private $rootNamespace;
+
+    /**
      * @param string $namespace
-     * @param integer $mode
+     * @param int $mode
      */
     public function __construct($rootNamespace = PackageList::ROOT)
     {
@@ -40,22 +36,7 @@ class BasicBundles
         $this->setup();
     }
 
-    protected function setup(): void
-    {
-        $this->discoverPackages($this->rootNamespace);
-    }
-
     /**
-     *
-     * @return string[]
-     */
-    public function getPackageNamespaces()
-    {
-        return $this->packageNamespaces;
-    }
-
-    /**
-     *
      * @param string $packageNamespace
      */
     protected function addPackageNamespace($packageNamespace)
@@ -64,16 +45,6 @@ class BasicBundles
     }
 
     /**
-     *
-     * @return string
-     */
-    public function getRootNamespace()
-    {
-        return $this->rootNamespace;
-    }
-
-    /**
-     *
      * @param string $namespace
      */
     private function discoverPackages($rootNamespace)
@@ -81,14 +52,14 @@ class BasicBundles
         $blacklist = $this->getBlacklistedFolders();
         $rootNamespace = $rootNamespace == PackageList::ROOT ? '' : $rootNamespace;
 
-        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals());
+        $pathBuilder = new SystemPathBuilder(new ClassnameUtilities(new StringUtilities('UTF-8')));
         $path = $pathBuilder->namespaceToFullPath($rootNamespace);
 
         $folders = Filesystem::get_directory_content($path, Filesystem::LIST_DIRECTORIES, false);
 
         foreach ($folders as $folder)
         {
-            if (! in_array($folder, $blacklist) && substr($folder, 0, 1) != '.')
+            if (!in_array($folder, $blacklist) && substr($folder, 0, 1) != '.')
             {
                 $folderNamespace = ($rootNamespace ? $rootNamespace . '\\' : '') . $folder;
 
@@ -103,23 +74,44 @@ class BasicBundles
     }
 
     /**
-     *
      * @return string[]
      */
     protected function getBlacklistedFolders()
     {
-        return array('.hg', '.git', 'build', 'Build', 'plugin', 'resources', 'Resources', 'Test');
+        return ['.hg', '.git', 'build', 'Build', 'plugin', 'resources', 'Resources', 'Test'];
     }
 
     /**
-     *
+     * @return string[]
+     */
+    public function getPackageNamespaces()
+    {
+        return $this->packageNamespaces;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRootNamespace()
+    {
+        return $this->rootNamespace;
+    }
+
+    protected function setup(): void
+    {
+        $this->discoverPackages($this->rootNamespace);
+    }
+
+    /**
      * @param string $folderNamespace
-     * @return boolean
+     *
+     * @return bool
      */
     protected function verifyPackage($folderNamespace)
     {
-        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals());
+        $pathBuilder = new SystemPathBuilder(new ClassnameUtilities(new StringUtilities('UTF-8')));
         $packageInfoPath = $pathBuilder->namespaceToFullPath($folderNamespace) . '/composer.json';
+
         return file_exists($packageInfoPath);
     }
 }

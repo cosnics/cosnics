@@ -7,12 +7,11 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package Chamilo\Libraries\File
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class PathBuilder
 {
@@ -40,7 +39,6 @@ class PathBuilder
     protected static ?PathBuilder $instance = null;
 
     /**
-     *
      * @var string[]
      */
     private array $cache = [];
@@ -77,11 +75,6 @@ class PathBuilder
     public function getClassnameUtilities(): ClassnameUtilities
     {
         return $this->classnameUtilities;
-    }
-
-    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities)
-    {
-        $this->classnameUtilities = $classnameUtilities;
     }
 
     public function getConfigurationPath(string $namespace = 'Chamilo\Configuration', bool $web = false): string
@@ -204,5 +197,10 @@ class PathBuilder
         return $this->cache[self::FULL][(string) $namespace][(string) $web] = $this->getBasePath($web) . ($namespace ?
                 $this->getClassnameUtilities()->namespaceToPath($namespace, $web) . $this->getDirectorySeparator($web) :
                 '');
+    }
+
+    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities)
+    {
+        $this->classnameUtilities = $classnameUtilities;
     }
 }
