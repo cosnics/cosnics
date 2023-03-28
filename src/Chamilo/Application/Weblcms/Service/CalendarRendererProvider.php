@@ -129,7 +129,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
                 $object->set_id($publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
             }
 
-            if($object->get_end_date() < $startTime || $object->get_start_date() > $endTime)
+            if($object->get_start_date() > $endTime)
                 continue;
 
             $publicationObject = new ContentObjectPublication();
@@ -138,6 +138,13 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
             $eventParser = new EventParser($publicationObject, $startTime, $endTime);
             $events = array_merge($events, $eventParser->getEvents());
+
+        }
+
+        foreach($events as $i => $event)
+        {
+            if($event->getEndDate() < $startTime || $event->getStartDate() > $endTime)
+                unset($events[$i]);
         }
 
         return $events;
