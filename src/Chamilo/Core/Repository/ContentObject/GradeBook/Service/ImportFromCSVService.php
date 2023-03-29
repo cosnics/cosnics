@@ -68,6 +68,11 @@ class ImportFromCSVService
             throw new NotCSVFileException();
         }
 
+        // Manual fix to remove Microsoft BOM characters
+        $startingPosition = strpos($header[0], 'lastname');
+        if($startingPosition !== false && $startingPosition > 0)
+            $header[0] = 'lastname';
+
         if (array_slice($header, 0, 3) != ['lastname', 'firstname', 'id']) {
             throw new InvalidHeaderException();
         }
