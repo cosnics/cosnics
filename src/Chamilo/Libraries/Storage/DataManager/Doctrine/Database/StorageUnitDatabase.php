@@ -101,14 +101,6 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
                 $columnData['columnDefinition'] = $column->getColumnDefinition();
                 $columnData['autoincrement'] = $column->getAutoincrement();
 
-                $columnData['comment'] = $column->getComment();
-                if ($column->getType()->requiresSQLCommentHint($this->getConnection()->getDatabasePlatform()))
-                {
-                    $columnData['comment'] .= $this->getConnection()->getDatabasePlatform()->getDoctrineTypeComment(
-                        $column->getType()
-                    );
-                }
-
                 $columns = [$columnData['name'] => $columnData];
 
                 $fieldsQuery = $this->getConnection()->getDatabasePlatform()->getColumnDeclarationListSQL($columns);
@@ -267,7 +259,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
             $schemaDiff = (new Comparator())->compareSchemas($schema, $newSchema);
 
-            $sql = $schemaDiff->toSql($this->getConnection()->getDatabasePlatform());
+            $sql = $this->getConnection()->getDatabasePlatform()->getAlterSchemaSQL($schemaDiff);
 
             foreach ($sql as $query)
             {
