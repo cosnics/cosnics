@@ -1029,7 +1029,7 @@ EOT;
      */
     public function validate_csv($value)
     {
-        $registry = &HTML_QuickForm_RuleRegistry::singleton();
+        $registry = HTML_QuickForm_RuleRegistry::singleton();
         $rulenr = '-1';
 
         foreach ($this->_rules as $target => $rules)
@@ -1259,7 +1259,7 @@ EOT;
      * @return string
      * @deprecated Use render() now
      */
-    public function toHtml($in_data = null)
+    public function toHtml($in_data = null): string
     {
         if(!$this->elementExists(self::ELEMENT_CSRF_TOKEN))
         {
@@ -1273,7 +1273,7 @@ EOT;
      * @return bool
      * @throws \Exception
      */
-    function validate()
+    function validate(): bool
     {
         $this->addCsrfToken();
 
@@ -1410,7 +1410,7 @@ EOT;
      *
      * @return \HTML_QuickForm_group
      */
-    function &createGroup($elements, $name = null, $groupLabel = '', $separator = null, $appendName = true)
+    function createGroup($elements, $name = null, $groupLabel = '', $separator = null, $appendName = true)
     {
         static $anonGroups = 1;
 

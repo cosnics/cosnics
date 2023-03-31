@@ -339,7 +339,7 @@ class CourseGroupForm extends FormValidator
     /**
      * Validates the filled in data of the form when the new course group is added
      */
-    public function validate()
+    public function validate(): bool
     {
         if (isset($_POST['add']) || isset($_POST['remove']))
         {
