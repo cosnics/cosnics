@@ -35,7 +35,7 @@ class AdvancedElementFinderElement
      * @param string $description
      * @param integer $type
      */
-    public function __construct($id, $class, $title, $description, $type = self :: TYPE_SELECTABLE)
+    public function __construct($id, $class, $title, $description, $type = self::TYPE_SELECTABLE)
     {
         $this->set_id($id);
         $this->set_class($class);

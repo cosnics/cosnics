@@ -1,4 +1,6 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
+
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
@@ -9,7 +11,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package Chamilo\Libraries\Format\Form\Element
  */
-class HTML_QuickForm_timepicker extends HTML_QuickForm_date
+class HTML_QuickForm_timepicker extends \HTML_QuickForm_date
 {
 
     /**
@@ -34,7 +36,7 @@ class HTML_QuickForm_timepicker extends HTML_QuickForm_date
 
         $js_form_name = $attributes['form_name'];
         // unset($attributes['form_name']);
-        HTML_QuickForm_element::__construct($elementName, $elementLabel, $attributes);
+        \HTML_QuickForm_element::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_appendName = true;
         $this->_type = 'timepicker';
@@ -91,7 +93,7 @@ class HTML_QuickForm_timepicker extends HTML_QuickForm_date
      *
      * @see HTML_QuickForm_date::toHtml()
      */
-    public function toHtml()
+    public function toHtml(): string
     {
         $js = $this->getElementJS();
         return $js . parent::toHtml();
@@ -112,7 +114,7 @@ class HTML_QuickForm_timepicker extends HTML_QuickForm_date
      *
      * @return string YYYY-MM-DD HH:II:SS
      */
-    public function exportValue()
+    public function exportValue(array &$submitValues, bool $assoc = false)
     {
         $values = parent::getValue();
         $h = $values['H'][0];

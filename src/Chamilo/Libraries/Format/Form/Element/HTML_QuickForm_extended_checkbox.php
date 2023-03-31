@@ -1,11 +1,15 @@
 <?php
+
+namespace Chamilo\Libraries\Format\Form\Element;
+use HTML_QuickForm_checkbox;
+
 /**
  * Extension on the HTML Quickform Checkbox element to support returnable values if the checkbox is not selected
  *
  * @package Chamilo\Libraries\Format\Form\Element
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
+class HTML_QuickForm_extended_checkbox extends \HTML_QuickForm_checkbox
 {
 
     /**
@@ -29,9 +33,13 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
      * @access public
      * @return void
      */
-    public function __construct($elementName = null, $elementLabel = null, $text = '', $attributes = null, $value = 1,
-        $return_value = null)
+    public function __construct($elementName = null, $elementLabel = null, ?string $text = '', $attributes = null, ?int $value = 1,
+        ?string $return_value = null
+    )
     {
+        if(is_null($text))
+            $text = '';
+
         HTML_QuickForm_checkbox::__construct($elementName, $elementLabel, $text, $attributes);
 
         if ($value && ! is_null($value))
@@ -102,25 +110,25 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
      *
      * @see HTML_QuickForm_checkbox::onQuickFormEvent()
      */
-    function onQuickFormEvent($event, $arg, &$caller)
+    public function onQuickFormEvent(string $event, $arg, ?\HTML_QuickForm $caller = null): bool
     {
         switch ($event)
         {
             case 'updateValue' :
                 // constant values override both default and submitted ones
                 // default values are overriden by submitted
-                $value = $this->_findValue($caller->_constantValues);
+                $value = $this->_findValue($caller->getConstantValues());
                 if (null === $value)
                 {
                     // if no boxes were checked, then there is no value in the array
                     // yet we don't want to display default value in this case
                     if ($caller->isSubmitted())
                     {
-                        $value = $this->_findValue($caller->_submitValues);
+                        $value = $this->_findValue($caller->getSubmitValues());
                     }
                     else
                     {
-                        $value = $this->_findValue($caller->_defaultValues);
+                        $value = $this->_findValue($caller->getDefaultValues());
                     }
                 }
                 if (null !== $value || $caller->isSubmitted())
@@ -149,13 +157,13 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
                         case 'updateValue' :
                             // constant values override both default and submitted ones
                             // default values are overriden by submitted
-                            $value = $this->_findValue($caller->_constantValues);
+                            $value = $this->_findValue($caller->getConstantValues());
                             if (null === $value)
                             {
-                                $value = $this->_findValue($caller->_submitValues);
+                                $value = $this->_findValue($caller->getSubmitValues());
                                 if (null === $value)
                                 {
-                                    $value = $this->_findValue($caller->_defaultValues);
+                                    $value = $this->_findValue($caller->getDefaultValues());
                                 }
                             }
                             if (null !== $value)
@@ -170,10 +178,10 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
                 }
                 else
                 {
-                    $value = $this->_findValue($caller->_constantValues);
+                    $value = $this->_findValue($caller->getConstantValues());
                     if (null === $value)
                     {
-                        $value = $this->_findValue($caller->_defaultValues);
+                        $value = $this->_findValue($caller->getDefaultValues());
                     }
                     if (null !== $value)
                     {
@@ -189,14 +197,14 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
      *
      * @see HTML_QuickForm_checkbox::toHtml()
      */
-    function toHtml()
+    function toHtml(): string
     {
         if (! $this->isFrozen())
         {
             $html = array();
 
             $html[] = '<div class="' . $this->getCheckboxClasses() . '">';
-            $html[] = HTML_QuickForm_input::toHtml();
+            $html[] = \HTML_QuickForm_input::toHtml();
             $html[] = '<label>';
             $html[] = $this->_text;
             $html[] = '</label>';

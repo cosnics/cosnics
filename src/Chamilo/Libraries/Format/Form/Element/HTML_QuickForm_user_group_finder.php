@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'HTML_QuickForm_element_finder.php';
+namespace Chamilo\Libraries\Format\Form\Element;
+
 
 /**
  * AJAX-based tree search and multiselect element.

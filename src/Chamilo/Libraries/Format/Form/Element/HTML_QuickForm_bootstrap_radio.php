@@ -1,4 +1,9 @@
 <?php
+
+namespace Chamilo\Libraries\Format\Form\Element;
+
+use HTML_QuickForm_radio;
+
 /**
  * Base class for <input /> form elements
  * HTML class for a radio type element
@@ -36,7 +41,7 @@ class HTML_QuickForm_bootstrap_radio extends HTML_QuickForm_radio
      *
      * @see HTML_QuickForm_radio::toHtml()
      */
-    function toHtml()
+    function toHtml(): string
     {
         if (! $this->isFrozen())
         {

@@ -1,9 +1,9 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
+
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Utilities\Utilities;
-
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'HTML_QuickForm_extended_checkbox.php';
 
 /**
  *
@@ -34,7 +34,7 @@ class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
      *
      * @see HTML_QuickForm_extended_checkbox::toHtml()
      */
-    function toHtml()
+    function toHtml(): string
     {
         $html = array();
 

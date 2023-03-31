@@ -5,13 +5,28 @@ namespace Chamilo\Libraries\Format\Form;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Date;
+use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_DateCompare;
+use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Filetype;
+use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_NumberCompare;
+use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Username;
+use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_UsernameAvailable;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_QuickForm;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_advanced_element_finder;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_radio;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_category;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_datepicker;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_extended_checkbox;
 use HTML_QuickForm_RuleRegistry;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylebutton;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_styleresetbutton;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylesubmitbutton;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
@@ -188,125 +203,33 @@ EOT;
 
     public function registerAdditionalElements()
     {
-        $dir = __DIR__ . '/';
-
         // Date and timepicker elements
-        $this->registerElementType(
-            'datepicker',
-            $dir . 'Element/HTML_QuickForm_datepicker.php',
-            'HTML_QuickForm_datepicker'
-        );
-        $this->registerElementType(
-            'timepicker',
-            $dir . 'Element/HTML_QuickForm_timepicker.php',
-            'HTML_QuickForm_timepicker'
-        );
+        $this->registerElementType('datepicker', HTML_QuickForm_datepicker::class);
 
         // Element finder elements
-        $this->registerElementType(
-            'upload_or_create',
-            $dir . 'Element/HTML_QuickForm_upload_or_create.php',
-            'HTML_QuickForm_upload_or_create'
-        );
-        $this->registerElementType(
-            'element_finder',
-            $dir . 'Element/HTML_QuickForm_element_finder.php',
-            'HTML_QuickForm_element_finder'
-        );
-        $this->registerElementType(
-            'advanced_element_finder',
-            $dir . 'Element/HTML_QuickForm_advanced_element_finder.php',
-            'HTML_QuickForm_advanced_element_finder'
-        );
-        $this->registerElementType(
-            'image_selecter',
-            $dir . 'Element/HTML_QuickForm_image_selecter.php',
-            'HTML_QuickForm_image_selecter'
-        );
-
-        $this->registerElementType(
-            'user_group_finder',
-            $dir . 'Element/HTML_QuickForm_user_group_finder.php',
-            'HTML_QuickForm_user_group_finder'
-        );
+        $this->registerElementType('advanced_element_finder', HTML_QuickForm_advanced_element_finder::class);
 
         // Button elements
-        $this->registerElementType(
-            'style_button',
-            $dir . 'Element/HTML_QuickForm_stylebutton.php',
-            'HTML_QuickForm_stylebutton'
-        );
-        $this->registerElementType(
-            'style_submit_button',
-            $dir . 'Element/HTML_QuickForm_stylesubmitbutton.php',
-            'HTML_QuickForm_stylesubmitbutton'
-        );
-        $this->registerElementType(
-            'style_reset_button',
-            $dir . 'Element/HTML_QuickForm_styleresetbutton.php',
-            'HTML_QuickForm_styleresetbutton'
-        );
+        $this->registerElementType('style_button', HTML_QuickForm_stylebutton::class);
+        $this->registerElementType('style_submit_button', HTML_QuickForm_stylesubmitbutton::class);
+        $this->registerElementType('style_reset_button', HTML_QuickForm_styleresetbutton::class);
 
-        // Checkbox and radio elements
-        $this->registerElementType(
-            'radio',
-            $dir . 'Element/HTML_QuickForm_bootstrap_radio.php',
-            'HTML_QuickForm_bootstrap_radio'
-        );
-
-        $this->registerElementType(
-            'checkbox',
-            $dir . 'Element/HTML_QuickForm_extended_checkbox.php',
-            'HTML_QuickForm_extended_checkbox'
-        );
-
-        $this->registerElementType('toggle', $dir . 'Element/HTML_QuickForm_toggle.php', 'HTML_QuickForm_toggle');
-
-        $this->registerElementType('category', $dir . 'Element/HTML_QuickForm_category.php', 'HTML_QuickForm_category');
+        // Replacing some default elements
+        $this->registerElementType('radio', HTML_QuickForm_bootstrap_radio::class);
+        $this->registerElementType('checkbox', HTML_QuickForm_extended_checkbox::class);
+        //$this->registerElementType('file', HTML_QuickForm_stylefile::class);
+        $this->registerElementType('toggle', HTML_QuickForm_toggle::class);
+        $this->registerElementType('category', HTML_QuickForm_category::class);
     }
 
     public function registerAdditionalRules()
     {
-        $dir = __DIR__ . '/';
-
-        $this->registerRule('date', null, 'HTML_QuickForm_Rule_Date', $dir . 'Rule/HTML_QuickForm_Rule_Date.php');
-        $this->registerRule(
-            'date_compare',
-            null,
-            'HTML_QuickForm_Rule_DateCompare',
-            $dir . 'Rule/HTML_QuickForm_Rule_DateCompare.php'
-        );
-        $this->registerRule(
-            'number_compare',
-            null,
-            'HTML_QuickForm_Rule_NumberCompare',
-            $dir . 'Rule/HTML_QuickForm_Rule_NumberCompare.php'
-        );
-        $this->registerRule(
-            'username_available',
-            null,
-            'HTML_QuickForm_Rule_UsernameAvailable',
-            $dir . 'Rule/HTML_QuickForm_Rule_UsernameAvailable.php'
-        );
-        $this->registerRule(
-            'username',
-            null,
-            'HTML_QuickForm_Rule_Username',
-            $dir . 'Rule/HTML_QuickForm_Rule_Username.php'
-        );
-        $this->registerRule(
-            'filetype',
-            null,
-            'HTML_QuickForm_Rule_Filetype',
-            $dir . 'Rule/HTML_QuickForm_Rule_Filetype.php'
-        );
-
-        $this->registerRule(
-            'disk_quota',
-            null,
-            'HTML_QuickForm_Rule_DiskQuota',
-            $dir . 'Rule/HTML_QuickForm_Rule_DiskQuota.php'
-        );
+        $this->registerRule('date', null, HTML_QuickForm_Rule_Date::class);
+        $this->registerRule('date_compare', null, HTML_QuickForm_Rule_DateCompare::class);
+        $this->registerRule('number_compare', null, HTML_QuickForm_Rule_NumberCompare::class);
+        $this->registerRule('username_available', null, HTML_QuickForm_Rule_UsernameAvailable::class);
+        $this->registerRule('username', null, HTML_QuickForm_Rule_Username::class);
+        $this->registerRule('filetype', null, HTML_QuickForm_Rule_Filetype::class);
     }
 
     public function set_error_reporting($enabled)
@@ -1309,7 +1232,11 @@ EOT;
 
         foreach ($this->_elements as $index => $element)
         {
-            if (!is_null(parent::getElementError($element->getName())))
+            $elementName = $element->getName();
+            if(is_null($elementName))
+                $elementName = '';
+
+            if (!is_null(parent::getElementError($elementName)))
             {
                 if($element->getName() == self::ELEMENT_CSRF_TOKEN)
                 {

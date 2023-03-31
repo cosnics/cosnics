@@ -1,4 +1,8 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
+
+use HTML_QuickForm_html;
+
 /**
  * A pseudo-element used for adding raw HTML to form
  * Intended for use with the default renderer only, template-based

@@ -1,8 +1,11 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
+
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use HTML_QuickForm_group;
 
 /**
  * Advanced ajax based element finder.
@@ -249,7 +252,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
      *
      * @see HTML_QuickForm_group::exportValue()
      */
-    public function exportValue($submitValues, $assoc = false)
+    public function exportValue(array &$submitValues, bool $assoc = false)
     {
         return $this->_prepareValue($this->getValue(), $assoc);
     }
@@ -258,7 +261,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
      *
      * @return string
      */
-    public function toHTML()
+    public function toHTML(): string
     {
         // Create a safe name for the id (remove array values)
         $safe_name = str_replace('[', '_', $this->getName());

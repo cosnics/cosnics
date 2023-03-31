@@ -1,4 +1,6 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Rule;
+
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -12,7 +14,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
  *
  * @package Chamilo\Libraries\Format\Form\Rule
  */
-class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
+class HTML_QuickForm_Rule_UsernameAvailable extends \HTML_QuickForm_Rule
 {
 
     /**
@@ -22,7 +24,7 @@ class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
      * @param string $currentUsername
      * @return boolean True if username is available
      */
-    public function validate($username, $currentUsername = null)
+    public function validate($username, $currentUsername = null): bool
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(

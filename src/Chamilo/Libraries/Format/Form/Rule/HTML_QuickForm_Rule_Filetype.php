@@ -1,10 +1,13 @@
 <?php
+
+namespace Chamilo\Libraries\Format\Form\Rule;
+
 /**
  * QuickForm rule to check if a filetype
  *
  * @package Chamilo\Libraries\Format\Form\Rule
  */
-class HTML_QuickForm_Rule_Filetype extends HTML_QuickForm_Rule
+class HTML_QuickForm_Rule_Filetype extends \HTML_QuickForm_Rule
 {
 
     /**
@@ -14,7 +17,7 @@ class HTML_QuickForm_Rule_Filetype extends HTML_QuickForm_Rule
      * @param string[] $extensions Allowed extensions
      * @return boolean True if filetype is allowed
      */
-    public function validate($file, $extensions = array())
+    public function validate($file, $extensions = array()): bool
     {
         $parts = explode('.', $file['name']);
         if (count($parts) < 2)

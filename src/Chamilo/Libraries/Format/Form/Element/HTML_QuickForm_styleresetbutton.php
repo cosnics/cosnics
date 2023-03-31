@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'HTML_QuickForm_stylebutton.php';
+namespace Chamilo\Libraries\Format\Form\Element;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Form\Element

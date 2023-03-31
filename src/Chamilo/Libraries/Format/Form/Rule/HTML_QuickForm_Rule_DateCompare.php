@@ -1,10 +1,12 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Rule;
+
 /**
  * QuickForm rule to compare 2 dates
  *
  * @package Chamilo\Libraries\Format\Form\Rule
  */
-class HTML_QuickForm_Rule_DateCompare extends HTML_QuickForm_Rule_Compare
+class HTML_QuickForm_Rule_DateCompare extends \HTML_QuickForm_Rule_Compare
 {
 
     /**
@@ -15,7 +17,7 @@ class HTML_QuickForm_Rule_DateCompare extends HTML_QuickForm_Rule_Compare
      * @param string $operator The operator to use (default '==')
      * @return boolean True if the 2 given dates match the operator
      */
-    public function validate($values, $operator = null)
+    public function validate($values, $operator = null): bool
     {
         $date1 = $values[0];
         $date2 = $values[1];

@@ -1,11 +1,13 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\File\Path;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Form\Element
  */
-class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
+class HTML_QuickForm_option_orderer extends \HTML_QuickForm_hidden
 {
 
     /**
@@ -34,7 +36,7 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
      *
      * @see HTML_QuickForm_input::toHtml()
      */
-    public function toHtml()
+    public function toHtml(): string
     {
         $html = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'OptionOrderer.js');
@@ -46,7 +48,7 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
      *
      * @see HTML_QuickForm_element::getFrozenHtml()
      */
-    public function getFrozenHtml()
+    public function getFrozenHtml(): string
     {
         $html = '<ol class="option-orderer oord-name_' . $this->getName() . '">';
         $order = $this->getValue();
@@ -72,7 +74,7 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
      *
      * @see HTML_QuickForm_input::exportValue()
      */
-    public function exportValue()
+    public function exportValue(array &$submitValues, bool $assoc = false)
     {
         return $this->getValue();
     }

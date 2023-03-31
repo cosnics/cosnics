@@ -1,4 +1,6 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
+
 /**
  *
  * @package Chamilo\Libraries\Format\Form\Element
@@ -6,7 +8,7 @@
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
+class HTML_QuickForm_stylebutton extends \HTML_QuickForm_element
 {
 
     /**
@@ -31,7 +33,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      */
     public function __construct($elementName = null, $elementLabel = null, $attributes = null, $value = null, $glyph = null)
     {
-        HTML_QuickForm_element::__construct($elementName, null, $attributes);
+        \HTML_QuickForm_element::__construct($elementName, null, $attributes);
 
         $defaultAttributes = array();
         $defaultAttributes[] = 'btn';
@@ -103,7 +105,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      *
      * @see HTML_QuickForm_element::getName()
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->getAttribute('name');
     }
@@ -130,7 +132,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      *
      * @see HTML_Common::toHtml()
      */
-    public function toHtml()
+    public function toHtml(): string
     {
         if ($this->_flagFrozen)
         {
@@ -163,7 +165,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      *
      * @see HTML_QuickForm_element::getFrozenHtml()
      */
-    function getFrozenHtml()
+    function getFrozenHtml(): string
     {
         return '';
     }
@@ -172,7 +174,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      *
      * @see HTML_QuickForm_element::onQuickFormEvent()
      */
-    public function onQuickFormEvent($event, $arg, &$caller)
+    public function onQuickFormEvent(string $event, $arg, ?\HTML_QuickForm $caller = null): bool
     {
         // do not use submit values for button-type elements
         $type = $this->getType();
@@ -182,10 +184,10 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         }
         else
         {
-            $value = $this->_findValue($caller->_constantValues);
+            $value = $this->_findValue($caller->getConstantValues());
             if (null === $value)
             {
-                $value = $this->_findValue($caller->_defaultValues);
+                $value = $this->_findValue($caller->getDefaultValues());
             }
             if (null !== $value)
             {

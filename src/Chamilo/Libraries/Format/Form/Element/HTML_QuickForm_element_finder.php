@@ -1,8 +1,11 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use HTML_QuickForm_group;
+
 /**
  * AJAX-based tree search and multiselect element.
  * Use at your own risk.
@@ -221,7 +224,7 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
      *
      * @see HTML_QuickForm_group::exportValue()
      */
-    public function exportValue($submitValues, $assoc = false)
+    public function exportValue(array &$submitValues, bool $assoc = false)
     {
         if ($assoc)
         {
@@ -254,7 +257,7 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
      *
      * @return string
      */
-    public function toHTML()
+    public function toHTML(): string
     {
         /*
          * 0 active hidden 1 search 2 deactivate 3 activate

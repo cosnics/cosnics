@@ -1,4 +1,6 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
+
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Translation\Translation;
@@ -11,7 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package Chamilo\Libraries\Format\Form\Element
  */
-class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
+class HTML_QuickForm_upload_or_create extends \HTML_QuickForm_group
 {
     const ELEMENT_CHOICE = 'choice';
     const ELEMENT_FILE = 'file';
@@ -27,7 +29,7 @@ class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
      */
     public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
-        HTML_QuickForm_element::__construct($elementName, $elementLabel, $attributes);
+        \HTML_QuickForm_element::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_appendName = false;
         $this->_type = 'upload_or_create';
@@ -39,7 +41,7 @@ class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
      */
     public function _createElements()
     {
-        $this->_elements[0] = new HTML_QuickForm_Radio(
+        $this->_elements[0] = new \HTML_QuickForm_Radio(
             self::ELEMENT_CHOICE,
             '',
             Translation::get('Upload', null, Utilities::COMMON_LIBRARIES),
@@ -48,8 +50,8 @@ class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
                 'onclick' => 'javascript:editor_hide(\'editor_html_content\'); javascript:uncompress_show(\'' .
                      self::ELEMENT_UNCOMPRESS . '\')'));
         $this->_elements[0]->setChecked(true);
-        $this->_elements[1] = new HTML_QuickForm_file(self::ELEMENT_FILE, '');
-        $this->_elements[2] = new HTML_QuickForm_Radio(
+        $this->_elements[1] = new \HTML_QuickForm_file(self::ELEMENT_FILE, '');
+        $this->_elements[2] = new \HTML_QuickForm_Radio(
             self::ELEMENT_CHOICE,
             '',
             Translation::get('Create', null, Utilities::COMMON_LIBRARIES),
@@ -68,7 +70,7 @@ class HTML_QuickForm_upload_or_create extends HTML_QuickForm_group
      *
      * @see HTML_QuickForm_group::toHtml()
      */
-    public function toHtml()
+    public function toHtml(): string
     {
         $html[] = $this->_elements[0]->toHtml();
         $html[] = '<div style="display: inline;" id="' . self::ELEMENT_UNCOMPRESS . '">';

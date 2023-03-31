@@ -1,4 +1,6 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
+
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
@@ -210,7 +212,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
      *
      * @return string
      */
-    public function toHTML()
+    public function toHTML(): string
     {
         $calculator = new \Chamilo\Core\Repository\Quota\Calculator(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(

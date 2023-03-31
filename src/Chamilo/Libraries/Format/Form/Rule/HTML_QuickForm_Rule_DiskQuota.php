@@ -1,4 +1,6 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Rule;
+
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Libraries\Platform\Session\Session;
 /**
@@ -6,7 +8,7 @@ use Chamilo\Libraries\Platform\Session\Session;
  *
  * @package Chamilo\Libraries\Format\Form\Rule
  */
-class HTML_QuickForm_Rule_DiskQuota extends HTML_QuickForm_Rule
+class HTML_QuickForm_Rule_DiskQuota extends \HTML_QuickForm_Rule
 {
 
     /**
@@ -15,7 +17,7 @@ class HTML_QuickForm_Rule_DiskQuota extends HTML_QuickForm_Rule
      * @param string[] $file Uploaded file (array)
      * @return boolean True if the filesize doesn't cause a disk quota overflow
      */
-    function validate($file, $options = null)
+    function validate($file, $options = null): bool
     {
         $size = $file['size'];
         $calculator = new Calculator(

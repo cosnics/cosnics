@@ -1,8 +1,12 @@
 <?php
+namespace Chamilo\Libraries\Format\Form\Element;
+
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use HTML_QuickForm_date;
+
 /**
  * Form element to select a date and hour (with popup datepicker)
  *
@@ -91,7 +95,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
     /**
      * HTML code to display this datepicker
      */
-    public function toHtml()
+    public function toHtml() : string
     {
         $js = $this->getElementJS();
         return $js . parent::toHtml();
