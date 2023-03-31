@@ -57,7 +57,7 @@ class Embedder extends ContentObjectEmbedder
         $applicationFactory = $this->getApplicationFactory();
         $applicationFactory->setAssignmentServiceBridge($assignmentServiceBridge);
 
-        $this->registerSelectedAssignmentEntity($assignmentServiceBridge);
+        $this->registerSelectedAssignmentEntity($assignmentServiceBridge, $assignmentServiceBridge);
         $this->addSelectedAssignmentEntityToApplicationFactory($applicationFactory, $assignmentServiceBridge);
 
         $result = $applicationFactory->getApplication(
@@ -170,6 +170,11 @@ class Embedder extends ContentObjectEmbedder
 
     protected function registerSelectedAssignmentEntity(AssignmentServiceBridge $assignmentServiceBridge): void
     {
+        if(!$assignmentServiceBridge->canEditAssignment())
+        {
+            return;
+        }
+
         if ($this->getRequest()->getFromPostOrUrl(
                 \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION
             ) == \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_ENTRY

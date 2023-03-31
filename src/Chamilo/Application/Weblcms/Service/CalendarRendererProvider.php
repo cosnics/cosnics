@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Service;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent;
+use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
@@ -129,12 +130,22 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
                 $object->set_id($publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
             }
 
+            if(get_class($object) == CalendarEvent::class)
+            {
+                if ($object->get_start_date() > $endTime)
+                    continue;
+
+                if ($object->get_frequency() == 0 && $object->get_end_date() < $startTime)
+                    continue;
+            }
+
             $publicationObject = new ContentObjectPublication();
             $publicationObject->set_default_properties($publication);
             $publicationObject->set_content_object($object);
 
             $eventParser = new EventParser($publicationObject, $startTime, $endTime);
             $events = array_merge($events, $eventParser->getEvents());
+
         }
 
         return $events;

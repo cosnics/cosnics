@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
@@ -25,22 +26,16 @@ class EmailerComponent extends Manager
         $ids = $this->getRequest()->get(self::PARAM_USER_USER_ID);
         $this->set_parameter(self::PARAM_USER_USER_ID, $ids);
 
-        if (! is_array($ids))
-        {
+        if (!is_array($ids)) {
             $ids = array($ids);
         }
 
-        if (count($ids) > 0)
-        {
-            $failures = 0;
-
-            foreach ($ids as $id)
-            {
-                if (! $this->get_user()->is_platform_admin())
-                {
+        if (count($ids) > 0) {
+            if ($this->get_user()->is_platform_admin()) {
+                foreach ($ids as $id) {
                     $users[] = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
                         \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                        (int) $id);
+                        (int)$id);
                 }
             }
 
@@ -50,9 +45,7 @@ class EmailerComponent extends Manager
             $application->set_target_users($users);
             $application->set_parameter(self::PARAM_USER_USER_ID, $ids);
             return $application->run();
-        }
-        else
-        {
+        } else {
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(

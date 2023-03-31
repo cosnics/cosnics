@@ -194,6 +194,8 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
             $entryContextIdentifier = $this->getRubricBridge()->getContextIdentifier();
             $rubricAction = $this->getRubricActionFromRequest($canUseRubricEvaluation, $entryContextIdentifier);
 
+            $this->getRubricBridge()->setAllowCreateFromExistingRubric($this->getRightsService()->canUserEditEvaluation() or ($openForStudents and $this->getEvaluationServiceBridge()->getSelfEvaluationAllowed()));
+
             if ($rubricAction)
             {
                 $rubricView = $this->runRubricComponent($rubricAction);

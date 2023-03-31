@@ -3,7 +3,7 @@
 <div style="font-family: Helvetica Neue, Helvetica, Arial, sans-serif; text-align: center;">
     <h1 style="font-weight: 500">{{ PRESENCE_TITLE }}</h1>
     <h2 style="font-weight: 500">{{ PRESENCE_CONTEXT|raw }}</h2>
-<img style="margin-top: 30px;" alt="qr-code" src="{{ SELF_SERVICE_QR_CODE|raw }}" />
+<img style="margin-top: 30px;" alt="qr-code" src="{{ SELF_SERVICE_QR_CODE|raw }}" data-url="{{ SELF_SERVICE_QR_CODE_URL }}" />
 </div>
 
 {#<script type="application/javascript">#}

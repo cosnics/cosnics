@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\ResultViewer\QuestionResultDisplay;
@@ -8,6 +9,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -38,13 +41,24 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
         $condition = new InCondition(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class_name(),
-                ComplexContentObjectItem::PROPERTY_ID),
+                ComplexContentObjectItem::PROPERTY_ID
+            ),
             $question_cids,
-            ComplexContentObjectItem::get_table_name());
+            ComplexContentObjectItem::get_table_name()
+        );
 
         $questions_cloi = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class_name(),
-            $condition);
+            new DataClassRetrievesParameters(
+                $condition, null, null, [
+                    new OrderBy(
+                        new PropertyConditionVariable(
+                            ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
+                        )
+                    )
+                ]
+            )
+        );
 
         $assessment = $this->get_root_content_object();
         $form->add_information_message('information', $assessment->get_title(), $assessment->get_description(), true);
@@ -60,7 +74,8 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
 
             $question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class_name(),
-                $question_cloi->get_ref());
+                $question_cloi->get_ref()
+            );
             $answers = unserialize($result['answer']);
             $feedback = $result['feedback'];
 
@@ -81,7 +96,8 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
                 $score,
                 $result['hint'],
                 $feedback,
-                $this->get_parent()->can_change_answer_data());
+                $this->get_parent()->can_change_answer_data()
+            );
 
             $display->render();
 
@@ -146,11 +162,13 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
         $buttons[] = $form->createElement(
             'style_submit_button',
             'submit',
-            Translation::get('Save', null, Utilities::COMMON_LIBRARIES));
+            Translation::get('Save', null, Utilities::COMMON_LIBRARIES)
+        );
         $buttons[] = $form->createElement(
             'style_reset_button',
             'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
+        );
 
         if ($this->get_parent()->can_change_answer_data())
         {

@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use http\Exception\InvalidArgumentException;
 use JMS\Serializer\Annotation\Type;
 
@@ -44,6 +45,20 @@ class LevelJSONModel
     protected $score;
 
     /**
+     * @var int
+     *
+     * @Type("integer")
+     */
+    protected $minimumScore;
+
+    /**
+     * @var bool
+     *
+     * @Type("bool")
+     */
+    protected $useRangeScore = false;
+
+    /**
      * @var bool
      *
      * @Type("bool")
@@ -63,16 +78,20 @@ class LevelJSONModel
      * @param int $id
      * @param string $title
      * @param int $score
+     * @param bool $useRangeScore
+     * @param int|null $minimumScore
      * @param bool $isDefault
      * @param string|null $description
      * @param int|null $criteriumId
      */
-    public function __construct(int $id, string $title, int $score, bool $isDefault, string $description = null, int $criteriumId = null)
+    public function __construct(int $id, string $title, int $score, bool $useRangeScore = false, ?int $minimumScore = null, bool $isDefault = false, string $description = null, int $criteriumId = null)
     {
         $this->id = $id;
         $this->title = $title;
         $this->description = $description;
         $this->score = $score;
+        $this->useRangeScore = $useRangeScore;
+        $this->minimumScore = $minimumScore;
         $this->isDefault = $isDefault;
         $this->criteriumId = $criteriumId;
     }
@@ -112,6 +131,22 @@ class LevelJSONModel
     /**
      * @return bool
      */
+    public function usesRangeScore(): ?bool
+    {
+        return $this->useRangeScore;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMinimumScore(): ?int
+    {
+        return $this->minimumScore;
+    }
+
+    /**
+     * @return bool
+     */
     public function isDefault(): ?bool
     {
         return $this->isDefault;
@@ -129,12 +164,18 @@ class LevelJSONModel
      * @param RubricData $rubricData
      *
      * @return Level
-     *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function toLevel(RubricData $rubricData)
     {
-        $criterium = !empty($this->criteriumId) ? $rubricData->getCriteriumById($this->criteriumId) : null;
+        try
+        {
+            $criterium = !empty($this->criteriumId) ? $rubricData->getCriteriumById($this->criteriumId) : null;
+        }
+        catch(ObjectNotExistException $ex)
+        {
+            $criterium = null;
+        }
+
         $level = new Level($rubricData, $criterium);
         $this->updateLevel($level);
 
@@ -152,6 +193,8 @@ class LevelJSONModel
         $level->setTitle($this->title);
         $level->setDescription($this->description);
         $level->setScore($this->score);
+        $level->setUsesRangeScore($this->useRangeScore);
+        $level->setMinimumScore($this->minimumScore);
         $level->setIsDefault($this->isDefault);
 
         return $level;
@@ -165,7 +208,12 @@ class LevelJSONModel
     public static function fromLevel(Level $level)
     {
         return new self(
-            $level->getId(), $level->getTitle(), $level->getScore(), $level->isDefault(), $level->getDescription(), $level->getCriteriumId()
+            $level->getId(), $level->getTitle(), $level->getScore(), $level->usesRangeScore(), $level->getMinimumScore(), $level->isDefault(), $level->getDescription(), $level->getCriteriumId()
         );
+    }
+
+    public function hasCriterium()
+    {
+        return !empty($this->getCriteriumId());
     }
 }

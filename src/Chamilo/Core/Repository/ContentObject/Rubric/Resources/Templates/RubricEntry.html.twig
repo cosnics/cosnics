@@ -69,8 +69,8 @@
                     <div class="save-rubric-area-content">
                         <button class="btn btn-primary" @click="saveRubric" v-html="$t('save')" :disabled="isSaving"></button>
                         <div v-if="showErrorMessage" class="warning-msg">
-                            <i class="fa fa-warning"></i><span v-html="$t('error')"></span>
-                            <button @click="showErrorMessage = false" class="btn btn-sm btn-default" style="padding: 2px 4px; margin-left: 2px;"><i class="fa fa-times" aria-hidden="true"></i><span class="sr-only">OK</span></button>
+                            <i class="fa fa-warning"></i><span v-html="$t(error)"></span>
+                            <button @click="showErrorMessage = false" class="btn btn-sm btn-default" style="padding: 2px 4px; margin-left: 2px;"><i class="fa fa-times" aria-hidden="true" style="color: #607d8b"></i><span class="sr-only">OK</span></button>
                         </div>
                         <div v-if="isSaving" class="info-msg" v-html="$t('is-saving')"></div>
                     </div>
@@ -87,17 +87,20 @@
         Vue.use(this['cosnics-rubric'].default);
         var messages = {
             'en': {
-                'error': 'Attention. You haven\'t selected a level for any criterium.',
+                'error-empty-form': 'Attention. You haven\'t selected a level for any criterium.',
+                'error-any': 'Attention: invalid value(s) found. Please correct.',
                 'is-saving': 'Saving rubric...',
                 'save': 'Save rubric'
             },
             'fr': {
-                'error': 'Attention. Aucun criterium a reçu un niveau..',
+                'error-empty-form': 'Attention. Aucun criterium a reçu un niveau..',
+                'error-any': 'Attention: valeur(s) invalide(s) trouvée(s).',
                 'is-saving': 'En train de sauvegarder la rubrique...',
                 'save': 'Sauvegarder la rubrique'
             },
             'nl': {
-                'error': 'Opgelet, voor geen enkel criterium is er een niveau geselecteerd.',
+                'error-empty-form': 'Opgelet, voor geen enkel criterium is er een niveau geselecteerd.',
+                'error-any': 'Opgelet: ongeldige waarde(n) aangetroffen.',
                 'is-saving': 'Rubric aan het oplaan...',
                 'save': 'Rubric opslaan'
             }
@@ -126,7 +129,8 @@
                 showErrorMessage: false,
                 rubricResults: { results: [] },
                 isSaving: false,
-                existingResult: existing_result
+                existingResult: existing_result,
+                error: ''
             },
             computed: {
                 rubricResultsJSON: function() {
@@ -140,12 +144,21 @@
                     const results = this.rubricResults.results;
                     const gradedCriteria = results.filter(t => t.type === 'criterium').map(c => c.level_id).filter(l => l !== null);
                     if (!gradedCriteria.length) {
+                        this.error = 'error-empty-form';
+                        this.hasErrors = true;
+                        this.showErrorMessage = true;
+                        return;
+                    }
+                    const errorCriteria = results.filter(t => t.type === 'criterium').filter(c => !!c.error);
+                    if (errorCriteria.length) {
+                        this.error = 'error-any';
                         this.hasErrors = true;
                         this.showErrorMessage = true;
                         return;
                     }
                     this.hasErrors = false;
                     this.showErrorMessage = false;
+                    this.error = '';
                     const form = document.querySelector('[name=entry_form]');
                     if (form) {
                         this.isSaving = true;

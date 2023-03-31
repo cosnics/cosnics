@@ -15,12 +15,12 @@
 }
 </i18n>
 <template>
-    <div class="rubric mod-bf" :class="{'mod-weight': rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)}" :style="{'--num-cols': rubric.rubricLevels.length}">
+    <div class="rubric mod-bf" :class="{'mod-weight': rubric.useWeights}" :style="{'--num-cols': rubric.maxNumLevels}">
         <formatting-help v-if="showFormatting" @close="showFormatting = false" class="mod-bf"></formatting-help>
         <ul class="rubric-tools">
             <li><a href="#" role="button" class="tools-show-formatting" @click.prevent="showFormatting=!showFormatting">{{ $t('formatting') }}</a></li>
         </ul>
-        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header mod-show">
+        <div v-if="rubric.useWeights" class="treenode-weight-header mod-show">
             <span>{{ $t('weight') }}</span>
         </div>
         <div class="rubric-header mod-show" v-if="!rubric.hasCustomLevels">
@@ -40,7 +40,7 @@
                         <div class="treenode-title-header-pre mod-criterium"></div>
                         <h3 class="treenode-title criterium-title u-markdown-criterium" :class="{'mod-no-category': !category.title}" v-html="criterium.toMarkdown()"></h3>
                     </div>
-                    <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight mod-pad rb-md:col-span-full">
+                    <div v-if="rubric.useWeights" class="treenode-weight mod-pad rb-md:col-span-full">
                         <span class="treenode-weight-title">{{ $t('weight') }}: </span>
                         <input v-if="rubric.useRelativeWeights" type="number" :placeholder="rubric.eqRestWeight.toLocaleString()" v-model.number="criterium.rel_weight" class="input-detail rel-weight" :class="{'is-set': criterium.rel_weight !== null, 'is-error': rubric.eqRestWeight < 0}" @input="onWeightChange($event, criterium)" min="0" max="100" />
                         <template v-else>
@@ -62,26 +62,21 @@
 
 <script lang="ts">
     import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
+    import {TreeNodeExt} from '../Util/interfaces';
     import Rubric from '../Domain/Rubric';
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
     import Level from '../Domain/Level';
     import Choice from '../Domain/Choice';
-    import DescriptionField from '../Components/DescriptionField.vue';
-    import FormattingHelp from '../Components/FormattingHelp.vue';
+    import DescriptionField from '../Components/Builder/FullView/DescriptionField.vue';
+    import FormattingHelp from '../Components/Builder/FormattingHelp.vue';
     import DataConnector from '../Connector/DataConnector';
-    import TreeNodeDescriptions from '../Components/TreeNodeDescriptions.vue';
+    import TreeNodeDescriptions from '../Components/Builder/FullView/TreeNodeDescriptions.vue';
     import debounce from 'debounce';
 
     function updateHeight(elem: HTMLElement) {
         elem.style.height = '';
         elem.style.height = `${elem.scrollHeight + 14}px`;
-    }
-
-    interface CriteriumExt {
-        criterium: Criterium;
-        choices: any[];
-        levels: Level[];
     }
 
     @Component({
@@ -97,7 +92,7 @@
     export default class RubricBuilderFull extends Vue {
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
-        private criteriaData: CriteriumExt[] = [];
+        private criteriaData: TreeNodeExt[] = [];
         private showFormatting = false;
 
         constructor() {
@@ -132,19 +127,23 @@
                 el.reportValidity();
                 return;
             }
-            const rubric = this.rubric;
-            if (rubric.useRelativeWeights && typeof criterium.rel_weight !== 'number') {
+            if (this.rubric.useRelativeWeights && typeof criterium.rel_weight !== 'number') {
                 criterium.rel_weight = null;
-            } else if (!rubric.useRelativeWeights) {
+            } else if (!this.rubric.useRelativeWeights) {
                 const criteriumExt = this.getCriteriumData(criterium);
-                criteriumExt.choices = [];
-                rubric.rubricLevels.forEach(level => {
-                    const choice = rubric.getChoice(criterium, level);
-                    const score = rubric.getChoiceScore(criterium, level);
-                    criteriumExt.choices.push({ level, choice, score});
-                });
+                criteriumExt.choices = this.getCriteriumChoices(criterium);
             }
             this.dataConnector?.updateTreeNode(criterium);
+        }
+
+        getCriteriumChoices(criterium: Criterium) {
+            const rubric = this.rubric;
+
+            return rubric.rubricLevels.map(level => ({
+                level,
+                choice: rubric.getChoice(criterium, level),
+                score: rubric.getChoiceScore(criterium, level)
+            }));
         }
 
         get useScores() {
@@ -162,28 +161,19 @@
             }));
         }
 
-        getCriteriumData(criterium: Criterium) : CriteriumExt {
-            const criteriumExt = this.criteriaData.find((_ : CriteriumExt) => _.criterium === criterium);
+        getCriteriumData(criterium: Criterium) : TreeNodeExt {
+            const criteriumExt = this.criteriaData.find((_ : TreeNodeExt) => _.treeNode === criterium);
             if (!criteriumExt) { throw new Error(`No data found for criterium: ${criterium}`); }
             return criteriumExt;
         }
 
         private initScores(rubric: Rubric) {
             rubric.getAllCriteria().forEach(criterium => {
-                const criteriumExt: CriteriumExt = { criterium: criterium, choices: [], levels: [] };
-                const criteriumLevels = rubric.filterLevelsByCriterium(criterium);
-                if (criteriumLevels.length) {
-                    criteriumLevels.forEach(level => {
-                       criteriumExt.levels.push(level);
-                    });
-                } else {
-                    rubric.rubricLevels.forEach(level => {
-                        const choice = rubric.getChoice(criterium, level);
-                        const score = rubric.getChoiceScore(criterium, level);
-                        criteriumExt.choices.push({ level, choice, score});
-                    });
-                }
-                this.criteriaData.push(criteriumExt);
+                const levels = rubric.filterLevelsByCriterium(criterium);
+                const choices = levels.length ? [] : this.getCriteriumChoices(criterium);
+                this.criteriaData.push({
+                    treeNode: criterium, levels, choices, showDefaultFeedback: false
+                });
             });
         }
 
@@ -238,7 +228,7 @@
         text-align: right;
     }
 
-    .input-detail.abs-weight, .input-detail.rel-weight {
+    .input-detail.abs-weight, .input-detail.rel-weight, .input-detail.mod-range {
         width: 3.5em;
 
         -moz-appearance: textfield;

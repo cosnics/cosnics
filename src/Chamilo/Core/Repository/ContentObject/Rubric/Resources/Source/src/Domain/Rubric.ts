@@ -39,12 +39,28 @@ export default class Rubric extends TreeNode {
         return 'rubric';
     }
 
+    get useWeights() {
+        return this.useScores && (this.useRelativeWeights || this.hasAbsoluteWeights);
+    }
+
     get rubricLevels(): Level[] {
         return this.levels.filter(level => !level.criteriumId);
     }
 
     get hasCustomLevels() {
         return this.levels.length !== this.rubricLevels.length;
+    }
+
+    get maxNumLevels(): number {
+        let num = this.rubricLevels.length;
+        if (!this.hasCustomLevels) { return num; }
+        this.getAllCriteria().forEach(criterium => {
+            const numCriteriumLevels = this.filterLevelsByCriterium(criterium).length;
+            if (numCriteriumLevels > num) {
+                num = numCriteriumLevels;
+            }
+        });
+        return num;
     }
 
     public filterLevelsByCriterium(criterium: Criterium): Level[] {

@@ -13,6 +13,8 @@ use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Bridge\EvaluationServiceBridge;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Bridge\PresenceServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -57,6 +59,8 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
         $this->getBridgeManager()->addBridge(new NotificationServiceBridge());
         $this->getBridgeManager()->addBridge(new EphorusServiceBridge());
         $this->getBridgeManager()->addBridge(new EntryPlagiarismResultServiceBridge());
+        $this->getBridgeManager()->addBridge(new EvaluationServiceBridge());
+        $this->getBridgeManager()->addBridge(new PresenceServiceBridge());
     }
 
     /**

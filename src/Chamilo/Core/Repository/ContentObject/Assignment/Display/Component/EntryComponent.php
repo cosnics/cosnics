@@ -93,6 +93,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $scoreForm = $this->getScoreForm();
         $this->processSubmittedData($scoreForm);
         $this->getRubricBridge()->setEntryURL($this->get_url([self::PARAM_RUBRIC_ENTRY => 1], [self::PARAM_RUBRIC_RESULTS]));
+        $this->getRubricBridge()->setAllowCreateFromExistingRubric($this->supportsRubrics() && $this->canUseRubricEvaluation());
 
         return $this->getTwig()->render(
             Manager::context() . ':EntryViewer.html.twig',
@@ -140,6 +141,13 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             $this->getRightsService()->canUserViewEntry($this->getUser(), $this->getAssignment(), $this->getEntry()))
         {
             return;
+        }
+
+        if($this->getEntry() &&
+            ($this->getEntry()->getEntityId() != $this->getEntityIdentifier() || $this->getEntry()->getEntityType() != $this->getEntityType())
+        )
+        {
+            throw new NotAllowedException();
         }
 
         if ($this->getRightsService()->canUserViewEntity(

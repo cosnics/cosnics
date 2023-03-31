@@ -114,11 +114,11 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
      */
     public function getQuery()
     {
-        $query = Request::post(self::PARAM_SIMPLE_SEARCH_QUERY);
+        $query = htmlentities(Request::post(self::PARAM_SIMPLE_SEARCH_QUERY));
 
         if (! $query)
         {
-            $query = Request::get(self::PARAM_SIMPLE_SEARCH_QUERY);
+            $query = htmlentities(Request::get(self::PARAM_SIMPLE_SEARCH_QUERY));
         }
 
         return $query;

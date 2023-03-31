@@ -61,6 +61,7 @@ class Security
 
             // Remove any attribute starting with "on" or xmlns
             $variable = preg_replace('#(<[^>]+?[\x00-\x20"\x2f\x5c\']+)(?:on|xmlns)[^>\x20=]*=[^>]*[>\b]?#iu', '$1>', $variable);
+            $variable = str_replace("onerror", "invalid", $variable);
 
             // Remove javascript: and vbscript: protocols
             $variable = preg_replace(
@@ -98,7 +99,7 @@ class Security
                 // Remove really unwanted tags, but allow object|embed (for html editor)
                 $old_data = $variable;
                 $variable = preg_replace(
-                    '#</*(?:applet|b(?:ase|gsound|link)|frame(?:set)?|ilayer|l(?:ayer|ink)|meta|s(?:cript)|xml)[^>]*+>#i',
+                    '#</*(?:applet|b(?:ase|gsound|link)|(?:i)frame(?:set)?|ilayer|l(?:ayer|ink)|meta|s(?:cript)|xml)[^>]*+>#i',
                     '<invalid>',
                     $variable);
             }
@@ -110,6 +111,7 @@ class Security
         {
             // only remove really bad parts
             $variable = preg_replace('#(<[^>]+?[\x00-\x20"\x2f\x5c\']+)(?:onerror|xmlns)[^>\x20=]*=[^>]*[>\b]?#iu', '$1>', $variable);
+            $variable = str_replace("onerror", "invalid", $variable);
         }
         return $variable;
     }

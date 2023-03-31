@@ -15,6 +15,7 @@ class PresenceResultPeriod extends DataClass
     const PROPERTY_DATE = 'date';
     const PROPERTY_CONTEXT_CLASS = 'context_class';
     const PROPERTY_CONTEXT_ID = 'context_id';
+    const PROPERTY_PERIOD_SELF_REGISTRATION_DISABLED = 'period_self_registration_disabled';
 
     /**
      * Get the default properties
@@ -29,7 +30,8 @@ class PresenceResultPeriod extends DataClass
                 self::PROPERTY_LABEL,
                 self::PROPERTY_DATE,
                 self::PROPERTY_CONTEXT_CLASS,
-                self::PROPERTY_CONTEXT_ID
+                self::PROPERTY_CONTEXT_ID,
+                self::PROPERTY_PERIOD_SELF_REGISTRATION_DISABLED
             )
         );
     }
@@ -113,6 +115,22 @@ class PresenceResultPeriod extends DataClass
     public function setContextId(int $context_id)
     {
         $this->set_default_property(self::PROPERTY_CONTEXT_ID, $context_id);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPeriodSelfRegistrationDisabled(): bool
+    {
+        return $this->get_default_property(self::PROPERTY_PERIOD_SELF_REGISTRATION_DISABLED);
+    }
+
+    /**
+     * @param bool $selfRegistrationDisabled
+     */
+    public function setPeriodSelfRegistrationDisabled(bool $selfRegistrationDisabled)
+    {
+        $this->set_default_property(self::PROPERTY_PERIOD_SELF_REGISTRATION_DISABLED, $selfRegistrationDisabled);
     }
 
     public static function get_table_name(): string

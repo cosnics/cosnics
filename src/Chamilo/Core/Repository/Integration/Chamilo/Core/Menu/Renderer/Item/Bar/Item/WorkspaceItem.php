@@ -44,7 +44,7 @@ class WorkspaceItem extends Bar
                 \Chamilo\Core\Repository\Manager::PARAM_WORKSPACE_ID => $this->getItem()->getWorkspaceId()));
         
         $html[] = '<a ' . $class . 'href="' . $redirect->getUrl() . '">';
-        $title = $this->getItem()->getName();
+        $title = htmlentities($this->getItem()->getName());
         
         if ($this->getItem()->show_icon())
         {

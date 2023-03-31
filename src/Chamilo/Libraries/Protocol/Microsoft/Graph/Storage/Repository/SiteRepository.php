@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
 use Microsoft\Graph\Model\DriveItem;
+use Microsoft\Graph\Model\Entity;
 use Microsoft\Graph\Model\FieldValueSet;
 use Microsoft\Graph\Model\ListInfo;
 use Microsoft\Graph\Model\ListItem;
@@ -119,6 +120,8 @@ class SiteRepository
             $parameters['$filter'] = $filter;
         }
 
+        $parameters['top'] = 5000;
+
         if(count($parameters) > 0)
         {
             $url .= '?' . http_build_query($parameters);
@@ -194,6 +197,26 @@ class SiteRepository
     public function updateListItem(string $siteId, string $listId, string $itemId, array $values)
     {
         $url = '/sites/' . $siteId . '/lists/' . $listId . '/items/' . $itemId . '/fields';
+
+        return $this->graphRepository->executePatchWithAccessTokenExpirationRetry(
+            $url, $values
+        );
+    }
+
+    /**
+     * @param string $siteId
+     * @param string $listId
+     * @param string $itemId
+     * @param string $contentTypeId
+     *
+     * @return Entity
+     * @throws GraphException
+     */
+    public function updateListItemContentType(string $siteId, string $listId, string $itemId, string $contentTypeId)
+    {
+        $values = ['contentType' => ['id' => $contentTypeId]];
+
+        $url = '/sites/' . $siteId . '/lists/' . $listId . '/items/' . $itemId;
 
         return $this->graphRepository->executePatchWithAccessTokenExpirationRetry(
             $url, $values

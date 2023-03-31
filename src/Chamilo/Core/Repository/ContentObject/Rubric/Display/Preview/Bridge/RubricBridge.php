@@ -46,4 +46,14 @@ class RubricBridge implements \Chamilo\Core\Repository\ContentObject\Rubric\Disp
     {
         // TODO: Implement getEntryURL() method.
     }
+
+    public function setAllowCreateFromExistingRubric(bool $allow)
+    {
+        // TODO: Implement setAllowCreateFromExistingRubric() method.
+    }
+
+    public function getAllowCreateFromExistingRubric(): bool
+    {
+        // TODO: Implement getAllowCreateFromExistingRubric() method.
+    }
 }

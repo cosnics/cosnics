@@ -11,7 +11,9 @@ use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\FeedbackServiceBr
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\NotificationServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Evaluation\LearningPathEvaluationServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\ExternalTool\ExternalToolServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\GradeBook\LearningPathGradeBookServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Presence\LearningPathPresenceServiceBridge;
+
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate;
@@ -199,6 +201,16 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $learningPathPresenceServiceBridge->setCanEditPresence($hasEditRight);
             $learningPathPresenceServiceBridge->setCourse($this->get_course());
             $this->getBridgeManager()->addBridge($learningPathPresenceServiceBridge);
+        }
+
+        if ($this->getRegistrationConsulter()->isContextRegistered('Chamilo\Application\Weblcms\Bridge\GradeBook'))
+        {
+            /** @var LearningPathGradeBookServiceBridge $learningPathGradeBookServiceBridge */
+            $learningPathGradeBookServiceBridge = $this->getService(LearningPathGradeBookServiceBridge::class);
+            $learningPathGradeBookServiceBridge->setContentObjectPublication($this->publication);
+            $learningPathGradeBookServiceBridge->setCanEditGradeBook($hasEditRight);
+            $learningPathGradeBookServiceBridge->setCourse($this->get_course());
+            $this->getBridgeManager()->addBridge($learningPathGradeBookServiceBridge);
         }
 
         /** @var AssignmentServiceBridge $assignmentServiceBridge */
