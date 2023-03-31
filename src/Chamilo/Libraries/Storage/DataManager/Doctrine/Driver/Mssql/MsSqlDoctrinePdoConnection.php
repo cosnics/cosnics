@@ -19,7 +19,7 @@ class MsSqlDoctrinePdoConnection extends \Doctrine\DBAL\Driver\PDOConnection
      *
      * @see \Doctrine\DBAL\Driver\PDOConnection::query()
      */
-    public function query()
+    public function query(?string $query = null, ?int $fetchMode = null, mixed ...$fetchModeArgs)
     {
         $args = func_get_args();
         $sql = $args[0];

@@ -80,7 +80,7 @@ class Joins implements \Countable, Hashable
      *
      * @see \Countable::count()
      */
-    public function count()
+    public function count(): int
     {
         return count($this->joins);
     }

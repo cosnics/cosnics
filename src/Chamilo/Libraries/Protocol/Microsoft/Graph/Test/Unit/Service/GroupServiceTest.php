@@ -41,7 +41,7 @@ class GroupServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->groupRepositoryMock = $this->getMockBuilder(GroupRepository::class)
             ->disableOriginalConstructor()->getMock();
@@ -59,7 +59,7 @@ class GroupServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    protected  function tearDown(): void
     {
         unset($this->userServiceMock);
         unset($this->groupRepositoryMock);

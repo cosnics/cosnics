@@ -16,7 +16,7 @@ abstract class FixturesBasedTestCase extends DependencyInjectionBasedTestCase
     /**
      * Setup before each test
      */
-    protected function setUp()
+    protected  function setUp(): void
     {
         parent::setUp();
 
@@ -27,7 +27,7 @@ abstract class FixturesBasedTestCase extends DependencyInjectionBasedTestCase
     /**
      * Teardown after each test
      */
-    protected function tearDown()
+    protected  function tearDown(): void
     {
         $this->dropStorageUnits();
     }

@@ -189,7 +189,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
      *
      * @see HTML_QuickForm_group::exportValue()
      */
-    public function exportValue($submitValues, $assoc = false)
+    public function exportValue(array &$submitValues, bool $assoc = false)
     {
         if ($assoc)
         {

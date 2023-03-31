@@ -37,7 +37,7 @@ class DiffCommand extends \Doctrine\Migrations\Tools\Console\Command\DiffCommand
      *
      * @see \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand::configure()
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->addArgument('package_path', InputArgument::REQUIRED, 'The package path');
         parent::configure();
@@ -60,7 +60,7 @@ EOT
      *
      * @see \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand::execute()
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $namespace = $input->getArgument('package_path');
 

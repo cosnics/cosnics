@@ -33,7 +33,7 @@ class Test extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->localSettingMock = $this->getMockBuilder(LocalSetting::class)
             ->disableOriginalConstructor()->getMock();
@@ -47,7 +47,7 @@ class Test extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->localSettingMock);
         unset($this->sessionUtilitiesMock);

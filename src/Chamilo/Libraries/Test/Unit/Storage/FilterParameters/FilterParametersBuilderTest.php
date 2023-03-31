@@ -35,7 +35,7 @@ class FilterParametersBuilderTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->fieldMapper = new FieldMapper();
         $this->fieldMapper->addFieldMapping('username', User::class, User::PROPERTY_USERNAME);
@@ -47,7 +47,7 @@ class FilterParametersBuilderTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->filterParametersBuilder);
     }

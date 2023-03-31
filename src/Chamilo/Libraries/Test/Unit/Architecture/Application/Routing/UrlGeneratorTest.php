@@ -32,7 +32,7 @@ class UrlGeneratorTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    protected  function setUp(): void
     {
         $this->request_mock = $this->createMock('Chamilo\Libraries\Platform\ChamiloRequest');
 
@@ -45,7 +45,7 @@ class UrlGeneratorTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    protected  function tearDown(): void
     {
         unset($this->request_mock);
     }

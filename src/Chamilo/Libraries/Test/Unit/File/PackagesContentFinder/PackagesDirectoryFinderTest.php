@@ -25,7 +25,7 @@ class PackagesDirectoryFinderTest extends ChamiloTestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected  function setUp(): void
     {
         $this->cache_file = __DIR__ . '/cache.tmp';
     }
@@ -33,7 +33,7 @@ class PackagesDirectoryFinderTest extends ChamiloTestCase
     /**
      * The cache file
      */
-    public function tearDown()
+    protected  function tearDown(): void
     {
         unlink($this->cache_file);
     }

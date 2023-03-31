@@ -121,26 +121,26 @@ class Text
         $n = '';
         $ok = 1;
 
-        while (isset($text{++ $i}))
+        while (isset($text[++ $i]))
         {
-            if ($ok && $text{$i} != '<')
+            if ($ok && $text[$i] != '<')
             {
                 continue;
             }
-            elseif ($text{$i} == '>')
+            elseif ($text[$i] == '>')
             {
                 $ok = 1;
                 $n .= '>';
                 continue;
             }
-            elseif ($text{$i} == '<')
+            elseif ($text[$i] == '<')
             {
                 $ok = 0;
             }
 
             if (! $ok)
             {
-                $n .= $text{$i};
+                $n .= $text[$i];
             }
         }
 

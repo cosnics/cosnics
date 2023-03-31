@@ -43,7 +43,7 @@ class GraphRepositoryTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->oauthProviderMock = $this->getMockBuilder(GenericProvider::class)
             ->disableOriginalConstructor()->getMock();
@@ -58,7 +58,7 @@ class GraphRepositoryTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    protected  function tearDown(): void
     {
         unset($this->oauthProviderMock);
         unset($this->graphMock);

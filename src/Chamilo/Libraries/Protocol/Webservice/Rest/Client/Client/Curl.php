@@ -163,7 +163,7 @@ class Curl extends RestClient
         $aLines = file($this->cookieFile);
         foreach ($aLines as $line)
         {
-            if ('#' == $line{0})
+            if ('#' == $line[0])
             {
                 continue;
             }

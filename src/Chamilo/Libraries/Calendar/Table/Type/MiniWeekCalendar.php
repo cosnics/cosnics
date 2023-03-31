@@ -217,7 +217,7 @@ class MiniWeekCalendar extends Calendar
      *
      * @return string
      */
-    public function toHtml()
+    public function toHtml(): string
     {
         $this->add_events();
         $html = parent::toHtml();

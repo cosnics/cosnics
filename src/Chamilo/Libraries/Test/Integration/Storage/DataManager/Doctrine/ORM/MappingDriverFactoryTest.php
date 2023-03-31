@@ -25,7 +25,7 @@ class MappingDriverFactoryTest extends DependencyInjectionBasedTestCase
     /**
      * Setup before each test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mappingDriverFactory = $this->getService('doctrine.orm.mapping_driver_factory');
@@ -34,7 +34,7 @@ class MappingDriverFactoryTest extends DependencyInjectionBasedTestCase
     /**
      * Teardown after each test
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->mappingDriverFactory);
     }

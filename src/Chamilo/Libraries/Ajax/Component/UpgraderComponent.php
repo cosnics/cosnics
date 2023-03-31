@@ -338,7 +338,9 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
     function fix_object($object)
     {
         // preg_replace_callback handler. Needed to calculate new key-length.
-        $fix_key = create_function('$matches', 'return ":" . strlen( $matches[1] ) . ":\"" . $matches[1] . "\"";');
+        $fix_key = function($matches) {
+            return ":" . strlen( $matches[1] ) . ":\"" . $matches[1] . "\"";
+        };
 
         // 1. Serialize the object to a string.
         $dump = serialize($object);

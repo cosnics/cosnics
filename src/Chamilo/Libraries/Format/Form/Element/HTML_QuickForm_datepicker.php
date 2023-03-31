@@ -180,7 +180,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
      *
      * @return string YYYY-MM-DD HH:II:SS
      */
-    public function exportValue()
+    public function exportValue(array &$submitValues, bool $assoc = false)
     {
         $values = parent::getValue();
         $y = $values['Y'][0];

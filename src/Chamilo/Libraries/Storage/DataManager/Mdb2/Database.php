@@ -1119,7 +1119,7 @@ class Database
         $parts = explode('_', $name);
         foreach ($parts as & $part)
         {
-            $possible_name .= $part{0};
+            $possible_name .= $part[0];
         }
         
         return $possible_name;

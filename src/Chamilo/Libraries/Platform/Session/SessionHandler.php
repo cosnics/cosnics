@@ -49,7 +49,7 @@ class SessionHandler implements \SessionHandlerInterface
      *
      * @return boolean
      */
-    public function open($save_path, $name)
+    public function open($save_path, $name): bool
     {
         $this->savePath = $save_path;
         $this->name = $name;
@@ -61,7 +61,7 @@ class SessionHandler implements \SessionHandlerInterface
      *
      * @return boolean
      */
-    public function close()
+    public function close(): bool
     {
         return true;
     }
@@ -71,7 +71,7 @@ class SessionHandler implements \SessionHandlerInterface
      * @param string $session_id
      * @return boolean|string
      */
-    public function read($session_id)
+    public function read($session_id): false|string
     {
         DataClassCache::truncate(\Chamilo\Core\User\Storage\DataClass\Session::class_name());
         $session = \Chamilo\Core\User\Storage\DataManager::retrieve(
@@ -99,7 +99,7 @@ class SessionHandler implements \SessionHandlerInterface
      * @param string $data
      * @return boolean
      */
-    public function write($session_id, $data)
+    public function write($session_id, $data): bool
     {
         $data = base64_encode($data);
 
@@ -135,7 +135,7 @@ class SessionHandler implements \SessionHandlerInterface
      * @param string $session_id
      * @return boolean
      */
-    public function destroy($session_id)
+    public function destroy($session_id): bool
     {
         return \Chamilo\Core\User\Storage\DataManager::deletes(
             \Chamilo\Core\User\Storage\DataClass\Session::class_name(),
@@ -192,7 +192,7 @@ class SessionHandler implements \SessionHandlerInterface
      *
      * @see SessionHandlerInterface::gc()
      */
-    public function gc($maxlifetime)
+    public function gc($maxlifetime): false|int
     {
         $this->garbage();
     }
