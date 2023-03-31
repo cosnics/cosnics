@@ -382,11 +382,11 @@ class csstidy
         $tokens = $GLOBALS['csstidy']['tokens'];
         $replaced = false;
         
-        while ($i < strlen($string) && (ctype_xdigit($string{$i}) || ctype_space($string{$i})) && strlen($add) < 6)
+        while ($i < strlen($string) && (ctype_xdigit($string[$i]) || ctype_space($string[$i])) && strlen($add) < 6)
         {
-            $add .= $string{$i};
+            $add .= $string[$i];
             
-            if (ctype_space($string{$i}))
+            if (ctype_space($string[$i]))
             {
                 break;
             }
@@ -405,12 +405,12 @@ class csstidy
             $add = trim('\\' . $add);
         }
         
-        if (@ctype_xdigit($string{$i + 1}) && ctype_space($string{$i}) && ! $replaced || ! ctype_space($string{$i}))
+        if (@ctype_xdigit($string[$i + 1]) && ctype_space($string[$i]) && ! $replaced || ! ctype_space($string[$i]))
         {
             $i --;
         }
         
-        if ($add != '\\' || ! $this->get_cfg('remove_bslash') || strpos($tokens, $string{$i + 1}) !== false)
+        if ($add != '\\' || ! $this->get_cfg('remove_bslash') || strpos($tokens, $string[$i + 1]) !== false)
         {
             return $add;
         }
@@ -478,7 +478,7 @@ class csstidy
     function is_token(&$string, $i)
     {
         $tokens = $GLOBALS['csstidy']['tokens'];
-        return (strpos($tokens, $string{$i}) !== false && ! csstidy :: escaped($string, $i));
+        return (strpos($tokens, $string[$i]) !== false && ! csstidy :: escaped($string, $i));
     }
 
     /**
@@ -506,7 +506,7 @@ class csstidy
         
         for ($i = 0, $size = strlen($string); $i < $size; $i ++)
         {
-            if ($string{$i} == "\n" || $string{$i} == "\r")
+            if ($string[$i] == "\n" || $string[$i] == "\r")
             {
                 ++ $this->line;
             }
@@ -517,22 +517,22 @@ class csstidy
                 case 'at' :
                     if (csstidy :: is_token($string, $i))
                     {
-                        if ($string{$i} == '/' && @$string{$i + 1} == '*')
+                        if ($string[$i] == '/' && @$string[$i + 1] == '*')
                         {
                             $this->status = 'ic';
                             ++ $i;
                             $this->from = 'at';
                         }
-                        elseif ($string{$i} == '{')
+                        elseif ($string[$i] == '{')
                         {
                             $this->status = 'is';
                             $this->_add_token(AT_START, $this->at);
                         }
-                        elseif ($string{$i} == ',')
+                        elseif ($string[$i] == ',')
                         {
                             $this->at = trim($this->at) . ',';
                         }
-                        elseif ($string{$i} == '\\')
+                        elseif ($string[$i] == '\\')
                         {
                             $this->at .= $this->_unicode($string, $i);
                         }
@@ -540,11 +540,11 @@ class csstidy
                     else
                     {
                         $lastpos = strlen($this->at) - 1;
-                        if (! ((ctype_space($this->at{$lastpos}) ||
-                             csstidy :: is_token($this->at, $lastpos) && $this->at{$lastpos} == ',') &&
-                             ctype_space($string{$i})))
+                        if (! ((ctype_space($this->at[$lastpos]) ||
+                             csstidy :: is_token($this->at, $lastpos) && $this->at[$lastpos] == ',') &&
+                             ctype_space($string[$i])))
                         {
-                            $this->at .= $string{$i};
+                            $this->at .= $string[$i];
                         }
                     }
                     break;
@@ -553,13 +553,13 @@ class csstidy
                 case 'is' :
                     if (csstidy :: is_token($string, $i))
                     {
-                        if ($string{$i} == '/' && @$string{$i + 1} == '*' && trim($this->selector) == '')
+                        if ($string[$i] == '/' && @$string[$i + 1] == '*' && trim($this->selector) == '')
                         {
                             $this->status = 'ic';
                             ++ $i;
                             $this->from = 'is';
                         }
-                        elseif ($string{$i} == '@' && trim($this->selector) == '')
+                        elseif ($string[$i] == '@' && trim($this->selector) == '')
                         {
                             // Check for at-rule
                             $this->invalid_at = true;
@@ -580,61 +580,61 @@ class csstidy
                                 $invalid_at_name = '';
                                 for ($j = $i + 1; $j < $size; ++ $j)
                                 {
-                                    if (! ctype_alpha($string{$j}))
+                                    if (! ctype_alpha($string[$j]))
                                     {
                                         break;
                                     }
-                                    $invalid_at_name .= $string{$j};
+                                    $invalid_at_name .= $string[$j];
                                 }
                                 $this->log('Invalid @-rule: ' . $invalid_at_name . ' (removed)', 'Warning');
                             }
                         }
-                        elseif (($string{$i} == '"' || $string{$i} == "'"))
+                        elseif (($string[$i] == '"' || $string[$i] == "'"))
                         {
-                            $this->selector .= $string{$i};
+                            $this->selector .= $string[$i];
                             $this->status = 'instr';
-                            $this->str_char = $string{$i};
+                            $this->str_char = $string[$i];
                             $this->from = 'is';
                         }
-                        elseif ($this->invalid_at && $string{$i} == ';')
+                        elseif ($this->invalid_at && $string[$i] == ';')
                         {
                             $this->invalid_at = false;
                             $this->status = 'is';
                         }
-                        elseif ($string{$i} == '{')
+                        elseif ($string[$i] == '{')
                         {
                             $this->status = 'ip';
                             $this->_add_token(SEL_START, $this->selector);
                             $this->added = false;
                         }
-                        elseif ($string{$i} == '}')
+                        elseif ($string[$i] == '}')
                         {
                             $this->_add_token(AT_END, $this->at);
                             $this->at = '';
                             $this->selector = '';
                             $this->sel_separate = array();
                         }
-                        elseif ($string{$i} == ',')
+                        elseif ($string[$i] == ',')
                         {
                             $this->selector = trim($this->selector) . ',';
                             $this->sel_separate[] = strlen($this->selector);
                         }
-                        elseif ($string{$i} == '\\')
+                        elseif ($string[$i] == '\\')
                         {
                             $this->selector .= $this->_unicode($string, $i);
                         }
                         else
-                            $this->selector .= $string{$i};
+                            $this->selector .= $string[$i];
                     }
                     else
                     {
                         $lastpos = strlen($this->selector) - 1;
                         if ($lastpos == - 1 ||
-                             ! ((ctype_space($this->selector{$lastpos}) ||
-                             csstidy :: is_token($this->selector, $lastpos) && $this->selector{$lastpos} == ',') &&
-                             ctype_space($string{$i})))
+                             ! ((ctype_space($this->selector[$lastpos]) ||
+                             csstidy :: is_token($this->selector, $lastpos) && $this->selector[$lastpos] == ',') &&
+                             ctype_space($string[$i])))
                         {
-                            $this->selector .= $string{$i};
+                            $this->selector .= $string[$i];
                         }
                     }
                     break;
@@ -643,7 +643,7 @@ class csstidy
                 case 'ip' :
                     if (csstidy :: is_token($string, $i))
                     {
-                        if (($string{$i} == ':' || $string{$i} == '=') && $this->property != '')
+                        if (($string[$i] == ':' || $string[$i] == '=') && $this->property != '')
                         {
                             $this->status = 'iv';
                             if (csstidy :: property_is_valid($this->property) ||
@@ -652,13 +652,13 @@ class csstidy
                                 $this->_add_token(PROPERTY, $this->property);
                             }
                         }
-                        elseif ($string{$i} == '/' && @$string{$i + 1} == '*' && $this->property == '')
+                        elseif ($string[$i] == '/' && @$string[$i + 1] == '*' && $this->property == '')
                         {
                             $this->status = 'ic';
                             ++ $i;
                             $this->from = 'ip';
                         }
-                        elseif ($string{$i} == '}')
+                        elseif ($string[$i] == '}')
                         {
                             $this->explode_selectors();
                             $this->status = 'is';
@@ -667,51 +667,51 @@ class csstidy
                             $this->selector = '';
                             $this->property = '';
                         }
-                        elseif ($string{$i} == ';')
+                        elseif ($string[$i] == ';')
                         {
                             $this->property = '';
                         }
-                        elseif ($string{$i} == '\\')
+                        elseif ($string[$i] == '\\')
                         {
                             $this->property .= $this->_unicode($string, $i);
                         }
                     }
-                    elseif (! ctype_space($string{$i}))
+                    elseif (! ctype_space($string[$i]))
                     {
-                        $this->property .= $string{$i};
+                        $this->property .= $string[$i];
                     }
                     break;
                 
                 /* Case in-value */
                 case 'iv' :
-                    $pn = (($string{$i} == "\n" || $string{$i} == "\r") && $this->property_is_next($string, $i + 1) ||
+                    $pn = (($string[$i] == "\n" || $string[$i] == "\r") && $this->property_is_next($string, $i + 1) ||
                          $i == strlen($string) - 1);
                     if (csstidy :: is_token($string, $i) || $pn)
                     {
-                        if ($string{$i} == '/' && @$string{$i + 1} == '*')
+                        if ($string[$i] == '/' && @$string[$i + 1] == '*')
                         {
                             $this->status = 'ic';
                             ++ $i;
                             $this->from = 'iv';
                         }
-                        elseif (($string{$i} == '"' || $string{$i} == "'" || $string{$i} == '('))
+                        elseif (($string[$i] == '"' || $string[$i] == "'" || $string[$i] == '('))
                         {
-                            $this->sub_value .= $string{$i};
-                            $this->str_char = ($string{$i} == '(') ? ')' : $string{$i};
+                            $this->sub_value .= $string[$i];
+                            $this->str_char = ($string[$i] == '(') ? ')' : $string[$i];
                             $this->status = 'instr';
                             $this->from = 'iv';
                         }
-                        elseif ($string{$i} == ',')
+                        elseif ($string[$i] == ',')
                         {
                             $this->sub_value = trim($this->sub_value) . ',';
                         }
-                        elseif ($string{$i} == '\\')
+                        elseif ($string[$i] == '\\')
                         {
                             $this->sub_value .= $this->_unicode($string, $i);
                         }
-                        elseif ($string{$i} == ';' || $pn)
+                        elseif ($string[$i] == ';' || $pn)
                         {
-                            if ($this->selector{0} == '@' && isset($at_rules[substr($this->selector, 1)]) &&
+                            if ($this->selector[0] == '@' && isset($at_rules[substr($this->selector, 1)]) &&
                                  $at_rules[substr($this->selector, 1)] == 'iv')
                             {
                                 $this->sub_value_arr[] = trim($this->sub_value);
@@ -741,11 +741,11 @@ class csstidy
                                 $this->status = 'ip';
                             }
                         }
-                        elseif ($string{$i} != '}')
+                        elseif ($string[$i] != '}')
                         {
-                            $this->sub_value .= $string{$i};
+                            $this->sub_value .= $string[$i];
                         }
-                        if (($string{$i} == '}' || $string{$i} == ';' || $pn) && ! empty($this->selector))
+                        if (($string[$i] == '}' || $string[$i] == ';' || $pn) && ! empty($this->selector))
                         {
                             if ($this->at == '')
                             {
@@ -799,7 +799,7 @@ class csstidy
                             $this->sub_value_arr = array();
                             $this->value = '';
                         }
-                        if ($string{$i} == '}')
+                        if ($string[$i] == '}')
                         {
                             $this->explode_selectors();
                             $this->_add_token(SEL_END, $this->selector);
@@ -810,9 +810,9 @@ class csstidy
                     }
                     elseif (! $pn)
                     {
-                        $this->sub_value .= $string{$i};
+                        $this->sub_value .= $string[$i];
                         
-                        if (ctype_space($string{$i}))
+                        if (ctype_space($string[$i]))
                         {
                             $this->optimise->subvalue();
                             if ($this->sub_value != '')
@@ -826,24 +826,24 @@ class csstidy
                 
                 /* Case in string */
                 case 'instr' :
-                    if ($this->str_char == ')' && $string{$i} == '"' && ! $this->str_in_str &&
+                    if ($this->str_char == ')' && $string[$i] == '"' && ! $this->str_in_str &&
                          ! csstidy :: escaped($string, $i))
                     {
                         $this->str_in_str = true;
                     }
-                    elseif ($this->str_char == ')' && $string{$i} == '"' && $this->str_in_str &&
+                    elseif ($this->str_char == ')' && $string[$i] == '"' && $this->str_in_str &&
                          ! csstidy :: escaped($string, $i))
                     {
                         $this->str_in_str = false;
                     }
-                    if ($string{$i} == $this->str_char && ! csstidy :: escaped($string, $i) && ! $this->str_in_str)
+                    if ($string[$i] == $this->str_char && ! csstidy :: escaped($string, $i) && ! $this->str_in_str)
                     {
                         $this->status = $this->from;
                     }
-                    $temp_add = $string{$i};
+                    $temp_add = $string[$i];
                     // ...and no not-escaped backslash at the previous position
-                    if (($string{$i} == "\n" || $string{$i} == "\r") &&
-                         ! ($string{$i - 1} == '\\' && ! csstidy :: escaped($string, $i - 1)))
+                    if (($string[$i] == "\n" || $string[$i] == "\r") &&
+                         ! ($string[$i - 1] == '\\' && ! csstidy :: escaped($string, $i - 1)))
                     {
                         $temp_add = "\\A ";
                         $this->log('Fixed incorrect newline in string', 'Warning');
@@ -860,7 +860,7 @@ class csstidy
                 
                 /* Case in-comment */
                 case 'ic' :
-                    if ($string{$i} == '*' && $string{$i + 1} == '/')
+                    if ($string[$i] == '*' && $string[$i + 1] == '/')
                     {
                         $this->status = $this->from;
                         $i ++;
@@ -869,7 +869,7 @@ class csstidy
                     }
                     else
                     {
-                        $cur_comment .= $string{$i};
+                        $cur_comment .= $string[$i];
                     }
                     break;
             }
@@ -931,7 +931,7 @@ class csstidy
      */
     function escaped(&$string, $pos)
     {
-        return ! (@($string{$pos - 1} != '\\') || csstidy :: escaped($string, $pos - 1));
+        return ! (@($string[$pos - 1] != '\\') || csstidy :: escaped($string, $pos - 1));
     }
 
     /**

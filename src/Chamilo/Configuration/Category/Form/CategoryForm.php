@@ -170,7 +170,7 @@ class CategoryForm extends FormValidator
         $this->build_footer('Create');
     }
 
-    public function validate()
+    public function validate(): bool
     {
         if (isset($_POST['add']) || isset($_POST['remove']))
         {
@@ -261,7 +261,7 @@ class CategoryForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array (), $filter = null)
     {
         $category = $this->category;
         $defaults[PlatformCategory::PROPERTY_ID] = $category->get_id();

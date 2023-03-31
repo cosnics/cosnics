@@ -195,7 +195,7 @@ class ExecuteForm extends FormValidator
         return $return;
     }
 
-    public function setDefaults($parameters = array())
+    public function setDefaults($parameters = array(), $filter = null)
     {
         $subcondition = new EqualityCondition(
             new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_DYNAMIC_FORM_ID), 

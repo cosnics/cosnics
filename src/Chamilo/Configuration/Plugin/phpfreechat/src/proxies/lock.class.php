@@ -28,7 +28,7 @@ require_once dirname(__FILE__) . "/../pfcproxycommand.class.php";
 class pfcProxyCommand_lock extends pfcProxyCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];

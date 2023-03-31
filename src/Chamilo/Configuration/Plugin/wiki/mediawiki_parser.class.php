@@ -1071,7 +1071,7 @@ class MediawikiParser
         $len = strlen($str);
         for ($i = 0; $i < $len; $i ++)
         {
-            $c = $str{$i};
+            $c = $str[$i];
             
             switch ($state)
             {
@@ -1232,7 +1232,7 @@ class MediawikiParser
         
         for ($i = 0; $i < $shorter; ++ $i)
         {
-            if ($st1{$i} != $st2{$i})
+            if ($st1[$i] != $st2[$i])
             {
                 break;
             }

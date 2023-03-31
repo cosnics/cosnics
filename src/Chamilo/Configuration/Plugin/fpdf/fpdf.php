@@ -1348,8 +1348,8 @@ function _parsepngstream($f, $file)
 				$color .= $data[$pos];
 				$alpha .= $data[$pos];
 				$line = substr($data,$pos+1,$len);
-				$color .= preg_replace('/(.{3})./s','$1',$line);
-				$alpha .= preg_replace('/.{3}(.)/s','$1',$line);
+				$color .= preg_replace('/(.[3])./s','$1',$line);
+				$alpha .= preg_replace('/.[3](.)/s','$1',$line);
 			}
 		}
 		unset($data);

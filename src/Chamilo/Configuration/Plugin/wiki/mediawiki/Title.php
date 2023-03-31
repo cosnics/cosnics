@@ -431,7 +431,7 @@ class MediaWikiTitle
             // Ensure that it really does come directly after #REDIRECT
             // Some older redirects included a colon, so don't freak about that!
             $m = array();
-            if (preg_match('!^\s*:?\s*\[{2}(.*?)(?:\|.*?)?\]{2}!', $text, $m))
+            if (preg_match('!^\s*:?\s*\[[2](.*?)(?:\|.*?)?\][2]!', $text, $m))
             {
                 // Strip preceding colon used to "escape" categories, etc.
                 // and URL-decode links
@@ -2637,7 +2637,7 @@ class MediaWikiTitle
             '[^' . MediawikiTitle :: legalChars() . ']' .             // URL percent encoding sequences interfere with the ability
                                                           // to round-trip titles -- you can't link to them
                                                           // consistently.
-            '|%[0-9A-Fa-f]{2}' .             // XML/HTML character references produce similar issues.
+            '|%[0-9A-Fa-f][2]' .             // XML/HTML character references produce similar issues.
             '|&[A-Za-z0-9\x80-\xff]+;' . '|&#[0-9]+;' . '|&#x[0-9A-Fa-f]+;' . '/S';
         }
         
@@ -2671,7 +2671,7 @@ class MediaWikiTitle
         
         // Initial colon indicates main namespace rather than specified default
         // but should not create invalid {ns,title} pairs such as {0,Project:Foo}
-        if (':' == $dbkey{0})
+        if (':' == $dbkey[0])
         {
             $this->mNamespace = NS_MAIN;
             $dbkey = substr($dbkey, 1); // remove the colon but continue processing
@@ -2831,7 +2831,7 @@ class MediaWikiTitle
         // inconsistent. Same for talk/userpages. Keep them normalized instead.
         $dbkey = ($this->mNamespace == NS_USER || $this->mNamespace == NS_USER_TALK) ? IP :: sanitizeIP($dbkey) : $dbkey;
         // Any remaining initial :s are illegal.
-        if ($dbkey !== '' && ':' == $dbkey{0})
+        if ($dbkey !== '' && ':' == $dbkey[0])
         {
             return false;
         }

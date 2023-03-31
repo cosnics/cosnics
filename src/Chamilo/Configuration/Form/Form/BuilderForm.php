@@ -177,7 +177,7 @@ class BuilderForm extends FormValidator
         $this->addElement('category');
     }
 
-    public function validate()
+    public function validate(): bool
     {
         if (isset($_POST['add']) || isset($_POST['remove']))
         {
@@ -234,7 +234,7 @@ class BuilderForm extends FormValidator
         return $succes;
     }
 
-    public function setDefaults($parameters = array())
+    public function setDefaults($parameters = array(), $filter = null)
     {
         $parameters[Element::PROPERTY_NAME] = $this->element->get_name();
         $parameters[Element::PROPERTY_REQUIRED] = $this->element->get_required();
