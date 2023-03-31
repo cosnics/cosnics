@@ -25,7 +25,7 @@ class AssessmentForm extends ContentObjectForm
     const RANDOM_QUESTIONS = 'random';
     const SESSION_QUESTIONS = 'questions';
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array (), $filter = null)
     {
         $object = $this->get_content_object();
         if ($object != null)
@@ -41,7 +41,7 @@ class AssessmentForm extends ContentObjectForm
         }
         else
         {
-            $defaults[Assessment::PROPERTY_ASSESSMENT_TYPE] = 0;
+            //$defaults[Assessment::PROPERTY_ASSESSMENT_TYPE] = 0;
             $defaults[self::UNLIMITED_ATTEMPTS] = 0;
             $defaults[self::ALL_QUESTIONS] = 0;
             $defaults[self::UNLIMITED_TIME] = 0;
@@ -51,7 +51,7 @@ class AssessmentForm extends ContentObjectForm
         parent::setDefaults($defaults);
     }
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Properties'));
@@ -60,18 +60,18 @@ class AssessmentForm extends ContentObjectForm
         $choices = array();
         $choices[] = $this->createElement(
             'radio',
-            self :: UNLIMITED_ATTEMPTS,
+            self::UNLIMITED_ATTEMPTS,
             '',
-            Translation :: get('UnlimitedAttempts'),
+            Translation::get('UnlimitedAttempts'),
             0,
             array(
                 'onclick' => 'javascript:window_hide(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
                 'id' => self::UNLIMITED_ATTEMPTS));
         $choices[] = $this->createElement(
             'radio',
-            self :: UNLIMITED_ATTEMPTS,
+            self::UNLIMITED_ATTEMPTS,
             '',
-            Translation :: get('LimitedAttempts'),
+            Translation::get('LimitedAttempts'),
             1,
             array(
                 'onclick' => 'javascript:window_show(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
@@ -137,9 +137,9 @@ class AssessmentForm extends ContentObjectForm
         $choices = array();
         $choices[] = $this->createElement(
             'radio',
-            self :: RANDOM_QUESTIONS,
+            self::RANDOM_QUESTIONS,
             '',
-            Translation :: get('NoRandomization'),
+            Translation::get('NoRandomization'),
             0,
             array(
                 'onclick' => 'javascript:window_hide(\'' . self::RANDOM_QUESTIONS . '_window\')',
@@ -232,7 +232,7 @@ class AssessmentForm extends ContentObjectForm
     }
 
     // Inherited
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
         parent::build_editing_form();
         $this->addElement('category', Translation::get('Properties'));
@@ -241,18 +241,18 @@ class AssessmentForm extends ContentObjectForm
         $choices = array();
         $choices[] = $this->createElement(
             'radio',
-            self :: UNLIMITED_ATTEMPTS,
+            self::UNLIMITED_ATTEMPTS,
             '',
-            Translation :: get('UnlimitedAttempts'),
+            Translation::get('UnlimitedAttempts'),
             0,
             array(
-                'onclick' => 'javascript:window_hide(\'' . self :: UNLIMITED_ATTEMPTS . '_window\')',
-                'id' => self :: UNLIMITED_ATTEMPTS));
+                'onclick' => 'javascript:window_hide(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
+                'id' => self::UNLIMITED_ATTEMPTS));
         $choices[] = $this->createElement(
             'radio',
-            self :: UNLIMITED_ATTEMPTS,
+            self::UNLIMITED_ATTEMPTS,
             '',
-            Translation :: get('LimitedAttempts'),
+            Translation::get('LimitedAttempts'),
             1,
             array(
                 'onclick' => 'javascript:window_show(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
@@ -318,9 +318,9 @@ class AssessmentForm extends ContentObjectForm
         $choices = array();
         $choices[] = $this->createElement(
             'radio',
-            self :: RANDOM_QUESTIONS,
+            self::RANDOM_QUESTIONS,
             '',
-            Translation :: get('NoRandomization'),
+            Translation::get('NoRandomization'),
             0,
             array(
                 'onclick' => 'javascript:window_hide(\'' . self::RANDOM_QUESTIONS . '_window\')',

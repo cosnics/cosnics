@@ -882,7 +882,7 @@ EOT;
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $content_object = $this->content_object;
         $defaults[ContentObject::PROPERTY_ID] = $content_object->get_id();
