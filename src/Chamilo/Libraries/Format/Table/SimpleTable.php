@@ -205,7 +205,7 @@ class SimpleTable extends HTML_Table
      * @return string
      * @deprecated User render() now
      */
-    public function toHTML()
+    public function toHTML(): string
     {
         return $this->render();
     }

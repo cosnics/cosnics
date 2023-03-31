@@ -124,7 +124,7 @@ class SortableTableFromArray extends SortableTable
      * @return string
      * @deprecated Use render() now
      */
-    public function toHtml()
+    public function toHtml(): string
     {
         return $this->render();
     }
@@ -133,7 +133,7 @@ class SortableTableFromArray extends SortableTable
      *
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $this->initializeTable();
 

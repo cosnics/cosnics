@@ -100,68 +100,108 @@ class TableSort
     /**
      * Sorts a 2-dimensional table.
      */
-    public function sort()
+    public function sort(): array
     {
         $data = $this->getData();
 
-        if (! is_array($data) || empty($data))
+        if (!is_array($data) || empty($data))
         {
-            return array();
+            return [];
         }
 
-        if ($this->getColumn() != strval(intval($this->getColumn())))
+        foreach ($this->getColumns() as $column)
         {
-            // Probably an attack
-            return $data;
+            if ($column != strval(intval($column)))
+            {
+                // Probably an attack
+                return $data;
+            }
         }
 
-        if (! in_array($this->getDirection(), array(SORT_ASC, SORT_DESC)))
+        foreach ($this->getDirections() as $direction)
         {
-            // Probably an attack
-            return $data;
+            if (!in_array($direction, array(SORT_ASC, SORT_DESC)))
+            {
+                // Probably an attack
+                return $data;
+            }
         }
 
-        if ($this->isImageColumn($data, $this->getColumn()))
+        $firstColumn = $this->getColumns();
+        $firstDirection = $this->getDirections();
+
+        $compare_operator = $this->getDirections() == SORT_ASC ? '>' : '<=';
+
+        if ($this->isImageColumn($data, $firstColumn))
         {
-            $type = SORT_IMAGE;
+            $compareFunction = function ($a, $b) use ($firstColumn, $firstDirection) {
+                $compareResult = strnatcmp(
+                    strip_tags($a[$firstColumn], '<img>'), strip_tags($b[$firstColumn], '<img>')
+                );
+
+                if ($firstDirection == SORT_ASC)
+                {
+                    return $compareResult > 0;
+                }
+                else
+                {
+                    return $compareResult <= 0;
+                }
+            };
         }
-        elseif ($this->isDateColumn($data, $this->getColumn()))
+        elseif ($this->isDateColumn($data, $firstColumn))
         {
-            $type = SORT_DATE;
+            $compareFunction = function ($a, $b) use ($firstColumn, $firstDirection) {
+                $aTime = strtotime(strip_tags($a[$firstColumn]));
+                $bTime = strtotime(strip_tags($b[$firstColumn]));
+
+                if ($firstDirection == SORT_ASC)
+                {
+                    return $aTime > $bTime;
+                }
+                else
+                {
+                    return $aTime <= $bTime;
+                }
+            };
         }
-        elseif ($this->isNumericColumn($data, $this->getColumn()))
+        elseif ($this->isNumericColumn($data, $firstColumn))
         {
-            $type = SORT_NUMERIC;
+            $compareFunction = function ($a, $b) use ($firstColumn, $firstDirection) {
+                $aTime = strip_tags($a[$firstColumn]);
+                $bTime = strip_tags($b[$firstColumn]);
+
+                if ($firstDirection == SORT_ASC)
+                {
+                    return $aTime > $bTime;
+                }
+                else
+                {
+                    return $aTime <= $bTime;
+                }
+            };
         }
         else
         {
-            $type = SORT_STRING;
-        }
+            $compareFunction = function ($a, $b) use ($firstColumn, $firstDirection) {
+                $compareResult = strnatcmp(
+                    strip_tags($a[$firstColumn]), strip_tags($b[$firstColumn])
+                );
 
-        $compare_operator = $this->getDirection() == SORT_ASC ? '>' : '<=';
-
-        switch ($type)
-        {
-            case SORT_NUMERIC :
-                $compare_function = 'return strip_tags($a[' . $this->getColumn() . ']) ' . $compare_operator .
-                     ' strip_tags($b[' . $this->getColumn() . ']);';
-                break;
-            case SORT_IMAGE :
-                $compare_function = 'return strnatcmp(strip_tags($a[' . $this->getColumn() .
-                     '], "<img>"), strip_tags($b[' . $this->getColumn() . '], "<img>")) ' . $compare_operator . ' 0;';
-                break;
-            case SORT_DATE :
-                $compare_function = 'return strtotime(strip_tags($a[' . $this->getColumn() . '])) ' . $compare_operator .
-                     ' strtotime(strip_tags($b[' . $this->getColumn() . ']));';
-            case SORT_STRING :
-            default :
-                $compare_function = 'return strnatcmp(strip_tags($a[' . $this->getColumn() . ']), strip_tags($b[' .
-                     $this->getColumn() . '])) ' . $compare_operator . ' 0;';
-                break;
+                if ($firstDirection == SORT_ASC)
+                {
+                    return $compareResult > 0;
+                }
+                else
+                {
+                    return $compareResult <= 0;
+                }
+            };
         }
 
         // Sort the content
-        usort($data, create_function('$a, $b', $compare_function));
+        usort($data, $compareFunction);
+
         return $data;
     }
 

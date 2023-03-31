@@ -562,7 +562,7 @@ abstract class HtmlTable extends \HTML_Table
      * @see HTML_Table::toHtml()
      * @deprecated User render() now
      */
-    public function toHtml($emptyTable = false)
+    public function toHtml($emptyTable = false): string
     {
         return $this->render($emptyTable);
     }
