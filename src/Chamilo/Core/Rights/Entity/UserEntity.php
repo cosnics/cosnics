@@ -10,6 +10,7 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Class that describes the users for the rights editor
@@ -138,9 +139,10 @@ class UserEntity implements RightsEntity
     /**
      * Function that can be filled in extensions of this class to limit the users
      *
+     * @param $condition Condition
      * @return Condition
      */
-    public function get_condition($condition = null)
+    public function get_condition(Condition $condition = null)
     {
         return $condition;
     }

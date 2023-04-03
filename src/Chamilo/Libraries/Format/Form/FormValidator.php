@@ -21,12 +21,15 @@ use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_advanced_element_finder
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_radio;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_category;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_datepicker;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_element_finder;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_extended_checkbox;
 use HTML_QuickForm_RuleRegistry;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylebutton;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_styleresetbutton;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylesubmitbutton;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle;
+use HTML_QuickForm_Rule;
+use HTML_QuickForm_Rule_DiskQuota;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
@@ -208,6 +211,7 @@ EOT;
 
         // Element finder elements
         $this->registerElementType('advanced_element_finder', HTML_QuickForm_advanced_element_finder::class);
+        $this->registerElementType('element_finder', HTML_QuickForm_element_finder::class);
 
         // Button elements
         $this->registerElementType('style_button', HTML_QuickForm_stylebutton::class);
@@ -230,6 +234,7 @@ EOT;
         $this->registerRule('username_available', null, HTML_QuickForm_Rule_UsernameAvailable::class);
         $this->registerRule('username', null, HTML_QuickForm_Rule_Username::class);
         $this->registerRule('filetype', null, HTML_QuickForm_Rule_Filetype::class);
+        $this->registerRule('disk_quota', null, HTML_QuickForm_Rule_DiskQuota::class);
     }
 
     public function set_error_reporting($enabled)

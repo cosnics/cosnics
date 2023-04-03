@@ -392,7 +392,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             $html[] = '<div class="alert alert-warning">' . Translation::get('CoursesClosedWarning') . '</div>';
         }
 
-        return implode($html, "\n");
+        return implode("\n", $html);
     }
 
     /**
@@ -447,7 +447,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
         // $html[] = '</div>';
 
-        return implode($html, "\n");
+        return implode("\n", $html);
     }
 
     protected function loadCourseSettings($courses)
@@ -625,7 +625,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                 }
             }
 
-            return implode($html, "\n");
+            return implode("\n", $html);
         }
     }
 

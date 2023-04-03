@@ -173,19 +173,19 @@ class HTML_QuickForm_element_finder extends HTML_QuickForm_group
         $deactivate_button_id = $active_id . '_button';
 
         $this->_elements = array();
-        $this->_elements[] = new HTML_QuickForm_hidden(
+        $this->_elements[] = new \HTML_QuickForm_hidden(
             $this->getName() . '_active_hidden',
-            null,
+            '',
             array('id' => $active_hidden_id));
-        $this->_elements[] = new HTML_QuickForm_text(
+        $this->_elements[] = new \HTML_QuickForm_text(
             $this->getName() . '_search',
             null,
             array('class' => 'element_query', 'id' => $this->getName() . '_search_field'));
-        $this->_elements[] = new HTML_QuickForm_button(
+        $this->_elements[] = new \HTML_QuickForm_button(
             $this->getName() . '_activate',
             '',
             array('id' => $activate_button_id, 'disabled' => 'disabled', 'class' => 'activate_elements'));
-        $this->_elements[] = new HTML_QuickForm_button(
+        $this->_elements[] = new \HTML_QuickForm_button(
             $this->getName() . '_deactivate',
             '',
             array('id' => $deactivate_button_id, 'disabled' => 'disabled', 'class' => 'deactivate_elements'));

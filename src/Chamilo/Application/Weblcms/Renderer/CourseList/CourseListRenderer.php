@@ -268,7 +268,7 @@ class CourseListRenderer
             }
         }
         
-        return implode($html, "\n");
+        return implode("\n", $html);
     }
 
     /**
