@@ -20,15 +20,15 @@ use function strpos;
 class ExternalCalendarForm extends ContentObjectForm
 {
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
         $this->build_extra_form();
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_editing_form();
+        parent::build_editing_form($htmleditor_options, $in_tab);
         $this->build_extra_form();
     }
 
@@ -128,7 +128,7 @@ class ExternalCalendarForm extends ContentObjectForm
         return strpos($remoteUrl, $pathWithoutScheme) == false;
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $content_object = $this->get_content_object();
 

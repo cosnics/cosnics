@@ -15,9 +15,9 @@ use Chamilo\Libraries\Translation\Translation;
 class SystemAnnouncementForm extends ContentObjectForm
 {
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
         $this->addElement('category', Translation::get('Properties'));
         $this->addElement(
             'select',
@@ -27,9 +27,9 @@ class SystemAnnouncementForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_editing_form();
+        parent::build_editing_form($htmleditor_options, $in_tab);
         $this->addElement('category', Translation::get('Properties'));
         $this->addElement(
             'select',
@@ -39,7 +39,7 @@ class SystemAnnouncementForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $lo = $this->get_content_object();
         if (isset($lo))

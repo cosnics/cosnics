@@ -149,7 +149,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
         $object->set_options($options);
     }
 
-    public function validate()
+    public function validate(): bool
     {
         $extraOptionRequested = Request::post('add');
         $removedOptions = Request::post('remove');

@@ -15,19 +15,19 @@ class RssFeedForm extends ContentObjectForm
     const DEFAULT_NUMBER_OF_ENTRIES = 20;
     const MAXIMUM_NUMBER_OF_ENTRIES = 50;
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
         $this->buildElements();
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_editing_form();
+        parent::build_editing_form($htmleditor_options, $in_tab);
         $this->buildElements();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $lo = $this->get_content_object();
         $default_url = null;

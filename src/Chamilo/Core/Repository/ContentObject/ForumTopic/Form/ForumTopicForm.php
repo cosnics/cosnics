@@ -71,7 +71,7 @@ class ForumTopicForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $object = $this->get_content_object();
         if ($object != null)

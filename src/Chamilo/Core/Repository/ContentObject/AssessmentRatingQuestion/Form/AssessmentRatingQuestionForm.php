@@ -25,7 +25,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
     const RATING_TYPE_PERCENTAGE = 0;
     const RATING_TYPE_RATING = 1;
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $object = $this->get_content_object();
 
@@ -48,13 +48,13 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
         parent::setDefaults($defaults);
     }
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
         parent::build_creation_form($this->getDescriptionHtmlEditorOptions());
         $this->buildBasicQuestionForm();
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
         parent::build_editing_form($this->getDescriptionHtmlEditorOptions());
         $this->buildBasicQuestionForm();

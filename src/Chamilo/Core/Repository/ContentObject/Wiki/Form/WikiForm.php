@@ -31,9 +31,9 @@ class WikiForm extends ContentObjectForm
         return parent::update_content_object();
     }
 
-    public function build_creation_form()
+    public function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options ,$in_tab);
         $this->addElement('category', Translation::get('Properties'));
         $this->addElement('checkbox', 'locked', Translation::get('WikiLocked'));
         $this->add_html_editor('links', Translation::get('WikiToolBoxLinks'), false);
@@ -42,9 +42,9 @@ class WikiForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    public function build_editing_form()
+    public function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_editing_form();
+        parent::build_editing_form($htmleditor_options, $in_tab);
         $this->addElement('category', Translation::get('Properties'));
         $this->addElement('checkbox', 'locked', Translation::get('WikiLocked'));
         $this->add_html_editor('links', Translation::get('WikiToolBoxLinks'), false);
@@ -53,7 +53,7 @@ class WikiForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $lo = $this->get_content_object();
         if (isset($lo))

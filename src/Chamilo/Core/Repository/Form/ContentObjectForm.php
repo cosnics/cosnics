@@ -1257,7 +1257,7 @@ EOT;
      *
      * @see FormValidator::validate
      */
-    public function validate()
+    public function validate(): bool
     {
         if ($this->isSubmitted())
         {

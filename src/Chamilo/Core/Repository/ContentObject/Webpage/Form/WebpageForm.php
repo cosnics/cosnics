@@ -26,7 +26,7 @@ use HTML_QuickForm_Rule_Required;
 class WebpageForm extends ContentObjectForm
 {
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
         $description_options = array();
         $description_options['height'] = '100';
@@ -62,7 +62,7 @@ class WebpageForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
         $description_options = array();
         $description_options['height'] = '100';
@@ -102,7 +102,7 @@ class WebpageForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $object = $this->get_content_object();
         $defaults['html_content'] = file_get_contents($this->get_upload_path() . $object->get_path());

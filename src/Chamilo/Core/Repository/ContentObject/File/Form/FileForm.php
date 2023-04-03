@@ -24,7 +24,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class FileForm extends ContentObjectForm
 {
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
         $description_options = array();
         $description_options['height'] = '100';
@@ -43,7 +43,6 @@ class FileForm extends ContentObjectForm
             array(
                 'maxFilesize' => $calculator->getMaximumUploadSize(), 
                 'titleInputName' => ContentObject::PROPERTY_TITLE));
-        
         $this->addRule('file', Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES), 'disk_quota');
         
         $calculator->addUploadWarningToForm($this);
@@ -60,7 +59,7 @@ class FileForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
         $description_options = array();
         $description_options['height'] = '100';
@@ -120,7 +119,7 @@ class FileForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $object = $this->get_content_object();
         parent::setDefaults($defaults);

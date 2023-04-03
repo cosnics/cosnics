@@ -381,7 +381,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         $this->addElement('html', $buttonToolBarRenderer->render());
     }
 
-    public function validate()
+    public function validate(): bool
     {
         $extraOptionRequested = Request::post('add');
         $removedOptions = Request::post('remove');

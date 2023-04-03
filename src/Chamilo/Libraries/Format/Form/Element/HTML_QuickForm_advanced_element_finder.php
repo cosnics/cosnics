@@ -74,7 +74,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
     public function __construct($elementName = null, $elementLabel = null, $elementTypes = null, $defaultValues = null,
         $config = array())
     {
-        HTML_QuickForm_element::__construct($elementName, $elementLabel);
+        \HTML_QuickForm_element::__construct($elementName, $elementLabel);
 
         $this->configuration = $config;
         $this->_type = 'advanced_element_finder';
@@ -192,9 +192,9 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
         $this->_elements = array();
 
-        $this->_elements[] = new HTML_QuickForm_hidden(
+        $this->_elements[] = new \HTML_QuickForm_hidden(
             'active_hidden_' . $this->getName(),
-            null,
+            '',
             array('id' => $active_hidden_id));
 
         $element_types_array = array();
@@ -205,22 +205,22 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
             $element_types_array[$element_type->get_id()] = $element_type->get_name();
         }
 
-        $this->_elements[] = new HTML_QuickForm_select(
+        $this->_elements[] = new \HTML_QuickForm_select(
             'element_types_' . $this->getName(),
             null,
             $element_types_array,
             array('id' => $element_types_select_box_id));
 
-        $this->_elements[] = new HTML_QuickForm_text(
+        $this->_elements[] = new \HTML_QuickForm_text(
             'search_' . $this->getName(),
             null,
             array('class' => 'element_query', 'id' => 'search_field'));
 
-        $this->_elements[] = new HTML_QuickForm_button(
+        $this->_elements[] = new \HTML_QuickForm_button(
             'activate_' . $this->getName(),
             '',
             array('id' => $activate_button_id, 'class' => 'activate_elements'));
-        $this->_elements[] = new HTML_QuickForm_button(
+        $this->_elements[] = new \HTML_QuickForm_button(
             'deactivate_' . $this->getName(),
             '',
             array('id' => $deactivate_button_id, 'class' => 'deactivate_elements'));

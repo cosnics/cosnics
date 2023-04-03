@@ -31,16 +31,16 @@ class TaskForm extends ContentObjectForm
     const PARAM_TYPE = 'type';
 
     // Inherited
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
         $this->add_calendar_form();
     }
 
     // Inherited
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_editing_form();
+        parent::build_editing_form($htmleditor_options, $in_tab);
         $this->add_calendar_form();
     }
 
@@ -256,7 +256,7 @@ class TaskForm extends ContentObjectForm
     }
 
     // Inherited
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $task = $this->get_content_object();
 

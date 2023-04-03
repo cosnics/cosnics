@@ -37,9 +37,9 @@ class HotspotQuestionForm extends ContentObjectForm
         '#ff8000',
         '#8000ff');
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
 
         $this->addElement(
             'html',
@@ -104,9 +104,9 @@ class HotspotQuestionForm extends ContentObjectForm
         $this->set_session_answers();
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
 
         $this->addElement('category', Translation::get('Properties'));
         $this->addElement(
@@ -157,7 +157,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $this->set_session_answers();
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         if (! $this->isSubmitted())
         {

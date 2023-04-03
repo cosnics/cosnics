@@ -29,7 +29,7 @@ class ForumForm extends ContentObjectForm
         return parent::update_content_object();
     }
 
-    public function build_editing_form()
+    public function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
         parent::build_editing_form();
         $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
@@ -37,7 +37,7 @@ class ForumForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $object = $this->get_content_object();
         if ($object != null)

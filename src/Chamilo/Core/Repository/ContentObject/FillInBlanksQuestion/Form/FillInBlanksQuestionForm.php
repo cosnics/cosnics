@@ -167,7 +167,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         if (! $this->isSubmitted())
         {
@@ -281,7 +281,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         }
     }
 
-    public function validate()
+    public function validate(): bool
     {
         if (isset($_POST['add']))
         {

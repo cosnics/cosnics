@@ -27,9 +27,9 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
     const PROPERTY_ADD_OPTION = 'add_option';
     const PROPERTY_REMOVE_OPTION = 'remove_option';
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
         $this->build_options_and_matches();
         $this->addElement(
             'html',
@@ -39,9 +39,9 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                     true) . 'AssessmentMatchingQuestion.js'));
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_editing_form();
+        parent::build_editing_form($htmleditor_options, $in_tab);
         $this->build_options_and_matches();
         $this->addElement(
             'html',
@@ -73,7 +73,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $this->add_matches();
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $object = $this->get_content_object();
         if ($object->get_number_of_options() != 0)
@@ -161,7 +161,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $object->set_matches($matches);
     }
 
-    public function validate()
+    public function validate(): bool
     {
         if (isset($_POST[self::PROPERTY_ADD_MATCH]) || isset($_POST[self::PROPERTY_REMOVE_MATCH]) ||
              isset($_POST[self::PROPERTY_REMOVE_OPTION]) || isset($_POST[self::PROPERTY_ADD_OPTION]))

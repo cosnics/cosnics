@@ -17,9 +17,9 @@ use Chamilo\Libraries\Utilities\Utilities;
 class AssessmentMatrixQuestionForm extends ContentObjectForm
 {
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
         $this->build_options_and_matches();
         $this->addElement(
             'html',
@@ -29,9 +29,9 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
                     true) . 'AssessmentMatrixQuestion.js'));
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_editing_form();
+        parent::build_editing_form($htmleditor_options, $in_tab);
         $this->build_options_and_matches();
         $this->addElement(
             'html',
@@ -58,7 +58,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $this->add_matches();
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $object = $this->get_content_object();
         if ($object->get_number_of_options() != 0)
@@ -406,7 +406,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    public function validate()
+    public function validate(): bool
     {
         if (isset($_POST['add_match']) || isset($_POST['remove_match']) || isset($_POST['remove_option']) ||
              isset($_POST['add_option']) || isset($_POST['change_matrix_type']))

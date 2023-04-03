@@ -110,7 +110,7 @@ class ExternalToolForm extends ContentObjectForm
     /**
      * @param array $defaults
      */
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         /** @var ExternalTool $externalTool */
         $externalTool = $this->get_content_object();

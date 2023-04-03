@@ -19,7 +19,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class HotpotatoesForm extends ContentObjectForm
 {
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaultValues = array(), $filter = null)
     {
         $object = $this->get_content_object();
         if ($object != null)
@@ -34,7 +34,7 @@ class HotpotatoesForm extends ContentObjectForm
         parent::setDefaults($defaults);
     }
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Properties'));
@@ -46,7 +46,7 @@ class HotpotatoesForm extends ContentObjectForm
     }
 
     // Inherited
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
         parent::build_editing_form();
         $this->addElement('category', Translation::get('Properties'));
