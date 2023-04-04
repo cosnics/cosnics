@@ -55,6 +55,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         if (count($order_property) > 0)
         {
             $order_column = $order_property[0]->get_property();
+            if (!is_string($order_column) && method_exists($order_column, 'get_property'))
+            {
+                $order_column = $order_column->get_property();
+            }
             $order_direction = $order_property[0]->get_direction();
             $ordering_values = array();
             
