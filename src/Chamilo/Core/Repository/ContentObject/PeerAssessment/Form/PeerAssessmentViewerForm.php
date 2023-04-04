@@ -205,7 +205,7 @@ class PeerAssessmentViewerForm extends FormValidator
         $this->addElement('html', implode(PHP_EOL, $table_footer));
     }
 
-    public function validate()
+    public function validate(): bool
     {
         $success = true;
         $vals = $this->getSubmitValues();

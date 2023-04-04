@@ -33,7 +33,7 @@ class PhysicalLocationForm extends ContentObjectForm
 
     protected function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
         $this->addElement('category', Translation::get('Properties'));
         $this->add_textfield(
             PhysicalLocation::PROPERTY_LOCATION,
@@ -45,7 +45,7 @@ class PhysicalLocationForm extends ContentObjectForm
 
     protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
-        parent::build_editing_form();
+        parent::build_editing_form($htmleditor_options, $in_tab);
         $this->addElement('category', Translation::get('Properties'));
         $this->add_textfield(
             PhysicalLocation::PROPERTY_LOCATION,

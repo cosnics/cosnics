@@ -103,7 +103,7 @@ class FileForm extends ContentObjectForm
 
         $this->addRule(
             'file',
-            Translation:: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
+            Translation:: get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES),
             'disk_quota'
         );
 

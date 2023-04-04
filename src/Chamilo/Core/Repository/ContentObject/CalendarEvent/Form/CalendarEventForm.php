@@ -31,16 +31,16 @@ class CalendarEventForm extends ContentObjectForm
     const PARAM_DAY = 'day';
 
     // Inherited
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
         $this->add_calendar_form();
     }
 
     // Inherited
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_editing_form();
+        parent::build_editing_form($htmleditor_options, $in_tab);
         $this->add_calendar_form();
     }
 
@@ -335,7 +335,7 @@ class CalendarEventForm extends ContentObjectForm
     }
 
     // Inherited
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $calendar_event = $this->get_content_object();
 
@@ -507,10 +507,10 @@ class CalendarEventForm extends ContentObjectForm
             $defaults[CalendarEvent::PROPERTY_FREQUENCY_COUNT] = 10;
 
             // Remove start and end date from the defaults because it blocks the selection of the start date
-             $defaults[CalendarEvent :: PROPERTY_START_DATE] = DatetimeUtilities :: format_locale_date(
+             $defaults[CalendarEvent::PROPERTY_START_DATE] = DatetimeUtilities::format_locale_date(
              '%d-%m-%Y %H:%M',
              time());
-             $defaults[CalendarEvent :: PROPERTY_END_DATE] = DatetimeUtilities :: format_locale_date(
+             $defaults[CalendarEvent::PROPERTY_END_DATE] = DatetimeUtilities::format_locale_date(
              '%d-%m-%Y %H:%M',
              time() + 3600);
         }

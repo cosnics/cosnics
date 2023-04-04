@@ -19,7 +19,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class HotpotatoesForm extends ContentObjectForm
 {
 
-    public function setDefaults($defaultValues = array(), $filter = null)
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $object = $this->get_content_object();
         if ($object != null)
@@ -31,7 +31,7 @@ class HotpotatoesForm extends ContentObjectForm
             $defaults[Hotpotatoes::PROPERTY_MAXIMUM_ATTEMPTS] = 0;
         }
 
-        parent::setDefaults($defaults);
+        parent::setDefaults($defaults, $filter);
     }
 
     protected function build_creation_form($htmleditor_options = array(), $in_tab = false)

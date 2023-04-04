@@ -85,12 +85,7 @@ class ForumPostForm extends FormValidator
      * **************************************************************************************************************
      */
     
-    /**
-     * Sets default values.
-     * 
-     * @param $defaults array Default values for this form's parameters.
-     */
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array (), $filter = null)
     {
         $forump = $this->forumpost;
         if ($this->form_type == self::TYPE_EDIT)
@@ -116,7 +111,7 @@ class ForumPostForm extends FormValidator
             }
         }
         
-        parent::setDefaults($defaults);
+        parent::setDefaults($defaults, $filter);
     }
 
     /**

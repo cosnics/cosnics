@@ -325,7 +325,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                 }
                 else
                 {
-                    $group[] = & $this->createElement(
+                    $group[] = $this->createElement(
                         'static',
                         null,
                         null,
@@ -447,7 +447,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                 }
                 else
                 {
-                    $group[] = & $this->createElement(
+                    $group[] = $this->createElement(
                         'static',
                         null,
                         null,

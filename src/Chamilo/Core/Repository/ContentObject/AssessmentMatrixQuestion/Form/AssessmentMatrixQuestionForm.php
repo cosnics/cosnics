@@ -248,7 +248,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
                 }
                 else
                 {
-                    $group[] = & $this->createElement(
+                    $group[] = $this->createElement(
                         'static',
                         null,
                         null,
@@ -364,7 +364,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
                 }
                 else
                 {
-                    $group[] = & $this->createElement(
+                    $group[] = $this->createElement(
                         'static',
                         null,
                         null,

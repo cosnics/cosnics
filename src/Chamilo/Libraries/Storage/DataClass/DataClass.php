@@ -166,6 +166,7 @@ abstract class DataClass
      */
     public function get_specific_property($propertiesType, $propertyName)
     {
+        var_dump($propertyName);
         $properties = $this->get_specific_properties($propertiesType);
         
         return (isset($properties) && array_key_exists($propertyName, $properties)) ? $properties[$propertyName] : null;

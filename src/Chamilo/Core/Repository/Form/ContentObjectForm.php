@@ -512,7 +512,7 @@ EOT;
             foreach ($this->extra['version_data'] as $version)
             {
                 $versions = array();
-                $versions[] = &$this->createElement(
+                $versions[] = $this->createElement(
                     'static',
                     null,
                     null,
@@ -521,7 +521,7 @@ EOT;
                         'style="visibility: visible;"') .
                     ' id="A' . $i . '">'
                 );
-                $versions[] = &$this->createElement(
+                $versions[] = $this->createElement(
                     'radio',
                     'object',
                     null,
@@ -529,8 +529,8 @@ EOT;
                     $version['id'],
                     'onclick="javascript:showRadio(\'B\',\'' . $i . '\')"'
                 );
-                $versions[] = &$this->createElement('static', null, null, '</span>');
-                $versions[] = &$this->createElement(
+                $versions[] = $this->createElement('static', null, null, '</span>');
+                $versions[] = $this->createElement(
                     'static',
                     null,
                     null,
@@ -538,7 +538,7 @@ EOT;
                     $i .
                     '">'
                 );
-                $versions[] = &$this->createElement(
+                $versions[] = $this->createElement(
                     'radio',
                     'compare',
                     null,
@@ -546,8 +546,8 @@ EOT;
                     $version['id'],
                     'onclick="javascript:showRadio(\'A\',\'' . $i . '\')"'
                 );
-                $versions[] = &$this->createElement('static', null, null, '</span>');
-                $versions[] = &$this->createElement('static', null, null, $version['html']);
+                $versions[] = $this->createElement('static', null, null, '</span>');
+                $versions[] = $this->createElement('static', null, null, $version['html']);
 
                 $this->addGroup($versions, null, null, "\n");
                 $i ++;

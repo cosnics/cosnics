@@ -13,9 +13,9 @@ use Chamilo\Libraries\Translation\Translation;
 class SlideshareForm extends ContentObjectForm
 {
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
         $this->addElement('category', Translation::get('Properties'));
 
         $external_repositories = \Chamilo\Core\Repository\Instance\Manager::get_links(
@@ -33,12 +33,12 @@ class SlideshareForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         parent::setDefaults($defaults);
     }

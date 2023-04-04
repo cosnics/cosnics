@@ -9,9 +9,9 @@ use Chamilo\Libraries\Translation\Translation;
 class Office365VideoForm extends ContentObjectForm
 {
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
         $this->addElement('category', Translation::get('Properties'));
         
         $external_repositories = \Chamilo\Core\Repository\Instance\Manager::get_links(
@@ -28,9 +28,9 @@ class Office365VideoForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
     }
 
     public function create_content_object()

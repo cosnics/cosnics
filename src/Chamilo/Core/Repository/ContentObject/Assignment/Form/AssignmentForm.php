@@ -35,7 +35,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class AssignmentForm extends ContentObjectForm
 {
 
-    public function setDefaults($defaultValues = array(), $filter = null)
+    public function setDefaults($defaults = array(), $filter = null)
     {
         /** @var Assignment $object */
         $object = $this->get_content_object();

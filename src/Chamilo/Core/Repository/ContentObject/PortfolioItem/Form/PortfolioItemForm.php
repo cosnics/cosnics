@@ -27,23 +27,23 @@ class PortfolioItemForm extends ContentObjectForm
         return parent::update_content_object();
     }
 
-    public function build_creation_form($default_content_object = null)
+    public function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
         $this->addElement('category', Translation::get('Properties'));
         $this->addElement('text', PortfolioItem::PROPERTY_REFERENCE, Translation::get('Reference'));
         $this->addElement('category');
     }
 
-    public function build_editing_form($object)
+    public function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
-        parent::build_editing_form();
+        parent::build_editing_form($htmleditor_options, $in_tab);
         $this->addElement('category', Translation::get('Properties'));
         $this->addElement('text', PortfolioItem::PROPERTY_REFERENCE, Translation::get('Reference'));
         $this->addElement('category');
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = [], $filter = null)
     {
         $object = $this->get_content_object();
         $defaults[PortfolioItem::PROPERTY_REFERENCE] = $object->get_reference();

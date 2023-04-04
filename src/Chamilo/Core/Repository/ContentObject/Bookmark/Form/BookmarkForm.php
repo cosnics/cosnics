@@ -12,9 +12,9 @@ use Chamilo\Libraries\Translation\Translation;
 class BookmarkForm extends ContentObjectForm
 {
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
         $this->addElement('category', Translation::get('Properties'));
         $this->add_textfield(Bookmark::PROPERTY_URL, Translation::get('URL'), true, array('size' => '100'));
         $this->add_textfield(
@@ -25,9 +25,9 @@ class BookmarkForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_editing_form();
+        parent::build_editing_form($htmleditor_options, $in_tab);
         $this->addElement('category', Translation::get('Properties'));
         $this->add_textfield(Bookmark::PROPERTY_URL, Translation::get('URL'), true, array('size' => '100'));
         $this->add_textfield(
@@ -38,7 +38,7 @@ class BookmarkForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $lo = $this->get_content_object();
         if (isset($lo))

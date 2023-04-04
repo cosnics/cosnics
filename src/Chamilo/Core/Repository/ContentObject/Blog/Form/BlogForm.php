@@ -38,9 +38,9 @@ class BlogForm extends ContentObjectForm
         return parent::update_content_object();
     }
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
         // $this->addElement('category', Translation:: get('Properties', null, Utilities :: COMMON_LIBRARIES));
         // $this->addElement(
         // 'select',
@@ -51,9 +51,9 @@ class BlogForm extends ContentObjectForm
         // $this->addElement('category');
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_editing_form();
+        parent::build_editing_form($htmleditor_options, $in_tab);
         // $this->addElement('category', Translation:: get('Properties', null, Utilities :: COMMON_LIBRARIES));
         // $this->addElement(
         // 'select',
@@ -64,7 +64,7 @@ class BlogForm extends ContentObjectForm
         // $this->addElement('category');
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $blog = $this->get_content_object();
         if (isset($blog))

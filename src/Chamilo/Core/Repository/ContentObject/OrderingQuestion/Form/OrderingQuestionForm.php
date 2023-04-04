@@ -207,7 +207,7 @@ class OrderingQuestionForm extends ContentObjectForm
                     OrderingQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']',
                     Translation::get('Item'),
                     $html_editor_options);
-                $group[] = & $this->createElement(
+                $group[] = $this->createElement(
                     'select',
                     OrderingQuestionOption::PROPERTY_ORDER . '[' . $option_number . ']',
                     Translation::get('Rank'),
@@ -216,7 +216,7 @@ class OrderingQuestionForm extends ContentObjectForm
                     OrderingQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']',
                     Translation::get('Feedback'),
                     $html_editor_options);
-                $group[] = & $this->createElement(
+                $group[] = $this->createElement(
                     'text',
                     OrderingQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']',
                     Translation::get('Score'),
@@ -224,7 +224,7 @@ class OrderingQuestionForm extends ContentObjectForm
 
                 if ($number_of_options - count($_SESSION['ordering_skip_options']) > 2)
                 {
-                    $group[] = & $this->createElement(
+                    $group[] = $this->createElement(
                         'image',
                         'remove[' . $option_number . ']',
                         Theme::getInstance()->getCommonImagePath('Action/Delete'),
@@ -232,7 +232,7 @@ class OrderingQuestionForm extends ContentObjectForm
                 }
                 else
                 {
-                    $group[] = & $this->createElement(
+                    $group[] = $this->createElement(
                         'static',
                         null,
                         null,

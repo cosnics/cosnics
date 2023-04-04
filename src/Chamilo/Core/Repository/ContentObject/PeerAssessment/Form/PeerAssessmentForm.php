@@ -17,7 +17,7 @@ use Chamilo\Libraries\Translation\Translation;
 class PeerAssessmentForm extends ContentObjectForm
 {
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $defaults[PeerAssessment::PROPERTY_SCALE] = $this->get_content_object()->get_scale();
         $defaults[PeerAssessment::PROPERTY_ASSESSMENT_TYPE] = $this->get_content_object()->get_assessment_type();
@@ -47,15 +47,15 @@ class PeerAssessmentForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_creation_form();
+        parent::build_creation_form($htmleditor_options, $in_tab);
         $this->build_default_form();
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
     {
-        parent::build_editing_form();
+        parent::build_editing_form($htmleditor_options, $in_tab);
         $this->build_default_form();
     }
 

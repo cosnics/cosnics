@@ -142,7 +142,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
         if (! isset($fields[AssessmentSelectQuestionOption::PROPERTY_CORRECT]))
         {
-            $message = ($answerType == AssessmentSelectQuestionOption::ANSWER_TYPE_CHECKBOX ? Translation::get(
+            $message = ($answerType == AssessmentSelectQuestion::ANSWER_TYPE_CHECKBOX ? Translation::get(
                 'SelectAtLeastOneCorrectAnswer') : Translation::get('SelectACorrectAnswer'));
             return array('change_answer_type' => $message);
         }
