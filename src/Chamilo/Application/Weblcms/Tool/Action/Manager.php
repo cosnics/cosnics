@@ -88,7 +88,7 @@ abstract class Manager extends Application implements NoContextComponent
         return $this->get_parent()->get_categories($list);
     }
 
-    public function get_category($id)
+    public function get_category($id = null)
     {
         return $this->get_parent()->get_category($id);
     }

@@ -51,7 +51,7 @@ class CategoryTable extends DataClassTable implements TableFormActionsSupport
         }
 
         // add check for VisibilitSupported marker interface
-        if ($this->get_component()->category_visibility_supported())
+        if (method_exists($this->get_component(), 'category_visibility_supported') && $this->get_component()->category_visibility_supported())
         {
             $actions->add_form_action(
                 new TableFormAction(

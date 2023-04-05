@@ -535,7 +535,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $location <type>
      * @return <array> two dimensional array: type => id
      */
-    public function retrieve_target_entities_array($right_id, $context, $location)
+    public static function retrieve_target_entities_array($right_id, $context, $location)
     {
         if (is_null($location) && ! is_object($location))
         {

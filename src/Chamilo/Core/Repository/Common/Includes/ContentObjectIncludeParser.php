@@ -45,7 +45,7 @@ abstract class ContentObjectIncludeParser
         return array('image', 'embed', 'youtube', 'chamilo');
     }
 
-    public function parse_includes($form)
+    public static function parse_includes($form)
     {
         $content_object = $form->get_content_object();
 

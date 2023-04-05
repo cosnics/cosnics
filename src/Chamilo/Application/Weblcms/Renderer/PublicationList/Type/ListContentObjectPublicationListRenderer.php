@@ -84,7 +84,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     {
         $publications = $this->get_page_publications();
 
-        if (count($publications) == 0)
+        if (!is_array($publications) || count($publications) == 0)
         {
             return Display::normal_message(Translation::get('NoPublications', null, Utilities::COMMON_LIBRARIES), true);
         }

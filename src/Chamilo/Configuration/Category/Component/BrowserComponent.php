@@ -86,7 +86,7 @@ class BrowserComponent extends Manager implements TableSupport
             $html[] = $table->as_html();
         }
 
-        return implode($html, "\n");
+        return implode("\n", $html);
     }
 
     public function get_condition()

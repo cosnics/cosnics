@@ -192,7 +192,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
      * By default the publication is for everybody who has access to the tool and
      * the publication will be available forever.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $publications = $this->publications;
 
@@ -447,7 +447,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $this->addElement(
             'static',
-            null,
+            '',
             '',
             '<div class="email-not-possible alert alert-info hidden">' .
             $this->getTranslation('SendEmailNotPossibleForDelayedPublications') . '</div>'
@@ -921,8 +921,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         {
             return false;
         }
-
-        if ($values[self::PROPERTY_RIGHTS_SELECTOR] == self::RIGHTS_INHERIT)
+        if ($values[self::PROPERTY_RIGHTS_SELECTOR][self::PROPERTY_RIGHTS_SELECTOR] == self::RIGHTS_INHERIT)
         {
             if (!$location->inherits())
             {
@@ -944,7 +943,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
                 }
             }
 
-            $option = $values[self::PROPERTY_RIGHTS_SELECTOR];
+            $option = $values[self::PROPERTY_RIGHTS_SELECTOR][self::PROPERTY_RIGHTS_SELECTOR];
             $location_id = $location->get_id();
 
             $weblcms_rights = WeblcmsRights::getInstance();
@@ -952,13 +951,14 @@ class ContentObjectPublicationForm extends BasePublicationForm
             switch ($option)
             {
                 case self::RIGHTS_FOR_ALL :
-                    if (!$weblcms_rights->invert_location_entity_right(WeblcmsRights::VIEW_RIGHT, 0, 0, $location_id))
+                    if (!$weblcms_rights->invert_location_entity_right(Manager::context(), WeblcmsRights::VIEW_RIGHT, 0, 0, $location_id))
                     {
                         return false;
                     }
                     break;
                 case self::RIGHTS_FOR_ME :
                     if (!$weblcms_rights->invert_location_entity_right(
+                        Manager::context(),
                         WeblcmsRights::VIEW_RIGHT,
                         Session::get_user_id(),
                         CourseUserEntity::ENTITY_TYPE,
@@ -974,6 +974,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
                         foreach ($target_ids as $target_id)
                         {
                             if (!$weblcms_rights->invert_location_entity_right(
+                                Manager::context(),
                                 WeblcmsRights::VIEW_RIGHT,
                                 $target_id,
                                 $entity_type,

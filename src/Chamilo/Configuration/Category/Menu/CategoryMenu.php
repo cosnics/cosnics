@@ -109,7 +109,7 @@ class CategoryMenu extends HtmlMenu
 
                 $sub_menu_items = $this->get_menu_items($object->get_id());
 
-                if (count($sub_menu_items) > 0)
+                if (is_array($sub_menu_items) && count($sub_menu_items) > 0)
                 {
                     $menu_item['sub'] = $sub_menu_items;
                 }

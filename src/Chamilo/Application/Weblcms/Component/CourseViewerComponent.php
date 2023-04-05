@@ -304,7 +304,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
 
     private $is_teacher;
 
-    public function is_teacher()
+    public function is_teacher($course = null, $user = null)
     {
         if (is_null($this->is_teacher))
         {

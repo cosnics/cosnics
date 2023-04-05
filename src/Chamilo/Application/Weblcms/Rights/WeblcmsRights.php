@@ -175,7 +175,7 @@ class WeblcmsRights extends RightsUtil
         // selected
         // item in the dropdownlist which works confusing when you expect
         // "everybody"
-        if (array_key_exists(0, $entities[0]))
+        if (is_array($entities[0]) && array_key_exists(0, $entities[0]))
         {
             $target_list[] = Translation::get('Everybody', null, Utilities::COMMON_LIBRARIES);
         }

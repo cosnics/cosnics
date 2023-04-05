@@ -109,7 +109,8 @@ class InCondition extends Condition
         $hashParts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
 
         $values = $this->get_values();
-        ksort($values);
+        if(is_array($values))
+            ksort($values);
         $hashParts[] = $values;
 
         $hashParts[] = $this->get_storage_unit();

@@ -144,7 +144,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $sections->reset();
 
-        if ($sections->size() == O)
+        if ($sections->size() == 0)
         {
             return '<div class="alert alert-warning">' . Translation::get('NoVisibleCourseSections') . '</div>';
         }
