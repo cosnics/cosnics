@@ -36,7 +36,7 @@ class ImpactViewComponent extends Manager
         
         $category_ids = $this->get_selected_category_ids();
         
-        $category_class_name = get_class($this->get_parent()->get_category());
+        $category_class_name = get_class($this->get_parent()->getCategory());
         $has_impact = $this->has_impact();
         $form = new ImpactViewForm($this->get_url(array(self::PARAM_CATEGORY_ID => $category_ids)));
 

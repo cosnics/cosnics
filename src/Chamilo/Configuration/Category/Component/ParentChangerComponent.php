@@ -48,7 +48,7 @@ class ParentChangerComponent extends Manager
 
         $this->set_parameter(self::PARAM_CATEGORY_ID, $ids);
 
-        $category_class_name = get_class($this->get_parent()->geCategory());
+        $category_class_name = get_class($this->get_parent()->getCategory());
 
         if (count($ids) != 0)
         {
@@ -174,7 +174,7 @@ class ParentChangerComponent extends Manager
         }
         $form->addElement(
             'static',
-            null,
+            '',
             Translation::get(
                 'ObjectSelected',
                 array('OBJECT' => Translation::get(count($selected_categories) > 1 ? 'Categories' : 'Category')),

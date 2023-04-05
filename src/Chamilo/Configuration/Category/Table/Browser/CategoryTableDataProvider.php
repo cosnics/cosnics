@@ -20,10 +20,14 @@ class CategoryTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         $category_class_name = get_class($this->get_component()->get_parent()->getCategory());
-        $order_property[] = new OrderBy(
+
+        if(is_null($order_property))
+            $order_property = [];
+
+        array_unshift($order_property, new OrderBy(
             new PropertyConditionVariable(
                 $category_class_name::class_name(),
-                $category_class_name::PROPERTY_DISPLAY_ORDER));
+                $category_class_name::PROPERTY_DISPLAY_ORDER)));
         return $this->get_component()->get_parent()->retrieve_categories($condition, $offset, $count, $order_property);
     }
 

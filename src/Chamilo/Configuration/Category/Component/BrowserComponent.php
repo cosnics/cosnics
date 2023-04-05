@@ -91,7 +91,7 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function get_condition()
     {
-        $category_class_name = get_class($this->get_parent()->get_category());
+        $category_class_name = get_class($this->get_parent()->getCategory());
         $class_name = $category_class_name::class_name();
 
         $cat_id = $this->get_category_id();

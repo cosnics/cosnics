@@ -200,7 +200,7 @@ class CategoryForm extends FormValidator
         {
             if (strpos($key, 'name') !== false)
             {
-                $category = $this->manager->get_parent()->get_category();
+                $category = $this->manager->get_parent()->getCategory();
                 $category->set_name($value);
                 $category->set_parent($this->category->get_parent());
                 $category->set_display_order(
