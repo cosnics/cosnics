@@ -39,9 +39,9 @@ class Encrypter
         {
             throw new \Dropbox\Exception('The storage encrypter requires the MCrypt extension');
         }
-        elseif (($length = mb_strlen($key, '8bit')) !== self :: KEY_SIZE)
+        elseif (($length = mb_strlen($key, '8bit')) !== self::KEY_SIZE)
         {
-            throw new \Dropbox\Exception('Expecting a ' . self :: KEY_SIZE . ' byte key, got ' . $length);
+            throw new \Dropbox\Exception('Expecting a ' . self::KEY_SIZE . ' byte key, got ' . $length);
         }
         else
         {
@@ -59,8 +59,8 @@ class Encrypter
     public function encrypt($token)
     {
         $data = serialize($token);
-        $iv = mcrypt_create_iv(self :: IV_SIZE, self :: IV_SOURCE);
-        $cipherText = mcrypt_encrypt(self :: CIPHER, $this->key, $data, self :: MODE, $iv);
+        $iv = mcrypt_create_iv(self::IV_SIZE, self::IV_SOURCE);
+        $cipherText = mcrypt_encrypt(self::CIPHER, $this->key, $data, self::MODE, $iv);
         return base64_encode($iv . $cipherText);
     }
 
@@ -73,9 +73,9 @@ class Encrypter
     public function decrypt($cipherText)
     {
         $cipherText = base64_decode($cipherText);
-        $iv = substr($cipherText, 0, self :: IV_SIZE);
-        $cipherText = substr($cipherText, self :: IV_SIZE);
-        $data = mcrypt_decrypt(self :: CIPHER, $this->key, $cipherText, self :: MODE, $iv);
+        $iv = substr($cipherText, 0, self::IV_SIZE);
+        $cipherText = substr($cipherText, self::IV_SIZE);
+        $data = mcrypt_decrypt(self::CIPHER, $this->key, $cipherText, self::MODE, $iv);
         $token = @unserialize($data);
         if ($token === false)
         { // Unserialize fails if $token is boolean false

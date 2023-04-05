@@ -54,8 +54,8 @@ class RightsUtil
         return self::$instance;
     }
 
-    public function create_location($context, $type = self :: TYPE_ROOT, $identifier = 0, $inherit = 0, $parent = 0, $locked = 0, 
-        $tree_identifier = 0, $tree_type = self :: TREE_TYPE_ROOT, $return_location = false, $create_in_batch = false)
+    public function create_location($context, $type = self::TYPE_ROOT, $identifier = 0, $inherit = 0, $parent = 0, $locked = 0,
+        $tree_identifier = 0, $tree_type = self::TREE_TYPE_ROOT, $return_location = false, $create_in_batch = false)
     {
         $rights_location_class = $context . '\Storage\DataClass\RightsLocation';
         if (! class_exists($rights_location_class))
@@ -93,8 +93,8 @@ class RightsUtil
         return in_array($right, $rights_array);
     }
 
-    public function is_allowed($right, $context, $user_id, $entities, $identifier = 0, $type = self :: TYPE_ROOT, $tree_identifier = 0, 
-        $tree_type = self :: TREE_TYPE_ROOT)
+    public function is_allowed($right, $context, $user_id, $entities, $identifier = 0, $type = self::TYPE_ROOT, $tree_identifier = 0,
+        $tree_type = self::TREE_TYPE_ROOT)
     {
         
         // //todo: make inherit optional check
@@ -514,8 +514,8 @@ class RightsUtil
      * @throws Exception
      * @return \Chamilo\Core\Rights\Storage\<array>
      */
-    public function get_target_entities($right_id, $context, $identifier = 0, $type = self :: TYPE_ROOT, $tree_identifier = 0, 
-        $tree_type = self :: TREE_TYPE_ROOT)
+    public function get_target_entities($right_id, $context, $identifier = 0, $type = self::TYPE_ROOT, $tree_identifier = 0,
+        $tree_type = self::TREE_TYPE_ROOT)
     {
         $location = $this->get_location_by_identifier($context, $type, $identifier, $tree_identifier, $tree_type);
         
@@ -562,7 +562,7 @@ class RightsUtil
     }
 
     public function get_location_by_identifier($context, $type, $identifier, $tree_identifier = '0', 
-        $tree_type = self :: TREE_TYPE_ROOT)
+        $tree_type = self::TREE_TYPE_ROOT)
     {
         return DataManager::retrieve_rights_location_by_identifier(
             $context, 
@@ -573,7 +573,7 @@ class RightsUtil
     }
 
     public function get_location_id_by_identifier($context, $type, $identifier, $tree_identifier = '0', 
-        $tree_type = self :: TREE_TYPE_ROOT)
+        $tree_type = self::TREE_TYPE_ROOT)
     {
         $location = $this->get_location_by_identifier($context, $type, $identifier, $tree_identifier, $tree_type);
         if ($location)
@@ -600,7 +600,7 @@ class RightsUtil
             $return_location);
     }
 
-    public function get_root_id($context, $tree_type = self :: TREE_TYPE_ROOT, $tree_identifier = 0)
+    public function get_root_id($context, $tree_type = self::TREE_TYPE_ROOT, $tree_identifier = 0)
     {
         $root = $this->get_root($context, $tree_type, $tree_identifier);
         if ($root)
@@ -613,7 +613,7 @@ class RightsUtil
         }
     }
 
-    public function get_root($context, $tree_type = self :: TREE_TYPE_ROOT, $tree_identifier = 0)
+    public function get_root($context, $tree_type = self::TREE_TYPE_ROOT, $tree_identifier = 0)
     {
         $class = $context . '\Storage\DataClass\RightsLocation';
         

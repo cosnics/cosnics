@@ -74,7 +74,7 @@ class DynamicVisualTab extends DynamicTab
      * @param integer $target
      */
     public function __construct($id, $name, $image, $link, $selected = false, $confirmation = false,
-        $position = self :: POSITION_LEFT, $display = self :: DISPLAY_BOTH, $target = self :: TARGET_WINDOW)
+        $position = self::POSITION_LEFT, $display = self::DISPLAY_BOTH, $target = self::TARGET_WINDOW)
     {
         parent::__construct($id, $name, $image);
         $this->link = $link;

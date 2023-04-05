@@ -705,7 +705,7 @@ abstract class Application
      */
     public function get_general_result(
         $failures, $count, $singleObject, $multipleObject,
-        $type = Application :: RESULT_TYPE_CREATED
+        $type = Application::RESULT_TYPE_CREATED
     )
     {
         if ($count == 1)
@@ -910,7 +910,7 @@ abstract class Application
      *
      * @return string[]
      */
-    public static function get_active_packages($type = Registration :: TYPE_APPLICATION)
+    public static function get_active_packages($type = Registration::TYPE_APPLICATION)
     {
         $applications = \Chamilo\Configuration\Configuration::registrations_by_type($type);
 

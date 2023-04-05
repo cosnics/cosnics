@@ -13,7 +13,7 @@ class MediawikiParserOutput
     $mContainsOldMagic,     // Boolean variable indicating if the input contained variables like {{CURRENTDAY}}
     $mTitleText,     // title text of the chosen language variant
     $mCacheTime = '',     // Time when this object was generated, or -1 for uncacheable. Used in ParserCache.
-    $mVersion = MediawikiParser :: VERSION,     // Compatibility check
+    $mVersion = MediawikiParser::VERSION,     // Compatibility check
     $mLinks = array(),     // 2-D map of NS/DBK to ID for the links in the document. ID=zero for broken.
     $mTemplates = array(),     // 2-D map of NS/DBK to ID for the template references. ID=zero for broken.
     $mTemplateIds = array(),     // 2-D map of NS/DBK to rev ID for the template references. ID=zero for broken.
@@ -278,7 +278,7 @@ class MediawikiParserOutput
         global $wgCacheEpoch;
         return $this->getCacheTime() == - 1 ||         // parser says it's uncacheable
         $this->getCacheTime() < $touched || $this->getCacheTime() <= $wgCacheEpoch || ! isset($this->mVersion) ||
-             version_compare($this->mVersion, MediawikiParser :: VERSION, "lt");
+             version_compare($this->mVersion, MediawikiParser::VERSION, "lt");
     }
 
     /**

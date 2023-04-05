@@ -106,7 +106,7 @@ class ActionBarRenderer
      * @param string $type
      * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $action
      */
-    public function add_action($type = self :: ACTION_BAR_COMMON, $action)
+    public function add_action($type = self::ACTION_BAR_COMMON, $action)
     {
         $this->actions[$type][] = $action;
     }

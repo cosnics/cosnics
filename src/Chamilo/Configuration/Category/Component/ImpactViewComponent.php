@@ -79,7 +79,7 @@ class ImpactViewComponent extends Manager
             $this->redirect(
                 $result,
                 $failures > 0,
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CATEGORIES, self :: PARAM_CATEGORY_ID => null )
+                array(self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES, self::PARAM_CATEGORY_ID => null )
             );
         }
         else
@@ -132,10 +132,10 @@ class ImpactViewComponent extends Manager
      */
     protected function get_selected_category_ids()
     {
-        $category_ids = $this->getRequest()->request->get(self :: PARAM_CATEGORY_ID);
+        $category_ids = $this->getRequest()->request->get(self::PARAM_CATEGORY_ID);
 
         if(empty($category_ids)) {
-            $category_ids = $this->getRequest()->query->get(self :: PARAM_CATEGORY_ID);
+            $category_ids = $this->getRequest()->query->get(self::PARAM_CATEGORY_ID);
         }
 
         if (empty($category_ids))

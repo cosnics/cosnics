@@ -45,7 +45,7 @@ class IdentRenderer
      * @param boolean $isDisabled
      * @param string $size
      */
-    public function __construct($identifier, $isNew = false, $isDisabled = false, $size = self :: SIZE_MD)
+    public function __construct($identifier, $isNew = false, $isDisabled = false, $size = self::SIZE_MD)
     {
         $this->identifier = $identifier;
         $this->size = $size;

@@ -210,7 +210,7 @@ class MediawikiLinkHolderArray
                 else
                 {
                     $title_conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE),
+                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject::PROPERTY_TITLE),
                         new StaticConditionVariable($title->getText()));
                 }
             }
@@ -239,12 +239,12 @@ class MediawikiLinkHolderArray
             $complex_wiki_page_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem :: class_name(),
-                    ComplexContentObjectItem :: PROPERTY_PARENT),
+                    ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($wiki->get_id()));
             $complex_wiki_page_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem :: class_name(),
-                    ComplexContentObjectItem :: PROPERTY_REF),
+                    ComplexContentObjectItem::PROPERTY_REF),
                 new StaticConditionVariable($wiki_page->get_id()));
 
             $current_complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieves(
@@ -277,8 +277,8 @@ class MediawikiLinkHolderArray
                 else
                 {
                     $query_parameters = $this->parent->get_mediawiki_parser_context()->get_parameters();
-                    $query_parameters[\Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION] = \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager :: ACTION_VIEW_WIKI_PAGE;
-                    $query_parameters[\Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $wiki_complex_ids[$pdbk];
+                    $query_parameters[\Chamilo\Core\Repository\Display\Manager::PARAM_ACTION] = \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager::ACTION_VIEW_WIKI_PAGE;
+                    $query_parameters[\Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $wiki_complex_ids[$pdbk];
 
                     $replacePairs[$searchkey] = MediawikiLinker :: makeColouredLinkObj(
                         $title,

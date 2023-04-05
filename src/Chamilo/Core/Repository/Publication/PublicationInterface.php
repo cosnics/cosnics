@@ -46,7 +46,7 @@ interface PublicationInterface
      * @param \libraries\storage\Condition $condition
      * @return multitype:mixed
      */
-    public static function get_content_object_publication_attributes($object_id, $type = self :: ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null, 
+    public static function get_content_object_publication_attributes($object_id, $type = self::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null,
         $offset = null, $order_properties = null);
 
     /**
@@ -65,7 +65,7 @@ interface PublicationInterface
      * @param \libraries\storage\Condition $condition
      * @return int
      */
-    public static function count_publication_attributes($attributes_type = self :: ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null);
+    public static function count_publication_attributes($attributes_type = self::ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null);
 
     /**
      * Deletes all publications of a given content object in the implementing context

@@ -80,7 +80,7 @@ class Page
      * @param \Chamilo\Libraries\Format\Structure\HeaderInterface $header
      * @param \Chamilo\Libraries\Format\Structure\FooterInterface $footer
      */
-    public function __construct($viewMode = self :: VIEW_MODE_FULL, $containerMode = 'container-fluid', HeaderInterface $header, FooterInterface $footer)
+    public function __construct($viewMode = self::VIEW_MODE_FULL, $containerMode = 'container-fluid', HeaderInterface $header, FooterInterface $footer)
     {
         $this->viewMode = $viewMode;
         $this->containerMode = $containerMode;

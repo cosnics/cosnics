@@ -174,7 +174,7 @@ class WorkspaceRepository
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
      */
-    private function getSharedWorkspacesForEntitiesWithRightCondition($entities, $right = RightsService :: RIGHT_VIEW)
+    private function getSharedWorkspacesForEntitiesWithRightCondition($entities, $right = RightsService::RIGHT_VIEW)
     {
         $conditions = array();
 
@@ -213,7 +213,7 @@ class WorkspaceRepository
      *
      * @return \Chamilo\Libraries\Storage\Query\Join
      */
-    private function getSharedWorkspacesJoin($joinType = Join :: TYPE_NORMAL)
+    private function getSharedWorkspacesJoin($joinType = Join::TYPE_NORMAL)
     {
         return new Join(
             WorkspaceEntityRelation::class_name(),
@@ -305,7 +305,7 @@ class WorkspaceRepository
      *
      * @return \Chamilo\Libraries\Storage\Query\Join
      */
-    private function getFavouritesJoin($joinType = Join :: TYPE_NORMAL)
+    private function getFavouritesJoin($joinType = Join::TYPE_NORMAL)
     {
         return new Join(
             WorkspaceUserFavourite::class_name(),

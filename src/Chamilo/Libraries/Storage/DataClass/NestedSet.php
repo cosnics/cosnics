@@ -318,7 +318,7 @@ abstract class NestedSet extends DataClass
      * @return \Chamilo\Libraries\Storage\DataClass\NestedSet the node that identifies the position where to insert a
      *         new/moved node
      */
-    public function validate_position($position = self :: AS_LAST_CHILD_OF, &$reference_node = null)
+    public function validate_position($position = self::AS_LAST_CHILD_OF, &$reference_node = null)
     {
         if ($position == self::AS_PREVIOUS_SIBLING_OF || $position == self::AS_NEXT_SIBLING_OF)
         {
@@ -578,7 +578,7 @@ abstract class NestedSet extends DataClass
      *
      * @see \Chamilo\Libraries\Storage\DataClass\DataClass::create()
      */
-    public function create($position = self :: AS_LAST_CHILD_OF, $reference_node = null)
+    public function create($position = self::AS_LAST_CHILD_OF, $reference_node = null)
     {
         // This variable is used to identify the node after which the newly
         // created node should be placed. This value is initialized with 0
@@ -654,7 +654,7 @@ abstract class NestedSet extends DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @return boolean
      */
-    public function move($position = self :: AS_LAST_CHILD_OF, $reference_node = null, $condition = null)
+    public function move($position = self::AS_LAST_CHILD_OF, $reference_node = null, $condition = null)
     {
         if ($this->validate_position($position, $reference_node) === null)
         {

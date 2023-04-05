@@ -73,7 +73,7 @@ class Manager implements PublicationInterface
     /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::get_content_object_publication_attributes()
      */
-    public static function get_content_object_publication_attributes($object_id, $type = self :: ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null, 
+    public static function get_content_object_publication_attributes($object_id, $type = self::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null,
         $offset = null, $order_properties = null)
     {
         switch ($type)
@@ -210,7 +210,7 @@ class Manager implements PublicationInterface
     /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::count_publication_attributes()
      */
-    public static function count_publication_attributes($attributes_type = self :: ATTRIBUTES_TYPE_OBJECT, $identifier = null, $condition = null)
+    public static function count_publication_attributes($attributes_type = self::ATTRIBUTES_TYPE_OBJECT, $identifier = null, $condition = null)
     {
         switch ($attributes_type)
         {

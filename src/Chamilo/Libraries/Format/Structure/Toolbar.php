@@ -44,7 +44,7 @@ class Toolbar
      * @param string[] $class_names
      * @param string $css
      */
-    public function __construct($type = self :: TYPE_HORIZONTAL, $class_names = array(), $css = null)
+    public function __construct($type = self::TYPE_HORIZONTAL, $class_names = array(), $css = null)
     {
         $this->type = $type;
         $this->class_names = $class_names;

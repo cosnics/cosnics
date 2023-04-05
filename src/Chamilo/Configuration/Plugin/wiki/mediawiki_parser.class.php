@@ -1066,7 +1066,7 @@ class MediawikiParser
         }
         
         // Ugly state machine to walk through avoiding tags.
-        $state = self :: COLON_STATE_TEXT;
+        $state = self::COLON_STATE_TEXT;
         $stack = 0;
         $len = strlen($str);
         for ($i = 0; $i < $len; $i ++)
@@ -1081,7 +1081,7 @@ class MediawikiParser
                     {
                         case "<" :
                             // Could be either a <start> tag or an </end> tag
-                            $state = self :: COLON_STATE_TAGSTART;
+                            $state = self::COLON_STATE_TAGSTART;
                             break;
                         case ":" :
                             if ($stack == 0)
@@ -1120,7 +1120,7 @@ class MediawikiParser
                             }
                             // Skip ahead to next tag start
                             $i = $lt;
-                            $state = self :: COLON_STATE_TAGSTART;
+                            $state = self::COLON_STATE_TAGSTART;
                     }
                     break;
                 case 1 : // self::COLON_STATE_TAG:
@@ -1129,11 +1129,11 @@ class MediawikiParser
                     {
                         case ">" :
                             $stack ++;
-                            $state = self :: COLON_STATE_TEXT;
+                            $state = self::COLON_STATE_TEXT;
                             break;
                         case "/" :
                             // Slash may be followed by >?
-                            $state = self :: COLON_STATE_TAGSLASH;
+                            $state = self::COLON_STATE_TAGSLASH;
                             break;
                         default :
                         
@@ -1144,17 +1144,17 @@ class MediawikiParser
                     switch ($c)
                     {
                         case "/" :
-                            $state = self :: COLON_STATE_CLOSETAG;
+                            $state = self::COLON_STATE_CLOSETAG;
                             break;
                         case "!" :
-                            $state = self :: COLON_STATE_COMMENT;
+                            $state = self::COLON_STATE_COMMENT;
                             break;
                         case ">" :
                             // Illegal early close? This shouldn't happen D:
-                            $state = self :: COLON_STATE_TEXT;
+                            $state = self::COLON_STATE_TEXT;
                             break;
                         default :
-                            $state = self :: COLON_STATE_TAG;
+                            $state = self::COLON_STATE_TAG;
                     }
                     break;
                 case 3 : // self::COLON_STATE_CLOSETAG:
@@ -1166,45 +1166,45 @@ class MediawikiParser
                         {
                             return false;
                         }
-                        $state = self :: COLON_STATE_TEXT;
+                        $state = self::COLON_STATE_TEXT;
                     }
                     break;
-                case self :: COLON_STATE_TAGSLASH :
+                case self::COLON_STATE_TAGSLASH :
                     if ($c === ">")
                     {
                         // Yes, a self-closed tag <blah/>
-                        $state = self :: COLON_STATE_TEXT;
+                        $state = self::COLON_STATE_TEXT;
                     }
                     else
                     {
                         // Probably we're jumping the gun, and this is an attribute
-                        $state = self :: COLON_STATE_TAG;
+                        $state = self::COLON_STATE_TAG;
                     }
                     break;
                 case 5 : // self::COLON_STATE_COMMENT:
                     if ($c === "-")
                     {
-                        $state = self :: COLON_STATE_COMMENTDASH;
+                        $state = self::COLON_STATE_COMMENTDASH;
                     }
                     break;
-                case self :: COLON_STATE_COMMENTDASH :
+                case self::COLON_STATE_COMMENTDASH :
                     if ($c === "-")
                     {
-                        $state = self :: COLON_STATE_COMMENTDASHDASH;
+                        $state = self::COLON_STATE_COMMENTDASHDASH;
                     }
                     else
                     {
-                        $state = self :: COLON_STATE_COMMENT;
+                        $state = self::COLON_STATE_COMMENT;
                     }
                     break;
-                case self :: COLON_STATE_COMMENTDASHDASH :
+                case self::COLON_STATE_COMMENTDASHDASH :
                     if ($c === ">")
                     {
-                        $state = self :: COLON_STATE_TEXT;
+                        $state = self::COLON_STATE_TEXT;
                     }
                     else
                     {
-                        $state = self :: COLON_STATE_COMMENT;
+                        $state = self::COLON_STATE_COMMENT;
                     }
                     break;
                 default :
@@ -1367,7 +1367,7 @@ class MediawikiParser
         $prevlevel = 0;
         $toclevel = 0;
         $prevtoclevel = 0;
-        $markerRegex = "{$this->mUniqPrefix}-h-(\d+)-" . self :: MARKER_SUFFIX;
+        $markerRegex = "{$this->mUniqPrefix}-h-(\d+)-" . self::MARKER_SUFFIX;
         // $baseTitleText = $this->mTitle->getPrefixedDBkey();
         $tocraw = array();
         

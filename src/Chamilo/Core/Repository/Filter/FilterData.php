@@ -239,7 +239,7 @@ class FilterData
      * @param string $part_type
      * @return int NULL
      */
-    public function get_date($date_type = self :: FILTER_CREATION_DATE, $part_type = self :: FILTER_FROM_DATE)
+    public function get_date($date_type = self::FILTER_CREATION_DATE, $part_type = self::FILTER_FROM_DATE)
     {
         $filter_property = $this->get_filter_property($date_type);
         
@@ -258,7 +258,7 @@ class FilterData
      * @param string $type
      * @return int NULL
      */
-    public function get_creation_date($type = self :: FILTER_FROM_DATE)
+    public function get_creation_date($type = self::FILTER_FROM_DATE)
     {
         return $this->get_date(self::FILTER_CREATION_DATE, $type);
     }
@@ -268,7 +268,7 @@ class FilterData
      * @param string $type
      * @return int NULL
      */
-    public function get_modification_date($type = self :: FILTER_FROM_DATE)
+    public function get_modification_date($type = self::FILTER_FROM_DATE)
     {
         return $this->get_date(self::FILTER_MODIFICATION_DATE, $type);
     }

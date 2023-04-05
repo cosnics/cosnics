@@ -79,7 +79,7 @@ class BaseHeader implements HeaderInterface
      * @param string $textDirection
      */
     public function __construct(
-        $viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid', $languageCode = 'en',
+        $viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid', $languageCode = 'en',
         $textDirection = 'ltr'
     )
     {

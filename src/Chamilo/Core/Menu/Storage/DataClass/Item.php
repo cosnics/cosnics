@@ -144,7 +144,7 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
         return $this->get_default_property(self::PROPERTY_DISPLAY);
     }
 
-    public function set_display($display = self :: DISPLAY_ICON)
+    public function set_display($display = self::DISPLAY_ICON)
     {
         $this->set_default_property(self::PROPERTY_DISPLAY, $display);
     }

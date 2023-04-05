@@ -57,7 +57,7 @@ class Display extends QuestionDisplay
 
         $formvalidator->addElement('html', '<div class="panel-body">');
 
-        if ($type == AssessmentSelectQuestion :: ANSWER_TYPE_CHECKBOX)
+        if ($type == AssessmentSelectQuestion::ANSWER_TYPE_CHECKBOX)
         {
             $advanced_select = $formvalidator->createElement(
                 'select',

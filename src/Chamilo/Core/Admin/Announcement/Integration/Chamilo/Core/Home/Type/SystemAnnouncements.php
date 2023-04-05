@@ -24,7 +24,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
         return array(self::CONFIGURATION_SHOW_EMPTY);
     }
 
-    public static function getDefaultImagePath($application = '', $type = '', $size = Theme :: ICON_MINI)
+    public static function getDefaultImagePath($application = '', $type = '', $size = Theme::ICON_MINI)
     {
         if ($type)
         {

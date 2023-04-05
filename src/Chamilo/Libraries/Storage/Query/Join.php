@@ -49,7 +49,7 @@ class Join implements Hashable
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $type
      */
-    public function __construct($dataClass, Condition $condition = null, $type = self :: TYPE_NORMAL)
+    public function __construct($dataClass, Condition $condition = null, $type = self::TYPE_NORMAL)
     {
         $this->set_data_class($dataClass);
         $this->set_condition($condition);

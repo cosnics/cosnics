@@ -151,7 +151,7 @@ class MediaWikiTitle
         {
             if ($defaultNamespace == NS_MAIN)
             {
-                if ($cachedcount >= self :: CACHE_MAX)
+                if ($cachedcount >= self::CACHE_MAX)
                 {
                     // Avoid memory leaks on mass operations...
                     MediawikiTitle :: $titleCache = array();

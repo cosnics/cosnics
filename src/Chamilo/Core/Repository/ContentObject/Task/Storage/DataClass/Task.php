@@ -352,7 +352,7 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
             self::PROPERTY_BYMONTHDAY);
     }
 
-    public function get_icon_name($size = Theme :: ICON_SMALL)
+    public function get_icon_name($size = Theme::ICON_SMALL)
     {
         if ($this->has_frequency())
         {
@@ -364,7 +364,7 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
         }
     }
 
-    public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
+    public function get_icon_image($size = Theme::ICON_SMALL, $is_available = true)
     {
         return static::icon_image(
             ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2), 
@@ -373,7 +373,7 @@ class Task extends ContentObject implements Versionable, AttachmentSupport, Incl
             $this->has_frequency());
     }
 
-    public static function icon_image($context, $size = Theme :: ICON_SMALL, $is_current = true, $has_frequency = false)
+    public static function icon_image($context, $size = Theme::ICON_SMALL, $is_current = true, $has_frequency = false)
     {
         if ($has_frequency)
         {

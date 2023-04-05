@@ -42,7 +42,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         return implode('<br />' . "\n", $html);
     }
 
-    public function get_available_size_dimensions($size = self :: SIZE_THUMBNAIL)
+    public function get_available_size_dimensions($size = self::SIZE_THUMBNAIL)
     {
         if (! in_array($size, self::get_default_sizes()))
         {
@@ -59,7 +59,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         return array('width' => $urls[$size]['width'], 'height' => $urls[$size]['height']);
     }
 
-    public function get_available_size_dimensions_string($size = self :: SIZE_THUMBNAIL)
+    public function get_available_size_dimensions_string($size = self::SIZE_THUMBNAIL)
     {
         $available_size_dimensions = $this->get_available_size_dimensions($size);
         
@@ -76,7 +76,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         return $this->set_default_property(self::PROPERTY_URLS, $urls);
     }
 
-    public function get_url($size = self :: SIZE_THUMBNAIL)
+    public function get_url($size = self::SIZE_THUMBNAIL)
     {
         if (! in_array($size, self::get_default_sizes()))
         {

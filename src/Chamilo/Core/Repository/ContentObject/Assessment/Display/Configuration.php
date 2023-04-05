@@ -82,7 +82,7 @@ class Configuration
      * @param int $feedback_location
      */
     public function __construct($allow_hints = true, $show_score = true, $show_correction = true, $show_solution = true, 
-        $show_answer_feedback = self :: ANSWER_FEEDBACK_TYPE_ALL, $feedback_location = self :: FEEDBACK_LOCATION_TYPE_BOTH)
+        $show_answer_feedback = self::ANSWER_FEEDBACK_TYPE_ALL, $feedback_location = self::FEEDBACK_LOCATION_TYPE_BOTH)
     {
         $this->allow_hints = $allow_hints;
         $this->show_score = $show_score;

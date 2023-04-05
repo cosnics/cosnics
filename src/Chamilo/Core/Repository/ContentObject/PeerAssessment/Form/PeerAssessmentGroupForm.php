@@ -37,7 +37,7 @@ class PeerAssessmentGroupForm extends FormValidator
      * 
      * @param PeerAssessmentDisplayViewerComponent $viewer
      */
-    public function __construct($viewer, $group_id, $url, $type = self :: FORM_TYPE_CREATE)
+    public function __construct($viewer, $group_id, $url, $type = self::FORM_TYPE_CREATE)
     {
         $this->viewer = $viewer;
         $this->group_id = $group_id;

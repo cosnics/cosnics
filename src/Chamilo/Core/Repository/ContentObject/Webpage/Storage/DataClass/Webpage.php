@@ -159,7 +159,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         return $this->get_storage_path() . $this->get_path();
     }
 
-    public function get_icon_name($size = Theme :: ICON_SMALL)
+    public function get_icon_name($size = Theme::ICON_SMALL)
     {
         $filename = $this->get_filename();
         $parts = explode('.', $filename);
@@ -179,13 +179,13 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         return $icon_name;
     }
 
-    public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
+    public function get_icon_image($size = Theme::ICON_SMALL, $is_available = true)
     {
         return '<img src="' . $this->get_icon_path($size) . '" alt="' . $this->get_extension() . '" title="' .
              htmlentities($this->get_extension()) . '"/>';
     }
 
-    public function get_icon_path($size = Theme :: ICON_SMALL)
+    public function get_icon_path($size = Theme::ICON_SMALL)
     {
         $extension = (string) StringUtilities::getInstance()->createString($this->get_extension())->upperCamelize();
         

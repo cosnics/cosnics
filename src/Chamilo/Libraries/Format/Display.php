@@ -54,7 +54,7 @@ class Display
      * @param string $message
      * @return string
      */
-    public static function message($type = self :: MESSAGE_TYPE_NORMAL, $message)
+    public static function message($type = self::MESSAGE_TYPE_NORMAL, $message)
     {
         $html = array();
 

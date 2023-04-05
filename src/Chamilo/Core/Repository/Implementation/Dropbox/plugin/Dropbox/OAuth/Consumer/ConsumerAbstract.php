@@ -75,7 +75,7 @@ abstract class ConsumerAbstract
     {
         // Nullify any request token we already have
         $this->storage->set(null, 'request_token');
-        $url = API :: API_URL . self :: REQUEST_TOKEN_METHOD;
+        $url = API::API_URL . self::REQUEST_TOKEN_METHOD;
         $response = $this->fetch('POST', $url, '');
         $token = $this->parseTokenString($response['body']);
         $this->storage->set($token, 'request_token');
@@ -117,7 +117,7 @@ abstract class ConsumerAbstract
         
         // Build the URL and redirect the user
         $query = '?' . http_build_query($params, '', '&');
-        $url = self :: WEB_URL . self :: AUTHORISE_METHOD . $query;
+        $url = self::WEB_URL . self::AUTHORISE_METHOD . $query;
         return $url;
     }
 
@@ -131,7 +131,7 @@ abstract class ConsumerAbstract
     public function getAccessToken()
     {
         // Get the signed request URL
-        $response = $this->fetch('POST', API :: API_URL, self :: ACCESS_TOKEN_METHOD);
+        $response = $this->fetch('POST', API::API_URL, self::ACCESS_TOKEN_METHOD);
         $token = $this->parseTokenString($response['body']);
         $this->storage->set($token, 'access_token');
     }

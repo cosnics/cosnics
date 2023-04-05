@@ -236,8 +236,8 @@ class MediawikiLinker
         // (i.e., for a nonexistent special page).
         if (in_array('broken', $options) and empty($query['action']) and $target->getNamespace() != NS_SPECIAL)
         {
-            $query[\Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ACTION] = \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager :: ACTION_CREATE_PAGE;
-            $query[ContentObject :: PROPERTY_TITLE] = $target->getText();
+            $query[\Chamilo\Core\Repository\Display\Action\Manager::PARAM_ACTION] = \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager::ACTION_CREATE_PAGE;
+            $query[ContentObject::PROPERTY_TITLE] = $target->getText();
             
             // $query['redlink'] = '1';
         }

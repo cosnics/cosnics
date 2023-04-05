@@ -58,7 +58,7 @@ class PlatformPackageBundles
      * @param int $mode
      * @return \Chamilo\Configuration\Package\PlatformPackageBundles
      */
-    public static function getInstance($mode = self :: MODE_ALL)
+    public static function getInstance($mode = self::MODE_ALL)
     {
         if (! isset(self::$instance[$mode]))
         {
@@ -72,7 +72,7 @@ class PlatformPackageBundles
      *
      * @param int $mode
      */
-    public function __construct($mode = self :: MODE_ALL)
+    public function __construct($mode = self::MODE_ALL)
     {
         $this->mode = $mode;
         $this->initialize();
@@ -157,7 +157,7 @@ class PlatformPackageBundles
         $this->reset_mode($this->mode);
     }
 
-    public function reset_mode($mode = self :: MODE_ALL)
+    public function reset_mode($mode = self::MODE_ALL)
     {
         $this->getPackageBundlesCacheService()->clearForIdentifier($this->mode);
     }

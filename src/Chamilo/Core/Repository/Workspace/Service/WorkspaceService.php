@@ -134,7 +134,7 @@ class WorkspaceService
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
-    public function getWorkspacesForUser(User $user, $right = RightsService :: RIGHT_VIEW, $limit = null, $offset = null, $orderProperty = null)
+    public function getWorkspacesForUser(User $user, $right = RightsService::RIGHT_VIEW, $limit = null, $offset = null, $orderProperty = null)
     {
         return $this->getWorkspaceRepository()->findWorkspacesForUser(
             $user, 
@@ -158,7 +158,7 @@ class WorkspaceService
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
-    public function getWorkspacesForUserWithExcludedWorkspaces(User $user, $right = RightsService :: RIGHT_VIEW, 
+    public function getWorkspacesForUserWithExcludedWorkspaces(User $user, $right = RightsService::RIGHT_VIEW,
         $excludedWorkspaceIdentifiers = array(), $limit, $offset, $orderProperty = null)
     {
         return $this->getWorkspaceRepository()->findWorkspacesForUserWithExcludedWorkspaces(
@@ -177,7 +177,7 @@ class WorkspaceService
      *
      * @return integer
      */
-    public function countWorkspacesForUser(User $user, $right = RightsService :: RIGHT_VIEW)
+    public function countWorkspacesForUser(User $user, $right = RightsService::RIGHT_VIEW)
     {
         return $this->getWorkspaceRepository()->countWorkspacesForUser($user, $this->getEntitiesForUser($user), $right);
     }
@@ -192,7 +192,7 @@ class WorkspaceService
      *
      * @return int
      */
-    public function countWorkspacesForUserWithExcludedWorkspaces(User $user, $right = RightsService :: RIGHT_VIEW, 
+    public function countWorkspacesForUserWithExcludedWorkspaces(User $user, $right = RightsService::RIGHT_VIEW,
         $excludedWorkspaceIdentifiers = array())
     {
         return $this->getWorkspaceRepository()->countWorkspacesForUserWithExcludedWorkspaces(

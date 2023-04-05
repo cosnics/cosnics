@@ -33,7 +33,7 @@ abstract class BaseFooter implements FooterInterface
      *
      * @param integer $viewMode
      */
-    public function __construct($viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid')
+    public function __construct($viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid')
     {
         $this->viewMode = $viewMode;
         $this->containerMode = $containerMode;

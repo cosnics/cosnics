@@ -50,7 +50,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      * @param integer $itemDisplay
      * @param boolean $needsCategory
      */
-    public function __construct($formValues, $itemDisplay = \Chamilo\Core\Menu\Storage\DataClass\Item :: DISPLAY_BOTH, $needsCategory = true)
+    public function __construct($formValues, $itemDisplay = \Chamilo\Core\Menu\Storage\DataClass\Item::DISPLAY_BOTH, $needsCategory = true)
     {
         parent::__construct($formValues);
         $this->itemDisplay = $itemDisplay;

@@ -70,7 +70,7 @@ class CreatorComponent extends Manager implements DelegateComponent
                 }
                 
                 $item->set_titles($item_titles);
-                $item->set_display(\Chamilo\Core\Menu\Storage\DataClass\Item :: DISPLAY_BOTH);
+                $item->set_display(\Chamilo\Core\Menu\Storage\DataClass\Item::DISPLAY_BOTH);
                 $item->set_hidden();
                 $success = $item->create();
                 

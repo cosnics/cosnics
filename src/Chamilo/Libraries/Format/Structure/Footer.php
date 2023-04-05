@@ -26,7 +26,7 @@ class Footer extends BaseFooter
      * @param integer $viewMode
      * @param string $containerMode
      */
-    public function __construct($viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid')
+    public function __construct($viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid')
     {
         parent::__construct($viewMode, $containerMode);
         $this->initializeContainer();

@@ -204,7 +204,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
     /*
      * Handles the displaying and validation of a create/edit content object form
      */
-    protected function handle_form($form, $type = ContentObjectForm :: TYPE_CREATE)
+    protected function handle_form($form, $type = ContentObjectForm::TYPE_CREATE)
     {
         if ($form->validate())
         {

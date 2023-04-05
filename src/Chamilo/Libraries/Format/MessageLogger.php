@@ -70,7 +70,7 @@ class MessageLogger
      * @param string $message
      * @param integer $type
      */
-    public function add_message($message, $type = self :: TYPE_NORMAL)
+    public function add_message($message, $type = self::TYPE_NORMAL)
     {
         switch ($type)
         {

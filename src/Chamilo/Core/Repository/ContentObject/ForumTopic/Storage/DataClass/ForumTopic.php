@@ -215,7 +215,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      * to be attached to the forum topic. @param const $type @return boolean $success Returns true if content object is
      * attached succesful
      */
-    public function attach_content_object($aid, $type = self :: ATTACHMENT_NORMAL)
+    public function attach_content_object($aid, $type = self::ATTACHMENT_NORMAL)
     {
         $success = parent::attach_content_object($aid, $type);
 

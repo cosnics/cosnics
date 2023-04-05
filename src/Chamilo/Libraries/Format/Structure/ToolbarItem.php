@@ -81,7 +81,7 @@ class ToolbarItem
      * @param string $confirmationMessage
      * @param string[] $extraAttributes
      */
-    public function __construct($label = null, $image = null, $href = null, $display = self :: DISPLAY_ICON_AND_LABEL, $confirmation = false, $class = null, $target = null,
+    public function __construct($label = null, $image = null, $href = null, $display = self::DISPLAY_ICON_AND_LABEL, $confirmation = false, $class = null, $target = null,
         $confirmationMessage = null, $extraAttributes = null)
     {
         $this->label = $label;

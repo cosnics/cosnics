@@ -41,7 +41,7 @@ class Banner
      * @param Application $application
      * @param integer $viewMode
      */
-    public function __construct(Application $application = null, $viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid')
+    public function __construct(Application $application = null, $viewMode = Page::VIEW_MODE_FULL, $containerMode = 'container-fluid')
     {
         $this->application = $application;
         $this->viewMode = $viewMode;

@@ -125,7 +125,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param \libraries\storage\Condition $condition
      * @return multitype:mixed
      */
-    public static function count_publication_attributes($attributes_type = self :: ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null)
+    public static function count_publication_attributes($attributes_type = self::ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null)
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations('Chamilo\Core\Repository');
         $info = 0;

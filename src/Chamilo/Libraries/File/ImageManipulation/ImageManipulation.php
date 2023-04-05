@@ -73,7 +73,7 @@ abstract class ImageManipulation
      * @param integer $type
      * @return boolean
      */
-    public function scale($width, $height, $type = self :: SCALE_INSIDE)
+    public function scale($width, $height, $type = self::SCALE_INSIDE)
     {
         $new_dimensions = $this->rescale($this->width, $this->height, $width, $height, $type);
         return $this->resize($new_dimensions[self::DIMENSION_WIDTH], $new_dimensions[self::DIMENSION_HEIGHT]);
@@ -89,7 +89,7 @@ abstract class ImageManipulation
      * @param integer $type
      * @return string[]
      */
-    public static function rescale($originalWidth, $originalHeight, $width, $height, $type = self :: SCALE_INSIDE)
+    public static function rescale($originalWidth, $originalHeight, $width, $height, $type = self::SCALE_INSIDE)
     {
         $aspect = $originalHeight / $originalWidth;
 
@@ -157,7 +157,7 @@ abstract class ImageManipulation
      * @param integer $offsetY
      * @return boolean
      */
-    abstract public function crop($width, $height, $offsetX = self :: CROP_CENTER, $offsetY = self :: CROP_CENTER);
+    abstract public function crop($width, $height, $offsetX = self::CROP_CENTER, $offsetY = self::CROP_CENTER);
 
     /**
      * Resize an image to an exact set of dimensions, ignoring aspect ratio.

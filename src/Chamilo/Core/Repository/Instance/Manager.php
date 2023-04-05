@@ -38,7 +38,7 @@ abstract class Manager extends Application
     // Default action
     const DEFAULT_ACTION = self::ACTION_BROWSE;
 
-    public static function get_registered_types($status = Registration :: STATUS_ACTIVE)
+    public static function get_registered_types($status = Registration::STATUS_ACTIVE)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(

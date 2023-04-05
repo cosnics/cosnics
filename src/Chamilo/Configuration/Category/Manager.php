@@ -82,7 +82,7 @@ abstract class Manager extends Application
     public function get_impact_view_url($category_id)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_IMPACT_VIEW, self::PARAM_CATEGORY_ID => $category_id));
+            array(self::PARAM_ACTION => self::ACTION_IMPACT_VIEW, self::PARAM_CATEGORY_ID => $category_id));
     }
 
     public function set_subcategories_allowed($subcategories_allowed)

@@ -95,7 +95,7 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
     /*
      * (non-PHPdoc) @see \core\repository\TypeSelectorOption::get_image_path()
      */
-    public function get_image_path($imageSize = Theme :: ICON_BIG)
+    public function get_image_path($imageSize = Theme::ICON_BIG)
     {
         $namespace = $this->get_template_registration()->get_content_object_type();
         

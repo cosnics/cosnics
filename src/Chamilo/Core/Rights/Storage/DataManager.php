@@ -298,7 +298,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     public static function retrieve_rights_location_by_identifier($context, $type, $identifier, $tree_identifier = '0',
-        $tree_type = RightsUtil :: TREE_TYPE_ROOT)
+        $tree_type = RightsUtil::TREE_TYPE_ROOT)
     {
         $context_class = ($context . '\Storage\DataClass\RightsLocation');
         $context_dm = ($context . '\Storage\DataManager');

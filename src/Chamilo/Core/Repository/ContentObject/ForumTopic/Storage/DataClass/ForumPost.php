@@ -434,7 +434,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      *
      * @return array The learning objects.
      */
-    public function get_attached_content_objects($type = self :: ATTACHMENT_NORMAL)
+    public function get_attached_content_objects($type = self::ATTACHMENT_NORMAL)
     {
         $this->attachments[$type] = DataManager::retrieve_attached_object_from_forum_post($this->get_id())->as_array();
 
@@ -446,7 +446,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      *
      * @param int $id The ID of the learning object to attach.
      */
-    public function attach_content_object($id, $type = self :: ATTACHMENT_NORMAL)
+    public function attach_content_object($id, $type = self::ATTACHMENT_NORMAL)
     {
         $forum_post_attachment = new ForumPostAttachment();
         $forum_post_attachment->set_forum_post_id($this->get_id());
@@ -464,7 +464,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      *
      * @return boolean
      */
-    public function attach_content_objects($ids = array(), $type = self :: ATTACHMENT_NORMAL)
+    public function attach_content_objects($ids = array(), $type = self::ATTACHMENT_NORMAL)
     {
         if (!is_array($ids))
         {

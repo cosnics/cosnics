@@ -40,8 +40,8 @@ class ExportParameters
 
     private $category_content_object_ids;
 
-    public function __construct(WorkspaceInterface $workspace, $user, $format = ContentObjectExport :: FORMAT_CPO, $content_object_ids = array(),
-        $category_ids = array(), $type = ContentObjectExport :: TYPE_DEFAULT)
+    public function __construct(WorkspaceInterface $workspace, $user, $format = ContentObjectExport::FORMAT_CPO, $content_object_ids = array(),
+        $category_ids = array(), $type = ContentObjectExport::TYPE_DEFAULT)
     {
         $this->workspace = $workspace;
         $this->user = $user;

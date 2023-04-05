@@ -41,7 +41,7 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
      */
     protected function getUserFromRequest()
     {
-        $userId = $this->getRequest()->get(\Chamilo\Core\User\Manager :: PARAM_USER_USER_ID);
+        $userId = $this->getRequest()->get(\Chamilo\Core\User\Manager::PARAM_USER_USER_ID);
 
         if(empty($userId)) {
             throw new NoObjectSelectedException(
