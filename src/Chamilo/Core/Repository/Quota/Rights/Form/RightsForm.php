@@ -52,7 +52,7 @@ class RightsForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    public function setDefaults()
+    public function setDefaults(array $defaultValues = [], $filter = null)
     {
         $default_elements = new AdvancedElementFinderElements();
         $targets_entities = Rights::getInstance()->get_quota_targets_entities();

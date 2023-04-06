@@ -242,7 +242,7 @@ class RequestForm extends FormValidator
         return true;
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults(array $defaults = [], $filter = null)
     {
         $request = $this->request;
         

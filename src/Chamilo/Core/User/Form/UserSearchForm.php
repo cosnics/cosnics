@@ -183,7 +183,7 @@ class UserSearchForm extends FormValidator
      *
      * @return boolean True if the user is searching.
      */
-    public function validate()
+    public function validate(): bool
     {
         return (count($this->get_search_conditions()) > 0);
     }

@@ -48,7 +48,7 @@ class ApplicationItemForm extends ItemForm
         $this->build_form();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults(array $defaults = [], $filter = null)
     {
         $item = $this->get_item();
         

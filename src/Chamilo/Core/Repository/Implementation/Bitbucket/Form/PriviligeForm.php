@@ -78,7 +78,7 @@ class PriviligeForm extends FormValidator
     /**
      * Display the form
      */
-    public function toHtml($in_data = null)
+    public function toHtml($in_data = null): string
     {
         $html = array();
         $html[] = '<div>';

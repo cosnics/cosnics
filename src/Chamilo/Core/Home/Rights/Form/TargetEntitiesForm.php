@@ -95,7 +95,7 @@ abstract class TargetEntitiesForm extends FormValidator
      *
      * @throws \Exception
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults(array $defaults = [], $filter = null)
     {
         $selectedEntities = $this->getSelectedEntities();
         

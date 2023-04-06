@@ -125,7 +125,7 @@ class RequestForm extends FormValidator
      * 
      * @param $defaults array Default values for this form's parameters.
      */
-    function setDefaults($defaults = array ())
+    public function setDefaults(array $defaults = [], $filter = null)
     {
         $defaults[Request::PROPERTY_COURSE_TYPE_ID] = $this->request->get_course_type_id();
         $defaults[Request::PROPERTY_NAME] = $this->request->get_name();

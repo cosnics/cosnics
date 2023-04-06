@@ -246,7 +246,7 @@ class CourseRequestForm extends FormValidator
         return true;
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults(array $defaults = [], $filter = null)
     {
         $request = $this->request;
         $defaults[CourseRequest::PROPERTY_COURSE_ID] = $request->get_course_id();

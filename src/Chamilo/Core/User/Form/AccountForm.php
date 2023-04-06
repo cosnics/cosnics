@@ -496,7 +496,7 @@ class AccountForm extends FormValidator
      *
      * @param array $defaults Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults(array $defaults = [], $filter = null)
     {
         $user = $this->user;
         $defaults[User::PROPERTY_ID] = $user->get_id();

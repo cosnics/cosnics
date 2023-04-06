@@ -201,7 +201,7 @@ class CourseSectionToolSelectorForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults(array $defaults = [], $filter = null)
     {
         $registered_tools = $this->get_registered_tools();
         $registered_tools_array = array();

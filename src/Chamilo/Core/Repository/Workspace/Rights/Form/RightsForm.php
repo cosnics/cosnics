@@ -185,22 +185,22 @@ class RightsForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults(array $defaultValues = [], $filter = null)
     {
         if ($this->entityRelation instanceof WorkspaceEntityRelation)
         {
             $givenRights = $this->entityRelation->get_rights();
             
-            $defaults[self::PROPERTY_VIEW] = $givenRights & ~ RightsService::RIGHT_USE & ~ RightsService::RIGHT_COPY &
+            $defaultValues[self::PROPERTY_VIEW] = $givenRights & ~ RightsService::RIGHT_USE & ~ RightsService::RIGHT_COPY &
                  ~ RightsService::RIGHT_MANAGE;
-            
-            $defaults[self::PROPERTY_USE] = $givenRights & RightsService::RIGHT_USE;
-            $defaults[self::PROPERTY_COPY] = $givenRights & RightsService::RIGHT_COPY;
-            $defaults[self::PROPERTY_MANAGE] = $givenRights & RightsService::RIGHT_MANAGE;
+
+            $defaultValues[self::PROPERTY_USE] = $givenRights & RightsService::RIGHT_USE;
+            $defaultValues[self::PROPERTY_COPY] = $givenRights & RightsService::RIGHT_COPY;
+            $defaultValues[self::PROPERTY_MANAGE] = $givenRights & RightsService::RIGHT_MANAGE;
         }
         else
         {
-            $defaults[self::PROPERTY_VIEW] = RightsService::RIGHT_VIEW;
+            $defaultValues[self::PROPERTY_VIEW] = RightsService::RIGHT_VIEW;
         }
         
         parent::setDefaults($defaults);

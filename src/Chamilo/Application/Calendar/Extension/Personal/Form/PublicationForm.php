@@ -89,8 +89,10 @@ class PublicationForm extends BasePublicationForm
      * Sets the default values of the form.
      * By default the publication is for everybody who has access to the tool and
      * the publication will be available forever.
+     * @param array $defaultValues
+     * @param null $filter
      */
-    public function setDefaults()
+    public function setDefaults(array $defaults = [], $filter = null)
     {
         $defaults = array();
         $defaults[self::PARAM_SHARE_OPTION] = 0;
@@ -261,7 +263,7 @@ class PublicationForm extends BasePublicationForm
         }
         
         $active = $this->getElement(self::PARAM_SHARE_ELEMENTS);
-        $active->_elements[0]->setValue(serialize($defaults[self::PARAM_SHARE_ELEMENTS]));
+        $active->getElements()[0]->setValue(serialize($defaults[self::PARAM_SHARE_ELEMENTS]));
         
         parent::setDefaults($defaults);
     }

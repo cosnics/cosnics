@@ -249,7 +249,7 @@ class UserViewForm extends FormValidator
      *
      * @see HTML_QuickForm::setDefaults()
      */
-    public function setDefaults($defaults = array ())
+    public function setDefaults(array $defaults = [], $filter = null)
     {
         $defaults[UserView::PROPERTY_ID] = $this->user_view->get_id();
         $defaults[UserView::PROPERTY_NAME] = $this->user_view->get_name();

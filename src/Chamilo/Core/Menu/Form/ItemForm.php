@@ -166,7 +166,7 @@ class ItemForm extends FormValidator
      * 
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults(array $defaults = [], $filter = null)
     {
         $item = $this->item;
         $active_languages = \Chamilo\Configuration\Configuration::getInstance()->getLanguages();

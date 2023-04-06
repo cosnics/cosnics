@@ -247,7 +247,7 @@ class CourseUserCategoryForm extends FormValidator
      * 
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults(array $defaults = [], $filter = null)
     {
         $course_user_category = $this->course_user_category;
         $defaults[CourseUserCategory::PROPERTY_TITLE] = $course_user_category->get_title();

@@ -5,6 +5,7 @@ node_modules/
 /bin/*
 /src/*
 /.idea/
+/.fleet/
 
 package-lock.json
 yarn.lock

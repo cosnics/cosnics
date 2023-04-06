@@ -92,7 +92,7 @@ class FileContentObjectImportForm extends ContentObjectImportForm
         $this->addElement('html', '</div>');
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults(array $defaults = [], $filter = null)
     {
         parent::setDefaults(
             array(

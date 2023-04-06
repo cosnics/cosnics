@@ -472,7 +472,7 @@ class UserForm extends FormValidator
      *
      * @param array $defaults Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $user = $this->user;
         if ($this->form_type == self::TYPE_EDIT)

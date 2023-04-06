@@ -509,7 +509,7 @@ class SettingsForm extends FormValidator
         return $this->sessionSettings;
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults(array $defaults = [], $filter = null)
     {
         $sessionSettings = $this->getSessionSettings();
 

@@ -104,7 +104,7 @@ class RequestForm extends FormValidator
      * 
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array ())
+    public function setDefaults(array $defaults = [], $filter = null)
     {
         if ($this->request->get_quota())
         {
