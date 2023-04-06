@@ -15,13 +15,13 @@ class SystemAnnouncementsForm extends ConfigurationForm
     public function addSettings()
     {
         $group = array();
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio', 
             SystemAnnouncements::CONFIGURATION_SHOW_EMPTY, 
             null, 
             Translation::get('True'), 
             1);
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio', 
             SystemAnnouncements::CONFIGURATION_SHOW_EMPTY, 
             null, 

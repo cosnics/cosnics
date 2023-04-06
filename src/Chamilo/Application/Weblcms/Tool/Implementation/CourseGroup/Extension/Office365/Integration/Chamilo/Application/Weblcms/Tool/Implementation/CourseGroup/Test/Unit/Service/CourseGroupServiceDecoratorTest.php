@@ -29,8 +29,7 @@ class CourseGroupServiceDecoratorTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->courseGroupOffice365ConnectorMock = $this->getMockBuilder(CourseGroupOffice365Connector::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -40,8 +39,7 @@ class CourseGroupServiceDecoratorTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->courseGroupOffice365ConnectorMock);
         unset($this->courseGroupServiceDecorator);
     }
@@ -50,7 +48,7 @@ class CourseGroupServiceDecoratorTest extends ChamiloTestCase
     {
         $courseGroup = new CourseGroup();
         $user = new User();
-        $formValues[CourseGroupFormDecorator::PROPERTY_USE_GROUP] = 1;
+        $formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM] = 1;
 
         $this->courseGroupOffice365ConnectorMock->expects($this->once())
             ->method('createGroupFromCourseGroup')
@@ -74,7 +72,7 @@ class CourseGroupServiceDecoratorTest extends ChamiloTestCase
     {
         $courseGroup = new CourseGroup();
         $user = new User();
-        $formValues[CourseGroupFormDecorator::PROPERTY_USE_GROUP] = 1;
+        $formValues[CourseGroupFormDecorator::PROPERTY_USE_TEAM] = 1;
 
         $this->courseGroupOffice365ConnectorMock->expects($this->once())
             ->method('createOrUpdateGroupFromCourseGroup')

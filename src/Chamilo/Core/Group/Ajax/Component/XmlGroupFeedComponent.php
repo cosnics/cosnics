@@ -56,7 +56,7 @@ class XmlGroupFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
                 {
                     $condition = new NotCondition(
                         new EqualityCondition(
-                            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_GROUP_ID), 
+                            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
                             new StaticConditionVariable($id[1])));
                 }
                 

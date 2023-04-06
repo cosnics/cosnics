@@ -70,7 +70,7 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
         {
             $group = array();
 
-            $group[] = &$courseGroupForm->createElement(
+            $group[] = $courseGroupForm->createElement(
                 'radio',
                 $useTeamElementName,
                 null,
@@ -78,7 +78,7 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
                 self::OPTION_NO_TEAM
             );
 
-            $group[] = &$courseGroupForm->createElement(
+            $group[] = $courseGroupForm->createElement(
                 'radio',
                 $useTeamElementName,
                 null,
@@ -86,7 +86,7 @@ class CourseGroupFormDecorator implements CourseGroupFormDecoratorInterface
                 self::OPTION_CLASS_TEAM
             );
 
-            $group[] = &$courseGroupForm->createElement(
+            $group[] = $courseGroupForm->createElement(
                 'radio',
                 $useTeamElementName,
                 null,

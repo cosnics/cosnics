@@ -16,6 +16,7 @@ require_once Path::getInstance()->getPluginPath(__NAMESPACE__) . 'Dropbox/Autolo
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
 
+    const SORT_RELEVANCE = 'relevance';
     private $dropbox;
 
     private $consumer;

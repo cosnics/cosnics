@@ -138,10 +138,11 @@ abstract class Manager extends Application
             }
             else
             {
-                $first_entity = array_shift($this->get_entities());
+                $entities = $this->get_entities();
+                $first_entity = array_shift($entities);
                 if ($first_entity)
                 {
-                    array_unshift($this->get_entities(), $first_entity);
+                    array_unshift($entities, $first_entity);
                     $this->selected_entity = $first_entity;
                 }
             }

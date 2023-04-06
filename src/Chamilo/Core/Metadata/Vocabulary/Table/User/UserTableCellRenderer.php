@@ -65,8 +65,8 @@ class UserTableCellRenderer extends RecordTableCellRenderer implements TableCell
         // Theme :: getInstance()->getCommonImagePath('Action/Edit'),
         // $this->get_component()->get_url(
         // array(
-        // Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
-        // Manager :: PARAM_ELEMENT_ID => $result->get_id())),
+        // Manager::PARAM_ACTION => Manager :: ACTION_UPDATE,
+        // Manager::PARAM_ELEMENT_ID => $result->get_id())),
         // ToolbarItem :: DISPLAY_ICON));
         
         // $toolbar->add_item(
@@ -75,8 +75,8 @@ class UserTableCellRenderer extends RecordTableCellRenderer implements TableCell
         // Theme :: getInstance()->getCommonImagePath('Action/Delete'),
         // $this->get_component()->get_url(
         // array(
-        // Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
-        // Manager :: PARAM_ELEMENT_ID => $result->get_id())),
+        // Manager::PARAM_ACTION => Manager :: ACTION_DELETE,
+        // Manager::PARAM_ELEMENT_ID => $result->get_id())),
         // ToolbarItem :: DISPLAY_ICON,
         // true));
         // }
@@ -92,9 +92,9 @@ class UserTableCellRenderer extends RecordTableCellRenderer implements TableCell
         // Theme :: getInstance()->getCommonImagePath('Action/Up'),
         // $this->get_component()->get_url(
         // array(
-        // Manager :: PARAM_ACTION => Manager :: ACTION_MOVE,
-        // Manager :: PARAM_ELEMENT_ID => $result->get_id(),
-        // Manager :: PARAM_MOVE => - 1)),
+        // Manager::PARAM_ACTION => Manager :: ACTION_MOVE,
+        // Manager::PARAM_ELEMENT_ID => $result->get_id(),
+        // Manager::PARAM_MOVE => - 1)),
         // ToolbarItem :: DISPLAY_ICON));
         // }
         // else
@@ -116,9 +116,9 @@ class UserTableCellRenderer extends RecordTableCellRenderer implements TableCell
         // Theme :: getInstance()->getCommonImagePath('Action/Down'),
         // $this->get_component()->get_url(
         // array(
-        // Manager :: PARAM_ACTION => Manager :: ACTION_MOVE,
-        // Manager :: PARAM_MOVE => 1,
-        // Manager :: PARAM_ELEMENT_ID => $result->get_id())),
+        // Manager::PARAM_ACTION => Manager :: ACTION_MOVE,
+        // Manager::PARAM_MOVE => 1,
+        // Manager::PARAM_ELEMENT_ID => $result->get_id())),
         // ToolbarItem :: DISPLAY_ICON));
         // }
         // else

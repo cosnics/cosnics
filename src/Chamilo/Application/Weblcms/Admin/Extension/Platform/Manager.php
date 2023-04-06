@@ -155,7 +155,7 @@ abstract class Manager extends Application
 
     public function get_selected_target_id()
     {
-        return Request::get(self::PARAM_TARGET_ID);
+        return Request::get(self::PARAM_ENTITY_ID);
     }
 
     public function get_selected_entity_class($helper = false)

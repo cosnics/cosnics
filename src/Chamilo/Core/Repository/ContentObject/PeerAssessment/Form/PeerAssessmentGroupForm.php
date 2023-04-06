@@ -147,14 +147,14 @@ class PeerAssessmentGroupForm extends FormValidator
         }
         else
         {
-            $this->addElement(
+            /*$this->addElement(
                 'html', 
                 Translation::get('GroupBlockedBecauseOfScores') . ': <a href="' .
                      $this->viewer->get_url(
                         array(
-                            \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager::ACTION_REMOVE_SCORES, 
+                            \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager::ACTION_,
                             \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager::PARAM_GROUP => $this->group_id)) .
-                     '">' . Translation::get('RemoveScoresToUnblock') . '</a>');
+                     '">' . Translation::get('RemoveScoresToUnblock') . '</a>');*/
         }
     }
 

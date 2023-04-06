@@ -146,7 +146,7 @@ class CourseCategoryCatalogMenu extends HtmlMenu
                     Course::class_name(),
                     new DataClassCountParameters(
                         new EqualityCondition(
-                            new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_CATEGORY),
+                            new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_CATEGORY_ID),
                             new StaticConditionVariable($category->get_id()))));
 
                 $count_text = " ($count)'";

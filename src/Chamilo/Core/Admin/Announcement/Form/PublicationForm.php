@@ -151,21 +151,21 @@ class PublicationForm extends FormValidator
         // Add the rights options
         $group = array();
         
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio', 
             null, 
             null, 
             Translation::get('Everyone'), 
             self::RIGHT_OPTION_ALL, 
             array('class' => 'other_option_selected'));
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio', 
             null, 
             null, 
             Translation::get('OnlyForMe'), 
             self::RIGHT_OPTION_ME, 
             array('class' => 'other_option_selected'));
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio', 
             null, 
             null, 
@@ -202,8 +202,10 @@ class PublicationForm extends FormValidator
      * Sets the default values of the form.
      * By default the publication is for everybody who has access to the tool and
      * the publication will be available forever.
+     * @param array $defaultValues
+     * @param null $filter
      */
-    public function setDefaults()
+    public function setDefaults(array $defaultValues = [], $filter = null)
     {
         $defaults = array();
         

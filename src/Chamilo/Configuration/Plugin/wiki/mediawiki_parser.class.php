@@ -221,7 +221,7 @@ class MediawikiParser
                                                                                 // bug #11874.
         
         $text = preg_replace(array_keys($fixtags), array_values($fixtags), $text);
-        
+        $linestart = 0;
         $text = $this->doBlockLevels($text, $linestart);
         
         $this->replaceLinkHolders($text);
@@ -1570,7 +1570,7 @@ class MediawikiParser
                 $matches['attrib'][$headlineCount], 
                 $anchor, 
                 $headline, 
-                $editlink, 
+                '',
                 $legacyAnchor);
             
             $headlineCount ++;
@@ -1808,7 +1808,7 @@ class MediawikiParser
             {
                 
                 // Interwikis
-                if ($iw && $this->mOptions->getInterwikiMagic() && $wgContLang->getLanguageName($iw))
+                if ($iw && $this->mOptions->getInterwikiMagic())
                 {
                     $this->mOutput->addLanguageLink($nt->getFullText());
                     $s = rtrim($s . $prefix);
@@ -1847,7 +1847,7 @@ class MediawikiParser
                     }
                     $sortkey = Sanitizer :: decodeCharReferences($sortkey);
                     $sortkey = str_replace("\n", '', $sortkey);
-                    $sortkey = $wgContLang->convertCategoryKey($sortkey);
+                    //$sortkey = $wgContLang->convertCategoryKey($sortkey);
                     $this->mOutput->addCategory($nt->getDBkey(), $sortkey);
                     
                     /**
@@ -1866,7 +1866,7 @@ class MediawikiParser
             {
                 if (in_array($nt->getPrefixedText(), $selflink, true))
                 {
-                    $s .= $prefix . $sk->makeSelfLinkObj($nt, $text, '', $trail);
+                    $s .= $prefix . MediaWikiLinker::makeSelfLinkObj($nt, $text, '', $trail);
                     continue;
                 }
             }
@@ -1879,11 +1879,11 @@ class MediawikiParser
                 $skip = $time = false;
                 if ($skip)
                 {
-                    $link = $sk->link($nt);
+                    $link = MediawikiLinker::link($nt);
                 }
                 else
                 {
-                    $link = $sk->makeMediaLinkObj($nt, $text, $time);
+                    $link = MediawikiLinker::makeMediaLinkObj($nt, $text, $time);
                 }
                 // Cloak with NOPARSE to avoid replacement in replaceExternalLinks
                 $s .= $prefix . $this->armorLinks($link) . $trail;

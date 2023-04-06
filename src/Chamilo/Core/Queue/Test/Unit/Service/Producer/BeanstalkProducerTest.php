@@ -32,8 +32,7 @@ class BeanstalkProducerTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->pheanstalkContext = $this->getMockBuilder(PheanstalkContext::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -43,8 +42,7 @@ class BeanstalkProducerTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->pheanstalkContext);
         unset($this->beanstalkProducer);
     }

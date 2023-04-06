@@ -89,7 +89,7 @@ class RightsGroupForm extends FormValidator
         // $default_elements->add_element($group_entity->get_element_finder_element($entity));
         // }
         
-        // $this->getElement(self :: PROPERTY_ACCESS)->setDefaultValues($default_elements);
+        // $this->getElement(self::PROPERTY_ACCESS)->setDefaultValues($default_elements);
         parent::setDefaults(array());
     }
 

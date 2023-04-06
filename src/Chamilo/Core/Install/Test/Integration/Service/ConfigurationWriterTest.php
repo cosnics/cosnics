@@ -25,15 +25,13 @@ class ConfigurationWriterTest extends ChamiloTestCase
      */
     protected $configurationWriter;
 
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
         $this->configurationWriter = new ConfigurationWriter(
             $pathBuilder->getResourcesPath('Chamilo\Core\Install') . 'Templates/configuration.xml.tpl');
     }
 
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->configurationWriter);
     }
 

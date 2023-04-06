@@ -14,7 +14,7 @@ class VanAchterResultProcessor extends PeerAssessmentResultprocessor
     // blows up the range
     protected $allowed_scores = array(- 2, - 1, 0, 1, 2);
 
-    protected function set_scores($scores)
+    protected function set_scores($scores, $default = 0)
     {
         parent::set_scores($scores);
     }

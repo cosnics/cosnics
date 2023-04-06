@@ -61,7 +61,7 @@ class TrackVideo
 
     /**
      *
-     * @return the $bitrate
+     * @return int
      */
     public function get_bitrate()
     {
@@ -153,12 +153,14 @@ class TrackVideo
 
     public function get_height()
     {
-        return array_pop(explode('x', $this->get_resolution()));
+        $array = explode('x', $this->get_resolution());
+        return array_pop($array);
     }
 
     public function get_width()
     {
-        return array_shift(explode('x', $this->get_resolution()));
+        $array = explode('x', $this->get_resolution());
+        return array_shift($array);
     }
 
     public function get_quality()

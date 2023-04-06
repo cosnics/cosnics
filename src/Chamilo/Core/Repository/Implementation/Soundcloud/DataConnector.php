@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
+    const SORT_RELEVANCE = 'relevance';
 
     /**
      *

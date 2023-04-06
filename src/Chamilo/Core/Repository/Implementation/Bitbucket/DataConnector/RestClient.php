@@ -51,11 +51,21 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Rest
         }
     }
 
+    /**
+     *
+     * @param boolean $responseMimeType
+     * @return mixed
+     */
+    public function request($responseMimeType = false)
+    {
+
+    }
+
     /*
      * a prefab function for a request @param method string @param url string @param data array @return
      * MediaMosaRestResult object
      */
-    public function request($method, $url, $data = null, $response_type = self::RESPONSE_TYPE_XML)
+    public function myRequest($method, $url, $data = null, $response_type = self::RESPONSE_TYPE_XML)
     {
         $this->set_http_method($method);
         

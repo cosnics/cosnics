@@ -27,22 +27,23 @@ class WeblcmsPeerAssessmentFeedbackTracker extends SimpleTracker
 
     /**
      * Inherited
+     * @param array $extendedPropertyNames
      */
-    static function get_default_property_names()
+    static function get_default_property_names($extendedPropertyNames = array())
     {
         return parent::get_default_property_names(
             array(self::PROPERTY_ATTEMPT_STATUS_ID, self::PROPERTY_USER_ID, self::PROPERTY_FEEDBACK));
     }
 
     /*
-     * function get_attempt_id() { return $this->get_default_property(self :: PROPERTY_ATTEMPT_ID); } function
-     * set_attempt_id($attempt_id) { $this->set_default_property(self :: PROPERTY_ATTEMPT_ID, $attempt_id); } function
-     * get_user_id() { return $this->get_default_property(self :: PROPERTY_USER_ID); } function set_user_id($user_id) {
-     * $this->set_default_property(self :: PROPERTY_USER_ID, $user_id); } function get_indicator_id() { return
-     * $this->get_default_property(self :: PROPERTY_SUBMISSION_ID); } function set_indicator_id($indicator_id) {
-     * $this->set_default_property(self :: PROPERTY_SUBMISSION_ID, $indicator_id); } function get_feedback() { return
-     * $this->get_default_property(self :: PROPERTY_FEEDBACK); } function set_feedback($feedback) {
-     * $this->set_default_property(self :: PROPERTY_FEEDBACK, $feedback); }
+     * function get_attempt_id() { return $this->get_default_property(self::PROPERTY_ATTEMPT_ID); } function
+     * set_attempt_id($attempt_id) { $this->set_default_property(self::PROPERTY_ATTEMPT_ID, $attempt_id); } function
+     * get_user_id() { return $this->get_default_property(self::PROPERTY_USER_ID); } function set_user_id($user_id) {
+     * $this->set_default_property(self::PROPERTY_USER_ID, $user_id); } function get_indicator_id() { return
+     * $this->get_default_property(self::PROPERTY_SUBMISSION_ID); } function set_indicator_id($indicator_id) {
+     * $this->set_default_property(self::PROPERTY_SUBMISSION_ID, $indicator_id); } function get_feedback() { return
+     * $this->get_default_property(self::PROPERTY_FEEDBACK); } function set_feedback($feedback) {
+     * $this->set_default_property(self::PROPERTY_FEEDBACK, $feedback); }
      */
     function __call($name, array $arguments)
     {

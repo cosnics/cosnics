@@ -37,8 +37,9 @@ class WeblcmsPeerAssessmentAttemptStatusTracker extends SimpleTracker
 
     /**
      * Inherited
+     * @param array $extendedPropertyNames
      */
-    static function get_default_property_names()
+    static function get_default_property_names($extendedPropertyNames = array())
     {
         return parent::get_default_property_names(
             array(
@@ -53,20 +54,20 @@ class WeblcmsPeerAssessmentAttemptStatusTracker extends SimpleTracker
     }
 
     /*
-     * function get_attempt_definition_id() { return $this->get_default_property(self :: PROPERTY_ATTEMPT_ID); }
+     * function get_attempt_definition_id() { return $this->get_default_property(self::PROPERTY_ATTEMPT_ID); }
      * function set_attempt_definition_id($attempt_definition_id) { $this->set_default_property(self ::
      * PROPERTY_ATTEMPT_ID, $attempt_definition_id); } function get_user_id() { return $this->get_default_property(self
-     * :: PROPERTY_USER_ID); } function set_user_id($user_id) { $this->set_default_property(self :: PROPERTY_USER_ID,
-     * $user_id); } function get_group_id() { return $this->get_default_property(self :: PROPERTY_GROUP_ID); } function
-     * set_group_id($group_id) { $this->set_default_property(self :: PROPERTY_GROUP_ID, $group_id); } function
-     * get_factor() { return $this->get_default_property(self :: PROPERTY_FACTOR); } function set_factor($factor) {
-     * $this->set_default_property(self :: PROPERTY_FACTOR, $factor); } function get_created() { return
-     * $this->get_default_property(self :: PROPERTY_CREATED); } function set_created($created) {
-     * $this->set_default_property(self :: PROPERTY_CREATED, $created); } function get_modified() { return
-     * $this->get_default_property(self :: PROPERTY_MODIFIED); } function set_modified($modified) {
-     * $this->set_default_property(self :: PROPERTY_MODIFIED, $modified); } function get_closed() { return
-     * $this->get_default_property(self :: PROPERTY_CLOSED); } function set_closed($closed) {
-     * $this->set_default_property(self :: PROPERTY_CLOSED, $closed); }
+     *::PROPERTY_USER_ID); } function set_user_id($user_id) { $this->set_default_property(self::PROPERTY_USER_ID,
+     * $user_id); } function get_group_id() { return $this->get_default_property(self::PROPERTY_GROUP_ID); } function
+     * set_group_id($group_id) { $this->set_default_property(self::PROPERTY_GROUP_ID, $group_id); } function
+     * get_factor() { return $this->get_default_property(self::PROPERTY_FACTOR); } function set_factor($factor) {
+     * $this->set_default_property(self::PROPERTY_FACTOR, $factor); } function get_created() { return
+     * $this->get_default_property(self::PROPERTY_CREATED); } function set_created($created) {
+     * $this->set_default_property(self::PROPERTY_CREATED, $created); } function get_modified() { return
+     * $this->get_default_property(self::PROPERTY_MODIFIED); } function set_modified($modified) {
+     * $this->set_default_property(self::PROPERTY_MODIFIED, $modified); } function get_closed() { return
+     * $this->get_default_property(self::PROPERTY_CLOSED); } function set_closed($closed) {
+     * $this->set_default_property(self::PROPERTY_CLOSED, $closed); }
      */
     function __call($name, array $arguments)
     {

@@ -86,8 +86,7 @@ class EntryNotificationJobProcessorTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->assignmentServiceMock = $this->getMockBuilder(AssignmentService::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -126,8 +125,7 @@ class EntryNotificationJobProcessorTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->assignmentServiceMock);
         unset($this->treeNodeDataServiceMock);
         unset($this->publicationServiceMock);

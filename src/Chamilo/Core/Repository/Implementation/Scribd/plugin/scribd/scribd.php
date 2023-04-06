@@ -73,7 +73,8 @@ class Scribd
     public function getList()
     {
         $method = "docs.getList";
-        
+
+        $params = [];
         $result = $this->postRequest($method, $params);
         return $result['resultset'];
     }

@@ -9,8 +9,8 @@ use Chamilo\Libraries\Storage\DataClassIntegrationTestCase;
  */
 class CourseIntegrationTest extends DataClassIntegrationTestCase
 {
-    // const WEEK = 604800;
-    // const DAY = 86400;
+    const WEEK = 604800;
+    const DAY = 86400;
     //
     // /******************************************************************************************************************/
     // /* Data providers */

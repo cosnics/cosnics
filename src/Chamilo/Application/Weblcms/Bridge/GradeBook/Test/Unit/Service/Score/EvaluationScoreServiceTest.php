@@ -72,8 +72,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->evaluationPublicationRepositoryMock = $this->getMockBuilder(EvaluationPublicationRepository::class)
             ->disableOriginalConstructor()->getMock();
         $this->publicationEntityServiceManagerMock = $this->getMockBuilder(PublicationEntityServiceManager::class)
@@ -97,8 +96,7 @@ class EvaluationScoreServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->evaluationPublicationRepositoryMock);
         unset($this->publicationEntityServiceManagerMock);
         unset($this->evaluationEntityServiceManagerMock);

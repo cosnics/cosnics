@@ -218,7 +218,7 @@ class AccountForm extends FormValidator
         }
 
         // Todo: The rule to check unique username should be updated to the LCMS code api
-        // $this->addRule(User :: PROPERTY_USERNAME, Translation :: get('UserTaken'), 'username_available',
+        // $this->addRule(User::PROPERTY_USERNAME, Translation :: get('UserTaken'), 'username_available',
         // $user_data['username']);
         $this->addElement('category');
 

@@ -136,6 +136,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
                     case 'text' :
                         if ($attributes['length'] && $attributes['length'] <= 255)
                         {
+                            /** @noinspection PhpInvalidStringOffsetUsageInspection */
                             $attributes['type'] = 'string';
                         }
                         break;

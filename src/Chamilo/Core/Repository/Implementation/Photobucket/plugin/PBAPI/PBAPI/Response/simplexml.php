@@ -35,7 +35,7 @@ class PBAPI_Response_simplexml extends PBAPI_Response
         
         $obj = new SimpleXMLElement($string);
         
-        $this->detectException($obj);
+        $this->detectElementException($obj);
         
         if ($onlycontent)
             return @$obj->content;
@@ -57,7 +57,7 @@ class PBAPI_Response_simplexml extends PBAPI_Response
      * 
      * @param $obj SimpleXMLElement
      */
-    protected function detectException(SimpleXMLElement $obj)
+    protected function detectElementException(SimpleXMLElement $obj)
     {
         $status = (string) $obj->status;
         if ($status != 'OK')

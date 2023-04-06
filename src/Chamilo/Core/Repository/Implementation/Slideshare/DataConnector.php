@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
+    const SORT_RELEVANCE = 'relevance';
 
     /**
      * @var \GuzzleHttp\Client
@@ -234,7 +235,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         /*
          * $date = time(); $hash = sha1($this->consumer_secret . $date); $params = array(); $params['api_key'] =
          * $this->consumer_key; $params['ts'] = $date; $params['hash'] = $hash; $params['slideshow_id'] =
-         * $values[ExternalObject :: PROPERTY_ID]; $result = $this->slideshare->send_request(SlideshareRestClient ::
+         * $values[ExternalObject::PROPERTY_ID]; $result = $this->slideshare->send_request(SlideshareRestClient ::
          * METHOD_GET, 'edit_slideshow', $params); $slideshows = (array) $result->get_response_content();
          */
     }

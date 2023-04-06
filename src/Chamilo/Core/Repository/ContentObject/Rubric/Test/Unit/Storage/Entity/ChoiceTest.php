@@ -28,8 +28,7 @@ class ChoiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->rubricData = new RubricData('Test Rubric');
         $this->choice = new Choice($this->rubricData);
     }
@@ -37,8 +36,7 @@ class ChoiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->choice);
         unset($this->rubricData);
     }

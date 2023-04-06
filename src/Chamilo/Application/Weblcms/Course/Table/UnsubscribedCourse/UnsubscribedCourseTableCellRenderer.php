@@ -49,7 +49,7 @@ class UnsubscribedCourseTableCellRenderer extends CourseTableCellRenderer
                     ToolbarItem::DISPLAY_ICON));
         }
         
-        if (CourseManagementRights::getInstance()->is_allowed(
+        if (CourseManagementRights::getInstance()->is_allowed_management(
             CourseManagementRights::DIRECT_SUBSCRIBE_RIGHT, 
             $course[Course::PROPERTY_ID]))
         {

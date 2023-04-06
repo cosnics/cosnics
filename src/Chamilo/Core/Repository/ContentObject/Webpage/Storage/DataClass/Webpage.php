@@ -352,7 +352,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
     /**
      * Get extensions for images
      * 
-     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_IMAGE) now
+     * @deprecated Use FileType :: get_type_extensions(FileType::TYPE_IMAGE) now
      * @return string[]
      */
     public static function get_image_types()
@@ -363,7 +363,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
     /**
      * Get extensions for flash
      * 
-     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_FLASH) now
+     * @deprecated Use FileType :: get_type_extensions(FileType::TYPE_FLASH) now
      * @return string[]
      */
     public static function get_flash_types()
@@ -382,7 +382,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
     /**
      * Get extensions for video
      * 
-     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_VIDEO) now
+     * @deprecated Use FileType :: get_type_extensions(FileType::TYPE_VIDEO) now
      * @return string[]
      */
     public static function get_video_types()
@@ -393,7 +393,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
     /**
      * Get extensions for audio
      * 
-     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_AUDIO) now
+     * @deprecated Use FileType :: get_type_extensions(FileType::TYPE_AUDIO) now
      * @return string[]
      */
     public static function get_audio_types()

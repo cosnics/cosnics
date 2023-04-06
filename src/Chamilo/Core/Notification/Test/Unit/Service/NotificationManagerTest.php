@@ -46,8 +46,7 @@ class NotificationManagerTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->notificationRepositoryMock = $this->getMockBuilder(NotificationRepository::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -65,8 +64,7 @@ class NotificationManagerTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->notificationRepositoryMock);
         unset($this->notificationTranslatorMock);
         unset($this->notificationContextManagerMock);

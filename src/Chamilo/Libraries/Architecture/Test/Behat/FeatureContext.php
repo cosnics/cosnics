@@ -115,8 +115,9 @@ class FeatureContext extends MinkContext
             $this->visit($redirect->getUrl());
         }
         else
-        {   // Example: from 'Chamilo\Core\Repository' extract 'repository'. 
-            $application = strtolower(array_pop(explode('\\', $application)));
+        {   // Example: from 'Chamilo\Core\Repository' extract 'repository'.
+            $array = explode('\\', $application);
+            $application = strtolower(array_pop($array));
             $this->visit('/index.php?application=' . $application);
         }
 
@@ -140,7 +141,8 @@ class FeatureContext extends MinkContext
         }
         else
         {   // Example: from 'Chamilo\Core\Repository' extract 'repository'.
-            $application = strtolower(array_pop(explode('\\', $application)));
+            $array = explode('\\', $application);
+            $application = strtolower(array_pop($array));
             $this->visit('/index.php?application=' . $application . '&go=' . $action);
         }
 

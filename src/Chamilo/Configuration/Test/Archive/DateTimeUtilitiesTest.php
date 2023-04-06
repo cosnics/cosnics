@@ -4,8 +4,7 @@ namespace Chamilo\Configuration\Test\Archive;
 class DateTimeUtilitiesTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function setUp()
-    {
+    protected function setUp(): void    {
     }
 
     public function test_format_locale_date_sould_produce_an_english_date()

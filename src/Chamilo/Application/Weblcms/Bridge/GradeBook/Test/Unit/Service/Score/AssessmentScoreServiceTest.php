@@ -28,8 +28,7 @@ class AssessmentScoreServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->scoreDataServiceMock = $this->getMockBuilder(ScoreDataService::class)
             ->disableOriginalConstructor()->getMock();
         $this->assessmentScoreService = new AssessmentScoreService($this->scoreDataServiceMock);
@@ -38,8 +37,7 @@ class AssessmentScoreServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->scoreDataServiceMock);
         unset($this->assessmentScoreService);
     }

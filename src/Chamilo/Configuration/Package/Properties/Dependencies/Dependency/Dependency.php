@@ -23,6 +23,12 @@ class Dependency
     const TYPE_EXTENSIONS = 'extensions';
     const TYPE_SERVER = 'server';
     const TYPE_SETTINGS = 'settings';
+    const COMPARE_EQUAL = '=';
+    const COMPARE_NOT_EQUAL = '!=';
+    const COMPARE_GREATER_THEN = '>';
+    const COMPARE_GREATER_THEN_OR_EQUAL = '>=';
+    const COMPARE_LESS_THEN = '<';
+    const COMPARE_LESS_THEN_OR_EQUAL = '<=';
 
     private $id;
 

@@ -81,7 +81,9 @@ class UserAttemptStatusViewerComponent extends Manager implements TableSupport
     private function render_attempts_list(array $attempts)
     {
         $html = array();
-        
+
+        $level = 0;
+
         // loop through all the attempts and render them
         foreach ($attempts as $a)
         {

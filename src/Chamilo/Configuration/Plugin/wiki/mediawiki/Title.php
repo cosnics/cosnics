@@ -3231,7 +3231,7 @@ class MediaWikiTitle
         }
         
         // Update watchlists
-        $oldnamespace = $this->getNamespace() & ~ 1;
+        $oldnamespace = (string) $this->getNamespace() & ~ 1;
         $newnamespace = $nt->getNamespace() & ~ 1;
         $oldtitle = $this->getDBkey();
         $newtitle = $nt->getDBkey();
@@ -3928,7 +3928,7 @@ class MediaWikiTitle
      * 
      * @return \type{\string} String representation of this title
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getPrefixedText();
     }
@@ -4069,7 +4069,7 @@ class MediaWikiTitle
             return $this->mNotificationTimestamp[$uid] = false;
         }
         // Don't cache too much!
-        if (count($this->mNotificationTimestamp) >= self :: CACHE_MAX)
+        if (count($this->mNotificationTimestamp) >= self::CACHE_MAX)
         {
             $this->mNotificationTimestamp = array();
         }

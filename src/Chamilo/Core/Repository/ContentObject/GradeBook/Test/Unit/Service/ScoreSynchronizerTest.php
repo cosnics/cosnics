@@ -30,8 +30,7 @@ class ScoreSynchronizerTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    protected function setUp()
-    {
+    protected function setUp(): void    {
         $this->gradeBookData = new GradeBookData('gradebook');
         $this->column = new GradeBookColumn($this->gradeBookData);
         $this->column->setId(1);
@@ -42,8 +41,7 @@ class ScoreSynchronizerTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->item);
         unset($this->column);
         unset($this->gradeBookData);

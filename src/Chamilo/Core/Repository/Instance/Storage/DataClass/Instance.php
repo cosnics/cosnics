@@ -20,6 +20,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 class Instance extends CompositeDataClass
 {
     const PROPERTY_TITLE = 'title';
+    const PROPERTY_DESCRIPTION = 'description';
     const PROPERTY_IMPLEMENTATION = 'implementation';
     const PROPERTY_ENABLED = 'enabled';
     const PROPERTY_CREATED = 'created';

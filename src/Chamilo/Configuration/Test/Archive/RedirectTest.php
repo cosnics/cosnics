@@ -14,8 +14,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
      * string(29) "/path/to/script.php/path/info" ["query"]=> string(21) "arg=value&arg2=value2" ["fragment"]=>
      * string(6) "anchor" }
      */
-    protected function setUp()
-    {
+    protected function setUp(): void    {
         $this->parsed_url = \Chamilo\ParseUrl(self::URL);
         
         $_SERVER['PHP_SELF'] = $this->parsed_url['path'];
@@ -94,14 +93,16 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         
         $redirect = new Redirect($params, array(), true);
         $encoded_return_value = $redirect->getUrl();
-        
+
+        $url = '';
         $this->assertEquals($url, $unencoded_return_value);
         $this->assertEquals($url, \Chamilo\HtmlEntityDecode($encoded_return_value));
     }
 
     private function assertURLQueryContains(array $expected, $url)
     {
-        $parsed_return_value = parse_url(urldecode($return_value));
+
+        $parsed_return_value = parse_url(urldecode($url));
         parse_str($parsed_return_value['query'], $parsed_return_query);
         
         $not_found = array_diff($expected, $parsed_return_query);

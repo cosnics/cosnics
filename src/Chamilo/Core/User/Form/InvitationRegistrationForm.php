@@ -114,9 +114,9 @@ class InvitationRegistrationForm extends FormValidator
 
         // Email
         $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), array("size" => "50"));
-        // $this->addRule(User :: PROPERTY_EMAIL, Translation :: get('ThisFieldIsRequired', null, Utilities ::
+        // $this->addRule(User::PROPERTY_EMAIL, Translation :: get('ThisFieldIsRequired', null, Utilities ::
         // COMMON_LIBRARIES), 'required');
-        // $this->addRule(User :: PROPERTY_EMAIL, Translation :: get('WrongEmail'), 'email');
+        // $this->addRule(User::PROPERTY_EMAIL, Translation :: get('WrongEmail'), 'email');
         $this->freeze(User::PROPERTY_EMAIL);
 
         $this->addElement('category');

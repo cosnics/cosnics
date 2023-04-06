@@ -18,14 +18,12 @@ class ImportUserResultTest extends ChamiloTestCase
      */
     protected $importUserResult;
 
-    protected function setUp()
-    {
+    protected function setUp(): void    {
         $importData = new ImportUserData('test');
         $this->importUserResult = new ImportUserResult($importData);
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->importUserResult);
     }
 

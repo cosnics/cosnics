@@ -44,7 +44,7 @@ class BlogForm extends ContentObjectForm
         // $this->addElement('category', Translation:: get('Properties', null, Utilities :: COMMON_LIBRARIES));
         // $this->addElement(
         // 'select',
-        // Blog :: PROPERTY_BLOG_LAYOUT,
+        // Blog::PROPERTY_BLOG_LAYOUT,
         // Translation:: get('BlogLayout'),
         // Blog:: get_available_blog_layouts()
         // );
@@ -57,7 +57,7 @@ class BlogForm extends ContentObjectForm
         // $this->addElement('category', Translation:: get('Properties', null, Utilities :: COMMON_LIBRARIES));
         // $this->addElement(
         // 'select',
-        // Blog :: PROPERTY_BLOG_LAYOUT,
+        // Blog::PROPERTY_BLOG_LAYOUT,
         // Translation:: get('BlogLayout'),
         // Blog:: get_available_blog_layouts()
         // );

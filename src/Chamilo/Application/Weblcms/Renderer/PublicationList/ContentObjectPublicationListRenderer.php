@@ -305,7 +305,8 @@ abstract class ContentObjectPublicationListRenderer
             $up_img = 'Action/Up';
             $up_url = $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_UP,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION => \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION_UP,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
                 ),
                 array(),
@@ -337,7 +338,8 @@ abstract class ContentObjectPublicationListRenderer
             $down_img = 'Action/Down';
             $down_url = $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_DOWN,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION => \Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION_DOWN,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
                 ),
                 array(),

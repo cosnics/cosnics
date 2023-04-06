@@ -101,7 +101,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         foreach ($video_types as $video_type)
         {
             $video_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(File::class_name, File::PROPERTY_FILENAME), 
+                new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME),
                 '*.' . $video_type);
         }
         

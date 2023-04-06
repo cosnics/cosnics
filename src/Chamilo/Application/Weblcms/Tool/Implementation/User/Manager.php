@@ -55,9 +55,9 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     public function get_status_changer_url($user, $status)
     {
-        // return $this->get_url(array(self :: PARAM_ACTION => self ::
-        // ACTION_CHANGE_STATUS, self :: PARAM_OBJECTS => $user, self ::
-        // PARAM_STATUS => $status, self :: PARAM_TAB => Request :: get(self ::
+        // return $this->get_url(array(self::PARAM_ACTION => self ::
+        // ACTION_CHANGE_STATUS, self::PARAM_OBJECTS => $user, self ::
+        // PARAM_STATUS => $status, self::PARAM_TAB => Request :: get(self ::
         // PARAM_TAB)));
         switch ($status)
         {
@@ -81,10 +81,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     public function get_platformgroup_status_changer_url($group, $status)
     {
-        // return $this->get_url(array(self :: PARAM_ACTION => self ::
-        // ACTION_CHANGE_PLATFORMGROUP_STATUS, self :: PARAM_OBJECTS => $group,
-        // self :: PARAM_STATUS => $status, self :: PARAM_TAB => Request ::
-        // get(self :: PARAM_TAB)));
+        // return $this->get_url(array(self::PARAM_ACTION => self ::
+        // ACTION_CHANGE_PLATFORMGROUP_STATUS, self::PARAM_OBJECTS => $group,
+        // self::PARAM_STATUS => $status, self::PARAM_TAB => Request ::
+        // get(self::PARAM_TAB)));
         switch ($status)
         {
             case 1 :

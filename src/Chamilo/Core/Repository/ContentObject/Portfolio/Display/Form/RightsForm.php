@@ -148,7 +148,7 @@ class RightsForm extends FormValidator
         
         if (! $has_root_location)
         {
-            $group[] = & $this->createElement(
+            $group[] = $this->createElement(
                 'radio', 
                 null, 
                 null, 
@@ -158,7 +158,7 @@ class RightsForm extends FormValidator
         }
         else
         {
-            $group[] = & $this->createElement(
+            $group[] = $this->createElement(
                 'radio', 
                 null, 
                 null, 
@@ -166,7 +166,7 @@ class RightsForm extends FormValidator
                 self::INHERIT_TRUE, 
                 array('class' => 'inherit_rights_selector', 'disabled' => 'disabled'));
         }
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio', 
             null, 
             null, 
@@ -194,21 +194,21 @@ class RightsForm extends FormValidator
         
         $group = array();
         
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio', 
             null, 
             null, 
             Translation::get('Everyone'), 
             self::RIGHT_OPTION_ALL, 
             array('class' => 'other_option_selected'));
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio', 
             null, 
             null, 
             Translation::get('OnlyForMe'), 
             self::RIGHT_OPTION_ME, 
             array('class' => 'other_option_selected'));
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio', 
             null, 
             null, 

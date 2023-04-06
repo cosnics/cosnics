@@ -34,21 +34,8 @@ class ClearParameterComponent extends \Chamilo\Core\Repository\ContentObject\Tas
                 case 'start_date' :
                     unset($session[Task::PROPERTY_START_DATE]);
                     break;
-                case 'end_date' :
-                    unset($session[Task::PROPERTY_END_DATE]);
-                    break;
                 case 'date' :
                     unset($session[Task::PROPERTY_START_DATE]);
-                    unset($session[Task::PROPERTY_END_DATE]);
-                    break;
-                case Task::PROPERTY_REPEAT_TYPE :
-                    unset($session[Task::PROPERTY_REPEAT_TYPE]);
-                    break;
-                case Task::PROPERTY_TASK_TYPE :
-                    unset($session[Task::PROPERTY_TASK_TYPE]);
-                    break;
-                case Task::PROPERTY_TASK_PRIORITY :
-                    unset($session[Task::PROPERTY_TASK_PRIORITY]);
                     break;
             }
             

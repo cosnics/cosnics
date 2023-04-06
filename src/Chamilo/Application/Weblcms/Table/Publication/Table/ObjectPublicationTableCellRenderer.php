@@ -157,8 +157,8 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
      */
     public function get_actions($publication)
     {
-        $table = &$this->get_table();
-        $column_model = &$table->get_column_model();
+        $table = $this->get_table();
+        $column_model = $table->get_column_model();
         return $this->get_component()->get_publication_actions_dropdown(
             $publication, 
             $column_model->is_display_order_column(), 

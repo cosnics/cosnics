@@ -284,7 +284,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      * @todo make separate method for deleting all users
      * @param type $user_id use null if all users should be deleted
      * @param type $group_id
-     * @return type
+     * @return bool
      */
     public function remove_user_from_group($user_id = null, $group_id)
     {
@@ -552,7 +552,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $debug = "ok";
-        // $breadcrumbtrail->add(new Breadcrumb($this->get_url(array(Tool :: PARAM_ACTION => Tool :: ACTION_BROWSE)),
+        // $breadcrumbtrail->add(new Breadcrumb($this->get_url(array(Tool::PARAM_ACTION => Tool :: ACTION_BROWSE)),
         // Translation :: get('PeerAssessmentToolBrowserComponent')));
     }
 

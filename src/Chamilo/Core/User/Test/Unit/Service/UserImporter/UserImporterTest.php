@@ -65,8 +65,7 @@ class UserImporterTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->importParserFactoryMock = $this->getMockBuilder(ImportParserFactory::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -101,8 +100,7 @@ class UserImporterTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->userImporter);
     }
 

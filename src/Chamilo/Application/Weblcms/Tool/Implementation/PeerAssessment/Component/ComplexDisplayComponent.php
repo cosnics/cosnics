@@ -496,7 +496,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         // TODO add breadcrumbs
-        // $breadcrumbtrail->add(new Breadcrumb($this->get_url(array(Tool :: PARAM_ACTION => Tool :: ACTION_BROWSE)),
+        // $breadcrumbtrail->add(new Breadcrumb($this->get_url(array(Tool::PARAM_ACTION => Tool :: ACTION_BROWSE)),
         // Translation :: get('PeerAssessmentToolBrowserComponent')));
         return $breadcrumbtrail;
     }
@@ -509,7 +509,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
     function get_available_browser_types()
     {
         /*
-         * return array( ContentObjectPublicationListRenderer :: TYPE_TABLE, ContentObjectPublicationListRenderer ::
+         * return array( ContentObjectPublicationListRenderer::TYPE_TABLE, ContentObjectPublicationListRenderer ::
          * TYPE_LIST );
          */
     }
@@ -522,7 +522,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
      * @param integer $right
      * @return boolean the weblcms right
      */
-    function is_allowed($right)
+    function is_allowed($right, $publication = null, $category_id = null)
     {
         switch ($right)
         {

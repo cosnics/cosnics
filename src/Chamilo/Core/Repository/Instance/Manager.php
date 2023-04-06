@@ -95,14 +95,15 @@ abstract class Manager extends Application
     public static function get_links($types = array(), $auto_open = false)
     {
         $instances = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_active_instances($types);
+        $type_names = array();
+
         if ($instances->size() == 0)
         {
             if (! is_array($types))
             {
                 $types = array($types);
             }
-            
-            $type_names = array();
+
             foreach ($types as $type)
             {
                 $type_names[] = Translation::get('TypeName', null, Manager::get_namespace($type));

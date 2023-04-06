@@ -38,7 +38,7 @@ class SubscribedCourseTableCellRenderer extends CourseTableCellRenderer
     {
         if (DataManager::is_user_direct_subscribed_to_course(
             $this->get_component()->get_user_id(), 
-            $course[Course::PROPERTY_ID]) && CourseManagementRights::getInstance()->is_allowed(
+            $course[Course::PROPERTY_ID]) && CourseManagementRights::getInstance()->is_allowed_management(
             CourseManagementRights::DIRECT_UNSUBSCRIBE_RIGHT, 
             $course[Course::PROPERTY_ID]) &&
              ! $this->is_subscribed_as_course_admin($course[Course::PROPERTY_ID], $this->get_component()->get_user()))

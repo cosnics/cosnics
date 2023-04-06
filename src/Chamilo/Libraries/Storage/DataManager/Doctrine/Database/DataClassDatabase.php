@@ -645,8 +645,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $array = array("*");
         }
 
-        $query = 'SELECT ' . implode(',', $array) . ' FROM ' . $object::get_table_name() . ' WHERE ' .
-             $object::PROPERTY_ID . '=' . $this->quote($compositeDataClass->getId());
+        $query = 'SELECT ' . implode(',', $array) . ' FROM ' . $compositeDataClass::get_table_name() . ' WHERE ' .
+            $compositeDataClass::PROPERTY_ID . '=' . $this->quote($compositeDataClass->getId());
 
         $statement = $this->getConnection()->query($query);
 

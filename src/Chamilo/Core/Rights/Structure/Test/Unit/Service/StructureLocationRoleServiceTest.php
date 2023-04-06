@@ -39,8 +39,7 @@ class StructureLocationRoleServiceTest extends ChamiloTestCase
      */
     protected $structureLocationRoleService;
 
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->roleServiceMock =
             $this->getMockForAbstractClass('Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface');
 
@@ -57,8 +56,7 @@ class StructureLocationRoleServiceTest extends ChamiloTestCase
         );
     }
 
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->roleServiceMock);
         unset($this->structureLocationServiceMock);
         unset($this->structureLocationRoleRepositoryMock);

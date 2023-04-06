@@ -59,8 +59,11 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
                 
                 if (count($types) == 1 && $type_selector->count_options() == 1)
                 {
-                    $single_category = array_pop($type_selector->get_categories());
-                    $single_option = array_pop($single_category->get_options());
+                    $categories = $type_selector->get_categories();
+                    $single_category = array_pop($categories);
+
+                    $options = $single_category->get_options();
+                    $single_option = array_pop($options);
                     
                     return $this->get_creation_form($single_option->get_template_registration_id());
                 }

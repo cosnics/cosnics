@@ -44,8 +44,7 @@ class WorkerTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->jobProcessorFactoryMock = $this->getMockBuilder(JobProcessorFactory::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -61,8 +60,7 @@ class WorkerTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->jobProcessorFactoryMock);
         unset($this->psrContextMock);
         unset($this->jobEntityManagerMock);

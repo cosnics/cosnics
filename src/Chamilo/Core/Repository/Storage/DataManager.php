@@ -758,7 +758,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         // foreach ($formats as $format)
         // {
         // $conditions[] = new PatternMatchCondition(
-        // new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_CONFIGURATION),
+        // new PropertyConditionVariable(Element :: class_name(), Element::PROPERTY_CONFIGURATION),
         // '*' . $format . '*');
         // }
         //

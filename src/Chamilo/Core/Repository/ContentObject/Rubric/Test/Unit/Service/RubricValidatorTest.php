@@ -39,8 +39,7 @@ class RubricValidatorTest extends ChamiloTestCase
      * Setup before each test
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->rubricValidator = new RubricValidator();
 
         $this->rubricData = new RubricData('Test Rubric');
@@ -95,8 +94,7 @@ class RubricValidatorTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->rubricValidator);
         unset($this->rootNode);
         unset($this->rubricData);

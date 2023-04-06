@@ -98,9 +98,9 @@ class RegisterForm extends FormValidator
             'required');
         // pw
         $group = array();
-        $group[] = & $this->createElement('radio', 'pass', null, Translation::get('AutoGeneratePassword') . '<br />', 1);
-        $group[] = & $this->createElement('radio', 'pass', null, null, 0);
-        $group[] = & $this->createElement('password', User::PROPERTY_PASSWORD, null, null);
+        $group[] = $this->createElement('radio', 'pass', null, Translation::get('AutoGeneratePassword') . '<br />', 1);
+        $group[] = $this->createElement('radio', 'pass', null, null, 0);
+        $group[] = $this->createElement('password', User::PROPERTY_PASSWORD, null, null);
         $this->addGroup($group, 'pw', Translation::get('Password'), '');
 
         $this->addElement('category');
@@ -141,13 +141,13 @@ class RegisterForm extends FormValidator
         }
         // Send email
         $group = array();
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio',
             'send_mail',
             null,
             Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES),
             1);
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio',
             'send_mail',
             null,
@@ -287,7 +287,7 @@ class RegisterForm extends FormValidator
      *
      * @param array $defaults Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array(), $filter = null)
     {
         $user = $this->user;
         if ($this->form_type == self::TYPE_EDIT)

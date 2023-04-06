@@ -28,8 +28,7 @@ class LevelTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->rubricData = new RubricData('Test Rubric');
         $this->level = new Level($this->rubricData);
     }
@@ -37,8 +36,7 @@ class LevelTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->rubricData);
         unset($this->level);
     }

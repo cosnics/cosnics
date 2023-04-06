@@ -31,8 +31,7 @@ class TreeNodeTest extends ChamiloTestCase
      * Setup before each test
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->rubricData = new RubricData('Test Rubric');
         $this->rootNode = $this->rubricData->getRootNode();
 
@@ -51,8 +50,7 @@ class TreeNodeTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->rootNode);
         unset($this->rubricData);
     }

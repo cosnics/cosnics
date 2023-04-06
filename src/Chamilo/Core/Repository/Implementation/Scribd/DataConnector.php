@@ -14,6 +14,7 @@ require_once Path::getInstance()->getPluginPath(__NAMESPACE__) . 'scribd/scribd.
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
     const BASIC_URL = 'http://api.scribd.org/api?';
+    const SORT_RELEVANCE = 'relevance';
 
     private $scribd;
 
@@ -158,7 +159,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public static function get_sort_properties()
     {
-        // $feed_type = Request :: get(Manager :: PARAM_FEED_TYPE);
+        // $feed_type = Request :: get(Manager::PARAM_FEED_TYPE);
         // $query = ActionBarSearchForm :: get_query();
         //
         // if (($feed_type == Manager :: FEED_TYPE_GENERAL && $query) ||

@@ -22,8 +22,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     private $dir1;
 
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->work_dir = __DIR__ . "/__generated_during_test";
         $this->source_file = $this->work_dir . "/source_file";
         $this->source_dir = $this->work_dir . "/source_dir";
@@ -60,8 +59,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             rmdir($dir);
     }
 
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         $this->delTree($this->work_dir);
     }
 

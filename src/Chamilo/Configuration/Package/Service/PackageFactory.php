@@ -255,7 +255,7 @@ class PackageFactory
 
         if ($packageNodeList->length > 1)
         {
-            throw new \Exception(Translation::get('MultipackageFileNotAllowed', array('CONTEXT' => $context)));
+            throw new \Exception(Translation::get('MultipackageFileNotAllowed', array('CONTEXT' => $path)));
         }
 
         return $this->parsePackageInfo($domXpath, $packageNodeList->item(0));

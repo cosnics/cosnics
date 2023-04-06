@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Php\Lib\Manager\BuilderWizard;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Php\Lib\Manager\BuilderWizardPage;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -149,7 +150,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
         return implode(PHP_EOL, $html);
     }
 
-    function getButtonToolbarRenderer()
+    public function getButtonToolbarRenderer(ContentObject $content_object = null)
     {
         $repository_context = $this->get_parent() instanceof \Chamilo\Core\Repository\Component\BuilderComponent;
         

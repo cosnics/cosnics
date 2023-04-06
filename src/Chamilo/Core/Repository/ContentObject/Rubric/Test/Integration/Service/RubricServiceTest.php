@@ -60,8 +60,7 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
     /**
      * Setup before each test
      */
-    protected function setUp()
-    {
+    protected function setUp(): void    {
         parent::setUp();
 
         /** @var RubricDataRepository $rubricDataRepository */
@@ -116,8 +115,7 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
         $this->rubricData = $rubricData;
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void    {
 //        parent::tearDown();
         unset($this->rubricService);
     }

@@ -25,17 +25,18 @@ class WeblcmsPeerAssessmentGroupSubscriptionTracker extends SimpleTracker
 
     /**
      * Inherited
+     * @param array $extendedPropertyNames
      */
-    static function get_default_property_names()
+    static function get_default_property_names($extendedPropertyNames = array())
     {
         return parent::get_default_property_names(array(self::PROPERTY_USER_ID, self::PROPERTY_GROUP_ID));
     }
 
     /*
-     * function get_user_id() { return $this->get_default_property(self :: PROPERTY_USER_ID); } function
-     * set_user_id($user_id) { $this->set_default_property(self :: PROPERTY_USER_ID, $user_id); } function
-     * get_group_id() { return $this->get_default_property(self :: PROPERTY_GROUP_ID); } function
-     * set_group_id($group_id) { $this->set_default_property(self :: PROPERTY_GROUP_ID, $group_id); }
+     * function get_user_id() { return $this->get_default_property(self::PROPERTY_USER_ID); } function
+     * set_user_id($user_id) { $this->set_default_property(self::PROPERTY_USER_ID, $user_id); } function
+     * get_group_id() { return $this->get_default_property(self::PROPERTY_GROUP_ID); } function
+     * set_group_id($group_id) { $this->set_default_property(self::PROPERTY_GROUP_ID, $group_id); }
      */
     function __call($name, array $arguments)
     {

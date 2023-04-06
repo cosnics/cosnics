@@ -75,7 +75,7 @@ class RequestsTreeRenderer extends HtmlMenu
             case CommonRequest::SUBSCRIPTION_REQUEST :
                 $request_database_method = 'count_requests';
                 break;
-            case CommonRequest::CREATION_REQUEST :
+            case CommonRequest::CREATE_REQUEST :
                 $request_database_method = 'count_course_create_requests';
                 break;
         }

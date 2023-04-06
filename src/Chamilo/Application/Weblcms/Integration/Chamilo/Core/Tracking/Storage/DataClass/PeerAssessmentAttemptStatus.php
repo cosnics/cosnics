@@ -70,16 +70,6 @@ class PeerAssessmentAttemptStatus extends \Chamilo\Core\Tracking\Storage\DataCla
         $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 
-    public function get_group_id()
-    {
-        return $this->get_default_property(self::PROPERTY_GROUP_ID);
-    }
-
-    public function set_group_id($group_id)
-    {
-        $this->set_default_property(self::PROPERTY_GROUP_ID, $group_id);
-    }
-
     public function get_factor()
     {
         return $this->get_default_property(self::PROPERTY_FACTOR);

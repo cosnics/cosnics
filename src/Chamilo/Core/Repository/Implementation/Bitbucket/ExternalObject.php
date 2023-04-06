@@ -58,7 +58,8 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_most_recent_changeset()
     {
-        return array_pop($this->get_changesets(1));
+        $changeSets = $this->get_changesets(1);
+        return array_pop($changeSets);
     }
 
     public function get_privileges()

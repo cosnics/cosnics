@@ -41,8 +41,7 @@ class Mdb2DatabaseTest extends \PHPUnit_Framework_TestCase
 
     public $db;
 
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->db = new Mdb2Database();
         // TODO: Find a way to have a separate test database which can
         // be dropped and recreated as tests are run to ensure no
@@ -50,8 +49,7 @@ class Mdb2DatabaseTest extends \PHPUnit_Framework_TestCase
         $this->db->set_prefix('unit_test_');
     }
 
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         // $this->db = new Mdb2Database; // For some reason, the db var is dropped before teardown?
         // FIXME: This is MDB2-specific.
         $mdb2conn = $this->db->get_connection();

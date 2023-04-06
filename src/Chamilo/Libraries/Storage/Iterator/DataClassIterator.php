@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
  */
 class DataClassIterator extends \ArrayIterator
 {
+    const POSITION_EMPTY = 0;
     const POSITION_FIRST = 1;
     const POSITION_LAST = 2;
     const POSITION_SINGLE = 3;

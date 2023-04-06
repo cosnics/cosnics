@@ -32,6 +32,8 @@ abstract class Manager extends Application
     const ACTION_PREVIEW = 'Preview';
     const DEFAULT_ACTION = self::BROWSER_COMPONENT;
 
+    const PARAM_ATTACHMENT_ID = 'AttachmentId';
+
     public static function factory($type, $application)
     {
         $class = __NAMESPACE__ . '\Component\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .

@@ -487,7 +487,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_users_from_group($group)
     {
         $endpoint = 'groups/' . $group . '/members/';
-        $this->bitbucket->configure(RestClient::METHOD_GET, $endpoint/*, array(), RestData :: factory(RestData :: TYPE_PLAIN, '')*/);
+        $this->bitbucket->configure(RestClient::METHOD_GET, $endpoint/*, array(), RestData :: factory(RestData::TYPE_PLAIN, '')*/);
         $response = $this->bitbucket->request();
         if ($response->get_response_code() != 200)
         {

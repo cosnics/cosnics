@@ -25,7 +25,7 @@ class StatusViewerComponent extends Manager
     public function run()
     {
         if (! $this->is_allowed(self::EDIT_RIGHT))
-            $this->redirect(null, null, array(self::PARAM_ACTION => self::ACTION_BROWSE_ATTEMPTS));
+            $this->redirect(null, null, array(self::PARAM_ACTION => self::ACTION_VIEW_USER_STATUS));
         
         $this->publication_id = Request::get(self::PARAM_PUBLICATION);
         $this->group_id = Request::get(self::PARAM_GROUP);

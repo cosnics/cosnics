@@ -14,6 +14,6 @@ class AttemptVisibilityTogglerComponent extends Manager
     {
         $this->toggle_attempt_visibility(Request::get(self::PARAM_ATTEMPT));
         
-        $this->redirect(null, false, array(self::PARAM_ACTION => self::ACTION_BROWSE_ATTEMPTS));
+        $this->redirect(null, false, array(self::PARAM_ACTION => self::ACTION_VIEW_USER_ATTEMPT_STATUS));
     }
 }

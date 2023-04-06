@@ -41,7 +41,7 @@ abstract class Manager extends Application
 
     public function get_item_creation_url()
     {
-        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_ADD));
+        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE));
     }
 
     public function get_item_editing_url($navigation_item)

@@ -81,8 +81,7 @@ class TrackingServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->attemptTrackingServiceMock = $this->getMockBuilder(AttemptTrackingService::class)->disableOriginalConstructor()->getMock();
 
         $this->attemptSummaryCalculatorMock = $this->getMockBuilder(AttemptSummaryCalculator::class)->disableOriginalConstructor()->getMock();
@@ -113,8 +112,7 @@ class TrackingServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->trackingService);
         unset($this->progressCalculatorMock);
         unset($this->assessmentTrackingServiceMock);

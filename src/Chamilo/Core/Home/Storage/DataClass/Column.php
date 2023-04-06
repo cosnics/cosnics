@@ -49,7 +49,7 @@ class Column extends Element
     public function is_empty()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Block::class_name(), Block::PROPERTY_COLUMN),
+            new PropertyConditionVariable(Block::class_name(), Block::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->get_id()));
 
         $blocks_count = DataManager::count(Block::class_name(), new DataClassCountParameters($condition));

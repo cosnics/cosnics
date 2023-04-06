@@ -52,7 +52,7 @@ class ExternalObjectForm extends FormValidator
         $this->external_repository_object = $external_repository_object;
 
         $defaults[ExternalObject::PROPERTY_ID] = $external_repository_object->get_id();
-        // $defaults[ExternalObject :: PROPERTY_TITLE] = $external_repository_object->get_title();
+        // $defaults[ExternalObject::PROPERTY_TITLE] = $external_repository_object->get_title();
         $defaults[ExternalObject::PROPERTY_DESCRIPTION] = html_entity_decode(
             $external_repository_object->get_description());
         $defaults[ExternalObject::PROPERTY_TAGS] = $external_repository_object->get_tags_string(false);
@@ -71,9 +71,9 @@ class ExternalObjectForm extends FormValidator
 
     public function build_basic_form()
     {
-        // $this->addElement('text', ExternalObject :: PROPERTY_TITLE, Translation :: get('Title'),
+        // $this->addElement('text', ExternalObject::PROPERTY_TITLE, Translation :: get('Title'),
         // array('size' => '50'));
-        // $this->addRule(ExternalObject :: PROPERTY_TITLE, Translation :: get('ThisFieldIsRequired'),
+        // $this->addRule(ExternalObject::PROPERTY_TITLE, Translation :: get('ThisFieldIsRequired'),
         // 'required');
         $this->addElement(
             'textarea',

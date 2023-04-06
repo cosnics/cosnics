@@ -976,6 +976,8 @@ class Cezpdf extends Cpdf
         {
             // take the columns from the first row of the data set
             reset($data);
+
+            $v = $data[0];
             $cols = array();
             foreach ($v as $k1 => $v1)
             {

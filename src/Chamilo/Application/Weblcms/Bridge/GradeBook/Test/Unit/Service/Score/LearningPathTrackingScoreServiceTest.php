@@ -32,8 +32,7 @@ class LearningPathTrackingScoreServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->trackingServiceBuilderServiceMock = $this->getMockBuilder(TrackingServiceBuilderService::class)
             ->disableOriginalConstructor()->getMock();
         $this->learningPathTrackingScoreService = new LearningPathTrackingScoreService($this->trackingServiceBuilderServiceMock);
@@ -42,8 +41,7 @@ class LearningPathTrackingScoreServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->trackingServiceBuilderServiceMock);
         unset($this->learningPathTrackingScoreService);
     }

@@ -44,7 +44,7 @@ class CourseTypeForm extends CommonCourseForm implements FormLockedSettingsSuppo
         // {
         // $this->addElement('html', '<div class="warning-message">'
         // . Translation :: get('ForceUpdateWarning') . '</div>');
-        // $this->addElement('checkbox', self :: PROPERTY_FORCE_UPDATE, Translation :: get('ForceUpdate'));
+        // $this->addElement('checkbox', self::PROPERTY_FORCE_UPDATE, Translation :: get('ForceUpdate'));
         // }
     }
 

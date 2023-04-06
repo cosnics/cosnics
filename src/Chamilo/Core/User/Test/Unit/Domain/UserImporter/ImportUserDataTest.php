@@ -24,16 +24,14 @@ class ImportUserDataTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->importUserData = new ImportUserData('test');
     }
 
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->importUserData);
     }
 

@@ -32,8 +32,7 @@ class CategoryNodeTest extends ChamiloTestCase
      *
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->rubricData = new RubricData('Test Rubric');
         $this->rubricData->getRootNode()->setId(9);
         $this->testNode = new CategoryNode('Test category 1', $this->rubricData);
@@ -44,8 +43,7 @@ class CategoryNodeTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->rubricNode);
     }
 

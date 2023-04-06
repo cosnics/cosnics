@@ -41,7 +41,7 @@ class WebpageContentObjectImportForm extends ContentObjectImportForm
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'WebpageImportForm.js'));
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array (), $filter = null)
     {
         parent::setDefaults(
             array(

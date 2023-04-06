@@ -111,7 +111,7 @@ class UserViewForm extends FormValidator
             }
         }
         
-        $elem = &$this->addElement(
+        $elem = $this->addElement(
             'select', 
             'types', 
             Translation::get('SelectTypesToShow'), 

@@ -41,7 +41,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
      * (non-PHPdoc) @see
      * \core\repository\content_object\portfolio\PortfolioDisplaySupport::is_allowed_to_delete_feedback()
      */
-    public function is_allowed_to_delete_feedback()
+    public function is_allowed_to_delete_feedback($feedback = null)
     {
         return true;
     }
@@ -50,7 +50,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
      * (non-PHPdoc) @see
      * \core\repository\content_object\portfolio\PortfolioDisplaySupport::is_allowed_to_edit_content_object()
      */
-    public function is_allowed_to_edit_content_object()
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node = null)
     {
         return true;
     }
@@ -59,7 +59,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
      * (non-PHPdoc) @see
      * \core\repository\content_object\portfolio\PortfolioDisplaySupport::is_allowed_to_view_content_object()
      */
-    public function is_allowed_to_view_content_object()
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node = null)
     {
         return true;
     }
@@ -67,7 +67,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
     /*
      * (non-PHPdoc) @see \core\repository\DisplaySupport::is_allowed_to_add_child()
      */
-    public function is_allowed_to_add_child()
+    public function is_allowed_to_add_child(ComplexContentObjectPathNode $node = null)
     {
         return true;
     }
@@ -75,7 +75,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
     /*
      * (non-PHPdoc) @see \core\repository\DisplaySupport::is_allowed_to_delete_child()
      */
-    public function is_allowed_to_delete_child()
+    public function is_allowed_to_delete_child(ComplexContentObjectPathNode $node = null)
     {
         return true;
     }
@@ -83,7 +83,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
     /*
      * (non-PHPdoc) @see \core\repository\DisplaySupport::is_allowed_to_edit_feedback()
      */
-    public function is_allowed_to_edit_feedback()
+    public function is_allowed_to_edit_feedback($feedback = null)
     {
         return true;
     }

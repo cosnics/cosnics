@@ -695,7 +695,7 @@ abstract class NestedSet extends DataClass
         $nested_set = $this;
 
         return \Chamilo\Libraries\Storage\DataManager\DataManager::transactional(
-            function ($c) use ($nested_set, $insert_after)
+            function ($c) use ($nested_set, $insert_after, $condition)
             { // Step 0: Compute the auxiliary values used by this
               // algorithm
               // This is the initial position of the node to be moved

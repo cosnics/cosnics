@@ -31,9 +31,9 @@ class XmlActiveGroupMenuFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID), 
             new StaticConditionVariable($parent_id));
-        $conditions[] = new EqualityCondition(
+/*        $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_STATE), 
-            new StaticConditionVariable(1));
+            new StaticConditionVariable(1));*/
         
         $groups_tree = DataManager::retrieves(
             Group::class_name(), 

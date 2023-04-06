@@ -77,7 +77,7 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
             
             if ($block->update())
             {
-                // $rendererFactory = new Factory(Renderer :: TYPE_BASIC, $this);
+                // $rendererFactory = new Factory(Renderer::TYPE_BASIC, $this);
                 // $renderer = $rendererFactory->getRenderer();
                 
                 $homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()));

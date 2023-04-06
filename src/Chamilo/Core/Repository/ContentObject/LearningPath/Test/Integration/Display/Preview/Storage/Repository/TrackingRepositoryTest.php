@@ -32,8 +32,7 @@ class TrackingRepositoryTest extends DependencyInjectionBasedTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->trackingRepository = new TrackingRepository();
         $this->createSessionFixtures();
     }
@@ -41,8 +40,7 @@ class TrackingRepositoryTest extends DependencyInjectionBasedTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->trackingRepository);
         Session::clear();
     }

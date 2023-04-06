@@ -100,7 +100,7 @@ class ProgressDetailsBlock extends ReportingBlock
                 $delete_url = $this->get_parent()->get_parent()->get_url(
                     array(
                         \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_DELETE_ATTEMPT,
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_DELETE_TREE_NODE_ATTEMPT,
                         \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID =>
                             $treeNode->getId(),
                         \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ITEM_ATTEMPT_ID =>

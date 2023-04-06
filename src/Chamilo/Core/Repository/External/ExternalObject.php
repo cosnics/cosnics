@@ -28,6 +28,9 @@ abstract class ExternalObject
      */
     private $synchronization_data;
     const PROPERTY_ID = 'id';
+
+    const OBJECT_TYPE = '';
+
     const PROPERTY_EXTERNAL_REPOSITORY_ID = 'external_repository_id';
     const PROPERTY_TITLE = 'title';
     const PROPERTY_DESCRIPTION = 'description';
@@ -442,7 +445,7 @@ abstract class ExternalObject
      */
     public static function get_object_type()
     {
-        return self::OBJECT_TYPE;
+        return static::OBJECT_TYPE;
     }
 
     /**

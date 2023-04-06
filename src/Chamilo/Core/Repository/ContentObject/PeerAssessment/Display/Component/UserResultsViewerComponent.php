@@ -73,7 +73,7 @@ class UserResultsViewerComponent extends Manager
             $this->redirect(
                 Translation::get('Notallowed'),
                 true,
-                array(self::PARAM_ACTION => self::ACTION_BROWSE_ATTEMPTS));
+                array(self::PARAM_ACTION => self::ACTION_VIEW_USER_STATUS));
         }
 
         $render_html = $this->render();

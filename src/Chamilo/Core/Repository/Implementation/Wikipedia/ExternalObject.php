@@ -8,6 +8,8 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     const OBJECT_TYPE = 'wikipedia';
     const PROPERTY_URLS = 'urls';
 
+    const PROPERTY_TAGS = 'tags';
+
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent::get_default_property_names(array(self::PROPERTY_URLS));

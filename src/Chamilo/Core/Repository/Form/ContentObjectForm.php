@@ -120,7 +120,7 @@ abstract class ContentObjectForm extends FormValidator
     /**
      * Constructor.
      *
-     * @param $form_type int The form type; either ContentObjectForm :: TYPE_CREATE or ContentObjectForm :: TYPE_EDIT.
+     * @param $form_type int The form type; either ContentObjectForm::TYPE_CREATE or ContentObjectForm::TYPE_EDIT.
      * @param $content_object ContentObject The object to create or update.
      * @param $form_name string The name to use in the form tag.
      * @param $method string The method to use ('post' or 'get').
@@ -1211,7 +1211,7 @@ EOT;
     /**
      * Creates a form object to manage an content object.
      *
-     * @param $form_type int The form type; either ContentObjectForm :: TYPE_CREATE or ContentObjectForm :: TYPE_EDIT.
+     * @param $form_type int The form type; either ContentObjectForm::TYPE_CREATE or ContentObjectForm::TYPE_EDIT.
      * @param $content_object ContentObject The object to create or update.
      * @param $form_name string The name to use in the form tag.
      * @param $method string The method to use ('post' or 'get').

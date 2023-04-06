@@ -27,8 +27,7 @@ class PasswordSecurityTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->userRepositoryMock = $this->getMockBuilder(UserRepository::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -38,8 +37,7 @@ class PasswordSecurityTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->userRepositoryMock);
         unset($this->passwordSecurity);
     }

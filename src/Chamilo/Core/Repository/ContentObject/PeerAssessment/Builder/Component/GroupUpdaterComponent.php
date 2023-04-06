@@ -31,7 +31,7 @@ class GroupUpdaterComponent extends Manager
         {
             $group = $this->get_group($group_id);
             
-            // $this->set_parameter(self :: PARAM_GROUP, $group_id);
+            // $this->set_parameter(self::PARAM_GROUP, $group_id);
             $param[self::PARAM_GROUP] = $group_id;
             $form = new PeerAssessmentGroupForm(
                 $this, 

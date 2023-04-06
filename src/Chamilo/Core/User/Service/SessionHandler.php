@@ -117,7 +117,7 @@ class SessionHandler implements \SessionHandlerInterface
         $this->lifetime = $lifetime;
     }
 
-    public function open($savePath, $name)
+    public function open($savePath, $name): bool
     {
         $this->savePath = $savePath;
         $this->name = $name;
@@ -125,7 +125,7 @@ class SessionHandler implements \SessionHandlerInterface
         return true;
     }
 
-    public function close()
+    public function close(): bool
     {
         return true;
     }
@@ -134,7 +134,7 @@ class SessionHandler implements \SessionHandlerInterface
      *
      * @see SessionHandlerInterface::read()
      */
-    public function read($sessionIdentifier)
+    public function read($sessionIdentifier): false|string
     {
         $session = $this->getSessionRepository()->getSessionForIdentifierNameAndSavePath(
             $sessionIdentifier, 
@@ -160,7 +160,7 @@ class SessionHandler implements \SessionHandlerInterface
      *
      * @see SessionHandlerInterface::write()
      */
-    public function write($sessionIdentifier, $data)
+    public function write($sessionIdentifier, $data): bool
     {
         $data = base64_encode($data);
         
@@ -194,7 +194,7 @@ class SessionHandler implements \SessionHandlerInterface
      *
      * @see SessionHandlerInterface::destroy()
      */
-    public function destroy($sessionIdentifier)
+    public function destroy($sessionIdentifier): bool
     {
         return $this->getSessionRepository()->deleteSessionForIdentifierNameAndSavePath(
             $sessionIdentifier, 
@@ -218,7 +218,7 @@ class SessionHandler implements \SessionHandlerInterface
      *
      * @see SessionHandlerInterface::gc()
      */
-    public function gc($maxlifetime)
+    public function gc($maxlifetime): false|int
     {
         $this->garbage($maxlifetime);
     }

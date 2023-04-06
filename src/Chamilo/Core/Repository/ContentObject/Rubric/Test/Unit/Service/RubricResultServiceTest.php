@@ -37,8 +37,7 @@ class RubricResultServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->rubricResultRepositoryMock = $this->getMockBuilder(RubricResultRepository::class)
             ->disableOriginalConstructor()->getMock();
         $this->rubricResultService = new RubricResultService($this->rubricResultRepositoryMock);
@@ -47,8 +46,7 @@ class RubricResultServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->rubricResultService);
     }
 

@@ -203,6 +203,6 @@ class RightsForm extends FormValidator
             $defaultValues[self::PROPERTY_VIEW] = RightsService::RIGHT_VIEW;
         }
         
-        parent::setDefaults($defaults);
+        parent::setDefaults($defaultValues);
     }
 }

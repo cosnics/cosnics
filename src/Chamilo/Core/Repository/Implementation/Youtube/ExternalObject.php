@@ -9,6 +9,7 @@ class ExternalObject extends StreamingMediaExternalObject
     const OBJECT_TYPE = 'youtube';
     const PROPERTY_CATEGORY = 'category';
     const PROPERTY_TAGS = 'tags';
+    const PROPERTY_FILE = 'file';
     const STATUS_DELETED = 'deleted';
     const STATUS_FAILED = 'failed';
     const STATUS_PROCESSED = 'processed';

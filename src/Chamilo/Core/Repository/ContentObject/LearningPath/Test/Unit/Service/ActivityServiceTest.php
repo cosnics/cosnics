@@ -68,8 +68,7 @@ class ActivityServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    protected function setUp()
-    {
+    protected function setUp(): void    {
         $this->activityRepositoryMock = $this->getMockBuilder(ActivityRepository::class)->disableOriginalConstructor()->getMock();
 
         $this->automaticNumberingServiceMock = $this->getMockBuilder(AutomaticNumberingService::class)->disableOriginalConstructor()->getMock();
@@ -88,8 +87,7 @@ class ActivityServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->activityRepositoryMock);
         unset($this->automaticNumberingServiceMock);
         unset($this->activityService);

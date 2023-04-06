@@ -39,6 +39,6 @@ class CourseGroupUserTableColumnModel extends RecordTableColumnModel
         
         // $title = Translation :: get(self :: COURSE_GROUP_COLOMN, array(), Utilities :: COMMON_LIBRARIES);
         // // $this->add_column(
-        // // new DataClassPropertyTableColumn(CourseGroup :: class_name(), CourseGroup :: PROPERTY_ID, $title, false));
+        // // new DataClassPropertyTableColumn(CourseGroup :: class_name(), CourseGroup::PROPERTY_ID, $title, false));
     }
 }

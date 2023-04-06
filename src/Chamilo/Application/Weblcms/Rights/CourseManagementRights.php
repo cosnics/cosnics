@@ -114,11 +114,11 @@ class CourseManagementRights extends WeblcmsRights
      * 
      * @param $right_id int
      * @param $identifier int
-     * @param $type int - [OPTIONAL] default: self :: TYPE_COURSE
+     * @param $type int - [OPTIONAL] default: self::TYPE_COURSE
      * @param $user_id int - [OPTIONAL] default: null
      * @return boolean
      */
-    public function is_allowed($right_id, $identifier, $type = self::TYPE_COURSE, $user_id = null)
+    public function is_allowed_management($right_id, $identifier, $type = self::TYPE_COURSE, $user_id = null)
     {
         $entities = array();
         $entities[UserEntity::ENTITY_TYPE] = new UserEntity();

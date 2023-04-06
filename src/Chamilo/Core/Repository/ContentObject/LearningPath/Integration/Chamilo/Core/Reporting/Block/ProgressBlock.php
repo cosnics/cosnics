@@ -123,13 +123,15 @@ class ProgressBlock extends ReportingBlock
 
                 if ($this->get_parent()->get_parent()->is_allowed_to_edit_attempt_data())
                 {
-                    $delete_url = $this->get_parent()->get_parent()->get_url(
+                    /*$delete_url = $this->get_parent()->get_parent()->get_url(
                         array(
-                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_DELETE_ATTEMPT,
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_DELETE_TREE_NODE_ATTEMPT,
                             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID => $treeNode->getId(
                             )
                         )
-                    );
+                    );*/
+
+                    $delete_url = null;
 
                     $actions[] = Theme::getInstance()->getCommonImage(
                         'Action/Delete',
@@ -168,11 +170,13 @@ class ProgressBlock extends ReportingBlock
 
         if ($this->get_parent()->get_parent()->is_allowed_to_edit_attempt_data() && $attempt_count > 0)
         {
-            $delete_url = $this->get_parent()->get_parent()->get_url(
+            /*$delete_url = $this->get_parent()->get_parent()->get_url(
                 array(
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_DELETE_ATTEMPT
+                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_DELETE_ATTEMPTS_FOR_TREE_NODE
                 )
-            );
+            );*/
+
+            $delete_url = null;
 
             $action = Theme::getInstance()->getCommonImage(
                 'Action/Delete',

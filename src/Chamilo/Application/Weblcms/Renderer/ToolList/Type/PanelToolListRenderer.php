@@ -180,8 +180,8 @@ class PanelToolListRenderer extends ToolListRenderer
                 // $html[] = '<a href="' .
                 // $parent->get_url(
                 // array(
-                // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => $lcms_action,
-                // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id())) .
+                // \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => $lcms_action,
+                // \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id())) .
                 // '"><img src="' . Theme :: getInstance()->getCommonImagePath($visible_image) .
                 // '" style="vertical-align: middle;" alt=""/></a>';
                 // }
@@ -192,9 +192,9 @@ class PanelToolListRenderer extends ToolListRenderer
                 // $html[] = '<a href="' .
                 // $parent->get_url(
                 // array(
-                // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION =>
+                // \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION =>
                 // \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_DELETE_LINKS,
-                // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id())) .
+                // \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id())) .
                 // '"><img src="' . Theme :: getInstance()->getCommonImagePath('Action/Delete') .
                 // '" style="vertical-align: middle;" alt=""/></a>';
                 // }

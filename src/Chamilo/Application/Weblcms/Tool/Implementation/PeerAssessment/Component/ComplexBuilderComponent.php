@@ -15,7 +15,7 @@ class ComplexBuilderComponent extends Manager implements DelegateComponent
 
     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        // $breadcrumbtrail->add(new Breadcrumb($this->get_url(array(Tool :: PARAM_ACTION => Tool :: ACTION_BROWSE)),
+        // $breadcrumbtrail->add(new Breadcrumb($this->get_url(array(Tool::PARAM_ACTION => Tool :: ACTION_BROWSE)),
         // Translation :: get('PeerAssessmentToolBrowserComponent')));
     }
 

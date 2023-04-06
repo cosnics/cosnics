@@ -129,8 +129,8 @@ class AvailabilityForm extends FormValidator
 
                     // $colourElement = $this->createElement(
                     // 'text',
-                    // AvailabilityService :: PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
-                    // $ownedCalendar->getIdentifier() . '][' . AvailabilityService :: PROPERTY_COLOUR . ']',
+                    // AvailabilityService::PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
+                    // $ownedCalendar->getIdentifier() . '][' . AvailabilityService::PROPERTY_COLOUR . ']',
                     // $ownedCalendar->getName() . ' Colour',
                     // array('class' => 'colour-selection'));
                     // $colourElement->setType('color');

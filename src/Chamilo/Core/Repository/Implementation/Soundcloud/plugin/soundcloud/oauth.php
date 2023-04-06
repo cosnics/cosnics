@@ -218,7 +218,7 @@ class OAuthSignatureMethod_RSA_SHA1 extends OAuthSignatureMethod
        * }}}
        */
 
-    public function build_signature(&$request, $consumer, $token)
+    public function build_signature($request, $consumer, $token)
     { /*
        * {{{
        */

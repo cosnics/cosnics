@@ -121,7 +121,7 @@ catch (exception $e)
          $trace[1]['line'] . "</b><br />";
 }
 
-print_r($data);
+//print_r($data);
 
 /*
  * Assuming $scope is set to default or all :) Array ( [result] => Array ( [doc_id] => 501796 [title] => Andrew Loomis -

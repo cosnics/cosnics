@@ -361,7 +361,8 @@ abstract class ComplexContentObjectPathNode
             {
                 while ($previous_sibling->has_children())
                 {
-                    $previous_sibling = array_pop($previous_sibling->get_children());
+                    $children = $previous_sibling->get_children();
+                    $previous_sibling = array_pop($children);
                 }
             }
             
@@ -410,7 +411,8 @@ abstract class ComplexContentObjectPathNode
         
         if ($this->has_children())
         {
-            $next = array_shift($this->get_children());
+            $children = $this->get_children();
+            $next = array_shift($children);
         }
         
         if (! $next instanceof ComplexContentObjectPathNode)

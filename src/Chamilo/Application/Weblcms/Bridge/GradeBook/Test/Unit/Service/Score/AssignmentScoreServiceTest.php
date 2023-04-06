@@ -41,8 +41,7 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->assignmentPublicationRepositoryMock = $this->getMockBuilder(AssignmentPublicationRepository::class)
             ->disableOriginalConstructor()->getMock();
         $this->assignmentServiceMock = $this->getMockBuilder(AssignmentService::class)
@@ -56,8 +55,7 @@ class AssignmentScoreServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->assignmentPublicationRepositoryMock);
         unset($this->assignmentServiceMock);
         unset($this->entityDataServiceMock);

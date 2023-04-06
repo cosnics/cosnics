@@ -167,7 +167,7 @@ class Soundcloud
         $ch = curl_init();
         $mime = (stristr($headers['Content-Type'], 'multipart/form-data')) ? true : false;
         $headers['User-Agent'] = (isset($headers['User-Agent'])) ? $headers['User-Agent'] : 'PHP SoundCloud/' .
-             self :: VERSION;
+             self::VERSION;
         $headers['Content-Length'] = (isset($headers['Content-Length'])) ? $headers['Content-Length'] : 0;
         $headers = (is_array($headers)) ? $this->_build_header($headers) : array();
         $options = array(CURLOPT_URL => $url, CURLOPT_HEADER => false, CURLOPT_RETURNTRANSFER => true);

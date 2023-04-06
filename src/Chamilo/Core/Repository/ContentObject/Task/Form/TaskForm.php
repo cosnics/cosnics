@@ -405,8 +405,8 @@ class TaskForm extends ContentObjectForm
         else
         {
             $defaults[Task::PROPERTY_FREQUENCY] = 0;
-            // $defaults[Task :: PROPERTY_START_DATE] = time();
-            // $defaults[Task :: PROPERTY_DUE_DATE] = strtotime('+1 Hour', time());
+            // $defaults[Task::PROPERTY_START_DATE] = time();
+            // $defaults[Task::PROPERTY_DUE_DATE] = strtotime('+1 Hour', time());
 
             $defaults[self::PARAM_DAILY][Task::PROPERTY_FREQUENCY_INTERVAL] = 1;
 

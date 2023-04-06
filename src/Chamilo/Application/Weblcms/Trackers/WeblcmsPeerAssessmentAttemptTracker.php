@@ -35,8 +35,9 @@ class WeblcmsPeerAssessmentAttemptTracker extends SimpleTracker
 
     /**
      * Inherited
+     * @param array $extendedPropertyNames
      */
-    static function get_default_property_names()
+    static function get_default_property_names($extendedPropertyNames = array())
     {
         return parent::get_default_property_names(
             array(
@@ -50,14 +51,14 @@ class WeblcmsPeerAssessmentAttemptTracker extends SimpleTracker
     }
 
     /*
-     * function get_publication_id() { return $this->get_default_property(self :: PROPERTY_PUBLICATION_ID); } function
-     * set_publication_id($publication_id) { $this->set_default_property(self :: PROPERTY_PUBLICATION_ID,
-     * $publication_id); } function get_start_date() { return $this->get_default_property(self :: PROPERTY_START_DATE);
-     * } function set_start_date($start_date) { $this->set_default_property(self :: PROPERTY_START_DATE, $start_date); }
-     * function get_end_date() { return $this->get_default_property(self :: PROPERTY_END_DATE); } function
-     * set_end_date($end_date) { $this->set_default_property(self :: PROPERTY_END_DATE, $end_date); } function
-     * get_closed() { return $this->get_default_property(self :: PROPERTY_CLOSED); } function set_closed($closed) {
-     * $this->set_default_property(self :: PROPERTY_CLOSED, $closed); }
+     * function get_publication_id() { return $this->get_default_property(self::PROPERTY_PUBLICATION_ID); } function
+     * set_publication_id($publication_id) { $this->set_default_property(self::PROPERTY_PUBLICATION_ID,
+     * $publication_id); } function get_start_date() { return $this->get_default_property(self::PROPERTY_START_DATE);
+     * } function set_start_date($start_date) { $this->set_default_property(self::PROPERTY_START_DATE, $start_date); }
+     * function get_end_date() { return $this->get_default_property(self::PROPERTY_END_DATE); } function
+     * set_end_date($end_date) { $this->set_default_property(self::PROPERTY_END_DATE, $end_date); } function
+     * get_closed() { return $this->get_default_property(self::PROPERTY_CLOSED); } function set_closed($closed) {
+     * $this->set_default_property(self::PROPERTY_CLOSED, $closed); }
      */
     function __call($name, array $arguments)
     {

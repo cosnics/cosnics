@@ -95,9 +95,9 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         
         // $most_recent = array();
         // $most_recent['title'] = Translation :: get('MostRecent');
-        // $most_recent['url'] = $this->get_url(array(self :: PARAM_FEED_TYPE =>
+        // $most_recent['url'] = $this->get_url(array(self::PARAM_FEED_TYPE =>
         // self :: FEED_TYPE_MOST_RECENT),
-        // array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
+        // array(ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY));
         // $most_recent['class'] = 'recent';
         // $menu_items[] = $most_recent;
         //

@@ -6,8 +6,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     private $config;
 
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->config = new Configuration();
     }
 

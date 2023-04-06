@@ -22,8 +22,7 @@ class TreeNodeDataRepositoryTest extends ChamiloFixturesBasedTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         parent::setUp();
 
         $this->treeNodeDataRepository = new TreeNodeDataRepository($this->getTestDataClassRepository());
@@ -32,8 +31,7 @@ class TreeNodeDataRepositoryTest extends ChamiloFixturesBasedTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         parent::tearDown();
 
         unset($this->treeNodeDataRepository);

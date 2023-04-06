@@ -11,6 +11,8 @@ use Chamilo\Libraries\Utilities\Utilities;
 class DeleterComponent extends Manager
 {
 
+    const PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID = 'LocationEntityRightGroupId';
+
     public function run()
     {
         if (! $this->get_user()->is_platform_admin())

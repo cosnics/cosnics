@@ -168,7 +168,7 @@ class HtmlMenu
      * @param integer $level Level in the tree
      * @return integer Node type (one of HTML_MENU_ENTRY_* constants)
      */
-    private function _findNodeType($nodeId, &$nodeUrl, $level)
+    private function _findNodeType($nodeId, $nodeUrl, $level)
     {
         if ($this->_currentUrl == $nodeUrl)
         {

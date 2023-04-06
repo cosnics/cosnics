@@ -87,7 +87,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
                         return Translation::get('Unknown');
                 }
             case User::PROPERTY_PLATFORMADMIN :
-                if ($user_with_subscription_status_and_type[User::PROPERTY_PLATFORM_ADMIN] == '1')
+                if ($user_with_subscription_status_and_type[User::PROPERTY_PLATFORMADMIN] == '1')
                 {
                     return Translation::get('PlatformAdministrator');
                 }
@@ -167,7 +167,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
             if ($user_id != $this->get_component()->get_user()->get_id() && $user_with_subscription_status_and_type[AllSubscribedUserTableColumnModel::SUBSCRIPTION_TYPE] %
                  2)
             {
-                if ($this->get_component()->get_user()->is_platform_admin() || CourseManagementRights::getInstance()->is_allowed(
+                if ($this->get_component()->get_user()->is_platform_admin() || CourseManagementRights::getInstance()->is_allowed_management(
                     CourseManagementRights::TEACHER_UNSUBSCRIBE_RIGHT, 
                     $this->get_component()->get_course_id(), 
                     CourseManagementRights::TYPE_COURSE, 

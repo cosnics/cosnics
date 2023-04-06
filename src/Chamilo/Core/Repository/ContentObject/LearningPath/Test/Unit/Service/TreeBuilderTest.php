@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializerInterface;
 
 /**
  * Tests the TreeBuilder class
@@ -60,8 +61,7 @@ class TreeBuilderTest extends ChamiloTestCase
      *        - Section D - ID: 5
      *            - Page 2 - ID: 7
      */
-    protected function setUp()
-    {
+    protected function setUp(): void    {
         $this->treeNodeDataRepositoryMock = $this->getMockBuilder(TreeNodeDataRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -70,9 +70,9 @@ class TreeBuilderTest extends ChamiloTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->serializerMock = $this->getMockBuilder(Serializer::class)
+        $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->treeBuilder = new TreeBuilder(
             $this->treeNodeDataRepositoryMock, $this->contentObjectRepositoryMock, $this->serializerMock
@@ -146,8 +146,7 @@ class TreeBuilderTest extends ChamiloTestCase
     /**
      * Teardown after each test
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->treeNodeDataRepositoryMock);
         unset($this->contentObjectRepositoryMock);
         unset($this->serializerMock);

@@ -85,7 +85,6 @@ class PeerAssessmentForm extends ContentObjectForm
         $object = new PeerAssessment();
         $values = $this->exportValues();
 
-        $object->set_assessment_type($values[PeerAssessment::PROPERTY_ASSESSMENT_TYPE]);
         $object->set_scale($values[PeerAssessment::PROPERTY_SCALE]);
 
         $this->set_content_object($object);
@@ -101,7 +100,6 @@ class PeerAssessmentForm extends ContentObjectForm
 
         $values = $this->exportValues();
 
-        $object->set_assessment_type($values[PeerAssessment::PROPERTY_ASSESSMENT_TYPE]);
         $object->set_scale($values[PeerAssessment::PROPERTY_SCALE]);
 
         $this->set_content_object($object);

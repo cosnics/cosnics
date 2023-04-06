@@ -44,8 +44,7 @@ class SynchronizerTest extends ChamiloTestCase
      */
     protected $configurationSynchronizer;
 
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->configurationLoader = $this->getMockForAbstractClass(LoaderInterface::class);
         $this->registrationConsulterMock = $this->createMock(RegistrationConsulter::class, array(), array(), '', false);
         $this->structureLocationServiceMock = $this->getMockForAbstractClass(StructureLocationServiceInterface::class);
@@ -59,8 +58,7 @@ class SynchronizerTest extends ChamiloTestCase
         );
     }
 
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->configurationLoader);
         unset($this->registrationConsulterMock);
         unset($this->structureLocationServiceMock);

@@ -121,13 +121,13 @@ class UserForm extends FormValidator
             'required');
 
         $group = array();
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio',
             User::PROPERTY_ACTIVE,
             null,
             Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES),
             1);
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio',
             User::PROPERTY_ACTIVE,
             null,
@@ -139,11 +139,11 @@ class UserForm extends FormValidator
         $group = array();
         if ($this->form_type == self::TYPE_EDIT)
         {
-            $group[] = &$this->createElement('radio', 'pass', null, Translation::get('KeepPassword') . '<br />', 2);
+            $group[] = $this->createElement('radio', 'pass', null, Translation::get('KeepPassword') . '<br />', 2);
         }
-        $group[] = &$this->createElement('radio', 'pass', null, Translation::get('AutoGeneratePassword') . '<br />', 1);
-        $group[] = &$this->createElement('radio', 'pass', null, null, 0);
-        $group[] = &$this->createElement('password', User::PROPERTY_PASSWORD, null, array('autocomplete' => 'off'));
+        $group[] = $this->createElement('radio', 'pass', null, Translation::get('AutoGeneratePassword') . '<br />', 1);
+        $group[] = $this->createElement('radio', 'pass', null, null, 0);
+        $group[] = $this->createElement('password', User::PROPERTY_PASSWORD, null, array('autocomplete' => 'off'));
         $this->addGroup($group, 'pw', Translation::get('Password'), '');
 
         $this->registerRule('checkPasswordRequirements', 'function', 'checkPasswordRequirements', $this);
@@ -156,7 +156,7 @@ class UserForm extends FormValidator
                         Translation::getInstance()->getTranslation('PasswordRequirements', null, 'Chamilo\Core\User'),
                         'checkPasswordRequirements'))));
 
-        // $this->add_forever_or_expiration_date_window(User :: PROPERTY_EXPIRATION_DATE, 'ExpirationDate');
+        // $this->add_forever_or_expiration_date_window(User::PROPERTY_EXPIRATION_DATE, 'ExpirationDate');
         $this->add_forever_or_timewindow(User::PROPERTY_EXPIRATION_DATE, 'ExpirationDate');
 
         // Official Code
@@ -216,13 +216,13 @@ class UserForm extends FormValidator
             $this->add_warning_message('admin_lockout_message', null, Translation::get('LockOutWarningMessage'));
         }
         $group = array();
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio',
             User::PROPERTY_PLATFORMADMIN,
             null,
             Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES),
             1);
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio',
             User::PROPERTY_PLATFORMADMIN,
             null,
@@ -232,13 +232,13 @@ class UserForm extends FormValidator
 
         // Send email
         $group = array();
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio',
             'send_mail',
             null,
             Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES),
             1);
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio',
             'send_mail',
             null,

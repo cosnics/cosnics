@@ -232,11 +232,11 @@ class InstanceForm extends FormValidator
                         {
                             if ($setting['field'] == 'checkbox')
                             {
-                                $group[] = & $this->createElement($setting['field'], $name, null, null, $option_value);
+                                $group[] = $this->createElement($setting['field'], $name, null, null, $option_value);
                             }
                             else
                             {
-                                $group[] = & $this->createElement(
+                                $group[] = $this->createElement(
                                     $setting['field'],
                                     $name,
                                     null,

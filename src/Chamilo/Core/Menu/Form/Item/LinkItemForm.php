@@ -40,7 +40,7 @@ class LinkItemForm extends ItemForm
         $this->build_form();
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array (), $filter = null)
     {
         $item = $this->get_item();
         

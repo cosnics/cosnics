@@ -29,6 +29,9 @@ class ExternalObject extends StreamingMediaExternalObject
     const PROPERTY_CATALOGS = 'catalogs';
     const PROPERTY_CREATORS = 'creators';
 
+    const PROPERTY_CATEGORY = 'category';
+    const PROPERTY_TAGS = 'tags';
+
     public function get_xml()
     {
         return $this->get_default_property(self::PROPERTY_XML);

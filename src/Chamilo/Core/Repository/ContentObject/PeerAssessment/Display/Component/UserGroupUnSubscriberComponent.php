@@ -57,7 +57,9 @@ class UserGroupUnSubscriberComponent extends Manager
         $html = array();
         
         $image = Theme::getInstance()->getCommonImagePath('Treemenu/Group');
-        
+
+        $level = 0;
+
         // loop through all the attempts and render them
         foreach ($groups as $g)
         {

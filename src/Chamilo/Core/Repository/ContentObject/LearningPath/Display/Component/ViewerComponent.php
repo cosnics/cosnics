@@ -244,11 +244,12 @@ class ViewerComponent extends BaseHtmlTreeComponent
      * Builds the attachment url TODO: Currently moved the complex content object item to the selected complex content
      * object item because the wrong parameter was used in the viewer
      *
-     * @param $attachment ContentObject
      *
+     * @param \Chamilo\Core\Repository\Display\ContentObject $attachment
+     * @param null $selected_complex_content_object_item_id
      * @return string
      */
-    public function get_content_object_display_attachment_url($attachment)
+    public function get_content_object_display_attachment_url($attachment, $selected_complex_content_object_item_id = null)
     {
         return parent::get_content_object_display_attachment_url($attachment, $this->getCurrentTreeNode()->getId());
     }

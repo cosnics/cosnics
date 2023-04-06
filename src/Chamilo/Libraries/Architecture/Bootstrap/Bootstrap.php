@@ -204,8 +204,7 @@ class Bootstrap
      *
      * @return \Chamilo\Libraries\Architecture\Bootstrap\Bootstrap
      */
-    public function setup()
-    {
-        return $this->registerErrorHandlers()->checkInstallation()->startSession();
+    protected function setUp(): void    {
+        $this->registerErrorHandlers()->checkInstallation()->startSession();
     }
 }

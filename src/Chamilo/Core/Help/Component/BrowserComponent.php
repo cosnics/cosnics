@@ -84,7 +84,7 @@ class BrowserComponent extends Manager implements TableSupport
         if (isset($query) && $query != '')
         {
             $condition = new PatternMatchCondition(
-                new PropertyConditionVariable(HelpItem::class_name(), HelpItem::PROPERTY_NAME),
+                new PropertyConditionVariable(HelpItem::class_name(), HelpItem::PROPERTY_IDENTIFIER),
                 '*' . $query . '*');
         }
 

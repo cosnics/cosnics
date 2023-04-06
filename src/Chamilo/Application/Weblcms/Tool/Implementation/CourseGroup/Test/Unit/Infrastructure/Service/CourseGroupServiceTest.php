@@ -39,8 +39,7 @@ class CourseGroupServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->courseGroupRepositoryMock = $this->getMockBuilder(CourseGroupRepository::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -58,8 +57,7 @@ class CourseGroupServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->courseGroupRepositoryMock);
         unset($this->courseGroupDecoratorsManagerMock);
         unset($this->userServiceMock);

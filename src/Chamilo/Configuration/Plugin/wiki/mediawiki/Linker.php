@@ -173,7 +173,7 @@ class MediawikiLinker
      *        always, even with a querystring. Has compatibility issues on some setups, so avoid wherever possible.
      * @return string HTML <a> attribute
      */
-    public function link($target, $text = null, $customAttribs = array(), $query = array(), $options = array())
+    public static function link($target, $text = null, $customAttribs = array(), $query = array(), $options = array())
     {
         if (! $target instanceof MediawikiTitle)
         {
@@ -561,7 +561,7 @@ class MediawikiLinker
      * This is currently rendered as the bold link text. The
      * calling sequence is the same as the other make*LinkObj functions, despite $query not being used.
      */
-    function makeSelfLinkObj($nt, $text = '', $query = '', $trail = '', $prefix = '')
+    static function makeSelfLinkObj($nt, $text = '', $query = '', $trail = '', $prefix = '')
     {
         if ('' == $text)
         {
@@ -1052,7 +1052,7 @@ class MediawikiLinker
      * @return string HTML @public
      * @todo Handle invalid or missing images better.
      */
-    function makeMediaLinkObj($title, $text = '', $time = false)
+    static function makeMediaLinkObj($title, $text = '', $time = false)
     {
         if (is_null($title))
         {

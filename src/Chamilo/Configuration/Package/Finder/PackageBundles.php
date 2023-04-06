@@ -52,8 +52,7 @@ class PackageBundles extends BasicBundles
         parent::__construct($rootNamespace);
     }
 
-    protected function setup()
-    {
+    protected function setUp(): void    {
         parent::setup();
         $this->readPackageDefinitions();
         $this->processPackageTypes();

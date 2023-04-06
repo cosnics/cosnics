@@ -18,6 +18,8 @@ class Visit extends SimpleTracker
     const PROPERTY_ENTER_DATE = 'enter_date';
     const PROPERTY_LEAVE_DATE = 'leave_date';
     const PROPERTY_LOCATION = 'location';
+
+    const PROPERTY_TYPE = 'type';
     const TYPE_ENTER = 'enter';
     const TYPE_LEAVE = 'leave';
 

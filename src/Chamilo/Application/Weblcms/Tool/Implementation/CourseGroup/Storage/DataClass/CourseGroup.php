@@ -94,7 +94,7 @@ class CourseGroup extends NestedTreeNode
      */
     public function get_group_id()
     {
-        // return $this->get_default_property(self :: PROPERTY_GROUP_ID);
+        // return $this->get_default_property(self::PROPERTY_GROUP_ID);
         return $this->get_optional_property(self::PROPERTY_GROUP_ID);
     }
 
@@ -400,7 +400,7 @@ class CourseGroup extends NestedTreeNode
         return DataManager::getInstance();
     }
 
-    public function create()
+    public function create($previousId = 0, $createInBatch = false)
     {
         if (!$this->get_parent_id())
         {

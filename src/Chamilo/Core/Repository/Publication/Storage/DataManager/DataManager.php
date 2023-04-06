@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
     const PREFIX = 'repository_';
+    const ATTRIBUTES_TYPE_OBJECT = 'object';
 
     /**
      * Determines where in this application the given learning object has been published.

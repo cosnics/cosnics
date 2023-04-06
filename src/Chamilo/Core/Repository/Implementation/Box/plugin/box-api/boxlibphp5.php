@@ -85,7 +85,7 @@ class boxclient
         
         if ($useCURL)
         {
-            $c = &new curl($request);
+            $c = new curl($request);
             $c->setopt(CURLOPT_FOLLOWLOCATION, true);
             $xml = $c->exec();
             $error = $c->hasError();
@@ -101,6 +101,7 @@ class boxclient
             $url_parsed = parse_url($request);
             $host = $url_parsed["host"];
             $port = ($url_parsed['port'] == 0) ? 80 : $url_parsed['port'];
+            $path = '';
             $path = $url_parsed["path"] . (($url_parsed['query'] != '') ? $path .= "?{$url_parsed[query]}" : '');
             $headers = "GET $path HTTP/1.0\r\n";
             $headers .= "Host: $host\r\n\r\n";

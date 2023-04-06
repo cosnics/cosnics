@@ -100,6 +100,6 @@ class EditorComponent extends Manager
 
     // public function get_additional_parameters()
     // {
-    // return array(self :: PARAM_GROUP_ID);
+    // return array(self::PARAM_GROUP_ID);
     // }
 }

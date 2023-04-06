@@ -252,7 +252,7 @@ class ConfigurationForm extends FormValidator
                             {
                                 if ($setting['field'] == 'checkbox' || $setting['field'] == 'toggle')
                                 {
-                                    $group[] = & $this->createElement(
+                                    $group[] = $this->createElement(
                                         $setting['field'],
                                         $name,
                                         null,
@@ -261,7 +261,7 @@ class ConfigurationForm extends FormValidator
                                 }
                                 else
                                 {
-                                    $group[] = & $this->createElement(
+                                    $group[] = $this->createElement(
                                         $setting['field'],
                                         $name,
                                         null,
@@ -447,7 +447,7 @@ class ConfigurationForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array (), $filter = null)
     {
         $configuration = $this->configuration;
 

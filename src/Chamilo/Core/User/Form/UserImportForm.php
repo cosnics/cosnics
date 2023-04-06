@@ -80,13 +80,13 @@ class UserImportForm extends FormValidator
         $this->addRule('file', Translation::get('OnlyCSVAllowed'), 'filetype', $allowed_upload_types);
 
         $group = array();
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio',
             'send_mail',
             null,
             Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES),
             1);
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio',
             'send_mail',
             null,

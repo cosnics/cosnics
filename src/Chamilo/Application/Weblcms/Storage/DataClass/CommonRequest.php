@@ -13,6 +13,7 @@ class CommonRequest extends DataClass
     const DENIED_DECISION = 1;
     const NO_DECISION = 0;
     const SUBSCRIPTION_REQUEST = 'subscription_request';
+    CONST CREATE_REQUEST = 'create_request';
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_SUBJECT = 'subject';
     const PROPERTY_MOTIVATION = 'motivation';

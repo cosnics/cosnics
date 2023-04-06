@@ -52,7 +52,7 @@ class AttemptBrowserComponent extends Manager
         $html = array();
         
         $image = Theme::getInstance()->getCommonImagePath('Action/Period');
-        
+        $level = 0;
         // loop through all the attempts and render them
         foreach ($attempts as $a)
         {

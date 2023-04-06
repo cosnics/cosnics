@@ -202,7 +202,8 @@ class FileProperties
      */
     public static function from_path($path)
     {
-        $fileName = array_pop(explode(DIRECTORY_SEPARATOR, $path));
+        $array = explode(DIRECTORY_SEPARATOR, $path);
+        $fileName = array_pop($array);
         $fileInfo = new finfo(FILEINFO_MIME_TYPE);
 
         $properties = new self();
@@ -244,7 +245,8 @@ class FileProperties
 
         if (in_array($urlInfo['scheme'], array('http', 'ftp', 'https')))
         {
-            $fileName = array_pop(explode('/', $url));
+            $array = explode('/', $url);
+            $fileName = array_pop($array);
             $fileNameParts = explode('.', $fileName);
 
             if (count($fileNameParts) >= 1)

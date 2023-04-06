@@ -680,7 +680,8 @@ class Services_Soundcloud
      */
     function download($trackId, $params = array(), $curlOptions = array())
     {
-        $lastResponseFormat = array_pop(explode('/', $this->getResponseFormat()));
+        $array = explode('/', $this->getResponseFormat());
+        $lastResponseFormat = array_pop($array);
         $defaultParams = array('oauth_token' => $this->getAccessToken());
         $defaultCurlOptions = array(
             CURLOPT_FOLLOWLOCATION => true,

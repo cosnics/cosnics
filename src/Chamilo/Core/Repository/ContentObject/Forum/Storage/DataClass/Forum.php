@@ -75,9 +75,12 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
         $this->set_additional_property(self::PROPERTY_LAST_TOPIC_CHANGED_CLOI, $last_cloi);
     }
 
+    /**
+     * @return int
+     */
     public function get_total_posts()
     {
-        return $this->get_additional_property(self::PROPERTY_TOTAL_POSTS);
+        return (int) $this->get_additional_property(self::PROPERTY_TOTAL_POSTS);
     }
 
     public function set_total_posts($total_posts)
@@ -352,7 +355,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
      * Then checks wether the forum has parents(here if the forum is a subforum)
      * and calls in a recursien function the add_post
      *
-     * @param type $posts
+     * @param int $posts
      * @param type $email_notificator
      * @param type $last_changed_cloi
      * @param type $last_post_id

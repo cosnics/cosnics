@@ -57,8 +57,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->install_configuration_file = __DIR__ . '/__files/install_config.php';
     }
 
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->tune_error_reporting_for_mdb2();
         $this->installer_config = new Configuration();
         $this->installer = new Installer($this->installer_config);
@@ -66,8 +65,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->installer_config->load_config_file($this->install_configuration_file);
     }
 
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         Filesystem::remove(Path::getInstance()->getStoragePath() . 'configuration/configuration.php');
         foreach ($this->EXTRA_DIRECTORIES as $directory)
         {
@@ -246,7 +244,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             'name' => array('type' => 'text', 'length' => 255), 
             'datetime' => array('type' => 'timestamp'));
         
-        $mdb2->createTable('dumb', $definition);
+        //$mdb2->createTable('dumb', $definition);
     }
 
     public function test_installation_should_keep_db_when_specified()

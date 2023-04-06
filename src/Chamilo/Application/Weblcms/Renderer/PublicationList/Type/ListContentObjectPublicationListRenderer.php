@@ -357,20 +357,20 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
             // New functionality in old code
 
-            // if ($publication[ContentObjectPublication :: PROPERTY_FROM_DATE] == 0 &&
-            // $publication[ContentObjectPublication :: PROPERTY_TO_DATE] == 0)
+            // if ($publication[ContentObjectPublication::PROPERTY_FROM_DATE] == 0 &&
+            // $publication[ContentObjectPublication::PROPERTY_TO_DATE] == 0)
             // {
             // $variable = 'PeriodForever';
             // $visibility_image = 'Action/Period';
             // }
             // else
             // {
-            // if (time() < $publication[ContentObjectPublication :: PROPERTY_FROM_DATE])
+            // if (time() < $publication[ContentObjectPublication::PROPERTY_FROM_DATE])
             // {
             // $variable = 'PeriodBefore';
             // $visibility_image = 'Action/PeriodBefore';
             // }
-            // elseif (time() > $publication[ContentObjectPublication :: PROPERTY_TO_DATE])
+            // elseif (time() > $publication[ContentObjectPublication::PROPERTY_TO_DATE])
             // {
             // $variable = 'PeriodAfter';
             // $visibility_image = 'Action/PeriodAfter';
@@ -388,9 +388,9 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             // Theme :: getInstance()->getCommonImagePath($visibility_image),
             // $this->get_url(
             // array(
-            // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager ::
+            // \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager ::
             // ACTION_UPDATE_PUBLICATION,
-            // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
+            // \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id)),
             // SubButton :: DISPLAY_LABEL));
 
             if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])

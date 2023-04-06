@@ -56,25 +56,25 @@ class PeerAssessmentSettingsForm extends FormValidator
         // //TODO add subscription group
         // $this->addElement(
         // 'checkbox',
-        // self :: PARAM_DIRECT_SUBSCRIBE_AVAILABLE,
+        // self::PARAM_DIRECT_SUBSCRIBE_AVAILABLE,
         // Translation :: get('DirectSubscribeAvailable')
         // );
         // $this->addElement(
         // 'checkbox',
-        // self :: PARAM_UNSUBSCRIBE_AVAILABLE,
+        // self::PARAM_UNSUBSCRIBE_AVAILABLE,
         // Translation :: get('UnsubscribeAvailable')
         // );
         // $this->add_datepicker(
-        // self :: PARAM_SUBSCRIPTION_DEADLINE,
+        // self::PARAM_SUBSCRIPTION_DEADLINE,
         // Translation :: get('SubscriptionDeadline'),
         // false
         // );
         // $this->add_textfield(
-        // self :: PARAM_MIN_GROUP_MEMBERS,
+        // self::PARAM_MIN_GROUP_MEMBERS,
         // Translation :: get('MinimumAmountOfGroupMembers'),false
         // );
         // $this->add_textfield(
-        // self :: PARAM_MAX_GROUP_MEMBERS,
+        // self::PARAM_MAX_GROUP_MEMBERS,
         // Translation :: get('MaximumAmountOfGroupMembers'),false
         // );
         // }
@@ -93,7 +93,7 @@ class PeerAssessmentSettingsForm extends FormValidator
         // //TODO add filter group
         // $this->addElement(
         // 'checkbox',
-        // self :: PARAM_FILTER_MIN_MAX,
+        // self::PARAM_FILTER_MIN_MAX,
         // Translation :: get('FilterMinMaxScores')
         // );
         $this->addElement('checkbox', self::PARAM_FILTER_SELF, Translation::get('FilterSelfAssessment'));

@@ -28,8 +28,7 @@ class CommonDataClassRepositTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         /** @var DataClassRepository $dataClassRepositoryMock */
         $dataClassRepositoryMock = $this->getMockBuilder(DataClassRepository::class)
             ->disableOriginalConstructor()->getMock();
@@ -43,8 +42,7 @@ class CommonDataClassRepositTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->commonDataClassRepository);
     }
 

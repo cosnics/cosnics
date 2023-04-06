@@ -91,14 +91,14 @@ if (! class_exists('php23'))
                 {
                     // Array ( [0] => mysql://user:password@server/database [1] => user [2] => password [3] => server
                     // [4] => database )
-                    $db = mysql_connect($matches[3], $matches[1], $matches[2]);
-                    mysql_select_db($matches[4], $db);
+                    $db = mysqli_connect($matches[3], $matches[1], $matches[2]);
+                    mysqli_select_db($matches[4], $db);
                     
                     /*
                      * If high performance is crucial, you can easily comment out this query once you've created your
                      * database table.
                      */
-                    mysql_query(
+                    mysqli_query(
                         "
 						CREATE TABLE IF NOT EXISTS `$table` (
 							`request` CHAR( 35 ) NOT NULL ,
@@ -109,14 +109,14 @@ if (! class_exists('php23'))
 					", 
                         $db);
                     
-                    $result = mysql_query("SELECT COUNT(*) FROM $table", $db);
-                    $result = mysql_fetch_row($result);
+                    $result = mysqli_query("SELECT COUNT(*) FROM $table", $db);
+                    $result = mysqli_fetch_row($result);
                     if ($result[0] > $this->max_cache_rows)
                     {
-                        mysql_query(
+                        mysqli_query(
                             "DELETE FROM $table WHERE expiration < DATE_SUB(NOW(), INTERVAL $cache_expire second)", 
                             $db);
-                        mysql_query('OPTIMIZE TABLE ' . $this->cache_table, $db);
+                        mysqli_query('OPTIMIZE TABLE ' . $this->cache_table, $db);
                     }
                     $this->cache = 'db';
                     $this->cache_db = $db;
@@ -167,13 +167,13 @@ if (! class_exists('php23'))
             $this->cache_request = $request;
             if ($this->cache == 'db')
             {
-                $result = mysql_query(
+                $result = mysqli_query(
                     "SELECT response FROM " . $this->cache_table . " WHERE request = '" . $reqhash .
                          "' AND DATE_SUB(NOW(), INTERVAL " . (int) $this->cache_expire . " SECOND) < expiration", 
                         $this->cache_db);
-                if (mysql_num_rows($result))
+                if (mysqli_num_rows($result))
                 {
-                    $result = mysql_fetch_assoc($result);
+                    $result = mysqli_fetch_assoc($result);
                     return $result['response'];
                 }
                 else
@@ -218,15 +218,15 @@ if (! class_exists('php23'))
             if ($this->cache == 'db')
             {
                 // $this->cache_db->query("DELETE FROM $this->cache_table WHERE request = '$reqhash'");
-                $result = mysql_query(
+                $result = mysqli_query(
                     "SELECT COUNT(*) FROM " . $this->cache_table . " WHERE request = '" . $reqhash . "'", 
                     $this->cache_db);
-                $result = mysql_fetch_row($result);
+                $result = mysqli_fetch_row($result);
                 if ($result[0])
                 {
                     $sql = "UPDATE " . $this->cache_table . " SET response = '" . str_replace("'", "''", $response) .
                          "', expiration = '" . strftime("%Y-%m-%d %H:%M:%S") . "' WHERE request = '" . $reqhash . "'";
-                    mysql_query($sql, $this->cache_db);
+                    mysqli_query($sql, $this->cache_db);
                 }
                 else
                 {
@@ -234,7 +234,7 @@ if (! class_exists('php23'))
                         "'", 
                         "''", 
                         $response) . "', '" . strftime("%Y-%m-%d %H:%M:%S") . "')";
-                    mysql_query($sql, $this->cache_db);
+                    mysqli_query($sql, $this->cache_db);
                 }
             }
             elseif ($this->cache == "fs")
@@ -560,7 +560,7 @@ if (! class_exists('php23'))
                 $rsp = explode("\n", $response);
                 foreach ($rsp as $line)
                 {
-                    if (ereg('<err code="([0-9]+)" msg="(.*)"', $line, $match))
+                    if (preg_match('<err code="([0-9]+)" msg="(.*)"', $line, $match))
                     {
                         if ($this->die_on_error)
                             die("The Flickr API returned the following error: #{$match[1]} - {$match[2]}");
@@ -572,7 +572,7 @@ if (! class_exists('php23'))
                             return false;
                         }
                     }
-                    elseif (ereg("<photoid>(.*)</photoid>", $line, $match))
+                    elseif (preg_match("<photoid>(.*)</photoid>", $line, $match))
                     {
                         $this->error_code = false;
                         $this->error_msg = false;
@@ -645,7 +645,7 @@ if (! class_exists('php23'))
                 $rsp = explode("\n", $response);
                 foreach ($rsp as $line)
                 {
-                    if (ereg('<err code="([0-9]+)" msg="(.*)"', $line, $match))
+                    if (preg_match('<err code="([0-9]+)" msg="(.*)"', $line, $match))
                     {
                         if ($this->die_on_error)
                             die("The Flickr API returned the following error: #{$match[1]} - {$match[2]}");
@@ -657,7 +657,7 @@ if (! class_exists('php23'))
                             return false;
                         }
                     }
-                    elseif (ereg("<ticketid>(.*)</", $line, $match))
+                    elseif (preg_match("<ticketid>(.*)</", $line, $match))
                     {
                         $this->error_code = false;
                         $this->error_msg = false;
@@ -727,7 +727,7 @@ if (! class_exists('php23'))
                 $rsp = explode("\n", $response);
                 foreach ($rsp as $line)
                 {
-                    if (ereg('<err code="([0-9]+)" msg="(.*)"', $line, $match))
+                    if (preg_match('<err code="([0-9]+)" msg="(.*)"', $line, $match))
                     {
                         if ($this->die_on_error)
                             die("The Flickr API returned the following error: #{$match[1]} - {$match[2]}");
@@ -739,7 +739,7 @@ if (! class_exists('php23'))
                             return false;
                         }
                     }
-                    elseif (ereg("<" . $find . ">(.*)</", $line, $match))
+                    elseif (preg_match("<" . $find . ">(.*)</", $line, $match))
                     {
                         $this->error_code = false;
                         $this->error_msg = false;
@@ -792,12 +792,10 @@ if (! class_exists('php23'))
             // redirect to its default page.
             if ($remember_uri === true)
             {
-                session_register('phpFlickr_auth_redirect');
                 $_SESSION['phpFlickr_auth_redirect'] = $_SERVER['REQUEST_URI'];
             }
             elseif ($remember_uri !== false)
             {
-                session_register('phpFlickr_auth_redirect');
                 $_SESSION['phpFlickr_auth_redirect'] = $remember_uri;
             }
             header("Location: http://www.23hq.com/services/auth/?api_key=" . $this->api_key . "&frob=" . $frob);
@@ -884,7 +882,6 @@ if (! class_exists('php23'))
              * http://www.flickr.com/services/api/flickr.auth.getToken.html
              */
             $this->request('flickr.auth.getToken', array('frob' => $frob));
-            session_register('phpFlickr_auth_token');
             $_SESSION['phpFlickr_auth_token'] = $this->parsed_response['auth']['token'];
             // dump($this->parsed_response);
             return $this->parsed_response ? $this->parsed_response['auth'] : false;

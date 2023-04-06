@@ -167,7 +167,7 @@ class CourseGroupForm extends FormValidator
             'select',
             CourseGroup::PROPERTY_PARENT_ID . $counter,
             Translation::getInstance()->getTranslation('GroupParent'),
-            // 'select', CourseGroup :: PROPERTY_PARENT_ID . $counter, null,
+            // 'select', CourseGroup::PROPERTY_PARENT_ID . $counter, null,
             $this->get_groups()
         );
         $this->addElement('html', '</div>');
@@ -840,7 +840,7 @@ class CourseGroupForm extends FormValidator
                     false
                 );
                 // fill the title field automatically
-                // $defaults[CourseGroup :: PROPERTY_NAME . $option_number] =
+                // $defaults[CourseGroup::PROPERTY_NAME . $option_number] =
                 // 'Group ' . $numbering;
                 parent::setDefaults($defaults);
                 $this->addRule(

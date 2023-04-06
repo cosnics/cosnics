@@ -9,6 +9,12 @@ class ExternalObject extends StreamingMediaExternalObject
     const OBJECT_TYPE = 'office365-video';
     const ID_SEPARATOR = 'ChannelId=';
 
+    const PROPERTY_TAGS = 'tags';
+
+    const PROPERTY_CATEGORY = 'category';
+
+    const PROPERTY_FILE = 'file';
+
     /**
      * \brief Sets the ID of Office 365 video object to the concatenation of the video ID and the channel ID.
      * Calls to the Microsoft Video API require always both the channel and the video Id. Therefore we concatenated

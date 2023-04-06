@@ -79,6 +79,8 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                         $contentObjectPublication, new FilterParameters()
                     );
 
+                $entityType = $this->getAssignmentPublication($contentObjectPublication)->getEntityType();
+
                 $entitiesWithEntriesCount =
                     $this->getAssignmentService()->countDistinctEntriesByContentObjectPublicationAndEntityType(
                         $contentObjectPublication,

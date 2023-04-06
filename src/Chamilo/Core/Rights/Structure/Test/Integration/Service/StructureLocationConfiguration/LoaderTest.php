@@ -18,8 +18,7 @@ class LoaderTest extends ChamiloTestCase
      */
     protected $configurationLoader;
 
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->configurationLoader = new Loader(Path::getInstance());
     }
 

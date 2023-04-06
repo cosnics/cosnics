@@ -29,8 +29,9 @@ class WeblcmsPeerAssessmentScoreTracker extends SimpleTracker
 
     /**
      * Inherited
+     * @param array $extendedPropertyNames
      */
-    static function get_default_property_names()
+    static function get_default_property_names($extendedPropertyNames = array())
     {
         return parent::get_default_property_names(
             array(
@@ -41,13 +42,13 @@ class WeblcmsPeerAssessmentScoreTracker extends SimpleTracker
     }
 
     /*
-     * function get_attempt_id() { return $this->get_default_property(self :: PROPERTY_ATTEMPT_STATUS_ID); } function
-     * set_attempt_id($attempt_id) { $this->set_default_property(self :: PROPERTY_ATTEMPT_STATUS_ID, $attempt_id); }
-     * function get_user_id() { return $this->get_default_property(self :: PROPERTY_USER_ID); } function
-     * set_user_id($user_id) { $this->set_default_property(self :: PROPERTY_USER_ID, $user_id); } function
-     * get_indicator_id() { return $this->get_default_property(self :: PROPERTY_INDICATOR_ID); } function
-     * set_indicator_id($indicator_id) { $this->set_default_property(self :: PROPERTY_INDICATOR_ID, $indicator_id); }
-     * function get_score() { return $this->get_default_property(self :: PROPERTY_SCORE); }
+     * function get_attempt_id() { return $this->get_default_property(self::PROPERTY_ATTEMPT_STATUS_ID); } function
+     * set_attempt_id($attempt_id) { $this->set_default_property(self::PROPERTY_ATTEMPT_STATUS_ID, $attempt_id); }
+     * function get_user_id() { return $this->get_default_property(self::PROPERTY_USER_ID); } function
+     * set_user_id($user_id) { $this->set_default_property(self::PROPERTY_USER_ID, $user_id); } function
+     * get_indicator_id() { return $this->get_default_property(self::PROPERTY_INDICATOR_ID); } function
+     * set_indicator_id($indicator_id) { $this->set_default_property(self::PROPERTY_INDICATOR_ID, $indicator_id); }
+     * function get_score() { return $this->get_default_property(self::PROPERTY_SCORE); }
      */
     function set_score($score)
     {

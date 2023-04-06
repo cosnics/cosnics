@@ -122,7 +122,7 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
                     \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID)));
     }
 
-    public function getButtonToolbarRenderer($selected_assessment)
+    public function getButtonToolbarRenderer($selected_assessment = null)
     {
         if (! isset($this->buttonToolbarRenderer))
         {

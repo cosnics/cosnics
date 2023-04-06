@@ -169,22 +169,22 @@ class ImpactViewComponent extends Manager
         {
             if ($count == 1)
             {
-                $message = $fail_message_single;
+                $message = $failMessageSingle;
             }
             else
             {
-                $message = $fail_message_multiple;
+                $message = $failMessageMultiple;
             }
         }
         else
         {
             if ($count == 1)
             {
-                $message = $succes_message_single;
+                $message = $succesMessageSingle;
             }
             else
             {
-                $message = $succes_message_multiple;
+                $message = $succesMessageMultiple;
             }
         }
         

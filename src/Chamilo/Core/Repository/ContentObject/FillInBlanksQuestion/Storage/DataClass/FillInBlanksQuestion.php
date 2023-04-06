@@ -50,8 +50,8 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
 
     /*
      * public function add_answer($answer) { $answers = $this->get_answers(); $answers[] = $answer; return
-     * $this->set_additional_property(self :: PROPERTY_ANSWERS, serialize($answers)); } public function
-     * set_answers($answers) { return $this->set_additional_property(self :: PROPERTY_ANSWERS, serialize($answers)); }
+     * $this->set_additional_property(self::PROPERTY_ANSWERS, serialize($answers)); } public function
+     * set_answers($answers) { return $this->set_additional_property(self::PROPERTY_ANSWERS, serialize($answers)); }
      */
     public function get_answers($index = -1)
     {

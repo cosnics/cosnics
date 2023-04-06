@@ -484,8 +484,8 @@ class CalendarEventForm extends ContentObjectForm
         else
         {
             $defaults[CalendarEvent::PROPERTY_FREQUENCY] = 0;
-            // $defaults[CalendarEvent :: PROPERTY_START_DATE] = time();
-            // $defaults[CalendarEvent :: PROPERTY_END_DATE] = strtotime('+1 Hour', time());
+            // $defaults[CalendarEvent::PROPERTY_START_DATE] = time();
+            // $defaults[CalendarEvent::PROPERTY_END_DATE] = strtotime('+1 Hour', time());
 
             $defaults[self::PARAM_DAILY][CalendarEvent::PROPERTY_FREQUENCY_INTERVAL] = 1;
 

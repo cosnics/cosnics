@@ -116,7 +116,7 @@ class ContentObjectPublicationFeedback extends ContentObjectPublication
         parent::set_email_sent(0);
     }
 
-    public function create()
+    public function create($create_in_batch = false)
     {
         if (Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))
         {

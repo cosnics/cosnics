@@ -73,7 +73,7 @@ class PBAPI_Exception extends Exception
      * 
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $str = __CLASS__ . ' (' . $this->getCode() . '): "' . $this->getMessage() . "\"\n" . 'Method: ' . implode(
             ':', 

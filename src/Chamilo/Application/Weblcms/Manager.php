@@ -374,7 +374,7 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self::PARAM_ACTION => self::ACTION_CREATE_COURSE,
+                self::PARAM_ACTION => self::ACTION_COURSE_MANAGER,
                 self::PARAM_COURSE => $course->get_id(),
                 self::PARAM_TOOL => 'course_settings',
                 'previous' => 'admin'));
@@ -470,7 +470,7 @@ abstract class Manager extends Application
             array(
                 self::PARAM_ACTION => self::ACTION_COURSE_CATEGORY_MANAGER,
                 self::PARAM_COMPONENT_ACTION => 'edit',
-                self::PARAM_COURSE_CATEGORY => $course_category->get_code()));
+                self::PARAM_COURSE_CATEGORY_ID => $course_category->get_code()));
     }
 
     /**

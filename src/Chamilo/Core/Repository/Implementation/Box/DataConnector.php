@@ -13,6 +13,8 @@ require_once Path::getInstance()->getPluginPath(__NAMESPACE__) . 'box-api/boxlib
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
 
+    const SORT_DATE_CREATED = 'DateCreated';
+    const SORT_RELEVANCE = 'relevance';
     private $boxnet;
 
     private $key;

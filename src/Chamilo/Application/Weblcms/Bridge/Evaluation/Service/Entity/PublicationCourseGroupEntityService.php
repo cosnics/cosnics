@@ -158,7 +158,8 @@ class PublicationCourseGroupEntityService implements PublicationEntityServiceInt
         $availableEntityIdentifiers =
             $this->getAvailableEntityIdentifiersForUser($this->getContentObjectPublication(), $currentUser);
 
-        return array_pop(array_reverse($availableEntityIdentifiers));
+        $array = array_reverse($availableEntityIdentifiers);
+        return array_pop($array);
     }
 
     /**

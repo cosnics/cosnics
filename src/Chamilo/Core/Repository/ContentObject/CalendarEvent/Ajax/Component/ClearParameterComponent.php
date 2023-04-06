@@ -48,9 +48,6 @@ class ClearParameterComponent extends \Chamilo\Core\Repository\ContentObject\Cal
                     unset($session[CalendarEvent::PROPERTY_START_DATE]);
                     unset($session[CalendarEvent::PROPERTY_END_DATE]);
                     break;
-                case CalendarEvent::PROPERTY_REPEAT_TYPE :
-                    unset($session[CalendarEvent::PROPERTY_REPEAT_TYPE]);
-                    break;
             }
             
             Session::register('advanced_filter', serialize($session));

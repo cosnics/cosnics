@@ -53,12 +53,6 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
             self::PROPERTY_MAXIMUM_TIME, 
             self::PROPERTY_RANDOM_QUESTIONS);
     }
-
-    public function set_assessment_type($type)
-    {
-        $this->set_additional_property(self::PROPERTY_ASSESSMENT_TYPE, $type);
-    }
-
     public function get_maximum_attempts()
     {
         return $this->get_additional_property(self::PROPERTY_MAXIMUM_ATTEMPTS);

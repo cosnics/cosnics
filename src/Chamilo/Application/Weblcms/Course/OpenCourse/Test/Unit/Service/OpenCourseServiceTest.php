@@ -44,8 +44,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
      */
     protected $openCourseService;
 
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->openCourseRepositoryMock = $this->getMockForAbstractClass(OpenCourseRepositoryInterface::class);
         $this->authorizationCheckerMock = $this->getMockForAbstractClass(AuthorizationCheckerInterface::class);
         $this->userRoleServiceMock = $this->getMockForAbstractClass(UserRoleServiceInterface::class);
@@ -55,8 +54,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
         );
     }
 
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->openCourseRepositoryMock);
         unset($this->authorizationCheckerMock);
         unset($this->userRoleServiceMock);

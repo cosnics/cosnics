@@ -96,7 +96,7 @@ class CategoryForm extends FormValidator
             PlatformCategory::PROPERTY_NAME . $number,
             Translation::get('Name'),
             array("size" => "50"));
-        // $this->addRule(PlatformCategory :: PROPERTY_NAME . $number,
+        // $this->addRule(PlatformCategory::PROPERTY_NAME . $number,
         // Translation :: get('ThisFieldIsRequired'), 'required');
         return $element;
     }

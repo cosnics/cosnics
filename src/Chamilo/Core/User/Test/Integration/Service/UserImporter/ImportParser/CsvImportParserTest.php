@@ -36,8 +36,7 @@ class CsvImportParserTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->csvImportParser = new CsvImportParser(StringUtilities::getInstance());
 
         $this->userImporterResult = new UserImporterResult();
@@ -50,8 +49,7 @@ class CsvImportParserTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->importedUserData);
         unset($this->userImporterResult);
         unset($this->csvImportParser);

@@ -55,8 +55,7 @@ class GradeBookItemScoreServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->publicationServiceMock = $this->getMockBuilder(PublicationService::class)
             ->disableOriginalConstructor()->getMock();
         $this->scoreServiceManagerMock = $this->getMockBuilder(ScoreServiceManager::class)
@@ -71,8 +70,7 @@ class GradeBookItemScoreServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->publicationServiceMock);
         unset($this->scoreServiceManagerMock);
         unset($this->learningPathServiceMock);

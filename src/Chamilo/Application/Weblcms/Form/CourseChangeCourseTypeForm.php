@@ -86,7 +86,7 @@ class CourseChangeCourseTypeForm extends FormValidator
             if (is_null($this->course_type_id) && $count == 0 && ! $this->allow_no_course_type)
             {
                 $parameters = array(
-                    'go' => Manager::ACTION_COURSE_CHANGE_COURSETYPE,
+                    'go' => Manager::ACTION_COURSE_TYPE_MANAGER,
                     'course' => $this->course->get_id());
                 $this->parent->simple_redirect($parameters);
             }
@@ -124,7 +124,7 @@ class CourseChangeCourseTypeForm extends FormValidator
         if ($this->size != 1)
         {
             $values = $this->exportValues();
-            return $values[self::SELECT_ELEMENT];
+            return $values[self::SELECT_COURSE_TYPE];
         }
         else
         {

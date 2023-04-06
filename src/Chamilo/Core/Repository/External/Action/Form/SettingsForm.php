@@ -233,7 +233,7 @@ class SettingsForm extends FormValidator
                             {
                                 if ($setting['field'] == 'checkbox' || $setting['field'] == 'toggle')
                                 {
-                                    $group[] = &$this->createElement(
+                                    $group[] = $this->createElement(
                                         $setting['field'],
                                         $name,
                                         null,
@@ -243,7 +243,7 @@ class SettingsForm extends FormValidator
                                 }
                                 else
                                 {
-                                    $group[] = &$this->createElement(
+                                    $group[] = $this->createElement(
                                         $setting['field'],
                                         $name,
                                         null,

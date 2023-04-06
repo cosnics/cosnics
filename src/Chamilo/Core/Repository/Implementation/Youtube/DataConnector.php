@@ -113,7 +113,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         if ($sessionToken)
         {
             $channelResults = $this->youtube->channels->listChannels('id', array('mine' => 'true'));
-            $channel = array_pop($channelResults->getItems());
+            $items = $channelResults->getItems();
+            $channel = array_pop($items);
             
             return $channel->getId();
         }

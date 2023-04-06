@@ -22,16 +22,14 @@ class ImportParserFactoryTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->importParserFactory = new ImportParserFactory();
     }
 
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->importParserFactory);
     }
 

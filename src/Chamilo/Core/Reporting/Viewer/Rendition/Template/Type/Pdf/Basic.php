@@ -77,7 +77,7 @@ class Basic extends Pdf
                         $this, 
                         $current_block, 
                         $this->get_format(), 
-                        PdfBlockRendition::VIEW_DEFAULT);
+                        PdfBlockRendition::VIEW_BASIC);
                 }
                 else
                 {
@@ -90,7 +90,7 @@ class Basic extends Pdf
                             $this, 
                             $block, 
                             $this->get_format(), 
-                            PdfBlockRendition::VIEW_DEFAULT);
+                            PdfBlockRendition::VIEW_BASIC);
                         $data[] = array(
                             Translation::get(
                                 ClassnameUtilities::getInstance()->getClassnameFromObject($block), 
@@ -150,7 +150,7 @@ class Basic extends Pdf
                 $this, 
                 $current_block, 
                 $this->get_format(), 
-                PdfBlockRendition::VIEW_DEFAULT);
+                PdfBlockRendition::VIEW_BASIC);
         }
         
         $file = Path::getInstance()->getTemporaryPath() .

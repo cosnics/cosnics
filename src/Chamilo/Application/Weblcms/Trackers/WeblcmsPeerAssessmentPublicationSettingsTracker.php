@@ -37,8 +37,9 @@ class WeblcmsPeerAssessmentPublicationSettingsTracker extends SimpleTracker
 
     /**
      * Inherited
+     * @param array $extendedPropertyNames
      */
-    static function get_default_property_names()
+    static function get_default_property_names($extendedPropertyNames = array())
     {
         return parent::get_default_property_names(
             array(
@@ -53,8 +54,8 @@ class WeblcmsPeerAssessmentPublicationSettingsTracker extends SimpleTracker
     }
 
     /*
-     * function get_publication_id() { return $this->get_default_property(self :: PROPERTY_PUBLICATION_ID); } function
-     * set_publication_id($publication_id) { $this->set_default_property(self :: PROPERTY_PUBLICATION_ID,
+     * function get_publication_id() { return $this->get_default_property(self::PROPERTY_PUBLICATION_ID); } function
+     * set_publication_id($publication_id) { $this->set_default_property(self::PROPERTY_PUBLICATION_ID,
      * $publication_id); }
      */
     function __call($name, array $arguments)

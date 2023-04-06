@@ -429,9 +429,10 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     /**
      * Returns the TreeNode for the current step
      *
+     * @param LearningPath $learningPath
      * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode
      */
-    public function getCurrentTreeNode()
+    public function getCurrentTreeNode(LearningPath $learningPath)
     {
         return parent::getCurrentTreeNodeForLearningPath($this->getSelectedLearningPath());
     }

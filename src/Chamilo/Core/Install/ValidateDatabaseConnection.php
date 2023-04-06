@@ -13,7 +13,7 @@ use HTML_QuickForm_Rule;
 class ValidateDatabaseConnection extends HTML_QuickForm_Rule
 {
 
-    public function validate($parameters, $options = null)
+    public function validate($parameters, $options = null): bool
     {
         $configuration = new \Doctrine\DBAL\Configuration();
 

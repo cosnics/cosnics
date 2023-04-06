@@ -203,6 +203,10 @@ class CourseGroupMenu extends HtmlMenu
     {
         $this->render($this->array_renderer, 'urhere');
         $breadcrumbs = $this->array_renderer->toArray();
+
+        /**
+         * @var string[] $crumb
+         */
         foreach ($breadcrumbs as $crumb)
         {
             $crumb['name'] = $crumb['title'];

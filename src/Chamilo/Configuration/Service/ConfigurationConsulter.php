@@ -72,7 +72,7 @@ class ConfigurationConsulter extends DataConsulter
     protected function setSetting($keys, $value)
     {
         $variables = $keys;
-        $values = &$this->getSettings();
+        $values = $this->getSettings();
 
         while (count($variables) > 0)
         {

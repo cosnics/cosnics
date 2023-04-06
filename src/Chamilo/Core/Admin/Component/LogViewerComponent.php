@@ -62,7 +62,7 @@ class LogViewerComponent extends Manager
     public function build_form()
     {
         $form = new FormValidator('logviewer', 'post', $this->get_url());
-        $renderer = & $form->defaultRenderer();
+        $renderer = $form->defaultRenderer();
         $renderer->setElementTemplate(' {element} ');
 
         $types = array('server' => Translation::get('ServerLogs'));

@@ -30,8 +30,7 @@ class NotificationTranslatorTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->translatorMock = $this->getMockBuilder(Translator::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -41,8 +40,7 @@ class NotificationTranslatorTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->translatorMock);
         unset($this->notificationTranslator);
     }

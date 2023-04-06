@@ -78,7 +78,7 @@ class TrackAudio
 
     /**
      *
-     * @return the $bitrate
+     * @return int
      */
     public function get_bitrate()
     {

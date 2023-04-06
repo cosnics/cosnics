@@ -12,7 +12,7 @@ class ExternalObject extends StreamingMediaExternalObject
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent::get_default_property_names(array(self::PROPERTY_URLS, self::PROPERTY_TAGS));
+        return parent::get_default_property_names(array(self::PROPERTY_URLS, self::PROPERTY_EMBED));
     }
 
     public function get_urls()

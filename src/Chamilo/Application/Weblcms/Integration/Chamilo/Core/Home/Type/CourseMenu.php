@@ -123,7 +123,7 @@ class CourseMenu extends Block
                     \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_CREATE));
             $TEXT = htmlspecialchars(Translation::get('CourseCreate'));
             $IMG = Theme::getInstance()->getCommonImagePath('Action/Create');
-            $result[] = compact('HREF', 'TEXT', 'IMG');
+            $result[] = compact('href', 'TEXT', 'IMG');
         }
         
         if ($count_request)

@@ -271,12 +271,12 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $rights[ExternalObject::RIGHT_DELETE] = false;
             $object->set_rights($rights);
             
-            // $newParent = new \Google_Service_Drive_ParentReference();
+            //$newParent = new \Google_Service_Drive_ParentReference();
             
             if ($file_item['parents'][0]['id'])
             {
-                $newParent->setId($file_item['parents'][0]['id']);
-                $this->service->parents->insert($file_item['id'], $newParent);
+                /*$newParent->setId($file_item['parents'][0]['id']);*/
+                //$this->service->parents->insert($file_item['id']);
             }
             
             if ($file_item['embedLink'] && strpos($file_item['embedLink'], 'video.google.com') === false)
@@ -353,6 +353,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             throw new \InvalidArgumentException('Could not import an Google Drive because the download URL is invalid');
         }
+        $response = null;
+
         if ($type=='get')
             $response = $this->service->files->get($externalExportURL,array('alt'=>'media'));//getClient()->getAuth()->authenticatedRequest($request);
         elseif ($type=='export')

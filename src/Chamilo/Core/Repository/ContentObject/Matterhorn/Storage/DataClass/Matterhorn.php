@@ -66,7 +66,7 @@ class Matterhorn extends ContentObject implements Versionable, Includeable
         return $settings->get_value() . '/engage/ui/embed.html?id=' . $synchronization_data->get_external_object_id();
     }
 
-    public function create()
+    public function create($create_in_batch = false)
     {
         $this->clear_errors();
 
@@ -80,7 +80,7 @@ class Matterhorn extends ContentObject implements Versionable, Includeable
         }
     }
 
-    public function update()
+    public function update($create_in_batch = false)
     {
         $this->clear_errors();
 

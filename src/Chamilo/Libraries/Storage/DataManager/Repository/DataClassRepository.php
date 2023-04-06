@@ -633,7 +633,7 @@ class DataClassRepository
 
         $parameters = new RecordRetrieveParameters(
             new DataClassProperties(
-                array(new PropertyConditionVariable($conditionDataClassName, $conditionClass::PROPERTY_TYPE))),
+                array(new PropertyConditionVariable($conditionDataClassName, $conditionDataClassName::PROPERTY_TYPE))),
             $condition);
 
         $type = $this->record($conditionDataClassName, $parameters);

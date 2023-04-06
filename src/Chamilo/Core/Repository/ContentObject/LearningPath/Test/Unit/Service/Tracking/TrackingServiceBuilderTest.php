@@ -30,8 +30,7 @@ class TrackingServiceBuilderTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    protected function setUp()
-    {
+    protected function setUp(): void    {
         $dataClassRepositoryMock = $this->getMockBuilder(DataClassRepository::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -46,8 +45,7 @@ class TrackingServiceBuilderTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void    {
     }
 
     public function testBuildTrackingService()

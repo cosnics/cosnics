@@ -15,7 +15,7 @@ class HTML_QuickForm_Rule_Course_Type extends HTML_QuickForm_Rule
      *
      * @return boolean
      */
-    public function validate($course_type_id, $options = null)
+    public function validate($course_type_id, $options = null): bool
     {
         return $course_type_id != - 1;
     }

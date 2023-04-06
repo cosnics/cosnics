@@ -29,8 +29,7 @@ class DBALProducerTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->dbalContextMock = $this->getMockBuilder(DbalContext::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -40,8 +39,7 @@ class DBALProducerTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->dbalContextMock);
         unset($this->DBALProducer);
     }

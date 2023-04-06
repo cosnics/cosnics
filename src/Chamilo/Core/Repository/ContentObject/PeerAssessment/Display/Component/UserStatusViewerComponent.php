@@ -35,7 +35,7 @@ class UserStatusViewerComponent extends Manager
             $this->redirect(
                 Translation::get('Notallowed'), 
                 true, 
-                array(self::PARAM_ACTION => self::ACTION_BROWSE_ATTEMPTS));
+                array(self::PARAM_ACTION => self::ACTION_VIEW_USER_STATUS));
         }
         
         if ($this->user_id != $this->get_user()->get_id())

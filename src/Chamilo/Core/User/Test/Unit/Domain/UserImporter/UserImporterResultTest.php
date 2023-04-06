@@ -21,16 +21,14 @@ class UserImporterResultTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
-    {
+    protected function setUp(): void    {
         $this->userImporterResult = new UserImporterResult();
     }
 
     /**
      * Tear down after each test
      */
-    public function tearDown()
-    {
+    protected function tearDown(): void    {
         unset($this->userImporterResult);
     }
 

@@ -19,7 +19,7 @@ class DochyResultProcessor extends PeerAssessmentResultprocessor
 
     private $user_id;
 
-    protected function set_scores($scores)
+    protected function set_scores($scores, $default = 0)
     {
         parent::set_scores($scores, $this->neutral_score);
     }
@@ -148,8 +148,8 @@ class DochyResultProcessor extends PeerAssessmentResultprocessor
             {
                 
                 /*
-                 * $url = $this->get_url(array( self :: PARAM_ACTION => self :: ACTION_VIEW_USER_RESULTS, self
-                 * :: PARAM_ATTEMPT => $this->attempt_id, self :: PARAM_USER => $this->user_id, 'user2' => $u->get_id()
+                 * $url = $this->get_url(array( self::PARAM_ACTION => self :: ACTION_VIEW_USER_RESULTS, self
+                 *::PARAM_ATTEMPT => $this->attempt_id, self::PARAM_USER => $this->user_id, 'user2' => $u->get_id()
                  * ));
                  */
                 

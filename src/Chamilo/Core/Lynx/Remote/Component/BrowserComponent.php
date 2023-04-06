@@ -184,12 +184,12 @@ class BrowserComponent extends Manager implements TableSupport
                     array(\Chamilo\Core\Lynx\Source\Manager::PARAM_SOURCE_ID => $this->get_source()->get_id())));
             $commonActions = new ButtonGroup();
 
-            $commonActions->addButton(
+            /*$commonActions->addButton(
                 new Button(
                     Translation::get('Synchronize'),
                     Theme::getInstance()->getImagePath('Chamilo\Core\Lynx\Remote', 'Action/Synchronize'),
                     $this->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_SYNCHRONIZE)),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));*/
 
             $buttonToolbar->addButtonGroup($commonActions);
 

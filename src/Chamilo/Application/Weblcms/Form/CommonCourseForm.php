@@ -147,6 +147,8 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
      */
     public function set_default_values_for_rights_form()
     {
+        $defaults = [];
+
         $available_rights = $this->get_available_rights();
         
         if ($this->base_object->is_identified())
@@ -224,7 +226,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             $element = $this->getElement($targets_name);
             $element->setDefaultValues($default_elements);
         }
-        
+
         $this->setDefaults($defaults);
     }
 
@@ -589,28 +591,28 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         
         $group = array();
         
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio', 
             null, 
             null, 
             Translation::get('Nobody'), 
             CourseManagementRights::RIGHT_OPTION_NOBODY, 
             array('class' => 'rights_selector'));
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio', 
             null, 
             null, 
             Translation::get('Everyone'), 
             CourseManagementRights::RIGHT_OPTION_ALL, 
             array('class' => 'rights_selector'));
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio', 
             null, 
             null, 
             Translation::get('OnlyForMe'), 
             CourseManagementRights::RIGHT_OTPION_ME, 
             array('class' => 'rights_selector'));
-        $group[] = & $this->createElement(
+        $group[] = $this->createElement(
             'radio', 
             null, 
             null, 
