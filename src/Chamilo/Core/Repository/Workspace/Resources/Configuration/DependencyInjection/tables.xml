@@ -15,7 +15,7 @@
         </service>
 
         <service id="Chamilo\Core\Repository\Workspace\Table\SharedInTableRenderer"/>
-        <service id="Chamilo\Core\Repository\Workspace\Table\SharedTableRenderer"/>
+        <service id="Chamilo\Core\Repository\Workspace\Table\ShareTableRenderer"/>
 
     </services>
 

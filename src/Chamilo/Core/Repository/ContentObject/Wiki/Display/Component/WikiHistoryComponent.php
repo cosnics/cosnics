@@ -3,16 +3,19 @@ namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Component;
 
 use Chamilo\Core\Repository\Common\ContentObjectDifferenceRenderer;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Wiki\Display\Table\Version\VersionTable;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Table\VersionTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -20,8 +23,7 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WikiHistoryComponent extends Manager implements TableSupport
 {
@@ -75,16 +77,29 @@ class WikiHistoryComponent extends Manager implements TableSupport
             }
             else
             {
+                $totalNumberOfItems = DataManager::count_content_objects(
+                    ContentObject::class, new DataClassCountParameters($this->getVersionTableCondition())
+                );
 
-                $version_parameters = $this->get_parameters();
-                $version_parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->complex_wiki_page_id;
+                $versionTableRenderer = $this->getVersionTableRenderer();
 
-                $version_browser = new VersionTable($this);
+                $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+                    $versionTableRenderer->getParameterNames(), $versionTableRenderer->getDefaultParameterValues(),
+                    $totalNumberOfItems
+                );
+
+                $contentObjects = DataManager::retrieve_content_objects(
+                    ContentObject::class, new DataClassRetrievesParameters(
+                        $this->getVersionTableCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+                        $tableParameterValues->getOffset(),
+                        $versionTableRenderer->determineOrderBy($tableParameterValues)
+                    )
+                );
 
                 $html[] = '<h3 id="page-title">' . Translation::get('RevisionHistory') . ': ' .
                     $this->wiki_page->get_title() . '</h3>';
 
-                $html[] = $version_browser->render();
+                $html[] = $versionTableRenderer->render($tableParameterValues, $contentObjects);
                 $html[] = ResourceManager::getInstance()->getResourceHtml(
                     Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'VersionTable.js'
                 );
@@ -96,7 +111,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
         }
         else
         {
-            $this->redirectWithMessage(null, false, array(self::PARAM_ACTION => self::ACTION_VIEW_WIKI));
+            $this->redirectWithMessage(null, false, [self::PARAM_ACTION => self::ACTION_VIEW_WIKI]);
         }
     }
 
@@ -120,6 +135,24 @@ class WikiHistoryComponent extends Manager implements TableSupport
         return $this->getService(ContentObjectDifferenceRenderer::class);
     }
 
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    public function getVersionTableCondition(): EqualityCondition
+    {
+        return new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
+            new StaticConditionVariable($this->wiki_page->get_object_number())
+        );
+    }
+
+    public function getVersionTableRenderer(): VersionTableRenderer
+    {
+        return $this->getService(VersionTableRenderer::class);
+    }
+
     public function get_content_object_deletion_url($content_object, $type = null)
     {
         $delete_allowed = DataManager::content_object_deletion_allowed(
@@ -132,11 +165,11 @@ class WikiHistoryComponent extends Manager implements TableSupport
         }
 
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_VERSION_DELETE,
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_wiki_page_id,
                 self::PARAM_WIKI_VERSION_ID => $content_object->get_id()
-            )
+            ]
         );
     }
 
@@ -150,30 +183,22 @@ class WikiHistoryComponent extends Manager implements TableSupport
         }
 
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_VERSION_REVERT,
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_wiki_page_id,
                 self::PARAM_WIKI_VERSION_ID => $content_object->get_id()
-            )
+            ]
         );
     }
 
     public function get_content_object_viewing_url($content_object)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_VIEW_WIKI_PAGE,
                 self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_wiki_page_id,
                 self::PARAM_WIKI_VERSION_ID => $content_object->get_id()
-            )
-        );
-    }
-
-    public function get_table_condition($class_name)
-    {
-        return new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
-            new StaticConditionVariable($this->wiki_page->get_object_number())
+            ]
         );
     }
 

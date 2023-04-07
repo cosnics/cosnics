@@ -8,9 +8,9 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Table\ContentObject\Version\VersionTable;
 use Chamilo\Core\Repository\Table\ExternalLink\ExternalLinkTable;
 use Chamilo\Core\Repository\Table\Link\LinkTable;
+use Chamilo\Core\Repository\Table\VersionTableRenderer;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Table\SharedInTableRenderer;
@@ -28,12 +28,13 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -48,7 +49,7 @@ use InvalidArgumentException;
 /**
  * Repository manager component which can be used to view a learning object.
  */
-class ViewerComponent extends Manager implements DelegateComponent, TableSupport
+class ViewerComponent extends Manager implements DelegateComponent
 {
 
     /**
@@ -659,11 +660,27 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
         if ($contentObject->get_current() != ContentObject::CURRENT_SINGLE)
         {
-            $versionTable = new VersionTable($this);
+            $totalNumberOfItems = DataManager::count_content_objects(
+                ContentObject::class, new DataClassCountParameters($this->getVersionTableCondition())
+            );
+
+            $versionTableRenderer = $this->getVersionTableRenderer();
+
+            $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+                $versionTableRenderer->getParameterNames(), $versionTableRenderer->getDefaultParameterValues(),
+                $totalNumberOfItems
+            );
+
+            $contentObjects = DataManager::retrieve_content_objects(
+                ContentObject::class, new DataClassRetrievesParameters(
+                    $this->getVersionTableCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+                    $tableParameterValues->getOffset(), $versionTableRenderer->determineOrderBy($tableParameterValues)
+                )
+            );
 
             $versionTabContent = [];
 
-            $versionTabContent[] = $versionTable->render();
+            $versionTabContent[] = $versionTableRenderer->render($tableParameterValues, $contentObjects);
             $versionTabContent[] = ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'VersionTable.js'
             );
@@ -681,17 +698,17 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         return $tabs;
     }
 
-    /**
-     * @param string $table_class_name
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition|\Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
-     */
-    public function get_table_condition($table_class_name)
+    public function getVersionTableCondition(): EqualityCondition
     {
         return new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
             new StaticConditionVariable($this->getContentObject()->get_object_number())
         );
+    }
+
+    public function getVersionTableRenderer(): VersionTableRenderer
+    {
+        return $this->getService(VersionTableRenderer::class);
     }
 
     /**
