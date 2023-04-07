@@ -34,10 +34,6 @@ use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -192,16 +188,6 @@ abstract class Manager extends Application
     }
 
     /**
-     * @return bool
-     */
-    public function current_user_has_recycled_objects()
-    {
-        $parameters = new DataClassCountParameters($this->get_current_user_recycle_bin_conditions());
-
-        return DataManager::count_active_content_objects(ContentObject::class, $parameters) > 0;
-    }
-
-    /**
      * Sets the active URL in the navigation menu.
      *
      * @param $url string The active URL.
@@ -261,14 +247,14 @@ abstract class Manager extends Application
         return $this->getService(WorkspaceExtensionManager::class);
     }
 
-    public function getWorkspaceService(): WorkspaceService
-    {
-        return $this->getService(WorkspaceService::class);
-    }
-
     protected function getWorkspaceRightsService(): RightsService
     {
         return $this->getService(RightsService::class);
+    }
+
+    public function getWorkspaceService(): WorkspaceService
+    {
+        return $this->getService(WorkspaceService::class);
     }
 
     /**
@@ -581,26 +567,6 @@ abstract class Manager extends Application
                 self::PARAM_CONTENT_OBJECT_ID => $content_object_id
             ]
         );
-    }
-
-    /**
-     * Return a condition object that can be used to look for objects of the current logged user that are recycled
-     *
-     * @return AndCondition
-     */
-    public function get_current_user_recycle_bin_conditions()
-    {
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($this->get_user_id())
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
-            new StaticConditionVariable(ContentObject::STATE_RECYCLED)
-        );
-
-        return new AndCondition($conditions);
     }
 
     public static function get_document_downloader_url($documentId, $securityCode = null)

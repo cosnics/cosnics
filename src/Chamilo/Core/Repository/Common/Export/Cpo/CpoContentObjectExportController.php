@@ -5,8 +5,6 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportController;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportImplementation;
 use Chamilo\Core\Repository\Common\Export\ExportParameters;
-use Chamilo\Core\Repository\Instance\Manager;
-use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
@@ -31,9 +29,7 @@ use DOMXPath;
 class CpoContentObjectExportController extends ContentObjectExportController
 {
     public const NODE_TYPE_ATTACHMENTS = 'attachments';
-
     public const NODE_TYPE_INCLUDES = 'includes';
-
     public const NODE_TYPE_SUB_ITEMS = 'sub_items';
 
     /**
@@ -343,38 +339,6 @@ class CpoContentObjectExportController extends ContentObjectExportController
         }
     }
 
-    public function get_external_instance_node($external_instance_id)
-    {
-        $external_instance_node = $this->has_external_instance_node($external_instance_id);
-        if (!$external_instance_node)
-        {
-            $external_instance_node = $this->get_export_node()->appendChild(
-                $this->dom_document->createElement('external_instance')
-            );
-            $external_instance_node->appendChild($this->dom_document->createAttribute('id'))->appendChild(
-                $this->dom_document->createTextNode($external_instance_id)
-            );
-
-            return $external_instance_node;
-        }
-
-        return $external_instance_node;
-    }
-
-    public function get_external_instances_node()
-    {
-        $node_list = $this->dom_xpath->query('/export/external_instances');
-
-        if ($node_list->length == 1)
-        {
-            return $node_list->item(0);
-        }
-        else
-        {
-            return $this->get_export_node()->appendChild($this->dom_document->createElement('external_instances'));
-        }
-    }
-
     public function get_filename()
     {
         return 'content_objects.cpo';
@@ -388,20 +352,6 @@ class CpoContentObjectExportController extends ContentObjectExportController
     public function get_xml_path()
     {
         return $this->temporary_directory . 'content_object.xml';
-    }
-
-    public function has_external_instance_node($external_instance_id)
-    {
-        $node_list = $this->dom_xpath->query('//external_instance[@id="' . $external_instance_id . '"]');
-
-        if ($node_list->length == 1)
-        {
-            return $node_list->item(0);
-        }
-        else
-        {
-            return false;
-        }
     }
 
     public function in_category_id_cache($category_id)
@@ -634,43 +584,6 @@ class CpoContentObjectExportController extends ContentObjectExportController
                         $this->process($child->get_ref_object());
                     }
                 }
-            }
-        }
-    }
-
-    public function process_external_instance($external_instance_id)
-    {
-        /** @var \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance $external_instance */
-        $external_instance = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_by_id(
-            Instance::class, $external_instance_id
-        );
-
-        if (!$this->has_external_instance_node($external_instance_id))
-        {
-            $external_instance_node = $this->get_external_instance_node($external_instance_id);
-
-            $id = $external_instance_node->appendChild($this->dom_document->createAttribute('id'));
-            $id->appendChild($this->dom_document->createTextNode($external_instance_id));
-
-            $type = $external_instance_node->appendChild($this->dom_document->createAttribute('type'));
-            $type->appendChild($this->dom_document->createTextNode($external_instance->get_implementation()));
-
-            $settings_node = $external_instance_node->appendChild($this->dom_document->createElement('settings'));
-
-            $settings = Manager::get_instance_identifier(
-                $external_instance->get_implementation()
-            );
-
-            foreach ($settings as $setting)
-            {
-                $setting = $external_instance->get_setting($setting);
-                $setting_node = $settings_node->appendChild($this->dom_document->createElement('setting'));
-
-                $variable = $setting_node->appendChild($this->dom_document->createElement('variable'));
-                $variable->appendChild($this->dom_document->createTextNode($setting->get_variable()));
-
-                $value = $setting_node->appendChild($this->dom_document->createElement('value'));
-                $value->appendChild($this->dom_document->createTextNode($setting->get_value()));
             }
         }
     }

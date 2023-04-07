@@ -1,11 +1,9 @@
 <?php
-
 namespace Chamilo\Core\Repository\Storage\DataClass;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Common\ContentObjectDifference;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
-use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataManager;
@@ -107,11 +105,6 @@ class ContentObject extends CompositeDataClass
      * updated upon updating the object.
      */
     private $oldState;
-
-    /**
-     * @var \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData
-     */
-    private $synchronization_data;
 
     /**
      * @var TemplateRegistration
@@ -1426,30 +1419,6 @@ class ContentObject extends CompositeDataClass
         return $this->getDefaultProperty(self::PROPERTY_STATE);
     }
 
-    // XXX: Keep this around? Override? Make useful?
-
-    /**
-     * @return \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData
-     */
-    public function get_synchronization_data()
-    {
-        if (!isset($this->synchronization_data))
-        {
-            $sync_condition = new EqualityCondition(
-                new PropertyConditionVariable(
-                    SynchronizationData::class, SynchronizationData::PROPERTY_CONTENT_OBJECT_ID
-                ), new StaticConditionVariable($this->get_id())
-            );
-
-            $this->synchronization_data =
-                \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_synchronization_data_set(
-                    $sync_condition
-                );
-        }
-
-        return $this->synchronization_data;
-    }
-
     public function get_template_registration()
     {
         if (!isset($this->template_registration))
@@ -1756,11 +1725,6 @@ class ContentObject extends CompositeDataClass
         return ($this->get_current() != 0);
     }
 
-    public function is_external()
-    {
-        return $this->get_synchronization_data() instanceof SynchronizationData;
-    }
-
     public function is_included_in($object_id)
     {
         $conditions = [];
@@ -1924,11 +1888,6 @@ class ContentObject extends CompositeDataClass
     public function set_state($state)
     {
         return $this->setDefaultProperty(self::PROPERTY_STATE, $state);
-    }
-
-    public function set_synchronization_data($external_sync)
-    {
-        $this->synchronization_data = $external_sync;
     }
 
     /**
@@ -2151,15 +2110,6 @@ class ContentObject extends CompositeDataClass
         if (!DataManager::deletes(ContentObjectInclude::class, $condition))
         {
             return false;
-        }
-
-        $external_sync = $this->get_synchronization_data();
-        if ($external_sync instanceof SynchronizationData)
-        {
-            if (!$external_sync->delete())
-            {
-                return false;
-            }
         }
 
         return parent::delete();

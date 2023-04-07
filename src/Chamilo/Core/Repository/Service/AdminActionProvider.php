@@ -21,17 +21,6 @@ class AdminActionProvider extends AbstractActionProvider implements ActionProvid
         $links = [];
 
         $parameters = [
-            Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Instance\Manager::context(),
-            Application::PARAM_ACTION => \Chamilo\Core\Repository\Instance\Manager::ACTION_BROWSE
-        ];
-
-        $links[] = new Action(
-            $translator->trans('ManageExternalInstancesDescription', [], $context),
-            $translator->trans('ManageExternalInstances', [], $context),
-            new FontAwesomeGlyph('globe', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
-        );
-
-        $parameters = [
             Application::PARAM_CONTEXT => $context,
             Application::PARAM_ACTION => Manager::ACTION_LINK_SCHEMAS
         ];

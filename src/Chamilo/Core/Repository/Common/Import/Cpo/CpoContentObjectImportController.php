@@ -5,8 +5,6 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportImplementation;
-use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
-use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
@@ -20,11 +18,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\File\Compression\Filecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
@@ -151,23 +144,6 @@ class CpoContentObjectImportController extends ContentObjectImportController
             DataManager::set_tags_for_content_objects(
                 $tags, [$content_object->get_id()], $content_object->get_owner_id()
             );
-        }
-    }
-
-    public function create_external_sync($content_object)
-    {
-        $external_sync = $content_object->get_synchronization_data();
-
-        if ($external_sync instanceof SynchronizationData)
-        {
-            $external_sync->set_content_object_id($content_object->get_id());
-            $external_sync->set_content_object_timestamp($content_object->get_modification_date());
-
-            return $external_sync->create();
-        }
-        else
-        {
-            return true;
         }
     }
 
@@ -346,13 +322,6 @@ class CpoContentObjectImportController extends ContentObjectImportController
         return $this->dom_xpath;
     }
 
-    public function get_external_instance_id_cache_id($old_external_instance_id)
-    {
-        return $this->get_cache_id(
-            Instance::class, Instance::PROPERTY_ID, $old_external_instance_id
-        );
-    }
-
     public function get_object_number_created($id)
     {
         return $this->object_number_created[$id];
@@ -438,15 +407,12 @@ class CpoContentObjectImportController extends ContentObjectImportController
         $this->process_includes($content_object_node);
         $this->process_sub_items($content_object_node);
         $this->process_helpers($content_object_node);
-        $this->process_external_sync($content_object_node);
 
         $content_object = ContentObjectImportImplementation::launch(
             $this, $this->determine_content_object_type(
             $this->dom_xpath->query('general/type', $content_object_node)->item(0)->nodeValue
         ), $content_object_parameter
         );
-
-        $external_sync = $this->set_external_sync($content_object_node, $content_object);
 
         $this->update_helpers($content_object_node, $content_object);
 
@@ -465,7 +431,6 @@ class CpoContentObjectImportController extends ContentObjectImportController
         $this->create_attachments($content_object_node);
         $this->create_includes($content_object_node);
         $this->create_sub_items($content_object_node);
-        $this->create_external_sync($content_object);
         $this->create_content_object_tags($content_object_node, $content_object);
 
         ContentObjectImportImplementation::post_process(
@@ -473,75 +438,6 @@ class CpoContentObjectImportController extends ContentObjectImportController
             $this->dom_xpath->query('general/type', $content_object_node)->item(0)->nodeValue
         ), $content_object_parameter, $content_object
         );
-    }
-
-    public function process_external_sync($content_object_node)
-    {
-        $external_sync_node_list = $this->dom_xpath->query('external_sync', $content_object_node);
-
-        if ($external_sync_node_list->length == 1)
-        {
-            $external_sync_node = $external_sync_node_list->item(0);
-            $external_id = $external_sync_node->getAttribute('external_instance');
-            if (!$this->get_external_instance_id_cache_id($external_id))
-            {
-                $external_instance_node_list = $this->dom_xpath->query(
-                    '/export/external_instance[@id="' . $external_id . '"]'
-                );
-                if ($external_instance_node_list->length == 1)
-                {
-
-                    $external_instance_node = $external_instance_node_list->item(0);
-                    $conditions = [];
-                    $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Instance::class, Instance::PROPERTY_IMPLEMENTATION),
-                        new StaticConditionVariable($external_instance_node->getAttribute('type'))
-                    );
-                    $condition = new AndCondition($conditions);
-
-                    $external_instances = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
-                        Instance::class, new DataClassRetrievesParameters($condition)
-                    );
-                    foreach ($external_instances as $external_instance)
-                    {
-                        $setting_node_list = $this->dom_xpath->query('setting', $external_instance_node);
-                        $is_matching_external_instance = true;
-                        foreach ($setting_node_list as $setting_node)
-                        {
-                            $variable = $this->dom_xpath->query('variable', $setting_node)->item(0)->nodeValue;
-                            $value = $this->dom_xpath->query('value', $setting_node)->item(0)->nodeValue;
-
-                            if ($external_instance->get_setting($variable) != $value)
-                            {
-                                $is_matching_external_instance = false;
-                                break;
-                            }
-                        }
-                        if (!$is_matching_external_instance)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            $this->set_external_instance_id_cache_id($external_id, $external_instance->get_id());
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return true;
-            }
-        }
-        else
-        {
-            return true;
-        }
     }
 
     public function process_helpers($content_object_node)
@@ -672,46 +568,6 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public function set_dom_xpath($dom_xpath)
     {
         $this->dom_xpath = $dom_xpath;
-    }
-
-    public function set_external_instance_id_cache_id($old_external_instance_id, $new_external_instance_id)
-    {
-        $this->set_cache_id(
-            Instance::class, Instance::PROPERTY_ID, $old_external_instance_id, $new_external_instance_id
-        );
-    }
-
-    public function set_external_sync($content_object_node, $content_object)
-    {
-        $external_sync_node_list = $this->dom_xpath->query('external_sync', $content_object_node);
-
-        if ($external_sync_node_list->length == 1)
-        {
-            $external_sync_node = $external_sync_node_list->item(0);
-            $external_id = $external_sync_node->getAttribute('external_instance');
-
-            if ($this->get_external_instance_id_cache_id($external_id))
-            {
-                $external_sync = new SynchronizationData();
-                $external_sync->set_content_object_id($content_object->get_id());
-                $external_sync->set_content_object_timestamp($content_object->get_modification_date());
-                $external_sync->set_external_id($this->get_external_instance_id_cache_id($external_id));
-                $external_sync->set_external_object_id($external_sync_node->getAttribute('id'));
-                $external_sync->set_external_object_timestamp($external_sync_node->getAttribute('timestamp'));
-
-                $content_object->set_synchronization_data($external_sync);
-
-                return $content_object;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return true;
-        }
     }
 
     public function set_object_number_created($id)

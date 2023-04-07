@@ -1,12 +1,10 @@
 <?php
-
 namespace Chamilo\Core\Repository\Storage;
 
 use ArrayIterator;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
-use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
@@ -1259,39 +1257,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         // Return the requested subset
         return new ArrayIterator(array_splice($content_objects, $offset, $count));
-    }
-
-    public static function retrieve_external_sync($condition)
-    {
-        $join = new Join(
-            ContentObject::class, new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                new PropertyConditionVariable(
-                    SynchronizationData::class, SynchronizationData::PROPERTY_CONTENT_OBJECT_ID
-                )
-            )
-        );
-
-        $parameters = new DataClassRetrieveParameters($condition);
-        $parameters->set_joins(new Joins([$join]));
-
-        return self::retrieve(SynchronizationData::class, $parameters);
-    }
-
-    public static function retrieve_external_syncs($condition = null, $count = null, $offset = null, $order_by = null)
-    {
-        $join = new Join(
-            ContentObject::class, new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                new PropertyConditionVariable(
-                    SynchronizationData::class, SynchronizationData::PROPERTY_CONTENT_OBJECT_ID
-                )
-            )
-        );
-
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by, new Joins([$join]));
-
-        return self::retrieves(SynchronizationData::class, $parameters);
     }
 
     public static function retrieve_most_recent_content_object_version($object)

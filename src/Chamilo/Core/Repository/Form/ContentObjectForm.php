@@ -479,27 +479,24 @@ abstract class ContentObjectForm extends FormValidator
 
         if ($object instanceof Versionable && $this->allow_new_version)
         {
-            if (!$object->is_external())
+            if ($object instanceof ForcedVersionSupport)
             {
-                if ($object instanceof ForcedVersionSupport)
-                {
-                    $this->addElement('hidden', self::PROPERTY_VERSION, null, ['class' => 'version']);
-                }
-                else
-                {
-                    $this->addElement(
-                        'checkbox', self::PROPERTY_VERSION, Translation::get('CreateAsNewVersion'), null,
-                        ['class' => 'version']
-                    );
+                $this->addElement('hidden', self::PROPERTY_VERSION, null, ['class' => 'version']);
+            }
+            else
+            {
+                $this->addElement(
+                    'checkbox', self::PROPERTY_VERSION, Translation::get('CreateAsNewVersion'), null,
+                    ['class' => 'version']
+                );
 
-                    $this->addElement('html', '<div class="content-object-version-comment hidden">');
-                    $this->addElement(
-                        'text', ContentObject::PROPERTY_COMMENT, Translation::get('VersionComment'),
-                        ['size' => '50', 'class' => 'form-control']
-                    );
+                $this->addElement('html', '<div class="content-object-version-comment hidden">');
+                $this->addElement(
+                    'text', ContentObject::PROPERTY_COMMENT, Translation::get('VersionComment'),
+                    ['size' => '50', 'class' => 'form-control']
+                );
 
-                    $this->addElement('html', '</div>');
-                }
+                $this->addElement('html', '</div>');
             }
         }
 

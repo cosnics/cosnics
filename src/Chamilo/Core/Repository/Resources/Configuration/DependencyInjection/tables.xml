@@ -32,6 +32,7 @@
                       id="Chamilo\Core\User\User"/>
         </service>
 
-    </services>
+        <service id="Chamilo\Core\Repository\Table\RecycleBinTableRenderer"/>
 
+    </services>
 </container>

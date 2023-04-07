@@ -85,8 +85,6 @@ class CpoDefaultContentObjectExport extends CpoContentObjectExport
             $text = $document->createTextNode(convert_uuencode($value));
             $text = $property->appendChild($text);
         }
-
-        $this->external_sync();
     }
 
     public function addGeneralProperty($document, $general, $prop)

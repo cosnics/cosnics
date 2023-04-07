@@ -33,7 +33,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Core\Repository' => [
-                'instance.xml',
                 'console.xml',
                 'content_object.xml',
                 'registration.xml',

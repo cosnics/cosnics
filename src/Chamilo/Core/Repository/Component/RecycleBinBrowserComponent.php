@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Component;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Table\ContentObject\RecycleBin\RecycleBinTable;
+use Chamilo\Core\Repository\Table\RecycleBinTableRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -13,32 +13,31 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
-/**
- *
- * @package repository.lib.repository_manager.component
- */
-class RecycleBinBrowserComponent extends Manager implements TableSupport
+class RecycleBinBrowserComponent extends Manager
 {
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
-
-    /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
     public function run()
     {
+        $translator = $this->getTranslator();
         $trail = BreadcrumbTrail::getInstance();
-        $trail->add(new Breadcrumb($this->get_url(), Translation::get('RecycleBin')));
+        $trail->add(new Breadcrumb($this->get_url(), $translator->trans('RecycleBin', [], Manager::CONTEXT)));
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
@@ -46,15 +45,17 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
 
         $html[] = $this->render_header();
 
-        if (Request::get(self::PARAM_EMPTY_RECYCLE_BIN))
+        if ($this->getRequest()->query->get(self::PARAM_EMPTY_RECYCLE_BIN))
         {
-            $this->empty_recycle_bin();
-            $html[] = $this->display_message(htmlentities(Translation::get('RecycleBinEmptied')));
+            $this->emptyRecycleBin();
+            $html[] = $this->display_message(
+                htmlentities($translator->trans('RecycleBinEmptied', [], Manager::CONTEXT))
+            );
         }
 
         $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = $this->display_content_objects();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderTable();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
@@ -63,22 +64,10 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
-                Translation::get('RepositoryManagerBrowserComponent')
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS]),
+                $this->getTranslator()->trans('RepositoryManagerBrowserComponent', [], Manager::CONTEXT)
             )
         );
-    }
-
-    /**
-     * Display content objects in the recycle bin.
-     *
-     * @return int The number of content objects currently in the recycle bin.
-     */
-    private function display_content_objects()
-    {
-        $table = new RecycleBinTable($this);
-
-        return $table->as_html();
     }
 
     /**
@@ -86,34 +75,33 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
      * This function will permanently delete all objects from the recycle bin. Only objects from
      * current user will be deleted.
      */
-    private function empty_recycle_bin()
+    private function emptyRecycleBin()
     {
-        $parameters = new DataClassRetrievesParameters($this->get_current_user_recycle_bin_conditions());
+        $parameters = new DataClassRetrievesParameters($this->getRecycleBinTableCondition());
         $trashed_objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
-        $count = 0;
+
         foreach ($trashed_objects as $object)
         {
             $object->delete();
-            $count ++;
         }
 
         $this->getDataClassRepositoryCache()->truncate(ContentObject::class);
-
-        return $count;
     }
 
-    public function getButtonToolbarRenderer()
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
 
+            $translator = $this->getTranslator();
+
             $commonActions->addButton(
                 new Button(
-                    Translation::get('EmptyRecycleBin'), new FontAwesomeGlyph('trash-alt'),
-                    $this->get_url(array(self::PARAM_EMPTY_RECYCLE_BIN => 1)), ToolbarItem::DISPLAY_ICON_AND_LABEL,
-                    Translation::get('ConfirmEmptyRecycleBin')
+                    $translator->trans('EmptyRecycleBin', [], Manager::CONTEXT), new FontAwesomeGlyph('trash-alt'),
+                    $this->get_url([self::PARAM_EMPTY_RECYCLE_BIN => 1]), ToolbarItem::DISPLAY_ICON_AND_LABEL,
+                    $translator->trans('ConfirmEmptyRecycleBin', [], Manager::CONTEXT)
                 )
             );
 
@@ -125,20 +113,61 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
-     */
-    public function getDataClassRepositoryCache()
+    public function getDataClassRepositoryCache(): DataClassRepositoryCache
     {
         return $this->getService(DataClassRepositoryCache::class);
     }
 
-    /*
-     * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
-     */
-
-    public function get_table_condition($table_class_name)
+    public function getRecycleBinTableCondition(): AndCondition
     {
-        return $this->get_current_user_recycle_bin_conditions();
+        $conditions = [];
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
+            new StaticConditionVariable($this->getUser()->getId())
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
+            new StaticConditionVariable(ContentObject::STATE_RECYCLED)
+        );
+
+        return new AndCondition($conditions);
+    }
+
+    public function getRecycleBinTableRenderer(): RecycleBinTableRenderer
+    {
+        return $this->getService(RecycleBinTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems = DataManager::count_active_content_objects(
+            ContentObject::class, new DataClassCountParameters($this->getRecycleBinTableCondition())
+        );
+        $recycleBinTableRenderer = $this->getRecycleBinTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $recycleBinTableRenderer->getParameterNames(), $recycleBinTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $contentObjects = DataManager::retrieve_active_content_objects(
+            ContentObject::class, new DataClassRetrievesParameters(
+                $this->getRecycleBinTableCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+                $tableParameterValues->getOffset(), $recycleBinTableRenderer->determineOrderBy($tableParameterValues)
+            )
+        );
+
+        return $recycleBinTableRenderer->render($tableParameterValues, $contentObjects);
     }
 }

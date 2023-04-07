@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Table\ExternalLink\ExternalLinkTable;
 use Chamilo\Core\Repository\Table\Link\LinkTable;
 use Chamilo\Core\Repository\Table\VersionTableRenderer;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
@@ -128,19 +127,6 @@ class ViewerComponent extends Manager implements DelegateComponent
             self::PARAM_CONTENT_OBJECT_ID => $contentObject->getId(),
             self::PARAM_ACTION => self::ACTION_VIEW_CONTENT_OBJECTS
         ];
-
-        // EXTERNAL INSTANCES
-        if ($contentObject->is_external())
-        {
-            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = 'external_instances';
-            $browser = new ExternalLinkTable($this);
-            $tabs->add(
-                new ContentTab(
-                    'external_instances', $translator->trans('ExternalInstances', [], self::package()),
-                    $browser->render(), new FontAwesomeGlyph('globe', ['fa-lg'], null, 'fas')
-                )
-            );
-        }
 
         // LINKS | PUBLICATIONS
         if ($contentObject->has_publications())
