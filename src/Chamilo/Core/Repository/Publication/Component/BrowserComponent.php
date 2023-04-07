@@ -2,55 +2,78 @@
 namespace Chamilo\Core\Repository\Publication\Component;
 
 use Chamilo\Core\Repository\Publication\Manager;
-use Chamilo\Core\Repository\Publication\Table\PublicationTable;
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
+use Chamilo\Core\Repository\Publication\Table\PublicationTableRenderer;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 
-/**
- *
- * @package repository.lib.repository_manager.component
- */
 /**
  * Repository manager component which displays user's publications.
  *
  * @author Hans De Bisschop
  * @author Dieter De Neef
  */
-class BrowserComponent extends Manager implements TableSupport, DelegateComponent
+class BrowserComponent extends Manager implements DelegateComponent
 {
-
     /**
-     * Runs this component and displays its output.
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
     public function run()
     {
-        $output = $this->get_publications_html();
-
         $html = [];
 
-        $html[] = $this->render_header();
-        $html[] = $output;
-        $html[] = $this->render_footer();
+        $html[] = $this->renderHeader();
+        $html[] = $this->renderTable();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
+    protected function getPublicationAggregator(): PublicationAggregator
+    {
+        return $this->getService(PublicationAggregator::class);
+    }
+
+    public function getPublicationTableRenderer(): PublicationTableRenderer
+    {
+        return $this->getService(PublicationTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
     /**
-     * Gets the table which shows the users's publication
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
-    private function get_publications_html()
+    protected function renderTable(): string
     {
-        $parameters = $this->get_parameters(true);
+        $totalNumberOfItems = $this->getPublicationAggregator()->countPublicationAttributes(
+            PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER, (int) $this->getUser()->getId()
+        );
 
-        $table = new PublicationTable($this);
-        return $table->as_html();
+        $publicationTableRenderer = $this->getPublicationTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $publicationTableRenderer->getParameterNames(), $publicationTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $attributes = $this->getPublicationAggregator()->getContentObjectPublicationsAttributes(
+            PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER, (int) $this->getUser()->getId(), null,
+            $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
+            $publicationTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $publicationTableRenderer->render($tableParameterValues, $attributes);
     }
 
-    /*
-     * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
-     */
-    public function get_table_condition($table_class_name)
-    {
-        return null;
-    }
 }

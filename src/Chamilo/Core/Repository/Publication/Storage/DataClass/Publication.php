@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 abstract class Publication extends DataClass
 {
-    const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
+    public const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
 
     /**
      * The content object
@@ -22,7 +22,6 @@ abstract class Publication extends DataClass
     protected $contentObject;
 
     /**
-     *
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
     public function getContentObject()
@@ -38,36 +37,24 @@ abstract class Publication extends DataClass
     }
 
     /**
+     * Get the default properties of all Publications.
      *
+     * @return array The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        $extendedPropertyNames[] = self::PROPERTY_CONTENT_OBJECT_ID;
+
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
+    }
+
+    /**
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
-     *
      * @deprecated
-     *
      */
     public function get_content_object()
     {
         return $this->getContentObject();
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @deprecated
-     *
-     */
-    public function set_content_object($contentObject)
-    {
-        $this->setContentObject($contentObject);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     */
-    public function setContentObject($contentObject)
-    {
-        $this->contentObject = $contentObject;
     }
 
     /**
@@ -81,15 +68,21 @@ abstract class Publication extends DataClass
     }
 
     /**
-     * Get the default properties of all Publications.
-     *
-     * @return array The property names.
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    public function setContentObject($contentObject)
     {
-        $extendedPropertyNames[] = self::PROPERTY_CONTENT_OBJECT_ID;
+        $this->contentObject = $contentObject;
+    }
 
-        return parent::getDefaultPropertyNames($extendedPropertyNames);
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @deprecated
+     */
+    public function set_content_object($contentObject)
+    {
+        $this->setContentObject($contentObject);
     }
 
     /**

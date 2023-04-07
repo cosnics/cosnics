@@ -9,19 +9,15 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\Home\Integration\Chamilo\Core\Repository\Publication\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationAggregator implements PublicationAggregatorInterface
 {
-    /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
+
     public function addPublicationTargetsToFormForContentObjectAndUser(
         FormValidator $form, ContentObject $contentObject, User $user
     )
@@ -29,57 +25,31 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param int $contentObjectIdentifiers
-     *
-     * @return bool
+     * @param int[] $contentObjectIdentifiers
      */
-    public function areContentObjectsPublished(array $contentObjectIdentifiers)
+    public function areContentObjectsPublished(array $contentObjectIdentifiers): bool
     {
         return Manager::areContentObjectsPublished($contentObjectIdentifiers);
     }
 
-    /**
-     * @param int $contentObjectIdentifier
-     *
-     * @return bool
-     */
-    public function canContentObjectBeEdited(int $contentObjectIdentifier)
+    public function canContentObjectBeEdited(int $contentObjectIdentifier): bool
     {
         return Manager::canContentObjectBeEdited($contentObjectIdentifier);
     }
 
-    /**
-     * Returns whether or not a content object can be unlinked
-     *
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return bool
-     */
-    public function canContentObjectBeUnlinked(ContentObject $contentObject)
+    public function canContentObjectBeUnlinked(ContentObject $contentObject): bool
     {
         return true;
     }
 
-    /**
-     * @param int $type
-     * @param int $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
     public function countPublicationAttributes(
-        int $type, int $objectIdentifier, Condition $condition = null
-    )
+        int $type, int $objectIdentifier, ?Condition $condition = null
+    ): int
     {
         return Manager::countPublicationAttributes($type, $objectIdentifier, $condition);
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return bool
-     */
-    public function deleteContentObjectPublications(ContentObject $contentObject)
+    public function deleteContentObjectPublications(ContentObject $contentObject): bool
     {
         return Manager::deleteContentObjectPublications($contentObject->getId());
     }
@@ -87,29 +57,24 @@ class PublicationAggregator implements PublicationAggregatorInterface
     /**
      * @param int $type
      * @param int $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param int $count
-     * @param int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?int $count
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
      */
     public function getContentObjectPublicationsAttributes(
         int $type, int $objectIdentifier, Condition $condition = null, int $count = null, int $offset = null,
         ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         return Manager::getContentObjectPublicationsAttributes(
             $objectIdentifier, $type, $condition, $count, $offset, $orderBy
         );
     }
-
-    /**
-     * @param int $contentObjectIdentifier
-     *
-     * @return bool
-     */
-    public function isContentObjectPublished(int $contentObjectIdentifier)
+    
+    public function isContentObjectPublished(int $contentObjectIdentifier): bool
     {
         return Manager::isContentObjectPublished($contentObjectIdentifier);
     }

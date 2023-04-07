@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Publication\Service;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -7,90 +6,55 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Manages the communication between the repository and the publications of content objects. This service is used
  * to determine whether or not a content object can be deleted, can be edited, ...
  *
  * @package Chamilo\Core\Repository\Service
- *
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 interface PublicationAggregatorInterface
 {
-    const ATTRIBUTES_TYPE_OBJECT = 2;
-    const ATTRIBUTES_TYPE_USER = 1;
+    public const ATTRIBUTES_TYPE_OBJECT = 2;
+    public const ATTRIBUTES_TYPE_USER = 1;
 
-    /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
     public function addPublicationTargetsToFormForContentObjectAndUser(
         FormValidator $form, ContentObject $contentObject, User $user
     );
 
     /**
-     * @param integer[] $contentObjectIdentifiers
-     *
-     * @return boolean
+     * @param int[] $contentObjectIdentifiers
      */
-    public function areContentObjectsPublished(array $contentObjectIdentifiers);
+    public function areContentObjectsPublished(array $contentObjectIdentifiers): bool;
+
+    public function canContentObjectBeEdited(int $contentObjectIdentifier): bool;
+
+    public function canContentObjectBeUnlinked(ContentObject $contentObject): bool;
+
+    public function countPublicationAttributes(int $type, int $objectIdentifier, ?Condition $condition = null): int;
+
+    public function deleteContentObjectPublications(ContentObject $contentObject): bool;
 
     /**
-     * @param integer $contentObjectIdentifier
+     * @param int $type
+     * @param int $objectIdentifier
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?int $count
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return boolean
-     */
-    public function canContentObjectBeEdited(int $contentObjectIdentifier);
-
-    /**
-     * Returns whether or not a content object can be unlinked
-     *
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return bool
-     *
-     */
-    public function canContentObjectBeUnlinked(ContentObject $contentObject);
-
-    /**
-     * @param integer $type
-     * @param integer $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return integer
-     */
-    public function countPublicationAttributes(int $type, int $objectIdentifier, Condition $condition = null);
-
-    /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return boolean
-     */
-    public function deleteContentObjectPublications(ContentObject $contentObject);
-
-    /**
-     * @param integer $type
-     * @param integer $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $count
-     * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
-     *
-     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
      */
     public function getContentObjectPublicationsAttributes(
-        int $type, int $objectIdentifier, Condition $condition = null, int $count = null, int $offset = null,
+        int $type, int $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
         ?OrderBy $orderBy = null
-    );
+    ): ArrayCollection;
 
     /**
-     * @param integer $contentObjectIdentifier
-     *
-     * @return boolean
      * @see PublicationInterface::isContentObjectPublished()
      */
-    public function isContentObjectPublished(int $contentObjectIdentifier);
+    public function isContentObjectPublished(int $contentObjectIdentifier): bool;
 }
