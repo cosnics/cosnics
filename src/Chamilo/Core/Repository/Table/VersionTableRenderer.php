@@ -10,7 +10,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
@@ -37,7 +36,6 @@ class VersionTableRenderer extends DataClassListTableRenderer implements TableRo
     public const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_DESC;
     public const DEFAULT_ORDER_COLUMN_INDEX = 4;
 
-    public const PROPERTY_TYPE = 'type';
     public const PROPERTY_USER = 'user';
 
     public const TABLE_IDENTIFIER = Manager::PARAM_CONTENT_OBJECT_ID;
@@ -127,10 +125,6 @@ class VersionTableRenderer extends DataClassListTableRenderer implements TableRo
         $translator = $this->getTranslator();
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TYPE)
-        );
-
-        $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_TITLE)
         );
 
@@ -151,11 +145,6 @@ class VersionTableRenderer extends DataClassListTableRenderer implements TableRo
         $this->addColumn(
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_COMMENT)
         );
-
-        $glyph = new FontAwesomeGlyph('folder', [], $translator->trans('Type', [], Manager::CONTEXT));
-        $this->addColumn(
-            new StaticTableColumn(self::PROPERTY_TYPE, $glyph->render())
-        );
     }
 
     /**
@@ -171,11 +160,6 @@ class VersionTableRenderer extends DataClassListTableRenderer implements TableRo
 
         switch ($column->get_name())
         {
-            case ContentObject::PROPERTY_TYPE :
-            case self::PROPERTY_TYPE :
-                return $contentObject->get_icon_image(
-                    IdentGlyph::SIZE_MINI, true, ['fa-fw']
-                );
             case ContentObject::PROPERTY_TITLE :
                 $title = parent::renderCell($column, $resultPosition, $contentObject);
                 $title_short = $stringUtilities->truncate($title, 50);
