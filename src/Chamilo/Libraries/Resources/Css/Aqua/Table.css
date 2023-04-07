@@ -64,3 +64,8 @@
 .table th.cell-stat-4x, .table td.cell-stat-4x {
     width: 28em;
 }
+
+.table .checkbox {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
