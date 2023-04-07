@@ -149,7 +149,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
     /**
      * @return array
      */
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         $classNameUtilities = ClassnameUtilities::getInstance();
         $configuration = Configuration::getInstance();

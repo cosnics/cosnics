@@ -15,6 +15,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
 class Manager implements PublicationInterface
@@ -265,7 +266,7 @@ class Manager implements PublicationInterface
             }
         }
 
-        return $publicationAttributes;
+        return new ArrayCollection($publicationAttributes);
     }
 
     public static function get_content_object_publication_attribute($publication_id, $context = null)

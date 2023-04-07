@@ -21,23 +21,21 @@ use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Personal\Storage\Repository
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationRepository
 {
 
     /**
-     *
      * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
     private $dataClassRepository;
 
     /**
-     *
      * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
      */
     public function __construct(DataClassRepository $dataClassRepository)
@@ -51,9 +49,9 @@ class PublicationRepository
     }
 
     /**
-     * @param integer[] $contentObjectIdentifiers
+     * @param int $contentObjectIdentifiers
      *
-     * @return integer
+     * @return int
      */
     public function countPublicationsForContentObjectIdentifiers(array $contentObjectIdentifiers)
     {
@@ -66,11 +64,11 @@ class PublicationRepository
     }
 
     /**
-     * @param integer $type
-     * @param integer $objectIdentifier
+     * @param int $type
+     * @param int $objectIdentifier
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return integer
+     * @return int
      */
     public function countPublicationsForTypeAndIdentifier(
         int $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, Condition $condition = null
@@ -96,7 +94,7 @@ class PublicationRepository
 
         if ($condition instanceof Condition)
         {
-            $condition = new AndCondition(array($condition, $publicationCondition));
+            $condition = new AndCondition([$condition, $publicationCondition]);
         }
         else
         {
@@ -109,7 +107,7 @@ class PublicationRepository
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
-     * @return boolean
+     * @return bool
      */
     public function createPublication(Publication $publication)
     {
@@ -119,7 +117,7 @@ class PublicationRepository
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
-     * @return boolean
+     * @return bool
      */
     public function deletePublication(Publication $publication)
     {
@@ -127,7 +125,7 @@ class PublicationRepository
     }
 
     /**
-     * @param integer $publicationIdentifier
+     * @param int $publicationIdentifier
      *
      * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication
      */
@@ -137,7 +135,7 @@ class PublicationRepository
     }
 
     /**
-     * @param integer $publicationIdentifier
+     * @param int $publicationIdentifier
      *
      * @return string[]
      * @throws \Exception
@@ -157,17 +155,17 @@ class PublicationRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $count
-     * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?int $count
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return string[]
+     * @return \Doctrine\Common\Collections\ArrayCollection
      * @throws \Exception
      */
     public function findPublicationRecords(
         Condition $condition = null, int $count = null, int $offset = null, ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         $retrieveProperties = [];
 
@@ -203,19 +201,20 @@ class PublicationRepository
     }
 
     /**
-     * @param integer $type
-     * @param integer $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $count
-     * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param int $type
+     * @param int $objectIdentifier
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?int $count
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return string[]
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @throws \Exception
      */
     public function findPublicationRecordsForTypeAndIdentifier(
         $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
-        Condition $condition = null, int $count = null, int $offset = null, ?OrderBy $orderBy = null
-    )
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+    ): ArrayCollection
     {
         switch ($type)
         {
@@ -232,12 +231,12 @@ class PublicationRepository
                 );
                 break;
             default :
-                return [];
+                return new ArrayCollection();
         }
 
         if ($condition instanceof Condition)
         {
-            $condition = new AndCondition(array($condition, $publicationCondition));
+            $condition = new AndCondition([$condition, $publicationCondition]);
         }
         else
         {
@@ -249,8 +248,8 @@ class PublicationRepository
 
     /**
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $count
-     * @param integer $offset
+     * @param int $count
+     * @param int $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[]
@@ -266,7 +265,7 @@ class PublicationRepository
     }
 
     /**
-     * @param integer $contentObjectIdentifier
+     * @param int $contentObjectIdentifier
      *
      * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[]
      */
@@ -316,7 +315,7 @@ class PublicationRepository
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
-     * @return boolean
+     * @return bool
      */
     public function updatePublication(Publication $publication)
     {

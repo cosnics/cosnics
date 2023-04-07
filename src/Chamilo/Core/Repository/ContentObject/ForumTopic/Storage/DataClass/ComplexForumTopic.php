@@ -77,7 +77,7 @@ class ComplexForumTopic extends ComplexContentObjectItem
         return array(self::PROPERTY_FORUM_TYPE);
     }
 
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         return array(ForumPost::class);
     }

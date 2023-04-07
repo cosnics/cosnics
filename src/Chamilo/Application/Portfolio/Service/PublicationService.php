@@ -11,33 +11,26 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Application\Portfolio\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationService
 {
 
     /**
-     *
      * @var \Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository
      */
     private $publicationRepository;
 
     /**
-     *
      * @var \Chamilo\Application\Portfolio\Service\RightsService
      */
     private $rightsService;
-
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
 
     /**
      * @var \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
@@ -45,7 +38,11 @@ class PublicationService
     private $templateRegistrationConsulter;
 
     /**
-     *
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    /**
      * @param \Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository $publicationRepository
      * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
      * @param \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter $templateRegistrationConsulter
@@ -65,7 +62,7 @@ class PublicationService
     /**
      * @param $contentObjectIdentifier
      *
-     * @return integer
+     * @return int
      */
     public function countPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
     {
@@ -73,9 +70,9 @@ class PublicationService
     }
 
     /**
-     * @param integer[] $contentObjectIdentifiers
+     * @param int $contentObjectIdentifiers
      *
-     * @return integer
+     * @return int
      */
     public function countPublicationsForContentObjectIdentifiers(array $contentObjectIdentifiers)
     {
@@ -85,11 +82,11 @@ class PublicationService
     }
 
     /**
-     * @param integer $type
-     * @param integer $objectIdentifier
+     * @param int $type
+     * @param int $objectIdentifier
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return integer
+     * @return int
      */
     public function countPublicationsForTypeAndIdentifier(
         $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
@@ -110,7 +107,6 @@ class PublicationService
     }
 
     /**
-     *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      */
     public function createPublication(Publication $publication)
@@ -119,7 +115,6 @@ class PublicationService
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
@@ -141,7 +136,6 @@ class PublicationService
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio
@@ -167,7 +161,7 @@ class PublicationService
     /**
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      *
-     * @return boolean
+     * @return bool
      */
     public function deletePublication(Publication $publication)
     {
@@ -176,9 +170,9 @@ class PublicationService
     }
 
     /**
-     * @param integer $publicationIdentifier
+     * @param int $publicationIdentifier
      *
-     * @return boolean
+     * @return bool
      */
     public function deletePublicationByIdentifier(int $publicationIdentifier)
     {
@@ -197,7 +191,7 @@ class PublicationService
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
-     * @return boolean
+     * @return bool
      */
     public function deletePublicationsForContentObject(ContentObject $contentObject)
     {
@@ -215,7 +209,7 @@ class PublicationService
     }
 
     /**
-     * @param integer $publicationIdentifier
+     * @param int $publicationIdentifier
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
@@ -225,7 +219,6 @@ class PublicationService
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
@@ -236,8 +229,7 @@ class PublicationService
     }
 
     /**
-     *
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
@@ -247,7 +239,7 @@ class PublicationService
     }
 
     /**
-     * @param integer $publicationIdentifier
+     * @param int $publicationIdentifier
      *
      * @return string[]
      * @throws \Exception
@@ -258,24 +250,24 @@ class PublicationService
     }
 
     /**
-     * @param integer $type
-     * @param integer $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $count
-     * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
+     * @param int $type
+     * @param int $objectIdentifier
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?int $count
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
      *
-     * @return string[]
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findPublicationRecordsForTypeAndIdentifier(
         $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
-        Condition $condition = null, $count = null, $offset = null, $orderProperties = null
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderProperties = null
     )
     {
         if ($type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT &&
             $type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER)
         {
-            return [];
+            return new ArrayCollection();
         }
         else
         {
@@ -286,7 +278,7 @@ class PublicationService
     }
 
     /**
-     * @param integer $contentObjectIdentifier
+     * @param int $contentObjectIdentifier
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication[]
      */
@@ -296,11 +288,10 @@ class PublicationService
     }
 
     /**
-     *
-     * @param integer $contentObjectIdentifier
-     * @param integer $publisherIdentifier
-     * @param integer $published
-     * @param integer $modified
+     * @param int $contentObjectIdentifier
+     * @param int $publisherIdentifier
+     * @param int $published
+     * @param int $modified
      *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Publication
      */
@@ -319,7 +310,6 @@ class PublicationService
     }
 
     /**
-     *
      * @param \Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio $portfolio
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
@@ -331,7 +321,6 @@ class PublicationService
     }
 
     /**
-     *
      * @return \Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository
      */
     public function getPublicationRepository()
@@ -340,16 +329,6 @@ class PublicationService
     }
 
     /**
-     *
-     * @param \Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository $publicationRepository
-     */
-    public function setPublicationRepository(PublicationRepository $publicationRepository)
-    {
-        $this->publicationRepository = $publicationRepository;
-    }
-
-    /**
-     *
      * @return \Chamilo\Application\Portfolio\Service\RightsService
      */
     public function getRightsService()
@@ -358,20 +337,35 @@ class PublicationService
     }
 
     /**
-     *
-     * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
-     */
-    public function setRightsService(RightsService $rightsService)
-    {
-        $this->rightsService = $rightsService;
-    }
-
-    /**
      * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
      */
     public function getTemplateRegistrationConsulter(): TemplateRegistrationConsulter
     {
         return $this->templateRegistrationConsulter;
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    public function getTranslator()
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @param \Chamilo\Application\Portfolio\Storage\Repository\PublicationRepository $publicationRepository
+     */
+    public function setPublicationRepository(PublicationRepository $publicationRepository)
+    {
+        $this->publicationRepository = $publicationRepository;
+    }
+
+    /**
+     * @param \Chamilo\Application\Portfolio\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService)
+    {
+        $this->rightsService = $rightsService;
     }
 
     /**
@@ -385,16 +379,6 @@ class PublicationService
     }
 
     /**
-     *
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator()
-    {
-        return $this->translator;
-    }
-
-    /**
-     *
      * @param \Symfony\Component\Translation\Translator $translator
      */
     public function setTranslator($translator)
@@ -405,7 +389,7 @@ class PublicationService
     /**
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\Publication $publication
      *
-     * @return boolean
+     * @return bool
      */
     public function updatePublication(Publication $publication)
     {

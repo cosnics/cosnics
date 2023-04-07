@@ -85,7 +85,7 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport, B
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
             self::package(), Manager::package() . '\ContentObject'

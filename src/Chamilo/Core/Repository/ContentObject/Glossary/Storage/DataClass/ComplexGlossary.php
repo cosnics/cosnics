@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 class ComplexGlossary extends ComplexContentObjectItem
 {
 
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         return array(GlossaryItem::class);
     }

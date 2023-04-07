@@ -73,7 +73,7 @@ class Assignment extends ContentObject implements AttachmentSupport
         return $this->getAdditionalProperty(self::PROPERTY_ALLOW_LATE_SUBMISSIONS);
     }
 
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         return $this->getAdditionalProperty(self::PROPERTY_ALLOWED_TYPES);
     }

@@ -13,16 +13,23 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
  * Portfolio constent object
  *
  * @package repository\content_object\portfolio$Portfolio
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Portfolio extends ContentObject implements ComplexContentObjectSupport, ComplexContentObjectDisclosure
 {
 
     /**
-     *
+     * @return string
+     */
+    public static function getTypeName(): string
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
+    }
+
+    /**
      * @see \libraries\architecture\ComplexContentObjectSupport::get_allowed_types()
      */
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
             'Chamilo\Core\Repository\ContentObject\Portfolio', Manager::package() . '\ContentObject'
@@ -39,14 +46,5 @@ class Portfolio extends ContentObject implements ComplexContentObjectSupport, Co
         }
 
         return $types;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 }

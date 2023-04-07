@@ -28,7 +28,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         return array(WikiPage::class);
     }

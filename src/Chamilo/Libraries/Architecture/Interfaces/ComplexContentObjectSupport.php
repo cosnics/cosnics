@@ -11,5 +11,5 @@ namespace Chamilo\Libraries\Architecture\Interfaces;
 interface ComplexContentObjectSupport
 {
 
-    public function get_allowed_types();
+    public function get_allowed_types(): array;
 }

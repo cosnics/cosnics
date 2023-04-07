@@ -26,7 +26,7 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
         return array(self::PROPERTY_BLOG_LAYOUT);
     }
 
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         $allowed_types = [];
         $allowed_types[] = BlogItem::class;

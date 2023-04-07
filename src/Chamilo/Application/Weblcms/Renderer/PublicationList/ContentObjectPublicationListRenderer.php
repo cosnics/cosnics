@@ -133,7 +133,7 @@ abstract class ContentObjectPublicationListRenderer
         return $this->actions;
     }
 
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         return $this->tool_browser->get_allowed_types();
     }

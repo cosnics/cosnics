@@ -17,7 +17,7 @@ use Chamilo\Libraries\Translation\Translation;
 class ComplexForum extends ComplexContentObjectItem
 {
 
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         return array(Forum::class, ForumTopic::class);
     }

@@ -1,8 +1,6 @@
 <?php
-
 namespace Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service;
 
-use Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Core\Admin\Announcement\Service\PublicationService;
 use Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Storage\DataClass\SystemAnnouncement;
 use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
@@ -14,48 +12,25 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationAggregator implements PublicationAggregatorInterface
 {
-    /**
-     * @var \Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator
-     */
-    private $publicationAttributesGenerator;
+    private PublicationAttributesGenerator $publicationAttributesGenerator;
 
-    /**
-     * @var \Chamilo\Core\Admin\Announcement\Service\PublicationService
-     */
-    private $publicationService;
+    private PublicationService $publicationService;
 
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
+    private PublicationTargetRenderer $publicationTargetRenderer;
 
-    /**
-     * @var \Chamilo\Core\Repository\Publication\Service\PublicationTargetService
-     */
-    private $publicationTargetService;
+    private PublicationTargetService $publicationTargetService;
 
-    /**
-     * @var \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer
-     */
-    private $publicationTargetRenderer;
+    private Translator $translator;
 
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Service\PublicationService $publicationService
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
-     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetService $publicationTargetService
-     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer $publicationTargetRenderer
-     */
     public function __construct(
         PublicationService $publicationService, Translator $translator,
         PublicationAttributesGenerator $publicationAttributesGenerator,
@@ -70,43 +45,6 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @return \Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator
-     */
-    public function getPublicationAttributesGenerator(): PublicationAttributesGenerator
-    {
-        return $this->publicationAttributesGenerator;
-    }
-
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
-     */
-    public function setPublicationAttributesGenerator(PublicationAttributesGenerator $publicationAttributesGenerator
-    ): void
-    {
-        $this->publicationAttributesGenerator = $publicationAttributesGenerator;
-    }
-
-    /**
-     * @return \Chamilo\Core\Admin\Announcement\Service\PublicationService
-     */
-    public function getPublicationService(): PublicationService
-    {
-        return $this->publicationService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Admin\Announcement\Service\PublicationService $publicationService
-     */
-    public function setPublicationService(PublicationService $publicationService): void
-    {
-        $this->publicationService = $publicationService;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function addPublicationTargetsToFormForContentObjectAndUser(
@@ -130,11 +68,9 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param integer[] $contentObjectIdentifiers
-     *
-     * @return boolean
+     * @param int[] $contentObjectIdentifiers
      */
-    public function areContentObjectsPublished(array $contentObjectIdentifiers)
+    public function areContentObjectsPublished(array $contentObjectIdentifiers): bool
     {
         $publicationCount =
             $this->getPublicationService()->countPublicationsForContentObjectIdentifiers($contentObjectIdentifiers);
@@ -142,68 +78,44 @@ class PublicationAggregator implements PublicationAggregatorInterface
         return $publicationCount > 0;
     }
 
-    /**
-     * @param integer $contentObjectIdentifier
-     *
-     * @return boolean
-     */
-    public function canContentObjectBeEdited(int $contentObjectIdentifier)
+    public function canContentObjectBeEdited(int $contentObjectIdentifier): bool
     {
         return true;
     }
 
-    /**
-     * Returns whether or not a content object can be unlinked
-     *
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return bool
-     */
-    public function canContentObjectBeUnlinked(ContentObject $contentObject)
+    public function canContentObjectBeUnlinked(ContentObject $contentObject): bool
     {
         return true;
     }
 
-    /**
-     * @param integer $type
-     * @param integer $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return integer
-     */
     public function countPublicationAttributes(
-        int $type, int $objectIdentifier, Condition $condition = null
-    )
+        int $type, int $objectIdentifier, ?Condition $condition = null
+    ): int
     {
         return $this->getPublicationService()->countPublicationsForTypeAndIdentifier(
             $type, $objectIdentifier, $condition
         );
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return boolean
-     */
-    public function deleteContentObjectPublications(ContentObject $contentObject)
+    public function deleteContentObjectPublications(ContentObject $contentObject): bool
     {
         return $this->getPublicationService()->deletePublicationsForContentObject($contentObject);
     }
 
     /**
-     * @param integer $type
-     * @param integer $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $count
-     * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param int $type
+     * @param int $objectIdentifier
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?int $count
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
      */
     public function getContentObjectPublicationsAttributes(
-        int $type, int $objectIdentifier, Condition $condition = null, int $count = null, int $offset = null,
+        int $type, int $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
         ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         $publicationRecords = $this->getPublicationService()->findPublicationRecordsForTypeAndIdentifier(
             $type, $objectIdentifier, $condition, $count, $offset, $orderBy
@@ -217,67 +129,65 @@ class PublicationAggregator implements PublicationAggregatorInterface
                 $this->getPublicationAttributesGenerator()->createAttributesFromRecord($publicationRecord);
         }
 
-        return $publicationAttributes;
+        return new ArrayCollection($publicationAttributes);
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer
-     */
+    public function getPublicationAttributesGenerator(): PublicationAttributesGenerator
+    {
+        return $this->publicationAttributesGenerator;
+    }
+
+    public function getPublicationService(): PublicationService
+    {
+        return $this->publicationService;
+    }
+
     public function getPublicationTargetRenderer(): PublicationTargetRenderer
     {
         return $this->publicationTargetRenderer;
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer $publicationTargetRenderer
-     */
-    public function setPublicationTargetRenderer(PublicationTargetRenderer $publicationTargetRenderer): void
-    {
-        $this->publicationTargetRenderer = $publicationTargetRenderer;
-    }
-
-    /**
-     * @return \Chamilo\Core\Repository\Publication\Service\PublicationTargetService
-     */
     public function getPublicationTargetService(): PublicationTargetService
     {
         return $this->publicationTargetService;
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetService $publicationTargetService
-     */
-    public function setPublicationTargetService(PublicationTargetService $publicationTargetService): void
-    {
-        $this->publicationTargetService = $publicationTargetService;
-    }
-
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
     public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * @param integer $contentObjectIdentifier
-     *
-     * @return boolean
-     */
-    public function isContentObjectPublished(int $contentObjectIdentifier)
+    public function isContentObjectPublished(int $contentObjectIdentifier): bool
     {
         $publicationCount =
             $this->getPublicationService()->countPublicationsForContentObjectIdentifier($contentObjectIdentifier);
 
         return $publicationCount > 0;
+    }
+
+    public function setPublicationAttributesGenerator(PublicationAttributesGenerator $publicationAttributesGenerator
+    ): void
+    {
+        $this->publicationAttributesGenerator = $publicationAttributesGenerator;
+    }
+
+    public function setPublicationService(PublicationService $publicationService): void
+    {
+        $this->publicationService = $publicationService;
+    }
+
+    public function setPublicationTargetRenderer(PublicationTargetRenderer $publicationTargetRenderer): void
+    {
+        $this->publicationTargetRenderer = $publicationTargetRenderer;
+    }
+
+    public function setPublicationTargetService(PublicationTargetService $publicationTargetService): void
+    {
+        $this->publicationTargetService = $publicationTargetService;
+    }
+
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 }

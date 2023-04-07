@@ -194,7 +194,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
         );
     }
 
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         return array(Forum::class, ForumTopic::class);
     }

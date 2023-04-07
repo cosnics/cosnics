@@ -13,7 +13,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 class ComplexPortfolio extends ComplexContentObjectItem
 {
 
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         return array(Portfolio::class, PortfolioItem::class);
     }

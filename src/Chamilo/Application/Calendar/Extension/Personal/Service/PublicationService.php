@@ -6,26 +6,26 @@ use Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\Publicati
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
 class PublicationService
 {
     /**
-     *
      * @var \Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\PublicationRepository
      */
     private $publicationRepository;
 
     /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
-
-    /**
      * @var \Chamilo\Application\Calendar\Extension\Personal\Service\RightsService
      */
     private $rightsService;
+
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
 
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\PublicationRepository $publicationRepository
@@ -44,7 +44,7 @@ class PublicationService
     /**
      * @param $contentObjectIdentifier
      *
-     * @return integer
+     * @return int
      */
     public function countPublicationsForContentObjectIdentifier(int $contentObjectIdentifier)
     {
@@ -52,9 +52,9 @@ class PublicationService
     }
 
     /**
-     * @param integer[] $contentObjectIdentifiers
+     * @param int $contentObjectIdentifiers
      *
-     * @return integer
+     * @return int
      */
     public function countPublicationsForContentObjectIdentifiers(array $contentObjectIdentifiers)
     {
@@ -64,11 +64,11 @@ class PublicationService
     }
 
     /**
-     * @param integer $type
-     * @param integer $objectIdentifier
+     * @param int $type
+     * @param int $objectIdentifier
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return integer
+     * @return int
      */
     public function countPublicationsForTypeAndIdentifier(int $type, int $objectIdentifier, Condition $condition = null)
     {
@@ -88,7 +88,7 @@ class PublicationService
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
-     * @return boolean
+     * @return bool
      */
     public function createPublication(Publication $publication)
     {
@@ -96,12 +96,12 @@ class PublicationService
     }
 
     /**
-     * @param integer $contentObjectIdentifier
-     * @param integer $userIdentifier
-     * @param integer[] $targetUserIdentifiers
-     * @param integer[] $targetGroupIdentifiers
+     * @param int $contentObjectIdentifier
+     * @param int $userIdentifier
+     * @param int $targetUserIdentifiers
+     * @param int $targetGroupIdentifiers
      *
-     * @return boolean
+     * @return bool
      */
     public function createPublicationWithRightsFromParameters(
         int $contentObjectIdentifier, int $userIdentifier, array $targetUserIdentifiers, array $targetGroupIdentifiers
@@ -124,7 +124,7 @@ class PublicationService
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
-     * @return boolean
+     * @return bool
      */
     public function deletePublication(Publication $publication)
     {
@@ -137,9 +137,9 @@ class PublicationService
     }
 
     /**
-     * @param integer $publicationIdentifier
+     * @param int $publicationIdentifier
      *
-     * @return boolean
+     * @return bool
      */
     public function deletePublicationByIdentifier(int $publicationIdentifier)
     {
@@ -158,7 +158,7 @@ class PublicationService
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
-     * @return boolean
+     * @return bool
      */
     public function deletePublicationsForContentObject(ContentObject $contentObject)
     {
@@ -176,7 +176,7 @@ class PublicationService
     }
 
     /**
-     * @param integer $publicationIdentifier
+     * @param int $publicationIdentifier
      *
      * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication
      */
@@ -186,7 +186,7 @@ class PublicationService
     }
 
     /**
-     * @param integer $publicationIdentifier
+     * @param int $publicationIdentifier
      *
      * @return string[]
      * @throws \Exception
@@ -197,24 +197,25 @@ class PublicationService
     }
 
     /**
-     * @param integer $type
-     * @param integer $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $count
-     * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
+     * @param int $type
+     * @param int $objectIdentifier
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?int $count
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
      *
-     * @return string[]
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @throws \Exception
      */
     public function findPublicationRecordsForTypeAndIdentifier(
-        int $type, int $objectIdentifier, Condition $condition = null, $count = null, $offset = null,
-        $orderProperties = null
-    )
+        int $type, int $objectIdentifier, ?Condition $condition = null, ?int $count = null, ?int $offset = null,
+        ?OrderBy $orderProperties = null
+    ): ArrayCollection
     {
         if ($type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT &&
             $type !== PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER)
         {
-            return [];
+            return new ArrayCollection();
         }
         else
         {
@@ -225,7 +226,7 @@ class PublicationService
     }
 
     /**
-     * @param integer $contentObjectIdentifier
+     * @param int $contentObjectIdentifier
      *
      * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[]
      */
@@ -254,14 +255,6 @@ class PublicationService
     }
 
     /**
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\PublicationRepository $publicationRepository
-     */
-    public function setPublicationRepository(PublicationRepository $publicationRepository): void
-    {
-        $this->publicationRepository = $publicationRepository;
-    }
-
-    /**
      * @return \Chamilo\Application\Calendar\Extension\Personal\Service\RightsService
      */
     public function getRightsService(): RightsService
@@ -270,19 +263,27 @@ class PublicationService
     }
 
     /**
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Service\RightsService $rightsService
-     */
-    public function setRightsService(RightsService $rightsService): void
-    {
-        $this->rightsService = $rightsService;
-    }
-
-    /**
      * @return \Symfony\Component\Translation\Translator
      */
     public function getTranslator(): Translator
     {
         return $this->translator;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\Repository\PublicationRepository $publicationRepository
+     */
+    public function setPublicationRepository(PublicationRepository $publicationRepository): void
+    {
+        $this->publicationRepository = $publicationRepository;
+    }
+
+    /**
+     * @param \Chamilo\Application\Calendar\Extension\Personal\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
     }
 
     /**
@@ -296,7 +297,7 @@ class PublicationService
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
      *
-     * @return boolean
+     * @return bool
      */
     public function updatePublication(Publication $publication)
     {
@@ -305,10 +306,10 @@ class PublicationService
 
     /**
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication $publication
-     * @param integer[] $targetUserIdentifiers
-     * @param integer[] $targetGroupIdentifiers
+     * @param int $targetUserIdentifiers
+     * @param int $targetGroupIdentifiers
      *
-     * @return boolean
+     * @return bool
      */
     public function updatePublicationWithRightsFromParameters(
         Publication $publication, array $targetUserIdentifiers, array $targetGroupIdentifiers

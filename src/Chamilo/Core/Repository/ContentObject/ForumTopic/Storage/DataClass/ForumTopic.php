@@ -184,7 +184,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      *
      * @return Array Returns an array with allowed types.
      */
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         return array(ForumPost::class);
     }

@@ -12,6 +12,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNod
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use RuntimeException;
 
@@ -24,9 +25,9 @@ use RuntimeException;
 class PublicationService
 {
     /**
-     * @var TreeNodeDataService
+     * @var ContentObjectRepository
      */
-    protected $treeNodeDataService;
+    protected $contentObjectRepository;
 
     /**
      * @var LearningPathService
@@ -39,14 +40,14 @@ class PublicationService
     protected $treeBuilder;
 
     /**
-     * @var ContentObjectRepository
-     */
-    protected $contentObjectRepository;
-
-    /**
      * @var Tree[]
      */
     protected $treeCache;
+
+    /**
+     * @var TreeNodeDataService
+     */
+    protected $treeNodeDataService;
 
     /**
      * PublicationService constructor.
@@ -57,8 +58,8 @@ class PublicationService
      * @param ContentObjectRepository $contentObjectRepository
      */
     public function __construct(
-        TreeNodeDataService $treeNodeDataService, LearningPathService $learningPathService,
-        TreeBuilder $treeBuilder, ContentObjectRepository $contentObjectRepository
+        TreeNodeDataService $treeNodeDataService, LearningPathService $learningPathService, TreeBuilder $treeBuilder,
+        ContentObjectRepository $contentObjectRepository
     )
     {
         $this->treeNodeDataService = $treeNodeDataService;
@@ -82,13 +83,59 @@ class PublicationService
 
         foreach ($treeNodesData as $treeNodeData)
         {
-            if($treeNodeData->getLearningPathId() != $treeNodeData->getContentObjectId())
+            if ($treeNodeData->getLearningPathId() != $treeNodeData->getContentObjectId())
             {
-                $count++;
+                $count ++;
             }
         }
 
         return $count > 0;
+    }
+
+    /**
+     * Counts the ContentObject publication attributes for a given content object (identified by id)
+     *
+     * @param int $contentObjectId
+     *
+     * @return int
+     */
+    public function countContentObjectPublicationAttributesForContentObject($contentObjectId)
+    {
+        $treeNodesData = $this->treeNodeDataService->getTreeNodesDataByContentObjects([$contentObjectId]);
+        $count = 0;
+
+        foreach ($treeNodesData as $treeNodeData)
+        {
+            if ($treeNodeData->getLearningPathId() != $treeNodeData->getContentObjectId())
+            {
+                $count ++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
+     * Counts the ContentObject publication attributes for a given user (identified by id)
+     *
+     * @param int $userId
+     *
+     * @return int
+     */
+    public function countContentObjectPublicationAttributesForUser($userId)
+    {
+        $treeNodesData = $this->treeNodeDataService->getTreeNodesDataByUserId((int) $userId);
+        $count = 0;
+
+        foreach ($treeNodesData as $treeNodeData)
+        {
+            if ($treeNodeData->getLearningPathId() != $treeNodeData->getContentObjectId())
+            {
+                $count ++;
+            }
+        }
+
+        return $count;
     }
 
     /**
@@ -98,18 +145,15 @@ class PublicationService
      */
     public function deleteContentObjectPublicationsByObjectId($contentObjectId)
     {
-        $treeNodesData =
-            $this->treeNodeDataService->getTreeNodesDataByContentObjects(array($contentObjectId));
+        $treeNodesData = $this->treeNodeDataService->getTreeNodesDataByContentObjects([$contentObjectId]);
 
         foreach ($treeNodesData as $treeNodeData)
         {
             $tree = $this->getTreeForTreeNodeData($treeNodeData);
             foreach ($tree->getTreeNodes() as $treeNode)
             {
-                if (
-                    $treeNodeData->getLearningPathId() == $contentObjectId ||
-                    $treeNode->getContentObject()->getId() != $contentObjectId
-                )
+                if ($treeNodeData->getLearningPathId() == $contentObjectId ||
+                    $treeNode->getContentObject()->getId() != $contentObjectId)
                 {
                     continue;
                 }
@@ -137,21 +181,53 @@ class PublicationService
     }
 
     /**
-     * Updates the content object id in the given learning path child (identified by id)
+     * Builds the publication attributes for the given learning path child
      *
-     * @param int $treeNodeDataId
-     * @param int $newContentObjectId
+     * @param TreeNodeData $treeNodeData
+     *
+     * @return Attributes
      */
-    public function updateContentObjectIdInTreeNodeData($treeNodeDataId, $newContentObjectId)
+    protected function getAttributesForTreeNodeData(TreeNodeData $treeNodeData)
     {
-        $treeNode = $this->getTreeNodeByTreeNodeDataId($treeNodeDataId);
+        $learningPath = $this->getLearningPathByTreeNodeData($treeNodeData);
+        $contentObject = $this->contentObjectRepository->findById($treeNodeData->getContentObjectId());
 
-        $newContentObject = new ContentObject();
-        $newContentObject->setId($newContentObjectId);
+        $attributes = new Attributes();
+        $attributes->setId($treeNodeData->getId());
+        $attributes->set_application('Chamilo\Core\Repository\ContentObject\LearningPath');
+        $attributes->set_publisher_id($learningPath->get_owner_id());
+        $attributes->set_date($contentObject->get_creation_date());
+        $attributes->set_location($learningPath->get_title());
+        $attributes->set_url(null);
+        $attributes->set_title($contentObject->get_title());
+        $attributes->set_content_object_id($treeNodeData->getContentObjectId());
+        $attributes->setModifierServiceIdentifier(PublicationModifier::class);
 
-        $this->learningPathService->updateContentObjectInTreeNode(
-            $treeNode, $newContentObject
-        );
+        return $attributes;
+    }
+
+    /**
+     * @param int $contentObjectId
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
+     */
+    public function getContentObjectPublicationAttributesForContentObject(int $contentObjectId): ArrayCollection
+    {
+        $treeNodesData = $this->treeNodeDataService->getTreeNodesDataByContentObjects([$contentObjectId]);
+
+        $attributes = [];
+
+        foreach ($treeNodesData as $treeNodeData)
+        {
+            if ($treeNodeData->getLearningPathId() == $treeNodeData->getContentObjectId())
+            {
+                continue;
+            }
+
+            $attributes[] = $this->getAttributesForTreeNodeData($treeNodeData);
+        }
+
+        return new ArrayCollection($attributes);
     }
 
     /**
@@ -169,33 +245,6 @@ class PublicationService
     }
 
     /**
-     * Returns the ContentObject publication attributes for a given content object (identified by id)
-     *
-     * @param int $contentObjectId
-     *
-     * @return Attributes[]
-     */
-    public function getContentObjectPublicationAttributesForContentObject($contentObjectId)
-    {
-        $treeNodesData =
-            $this->treeNodeDataService->getTreeNodesDataByContentObjects(array($contentObjectId));
-
-        $attributes = [];
-
-        foreach ($treeNodesData as $treeNodeData)
-        {
-            if($treeNodeData->getLearningPathId() == $treeNodeData->getContentObjectId())
-            {
-                continue;
-            }
-
-            $attributes[] = $this->getAttributesForTreeNodeData($treeNodeData);
-        }
-
-        return $attributes;
-    }
-
-    /**
      * Returns the ContentObject publication attributes for a given user (identified by id)
      *
      * @param int $userId
@@ -210,7 +259,7 @@ class PublicationService
 
         foreach ($treeNodesData as $treeNodeData)
         {
-            if($treeNodeData->getLearningPathId() == $treeNodeData->getContentObjectId())
+            if ($treeNodeData->getLearningPathId() == $treeNodeData->getContentObjectId())
             {
                 continue;
             }
@@ -219,89 +268,6 @@ class PublicationService
         }
 
         return $attributes;
-    }
-
-    /**
-     * Counts the ContentObject publication attributes for a given content object (identified by id)
-     *
-     * @param int $contentObjectId
-     *
-     * @return int
-     */
-    public function countContentObjectPublicationAttributesForContentObject($contentObjectId)
-    {
-        $treeNodesData = $this->treeNodeDataService->getTreeNodesDataByContentObjects(array($contentObjectId));
-        $count = 0;
-
-        foreach ($treeNodesData as $treeNodeData)
-        {
-            if($treeNodeData->getLearningPathId() != $treeNodeData->getContentObjectId())
-            {
-                $count++;
-            }
-        }
-
-        return $count;
-    }
-
-    /**
-     * Counts the ContentObject publication attributes for a given user (identified by id)
-     *
-     * @param int $userId
-     *
-     * @return int
-     */
-    public function countContentObjectPublicationAttributesForUser($userId)
-    {
-        $treeNodesData = $this->treeNodeDataService->getTreeNodesDataByUserId((int) $userId);
-        $count = 0;
-
-        foreach ($treeNodesData as $treeNodeData)
-        {
-            if($treeNodeData->getLearningPathId() != $treeNodeData->getContentObjectId())
-            {
-                $count++;
-            }
-        }
-
-        return $count;
-    }
-
-    /**
-     * Returns a learning path tree node by a given learning path child identifier
-     *
-     * @param int $treeNodeDataId
-     *
-     * @return TreeNode
-     */
-    protected function getTreeNodeByTreeNodeDataId($treeNodeDataId)
-    {
-        $treeNodeData = $this->treeNodeDataService->getTreeNodeDataById($treeNodeDataId);
-
-        $tree = $this->getTreeForTreeNodeData($treeNodeData);
-        $treeNode = $tree->getTreeNodeById((int) $treeNodeDataId);
-
-        return $treeNode;
-    }
-
-    /**
-     * Builds the learning path tree that belongs to a given learning path child
-     *
-     * @param TreeNodeData $treeNodeData
-     *
-     * @return Tree
-     */
-    protected function getTreeForTreeNodeData(TreeNodeData $treeNodeData)
-    {
-        if (!array_key_exists($treeNodeData->getLearningPathId(), $this->treeCache))
-        {
-            $learningPath = $this->getLearningPathByTreeNodeData($treeNodeData);
-
-            $this->treeCache[$treeNodeData->getLearningPathId()] =
-                $this->treeBuilder->buildTree($learningPath);
-        }
-
-        return $this->treeCache[$treeNodeData->getLearningPathId()];
     }
 
     /**
@@ -329,29 +295,57 @@ class PublicationService
     }
 
     /**
-     * Builds the publication attributes for the given learning path child
+     * Builds the learning path tree that belongs to a given learning path child
      *
      * @param TreeNodeData $treeNodeData
      *
-     * @return Attributes
+     * @return Tree
      */
-    protected function getAttributesForTreeNodeData(TreeNodeData $treeNodeData)
+    protected function getTreeForTreeNodeData(TreeNodeData $treeNodeData)
     {
-        $learningPath = $this->getLearningPathByTreeNodeData($treeNodeData);
-        $contentObject = $this->contentObjectRepository->findById($treeNodeData->getContentObjectId());
+        if (!array_key_exists($treeNodeData->getLearningPathId(), $this->treeCache))
+        {
+            $learningPath = $this->getLearningPathByTreeNodeData($treeNodeData);
 
-        $attributes = new Attributes();
-        $attributes->setId($treeNodeData->getId());
-        $attributes->set_application('Chamilo\Core\Repository\ContentObject\LearningPath');
-        $attributes->set_publisher_id($learningPath->get_owner_id());
-        $attributes->set_date($contentObject->get_creation_date());
-        $attributes->set_location($learningPath->get_title());
-        $attributes->set_url(null);
-        $attributes->set_title($contentObject->get_title());
-        $attributes->set_content_object_id($treeNodeData->getContentObjectId());
-        $attributes->setModifierServiceIdentifier(PublicationModifier::class);
+            $this->treeCache[$treeNodeData->getLearningPathId()] = $this->treeBuilder->buildTree($learningPath);
+        }
 
-        return $attributes;
+        return $this->treeCache[$treeNodeData->getLearningPathId()];
+    }
+
+    /**
+     * Returns a learning path tree node by a given learning path child identifier
+     *
+     * @param int $treeNodeDataId
+     *
+     * @return TreeNode
+     */
+    protected function getTreeNodeByTreeNodeDataId($treeNodeDataId)
+    {
+        $treeNodeData = $this->treeNodeDataService->getTreeNodeDataById($treeNodeDataId);
+
+        $tree = $this->getTreeForTreeNodeData($treeNodeData);
+        $treeNode = $tree->getTreeNodeById((int) $treeNodeDataId);
+
+        return $treeNode;
+    }
+
+    /**
+     * Updates the content object id in the given learning path child (identified by id)
+     *
+     * @param int $treeNodeDataId
+     * @param int $newContentObjectId
+     */
+    public function updateContentObjectIdInTreeNodeData($treeNodeDataId, $newContentObjectId)
+    {
+        $treeNode = $this->getTreeNodeByTreeNodeDataId($treeNodeDataId);
+
+        $newContentObject = new ContentObject();
+        $newContentObject->setId($newContentObjectId);
+
+        $this->learningPathService->updateContentObjectInTreeNode(
+            $treeNode, $newContentObject
+        );
     }
 
 }

@@ -24,7 +24,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 class ComplexAssessment extends ComplexContentObjectItem
 {
 
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         $allowed_types = [];
         $allowed_types[] = AssessmentRatingQuestion::class;

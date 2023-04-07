@@ -85,7 +85,7 @@ abstract class Manager extends Application implements NoContextComponent
         return $this->get_parent()->get_allowed_types();
     }
 
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         return $this->get_parent()->get_allowed_types();
     }

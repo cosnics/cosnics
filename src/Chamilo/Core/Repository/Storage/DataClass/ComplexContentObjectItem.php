@@ -157,7 +157,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
      *
      * @return Array of learning object types
      */
-    public function get_allowed_types()
+    public function get_allowed_types(): array
     {
         return [];
     }

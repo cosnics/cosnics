@@ -27,6 +27,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -34,52 +35,22 @@ use Symfony\Component\Translation\Translator;
  * to determine whether or not a content object can be deleted, can be edited, ...
  *
  * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class PublicationAggregator implements PublicationAggregatorInterface
 {
-    /**
-     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
-     */
-    protected $assignmentService;
+    protected AssignmentService $assignmentService;
 
-    /**
-     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService
-     */
-    protected $learningPathAssignmentService;
+    protected LearningPathAssignmentService $learningPathAssignmentService;
 
-    /**
-     * @var UserService
-     */
-    protected $userService;
+    protected UserService $userService;
 
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
+    private PublicationTargetRenderer $publicationTargetRenderer;
 
-    /**
-     * @var \Chamilo\Core\Repository\Publication\Service\PublicationTargetService
-     */
-    private $publicationTargetService;
+    private PublicationTargetService $publicationTargetService;
 
-    /**
-     * @var \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer
-     */
-    private $publicationTargetRenderer;
+    private Translator $translator;
 
-    /**
-     * PublicationAggregator constructor.
-     *
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService $assignmentService
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService $learningPathAssignmentService
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetService $publicationTargetService
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer $publicationTargetRenderer
-     */
     public function __construct(
         AssignmentService $assignmentService, LearningPathAssignmentService $learningPathAssignmentService,
         UserService $userService, Translator $translator, PublicationTargetService $publicationTargetService,
@@ -94,13 +65,6 @@ class PublicationAggregator implements PublicationAggregatorInterface
         $this->publicationTargetRenderer = $publicationTargetRenderer;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function addPublicationTargetsToFormForContentObjectAndUser(
         FormValidator $form, ContentObject $contentObject, User $user
     )
@@ -108,7 +72,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         $type = $contentObject->getType();
 
         $excludedCourseTypeSetting = (string) Configuration::getInstance()->get_setting(
-            array('Chamilo\Application\Weblcms', 'excluded_course_types')
+            ['Chamilo\Application\Weblcms', 'excluded_course_types']
         );
 
         if (!empty($excludedCourseTypeSetting))
@@ -117,8 +81,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
             $condition = new NotCondition(
                 new InCondition(
-                    new PropertyConditionVariable(Course::class, Course::PROPERTY_COURSE_TYPE_ID),
-                    $excludedCourseTypes
+                    new PropertyConditionVariable(Course::class, Course::PROPERTY_COURSE_TYPE_ID), $excludedCourseTypes
                 )
             );
         }
@@ -129,7 +92,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
         $possible_courses = [];
 
-        foreach($courses as $course)
+        foreach ($courses as $course)
         {
             if ($course->is_course_admin($user))
             {
@@ -144,7 +107,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
         $tool_names = [];
 
-        foreach($tools as $tool)
+        foreach ($tools as $tool)
         {
             $tool_name = $tool->get_name();
 
@@ -232,35 +195,21 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     /**
-     * @param integer[] $contentObjectIdentifiers
-     *
-     * @return boolean
+     * @param int[] $contentObjectIdentifiers
      */
-    public function areContentObjectsPublished(array $contentObjectIdentifiers)
+    public function areContentObjectsPublished(array $contentObjectIdentifiers): bool
     {
         return Manager::areContentObjectsPublished($contentObjectIdentifiers);
     }
 
-    /**
-     * @param integer $contentObjectIdentifier
-     *
-     * @return boolean
-     */
-    public function canContentObjectBeEdited(int $contentObjectIdentifier)
+    public function canContentObjectBeEdited(int $contentObjectIdentifier): bool
     {
         return Manager::canContentObjectBeEdited($contentObjectIdentifier);
     }
 
-    /**
-     * Returns whether or not a content object can be unlinked
-     *
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return bool
-     */
-    public function canContentObjectBeUnlinked(ContentObject $contentObject)
+    public function canContentObjectBeUnlinked(ContentObject $contentObject): bool
     {
-        $user = $this->userService->findUserByIdentifier($contentObject->get_owner_id());
+        $user = $this->userService->findUserByIdentifier((string) $contentObject->get_owner_id());
         $isTeacher = ($user instanceof User && $user->get_status() == User::STATUS_TEACHER);
 
         if ($this->assignmentService->isContentObjectUsedAsEntry($contentObject))
@@ -277,103 +226,69 @@ class PublicationAggregator implements PublicationAggregatorInterface
         return true;
     }
 
-    /**
-     * @param integer $type
-     * @param integer $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return integer
-     */
-    public function countPublicationAttributes(int $type, int $objectIdentifier, Condition $condition = null)
+    public function countPublicationAttributes(int $type, int $objectIdentifier, ?Condition $condition = null): int
     {
         return Manager::countPublicationAttributes($type, $objectIdentifier, $condition);
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @return boolean
-     */
-    public function deleteContentObjectPublications(ContentObject $contentObject)
+    public function deleteContentObjectPublications(ContentObject $contentObject): bool
     {
         return Manager::deleteContentObjectPublications($contentObject->getId());
     }
 
     /**
-     * @param integer $type
-     * @param integer $objectIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $count
-     * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param int $type
+     * @param int $objectIdentifier
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?int $count
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
+     * @return  \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
      */
     public function getContentObjectPublicationsAttributes(
         int $type, int $objectIdentifier, Condition $condition = null, int $count = null, int $offset = null,
         ?OrderBy $orderBy = null
-    )
+    ): ArrayCollection
     {
         return Manager::getContentObjectPublicationsAttributes(
             $objectIdentifier, $type, $condition, $count, $offset, $orderBy
         );
     }
 
-    /**
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer
-     */
     public function getPublicationTargetRenderer(): PublicationTargetRenderer
     {
         return $this->publicationTargetRenderer;
     }
 
-    /**
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer $publicationTargetRenderer
-     */
-    public function setPublicationTargetRenderer(PublicationTargetRenderer $publicationTargetRenderer): void
-    {
-        $this->publicationTargetRenderer = $publicationTargetRenderer;
-    }
-
-    /**
-     * @return \Chamilo\Core\Repository\Publication\Service\PublicationTargetService
-     */
     public function getPublicationTargetService(): PublicationTargetService
     {
         return $this->publicationTargetService;
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetService $publicationTargetService
-     */
-    public function setPublicationTargetService(PublicationTargetService $publicationTargetService): void
-    {
-        $this->publicationTargetService = $publicationTargetService;
-    }
-
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
     public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
+    public function isContentObjectPublished(int $contentObjectIdentifier): bool
+    {
+        return Manager::isContentObjectPublished($contentObjectIdentifier);
+    }
+
+    public function setPublicationTargetRenderer(PublicationTargetRenderer $publicationTargetRenderer): void
+    {
+        $this->publicationTargetRenderer = $publicationTargetRenderer;
+    }
+
+
+    public function setPublicationTargetService(PublicationTargetService $publicationTargetService): void
+    {
+        $this->publicationTargetService = $publicationTargetService;
+    }
+
     public function setTranslator(Translator $translator): void
     {
         $this->translator = $translator;
-    }
-
-    /**
-     * @param integer $contentObjectIdentifier
-     *
-     * @return boolean
-     */
-    public function isContentObjectPublished(int $contentObjectIdentifier)
-    {
-        return Manager::isContentObjectPublished($contentObjectIdentifier);
     }
 }
