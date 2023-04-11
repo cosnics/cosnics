@@ -11,6 +11,8 @@
             <tag name="chamilo.core.repository.publication.publication_aggregator"/>
         </service>
         <service id="Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator"/>
-        <service id="Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service\PublicationModifier"/>
+        <service id="Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service\PublicationModifier">
+            <tag name="Chamilo\Core\Repository\Publication\Service\PublicationModifier"/>
+        </service>
     </services>
 </container>

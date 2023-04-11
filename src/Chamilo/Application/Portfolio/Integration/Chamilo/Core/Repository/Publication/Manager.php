@@ -4,9 +4,7 @@ namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publ
 use Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication\Service\PublicationModifier;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Application\Portfolio\Storage\DataManager;
-use Chamilo\Core\Repository\Publication\Location\Locations;
-use Chamilo\Core\Repository\Publication\LocationSupport;
-use Chamilo\Core\Repository\Publication\PublicationInterface;
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -26,21 +24,16 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publication
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class Manager implements PublicationInterface
+class Manager
 {
 
     public static function add_publication_attributes_elements($form)
     {
         // TODO: Please implement me !
     }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::isContentObjectPublished()
-     */
 
     public static function areContentObjectsPublished($object_ids)
     {
@@ -52,32 +45,24 @@ class Manager implements PublicationInterface
         return DataManager::count(Publication::class, $parameters) > 0;
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::areContentObjectsPublished()
-     */
-
     public static function canContentObjectBeEdited($object_id)
     {
         return true;
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationsAttributes()
-     */
-
     public static function countPublicationAttributes(
-        $attributes_type = self::ATTRIBUTES_TYPE_OBJECT, $identifier = null, $condition = null
+        $attributes_type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, $identifier = null, $condition = null
     )
     {
         switch ($attributes_type)
         {
-            case PublicationInterface::ATTRIBUTES_TYPE_OBJECT :
+            case PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT :
                 $publication_condition = new EqualityCondition(
                     new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
                     new StaticConditionVariable($identifier)
                 );
                 break;
-            case PublicationInterface::ATTRIBUTES_TYPE_USER :
+            case PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER :
                 $publication_condition = new EqualityCondition(
                     new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLISHER_ID),
                     new StaticConditionVariable($identifier)
@@ -89,7 +74,7 @@ class Manager implements PublicationInterface
 
         if ($condition instanceof Condition)
         {
-            $condition = new AndCondition(array($condition, $publication_condition));
+            $condition = new AndCondition([$condition, $publication_condition]);
         }
         else
         {
@@ -133,10 +118,6 @@ class Manager implements PublicationInterface
         return $attributes;
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::get_content_object_publication_attribute()
-     */
-
     public static function deleteContentObjectPublications($object_id)
     {
         $condition = new EqualityCondition(
@@ -173,19 +154,19 @@ class Manager implements PublicationInterface
     }
 
     public static function getContentObjectPublicationsAttributes(
-        $object_id, $type = self::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null, $offset = null,
-        $order_properties = null
+        $object_id, $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null,
+        $offset = null, $order_properties = null
     )
     {
         switch ($type)
         {
-            case PublicationInterface::ATTRIBUTES_TYPE_OBJECT :
+            case PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT :
                 $publication_condition = new EqualityCondition(
                     new PropertyConditionVariable(Publication::class, Publication::PROPERTY_CONTENT_OBJECT_ID),
                     new StaticConditionVariable($object_id)
                 );
                 break;
-            case PublicationInterface::ATTRIBUTES_TYPE_USER :
+            case PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER :
                 $publication_condition = new EqualityCondition(
                     new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLISHER_ID),
                     new StaticConditionVariable($object_id)
@@ -197,7 +178,7 @@ class Manager implements PublicationInterface
 
         if ($condition instanceof Condition)
         {
-            $condition = new AndCondition(array($condition, $publication_condition));
+            $condition = new AndCondition([$condition, $publication_condition]);
         }
         else
         {
@@ -261,10 +242,6 @@ class Manager implements PublicationInterface
         return DataManager::count(Publication::class, $parameters) > 0;
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::add_publication_attributes_elements()
-     */
-
     /**
      * Retrieves content object publications joined with the repository content object table
      *
@@ -311,10 +288,6 @@ class Manager implements PublicationInterface
 
         return DataManager::records(Publication::class, $parameters);
     }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::update_content_object_publication_id()
-     */
 
     public static function update_content_object_publication_id($publication_attributes)
     {

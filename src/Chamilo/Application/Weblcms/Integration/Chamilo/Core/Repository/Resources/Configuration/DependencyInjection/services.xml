@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults autowire="true"
@@ -9,9 +9,23 @@
 
         <service id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator">
             <tag name="chamilo.core.repository.publication.publication_aggregator"/>
+            <argument key="$assignmentPublicationService"
+                      type="service"
+                      id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator\AssignmentPublicationService"/>
+            <argument key="$learningPathAssignmentPublicationService"
+                      type="service"
+                      id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator\LearningPathAssignmentPublicationService"/>
         </service>
 
-        <service id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationModifier"/>
+        <service id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationModifier">
+            <tag name="Chamilo\Core\Repository\Publication\Service\PublicationModifier"/>
+            <argument key="$assignmentPublicationService"
+                      type="service"
+                      id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator\AssignmentPublicationService"/>
+            <argument key="$learningPathAssignmentPublicationService"
+                      type="service"
+                      id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator\LearningPathAssignmentPublicationService"/>
+        </service>
 
         <service id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator\AssignmentPublicationService"
                  class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\AssignmentPublicationService">

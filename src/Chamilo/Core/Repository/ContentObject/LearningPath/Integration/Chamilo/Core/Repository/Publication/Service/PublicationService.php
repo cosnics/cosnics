@@ -249,9 +249,9 @@ class PublicationService
      *
      * @param int $userId
      *
-     * @return Attributes[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
      */
-    public function getContentObjectPublicationAttributesForUser($userId)
+    public function getContentObjectPublicationAttributesForUser($userId): ArrayCollection
     {
         $treeNodesData = $this->treeNodeDataService->getTreeNodesDataByUserId((int) $userId);
 
@@ -267,7 +267,7 @@ class PublicationService
             $attributes[] = $this->getAttributesForTreeNodeData($treeNodeData);
         }
 
-        return $attributes;
+        return new ArrayCollection($attributes);
     }
 
     /**

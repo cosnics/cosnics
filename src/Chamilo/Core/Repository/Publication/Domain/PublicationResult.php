@@ -3,87 +3,53 @@ namespace Chamilo\Core\Repository\Publication\Domain;
 
 /**
  * @package Chamilo\Core\Repository\Publication\Domain
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationResult
 {
-    const STATUS_SUCCESS = 1;
-    const STATUS_FAILURE = 2;
+    public const STATUS_FAILURE = 2;
+    public const STATUS_SUCCESS = 1;
 
-    /**
-     * @var integer
-     */
-    private $status;
+    private string $message;
 
-    /**
-     * @var string
-     */
-    private $message;
+    private int $status;
 
-    /**
-     * @var string
-     */
-    private $url;
+    private ?string $url;
 
-    /**
-     * @param integer $status
-     * @param string $message
-     * @param string $url
-     */
-    public function __construct(int $status, string $message, string $url = null)
+    public function __construct(int $status, string $message, ?string $url = null)
     {
         $this->status = $status;
         $this->message = $message;
         $this->url = $url;
     }
 
-    /**
-     * @return integer
-     */
-    public function getStatus(): int
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param integer $status
-     */
-    public function setStatus(int $status): void
-    {
-        $this->status = $status;
-    }
-
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;
     }
 
-    /**
-     * @param string $message
-     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
     public function setMessage(string $message): void
     {
         $this->message = $message;
     }
 
-    /**
-     * @return string
-     */
-    public function getUrl()
+    public function setStatus(int $status): void
     {
-        return $this->url;
+        $this->status = $status;
     }
 
-    /**
-     * @param string $url
-     */
-    public function setUrl(string $url)
+    public function setUrl(?string $url)
     {
         $this->url = $url;
     }
-
 }

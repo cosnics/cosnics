@@ -3,68 +3,25 @@ namespace Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publ
 
 /**
  * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Domain
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationTarget extends \Chamilo\Core\Repository\Publication\Domain\PublicationTarget
 {
-    /**
-     *
-     * @var integer
-     */
-    private $userIdentifier;
+    private string $publicationIdentifier;
 
-    /**
-     *
-     * @var integer
-     */
-    private $publicationIdentifier;
-
-    /**
-     * @param string $modifierServiceIdentifier
-     * @param integer $userIdentifier
-     * @param integer $publicationIdentifier
-     */
-    public function __construct($modifierServiceIdentifier, $userIdentifier, $publicationIdentifier)
+    public function __construct(string $modifierServiceIdentifier, string $userIdentifier, string $publicationIdentifier)
     {
-        parent:: __construct($modifierServiceIdentifier);
+        parent:: __construct($modifierServiceIdentifier, $userIdentifier);
 
-        $this->userIdentifier = $userIdentifier;
         $this->publicationIdentifier = $publicationIdentifier;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getUserIdentifier()
-    {
-        return $this->userIdentifier;
-    }
-
-    /**
-     *
-     * @param integer $userIdentifier
-     */
-    public function setUserIdentifier($userIdentifier)
-    {
-        $this->userIdentifier = $userIdentifier;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getPublicationIdentifier()
+    public function getPublicationIdentifier(): string
     {
         return $this->publicationIdentifier;
     }
 
-    /**
-     *
-     * @param integer $publicationIdentifier
-     */
-    public function setPublicationIdentifier($publicationIdentifier)
+    public function setPublicationIdentifier(string $publicationIdentifier)
     {
         $this->publicationIdentifier = $publicationIdentifier;
     }

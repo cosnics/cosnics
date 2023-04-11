@@ -2,83 +2,89 @@
 namespace Chamilo\Core\Repository\Publication\Storage\Repository;
 
 use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
-use Doctrine\Common\Cache\CacheProvider;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Cache\Exception\CacheException;
 
 /**
  * @package Chamilo\Core\Repository\Publication\Storage\Repository
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationTargetRepository
 {
-    /**
-     * @var \Doctrine\Common\Cache\CacheProvider
-     */
-    private $cacheProvider;
+    private AdapterInterface $cacheAdapter;
 
-    /**
-     * @param \Doctrine\Common\Cache\CacheProvider $cacheProvider
-     */
-    public function __construct(CacheProvider $cacheProvider)
+    public function __construct(AdapterInterface $cacheAdapter)
     {
-        $this->cacheProvider = $cacheProvider;
+        $this->cacheAdapter = $cacheAdapter;
     }
 
     /**
-     * @param string $key
-     * @param string $modifierServiceIdentifier
-     *
-     * @return bool
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function addModifierServiceIdentifier(string $key, string $modifierServiceIdentifier)
+    public function addModifierServiceIdentifier(string $key, string $modifierServiceIdentifier): bool
     {
-        return $this->getCacheProvider()->save($key, $modifierServiceIdentifier);
+        $cacheAdapter = $this->getCacheAdapter();
+
+        $cacheItem = $cacheAdapter->getItem($key);
+        $cacheItem->set($modifierServiceIdentifier);
+
+        return $cacheAdapter->save($cacheItem);
     }
 
     /**
-     * @param string $key
-     * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
-     *
-     * @return bool
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function addPublicationTarget(string $key, PublicationTarget $publicationTarget)
+    public function addPublicationTarget(string $key, PublicationTarget $publicationTarget): bool
     {
-        return $this->getCacheProvider()->save($key, $publicationTarget);
+        $cacheAdapter = $this->getCacheAdapter();
+
+        $cacheItem = $cacheAdapter->getItem($key);
+        $cacheItem->set($publicationTarget);
+
+        return $cacheAdapter->save($cacheItem);
+    }
+
+    public function getCacheAdapter(): AdapterInterface
+    {
+        return $this->cacheAdapter;
     }
 
     /**
-     * @return \Doctrine\Common\Cache\CacheProvider
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function getCacheProvider(): CacheProvider
+    public function getModifierServiceIdentifier(string $key): string
     {
-        return $this->cacheProvider;
+        $cacheAdapter = $this->getCacheAdapter();
+
+        $cacheItem = $cacheAdapter->getItem($key);
+        if (!$cacheItem->isHit())
+        {
+            throw new CacheException();
+        }
+
+        return $cacheItem->get();
     }
 
     /**
-     * @param \Doctrine\Common\Cache\CacheProvider $cacheProvider
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function setCacheProvider(CacheProvider $cacheProvider): void
+    public function getPublicationTarget(string $key): PublicationTarget
     {
-        $this->cacheProvider = $cacheProvider;
+        $cacheAdapter = $this->getCacheAdapter();
+
+        $cacheItem = $cacheAdapter->getItem($key);
+        if (!$cacheItem->isHit())
+        {
+            throw new CacheException();
+        }
+
+        return $cacheItem->get();
     }
 
-    /**
-     * @param string $key
-     *
-     * @return string
-     */
-    public function getModifierServiceIdentifier(string $key)
+    public function setCacheAdapter(AdapterInterface $cacheAdapter): void
     {
-        return $this->getCacheProvider()->fetch($key);
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return \Chamilo\Core\Repository\Publication\Domain\PublicationTarget
-     */
-    public function getPublicationTarget(string $key)
-    {
-        return $this->getCacheProvider()->fetch($key);
+        $this->cacheAdapter = $cacheAdapter;
     }
 }

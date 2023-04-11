@@ -29,7 +29,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataMana
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
-use Chamilo\Core\Repository\Publication\PublicationInterface;
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -63,12 +63,12 @@ use Exception;
 /**
  * This class represents the data manager for this package
  *
- * @author Sven Vanpoucke - Hogeschool Gent - Refactoring from MDB2
+ * @author  Sven Vanpoucke - Hogeschool Gent - Refactoring from MDB2
  * @package application.weblcms
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'weblcms_';
+    public const PREFIX = 'weblcms_';
 
     /**
      * **************************************************************************************************************
@@ -118,9 +118,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Clears the locked rights for a given location id (an optionally a given right id)
      *
      * @param $location_id int
-     * @param $right_id int - [OPTIONAL] default null
+     * @param $right_id    int - [OPTIONAL] default null
      *
-     * @return boolean
+     * @return bool
      */
     public static function clear_locked_rights_for_location($location_id, $right_id = null)
     {
@@ -139,19 +139,19 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @return int
      */
     public static function countPublicationAttributes(
-        $attributes_type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null
+        $attributes_type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null
     )
     {
         switch ($attributes_type)
         {
-            case PublicationInterface::ATTRIBUTES_TYPE_OBJECT :
+            case PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT :
                 $publication_condition = new EqualityCondition(
                     new PropertyConditionVariable(
                         ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
                     ), new StaticConditionVariable($identifier)
                 );
                 break;
-            case PublicationInterface::ATTRIBUTES_TYPE_USER :
+            case PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER :
                 $publication_condition = new EqualityCondition(
                     new PropertyConditionVariable(
                         ContentObjectPublication::class, ContentObjectPublication::PROPERTY_PUBLISHER_ID
@@ -164,7 +164,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         if ($condition instanceof Condition)
         {
-            $condition = new AndCondition(array($condition, $publication_condition));
+            $condition = new AndCondition([$condition, $publication_condition]);
         }
         else
         {
@@ -181,7 +181,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return integer
+     * @return int
      */
     public static function count_content_object_publications($condition)
     {
@@ -198,7 +198,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param Condition $condition
      * @param int $user_id
      *
-     * @return integer
+     * @return int
      */
     public static function count_content_object_publications_with_view_right_granted_in_category_location(
         $parent_location, $entities, $condition, $user_id = null
@@ -374,6 +374,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Steps:
      * -# Retrieve all tools with new publications for all courses. @param array $courses mapping of course ID's onto
      * course objects @see create_courses_array($courses).
+     *
      * @see RighsUtils::
      * filter_location_identifiers_by_granted_right(...)
      * -# Filter out all publication whose category is not visible. @see
@@ -381,7 +382,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * retrieve_publication_category_visibility(...), and ContentObjectPublicationCategory::
      * is_recursive_visible_on_arrays(...).
      * -# Fill cache $new_publications_cache with the remaining publications.
-     *
      * @see DataManager::
      * retrieve_new_publication_icon_ids
      * -# Filter out all publications which user has no access right to.
@@ -466,7 +466,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param $user_id int
      *
-     * @return boolean
+     * @return bool
      */
     public static function fix_course_type_user_category_rel_course_for_user($user_id)
     {
@@ -519,20 +519,20 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
      */
     public static function getContentObjectPublicationsAttributes(
-        $identifier, $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null,
+        $identifier, $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null,
         $offset = null, $order_properties = null
     )
     {
         switch ($type)
         {
-            case PublicationInterface::ATTRIBUTES_TYPE_OBJECT :
+            case PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT :
                 $publication_condition = new EqualityCondition(
                     new PropertyConditionVariable(
                         ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
                     ), new StaticConditionVariable($identifier)
                 );
                 break;
-            case PublicationInterface::ATTRIBUTES_TYPE_USER :
+            case PublicationAggregatorInterface::ATTRIBUTES_TYPE_USER :
                 $publication_condition = new EqualityCondition(
                     new PropertyConditionVariable(
                         ContentObjectPublication::class, ContentObjectPublication::PROPERTY_PUBLISHER_ID
@@ -545,7 +545,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         if ($condition instanceof Condition)
         {
-            $condition = new AndCondition(array($condition, $publication_condition));
+            $condition = new AndCondition([$condition, $publication_condition]);
         }
         else
         {
@@ -740,7 +740,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $publication_id
      *
      * @return int
-     *
      * @throws \libraries\architecture\ObjectNotExistException
      */
     public static function get_course_id_from_publication($publication_id)
@@ -768,10 +767,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Returns course settings
      * with their compliant values.
      *
-     * @param $course_setting_relation_class String - The class name for the course setting relation table
-     * @param $course_setting_relation_value_class String - The class name for the course setting relation value table
-     * @param $course_setting_foreign_property String - The foreign property for the course setting id
-     * @param $course_setting_relation_foreign_property String - The foreign property for the course setting relation id
+     * @param $course_setting_relation_class            String - The class name for the course setting relation table
+     * @param $course_setting_relation_value_class      String - The class name for the course setting relation value
+     *                                                  table
+     * @param $course_setting_foreign_property          String - The foreign property for the course setting id
+     * @param $course_setting_relation_foreign_property String - The foreign property for the course setting relation
+     *                                                  id
      * @param Condition $condition
      * @param int $offset
      * @param int $count
@@ -859,13 +860,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        $order_by = array(
+        $order_by = [
             new OrderProperty(
                 new PropertyConditionVariable(
                     CourseModuleLastAccess::class, CourseModuleLastAccess::PROPERTY_ACCESS_DATE
                 )
             )
-        );
+        ];
 
         $course_module_access = self::retrieve(
             CourseModuleLastAccess::class, new DataClassRetrieveParameters($condition, new OrderBy($order_by))
@@ -1040,7 +1041,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $users = \Chamilo\Core\User\Storage\DataManager::records(
                 User::class, new RecordRetrievesParameters(
-                    new RetrieveProperties(array(new PropertiesConditionVariable(User::class))),
+                    new RetrieveProperties([new PropertiesConditionVariable(User::class)]),
                     new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $user_ids)
                 )
             );
@@ -1306,9 +1307,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Is the given right locked for the given location
      *
      * @param $location_id int
-     * @param $right_id int
+     * @param $right_id    int
      *
-     * @return boolean
+     * @return bool
      */
     public static function is_right_locked_for_location($location_id, $right_id)
     {
@@ -1327,10 +1328,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Returns whether or not there is a pending request for a given user and course
      *
-     * @param $user_id int
+     * @param $user_id   int
      * @param $course_id int
      *
-     * @return boolean
+     * @return bool
      */
     public static function is_user_requested_for_course($user_id, $course_id)
     {
@@ -1593,7 +1594,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         if (!is_array($courseTypeIdentifiers))
         {
-            $courseTypeIdentifiers = array($courseTypeIdentifiers);
+            $courseTypeIdentifiers = [$courseTypeIdentifiers];
         }
 
         $condition = new InCondition(
@@ -1620,7 +1621,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         if (!is_array($courseIdentifiers))
         {
-            $courseIdentifiers = array($courseIdentifiers);
+            $courseIdentifiers = [$courseIdentifiers];
         }
 
         $condition = new InCondition(
@@ -1692,8 +1693,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Retrieves the course_settings joined with the course_tool (name property)
      *
      * @param $condition Condition
-     * @param $offset int
-     * @param $count int
+     * @param $offset    int
+     * @param $count     int
      * @param $order_by
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
@@ -1799,12 +1800,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         $condition = new AndCondition($conditions);
-        $object_table_order = array(
+        $object_table_order = [
             new OrderProperty(
                 new PropertyConditionVariable(CourseTypeUserCategory::class, CourseTypeUserCategory::PROPERTY_SORT),
                 $order_direction
             )
-        );
+        ];
 
         return self::retrieve(
             CourseTypeUserCategory::class, new DataClassRetrieveParameters($condition, new OrderBy($object_table_order))
@@ -1854,13 +1855,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $joins = new Joins();
         $joins->add(new Join(CourseUserCategory::class, $join_condition));
 
-        $order_by = array(
+        $order_by = [
             new OrderProperty(
                 new PropertyConditionVariable(
                     CourseTypeUserCategory::class, CourseTypeUserCategory::PROPERTY_SORT
                 )
             )
-        );
+        ];
 
         $parameters =
             new RecordRetrievesParameters($properties, $condition, null, null, new OrderBy($order_by), $joins);
@@ -2138,7 +2139,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             );
         }
 
-        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, new Joins(array($join)));
+        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, new Joins([$join]));
 
         return self::records(ContentObjectPublication::class, $parameters);
     }
@@ -2451,11 +2452,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $group_ids = DataManager::distinct(
                 CourseEntityRelation::class, new DataClassDistinctParameters(
                     new AndCondition($cgrConditions), new RetrieveProperties(
-                        array(
+                        [
                             new PropertyConditionVariable(
                                 CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID
                             )
-                        )
+                        ]
                     )
                 )
             );
@@ -2553,8 +2554,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Returns if a category inside a tool has new publications
      *
-     * @param string $tool type
-     * @param User $user User
+     * @param string $tool   type
+     * @param User $user     User
      * @param Course $course Course
      * @param string $category
      *
@@ -2608,7 +2609,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return bool
      * @see fill_new_publications_cache(...) for more information.
-     *
      */
     public static function tool_has_new_publications($tool, User $user, Course $course)
     {

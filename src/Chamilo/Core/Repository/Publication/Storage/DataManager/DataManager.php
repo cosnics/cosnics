@@ -4,18 +4,17 @@ namespace Chamilo\Core\Repository\Publication\Storage\DataManager;
 use ArrayIterator;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Core\Repository\Publication\PublicationInterface;
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 
 /**
- *
  * @package core\repository\user_view
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
-    const PREFIX = 'repository_';
+    public const PREFIX = 'repository_';
 
     public static function areContentObjectsPublished($ids)
     {
@@ -61,7 +60,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      */
     public static function countPublicationAttributes(
-        $attributes_type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null
+        $attributes_type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null
     )
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations('Chamilo\Core\Repository');

@@ -1,19 +1,18 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Configuration\Configuration;
+use Chamilo\Application\Weblcms\Tool\Manager;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetService;
@@ -28,6 +27,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Exception;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -39,7 +39,13 @@ use Symfony\Component\Translation\Translator;
  */
 class PublicationAggregator implements PublicationAggregatorInterface
 {
+    protected AssignmentPublicationService $assignmentPublicationService;
+
     protected AssignmentService $assignmentService;
+
+    protected ConfigurationConsulter $configurationConsulter;
+
+    protected AssignmentPublicationService $learningPathAssignmentPublicationService;
 
     protected LearningPathAssignmentService $learningPathAssignmentService;
 
@@ -54,7 +60,10 @@ class PublicationAggregator implements PublicationAggregatorInterface
     public function __construct(
         AssignmentService $assignmentService, LearningPathAssignmentService $learningPathAssignmentService,
         UserService $userService, Translator $translator, PublicationTargetService $publicationTargetService,
-        PublicationTargetRenderer $publicationTargetRenderer
+        PublicationTargetRenderer $publicationTargetRenderer,
+        AssignmentPublicationService $assignmentPublicationService,
+        AssignmentPublicationService $learningPathAssignmentPublicationService,
+        ConfigurationConsulter $configurationConsulter
     )
     {
         $this->assignmentService = $assignmentService;
@@ -63,17 +72,27 @@ class PublicationAggregator implements PublicationAggregatorInterface
         $this->translator = $translator;
         $this->publicationTargetService = $publicationTargetService;
         $this->publicationTargetRenderer = $publicationTargetRenderer;
+        $this->assignmentPublicationService = $assignmentPublicationService;
+        $this->learningPathAssignmentPublicationService = $learningPathAssignmentPublicationService;
+        $this->configurationConsulter = $configurationConsulter;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Exception
+     */
     public function addPublicationTargetsToFormForContentObjectAndUser(
         FormValidator $form, ContentObject $contentObject, User $user
     )
     {
         $type = $contentObject->getType();
 
-        $excludedCourseTypeSetting = (string) Configuration::getInstance()->get_setting(
+        $excludedCourseTypeSetting = $this->getConfigurationConsulter()->getSetting(
             ['Chamilo\Application\Weblcms', 'excluded_course_types']
         );
+
+        $condition = null;
 
         if (!empty($excludedCourseTypeSetting))
         {
@@ -105,12 +124,11 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
         $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters());
 
-        $tool_names = [];
+        $toolNames = [];
+        $types = [];
 
         foreach ($tools as $tool)
         {
-            $tool_name = $tool->get_name();
-
             $class = $tool->getContext() . '\Manager';
 
             if (class_exists($class))
@@ -119,23 +137,23 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
                 if (count($allowed_types) > 0)
                 {
-                    $types[$tool->get_id()] = $allowed_types;
-                    $tool_names[$tool->get_id()] = $tool->get_name();
+                    $types[$tool->getId()] = $allowed_types;
+                    $toolNames[$tool->getId()] = $tool->get_name();
                 }
 
                 if (is_subclass_of(
                     $class, 'Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface'
                 ))
                 {
-                    $types[$tool->get_id()][] = Introduction::class;
-                    $tool_names[$tool->get_id()] = $tool->get_name();
+                    $types[$tool->getId()][] = Introduction::class;
+                    $toolNames[$tool->getId()] = $tool->get_name();
                 }
             }
         }
 
         $columnNames = [];
-        $columnNames[] = $this->getTranslator()->trans('Course', [], \Chamilo\Application\Weblcms\Manager::context());
-        $columnNames[] = $this->getTranslator()->trans('Tool', [], \Chamilo\Application\Weblcms\Manager::context());
+        $columnNames[] = $this->getTranslator()->trans('Course', [], \Chamilo\Application\Weblcms\Manager::CONTEXT);
+        $columnNames[] = $this->getTranslator()->trans('Tool', [], \Chamilo\Application\Weblcms\Manager::CONTEXT);
 
         $this->getPublicationTargetRenderer()->addHeaderToForm(
             $form, $this->getTranslator()->trans('TypeName', [], 'Chamilo\Application\Weblcms'), $columnNames
@@ -154,7 +172,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
                                 $course, CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT
                             ) || !empty(
                             DataManager::retrieve_introduction_publication_by_course_and_tool(
-                                $course->getId(), $tool_names[$tool_id]
+                                $course->getId(), $toolNames[$tool_id]
                             )
                             )))
                     {
@@ -164,17 +182,17 @@ class PublicationAggregator implements PublicationAggregatorInterface
                     if ($course_settings_controller->get_course_setting(
                             $course, CourseSetting::COURSE_SETTING_TOOL_ACTIVE, $tool_id
                         ) && $course_management_rights->is_allowed_management(
-                            CourseManagementRights::PUBLISH_FROM_REPOSITORY_RIGHT, $course->get_id()
+                            CourseManagementRights::PUBLISH_FROM_REPOSITORY_RIGHT, $course->getId()
                         ))
                     {
-                        $tool_namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace(
-                            $tool_names[$tool_id]
+                        $tool_namespace = Manager::get_tool_type_namespace(
+                            $toolNames[$tool_id]
                         );
                         $tool_name = $this->getTranslator()->trans('TypeName', [], $tool_namespace);
 
                         $publicationTargetKey = $this->getPublicationTargetService()->addPublicationTargetAndGetKey(
                             new PublicationTarget(
-                                PublicationModifier::class, $course->get_id(), $tool_names[$tool_id], $user->getId()
+                                PublicationModifier::class, $course->getId(), $toolNames[$tool_id], $user->getId()
                             )
                         );
 
@@ -199,28 +217,58 @@ class PublicationAggregator implements PublicationAggregatorInterface
      */
     public function areContentObjectsPublished(array $contentObjectIdentifiers): bool
     {
-        return Manager::areContentObjectsPublished($contentObjectIdentifiers);
+        if (DataManager::areContentObjectsPublished($contentObjectIdentifiers))
+        {
+            return true;
+        }
+
+        $assignmentPublicationServices = $this->getAssignmentPublicationServices();
+        foreach ($assignmentPublicationServices as $assignmentPublicationService)
+        {
+            if ($assignmentPublicationService->areContentObjectsPublished($contentObjectIdentifiers))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function canContentObjectBeEdited(int $contentObjectIdentifier): bool
     {
-        return Manager::canContentObjectBeEdited($contentObjectIdentifier);
+        $contentObject = new ContentObject();
+        $contentObject->setId((string) $contentObjectIdentifier);
+
+        if ($this->getAssignmentService()->isContentObjectUsedAsEntry($contentObject))
+        {
+            return false;
+        }
+
+        if ($this->getLearningPathAssignmentService()->isContentObjectUsedAsEntry($contentObject))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public function canContentObjectBeUnlinked(ContentObject $contentObject): bool
     {
-        $user = $this->userService->findUserByIdentifier((string) $contentObject->get_owner_id());
+        $user = $this->getUserService()->findUserByIdentifier((string) $contentObject->get_owner_id());
         $isTeacher = ($user instanceof User && $user->get_status() == User::STATUS_TEACHER);
 
-        if ($this->assignmentService->isContentObjectUsedAsEntry($contentObject))
+        $assignmentService = $this->getAssignmentService();
+
+        if ($assignmentService->isContentObjectUsedAsEntry($contentObject))
         {
-            return ($isTeacher && !$this->assignmentService->isContentObjectOwnerSameAsSubmitter($contentObject));
+            return ($isTeacher && !$assignmentService->isContentObjectOwnerSameAsSubmitter($contentObject));
         }
 
-        if ($this->learningPathAssignmentService->isContentObjectUsedAsEntry($contentObject))
+        $learningPathAssignmentService = $this->getLearningPathAssignmentService();
+
+        if ($learningPathAssignmentService->isContentObjectUsedAsEntry($contentObject))
         {
-            return ($isTeacher &&
-                !$this->learningPathAssignmentService->isContentObjectOwnerSameAsSubmitter($contentObject));
+            return ($isTeacher && !$learningPathAssignmentService->isContentObjectOwnerSameAsSubmitter($contentObject));
         }
 
         return true;
@@ -228,12 +276,81 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
     public function countPublicationAttributes(int $type, int $objectIdentifier, ?Condition $condition = null): int
     {
-        return Manager::countPublicationAttributes($type, $objectIdentifier, $condition);
+        $count = DataManager::countPublicationAttributes($type, $objectIdentifier, $condition);
+
+        $assignmentPublicationServices = $this->getAssignmentPublicationServices();
+
+        foreach ($assignmentPublicationServices as $assignmentPublicationService)
+        {
+            switch ($type)
+            {
+                case self::ATTRIBUTES_TYPE_USER:
+                    $count += $assignmentPublicationService->countContentObjectPublicationAttributesForUser(
+                        $objectIdentifier
+                    );
+                    break;
+                case self::ATTRIBUTES_TYPE_OBJECT:
+                default:
+                    $count += $assignmentPublicationService->countContentObjectPublicationAttributesForContentObject(
+                        $objectIdentifier
+                    );
+                    break;
+            }
+        }
+
+        return $count;
     }
 
     public function deleteContentObjectPublications(ContentObject $contentObject): bool
     {
-        return Manager::deleteContentObjectPublications($contentObject->getId());
+        if (!DataManager::deleteContentObjectPublications($contentObject->getId()))
+        {
+            return false;
+        }
+
+        try
+        {
+            $assignmentPublicationServices = $this->getAssignmentPublicationServices();
+            foreach ($assignmentPublicationServices as $assignmentPublicationService)
+            {
+                $assignmentPublicationService->deleteContentObjectPublicationsByObjectId($contentObject->getId());
+            }
+        }
+        catch (Exception $ex)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getAssignmentPublicationService(): AssignmentPublicationService
+    {
+        return $this->assignmentPublicationService;
+    }
+
+    /**
+     * @return AssignmentPublicationService[]
+     */
+    protected function getAssignmentPublicationServices(): array
+    {
+        return [
+            $this->getAssignmentPublicationService(),
+            $this->getLearningPathAssignmentPublicationService()
+        ];
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService
+     */
+    public function getAssignmentService(): AssignmentService
+    {
+        return $this->assignmentService;
+    }
+
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
     }
 
     /**
@@ -251,9 +368,47 @@ class PublicationAggregator implements PublicationAggregatorInterface
         ?OrderBy $orderBy = null
     ): ArrayCollection
     {
-        return Manager::getContentObjectPublicationsAttributes(
+        $publicationAttributes = DataManager::getContentObjectPublicationsAttributes(
             $objectIdentifier, $type, $condition, $count, $offset, $orderBy
         );
+
+        $assignmentPublicationServices = $this->getAssignmentPublicationServices();
+        foreach ($assignmentPublicationServices as $assignmentPublicationService)
+        {
+            switch ($type)
+            {
+                case self::ATTRIBUTES_TYPE_USER:
+                    $publicationAttributes = array_merge(
+                        $publicationAttributes,
+                        $assignmentPublicationService->getContentObjectPublicationAttributesForUser($objectIdentifier)
+                    );
+                    break;
+                case self::ATTRIBUTES_TYPE_OBJECT:
+                default:
+                    $publicationAttributes = array_merge(
+                        $publicationAttributes,
+                        $assignmentPublicationService->getContentObjectPublicationAttributesForContentObject(
+                            $objectIdentifier
+                        )
+                    );
+                    break;
+            }
+        }
+
+        return new ArrayCollection($publicationAttributes);
+    }
+
+    public function getLearningPathAssignmentPublicationService(): AssignmentPublicationService
+    {
+        return $this->learningPathAssignmentPublicationService;
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService
+     */
+    public function getLearningPathAssignmentService(): LearningPathAssignmentService
+    {
+        return $this->learningPathAssignmentService;
     }
 
     public function getPublicationTargetRenderer(): PublicationTargetRenderer
@@ -271,16 +426,37 @@ class PublicationAggregator implements PublicationAggregatorInterface
         return $this->translator;
     }
 
+    /**
+     * @return \Chamilo\Core\User\Service\UserService
+     */
+    public function getUserService(): UserService
+    {
+        return $this->userService;
+    }
+
     public function isContentObjectPublished(int $contentObjectIdentifier): bool
     {
-        return Manager::isContentObjectPublished($contentObjectIdentifier);
+        if (DataManager::isContentObjectPublished($contentObjectIdentifier))
+        {
+            return true;
+        }
+
+        $assignmentPublicationServices = $this->getAssignmentPublicationServices();
+        foreach ($assignmentPublicationServices as $assignmentPublicationService)
+        {
+            if ($assignmentPublicationService->areContentObjectsPublished([$contentObjectIdentifier]))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function setPublicationTargetRenderer(PublicationTargetRenderer $publicationTargetRenderer): void
     {
         $this->publicationTargetRenderer = $publicationTargetRenderer;
     }
-
 
     public function setPublicationTargetService(PublicationTargetService $publicationTargetService): void
     {

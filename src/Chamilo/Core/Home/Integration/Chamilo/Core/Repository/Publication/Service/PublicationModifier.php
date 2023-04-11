@@ -1,8 +1,9 @@
 <?php
-
 namespace Chamilo\Core\Home\Integration\Chamilo\Core\Repository\Publication\Service;
 
-use Chamilo\Core\Home\Integration\Chamilo\Core\Repository\Publication\Manager;
+use Chamilo\Core\Home\Manager;
+use Chamilo\Core\Home\Service\ContentObjectPublicationService;
+use Chamilo\Core\Home\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Publication\Domain\PublicationResult;
 use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
 use Chamilo\Core\Repository\Publication\Service\PublicationModifierInterface;
@@ -13,85 +14,71 @@ use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Home\Integration\Chamilo\Core\Repository\Publication\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationModifier implements PublicationModifierInterface
 {
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
+    protected ContentObjectPublicationService $contentObjectPublicationService;
 
-    /**
-     *
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function __construct(Translator $translator)
+    private Translator $translator;
+
+    public function __construct(ContentObjectPublicationService $contentObjectPublicationService, Translator $translator
+    )
     {
         $this->translator = $translator;
+        $this->contentObjectPublicationService = $contentObjectPublicationService;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
-     *
-     * @see PublicationInterface::add_publication_attributes_elements()
-     */
     public function addContentObjectPublicationAttributesElementsToForm(FormValidator $formValidator)
     {
-        return Manager::add_publication_attributes_elements($formValidator);
     }
 
-    /**
-     * @param int $publicationIdentifier
-     *
-     * @return bool
-     */
-    public function deleteContentObjectPublication(int $publicationIdentifier)
+    protected function createPublicationAttributesFromPublication(ContentObjectPublication $publication): Attributes
     {
-        return Manager::delete_content_object_publication($publicationIdentifier);
+        $attributes = new Attributes();
+
+        $attributes->setId($publication->getId());
+        $attributes->set_publisher_id($publication->getContentObject()->get_owner_id());
+        $attributes->set_date($publication->getContentObject()->get_creation_date());
+        $attributes->set_application(Manager::CONTEXT);
+        $attributes->set_location($this->getTranslator()->trans('TypeName', [], Manager::CONTEXT));
+        $attributes->set_url('index.php');
+
+        $attributes->set_title($publication->getContentObject()->get_title());
+        $attributes->set_content_object_id($publication->get_content_object_id());
+        $attributes->setModifierServiceIdentifier(PublicationModifier::class);
+
+        return $attributes;
     }
 
-    /**
-     * @param int $publicationIdentifier
-     *
-     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes
-     * @throws \Exception
-     */
-    public function getContentObjectPublicationAttributes(int $publicationIdentifier)
+    public function deleteContentObjectPublication(int $publicationIdentifier): bool
     {
-        return Manager::get_content_object_publication_attribute($publicationIdentifier);
+        $this->getContentObjectPublicationService()->deleteContentObjectPublicationById($publicationIdentifier);
+
+        return true;
     }
 
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
+    public function getContentObjectPublicationAttributes(int $publicationIdentifier): Attributes
+    {
+        $publication =
+            $this->getContentObjectPublicationService()->getContentObjectPublicationById($publicationIdentifier);
+
+        return $this->createPublicationAttributesFromPublication($publication);
+    }
+
+    public function getContentObjectPublicationService(): ContentObjectPublicationService
+    {
+        return $this->contentObjectPublicationService;
+    }
+
     public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
-     * @param array $options
-     *
-     * @return \Chamilo\Core\Repository\Publication\Domain\PublicationResult
-     * @throws \Exception
-     * @see PublicationModifierInterface::publishContentObject()
-     */
     public function publishContentObject(
-        ContentObject $contentObject, PublicationTarget $publicationTarget, $options = []
-    )
+        ContentObject $contentObject, PublicationTarget $publicationTarget, array $options = []
+    ): PublicationResult
     {
         return new PublicationResult(
             PublicationResult::STATUS_FAILURE, $this->getTranslator()->trans(
@@ -101,13 +88,29 @@ class PublicationModifier implements PublicationModifierInterface
         );
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes $publicationAttributes
-     *
-     * @return bool
-     */
-    public function updateContentObjectPublicationContentObjectIdentifier(Attributes $publicationAttributes)
+    public function setTranslator(Translator $translator): void
     {
-        return Manager::update_content_object_publication_id($publicationAttributes);
+        $this->translator = $translator;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function updateContentObjectPublicationContentObjectIdentifier(Attributes $publicationAttributes): bool
+    {
+        $publication = $this->getContentObjectPublicationService()->getContentObjectPublicationById(
+            $publicationAttributes->getId()
+        );
+
+        if ($publication instanceof ContentObjectPublication)
+        {
+            $publication->set_content_object_id($publicationAttributes->get_content_object_id());
+
+            return $publication->update();
+        }
+        else
+        {
+            return false;
+        }
     }
 }

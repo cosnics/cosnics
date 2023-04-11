@@ -10,6 +10,8 @@
         <service id="Chamilo\Core\Home\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAggregator">
             <tag name="chamilo.core.repository.publication.publication_aggregator"/>
         </service>
-        <service id="Chamilo\Core\Home\Integration\Chamilo\Core\Repository\Publication\Service\PublicationModifier"/>
+        <service id="Chamilo\Core\Home\Integration\Chamilo\Core\Repository\Publication\Service\PublicationModifier">
+            <tag name="Chamilo\Core\Repository\Publication\Service\PublicationModifier"/>
+        </service>
     </services>
 </container>

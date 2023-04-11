@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
@@ -23,6 +22,7 @@ use Chamilo\Libraries\Mail\ValueObject\MailFile;
 use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
 use Exception;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Service class that mails a content object publication to a user
@@ -32,60 +32,22 @@ use Exception;
 class ContentObjectPublicationMailer
 {
 
-    /**
-     *
-     * @var MailerInterface
-     */
-    protected $mailer;
+    protected ContentObjectRepository $contentObjectRepository;
 
-    /**
-     *
-     * @var Translation
-     */
-    protected $translator;
+    protected CourseRepositoryInterface $courseRepository;
 
-    /**
-     *
-     * @var CourseRepositoryInterface
-     */
-    protected $courseRepository;
+    protected MailerInterface $mailer;
 
-    /**
-     *
-     * @var PublicationRepositoryInterface
-     */
-    protected $publicationRepository;
+    protected PublicationRepositoryInterface $publicationRepository;
 
-    /**
-     *
-     * @var ContentObjectRepository
-     */
-    protected $contentObjectRepository;
+    protected ThemePathBuilder $themePathBuilder;
 
-    /**
-     *
-     * @var \Chamilo\Core\User\Service\UserService
-     */
-    protected $userService;
+    protected Translator $translator;
 
-    /**
-     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    protected $themePathBuilder;
+    protected UserService $userService;
 
-    /**
-     * ContentObjectPublicationMailer constructor.
-     *
-     * @param MailerInterface $mailer
-     * @param Translation $translator
-     * @param CourseRepositoryInterface $courseRepository
-     * @param PublicationRepositoryInterface $publicationRepository
-     * @param ContentObjectRepository $contentObjectRepository
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     */
     public function __construct(
-        MailerInterface $mailer, Translation $translator, CourseRepositoryInterface $courseRepository,
+        MailerInterface $mailer, Translator $translator, CourseRepositoryInterface $courseRepository,
         PublicationRepositoryInterface $publicationRepository, ContentObjectRepository $contentObjectRepository,
         UserService $userService, ThemePathBuilder $themePathBuilder
     )
@@ -163,14 +125,6 @@ class ContentObjectPublicationMailer
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     */
-    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): void
-    {
-        $this->themePathBuilder = $themePathBuilder;
-    }
-
-    /**
      * Helper function to get the translation
      *
      * @param string $variable
@@ -179,27 +133,14 @@ class ContentObjectPublicationMailer
      *
      * @return string
      */
-    public function getTranslation($variable, $parameters = [], $context = 'Chamilo\Application\Weblcms')
+    public function getTranslation(string $variable, array $parameters = [], string $context = 'Chamilo\Application\Weblcms'): ?string
     {
-        return $this->translator->getTranslation($variable, $parameters, $context);
+        return $this->translator->trans($variable, $parameters, $context);
     }
 
-    /**
-     *
-     * @return \Chamilo\Core\User\Service\UserService
-     */
-    public function getUserService()
+    public function getUserService(): UserService
     {
         return $this->userService;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     */
-    public function setUserService(UserService $userService)
-    {
-        $this->userService = $userService;
     }
 
     /**
@@ -209,7 +150,7 @@ class ContentObjectPublicationMailer
      */
     protected function logMailProgress($logMessage)
     {
-        if (Configuration::getInstance()->get_setting(array('Chamilo\Application\Weblcms', 'log_mails')))
+        if (Configuration::getInstance()->get_setting(['Chamilo\Application\Weblcms', 'log_mails']))
         {
             $dir = Path::getInstance()->getLogPath() . 'mail';
 
@@ -218,8 +159,8 @@ class ContentObjectPublicationMailer
                 mkdir($dir);
             }
 
-            $today = date("Ymd", mktime());
-            $logfile = $dir . '//' . "mails_sent_$today" . ".log";
+            $today = date('Ymd', mktime());
+            $logfile = $dir . '//' . "mails_sent_$today" . '.log';
             $mail_log = new FileLogger($logfile, true);
             $mail_log->log_message($logMessage, true);
         }
@@ -270,23 +211,23 @@ class ContentObjectPublicationMailer
 
         if ($content_object->has_attachments())
         {
-            $body .= '<br ><br >' . $this->getTranslation('AttachmentWarning', array('LINK' => $link));
+            $body .= '<br ><br >' . $this->getTranslation('AttachmentWarning', ['LINK' => $link]);
         }
 
         $body .= '</div></body></html>';
 
-        $log = "mail for publication " . $contentObjectPublication->getId() . " in course ";
+        $log = 'mail for publication ' . $contentObjectPublication->getId() . ' in course ';
         $log .= $course->get_title();
         $log .= " to: \n";
 
         $subject = $this->getTranslation(
             'NewPublicationMailSubject',
-            array('COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title())
+            ['COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title()]
         );
 
         $mail = new Mail(
-            $subject, $body, $targetUsers, true, [], [], $user->get_fullname(), $user->get_email(), null,
-            null, $mailFiles
+            $subject, $body, $targetUsers, true, [], [], $user->get_fullname(), $user->get_email(), null, null,
+            $mailFiles
         );
 
         try
@@ -356,5 +297,21 @@ class ContentObjectPublicationMailer
         }
 
         return $doc->saveHTML();
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
+     */
+    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): void
+    {
+        $this->themePathBuilder = $themePathBuilder;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     */
+    public function setUserService(UserService $userService)
+    {
+        $this->userService = $userService;
     }
 }

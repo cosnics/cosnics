@@ -5,7 +5,6 @@ use Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\Publicatio
 use Chamilo\Application\Portfolio\Service\PublicationService;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
-use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetService;
@@ -96,7 +95,8 @@ class PublicationAggregator implements PublicationAggregatorInterface
     }
 
     public function countPublicationAttributes(
-        int $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, ?Condition $condition = null
+        int $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
+        ?Condition $condition = null
     ): int
     {
         return $this->getPublicationService()->countPublicationsForTypeAndIdentifier(
@@ -120,8 +120,8 @@ class PublicationAggregator implements PublicationAggregatorInterface
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes>
      */
     public function getContentObjectPublicationsAttributes(
-        int $type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier, ?Condition $condition = null,
-        ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+        int $type = PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, int $objectIdentifier,
+        ?Condition $condition = null, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
     ): ArrayCollection
     {
         $publicationRecords = $this->getPublicationService()->findPublicationRecordsForTypeAndIdentifier(

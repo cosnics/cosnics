@@ -7,21 +7,17 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 
 /**
  * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationTargetRenderer extends \Chamilo\Core\Repository\Publication\Service\PublicationTargetRenderer
 {
+
     /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
-     * @param string $publicationContext
-     *
-     * @throws \Exception
+     * @throws \QuickformException
      */
     public function addPublicationAttributes(FormValidator $form, string $publicationContext)
     {
-
-        $applicationContext = \Chamilo\Application\Weblcms\Manager::context();
+        $applicationContext = \Chamilo\Application\Weblcms\Manager::CONTEXT;
         $labelPublicationDetails = $this->getTranslator()->trans('PublicationDetails', [], $applicationContext);
         $labelHidden = $this->getTranslator()->trans('Hidden', [], $applicationContext);
         $labelCollaborate = $this->getTranslator()->trans('CourseAdminCollaborate', [], $applicationContext);
@@ -63,11 +59,11 @@ class PublicationTargetRenderer extends \Chamilo\Core\Repository\Publication\Ser
 
     /**
      * @param string $publicationContext
-     * @param string
+     * @param ?string $property
      *
      * @return string
      */
-    protected function getPublicationAttributeElementName(string $publicationContext, string $property = null)
+    protected function getPublicationAttributeElementName(string $publicationContext, string $property = null): string
     {
         $elementName = Manager::WIZARD_TARGET . '[' . $publicationContext . '][' . Manager::WIZARD_OPTION . ']';
 

@@ -9,8 +9,7 @@ use Exception;
  * Factory to instantiate the mailer
  *
  * @package Chamilo\Libraries\Mail\Mailer
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class MailerFactory
 {
@@ -41,12 +40,11 @@ class MailerFactory
      * Returns the active mailer
      *
      * @return \Chamilo\Libraries\Mail\Mailer\MailerInterface
-     *
      * @throws \Exception
      */
     public function getActiveMailer()
     {
-        $mailerClass = $this->configuration->get_setting(array('Chamilo\Core\Admin', 'mailer'));
+        $mailerClass = $this->configuration->get_setting(['Chamilo\Core\Admin', 'mailer']);
         if (!class_exists($mailerClass))
         {
             throw new Exception(Translation::getInstance()->getTranslation('InvalidMailerClass'));

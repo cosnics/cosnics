@@ -1,40 +1,40 @@
 <?php
-
 namespace Chamilo\Core\Repository\Publication\Domain;
 
 /**
  * @package Chamilo\Core\Repository\Publication\Domain
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationTarget
 {
-    /**
-     * @var string
-     */
-    private $modifierServiceIdentifier;
 
-    /**
-     * @param string $modifierServiceIdentifier
-     */
-    public function __construct($modifierServiceIdentifier)
+    protected string $modifierServiceIdentifier;
+
+    protected string $userIdentifier;
+
+    public function __construct(string $modifierServiceIdentifier, string $userIdentifier)
     {
         $this->modifierServiceIdentifier = $modifierServiceIdentifier;
+        $this->userIdentifier = $userIdentifier;
     }
 
-    /**
-     * @return string
-     */
     public function getModifierServiceIdentifier(): string
     {
         return $this->modifierServiceIdentifier;
     }
 
-    /**
-     * @param string $modifierServiceIdentifier
-     */
+    public function getUserIdentifier(): string
+    {
+        return $this->userIdentifier;
+    }
+
     public function setModifierServiceIdentifier(string $modifierServiceIdentifier): void
     {
         $this->modifierServiceIdentifier = $modifierServiceIdentifier;
+    }
+
+    public function setUserIdentifier(string $userIdentifier)
+    {
+        $this->userIdentifier = $userIdentifier;
     }
 }

@@ -8,23 +8,19 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 /**
  * Abstract class for publications to inherit
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Publication extends DataClass
 {
     public const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
 
-    /**
-     * The content object
-     *
-     * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject
-     */
-    protected $contentObject;
+    protected ?ContentObject $contentObject;
 
     /**
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
+     * @throws \ReflectionException
      */
-    public function getContentObject()
+    public function getContentObject(): ContentObject
     {
         if (is_null($this->contentObject))
         {
@@ -37,9 +33,9 @@ abstract class Publication extends DataClass
     }
 
     /**
-     * Get the default properties of all Publications.
+     * @param string[] $extendedPropertyNames
      *
-     * @return array The property names.
+     * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
@@ -49,48 +45,33 @@ abstract class Publication extends DataClass
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
-     * @deprecated
+     * @throws \ReflectionException
+     * @deprecated Use Publciation::getContentObject()
      */
-    public function get_content_object()
+    public function get_content_object(): ?ContentObject
     {
         return $this->getContentObject();
     }
 
-    /**
-     * Gets the content object id.
-     *
-     * @return int
-     */
-    public function get_content_object_id()
+    public function get_content_object_id(): int
     {
         return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     */
-    public function setContentObject($contentObject)
+    public function setContentObject(ContentObject $contentObject)
     {
         $this->contentObject = $contentObject;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     *
-     * @deprecated
+     * @deprecated Use Publication::setContentObject()
      */
-    public function set_content_object($contentObject)
+    public function set_content_object(ContentObject $contentObject)
     {
         $this->setContentObject($contentObject);
     }
 
-    /**
-     * Sets the content object id.
-     *
-     * @param int $content_object_id
-     */
-    public function set_content_object_id($content_object_id)
+    public function set_content_object_id(int $content_object_id)
     {
         $this->setDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
     }

@@ -29,41 +29,34 @@ use ErrorException;
 use Exception;
 use RuntimeException;
 
-// to support mailing CO publications:
-
-/**
- *
- * @package application.lib.weblcms
- */
-
 /**
  * This class represents a learning object publication.
  * When publishing a learning object from the repository in the
  * weblcms application, a new object of this type is created.
+ *
+ * @package Chamilo\Application\Weblcms\Storage\DataClass
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ContentObjectPublication extends Publication implements DisplayOrderDataClassListenerSupport
 {
+    public const CONTENT_OBJECT_MODIFICATION_DATE_ALIAS = 'content_object_modification_date';
 
-    /*
-     * #@+ Constant defining a property of the publication
-     */
-    const CONTENT_OBJECT_MODIFICATION_DATE_ALIAS = 'content_object_modification_date';
+    public const PROPERTY_ALLOW_COLLABORATION = 'allow_collaboration';
+    public const PROPERTY_CATEGORY_ID = 'category_id';
+    public const PROPERTY_COURSE_ID = 'course_id';
+    public const PROPERTY_DISPLAY_ORDER_INDEX = 'display_order';
+    public const PROPERTY_EMAIL_SENT = 'email_sent';
+    public const PROPERTY_FROM_DATE = 'from_date';
+    public const PROPERTY_HIDDEN = 'hidden';
+    public const PROPERTY_MODIFIED_DATE = 'modified';
+    public const PROPERTY_PUBLICATION_DATE = 'published';
+    public const PROPERTY_PUBLISHER_ID = 'publisher_id';
+    public const PROPERTY_SHOW_ON_HOMEPAGE = 'show_on_homepage';
+    public const PROPERTY_TOOL = 'tool';
+    public const PROPERTY_TO_DATE = 'to_date';
 
-    const PROPERTY_ALLOW_COLLABORATION = 'allow_collaboration';
-    const PROPERTY_CATEGORY_ID = 'category_id';
-    const PROPERTY_COURSE_ID = 'course_id';
-    const PROPERTY_DISPLAY_ORDER_INDEX = 'display_order';
-    const PROPERTY_EMAIL_SENT = 'email_sent';
-    const PROPERTY_FROM_DATE = 'from_date';
-    const PROPERTY_HIDDEN = 'hidden';
-    const PROPERTY_MODIFIED_DATE = 'modified';
-    const PROPERTY_PUBLICATION_DATE = 'published';
-    const PROPERTY_PUBLISHER_ID = 'publisher_id';
-    const PROPERTY_SHOW_ON_HOMEPAGE = 'show_on_homepage';
-    const PROPERTY_TOOL = 'tool';
-    const PROPERTY_TO_DATE = 'to_date';
-
-    const TYPE_FILE = 'file';
+    public const TYPE_FILE = 'file';
 
     private $publisher;
 
@@ -173,7 +166,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_COURSE_ID,
                 self::PROPERTY_TOOL,
                 self::PROPERTY_CATEGORY_ID,
@@ -187,12 +180,28 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
                 self::PROPERTY_EMAIL_SENT,
                 self::PROPERTY_SHOW_ON_HOMEPAGE,
                 self::PROPERTY_ALLOW_COLLABORATION
-            )
+            ]
         );
     }
 
     /**
-     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
+     */
+    public function getDisplayOrderContextProperties(): array
+    {
+        return [
+            new PropertyConditionVariable(self::class, self::PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(self::class, self::PROPERTY_TOOL),
+            new PropertyConditionVariable(self::class, self::PROPERTY_CATEGORY_ID)
+        ];
+    }
+
+    public function getDisplayOrderProperty(): PropertyConditionVariable
+    {
+        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER_INDEX);
+    }
+
+    /**
      * @return string
      */
     public static function getStorageUnitName(): string
@@ -274,26 +283,9 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         return $redirect->getUrl();
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
-     */
-    public function getDisplayOrderContextProperties(): array
-    {
-        return array(
-            new PropertyConditionVariable(self::class, self::PROPERTY_COURSE_ID),
-            new PropertyConditionVariable(self::class, self::PROPERTY_TOOL),
-            new PropertyConditionVariable(self::class, self::PROPERTY_CATEGORY_ID)
-        );
-    }
-
     public function get_display_order_index()
     {
         return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER_INDEX);
-    }
-
-    public function getDisplayOrderProperty(): PropertyConditionVariable
-    {
-        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER_INDEX);
     }
 
     /**
@@ -370,11 +362,6 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         return $this->target_course_groups;
     }
 
-    public function set_target_course_groups($target_course_groups)
-    {
-        $this->target_course_groups = $target_course_groups;
-    }
-
     public function get_target_entities()
     {
         try
@@ -408,11 +395,6 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         return $this->target_groups;
     }
 
-    public function set_target_groups($target_groups)
-    {
-        $this->target_groups = $target_groups;
-    }
-
     /**
      * Gets the list of target users of this publication
      *
@@ -427,11 +409,6 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         }
 
         return $this->target_users;
-    }
-
-    public function set_target_users($target_users)
-    {
-        $this->target_users = $target_users;
     }
 
     /**
@@ -467,7 +444,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      * Determines whether this publication was sent by email to the users and course_groups for which this publication
      * was made
      *
-     * @return boolean True if an email was sent
+     * @return bool True if an email was sent
      */
     public function is_email_sent()
     {
@@ -483,7 +460,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
     /**
      * Determines whether this publication is available forever
      *
-     * @return boolean True if the publication is available forever
+     * @return bool True if the publication is available forever
      * @see get_from_date()
      * @see get_to_date()
      */
@@ -495,7 +472,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
     /**
      * Determines whether this publication is hidden or not
      *
-     * @return boolean True if the publication is hidden.
+     * @return bool True if the publication is hidden.
      */
     public function is_hidden()
     {
@@ -563,7 +540,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         // safety check: filter any dubbles
         $unique_email = array_unique($target_email);
 
-        $site_name = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
+        $site_name = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']);
 
         $doc = new DOMDocument();
         $doc->loadHTML('<?xml encoding="utf-8" ?>' . $body);
@@ -610,18 +587,18 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
 
         if ($content_object->has_attachments())
         {
-            $body .= '<br ><br >' . Translation::get('AttachmentWarning', array('LINK' => $link));
+            $body .= '<br ><br >' . Translation::get('AttachmentWarning', ['LINK' => $link]);
         }
 
         $body .= '</div></body></html>';
 
-        $log = "mail for publication " . $this->get_id() . " in course ";
+        $log = 'mail for publication ' . $this->get_id() . ' in course ';
         $log .= $course->get_title();
         $log .= " to: \n";
 
         $subject = Translation::get(
             'NewPublicationMailSubject',
-            array('COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title())
+            ['COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title()]
         );
 
         $mail = new Mail(
@@ -643,7 +620,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
             $log .= " (unsuccessfull)\n";
         }
 
-        $logMails = Configuration::getInstance()->get_setting(array('Chamilo\Application\Weblcms', 'log_mails'));
+        $logMails = Configuration::getInstance()->get_setting(['Chamilo\Application\Weblcms', 'log_mails']);
 
         if ($logMails)
         {
@@ -654,8 +631,8 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
                 mkdir($dir);
             }
 
-            $today = date("Ymd", mktime());
-            $logfile = $dir . '//' . "mails_sent_$today" . ".log";
+            $today = date('Ymd', mktime());
+            $logfile = $dir . '//' . "mails_sent_$today" . '.log';
             $mail_log = new FileLogger($logfile, true);
             $mail_log->log_message($log, true);
         }
@@ -678,10 +655,6 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         return $success ? $places : 0;
     }
 
-    /*
-     * #@-
-     */
-
     public function render_target_entities_as_string()
     {
         return WeblcmsRights::getInstance()->render_target_entities_as_string($this->get_target_entities());
@@ -696,6 +669,10 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
     {
         $this->setDefaultProperty(self::PROPERTY_CATEGORY_ID, $category);
     }
+
+    /*
+     * #@-
+     */
 
     public function set_course_id($course)
     {
@@ -750,6 +727,21 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
     public function set_show_on_homepage($show_on_homepage)
     {
         $this->setDefaultProperty(self::PROPERTY_SHOW_ON_HOMEPAGE, $show_on_homepage);
+    }
+
+    public function set_target_course_groups($target_course_groups)
+    {
+        $this->target_course_groups = $target_course_groups;
+    }
+
+    public function set_target_groups($target_groups)
+    {
+        $this->target_groups = $target_groups;
+    }
+
+    public function set_target_users($target_users)
+    {
+        $this->target_users = $target_users;
     }
 
     public function set_to_date($to_date)

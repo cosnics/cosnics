@@ -2,187 +2,249 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Application\Weblcms\Manager as WeblcmsManager;
 use Chamilo\Application\Weblcms\Service\ContentObjectPublicationMailer;
 use Chamilo\Application\Weblcms\Service\CourseService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Storage\Repository\CourseRepository;
 use Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository;
 use Chamilo\Application\Weblcms\Tool\Manager as WeblcmsToolManager;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Publication\Domain\PublicationResult;
 use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;
+use Chamilo\Core\Repository\Publication\Manager;
 use Chamilo\Core\Repository\Publication\Service\PublicationModifierInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Exception;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationModifier implements PublicationModifierInterface
 {
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
 
-    /**
-     *
-     * @var \Chamilo\Core\User\Service\UserService
-     */
-    private $userService;
+    protected AssignmentPublicationService $assignmentPublicationService;
 
-    /**
-     *
-     * @var \Chamilo\Application\Weblcms\Service\CourseService
-     */
-    private $courseService;
+    protected DatetimeUtilities $datetimeUtilities;
 
-    /**
-     * @var \Chamilo\Libraries\Format\Theme\ThemePathBuilder
-     */
-    private $themePathBuilder;
+    protected AssignmentPublicationService $learningPathAssignmentPublicationService;
 
-    /**
-     *
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Chamilo\Application\Weblcms\Service\CourseService $courseService
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     */
+    protected RegistrationConsulter $registrationConsulter;
+
+    protected UrlGenerator $urlGenerator;
+
+    private CourseService $courseService;
+
+    private ThemePathBuilder $themePathBuilder;
+
+    private Translator $translator;
+
+    private UserService $userService;
+
     public function __construct(
         Translator $translator, UserService $userService, CourseService $courseService,
-        ThemePathBuilder $themePathBuilder
+        ThemePathBuilder $themePathBuilder, UrlGenerator $urlGenerator, DatetimeUtilities $datetimeUtilities,
+        RegistrationConsulter $registrationConsulter, AssignmentPublicationService $assignmentPublicationService,
+        AssignmentPublicationService $learningPathAssignmentPublicationService
     )
     {
         $this->translator = $translator;
         $this->userService = $userService;
         $this->courseService = $courseService;
         $this->themePathBuilder = $themePathBuilder;
+        $this->urlGenerator = $urlGenerator;
+        $this->datetimeUtilities = $datetimeUtilities;
+        $this->registrationConsulter = $registrationConsulter;
+        $this->assignmentPublicationService = $assignmentPublicationService;
+        $this->learningPathAssignmentPublicationService = $learningPathAssignmentPublicationService;
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
-     *
-     * @see PublicationInterface::add_publication_attributes_elements()
+     * @throws \QuickformException
      */
     public function addContentObjectPublicationAttributesElementsToForm(FormValidator $formValidator)
     {
-        return Manager::add_publication_attributes_elements($formValidator);
+        $registration = $this->getRegistrationConsulter()->getRegistrationForContext(
+            'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication'
+        );
+        $translator = $this->getTranslator();
+
+        $formValidator->addElement(
+            'html', '<h5>' . $translator->trans('PublicationDetails', [], 'Chamilo\Application\Weblcms') . '</h5>'
+        );
+
+        $formValidator->addElement(
+            'checkbox', Manager::WIZARD_OPTION . '[' . $registration[DataClass::PROPERTY_ID] . '][' .
+            ContentObjectPublication::PROPERTY_HIDDEN . ']', $translator->trans('Hidden', [], WeblcmsManager::CONTEXT)
+        );
+
+        $formValidator->addTimePeriodSelection(
+            'PublicationPeriod', ContentObjectPublication::PROPERTY_FROM_DATE,
+            ContentObjectPublication::PROPERTY_TO_DATE, FormValidator::PROPERTY_TIME_PERIOD_FOREVER,
+            Manager::WIZARD_OPTION . '[' . $registration[DataClass::PROPERTY_ID] . ']'
+        );
+
+        $formValidator->addElement(
+            'checkbox', Manager::WIZARD_OPTION . '[' . $registration[DataClass::PROPERTY_ID] . '][' .
+            ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION . ']',
+            $translator->trans('CourseAdminCollaborate', [], WeblcmsManager::CONTEXT)
+        );
+
+        $formValidator->addElement(
+            'checkbox', Manager::WIZARD_OPTION . '[' . $registration[DataClass::PROPERTY_ID] . '][' .
+            ContentObjectPublication::PROPERTY_EMAIL_SENT . ']',
+            $translator->trans('SendByEMail', [], WeblcmsManager::CONTEXT)
+        );
+
+        $defaults[Manager::WIZARD_OPTION][$registration[DataClass::PROPERTY_ID]][FormValidator::PROPERTY_TIME_PERIOD_FOREVER] =
+            1;
+
+        $defaults[Manager::WIZARD_OPTION][$registration[DataClass::PROPERTY_ID]][ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] =
+            1;
+
+        $formValidator->setDefaults($defaults);
     }
 
     /**
-     * @param integer $publicationIdentifier
-     *
-     * @return bool
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function deleteContentObjectPublication(int $publicationIdentifier)
+    public function deleteContentObjectPublication(int $publicationIdentifier): bool
     {
-        return Manager::delete_content_object_publication($publicationIdentifier);
+        if (empty($context) || $context == ContentObjectPublication::class)
+        {
+            $publication = DataManager::retrieve_by_id(ContentObjectPublication::class, $publicationIdentifier);
+            if (!$publication)
+            {
+                return false;
+            }
+
+            return $publication->delete();
+        }
+
+        try
+        {
+            $assignmentPublicationServices = $this->getAssignmentPublicationServices();
+
+            foreach ($assignmentPublicationServices as $assignmentPublicationService)
+            {
+                if ($assignmentPublicationService->getPublicationContext() == $context)
+                {
+                    $assignmentPublicationService->deleteContentObjectPublicationsByPublicationId(
+                        $publicationIdentifier
+                    );
+
+                    break;
+                }
+            }
+
+            return true;
+        }
+        catch (Exception $ex)
+        {
+            return false;
+        }
     }
 
     /**
-     * @param integer $publicationIdentifier
-     *
-     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes
-     * @throws \Exception
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\AssignmentPublicationService
      */
-    public function getContentObjectPublicationAttributes(int $publicationIdentifier)
+    public function getAssignmentPublicationService(): AssignmentPublicationService
     {
-        return Manager::get_content_object_publication_attribute($publicationIdentifier);
+        return $this->assignmentPublicationService;
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Service\CourseService
+     * @return AssignmentPublicationService[]
      */
+    protected function getAssignmentPublicationServices(): array
+    {
+        return [
+            $this->getAssignmentPublicationService(),
+            $this->getLearningPathAssignmentPublicationService()
+        ];
+    }
+
+    public function getContentObjectPublicationAttributes(int $publicationIdentifier): Attributes
+    {
+        return DataManager::get_content_object_publication_attribute($publicationIdentifier);
+
+        // TODO: This should be solved differently, should be seperate implementations
+        //        $assignmentPublicationServices = $this->getAssignmentPublicationServices();
+        //
+        //        foreach ($assignmentPublicationServices as $assignmentPublicationService)
+        //        {
+        //            if ($assignmentPublicationService->getPublicationContext() == $context)
+        //            {
+        //                return $assignmentPublicationService->getContentObjectPublicationAttributes($publicationIdentifier);
+        //            }
+        //        }
+    }
+
     public function getCourseService(): CourseService
     {
         return $this->courseService;
     }
 
-    /**
-     * @param \Chamilo\Application\Weblcms\Service\CourseService $courseService
-     */
-    public function setCourseService(CourseService $courseService): void
+    public function getDatetimeUtilities(): DatetimeUtilities
     {
-        $this->courseService = $courseService;
+        return $this->datetimeUtilities;
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\AssignmentPublicationService
      */
+    public function getLearningPathAssignmentPublicationService(): AssignmentPublicationService
+    {
+        return $this->learningPathAssignmentPublicationService;
+    }
+
+    public function getRegistrationConsulter(): RegistrationConsulter
+    {
+        return $this->registrationConsulter;
+    }
+
     public function getThemePathBuilder(): ThemePathBuilder
     {
         return $this->themePathBuilder;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
-     */
-    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): void
-    {
-        $this->themePathBuilder = $themePathBuilder;
-    }
-
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
     public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
+    public function getUrlGenerator(): UrlGenerator
     {
-        $this->translator = $translator;
+        return $this->urlGenerator;
     }
 
-    /**
-     * @return \Chamilo\Core\User\Service\UserService
-     */
     public function getUserService(): UserService
     {
         return $this->userService;
     }
 
     /**
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     */
-    public function setUserService(UserService $userService): void
-    {
-        $this->userService = $userService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
-     * @param array $options
-     *
-     * @return \Chamilo\Core\Repository\Publication\Domain\PublicationResult
      * @throws \Exception
-     * @see PublicationModifierInterface::publishContentObject()
      */
     public function publishContentObject(
-        ContentObject $contentObject, PublicationTarget $publicationTarget, $options = []
-    )
+        ContentObject $contentObject, PublicationTarget $publicationTarget, array $options = []
+    ): PublicationResult
     {
         $course = $this->getCourseService()->getCourseById($publicationTarget->getCourseIdentifier());
         $toolNamespace = WeblcmsToolManager::get_tool_type_namespace($publicationTarget->getToolIdentifier());
@@ -205,10 +267,14 @@ class PublicationModifier implements PublicationModifierInterface
         if ($options[FormValidator::PROPERTY_TIME_PERIOD_FOREVER] == 0)
         {
             $publication->set_from_date(
-                DatetimeUtilities::getInstance()->timeFromDatepicker($options[ContentObjectPublication::PROPERTY_FROM_DATE])
+                $this->getDatetimeUtilities()->timeFromDatepicker(
+                    $options[ContentObjectPublication::PROPERTY_FROM_DATE]
+                )
             );
             $publication->set_to_date(
-                DatetimeUtilities::getInstance()->timeFromDatepicker($options[ContentObjectPublication::PROPERTY_TO_DATE])
+                $this->getDatetimeUtilities()->timeFromDatepicker(
+                    $options[ContentObjectPublication::PROPERTY_TO_DATE]
+                )
             );
         }
 
@@ -255,7 +321,7 @@ class PublicationModifier implements PublicationModifierInterface
             $mailerFactory = new MailerFactory(Configuration::getInstance());
 
             $contentObjectPublicationMailer = new ContentObjectPublicationMailer(
-                $mailerFactory->getActiveMailer(), Translation::getInstance(), new CourseRepository(),
+                $mailerFactory->getActiveMailer(), $this->getTranslator(), new CourseRepository(),
                 new PublicationRepository(), new ContentObjectRepository(), $this->getUserService(),
                 $this->getThemePathBuilder()
             );
@@ -273,31 +339,86 @@ class PublicationModifier implements PublicationModifierInterface
         );
 
         $parameters = [];
-        $parameters[Application::PARAM_CONTEXT] = WeblcmsManager::context();
-        $parameters[WeblcmsManager::PARAM_ACTION] = WeblcmsManager::ACTION_VIEW_COURSE;
+        $parameters[Application::PARAM_CONTEXT] = WeblcmsManager::CONTEXT;
+        $parameters[Application::PARAM_ACTION] = WeblcmsManager::ACTION_VIEW_COURSE;
         $parameters[WeblcmsManager::PARAM_COURSE] = $publicationTarget->getCourseIdentifier();
         $parameters[WeblcmsManager::PARAM_TOOL] = $publicationTarget->getToolIdentifier();
 
         if (!$contentObject instanceof Introduction)
         {
             $parameters[WeblcmsToolManager::PARAM_ACTION] = WeblcmsToolManager::ACTION_VIEW;
-            $parameters[WeblcmsToolManager::PARAM_PUBLICATION_ID] = $publication->get_id();
+            $parameters[WeblcmsToolManager::PARAM_PUBLICATION_ID] = $publication->getId();
         }
 
-        $publicationUrl = new Redirect($parameters);
+        $publicationUrl = $this->getUrlGenerator()->fromParameters($parameters);
 
         return new PublicationResult(
-            PublicationResult::STATUS_SUCCESS, $successMessage, $publicationUrl->getUrl()
+            PublicationResult::STATUS_SUCCESS, $successMessage, $publicationUrl
         );
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes $publicationAttributes
-     *
-     * @return boolean
+     * @param \Chamilo\Application\Weblcms\Service\CourseService $courseService
      */
-    public function updateContentObjectPublicationContentObjectIdentifier(Attributes $publicationAttributes)
+    public function setCourseService(CourseService $courseService): void
     {
-        return Manager::update_content_object_publication_id($publicationAttributes);
+        $this->courseService = $courseService;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
+     */
+    public function setThemePathBuilder(ThemePathBuilder $themePathBuilder): void
+    {
+        $this->themePathBuilder = $themePathBuilder;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Service\UserService $userService
+     */
+    public function setUserService(UserService $userService): void
+    {
+        $this->userService = $userService;
+    }
+
+    public function updateContentObjectPublicationContentObjectIdentifier(Attributes $publicationAttributes): bool
+    {
+        $context = $publicationAttributes->getPublicationContext();
+
+        if (empty($context) || $context == ContentObjectPublication::class)
+        {
+            return DataManager::update_content_object_publication_id($publicationAttributes);
+        }
+
+        try
+        {
+            $assignmentPublicationServices = $this->getAssignmentPublicationServices();
+
+            foreach ($assignmentPublicationServices as $assignmentPublicationService)
+            {
+                if ($assignmentPublicationService->getPublicationContext() == $context)
+                {
+                    $assignmentPublicationService->updateContentObjectId(
+                        $publicationAttributes->getId(), $publicationAttributes->get_content_object_id()
+                    );
+
+                    break;
+                }
+            }
+
+            return true;
+        }
+        catch (Exception $ex)
+        {
+            return false;
+        }
     }
 }

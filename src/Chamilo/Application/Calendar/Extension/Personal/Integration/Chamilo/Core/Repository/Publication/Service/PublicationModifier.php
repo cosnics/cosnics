@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service;
 
 use Chamilo\Application\Calendar\Extension\Personal\Manager as PersonalCalendarManager;
@@ -11,140 +10,81 @@ use Chamilo\Core\Repository\Publication\Service\PublicationModifierInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationModifier implements PublicationModifierInterface
 {
 
-    /**
-     * @var \Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService
-     */
-    private $publicationService;
+    protected UrlGenerator $urlGenerator;
 
-    /**
-     * @var \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator
-     */
-    private $publicationAttributesGenerator;
+    private PublicationAttributesGenerator $publicationAttributesGenerator;
 
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
+    private PublicationService $publicationService;
 
-    /**
-     * @param \Chamilo\Application\Portfolio\Service\PublicationService $publicationService
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
+    private Translator $translator;
+
     public function __construct(
         PublicationService $publicationService, PublicationAttributesGenerator $publicationAttributesGenerator,
-        Translator $translator
+        Translator $translator, UrlGenerator $urlGenerator
     )
     {
         $this->publicationService = $publicationService;
         $this->publicationAttributesGenerator = $publicationAttributesGenerator;
         $this->translator = $translator;
+        $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
-     */
     public function addContentObjectPublicationAttributesElementsToForm(FormValidator $formValidator)
     {
     }
 
-    /**
-     * @param integer $publicationIdentifier
-     *
-     * @return bool
-     */
-    public function deleteContentObjectPublication(int $publicationIdentifier)
+    public function deleteContentObjectPublication(int $publicationIdentifier): bool
     {
         return $this->getPublicationService()->deletePublicationByIdentifier($publicationIdentifier);
     }
 
     /**
-     * @param integer $publicationIdentifier
-     *
-     * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes
      * @throws \Exception
      */
-    public function getContentObjectPublicationAttributes(int $publicationIdentifier)
+    public function getContentObjectPublicationAttributes(int $publicationIdentifier): Attributes
     {
         return $this->getPublicationAttributesGenerator()->createAttributesFromRecord(
             $this->getPublicationService()->findPublicationRecordByIdentifier($publicationIdentifier)
         );
     }
 
-    /**
-     * @return \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator
-     */
     public function getPublicationAttributesGenerator(): PublicationAttributesGenerator
     {
         return $this->publicationAttributesGenerator;
     }
 
-    /**
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service\PublicationAttributesGenerator $publicationAttributesGenerator
-     */
-    public function setPublicationAttributesGenerator(PublicationAttributesGenerator $publicationAttributesGenerator
-    ): void
-    {
-        $this->publicationAttributesGenerator = $publicationAttributesGenerator;
-    }
-
-    /**
-     * @return \Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService
-     */
     public function getPublicationService(): PublicationService
     {
         return $this->publicationService;
     }
 
-    /**
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService $publicationService
-     */
-    public function setPublicationService(PublicationService $publicationService): void
-    {
-        $this->publicationService = $publicationService;
-    }
-
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
     public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
+    public function getUrlGenerator(): UrlGenerator
     {
-        $this->translator = $translator;
+        return $this->urlGenerator;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Domain\PublicationTarget $publicationTarget
-     * @param array $options
-     *
-     * @return \Chamilo\Core\Repository\Publication\Domain\PublicationResult
-     * @throws \Exception
-     * @see PublicationModifierInterface::publishContentObject()
+     * @throws \ReflectionException
      */
     public function publishContentObject(
-        ContentObject $contentObject, PublicationTarget $publicationTarget, $options = []
-    )
+        ContentObject $contentObject, PublicationTarget $publicationTarget, array $options = []
+    ): PublicationResult
     {
         $publication = $this->getPublicationService()->getPublicationInstance();
         $publication->set_content_object_id($contentObject->getId());
@@ -166,28 +106,40 @@ class PublicationModifier implements PublicationModifierInterface
                 'Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository'
             );
 
-            $publicationUrl = new Redirect(
-                array(
+            $publicationUrl = $this->getUrlGenerator()->fromParameters(
+                [
                     Application::PARAM_CONTEXT => PersonalCalendarManager::package(),
                     Application::PARAM_ACTION => PersonalCalendarManager::ACTION_VIEW,
                     PersonalCalendarManager::PARAM_PUBLICATION_ID => $publication->getId()
-                )
+                ]
             );
 
             return new PublicationResult(
-                PublicationResult::STATUS_SUCCESS, $successMessage, $publicationUrl->getUrl()
+                PublicationResult::STATUS_SUCCESS, $successMessage, $publicationUrl
             );
         }
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes $publicationAttributes
-     *
-     * @return boolean
-     */
-    public function updateContentObjectPublicationContentObjectIdentifier(Attributes $publicationAttributes)
+    public function setPublicationAttributesGenerator(PublicationAttributesGenerator $publicationAttributesGenerator
+    ): void
     {
-        $publication = $this->getPublicationService()->findPublicationByIdentifier($publicationAttributes->getId());
+        $this->publicationAttributesGenerator = $publicationAttributesGenerator;
+    }
+
+    public function setPublicationService(PublicationService $publicationService): void
+    {
+        $this->publicationService = $publicationService;
+    }
+
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    public function updateContentObjectPublicationContentObjectIdentifier(Attributes $publicationAttributes): bool
+    {
+        $publication =
+            $this->getPublicationService()->findPublicationByIdentifier((int) $publicationAttributes->getId());
 
         if ($publication instanceof Publication)
         {

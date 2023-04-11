@@ -1,21 +1,20 @@
 <?php
 namespace Chamilo\Core\Repository\Publication\Factory;
 
-use Doctrine\Common\Cache\ArrayCache;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
  * @package Chamilo\Core\Repository\Publication\Factory
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationTargetRepositoryCacheProviderFactory
 {
 
     /**
-     * @return \Doctrine\Common\Cache\ArrayCache
+     * @return \Symfony\Component\Cache\Adapter\ArrayAdapter
      */
-    public function getPublicationTargetRepositoryCacheProvider()
+    public function getPublicationTargetRepositoryCacheProvider(): ArrayAdapter
     {
-        return new ArrayCache();
+        return new ArrayAdapter();
     }
 }

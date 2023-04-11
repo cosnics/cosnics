@@ -8,8 +8,7 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\DependencyInjection
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
 {

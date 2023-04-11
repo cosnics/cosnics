@@ -53,8 +53,5 @@ interface PublicationAggregatorInterface
         ?OrderBy $orderBy = null
     ): ArrayCollection;
 
-    /**
-     * @see PublicationInterface::isContentObjectPublished()
-     */
     public function isContentObjectPublished(int $contentObjectIdentifier): bool;
 }

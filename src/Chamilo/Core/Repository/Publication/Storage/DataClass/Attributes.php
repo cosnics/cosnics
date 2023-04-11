@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Publication\Storage\DataClass;
 
 use Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager;

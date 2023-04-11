@@ -7,28 +7,20 @@ use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Repository\Publication\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationTargetRenderer
 {
 
-    /**
-     *
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
+    private Translator $translator;
 
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
     public function __construct(Translator $translator)
     {
         $this->translator = $translator;
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
+     * @throws \QuickformException
      */
     public function addFooterToForm(FormValidator $form)
     {
@@ -42,11 +34,13 @@ class PublicationTargetRenderer
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
      * @param string[] $columnNames
-     * @param boolean $hasOnlyOneLocation
+     *
+     * @throws \QuickformException
      */
-    public function addHeaderToForm(FormValidator $form, string $title, array $columnNames, $hasOnlyOneLocation = false)
+    public function addHeaderToForm(
+        FormValidator $form, string $title, array $columnNames, bool $hasOnlyOneLocation = false
+    )
     {
         $tableHeader = [];
 
@@ -82,10 +76,9 @@ class PublicationTargetRenderer
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
-     * @param string $publicationContext
-     * @param string $targetKey
      * @param string[] $targetNames
+     *
+     * @throws \QuickformException
      */
     public function addPublicationTargetToForm(
         FormValidator $form, string $publicationContext, string $targetKey, array $targetNames
@@ -109,45 +102,30 @@ class PublicationTargetRenderer
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
-     * @param string $publicationContext
-     * @param string $targetKey
-     * @param string $targetName
+     * @throws \QuickformException
      */
     public function addSinglePublicationTargetToForm(
         FormValidator $form, string $publicationContext, string $targetKey, string $targetName
     )
     {
-        $columnName = $this->getTranslator()->trans('Target', [], Manager::context());
+        $columnName = $this->getTranslator()->trans('Target', [], Manager::CONTEXT);
 
         $this->addHeaderToForm($form, $targetName, [$columnName], true);
         $this->addPublicationTargetToForm($form, $publicationContext, $targetKey, [$targetName]);
         $this->addFooterToForm($form);
     }
 
-    /**
-     * @param string $publicationContext
-     * @param string $targetKey
-     *
-     * @return string
-     */
-    protected function getCheckboxName(string $publicationContext, string $targetKey)
+    protected function getCheckboxName(string $publicationContext, string $targetKey): string
     {
         return Manager::WIZARD_TARGET . '[' . $publicationContext . '][' . Manager::WIZARD_TARGET . '][' . $targetKey .
             ']';
     }
 
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
     public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
     public function setTranslator(Translator $translator): void
     {
         $this->translator = $translator;

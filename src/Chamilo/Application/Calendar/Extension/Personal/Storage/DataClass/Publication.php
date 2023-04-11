@@ -1,72 +1,58 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass;
 
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+
 /**
- *
  * @package Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Dieter De Neef
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Dieter De Neef
  */
 class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass\Publication
 {
 
-    const PROPERTY_PUBLISHED = 'published';
-    const PROPERTY_PUBLISHER = 'publisher_id';
+    public const PROPERTY_PUBLISHED = 'published';
+    public const PROPERTY_PUBLISHER = 'publisher_id';
 
     /**
-     * Get the default properties of all Publications.
+     * @param string[] $extendedPropertyNames
      *
-     * @return string[] The property names.
+     * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(array(self::PROPERTY_PUBLISHER, self::PROPERTY_PUBLISHED));
+        return parent::getDefaultPropertyNames([self::PROPERTY_PUBLISHER, self::PROPERTY_PUBLISHED]);
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
-     */
-    public function get_publication_object()
-    {
-        return parent::getContentObject();
-    }
-
-    /**
-     * @return integer
-     */
-    public function get_published()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_PUBLISHED);
-    }
-
-    /**
-     * @return integer
-     */
-    public function get_publisher()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_PUBLISHER);
-    }
-
-    /**
-     * @return string
-     */
     public static function getStorageUnitName(): string
     {
         return 'calendar_personal_publication';
     }
 
     /**
-     * @param integer $published
+     * @throws \ReflectionException
      */
-    public function set_published($published)
+    public function get_publication_object(): ?ContentObject
+    {
+        return parent::getContentObject();
+    }
+
+    public function get_published(): int
+    {
+        return $this->getDefaultProperty(self::PROPERTY_PUBLISHED);
+    }
+
+    public function get_publisher(): int
+    {
+        return $this->getDefaultProperty(self::PROPERTY_PUBLISHER);
+    }
+
+    public function set_published(int $published)
     {
         $this->setDefaultProperty(self::PROPERTY_PUBLISHED, $published);
     }
 
-    /**
-     * @param integer $publisher
-     */
-    public function set_publisher($publisher)
+    public function set_publisher(int $publisher)
     {
         $this->setDefaultProperty(self::PROPERTY_PUBLISHER, $publisher);
     }

@@ -2,65 +2,59 @@
 namespace Chamilo\Core\Repository\Publication\Service;
 
 use Chamilo\Core\Repository\Publication\Manager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\Repository\Publication\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PublicationTargetProcessor
 {
     /**
-     * @var \Chamilo\Core\Repository\Publication\Service\PublicationTargetService
+     * @var \Chamilo\Core\Repository\Publication\Service\PublicationModifierInterface[]
      */
-    private $publicationTargetService;
+    protected array $publicationModifiers;
 
-    /**
-     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetService $publicationTargetService
-     */
+    private PublicationTargetService $publicationTargetService;
+
     public function __construct(PublicationTargetService $publicationTargetService)
     {
         $this->publicationTargetService = $publicationTargetService;
+        $this->publicationModifiers = [];
     }
 
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * @param string $modifierServiceIdentifier
-     *
-     * @return \Chamilo\Core\Repository\Publication\Service\PublicationModifierInterface
-     */
-    protected function getModifierService(ContainerInterface $container, string $modifierServiceIdentifier)
+    public function addPublicationModifier(PublicationModifierInterface $publicationModifier)
     {
-        return $container->get($modifierServiceIdentifier);
+        $this->publicationModifiers[get_class($publicationModifier)] = $publicationModifier;
+    }
+
+    public function getPublicationModifier(string $modifierServiceIdentifier): PublicationModifierInterface
+    {
+        return $this->publicationModifiers[$modifierServiceIdentifier];
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Publication\Service\PublicationTargetService
+     * @return \Chamilo\Core\Repository\Publication\Service\PublicationModifierInterface[]
      */
+    public function getPublicationModifiers(): array
+    {
+        return $this->publicationModifiers;
+    }
+
     public function getPublicationTargetService(): PublicationTargetService
     {
         return $this->publicationTargetService;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Publication\Service\PublicationTargetService $publicationTargetService
-     */
-    public function setPublicationTargetService(PublicationTargetService $publicationTargetService): void
-    {
-        $this->publicationTargetService = $publicationTargetService;
-    }
-
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * @param array $contentObjects
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject> $contentObjects
      * @param array $selectedTargetValues
      *
+     * @return \Chamilo\Core\Repository\Publication\Domain\PublicationResult[]
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function processSelectedTargetsFromValues(
-        ContainerInterface $container, array $contentObjects, array $selectedTargetValues
-    )
+    public function processSelectedTargetsFromValues(ArrayCollection $contentObjects, array $selectedTargetValues
+    ): array
     {
         $publicationResults = [];
 
@@ -69,7 +63,7 @@ class PublicationTargetProcessor
             $modifierServiceIdentifier =
                 $this->getPublicationTargetService()->getModifierServiceIdentifier($modifierServiceKey);
 
-            $modifierService = $this->getModifierService($container, $modifierServiceIdentifier);
+            $publicationModifier = $this->getPublicationModifier($modifierServiceIdentifier);
             $publicationOptions = $targetData[Manager::WIZARD_OPTION];
 
             foreach ($targetData[Manager::WIZARD_TARGET] as $publicationTargetKey => $selected)
@@ -78,12 +72,18 @@ class PublicationTargetProcessor
 
                 foreach ($contentObjects as $contentObject)
                 {
-                    $publicationResults[] =
-                        $modifierService->publishContentObject($contentObject, $publicationTarget, $publicationOptions);
+                    $publicationResults[] = $publicationModifier->publishContentObject(
+                        $contentObject, $publicationTarget, $publicationOptions
+                    );
                 }
             }
         }
 
         return $publicationResults;
+    }
+
+    public function setPublicationTargetService(PublicationTargetService $publicationTargetService): void
+    {
+        $this->publicationTargetService = $publicationTargetService;
     }
 }

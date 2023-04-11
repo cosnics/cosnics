@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\DependencyInjection;
 
 use Chamilo\Core\Repository\DependencyInjection\CompilerPass\IncludeParserCompilerPass;
 use Chamilo\Core\Repository\DependencyInjection\CompilerPass\PublicationAggregatorCompilerPass;
+use Chamilo\Core\Repository\DependencyInjection\CompilerPass\PublicationTargetProcessorCompilerPass;
 use Chamilo\Core\Repository\DependencyInjection\CompilerPass\WorkspaceExtensionCompilerPass;
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
@@ -50,6 +51,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     public function registerCompilerPasses(ContainerBuilder $container)
     {
         $container->addCompilerPass(new PublicationAggregatorCompilerPass());
+        $container->addCompilerPass(new PublicationTargetProcessorCompilerPass());
         $container->addCompilerPass(new WorkspaceExtensionCompilerPass());
         $container->addCompilerPass(new IncludeParserCompilerPass());
     }

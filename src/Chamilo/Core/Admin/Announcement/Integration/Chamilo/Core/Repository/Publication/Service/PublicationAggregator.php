@@ -54,7 +54,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         if ($user->is_platform_admin() && $contentObject instanceof SystemAnnouncement)
         {
             $publicationTargetKey = $this->getPublicationTargetService()->addPublicationTargetAndGetKey(
-                new PublicationTarget(PublicationModifier::class)
+                new PublicationTarget(PublicationModifier::class, $user->getId())
             );
             $modifierServiceKey =
                 $this->getPublicationTargetService()->addModifierServiceIdentifierAndGetKey(PublicationModifier::class);

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\Publication\Form;
 
 use Chamilo\Core\Repository\Manager;
@@ -16,15 +15,10 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
-use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-
-/**
- *
- * @package repository.lib.repository_manager.component.publication_wizard.pages
- */
 
 /**
  * Class for application settings page Displays a form where the user can enter the installation settings regarding the
@@ -34,33 +28,28 @@ class PublicationTargetForm extends FormValidator
 {
 
     /**
-     *
+     * @var \Chamilo\Libraries\Architecture\Application\Application
+     */
+    private $application;
+
+    private $applications;
+
+    /**
+     * @var int
+     */
+    private $contentObjectIdentifiers;
+
+    /**
      * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     private $content_objects;
 
     /**
-     *
-     * @var integer[]
-     */
-    private $contentObjectIdentifiers;
-
-    /**
-     *
      * @var string
      */
     private $type;
 
-    private $applications;
-
     /**
-     *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    private $application;
-
-    /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      *
      * @throws NoObjectSelectedException
@@ -83,7 +72,7 @@ class PublicationTargetForm extends FormValidator
 
         if (!is_array($this->contentObjectIdentifiers))
         {
-            $this->contentObjectIdentifiers = array($this->contentObjectIdentifiers);
+            $this->contentObjectIdentifiers = [$this->contentObjectIdentifiers];
         }
 
         $this->content_objects = [];
@@ -103,7 +92,7 @@ class PublicationTargetForm extends FormValidator
             }
 
             // Check the USE-right
-            if (!R$this->getWorkspaceRightsService()->canUseContentObject(
+            if (!$this->getWorkspaceRightsService()->canUseContentObject(
                 $this->getApplication()->get_user(), $content_object
             ))
             {
@@ -132,14 +121,9 @@ class PublicationTargetForm extends FormValidator
         $this->buildForm();
     }
 
-    protected function getWorkspaceRightsService(): RightsService
-    {
-        return $this->getService(RightsService::class);
-    }
-
     /**
-     *
      * @return string
+     * @throws \QuickformException
      */
     public function add_selected_content_objects()
     {
@@ -159,10 +143,10 @@ class PublicationTargetForm extends FormValidator
 
         foreach ($this->content_objects as $content_object)
         {
-            $table_data[] = array(
+            $table_data[] = [
                 $content_object->get_icon_image(IdentGlyph::SIZE_MINI),
                 $content_object->get_title()
-            );
+            ];
         }
 
         $glyph = new FontAwesomeGlyph('folder', [], Translation::get('Type'));
@@ -179,6 +163,9 @@ class PublicationTargetForm extends FormValidator
         $this->addElement('html', $table->render());
     }
 
+    /**
+     * @throws \QuickformException
+     */
     public function buildForm()
     {
         $this->_formBuilt = true;
@@ -205,8 +192,8 @@ class PublicationTargetForm extends FormValidator
         $this->addElement('html', '<br /><br />');
 
         $this->addElement(
-            'style_submit_button', 'publish', Translation::get('Publish', null, StringUtilities::LIBRARIES), null,
-            null, new FontAwesomeGlyph('ok-sign')
+            'style_submit_button', 'publish', Translation::get('Publish', null, StringUtilities::LIBRARIES), null, null,
+            new FontAwesomeGlyph('ok-sign')
         );
 
         $this->addElement(
@@ -229,5 +216,10 @@ class PublicationTargetForm extends FormValidator
         $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
         return $dependencyInjectionContainer->get(PublicationAggregator::class);
+    }
+
+    protected function getWorkspaceRightsService(): RightsService
+    {
+        return $this->getService(RightsService::class);
     }
 }

@@ -29,6 +29,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 abstract class Manager extends Application
 {
+    public const CONTEXT = __NAMESPACE__;
+
     public const ACTION_ADMIN = 'Admin';
     public const ACTION_ADMIN_COURSE_MANAGER = 'AdminCourseManager';
     public const ACTION_ADMIN_REQUEST_BROWSER = 'AdminRequestBrowser';
