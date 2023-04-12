@@ -50,6 +50,6 @@ class InternationalizationBundlesCacheService extends DoctrineFilesystemCacheSer
     {
         $internationalizationBundles = new InternationalizationBundles(PackageList::ROOT);
 
-        return $this->getCacheProvider()->save($identifier, $internationalizationBundles->getPackageNamespaces());
+        return $this->getCacheAdapter()->save($identifier, $internationalizationBundles->getPackageNamespaces());
     }
 }

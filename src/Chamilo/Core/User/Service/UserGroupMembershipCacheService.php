@@ -64,6 +64,6 @@ class UserGroupMembershipCacheService extends DoctrinePhpFileCacheService implem
             $identifier->get(self::PARAM_USER_IDENTIFIER), $identifier->get(self::PARAM_TYPE)
         );
 
-        return $this->getCacheProvider()->save((string) $identifier, $groupMemberships);
+        return $this->getCacheAdapter()->save((string) $identifier, $groupMemberships);
     }
 }

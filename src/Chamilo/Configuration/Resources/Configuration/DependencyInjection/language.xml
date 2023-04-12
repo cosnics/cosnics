@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults autowire="true"
@@ -10,6 +10,18 @@
         <service id="Chamilo\Configuration\Service\LanguageConsulter">
             <argument type="service"
                       id="Chamilo\Configuration\Service\LanguageCacheLoader"/>
+        </service>
+
+        <service id="Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheService">
+            <argument key="$cacheAdapter"
+                      type="service"
+                      id="Chamilo\Configuration\Service\RegistrationCacheLoader"/>
+        </service>
+
+        <service id="Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheAdapter"
+                 class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <argument key="$namespace">Chamilo\Configuration\Package\InternationalizationBundles</argument>
+            <argument key="$directory">%chamilo.configuration.storage%</argument>>
         </service>
 
         <service id="Chamilo\Configuration\Service\LanguageCacheLoader"

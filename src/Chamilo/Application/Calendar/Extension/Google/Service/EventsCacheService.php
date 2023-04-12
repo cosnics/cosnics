@@ -114,6 +114,6 @@ class EventsCacheService extends DoctrineFilesystemCacheService implements UserB
             $calendarIdentifier, $fromDate, $toDate
         );
 
-        return $this->getCacheProvider()->save($identifier, $result, $lifetimeInMinutes * 60);
+        return $this->getCacheAdapter()->save($identifier, $result, $lifetimeInMinutes * 60);
     }
 }

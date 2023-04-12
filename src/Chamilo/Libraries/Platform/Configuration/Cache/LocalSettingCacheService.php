@@ -115,6 +115,6 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
             $localSettings[$setting->get_context()][$setting->get_variable()] = $userSetting->get_value();
         }
 
-        return $this->getCacheProvider()->save($identifier, $localSettings);
+        return $this->getCacheAdapter()->save($identifier, $localSettings);
     }
 }

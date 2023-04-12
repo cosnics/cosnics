@@ -54,7 +54,7 @@ class TemplateRegistrationLoader extends DoctrineFilesystemCacheService implemen
     {
         $this->getTemplateRegistrationRepository()->clearTemplateRegistrationCache();
 
-        return $this->getCacheProvider()->delete($this->getIdentifier());
+        return $this->getCacheAdapter()->delete($this->getIdentifier());
     }
 
     /**
@@ -154,7 +154,7 @@ class TemplateRegistrationLoader extends DoctrineFilesystemCacheService implemen
             }
         }
 
-        return $this->getCacheProvider()->save($this->getIdentifier(), $groupedRegistrations);
+        return $this->getCacheAdapter()->save($this->getIdentifier(), $groupedRegistrations);
     }
 
     /**

@@ -103,6 +103,6 @@ class TypeSelectorCacheService extends DoctrineFilesystemCacheService implements
     {
         $typeSelector = $this->getTypeSelectorFactory()->buildTypeSelector();
 
-        return $this->getCacheProvider()->save((string) $identifier, $typeSelector);
+        return $this->getCacheAdapter()->save((string) $identifier, $typeSelector);
     }
 }

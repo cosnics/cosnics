@@ -75,6 +75,6 @@ class PackageBundlesCacheService extends DoctrineFilesystemCacheService
         $packageList->get_list();
         $packageList->get_list(true);
 
-        return $this->getCacheProvider()->save($identifier, $packageList);
+        return $this->getCacheAdapter()->save($identifier, $packageList);
     }
 }

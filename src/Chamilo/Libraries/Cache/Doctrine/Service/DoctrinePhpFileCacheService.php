@@ -18,7 +18,7 @@ abstract class DoctrinePhpFileCacheService extends DoctrineCacheService
      *
      * @return \Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache
      */
-    public function setupCacheProvider()
+    public function setupCacheAdapter()
     {
         return new PhpFileCache($this->getCachePath());
     }

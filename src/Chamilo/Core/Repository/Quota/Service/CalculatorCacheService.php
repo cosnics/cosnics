@@ -87,6 +87,6 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
             $totalQuota;
         }
 
-        return $this->getCacheProvider()->save($identifier, $totalQuota);
+        return $this->getCacheAdapter()->save($identifier, $totalQuota);
     }
 }

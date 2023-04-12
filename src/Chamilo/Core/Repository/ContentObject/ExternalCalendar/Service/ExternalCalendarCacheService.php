@@ -85,6 +85,6 @@ class ExternalCalendarCacheService extends DoctrineFilesystemCacheService implem
 
         $calendar = VObject\Reader::read($calendarData, VObject\Reader::OPTION_FORGIVING);
 
-        return $this->getCacheProvider()->save($identifier, $calendar, $lifetime);
+        return $this->getCacheAdapter()->save($identifier, $calendar, $lifetime);
     }
 }

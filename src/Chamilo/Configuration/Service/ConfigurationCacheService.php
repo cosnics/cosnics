@@ -48,7 +48,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
             $languages[$language[Language::PROPERTY_ISOCODE]] = $language[Language::PROPERTY_ORIGINAL_NAME];
         }
 
-        return $this->getCacheProvider()->save(self::IDENTIFIER_LANGUAGES, $languages);
+        return $this->getCacheAdapter()->save(self::IDENTIFIER_LANGUAGES, $languages);
     }
 
     /**
@@ -89,7 +89,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
             }
         }
 
-        return $this->getCacheProvider()->save(self::IDENTIFIER_REGISTRATIONS, $registrations);
+        return $this->getCacheAdapter()->save(self::IDENTIFIER_REGISTRATIONS, $registrations);
     }
 
     /**
@@ -112,7 +112,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
                 $setting[Setting::PROPERTY_VALUE];
         }
 
-        return $this->getCacheProvider()->save(self::IDENTIFIER_SETTINGS, $settings);
+        return $this->getCacheAdapter()->save(self::IDENTIFIER_SETTINGS, $settings);
     }
 
     /**

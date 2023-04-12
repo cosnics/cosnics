@@ -2,24 +2,20 @@
 namespace Chamilo\Libraries\Cache\Doctrine\Service;
 
 use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
-use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
- *
  * @package Chamilo\Libraries\Cache\Doctrine\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class DoctrineFilesystemCacheService extends DoctrineCacheService
 {
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
-     */
-    public function setupCacheProvider()
+    public function setupCacheAdapter(): AdapterInterface
     {
-        return new FilesystemCache($this->getCachePath());
+        return new FilesystemAdapter(md5($this->getCachePathNamespace()), 0, $this->getCachePath());
     }
 }

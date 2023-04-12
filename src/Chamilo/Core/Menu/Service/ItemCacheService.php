@@ -3,128 +3,41 @@ namespace Chamilo\Core\Menu\Service;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
-use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Doctrine\Common\Collections\ArrayCollection;
+use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
  * @package Chamilo\Core\Menu\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ItemCacheService
 {
     public const KEY_ITEMS = 'items';
     public const KEY_ITEM_TITLES = 'titles';
 
-    /**
-     * @var \Chamilo\Core\Menu\Service\ItemService
-     */
-    private $itemService;
+    private AdapterInterface $cacheAdapter;
 
-    /**
-     * @var \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
-     */
-    private $cacheProvider;
+    private ItemService $itemService;
 
-    /**
-     * @var \Chamilo\Libraries\Storage\DataClass\PropertyMapper
-     */
-    private $propertyMapper;
+    private PropertyMapper $propertyMapper;
 
-    /**
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     * @param \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache $cacheProvider
-     * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
-     */
     public function __construct(
-        ItemService $itemService, FilesystemCache $cacheProvider, PropertyMapper $propertyMapper
+        ItemService $itemService, AdapterInterface $cacheAdapter, PropertyMapper $propertyMapper
     )
     {
         $this->itemService = $itemService;
-        $this->cacheProvider = $cacheProvider;
+        $this->cacheAdapter = $cacheAdapter;
         $this->propertyMapper = $propertyMapper;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\DataClass\PropertyMapper
-     */
-    public function getPropertyMapper(): PropertyMapper
+    public function clear(): bool
     {
-        return $this->propertyMapper;
+        return $this->getCacheAdapter()->clear();
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
-     */
-    public function setPropertyMapper(PropertyMapper $propertyMapper): void
-    {
-        $this->propertyMapper = $propertyMapper;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
-     */
-    public function getCacheProvider(): FilesystemCache
-    {
-        return $this->cacheProvider;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache $cacheProvider
-     */
-    public function setCacheProvider(FilesystemCache $cacheProvider): void
-    {
-        $this->cacheProvider = $cacheProvider;
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Service\ItemService
-     */
-    public function getItemService(): ItemService
-    {
-        return $this->itemService;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     */
-    public function setItemService(ItemService $itemService): void
-    {
-        $this->itemService = $itemService;
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[][]
-     */
-    protected function findItemsGroupedByParentIdentifier()
-    {
-        return $this->getPropertyMapper()->groupDataClassByProperty(
-            $this->getItemService()->findItems(), Item::PROPERTY_PARENT
-        );
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[][]
-     */
-    protected function getItemsGroupedByParentIdentifier()
-    {
-        $cacheProvider = $this->getCacheProvider();
-
-        if (!$cacheProvider->contains(self::KEY_ITEMS))
-        {
-            $cacheProvider->save(self::KEY_ITEMS, $this->findItemsGroupedByParentIdentifier());
-        }
-
-        return $cacheProvider->fetch(self::KEY_ITEMS);
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
-     */
-    public function doesItemHaveChildren(Item $item)
+    public function doesItemHaveChildren(Item $item): bool
     {
         $groupedItems = $this->getItemsGroupedByParentIdentifier();
 
@@ -132,30 +45,16 @@ class ItemCacheService
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
-     */
-    /**
-     * @param $parentIdentifier
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function findItemsByParentIdentifier(int $parentIdentifier)
-    {
-        $groupedItems = $this->getItemsGroupedByParentIdentifier();
-        $parentKeyExists = array_key_exists($parentIdentifier, $groupedItems);
-        $parentIdentifierItems = $parentKeyExists ? $groupedItems[$parentIdentifier] : [];
-
-        return new ArrayCollection($parentIdentifierItems);
-    }
-
-    /**
      * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][][]
      */
-    protected function findItemTitlesGroupedByItemIdentifierAndIsocode()
+    protected function findItemTitlesGroupedByItemIdentifierAndIsocode(): array
     {
         $itemTitles = $this->getItemService()->findItemTitles();
         $groupedItemTitles = [];
 
+        /**
+         * @var \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][] $itemTitlesGroupedByIdentifiers
+         */
         $itemTitlesGroupedByIdentifiers =
             $this->getPropertyMapper()->groupDataClassByProperty($itemTitles, ItemTitle::PROPERTY_ITEM_ID);
 
@@ -177,26 +76,53 @@ class ItemCacheService
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][][]
+     * @param int $parentIdentifier
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      */
-    protected function getItemTitlesGroupedByItemIdentifierAndIsocode()
+    public function findItemsByParentIdentifier(int $parentIdentifier): ArrayCollection
     {
-        $cacheProvider = $this->getCacheProvider();
+        $groupedItems = $this->getItemsGroupedByParentIdentifier();
+        $parentKeyExists = array_key_exists($parentIdentifier, $groupedItems);
+        $parentIdentifierItems = $parentKeyExists ? $groupedItems[$parentIdentifier] : [];
 
-        if (!$cacheProvider->contains(self::KEY_ITEM_TITLES))
-        {
-            $cacheProvider->save(self::KEY_ITEM_TITLES, $this->findItemTitlesGroupedByItemIdentifierAndIsocode());
-        }
+        return new ArrayCollection($parentIdentifierItems);
+    }
 
-        return $cacheProvider->fetch(self::KEY_ITEM_TITLES);
+    /**
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[][]
+     */
+    protected function findItemsGroupedByParentIdentifier(): array
+    {
+        return $this->getPropertyMapper()->groupDataClassByProperty(
+            $this->getItemService()->findItems(), Item::PROPERTY_PARENT
+        );
+    }
+
+    public function getCacheAdapter(): AdapterInterface
+    {
+        return $this->cacheAdapter;
+    }
+
+    public function getItemService(): ItemService
+    {
+        return $this->itemService;
     }
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle|\Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][]
+     * @return string
      */
-    protected function getItemTitles(Item $item)
+    public function getItemTitleForCurrentLanguage(Item $item): string
+    {
+        return $this->getItemService()->determineItemTitleForCurrentLanguage($this->getItemTitles($item));
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
+     */
+    protected function getItemTitles(Item $item): array
     {
         $groupedItemTitles = $this->getItemTitlesGroupedByItemIdentifierAndIsocode();
 
@@ -206,21 +132,73 @@ class ItemCacheService
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return string
+     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][]
      */
-    public function getItemTitleForCurrentLanguage(Item $item)
+    protected function getItemTitlesGroupedByItemIdentifierAndIsocode(): array
     {
-        return $this->getItemService()->determineItemTitleForCurrentLanguage($this->getItemTitles($item));
+        $cacheAdapter = $this->getCacheAdapter();
+
+        try
+        {
+            $cacheItem = $cacheAdapter->getItem(self::KEY_ITEM_TITLES);
+
+            if (!$cacheItem->isHit())
+            {
+                $cacheItem->set($this->findItemTitlesGroupedByItemIdentifierAndIsocode());
+                $cacheAdapter->save($cacheItem);
+            }
+
+            return $cacheItem->get();
+        }
+        catch (InvalidArgumentException $e)
+        {
+            return [];
+        }
     }
 
     /**
-     * @return bool
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[][]
      */
-    public function clear()
+    protected function getItemsGroupedByParentIdentifier(): array
     {
-        return $this->getCacheProvider()->deleteAll();
+        $cacheAdapter = $this->getCacheAdapter();
+
+        try
+        {
+            $cacheItem = $cacheAdapter->getItem(self::KEY_ITEMS);
+
+            if (!$cacheItem->isHit())
+            {
+                $cacheItem->set($this->findItemsGroupedByParentIdentifier());
+                $cacheAdapter->save($cacheItem);
+            }
+
+            return $cacheItem->get();
+        }
+        catch (InvalidArgumentException $e)
+        {
+            return [];
+        }
+    }
+
+    public function getPropertyMapper(): PropertyMapper
+    {
+        return $this->propertyMapper;
+    }
+
+    public function setCacheAdapter(AdapterInterface $cacheAdapter): void
+    {
+        $this->cacheAdapter = $cacheAdapter;
+    }
+
+    public function setItemService(ItemService $itemService): void
+    {
+        $this->itemService = $itemService;
+    }
+
+    public function setPropertyMapper(PropertyMapper $propertyMapper): void
+    {
+        $this->propertyMapper = $propertyMapper;
     }
 
     public function warmUp()

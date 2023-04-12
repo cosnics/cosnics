@@ -1,124 +1,134 @@
 <?php
 namespace Chamilo\Libraries\Cache\Doctrine;
 
-use Chamilo\Libraries\Cache\IdentifiableCacheService;
+use Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Exception;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
- *
  * @package Chamilo\Libraries\Cache\Doctrine
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class DoctrineCacheService extends IdentifiableCacheService
+abstract class DoctrineCacheService implements CacheResetterInterface
 {
     /**
      * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
      */
-    protected $configurablePathBuilder;
+    protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    /**
-     *
-     * @var \Doctrine\Common\Cache\CacheProvider
-     */
-    private $cacheProvider;
+    private AdapterInterface $cacheAdapter;
 
-    /**
-     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     */
     public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::clear()
-     */
-    public function clear()
+    public function clear(): bool
     {
-        return $this->getCacheProvider()->flushAll();
+        return $this->getCacheAdapter()->clear();
+    }
+
+    public function clearAndWarmUp(): bool
+    {
+        if (!$this->clear())
+        {
+            return false;
+        }
+
+        return $this->warmUp();
+    }
+
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function clearAndWarmUpForIdentifier($identifier): bool
+    {
+        if (!$this->clearForIdentifier($identifier))
+        {
+            return false;
+        }
+
+        return $this->warmUpForIdentifier($identifier);
+    }
+
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function clearAndWarmUpForIdentifiers($identifiers): bool
+    {
+        foreach ($identifiers as $identifier)
+        {
+            if (!$this->clearAndWarmUpForIdentifier($identifier))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
      * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
      *
-     * @return bool
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function clearForIdentifier($identifier)
+    public function clearForIdentifier($identifier): bool
     {
-        return $this->getCacheProvider()->delete((string) $identifier);
+        return $this->getCacheAdapter()->deleteItem((string) $identifier);
     }
 
     /**
-     *
-     * @return string
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    protected function getCachePath()
+    public function clearForIdentifiers($identifiers): bool
+    {
+        foreach ($identifiers as $identifier)
+        {
+            if (!$this->clearForIdentifier($identifier))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function getCacheAdapter(): AdapterInterface
+    {
+        if (!isset($this->cacheAdapter))
+        {
+            $this->cacheAdapter = $this->setupCacheAdapter();
+        }
+
+        return $this->cacheAdapter;
+    }
+
+    protected function getCachePath(): string
     {
         return $this->getConfigurablePathBuilder()->getCachePath($this->getCachePathNamespace());
     }
 
-    /**
-     *
-     * @return string
-     */
-    abstract function getCachePathNamespace();
+    abstract public function getCachePathNamespace(): string;
 
-    /**
-     *
-     * @return \Doctrine\Common\Cache\CacheProvider
-     */
-    public function getCacheProvider()
-    {
-        if (!isset($this->cacheProvider))
-        {
-            $this->cacheProvider = $this->setupCacheProvider();
-        }
-
-        return $this->cacheProvider;
-    }
-
-    /**
-     *
-     * @param \Doctrine\Common\Cache\CacheProvider $cacheProvider
-     */
-    public function setCacheProvider($cacheProvider)
-    {
-        $this->cacheProvider = $cacheProvider;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
-     */
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
         return $this->configurablePathBuilder;
     }
 
     /**
-     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     *
-     * @return DoctrineCacheService
-     */
-    public function setConfigurablePathBuilder(ConfigurablePathBuilder $configurablePathBuilder): DoctrineCacheService
-    {
-        $this->configurablePathBuilder = $configurablePathBuilder;
-
-        return $this;
-    }
-
-    /**
      * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
      *
-     * @return false|mixed
+     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Exception
      */
     public function getForIdentifier($identifier)
     {
-        if (!$this->getCacheProvider()->contains((string) $identifier))
+        $cacheItem = $this->getCacheAdapter()->getItem((string) $identifier);
+
+        if (!$cacheItem->isHit())
         {
             if (!$this->warmUpForIdentifier($identifier))
             {
@@ -126,12 +136,43 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
             }
         }
 
-        return $this->getCacheProvider()->fetch((string) $identifier);
+        return $this->getCacheAdapter()->getItem((string) $identifier)->get();
     }
 
     /**
-     *
-     * @return \Doctrine\Common\Cache\CacheProvider
+     * @return \Chamilo\Libraries\Cache\ParameterBag[]|string[]
      */
-    abstract function setupCacheProvider();
+    abstract public function getIdentifiers();
+
+    abstract public function setupCacheAdapter(): AdapterInterface;
+
+    public function warmUp(): bool
+    {
+        return $this->warmUpForIdentifiers($this->getIdentifiers());
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
+     *
+     * @return bool
+     */
+    abstract public function warmUpForIdentifier($identifier): bool;
+
+    /**
+     * @param \Chamilo\Libraries\Cache\ParameterBag[]|string[] $identifiers
+     *
+     * @return bool
+     */
+    public function warmUpForIdentifiers($identifiers): bool
+    {
+        foreach ($identifiers as $identifier)
+        {
+            if (!$this->warmUpForIdentifier($identifier))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

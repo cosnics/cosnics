@@ -8,18 +8,19 @@ use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService;
 use Exception;
+use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class CalendarEventDataProvider extends ExternalCalendar
 {
@@ -27,27 +28,22 @@ class CalendarEventDataProvider extends ExternalCalendar
 
     use DependencyInjectionContainerTrait;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
-     */
-    private $filesystemCache;
+    private FilesystemAdapter $filesystemAdapter;
 
+    /**
+     * @throws \Exception
+     */
     public function __construct()
     {
         $this->initializeContainer();
     }
 
-    /**
-     *
-     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
-     */
-    protected function getAvailabilityService()
+    protected function getAvailabilityService(): AvailabilityService
     {
         return $this->getService(AvailabilityService::class);
     }
 
-    protected function getCalendarByIdentifier($calendarIdentifier, User $user)
+    protected function getCalendarByIdentifier(string $calendarIdentifier, User $user): AvailableCalendar
     {
         $availableCalendar = new AvailableCalendar();
 
@@ -68,14 +64,10 @@ class CalendarEventDataProvider extends ExternalCalendar
     }
 
     /**
-     *
-     * @param string $calendarIdentifier
-     * @param int $fromDate
-     * @param int $toDate
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
      */
-    protected function getCalendarEvents($calendarIdentifier, User $user, $fromDate, $toDate)
+    protected function getCalendarEvents(string $calendarIdentifier, User $user, int $fromDate, int $toDate): array
     {
         $office365CalenderEvents = $this->getCalendarService()->findEventsForCalendarIdentifierAndBetweenDates(
             $calendarIdentifier, $user, $fromDate, $toDate
@@ -93,15 +85,7 @@ class CalendarEventDataProvider extends ExternalCalendar
         return $events;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
-     *
-     * @return string[]
-     */
-    protected function getCalendarIdentifiers(
-        CalendarRendererProvider $calendarRendererProvider
-    )
+    protected function getCalendarIdentifiers(CalendarRendererProvider $calendarRendererProvider): array
     {
         $availabilities = $this->getAvailabilityService()->getAvailabilitiesForUserAndCalendarType(
             $calendarRendererProvider->getDataUser(), self::CALENDAR_EVENT_DATA_PROVIDER_TYPE
@@ -132,87 +116,79 @@ class CalendarEventDataProvider extends ExternalCalendar
         return $calendarIdentifiers;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService
-     */
-    protected function getCalendarService()
+    protected function getCalendarService(): CalendarService
     {
         return $this->getService(CalendarService::class);
     }
 
     /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User|null $user
-     *
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]|false|mixed
-     * @see \Chamilo\Application\Calendar\Architecture\CalendarInterface::getCalendars()
-     *
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      */
-    public function getCalendars(User $user = null)
+    public function getCalendars(?User $user = null): array
     {
-        $identifier = [__METHOD__, $user->getId()];
-        $identifierString = md5(serialize($identifier));
+        $filesystemAdapter = $this->getFilesystemAdapter();
 
-        $filesystemCache = $this->getFilesystemCache();
-
-        if (!$filesystemCache->contains($identifierString))
+        try
         {
-            try
-            {
-                $availableCalendars = [];
-                $ownedCalendars = $this->getCalendarService()->listOwnedCalendars($user);
+            $identifier = [__METHOD__, $user->getId()];
+            $identifierString = md5(serialize($identifier));
 
-                foreach ($ownedCalendars as $calendarItem)
+            $cacheItem = $filesystemAdapter->getItem($identifierString);
+
+            if (!$cacheItem->isHit())
+            {
+                try
                 {
-                    $availableCalendar = new AvailableCalendar();
+                    $availableCalendars = [];
+                    $ownedCalendars = $this->getCalendarService()->listOwnedCalendars($user);
 
-                    $availableCalendar->setType(self::CALENDAR_EVENT_DATA_PROVIDER_TYPE);
-                    $availableCalendar->setIdentifier($calendarItem->getId());
-                    $availableCalendar->setName($calendarItem->getName());
+                    foreach ($ownedCalendars as $calendarItem)
+                    {
+                        $availableCalendar = new AvailableCalendar();
 
-                    $availableCalendars[] = $availableCalendar;
+                        $availableCalendar->setType(self::CALENDAR_EVENT_DATA_PROVIDER_TYPE);
+                        $availableCalendar->setIdentifier($calendarItem->getId());
+                        $availableCalendar->setName($calendarItem->getName());
+
+                        $availableCalendars[] = $availableCalendar;
+                    }
                 }
-            }
-            catch (Exception $exception)
-            {
-                $availableCalendars = [];
+                catch (Exception $exception)
+                {
+                    $availableCalendars = [];
+                }
+
+                $cacheItem->set($availableCalendars);
+                $filesystemAdapter->save($cacheItem);
             }
 
-            $filesystemCache->save($identifierString, $availableCalendars, $this->getRefreshExternalInSeconds());
+            return $cacheItem->get();
         }
-
-        return $filesystemCache->fetch($identifierString);
+        catch (InvalidArgumentException $e)
+        {
+            return [];
+        }
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
-     */
-    protected function getConfigurablePathBuilder()
+    protected function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
         return $this->getService(ConfigurablePathBuilder::class);
     }
 
-    /**
-     *
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    protected function getConfigurationConsulter()
+    protected function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->getService(ConfigurationConsulter::class);
     }
 
     /**
-     *
-     * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate)
+    public function getEvents(CalendarRendererProvider $calendarRendererProvider, int $fromDate, int $toDate): array
     {
+        $filesystemAdapter = $this->getFilesystemAdapter();
+
         try
         {
-            $events = [];
-
             $calendarIdentifiers = $this->getCalendarIdentifiers($calendarRendererProvider);
 
             $identifier = [
@@ -223,12 +199,12 @@ class CalendarEventDataProvider extends ExternalCalendar
                 $toDate
             ];
 
-            $identifierString = md5(serialize($identifier));
+            $cacheItem = $filesystemAdapter->getItem($identifier);
 
-            $filesystemCache = $this->getFilesystemCache();
-
-            if (!$filesystemCache->contains($identifierString))
+            if (!$cacheItem->isHit())
             {
+                $events = [];
+
                 foreach ($calendarIdentifiers as $calendarIdentifier)
                 {
                     $events = array_merge(
@@ -238,35 +214,32 @@ class CalendarEventDataProvider extends ExternalCalendar
                     );
                 }
 
-                $filesystemCache->save($identifierString, $events, $this->getRefreshExternalInSeconds());
+                $cacheItem->set($events);
+                $filesystemAdapter->save($cacheItem);
             }
 
-            return $filesystemCache->fetch($identifierString);
+            return $cacheItem->get();
         }
-        catch (Exception $exception)
+        catch (InvalidArgumentException|AzureUserNotExistsException $e)
         {
             return [];
         }
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
-     */
-    protected function getFilesystemCache()
+    protected function getFilesystemAdapter(): FilesystemAdapter
     {
-        if (!isset($this->filesystemCache))
+        if (!isset($this->filesystemAdapter))
         {
-            $this->filesystemCache = new FilesystemCache(
-                $this->getConfigurablePathBuilder()->getCachePath('Chamilo\Application\Calendar\Extension\Office365')
+            $this->filesystemAdapter = new FilesystemAdapter(
+                md5('Chamilo\Application\Calendar\Extension\Office365'), $this->getRefreshExternalInSeconds(),
+                $this->getConfigurablePathBuilder()->getConfiguredCachePath()
             );
         }
 
-        return $this->filesystemCache;
+        return $this->filesystemAdapter;
     }
 
     /**
-     *
      * @return int
      */
     protected function getRefreshExternalInSeconds()

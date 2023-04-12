@@ -3,132 +3,84 @@ namespace Chamilo\Core\Menu\Service;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
+use Exception;
+use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
  * @package Chamilo\Core\Menu\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RightsCacheService
 {
 
-    /**
-     * @var \Chamilo\Core\Menu\Service\RightsService
-     */
-    private $rightsService;
+    private AdapterInterface $cacheAdapter;
 
-    /**
-     * @var \Chamilo\Core\Menu\Service\ItemService
-     */
-    private $itemService;
+    private ItemService $itemService;
 
-    /**
-     * @var \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
-     */
-    private $cacheProvider;
+    private RightsService $rightsService;
 
-    /**
-     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     * @param \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache $cacheProvider
-     */
-    public function __construct(RightsService $rightsService, ItemService $itemService, FilesystemCache $cacheProvider)
+    public function __construct(RightsService $rightsService, ItemService $itemService, AdapterInterface $cacheAdapter)
     {
         $this->rightsService = $rightsService;
         $this->itemService = $itemService;
-        $this->cacheProvider = $cacheProvider;
+        $this->cacheAdapter = $cacheAdapter;
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    public function canUserViewItem(User $user, Item $item)
+    public function canUserViewItem(User $user, Item $item): bool
     {
         if (!$item->isIdentified())
         {
             return true;
         }
 
-        $cacheProvider = $this->getCacheProvider();
+        $cacheAdapter = $this->getCacheAdapter();
 
-        if (!$cacheProvider->contains($user->getId()))
+        try
         {
-            $cacheProvider->save($user->getId(), $this->getUserRightsForAllItems($user));
+            $cacheItem = $cacheAdapter->getItem($user->getId());
+
+            if (!$cacheItem->isHit())
+            {
+                $cacheItem->set($this->getUserRightsForAllItems($user));
+                $cacheAdapter->save($cacheItem);
+            }
+
+            $userRights = $cacheItem->get();
+
+            return $userRights[$item->getId()];
         }
-
-        $userRights = $cacheProvider->fetch($user->getId());
-
-        return $userRights[$item->getId()];
+        catch (Exception|InvalidArgumentException $exception)
+        {
+            return false;
+        }
     }
 
-    /**
-     * @return bool
-     */
-    public function clear()
+    public function clear(): bool
     {
-        return $this->getCacheProvider()->deleteAll();
+        return $this->getCacheAdapter()->clear();
     }
 
-    /**
-     * @return \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
-     */
-    public function getCacheProvider(): FilesystemCache
+    public function getCacheAdapter(): AdapterInterface
     {
-        return $this->cacheProvider;
+        return $this->cacheAdapter;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache $cacheProvider
-     */
-    public function setCacheProvider(FilesystemCache $cacheProvider): void
-    {
-        $this->cacheProvider = $cacheProvider;
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Service\ItemService
-     */
     public function getItemService(): ItemService
     {
         return $this->itemService;
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     */
-    public function setItemService(ItemService $itemService): void
-    {
-        $this->itemService = $itemService;
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Service\RightsService
-     */
     public function getRightsService(): RightsService
     {
         return $this->rightsService;
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
-     */
-    public function setRightsService(RightsService $rightsService): void
-    {
-        $this->rightsService = $rightsService;
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
+     * @return bool[]
      * @throws \Exception
      */
-    protected function getUserRightsForAllItems(User $user)
+    protected function getUserRightsForAllItems(User $user): array
     {
         $items = $this->getItemService()->findItems();
         $itemRights = [];
@@ -139,5 +91,20 @@ class RightsCacheService
         }
 
         return $itemRights;
+    }
+
+    public function setCacheAdapter(AdapterInterface $cacheAdapter): void
+    {
+        $this->cacheAdapter = $cacheAdapter;
+    }
+
+    public function setItemService(ItemService $itemService): void
+    {
+        $this->itemService = $itemService;
+    }
+
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
     }
 }

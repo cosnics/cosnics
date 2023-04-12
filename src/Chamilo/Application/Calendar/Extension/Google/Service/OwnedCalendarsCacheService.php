@@ -91,7 +91,7 @@ class OwnedCalendarsCacheService extends DoctrineFilesystemCacheService implemen
     {
         $lifetimeInMinutes = LocalSetting::getInstance()->get('refresh_external', 'Chamilo\Libraries\Calendar');
 
-        return $this->getCacheProvider()->save(
+        return $this->getCacheAdapter()->save(
             $identifier, $this->getCalendarRepository()->findOwnedCalendars(), $lifetimeInMinutes * 60
         );
     }

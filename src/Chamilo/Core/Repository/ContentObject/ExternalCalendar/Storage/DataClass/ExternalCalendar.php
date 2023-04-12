@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
-use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
@@ -17,13 +16,15 @@ use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use DateTime;
 use Exception;
+use Psr\Cache\InvalidArgumentException;
+use Sabre\VObject\InvalidDataException;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ExternalCalendar extends ContentObject implements Versionable, FileStorageSupport
 {
@@ -51,7 +52,6 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
     public const REPEAT_TYPE_YEAR = 'YEARLY';
 
     /**
-     *
      * @var \Sabre\VObject\Component\VCalendar
      */
     private $calendar;
@@ -165,14 +165,33 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(
+        return [
             self::PROPERTY_FILENAME,
             self::PROPERTY_FILESIZE,
             self::PROPERTY_PATH,
             self::PROPERTY_HASH,
             self::PROPERTY_PATH_TYPE,
             self::PROPERTY_STORAGE_PATH
+        ];
+    }
+
+    protected function getConfigurablePathBuilder(): ConfigurablePathBuilder
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            ConfigurablePathBuilder::class
         );
+    }
+
+    protected function getFilesystemAdapter(): FilesystemAdapter
+    {
+        if (!isset($this->filesystemAdapter))
+        {
+            $this->filesystemAdapter = new FilesystemAdapter(
+                md5(__NAMESPACE__ . '\Occurences'), 3600, $this->getConfigurablePathBuilder()->getConfiguredCachePath()
+            );
+        }
+
+        return $this->filesystemAdapter;
     }
 
     /**
@@ -189,7 +208,6 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
     }
 
     /**
-     *
      * @return \Sabre\VObject\Component\VCalendar
      */
     public function get_calendar()
@@ -261,18 +279,15 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
 
     public function get_occurences($start_timestamp, $end_timestamp)
     {
-        $occurences = [];
+        $filesystemAdapter = $this->getFilesystemAdapter();
 
         try
         {
-            $cache = new FilesystemCache(Path::getInstance()->getCachePath(__NAMESPACE__ . '\Occurences'));
-            $cacheId = md5(serialize(array($this->get_path(), $start_timestamp, $end_timestamp)));
+            $cacheId = md5(serialize([$this->get_path(), $start_timestamp, $end_timestamp]));
 
-            if ($cache->contains($cacheId))
-            {
-                $occurences = $cache->fetch($cacheId);
-            }
-            else
+            $cacheItem = $filesystemAdapter->getItem($cacheId);
+
+            if (!$cacheItem->isHit())
             {
                 $calendar = $this->get_calendar();
 
@@ -285,14 +300,16 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
                 $calendar->expand($start_date_time, $end_date_time);
                 $occurences = $calendar->VEVENT;
 
-                $cache->save($cacheId, $occurences, 3600);
+                $cacheItem->set($occurences);
+                $filesystemAdapter->save($cacheItem);
             }
-        }
-        catch (Exception $exception)
-        {
-        }
 
-        return $occurences;
+            return $cacheItem->get();
+        }
+        catch (InvalidArgumentException|InvalidDataException $e)
+        {
+            return [];
+        }
     }
 
     public function get_path()
@@ -315,23 +332,9 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
         return $this->save_as_new_version;
     }
 
-    /**
-     * Set a value indicating wether the File must be saved as a new version if its save() or update() method is called
-     *
-     * @return void
-     * @var $save_as_new_version bool
-     */
-    public function set_save_as_new_version($save_as_new_version)
-    {
-        if (is_bool($save_as_new_version))
-        {
-            $this->save_as_new_version = $save_as_new_version;
-        }
-    }
-
     public static function get_searchable_property_names()
     {
-        return array(self::PROPERTY_PATH, self::PROPERTY_FILENAME);
+        return [self::PROPERTY_PATH, self::PROPERTY_FILENAME];
     }
 
     public function get_storage_path()
@@ -348,26 +351,6 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
     public function get_temporary_file_path()
     {
         return $this->temporary_file_path;
-    }
-
-    /**
-     * Set temporary file path.
-     * A path to a file that has to be moved and renamed when the File is saved
-     *
-     * @return void
-     * @var $temporary_file_path string
-     */
-    public function set_temporary_file_path($temporary_file_path)
-    {
-        if (StringUtilities::getInstance()->hasValue($temporary_file_path))
-        {
-            if (StringUtilities::getInstance()->hasValue($this->get_in_memory_file()))
-            {
-                throw new Exception('A File can not have a temporary file path and in memory content');
-            }
-
-            $this->temporary_file_path = $temporary_file_path;
-        }
     }
 
     public function has_file_to_save()
@@ -462,7 +445,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
                 {
                     Filesystem::chmod(
                         $path_to_save,
-                        Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'permissions_new_files'))
+                        Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'permissions_new_files'])
                     );
 
                     $file_bytes = Filesystem::get_disk_space($path_to_save);
@@ -544,8 +527,42 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
         return $this->setAdditionalProperty(self::PROPERTY_PATH_TYPE, $path_type);
     }
 
+    /**
+     * Set a value indicating wether the File must be saved as a new version if its save() or update() method is called
+     *
+     * @return void
+     * @var $save_as_new_version bool
+     */
+    public function set_save_as_new_version($save_as_new_version)
+    {
+        if (is_bool($save_as_new_version))
+        {
+            $this->save_as_new_version = $save_as_new_version;
+        }
+    }
+
     public function set_storage_path($storage_path)
     {
         return $this->setAdditionalProperty(self::PROPERTY_STORAGE_PATH, $storage_path);
+    }
+
+    /**
+     * Set temporary file path.
+     * A path to a file that has to be moved and renamed when the File is saved
+     *
+     * @return void
+     * @var $temporary_file_path string
+     */
+    public function set_temporary_file_path($temporary_file_path)
+    {
+        if (StringUtilities::getInstance()->hasValue($temporary_file_path))
+        {
+            if (StringUtilities::getInstance()->hasValue($this->get_in_memory_file()))
+            {
+                throw new Exception('A File can not have a temporary file path and in memory content');
+            }
+
+            $this->temporary_file_path = $temporary_file_path;
+        }
     }
 }

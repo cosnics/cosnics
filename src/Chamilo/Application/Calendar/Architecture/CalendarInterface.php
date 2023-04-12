@@ -5,31 +5,25 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Architecture
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 interface CalendarInterface
 {
 
     /**
-     * Gets the events published in the implementing context
+     * Get the individual calendars in the implementing context
      *
-     * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
-     * @param integer $fromDate
-     * @param integer $toDate
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     */
+    public function getCalendars(?User $user = null): array;
+
+    /**
+     * Gets the events published in the implementing context
      *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate);
-
-    /**
-     * Get the individual calendars in the implementing context
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
-     */
-    public function getCalendars(User $user = null);
+    public function getEvents(CalendarRendererProvider $calendarRendererProvider, int $fromDate, int $toDate): array;
 }
