@@ -7,15 +7,16 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheService">
+        <service id="Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\ExternalCalendarCacheService">
             <argument key="$cacheAdapter"
                       type="service"
-                      id="Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheAdapter"/>
+                      id="Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\ExternalCalendarCacheAdapter"/>
         </service>
 
-        <service id="Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheAdapter"
+        <service id="Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\ExternalCalendarCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
-            <argument key="$namespace">Chamilo\Application\Calendar\Extension\Google\OwnedCalendars</argument>
+            <argument key="$namespace">Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\Ical</argument>
+            <argument key="$defaultLifetime">3600</argument>
             <argument key="$directory"
                       type="expression">parameter('chamilo.configuration.storage')['cache_path']</argument>
         </service>

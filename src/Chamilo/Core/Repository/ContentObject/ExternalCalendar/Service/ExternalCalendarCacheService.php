@@ -3,74 +3,47 @@ namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service;
 
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
-use Chamilo\Libraries\Cache\ParameterBag;
 use Sabre\VObject;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ExternalCalendarCacheService extends DoctrineFilesystemCacheService implements UserBasedCacheInterface
 {
-    const PARAM_LIFETIME = 'lifetime';
-    const PARAM_PATH = 'path';
+    public const PARAM_LIFETIME = 'lifetime';
+    public const PARAM_PATH = 'path';
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCachePathNamespace()
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getCachePathNamespace()
+    public function getCalendarForPath(string $path): VObject\Component\VCalendar
     {
-        return __NAMESPACE__ . '\Ical';
+        return $this->getForIdentifier($path);
     }
 
     /**
-     *
-     * @param string $path
-     * @param integer $lifetime
-     *
-     * @return \Sabre\VObject\Component\VCalendar
+     * @return string[]
      */
-    public function getCalendarForPath($path, $lifetime = 3600)
-    {
-        $cacheIdentifier = md5(serialize($path));
-        $parameterBag = new ParameterBag(
-            array(
-                ParameterBag::PARAM_IDENTIFIER => $cacheIdentifier,
-                self::PARAM_PATH => $path,
-                self::PARAM_LIFETIME => $lifetime
-            )
-        );
-
-        return $this->getForIdentifier($parameterBag);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
-     */
-    public function getIdentifiers()
+    public function getIdentifiers(): array
     {
         return [];
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function warmUpForIdentifier($identifier)
+    public function warmUpForIdentifier($identifier): bool
     {
-        $path = $identifier->get(self::PARAM_PATH);
-        $lifetime = $identifier->get(self::PARAM_LIFETIME);
+        $calendarData = '';
 
-        if (!file_exists($path))
+        if (!file_exists($identifier))
         {
-            if ($f = @fopen($path, 'r'))
+            if ($f = fopen($identifier, 'r'))
             {
-                $calendarData = '';
+
                 while (!feof($f))
                 {
                     $calendarData .= fgets($f, 4096);
@@ -80,11 +53,14 @@ class ExternalCalendarCacheService extends DoctrineFilesystemCacheService implem
         }
         else
         {
-            $calendarData = file_get_contents($path);
+            $calendarData = file_get_contents($identifier);
         }
 
         $calendar = VObject\Reader::read($calendarData, VObject\Reader::OPTION_FORGIVING);
 
-        return $this->getCacheAdapter()->save($identifier, $calendar, $lifetime);
+        $cacheItem = $this->getCacheAdapter()->getItem($identifier);
+        $cacheItem->set($calendar);
+
+        return $this->getCacheAdapter()->save($cacheItem);
     }
 }

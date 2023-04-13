@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Calendar\Extension\Google\DependencyInjection;
+namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\DependencyInjection;
 
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
@@ -15,11 +15,11 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getAlias()
     {
-        return 'chamilo.application.calendar.extension.google';
+        return 'chamilo.core.repository.content_object.external_calendar';
     }
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Application\Calendar\Extension\Google' => ['services.xml']];
+        return ['Chamilo\Core\Repository\ContentObject\ExternalCalendar' => ['services.xml']];
     }
 }

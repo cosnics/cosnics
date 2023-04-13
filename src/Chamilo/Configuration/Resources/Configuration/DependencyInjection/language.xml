@@ -22,8 +22,7 @@
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
             <argument key="$namespace">Chamilo\Configuration\Package\InternationalizationBundles</argument>
             <argument key="$directory"
-                      type="expression">parameter('chamilo.configuration.storage')['cache_path']
-            </argument>
+                      type="expression">parameter('chamilo.configuration.storage')['cache_path']</argument>
         </service>
 
         <service id="Chamilo\Configuration\Service\LanguageCacheLoader"
