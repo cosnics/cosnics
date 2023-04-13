@@ -21,8 +21,9 @@ abstract class DoctrineCacheService implements CacheResetterInterface
 
     private AdapterInterface $cacheAdapter;
 
-    public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
+    public function __construct(AdapterInterface $cacheAdapter, ConfigurablePathBuilder $configurablePathBuilder)
     {
+        $this->cacheAdapter = $cacheAdapter;
         $this->configurablePathBuilder = $configurablePathBuilder;
     }
 
@@ -98,20 +99,8 @@ abstract class DoctrineCacheService implements CacheResetterInterface
 
     public function getCacheAdapter(): AdapterInterface
     {
-        if (!isset($this->cacheAdapter))
-        {
-            $this->cacheAdapter = $this->setupCacheAdapter();
-        }
-
         return $this->cacheAdapter;
     }
-
-    protected function getCachePath(): string
-    {
-        return $this->getConfigurablePathBuilder()->getCachePath($this->getCachePathNamespace());
-    }
-
-    abstract public function getCachePathNamespace(): string;
 
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
@@ -140,9 +129,9 @@ abstract class DoctrineCacheService implements CacheResetterInterface
     }
 
     /**
-     * @return \Chamilo\Libraries\Cache\ParameterBag[]|string[]
+     * @return string[]
      */
-    abstract public function getIdentifiers();
+    abstract public function getIdentifiers(): array;
 
     abstract public function setupCacheAdapter(): AdapterInterface;
 

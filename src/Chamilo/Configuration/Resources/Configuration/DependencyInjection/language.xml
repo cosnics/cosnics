@@ -15,13 +15,15 @@
         <service id="Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheService">
             <argument key="$cacheAdapter"
                       type="service"
-                      id="Chamilo\Configuration\Service\RegistrationCacheLoader"/>
+                      id="Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheAdapter"/>
         </service>
 
         <service id="Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
             <argument key="$namespace">Chamilo\Configuration\Package\InternationalizationBundles</argument>
-            <argument key="$directory">%chamilo.configuration.storage%</argument>>
+            <argument key="$directory"
+                      type="expression">parameter('chamilo.configuration.storage')['cache_path']
+            </argument>
         </service>
 
         <service id="Chamilo\Configuration\Service\LanguageCacheLoader"

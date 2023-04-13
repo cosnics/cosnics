@@ -2,80 +2,58 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Service;
 
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
+use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Extension\Google\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class OwnedCalendarsCacheService extends DoctrineFilesystemCacheService implements UserBasedCacheInterface
 {
 
-    /**
-     *
-     * @var \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
-     */
-    private $calendarRepository;
+    protected User $user;
 
-    /**
-     *
-     * @param \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
-     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     */
-    public function __construct(CalendarRepository $calendarRepository, ConfigurablePathBuilder $configurablePathBuilder
+    protected UserSettingService $userSettingService;
+
+    private CalendarRepository $calendarRepository;
+
+    public function __construct(
+        AdapterInterface $cacheAdapter, ConfigurablePathBuilder $configurablePathBuilder,
+        CalendarRepository $calendarRepository, User $user, UserSettingService $userSettingService
     )
     {
-        parent::__construct($configurablePathBuilder);
+        parent::__construct($cacheAdapter, $configurablePathBuilder);
+
         $this->calendarRepository = $calendarRepository;
+        $this->user = $user;
+        $this->userSettingService = $userSettingService;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCachePathNamespace()
-     */
-    public function getCachePathNamespace()
-    {
-        return 'Chamilo\Application\Calendar\Extension\Google\OwnedCalendars';
-    }
-
-    /**
-     *
-     * @return \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
-     */
-    public function getCalendarRepository()
+    public function getCalendarRepository(): CalendarRepository
     {
         return $this->calendarRepository;
     }
 
     /**
-     *
-     * @param \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
+     * @return string[]
      */
-    public function setCalendarRepository($calendarRepository)
-    {
-        $this->calendarRepository = $calendarRepository;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
-     */
-    public function getIdentifiers()
+    public function getIdentifiers(): array
     {
         return [];
     }
 
     /**
-     *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getOwnedCalendars()
+    public function getOwnedCalendars(): array
     {
         $calendarRepository = $this->getCalendarRepository();
         $identifier = $calendarRepository->getCacheIdentifier($calendarRepository->getAccessToken(), __METHOD__);
@@ -83,16 +61,29 @@ class OwnedCalendarsCacheService extends DoctrineFilesystemCacheService implemen
         return $this->getForIdentifier($identifier);
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
-     */
-    public function warmUpForIdentifier($identifier)
+    public function getUser(): User
     {
-        $lifetimeInMinutes = LocalSetting::getInstance()->get('refresh_external', 'Chamilo\Libraries\Calendar');
+        return $this->user;
+    }
 
-        return $this->getCacheAdapter()->save(
-            $identifier, $this->getCalendarRepository()->findOwnedCalendars(), $lifetimeInMinutes * 60
+    public function getUserSettingService(): UserSettingService
+    {
+        return $this->userSettingService;
+    }
+
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function warmUpForIdentifier($identifier): bool
+    {
+        $lifetimeInMinutes = $this->getUserSettingService()->getSettingForUser(
+            $this->getUser(), 'Chamilo\Libraries\Calendar', 'refresh_external'
         );
+
+        $cacheItem = $this->getCacheAdapter()->getItem($identifier);
+        $cacheItem->set($this->getCalendarRepository()->findOwnedCalendars());
+        $cacheItem->expiresAfter($lifetimeInMinutes * 60);
+
+        return $this->getCacheAdapter()->save($cacheItem);
     }
 }
