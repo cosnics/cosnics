@@ -7,7 +7,9 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Libraries\Translation\TranslatorFactory"/>
+        <service id="Chamilo\Libraries\Translation\TranslatorFactory">
+            <argument key="$securityKey">%chamilo.configuration.general.security_key%</argument>
+        </service>
 
     </services>
 </container>

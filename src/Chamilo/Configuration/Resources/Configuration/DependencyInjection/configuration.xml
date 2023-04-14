@@ -13,8 +13,19 @@
 
         <service id="Chamilo\Configuration\Service\ConfigurationCacheLoader"
                  class="Chamilo\Configuration\Service\DataCacheLoader">
-            <argument type="service"
+            <argument key="$cacheableDataLoader"
+                      type="service"
                       id="Chamilo\Configuration\Service\ConfigurationLoader"/>
+            <argument key="$cacheAdapter"
+                      type="service"
+                      id="Chamilo\Configuration\Service\ConfigurationCacheAdapter"/>
+        </service>
+
+        <service id="Chamilo\Configuration\Service\ConfigurationCacheAdapter"
+                 class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
+            <argument key="$namespace">Chamilo\Configuration</argument>
+            <argument key="$directory"
+                      type="expression">parameter('chamilo.configuration.storage')['cache_path']</argument>
         </service>
 
         <service id="Chamilo\Configuration\Service\ConfigurationLoader"
@@ -38,6 +49,21 @@
 
         <service id="Chamilo\Configuration\Package\Service\PackageFactory"/>
         <service id="Chamilo\Configuration\Package\PlatformPackageBundles"/>
+
+        <service id="Chamilo\Configuration\Package\Service\PackageBundlesCacheService">
+            <argument key="$cacheAdapter"
+                      type="service"
+                      id="Chamilo\Configuration\Package\Service\PackageBundlesCacheAdapter"/>
+        </service>
+
+        <service id="Chamilo\Configuration\Package\Service\PackageBundlesCacheAdapter"
+                 class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <argument key="$namespace">Chamilo\Configuration\Package\PlatformPackageBundles</argument>
+            <argument key="$directory"
+                      type="expression">parameter('chamilo.configuration.storage')['cache_path']
+            </argument>
+        </service>
+
         <service id="Chamilo\Configuration\Service\PackageContextSequencer"/>
     </services>
 </container>

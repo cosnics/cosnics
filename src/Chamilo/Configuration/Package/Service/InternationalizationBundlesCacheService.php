@@ -3,7 +3,7 @@ namespace Chamilo\Configuration\Package\Service;
 
 use Chamilo\Configuration\Package\Finder\InternationalizationBundles;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
+use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
 
 /**
  * @package Chamilo\Configuration\Package\Service
@@ -11,14 +11,14 @@ use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class InternationalizationBundlesCacheService extends DoctrineFilesystemCacheService
+class InternationalizationBundlesCacheService extends DoctrineCacheService
 {
 
     /**
-     * @return \Chamilo\Configuration\Package\PackageList
+     * @return string[]
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getAllPackages(): PackageList
+    public function getAllPackages(): array
     {
         return $this->getForIdentifier(PackageList::MODE_ALL);
     }
@@ -39,7 +39,7 @@ class InternationalizationBundlesCacheService extends DoctrineFilesystemCacheSer
     {
         $internationalizationBundles = new InternationalizationBundles(PackageList::ROOT);
 
-        $cacheItem = $this->getCacheAdapter()->getItem((string) $identifier);
+        $cacheItem = $this->getCacheAdapter()->getItem($identifier);
         $cacheItem->set($internationalizationBundles->getPackageNamespaces());
 
         return $this->getCacheAdapter()->save($cacheItem);

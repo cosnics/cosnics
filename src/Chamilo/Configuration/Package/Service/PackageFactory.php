@@ -1,151 +1,62 @@
 <?php
 namespace Chamilo\Configuration\Package\Service;
 
-use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Package\Properties\Authors\Author;
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependencies;
 use Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency;
+use Chamilo\Configuration\Package\Storage\DataClass\Package;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\Translation\Translation;
 use Exception;
 use stdClass;
 
 /**
- *
  * @package Chamilo\Configuration\Package\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PackageFactory
 {
-    const PACKAGE_DESCRIPTOR = 'composer.json';
+    public const PACKAGE_DESCRIPTOR = 'composer.json';
 
-    /**
-     *
-     * @var \Chamilo\Libraries\File\PathBuilder
-     */
-    private $pathBuilder;
+    private SystemPathBuilder $systemPathBuilder;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Translation\Translation
-     */
-    private $translation;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
-     * @param \Chamilo\Libraries\Translation\Translation $translation
-     */
-    public function __construct(PathBuilder $pathBuilder, Translation $translation = null)
+    public function __construct(SystemPathBuilder $systemPathBuilder)
     {
-        $this->pathBuilder = $pathBuilder;
-        $this->translation = $translation;
+        $this->systemPathBuilder = $systemPathBuilder;
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\File\PathBuilder
-     */
-    public function getPathBuilder()
-    {
-        return $this->pathBuilder;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
-     */
-    public function setPathBuilder(PathBuilder $pathBuilder)
-    {
-        $this->pathBuilder = $pathBuilder;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Translation\Translation
-     */
-    public function getTranslation()
-    {
-        return $this->translation;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Translation\Translation $translation
-     */
-    public function setTranslation(Translation $translation)
-    {
-        $this->translation = $translation;
-    }
-
-    /**
-     *
-     * @param string $context
-     *
-     * @return string|boolean
-     */
-    public function packageExists($context)
-    {
-        $packagePath = $this->getPackagePath($context);
-
-        if (file_exists($packagePath))
-        {
-            return $packagePath;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /**
-     *
-     * @param string $context
-     *
-     * @return string
-     */
-    public function getPackagePath($context)
-    {
-        return $this->getPathBuilder()->namespaceToFullPath($context) . self::PACKAGE_DESCRIPTOR;
-    }
-
-    /**
-     *
-     * @param string $context
-     *
-     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
      * @throws \Exception
      */
-    public function getPackage($context)
+    public function getPackage(string $context): Package
     {
-        $path = $this->packageExists($context);
-
-        if (!$path)
+        if (!$this->packageExists($context))
         {
-            throw new Exception(Translation::get('InvalidPackageContext', array('CONTEXT' => $context)));
+            throw new Exception(Translation::get('InvalidPackageContext', ['CONTEXT' => $context]));
         }
 
-        return $this->parseComposerJsonPath($path);
+        return $this->parseComposerJsonPath($this->getPackagePath($context));
     }
 
-    /**
-     *
-     * @param string $path
-     *
-     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
-     */
-    public function parseComposerJsonPath($path)
+    public function getPackagePath(string $context): string
     {
-        return $this->parseComposerJson(json_decode(file_get_contents($path)));
+        return $this->getSystemPathBuilder()->namespaceToFullPath($context) . self::PACKAGE_DESCRIPTOR;
+    }
+
+    public function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return $this->systemPathBuilder;
+    }
+
+    public function packageExists(string $context): bool
+    {
+        return file_exists($this->getPackagePath($context));
     }
 
     /**
-     *
-     * @param \stdClass $jsonPackageObject
-     *
-     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
+     * @throws \Exception
      */
-    public function parseComposerJson(stdClass $jsonPackageObject)
+    public function parseComposerJson(stdClass $jsonPackageObject): Package
     {
         $cosnicsProperties = $jsonPackageObject->extra->cosnics;
 
@@ -200,5 +111,13 @@ class PackageFactory
         }
 
         return $package;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function parseComposerJsonPath(string $path): Package
+    {
+        return $this->parseComposerJson(json_decode(file_get_contents($path)));
     }
 }

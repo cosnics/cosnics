@@ -3,78 +3,84 @@ namespace Chamilo\Configuration\Package\Service;
 
 use Chamilo\Configuration\Package\Finder\PackageBundles;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
- *
  * @package Chamilo\Configuration\Package\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PackageBundlesCacheService extends DoctrineFilesystemCacheService
+class PackageBundlesCacheService extends DoctrineCacheService
 {
+    protected PackageFactory $packageFactory;
+
+    public function __construct(
+        AdapterInterface $cacheAdapter, ConfigurablePathBuilder $configurablePathBuilder, PackageFactory $packageFactory
+    )
+    {
+        parent::__construct($cacheAdapter, $configurablePathBuilder);
+
+        $this->packageFactory = $packageFactory;
+    }
 
     /**
-     *
-     * @return \Chamilo\Configuration\Package\PackageList
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getAllPackages()
+    public function getAllPackages(): PackageList
     {
         return $this->getForIdentifier(PackageList::MODE_ALL);
     }
 
     /**
-     *
-     * @return \Chamilo\Configuration\Package\PackageList
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getAvailablePackages()
+    public function getAvailablePackages(): PackageList
     {
         return $this->getForIdentifier(PackageList::MODE_AVAILABLE);
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCachePathNamespace()
+     * @return string[]
      */
-    public function getCachePathNamespace()
+    public function getIdentifiers(): array
     {
-        return 'Chamilo\Configuration\Package\PlatformPackageBundles';
+        return [PackageList::MODE_ALL, PackageList::MODE_INSTALLED, PackageList::MODE_AVAILABLE];
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getIdentifiers()
-    {
-        return array(PackageList::MODE_ALL, PackageList::MODE_INSTALLED, PackageList::MODE_AVAILABLE);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Configuration\Package\PackageList
-     */
-    public function getInstalledPackages()
+    public function getInstalledPackages(): PackageList
     {
         return $this->getForIdentifier(PackageList::MODE_INSTALLED);
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
-     */
-    public function warmUpForIdentifier($identifier)
+    public function getPackageFactory(): PackageFactory
     {
-        $packageFactory = new PackageFactory(PathBuilder::getInstance());
+        return $this->packageFactory;
+    }
+
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function warmUpForIdentifier($identifier): bool
+    {
+        $packageFactory = $this->getPackageFactory();
         $packageListBuilder = new PackageBundles(PackageList::ROOT, $identifier, $packageFactory);
         $packageList = $packageListBuilder->getPackageList();
-        $packageList->get_all_packages();
-        $packageList->get_all_packages(true);
-        $packageList->get_list();
-        $packageList->get_list(true);
 
-        return $this->getCacheAdapter()->save($identifier, $packageList);
+        $packageList->get_all_packages(false);
+        $packageList->get_list(false);
+
+        $packageList->get_all_packages();
+        $packageList->get_list();
+
+        $cacheItem = $this->getCacheAdapter()->getItem($identifier);
+        $cacheItem->set($packageList);
+
+        return $this->getCacheAdapter()->save($cacheItem);
     }
 }

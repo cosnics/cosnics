@@ -4,10 +4,11 @@ namespace Chamilo\Libraries\Platform\Configuration\Cache;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
-use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
+use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -18,40 +19,22 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package Chamilo\Core\Menu\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LocalSettingCacheService extends DoctrinePhpFileCacheService implements UserBasedCacheInterface
+class LocalSettingCacheService extends DoctrineCacheService implements UserBasedCacheInterface
 {
 
-    /**
-     * @param string $identifier
-     *
-     * @return bool
-     */
-    public function clearForIdentifier($identifier)
+    public function clearForIdentifier($identifier): bool
     {
         $this->getDataClassRepositoryCache()->truncate(UserSetting::class);
 
         return parent::clearForIdentifier($identifier);
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCachePathNamespace()
-     */
-    public function getCachePathNamespace()
-    {
-        return 'Chamilo\Libraries\Platform\Configuration';
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
-     */
-    protected function getDataClassRepositoryCache()
+    protected function getDataClassRepositoryCache(): DataClassRepositoryCache
     {
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
             DataClassRepositoryCache::class
@@ -59,36 +42,31 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
     }
 
     /**
-     *
-     * @param integer $userIdentifier
-     *
-     * @return boolean[]
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getForUserIdentifier($userIdentifier)
+    public function getForUserIdentifier($userIdentifier): bool
     {
         return $this->getForIdentifier($userIdentifier);
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
+     * @throws \Exception
      */
-    public function getIdentifiers()
+    public function getIdentifiers(): array
     {
         return DataManager::distinct(
             User::class, new DataClassDistinctParameters(
-                null, new RetrieveProperties(array(new PropertyConditionVariable(User::class, User::PROPERTY_ID)))
+                null, new RetrieveProperties([new PropertyConditionVariable(User::class, User::PROPERTY_ID)])
             )
         );
     }
 
     /**
-     * @param string $identifier
-     *
-     * @return boolean
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function warmUpForIdentifier($identifier)
+    public function warmUpForIdentifier($identifier): bool
     {
         $localSettings = [];
 
@@ -103,7 +81,7 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
         foreach ($userSettings as $userSetting)
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Setting::class, Setting::PROPERTY_ID),
+                new PropertyConditionVariable(Setting::class, DataClass::PROPERTY_ID),
                 new StaticConditionVariable($userSetting->get_setting_id())
             );
             /**
@@ -115,6 +93,9 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
             $localSettings[$setting->get_context()][$setting->get_variable()] = $userSetting->get_value();
         }
 
-        return $this->getCacheAdapter()->save($identifier, $localSettings);
+        $cacheItem = $this->getCacheAdapter()->getItem($identifier);
+        $cacheItem->set($localSettings);
+
+        return $this->getCacheAdapter()->save($cacheItem);
     }
 }

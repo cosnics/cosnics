@@ -19,5 +19,18 @@
             <argument key="$directory"
                       type="expression">parameter('chamilo.configuration.storage')['cache_path']</argument>
         </service>
+
+        <service id="Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheService">
+            <argument key="$cacheAdapter"
+                      type="service"
+                      id="Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheAdapter"/>
+        </service>
+
+        <service id="Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheAdapter"
+                 class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <argument key="$namespace">Chamilo\Application\Calendar\Extension\Google\Events</argument>
+            <argument key="$directory"
+                      type="expression">parameter('chamilo.configuration.storage')['cache_path']</argument>
+        </service>
     </services>
 </container>

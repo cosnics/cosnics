@@ -15,10 +15,7 @@ use Chamilo\Configuration\Storage\Repository\LanguageRepository;
 use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
 use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\ExternalCalendarCacheService;
 use Chamilo\Core\Repository\Quota\Service\CalculatorCacheService;
-use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Service\TemplateRegistrationLoader;
-use Chamilo\Core\Repository\Service\TypeSelectorCacheService;
-use Chamilo\Core\User\Service\UserGroupMembershipCacheService;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Format\Twig\TwigCacheService;
@@ -134,10 +131,10 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
      */
     protected function addUserCacheServices(CacheManager $cacheManager)
     {
-        $cacheManager->addCacheService(
-            'chamilo_repository_type_selector',
-            new TypeSelectorCacheService(new TypeSelectorFactory(), $this->getConfigurablePathBuilder())
-        );
+//        $cacheManager->addCacheService(
+//            'chamilo_repository_type_selector',
+//            new TypeSelectorCacheService(new TypeSelectorFactory(), $this->getConfigurablePathBuilder())
+//        );
 
         $googleCalendarRepository = new CalendarRepository(
             '', '', ''
@@ -161,9 +158,9 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         //
         //        );
 
-        $cacheManager->addCacheService(
-            'chamilo_user_groups', new UserGroupMembershipCacheService($this->getConfigurablePathBuilder())
-        );
+//        $cacheManager->addCacheService(
+//            'chamilo_user_groups', new UserGroupMembershipCacheService($this->getConfigurablePathBuilder())
+//        );
         $cacheManager->addCacheService(
             'chamilo_local_settings', new LocalSettingCacheService($this->getConfigurablePathBuilder())
         );

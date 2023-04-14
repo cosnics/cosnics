@@ -15,6 +15,7 @@
             <argument key="$itemCacheProvider"
                       type="service"
                       id="Chamilo\Core\Menu\Cache\ItemCacheProvider"/>
+            <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>
         </service>
         <service id="Chamilo\Core\Menu\Service\ItemCacheService">
             <argument key="$cacheAdapter"

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Menu\Storage\Repository;
 use Chamilo\Core\Menu\Storage\DataClass\CategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
+use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -24,25 +25,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 class ItemRepository
 {
 
-    /**
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
-    private $dataClassRepository;
+    private DataClassRepository $dataClassRepository;
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
     public function __construct(DataClassRepository $dataClassRepository)
     {
         $this->dataClassRepository = $dataClassRepository;
     }
 
-    /**
-     * @param int $parentIdentifier
-     *
-     * @return int
-     */
-    public function countItemsByParentIdentifier(int $parentIdentifier)
+    public function countItemsByParentIdentifier(string $parentIdentifier): int
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT),
@@ -55,53 +45,32 @@ class ItemRepository
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function createItem(Item $item)
+    public function createItem(Item $item): bool
     {
         return $this->getDataClassRepository()->create($item);
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
-     *
-     * @return bool
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function createItemTitle(ItemTitle $itemTitle)
+    public function createItemTitle(ItemTitle $itemTitle): bool
     {
         return $this->getDataClassRepository()->create($itemTitle);
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
-     */
-    public function deleteItem(Item $item)
+    public function deleteItem(Item $item): bool
     {
         return $this->getDataClassRepository()->delete($item);
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
-     *
-     * @return bool
-     */
-    public function deleteItemTitle(ItemTitle $itemTitle)
+    public function deleteItemTitle(ItemTitle $itemTitle): bool
     {
         return $this->getDataClassRepository()->delete($itemTitle);
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
-     */
-    public function deleteItemTitlesForItem(Item $item)
+    public function deleteItemTitlesForItem(Item $item): bool
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(ItemTitle::class, ItemTitle::PROPERTY_ITEM_ID),
@@ -111,30 +80,27 @@ class ItemRepository
         return $this->getDataClassRepository()->deletes(ItemTitle::class, $condition);
     }
 
-    /**
-     * @param int $identifier
-     *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item
-     */
-    public function findItemByIdentifier(int $identifier)
+    public function findItemByIdentifier(string $identifier): ?Item
     {
         return $this->getDataClassRepository()->retrieveById(Item::class, $identifier);
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\ItemTitle>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findItemTitles()
+    public function findItemTitles(): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(ItemTitle::class, new DataClassRetrievesParameters());
     }
 
     /**
-     * @param int $itemIdentifier
+     * @param string $itemIdentifier
      *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\ItemTitle>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findItemTitlesByItemIdentifier(int $itemIdentifier)
+    public function findItemTitlesByItemIdentifier(string $itemIdentifier): ArrayCollection
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(ItemTitle::class, ItemTitle::PROPERTY_ITEM_ID),
@@ -177,16 +143,16 @@ class ItemRepository
     }
 
     /**
-     * @param int $parentIdentifier
-     * @param int $count
-     * @param int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
+     * @param string $parentIdentifier
+     * @param ?int $count
+     * @param ?int $offset
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findItemsByParentIdentifier(
-        int $parentIdentifier, int $count = null, int $offset = null, OrderBy $orderBy = null
+        string $parentIdentifier, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
     ): ArrayCollection
     {
         $condition = new EqualityCondition(
@@ -219,7 +185,7 @@ class ItemRepository
         );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Item::class, Item::PROPERTY_TYPE),
+            new PropertyConditionVariable(Item::class, CompositeDataClass::PROPERTY_TYPE),
             new StaticConditionVariable(CategoryItem::class)
         );
 
@@ -232,20 +198,15 @@ class ItemRepository
         );
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
-    protected function getDataClassRepository()
+    protected function getDataClassRepository(): DataClassRepository
     {
         return $this->dataClassRepository;
     }
 
     /**
-     * @param int $parentIdentifier
-     *
-     * @return int
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function getNextItemSortValueByParentIdentifier(int $parentIdentifier)
+    public function getNextItemSortValueByParentIdentifier(string $parentIdentifier): int
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT),
@@ -264,21 +225,17 @@ class ItemRepository
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function updateItem(Item $item)
+    public function updateItem(Item $item): bool
     {
         return $this->getDataClassRepository()->update($item);
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
-     *
-     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function updateItemTitle(ItemTitle $itemTitle)
+    public function updateItemTitle(ItemTitle $itemTitle): bool
     {
         return $this->getDataClassRepository()->update($itemTitle);
     }

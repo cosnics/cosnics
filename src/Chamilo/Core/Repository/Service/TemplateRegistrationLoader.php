@@ -3,54 +3,38 @@ namespace Chamilo\Core\Repository\Service;
 
 use Chamilo\Configuration\Interfaces\DataLoaderInterface;
 use Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository;
-use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
+use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
- *
  * @package Chamilo\Configuration\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class TemplateRegistrationLoader extends DoctrineFilesystemCacheService implements DataLoaderInterface
+class TemplateRegistrationLoader extends DoctrineCacheService implements DataLoaderInterface
 {
-    const REGISTRATION_DEFAULT = 2;
-    const REGISTRATION_ID = 1;
-    const REGISTRATION_USER_ID = 3;
+    public const REGISTRATION_DEFAULT = 2;
+    public const REGISTRATION_ID = 1;
+    public const REGISTRATION_USER_ID = 3;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    private $stringUtilities;
+    private StringUtilities $stringUtilities;
 
-    /**
-     *
-     * @var \Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository
-     */
-    private $templateRegistrationRepository;
+    private TemplateRegistrationRepository $templateRegistrationRepository;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     * @param \Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository $templateRegistrationRepository
-     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     */
     public function __construct(
-        StringUtilities $stringUtilities, TemplateRegistrationRepository $templateRegistrationRepository,
-        ConfigurablePathBuilder $configurablePathBuilder
+        AdapterInterface $cacheAdapter, ConfigurablePathBuilder $configurablePathBuilder,
+        StringUtilities $stringUtilities, TemplateRegistrationRepository $templateRegistrationRepository
     )
     {
-        parent::__construct($configurablePathBuilder);
+        parent::__construct($cacheAdapter, $configurablePathBuilder);
+
         $this->stringUtilities = $stringUtilities;
         $this->templateRegistrationRepository = $templateRegistrationRepository;
     }
 
-    /**
-     * @return boolean
-     */
-    public function clearData()
+    public function clearData(): bool
     {
         $this->getTemplateRegistrationRepository()->clearTemplateRegistrationCache();
 
@@ -58,83 +42,42 @@ class TemplateRegistrationLoader extends DoctrineFilesystemCacheService implemen
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCachePathNamespace()
+     * @return \Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration[][]
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getCachePathNamespace()
-    {
-        return 'Chamilo\Core\Repository';
-    }
-
-    /**
-     *
-     * @return string[]
-     * @throws \Exception
-     */
-    public function getData()
+    public function getData(): array
     {
         return $this->getForIdentifier($this->getIdentifier());
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return md5(__CLASS__);
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
+     * @return string[]
      */
-    public function getIdentifiers()
+    public function getIdentifiers(): array
     {
-        return array($this->getIdentifier());
+        return [$this->getIdentifier()];
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    public function getStringUtilities()
+    public function getStringUtilities(): StringUtilities
     {
         return $this->stringUtilities;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
-    public function setStringUtilities(StringUtilities $stringUtilities)
-    {
-        $this->stringUtilities = $stringUtilities;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository
-     */
-    public function getTemplateRegistrationRepository()
+    public function getTemplateRegistrationRepository(): TemplateRegistrationRepository
     {
         return $this->templateRegistrationRepository;
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository $templateRegistrationRepository
-     */
-    public function setTemplateRegistrationRepository($templateRegistrationRepository)
-    {
-        $this->templateRegistrationRepository = $templateRegistrationRepository;
-    }
-
-    /**
-     * @return boolean
+     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Exception
      */
-    public function loadData()
+    public function loadData(): bool
     {
         $templateRegistrations = $this->getTemplateRegistrationRepository()->findTemplateRegistrations();
         $groupedRegistrations = [];
@@ -154,16 +97,16 @@ class TemplateRegistrationLoader extends DoctrineFilesystemCacheService implemen
             }
         }
 
-        return $this->getCacheAdapter()->save($this->getIdentifier(), $groupedRegistrations);
+        $cacheItem = $this->getCacheAdapter()->getItem($this->getIdentifier());
+        $cacheItem->set($groupedRegistrations);
+
+        return $this->getCacheAdapter()->save($cacheItem);
     }
 
     /**
-     * @param string $identifier
-     *
-     * @return boolean
-     * @throws \Exception
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function warmUpForIdentifier($identifier)
+    public function warmUpForIdentifier($identifier): bool
     {
         return $this->loadData();
     }

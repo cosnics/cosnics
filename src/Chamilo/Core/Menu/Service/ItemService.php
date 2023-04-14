@@ -21,57 +21,31 @@ use Symfony\Component\Translation\Translator;
 class ItemService
 {
     public const PARAM_DIRECTION_DOWN = 2;
-
     public const PARAM_DIRECTION_UP = 1;
 
     /**
-     * @var \Chamilo\Libraries\Storage\Service\DisplayOrderHandler
+     * @var string[]
      */
-    private $displayOrderHandler;
+    protected array $fallbackIsoCodes;
 
-    /**
-     * @var \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
-     */
-    private $itemCacheProvider;
+    private DisplayOrderHandler $displayOrderHandler;
 
-    /**
-     * @var \Chamilo\Core\Menu\Storage\Repository\ItemRepository
-     */
-    private $itemRepository;
+    private FilesystemCache $itemCacheProvider;
 
-    /**
-     * @var \Chamilo\Libraries\Storage\DataClass\PropertyMapper
-     */
-    private $propertyMapper;
+    private ItemRepository $itemRepository;
 
-    /**
-     * @var \Chamilo\Core\Menu\Service\RightsService
-     */
-    private $rightsService;
+    private PropertyMapper $propertyMapper;
 
-    /**
-     * @var \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    private $stringUtilities;
+    private RightsService $rightsService;
 
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
+    private StringUtilities $stringUtilities;
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\Repository\ItemRepository $itemRepository
-     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
-     * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Libraries\Storage\Service\DisplayOrderHandler $displayOrderHandler
-     * @param \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache $itemCacheProvider
-     */
+    private Translator $translator;
+
     public function __construct(
         ItemRepository $itemRepository, RightsService $rightsService, StringUtilities $stringUtilities,
         PropertyMapper $propertyMapper, Translator $translator, DisplayOrderHandler $displayOrderHandler,
-        FilesystemCache $itemCacheProvider
+        FilesystemCache $itemCacheProvider, array $fallbackIsoCodes
     )
     {
         $this->itemRepository = $itemRepository;
@@ -81,26 +55,19 @@ class ItemService
         $this->translator = $translator;
         $this->displayOrderHandler = $displayOrderHandler;
         $this->itemCacheProvider = $itemCacheProvider;
+        $this->fallbackIsoCodes = $fallbackIsoCodes;
     }
 
-    /**
-     * @param int $parentIdentifier
-     *
-     * @return int
-     */
-    public function countItemsByParentIdentifier(int $parentIdentifier)
+    public function countItemsByParentIdentifier(string $parentIdentifier): int
     {
         return $this->getItemRepository()->countItemsByParentIdentifier($parentIdentifier);
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      * @throws \Exception
      */
-    public function createItem(Item $item)
+    public function createItem(Item $item): bool
     {
         if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeCreate($item))
         {
@@ -123,17 +90,16 @@ class ItemService
     }
 
     /**
-     * @param string $itemType
-     * @param string[] $values
+     * @param string[][] $values
      *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Exception
      */
-    public function createItemForTypeFromValues(string $itemType, array $values)
+    public function createItemForTypeFromValues(string $itemType, array $values): ?Item
     {
         $item = $this->getItemTypeInstance($itemType);
 
-        foreach ($item->getDefaultPropertyNames() as $property)
+        foreach ($item::getDefaultPropertyNames() as $property)
         {
             if (isset($values[$property]))
             {
@@ -141,7 +107,7 @@ class ItemService
             }
         }
 
-        foreach ($item->getAdditionalPropertyNames() as $property)
+        foreach ($item::getAdditionalPropertyNames() as $property)
         {
             if (isset($values[$property]))
             {
@@ -155,19 +121,16 @@ class ItemService
 
         if (!$this->createItem($item))
         {
-            return false;
+            return null;
         }
 
         return $item;
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
-     *
-     * @return bool
      * @throws \Exception
      */
-    public function createItemTitle(ItemTitle $itemTitle)
+    public function createItemTitle(ItemTitle $itemTitle): bool
     {
         if (!$this->getItemRepository()->createItemTitle($itemTitle))
         {
@@ -180,14 +143,9 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param string $isocode
-     * @param string $title
-     *
-     * @return bool
      * @throws \Exception
      */
-    public function createItemTitleForItemFromParameters(Item $item, string $isocode, string $title)
+    public function createItemTitleForItemFromParameters(Item $item, string $isocode, string $title): bool
     {
         $itemTitle = new ItemTitle();
         $itemTitle->setTitle($title);
@@ -198,13 +156,11 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param string[] $values
+     * @param string[][] $values
      *
-     * @return bool
      * @throws \Exception
      */
-    public function createItemTitlesForItemFromValues(Item $item, array $values)
+    public function createItemTitlesForItemFromValues(Item $item, array $values): bool
     {
         foreach ($values[ItemTitle::PROPERTY_TITLE] as $isocode => $title)
         {
@@ -222,38 +178,35 @@ class ItemService
 
     /**
      * @param string $itemType
-     * @param string[] $values
+     * @param string[][] $values
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      * @throws \Exception
      */
-    public function createItemWithTitlesForTypeFromValues(string $itemType, array $values)
+    public function createItemWithTitlesForTypeFromValues(string $itemType, array $values): ?Item
     {
         $item = $this->createItemForTypeFromValues($itemType, $values);
 
         if (!$item instanceof Item)
         {
-            return false;
+            return null;
         }
 
         if (!$this->createItemTitlesForItemFromValues($item, $values))
         {
-            return false;
+            return null;
         }
 
         return $item;
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Exception
      */
-    public function deleteItem(Item $item)
+    public function deleteItem(Item $item): bool
     {
         if (!$this->deleteItemChildren($item))
         {
@@ -286,13 +239,11 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function deleteItemChildren(Item $item)
+    public function deleteItemChildren(Item $item): bool
     {
         $itemChildren = $this->findItemsByParentIdentifier($item->getId());
 
@@ -307,12 +258,7 @@ class ItemService
         return true;
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
-     *
-     * @return bool
-     */
-    public function deleteItemTitle(ItemTitle $itemTitle)
+    public function deleteItemTitle(ItemTitle $itemTitle): bool
     {
         if (!$this->getItemRepository()->deleteItemTitle($itemTitle))
         {
@@ -324,12 +270,7 @@ class ItemService
         return true;
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
-     */
-    public function deleteItemTitlesForItem(Item $item)
+    public function deleteItemTitlesForItem(Item $item): bool
     {
         if (!$this->getItemRepository()->deleteItemTitlesForItem($item))
         {
@@ -343,21 +284,16 @@ class ItemService
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[] $itemTitles
-     *
-     * @return string
      */
-    public function determineItemTitleForCurrentLanguage(array $itemTitles)
+    public function determineItemTitleForCurrentLanguage(array $itemTitles): string
     {
         return $this->determineItemTitleForIsoCode($itemTitles, $this->getTranslator()->getLocale());
     }
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[] $itemTitles
-     * @param string $isoCode
-     *
-     * @return string
      */
-    public function determineItemTitleForIsoCode(array $itemTitles, string $isoCode)
+    public function determineItemTitleForIsoCode(array $itemTitles, string $isoCode): string
     {
         if (key_exists($isoCode, $itemTitles))
         {
@@ -365,7 +301,7 @@ class ItemService
         }
         else
         {
-            $fallbackIsoCodes = $this->getTranslator()->getFallbackLocales();
+            $fallbackIsoCodes = $this->getFallbackIsoCodes();
 
             foreach ($fallbackIsoCodes as $fallbackIsoCode)
             {
@@ -379,50 +315,41 @@ class ItemService
         return $this->getTranslator()->trans('MenuItem', [], 'Chamilo\Core\Menu');
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
-     */
-    public function doesItemHaveChildren(Item $item)
+    public function doesItemHaveChildren(Item $item): bool
     {
         return $this->countItemsByParentIdentifier($item->getId()) > 0;
     }
 
-    /**
-     * @param int $identifier
-     *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item
-     */
-    public function findItemByIdentifier(int $identifier)
+    public function findItemByIdentifier(string $identifier): ?Item
     {
         return $this->getItemRepository()->findItemByIdentifier($identifier);
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\ItemTitle>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findItemTitles()
+    public function findItemTitles(): ArrayCollection
     {
         return $this->getItemRepository()->findItemTitles();
     }
 
     /**
-     * @param int $itemIdentifier
+     * @param string $itemIdentifier
      *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\ItemTitle>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findItemTitlesByItemIdentifier(int $itemIdentifier)
+    public function findItemTitlesByItemIdentifier(string $itemIdentifier): ArrayCollection
     {
         return $this->getItemRepository()->findItemTitlesByItemIdentifier($itemIdentifier);
     }
 
     /**
-     * @param int $itemIdentifier
-     *
      * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findItemTitlesByItemIdentifierIndexedByIsoCode(int $itemIdentifier)
+    public function findItemTitlesByItemIdentifierIndexedByIsoCode(string $itemIdentifier): array
     {
         return $this->getPropertyMapper()->mapDataClassByProperty(
             $this->findItemTitlesByItemIdentifier($itemIdentifier), ItemTitle::PROPERTY_ISOCODE
@@ -431,6 +358,7 @@ class ItemService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findItems(): ArrayCollection
     {
@@ -438,7 +366,7 @@ class ItemService
     }
 
     /**
-     * @param int[] $identifiers
+     * @param string[] $identifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
@@ -449,7 +377,7 @@ class ItemService
     }
 
     /**
-     * @param int $parentIdentifier
+     * @param string $parentIdentifier
      * @param ?int $count
      * @param ?int $offset
      * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $orderBy
@@ -458,7 +386,7 @@ class ItemService
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function findItemsByParentIdentifier(
-        int $parentIdentifier, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
+        string $parentIdentifier, ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
     ): ArrayCollection
     {
         return $this->getItemRepository()->findItemsByParentIdentifier(
@@ -481,7 +409,7 @@ class ItemService
      */
     public function findRootItems(): ArrayCollection
     {
-        return $this->findItemsByParentIdentifier(0);
+        return $this->findItemsByParentIdentifier('0');
     }
 
     /**
@@ -493,8 +421,13 @@ class ItemService
     }
 
     /**
-     * @return \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
+     * @return string[]
      */
+    protected function getFallbackIsoCodes(): array
+    {
+        return $this->fallbackIsoCodes;
+    }
+
     public function getItemCacheProvider(): FilesystemCache
     {
         return $this->itemCacheProvider;
@@ -503,17 +436,15 @@ class ItemService
     /**
      * @return \Chamilo\Core\Menu\Storage\Repository\ItemRepository
      */
-    public function getItemRepository()
+    public function getItemRepository(): ItemRepository
     {
         return $this->itemRepository;
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return string
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function getItemTitleForCurrentLanguage(Item $item)
+    public function getItemTitleForCurrentLanguage(Item $item): string
     {
         return $this->determineItemTitleForCurrentLanguage(
             $this->findItemTitlesByItemIdentifierIndexedByIsoCode($item->getId())
@@ -521,12 +452,9 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param string $isoCode
-     *
-     * @return string
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function getItemTitleForIsoCode(Item $item, string $isoCode)
+    public function getItemTitleForIsoCode(Item $item, string $isoCode): string
     {
         return $this->determineItemTitleForIsoCode(
             $this->findItemTitlesByItemIdentifierIndexedByIsoCode($item->getId()), $isoCode
@@ -534,9 +462,15 @@ class ItemService
     }
 
     /**
-     * @param string $itemType
-     *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item
+     */
+
+    /**
+     * @template getItemTypeInstance
+     *
+     * @param class-string<getItemTypeInstance> $itemType
+     *
+     * @return ?getItemTypeInstance
      */
     public function getItemTypeInstance(string $itemType)
     {
@@ -544,55 +478,38 @@ class ItemService
     }
 
     /**
-     * @param int $parentIdentifier
-     *
-     * @return int
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function getNextItemSortValueByParentIdentifier(int $parentIdentifier)
+    public function getNextItemSortValueByParentIdentifier(string $parentIdentifier): int
     {
         return $this->getItemRepository()->getNextItemSortValueByParentIdentifier($parentIdentifier);
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\DataClass\PropertyMapper
-     */
     public function getPropertyMapper(): PropertyMapper
     {
         return $this->propertyMapper;
     }
 
-    /**
-     * @return \Chamilo\Core\Menu\Service\RightsService
-     */
     public function getRightsService(): RightsService
     {
         return $this->rightsService;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Utilities\StringUtilities
-     */
     public function getStringUtilities(): StringUtilities
     {
         return $this->stringUtilities;
     }
 
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
     public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param int $moveDirection
-     *
-     * @return bool
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function moveItemInDirection(Item $item, int $moveDirection)
+    public function moveItemInDirection(Item $item, int $moveDirection): bool
     {
         $newDisplayOrder = $item->getSort() + ($moveDirection == self::PARAM_DIRECTION_UP ? - 1 : 1);
         $item->setSort($newDisplayOrder);
@@ -601,13 +518,12 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param string[] $values
+     * @param string[][] $values
      *
-     * @return bool
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function saveItemFromValues(Item $item, array $values)
+    public function saveItemFromValues(Item $item, array $values): bool
     {
         $parentHasChanged = $item->getParentId() != $values[Item::PROPERTY_PARENT];
 
@@ -616,7 +532,7 @@ class ItemService
             $item->setSort(null);
         }
 
-        foreach ($item->getDefaultPropertyNames() as $property)
+        foreach ($item::getDefaultPropertyNames() as $property)
         {
             if (isset($values[$property]))
             {
@@ -624,7 +540,7 @@ class ItemService
             }
         }
 
-        foreach ($item->getAdditionalPropertyNames() as $property)
+        foreach ($item::getAdditionalPropertyNames() as $property)
         {
             if (isset($values[$property]))
             {
@@ -641,13 +557,11 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param string[] $values
+     * @param string[][] $values
      *
-     * @return bool
      * @throws \Exception
      */
-    public function saveItemTitlesForItemFromValues(Item $item, array $values)
+    public function saveItemTitlesForItemFromValues(Item $item, array $values): bool
     {
         $existingItemTitles = $this->findItemTitlesByItemIdentifierIndexedByIsoCode($item->getId());
         $valuesItemTitles = $values[ItemTitle::PROPERTY_TITLE];
@@ -690,14 +604,12 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param string[] $values
+     * @param string[][] $values
      *
-     * @return bool
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      * @throws \Exception
      */
-    public function saveItemWithTitlesFromValues(Item $item, array $values)
+    public function saveItemWithTitlesFromValues(Item $item, array $values): bool
     {
         if (!$this->saveItemFromValues($item, $values))
         {
@@ -713,68 +625,10 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Service\DisplayOrderHandler $displayOrderHandler
-     */
-    public function setDisplayOrderHandler(DisplayOrderHandler $displayOrderHandler): void
-    {
-        $this->displayOrderHandler = $displayOrderHandler;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache $itemCacheProvider
-     */
-    public function setItemCacheProvider(FilesystemCache $itemCacheProvider): void
-    {
-        $this->itemCacheProvider = $itemCacheProvider;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\Repository\ItemRepository $itemRepository
-     */
-    public function setItemRepository(ItemRepository $itemRepository)
-    {
-        $this->itemRepository = $itemRepository;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\PropertyMapper $propertyMapper
-     */
-    public function setPropertyMapper(PropertyMapper $propertyMapper): void
-    {
-        $this->propertyMapper = $propertyMapper;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Service\RightsService $rightsService
-     */
-    public function setRightsService(RightsService $rightsService): void
-    {
-        $this->rightsService = $rightsService;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
-    public function setStringUtilities(StringUtilities $stringUtilities): void
-    {
-        $this->stringUtilities = $stringUtilities;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
-    public function updateItem(Item $item)
+    public function updateItem(Item $item): bool
     {
         if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeUpdate($item))
         {
@@ -797,11 +651,9 @@ class ItemService
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle $itemTitle
-     *
-     * @return bool
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function updateItemTitle(ItemTitle $itemTitle)
+    public function updateItemTitle(ItemTitle $itemTitle): bool
     {
         if (!$this->getItemRepository()->updateItemTitle($itemTitle))
         {

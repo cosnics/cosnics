@@ -133,8 +133,6 @@ abstract class DoctrineCacheService implements CacheResetterInterface
      */
     abstract public function getIdentifiers(): array;
 
-    abstract public function setupCacheAdapter(): AdapterInterface;
-
     public function warmUp(): bool
     {
         return $this->warmUpForIdentifiers($this->getIdentifiers());
@@ -142,17 +140,13 @@ abstract class DoctrineCacheService implements CacheResetterInterface
 
     /**
      * @param \Chamilo\Libraries\Cache\ParameterBag|string $identifier
-     *
-     * @return bool
      */
     abstract public function warmUpForIdentifier($identifier): bool;
 
     /**
-     * @param \Chamilo\Libraries\Cache\ParameterBag[]|string[] $identifiers
-     *
-     * @return bool
+     * @param string[] $identifiers
      */
-    public function warmUpForIdentifiers($identifiers): bool
+    public function warmUpForIdentifiers(array $identifiers): bool
     {
         foreach ($identifiers as $identifier)
         {

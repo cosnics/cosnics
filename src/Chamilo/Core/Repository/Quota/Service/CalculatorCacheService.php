@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Quota\Service;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
+use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
@@ -13,52 +13,37 @@ use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
- *
  * @package Chamilo\Configuration\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CalculatorCacheService extends DoctrinePhpFileCacheService
+class CalculatorCacheService extends DoctrineCacheService
 {
-    // Identifiers
-    const IDENTIFIER_TOTAL_USER_DISK_QUOTA = 'total_user_disk_quota';
+    public const IDENTIFIER_TOTAL_USER_DISK_QUOTA = 'total_user_disk_quota';
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCachePathNamespace()
-     */
-    public function getCachePathNamespace()
+    public function getIdentifiers(): array
     {
-        return 'Chamilo\Core\Repository\Quota';
+        return [self::IDENTIFIER_TOTAL_USER_DISK_QUOTA];
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getIdentifiers()
-    {
-        return array(self::IDENTIFIER_TOTAL_USER_DISK_QUOTA);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
-     */
-    public function getTotalUserDiskQuota()
+    public function getTotalUserDiskQuota(): int
     {
         return $this->getForIdentifier(self::IDENTIFIER_TOTAL_USER_DISK_QUOTA);
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Exception
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function warmUpForIdentifier($identifier)
+    public function warmUpForIdentifier($identifier): bool
     {
-        $policy = Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_policy'));
-        $fallback = Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback'));
+        $policy = Configuration::getInstance()->get_setting(['Chamilo\Core\Repository', 'quota_policy']);
+        $fallback = Configuration::getInstance()->get_setting(['Chamilo\Core\Repository', 'quota_fallback']);
 
         if ($policy == Calculator::POLICY_USER && !$fallback)
         {
@@ -78,15 +63,16 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
 
             $totalQuota = 0;
 
-            foreach($users as $user)
+            foreach ($users as $user)
             {
                 $calculator = new Calculator($user);
                 $totalQuota += $calculator->getMaximumUserDiskQuota();
             }
-
-            $totalQuota;
         }
 
-        return $this->getCacheAdapter()->save($identifier, $totalQuota);
+        $cacheItem = $this->getCacheAdapter()->getItem($identifier);
+        $cacheItem->set($totalQuota);
+
+        return $this->getCacheAdapter()->save($cacheItem);
     }
 }

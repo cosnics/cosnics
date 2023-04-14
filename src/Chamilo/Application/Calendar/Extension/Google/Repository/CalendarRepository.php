@@ -18,59 +18,50 @@ use Google_Service_Calendar;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Extension\Google\Repository
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class CalendarRepository
 {
 
     /**
-     *
      * @var \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository
      */
     private static $instance;
 
     /**
-     *
-     * @var string
-     */
-    private $developerKey;
-
-    /**
-     *
-     * @var string
-     */
-    private $clientId;
-
-    /**
-     *
-     * @var string
-     */
-    private $clientSecret;
-
-    /**
-     *
      * @var string
      */
     private $accessToken;
 
     /**
-     *
-     * @var \Google_Client
-     */
-    private $googleClient;
-
-    /**
-     *
      * @var \Google_Service_Calendar
      */
     private $calendarClient;
 
     /**
-     *
+     * @var string
+     */
+    private $clientId;
+
+    /**
+     * @var string
+     */
+    private $clientSecret;
+
+    /**
+     * @var string
+     */
+    private $developerKey;
+
+    /**
+     * @var \Google_Client
+     */
+    private $googleClient;
+
+    /**
      * @param string $developerKey
      * @param string $clientId
      * @param string $clientSecret
@@ -97,10 +88,9 @@ class CalendarRepository
     }
 
     /**
-     *
      * @param string $calendarIdentifier
-     * @param integer $fromDate
-     * @param integer $toDate
+     * @param int $fromDate
+     * @param int $toDate
      *
      * @return \Google_Service_Calendar_Events
      */
@@ -115,12 +105,12 @@ class CalendarRepository
         try
         {
             return $this->getCalendarClient()->events->listEvents(
-                $calendarIdentifier, array(
+                $calendarIdentifier, [
                     'timeMin' => $timeMin->format(DateTimeInterface::RFC3339),
                     'timeMax' => $timeMax->format(
                         DateTimeInterface::RFC3339
                     )
-                )
+                ]
             );
         }
         catch (Exception $ex)
@@ -132,7 +122,6 @@ class CalendarRepository
     }
 
     /**
-     *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      */
     public function findOwnedCalendars()
@@ -140,8 +129,7 @@ class CalendarRepository
         try
         {
             $calendarItems =
-                $this->getCalendarClient()->calendarList->listCalendarList(array('minAccessRole' => 'owner'))->getItems(
-                    );
+                $this->getCalendarClient()->calendarList->listCalendarList(['minAccessRole' => 'owner'])->getItems();
         }
         catch (Exception $ex)
         {
@@ -168,21 +156,11 @@ class CalendarRepository
     }
 
     /**
-     *
      * @return string
      */
     public function getAccessToken()
     {
         return $this->accessToken;
-    }
-
-    /**
-     *
-     * @param string $accessToken
-     */
-    public function setAccessToken($accessToken)
-    {
-        $this->accessToken = $accessToken;
     }
 
     public function getCacheIdentifier($userToken, $method, $additionalIdentifiers = [])
@@ -197,7 +175,6 @@ class CalendarRepository
     }
 
     /**
-     *
      * @return \Google_Service_Calendar
      */
     public function getCalendarClient()
@@ -211,7 +188,6 @@ class CalendarRepository
     }
 
     /**
-     *
      * @return string
      */
     public function getClientId()
@@ -220,16 +196,6 @@ class CalendarRepository
     }
 
     /**
-     *
-     * @param string $clientId
-     */
-    public function setClientId($clientId)
-    {
-        $this->clientId = $clientId;
-    }
-
-    /**
-     *
      * @return string
      */
     public function getClientSecret()
@@ -238,16 +204,6 @@ class CalendarRepository
     }
 
     /**
-     *
-     * @param string $clientSecret
-     */
-    public function setClientSecret($clientSecret)
-    {
-        $this->clientSecret = $clientSecret;
-    }
-
-    /**
-     *
      * @return string
      */
     public function getDeveloperKey()
@@ -256,16 +212,6 @@ class CalendarRepository
     }
 
     /**
-     *
-     * @param string $developerKey
-     */
-    public function setDeveloperKey($developerKey)
-    {
-        $this->developerKey = $developerKey;
-    }
-
-    /**
-     *
      * @return \Google_Client
      */
     public function getGoogleClient()
@@ -287,7 +233,7 @@ class CalendarRepository
             }
 
             $this->googleClient->setClassConfig(
-                'Google_Cache_File', array('directory' => Path::getInstance()->getCachePath(__NAMESPACE__))
+                'Google_Cache_File', ['directory' => Path::getInstance()->getCachePath(__NAMESPACE__)]
             );
 
             $this->googleClient->setCache(new Google_Cache_File($this->googleClient));
@@ -312,19 +258,18 @@ class CalendarRepository
     }
 
     /**
-     *
      * @return \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository
      */
-    static public function getInstance()
+    public static function getInstance()
     {
         if (is_null(static::$instance))
         {
             $configuration = Configuration::getInstance();
             $configurationContext = Manager::context();
 
-            $developerKey = $configuration->get_setting(array($configurationContext, 'developer_key'));
-            $clientId = $configuration->get_setting(array($configurationContext, 'client_id'));
-            $clientSecret = $configuration->get_setting(array($configurationContext, 'client_secret'));
+            $developerKey = $configuration->get_setting([$configurationContext, 'developer_key']);
+            $clientId = $configuration->get_setting([$configurationContext, 'client_id']);
+            $clientSecret = $configuration->get_setting([$configurationContext, 'client_secret']);
             $accessToken = LocalSetting::getInstance()->get('token', $configurationContext);
 
             self::$instance = new static($developerKey, $clientId, $clientSecret, $accessToken);
@@ -334,8 +279,7 @@ class CalendarRepository
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function hasAccessToken()
     {
@@ -354,10 +298,10 @@ class CalendarRepository
         $googleClient = $this->getGoogleClient();
 
         $redirect = new Redirect(
-            array(
+            [
                 Application::PARAM_CONTEXT => Manager::context(),
                 Manager::PARAM_ACTION => Manager::ACTION_LOGIN
-            )
+            ]
         );
 
         $googleClient->setRedirectUri($redirect->getUrl());
@@ -394,15 +338,46 @@ class CalendarRepository
     }
 
     /**
-     *
      * @param string $accessToken
      *
-     * @return boolean
+     * @return bool
      */
     public function saveAccessToken($accessToken)
     {
         return LocalSetting::getInstance()->create(
             'token', $accessToken, Manager::context()
         );
+    }
+
+    /**
+     * @param string $accessToken
+     */
+    public function setAccessToken($accessToken)
+    {
+        $this->accessToken = $accessToken;
+    }
+
+    /**
+     * @param string $clientId
+     */
+    public function setClientId($clientId)
+    {
+        $this->clientId = $clientId;
+    }
+
+    /**
+     * @param string $clientSecret
+     */
+    public function setClientSecret($clientSecret)
+    {
+        $this->clientSecret = $clientSecret;
+    }
+
+    /**
+     * @param string $developerKey
+     */
+    public function setDeveloperKey($developerKey)
+    {
+        $this->developerKey = $developerKey;
     }
 }

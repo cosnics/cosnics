@@ -233,7 +233,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     }
 
     /**
-     * @param int $sort
+     * @param ?int $sort
      */
     public function setSort($sort)
     {

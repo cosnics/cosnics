@@ -3,34 +3,27 @@ namespace Chamilo\Configuration\Service;
 
 use Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface;
 use Chamilo\Configuration\Interfaces\DataLoaderInterface;
-use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
+use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
- *
  * @package Chamilo\Configuration\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class DataCacheLoader extends DoctrinePhpFileCacheService implements DataLoaderInterface
+class DataCacheLoader extends DoctrineCacheService implements DataLoaderInterface
 {
 
-    /**
-     *
-     * @var \Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface
-     */
-    private $cacheableDataLoader;
+    private CacheableDataLoaderInterface $cacheableDataLoader;
 
-    /**
-     *
-     * @param \Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface $cacheableDataLoader
-     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
-     */
     public function __construct(
-        CacheableDataLoaderInterface $cacheableDataLoader, ConfigurablePathBuilder $configurablePathBuilder
+        AdapterInterface $cacheAdapter, ConfigurablePathBuilder $configurablePathBuilder,
+        CacheableDataLoaderInterface $cacheableDataLoader
     )
     {
-        parent::__construct($configurablePathBuilder);
+        parent::__construct($cacheAdapter, $configurablePathBuilder);
+
         $this->cacheableDataLoader = $cacheableDataLoader;
     }
 
@@ -41,67 +34,39 @@ class DataCacheLoader extends DoctrinePhpFileCacheService implements DataLoaderI
         return $this->getCacheAdapter()->delete($this->getCacheableDataLoader()->getIdentifier());
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService::getCachePathNamespace()
-     */
-    public function getCachePathNamespace()
-    {
-        return 'Chamilo\Configuration';
-    }
-
-    /**
-     *
-     * @return \Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface
-     */
-    protected function getCacheableDataLoader()
+    protected function getCacheableDataLoader(): CacheableDataLoaderInterface
     {
         return $this->cacheableDataLoader;
     }
 
     /**
-     *
-     * @param \Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface $cacheableDataLoader
-     */
-    protected function setCacheableDataLoader(CacheableDataLoaderInterface $cacheableDataLoader)
-    {
-        $this->cacheableDataLoader = $cacheableDataLoader;
-    }
-
-    /**
-     *
-     * @return string[]
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getData()
     {
         return $this->getForIdentifier($this->getCacheableDataLoader()->getIdentifier());
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::getIdentifiers()
-     */
-    public function getIdentifiers()
+    public function getIdentifiers(): array
     {
-        return array($this->getCacheableDataLoader()->getIdentifier());
+        return [$this->getCacheableDataLoader()->getIdentifier()];
     }
 
     /**
-     *
-     * @return boolean
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function loadData()
+    public function loadData(): bool
     {
-        return $this->getCacheAdapter()->save(
-            $this->getCacheableDataLoader()->getIdentifier(), $this->getCacheableDataLoader()->getData()
-        );
+        $cacheItem = $this->getCacheAdapter()->getItem($this->getCacheableDataLoader()->getIdentifier());
+        $cacheItem->set($this->getCacheableDataLoader()->getData());
+
+        return $this->getCacheAdapter()->save($cacheItem);
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
+     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function warmUpForIdentifier($identifier)
+    public function warmUpForIdentifier($identifier): bool
     {
         return $this->loadData();
     }

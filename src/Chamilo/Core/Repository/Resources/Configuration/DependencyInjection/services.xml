@@ -44,6 +44,20 @@
 
         <service id="Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator"/>
         <service id="Chamilo\Core\Repository\Quota\Rights\Storage\Repository\RightsRepository"/>
+
+        <service id="Chamilo\Core\Repository\Quota\Service\CalculatorCacheService">
+            <argument key="$cacheAdapter"
+                      type="service"
+                      id="Chamilo\Core\Repository\Quota\Service\CalculatorCacheAdapter"/>
+        </service>
+
+        <service id="Chamilo\Core\Repository\Quota\Service\CalculatorCacheAdapter"
+                 class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
+            <argument key="$namespace">Chamilo\Core\Repository\Quota\Calculator</argument>
+            <argument key="$directory"
+                      type="expression">parameter('chamilo.configuration.storage')['cache_path']</argument>
+        </service>
+
         <service id="Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository"/>
 
         <service id="Chamilo\Core\Repository\Common\ContentObjectDifferenceRenderer"/>

@@ -314,17 +314,9 @@ class User extends DataClass
      */
     public function get_groups($only_retrieve_ids = false)
     {
-        // if (! $only_retrieve_ids)
-        // {
         return \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
             $this->getId(), $only_retrieve_ids
         );
-        // }
-        // else
-        // {
-        // $userGroupMembershipCacheService = new UserGroupMembershipCacheService();
-        // return $userGroupMembershipCacheService->getMembershipsForUserAndType($this, $only_retrieve_ids);
-        // }
     }
 
     /**

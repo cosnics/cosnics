@@ -3,9 +3,9 @@ namespace Chamilo\Libraries\Format\Validator;
 
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\CachedReader;
-use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Common\Cache\PhpFileCache;
+use Doctrine\Common\Annotations\PsrCachedReader;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 use Symfony\Component\Validator\ValidatorBuilder;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -13,8 +13,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * Builds the Symfony Validator for use with annotaded data-classes
  * More information can be found at the Symfony Validator Component manual:
  *
- * @link http://symfony.com/doc/current/book/validation.html
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @link    http://symfony.com/doc/current/book/validation.html
+ * @author  Sven Vanpoucke - Hogeschool Gent
  * @package Chamilo\Libraries\Format\Validator
  */
 class ValidatorFactory
@@ -39,12 +39,16 @@ class ValidatorFactory
         $this->devMode = $devMode;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function createValidator(): ValidatorDecorator
     {
-        $cachePath = $this->configurablePathBuilder->getCachePath(__NAMESPACE__);
-        $cache = $this->devMode ? new ArrayCache() : new PhpFileCache($cachePath);
+        $cacheAdapter = $this->devMode ? new ArrayAdapter() : new PhpFilesAdapter(
+            md5('Chamilo\Libraries\Format\Validator'), 0, $this->configurablePathBuilder->getCachePath()
+        );
 
-        $annotationReader = new CachedReader(new AnnotationReader(), $cache);
+        $annotationReader = new PsrCachedReader(new AnnotationReader(), $cacheAdapter);
         $this->validatorBuilder->enableAnnotationMapping($annotationReader);
         $symfonyValidator = $this->validatorBuilder->getValidator();
 

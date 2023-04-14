@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Package\Storage\DataClass;
 
+use Chamilo\Configuration\Package\Properties\Authors\Author;
 use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\PathBuilder;
@@ -10,33 +11,32 @@ use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
- *
  * @package Chamilo\Configuration\Package\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Package extends DataClass
 {
 
-    const PROPERTY_ADDITIONAL = 'additional';
-    const PROPERTY_AUTHORS = 'authors';
-    const PROPERTY_CATEGORY = 'category';
-    const PROPERTY_CONTEXT = 'context';
-    const PROPERTY_CORE_INSTALL = 'core_install';
-    const PROPERTY_DEFAULT_INSTALL = 'default_install';
-    const PROPERTY_DEPENDENCIES = 'dependencies';
-    const PROPERTY_DESCRIPTION = 'description';
-    const PROPERTY_EXTRA = 'extra';
-    const PROPERTY_NAME = 'name';
-    const PROPERTY_RESOURCES = 'resources';
-    const PROPERTY_TYPE = 'type';
-    const PROPERTY_VERSION = 'version';
+    public const PROPERTY_ADDITIONAL = 'additional';
+    public const PROPERTY_AUTHORS = 'authors';
+    public const PROPERTY_CATEGORY = 'category';
+    public const PROPERTY_CONTEXT = 'context';
+    public const PROPERTY_CORE_INSTALL = 'core_install';
+    public const PROPERTY_DEFAULT_INSTALL = 'default_install';
+    public const PROPERTY_DEPENDENCIES = 'dependencies';
+    public const PROPERTY_DESCRIPTION = 'description';
+    public const PROPERTY_EXTRA = 'extra';
+    public const PROPERTY_NAME = 'name';
+    public const PROPERTY_RESOURCES = 'resources';
+    public const PROPERTY_TYPE = 'type';
+    public const PROPERTY_VERSION = 'version';
 
     /**
-     * @param \stdClass $author
+     * @param \Chamilo\Configuration\Package\Properties\Authors\Author $author
      *
      * @throws \Exception
      */
-    public function add_author($author)
+    public function add_author(Author $author)
     {
         $authors = $this->get_authors();
         $authors[] = $author;
@@ -45,24 +45,23 @@ class Package extends DataClass
     }
 
     /**
-     *
      * @param string $context
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      * @deprecated Use PackageFactory->packageExists($context) now
      */
     public static function exists($context)
     {
         $packageFactory = new PackageFactory(
-            new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals()), Translation::getInstance()
+            new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals()),
+            Translation::getInstance()
         );
 
         return $packageFactory->packageExists($context);
     }
 
     /**
-     *
      * @param string $context
      *
      * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
@@ -72,14 +71,14 @@ class Package extends DataClass
     public static function get($context)
     {
         $packageFactory = new PackageFactory(
-            new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals()), Translation::getInstance()
+            new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals()),
+            Translation::getInstance()
         );
 
         return $packageFactory->getPackage($context);
     }
 
     /**
-     *
      * @return string[]
      */
     public function getAdditional()
@@ -88,8 +87,7 @@ class Package extends DataClass
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getCoreInstall()
     {
@@ -97,8 +95,7 @@ class Package extends DataClass
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getDefaultInstall()
     {
@@ -130,17 +127,6 @@ class Package extends DataClass
     }
 
     /**
-     * Returns the dependencies for this dataclass
-     *
-     * @return ?\Chamilo\Configuration\Package\Properties\Dependencies\Dependencies
-     * @throws \Exception
-     */
-    public function get_dependencies()
-    {
-        return unserialize($this->getDefaultProperty(self::PROPERTY_DEPENDENCIES));
-    }
-
-    /**
      * Returns the extra of this Package.
      *
      * @return \stdClass[]
@@ -167,7 +153,7 @@ class Package extends DataClass
     }
 
     /**
-     * @return \stdClass[]
+     * @return \Chamilo\Configuration\Package\Properties\Authors\Author[]
      */
     public function get_authors()
     {
@@ -175,7 +161,6 @@ class Package extends DataClass
     }
 
     /**
-     *
      * @return string
      */
     public function get_category()
@@ -189,6 +174,17 @@ class Package extends DataClass
     public function get_context()
     {
         return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
+    }
+
+    /**
+     * Returns the dependencies for this dataclass
+     *
+     * @return ?\Chamilo\Configuration\Package\Properties\Dependencies\Dependencies
+     * @throws \Exception
+     */
+    public function get_dependencies()
+    {
+        return unserialize($this->getDefaultProperty(self::PROPERTY_DEPENDENCIES));
     }
 
     /**
@@ -241,7 +237,6 @@ class Package extends DataClass
     }
 
     /**
-     *
      * @param string[] $additional
      *
      * @throws \Exception
@@ -252,7 +247,7 @@ class Package extends DataClass
     }
 
     /**
-     * @param integer $coreInstall
+     * @param int $coreInstall
      *
      * @throws \Exception
      */
@@ -262,7 +257,7 @@ class Package extends DataClass
     }
 
     /**
-     * @param integer $defaultInstall
+     * @param int $defaultInstall
      *
      * @throws \Exception
      */
@@ -294,7 +289,7 @@ class Package extends DataClass
     }
 
     /**
-     * @param \stdClass[] $authors
+     * @param \Chamilo\Configuration\Package\Properties\Authors\Author[] $authors
      *
      * @throws \Exception
      */

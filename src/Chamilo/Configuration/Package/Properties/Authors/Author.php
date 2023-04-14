@@ -2,95 +2,52 @@
 namespace Chamilo\Configuration\Package\Properties\Authors;
 
 /**
- *
- * @author Hans De Bisschop
- * @package core.lynx
+ * @package Chamilo\Configuration\Package\Properties\Authors
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Author
 {
 
-    /**
-     *
-     * @var string
-     */
-    private $name;
+    private ?string $company;
 
-    /**
-     *
-     * @var string
-     */
-    private $email;
+    private string $email;
 
-    /**
-     *
-     * @var string
-     */
-    private $company;
+    private string $name;
 
-    /**
-     *
-     * @param string $name
-     * @param string $email
-     * @param string $company
-     */
-    public function __construct($name, $email, $company = null)
+    public function __construct(string $name, string $email, ?string $company = null)
     {
         $this->set_name($name);
         $this->set_email($email);
         $this->set_company($company);
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_name()
-    {
-        return $this->name;
-    }
-
-    /**
-     *
-     * @param string $name
-     */
-    public function set_name($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_email()
-    {
-        return $this->email;
-    }
-
-    /**
-     *
-     * @param string $email
-     */
-    public function set_email($email)
-    {
-        $this->email = $email;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_company()
+    public function get_company(): ?string
     {
         return $this->company;
     }
 
-    /**
-     *
-     * @param string $company
-     */
-    public function set_company($company)
+    public function get_email(): string
+    {
+        return $this->email;
+    }
+
+    public function get_name(): string
+    {
+        return $this->name;
+    }
+
+    public function set_company(?string $company)
     {
         $this->company = $company;
+    }
+
+    public function set_email(string $email)
+    {
+        $this->email = $email;
+    }
+
+    public function set_name(string $name)
+    {
+        $this->name = $name;
     }
 }

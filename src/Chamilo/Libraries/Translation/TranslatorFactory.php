@@ -16,39 +16,45 @@ use Symfony\Component\Translation\Translator;
  * Builds the symfony translator
  *
  * @package Chamilo\Libraries\Translation
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TranslatorFactory
 {
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
+    protected InternationalizationBundlesCacheService $internationalizationBundlesCacheService;
+
+    public function __construct(
+        ConfigurablePathBuilder $configurablePathBuilder,
+        InternationalizationBundlesCacheService $internationalizationBundlesCacheService
+    )
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
+        $this->internationalizationBundlesCacheService = $internationalizationBundlesCacheService;
     }
 
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     protected function addOptimizedTranslationResources(Translator $translator)
     {
-        $translationCachePath = $this->configurablePathBuilder->getCachePath(__NAMESPACE__);
+        $packageNamespaces = $this->getInternationalizationBundlesCacheService()->getAllPackages();
+
+        $translationCachePath = $this->getConfigurablePathBuilder()->getCachePath(__NAMESPACE__);
 
         if (!is_dir($translationCachePath))
         {
             Filesystem::create_dir($translationCachePath);
         }
 
-        $internationalizationBundlesCacheService =
-            new InternationalizationBundlesCacheService($this->configurablePathBuilder);
-        $packageNamespaces = $internationalizationBundlesCacheService->getAllPackages();
-
         $translationResourcesOptimizer = new TranslationResourcesOptimizer(
-            array('xliff' => new XliffFileLoader(), 'ini' => new IniFileLoader()),
-            new PackagesTranslationResourcesFinder(
-                new PackagesFilesFinder(
-                    new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals()),
-                    $packageNamespaces
-                )
-            ), $translationCachePath
+            ['xliff' => new XliffFileLoader(), 'ini' => new IniFileLoader()], new PackagesTranslationResourcesFinder(
+            new PackagesFilesFinder(
+                new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals()),
+                $packageNamespaces
+            )
+        ), $translationCachePath
         );
 
         $resources = $translationResourcesOptimizer->getOptimizedTranslationResources();
@@ -59,15 +65,28 @@ class TranslatorFactory
         }
     }
 
-    public function createTranslator(?string $locale = null): Translator
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function createTranslator(?string $locale = null, array $fallbackLanguages = []): Translator
     {
         $translator = new Translator($locale);
 
         $translator->addLoader('optimized', new OptimizedTranslationsPhpFileLoader());
         $this->addOptimizedTranslationResources($translator);
 
-        $translator->setFallbackLocales(array('en', 'nl'));
+        $translator->setFallbackLocales($fallbackLanguages);
 
         return $translator;
+    }
+
+    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
+    {
+        return $this->configurablePathBuilder;
+    }
+
+    public function getInternationalizationBundlesCacheService(): InternationalizationBundlesCacheService
+    {
+        return $this->internationalizationBundlesCacheService;
     }
 }

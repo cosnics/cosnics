@@ -6,7 +6,6 @@ use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Selector\Option\ContentObjectTypeSelectorOption;
 use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
-use Chamilo\Core\Repository\Service\TypeSelectorCacheService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -14,20 +13,21 @@ use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
- *
  * @package Chamilo\Core\Repository\Selector
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class TypeSelectorFactory
 {
     use DependencyInjectionContainerTrait;
 
-    const MODE_CATEGORIES = 1;
-    const MODE_FLAT_LIST = 2;
+    public const MODE_CATEGORIES = 1;
+    public const MODE_FLAT_LIST = 2;
 
     /**
      * @var bool
@@ -40,21 +40,18 @@ class TypeSelectorFactory
     protected $mode;
 
     /**
-     *
      * @var string[]
      */
     private $contentObjectTypes;
 
     /**
-     *
-     * @var integer
+     * @var int
      */
     private $userIdentifier;
 
     /**
-     *
      * @param string[] $contentObjectTypes
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      * @param int $mode
      * @param bool $defaultSorting
      */
@@ -71,13 +68,12 @@ class TypeSelectorFactory
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\Selector\TypeSelector
      */
     public function buildTypeSelector()
     {
-        $typeSelector = new TypeSelector();
         $helperTypes = DataManager::get_active_helper_types();
+        $typeSelector = new TypeSelector();
 
         $contexts = [];
 
@@ -161,16 +157,66 @@ class TypeSelectorFactory
     }
 
     /**
-     *
      * @return string[]
      */
     public function getContentObjectTypes()
     {
         return $this->contentObjectTypes;
     }
+    
+    public function getRegistrationConsulter(): RegistrationConsulter
+    {
+        return $this->getService(RegistrationConsulter::class);
+    }
+
+    public function getTemplateRegistrationConsulter(): TemplateRegistrationConsulter
+    {
+        return $this->getService(TemplateRegistrationConsulter::class);
+    }
 
     /**
-     *
+     * @throws \Exception
+     */
+    public function getTypeSelector(): TypeSelector
+    {
+        $cacheAdapter = $this->getTypeSelectorCacheAdapter();
+
+        $cacheIdentifier = md5(
+            serialize([$this->getContentObjectTypes(), $this->getUserIdentifier(), $this->mode, $this->defaultSorting])
+        );
+
+        try
+        {
+            $cacheItem = $cacheAdapter->getItem($cacheIdentifier);
+
+            if (!$cacheItem->isHit())
+            {
+                $cacheItem->set($this->buildTypeSelector());
+                $cacheAdapter->save($cacheItem);
+            }
+
+            return $cacheItem->get();
+        }
+        catch (InvalidArgumentException $e)
+        {
+            return new TypeSelector();
+        }
+    }
+
+    protected function getTypeSelectorCacheAdapter(): FilesystemAdapter
+    {
+        return $this->getService('Chamilo\Core\Repository\Service\TypeSelectorCacheAdapter');
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserIdentifier()
+    {
+        return $this->userIdentifier;
+    }
+
+    /**
      * @param string[] $contentObjectTypes
      */
     public function setContentObjectTypes($contentObjectTypes)
@@ -179,52 +225,7 @@ class TypeSelectorFactory
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\RegistrationConsulter
-     * @throws \Exception
-     */
-    public function getRegistrationConsulter(): RegistrationConsulter
-    {
-        return $this->getService(
-            RegistrationConsulter::class
-        );
-    }
-
-    /**
-     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
-     * @throws \Exception
-     */
-    public function getTemplateRegistrationConsulter()
-    {
-        return $this->getService(
-            TemplateRegistrationConsulter::class
-        );
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Selector\TypeSelector
-     */
-    public function getTypeSelector()
-    {
-        $typeSelectorCacheService = new TypeSelectorCacheService($this, $this->getConfigurablePathBuilder());
-
-        return $typeSelectorCacheService->getForContentObjectTypesUserIdentifierAndMode(
-            $this->getContentObjectTypes(), $this->getUserIdentifier(), $this->mode, $this->defaultSorting
-        );
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getUserIdentifier()
-    {
-        return $this->userIdentifier;
-    }
-
-    /**
-     *
-     * @param integer $userIdentifier
+     * @param int $userIdentifier
      */
     public function setUserIdentifier($userIdentifier)
     {
