@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Libraries\Cache\Doctrine;
+namespace Chamilo\Libraries\Cache;
 
-use Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheInterface;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Exception;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class DoctrineCacheService implements CacheResetterInterface
+abstract class SymfonyCacheService implements CacheInterface
 {
     /**
      * @var \Chamilo\Libraries\File\ConfigurablePathBuilder

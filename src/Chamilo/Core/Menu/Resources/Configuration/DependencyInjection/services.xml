@@ -9,10 +9,9 @@
 
         <service id="Chamilo\Core\Menu\Factory\ItemFormFactory"/>
         <service id="Chamilo\Core\Menu\Factory\ItemRendererFactory"/>
-        <service id="Chamilo\Core\Menu\Factory\MenuCacheProviderFactory"/>
 
         <service id="Chamilo\Core\Menu\Service\ItemService">
-            <argument key="$itemCacheProvider"
+            <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Core\Menu\Cache\ItemCacheProvider"/>
             <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>
@@ -36,13 +35,18 @@
                       id="Chamilo\Configuration\Service\ConfigurationConsulter"/>
         </service>
 
-        <service id="Chamilo\Core\Menu\Cache\RightsCacheProvider">
-            <factory service="Chamilo\Core\Menu\Factory\MenuCacheProviderFactory"
-                     method="getRightsCacheProvider"/>
+        <service id="Chamilo\Core\Menu\Cache\RightsCacheProvider"
+                 class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createFilesystemAdapter"/>
+            <argument key="$namespace">Chamilo\Core\Menu\Rights</argument>
         </service>
-        <service id="Chamilo\Core\Menu\Cache\ItemCacheProvider">
-            <factory service="Chamilo\Core\Menu\Factory\MenuCacheProviderFactory"
-                     method="getItemCacheProvider"/>
+
+        <service id="Chamilo\Core\Menu\Cache\ItemCacheProvider"
+                 class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createFilesystemAdapter"/>
+            <argument key="$namespace">Chamilo\Core\Menu\Item</argument>
         </service>
 
         <service id="Chamilo\Core\Menu\Storage\Repository\ItemRepository"/>

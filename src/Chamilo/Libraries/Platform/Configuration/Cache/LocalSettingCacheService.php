@@ -4,8 +4,8 @@ namespace Chamilo\Libraries\Platform\Configuration\Cache;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
-use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
+use Chamilo\Libraries\Cache\SymfonyCacheService;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -24,7 +24,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LocalSettingCacheService extends DoctrineCacheService implements UserBasedCacheInterface
+class LocalSettingCacheService extends SymfonyCacheService implements UserBasedCacheInterface
 {
 
     public function clearForIdentifier($identifier): bool

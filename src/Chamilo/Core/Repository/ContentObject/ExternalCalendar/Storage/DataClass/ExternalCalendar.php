@@ -175,23 +175,11 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
         ];
     }
 
-    protected function getConfigurablePathBuilder(): ConfigurablePathBuilder
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            ConfigurablePathBuilder::class
-        );
-    }
-
     protected function getFilesystemAdapter(): FilesystemAdapter
     {
-        if (!isset($this->filesystemAdapter))
-        {
-            $this->filesystemAdapter = new FilesystemAdapter(
-                md5(__NAMESPACE__ . '\Occurences'), 3600, $this->getConfigurablePathBuilder()->getConfiguredCachePath()
-            );
-        }
-
-        return $this->filesystemAdapter;
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            'Chamilo\Core\Repository\ContentObject\ExternalCalendar\OccurencesCacheAdapter'
+        );
     }
 
     /**

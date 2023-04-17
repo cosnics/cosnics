@@ -15,10 +15,19 @@
 
         <service id="Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\ExternalCalendarCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\Ical</argument>
-            <argument key="$defaultLifetime">3600</argument>
-            <argument key="$directory"
-                      type="expression">parameter('chamilo.configuration.storage')['cache_path']</argument>
+            <argument key="$defaultLifetime">%chamilo.configuration.cache.external.defaultLifetime%</argument>
         </service>
+
+        <service id="Chamilo\Core\Repository\ContentObject\ExternalCalendar\OccurencesCacheAdapter"
+                 class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createFilesystemAdapter"/>
+            <argument key="$namespace">Chamilo\Core\Repository\ContentObject\ExternalCalendar\Occurences</argument>
+            <argument key="$defaultLifetime">%chamilo.configuration.cache.external.defaultLifetime%</argument>
+        </service>
+
     </services>
 </container>

@@ -11,5 +11,8 @@
             <tag name="Chamilo\Core\Admin\Service\ActionProvider"/>
         </service>
 
+        <service id="Chamilo\Core\Home\Service\ContentObjectPublicationService"/>
+        <service id="Chamilo\Core\Home\Repository\ContentObjectPublicationRepository"/>
+
     </services>
 </container>

@@ -23,17 +23,16 @@
 
         <service id="Chamilo\Core\Repository\Service\TemplateRegistrationLoaderCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Core\Repository</argument>
-            <argument key="$directory"
-                      type="expression">parameter('chamilo.configuration.storage')['cache_path']</argument>
         </service>
 
         <service id="Chamilo\Core\Repository\Service\TypeSelectorCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Core\Repository\Selector</argument>
-            <argument key="$directory"
-                      type="expression">parameter('chamilo.configuration.storage')['cache_path']
-            </argument>
         </service>
 
         <service id="Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository"/>

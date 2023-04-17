@@ -36,9 +36,9 @@
 
         <service id="Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createPhpFilesAdapter"/>
             <argument key="$namespace">Chamilo\Libraries\Platform\Configuration\LocalSetting</argument>
-            <argument key="$directory"
-                      type="expression">parameter('chamilo.configuration.storage')['cache_path']</argument>
         </service>
     </services>
 </container>

@@ -3,7 +3,7 @@ namespace Chamilo\Configuration\Service;
 
 use Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface;
 use Chamilo\Configuration\Interfaces\DataLoaderInterface;
-use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
+use Chamilo\Libraries\Cache\SymfonyCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -12,7 +12,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class DataCacheLoader extends DoctrineCacheService implements DataLoaderInterface
+class DataCacheLoader extends SymfonyCacheService implements DataLoaderInterface
 {
 
     private CacheableDataLoaderInterface $cacheableDataLoader;

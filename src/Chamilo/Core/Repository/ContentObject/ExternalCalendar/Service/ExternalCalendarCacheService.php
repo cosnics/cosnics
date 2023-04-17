@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service;
 
-use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
+use Chamilo\Libraries\Cache\SymfonyCacheService;
 use Sabre\VObject;
 
 /**
@@ -11,7 +11,7 @@ use Sabre\VObject;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ExternalCalendarCacheService extends DoctrineCacheService implements UserBasedCacheInterface
+class ExternalCalendarCacheService extends SymfonyCacheService implements UserBasedCacheInterface
 {
     public const PARAM_LIFETIME = 'lifetime';
     public const PARAM_PATH = 'path';

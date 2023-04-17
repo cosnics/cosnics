@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Service;
 
 use Chamilo\Configuration\Interfaces\DataLoaderInterface;
 use Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository;
-use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
+use Chamilo\Libraries\Cache\SymfonyCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -13,7 +13,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class TemplateRegistrationLoader extends DoctrineCacheService implements DataLoaderInterface
+class TemplateRegistrationLoader extends SymfonyCacheService implements DataLoaderInterface
 {
     public const REGISTRATION_DEFAULT = 2;
     public const REGISTRATION_ID = 1;

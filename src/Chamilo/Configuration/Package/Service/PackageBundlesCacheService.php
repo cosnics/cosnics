@@ -3,7 +3,7 @@ namespace Chamilo\Configuration\Package\Service;
 
 use Chamilo\Configuration\Package\Finder\PackageBundles;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
+use Chamilo\Libraries\Cache\SymfonyCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -13,7 +13,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PackageBundlesCacheService extends DoctrineCacheService
+class PackageBundlesCacheService extends SymfonyCacheService
 {
     protected PackageFactory $packageFactory;
 

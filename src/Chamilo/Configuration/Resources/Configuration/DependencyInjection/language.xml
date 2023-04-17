@@ -20,15 +20,26 @@
 
         <service id="Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Configuration\Package\InternationalizationBundles</argument>
-            <argument key="$directory"
-                      type="expression">parameter('chamilo.configuration.storage')['cache_path']</argument>
         </service>
 
         <service id="Chamilo\Configuration\Service\LanguageCacheLoader"
                  class="Chamilo\Configuration\Service\DataCacheLoader">
-            <argument type="service"
+            <argument key="$cacheableDataLoader"
+                      type="service"
                       id="Chamilo\Configuration\Service\LanguageLoader"/>
+            <argument key="$cacheAdapter"
+                      type="service"
+                      id="Chamilo\Configuration\Service\LanguageCacheAdapter"/>
+        </service>
+
+        <service id="Chamilo\Configuration\Service\LanguageCacheAdapter"
+                 class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createPhpFilesAdapter"/>
+            <argument key="$namespace">Chamilo\Configuration\Service\Language</argument>
         </service>
 
         <service id="Chamilo\Configuration\Service\LanguageLoader"/>

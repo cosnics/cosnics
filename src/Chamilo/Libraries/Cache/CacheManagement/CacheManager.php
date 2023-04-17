@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Cache\CacheManagement;
 
-use Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheInterface;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 use InvalidArgumentException;
 
@@ -18,7 +18,7 @@ class CacheManager
     /**
      * The cache services which have the possibility to be reset (clear and warmup)
      *
-     * @var \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface[]
+     * @var \Chamilo\Libraries\Cache\Interfaces\CacheInterface[]
      */
     protected $cacheServices;
 
@@ -31,9 +31,9 @@ class CacheManager
      * Adds a cache service to the list of cache warmers
      *
      * @param string $alias
-     * @param \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface $cacheService
+     * @param \Chamilo\Libraries\Cache\Interfaces\CacheInterface $cacheService
      */
-    public function addCacheService($alias, CacheResetterInterface $cacheService)
+    public function addCacheService($alias, CacheInterface $cacheService)
     {
         $this->cacheServices[$alias] = $cacheService;
     }
@@ -66,7 +66,7 @@ class CacheManager
     /**
      * Returns the cache warmers
      *
-     * @return \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface[]
+     * @return \Chamilo\Libraries\Cache\Interfaces\CacheInterface[]
      */
     public function getCacheServices()
     {
@@ -79,7 +79,7 @@ class CacheManager
      *
      * @param string[] $cacheServiceAliases
      *
-     * @return \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface[]
+     * @return \Chamilo\Libraries\Cache\Interfaces\CacheInterface[]
      */
     protected function getCacheServicesByAliases($cacheServiceAliases = [])
     {

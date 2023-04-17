@@ -1,27 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Cache\CacheManagement;
 
-use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
-use Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheService;
-use Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheService;
-use Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheService;
-use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
-use Chamilo\Configuration\Service\DataCacheLoader;
-use Chamilo\Configuration\Service\LanguageLoader;
-use Chamilo\Configuration\Service\RegistrationLoader;
-use Chamilo\Configuration\Service\StorageConfigurationLoader;
-use Chamilo\Configuration\Storage\Repository\ConfigurationRepository;
-use Chamilo\Configuration\Storage\Repository\LanguageRepository;
-use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
-use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\ExternalCalendarCacheService;
-use Chamilo\Core\Repository\Quota\Service\CalculatorCacheService;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Repository\Service\TemplateRegistrationLoader;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Format\Twig\TwigCacheService;
-use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\DoctrineProxyCacheService;
-use Chamilo\Libraries\Translation\TranslationCacheService;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -32,61 +18,34 @@ use Twig\Environment;
  * Creates the cache services for Chamilo
  *
  * @package Chamilo\Libraries\Cache\CacheManagement
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterface
 {
 
-    /**
-     *
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
+    protected ContainerInterface $container;
 
-    /**
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
-    /**
-     * Adds general chamilo cache services
-     *
-     * @param \Chamilo\Libraries\Cache\CacheManagement\CacheManager $cacheManager
-     */
     protected function addGeneralCacheServices(CacheManager $cacheManager)
     {
-
-        $dataClassRepository =
-            $this->container->get('Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository');
-
         $cacheManager->addCacheService(
             'chamilo_dependency_injection', new DependencyInjectionCacheService($this->getConfigurationConsulter())
         );
 
         $cacheManager->addCacheService(
-            'chamilo_configuration', new DataCacheLoader(
-                new StorageConfigurationLoader(new ConfigurationRepository($this->getDataClassRepository())),
-                $this->getConfigurablePathBuilder()
-            )
+            'chamilo_configuration', $this->container->get('Chamilo\Configuration\Service\StorageConfigurationLoader')
         );
 
         $cacheManager->addCacheService(
-            'chamilo_registration', new DataCacheLoader(
-                new RegistrationLoader(
-                    $this->getStringUtilities(), new RegistrationRepository($this->getDataClassRepository())
-                ), $this->getConfigurablePathBuilder()
-            )
+            'chamilo_registration', $this->container->get('Chamilo\Configuration\Service\RegistrationLoader')
         );
 
         $cacheManager->addCacheService(
-            'chamilo_language', new DataCacheLoader(
-                new LanguageLoader(new LanguageRepository($this->getDataClassRepository())),
-                $this->getConfigurablePathBuilder()
-            )
+            'chamilo_language', $this->container->get('Chamilo\Configuration\Service\LanguageLoader')
         );
 
         $cacheManager->addCacheService(
@@ -94,20 +53,21 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         );
 
         $cacheManager->addCacheService(
-            'chamilo_packages', new PackageBundlesCacheService($this->getConfigurablePathBuilder())
+            'chamilo_packages',
+            $this->container->get('Chamilo\Configuration\Package\Service\PackageBundlesCacheService')
         );
 
         $cacheManager->addCacheService(
             'chamilo_translation_bundles',
-            new InternationalizationBundlesCacheService($this->getConfigurablePathBuilder())
+            $this->container->get('Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheService')
         );
 
         $cacheManager->addCacheService(
-            'chamilo_translations', new TranslationCacheService($this->getConfigurablePathBuilder())
+            'chamilo_translations', $this->container->get('Chamilo\Libraries\Translation\TranslationCacheService')
         );
 
         $cacheManager->addCacheService(
-            'chamilo_calculator', new CalculatorCacheService($this->getConfigurablePathBuilder())
+            'chamilo_calculator', $this->container->get('Chamilo\Core\Repository\Quota\Service\CalculatorCacheService')
         );
 
         // TODO: fix this for the new cache services for items
@@ -124,122 +84,70 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         );
     }
 
-    /**
-     * Adds user based cache services
-     *
-     * @param \Chamilo\Libraries\Cache\CacheManagement\CacheManager $cacheManager
-     */
     protected function addUserCacheServices(CacheManager $cacheManager)
     {
-//        $cacheManager->addCacheService(
-//            'chamilo_repository_type_selector',
-//            new TypeSelectorCacheService(new TypeSelectorFactory(), $this->getConfigurablePathBuilder())
-//        );
-
-        $googleCalendarRepository = new CalendarRepository(
-            '', '', ''
-        );
-
         $cacheManager->addCacheService(
             'chamilo_google_events',
-            new EventsCacheService($googleCalendarRepository, $this->getConfigurablePathBuilder())
+            $this->container->get('Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheService')
         );
         $cacheManager->addCacheService(
             'chamilo_google_calendars',
-            new OwnedCalendarsCacheService($googleCalendarRepository, $this->getConfigurablePathBuilder())
+            $this->container->get('Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheService')
         );
         $cacheManager->addCacheService(
-            'chamilo_external_calendar', new ExternalCalendarCacheService($this->getConfigurablePathBuilder())
+            'chamilo_external_calendar', $this->container->get(
+            'Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\ExternalCalendarCacheService'
+        )
         );
 
-        // TODO: fix the new cache services for rights
-        //        $cacheManager->addCacheService(
-        //            'chamilo_menu_rights', $this->container->get(RightsCacheService::class)
-        //
-        //        );
-
-//        $cacheManager->addCacheService(
-//            'chamilo_user_groups', new UserGroupMembershipCacheService($this->getConfigurablePathBuilder())
-//        );
         $cacheManager->addCacheService(
-            'chamilo_local_settings', new LocalSettingCacheService($this->getConfigurablePathBuilder())
+            'chamilo_local_settings',
+            $this->container->get('Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService')
         );
     }
 
-    /**
-     * Creates and adds the cache services to the given cache manager
-     *
-     * @param \Chamilo\Libraries\Cache\CacheManagement\CacheManager $cacheManager
-     *
-     * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
-     * @throws \Doctrine\DBAL\Exception
-     */
     public function createCacheServices(CacheManager $cacheManager)
     {
         $this->addGeneralCacheServices($cacheManager);
         $this->addUserCacheServices($cacheManager);
     }
 
-    /**
-     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
-     */
-    protected function getConfigurablePathBuilder()
+    protected function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
         return $this->container->get(ConfigurablePathBuilder::class);
     }
 
-    /**
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    protected function getConfigurationConsulter()
+    protected function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->container->get('Chamilo\Configuration\Service\FileConfigurationConsulter');
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
-    protected function getDataClassRepository()
+    protected function getDataClassRepository(): DataClassRepository
     {
         return $this->container->get('Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository');
     }
 
-    /**
-     * @return \Doctrine\ORM\EntityManager
-     */
-    protected function getEntityManager()
+    protected function getEntityManager(): EntityManager
     {
         return $this->container->get(EntityManager::class);
     }
 
-    /**
-     * @return \Twig\Environment
-     */
-    protected function getEnvironment()
+    protected function getEnvironment(): Environment
     {
         return $this->container->get(Environment::class);
     }
 
-    /**
-     * @return \Symfony\Component\Form\FormFactory
-     */
-    protected function getFormFactory()
+    protected function getFormFactory(): FormFactory
     {
         return $this->container->get(FormFactory::class);
     }
 
-    /**
-     * @return \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    protected function getStringUtilities()
+    protected function getStringUtilities(): StringUtilities
     {
         return $this->container->get(StringUtilities::class);
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationLoader
-     */
-    protected function getTemplateRegistrationLoader()
+    protected function getTemplateRegistrationLoader(): TemplateRegistrationLoader
     {
         return $this->container->get(TemplateRegistrationLoader::class);
     }

@@ -7,8 +7,11 @@ namespace Chamilo\Libraries\Cache\Interfaces;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-interface CacheResetterInterface extends CacheClearerInterface
+interface CacheInterface
 {
+    public function clear(): bool;
 
     public function clearAndWarmUp(): bool;
+
+    public function warmUp(): bool;
 }

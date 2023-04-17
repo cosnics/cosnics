@@ -3,7 +3,7 @@ namespace Chamilo\Configuration\Package\Service;
 
 use Chamilo\Configuration\Package\Finder\InternationalizationBundles;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
+use Chamilo\Libraries\Cache\SymfonyCacheService;
 
 /**
  * @package Chamilo\Configuration\Package\Service
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class InternationalizationBundlesCacheService extends DoctrineCacheService
+class InternationalizationBundlesCacheService extends SymfonyCacheService
 {
 
     /**

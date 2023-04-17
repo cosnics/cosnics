@@ -8,28 +8,37 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
  * Manages the cache for the symfony translations
  *
  * @package Chamilo\Libraries\Translation
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TranslationCacheService extends FileBasedCacheService
 {
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
+    protected TranslatorFactory $translatorFactory;
+
+    public function __construct(TranslatorFactory $translatorFactory)
     {
-        $this->configurablePathBuilder = $configurablePathBuilder;
+        $this->translatorFactory = $translatorFactory;
     }
 
-    function getCachePath(): string
+    public function getCachePath(): string
     {
         return $this->configurablePathBuilder->getCachePath(__NAMESPACE__);
     }
 
-    public function warmUp(): TranslationCacheService
+    public function getTranslatorFactory(): TranslatorFactory
     {
-        $translatorFactory = new TranslatorFactory($this->configurablePathBuilder);
-        $translatorFactory->createTranslator('en_EN');
+        return $this->translatorFactory;
+    }
 
-        return $this;
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function warmUp(): bool
+    {
+        $this->getTranslatorFactory()->createTranslator('en_EN');
+
+        return true;
     }
 }

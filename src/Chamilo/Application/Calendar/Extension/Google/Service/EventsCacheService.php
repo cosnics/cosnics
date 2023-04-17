@@ -4,9 +4,9 @@ namespace Chamilo\Application\Calendar\Extension\Google\Service;
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 use Chamilo\Libraries\Cache\ParameterBag;
+use Chamilo\Libraries\Cache\SymfonyCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Google_Service_Calendar_Events;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EventsCacheService extends DoctrineCacheService implements UserBasedCacheInterface
+class EventsCacheService extends SymfonyCacheService implements UserBasedCacheInterface
 {
     public const PARAM_CALENDAR_IDENTIFIER = 'calendarIdentifier';
     public const PARAM_FROM_DATE = 'fromDate';

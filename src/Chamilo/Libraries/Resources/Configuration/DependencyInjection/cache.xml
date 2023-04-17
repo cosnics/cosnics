@@ -13,6 +13,8 @@
 
         <service id="Chamilo\Libraries\Cache\CacheManagement\CacheManagerBuilder"/>
 
+        <service id="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"/>
+
         <service id="Chamilo\Libraries\Cache\CacheManagement\ChamiloCacheServicesConstructor">
             <argument type="service"
                       id="service_container"/>

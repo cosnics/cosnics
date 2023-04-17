@@ -52,6 +52,7 @@ use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Exception\ConnectionException;
 use Chamilo\Libraries\Storage\Service\ParametersHandler;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
@@ -60,8 +61,8 @@ use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
  * Builds the default dependency injection container for Chamilo
  *
  * @package Chamilo\Libraries\DependencyInjection
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyInjectionContainerBuilder
 {
@@ -195,11 +196,6 @@ class DependencyInjectionContainerBuilder
         }
 
         return $this->containerExtensionFinder;
-    }
-
-    public function setContainerExtensionFinder(?ContainerExtensionFinderInterface $containerExtensionFinder = null)
-    {
-        $this->containerExtensionFinder = $containerExtensionFinder;
     }
 
     protected function getFileConfigurationConsulter(): ConfigurationConsulter
@@ -339,11 +335,14 @@ class DependencyInjectionContainerBuilder
 
             $this->registrationConsulter = new RegistrationConsulter(
                 $this->getStringUtilities(), new DataCacheLoader(
-                    new RegistrationLoader(
-                        $this->getStringUtilities(), new RegistrationRepository(
-                            $dataClassRepository
-                        )
-                    ), $this->getConfigurablePathBuilder()
+                    new PhpFilesAdapter(
+                        md5('Chamilo\Configuration\Service\Registration'), 0,
+                        $this->getConfigurablePathBuilder()->getCachePath()
+                    ), $this->getConfigurablePathBuilder(), new RegistrationLoader(
+                    $this->getStringUtilities(), new RegistrationRepository(
+                        $dataClassRepository
+                    )
+                ),
                 )
             );
         }
@@ -443,5 +442,10 @@ class DependencyInjectionContainerBuilder
     public function setBuilder(?ContainerBuilder $builder = null)
     {
         $this->builder = $builder;
+    }
+
+    public function setContainerExtensionFinder(?ContainerExtensionFinderInterface $containerExtensionFinder = null)
+    {
+        $this->containerExtensionFinder = $containerExtensionFinder;
     }
 }

@@ -53,9 +53,9 @@
 
         <service id="Chamilo\Core\Repository\Quota\Service\CalculatorCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createPhpFilesAdapter"/>
             <argument key="$namespace">Chamilo\Core\Repository\Quota\Calculator</argument>
-            <argument key="$directory"
-                      type="expression">parameter('chamilo.configuration.storage')['cache_path']</argument>
         </service>
 
         <service id="Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository"/>

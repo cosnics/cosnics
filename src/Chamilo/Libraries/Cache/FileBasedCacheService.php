@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Cache;
 
-use Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheInterface;
 use Chamilo\Libraries\File\Filesystem;
 use RuntimeException;
 
@@ -9,44 +9,29 @@ use RuntimeException;
  * Abstract service class to manage caches that are file based
  *
  * @package Chamilo\Libraries\Cache
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
-abstract class FileBasedCacheService implements CacheResetterInterface
+abstract class FileBasedCacheService implements CacheInterface
 {
 
-    /**
-     * Clears the cache.
-     */
-    public function clear()
+    public function clear(): bool
     {
         return $this->removeCachePath($this->getCachePath());
     }
 
-    /**
-     * Clears the cache and warms it up again
-     *
-     * @return \Chamilo\Libraries\Cache\FileBasedCacheService
-     */
-    public function clearAndWarmUp()
+    public function clearAndWarmUp(): bool
     {
-        return $this->clear()->warmUp();
+        if (!$this->clear())
+        {
+            return false;
+        }
+
+        return $this->warmUp();
     }
 
-    /**
-     * Returns the path to the cache directory or file
-     *
-     * @return string
-     */
-    abstract function getCachePath();
+    abstract public function getCachePath(): string;
 
-    /**
-     * Removes the cachePath
-     *
-     * @param string $cachePath
-     *
-     * @return $this
-     */
-    protected function removeCachePath($cachePath)
+    protected function removeCachePath(string $cachePath): bool
     {
         if (file_exists($cachePath))
         {
@@ -56,16 +41,6 @@ abstract class FileBasedCacheService implements CacheResetterInterface
             }
         }
 
-        return $this;
-    }
-
-    /**
-     * Warms up the cache
-     *
-     * @return \Chamilo\Libraries\Cache\FileBasedCacheService
-     */
-    public function warmUp()
-    {
-        return $this;
+        return true;
     }
 }

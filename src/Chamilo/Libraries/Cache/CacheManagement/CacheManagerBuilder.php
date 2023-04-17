@@ -8,13 +8,12 @@ namespace Chamilo\Libraries\Cache\CacheManagement;
  * their own cache services
  *
  * @package Chamilo\Libraries\Cache\CacheManagement
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class CacheManagerBuilder
 {
 
     /**
-     *
      * @var \Chamilo\Libraries\Cache\CacheManagement\CacheServicesConstructorInterface[]
      */
     protected $cacheServicesConstructors;
@@ -25,7 +24,6 @@ class CacheManagerBuilder
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Cache\CacheManagement\CacheServicesConstructorInterface $cacheServicesConstructor
      */
     public function addCacheServiceConstructor(CacheServicesConstructorInterface $cacheServicesConstructor)

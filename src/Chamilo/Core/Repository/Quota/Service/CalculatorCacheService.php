@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Quota\Service;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Cache\Doctrine\DoctrineCacheService;
+use Chamilo\Libraries\Cache\SymfonyCacheService;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CalculatorCacheService extends DoctrineCacheService
+class CalculatorCacheService extends SymfonyCacheService
 {
     public const IDENTIFIER_TOTAL_USER_DISK_QUOTA = 'total_user_disk_quota';
 

@@ -23,9 +23,9 @@
 
         <service id="Chamilo\Configuration\Service\ConfigurationCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
-            <argument key="$namespace">Chamilo\Configuration</argument>
-            <argument key="$directory"
-                      type="expression">parameter('chamilo.configuration.storage')['cache_path']</argument>
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createPhpFilesAdapter"/>
+            <argument key="$namespace">Chamilo\Configuration\Service\Configuration</argument>
         </service>
 
         <service id="Chamilo\Configuration\Service\ConfigurationLoader"
@@ -58,10 +58,9 @@
 
         <service id="Chamilo\Configuration\Package\Service\PackageBundlesCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Configuration\Package\PlatformPackageBundles</argument>
-            <argument key="$directory"
-                      type="expression">parameter('chamilo.configuration.storage')['cache_path']
-            </argument>
         </service>
 
         <service id="Chamilo\Configuration\Service\PackageContextSequencer"/>

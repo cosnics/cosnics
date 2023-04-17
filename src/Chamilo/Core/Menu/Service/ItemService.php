@@ -4,12 +4,12 @@ namespace Chamilo\Core\Menu\Service;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
-use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -28,9 +28,9 @@ class ItemService
      */
     protected array $fallbackIsoCodes;
 
-    private DisplayOrderHandler $displayOrderHandler;
+    private AdapterInterface $cacheAdapter;
 
-    private FilesystemCache $itemCacheProvider;
+    private DisplayOrderHandler $displayOrderHandler;
 
     private ItemRepository $itemRepository;
 
@@ -45,7 +45,7 @@ class ItemService
     public function __construct(
         ItemRepository $itemRepository, RightsService $rightsService, StringUtilities $stringUtilities,
         PropertyMapper $propertyMapper, Translator $translator, DisplayOrderHandler $displayOrderHandler,
-        FilesystemCache $itemCacheProvider, array $fallbackIsoCodes
+        AdapterInterface $cacheAdapter, array $fallbackIsoCodes
     )
     {
         $this->itemRepository = $itemRepository;
@@ -54,7 +54,7 @@ class ItemService
         $this->propertyMapper = $propertyMapper;
         $this->translator = $translator;
         $this->displayOrderHandler = $displayOrderHandler;
-        $this->itemCacheProvider = $itemCacheProvider;
+        $this->cacheAdapter = $cacheAdapter;
         $this->fallbackIsoCodes = $fallbackIsoCodes;
     }
 
@@ -84,7 +84,7 @@ class ItemService
             return false;
         }
 
-        $this->getItemCacheProvider()->delete(ItemCacheService::KEY_ITEMS);
+        $this->getCacheAdapter()->delete(ItemCacheService::KEY_ITEMS);
 
         return true;
     }
@@ -137,7 +137,7 @@ class ItemService
             return false;
         }
 
-        $this->getItemCacheProvider()->delete(ItemCacheService::KEY_ITEM_TITLES);
+        $this->getCacheAdapter()->delete(ItemCacheService::KEY_ITEM_TITLES);
 
         return true;
     }
@@ -233,7 +233,7 @@ class ItemService
             return false;
         }
 
-        $this->getItemCacheProvider()->delete(ItemCacheService::KEY_ITEMS);
+        $this->getCacheAdapter()->delete(ItemCacheService::KEY_ITEMS);
 
         return true;
     }
@@ -265,7 +265,7 @@ class ItemService
             return false;
         }
 
-        $this->getItemCacheProvider()->delete(ItemCacheService::KEY_ITEM_TITLES);
+        $this->getCacheAdapter()->delete(ItemCacheService::KEY_ITEM_TITLES);
 
         return true;
     }
@@ -277,7 +277,7 @@ class ItemService
             return false;
         }
 
-        $this->getItemCacheProvider()->delete(ItemCacheService::KEY_ITEM_TITLES);
+        $this->getCacheAdapter()->delete(ItemCacheService::KEY_ITEM_TITLES);
 
         return true;
     }
@@ -412,6 +412,11 @@ class ItemService
         return $this->findItemsByParentIdentifier('0');
     }
 
+    public function getCacheAdapter(): AdapterInterface
+    {
+        return $this->cacheAdapter;
+    }
+
     /**
      * @return \Chamilo\Libraries\Storage\Service\DisplayOrderHandler
      */
@@ -426,11 +431,6 @@ class ItemService
     protected function getFallbackIsoCodes(): array
     {
         return $this->fallbackIsoCodes;
-    }
-
-    public function getItemCacheProvider(): FilesystemCache
-    {
-        return $this->itemCacheProvider;
     }
 
     /**
@@ -645,7 +645,7 @@ class ItemService
             return false;
         }
 
-        $this->getItemCacheProvider()->delete(ItemCacheService::KEY_ITEMS);
+        $this->getCacheAdapter()->delete(ItemCacheService::KEY_ITEMS);
 
         return true;
     }
@@ -660,7 +660,7 @@ class ItemService
             return false;
         }
 
-        $this->getItemCacheProvider()->delete(ItemCacheService::KEY_ITEM_TITLES);
+        $this->getCacheAdapter()->delete(ItemCacheService::KEY_ITEM_TITLES);
 
         return true;
     }

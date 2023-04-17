@@ -228,15 +228,7 @@ class CalendarEventDataProvider extends ExternalCalendar
 
     protected function getFilesystemAdapter(): FilesystemAdapter
     {
-        if (!isset($this->filesystemAdapter))
-        {
-            $this->filesystemAdapter = new FilesystemAdapter(
-                md5('Chamilo\Application\Calendar\Extension\Office365'), $this->getRefreshExternalInSeconds(),
-                $this->getConfigurablePathBuilder()->getConfiguredCachePath()
-            );
-        }
-
-        return $this->filesystemAdapter;
+        return $this->getService('Chamilo\Application\Calendar\Extension\Office365\CacheAdapter');
     }
 
     /**

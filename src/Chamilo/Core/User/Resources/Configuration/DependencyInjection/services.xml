@@ -15,16 +15,17 @@
 
         <service id="Chamilo\Core\User\Factory\UserFactory"/>
         <service id="Chamilo\Core\User\Service\UserService"/>
-        <service id="Chamilo\Core\User\Factory\UserSettingsCacheFactory"/>
         <service id="Chamilo\Core\User\Service\UserSettingService">
             <argument key="$userSettingsCache"
                       type="service"
                       id="Chamilo\Core\User\Service\UserSettingCacheService"/>
         </service>
 
-        <service id="Chamilo\Core\User\Service\UserSettingCacheService">
-            <factory service="Chamilo\Core\User\Factory\UserSettingsCacheFactory"
-                     method="createUserSettingsCache"/>
+        <service id="Chamilo\Core\User\Service\UserSettingCacheService"
+                 class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createFilesystemAdapter"/>
+            <argument key="$namespace">Chamilo\Core\User\UserSetting</argument>
         </service>
 
         <service id="Chamilo\Core\User\Service\PasswordGenerator"/>
