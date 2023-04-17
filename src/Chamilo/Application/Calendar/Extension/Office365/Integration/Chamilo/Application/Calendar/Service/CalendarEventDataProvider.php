@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Architecture\ExternalCalendar;
 use Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
@@ -198,8 +198,9 @@ class CalendarEventDataProvider extends ExternalCalendar
                 $fromDate,
                 $toDate
             ];
+            $identifierString = md5(serialize($identifier));
 
-            $cacheItem = $filesystemAdapter->getItem($identifier);
+            $cacheItem = $filesystemAdapter->getItem($identifierString);
 
             if (!$cacheItem->isHit())
             {

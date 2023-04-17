@@ -7,13 +7,11 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Core\Repository\Service\TemplateRegistrationConsulter">
+        <service id="Chamilo\Core\Repository\Service\Consulter\TemplateRegistrationConsulter">
             <argument key="$dataLoader"
                       type="service"
                       id="Chamilo\Core\Repository\Service\TemplateRegistrationLoader"/>
         </service>
-
-        <service id="Chamilo\Core\Repository\Service\TemplateRegistrationLoader"/>
 
         <service id="Chamilo\Core\Repository\Service\TemplateRegistrationLoader">
             <argument key="$cacheAdapter"

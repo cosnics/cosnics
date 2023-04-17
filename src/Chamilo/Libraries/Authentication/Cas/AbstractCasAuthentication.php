@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Authentication\Cas;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Authentication\Authentication;

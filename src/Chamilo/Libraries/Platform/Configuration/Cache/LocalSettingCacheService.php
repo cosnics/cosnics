@@ -44,7 +44,7 @@ class LocalSettingCacheService extends SymfonyCacheService implements UserBasedC
     /**
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function getForUserIdentifier($userIdentifier): bool
+    public function getForUserIdentifier($userIdentifier)
     {
         return $this->getForIdentifier($userIdentifier);
     }
@@ -93,7 +93,7 @@ class LocalSettingCacheService extends SymfonyCacheService implements UserBasedC
             $localSettings[$setting->get_context()][$setting->get_variable()] = $userSetting->get_value();
         }
 
-        $cacheItem = $this->getCacheAdapter()->getItem($identifier);
+        $cacheItem = $this->getCacheAdapter()->getItem((string) $identifier);
         $cacheItem->set($localSettings);
 
         return $this->getCacheAdapter()->save($cacheItem);

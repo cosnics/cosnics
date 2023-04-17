@@ -1,39 +1,34 @@
 <?php
-namespace Chamilo\Configuration\Service;
+namespace Chamilo\Configuration\Service\Consulter;
 
+use Chamilo\Libraries\Cache\Interfaces\DataLoaderInterface;
 use Exception;
 
 /**
- *
  * @package Chamilo\Configuration\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class ConfigurationConsulter extends DataConsulter
+class ConfigurationConsulter
 {
+    protected DataLoaderInterface $dataLoader;
 
-    /**
-     *
-     * @return string[][]
-     */
-    public function getSettings()
+    public function __construct(DataLoaderInterface $dataLoader)
     {
-        return $this->getData();
+        $this->dataLoader = $dataLoader;
+    }
+
+    public function getDataLoader(): DataLoaderInterface
+    {
+        return $this->dataLoader;
     }
 
     /**
-     * Gets a parameter from the configuration.
-     *
      * @param string[] $keys
-     * @throws \Exception
-     * @return string
-     */
-    /**
      *
-     * @param string[] $keys
      * @return string|string[]
      */
-    public function getSetting($keys)
+    public function getSetting(array $keys)
     {
         try
         {
@@ -48,8 +43,7 @@ class ConfigurationConsulter extends DataConsulter
                 {
                     throw new Exception(
                         'The requested variable is not available in an unconfigured environment (' .
-                        implode(' > ', $keys) .
-                        ')'
+                        implode(' > ', $keys) . ')'
                     );
                 }
                 else
@@ -60,20 +54,24 @@ class ConfigurationConsulter extends DataConsulter
 
             return $values;
         }
-        catch(Exception $ex)
+        catch (Exception $ex)
         {
             return null;
         }
     }
 
     /**
-     *
-     * @param string $context
-     * @return boolean
+     * @return string[][]
      */
-    public function hasSettingsForContext($context)
+    public function getSettings(): array
+    {
+        return $this->getDataLoader()->readData();
+    }
+
+    public function hasSettingsForContext(string $context): bool
     {
         $settings = $this->getSettings();
+
         return isset($settings[$context]);
     }
 }

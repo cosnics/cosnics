@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Service;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Symfony\Component\Translation\Translator;
 

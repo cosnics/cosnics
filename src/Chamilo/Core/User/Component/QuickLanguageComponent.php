@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Configuration\Service\LanguageConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -55,7 +55,7 @@ class QuickLanguageComponent extends Manager
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter|object
+     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter|object
      */
     private function getConfigurationService()
     {
@@ -63,7 +63,7 @@ class QuickLanguageComponent extends Manager
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\LanguageConsulter|object
+     * @return \Chamilo\Configuration\Service\Consulter\LanguageConsulter|object
      */
     private function getLanguageService()
     {

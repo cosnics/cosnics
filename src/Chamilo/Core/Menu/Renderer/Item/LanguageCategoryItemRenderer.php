@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Renderer\Item;
 
-use Chamilo\Configuration\Service\LanguageConsulter;
+use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\ItemCacheService;
@@ -25,7 +25,7 @@ use Symfony\Component\Translation\Translator;
 class LanguageCategoryItemRenderer extends ItemRenderer
 {
     /**
-     * @var \Chamilo\Configuration\Service\LanguageConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\LanguageConsulter
      */
     private $languageConsulter;
 
@@ -40,7 +40,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
      * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
      * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Configuration\Service\LanguageConsulter $languageConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\LanguageConsulter $languageConsulter
      * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
      */
     public function __construct(
@@ -128,7 +128,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\LanguageConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\LanguageConsulter
      */
     public function getLanguageConsulter(): LanguageConsulter
     {
@@ -136,7 +136,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\LanguageConsulter $languageConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\LanguageConsulter $languageConsulter
      */
     public function setLanguageConsulter(LanguageConsulter $languageConsulter): void
     {

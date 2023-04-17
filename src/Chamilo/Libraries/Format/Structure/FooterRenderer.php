@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Rights\Structure\Service\AuthorizationChecker;
 use Chamilo\Core\User\Storage\DataClass\User;

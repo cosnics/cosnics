@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Rights\Structure\Test\Unit\Service\StructureLocationConfiguration;
 
-use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationRoleServiceInterface;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationServiceInterface;
 use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Interfaces\LoaderInterface;

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Rights\Service;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Repository\Quota\Rights\Form\RightsGroupForm;
@@ -17,8 +17,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Rights\Form\RightsForm;
 use Chamilo\Libraries\Rights\Storage\Repository\RightsRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -37,7 +37,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     private $authorizedUsersCache = [];
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     private $configurationConsulter;
 
@@ -74,7 +74,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
      * @param \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator $storageSpaceCalculator
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      */
     public function __construct(
         RightsRepository $rightsRepository, UserService $userService, Translator $translator,
@@ -554,7 +554,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
@@ -562,7 +562,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      */
     public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
     {

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Renderer\Item;
 
-use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\ItemCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
@@ -127,7 +127,7 @@ class ApplicationItemRenderer extends ItemRenderer
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
      */
     public function getRegistrationConsulter(): RegistrationConsulter
     {
@@ -135,7 +135,7 @@ class ApplicationItemRenderer extends ItemRenderer
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
      */
     public function setRegistrationConsulter(RegistrationConsulter $registrationConsulter): void
     {

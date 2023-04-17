@@ -6,13 +6,12 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupOffice365Reference;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
-use Microsoft\Graph\Model\Group;
 use RuntimeException;
 
 /**
@@ -48,7 +47,7 @@ class CourseGroupOffice365Connector
     protected $courseService;
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     protected $configurationConsulter;
 
@@ -60,7 +59,7 @@ class CourseGroupOffice365Connector
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService $userService
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Service\CourseGroupOffice365ReferenceService $courseGroupOffice365ReferenceService
      * @param \Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface $courseService
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      */
     public function __construct(
         GroupService $groupService, TeamService $teamService, UserService $userService,

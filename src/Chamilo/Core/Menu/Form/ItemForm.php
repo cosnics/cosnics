@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Menu\Form;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Configuration\Service\LanguageConsulter;
-use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
@@ -21,7 +21,7 @@ use Symfony\Component\Translation\Translator;
 class ItemForm extends FormValidator
 {
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     private $configurationConsulter;
 
@@ -31,12 +31,12 @@ class ItemForm extends FormValidator
     private $itemService;
 
     /**
-     * @var \Chamilo\Configuration\Service\LanguageConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\LanguageConsulter
      */
     private $languageConsulter;
 
     /**
-     * @var \Chamilo\Configuration\Service\RegistrationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
      */
     private $registrationConsulter;
 
@@ -48,9 +48,9 @@ class ItemForm extends FormValidator
     /**
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     * @param \Chamilo\Configuration\Service\LanguageConsulter $languageConsulter
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\LanguageConsulter $languageConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
      * @param string $action
      *
      * @throws \Exception
@@ -123,7 +123,7 @@ class ItemForm extends FormValidator
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
@@ -131,7 +131,7 @@ class ItemForm extends FormValidator
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      */
     public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
     {
@@ -155,7 +155,7 @@ class ItemForm extends FormValidator
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\LanguageConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\LanguageConsulter
      */
     public function getLanguageConsulter(): LanguageConsulter
     {
@@ -163,7 +163,7 @@ class ItemForm extends FormValidator
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\LanguageConsulter $languageConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\LanguageConsulter $languageConsulter
      */
     public function setLanguageConsulter(LanguageConsulter $languageConsulter): void
     {
@@ -189,7 +189,7 @@ class ItemForm extends FormValidator
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
      */
     public function getRegistrationConsulter(): RegistrationConsulter
     {
@@ -197,7 +197,7 @@ class ItemForm extends FormValidator
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
      */
     public function setRegistrationConsulter(RegistrationConsulter $registrationConsulter): void
     {

@@ -2,7 +2,7 @@
 
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 
 /**
  * Factory class for the GroupRepository
@@ -19,7 +19,7 @@ class GroupRepositoryFactory
     protected $graphRepository;
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     protected $configurationConsulter;
 
@@ -27,7 +27,7 @@ class GroupRepositoryFactory
      * GroupRepositoryFactory constructor.
      *
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository $graphRepository
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      */
     public function __construct(
         GraphRepository $graphRepository, ConfigurationConsulter $configurationConsulter

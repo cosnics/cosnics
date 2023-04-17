@@ -6,7 +6,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
@@ -17,13 +16,11 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package Chamilo\Libraries\Platform\Configuration
- *
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class LocalSetting
 {
@@ -36,6 +33,16 @@ class LocalSetting
     private static $instance;
 
     /**
+     * @var int
+     */
+    private $currentUserIdentifier;
+
+    /**
+     * @var \Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService
+     */
+    private $localSettingCacheService;
+
+    /**
      * Parameters defined in the configuration.
      * Stored as an associative array.
      *
@@ -44,21 +51,8 @@ class LocalSetting
     private $localSettings;
 
     /**
-     *
-     * @var integer
-     */
-    private $currentUserIdentifier;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService
-     */
-    private $localSettingCacheService;
-
-    /**
-     *
      * @param \Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService $localSettingCacheService
-     * @param integer $currentUserIdentifier
+     * @param int $currentUserIdentifier
      */
     public function __construct(LocalSettingCacheService $localSettingCacheService, $currentUserIdentifier = 0)
     {
@@ -123,7 +117,7 @@ class LocalSetting
                 return false;
             }
 
-            return $this->getLocalSettingCacheService()->clearAndWarmUpForIdentifiers(array($userIdentifier));
+            return $this->getLocalSettingCacheService()->clearAndWarmUpForIdentifiers([$userIdentifier]);
         }
 
         return false;
@@ -151,7 +145,7 @@ class LocalSetting
 
         if (!$localSettings)
         {
-            return Configuration::getInstance()->get_setting(array($application, $variable));
+            return Configuration::getInstance()->get_setting([$application, $variable]);
         }
 
         if (isset($localSettings[$application]) && isset($localSettings[$application][$variable]))
@@ -160,26 +154,16 @@ class LocalSetting
         }
         else
         {
-            return Configuration::getInstance()->get_setting(array($application, $variable));
+            return Configuration::getInstance()->get_setting([$application, $variable]);
         }
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getCurrentUserIdentifier()
     {
         return $this->currentUserIdentifier;
-    }
-
-    /**
-     *
-     * @param number $currentUserIdentifier
-     */
-    public function setCurrentUserIdentifier($currentUserIdentifier)
-    {
-        $this->currentUserIdentifier = $currentUserIdentifier;
     }
 
     /**
@@ -201,11 +185,8 @@ class LocalSetting
     {
         if (!isset(self::$instance))
         {
-            $configurablePathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-                ConfigurablePathBuilder::class
-            );
-
-            $localSettingCacheService = new LocalSettingCacheService($configurablePathBuilder);
+            $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+            $localSettingCacheService = $container->get(LocalSettingCacheService::class);
             $userIdentifier = Session::get_user_id();
             if (is_null($userIdentifier))
             {
@@ -218,21 +199,11 @@ class LocalSetting
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService
      */
     public function getLocalSettingCacheService()
     {
         return $this->localSettingCacheService;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService $localSettingCacheService
-     */
-    public function setLocalSettingCacheService($localSettingCacheService)
-    {
-        $this->localSettingCacheService = $localSettingCacheService;
     }
 
     /**
@@ -243,15 +214,6 @@ class LocalSetting
     public function getLocalSettings()
     {
         return $this->localSettings;
-    }
-
-    /**
-     *
-     * @param string[] $localSettings
-     */
-    public function setLocalSettings($localSettings)
-    {
-        $this->localSettings = $localSettings;
     }
 
     /**
@@ -275,5 +237,29 @@ class LocalSetting
         $this->getLocalSettingCacheService()->clearForIdentifier($this->currentUserIdentifier);
         $this->getDataClassRepositoryCache()->truncate(UserSetting::class);
         $this->localSettings = $this->getLocalSettingCacheService()->getForUserIdentifier($this->currentUserIdentifier);
+    }
+
+    /**
+     * @param number $currentUserIdentifier
+     */
+    public function setCurrentUserIdentifier($currentUserIdentifier)
+    {
+        $this->currentUserIdentifier = $currentUserIdentifier;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService $localSettingCacheService
+     */
+    public function setLocalSettingCacheService($localSettingCacheService)
+    {
+        $this->localSettingCacheService = $localSettingCacheService;
+    }
+
+    /**
+     * @param string[] $localSettings
+     */
+    public function setLocalSettings($localSettings)
+    {
+        $this->localSettings = $localSettings;
     }
 }

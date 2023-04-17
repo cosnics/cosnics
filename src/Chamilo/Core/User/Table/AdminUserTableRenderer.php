@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Table;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\LoginTemplate;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;

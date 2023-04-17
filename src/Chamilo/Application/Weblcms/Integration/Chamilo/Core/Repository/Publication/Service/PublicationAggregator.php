@@ -12,7 +12,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Manager;
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetService;

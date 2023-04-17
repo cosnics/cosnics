@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Core\Repository\Publication\Service;
 
 use Chamilo\Application\Calendar\Extension\Personal\Service\PublicationService;
-use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;

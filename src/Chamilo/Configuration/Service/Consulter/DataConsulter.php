@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Configuration\Service;
+namespace Chamilo\Configuration\Service\Consulter;
 
 use Chamilo\Configuration\Interfaces\DataLoaderInterface;
 

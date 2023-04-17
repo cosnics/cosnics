@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Repository;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Storage\DataClass\Online;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;

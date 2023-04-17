@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Admin\Form\ConfigurationForm;
@@ -133,8 +133,7 @@ class UserSettingsComponent extends ProfileComponent
     }
 
     /**
-     *
-     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
      */
     public function getRegistrationConsulter(): RegistrationConsulter
     {

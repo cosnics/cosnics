@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Support;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;

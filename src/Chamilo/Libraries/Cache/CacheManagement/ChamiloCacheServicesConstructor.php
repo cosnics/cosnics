@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Cache\CacheManagement;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Repository\Service\TemplateRegistrationLoader;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
@@ -37,15 +37,21 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         );
 
         $cacheManager->addCacheService(
-            'chamilo_configuration', $this->container->get('Chamilo\Configuration\Service\StorageConfigurationLoader')
+            'chamilo_configuration', $this->container->get(
+            'Chamilo\Configuration\Service\DataLoader\StorageConfigurationCacheDataLoader'
+        )
         );
 
         $cacheManager->addCacheService(
-            'chamilo_registration', $this->container->get('Chamilo\Configuration\Service\RegistrationLoader')
+            'chamilo_registration', $this->container->get(
+            'Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataLoader'
+        )
         );
 
         $cacheManager->addCacheService(
-            'chamilo_language', $this->container->get('Chamilo\Configuration\Service\LanguageLoader')
+            'chamilo_language', $this->container->get(
+            'Chamilo\Configuration\Service\DataLoader\LanguageCacheDataLoader'
+        )
         );
 
         $cacheManager->addCacheService(

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Service;
 
-use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Admin\Form\AdminSearchForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;

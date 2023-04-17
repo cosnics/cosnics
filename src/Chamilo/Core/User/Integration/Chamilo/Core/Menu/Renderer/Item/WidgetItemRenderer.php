@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Service\ItemCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -24,7 +24,7 @@ class WidgetItemRenderer extends ItemRenderer
 {
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     private $configurationConsulter;
 
@@ -39,7 +39,7 @@ class WidgetItemRenderer extends ItemRenderer
      * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
      * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Core\User\Picture\UserPictureProviderInterface $userPictureProvider ;
      */
     public function __construct(
@@ -156,7 +156,7 @@ class WidgetItemRenderer extends ItemRenderer
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
@@ -164,7 +164,7 @@ class WidgetItemRenderer extends ItemRenderer
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      */
     public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
     {

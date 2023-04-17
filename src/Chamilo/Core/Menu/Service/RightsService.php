@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Service;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\RightsLocation;
@@ -17,8 +17,7 @@ use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService implements UserBasedCacheInterface
 {
@@ -27,14 +26,9 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     public const VIEW_RIGHT = 1;
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     private $configurationConsulter;
-
-    /**
-     * @var \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
-     */
-    private $userEntityProvider;
 
     /**
      * @var \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider
@@ -42,10 +36,15 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     private $groupEntityProvider;
 
     /**
+     * @var \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
+     */
+    private $userEntityProvider;
+
+    /**
      * @param \Chamilo\Libraries\Rights\Storage\Repository\RightsRepository $rightsRepository
      * @param \Chamilo\Core\User\Service\UserService $userService
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
      * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
      */
@@ -67,7 +66,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
      */
     public function areRightsEnabled()
     {
-        $setting = $this->getConfigurationConsulter()->getSetting(array('Chamilo\Core\Menu', 'enable_rights'));
+        $setting = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Menu', 'enable_rights']);
 
         return $setting == 1;
     }
@@ -237,23 +236,15 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
      */
     public function getAvailableRights()
     {
-        return array('View' => self::VIEW_RIGHT);
+        return ['View' => self::VIEW_RIGHT];
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
-    }
-
-    /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     */
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
-    {
-        $this->configurationConsulter = $configurationConsulter;
     }
 
     /**
@@ -262,14 +253,6 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     public function getGroupEntityProvider(): GroupEntityProvider
     {
         return $this->groupEntityProvider;
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
-     */
-    public function setGroupEntityProvider(GroupEntityProvider $groupEntityProvider): void
-    {
-        $this->groupEntityProvider = $groupEntityProvider;
     }
 
     /**
@@ -305,14 +288,6 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     public function getUserEntityProvider(): UserEntityProvider
     {
         return $this->userEntityProvider;
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
-     */
-    public function setUserEntityProvider(UserEntityProvider $userEntityProvider): void
-    {
-        $this->userEntityProvider = $userEntityProvider;
     }
 
     /**
@@ -366,6 +341,22 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     }
 
     /**
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
+     */
+    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
+    {
+        $this->configurationConsulter = $configurationConsulter;
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider $groupEntityProvider
+     */
+    public function setGroupEntityProvider(GroupEntityProvider $groupEntityProvider): void
+    {
+        $this->groupEntityProvider = $groupEntityProvider;
+    }
+
+    /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\RightsLocation $rightsLocation
      *
      * @return bool
@@ -374,5 +365,13 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
     public function setRightsLocationViewRightForEveryone(RightsLocation $rightsLocation)
     {
         return $this->setRightsLocationEntityRight(self::VIEW_RIGHT, 0, 0, $rightsLocation->getId());
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider $userEntityProvider
+     */
+    public function setUserEntityProvider(UserEntityProvider $userEntityProvider): void
+    {
+        $this->userEntityProvider = $userEntityProvider;
     }
 }

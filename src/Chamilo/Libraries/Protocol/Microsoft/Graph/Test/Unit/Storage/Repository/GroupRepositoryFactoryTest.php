@@ -2,15 +2,11 @@
 
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Test\Unit\Storage\Repository;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepositoryInterface;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepositoryFactory;
-use League\OAuth2\Client\Token\AccessToken;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Tests the Office365RepositoryFactory
@@ -25,7 +21,7 @@ class GroupRepositoryFactoryTest extends ChamiloTestCase
     protected $groupRepositoryFactory;
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $configurationConsulterMock;
 

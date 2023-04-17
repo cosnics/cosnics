@@ -2,7 +2,7 @@
 
 namespace Chamilo\Libraries\Architecture\Bootstrap;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Service\WhoIsOnlineService;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit;

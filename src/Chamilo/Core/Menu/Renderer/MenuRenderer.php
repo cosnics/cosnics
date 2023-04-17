@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Renderer;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\ItemCacheService;
 use Chamilo\Core\Menu\Service\RightsCacheService;
@@ -38,7 +38,7 @@ class MenuRenderer
     private $chamiloRequest;
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     private $configurationConsulter;
 
@@ -57,7 +57,7 @@ class MenuRenderer
      * @param \Chamilo\Core\Menu\Service\RightsCacheService $rightsCacheService
      * @param \Chamilo\Core\Menu\Factory\ItemRendererFactory $itemRendererFactory
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $chamiloRequest
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      */
@@ -145,7 +145,7 @@ class MenuRenderer
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
@@ -153,7 +153,7 @@ class MenuRenderer
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      */
     public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
     {

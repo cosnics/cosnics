@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\Component;
 
-use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Ajax\Manager;
 use Chamilo\Core\Repository\DTO\HtmlEditorContentObjectPlaceholder;
@@ -61,7 +61,7 @@ class HtmlEditorFileUploadComponent extends Manager
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
      */
     public function getRegistrationConsulter(): RegistrationConsulter
     {

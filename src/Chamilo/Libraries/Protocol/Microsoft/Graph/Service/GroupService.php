@@ -2,7 +2,7 @@
 
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
@@ -41,7 +41,7 @@ class GroupService
      *
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService $userService
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository $groupRepository
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      */
     public function __construct(
         UserService $userService, GroupRepository $groupRepository, ConfigurationConsulter $configurationConsulter

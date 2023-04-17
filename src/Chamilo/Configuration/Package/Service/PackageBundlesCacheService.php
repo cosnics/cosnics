@@ -78,7 +78,7 @@ class PackageBundlesCacheService extends SymfonyCacheService
         $packageList->get_all_packages();
         $packageList->get_list();
 
-        $cacheItem = $this->getCacheAdapter()->getItem($identifier);
+        $cacheItem = $this->getCacheAdapter()->getItem((string) $identifier);
         $cacheItem->set($packageList);
 
         return $this->getCacheAdapter()->save($cacheItem);

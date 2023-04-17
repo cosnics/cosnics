@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Service;
 
 use Chamilo\Configuration\Interfaces\DataLoaderInterface;
-use Chamilo\Configuration\Service\DataConsulter;
+use Chamilo\Configuration\Service\Consulter\DataConsulter;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**

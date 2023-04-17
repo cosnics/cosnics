@@ -2,7 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use RuntimeException;
 use Symfony\Component\Translation\Translator;
 
@@ -16,7 +16,7 @@ class EphorusWebserviceRepositoryFactory
     const TRANSLATION_CONTEXT = 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus';
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     protected $configurationConsulter;
 
@@ -28,7 +28,7 @@ class EphorusWebserviceRepositoryFactory
     /**
      * EphorusWebserviceRepositoryFactory constructor.
      *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      * @param \Symfony\Component\Translation\Translator $translator
      */
     public function __construct(

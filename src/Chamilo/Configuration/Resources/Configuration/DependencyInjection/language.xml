@@ -7,11 +7,6 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Configuration\Service\LanguageConsulter">
-            <argument type="service"
-                      id="Chamilo\Configuration\Service\LanguageCacheLoader"/>
-        </service>
-
         <service id="Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheService">
             <argument key="$cacheAdapter"
                       type="service"
@@ -25,24 +20,25 @@
             <argument key="$namespace">Chamilo\Configuration\Package\InternationalizationBundles</argument>
         </service>
 
-        <service id="Chamilo\Configuration\Service\LanguageCacheLoader"
-                 class="Chamilo\Configuration\Service\DataCacheLoader">
-            <argument key="$cacheableDataLoader"
+        <service id="Chamilo\Configuration\Service\Consulter\LanguageConsulter">
+            <argument key="$languageCacheDataLoader"
                       type="service"
-                      id="Chamilo\Configuration\Service\LanguageLoader"/>
-            <argument key="$cacheAdapter"
-                      type="service"
-                      id="Chamilo\Configuration\Service\LanguageCacheAdapter"/>
+                      id="Chamilo\Configuration\Service\DataLoader\LanguageCacheDataLoader"/>
         </service>
 
-        <service id="Chamilo\Configuration\Service\LanguageCacheAdapter"
+        <service id="Chamilo\Configuration\Service\DataLoader\LanguageCacheDataLoader">
+            <argument key="$cacheAdapter"
+                      type="service"
+                      id="Chamilo\Configuration\Service\DataLoader\LanguageCacheAdapter"/>
+        </service>
+
+        <service id="Chamilo\Configuration\Service\DataLoader\LanguageCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createPhpFilesAdapter"/>
             <argument key="$namespace">Chamilo\Configuration\Service\Language</argument>
         </service>
 
-        <service id="Chamilo\Configuration\Service\LanguageLoader"/>
         <service id="Chamilo\Configuration\Storage\Repository\LanguageRepository"/>
     </services>
 </container>

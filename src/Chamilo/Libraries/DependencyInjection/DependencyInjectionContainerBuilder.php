@@ -2,12 +2,11 @@
 namespace Chamilo\Libraries\DependencyInjection;
 
 use Chamilo\Configuration\Package\PlatformPackageBundles;
-use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Configuration\Service\DataCacheLoader;
-use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
+use Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataLoader;
+use Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataLoader;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Configuration\Service\RegistrationConsulter;
-use Chamilo\Configuration\Service\RegistrationLoader;
 use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -52,6 +51,7 @@ use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Exception\ConnectionException;
 use Chamilo\Libraries\Storage\Service\ParametersHandler;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -203,7 +203,7 @@ class DependencyInjectionContainerBuilder
         if (!isset($this->fileConfigurationConsulter))
         {
             $this->fileConfigurationConsulter = new ConfigurationConsulter(
-                new FileConfigurationLoader($this->getFileConfigurationLocator())
+                new FileConfigurationCacheDataLoader(new ArrayAdapter(), $this->getFileConfigurationLocator())
             );
         }
 
@@ -334,16 +334,12 @@ class DependencyInjectionContainerBuilder
             );
 
             $this->registrationConsulter = new RegistrationConsulter(
-                $this->getStringUtilities(), new DataCacheLoader(
+                new RegistrationCacheDataLoader(
                     new PhpFilesAdapter(
                         md5('Chamilo\Configuration\Service\Registration'), 0,
                         $this->getConfigurablePathBuilder()->getCachePath()
-                    ), $this->getConfigurablePathBuilder(), new RegistrationLoader(
-                    $this->getStringUtilities(), new RegistrationRepository(
-                        $dataClassRepository
-                    )
-                ),
-                )
+                    ), $this->getStringUtilities(), new RegistrationRepository($dataClassRepository)
+                ), $this->getStringUtilities()
             );
         }
 

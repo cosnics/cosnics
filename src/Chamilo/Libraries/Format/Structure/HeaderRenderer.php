@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Menu\Factory;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Configuration\Service\LanguageConsulter;
-use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Exception;
@@ -33,17 +33,17 @@ class ItemFormFactory
     private $itemService;
 
     /**
-     * @var \Chamilo\Configuration\Service\LanguageConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\LanguageConsulter
      */
     private $languageConsulter;
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     private $configurationConsulter;
 
     /**
-     * @var \Chamilo\Configuration\Service\RegistrationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
      */
     private $registrationConsulter;
 
@@ -51,9 +51,9 @@ class ItemFormFactory
      * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Menu\Service\ItemService $itemService
-     * @param \Chamilo\Configuration\Service\LanguageConsulter $languageConsulter
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\LanguageConsulter $languageConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
      */
     public function __construct(
         ClassnameUtilities $classnameUtilities, Translator $translator, ItemService $itemService,
@@ -86,7 +86,7 @@ class ItemFormFactory
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
@@ -94,7 +94,7 @@ class ItemFormFactory
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      */
     public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
     {
@@ -143,7 +143,7 @@ class ItemFormFactory
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\LanguageConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\LanguageConsulter
      */
     public function getLanguageConsulter(): LanguageConsulter
     {
@@ -151,7 +151,7 @@ class ItemFormFactory
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\LanguageConsulter $languageConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\LanguageConsulter $languageConsulter
      */
     public function setLanguageConsulter(LanguageConsulter $languageConsulter): void
     {
@@ -159,7 +159,7 @@ class ItemFormFactory
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
      */
     public function getRegistrationConsulter(): RegistrationConsulter
     {
@@ -167,7 +167,7 @@ class ItemFormFactory
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
      */
     public function setRegistrationConsulter(RegistrationConsulter $registrationConsulter): void
     {

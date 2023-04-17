@@ -34,7 +34,7 @@
 
         <service id="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory">
             <argument type="service"
-                      id="Chamilo\Configuration\Service\FileConfigurationConsulter"/>
+                      id="Chamilo\Configuration\Service\Consulter\FileConfigurationConsulter"/>
         </service>
 
         <service id="Chamilo\Libraries\Architecture\Test\PHPUnitGenerator\PHPUnitGenerator"/>

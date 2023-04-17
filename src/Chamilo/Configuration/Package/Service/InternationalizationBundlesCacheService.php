@@ -39,7 +39,7 @@ class InternationalizationBundlesCacheService extends SymfonyCacheService
     {
         $internationalizationBundles = new InternationalizationBundles(PackageList::ROOT);
 
-        $cacheItem = $this->getCacheAdapter()->getItem($identifier);
+        $cacheItem = $this->getCacheAdapter()->getItem((string) $identifier);
         $cacheItem->set($internationalizationBundles->getPackageNamespaces());
 
         return $this->getCacheAdapter()->save($cacheItem);

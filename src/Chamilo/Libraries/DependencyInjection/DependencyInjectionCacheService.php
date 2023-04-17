@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Cache\FileBasedCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 
@@ -16,14 +16,12 @@ class DependencyInjectionCacheService extends FileBasedCacheService
 {
 
     /**
-     *
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     private $fileConfigurationConsulter;
 
     /**
-     *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $fileConfigurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $fileConfigurationConsulter
      */
     public function __construct(ConfigurationConsulter $fileConfigurationConsulter)
     {
@@ -44,8 +42,7 @@ class DependencyInjectionCacheService extends FileBasedCacheService
     }
 
     /**
-     *
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     public function getFileConfigurationConsulter()
     {
@@ -53,8 +50,7 @@ class DependencyInjectionCacheService extends FileBasedCacheService
     }
 
     /**
-     *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $fileConfigurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $fileConfigurationConsulter
      */
     public function setFileConfigurationConsulter(ConfigurationConsulter $fileConfigurationConsulter)
     {

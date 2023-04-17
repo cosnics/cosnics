@@ -11,7 +11,7 @@ use Chamilo\Application\Weblcms\Storage\Repository\CourseRepository;
 use Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository;
 use Chamilo\Application\Weblcms\Tool\Manager as WeblcmsToolManager;
 use Chamilo\Configuration\Configuration;
-use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Publication\Domain\PublicationResult;
 use Chamilo\Core\Repository\Publication\Domain\PublicationTarget;

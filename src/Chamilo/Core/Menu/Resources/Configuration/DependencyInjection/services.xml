@@ -32,7 +32,7 @@
                       id="Chamilo\Core\Menu\Storage\Repository\RightsRepository"/>
             <argument key="$configurationConsulter"
                       type="service"
-                      id="Chamilo\Configuration\Service\ConfigurationConsulter"/>
+                      id="Chamilo\Configuration\Service\Consulter\ConfigurationConsulter"/>
         </service>
 
         <service id="Chamilo\Core\Menu\Cache\RightsCacheProvider"

@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Configuration;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Configuration\Service\LanguageConsulter;
-use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
@@ -62,8 +62,7 @@ class Configuration
     }
 
     /**
-     *
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     public function getConfigurationConsulter()
     {
@@ -116,8 +115,7 @@ class Configuration
     }
 
     /**
-     *
-     * @return \Chamilo\Configuration\Service\LanguageConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\LanguageConsulter
      */
     public function getLanguageConsulter()
     {
@@ -145,8 +143,7 @@ class Configuration
     }
 
     /**
-     *
-     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
      */
     public function getRegistrationConsulter(): RegistrationConsulter
     {

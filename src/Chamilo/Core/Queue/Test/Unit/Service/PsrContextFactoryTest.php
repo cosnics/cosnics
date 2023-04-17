@@ -2,8 +2,7 @@
 
 namespace Chamilo\Core\Queue\Test\Unit\Service;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Core\Queue\Service\Producer\BeanstalkProducer;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Queue\Service\PsrContextFactory;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Doctrine\DBAL\Connection;
@@ -23,7 +22,7 @@ class PsrContextFactoryTest extends ChamiloTestCase
     protected $psrContextFactory;
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configurationConsulterMock;
 

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Service;
 
-use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository;

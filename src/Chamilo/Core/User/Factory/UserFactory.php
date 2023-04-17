@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Factory;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
@@ -19,8 +19,7 @@ class UserFactory
 {
 
     /**
-     *
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     private $configurationConsulter;
 
@@ -55,10 +54,9 @@ class UserFactory
     private $userService;
 
     /**
-     *
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      * @param \Chamilo\Libraries\Translation\Translation $translationUtilities
      * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSettingUtilities
@@ -77,8 +75,7 @@ class UserFactory
     }
 
     /**
-     *
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     public function getConfigurationConsulter()
     {
@@ -86,8 +83,7 @@ class UserFactory
     }
 
     /**
-     *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      */
     public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
     {

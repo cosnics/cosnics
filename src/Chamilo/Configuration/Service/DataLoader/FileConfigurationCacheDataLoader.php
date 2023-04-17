@@ -1,73 +1,55 @@
 <?php
-namespace Chamilo\Configuration\Service;
+namespace Chamilo\Configuration\Service\DataLoader;
 
-use Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
+use Chamilo\Libraries\Cache\CacheDataLoaderTrait;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 /**
- *
  * @package Chamilo\Configuration\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class FileConfigurationLoader implements CacheableDataLoaderInterface
+class FileConfigurationCacheDataLoader implements CacheDataLoaderInterface
 {
-
-    /**
-     * @var string[]
-     */
-    protected static $dataCache;
-
-    /**
-     *
-     * @var \Chamilo\Configuration\Service\FileConfigurationLocator
-     */
-    private $fileConfigurationLocator;
-
-    /**
-     *
-     * @param FileConfigurationLocator $fileConfigurationLocator
-     */
-    public function __construct(FileConfigurationLocator $fileConfigurationLocator)
+    use CacheDataLoaderTrait
     {
+        clearCache as protected clearAdapterCache;
+    }
+
+    private FileConfigurationLocator $fileConfigurationLocator;
+
+    public function __construct(AdapterInterface $cacheAdapter, FileConfigurationLocator $fileConfigurationLocator)
+    {
+        $this->cacheAdapter = $cacheAdapter;
         $this->fileConfigurationLocator = $fileConfigurationLocator;
     }
 
-    public function clearData()
-    {
-        return true;
-    }
-
     /**
-     *
-     * @return string[]
+     * @return string[][]
      * @throws \Exception
      */
-    public function getData()
+    public function getDataForCache(): array
     {
-        if (!isset(self::$dataCache))
+        if ($this->getFileConfigurationLocator()->isAvailable())
         {
-            if ($this->getFileConfigurationLocator()->isAvailable())
-            {
-                self::$dataCache = $this->getSettings();
-            }
-            else
-            {
-                self::$dataCache = $this->getDefaultSettings();
-            }
+            return $this->getFileSettings();
         }
-
-        return self::$dataCache;
+        else
+        {
+            return $this->getDefaultSettings();
+        }
     }
 
     /**
-     *
      * @return string[]
      * @throws \Exception
      */
-    protected function getDefaultSettings()
+    protected function getDefaultSettings(): array
     {
         $fileContainer = new ContainerBuilder();
         $xmlFileLoader = new XmlFileLoader(
@@ -78,39 +60,16 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
         return $this->getSettingsFromContainer($fileContainer);
     }
 
-    /**
-     *
-     * @return \Chamilo\Configuration\Service\FileConfigurationLocator
-     */
-    public function getFileConfigurationLocator()
+    public function getFileConfigurationLocator(): FileConfigurationLocator
     {
         return $this->fileConfigurationLocator;
     }
 
     /**
-     *
-     * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
-     */
-    public function setFileConfigurationLocator(FileConfigurationLocator $fileConfigurationLocator)
-    {
-        $this->fileConfigurationLocator = $fileConfigurationLocator;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getIdentifier()
-    {
-        return md5(__CLASS__);
-    }
-
-    /**
-     *
      * @return string[]
      * @throws \Exception
      */
-    protected function getSettings()
+    protected function getFileSettings(): array
     {
         $fileContainer = new ContainerBuilder();
         $xmlFileLoader = new XmlFileLoader(
@@ -121,26 +80,19 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
         return $this->getSettingsFromContainer($fileContainer);
     }
 
-    /**
-     *
-     * @return string
-     */
-    protected function getSettingsContext()
+    protected function getSettingsContext(): string
     {
         return 'Chamilo\Configuration';
     }
 
     /**
-     *
-     * @param ContainerBuilder $fileContainer
-     *
      * @return string[]
      */
-    protected function getSettingsFromContainer(ContainerBuilder $fileContainer)
+    protected function getSettingsFromContainer(ContainerBuilder $fileContainer): array
     {
-        $settings = array(
-            $this->getSettingsContext() => array(
-                'general' => array(
+        $settings = [
+            $this->getSettingsContext() => [
+                'general' => [
                     'security_key' => $fileContainer->getParameter('chamilo.configuration.general.security_key'),
                     'hashing_algorithm' => $fileContainer->getParameter(
                         'chamilo.configuration.general.hashing_algorithm'
@@ -148,20 +100,20 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
                     'install_date' => $fileContainer->getParameter('chamilo.configuration.general.install_date'),
                     'language' => $fileContainer->getParameter('chamilo.configuration.general.language'),
                     'theme' => $fileContainer->getParameter('chamilo.configuration.general.theme')
-                ),
+                ],
                 'database' => $fileContainer->getParameter('chamilo.configuration.database'),
-                'debug' => array(
+                'debug' => [
                     'show_errors' => $fileContainer->getParameter('chamilo.configuration.debug.show_errors'),
                     'enable_query_cache' => $fileContainer->getParameter(
                         'chamilo.configuration.debug.enable_query_cache'
                     )
-                ),
+                ],
                 'storage' => $fileContainer->getParameter('chamilo.configuration.storage'),
-                'session' => array(
+                'session' => [
                     'session_handler' => $fileContainer->getParameter('chamilo.configuration.session.session_handler')
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         if ($fileContainer->hasParameter('chamilo.configuration.error_handling'))
         {

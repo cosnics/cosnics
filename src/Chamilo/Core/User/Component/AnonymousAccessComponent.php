@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Form\AnonymousUserForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;

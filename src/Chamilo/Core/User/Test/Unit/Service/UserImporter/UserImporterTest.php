@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Test\Unit\Service\UserImporter;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Domain\UserImporter\ImportUserData;
 use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserFactory;
 use Chamilo\Core\User\Service\UserImporter\ImportParser\ImportParserInterface;

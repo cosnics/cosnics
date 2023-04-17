@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Cache;
 
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 
@@ -16,6 +17,11 @@ class SymfonyCacheAdapterFactory
     public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
     {
         $this->configurablePathBuilder = $configurablePathBuilder;
+    }
+
+    public function createArrayAdapter(int $defaultLifetime = 0): ArrayAdapter
+    {
+        return new ArrayAdapter($defaultLifetime);
     }
 
     public function createFilesystemAdapter(string $namespace, int $defaultLifetime = 0): FilesystemAdapter

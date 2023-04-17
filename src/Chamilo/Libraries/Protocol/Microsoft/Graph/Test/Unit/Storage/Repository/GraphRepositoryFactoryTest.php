@@ -2,7 +2,7 @@
 
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Test\Unit\Storage\Repository;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepositoryInterface;
@@ -24,7 +24,7 @@ class GraphRepositoryFactoryTest extends ChamiloTestCase
     protected $graphRepositoryFactory;
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $configurationConsulterMock;
 

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Test\PHPUnitGenerator;
 
-use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Libraries\File\PathBuilder;
 use DOMDocument;
 use DOMXPath;

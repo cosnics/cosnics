@@ -2,7 +2,7 @@
 
 namespace Chamilo\Libraries\Authentication;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Lynx\Service;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Service\AbstractActionProvider;
 use Chamilo\Core\Admin\Service\ActionProviderInterface;
 use Chamilo\Libraries\Architecture\Application\Application;

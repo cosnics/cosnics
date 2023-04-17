@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\User\Picture;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Exception;
 use Symfony\Component\Translation\Translator;
@@ -17,12 +17,12 @@ class UserPictureProviderFactory
     use DependencyInjectionContainerTrait;
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     protected $configurationConsulter;
 
     /**
-     * @var \Chamilo\Configuration\Service\RegistrationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
      */
     protected $registrationConsulter;
 
@@ -32,8 +32,8 @@ class UserPictureProviderFactory
     protected $translator;
 
     /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
      * @param \Symfony\Component\Translation\Translator $translator
      */
     public function __construct(
@@ -97,7 +97,7 @@ class UserPictureProviderFactory
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
@@ -105,7 +105,7 @@ class UserPictureProviderFactory
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      *
      * @return UserPictureProviderFactory
      */
@@ -119,7 +119,7 @@ class UserPictureProviderFactory
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\RegistrationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\RegistrationConsulter
      */
     public function getRegistrationConsulter(): RegistrationConsulter
     {
@@ -127,7 +127,7 @@ class UserPictureProviderFactory
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\RegistrationConsulter $registrationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
      *
      * @return UserPictureProviderFactory
      */

@@ -2,7 +2,7 @@
 
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use League\OAuth2\Client\Provider\GenericProvider;
@@ -20,8 +20,7 @@ class GraphRepositoryFactory
 {
 
     /**
-     *
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     protected $configurationConsulter;
 
@@ -40,7 +39,7 @@ class GraphRepositoryFactory
     /**
      * MicrosoftGraphRepositoryFactory constructor.
      *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepositoryInterface $accessTokenRepository
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */

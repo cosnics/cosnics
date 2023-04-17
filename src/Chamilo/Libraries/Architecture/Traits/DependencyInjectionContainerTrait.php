@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Traits;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Rights\Structure\Service\AuthorizationChecker;
 use Chamilo\Core\User\Service\UserService;

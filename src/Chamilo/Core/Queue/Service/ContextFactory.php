@@ -2,9 +2,7 @@
 
 namespace Chamilo\Core\Queue\Service;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Core\Queue\Service\Producer\BeanstalkProducer;
-use Chamilo\Core\Queue\Service\Producer\DBALProducer;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Doctrine\DBAL\Connection;
 use Enqueue\Dbal\DbalContext;
 use Enqueue\Pheanstalk\PheanstalkConnectionFactory;
@@ -17,7 +15,7 @@ use Enqueue\Pheanstalk\PheanstalkConnectionFactory;
 class ContextFactory
 {
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     protected $configurationConsulter;
 
@@ -29,7 +27,7 @@ class ContextFactory
     /**
      * QueueConnectionFactory constructor.
      *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      * @param \Doctrine\DBAL\Connection $dbalConnection
      */
     public function __construct(ConfigurationConsulter $configurationConsulter, Connection $dbalConnection)

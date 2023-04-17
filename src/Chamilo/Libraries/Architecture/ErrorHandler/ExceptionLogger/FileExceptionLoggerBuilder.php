@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;

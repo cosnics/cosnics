@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\Selector;
 
-use Chamilo\Configuration\Service\RegistrationConsulter;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Selector\Option\ContentObjectTypeSelectorOption;
 use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;

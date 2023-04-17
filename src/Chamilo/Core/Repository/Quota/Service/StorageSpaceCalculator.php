@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Service;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Quota\Manager;
@@ -33,7 +33,7 @@ class StorageSpaceCalculator
     const POLICY_USER = 0;
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     private $configurationConsulter;
 
@@ -83,7 +83,7 @@ class StorageSpaceCalculator
     private $contentObjectService;
 
     /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
      * @param \Chamilo\Core\User\Service\UserService $userService
@@ -383,7 +383,7 @@ class StorageSpaceCalculator
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
@@ -391,7 +391,7 @@ class StorageSpaceCalculator
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      */
     public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter): void
     {

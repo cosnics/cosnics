@@ -7,30 +7,25 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Configuration\Service\RegistrationConsulter">
-            <argument key="$dataLoader"
+        <service id="Chamilo\Configuration\Service\Consulter\RegistrationConsulter">
+            <argument key="$languageCacheDataLoader"
                       type="service"
-                      id="Chamilo\Configuration\Service\RegistrationCacheLoader"/>
+                      id="Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataLoader"/>
         </service>
 
-        <service id="Chamilo\Configuration\Service\RegistrationCacheLoader"
-                 class="Chamilo\Configuration\Service\DataCacheLoader">
-            <argument key="$cacheableDataLoader"
-                      type="service"
-                      id="Chamilo\Configuration\Service\RegistrationLoader"/>
+        <service id="Chamilo\Configuration\Service\DataLoader\DataRegistrationCacheDataLoader">
             <argument key="$cacheAdapter"
                       type="service"
-                      id="Chamilo\Configuration\Service\RegistrationCacheAdapter"/>
+                      id="Chamilo\Configuration\Service\DataLoader\RegistrationCacheAdapter"/>
         </service>
 
-        <service id="Chamilo\Configuration\Service\RegistrationCacheAdapter"
+        <service id="Chamilo\Configuration\Service\DataLoader\RegistrationCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createPhpFilesAdapter"/>
             <argument key="$namespace">Chamilo\Configuration\Service\Registration</argument>
         </service>
 
-        <service id="Chamilo\Configuration\Service\RegistrationLoader"/>
         <service id="Chamilo\Configuration\Storage\Repository\RegistrationRepository"/>
     </services>
 </container>
