@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Cache\CacheManagement;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Repository\Service\TemplateRegistrationLoader;
+use Chamilo\Core\Repository\Service\TemplateRegistrationCacheDataLoader;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Format\Twig\TwigCacheService;
@@ -153,8 +153,8 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         return $this->container->get(StringUtilities::class);
     }
 
-    protected function getTemplateRegistrationLoader(): TemplateRegistrationLoader
+    protected function getTemplateRegistrationLoader(): TemplateRegistrationCacheDataLoader
     {
-        return $this->container->get(TemplateRegistrationLoader::class);
+        return $this->container->get(TemplateRegistrationCacheDataLoader::class);
     }
 }

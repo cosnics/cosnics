@@ -3,25 +3,25 @@ namespace Chamilo\Configuration\Service\Consulter;
 
 use Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataLoader;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Libraries\Cache\DataConsulterTrait;
+use Chamilo\Libraries\Cache\Interfaces\DataConsulterInterface;
 use Chamilo\Libraries\Cache\Interfaces\DataLoaderInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * @package Chamilo\Configuration\Service
+ * @package Chamilo\Configuration\Service\Consulter
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class RegistrationConsulter
+class RegistrationConsulter implements DataConsulterInterface
 {
-    protected DataLoaderInterface $dataLoader;
+    use DataConsulterTrait;
 
     protected StringUtilities $stringUtilities;
 
-    public function __construct(
-        DataLoaderInterface $dataLoader, StringUtilities $stringUtilities
-    )
+    public function __construct(DataLoaderInterface $dataLoader, StringUtilities $stringUtilities)
     {
-        $this->dataLoader = $dataLoader;
+        $this->$dataLoader = $dataLoader;
         $this->stringUtilities = $stringUtilities;
     }
 
@@ -42,11 +42,6 @@ class RegistrationConsulter
         }
 
         return $contentObjectTypes;
-    }
-
-    public function getDataLoader(): DataLoaderInterface
-    {
-        return $this->dataLoader;
     }
 
     /**

@@ -1,83 +1,61 @@
 <?php
 namespace Chamilo\Core\Repository\Service;
 
-use Chamilo\Configuration\Interfaces\DataLoaderInterface;
 use Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository;
-use Chamilo\Libraries\Cache\SymfonyCacheService;
+use Chamilo\Libraries\Cache\CacheDataLoaderTrait;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
- * @package Chamilo\Configuration\Service
+ * @package Chamilo\Core\Repository\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class TemplateRegistrationLoader extends SymfonyCacheService implements DataLoaderInterface
+class TemplateRegistrationCacheDataLoader implements CacheDataLoaderInterface
 {
+    use CacheDataLoaderTrait
+    {
+        clearCache as protected clearAdapterCache;
+    }
+
     public const REGISTRATION_DEFAULT = 2;
     public const REGISTRATION_ID = 1;
     public const REGISTRATION_USER_ID = 3;
 
-    private StringUtilities $stringUtilities;
+    protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    private TemplateRegistrationRepository $templateRegistrationRepository;
+    protected StringUtilities $stringUtilities;
+
+    protected TemplateRegistrationRepository $templateRegistrationRepository;
 
     public function __construct(
         AdapterInterface $cacheAdapter, ConfigurablePathBuilder $configurablePathBuilder,
         StringUtilities $stringUtilities, TemplateRegistrationRepository $templateRegistrationRepository
     )
     {
-        parent::__construct($cacheAdapter, $configurablePathBuilder);
-
+        $this->cacheAdapter = $cacheAdapter;
+        $this->configurablePathBuilder = $configurablePathBuilder;
         $this->stringUtilities = $stringUtilities;
         $this->templateRegistrationRepository = $templateRegistrationRepository;
     }
 
-    public function clearData(): bool
+    public function clearCache(): bool
     {
-        $this->getTemplateRegistrationRepository()->clearTemplateRegistrationCache();
+        if ($this->getTemplateRegistrationRepository()->clearTemplateRegistrationCache())
+        {
+            return $this->clearAdapterCache();
+        }
 
-        return $this->getCacheAdapter()->delete($this->getIdentifier());
+        return false;
     }
 
     /**
      * @return \Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration[][]
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getData(): array
-    {
-        return $this->getForIdentifier($this->getIdentifier());
-    }
-
-    public function getIdentifier(): string
-    {
-        return md5(__CLASS__);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getIdentifiers(): array
-    {
-        return [$this->getIdentifier()];
-    }
-
-    public function getStringUtilities(): StringUtilities
-    {
-        return $this->stringUtilities;
-    }
-
-    public function getTemplateRegistrationRepository(): TemplateRegistrationRepository
-    {
-        return $this->templateRegistrationRepository;
-    }
-
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Exception
      */
-    public function loadData(): bool
+    public function getDataForCache(): array
     {
         $templateRegistrations = $this->getTemplateRegistrationRepository()->findTemplateRegistrations();
         $groupedRegistrations = [];
@@ -97,17 +75,16 @@ class TemplateRegistrationLoader extends SymfonyCacheService implements DataLoad
             }
         }
 
-        $cacheItem = $this->getCacheAdapter()->getItem($this->getIdentifier());
-        $cacheItem->set($groupedRegistrations);
-
-        return $this->getCacheAdapter()->save($cacheItem);
+        return $groupedRegistrations;
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function warmUpForIdentifier($identifier): bool
+    public function getStringUtilities(): StringUtilities
     {
-        return $this->loadData();
+        return $this->stringUtilities;
+    }
+
+    public function getTemplateRegistrationRepository(): TemplateRegistrationRepository
+    {
+        return $this->templateRegistrationRepository;
     }
 }

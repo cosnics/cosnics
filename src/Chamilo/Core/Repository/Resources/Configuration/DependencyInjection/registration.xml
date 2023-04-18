@@ -10,16 +10,16 @@
         <service id="Chamilo\Core\Repository\Service\Consulter\TemplateRegistrationConsulter">
             <argument key="$dataLoader"
                       type="service"
-                      id="Chamilo\Core\Repository\Service\TemplateRegistrationLoader"/>
+                      id="Chamilo\Core\Repository\Service\TemplateRegistrationCacheDataLoader"/>
         </service>
 
-        <service id="Chamilo\Core\Repository\Service\TemplateRegistrationLoader">
+        <service id="Chamilo\Core\Repository\Service\TemplateRegistrationCacheDataLoader">
             <argument key="$cacheAdapter"
                       type="service"
-                      id="Chamilo\Core\Repository\Service\TemplateRegistrationLoaderCacheAdapter"/>
+                      id="Chamilo\Core\Repository\Service\TemplateRegistrationCacheAdapter"/>
         </service>
 
-        <service id="Chamilo\Core\Repository\Service\TemplateRegistrationLoaderCacheAdapter"
+        <service id="Chamilo\Core\Repository\Service\TemplateRegistrationCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>

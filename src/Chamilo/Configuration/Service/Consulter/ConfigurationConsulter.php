@@ -1,26 +1,23 @@
 <?php
 namespace Chamilo\Configuration\Service\Consulter;
 
+use Chamilo\Libraries\Cache\DataConsulterTrait;
+use Chamilo\Libraries\Cache\Interfaces\DataConsulterInterface;
 use Chamilo\Libraries\Cache\Interfaces\DataLoaderInterface;
 use Exception;
 
 /**
- * @package Chamilo\Configuration\Service
+ * @package Chamilo\Configuration\Service\Consulter
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class ConfigurationConsulter
+class ConfigurationConsulter implements DataConsulterInterface
 {
-    protected DataLoaderInterface $dataLoader;
+    use DataConsulterTrait;
 
     public function __construct(DataLoaderInterface $dataLoader)
     {
-        $this->dataLoader = $dataLoader;
-    }
-
-    public function getDataLoader(): DataLoaderInterface
-    {
-        return $this->dataLoader;
+        $this->$dataLoader = $dataLoader;
     }
 
     /**

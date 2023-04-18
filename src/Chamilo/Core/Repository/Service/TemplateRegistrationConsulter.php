@@ -1,108 +1,65 @@
 <?php
 namespace Chamilo\Core\Repository\Service;
 
-use Chamilo\Configuration\Interfaces\DataLoaderInterface;
-use Chamilo\Configuration\Service\Consulter\DataConsulter;
+use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
+use Chamilo\Libraries\Cache\DataConsulterTrait;
+use Chamilo\Libraries\Cache\Interfaces\DataConsulterInterface;
+use Chamilo\Libraries\Cache\Interfaces\DataLoaderInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package Chamilo\Configuration\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @package Chamilo\Core\Repository\Service
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class TemplateRegistrationConsulter extends DataConsulter
+class TemplateRegistrationConsulter implements DataConsulterInterface
 {
+    use DataConsulterTrait;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    private $stringUtilities;
+    protected StringUtilities $stringUtilities;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     * @param \Chamilo\Configuration\Interfaces\DataLoaderInterface $dataLoader
-     */
-    public function __construct(StringUtilities $stringUtilities, DataLoaderInterface $dataLoader)
+    public function __construct(DataLoaderInterface $dataLoader, StringUtilities $stringUtilities)
     {
-        parent::__construct($dataLoader);
+        $this->$dataLoader = $dataLoader;
         $this->stringUtilities = $stringUtilities;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    public function getStringUtilities()
+    public function getStringUtilities(): StringUtilities
     {
         return $this->stringUtilities;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
-    public function setStringUtilities(StringUtilities $stringUtilities)
+    public function getTemplateRegistrationByIdentifier(int $identifier): ?TemplateRegistration
     {
-        $this->stringUtilities = $stringUtilities;
+        return $this->getTemplateRegistrations()[TemplateRegistrationCacheDataLoader::REGISTRATION_ID][$identifier];
+    }
+
+    public function getTemplateRegistrationDefaultByType(string $type): ?TemplateRegistration
+    {
+        return $this->getTemplateRegistrations()[TemplateRegistrationCacheDataLoader::REGISTRATION_DEFAULT][$type];
     }
 
     /**
-     *
-     * @param int $identifier
-     *
-     * @return \Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration
-     */
-    public function getTemplateRegistrationByIdentifier($identifier)
-    {
-        return $this->getTemplateRegistrations()[TemplateRegistrationLoader::REGISTRATION_ID][$identifier];
-    }
-
-    /**
-     *
-     * @param string $type
-     *
-     * @return \Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration
-     */
-    public function getTemplateRegistrationDefaultByType($type)
-    {
-        return $this->getTemplateRegistrations()[TemplateRegistrationLoader::REGISTRATION_DEFAULT][$type];
-    }
-
-    /**
-     *
      * @return \Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration[][]
      */
-    public function getTemplateRegistrations()
+    public function getTemplateRegistrations(): array
     {
-        return $this->getData();
+        return $this->getDataLoader()->readData();
     }
 
     /**
-     * Get the template registrations for a specific content object type and/or user_id
-     *
-     * @param string[] $types
-     * @param int $user_id
-     *
      * @return \Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration[]
      */
-    public function getTemplateRegistrationsByTypesAndUserIdentifier($types, $user_id = null)
+    public function getTemplateRegistrationsByTypesAndUserIdentifier(array $types, ?int $user_id = null): array
     {
         $templateRegistrations = $this->getTemplateRegistrations();
 
         $filteredTemplateRegistrations = [];
 
-        if (!is_array($types))
-        {
-            $types = array($types);
-        }
-
         foreach ($types as $type)
         {
-            $commonTemplateRegistrations = (array)
-                $templateRegistrations[TemplateRegistrationLoader::REGISTRATION_USER_ID][0][$type];
+            $commonTemplateRegistrations =
+                (array) $templateRegistrations[TemplateRegistrationCacheDataLoader::REGISTRATION_USER_ID][0][$type];
 
             if (count($commonTemplateRegistrations) > 0)
             {
@@ -112,8 +69,8 @@ class TemplateRegistrationConsulter extends DataConsulter
 
             if ($user_id)
             {
-                $userTemplateRegistrations = (array)
-                    $templateRegistrations[TemplateRegistrationLoader::REGISTRATION_USER_ID][$user_id][$type];
+                $userTemplateRegistrations =
+                    (array) $templateRegistrations[TemplateRegistrationCacheDataLoader::REGISTRATION_USER_ID][$user_id][$type];
 
                 if (count($userTemplateRegistrations) > 0)
                 {
