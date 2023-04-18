@@ -3,19 +3,19 @@ namespace Chamilo\Configuration\Service\DataLoader;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
-use Chamilo\Libraries\Cache\CacheDataLoaderTrait;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataAccessorInterface;
+use Chamilo\Libraries\Cache\Traits\SingularCacheDataAccessorTrait;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
- * @package Chamilo\Configuration\Service
+ * @package Chamilo\Configuration\Service\DataLoader
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class RegistrationCacheDataLoader implements CacheDataAccessorInterface
 {
-    use CacheDataLoaderTrait
+    use SingularCacheDataAccessorTrait
     {
         clearCacheData as protected clearAdapterCache;
     }
@@ -53,8 +53,9 @@ class RegistrationCacheDataLoader implements CacheDataAccessorInterface
      */
     public function getDataForCache(): array
     {
-        $registrationRecords = $this->getRegistrationRepository()->findRegistrationsAsRecords();
         $registrations = [];
+
+        $registrationRecords = $this->getRegistrationRepository()->findRegistrationsAsRecords();
 
         foreach ($registrationRecords as $registrationRecord)
         {

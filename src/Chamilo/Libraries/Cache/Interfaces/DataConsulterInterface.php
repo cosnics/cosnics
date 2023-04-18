@@ -7,5 +7,5 @@ namespace Chamilo\Libraries\Cache\Interfaces;
  */
 interface DataConsulterInterface
 {
-    public function getDataLoader(): DataLoaderInterface;
+    public function getDataLoader(): DataAccessorInterface;
 }

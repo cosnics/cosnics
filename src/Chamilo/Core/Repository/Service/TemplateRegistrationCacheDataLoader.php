@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Repository\Service;
 
 use Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository;
-use Chamilo\Libraries\Cache\CacheDataLoaderTrait;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataAccessorInterface;
+use Chamilo\Libraries\Cache\Traits\SingularCacheDataAccessorTrait;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  */
 class TemplateRegistrationCacheDataLoader implements CacheDataAccessorInterface
 {
-    use CacheDataLoaderTrait
+    use SingularCacheDataAccessorTrait
     {
         clearCacheData as protected clearAdapterCache;
     }

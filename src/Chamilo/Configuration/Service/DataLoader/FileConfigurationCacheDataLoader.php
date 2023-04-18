@@ -2,21 +2,21 @@
 namespace Chamilo\Configuration\Service\DataLoader;
 
 use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Libraries\Cache\CacheDataLoaderTrait;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataAccessorInterface;
+use Chamilo\Libraries\Cache\Traits\SingularCacheDataAccessorTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 /**
- * @package Chamilo\Configuration\Service
+ * @package Chamilo\Configuration\Service\DataLoader
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class FileConfigurationCacheDataLoader implements CacheDataAccessorInterface
 {
-    use CacheDataLoaderTrait
+    use SingularCacheDataAccessorTrait
     {
         clearCacheData as protected clearAdapterCache;
     }

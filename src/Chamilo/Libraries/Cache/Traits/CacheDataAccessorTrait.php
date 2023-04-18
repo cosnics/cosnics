@@ -1,15 +1,15 @@
 <?php
-namespace Chamilo\Libraries\Cache;
+namespace Chamilo\Libraries\Cache\Traits;
 
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Exception\CacheException;
 
 /**
- * @package Chamilo\Libraries\Cache
+ * @package Chamilo\Libraries\Cache\Traits
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-trait CacheDataSaverTrait
+trait CacheDataAccessorTrait
 {
     protected AdapterInterface $cacheAdapter;
 
@@ -28,6 +28,11 @@ trait CacheDataSaverTrait
     public function getCacheAdapter(): AdapterInterface
     {
         return $this->cacheAdapter;
+    }
+
+    public function getCacheKeyForParts(array $cacheKeyParts): string
+    {
+        return md5(serialize($cacheKeyParts));
     }
 
     public function hasCacheData(string $cacheKey): bool

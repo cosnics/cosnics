@@ -3,8 +3,8 @@ namespace Chamilo\Configuration\Package\Service;
 
 use Chamilo\Configuration\Package\Finder\InternationalizationBundles;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Libraries\Cache\CacheDataLoaderTrait;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataAccessorInterface;
+use Chamilo\Libraries\Cache\Traits\SingularCacheDataAccessorTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
@@ -15,7 +15,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  */
 class InternationalizationBundlesCacheService implements CacheDataAccessorInterface
 {
-    use CacheDataLoaderTrait;
+    use SingularCacheDataAccessorTrait;
 
     public function __construct(AdapterInterface $cacheAdapter)
     {

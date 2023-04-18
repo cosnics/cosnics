@@ -3,7 +3,7 @@ namespace Chamilo\Configuration\Service\Consulter;
 
 use Chamilo\Libraries\Cache\DataConsulterTrait;
 use Chamilo\Libraries\Cache\Interfaces\DataConsulterInterface;
-use Chamilo\Libraries\Cache\Interfaces\DataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\DataAccessorInterface;
 
 /**
  * @package Chamilo\Configuration\Service\Consulter
@@ -14,7 +14,7 @@ class LanguageConsulter implements DataConsulterInterface
 {
     use DataConsulterTrait;
 
-    public function __construct(DataLoaderInterface $dataLoader)
+    public function __construct(DataAccessorInterface $dataLoader)
     {
         $this->$dataLoader = $dataLoader;
     }

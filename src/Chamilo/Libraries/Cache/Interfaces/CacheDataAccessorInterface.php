@@ -5,7 +5,7 @@ namespace Chamilo\Libraries\Cache\Interfaces;
  * @package Chamilo\Libraries\Cache
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-interface CacheDataAccessorInterface extends DataLoaderInterface
+interface CacheDataAccessorInterface extends DataAccessorInterface
 {
     public function clearCacheData(): bool;
 
@@ -13,4 +13,5 @@ interface CacheDataAccessorInterface extends DataLoaderInterface
 
     public function reloadCacheData();
 
+    public function saveCacheData(): bool;
 }

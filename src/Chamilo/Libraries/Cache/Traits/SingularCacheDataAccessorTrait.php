@@ -1,42 +1,37 @@
 <?php
-namespace Chamilo\Libraries\Cache;
+namespace Chamilo\Libraries\Cache\Traits;
 
-use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Cache\Exception\CacheException;
+use Throwable;
 
 /**
- * @package Chamilo\Libraries\Cache
+ * @package Chamilo\Libraries\Cache\Traits
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-trait CacheDataLoaderTrait
+trait SingularCacheDataAccessorTrait
 {
-    use CacheDataSaverTrait
+    use CacheDataAccessorTrait
     {
         clearCacheData as clearCacheDataForKey;
         loadData as loadCacheDataForKey;
         saveCacheData as saveCacheDataForKey;
     }
 
-    protected AdapterInterface $cacheAdapter;
-
     public function clearCacheData(): bool
     {
         return $this->clearCacheDataForKey($this->getCacheKey());
     }
 
-    public function getCacheAdapter(): AdapterInterface
-    {
-        return $this->cacheAdapter;
-    }
-
     public function getCacheKey(): string
     {
-        return md5(static::class);
+        return $this->getCacheKeyForParts([static::class]);
     }
 
     abstract protected function getDataForCache();
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Exception
      */
     public function loadData()
     {
@@ -44,7 +39,7 @@ trait CacheDataLoaderTrait
 
         if (!$this->hasCacheData($cacheKey))
         {
-            $this->saveCacheDataForKey($cacheKey, $this->getDataForCache());
+            $this->saveCacheData();
         }
 
         return $this->loadCacheDataForKey($cacheKey);
@@ -62,6 +57,13 @@ trait CacheDataLoaderTrait
 
     public function saveCacheData(): bool
     {
-        return $this->saveCacheDataForKey($this->getCacheKey(), $this->getDataForCache());
+        try
+        {
+            return $this->saveCacheDataForKey($this->getCacheKey(), $this->getDataForCache());
+        }
+        catch (Throwable $throwable)
+        {
+            throw new CacheException('Could not get data for cache in ' . static::class);
+        }
     }
 }
