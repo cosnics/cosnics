@@ -1,16 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Service;
 
-use Chamilo\Configuration\Configuration;
-use Chamilo\Core\Repository\Quota\Calculator;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Cache\SymfonyCacheService;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
-use Chamilo\Libraries\Storage\Query\RetrieveProperties;
-use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Cache\CacheDataLoaderTrait;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataAccessorInterface;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
  * @package Chamilo\Configuration\Service
@@ -18,61 +11,30 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CalculatorCacheService extends SymfonyCacheService
+class CalculatorCacheService implements CacheDataAccessorInterface
 {
-    public const IDENTIFIER_TOTAL_USER_DISK_QUOTA = 'total_user_disk_quota';
+    use CacheDataLoaderTrait;
 
-    public function getIdentifiers(): array
+    protected StorageSpaceCalculator $storageSpaceCalculator;
+
+    public function __construct(AdapterInterface $cacheAdapter, StorageSpaceCalculator $storageSpaceCalculator)
     {
-        return [self::IDENTIFIER_TOTAL_USER_DISK_QUOTA];
+        $this->cacheAdapter = $cacheAdapter;
+        $this->storageSpaceCalculator = $storageSpaceCalculator;
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getTotalUserDiskQuota(): int
+    public function getCacheKey(): string
     {
-        return $this->getForIdentifier(self::IDENTIFIER_TOTAL_USER_DISK_QUOTA);
+        return StorageSpaceCalculator::CACHE_KEY_MAXIMUM_AGGREGATED_USER_STORAGE_SPACE;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Exception
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function warmUpForIdentifier($identifier): bool
+    protected function getDataForCache(): int
     {
-        $policy = Configuration::getInstance()->get_setting(['Chamilo\Core\Repository', 'quota_policy']);
-        $fallback = Configuration::getInstance()->get_setting(['Chamilo\Core\Repository', 'quota_fallback']);
+        return $this->getStorageSpaceCalculator()->getMaximumAggregatedUserStorageSpace();
+    }
 
-        if ($policy == Calculator::POLICY_USER && !$fallback)
-        {
-            $property = new FunctionConditionVariable(
-                FunctionConditionVariable::SUM, new PropertyConditionVariable(User::class, User::PROPERTY_DISK_QUOTA),
-                'disk_quota'
-            );
-
-            $parameters = new RecordRetrieveParameters(new RetrieveProperties($property));
-
-            $record = DataManager::record(User::class, $parameters);
-            $totalQuota = $record['disk_quota'];
-        }
-        else
-        {
-            $users = DataManager::retrieves(User::class, new DataClassRetrievesParameters());
-
-            $totalQuota = 0;
-
-            foreach ($users as $user)
-            {
-                $calculator = new Calculator($user);
-                $totalQuota += $calculator->getMaximumUserDiskQuota();
-            }
-        }
-
-        $cacheItem = $this->getCacheAdapter()->getItem($identifier);
-        $cacheItem->set($totalQuota);
-
-        return $this->getCacheAdapter()->save($cacheItem);
+    public function getStorageSpaceCalculator(): StorageSpaceCalculator
+    {
+        return $this->storageSpaceCalculator;
     }
 }

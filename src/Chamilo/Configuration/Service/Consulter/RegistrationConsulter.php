@@ -26,7 +26,7 @@ class RegistrationConsulter implements DataConsulterInterface
     }
 
     /**
-     * @return string[]
+     * @return string[][]
      */
     public function getContentObjectRegistrations(bool $alsoReturnInactiveTypes = true): array
     {
@@ -99,7 +99,7 @@ class RegistrationConsulter implements DataConsulterInterface
      */
     public function getRegistrations(): array
     {
-        return $this->getDataLoader()->readData();
+        return $this->getDataLoader()->loadData();
     }
 
     /**

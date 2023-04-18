@@ -4,7 +4,7 @@ namespace Chamilo\Configuration\Service\DataLoader;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
 use Chamilo\Libraries\Cache\CacheDataLoaderTrait;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataAccessorInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -13,11 +13,11 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class RegistrationCacheDataLoader implements CacheDataLoaderInterface
+class RegistrationCacheDataLoader implements CacheDataAccessorInterface
 {
     use CacheDataLoaderTrait
     {
-        clearCache as protected clearAdapterCache;
+        clearCacheData as protected clearAdapterCache;
     }
 
     public const REGISTRATION_CONTEXT = 1;
@@ -37,7 +37,7 @@ class RegistrationCacheDataLoader implements CacheDataLoaderInterface
         $this->registrationRepository = $registrationRepository;
     }
 
-    public function clearCache(): bool
+    public function clearCacheData(): bool
     {
         if ($this->getRegistrationRepository()->clearRegistrationCache())
         {

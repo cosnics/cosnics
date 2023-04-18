@@ -3,7 +3,9 @@ namespace Chamilo\Configuration\Package\Service;
 
 use Chamilo\Configuration\Package\Finder\InternationalizationBundles;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Libraries\Cache\SymfonyCacheService;
+use Chamilo\Libraries\Cache\CacheDataLoaderTrait;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataAccessorInterface;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
  * @package Chamilo\Configuration\Package\Service
@@ -11,37 +13,22 @@ use Chamilo\Libraries\Cache\SymfonyCacheService;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class InternationalizationBundlesCacheService extends SymfonyCacheService
+class InternationalizationBundlesCacheService implements CacheDataAccessorInterface
 {
+    use CacheDataLoaderTrait;
 
-    /**
-     * @return string[]
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function getAllPackages(): array
+    public function __construct(AdapterInterface $cacheAdapter)
     {
-        return $this->getForIdentifier(PackageList::MODE_ALL);
+        $this->cacheAdapter = $cacheAdapter;
     }
 
     /**
      * @return string[]
      */
-    public function getIdentifiers(): array
-    {
-        return [PackageList::MODE_ALL];
-    }
-
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
-     */
-    public function warmUpForIdentifier($identifier): bool
+    protected function getDataForCache(): array
     {
         $internationalizationBundles = new InternationalizationBundles(PackageList::ROOT);
 
-        $cacheItem = $this->getCacheAdapter()->getItem((string) $identifier);
-        $cacheItem->set($internationalizationBundles->getPackageNamespaces());
-
-        return $this->getCacheAdapter()->save($cacheItem);
+        return $internationalizationBundles->getPackageNamespaces();
     }
 }

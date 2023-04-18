@@ -31,7 +31,7 @@ class LanguageConsulter implements DataConsulterInterface
      */
     public function getLanguages(): array
     {
-        return $this->getDataLoader()->readData();
+        return $this->getDataLoader()->loadData();
     }
 
     /**

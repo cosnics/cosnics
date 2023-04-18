@@ -102,12 +102,10 @@ class GroupRepository
     }
 
     /**
-     * @param int $userIdentifier
-     *
-     * @return string[][]|ArrayCollection
-     * @throws \Exception
+     * @return ArrayCollection
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(int $userIdentifier)
+    public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(string $userIdentifier)
     {
         $properties = new RetrieveProperties();
 
@@ -415,10 +413,9 @@ class GroupRepository
 
     /**
      * @param int $function
-     * @param int $userGroupIdentifiers
+     * @param int[] $userGroupIdentifiers
      *
      * @return int
-     * @throws \Exception
      */
     protected function getGroupQuotumWithFunctionForUserGroupIdentifiers(int $function, array $userGroupIdentifiers
     ): int
@@ -446,7 +443,6 @@ class GroupRepository
      * @param int $userGroupIdentifiers
      *
      * @return int
-     * @throws \Exception
      */
     public function getHighestGroupQuotumForUserGroupIdentifiers(array $userGroupIdentifiers): int
     {
@@ -456,10 +452,9 @@ class GroupRepository
     }
 
     /**
-     * @param int $userGroupIdentifiers
+     * @param int[] $userGroupIdentifiers
      *
      * @return int
-     * @throws \Exception
      */
     public function getLowestGroupQuotumForUserGroupIdentifiers(array $userGroupIdentifiers): int
     {

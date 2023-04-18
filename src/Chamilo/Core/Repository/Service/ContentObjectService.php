@@ -68,9 +68,6 @@ class ContentObjectService
         return $this->stringUtilities;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getUsedStorageSpace(): int
     {
         $contentObjectTypes = $this->getContentObjectTypes();
@@ -84,9 +81,6 @@ class ContentObjectService
         return $usedStorageSpace;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getUsedStorageSpaceForContentObjectType(string $contentObjectType): int
     {
         return $this->getContentObjectRepository()->getUsedStorageSpaceForContentObjectType(
@@ -94,9 +88,6 @@ class ContentObjectService
         );
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getUsedStorageSpaceForContentObjectTypeAndUser(string $contentObjectType, User $user): int
     {
         return $this->getContentObjectRepository()->getUsedStorageSpaceForContentObjectTypeAndUser(
@@ -104,9 +95,6 @@ class ContentObjectService
         );
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getUsedStorageSpaceForUser(User $user): int
     {
         $contentObjectTypes = $this->getContentObjectTypes();

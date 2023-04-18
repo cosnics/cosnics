@@ -1,283 +1,103 @@
 <?php
 namespace Chamilo\Core\Repository\Quota;
 
-use Chamilo\Configuration\Configuration;
-use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
-use Chamilo\Core\Repository\Quota\Service\CalculatorCacheService;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
- * @package Chamilo\Core\Repository\Quota
- * @author Bart Mollet
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Dieter De Neef
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @package    Chamilo\Core\Repository\Quota
+ * @author     Bart Mollet
+ * @author     Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author     Dieter De Neef
+ * @author     Magali Gillard <magali.gillard@ehb.be>
+ * @author     Eduard Vossen <eduard.vossen@ehb.be>
  * @deprecated Use StorageSpaceCalculator service now
  */
 class Calculator
 {
-    const POLICY_GROUP_HIGHEST = 1;
+    private User $user;
 
-    const POLICY_GROUP_LOWEST = 2;
-
-    const POLICY_HIGHEST = 3;
-
-    const POLICY_LOWEST = 4;
-
-    const POLICY_USER = 0;
-
-    /**
-     *
-     * @var \Chamilo\Core\Repository\Quota\Service\CalculatorCacheService
-     */
-    private $calculatorCacheService;
-
-    /**
-     *
-     * @var integer
-     * @deprecated No longer relevant
-     */
-    private $maximumDatabaseQuota;
-
-    /**
-     *
-     * @var integer
-     */
-    private $maximumUserDiskQuota;
-
-    /**
-     *
-     * @var integer
-     */
-    private $usedAggregatedUserDiskQuota;
-
-    /**
-     *
-     * @var integer
-     * @deprecated No longer relevant
-     */
-    private $usedDatabaseQuota;
-
-    /**
-     *
-     * @var integer
-     */
-    private $usedUserDiskQuota;
-
-    /**
-     *
-     * @var \Chamilo\Core\User\Storage\DataClass\User
-     */
-    private $user;
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param boolean $reset
-     */
-    public function __construct(User $user, $reset = false)
+    public function __construct(User $user)
     {
         $this->user = $user;
-
-        if ($reset)
-        {
-            $this->resetCache();
-        }
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
-     *
      * @deprecated Use StorageSpaceCalculator::addUploadWarningToForm() now
      */
     public function addUploadWarningToForm(FormValidator $form)
     {
-        $enableQuota = (boolean) Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Repository', 'enable_quota')
-        );
-
-        $postMaxSize = Filesystem::interpret_file_size(ini_get('post_max_size'));
-        $uploadMaxFilesize = Filesystem::interpret_file_size(ini_get('upload_max_filesize'));
-
-        $maximumServerSize = $postMaxSize < $uploadMaxFilesize ? $uploadMaxFilesize : $postMaxSize;
-
-        if ($enableQuota && $this->getAvailableUserDiskQuota() < $maximumServerSize)
-        {
-            $maximumSize = $this->getAvailableUserDiskQuota();
-
-            $redirect = new Redirect(
-                array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Manager::context(),
-                    \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_QUOTA,
-                    FilterData::FILTER_CATEGORY => null,
-                    Manager::PARAM_ACTION => null
-                )
-            );
-            $url = $redirect->getUrl();
-
-            $allowUpgrade =
-                Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
-            $allowRequest =
-                Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'allow_request'));
-
-            $translation = ($allowUpgrade || $allowRequest) ? 'MaximumFileSizeUser' : 'MaximumFileSizeUserNoUpgrade';
-
-            $message = Translation::get(
-                $translation, array(
-                    'SERVER' => Filesystem::format_file_size($maximumServerSize),
-                    'USER' => Filesystem::format_file_size($maximumSize),
-                    'URL' => $url
-                )
-            );
-
-            if ($maximumSize < 5242880)
-            {
-                $form->add_error_message('max_size', null, $message);
-            }
-            else
-            {
-                $form->add_warning_message('max_size', null, $message);
-            }
-        }
-        else
-        {
-            $maximumSize = $maximumServerSize;
-            $message = Translation::get(
-                'MaximumFileSizeServer', array('FILESIZE' => Filesystem::format_file_size($maximumSize))
-            );
-            $form->add_warning_message('max_size', null, $message);
-        }
+        $this->getStorageSpaceCalculator()->addUploadWarningToFormForUser($form, $this->getUser());
     }
 
     /**
-     *
-     * @param integer $requestedStorageSize
-     *
-     * @return boolean
      * @deprecated Use StorageSpaceCalculator::doesUserHaveRequestedStorageSpace() now
      */
-    public function canUpload($requestedStorageSize)
+    public function canUpload(int $requestedStorageSize): bool
     {
-        if (!$this->isEnabled())
-        {
-            return true;
-        }
-
-        return $this->getAvailableUserDiskQuota() > $requestedStorageSize;
+        return $this->getStorageSpaceCalculator()->doesUserHaveRequestedStorageSpace(
+            $this->getUser(), $requestedStorageSize
+        );
     }
 
     /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getAggregatedUserStorageSpacePercentage() now
      */
-    public function getAggregatedUserDiskQuotaPercentage()
+    public function getAggregatedUserDiskQuotaPercentage(): int
     {
-        return 100 * $this->getUsedAggregatedUserDiskQuota() / $this->getMaximumAggregatedUserDiskQuota();
+        return $this->getStorageSpaceCalculator()->getAggregatedUserStorageSpacePercentage();
     }
 
     /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getAllocatedStorageSpacePercentage() now
      */
-    public function getAllocatedDiskSpacePercentage()
+    public function getAllocatedDiskSpacePercentage(): int
     {
-        return 100 * $this->getUsedAllocatedDiskSpace() / $this->getMaximumAllocatedDiskSpace();
+        return $this->getStorageSpaceCalculator()->getAllocatedStorageSpacePercentage();
     }
 
     /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getAvailableAggregatedUserStorageSpace() now
      */
-    public function getAvailableAggregatedUserDiskQuota()
+    public function getAvailableAggregatedUserDiskQuota(): int
     {
-        $quota = $this->getMaximumAggregatedUserDiskQuota() - $this->getUsedAggregatedUserDiskQuota();
-
-        return $quota > 0 ? $quota : 0;
+        return $this->getStorageSpaceCalculator()->getAvailableAggregatedUserStorageSpace();
     }
 
     /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getAvailableAllocatedStorageSpace()
      */
-    public function getAvailableAllocatedDiskSpace()
+    public function getAvailableAllocatedDiskSpace(): int
     {
-        return $this->getMaximumAllocatedDiskSpace() - $this->getUsedAllocatedDiskSpace();
+        return $this->getStorageSpaceCalculator()->getAvailableAllocatedStorageSpace();
     }
 
     /**
-     *
-     * @return integer
-     * @deprecated No longer relevant
-     */
-    public function getAvailableDatabaseQuota()
-    {
-        $quota = $this->getMaximumDatabaseQuota() - $this->getUsedDatabaseQuota();
-
-        return $quota > 0 ? $quota : 0;
-    }
-
-    /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getAvailableReservedStorageSpace() now
      */
-    public function getAvailableReservedDiskSpace()
+    public function getAvailableReservedDiskSpace(): int
     {
-        $quota = $this->getMaximumReservedDiskSpace() - $this->getUsedReservedDiskSpace();
-
-        return $quota > 0 ? $quota : 0;
+        return $this->getStorageSpaceCalculator()->getAvailableReservedStorageSpace();
     }
 
     /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getAvailableStorageSpaceForUser() now
      */
-    public function getAvailableUserDiskQuota()
+    public function getAvailableUserDiskQuota(): int
     {
-        $quota = $this->getMaximumUserDiskQuota() - $this->getUsedUserDiskQuota();
-
-        return $quota > 0 ? $quota : 0;
+        return $this->getStorageSpaceCalculator()->getAvailableStorageSpaceForUser($this->getUser());
     }
 
     /**
      * Build a bar-view of the used quota.
      *
-     * @param $percent float The percentage of the bar that is in use
-     * @param $status string A status message which will be displayed below the bar.
-     *
-     * @return string HTML representation of the requested bar.
+     * @param int $percent   The percentage of the bar that is in use
+     * @param string $status A status message which will be displayed below the bar.
      */
-    public static function getBar($percent, $status)
+    public static function getBar(int $percent, string $status): string
     {
         $html = [];
 
@@ -313,241 +133,74 @@ class Calculator
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Quota\Service\CalculatorCacheService
-     * @deprecated Re-implement caching differently
-     * @todo Re-implement caching differently
-     */
-    private function getCalculatorCacheService()
-    {
-        if (!isset($this->calculatorCacheService))
-        {
-            $this->calculatorCacheService =
-                new CalculatorCacheService($this->getService(ConfigurablePathBuilder::class));
-        }
-
-        return $this->calculatorCacheService;
-    }
-
-    /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getHighestGroupQuotumForUser() now
      */
-    public function getGroupHighest()
+    public function getGroupHighest(): int
     {
-        $userGroupIds = $this->user->get_groups(true);
-
-        $conditions = [];
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $userGroupIds
-        );
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA), ComparisonCondition::GREATER_THAN,
-            new StaticConditionVariable(0)
-        );
-        $condition = new AndCondition($conditions);
-
-        $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
-            Group::class, new DataClassRetrieveParameters(
-                $condition, new OrderBy(
-                    array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA)))
-                )
-            )
-        );
-
-        return $group instanceof Group ? $group->get_disk_quota() : 0;
+        return $this->getStorageSpaceCalculator()->getHighestGroupQuotumForUser($this->getUser());
     }
 
     /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getLowestGroupQuotumForUser() now
      */
-    public function getGroupLowest()
+    public function getGroupLowest(): int
     {
-        $userGroupIds = $this->user->get_groups(true);
-
-        $conditions = [];
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $userGroupIds
-        );
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA), ComparisonCondition::GREATER_THAN,
-            new StaticConditionVariable(0)
-        );
-        $condition = new AndCondition($conditions);
-
-        $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
-            Group::class, new DataClassRetrieveParameters(
-                $condition, new OrderBy(array(
-                        new OrderProperty(
-                            new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA), SORT_ASC
-                        )
-                    ))
-            )
-        );
-
-        return $group instanceof Group ? $group->get_disk_quota() : 0;
+        return $this->getStorageSpaceCalculator()->getLowestGroupQuotumForUser($this->getUser());
     }
 
     /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getMaximumAggregatedUserStorageSpace() now
      */
-    public function getMaximumAggregatedUserDiskQuota()
+    public function getMaximumAggregatedUserDiskQuota(): int
     {
-        if (is_null($this->maximumAggregatedUserDiskQuota))
-        {
-            $this->maximumAggregatedUserDiskQuota = $this->getTotalUserDiskQuota();
-        }
-
-        return $this->maximumAggregatedUserDiskQuota;
+        return $this->getStorageSpaceCalculator()->getMaximumAggregatedUserStorageSpace();
     }
 
     /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getMaximumAllocatedStorageSpace() now
      */
-    public function getMaximumAllocatedDiskSpace()
+    public function getMaximumAllocatedDiskSpace(): int
     {
-        return disk_total_space(Path::getInstance()->getRepositoryPath());
+        return $this->getStorageSpaceCalculator()->getMaximumAllocatedStorageSpace();
     }
 
     /**
-     *
-     * @return integer
-     * @deprecated No longer relevant
-     */
-    public function getMaximumDatabaseQuota()
-    {
-        if (is_null($this->maximumDatabaseQuota))
-        {
-            $this->maximumDatabaseQuota = $this->user->get_database_quota();
-        }
-
-        return $this->maximumDatabaseQuota;
-    }
-
-    /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getMaximumAllocatedStorageSpace() now
      */
-    public function getMaximumReservedDiskSpace()
+    public function getMaximumReservedDiskSpace(): int
     {
-        return disk_total_space(Path::getInstance()->getRepositoryPath());
+        return $this->getStorageSpaceCalculator()->getMaximumAllocatedStorageSpace();
     }
 
     /**
-     *
-     * @return integer
      * @deprecated USe StorageSpaceCalculator::getMaximumUploadSizeForUser() now
      */
-    public function getMaximumUploadSize()
+    public function getMaximumUploadSize(): int
     {
-        $enableQuota = (boolean) Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Repository', 'enable_quota')
-        );
-
-        $postMaxSize = Filesystem::interpret_file_size(ini_get('post_max_size'));
-        $uploadMaxFilesize = Filesystem::interpret_file_size(ini_get('upload_max_filesize'));
-
-        $maximumServerSize = $postMaxSize < $uploadMaxFilesize ? $uploadMaxFilesize : $postMaxSize;
-
-        if ($enableQuota && $this->getAvailableUserDiskQuota() < $maximumServerSize)
-        {
-            $maximumSize = $this->getAvailableUserDiskQuota();
-            $maximumUploadSize = $maximumSize > $maximumServerSize ? $maximumServerSize : $maximumSize;
-        }
-        else
-        {
-            $maximumUploadSize = $maximumServerSize;
-        }
-
-        return floor($maximumUploadSize / 1024 / 1024);
+        return $this->getStorageSpaceCalculator()->getMaximumUploadSizeForUser($this->getUser());
     }
 
     /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getAllowedStorageSpaceForUser() now
      */
-    public function getMaximumUserDiskQuota()
+    public function getMaximumUserDiskQuota(): int
     {
-        if (is_null($this->maximumUserDiskQuota))
-        {
-            $policy = Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_policy'));
-            $fallback = Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback'));
-            $fallbackUser = Configuration::getInstance()->get_setting(
-                array('Chamilo\Core\Repository', 'quota_fallback_user')
-            );
-
-            switch ($policy)
-            {
-                case self::POLICY_USER :
-                    if ($this->user->get_disk_quota() || !$fallback)
-                    {
-                        $this->maximumUserDiskQuota = $this->user->get_disk_quota();
-                    }
-                    else
-                    {
-                        $this->maximumUserDiskQuota =
-                            ($fallbackUser == 0 ? $this->getGroupHighest() : $this->getGroupLowest());
-                    }
-                    break;
-                case self::POLICY_GROUP_HIGHEST :
-                    $group = $this->getGroupHighest();
-                    $this->maximumUserDiskQuota = $group || !$fallback ? $group : $this->user->get_disk_quota();
-                    break;
-                case self::POLICY_GROUP_LOWEST :
-                    $group = $this->getGroupLowest();
-                    $this->maximumUserDiskQuota = $group || !$fallback ? $group : $this->user->get_disk_quota();
-                    break;
-                case self::POLICY_HIGHEST :
-                    $group = $this->getGroupHighest();
-                    $this->maximumUserDiskQuota =
-                        ($group > $this->user->get_disk_quota() ? $group : $this->user->get_disk_quota());
-                    break;
-                case self::POLICY_LOWEST :
-                    $group = $this->getGroupLowest();
-                    $this->maximumUserDiskQuota =
-                        ($group > $this->user->get_disk_quota() || !$group ? $this->user->get_disk_quota() : $group);
-                    break;
-                default :
-                    $this->maximumUserDiskQuota = $this->user->get_disk_quota();
-                    break;
-            }
-        }
-
-        return $this->maximumUserDiskQuota;
+        return $this->getStorageSpaceCalculator()->getAllowedStorageSpaceForUser($this->getUser());
     }
 
     /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getReservedStorageSpacePercentage() now
      */
-    public function getReservedDiskSpacePercentage()
+    public function getReservedDiskSpacePercentage(): int
     {
-        return 100 * $this->getUsedReservedDiskSpace() / $this->getMaximumReservedDiskSpace();
+        return $this->getStorageSpaceCalculator()->getReservedStorageSpacePercentage();
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
-     */
-    public function getRightsService()
+    public function getRightsService(): RightsService
     {
         return $this->getService(RightsService::class);
     }
 
-    /**
-     * @param string $serviceName
-     *
-     * @return object
-     * @throws \Exception
-     */
     protected function getService(string $serviceName)
     {
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
@@ -555,295 +208,95 @@ class Calculator
         );
     }
 
+    protected function getStorageSpaceCalculator(): StorageSpaceCalculator
+    {
+        return $this->getService(StorageSpaceCalculator::class);
+    }
+
     /**
      * @deprecated Use StorageSpaceCalculator::getMaximumAggregatedUserStorageSpace() now
      */
-    public function getTotalUserDiskQuota($reset = false)
+    public function getTotalUserDiskQuota(): int
     {
-        if ($reset)
-        {
-            $this->getCalculatorCacheService()->clearForIdentifiers(
-                array(CalculatorCacheService::IDENTIFIER_TOTAL_USER_DISK_QUOTA)
-            );
-        }
-
-        return $this->getCalculatorCacheService()->getTotalUserDiskQuota();
+        return $this->getStorageSpaceCalculator()->getMaximumAggregatedUserStorageSpace();
     }
 
     /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getUsedAggregatedUserStorageSpace() now
      */
-    public function getUsedAggregatedUserDiskQuota()
+    public function getUsedAggregatedUserDiskQuota(): int
     {
-        if (is_null($this->usedAggregatedUserDiskQuota))
-        {
-            $this->usedAggregatedUserDiskQuota = DataManager::get_used_disk_space();
-        }
-
-        return $this->usedAggregatedUserDiskQuota;
+        return $this->getStorageSpaceCalculator()->getUsedAggregatedUserStorageSpace();
     }
 
     /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getUsedAggregatedUserStorageSpace() now
      */
-    public function getUsedAllocatedDiskSpace()
+    public function getUsedAllocatedDiskSpace(): int
     {
-        return $this->getUsedAggregatedUserDiskQuota();
+        return $this->getStorageSpaceCalculator()->getUsedAggregatedUserStorageSpace();
     }
 
     /**
-     *
-     * @return integer
-     * @deprecated No longer relevant
-     */
-    public function getUsedDatabaseQuota()
-    {
-        if (is_null($this->usedDatabaseQuota))
-        {
-            $condition = new AndCondition(
-                [
-                    new EqualityCondition(
-                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-                        new StaticConditionVariable($this->user->get_id())
-                    ),
-                    new NotCondition(
-                        new InCondition(
-                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
-                            DataManager::get_active_helper_types()
-                        )
-                    )
-                ]
-            );
-
-            $this->usedDatabaseQuota = DataManager::count_active_content_objects(
-                ContentObject::class, $condition
-            );
-        }
-
-        return $this->usedDatabaseQuota;
-    }
-
-    /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getMaximumAggregatedUserStorageSpace() now
      */
-    public function getUsedReservedDiskSpace()
+    public function getUsedReservedDiskSpace(): int
     {
-        return $this->getMaximumAggregatedUserDiskQuota();
+        return $this->getStorageSpaceCalculator()->getMaximumAggregatedUserStorageSpace();
     }
 
     /**
-     *
-     * @return integer
      * @deprecated Use StorageSpaceCalculator::getUsedStorageSpaceForUser() now
      */
-    public function getUsedUserDiskQuota()
+    public function getUsedUserDiskQuota(): int
     {
-        if (is_null($this->usedUserDiskQuota))
-        {
-            $this->usedUserDiskQuota = DataManager::get_used_disk_space(
-                $this->user->getId()
-            );
-        }
+        return $this->getStorageSpaceCalculator()->getUsedStorageSpaceForUser($this->getUser());
+    }
 
-        return $this->usedUserDiskQuota;
+    public function getUser(): User
+    {
+        return $this->user;
     }
 
     /**
-     *
-     * @return integer
-     * @deprecated No longer relevant
-     */
-    public function getUserDatabasePercentage()
-    {
-        return 100 * $this->getUsedDatabaseQuota() / $this->getMaximumDatabaseQuota();
-    }
-
-    /**
-     *
-     * @return integer
      * @deprecated UseStorageSpaceCalculator::geStorageSpacePercentageForUser() now
      */
-    public function getUserDiskQuotaPercentage()
+    public function getUserDiskQuotaPercentage(): int
     {
-        return 100 * $this->getUsedUserDiskQuota() / $this->getMaximumUserDiskQuota();
+        return $this->getStorageSpaceCalculator()->getStorageSpacePercentageForUser($this->getUser());
     }
 
     /**
-     * @return bool
      * @deprecated Use StorageSpaceCalculator::isStorageQuotumEnabled() now
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
-        return (boolean) Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'enable_quota'));
+        return $this->getStorageSpaceCalculator()->isStorageQuotumEnabled();
     }
 
     /**
-     *
-     * @return boolean
+     * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
      * @deprecated Use RightsService::canUserRequestAdditionalStorageSpace() now
      */
-    public function requestAllowed()
+    public function requestAllowed(): bool
     {
-        if (!$this->isEnabled())
-        {
-            return false;
-        }
-
-        $quotaStep = (int) Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'step'));
-        $allowRequest = Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'allow_request'));
-
-        if (!$this->usesUserDiskQuota())
-        {
-            return false;
-        }
-
-        if ($this->getRightsService()->canUserViewQuotaRequests($this->user) &&
-            $this->getAvailableAllocatedDiskSpace() > $quotaStep)
-        {
-            return true;
-        }
-
-        if ($allowRequest)
-        {
-            if ($this->getAvailableAllocatedDiskSpace() > $quotaStep)
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->getRightsService()->canUserRequestAdditionalStorageSpace($this->getUser());
     }
 
     /**
-     * @deprecated No longer relevant
-     */
-    public function resetCache()
-    {
-        $this->getCalculatorCacheService()->clearForIdentifiers(
-            array(CalculatorCacheService::IDENTIFIER_TOTAL_USER_DISK_QUOTA)
-        );
-    }
-
-    /**
-     *
-     * @return boolean
+     * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
      * @deprecated Use RightsService::canUserUpgradeStorageSpace() now
      */
-    public function upgradeAllowed()
+    public function upgradeAllowed(): bool
     {
-        if (!$this->isEnabled())
-        {
-            return false;
-        }
-
-        $quotaStep = (int) Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'step'));
-        $allowUpgrade = (boolean) Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Repository', 'allow_upgrade')
-        );
-        $maximumUserDiskSpace = (int) Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Repository', 'maximum_user')
-        );
-
-        if (!$this->usesUserDiskQuota())
-        {
-            return false;
-        }
-
-        if ($this->getRightsService()->canUserViewQuotaRequests($this->user) &&
-            $this->getAvailableAllocatedDiskSpace() > $quotaStep)
-        {
-            return true;
-        }
-
-        if ($allowUpgrade)
-        {
-            if ($maximumUserDiskSpace == 0)
-            {
-                if ($this->getAvailableAllocatedDiskSpace() > $quotaStep)
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                if ($this->user->get_disk_quota() < $maximumUserDiskSpace)
-                {
-                    if ($this->getAvailableAllocatedDiskSpace() > $quotaStep)
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
+        return $this->getRightsService()->canUserUpgradeStorageSpace($this->getUser());
     }
 
     /**
-     *
-     * @return boolean
      * @deprecated Use StorageSpaceCalculator::isQuotumDefinedForUser() now
      */
-    public function usesUserDiskQuota()
+    public function usesUserDiskQuota(): bool
     {
-        $policy = Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_policy'));
-        $fallback = Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback'));
-        $fallbackUser = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Repository', 'quota_fallback_user')
-        );
-
-        switch ($policy)
-        {
-            case self::POLICY_USER :
-                if ($this->user->get_disk_quota() || !$fallback)
-                {
-                    return true;
-                }
-                else
-                {
-                    if ($fallbackUser == 0)
-                    {
-                        $group = $this->getGroupHighest();
-
-                        return !($group > $this->user->get_disk_quota());
-                    }
-                    else
-                    {
-                        $group = $this->getGroupLowest();
-
-                        return !($group || !$fallback);
-                    }
-                }
-                break;
-            case self::POLICY_GROUP_HIGHEST :
-                $group = $this->getGroupHighest();
-
-                return !($group || !$fallback);
-                break;
-            case self::POLICY_GROUP_LOWEST :
-                $group = $this->getGroupLowest();
-
-                return !($group || !$fallback);
-                break;
-            case self::POLICY_HIGHEST :
-                $group = $this->getGroupHighest();
-
-                return !($group > $this->user->get_disk_quota());
-                break;
-            case self::POLICY_LOWEST :
-                $group = $this->getGroupLowest();
-
-                return $group > $this->user->get_disk_quota() || !$group;
-                break;
-            default :
-                return true;
-                break;
-        }
+        return $this->getStorageSpaceCalculator()->isQuotumDefinedForUser($this->getUser());
     }
 }

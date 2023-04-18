@@ -7,8 +7,6 @@ namespace Chamilo\Libraries\Cache\Interfaces;
  */
 interface DataLoaderInterface
 {
-    public function readData();
-
-    public function rereadData();
+    public function loadData();
 
 }

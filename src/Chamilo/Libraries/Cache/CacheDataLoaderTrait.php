@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Cache;
 
 use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\Cache\Exception\CacheException;
 
 /**
  * @package Chamilo\Libraries\Cache
@@ -10,11 +9,18 @@ use Symfony\Component\Cache\Exception\CacheException;
  */
 trait CacheDataLoaderTrait
 {
+    use CacheDataSaverTrait
+    {
+        clearCacheData as clearCacheDataForKey;
+        loadData as loadCacheDataForKey;
+        saveCacheData as saveCacheDataForKey;
+    }
+
     protected AdapterInterface $cacheAdapter;
 
-    public function clearCache(): bool
+    public function clearCacheData(): bool
     {
-        return $this->getCacheAdapter()->clear();
+        return $this->clearCacheDataForKey($this->getCacheKey());
     }
 
     public function getCacheAdapter(): AdapterInterface
@@ -30,65 +36,32 @@ trait CacheDataLoaderTrait
     abstract protected function getDataForCache();
 
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function loadCache(): bool
-    {
-        $cacheAdapter = $this->getCacheAdapter();
-        $cacheItem = $cacheAdapter->getItem($this->getCacheKey());
-
-        if (!$cacheItem->isHit())
-        {
-            $cacheItem->set($this->getDataForCache());
-
-            return $cacheAdapter->save($cacheItem);
-        }
-
-        return true;
-    }
-
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function readData()
-    {
-        $cacheAdapter = $this->getCacheAdapter();
-        $cacheItem = $cacheAdapter->getItem($this->getCacheKey());
-
-        if (!$cacheItem->isHit())
-        {
-            $this->loadCache();
-            $cacheItem = $cacheAdapter->getItem($this->getCacheKey());
-        }
-
-        return $cacheItem->get();
-    }
-
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function reloadCache(): bool
+    public function loadData()
     {
-        if ($this->clearCache())
+        $cacheKey = $this->getCacheKey();
+
+        if (!$this->hasCacheData($cacheKey))
         {
-            return $this->loadCache();
+            $this->saveCacheDataForKey($cacheKey, $this->getDataForCache());
         }
 
-        throw new CacheException('Could not clear cache');
+        return $this->loadCacheDataForKey($cacheKey);
     }
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function rereadData()
+    public function reloadCacheData()
     {
-        if ($this->clearCache())
-        {
-            return $this->readData();
-        }
+        $this->clearCacheData();
 
-        throw new CacheException('Could not clear cache');
+        return $this->loadData();
+    }
+
+    public function saveCacheData(): bool
+    {
+        return $this->saveCacheDataForKey($this->getCacheKey(), $this->getDataForCache());
     }
 }

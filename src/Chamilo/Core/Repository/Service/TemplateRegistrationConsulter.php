@@ -20,7 +20,7 @@ class TemplateRegistrationConsulter implements DataConsulterInterface
 
     public function __construct(DataLoaderInterface $dataLoader, StringUtilities $stringUtilities)
     {
-        $this->$dataLoader = $dataLoader;
+        $this->dataLoader = $dataLoader;
         $this->stringUtilities = $stringUtilities;
     }
 
@@ -44,7 +44,7 @@ class TemplateRegistrationConsulter implements DataConsulterInterface
      */
     public function getTemplateRegistrations(): array
     {
-        return $this->getDataLoader()->readData();
+        return $this->getDataLoader()->loadData();
     }
 
     /**

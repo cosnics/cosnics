@@ -152,13 +152,7 @@ class GroupsTreeTraverser
         return $this->groupUsersCount[$cacheKey];
     }
 
-    /**
-     * @param int $userIdentifier
-     *
-     * @return int
-     * @throws \Exception
-     */
-    public function findAllSubscribedGroupIdentifiersForUserIdentifier(int $userIdentifier)
+    public function findAllSubscribedGroupIdentifiersForUserIdentifier(string $userIdentifier)
     {
         if (!array_key_exists($userIdentifier, $this->userSubscribedGroupIdentifiers))
         {
@@ -211,12 +205,10 @@ class GroupsTreeTraverser
     }
 
     /**
-     * @param int $userIdentifier
-     *
-     * @return string[][]|ArrayCollection
-     * @throws \Exception
+     * @return ArrayCollection
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(int $userIdentifier)
+    public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(string $userIdentifier)
     {
         return $this->groupRepository->findDirectlySubscribedGroupNestingValuesForUserIdentifier($userIdentifier);
     }
@@ -370,7 +362,6 @@ class GroupsTreeTraverser
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return int
-     * @throws \Exception
      */
     public function getHighestGroupQuotumForUser(User $user)
     {
@@ -388,7 +379,6 @@ class GroupsTreeTraverser
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return int
-     * @throws \Exception
      */
     public function getLowestGroupQuotumForUser(User $user)
     {

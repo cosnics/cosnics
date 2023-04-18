@@ -2,7 +2,7 @@
 namespace Chamilo\Configuration\Service\DataLoader;
 
 use Chamilo\Libraries\Cache\CacheDataLoaderTrait;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataAccessorInterface;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
@@ -10,20 +10,20 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class AggregatedCacheDataLoader implements CacheDataLoaderInterface
+class AggregatedCacheDataLoader implements CacheDataAccessorInterface
 {
     use CacheDataLoaderTrait
     {
-        clearCache as protected clearAdapterCache;
+        clearCacheData as protected clearAdapterCache;
     }
 
     /**
-     * @var \Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface[]
+     * @var \Chamilo\Libraries\Cache\Interfaces\CacheDataAccessorInterface[]
      */
     private array $dataLoaders;
 
     /**
-     * @param \Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface[] $dataLoaders
+     * @param \Chamilo\Libraries\Cache\Interfaces\CacheDataAccessorInterface[] $dataLoaders
      */
     public function __construct(AdapterInterface $cacheAdapter, array $dataLoaders = [])
     {
@@ -31,17 +31,17 @@ class AggregatedCacheDataLoader implements CacheDataLoaderInterface
         $this->dataLoaders = $dataLoaders;
     }
 
-    public function clearCache(): bool
+    public function clearCacheData(): bool
     {
         foreach ($this->getDataLoaders() as $dataLoader)
         {
-            if (!$dataLoader->clearCache())
+            if (!$dataLoader->clearCacheData())
             {
                 return false;
             }
         }
 
-        return $this->clearCache();
+        return $this->clearCacheData();
     }
 
     protected function getDataForCache(): array
@@ -50,14 +50,14 @@ class AggregatedCacheDataLoader implements CacheDataLoaderInterface
 
         foreach ($this->getDataLoaders() as $dataLoader)
         {
-            $data = array_merge_recursive($data, $dataLoader->readData());
+            $data = array_merge_recursive($data, $dataLoader->loadData());
         }
 
         return $data;
     }
 
     /**
-     * @return \Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface[]
+     * @return \Chamilo\Libraries\Cache\Interfaces\CacheDataAccessorInterface[]
      */
     protected function getDataLoaders(): array
     {

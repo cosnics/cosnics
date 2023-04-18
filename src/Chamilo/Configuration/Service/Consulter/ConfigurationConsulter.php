@@ -62,7 +62,7 @@ class ConfigurationConsulter implements DataConsulterInterface
      */
     public function getSettings(): array
     {
-        return $this->getDataLoader()->readData();
+        return $this->getDataLoader()->loadData();
     }
 
     public function hasSettingsForContext(string $context): bool
