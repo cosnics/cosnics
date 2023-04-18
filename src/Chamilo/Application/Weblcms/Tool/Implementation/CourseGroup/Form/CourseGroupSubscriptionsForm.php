@@ -128,7 +128,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
             $current,
             array('load_elements' => true));
         $elem->setDefaults($defaults);
-        $this->addElement('static', null, null, $legend->as_html());
+        $this->addElement('static', '', null, $legend->as_html());
 
         $buttons[] = $this->createElement(
             'style_submit_button',

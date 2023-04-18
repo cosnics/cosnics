@@ -109,13 +109,10 @@ class TableSort
             return [];
         }
 
-        foreach ($this->getColumns() as $column)
+        if ($this->getColumn() != strval(intval($this->getColumn())))
         {
-            if ($column != strval(intval($column)))
-            {
-                // Probably an attack
-                return $data;
-            }
+            // Probably an attack
+            return $data;
         }
 
         foreach ($this->getDirections() as $direction)
@@ -127,7 +124,7 @@ class TableSort
             }
         }
 
-        $firstColumn = $this->getColumns();
+        $firstColumn = $this->getColumn();
         $firstDirection = $this->getDirections();
 
         $compare_operator = $this->getDirections() == SORT_ASC ? '>' : '<=';

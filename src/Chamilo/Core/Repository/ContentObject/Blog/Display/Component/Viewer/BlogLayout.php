@@ -55,7 +55,7 @@ abstract class BlogLayout
      * @param $parent
      * @param $blog Blog
      */
-    public function factory($parent, Blog $blog)
+    public static function factory($parent, Blog $blog)
     {
         $type = $blog->get_blog_layout();
         $class = __NAMESPACE__ . '\BlogLayout\\' . $type . 'BlogLayout';

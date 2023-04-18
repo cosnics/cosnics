@@ -41,7 +41,9 @@ class PatternMatchConditionTranslator extends ConditionTranslator
          * namely a percent sign. - The third one is similar to the second: it replaces question marks that are not
          * escaped with the SQL equivalent _. ======================================================================
          */
-        $string = preg_replace_callback('/([%\'\\\\_])/e', "'\\\\\\\\' . '\\1'", $string);
-        return preg_replace(array('/(?<!\\\\)\*/', '/(?<!\\\\)\?/'), array('%', '_'), $string);
+        $string = preg_replace(['/\\\\/', '/%/', '/\'/', '/_/'], ['\\\\\\\\', '\%', '\\\'', '\_'], $string);
+
+        // Replace asterisks and question marks that are not prefixed with a backslash with the SQL equivalent
+        return preg_replace(['/(?<!\\\\)\*/', '/(?<!\\\\)\?/'], ['%', '_'], $string);
     }
 }

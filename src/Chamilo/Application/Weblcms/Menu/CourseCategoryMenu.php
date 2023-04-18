@@ -69,7 +69,7 @@ class CourseCategoryMenu extends HtmlMenu
             $categories[$category->get_parent()][] = $category;
         }
         $menu = $this->get_sub_menu_items($categories, 0);
-        if (count($extra_items))
+        if (is_array($extra_items) && count($extra_items) > 0)
         {
             $menu = array_merge($menu, $extra_items);
         }
@@ -108,7 +108,7 @@ class CourseCategoryMenu extends HtmlMenu
                 $menu_item['url'] = $this->get_category_url($category->get_id());
             }
             $sub_menu_items = $this->get_sub_menu_items($categories, $category->get_id());
-            if (count($sub_menu_items) > 0)
+            if (is_array($sub_menu_items) && count($sub_menu_items) > 0)
             {
                 $menu_item['sub'] = $sub_menu_items;
             }

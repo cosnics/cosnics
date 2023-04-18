@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\ComplexWikiPage;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -20,7 +21,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
-    public function render_header($pageTitle = null)
+    public function render_header($pageTitle = null, ComplexWikiPage $page = null)
     {
         $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
@@ -30,7 +31,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
 
         $html = array();
 
-        $html[] = parent::render_header($complex_wiki_page);
+        $html[] = parent::render_header(null, $complex_wiki_page);
         $html[] = '<div class="wiki-pane-content-title">' . Translation::get('Edit', null, Utilities::COMMON_LIBRARIES) .
              ' ' . $wiki_page->get_title() . '</div>';
         $html[] = '<div class="wiki-pane-content-subtitle">' . Translation::get(

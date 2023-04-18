@@ -100,7 +100,7 @@ class Menu extends HtmlMenu
             $menu_item['url'] = $this->get_cloi_url();
 
         $sub_menu_items = $this->get_menu_items($root->get_id());
-        if (count($sub_menu_items) > 0)
+        if (is_array($sub_menu_items) && count($sub_menu_items) > 0)
         {
             $menu_item['sub'] = $sub_menu_items;
         }
@@ -167,7 +167,7 @@ class Menu extends HtmlMenu
                 }
 
                 $sub_menu_items = $this->get_menu_items($cloi->get_ref());
-                if (count($sub_menu_items) > 0)
+                if (is_array($sub_menu_items) && count($sub_menu_items) > 0)
                 {
                     $menu_item['sub'] = $sub_menu_items;
                 }

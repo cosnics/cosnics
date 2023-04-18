@@ -2381,6 +2381,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $target_entities = array();
         }
 
+        $user_ids = null;
+
         // check for everybody
         if (array_key_exists(0, $target_entities[0]))
         {
@@ -2433,7 +2435,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             }
         }
 
-        if (count($user_ids) > 0)
+        if (!is_null($user_ids) && is_array($user_ids) && count($user_ids) > 0)
         {
             $users = \Chamilo\Core\User\Storage\DataManager::records(
                 User::class_name(),

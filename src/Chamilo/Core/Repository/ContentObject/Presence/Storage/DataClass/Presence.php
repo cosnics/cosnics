@@ -94,7 +94,7 @@ class Presence extends ContentObject implements Versionable
     /**
      * @return string
      */
-    public function getVerifyIcon(): string
+    public function getVerifyIcon(): ?string
     {
         return $this->get_additional_property(self::PROPERTY_VERIFY_ICON);
     }

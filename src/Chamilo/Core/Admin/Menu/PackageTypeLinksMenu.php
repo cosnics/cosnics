@@ -47,8 +47,8 @@ class PackageTypeLinksMenu extends HtmlMenu
                 $sub_items[] = $children;
             }
         }
-        
-        if (count($sub_items) > 0)
+
+        if (is_array($sub_items) && count($sub_items) > 0)
         {
             $item['sub'] = $sub_items;
         }
@@ -73,7 +73,7 @@ class PackageTypeLinksMenu extends HtmlMenu
             }
         }
         
-        if ($has_links || (count($sub_items) > 0))
+        if ($has_links || (is_array($sub_items) && count($sub_items) > 0))
         {
             if (! $has_links)
             {

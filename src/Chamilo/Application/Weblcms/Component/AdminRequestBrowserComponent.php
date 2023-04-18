@@ -101,7 +101,7 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         $html[] = '<div style="clear: both;"></div>';
         $html[] = '</div>';
         $html[] = '</div>';
-        return implode($html, "\n");
+        return implode("\n", $html);
     }
 
     public function getButtonToolbarRenderer()
@@ -137,7 +137,7 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         $html = array();
         $html[] = $table->as_html();
 
-        return implode($html, "\n");
+        return implode("\n", $html);
     }
 
     public function get_condition()

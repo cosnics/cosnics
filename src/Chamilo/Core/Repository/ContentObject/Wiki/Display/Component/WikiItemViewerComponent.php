@@ -71,7 +71,7 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
 
             $html = array();
 
-            $html[] = $this->render_header($complex_wiki_page);
+            $html[] = $this->render_header(null, $complex_wiki_page);
             $html[] = '<div class="wiki-pane-content-title">' . $display_wiki_page->get_title() . '</div>';
             $html[] = '<div class="wiki-pane-content-subtitle">' . Translation::get(
                 'From',

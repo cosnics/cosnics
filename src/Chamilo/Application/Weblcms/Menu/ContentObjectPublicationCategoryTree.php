@@ -92,14 +92,14 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
             0);
         $menu_item['url'] = $this->get_category_url(0);
         $sub_menu_items = $this->get_sub_menu_items(0);
-        if (count($sub_menu_items) > 0)
+        if (is_array($sub_menu_items) && count($sub_menu_items) > 0)
         {
             $menu_item['sub'] = $sub_menu_items;
         }
         $menu_item['class'] = 'type_category';
         $menu_item[OptionsMenuRenderer::KEY_ID] = 0;
         $menu[0] = $menu_item;
-        if (count($extra_items))
+        if (is_array($extra_items) && count($extra_items))
         {
             $menu = array_merge($menu, $extra_items);
         }
@@ -137,7 +137,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
             $menu_item['title'] = $category->get_name() . $this->get_category_count($category->get_id());
             $menu_item['url'] = $this->get_category_url($category->get_id());
             $sub_menu_items = $this->get_sub_menu_items($category->get_id());
-            if (count($sub_menu_items) > 0)
+            if (is_array($sub_menu_items) && count($sub_menu_items) > 0)
             {
                 $menu_item['sub'] = $sub_menu_items;
             }

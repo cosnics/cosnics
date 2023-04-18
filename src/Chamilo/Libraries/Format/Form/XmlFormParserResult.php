@@ -61,7 +61,7 @@ class XmlFormParserResult
             $this->add_element_fo_form($form, $element);
         }
 
-        $form->setDefaults(array_merge($form->_defaultValues, $this->get_default_values()));
+        $form->setDefaults(array_merge($form->getDefaultValues(), $this->get_default_values()));
 
         foreach ($this->get_validation_rules() as $validation_rule)
         {

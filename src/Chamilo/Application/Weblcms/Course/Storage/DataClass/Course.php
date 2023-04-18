@@ -580,6 +580,7 @@ class Course extends DataClass
 
         // Create course subtree root location
         $course_subtree_root_location = CourseManagementRights::getInstance()->create_subtree_root_location(
+            \Chamilo\Application\Weblcms\Manager::context(),
             $this->get_id(),
             CourseManagementRights::TREE_TYPE_COURSE,
             true);
@@ -593,6 +594,7 @@ class Course extends DataClass
 
         // Set view right for everyone on root location
         if (! CourseManagementRights::getInstance()->invert_location_entity_right(
+            \Chamilo\Application\Weblcms\Manager::context(),
             CourseManagementRights::VIEW_RIGHT,
             0,
             0,

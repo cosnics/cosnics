@@ -107,7 +107,7 @@ class ContentObjectCategoryMenu extends HtmlMenu
         if (DataManager::workspace_has_categories($this->currentWorkspace))
         {
             $sub_menu_items = $this->get_sub_menu_items();
-            if (count($sub_menu_items) > 0)
+            if (is_array($sub_menu_items) && count($sub_menu_items) > 0)
             {
                 $menu_item['sub'] = $sub_menu_items;
             }
@@ -117,7 +117,7 @@ class ContentObjectCategoryMenu extends HtmlMenu
         $menu_item[OptionsMenuRenderer::KEY_ID] = 0;
         $menu[0] = $menu_item;
 
-        if (count($extra_items))
+        if (is_array($extra_items) && count($extra_items) > 0)
         {
             $menu = array_merge($menu, $extra_items);
         }
@@ -170,7 +170,7 @@ class ContentObjectCategoryMenu extends HtmlMenu
             $menu_item['title'] = $category->get_name()/* . ' (' . $count . ')'*/;
             $menu_item['url'] = $this->get_category_url($category->get_id());
             $sub_menu_items = $this->get_sub_menu_items($category->get_id());
-            if (count($sub_menu_items) > 0)
+            if (is_array($sub_menu_items) && count($sub_menu_items) > 0)
             {
                 $menu_item['sub'] = $sub_menu_items;
             }

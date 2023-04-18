@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Course\Form;
 
+use Chamilo\Application\Weblcms\Course\Form\Rule\HTML_QuickForm_Rule_Course_Type;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
@@ -100,11 +101,8 @@ class CourseForm extends CommonCourseForm
             $course_type_options, 
             array('class' => 'course_type_selector'));
         
-        $this->registerRule(
-            'course_type', 
-            null, 
-            'HTML_QuickForm_Rule_Course_Type', 
-            __DIR__ . '/Rule/HTML_QuickForm_Rule_Course_Type.php');
+
+        $this->registerRule('course_type', null, HTML_QuickForm_Rule_Course_Type::class);
         
         $this->addRule(Course::PROPERTY_COURSE_TYPE_ID, Translation::get('SelectAValidCourseType'), 'course_type');
         $this->addRule(Course::PROPERTY_COURSE_TYPE_ID, Translation::get('ThisFieldIsRequired'), 'required');

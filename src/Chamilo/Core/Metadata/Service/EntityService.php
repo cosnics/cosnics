@@ -201,6 +201,9 @@ class EntityService
         $entityType = DataClassEntityFactory::getInstance()->getEntity($entity->getDataClassName());
         $availableSchemaIdsForEntity = $this->getAvailableSchemaIdsForEntityType($relationService, $entityType);
 
+        if(!is_array($submittedSchemaValues))
+            $submittedSchemaValues = [];
+
         $submittedSchemaIds = array_keys($submittedSchemaValues);
 
         $submittedAvailableSchemaIds = array_intersect($submittedSchemaIds, $availableSchemaIdsForEntity);

@@ -189,6 +189,9 @@ class Text
      */
     public static function parse_html_file($string, $tag = 'img')
     {
+        if(is_null($string) || $string == '')
+            return [];
+
         $document = new DOMDocument();
         $document->loadHTML($string);
         return $document->getElementsByTagname($tag);

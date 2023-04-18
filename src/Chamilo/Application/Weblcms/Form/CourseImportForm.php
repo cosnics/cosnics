@@ -67,7 +67,7 @@ class CourseImportForm extends FormValidator
             {
                 $failures ++;
                 $this->failedcsv[] = Translation::get('Invalid', null, Utilities::COMMON_LIBRARIES) . ': ' .
-                     implode($csvcourse, ';');
+                     implode(";", $csvcourse);
             }
         }
 
@@ -136,23 +136,23 @@ class CourseImportForm extends FormValidator
                         $teacher_info->get_id()))
                     {
                         $failures ++;
-                        $this->failedcsv[] = Translation::get('SubscriptionFailed') . ':' . implode($csvcourse, ';');
+                        $this->failedcsv[] = Translation::get('SubscriptionFailed') . ':' . implode(";", $csvcourse);
                     }
                 }
                 else
                 {
                     $failures ++;
-                    $this->failedcsv[] = Translation::get('CreationFailed') . ':' . implode($csvcourse, ';');
+                    $this->failedcsv[] = Translation::get('CreationFailed') . ':' . implode(";", $csvcourse);
                 }
 
                 $setting_language = $course->get_course_setting(CourseSettingsConnector::LANGUAGE);
                 if ($setting_language != $course->get_language())
                 {
-                    $this->failedcsv[] = Translation::get('LanguageSettingFailed') . ':' . implode($csvcourse, ';');
+                    $this->failedcsv[] = Translation::get('LanguageSettingFailed') . ':' . implode(";", $csvcourse);
                     $course->set_language($setting_language);
                     if (! $course->update())
                     {
-                        $this->failedcsv[] = Translation::get('CreationFailed') . ':' . implode($csvcourse, ';');
+                        $this->failedcsv[] = Translation::get('CreationFailed') . ':' . implode(";", $csvcourse);
                     }
                 }
             }
@@ -182,17 +182,17 @@ class CourseImportForm extends FormValidator
                 else
                 {
                     $failures ++;
-                    $this->failedcsv[] = Translation::get('UpdateFailed') . ':' . implode($csvcourse, ';');
+                    $this->failedcsv[] = Translation::get('UpdateFailed') . ':' . implode(";", $csvcourse);
                 }
 
                 $setting_language = $course->get_course_setting(CourseSettingsConnector::LANGUAGE);
                 if ($setting_language != $course->get_language())
                 {
-                    $this->failedcsv[] = Translation::get('LanguageSettingFailed') . ':' . implode($csvcourse, ';');
+                    $this->failedcsv[] = Translation::get('LanguageSettingFailed') . ':' . implode(";", $csvcourse);
                     $course->set_language($setting_language);
                     if (! $course->update())
                     {
-                        $this->failedcsv[] = Translation::get('CreationFailed') . ':' . implode($csvcourse, ';');
+                        $this->failedcsv[] = Translation::get('CreationFailed') . ':' . implode(";", $csvcourse);
                     }
                 }
             }
@@ -203,7 +203,7 @@ class CourseImportForm extends FormValidator
                 if (! $course->delete())
                 {
                     $failures ++;
-                    $this->failedcsv[] = Translation::get('DeleteFailed') . ':' . implode($csvcourse, ';');
+                    $this->failedcsv[] = Translation::get('DeleteFailed') . ':' . implode(";", $csvcourse);
                 }
             }
         }
@@ -233,7 +233,7 @@ class CourseImportForm extends FormValidator
 
     public function get_failed_csv()
     {
-        return implode($this->failedcsv, '<br />');
+        return implode('<br />', $this->failedcsv);
     }
 
     public function validate_data($csvcourse)

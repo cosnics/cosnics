@@ -125,7 +125,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
 
-        return implode($html, "\n");
+        return implode("\n", $html);
     }
 
     public function get_menu_html()
@@ -138,7 +138,7 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $group_menu->render_as_tree();
         $html[] = '</div>';
 
-        return implode($html, "\n");
+        return implode("\n", $html);
     }
 
     public function get_group()

@@ -519,16 +519,16 @@ class BrowserComponent extends Manager implements DelegateComponent
                             )
                         )
                     );
-                }
 
-                $manageActions->addButton(
-                    new Button(
-                        Translation::get('ManageRights', null, Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('lock'),
-                        $link,
-                        Button::DISPLAY_ICON_AND_LABEL
-                    )
-                );
+                    $manageActions->addButton(
+                        new Button(
+                            Translation::get('ManageRights', null, Utilities::COMMON_LIBRARIES),
+                            new FontAwesomeGlyph('lock'),
+                            $link,
+                            Button::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
+                }
             }
 
             if ($this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT) &&
@@ -562,7 +562,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $browser_types = $this->get_parent()->get_available_browser_types();
 
-            if (count($browser_types) > 1)
+            if (is_array($browser_types) && count($browser_types) > 1)
             {
                 $filterActions = array();
 

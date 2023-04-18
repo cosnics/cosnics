@@ -210,7 +210,7 @@ class CourseListRenderer
             $html[] = $this->get_no_courses_message_as_html();
         }
         
-        return implode($html, "\n");
+        return implode("\n", $html);
     }
 
     /**

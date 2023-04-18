@@ -95,7 +95,7 @@ class ListGlossaryRenderer extends GlossaryRenderer
         $component = $this->get_component();
         
         $toolbar = new Toolbar();
-        if ($component->is_allowed_to_edit_content_object(EDIT_RIGHT))
+        if ($component->is_allowed_to_edit_content_object())
         {
             $toolbar->add_item(
                 new ToolbarItem(

@@ -32,7 +32,7 @@ class CourseSettingsXmlFormParser extends SettingsXmlFormParser
      * 
      * @var string[]
      */
-    private $frozen_elements;
+    private $frozen_elements = [];
 
     /**
      * **************************************************************************************************************

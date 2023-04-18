@@ -30,7 +30,7 @@ class CourseAdminValidator implements CourseAdminValidatorInterface
     /**
      * @var bool[]
      */
-    protected $courseAdminCache;
+    protected $courseAdminCache = [];
 
     /*
      * Constructor

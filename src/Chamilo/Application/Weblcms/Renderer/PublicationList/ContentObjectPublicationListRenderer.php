@@ -587,7 +587,7 @@ abstract class ContentObjectPublicationListRenderer
         $html = array();
         $html[] = $this->get_publication_actions($publication)->as_html();
 
-        return implode($html);
+        return implode("\n", $html);
     }
 
     /**

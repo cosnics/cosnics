@@ -42,7 +42,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
                 $html = array();
 
-                $html[] = $this->render_header($complex_wiki_homepage);
+                $html[] = $this->render_header(null, $complex_wiki_homepage);
                 $html[] = '<div class="wiki-pane-content-title">' . $wiki_homepage->get_title() . '</div>';
                 $html[] = '<div class="wiki-pane-content-subtitle">' .
                      Translation::get('From', null, Utilities::COMMON_LIBRARIES) . ' ' .

@@ -372,7 +372,7 @@ class CourseGroup extends NestedTreeNode
     {
         $members = $this->get_members();
 
-        return count($members);
+        return is_array($members) ? count($members) : 0;
     }
 
     /**

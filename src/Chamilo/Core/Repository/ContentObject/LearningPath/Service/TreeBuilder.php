@@ -109,7 +109,8 @@ class TreeBuilder
     )
     {
         $treeNodeDataForSection = $orderedTreeNodesData[$parentTreeNodeDataId];
-        ksort($treeNodeDataForSection);
+        if(is_array($treeNodeDataForSection))
+            ksort($treeNodeDataForSection);
 
         foreach ($treeNodeDataForSection as $treeNodeData)
         {

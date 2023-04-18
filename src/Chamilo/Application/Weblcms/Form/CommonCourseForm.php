@@ -179,13 +179,13 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         {
             $option_name = CourseManagementRights::PARAM_RIGHT_OPTION . '[' . $right_id . ']';
             
-            if (count($selected_entities_per_right[$right_id]) == 0)
+            if (is_array($selected_entities_per_right[$right_id]) && count($selected_entities_per_right[$right_id]) == 0)
             {
                 $defaults[$option_name] = CourseManagementRights::RIGHT_OPTION_NOBODY;
                 continue;
             }
             
-            if (count($selected_entities_per_right[$right_id]) == 1)
+            if (is_array($selected_entities_per_right[$right_id]) && count($selected_entities_per_right[$right_id]) == 1)
             {
                 $selected_entity = $selected_entities_per_right[$right_id][0];
                 

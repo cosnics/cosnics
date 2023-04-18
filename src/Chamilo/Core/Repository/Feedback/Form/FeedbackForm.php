@@ -142,7 +142,7 @@ class FeedbackForm extends FormValidator
 
         $renderer->setElementTemplate('<div class="form-group">{element}</div>', 'buttons');
         $renderer->setElementTemplate('<div class="form-group">{element}</div>', 'buttons');
-        $renderer->setRequiredNoteTemplate(null);
+        $renderer->setRequiredNoteTemplate('');
     }
 
     /**

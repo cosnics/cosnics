@@ -416,6 +416,7 @@ class RightsService implements RightsServiceInterface
             foreach ($entityIds as $entityId)
             {
                 $this->weblcmsRights->invert_location_entity_right(
+                    \Chamilo\Application\Weblcms\Manager::context(),
                     $rightId, $entityId, $entityType, $location->getId()
                 );
             }
@@ -427,7 +428,7 @@ class RightsService implements RightsServiceInterface
     )
     {
         $location = $this->getLocationForPublication($contentObjectPublication);
-        $this->weblcmsRights->invert_location_entity_right($rightId, $entityId, $entityType, $location->getId());
+        $this->weblcmsRights->invert_location_entity_right(\Chamilo\Application\Weblcms\Manager::context(), $rightId, $entityId, $entityType, $location->getId());
     }
 
     /**

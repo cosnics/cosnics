@@ -131,7 +131,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
         $html[] = '</div>';
         $html[] = '</div>';
 
-        return implode($html, "\n");
+        return implode("\n", $html);
     }
 
     /**

@@ -866,7 +866,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             throw new UserException(Translation::get("PublicationInSelectedCategoryNotAllowed"));
         }
 
-        if ($values[self::PROPERTY_FOREVER] != 0)
+        if ($values[self::PROPERTY_FOREVER] == null || $values[self::PROPERTY_FOREVER] != 0)
         {
             $from = $to = 0;
         }

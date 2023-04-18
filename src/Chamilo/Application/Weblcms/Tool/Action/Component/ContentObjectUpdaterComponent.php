@@ -94,6 +94,8 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
 
                 $tool = $this->get_tool_id();
 
+                $params = [];
+
                 if ($tool == 'learning_path')
                 {
                     $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = null;

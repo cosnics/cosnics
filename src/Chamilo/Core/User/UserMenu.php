@@ -60,7 +60,7 @@ class UserMenu extends HtmlMenu
     private function get_menu_items($extra_items)
     {
         $menu = array();
-        if (count($extra_items))
+        if (is_array($extra_items) && count($extra_items) > 0)
         {
             $menu = array_merge($menu, $extra_items);
         }

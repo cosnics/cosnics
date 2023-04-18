@@ -77,6 +77,13 @@ class PublicationForm extends ContentObjectPublicationForm
         {
             $this->setDefaultsForPublication($publications[0]);
         }
+        else
+        {
+            $defaults = [];
+            $defaults['feedback_period_choice'] = 0;
+            $defaults['use_code'] = 0;
+            $this->setDefaults($defaults);
+        }
     }
 
     /**
@@ -236,6 +243,7 @@ class PublicationForm extends ContentObjectPublicationForm
         if ($fields['feedback_period_choice'] == 2)
         {
             $exportValues = $this->exportValues();
+
             $from = DatetimeUtilities::time_from_datepicker($exportValues['feedback_from_date']);
             $to = DatetimeUtilities::time_from_datepicker($exportValues['feedback_to_date']);
             if ($from > $to)

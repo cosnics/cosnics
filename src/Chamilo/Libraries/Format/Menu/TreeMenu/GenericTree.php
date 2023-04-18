@@ -154,7 +154,7 @@ abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
         $tree_item['title'] = $this->get_root_node_title();
         $tree_item['url'] = $this->get_node_url($this->get_root_node_id());
 
-        if (count($this->tree) > 0)
+        if (is_array($this->tree) && count($this->tree) > 0)
         {
             $tree_item['children'] = 'collapse';
             $tree_item['sub'] = $this->tree;

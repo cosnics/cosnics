@@ -305,7 +305,7 @@ class Basic extends Pdf
             $result[] = '  ' . ($index + 1) . '. ' . trim($list_item);
         }
         
-        return implode($result, "\n");
+        return implode("\n", $result);
     }
 
     private function replace_unordered_list($unordered_list_match)
@@ -319,7 +319,7 @@ class Basic extends Pdf
         {
             $result[] = '  ' . chr(149) . ' ' . trim($list_item);
         }
-        
-        return implode($result, "\n");
+
+        return implode("\n", $result);
     }
 }

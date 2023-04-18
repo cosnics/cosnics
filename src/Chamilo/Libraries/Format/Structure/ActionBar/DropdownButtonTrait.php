@@ -39,7 +39,7 @@ trait DropdownButtonTrait
      */
     public function hasButtons()
     {
-        return count($this->subButtons) > 0;
+        return is_array($this->subButtons) && count($this->subButtons) > 0;
     }
 
     /**

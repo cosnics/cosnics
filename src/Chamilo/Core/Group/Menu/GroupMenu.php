@@ -146,7 +146,7 @@ class GroupMenu extends HtmlMenu
             $menu_item['url'] = $this->get_home_url();
 
             $sub_menu_items = $this->get_menu_items($group->get_id());
-            if (count($sub_menu_items) > 0)
+            if (is_array($sub_menu_items) && count($sub_menu_items) > 0)
             {
                 $menu_item['sub'] = $sub_menu_items;
             }

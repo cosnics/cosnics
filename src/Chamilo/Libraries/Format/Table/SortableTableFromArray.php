@@ -163,9 +163,11 @@ class SortableTableFromArray extends SortableTable
                 $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
             }
 
+            $security = new Security();
+
             $this->setColumnHeader(
                 $key,
-                Security::remove_XSS($tableColumn->get_title()),
+                $security->remove_XSS($tableColumn->get_title()),
                 $tableColumn->is_sortable(),
                 $headerAttributes,
                 $contentAttributes);

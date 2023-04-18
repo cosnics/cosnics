@@ -88,7 +88,7 @@ class ViewerComponent extends Manager implements TableSupport
         $html[] = $table->as_html();
         $html[] = '</div>';
 
-        return implode($html, "\n");
+        return implode("\n", $html);
     }
 
     public function get_condition()

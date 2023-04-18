@@ -1,11 +1,13 @@
 <?php
 
+namespace Chamilo\Application\Weblcms\Course\Form\Rule;
+
 /**
  * QuickForm rule to if a course type is selected
  * 
  * @author Sven Vanpoucke
  */
-class HTML_QuickForm_Rule_Course_Type extends HTML_QuickForm_Rule
+class HTML_QuickForm_Rule_Course_Type extends \HTML_QuickForm_Rule
 {
 
     /**

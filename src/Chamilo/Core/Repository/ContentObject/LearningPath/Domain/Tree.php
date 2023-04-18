@@ -14,7 +14,7 @@ class Tree
     /**
      * @var TreeNode[]
      */
-    protected $treeNodes;
+    protected $treeNodes = [];
 
     /**
      * @var TreeNode[]

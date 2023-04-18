@@ -32,7 +32,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
 
     private $show_groups;
 
-    private $group_users;
+    private $group_users = [];
 
     public function run()
     {
@@ -176,7 +176,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
             }
 
             // if ($user_conditions)
-            if (count($user_conditions) > 0)
+            if (is_array($user_conditions) && count($user_conditions) > 0)
             {
                 $user_conditions[] = new InCondition(
                     new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
@@ -185,16 +185,16 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
             }
             else
             {
-                if (count($user_ids) > 0)
+                //if (count($user_ids) > 0)
                 {
                     $user_condition = new InCondition(
                         new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
                         $user_ids);
                 }
-                else
+                /*else
                 {
                     $user_condition = null;
-                }
+                }*/
             }
 
             // Order the users alphabetically

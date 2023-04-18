@@ -28,10 +28,10 @@ class WikiHistoryComponent extends Manager implements TableSupport
 
     public function run()
     {
-        if (! $this->is_allowed(VIEW_RIGHT))
+        /*if (! $this->is_allowed(VIEW_RIGHT))
         {
             throw new NotAllowedException();
-        }
+        }*/
 
         $this->complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
@@ -45,7 +45,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
 
             $html = array();
 
-            $html[] = $this->render_header($complex_wiki_page);
+            $html[] = $this->render_header(null, $complex_wiki_page);
 
             if ($compare_object_ids)
             {

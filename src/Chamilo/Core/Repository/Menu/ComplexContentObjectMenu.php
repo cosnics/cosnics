@@ -87,7 +87,7 @@ class ComplexContentObjectMenu extends HtmlMenu
         $menu_item['url'] = $this->get_cloi_url($root);
 
         $sub_menu_items = $this->get_menu_items($root);
-        if (count($sub_menu_items) > 0)
+        if (is_array($sub_menu_items) && count($sub_menu_items) > 0)
         {
             $menu_item['sub'] = $sub_menu_items;
         }
@@ -125,7 +125,7 @@ class ComplexContentObjectMenu extends HtmlMenu
                 $menu_item['url'] = $this->get_cloi_url($object->get_ref());
 
                 $sub_menu_items = $this->get_menu_items($object->get_ref());
-                if (count($sub_menu_items) > 0)
+                if (is_array($sub_menu_items) && count($sub_menu_items) > 0)
                 {
                     $menu_item['sub'] = $sub_menu_items;
                 }

@@ -89,8 +89,8 @@ class BrowseComponent extends Manager implements TableSupport
         $html[] = '<div style="clear: both;"></div>';
         $html[] = '</div>';
         $html[] = '</div>';
-        
-        return implode($html, "\n");
+
+        return implode("\n", $html);
     }
 
     public function getButtonToolbarRenderer()

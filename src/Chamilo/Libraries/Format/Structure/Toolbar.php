@@ -222,7 +222,7 @@ class Toolbar
         $html[] = '<div class="clear">&nbsp;</div>';
         $html[] = '</div>';
 
-        return implode($html);
+        return implode("\n", $html);
     }
 
     /**

@@ -83,7 +83,7 @@ class RssFeedForm extends ContentObjectForm
     {
         $this->addElement('category', Translation::get('Properties'));
 
-        $this->add_textfield(RssFeed::PROPERTY_URL, Translation::get('URL'), true, ' size="100" style="width: 100%;"');
+        $this->add_textfield(RssFeed::PROPERTY_URL, Translation::get('URL'), true, ['size' => 100, 'style' => 'width: 100%;']);
 
         $this->add_textfield(
             RssFeed::PROPERTY_NUMBER_OF_ENTRIES,
@@ -92,7 +92,7 @@ class RssFeedForm extends ContentObjectForm
                 array(),
                 'Chamilo\Core\Repository\ContentObject\RssFeed'),
             true,
-            ' size="100" style="width: 100%;"');
+            ['size' => 100, 'style' => 'width: 100%;']);
 
         $this->addElement('category');
     }

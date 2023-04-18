@@ -123,7 +123,7 @@ class UserImportForm extends FormValidator
             if (! $validuser)
             {
                 $failures ++;
-                $this->failedcsv[] = Translation::get('Invalid') . ': ' . implode($csvuser, ';');
+                $this->failedcsv[] = Translation::get('Invalid') . ': ' . implode(";", $csvuser);
             }
             else
             {
@@ -184,7 +184,7 @@ class UserImportForm extends FormValidator
                 if (! $user->create())
                 {
                     $failures ++;
-                    $this->failedcsv[] = Translation::get('CreateFailed') . ': ' . implode($csvuser, ';');
+                    $this->failedcsv[] = Translation::get('CreateFailed') . ': ' . implode(";", $csvuser);
                 }
                 else
                 {
@@ -266,7 +266,7 @@ class UserImportForm extends FormValidator
                 if (! $user->update())
                 {
                     $failures ++;
-                    $this->failedcsv[] = Translation::get('UpdateFailed') . ': ' . implode($csvuser, ';');
+                    $this->failedcsv[] = Translation::get('UpdateFailed') . ': ' . implode(";", $csvuser);
                 }
                 else
                 {
@@ -284,7 +284,7 @@ class UserImportForm extends FormValidator
                 if (! $user->update())
                 {
                     $failures ++;
-                    $this->failedcsv[] = Translation::get('DeleteFailed') . ': ' . implode($csvuser, ';');
+                    $this->failedcsv[] = Translation::get('DeleteFailed') . ': ' . implode(";", $csvuser);
                 }
             }
         }
@@ -301,7 +301,7 @@ class UserImportForm extends FormValidator
 
     public function get_failed_csv()
     {
-        // return implode($this->failedcsv, '<br />');
+        // return implode('<br />', $this->failedcsv);
         $short_list = array_chunk($this->failedcsv, 20);
         $nr_more_errors = count($this->failedcsv) - 20;
         if ($nr_more_errors > 0)
@@ -309,7 +309,7 @@ class UserImportForm extends FormValidator
             $short_list[0][] = Translation::get('NrMoreInvalidRecords', array('NR' => $nr_more_errors));
         }
 
-        return implode($short_list[0], '<br />');
+        return implode('<br />', $short_list[0]);
     }
 
     public function count_failed_items()

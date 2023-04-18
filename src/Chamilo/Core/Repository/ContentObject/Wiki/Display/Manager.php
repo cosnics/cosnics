@@ -93,13 +93,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         return $complex_wiki_homepage->next_result();
     }
 
-    public static function get_current_page_complex_id()
+    public function get_current_page_complex_id()
     {
         $selected_page = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
         if (! $selected_page)
         {
-            $selected_page = $this->get_wiki_homepage($this->get_root_content_object_id())->get_id();
+            $selected_page = self::get_wiki_homepage($this->get_root_content_object_id())->get_id();
         }
 
         return $selected_page;
@@ -226,7 +226,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         return $this->get_parent()->get_publication();
     }
 
-    public function render_header(ComplexWikiPage $complex_wiki_page = null)
+    public function render_header($pageTitle = null, ComplexWikiPage $complex_wiki_page = null)
     {
         $html = array();
 

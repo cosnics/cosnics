@@ -87,7 +87,7 @@ class WeblcmsRights extends RightsUtil
         $create_in_batch = false, $inherit = 1)
     {
         return parent::create_location(
-            Manager::context(),
+            \Chamilo\Application\Weblcms\Manager::context(),
             $type,
             $identifier,
             $inherit,
