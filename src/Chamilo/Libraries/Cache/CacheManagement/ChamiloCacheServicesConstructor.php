@@ -73,7 +73,9 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         );
 
         $cacheManager->addCacheService(
-            'chamilo_calculator', $this->container->get('Chamilo\Core\Repository\Quota\Service\CalculatorCacheService')
+            'chamilo_calculator', $this->container->get(
+            'Chamilo\Core\Repository\Quota\Service\CachedAggregatedUserStorageSpaceCalculator'
+        )
         );
 
         // TODO: fix this for the new cache services for items

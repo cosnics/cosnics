@@ -3,8 +3,8 @@ namespace Chamilo\Configuration\Service\DataLoader;
 
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Configuration\Storage\Repository\ConfigurationRepository;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataAccessorInterface;
-use Chamilo\Libraries\Cache\Traits\SingularCacheDataAccessorTrait;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Traits\CacheDataLoaderTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
@@ -12,9 +12,9 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class StorageConfigurationCacheDataLoader implements CacheDataAccessorInterface
+class StorageConfigurationCacheDataLoader implements CacheDataLoaderInterface
 {
-    use SingularCacheDataAccessorTrait
+    use CacheDataLoaderTrait
     {
         clearCacheData as protected clearAdapterCache;
     }

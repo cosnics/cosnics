@@ -9,7 +9,7 @@ use Symfony\Component\Cache\Exception\CacheException;
  * @package Chamilo\Libraries\Cache\Traits
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-trait CacheDataAccessorTrait
+trait CacheAdapterHandlerTrait
 {
     protected AdapterInterface $cacheAdapter;
 
@@ -50,7 +50,7 @@ trait CacheDataAccessorTrait
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function loadData(string $cacheKey)
+    public function loadCacheData(string $cacheKey)
     {
         try
         {
@@ -65,12 +65,14 @@ trait CacheDataAccessorTrait
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function saveCacheData(string $cacheKey, $cacheData): bool
+    public function saveCacheData(string $cacheKey, $cacheData, ?int $lifetime = null): bool
     {
         try
         {
             $cacheAdapter = $this->getCacheAdapter();
             $cacheItem = $cacheAdapter->getItem($cacheKey);
+            // TODO: Make sure null being passed on here is not a problem
+            $cacheItem->expiresAfter($lifetime);
             $cacheItem->set($cacheData);
 
             return $cacheAdapter->save($cacheItem);

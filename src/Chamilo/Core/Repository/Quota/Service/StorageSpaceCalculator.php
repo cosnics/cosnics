@@ -2,80 +2,47 @@
 namespace Chamilo\Core\Repository\Quota\Service;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Quota\Manager;
-use Chamilo\Core\Repository\Service\ContentObjectService;
-use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Cache\Traits\CacheDataAccessorTrait;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\Cache\Exception\CacheException;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Repository\Quota\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class StorageSpaceCalculator
+class StorageSpaceCalculator implements UserStorageSpaceCalculatorInterface
 {
-    use CacheDataAccessorTrait;
+    protected AggregatedUserStorageSpaceCalculatorInterface $aggregatedUserStorageSpaceCalculator;
 
-    public const CACHE_KEY_MAXIMUM_AGGREGATED_USER_STORAGE_SPACE = 'd07b197bfa9677710b95fc5202198f83';
+    protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    public const POLICY_GROUP_HIGHEST = 1;
-    public const POLICY_GROUP_LOWEST = 2;
-    public const POLICY_HIGHEST = 3;
-    public const POLICY_LOWEST = 4;
-    public const POLICY_USER = 0;
+    protected ConfigurationConsulter $configurationConsulter;
 
-    protected GroupsTreeTraverser $groupsTreeTraverser;
+    protected Translator $translator;
 
     protected UrlGenerator $urlGenerator;
 
-    /**
-     * @var int[]
-     */
-    private array $allowedStorageSpaceForUserCache = [];
-
-    private ConfigurablePathBuilder $configurablePathBuilder;
-
-    private ConfigurationConsulter $configurationConsulter;
-
-    private ContentObjectService $contentObjectService;
-
-    private Translator $translator;
-
-    private ?int $usedAggregatedUserStorageSpace = null;
-
-    /**
-     * @var int[]
-     */
-    private array $usedStorageSpaceForUserCache = [];
-
-    private UserService $userService;
+    protected UserStorageSpaceCalculatorInterface $userStorageSpaceCalculator;
 
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator,
-        GroupsTreeTraverser $groupsTreeTraverser, UserService $userService,
-        ConfigurablePathBuilder $configurablePathBuilder, ContentObjectService $contentObjectService,
-        UrlGenerator $urlGenerator, AdapterInterface $cacheAdapter
+        ConfigurablePathBuilder $configurablePathBuilder, UrlGenerator $urlGenerator,
+        UserStorageSpaceCalculatorInterface $allowedUserStorageCalculator,
+        CachedAggregatedUserStorageSpaceCalculator $maximumAggregatedUserStorageSpaceCacheDataLoader
     )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
-        $this->groupsTreeTraverser = $groupsTreeTraverser;
-        $this->userService = $userService;
         $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->contentObjectService = $contentObjectService;
         $this->urlGenerator = $urlGenerator;
-        $this->cacheAdapter = $cacheAdapter;
+        $this->userStorageSpaceCalculator = $allowedUserStorageCalculator;
+        $this->aggregatedUserStorageSpaceCalculator = $maximumAggregatedUserStorageSpaceCacheDataLoader;
     }
 
     public function addUploadWarningToFormForUser(FormValidator $form, User $user)
@@ -133,101 +100,6 @@ class StorageSpaceCalculator
         }
     }
 
-    public function doGetAllowedStorageSpaceForUser(User $user): int
-    {
-        $quotumPolicy = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Repository', 'quota_policy']);
-        $useQuotumFallback = (bool) $this->getConfigurationConsulter()->getSetting(
-            ['Chamilo\Core\Repository', 'quota_fallback']
-        );
-        $isQuotumFallbackUser = (bool) $this->getConfigurationConsulter()->getSetting(
-            ['Chamilo\Core\Repository', 'quota_fallback_user']
-        );
-        $groupsTreeTraverser = $this->getGroupsTreeTraverser();
-
-        switch ($quotumPolicy)
-        {
-            case self::POLICY_USER :
-                if ($user->get_disk_quota() || !$useQuotumFallback)
-                {
-                    return $user->get_disk_quota();
-                }
-                elseif ($isQuotumFallbackUser == 0)
-                {
-                    return $groupsTreeTraverser->getHighestGroupQuotumForUser($user);
-                }
-                else
-                {
-                    return $groupsTreeTraverser->getLowestGroupQuotumForUser($user);
-                }
-            case self::POLICY_GROUP_HIGHEST :
-                $groupQuotum = $groupsTreeTraverser->getHighestGroupQuotumForUser($user);
-
-                if ($groupQuotum || !$useQuotumFallback)
-                {
-                    return $groupQuotum;
-                }
-                else
-                {
-                    return $user->get_disk_quota();
-                }
-            case self::POLICY_GROUP_LOWEST :
-                $groupQuotum = $groupsTreeTraverser->getLowestGroupQuotumForUser($user);
-
-                if ($groupQuotum || !$useQuotumFallback)
-                {
-                    return $groupQuotum;
-                }
-                else
-                {
-                    return $user->get_disk_quota();
-                }
-            case self::POLICY_HIGHEST :
-                $groupQuotum = $groupsTreeTraverser->getHighestGroupQuotumForUser($user);
-
-                if ($groupQuotum > $user->get_disk_quota())
-                {
-                    return $groupQuotum;
-                }
-                else
-                {
-                    return $user->get_disk_quota();
-                }
-            case self::POLICY_LOWEST :
-                $groupQuotum = $groupsTreeTraverser->getLowestGroupQuotumForUser($user);
-
-                if ($groupQuotum > $user->get_disk_quota() || !$groupQuotum)
-                {
-                    return $user->get_disk_quota();
-                }
-                else
-                {
-                    return $groupQuotum;
-                }
-            default :
-                return $user->get_disk_quota();
-        }
-    }
-
-    public function doGetMaximumAggregatedUserStorageSpace(): int
-    {
-        try
-        {
-            $totalQuota = 0;
-            $users = $this->getUserService()->findUsers();
-
-            foreach ($users as $user)
-            {
-                $totalQuota += $this->getAllowedStorageSpaceForUser($user);
-            }
-
-            return $totalQuota;
-        }
-        catch (DataClassNoResultException $exception)
-        {
-            return 0;
-        }
-    }
-
     public function doesUserHaveRequestedStorageSpace(User $user, int $requestedStorageSpace): bool
     {
         if (!$this->isStorageQuotumEnabled())
@@ -236,6 +108,11 @@ class StorageSpaceCalculator
         }
 
         return $this->getAvailableStorageSpaceForUser($user) > $requestedStorageSpace;
+    }
+
+    public function getAggregatedUserStorageSpaceCalculator(): AggregatedUserStorageSpaceCalculatorInterface
+    {
+        return $this->aggregatedUserStorageSpaceCalculator;
     }
 
     public function getAggregatedUserStorageSpacePercentage(): int
@@ -250,16 +127,7 @@ class StorageSpaceCalculator
 
     public function getAllowedStorageSpaceForUser(User $user): int
     {
-        $cacheKey = $this->getCacheKeyForParts([CalculatorCacheService::class, $user->getId()]);
-
-        if (!$this->hasCacheData($cacheKey))
-        {
-            $this->saveCacheData(
-                $cacheKey, $this->doGetAllowedStorageSpaceForUser($user)
-            );
-        }
-
-        return $this->loadData($cacheKey);
+        return $this->getUserStorageSpaceCalculator()->getAllowedStorageSpaceForUser($user);
     }
 
     public function getAvailableAggregatedUserStorageSpace(): int
@@ -285,9 +153,7 @@ class StorageSpaceCalculator
 
     public function getAvailableStorageSpaceForUser(User $user): int
     {
-        $availableStorageSpace = $this->getAllowedStorageSpaceForUser($user) - $this->getUsedStorageSpaceForUser($user);
-
-        return max($availableStorageSpace, 0);
+        return $this->getUserStorageSpaceCalculator()->getAvailableStorageSpaceForUser($user);
     }
 
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
@@ -300,45 +166,9 @@ class StorageSpaceCalculator
         return $this->configurationConsulter;
     }
 
-    public function getContentObjectService(): ContentObjectService
-    {
-        return $this->contentObjectService;
-    }
-
-    public function getGroupsTreeTraverser(): GroupsTreeTraverser
-    {
-        return $this->groupsTreeTraverser;
-    }
-
-    public function getHighestGroupQuotumForUser(User $user): int
-    {
-        return $this->getGroupsTreeTraverser()->getHighestGroupQuotumForUser($user);
-    }
-
-    public function getLowestGroupQuotumForUser(User $user): int
-    {
-        return $this->getGroupsTreeTraverser()->getLowestGroupQuotumForUser($user);
-    }
-
     public function getMaximumAggregatedUserStorageSpace(): int
     {
-        try
-        {
-            $cacheKey = $this->getCacheKeyForParts([CalculatorCacheService::class]);
-
-            if (!$this->hasCacheData($cacheKey))
-            {
-                $this->saveCacheData(
-                    $cacheKey, $this->doGetMaximumAggregatedUserStorageSpace()
-                );
-            }
-
-            return $this->loadData($cacheKey);
-        }
-        catch (CacheException $exception)
-        {
-            return 0;
-        }
+        return $this->getAggregatedUserStorageSpaceCalculator()->getMaximumAggregatedUserStorageSpace();
     }
 
     public function getMaximumAllocatedStorageSpace(): int
@@ -388,78 +218,22 @@ class StorageSpaceCalculator
 
     public function getUsedAggregatedUserStorageSpace(): int
     {
-        if (!isset($this->usedAggregatedUserStorageSpace))
-        {
-            $this->usedAggregatedUserStorageSpace = $this->getContentObjectService()->getUsedStorageSpace();
-        }
-
-        return $this->usedAggregatedUserStorageSpace;
+        return $this->getUserStorageSpaceCalculator()->getUsedAggregatedUserStorageSpace();
     }
 
     public function getUsedStorageSpaceForUser(User $user): int
     {
-        if (!isset($this->usedStorageSpaceForUserCache[$user->getId()]))
-        {
-            $this->usedStorageSpaceForUserCache[$user->getId()] =
-                $this->getContentObjectService()->getUsedStorageSpaceForUser($user);
-        }
-
-        return $this->usedStorageSpaceForUserCache[$user->getId()];
+        return $this->getUserStorageSpaceCalculator()->getUsedStorageSpaceForUser($user);
     }
 
-    public function getUserService(): UserService
+    public function getUserStorageSpaceCalculator(): UserStorageSpaceCalculatorInterface
     {
-        return $this->userService;
+        return $this->userStorageSpaceCalculator;
     }
 
     public function isQuotumDefinedForUser(User $user): bool
     {
-        $quotaPolicy = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Repository', 'quota_policy']);
-        $useQuotaFallback =
-            (bool) $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Repository', 'quota_fallback']);
-        $isQuotaFallbackUser = (bool) $this->getConfigurationConsulter()->getSetting(
-            ['Chamilo\Core\Repository', 'quota_fallback_user']
-        );
-        $groupsTreeTraverser = $this->getGroupsTreeTraverser();
-
-        switch ($quotaPolicy)
-        {
-            case self::POLICY_USER :
-                if ($user->get_disk_quota() || !$useQuotaFallback)
-                {
-                    return true;
-                }
-                elseif ($isQuotaFallbackUser == 0)
-                {
-                    $groupQuota = $groupsTreeTraverser->getHighestGroupQuotumForUser($user);
-
-                    return !($groupQuota > $user->get_disk_quota());
-                }
-                else
-                {
-                    $groupQuota = $groupsTreeTraverser->getLowestGroupQuotumForUser($user);
-
-                    return !$groupQuota;
-                }
-            case self::POLICY_GROUP_HIGHEST :
-                $groupQuota = $groupsTreeTraverser->getHighestGroupQuotumForUser($user);
-
-                return !($groupQuota || !$useQuotaFallback);
-            case self::POLICY_GROUP_LOWEST :
-                $groupQuota = $groupsTreeTraverser->getLowestGroupQuotumForUser($user);
-
-                return !($groupQuota || !$useQuotaFallback);
-            case self::POLICY_HIGHEST :
-                $groupQuota = $groupsTreeTraverser->getHighestGroupQuotumForUser($user);
-
-                return !($groupQuota > $user->get_disk_quota());
-            case self::POLICY_LOWEST :
-                $groupQuota = $groupsTreeTraverser->getLowestGroupQuotumForUser($user);
-
-                return $groupQuota > $user->get_disk_quota() || !$groupQuota;
-            default :
-                return true;
-        }
+        return $this->getUserStorageSpaceCalculator()->isQuotumDefinedForUser($user);
     }
 
     public function isStorageQuotumEnabled(): bool

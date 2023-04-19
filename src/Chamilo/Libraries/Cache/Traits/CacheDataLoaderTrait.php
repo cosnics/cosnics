@@ -8,12 +8,12 @@ use Throwable;
  * @package Chamilo\Libraries\Cache\Traits
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-trait SingularCacheDataAccessorTrait
+trait CacheDataLoaderTrait
 {
-    use CacheDataAccessorTrait
+    use CacheAdapterHandlerTrait
     {
         clearCacheData as clearCacheDataForKey;
-        loadData as loadCacheDataForKey;
+        loadCacheData as loadCacheDataForKey;
         saveCacheData as saveCacheDataForKey;
     }
 
@@ -31,9 +31,8 @@ trait SingularCacheDataAccessorTrait
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Exception
      */
-    public function loadData()
+    public function loadCacheData()
     {
         $cacheKey = $this->getCacheKey();
 
@@ -52,7 +51,7 @@ trait SingularCacheDataAccessorTrait
     {
         $this->clearCacheData();
 
-        return $this->loadData();
+        return $this->loadCacheData();
     }
 
     public function saveCacheData(): bool

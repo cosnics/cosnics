@@ -45,13 +45,13 @@
         <service id="Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator"/>
         <service id="Chamilo\Core\Repository\Quota\Rights\Storage\Repository\RightsRepository"/>
 
-        <service id="Chamilo\Core\Repository\Quota\Service\CalculatorCacheService">
+        <service id="Chamilo\Core\Repository\Quota\Service\MaximumAggregatedUserStorageSpaceCacheDataLoader">
             <argument key="$cacheAdapter"
                       type="service"
-                      id="Chamilo\Core\Repository\Quota\Service\CalculatorCacheAdapter"/>
+                      id="Chamilo\Core\Repository\Quota\Service\MaximumAggregatedUserStorageSpaceCacheAdapter"/>
         </service>
 
-        <service id="Chamilo\Core\Repository\Quota\Service\CalculatorCacheAdapter"
+        <service id="Chamilo\Core\Repository\Quota\Service\MaximumAggregatedUserStorageSpaceCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createPhpFilesAdapter"/>

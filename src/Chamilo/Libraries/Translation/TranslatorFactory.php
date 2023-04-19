@@ -39,7 +39,7 @@ class TranslatorFactory
      */
     protected function addOptimizedTranslationResources(Translator $translator)
     {
-        $packageNamespaces = $this->getInternationalizationBundlesCacheService()->loadData();
+        $packageNamespaces = $this->getInternationalizationBundlesCacheService()->loadCacheData();
 
         $translationCachePath = $this->getConfigurablePathBuilder()->getCachePath(__NAMESPACE__);
 
