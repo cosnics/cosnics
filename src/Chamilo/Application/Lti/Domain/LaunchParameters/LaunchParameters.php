@@ -133,14 +133,14 @@ class LaunchParameters
      *
      * @var int
      */
-    protected $launchPresentationWidth = 1280;
+    protected $launchPresentationWidth = "100%";
 
     /**
      * Recommended
      *
      * @var int
      */
-    protected $launchPresentationHeight = 720;
+    protected $launchPresentationHeight = 1080;
 
     /**
      * Recommended
