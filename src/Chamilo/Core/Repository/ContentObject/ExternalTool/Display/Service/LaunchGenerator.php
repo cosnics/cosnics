@@ -6,6 +6,7 @@ use Chamilo\Application\Lti\Domain\LaunchParameters\CustomLaunchParameter;
 use Chamilo\Application\Lti\Domain\LaunchParameters\Role\ContextRole;
 use Chamilo\Application\Lti\Domain\Provider\ProviderInterface;
 use Chamilo\Application\Lti\Service\ProviderService;
+use Chamilo\Application\Lti\Storage\Entity\Provider;
 use Chamilo\Core\Repository\ContentObject\ExternalTool\Display\Bridge\Interfaces\ExternalToolServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\ExternalTool\Storage\DataClass\ExternalTool;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -104,6 +105,16 @@ class LaunchGenerator
             $launchParameters->addCustomLaunchParameters(
                 new CustomLaunchParameter($customParameter->getName(), $customParameter->getValue())
             );
+        }
+
+        if($provider instanceof Provider)
+        {
+            foreach($provider->getCustomParameters() as $customParameter)
+            {
+                $launchParameters->addCustomLaunchParameters(
+                    new CustomLaunchParameter($customParameter->getName(), $customParameter->getValue())
+                );
+            }
         }
 
         if ($externalToolServiceBridge->supportsOutcomesService())
