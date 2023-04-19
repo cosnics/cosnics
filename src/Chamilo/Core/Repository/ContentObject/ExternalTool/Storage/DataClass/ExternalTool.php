@@ -123,7 +123,7 @@ class ExternalTool extends ContentObject implements ProviderInterface
     }
 
     /**
-     * @return array
+     * @return ExternalToolCustomParameter[]
      */
     public function getCustomParameters()
     {
@@ -140,7 +140,7 @@ class ExternalTool extends ContentObject implements ProviderInterface
     }
 
     /**
-     * @param array $customParameters
+     * @param ExternalToolCustomParameter[] $customParameters
      */
     public function setCustomParameters(array $customParameters)
     {

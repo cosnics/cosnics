@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\ExternalTool\Display\Service;
 
+use Chamilo\Application\Lti\Domain\LaunchParameters\CustomLaunchParameter;
 use Chamilo\Application\Lti\Domain\LaunchParameters\Role\ContextRole;
 use Chamilo\Application\Lti\Domain\Provider\ProviderInterface;
 use Chamilo\Application\Lti\Service\ProviderService;
@@ -97,6 +98,13 @@ class LaunchGenerator
             ->setResourceLinkId($externalToolServiceBridge->getResourceLinkIdentifier())
             ->setResourceLinkTitle($externalTool->get_title())
             ->addRole(new ContextRole($role));
+
+        foreach($externalTool->getCustomParameters() as $customParameter)
+        {
+            $launchParameters->addCustomLaunchParameters(
+                new CustomLaunchParameter($customParameter->getName(), $customParameter->getValue())
+            );
+        }
 
         if ($externalToolServiceBridge->supportsOutcomesService())
         {
