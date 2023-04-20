@@ -17,7 +17,7 @@ class ConfigurationConsulter implements DataConsulterInterface
 
     public function __construct(CacheDataLoaderInterface $dataLoader)
     {
-        $this->$dataLoader = $dataLoader;
+        $this->dataLoader = $dataLoader;
     }
 
     /**

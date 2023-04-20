@@ -337,7 +337,7 @@ class DependencyInjectionContainerBuilder
                 new RegistrationCacheDataLoader(
                     new PhpFilesAdapter(
                         md5('Chamilo\Configuration\Service\Registration'), 0,
-                        $this->getConfigurablePathBuilder()->getCachePath()
+                        $this->getConfigurablePathBuilder()->getConfiguredCachePath()
                     ), $this->getStringUtilities(), new RegistrationRepository($dataClassRepository)
                 ), $this->getStringUtilities()
             );

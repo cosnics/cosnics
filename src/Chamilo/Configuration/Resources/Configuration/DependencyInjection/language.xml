@@ -21,7 +21,7 @@
         </service>
 
         <service id="Chamilo\Configuration\Service\Consulter\LanguageConsulter">
-            <argument key="$languageCacheDataLoader"
+            <argument key="$dataLoader"
                       type="service"
                       id="Chamilo\Configuration\Service\DataLoader\LanguageCacheDataLoader"/>
         </service>

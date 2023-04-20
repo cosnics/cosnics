@@ -21,11 +21,11 @@ class CachedAggregatedUserStorageSpaceCalculator
 
     public function __construct(
         AdapterInterface $cacheAdapter,
-        AggregatedUserStorageSpaceCalculator $maximumAggregatedUserStorageSpaceCalculator
+        AggregatedUserStorageSpaceCalculator $aggregatedUserStorageSpaceCalculator
     )
     {
         $this->cacheAdapter = $cacheAdapter;
-        $this->aggregatedUserStorageSpaceCalculator = $maximumAggregatedUserStorageSpaceCalculator;
+        $this->aggregatedUserStorageSpaceCalculator = $aggregatedUserStorageSpaceCalculator;
     }
 
     public function getAggregatedUserStorageSpaceCalculator(): AggregatedUserStorageSpaceCalculator

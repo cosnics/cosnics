@@ -33,16 +33,16 @@ class StorageSpaceCalculator implements UserStorageSpaceCalculatorInterface
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator,
         ConfigurablePathBuilder $configurablePathBuilder, UrlGenerator $urlGenerator,
-        UserStorageSpaceCalculatorInterface $allowedUserStorageCalculator,
-        CachedAggregatedUserStorageSpaceCalculator $maximumAggregatedUserStorageSpaceCacheDataLoader
+        UserStorageSpaceCalculatorInterface $userStorageSpaceCalculator,
+        AggregatedUserStorageSpaceCalculatorInterface $aggregatedUserStorageSpaceCalculator
     )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
         $this->configurablePathBuilder = $configurablePathBuilder;
         $this->urlGenerator = $urlGenerator;
-        $this->userStorageSpaceCalculator = $allowedUserStorageCalculator;
-        $this->aggregatedUserStorageSpaceCalculator = $maximumAggregatedUserStorageSpaceCacheDataLoader;
+        $this->userStorageSpaceCalculator = $userStorageSpaceCalculator;
+        $this->aggregatedUserStorageSpaceCalculator = $aggregatedUserStorageSpaceCalculator;
     }
 
     public function addUploadWarningToFormForUser(FormValidator $form, User $user)

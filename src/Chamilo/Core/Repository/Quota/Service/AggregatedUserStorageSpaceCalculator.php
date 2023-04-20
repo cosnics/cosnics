@@ -14,6 +14,14 @@ class AggregatedUserStorageSpaceCalculator implements AggregatedUserStorageSpace
 
     protected UserStorageSpaceCalculatorInterface $userStorageSpaceCalculator;
 
+    public function __construct(
+        UserService $userService, UserStorageSpaceCalculatorInterface $userStorageSpaceCalculator
+    )
+    {
+        $this->userService = $userService;
+        $this->userStorageSpaceCalculator = $userStorageSpaceCalculator;
+    }
+
     public function getMaximumAggregatedUserStorageSpace(): int
     {
         try

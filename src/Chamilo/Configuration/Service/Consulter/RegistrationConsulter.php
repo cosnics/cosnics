@@ -21,7 +21,7 @@ class RegistrationConsulter implements DataConsulterInterface
 
     public function __construct(CacheDataLoaderInterface $dataLoader, StringUtilities $stringUtilities)
     {
-        $this->$dataLoader = $dataLoader;
+        $this->dataLoader = $dataLoader;
         $this->stringUtilities = $stringUtilities;
     }
 

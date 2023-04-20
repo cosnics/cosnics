@@ -45,7 +45,7 @@ class ValidatorFactory
     public function createValidator(): ValidatorDecorator
     {
         $cacheAdapter = $this->devMode ? new ArrayAdapter() : new PhpFilesAdapter(
-            md5('Chamilo\Libraries\Format\Validator'), 0, $this->configurablePathBuilder->getCachePath()
+            md5('Chamilo\Libraries\Format\Validator'), 0, $this->configurablePathBuilder->getConfiguredCachePath()
         );
 
         $annotationReader = new PsrCachedReader(new AnnotationReader(), $cacheAdapter);

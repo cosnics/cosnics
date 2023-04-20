@@ -16,14 +16,14 @@ class CachedUserStorageSpaceCalculator implements UserStorageSpaceCalculatorInte
 {
     use CacheAdapterHandlerTrait;
 
-    protected UserStorageSpaceCalculator $allowedUserStorageSpaceCalculator;
+    protected UserStorageSpaceCalculator $userStorageSpaceCalculator;
 
     public function __construct(
-        AdapterInterface $cacheAdapter, UserStorageSpaceCalculator $allowedUserStorageSpaceCalculator
+        AdapterInterface $cacheAdapter, UserStorageSpaceCalculator $userStorageSpaceCalculator
     )
     {
         $this->cacheAdapter = $cacheAdapter;
-        $this->allowedUserStorageSpaceCalculator = $allowedUserStorageSpaceCalculator;
+        $this->userStorageSpaceCalculator = $userStorageSpaceCalculator;
     }
 
     public function getAllowedStorageSpaceForUser(User $user): int
@@ -36,7 +36,7 @@ class CachedUserStorageSpaceCalculator implements UserStorageSpaceCalculatorInte
             {
 
                 $this->saveCacheData(
-                    $cacheKey, $this->getAllowedUserStorageSpaceCalculator()->getAllowedStorageSpaceForUser($user)
+                    $cacheKey, $this->getUserStorageSpaceCalculator()->getAllowedStorageSpaceForUser($user)
                 );
             }
 
@@ -48,9 +48,9 @@ class CachedUserStorageSpaceCalculator implements UserStorageSpaceCalculatorInte
         }
     }
 
-    public function getAllowedUserStorageSpaceCalculator(): UserStorageSpaceCalculator
+    public function getUserStorageSpaceCalculator(): UserStorageSpaceCalculator
     {
-        return $this->allowedUserStorageSpaceCalculator;
+        return $this->userStorageSpaceCalculator;
     }
 
     public function getAvailableStorageSpaceForUser(User $user): int
@@ -62,7 +62,7 @@ class CachedUserStorageSpaceCalculator implements UserStorageSpaceCalculatorInte
 
     public function getUsedAggregatedUserStorageSpace(): int
     {
-        return $this->getAllowedUserStorageSpaceCalculator()->getUsedAggregatedUserStorageSpace();
+        return $this->getUserStorageSpaceCalculator()->getUsedAggregatedUserStorageSpace();
     }
 
     public function getUsedStorageSpaceForUser(User $user): int
@@ -74,7 +74,7 @@ class CachedUserStorageSpaceCalculator implements UserStorageSpaceCalculatorInte
             if (!$this->hasCacheData($cacheKey))
             {
                 $this->saveCacheData(
-                    $cacheKey, $this->getAllowedUserStorageSpaceCalculator()->getUsedStorageSpaceForUser($user)
+                    $cacheKey, $this->getUserStorageSpaceCalculator()->getUsedStorageSpaceForUser($user)
                 );
             }
 
@@ -95,7 +95,7 @@ class CachedUserStorageSpaceCalculator implements UserStorageSpaceCalculatorInte
             if (!$this->hasCacheData($cacheKey))
             {
                 $this->saveCacheData(
-                    $cacheKey, $this->getAllowedUserStorageSpaceCalculator()->isQuotumDefinedForUser($user)
+                    $cacheKey, $this->getUserStorageSpaceCalculator()->isQuotumDefinedForUser($user)
                 );
             }
 

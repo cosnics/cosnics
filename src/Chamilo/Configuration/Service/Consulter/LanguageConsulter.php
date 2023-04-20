@@ -16,7 +16,7 @@ class LanguageConsulter implements DataConsulterInterface
 
     public function __construct(CacheDataLoaderInterface $dataLoader)
     {
-        $this->$dataLoader = $dataLoader;
+        $this->dataLoader = $dataLoader;
     }
 
     public function getLanguageNameFromIsocode(string $isocode): string
