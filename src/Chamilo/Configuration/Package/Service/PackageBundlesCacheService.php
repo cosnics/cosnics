@@ -3,9 +3,10 @@ namespace Chamilo\Configuration\Package\Service;
 
 use Chamilo\Configuration\Package\Finder\PackageBundles;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Libraries\Cache\SymfonyCacheService;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Cache\Exception\CacheException;
 
 /**
  * @package Chamilo\Configuration\Package\Service
@@ -13,49 +14,69 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PackageBundlesCacheService extends SymfonyCacheService
+class PackageBundlesCacheService implements CacheDataLoaderInterface
 {
+    use CacheAdapterHandlerTrait;
+
     protected PackageFactory $packageFactory;
 
-    public function __construct(
-        AdapterInterface $cacheAdapter, ConfigurablePathBuilder $configurablePathBuilder, PackageFactory $packageFactory
-    )
+    public function __construct(AdapterInterface $cacheAdapter, PackageFactory $packageFactory)
     {
-        parent::__construct($cacheAdapter, $configurablePathBuilder);
-
+        $this->cacheAdapter = $cacheAdapter;
         $this->packageFactory = $packageFactory;
     }
 
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getAllPackages(): PackageList
     {
-        return $this->getForIdentifier(PackageList::MODE_ALL);
+        if (!$this->loadCacheDataForIdentifier((string) PackageList::MODE_ALL))
+        {
+            throw new CacheException(
+                'Could not load cache for ' . __CLASS__ . ' with key ' . PackageList::MODE_ALL
+            );
+        }
+
+        return $this->readCacheDataForKey($this->getCacheKeyForParts([PackageList::MODE_ALL]));
     }
 
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getAvailablePackages(): PackageList
     {
-        return $this->getForIdentifier(PackageList::MODE_AVAILABLE);
+        if (!$this->loadCacheDataForIdentifier((string) PackageList::MODE_AVAILABLE))
+        {
+            throw new CacheException(
+                'Could not load cache for ' . __CLASS__ . ' with key ' . PackageList::MODE_AVAILABLE
+            );
+        }
+
+        return $this->readCacheDataForKey($this->getCacheKeyForParts([PackageList::MODE_AVAILABLE]));
     }
 
     /**
-     * @return string[]
+     * @return int[]
      */
-    public function getIdentifiers(): array
+    protected function getCacheIdentifiers(): array
     {
         return [PackageList::MODE_ALL, PackageList::MODE_INSTALLED, PackageList::MODE_AVAILABLE];
     }
 
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getInstalledPackages(): PackageList
     {
-        return $this->getForIdentifier(PackageList::MODE_INSTALLED);
+        if (!$this->loadCacheDataForIdentifier((string) PackageList::MODE_INSTALLED))
+        {
+            throw new CacheException(
+                'Could not load cache for ' . __CLASS__ . ' with key ' . PackageList::MODE_INSTALLED
+            );
+        }
+
+        return $this->readCacheDataForKey($this->getCacheKeyForParts([PackageList::MODE_INSTALLED]));
     }
 
     public function getPackageFactory(): PackageFactory
@@ -63,13 +84,10 @@ class PackageBundlesCacheService extends SymfonyCacheService
         return $this->packageFactory;
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function warmUpForIdentifier($identifier): bool
+    public function getPackageListForMode(string $mode): PackageList
     {
         $packageFactory = $this->getPackageFactory();
-        $packageListBuilder = new PackageBundles(PackageList::ROOT, $identifier, $packageFactory);
+        $packageListBuilder = new PackageBundles(PackageList::ROOT, $mode, $packageFactory);
         $packageList = $packageListBuilder->getPackageList();
 
         $packageList->get_all_packages(false);
@@ -78,9 +96,41 @@ class PackageBundlesCacheService extends SymfonyCacheService
         $packageList->get_all_packages();
         $packageList->get_list();
 
-        $cacheItem = $this->getCacheAdapter()->getItem((string) $identifier);
-        $cacheItem->set($packageList);
+        return $packageList;
+    }
 
-        return $this->getCacheAdapter()->save($cacheItem);
+    public function loadCacheData(): bool
+    {
+        foreach ($this->getCacheIdentifiers() as $cacheIdentifier)
+        {
+            if (!$this->loadCacheDataForIdentifier((string) $cacheIdentifier))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function loadCacheDataForIdentifier(string $cacheIdentifier): bool
+    {
+        $cacheKey = $this->getCacheKeyForParts([$cacheIdentifier]);
+
+        if (!$this->hasCacheDataForKey($cacheKey))
+        {
+            try
+            {
+                if (!$this->saveCacheDataForKey($cacheKey, $this->getPackageListForMode($cacheIdentifier)))
+                {
+                    return false;
+                }
+            }
+            catch (CacheException $e)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

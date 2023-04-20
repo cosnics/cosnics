@@ -4,7 +4,7 @@ namespace Chamilo\Configuration\Service\Consulter;
 use Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataLoader;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Cache\DataConsulterTrait;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
 use Chamilo\Libraries\Cache\Interfaces\DataConsulterInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -19,9 +19,9 @@ class RegistrationConsulter implements DataConsulterInterface
 
     protected StringUtilities $stringUtilities;
 
-    public function __construct(CacheDataLoaderInterface $dataLoader, StringUtilities $stringUtilities)
+    public function __construct(CacheDataReaderInterface $dataReader, StringUtilities $stringUtilities)
     {
-        $this->dataLoader = $dataLoader;
+        $this->dataReader = $dataReader;
         $this->stringUtilities = $stringUtilities;
     }
 
@@ -99,7 +99,7 @@ class RegistrationConsulter implements DataConsulterInterface
      */
     public function getRegistrations(): array
     {
-        return $this->getDataLoader()->loadCacheData();
+        return $this->getDataReader()->readCacheData();
     }
 
     /**

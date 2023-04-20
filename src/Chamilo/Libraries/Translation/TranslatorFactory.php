@@ -35,11 +35,11 @@ class TranslatorFactory
     }
 
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function addOptimizedTranslationResources(Translator $translator)
     {
-        $packageNamespaces = $this->getInternationalizationBundlesCacheService()->loadCacheData();
+        $packageNamespaces = $this->getInternationalizationBundlesCacheService()->readCacheData();
 
         $translationCachePath = $this->getConfigurablePathBuilder()->getCachePath(__NAMESPACE__);
 
@@ -66,7 +66,7 @@ class TranslatorFactory
     }
 
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function createTranslator(?string $locale = null, array $fallbackLanguages = []): Translator
     {

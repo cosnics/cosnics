@@ -10,12 +10,7 @@ use Throwable;
  */
 trait CacheDataLoaderTrait
 {
-    use CacheAdapterHandlerTrait
-    {
-        clearCacheData as clearCacheDataForKey;
-        loadCacheData as loadCacheDataForKey;
-        saveCacheData as saveCacheDataForKey;
-    }
+    use CacheAdapterHandlerTrait;
 
     public function clearCacheData(): bool
     {
@@ -29,31 +24,78 @@ trait CacheDataLoaderTrait
 
     abstract protected function getDataForCache();
 
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    public function loadCacheData()
+    public function loadCacheData(): bool
     {
         $cacheKey = $this->getCacheKey();
 
-        if (!$this->hasCacheData($cacheKey))
+        if (!$this->hasCacheDataForKey($cacheKey))
         {
-            $this->saveCacheData();
+            try
+            {
+                return $this->saveCacheData();
+            }
+            catch (CacheException $e)
+            {
+                return false;
+            }
         }
 
-        return $this->loadCacheDataForKey($cacheKey);
+        return true;
     }
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function reloadCacheData()
+    public function readCacheData()
     {
-        $this->clearCacheData();
+        if (!$this->loadCacheData())
+        {
+            throw new CacheException('Could not load data for cache in ' . static::class);
+        }
 
-        return $this->loadCacheData();
+        try
+        {
+            return $this->readCacheDataForKey($this->getCacheKey());
+        }
+        catch (CacheException $e)
+        {
+            throw new CacheException('Could not read data for cache in ' . static::class);
+        }
     }
 
+    public function reloadCacheData(): bool
+    {
+        if ($this->clearCacheData())
+        {
+            return $this->loadCacheData();
+        }
+
+        return false;
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function rereadCacheData()
+    {
+        if (!$this->clearCacheData())
+        {
+            throw new CacheException('Could not clear data for cache in ' . static::class);
+        }
+
+        try
+        {
+            return $this->readCacheData();
+        }
+        catch (CacheException $e)
+        {
+            throw new CacheException('Could not read data for cache in ' . static::class);
+        }
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function saveCacheData(): bool
     {
         try

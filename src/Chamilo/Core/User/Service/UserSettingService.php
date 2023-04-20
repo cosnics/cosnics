@@ -6,10 +6,9 @@ use Exception;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
- *
  * @package Chamilo\Core\User\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class UserSettingService
 {

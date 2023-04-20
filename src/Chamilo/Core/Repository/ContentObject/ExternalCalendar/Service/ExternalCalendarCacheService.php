@@ -1,9 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service;
 
-use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
-use Chamilo\Libraries\Cache\SymfonyCacheService;
+use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
+use Psr\Cache\InvalidArgumentException;
 use Sabre\VObject;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service
@@ -11,56 +12,59 @@ use Sabre\VObject;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ExternalCalendarCacheService extends SymfonyCacheService implements UserBasedCacheInterface
+class ExternalCalendarCacheService
 {
+    use CacheAdapterHandlerTrait;
+
     public const PARAM_LIFETIME = 'lifetime';
     public const PARAM_PATH = 'path';
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
+    public function __construct(AdapterInterface $cacheAdapter)
+    {
+        $this->cacheAdapter = $cacheAdapter;
+    }
+
     public function getCalendarForPath(string $path): VObject\Component\VCalendar
     {
-        return $this->getForIdentifier($path);
-    }
+        $cacheAdapter = $this->getCacheAdapter();
+        $cacheIdentifier = md5(serialize([$path]));
 
-    /**
-     * @return string[]
-     */
-    public function getIdentifiers(): array
-    {
-        return [];
-    }
-
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function warmUpForIdentifier($identifier): bool
-    {
-        $calendarData = '';
-
-        if (!file_exists($identifier))
+        try
         {
-            if ($f = fopen($identifier, 'r'))
+            $cacheItem = $cacheAdapter->getItem($cacheIdentifier);
+
+            if (!$cacheItem->isHit())
             {
+                $calendarData = '';
 
-                while (!feof($f))
+                if (!file_exists($path))
                 {
-                    $calendarData .= fgets($f, 4096);
+                    if ($f = fopen($path, 'r'))
+                    {
+
+                        while (!feof($f))
+                        {
+                            $calendarData .= fgets($f, 4096);
+                        }
+                        fclose($f);
+                    }
                 }
-                fclose($f);
+                else
+                {
+                    $calendarData = file_get_contents($path);
+                }
+
+                $calendar = VObject\Reader::read($calendarData, VObject\Reader::OPTION_FORGIVING);
+
+                $cacheItem->set($calendar);
+                $cacheAdapter->save($cacheItem);
             }
+
+            return $cacheItem->get();
         }
-        else
+        catch (InvalidArgumentException $e)
         {
-            $calendarData = file_get_contents($identifier);
+            return new VObject\Component\VCalendar();
         }
-
-        $calendar = VObject\Reader::read($calendarData, VObject\Reader::OPTION_FORGIVING);
-
-        $cacheItem = $this->getCacheAdapter()->getItem($identifier);
-        $cacheItem->set($calendar);
-
-        return $this->getCacheAdapter()->save($cacheItem);
     }
 }

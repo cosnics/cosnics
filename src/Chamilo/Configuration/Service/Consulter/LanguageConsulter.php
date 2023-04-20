@@ -2,7 +2,7 @@
 namespace Chamilo\Configuration\Service\Consulter;
 
 use Chamilo\Libraries\Cache\DataConsulterTrait;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
 use Chamilo\Libraries\Cache\Interfaces\DataConsulterInterface;
 
 /**
@@ -14,9 +14,9 @@ class LanguageConsulter implements DataConsulterInterface
 {
     use DataConsulterTrait;
 
-    public function __construct(CacheDataLoaderInterface $dataLoader)
+    public function __construct(CacheDataReaderInterface $dataReader)
     {
-        $this->dataLoader = $dataLoader;
+        $this->dataReader = $dataReader;
     }
 
     public function getLanguageNameFromIsocode(string $isocode): string
@@ -31,7 +31,7 @@ class LanguageConsulter implements DataConsulterInterface
      */
     public function getLanguages(): array
     {
-        return $this->getDataLoader()->loadCacheData();
+        return $this->getDataReader()->readCacheData();
     }
 
     /**

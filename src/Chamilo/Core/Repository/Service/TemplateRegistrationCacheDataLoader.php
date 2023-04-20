@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Service;
 
 use Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
 use Chamilo\Libraries\Cache\Traits\CacheDataLoaderTrait;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -13,12 +14,9 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class TemplateRegistrationCacheDataLoader implements CacheDataLoaderInterface
+class TemplateRegistrationCacheDataLoader implements CacheDataLoaderInterface, CacheDataReaderInterface
 {
-    use CacheDataLoaderTrait
-    {
-        clearCacheData as protected clearAdapterCache;
-    }
+    use CacheDataLoaderTrait;
 
     public const REGISTRATION_DEFAULT = 2;
     public const REGISTRATION_ID = 1;
@@ -39,16 +37,6 @@ class TemplateRegistrationCacheDataLoader implements CacheDataLoaderInterface
         $this->configurablePathBuilder = $configurablePathBuilder;
         $this->stringUtilities = $stringUtilities;
         $this->templateRegistrationRepository = $templateRegistrationRepository;
-    }
-
-    public function clearCacheData(): bool
-    {
-        if ($this->getTemplateRegistrationRepository()->clearTemplateRegistrationCache())
-        {
-            return $this->clearAdapterCache();
-        }
-
-        return false;
     }
 
     /**

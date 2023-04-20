@@ -2,7 +2,7 @@
 namespace Chamilo\Configuration\Service\Consulter;
 
 use Chamilo\Libraries\Cache\DataConsulterTrait;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
 use Chamilo\Libraries\Cache\Interfaces\DataConsulterInterface;
 use Exception;
 
@@ -15,9 +15,9 @@ class ConfigurationConsulter implements DataConsulterInterface
 {
     use DataConsulterTrait;
 
-    public function __construct(CacheDataLoaderInterface $dataLoader)
+    public function __construct(CacheDataReaderInterface $dataReader)
     {
-        $this->dataLoader = $dataLoader;
+        $this->dataReader = $dataReader;
     }
 
     /**
@@ -62,7 +62,7 @@ class ConfigurationConsulter implements DataConsulterInterface
      */
     public function getSettings(): array
     {
-        return $this->getDataLoader()->loadCacheData();
+        return $this->getDataReader()->readCacheData();
     }
 
     public function hasSettingsForContext(string $context): bool

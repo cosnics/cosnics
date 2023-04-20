@@ -4,6 +4,7 @@ namespace Chamilo\Configuration\Service\DataLoader;
 use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Configuration\Storage\Repository\LanguageRepository;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
 use Chamilo\Libraries\Cache\Traits\CacheDataLoaderTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -12,12 +13,9 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class LanguageCacheDataLoader implements CacheDataLoaderInterface
+class LanguageCacheDataLoader implements CacheDataLoaderInterface, CacheDataReaderInterface
 {
-    use CacheDataLoaderTrait
-    {
-        clearCacheData as protected clearAdapterCache;
-    }
+    use CacheDataLoaderTrait;
 
     protected LanguageRepository $languageRepository;
 
@@ -25,16 +23,6 @@ class LanguageCacheDataLoader implements CacheDataLoaderInterface
     {
         $this->cacheAdapter = $cacheAdapter;
         $this->languageRepository = $languageRepository;
-    }
-
-    public function clearCacheData(): bool
-    {
-        if ($this->getLanguageRepository()->clearLanguageCache())
-        {
-            return $this->clearAdapterCache();
-        }
-
-        return false;
     }
 
     /**

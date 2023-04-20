@@ -32,15 +32,15 @@ class CachedUserStorageSpaceCalculator implements UserStorageSpaceCalculatorInte
         {
             $cacheKey = $this->getCacheKeyForParts([__CLASS__, __METHOD__, $user->getId()]);
 
-            if (!$this->hasCacheData($cacheKey))
+            if (!$this->hasCacheDataForKey($cacheKey))
             {
 
-                $this->saveCacheData(
+                $this->saveCacheDataForKey(
                     $cacheKey, $this->getUserStorageSpaceCalculator()->getAllowedStorageSpaceForUser($user)
                 );
             }
 
-            return $this->loadCacheData($cacheKey);
+            return $this->readCacheDataForKey($cacheKey);
         }
         catch (CacheException $e)
         {

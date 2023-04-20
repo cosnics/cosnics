@@ -4,9 +4,8 @@ namespace Chamilo\Application\Calendar\Extension\Google\Service;
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
-use Chamilo\Libraries\Cache\SymfonyCacheService;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
@@ -15,8 +14,9 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class OwnedCalendarsCacheService extends SymfonyCacheService implements UserBasedCacheInterface
+class OwnedCalendarsCacheService
 {
+    use CacheAdapterHandlerTrait;
 
     protected User $user;
 
@@ -25,12 +25,11 @@ class OwnedCalendarsCacheService extends SymfonyCacheService implements UserBase
     private CalendarRepository $calendarRepository;
 
     public function __construct(
-        AdapterInterface $cacheAdapter, ConfigurablePathBuilder $configurablePathBuilder,
-        CalendarRepository $calendarRepository, User $user, UserSettingService $userSettingService
+        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, User $user,
+        UserSettingService $userSettingService
     )
     {
-        parent::__construct($cacheAdapter, $configurablePathBuilder);
-
+        $this->cacheAdapter = $cacheAdapter;
         $this->calendarRepository = $calendarRepository;
         $this->user = $user;
         $this->userSettingService = $userSettingService;
@@ -42,23 +41,38 @@ class OwnedCalendarsCacheService extends SymfonyCacheService implements UserBase
     }
 
     /**
-     * @return string[]
-     */
-    public function getIdentifiers(): array
-    {
-        return [];
-    }
-
-    /**
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getOwnedCalendars(): array
     {
+        $cacheAdapter = $this->getCacheAdapter();
         $calendarRepository = $this->getCalendarRepository();
-        $identifier = $calendarRepository->getCacheIdentifier($calendarRepository->getAccessToken(), __METHOD__);
 
-        return $this->getForIdentifier($identifier);
+        $cacheIdentifier = md5(
+            serialize([$calendarRepository->getAccessToken(), __METHOD__])
+        );
+
+        try
+        {
+            $cacheItem = $cacheAdapter->getItem($cacheIdentifier);
+
+            if (!$cacheItem->isHit())
+            {
+                $lifetimeInMinutes = $this->getUserSettingService()->getSettingForUser(
+                    $this->getUser(), 'Chamilo\Libraries\Calendar', 'refresh_external'
+                );
+
+                $cacheItem->set($this->getCalendarRepository()->findOwnedCalendars());
+                $cacheItem->expiresAfter($lifetimeInMinutes * 60);
+                $cacheAdapter->save($cacheItem);
+            }
+
+            return $cacheItem->get();
+        }
+        catch (InvalidArgumentException $e)
+        {
+            return [];
+        }
     }
 
     public function getUser(): User
@@ -69,21 +83,5 @@ class OwnedCalendarsCacheService extends SymfonyCacheService implements UserBase
     public function getUserSettingService(): UserSettingService
     {
         return $this->userSettingService;
-    }
-
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function warmUpForIdentifier($identifier): bool
-    {
-        $lifetimeInMinutes = $this->getUserSettingService()->getSettingForUser(
-            $this->getUser(), 'Chamilo\Libraries\Calendar', 'refresh_external'
-        );
-
-        $cacheItem = $this->getCacheAdapter()->getItem($identifier);
-        $cacheItem->set($this->getCalendarRepository()->findOwnedCalendars());
-        $cacheItem->expiresAfter($lifetimeInMinutes * 60);
-
-        return $this->getCacheAdapter()->save($cacheItem);
     }
 }

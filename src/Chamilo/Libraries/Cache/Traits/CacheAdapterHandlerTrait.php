@@ -13,7 +13,7 @@ trait CacheAdapterHandlerTrait
 {
     protected AdapterInterface $cacheAdapter;
 
-    public function clearCacheData(string $cacheKey): bool
+    public function clearCacheDataForKey(string $cacheKey): bool
     {
         try
         {
@@ -35,7 +35,7 @@ trait CacheAdapterHandlerTrait
         return md5(serialize($cacheKeyParts));
     }
 
-    public function hasCacheData(string $cacheKey): bool
+    public function hasCacheDataForKey(string $cacheKey): bool
     {
         try
         {
@@ -50,7 +50,7 @@ trait CacheAdapterHandlerTrait
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function loadCacheData(string $cacheKey)
+    public function readCacheDataForKey(string $cacheKey)
     {
         try
         {
@@ -65,7 +65,7 @@ trait CacheAdapterHandlerTrait
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function saveCacheData(string $cacheKey, $cacheData, ?int $lifetime = null): bool
+    public function saveCacheDataForKey(string $cacheKey, $cacheData, ?int $lifetime = null): bool
     {
         try
         {

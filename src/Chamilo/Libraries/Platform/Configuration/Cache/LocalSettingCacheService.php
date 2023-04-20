@@ -6,6 +6,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 use Chamilo\Libraries\Cache\SymfonyCacheService;
+use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -26,6 +27,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class LocalSettingCacheService extends SymfonyCacheService implements UserBasedCacheInterface
 {
+    use CacheAdapterHandlerTrait;
 
     public function clearForIdentifier($identifier): bool
     {

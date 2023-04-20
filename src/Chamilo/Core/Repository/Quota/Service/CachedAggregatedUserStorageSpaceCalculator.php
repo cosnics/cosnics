@@ -42,7 +42,7 @@ class CachedAggregatedUserStorageSpaceCalculator
     {
         try
         {
-            return $this->loadCacheData();
+            return $this->readCacheData();
         }
         catch (CacheException $e)
         {

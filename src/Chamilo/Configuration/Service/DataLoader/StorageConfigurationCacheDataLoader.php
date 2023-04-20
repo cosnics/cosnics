@@ -4,6 +4,7 @@ namespace Chamilo\Configuration\Service\DataLoader;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Configuration\Storage\Repository\ConfigurationRepository;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
 use Chamilo\Libraries\Cache\Traits\CacheDataLoaderTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -12,12 +13,9 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class StorageConfigurationCacheDataLoader implements CacheDataLoaderInterface
+class StorageConfigurationCacheDataLoader implements CacheDataLoaderInterface, CacheDataReaderInterface
 {
-    use CacheDataLoaderTrait
-    {
-        clearCacheData as protected clearAdapterCache;
-    }
+    use CacheDataLoaderTrait;
 
     protected ConfigurationRepository $configurationRepository;
 
@@ -25,16 +23,6 @@ class StorageConfigurationCacheDataLoader implements CacheDataLoaderInterface
     {
         $this->cacheAdapter = $cacheAdapter;
         $this->configurationRepository = $configurationRepository;
-    }
-
-    public function clearCacheData(): bool
-    {
-        if ($this->getConfigurationRepository()->clearSettingCache())
-        {
-            return $this->clearAdapterCache();
-        }
-
-        return false;
     }
 
     public function getConfigurationRepository(): ConfigurationRepository

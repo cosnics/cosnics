@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Cache;
 
-use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
 
 /**
  * @package Chamilo\Libraries\Cache
@@ -9,10 +9,10 @@ use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
  */
 trait DataConsulterTrait
 {
-    protected CacheDataLoaderInterface $dataLoader;
+    protected CacheDataReaderInterface $dataReader;
 
-    public function getDataLoader(): CacheDataLoaderInterface
+    public function getDataReader(): CacheDataReaderInterface
     {
-        return $this->dataLoader;
+        return $this->dataReader;
     }
 }

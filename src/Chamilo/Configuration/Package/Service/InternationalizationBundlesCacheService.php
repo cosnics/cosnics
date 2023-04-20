@@ -4,6 +4,7 @@ namespace Chamilo\Configuration\Package\Service;
 use Chamilo\Configuration\Package\Finder\InternationalizationBundles;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
 use Chamilo\Libraries\Cache\Traits\CacheDataLoaderTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -13,7 +14,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class InternationalizationBundlesCacheService implements CacheDataLoaderInterface
+class InternationalizationBundlesCacheService implements CacheDataLoaderInterface, CacheDataReaderInterface
 {
     use CacheDataLoaderTrait;
 
