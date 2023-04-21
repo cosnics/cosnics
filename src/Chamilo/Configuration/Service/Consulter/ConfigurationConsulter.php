@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Service\Consulter;
 
-use Chamilo\Libraries\Cache\DataConsulterTrait;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
-use Chamilo\Libraries\Cache\Interfaces\DataConsulterInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
 use Exception;
 
 /**
@@ -11,13 +9,18 @@ use Exception;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class ConfigurationConsulter implements DataConsulterInterface
+class ConfigurationConsulter
 {
-    use DataConsulterTrait;
+    protected CacheDataLoaderInterface $dataLoader;
 
-    public function __construct(CacheDataReaderInterface $dataReader)
+    public function __construct(CacheDataLoaderInterface $dataLoader)
     {
-        $this->dataReader = $dataReader;
+        $this->dataLoader = $dataLoader;
+    }
+
+    public function getDataLoader(): CacheDataLoaderInterface
+    {
+        return $this->dataLoader;
     }
 
     /**
@@ -59,12 +62,16 @@ class ConfigurationConsulter implements DataConsulterInterface
 
     /**
      * @return string[][]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getSettings(): array
     {
-        return $this->getDataReader()->readCacheData();
+        return $this->getDataLoader()->loadCachedData();
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function hasSettingsForContext(string $context): bool
     {
         $settings = $this->getSettings();
