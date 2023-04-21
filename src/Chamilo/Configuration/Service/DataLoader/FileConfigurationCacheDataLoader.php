@@ -3,8 +3,8 @@ namespace Chamilo\Configuration\Service\DataLoader;
 
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
-use Chamilo\Libraries\Cache\Traits\CacheDataLoaderTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheDataLoaderTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,9 +15,10 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class FileConfigurationCacheDataLoader implements CacheDataLoaderInterface, CacheDataReaderInterface
+class FileConfigurationCacheDataLoader implements CacheDataLoaderInterface
 {
-    use CacheDataLoaderTrait;
+    use SimpleCacheAdapterHandlerTrait;
+    use SimpleCacheDataLoaderTrait;
 
     private FileConfigurationLocator $fileConfigurationLocator;
 

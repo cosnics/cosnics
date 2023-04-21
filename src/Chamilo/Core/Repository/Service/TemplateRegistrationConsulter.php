@@ -2,9 +2,6 @@
 namespace Chamilo\Core\Repository\Service;
 
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
-use Chamilo\Libraries\Cache\DataConsulterTrait;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
-use Chamilo\Libraries\Cache\Interfaces\DataConsulterInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -12,15 +9,17 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class TemplateRegistrationConsulter implements DataConsulterInterface
+class TemplateRegistrationConsulter
 {
-    use DataConsulterTrait;
-
     protected StringUtilities $stringUtilities;
 
-    public function __construct(CacheDataReaderInterface $dataReader, StringUtilities $stringUtilities)
+    protected TemplateRegistrationCacheDataLoader $templateRegistrationCacheDataLoader;
+
+    public function __construct(
+        TemplateRegistrationCacheDataLoader $templateRegistrationCacheDataLoader, StringUtilities $stringUtilities
+    )
     {
-        $this->dataReader = $dataReader;
+        $this->templateRegistrationCacheDataLoader = $templateRegistrationCacheDataLoader;
         $this->stringUtilities = $stringUtilities;
     }
 
@@ -29,11 +28,22 @@ class TemplateRegistrationConsulter implements DataConsulterInterface
         return $this->stringUtilities;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function getTemplateRegistrationByIdentifier(int $identifier): ?TemplateRegistration
     {
         return $this->getTemplateRegistrations()[TemplateRegistrationCacheDataLoader::REGISTRATION_ID][$identifier];
     }
 
+    public function getTemplateRegistrationCacheDataLoader(): TemplateRegistrationCacheDataLoader
+    {
+        return $this->templateRegistrationCacheDataLoader;
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function getTemplateRegistrationDefaultByType(string $type): ?TemplateRegistration
     {
         return $this->getTemplateRegistrations()[TemplateRegistrationCacheDataLoader::REGISTRATION_DEFAULT][$type];
@@ -41,14 +51,16 @@ class TemplateRegistrationConsulter implements DataConsulterInterface
 
     /**
      * @return \Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration[][]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getTemplateRegistrations(): array
     {
-        return $this->getDataReader()->readCacheData();
+        return $this->getTemplateRegistrationCacheDataLoader()->getTemplateRegistrations();
     }
 
     /**
      * @return \Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration[]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getTemplateRegistrationsByTypesAndUserIdentifier(array $types, ?int $user_id = null): array
     {

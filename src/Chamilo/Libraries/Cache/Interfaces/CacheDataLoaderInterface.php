@@ -7,6 +7,9 @@ namespace Chamilo\Libraries\Cache\Interfaces;
  */
 interface CacheDataLoaderInterface
 {
-
-    public function loadCacheData(): bool;
+    /**
+     * @return mixed
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function loadCachedData();
 }

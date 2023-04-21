@@ -13,15 +13,18 @@ trait CacheAdapterHandlerTrait
 {
     protected AdapterInterface $cacheAdapter;
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function clearCacheDataForKey(string $cacheKey): bool
     {
         try
         {
             return $this->getCacheAdapter()->deleteItem($cacheKey);
         }
-        catch (InvalidArgumentException $e)
+        catch (InvalidArgumentException $exception)
         {
-            return false;
+            throw new CacheException('Could not clear cache in ' . static::class . 'for key ' . $cacheKey);
         }
     }
 
@@ -41,13 +44,52 @@ trait CacheAdapterHandlerTrait
         {
             return $this->getCacheAdapter()->getItem($cacheKey)->isHit();
         }
-        catch (InvalidArgumentException $e)
+        catch (InvalidArgumentException $exception)
         {
             return false;
         }
     }
 
     /**
+     * @param string $cacheKey
+     * @param callable $dataSource
+     *
+     * @return mixed
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function loadCacheDataForKey(string $cacheKey, callable $dataSource)
+    {
+        try
+        {
+            if (!$this->hasCacheDataForKey($cacheKey))
+            {
+                $this->saveCacheDataForKey($cacheKey, call_user_func($dataSource));
+            }
+
+            return $this->readCacheDataForKey($cacheKey);
+        }
+        catch (CacheException $exception)
+        {
+            throw new CacheException('Could not load cache in ' . static::class . 'for key ' . $cacheKey);
+        }
+    }
+
+    /**
+     * @param string[] $cacheKeyParts
+     * @param callable $dataSource
+     *
+     * @return mixed
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function loadCacheDataForKeyParts(array $cacheKeyParts, callable $dataSource)
+    {
+        return $this->loadCacheDataForKey(
+            $this->getCacheKeyForParts($cacheKeyParts), $dataSource
+        );
+    }
+
+    /**
+     * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function readCacheDataForKey(string $cacheKey)
@@ -56,10 +98,48 @@ trait CacheAdapterHandlerTrait
         {
             return $this->getCacheAdapter()->getItem($cacheKey)->get();
         }
-        catch (InvalidArgumentException $e)
+        catch (InvalidArgumentException $exception)
         {
             throw new CacheException('Could not load cache in ' . static::class . 'for key ' . $cacheKey);
         }
+    }
+
+    /**
+     * @return mixed
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function readCacheDataForKeyParts(array $cacheKeyParts)
+    {
+        return $this->readCacheDataForKey($this->getCacheKeyForParts($cacheKeyParts));
+    }
+
+    /**
+     * @return mixed
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function reloadCacheDataForKey(string $cacheKey, callable $dataSource)
+    {
+        try
+        {
+            $this->clearCacheDataForKey($cacheKey);
+
+            return $this->loadCacheDataForKey($cacheKey, $dataSource);
+        }
+        catch (CacheException $exception)
+        {
+            throw new CacheException('Could not reload cache in ' . static::class . 'for key ' . $cacheKey);
+        }
+    }
+
+    /**
+     * @param string[] $cacheKeyParts
+     *
+     * @return mixed
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function reloadCacheDataForKeyParts(array $cacheKeyParts, callable $dataSource)
+    {
+        return $this->reloadCacheDataForKey($this->getCacheKeyForParts($cacheKeyParts), $dataSource);
     }
 
     /**
@@ -77,7 +157,7 @@ trait CacheAdapterHandlerTrait
 
             return $cacheAdapter->save($cacheItem);
         }
-        catch (InvalidArgumentException $e)
+        catch (InvalidArgumentException $exception)
         {
             throw new CacheException('Could not save cache in ' . static::class . 'for key ' . $cacheKey);
         }

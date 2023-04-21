@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\Service;
 
 use Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
-use Chamilo\Libraries\Cache\Traits\CacheDataLoaderTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheDataLoaderTrait;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -14,9 +14,10 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class TemplateRegistrationCacheDataLoader implements CacheDataLoaderInterface, CacheDataReaderInterface
+class TemplateRegistrationCacheDataLoader implements CacheDataLoaderInterface
 {
-    use CacheDataLoaderTrait;
+    use SimpleCacheAdapterHandlerTrait;
+    use SimpleCacheDataLoaderTrait;
 
     public const REGISTRATION_DEFAULT = 2;
     public const REGISTRATION_ID = 1;
@@ -74,5 +75,14 @@ class TemplateRegistrationCacheDataLoader implements CacheDataLoaderInterface, C
     public function getTemplateRegistrationRepository(): TemplateRegistrationRepository
     {
         return $this->templateRegistrationRepository;
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration[][]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function getTemplateRegistrations(): array
+    {
+        return $this->loadCacheData();
     }
 }

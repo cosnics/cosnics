@@ -99,7 +99,7 @@ class PackageBundlesCacheService implements CacheDataLoaderInterface
         return $packageList;
     }
 
-    public function loadCacheData(): bool
+    public function loadCachedData()
     {
         foreach ($this->getCacheIdentifiers() as $cacheIdentifier)
         {

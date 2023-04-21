@@ -3,21 +3,23 @@ namespace Chamilo\Core\Menu\Service;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Doctrine\Common\Collections\ArrayCollection;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Cache\Exception\CacheException;
 
 /**
  * @package Chamilo\Core\Menu\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ItemCacheService
+class ItemCacheService implements CacheDataLoaderInterface
 {
+    use CacheAdapterHandlerTrait;
+
     public const KEY_ITEMS = 'items';
     public const KEY_ITEM_TITLES = 'titles';
-
-    private AdapterInterface $cacheAdapter;
 
     private ItemService $itemService;
 
@@ -32,11 +34,6 @@ class ItemCacheService
         $this->propertyMapper = $propertyMapper;
     }
 
-    public function clear(): bool
-    {
-        return $this->getCacheAdapter()->clear();
-    }
-
     public function doesItemHaveChildren(Item $item): bool
     {
         $groupedItems = $this->getItemsGroupedByParentIdentifier();
@@ -46,6 +43,7 @@ class ItemCacheService
 
     /**
      * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][][]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function findItemTitlesGroupedByItemIdentifierAndIsocode(): array
     {
@@ -91,17 +89,13 @@ class ItemCacheService
 
     /**
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[][]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function findItemsGroupedByParentIdentifier(): array
     {
         return $this->getPropertyMapper()->groupDataClassByProperty(
             $this->getItemService()->findItems(), Item::PROPERTY_PARENT
         );
-    }
-
-    public function getCacheAdapter(): AdapterInterface
-    {
-        return $this->cacheAdapter;
     }
 
     public function getItemService(): ItemService
@@ -136,21 +130,12 @@ class ItemCacheService
      */
     protected function getItemTitlesGroupedByItemIdentifierAndIsocode(): array
     {
-        $cacheAdapter = $this->getCacheAdapter();
-
         try
         {
-            $cacheItem = $cacheAdapter->getItem(self::KEY_ITEM_TITLES);
-
-            if (!$cacheItem->isHit())
-            {
-                $cacheItem->set($this->findItemTitlesGroupedByItemIdentifierAndIsocode());
-                $cacheAdapter->save($cacheItem);
-            }
-
-            return $cacheItem->get();
+            return $this->loadCacheDataForKeyParts([__CLASS__, __METHOD__],
+                [$this, 'findItemTitlesGroupedByItemIdentifierAndIsocode']);
         }
-        catch (InvalidArgumentException $e)
+        catch (CacheException $e)
         {
             return [];
         }
@@ -161,21 +146,12 @@ class ItemCacheService
      */
     protected function getItemsGroupedByParentIdentifier(): array
     {
-        $cacheAdapter = $this->getCacheAdapter();
-
         try
         {
-            $cacheItem = $cacheAdapter->getItem(self::KEY_ITEMS);
-
-            if (!$cacheItem->isHit())
-            {
-                $cacheItem->set($this->findItemsGroupedByParentIdentifier());
-                $cacheAdapter->save($cacheItem);
-            }
-
-            return $cacheItem->get();
+            return $this->loadCacheDataForKeyParts([__CLASS__, __METHOD__],
+                [$this, 'findItemsGroupedByParentIdentifier']);
         }
-        catch (InvalidArgumentException $e)
+        catch (CacheException $e)
         {
             return [];
         }
@@ -186,23 +162,9 @@ class ItemCacheService
         return $this->propertyMapper;
     }
 
-    public function setCacheAdapter(AdapterInterface $cacheAdapter): void
-    {
-        $this->cacheAdapter = $cacheAdapter;
-    }
-
-    public function setItemService(ItemService $itemService): void
-    {
-        $this->itemService = $itemService;
-    }
-
-    public function setPropertyMapper(PropertyMapper $propertyMapper): void
-    {
-        $this->propertyMapper = $propertyMapper;
-    }
-
-    public function warmUp()
+    public function loadCachedData()
     {
         $this->getItemTitlesGroupedByItemIdentifierAndIsocode();
+        $this->getItemsGroupedByParentIdentifier();
     }
 }

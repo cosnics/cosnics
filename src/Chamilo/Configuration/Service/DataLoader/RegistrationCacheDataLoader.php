@@ -4,8 +4,8 @@ namespace Chamilo\Configuration\Service\DataLoader;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
-use Chamilo\Libraries\Cache\Traits\CacheDataLoaderTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheDataLoaderTrait;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -14,9 +14,10 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class RegistrationCacheDataLoader implements CacheDataLoaderInterface, CacheDataReaderInterface
+class RegistrationCacheDataLoader implements CacheDataLoaderInterface
 {
-    use CacheDataLoaderTrait;
+    use SimpleCacheAdapterHandlerTrait;
+    use SimpleCacheDataLoaderTrait;
 
     public const REGISTRATION_CONTEXT = 1;
     public const REGISTRATION_INTEGRATION = 3;
@@ -77,6 +78,14 @@ class RegistrationCacheDataLoader implements CacheDataLoaderInterface, CacheData
     public function getRegistrationRepository(): RegistrationRepository
     {
         return $this->registrationRepository;
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function getRegistrations(): array
+    {
+        return $this->loadCacheData();
     }
 
     public function getStringUtilities(): StringUtilities

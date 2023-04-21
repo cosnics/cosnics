@@ -3,9 +3,6 @@ namespace Chamilo\Configuration\Service\Consulter;
 
 use Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataLoader;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Libraries\Cache\DataConsulterTrait;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
-use Chamilo\Libraries\Cache\Interfaces\DataConsulterInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -13,20 +10,24 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class RegistrationConsulter implements DataConsulterInterface
+class RegistrationConsulter
 {
-    use DataConsulterTrait;
+
+    protected RegistrationCacheDataLoader $registrationCacheDataLoader;
 
     protected StringUtilities $stringUtilities;
 
-    public function __construct(CacheDataReaderInterface $dataReader, StringUtilities $stringUtilities)
+    public function __construct(
+        RegistrationCacheDataLoader $registrationCacheDataLoader, StringUtilities $stringUtilities
+    )
     {
-        $this->dataReader = $dataReader;
+        $this->registrationCacheDataLoader = $registrationCacheDataLoader;
         $this->stringUtilities = $stringUtilities;
     }
 
     /**
      * @return string[][]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getContentObjectRegistrations(bool $alsoReturnInactiveTypes = true): array
     {
@@ -46,6 +47,7 @@ class RegistrationConsulter implements DataConsulterInterface
 
     /**
      * @return string[][]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getIntegrationRegistrations(string $integration, ?string $root = null): array
     {
@@ -74,8 +76,14 @@ class RegistrationConsulter implements DataConsulterInterface
         }
     }
 
+    public function getRegistrationCacheDataLoader(): RegistrationCacheDataLoader
+    {
+        return $this->registrationCacheDataLoader;
+    }
+
     /**
      * @return string[]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getRegistrationContexts(): array
     {
@@ -86,6 +94,7 @@ class RegistrationConsulter implements DataConsulterInterface
 
     /**
      * @return string[]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getRegistrationForContext(string $context): array
     {
@@ -96,14 +105,16 @@ class RegistrationConsulter implements DataConsulterInterface
 
     /**
      * @return string[][][][]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getRegistrations(): array
     {
-        return $this->getDataReader()->readCacheData();
+        return $this->getRegistrationCacheDataLoader()->readCacheData();
     }
 
     /**
      * @return string[][]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getRegistrationsByType(string $type): array
     {
@@ -117,6 +128,9 @@ class RegistrationConsulter implements DataConsulterInterface
         return $this->stringUtilities;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function isContextRegistered(string $context): bool
     {
         $registration = $this->getRegistrationForContext($context);
@@ -124,6 +138,9 @@ class RegistrationConsulter implements DataConsulterInterface
         return !empty($registration);
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function isContextRegisteredAndActive(string $context): bool
     {
         $registration = $this->getRegistrationForContext($context);

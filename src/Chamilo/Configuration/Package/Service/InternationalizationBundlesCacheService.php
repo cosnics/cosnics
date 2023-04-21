@@ -4,8 +4,8 @@ namespace Chamilo\Configuration\Package\Service;
 use Chamilo\Configuration\Package\Finder\InternationalizationBundles;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
-use Chamilo\Libraries\Cache\Traits\CacheDataLoaderTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheDataLoaderTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
@@ -14,9 +14,10 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class InternationalizationBundlesCacheService implements CacheDataLoaderInterface, CacheDataReaderInterface
+class InternationalizationBundlesCacheService implements CacheDataLoaderInterface
 {
-    use CacheDataLoaderTrait;
+    use SimpleCacheAdapterHandlerTrait;
+    use SimpleCacheDataLoaderTrait;
 
     public function __construct(AdapterInterface $cacheAdapter)
     {
@@ -31,5 +32,14 @@ class InternationalizationBundlesCacheService implements CacheDataLoaderInterfac
         $internationalizationBundles = new InternationalizationBundles(PackageList::ROOT);
 
         return $internationalizationBundles->getPackageNamespaces();
+    }
+
+    /**
+     * @return string[]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function getPackageNamespaces(): array
+    {
+        return $this->loadCacheData();
     }
 }

@@ -2,7 +2,8 @@
 namespace Chamilo\Core\Repository\Quota\Service;
 
 use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
-use Chamilo\Libraries\Cache\Traits\CacheDataLoaderTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheDataLoaderTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Exception\CacheException;
 
@@ -15,13 +16,13 @@ use Symfony\Component\Cache\Exception\CacheException;
 class CachedAggregatedUserStorageSpaceCalculator
     implements CacheDataLoaderInterface, AggregatedUserStorageSpaceCalculatorInterface
 {
-    use CacheDataLoaderTrait;
+    use SimpleCacheAdapterHandlerTrait;
+    use SimpleCacheDataLoaderTrait;
 
     protected AggregatedUserStorageSpaceCalculator $aggregatedUserStorageSpaceCalculator;
 
     public function __construct(
-        AdapterInterface $cacheAdapter,
-        AggregatedUserStorageSpaceCalculator $aggregatedUserStorageSpaceCalculator
+        AdapterInterface $cacheAdapter, AggregatedUserStorageSpaceCalculator $aggregatedUserStorageSpaceCalculator
     )
     {
         $this->cacheAdapter = $cacheAdapter;
@@ -42,7 +43,7 @@ class CachedAggregatedUserStorageSpaceCalculator
     {
         try
         {
-            return $this->readCacheData();
+            return $this->loadCacheData();
         }
         catch (CacheException $e)
         {

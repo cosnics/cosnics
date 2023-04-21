@@ -1,22 +1,25 @@
 <?php
 namespace Chamilo\Configuration\Service\Consulter;
 
-use Chamilo\Libraries\Cache\DataConsulterTrait;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataReaderInterface;
-use Chamilo\Libraries\Cache\Interfaces\DataConsulterInterface;
+use Chamilo\Configuration\Service\DataLoader\LanguageCacheDataLoader;
 
 /**
  * @package Chamilo\Configuration\Service\Consulter
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class LanguageConsulter implements DataConsulterInterface
+class LanguageConsulter
 {
-    use DataConsulterTrait;
+    protected LanguageCacheDataLoader $languageCacheDataLoader;
 
-    public function __construct(CacheDataReaderInterface $dataReader)
+    public function __construct(LanguageCacheDataLoader $languageCacheDataLoader)
     {
-        $this->dataReader = $dataReader;
+        $this->languageCacheDataLoader = $languageCacheDataLoader;
+    }
+
+    public function getLanguageCacheDataLoader(): LanguageCacheDataLoader
+    {
+        return $this->languageCacheDataLoader;
     }
 
     public function getLanguageNameFromIsocode(string $isocode): string
@@ -31,7 +34,7 @@ class LanguageConsulter implements DataConsulterInterface
      */
     public function getLanguages(): array
     {
-        return $this->getDataReader()->readCacheData();
+        return $this->getLanguageCacheDataLoader()->getLanguages();
     }
 
     /**

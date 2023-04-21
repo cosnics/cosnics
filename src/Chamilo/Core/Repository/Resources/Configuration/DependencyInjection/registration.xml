@@ -8,7 +8,7 @@
                   public="true"/>
 
         <service id="Chamilo\Core\Repository\Service\TemplateRegistrationConsulter">
-            <argument key="$dataLoader"
+            <argument key="$dataReader"
                       type="service"
                       id="Chamilo\Core\Repository\Service\TemplateRegistrationCacheDataLoader"/>
         </service>
