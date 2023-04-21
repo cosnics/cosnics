@@ -2,35 +2,25 @@
 namespace Chamilo\Application\Calendar\Extension\Google;
 
 use Chamilo\Application\Calendar\ActionsInterface;
+use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Extension\Google
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Actions implements ActionsInterface
 {
 
     /**
-     *
-     * @see \Chamilo\Application\Calendar\ActionsInterface::getPrimary()
-     */
-    public function getPrimary(Application $application)
-    {
-        return [];
-    }
-
-    /**
-     *
      * @see \Chamilo\Application\Calendar\ActionsInterface::getAdditional()
      */
     public function getAdditional(Application $application)
@@ -40,8 +30,13 @@ class Actions implements ActionsInterface
             DropdownButton::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']
         );
 
-        $configurationContext = Manager::context();
-        $accessToken = LocalSetting::getInstance()->get('token', $configurationContext);
+        /**
+         * @var \Chamilo\Core\User\Service\UserSettingService $userSettingsService
+         */
+        $userSettingsService =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UserSettingService::class);
+
+        $accessToken = $userSettingsService->getSettingForUser($application->getUser(), Manager::CONTEXT, 'token');
 
         if (!$accessToken)
         {
@@ -70,6 +65,14 @@ class Actions implements ActionsInterface
             );
         }
 
-        return array($dropdownButton);
+        return [$dropdownButton];
+    }
+
+    /**
+     * @see \Chamilo\Application\Calendar\ActionsInterface::getPrimary()
+     */
+    public function getPrimary(Application $application)
+    {
+        return [];
     }
 }

@@ -5,10 +5,14 @@ namespace Chamilo\Application\Calendar\Extension\Google\Repository;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use DateTime;
 use DateTimeInterface;
 use Exception;
@@ -61,11 +65,15 @@ class CalendarRepository
      */
     private $googleClient;
 
+    use DependencyInjectionContainerTrait;
+
     /**
      * @param string $developerKey
      * @param string $clientId
      * @param string $clientSecret
      * @param string $accessToken
+     *
+     * @throws \Exception
      */
     public function __construct($developerKey, $clientId, $clientSecret, $accessToken = null)
     {
@@ -73,6 +81,8 @@ class CalendarRepository
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->accessToken = $accessToken;
+
+        $this->initializeContainer();
     }
 
     /**
@@ -82,8 +92,8 @@ class CalendarRepository
      */
     public function clearAccessToken()
     {
-        return LocalSetting::getInstance()->create(
-            'token', null, Manager::context()
+        return $this->getUserService()->createUserSettingForSettingAndUser(
+            Manager::CONTEXT, 'token', $this->getUser(), null
         );
     }
 
@@ -264,18 +274,43 @@ class CalendarRepository
     {
         if (is_null(static::$instance))
         {
+            $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
             $configuration = Configuration::getInstance();
-            $configurationContext = Manager::context();
 
-            $developerKey = $configuration->get_setting([$configurationContext, 'developer_key']);
-            $clientId = $configuration->get_setting([$configurationContext, 'client_id']);
-            $clientSecret = $configuration->get_setting([$configurationContext, 'client_secret']);
-            $accessToken = LocalSetting::getInstance()->get('token', $configurationContext);
+            /**
+             * @var \Chamilo\Core\User\Service\UserSettingService $userSettingService
+             */
+            $userSettingService = $container->get(UserSettingService::class);
+
+            /**
+             * @var \Chamilo\Core\User\Storage\DataClass\User $user
+             */
+            $user = $container->get(User::class);
+
+            $developerKey = $configuration->get_setting([Manager::CONTEXT, 'developer_key']);
+            $clientId = $configuration->get_setting([Manager::CONTEXT, 'client_id']);
+            $clientSecret = $configuration->get_setting([Manager::CONTEXT, 'client_secret']);
+            $accessToken = $userSettingService->getSettingForUser($user, Manager::CONTEXT, 'token');
 
             self::$instance = new static($developerKey, $clientId, $clientSecret, $accessToken);
         }
 
         return static::$instance;
+    }
+
+    protected function getUser(): User
+    {
+        return $this->getService(User::class);
+    }
+
+    protected function getUserServic(): UserService
+    {
+        return $this->getService(UserService::class);
+    }
+
+    protected function getUserSettingService(): UserSettingService
+    {
+        return $this->getService(UserSettingService::class);
     }
 
     /**
@@ -344,8 +379,8 @@ class CalendarRepository
      */
     public function saveAccessToken($accessToken)
     {
-        return LocalSetting::getInstance()->create(
-            'token', $accessToken, Manager::context()
+        return $this->getUserService()->createUserSettingForSettingAndUser(
+            Manager::CONTEXT, 'token', $this->getUser(), $accessToken
         );
     }
 

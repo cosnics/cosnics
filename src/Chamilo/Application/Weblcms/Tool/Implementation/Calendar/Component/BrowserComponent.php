@@ -9,7 +9,6 @@ use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
 use Mobile_Detect;
 
@@ -24,19 +23,16 @@ class BrowserComponent extends Manager
     public const PARAM_FILTER = 'filter';
 
     /**
-     *
      * @var \Chamilo\Application\Weblcms\Service\CalendarRendererProvider
      */
     private $calendarDataProvider;
 
     /**
-     *
      * @var int
      */
     private $currentTime;
 
     /**
-     *
      * @var \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent
      */
     private $defaultComponent;
@@ -61,7 +57,6 @@ class BrowserComponent extends Manager
     }
 
     /**
-     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
@@ -97,7 +92,6 @@ class BrowserComponent extends Manager
     }
 
     /**
-     *
      * @return int
      */
     public function getCurrentRendererTime()
@@ -111,7 +105,6 @@ class BrowserComponent extends Manager
     }
 
     /**
-     *
      * @return string
      */
     public function getCurrentRendererType()
@@ -120,7 +113,9 @@ class BrowserComponent extends Manager
 
         if (!$rendererType)
         {
-            $rendererType = LocalSetting::getInstance()->get('default_view', 'Chamilo\Libraries\Calendar');
+            $rendererType = $this->getUserSettingService()->getSettingForUser(
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'default_view'
+            );
 
             if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH)
             {
@@ -136,7 +131,6 @@ class BrowserComponent extends Manager
     }
 
     /**
-     *
      * @return \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent
      */
     public function getDefaultComponent()
@@ -158,7 +152,7 @@ class BrowserComponent extends Manager
 
         $toolActions[] = new Button(
             Translation::get('ICalExternal'), new FontAwesomeGlyph('globe'),
-            $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_ICAL)),
+            $this->get_url([\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_ICAL]),
             Button::DISPLAY_ICON_AND_LABEL
         );
 

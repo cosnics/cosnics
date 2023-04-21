@@ -22,23 +22,5 @@
                  class="Chamilo\Libraries\Translation\Translation"/>
 
         <service id="Chamilo\Libraries\Platform\TranslationCacheService"/>
-
-        <service id="Chamilo\Libraries\Platform\Configuration\LocalSetting">
-            <factory class="Chamilo\Libraries\Platform\Configuration\LocalSetting"
-                     method="getInstance"/>
-        </service>
-
-        <service id="Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService">
-            <argument key="$cacheAdapter"
-                      type="service"
-                      id="Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheAdapter"/>
-        </service>
-
-        <service id="Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheAdapter"
-                 class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
-            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
-                     method="createPhpFilesAdapter"/>
-            <argument key="$namespace">Chamilo\Libraries\Platform\Configuration\LocalSetting</argument>
-        </service>
     </services>
 </container>

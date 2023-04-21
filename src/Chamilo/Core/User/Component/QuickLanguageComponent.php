@@ -1,72 +1,63 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Platform\Session\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- *
  * @package user.lib.user_manager.component
  */
 class QuickLanguageComponent extends Manager
 {
-    private function isAllowedToChangeLanguage()
-    {
-        return $this->getConfigurationService()->getSetting(
-                array(self::package(), 'allow_user_change_platform_language')
-            ) == 1 && $this->getConfigurationService()->getSetting(
-                array(self::package(), 'allow_user_quick_change_platform_language')
-            ) == 1;
-    }
-
-    private function getLanguages()
-    {
-        return $this->getLanguageService()->getLanguages();
-    }
-
     /**
      * Runs this component and redirect to the original location afterwards.
      * If the allow_user_quick_lang platform
      * setting is set, overwrite the language setting (depending on the request parameters).
+     *
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ChangeLanguage');
-
-        $this->getConfigurationService()->clearData();
+        $this->checkAuthorization(Manager::CONTEXT, 'ChangeLanguage');
 
         if ($this->isAllowedToChangeLanguage())
         {
-            $choice = Request::get(self::PARAM_CHOICE);
+            $choice = $this->getRequest()->query->get(self::PARAM_CHOICE);
             $languages = array_keys($this->getLanguages());
 
             if ($choice && in_array($choice, $languages))
             {
-                LocalSetting::getInstance()->create('platform_language', $choice);
+                $this->getUserService()->createUserSettingForSettingAndUser(
+                    'Chamilo\Core\Admin', 'platform_language', $this->getUser(), $choice
+                );
             }
         }
 
-        $response = new RedirectResponse(Request::get(self::PARAM_REFER));
+        $response = new RedirectResponse($this->getRequest()->query->get(self::PARAM_REFER));
         $response->send();
     }
 
-    /**
-     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter|object
-     */
-    private function getConfigurationService()
+    private function getLanguageConsulter(): LanguageConsulter
     {
-        return $this->getService(ConfigurationConsulter::class);
+        return $this->getService(LanguageConsulter::class);
     }
 
     /**
-     * @return \Chamilo\Configuration\Service\Consulter\LanguageConsulter|object
+     * @return string[]
      */
-    private function getLanguageService()
+    private function getLanguages(): array
     {
-        return $this->getService(LanguageConsulter::class);
+        return $this->getLanguageConsulter()->getLanguages();
+    }
+
+    private function isAllowedToChangeLanguage(): bool
+    {
+        return $this->getConfigurationConsulter()->getSetting(
+                ['Chamilo\Core\User', 'allow_user_change_platform_language']
+            ) == 1 && $this->getConfigurationConsulter()->getSetting(
+                ['Chamilo\Core\User', 'allow_user_quick_change_platform_language']
+            ) == 1;
     }
 }

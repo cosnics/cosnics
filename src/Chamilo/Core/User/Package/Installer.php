@@ -3,17 +3,14 @@ namespace Chamilo\Core\User\Package;
 
 use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Hashing\HashingUtilities;
-use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package user.install
  */
 
@@ -111,13 +108,13 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         }
         else
         {
-            $configurablePathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-                ConfigurablePathBuilder::class
+            $userService = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+                UserService::class
             );
 
-            $localSetting = new LocalSetting(new LocalSettingCacheService($configurablePathBuilder), $user->get_id());
-
-            return $localSetting->create('platform_language', 'nl');
+            return $userService->createUserSettingForSettingAndUser(
+                'Chamilo\Core\Admin', 'platform_language', $user, 'nl'
+            );
         }
     }
 
@@ -128,7 +125,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     {
         $values = $this->get_form_values();
 
-        $settings[] = array(Manager::context(), 'allow_registration', $values['self_reg']);
+        $settings[] = [Manager::context(), 'allow_registration', $values['self_reg']];
 
         foreach ($settings as $setting)
         {
@@ -174,7 +171,6 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Hashing\HashingUtilities
      */
     public function getHashingUtilities()

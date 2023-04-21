@@ -24,7 +24,6 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
@@ -32,7 +31,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package application.lib.weblcms.weblcms_manager.component
  */
 
@@ -78,7 +76,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
 
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_CATEGORY => null, self::PARAM_TOOL => null)), $breadcrumb_title
+                $this->get_url([self::PARAM_CATEGORY => null, self::PARAM_TOOL => null]), $breadcrumb_title
             )
         );
 
@@ -130,13 +128,13 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         if (!class_exists($managerClass) || !is_subclass_of($managerClass, IgnoreToolTrackingInterface::class))
         {
             Event::trigger(
-                'VisitCourse', Manager::context(), array(
+                'VisitCourse', Manager::context(), [
                     CourseVisit::PROPERTY_USER_ID => $this->get_user_id(),
                     CourseVisit::PROPERTY_COURSE_ID => $this->get_course_id(),
                     CourseVisit::PROPERTY_TOOL_ID => $this->course_tool_registration->get_id(),
                     CourseVisit::PROPERTY_CATEGORY_ID => $category,
                     CourseVisit::PROPERTY_PUBLICATION_ID => $publicationId
-                )
+                ]
             );
 
             DataManager::log_course_module_access($this->get_course_id(), $this->get_user_id(), $tool, $category);
@@ -155,7 +153,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      * access when status is 'open to platform' or 'open to world' anonymous users have access when status is 'open to
      * world'
      *
-     * @return boolean access_allowed
+     * @return bool access_allowed
      */
     public function access_allowed()
     {
@@ -201,7 +199,6 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @return OpenCourseService
      */
     protected function getOpenCourseService()
@@ -213,7 +210,6 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      * Returns the course
      *
      * @return Course
-     *
      * @throws \Exception
      */
     public function get_course()
@@ -328,7 +324,6 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      * Returns whether or not the tool is active
      *
      * @return bool
-     *
      * @throws NoObjectSelectedException
      * @throws ObjectNotExistException
      */
@@ -343,7 +338,6 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      * Returns whether or not the tool is visible
      *
      * @return bool
-     *
      * @throws NoObjectSelectedException
      * @throws ObjectNotExistException
      */
@@ -437,7 +431,9 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         // set user selected language or general platform language
         if ($language == 'platform_language')
         {
-            $language = LocalSetting::getInstance()->get('platform_language');
+            $language = $this->getUserSettingService()->getSettingForUser(
+                $this->getUser(), 'Chamilo\Core\Admin', 'platform_language'
+            );
         }
 
         Translation::getInstance()->setLanguageIsocode($language);
@@ -482,11 +478,11 @@ class CourseViewerComponent extends Manager implements DelegateComponent
 
                 $html[] = '<div class="alert alert-warning">' . Translation::get('ViewingAsUser') . ' ' .
                     $user->get_firstname() . ' ' . $user->get_lastname() . ' <a href="' . $this->get_url(
-                        array(
+                        [
                             self::PARAM_TOOL => 'User',  // replace,
                             // seriously
                             self::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\User\Manager::ACTION_VIEW_AS
-                        )
+                        ]
                     ) . '">' . Translation::get('Back') . '</a></div>';
             }
         }

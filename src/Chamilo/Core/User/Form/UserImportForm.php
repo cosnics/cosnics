@@ -7,6 +7,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Import;
@@ -16,19 +17,15 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Exception;
 
 set_time_limit(0);
 ini_set('memory_limit', - 1);
 
 /**
- *
  * @package Chamilo\Core\User\Form
  */
 class UserImportForm extends FormValidator
@@ -37,21 +34,21 @@ class UserImportForm extends FormValidator
 
     public const TYPE_IMPORT = 1;
 
-    private $failedcsv;
-
     private $current_tag;
 
     private $current_value;
 
-    private $user;
+    private $failedcsv;
 
     private $form_user;
 
-    private $users;
+    private $udm;
+
+    private $user;
 
     // Constants
 
-    private $udm;
+    private $users;
 
     /**
      * Creates a new UserImportForm Used to import users from a file
@@ -73,7 +70,7 @@ class UserImportForm extends FormValidator
     public function build_importing_form()
     {
         $this->addElement('file', 'file', Translation::get('FileName'));
-        $allowed_upload_types = array('xml', 'csv');
+        $allowed_upload_types = ['xml', 'csv'];
         $this->addRule('file', Translation::get('OnlyCSVAllowed'), 'filetype', $allowed_upload_types);
 
         $group = [];
@@ -110,7 +107,6 @@ class UserImportForm extends FormValidator
     }
 
     /**
-     *
      * @param $csvuser
      *
      * @return string
@@ -184,7 +180,6 @@ class UserImportForm extends FormValidator
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Hashing\HashingUtilities
      */
     public function getHashingUtilities()
@@ -199,7 +194,7 @@ class UserImportForm extends FormValidator
         $nr_more_errors = count($this->failedcsv) - 20;
         if ($nr_more_errors > 0)
         {
-            $short_list[0][] = Translation::get('NrMoreInvalidRecords', array('NR' => $nr_more_errors));
+            $short_list[0][] = Translation::get('NrMoreInvalidRecords', ['NR' => $nr_more_errors]);
         }
 
         return implode($short_list[0], '<br />');
@@ -285,10 +280,9 @@ class UserImportForm extends FormValidator
                 }
                 else
                 {
-                    $localSetting = new LocalSetting(
-                        new LocalSettingCacheService($this->getConfigurablePathBuilder()), $user->get_id()
+                    $this->getUserService()->createUserSettingForSettingAndUser(
+                        'Chamilo\Core\Admin', 'platform_language', $user, $csvuser['language']
                     );
-                    $localSetting->create('platform_language', $csvuser['language']);
 
                     $send_mail = intval($values['mail']['send_mail']);
                     if ($send_mail)
@@ -298,7 +292,7 @@ class UserImportForm extends FormValidator
 
                     Event::trigger(
                         'Import', Manager::context(),
-                        array('target_user_id' => $user->get_id(), 'action_user_id' => $this->form_user->get_id())
+                        ['target_user_id' => $user->get_id(), 'action_user_id' => $this->form_user->get_id()]
                     );
                 }
             }
@@ -371,10 +365,9 @@ class UserImportForm extends FormValidator
                 }
                 else
                 {
-                    $localSetting = new LocalSetting(
-                        new LocalSettingCacheService($this->getConfigurablePathBuilder()), $user->get_id()
+                    $this->getUserService()->createUserSettingForSettingAndUser(
+                        'Chamilo\Core\Admin', 'platform_language', $user, $csvuser['language']
                     );
-                    $localSetting->create('platform_language', $csvuser['language']);
                 }
             }
             elseif ($action == 'D')
@@ -415,8 +408,8 @@ class UserImportForm extends FormValidator
         elseif ($file_type == 'text/xml')
         {
             $parser = xml_parser_create();
-            xml_set_element_handler($parser, array(get_class(), 'element_start'), array(get_class(), 'element_end'));
-            xml_set_character_data_handler($parser, array(get_class(), 'character_data'));
+            xml_set_element_handler($parser, [get_class(), 'element_start'], [get_class(), 'element_end']);
+            xml_set_character_data_handler($parser, [get_class(), 'character_data']);
             xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
             xml_parse($parser, utf8_decode(file_get_contents($file_name)));
             xml_parser_free($parser);
@@ -425,7 +418,7 @@ class UserImportForm extends FormValidator
         {
             throw new UserException(
                 Translation::getInstance()->getTranslation(
-                    'InvalidImportFormat', array('FILE_TYPE' => $file_type), StringUtilities::LIBRARIES
+                    'InvalidImportFormat', ['FILE_TYPE' => $file_type], StringUtilities::LIBRARIES
                 )
             );
         }
@@ -443,24 +436,24 @@ class UserImportForm extends FormValidator
         $options['lastname'] = $user->get_lastname();
         $options['username'] = $user->get_username();
         $options['password'] = $unencrypted_password;
-        $options['site_name'] = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
+        $options['site_name'] = Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'site_name']);
         $options['site_url'] = Path::getInstance()->getBasePath(true);
         $options['admin_firstname'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_firstname')
+            ['Chamilo\Core\Admin', 'administrator_firstname']
         );
         $options['admin_surname'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_surname')
+            ['Chamilo\Core\Admin', 'administrator_surname']
         );
         $options['admin_telephone'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_telephone')
+            ['Chamilo\Core\Admin', 'administrator_telephone']
         );
         $options['admin_email'] = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'administrator_email')
+            ['Chamilo\Core\Admin', 'administrator_email']
         );
 
         $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
 
-        $body = Configuration::getInstance()->get_setting(array(Manager::context(), 'email_template'));
+        $body = Configuration::getInstance()->get_setting([Manager::context(), 'email_template']);
         foreach ($options as $option => $value)
         {
             $body = str_replace('[' . $option . ']', $value, $body);
@@ -567,11 +560,11 @@ class UserImportForm extends FormValidator
         if (!$csvuser['language'])
         {
             $csvuser['language'] = Configuration::getInstance()->get_setting(
-                array('Chamilo\Core\Admin', 'platform_language')
+                ['Chamilo\Core\Admin', 'platform_language']
             );
         }
 
-        if ($action == 'C' && Configuration::getInstance()->get_setting(array(Manager::context(), 'require_email')) &&
+        if ($action == 'C' && Configuration::getInstance()->get_setting([Manager::context(), 'require_email']) &&
             (!$email || $email == ''))
         {
             $failures ++;

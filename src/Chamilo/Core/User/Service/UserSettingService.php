@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Exception;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
@@ -12,18 +13,42 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
  */
 class UserSettingService
 {
+    protected DatetimeUtilities $datetimeUtilities;
+
     protected UserService $userService;
 
     protected FilesystemAdapter $userSettingsCache;
 
-    /**
-     * @param \Chamilo\Core\User\Service\UserService $userService
-     * @param \Symfony\Component\Cache\Adapter\FilesystemAdapter $userSettingsCache
-     */
-    public function __construct(UserService $userService, FilesystemAdapter $userSettingsCache)
+    public function __construct(
+        UserService $userService, FilesystemAdapter $userSettingsCache, DatetimeUtilities $datetimeUtilities
+    )
     {
         $this->userService = $userService;
         $this->userSettingsCache = $userSettingsCache;
+        $this->datetimeUtilities = $datetimeUtilities;
+    }
+
+    /**
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function clearSettingsCacheforUser(User $user): bool
+    {
+        return $this->getUserSettingsCache()->deleteItem('user.' . $user->getId());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function convertDateToUserTimezone(User $user, string $date, ?string $format = null): string
+    {
+        $userTimezone = $this->getSettingForUser($user, 'Chamilo\Core\Admin', 'platform_timezone');
+
+        return $this->getDatetimeUtilities()->convertDateToTimezone($date, $format, $userTimezone);
+    }
+
+    public function getDatetimeUtilities(): DatetimeUtilities
+    {
+        return $this->datetimeUtilities;
     }
 
     public function getSettingForUser(User $user, string $context, string $variable, bool $useCache = true): ?string

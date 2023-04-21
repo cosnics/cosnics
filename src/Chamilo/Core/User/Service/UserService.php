@@ -148,7 +148,7 @@ class UserService
     }
 
     /**
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function createUserSettingForSettingAndUser(
         string $context, string $variable, User $user, ?string $value = null

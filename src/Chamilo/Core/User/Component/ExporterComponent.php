@@ -8,22 +8,19 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Export\Export;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package user.lib.user_manager.component
  */
 class ExporterComponent extends Manager
 {
-    const EXPORT_ACTION_ADD = 'A';
-    const EXPORT_ACTION_UPDATE = 'U';
-    const EXPORT_ACTION_DELETE = 'D';
-    const EXPORT_ACTION_DEFAULT = self::EXPORT_ACTION_ADD;
+    public const EXPORT_ACTION_ADD = 'A';
+    public const EXPORT_ACTION_DEFAULT = self::EXPORT_ACTION_ADD;
+    public const EXPORT_ACTION_DELETE = 'D';
+    public const EXPORT_ACTION_UPDATE = 'U';
 
     /**
      * Runs this component and displays its output.
@@ -32,7 +29,7 @@ class ExporterComponent extends Manager
     {
         $this->checkAuthorization(Manager::context(), 'ManageUsers');
 
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -44,9 +41,9 @@ class ExporterComponent extends Manager
             $export = $form->exportValues();
             $file_type = $export['file_type'];
             $result = DataManager::retrieves(
-                User::class,
-                new DataClassRetrievesParameters());
-            foreach($result as $user)
+                User::class, new DataClassRetrievesParameters()
+            );
+            foreach ($result as $user)
             {
                 if ($file_type == 'pdf')
                 {
@@ -58,9 +55,9 @@ class ExporterComponent extends Manager
                 }
 
                 Event::trigger(
-                    'Export',
-                    Manager::context(),
-                    array('target_user_id' => $user->get_id(), 'action_user_id' => $this->get_user()->get_id()));
+                    'Export', Manager::context(),
+                    ['target_user_id' => $user->get_id(), 'action_user_id' => $this->get_user()->get_id()]
+                );
                 $data[] = $user_array;
             }
             $this->export_users($file_type, $data);
@@ -77,54 +74,21 @@ class ExporterComponent extends Manager
         }
     }
 
-    public function prepare_for_pdf_export($user)
+    public function export_users($file_type, $data)
     {
-        $lastname_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_LASTNAME)->upperCamelize());
-        $firstname_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_FIRSTNAME)->upperCamelize());
-        $username_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_USERNAME)->upperCamelize());
-        $email_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_EMAIL)->upperCamelize());
-        $language_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString('language')->upperCamelize());
-        $status_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_STATUS)->upperCamelize());
-        $active_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_ACTIVE)->upperCamelize());
-        $official_code_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_OFFICIAL_CODE)->upperCamelize());
-        $phone_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_PHONE)->upperCamelize());
-        $activation_date_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_ACTIVATION_DATE)->upperCamelize());
-        $expiration_date_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_EXPIRATION_DATE)->upperCamelize());
-        $auth_source_title = Translation::get(
-            (string) StringUtilities::getInstance()->createString(User::PROPERTY_AUTH_SOURCE)->uperCamelize());
+        $filename = 'export_users_' . date('Y-m-d_H-i-s');
+        if ($file_type == 'pdf')
+        {
+            $data = [['key' => 'users', 'data' => $data]];
+        }
+        $export = Export::factory($file_type, $data);
+        $export->set_filename($filename);
+        $export->send_to_browser();
+    }
 
-        $user_array[$lastname_title] = $user->get_lastname();
-        $user_array[$firstname_title] = $user->get_firstname();
-        $user_array[$username_title] = $user->get_username();
-        $user_array[$email_title] = $user->get_email();
-        $user_array[$language_title] = LocalSetting::getInstance()->get('platform_language');
-        $user_array[$status_title] = $user->get_status();
-        $user_array[$active_title] = $user->get_active();
-        $user_array[$official_code_title] = $user->get_official_code();
-        $user_array[$phone_title] = $user->get_phone();
-
-        $act_date = $user->get_activation_date();
-
-        $user_array[$activation_date_title] = $act_date;
-
-        $exp_date = $user->get_expiration_date();
-
-        $user_array[$expiration_date_title] = $exp_date;
-
-        $user_array[$auth_source_title] = $user->get_auth_source();
-
-        return $user_array;
+    protected function getPlatformLanguageForUser(User $user): string
+    {
+        return $this->getUserSettingService()->getSettingForUser($user, 'Chamilo\Core\Admin', 'platform_language');
     }
 
     public function prepare_for_other_export($user, $action = self::EXPORT_ACTION_DEFAULT)
@@ -137,7 +101,8 @@ class ExporterComponent extends Manager
         $user_array[User::PROPERTY_FIRSTNAME] = $user->get_firstname();
         $user_array[User::PROPERTY_USERNAME] = $user->get_username();
         $user_array[User::PROPERTY_EMAIL] = $user->get_email();
-        $user_array['language'] = LocalSetting::getInstance()->get('platform_language');
+
+        $user_array['language'] = $this->getPlatformLanguageForUser($user);
         $user_array[User::PROPERTY_STATUS] = $user->get_status();
         $user_array[User::PROPERTY_ACTIVE] = $user->get_active();
         $user_array[User::PROPERTY_OFFICIAL_CODE] = $user->get_official_code();
@@ -156,15 +121,65 @@ class ExporterComponent extends Manager
         return $user_array;
     }
 
-    public function export_users($file_type, $data)
+    public function prepare_for_pdf_export($user)
     {
-        $filename = 'export_users_' . date('Y-m-d_H-i-s');
-        if ($file_type == 'pdf')
-        {
-            $data = array(array('key' => 'users', 'data' => $data));
-        }
-        $export = Export::factory($file_type, $data);
-        $export->set_filename($filename);
-        $export->send_to_browser();
+        $lastname_title = Translation::get(
+            (string) StringUtilities::getInstance()->createString(User::PROPERTY_LASTNAME)->upperCamelize()
+        );
+        $firstname_title = Translation::get(
+            (string) StringUtilities::getInstance()->createString(User::PROPERTY_FIRSTNAME)->upperCamelize()
+        );
+        $username_title = Translation::get(
+            (string) StringUtilities::getInstance()->createString(User::PROPERTY_USERNAME)->upperCamelize()
+        );
+        $email_title = Translation::get(
+            (string) StringUtilities::getInstance()->createString(User::PROPERTY_EMAIL)->upperCamelize()
+        );
+        $language_title = Translation::get(
+            (string) StringUtilities::getInstance()->createString('language')->upperCamelize()
+        );
+        $status_title = Translation::get(
+            (string) StringUtilities::getInstance()->createString(User::PROPERTY_STATUS)->upperCamelize()
+        );
+        $active_title = Translation::get(
+            (string) StringUtilities::getInstance()->createString(User::PROPERTY_ACTIVE)->upperCamelize()
+        );
+        $official_code_title = Translation::get(
+            (string) StringUtilities::getInstance()->createString(User::PROPERTY_OFFICIAL_CODE)->upperCamelize()
+        );
+        $phone_title = Translation::get(
+            (string) StringUtilities::getInstance()->createString(User::PROPERTY_PHONE)->upperCamelize()
+        );
+        $activation_date_title = Translation::get(
+            (string) StringUtilities::getInstance()->createString(User::PROPERTY_ACTIVATION_DATE)->upperCamelize()
+        );
+        $expiration_date_title = Translation::get(
+            (string) StringUtilities::getInstance()->createString(User::PROPERTY_EXPIRATION_DATE)->upperCamelize()
+        );
+        $auth_source_title = Translation::get(
+            (string) StringUtilities::getInstance()->createString(User::PROPERTY_AUTH_SOURCE)->uperCamelize()
+        );
+
+        $user_array[$lastname_title] = $user->get_lastname();
+        $user_array[$firstname_title] = $user->get_firstname();
+        $user_array[$username_title] = $user->get_username();
+        $user_array[$email_title] = $user->get_email();
+        $user_array[$language_title] = $this->getPlatformLanguageForUser($user);
+        $user_array[$status_title] = $user->get_status();
+        $user_array[$active_title] = $user->get_active();
+        $user_array[$official_code_title] = $user->get_official_code();
+        $user_array[$phone_title] = $user->get_phone();
+
+        $act_date = $user->get_activation_date();
+
+        $user_array[$activation_date_title] = $act_date;
+
+        $exp_date = $user->get_expiration_date();
+
+        $user_array[$expiration_date_title] = $exp_date;
+
+        $user_array[$auth_source_title] = $user->get_auth_source();
+
+        return $user_array;
     }
 }

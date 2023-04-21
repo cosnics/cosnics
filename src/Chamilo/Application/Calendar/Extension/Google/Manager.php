@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
+    public const CONTEXT = __NAMESPACE__;
     public const ACTION_LOGIN = 'Login';
     public const ACTION_LOGOUT = 'Logout';
 

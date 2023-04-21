@@ -107,11 +107,6 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
             'Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\ExternalCalendarCacheService'
         )
         );
-
-        $cacheManager->addCacheService(
-            'chamilo_local_settings',
-            $this->container->get('Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService')
-        );
     }
 
     public function createCacheServices(CacheManager $cacheManager)

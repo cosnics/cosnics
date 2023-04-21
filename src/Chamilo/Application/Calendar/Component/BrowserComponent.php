@@ -20,21 +20,18 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class BrowserComponent extends Manager implements DelegateComponent
 {
 
     /**
-     *
      * @var JumpForm
      */
     private $form;
@@ -86,12 +83,12 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         if (!isset($this->calendarDataProvider))
         {
-            $displayParameters = array(
+            $displayParameters = [
                 self::PARAM_CONTEXT => self::package(),
                 self::PARAM_ACTION => self::ACTION_BROWSE,
                 HtmlCalendarRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
                 HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
-            );
+            ];
 
             $this->calendarDataProvider = new CalendarRendererProvider(
                 new CalendarRendererProviderRepository(), $this->get_user(), $displayParameters,
@@ -112,12 +109,12 @@ class BrowserComponent extends Manager implements DelegateComponent
         $buttonGroup = new ButtonGroup();
 
         $printUrl = new Redirect(
-            array(
+            [
                 self::PARAM_CONTEXT => self::package(),
                 self::PARAM_ACTION => self::ACTION_PRINT,
                 HtmlCalendarRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
                 HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
-            )
+            ]
         );
 
         $buttonGroup->addButton(
@@ -127,7 +124,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         $iCalUrl = new Redirect(
-            array(Application::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => Manager::ACTION_ICAL)
+            [Application::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => Manager::ACTION_ICAL]
         );
 
         $buttonGroup->addButton(
@@ -135,11 +132,11 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         $settingsUrl = new Redirect(
-            array(
+            [
                 Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
                 Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_USER_SETTINGS,
                 UserSettingsComponent::PARAM_CONTEXT => 'Chamilo\Libraries\Calendar'
-            )
+            ]
         );
 
         $splitDropdownButton = new SplitDropdownButton(
@@ -148,7 +145,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         $availabilityUrl = new Redirect(
-            array(Application::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => Manager::ACTION_AVAILABILITY)
+            [Application::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => Manager::ACTION_AVAILABILITY]
         );
 
         $splitDropdownButton->addSubButton(
@@ -204,6 +201,5 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->getCalendarDataProvider(), $this->getCurrentRendererTime(), $this->getViewActions()
         );
     }
-
 
 }

@@ -33,7 +33,6 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Mail\ValueObject\MailFile;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -516,6 +515,11 @@ class ContentObjectPublicationForm extends BasePublicationForm
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ThemePathBuilder::class);
     }
 
+    protected function getUser(): ?User
+    {
+        return $this->getService(User::class);
+    }
+
     /**
      * Gets the categories for the current tool and course recursively
      *
@@ -856,8 +860,8 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
             if ($this->collaborate_possible && !$force_collaborate)
             {
-                $collaborateDefault = LocalSetting:: getInstance()->get(
-                    'collaborate_default', Manager:: package()
+                $collaborateDefault = $this->getUserSettingService()->getSettingForUser(
+                    $this->getUser(), Manager::CONTEXT, 'collaborate_default'
                 );
 
                 $defaults[ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] =

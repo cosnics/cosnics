@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
+use Chamilo\Core\Repository\Processor\Ckeditor\Processor;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -41,9 +41,7 @@ class HtmlEditorFileComponent extends Manager
         }
         else
         {
-            $processor = HtmlEditorProcessor::factory(
-                $plugin, $this, \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
-            );
+            $processor = new Processor($this, \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects());
 
             $html = [];
 

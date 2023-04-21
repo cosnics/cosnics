@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Utilities;
 
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use DateTime;
 use DateTimeZone;
 use Symfony\Component\Translation\Translator;
@@ -53,11 +52,9 @@ class DatetimeUtilities
 
         if (!$timezone)
         {
-            $timezone = LocalSetting::getInstance()->get('platform_timezone');
-            if (!$timezone)
-            {
-                return $this->formatLocaleDate($format, $date);
-            }
+            $date_time = new DateTime($date);
+
+            return $this->formatLocaleDate($format, (int) $date_time);
         }
 
         $date_time_zone = new DateTimeZone($timezone);

@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Common\Includes\Type;
 
 use Chamilo\Core\Repository\Common\Includes\ContentObjectIncludeParser;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
+use Chamilo\Core\Repository\Processor\Ckeditor\Processor;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -35,7 +35,7 @@ class IncludeEmbedParser extends ContentObjectIncludeParser
                 foreach ($tags as $tag)
                 {
                     $source = $tag->getAttribute('src');
-                    $matches = preg_match(HtmlEditorProcessor::get_repository_document_display_matching_url(), $source);
+                    $matches = preg_match(Processor::get_repository_document_display_matching_url(), $source);
 
                     if ($matches === 1)
                     {

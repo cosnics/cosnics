@@ -3,11 +3,10 @@ namespace Chamilo\Core\Admin\Form;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Core\Admin\Storage\DataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -19,9 +18,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
 
 /**
- *
  * @package admin.lib
- * @author Hans De Bisschop
+ * @author  Hans De Bisschop
  */
 
 /**
@@ -30,9 +28,9 @@ use DOMDocument;
 class ConfigurationForm extends FormValidator
 {
 
-    private $context;
-
     private $configuration;
+
+    private $context;
 
     private $is_user_setting_form;
 
@@ -40,11 +38,13 @@ class ConfigurationForm extends FormValidator
      * Constructor.
      *
      * @param $application string The name of the application.
-     * @param $form_name string The name to use in the form tag.
-     * @param $method string The method to use (self::FORM_METHOD_POST or self::FORM_METHOD_GET).
-     * @param $action string The URL to which the form should be submitted.
+     * @param $form_name   string The name to use in the form tag.
+     * @param $method      string The method to use (self::FORM_METHOD_POST or self::FORM_METHOD_GET).
+     * @param $action      string The URL to which the form should be submitted.
      */
-    public function __construct($context, $form_name, $method = self::FORM_METHOD_POST, $action = null, $is_user_setting_form = false)
+    public function __construct(
+        $context, $form_name, $method = self::FORM_METHOD_POST, $action = null, $is_user_setting_form = false
+    )
     {
         parent::__construct($form_name, $method, $action);
 
@@ -211,7 +211,7 @@ class ConfigurationForm extends FormValidator
                                 'select', $name, Translation::get(
                                 (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), null,
                                 $context
-                            ), $options, array('class' => 'form-control')
+                            ), $options, ['class' => 'form-control']
                             );
                         }
                     }
@@ -241,6 +241,11 @@ class ConfigurationForm extends FormValidator
         }
     }
 
+    protected function getUser(): ?User
+    {
+        return $this->getService(User::class);
+    }
+
     protected function isHidden($setting)
     {
         return isset($setting['hidden']) && ($setting['hidden'] == 1 || $setting['hidden'] == 'true');
@@ -258,7 +263,7 @@ class ConfigurationForm extends FormValidator
 
     private function is_valid_validation_method($validation_method)
     {
-        $available_validation_methods = array('regex', 'email', 'lettersonly', 'alphanumeric', 'numeric');
+        $available_validation_methods = ['regex', 'email', 'lettersonly', 'alphanumeric', 'numeric'];
 
         return in_array($validation_method, $available_validation_methods);
     }
@@ -288,7 +293,7 @@ class ConfigurationForm extends FormValidator
 
                 // Get settings in category
                 $properties = $category->getElementsByTagname('setting');
-                $attributes = array('field', 'default', 'locked', 'user_setting', 'hidden');
+                $attributes = ['field', 'default', 'locked', 'user_setting', 'hidden'];
 
                 foreach ($properties as $index => $property)
                 {
@@ -308,7 +313,7 @@ class ConfigurationForm extends FormValidator
 
                         if ($property_options)
                         {
-                            $property_options_attributes = array('type', 'source');
+                            $property_options_attributes = ['type', 'source'];
 
                             foreach ($property_options_attributes as $index => $options_attribute)
                             {
@@ -343,11 +348,11 @@ class ConfigurationForm extends FormValidator
                                 $validation_info = [];
                                 foreach ($validations as $validation)
                                 {
-                                    $validation_info[] = array(
+                                    $validation_info[] = [
                                         'rule' => $validation->getAttribute('rule'),
                                         'message' => $validation->getAttribute('message'),
                                         'format' => $validation->getAttribute('format')
-                                    );
+                                    ];
                                 }
                                 $property_info['validations'] = $validation_info;
                             }
@@ -357,7 +362,7 @@ class ConfigurationForm extends FormValidator
 
                         if ($property_availability)
                         {
-                            $property_availability_attributes = array('source');
+                            $property_availability_attributes = ['source'];
 
                             foreach ($property_availability_attributes as $index => $availability_attribute)
                             {
@@ -401,11 +406,12 @@ class ConfigurationForm extends FormValidator
             {
                 if ($setting['user_setting'] && $this->is_user_setting_form)
                 {
-                    $configuration_value = LocalSetting::getInstance()->get($name, $this->context);
+                    $configuration_value =
+                        $this->getUserSettingService()->getSettingForUser($this->getUser(), $this->context, $name);
                 }
                 else
                 {
-                    $configuration_value = Configuration::getInstance()->get_setting(array($this->context, $name));
+                    $configuration_value = Configuration::getInstance()->get_setting([$this->context, $name]);
                 }
 
                 if (isset($configuration_value) && ($configuration_value == 0 || !empty($configuration_value)))
@@ -423,7 +429,6 @@ class ConfigurationForm extends FormValidator
     }
 
     /**
-     *
      * @param $setting array
      */
     public function setting_is_available(array $setting)
@@ -447,7 +452,7 @@ class ConfigurationForm extends FormValidator
                         ));
                     if ($availability_method_exists)
                     {
-                        return call_user_func(array($connector_class, $setting['availability']['source']));
+                        return call_user_func([$connector_class, $setting['availability']['source']]);
                     }
                     else
                     {
@@ -473,7 +478,7 @@ class ConfigurationForm extends FormValidator
     /**
      * Updates the configuration.
      *
-     * @return boolean True if the update succeeded, false otherwise.
+     * @return bool True if the update succeeded, false otherwise.
      */
     public function update_configuration()
     {
@@ -608,7 +613,7 @@ class ConfigurationForm extends FormValidator
             }
         }
 
-        LocalSetting::getInstance()->resetCache();
+        $this->getUserSettingService()->clearSettingsCacheforUser($this->getUser());
 
         if ($problems > 0)
         {

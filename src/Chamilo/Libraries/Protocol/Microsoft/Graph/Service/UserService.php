@@ -1,41 +1,32 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
+use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository;
 
 /**
- *
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserService
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository
-     */
-    protected $userRepository;
+    protected UserRepository $userRepository;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Platform\Configuration\LocalSetting
-     */
-    protected $localSetting;
+    protected \Chamilo\Core\User\Service\UserService $userService;
 
-    /**
-     * UserService constructor
-     *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository $userRepository
-     * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSetting
-     */
-    public function __construct(UserRepository $userRepository, LocalSetting $localSetting)
+    protected UserSettingService $userSettingService;
+
+    public function __construct(
+        UserRepository $userRepository, \Chamilo\Core\User\Service\UserService $userService,
+        UserSettingService $userSettingService
+    )
     {
-        $this->setUserRepository($userRepository);
-        $this->setLocalSetting($localSetting);
+        $this->userRepository = $userRepository;
+        $this->userService = $userService;
+        $this->userSettingService = $userSettingService;
     }
 
     /**
@@ -54,12 +45,12 @@ class UserService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return string
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function getAzureUserIdentifier(User $user)
+    public function getAzureUserIdentifier(User $user): string
     {
-        $azureActiveDirectoryUserIdentifier = $this->getLocalSetting()->get(
-            'external_user_id', 'Chamilo\Libraries\Protocol\Microsoft\Graph', $user
+        $azureActiveDirectoryUserIdentifier = $this->getUserSettingService()->getSettingForUser(
+            $user, 'Chamilo\Libraries\Protocol\Microsoft\Graph', 'external_user_id'
         );
 
         if (empty($azureActiveDirectoryUserIdentifier))
@@ -71,48 +62,28 @@ class UserService
                 $azureActiveDirectoryUserIdentifier = $azureUser->getId();
             }
 
-            $this->getLocalSetting()->create(
-                'external_user_id', $azureActiveDirectoryUserIdentifier, 'Chamilo\Libraries\Protocol\Microsoft\Graph',
-                $user
+            $this->getUserService()->createUserSettingForSettingAndUser(
+                'Chamilo\Libraries\Protocol\Microsoft\Graph', 'external_user_id', $user,
+                $azureActiveDirectoryUserIdentifier
             );
         }
 
         return $azureActiveDirectoryUserIdentifier;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Platform\Configuration\LocalSetting
-     */
-    protected function getLocalSetting()
-    {
-        return $this->localSetting;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSetting
-     */
-    protected function setLocalSetting(LocalSetting $localSetting)
-    {
-        $this->localSetting = $localSetting;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository
-     */
-    protected function getUserRepository()
+    public function getUserRepository(): UserRepository
     {
         return $this->userRepository;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository $userRepository
-     */
-    protected function setUserRepository(UserRepository $userRepository)
+    public function getUserService(): \Chamilo\Core\User\Service\UserService
     {
-        $this->userRepository = $userRepository;
+        return $this->userService;
     }
+
+    public function getUserSettingService(): UserSettingService
+    {
+        return $this->userSettingService;
+    }
+
 }

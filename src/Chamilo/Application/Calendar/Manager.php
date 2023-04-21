@@ -3,14 +3,12 @@ namespace Chamilo\Application\Calendar;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use DateTime;
 use Mobile_Detect;
 
 /**
- *
  * @package application\calendar
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends Application
 {
@@ -27,19 +25,16 @@ abstract class Manager extends Application
     public const PARAM_VIEW = 'view';
 
     /**
-     *
      * @var int
      */
     private $currentTime;
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer
      */
     private $tabs;
 
     /**
-     *
      * @return int
      */
     public function getCurrentRendererTime()
@@ -58,7 +53,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return string
      */
     public function getCurrentRendererType()
@@ -67,7 +61,9 @@ abstract class Manager extends Application
 
         if (!$rendererType)
         {
-            $rendererType = LocalSetting::getInstance()->get('default_view', 'Chamilo\Libraries\Calendar');
+            $rendererType = $this->getUserSettingService()->getSettingForUser(
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'default_view'
+            );
 
             if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH)
             {
@@ -83,7 +79,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @param int $currentTime
      */
     public function setCurrentRendererTime($currentTime)

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Service\IncludeParser;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
-use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
+use Chamilo\Core\Repository\Processor\Ckeditor\Processor;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Utilities\String\Text;
 
@@ -41,7 +41,7 @@ class IncludeEmbedParser extends IncludeTagParser
      */
     protected function isValidSource($source)
     {
-        $matches = preg_match(HtmlEditorProcessor::get_repository_document_display_matching_url(), $source);
+        $matches = preg_match(Processor::get_repository_document_display_matching_url(), $source);
 
         return $matches === 1;
     }

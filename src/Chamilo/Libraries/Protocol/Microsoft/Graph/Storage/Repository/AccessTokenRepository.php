@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use League\OAuth2\Client\Token\AccessToken;
 
@@ -9,46 +11,35 @@ use League\OAuth2\Client\Token\AccessToken;
  * Storage solution for the Graph access token
  *
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class AccessTokenRepository implements AccessTokenRepositoryInterface
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Platform\Configuration\LocalSetting
-     */
-    protected $localSetting;
+    protected SessionUtilities $sessionUtilities;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
-     */
-    protected $sessionUtilities;
+    protected User $user;
 
-    /**
-     * AccessTokenRepository constructor.
-     *
-     * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSetting
-     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
-     */
+    protected UserSettingService $userSettingService;
+
+    protected UserService $userservice;
+
     public function __construct(
-        LocalSetting $localSetting, SessionUtilities $sessionUtilities
+        User $user, UserService $userservice, UserSettingService $userSettingService, SessionUtilities $sessionUtilities
     )
     {
-        $this->localSetting = $localSetting;
+        $this->user = $user;
+        $this->userservice = $userservice;
+        $this->userSettingService = $userSettingService;
         $this->sessionUtilities = $sessionUtilities;
     }
 
-    /**
-     * Returns the application access token
-     *
-     * @return AccessToken
-     */
-    public function getApplicationAccessToken()
+    public function getApplicationAccessToken(): ?AccessToken
     {
-        $accessTokenData = $this->localSetting->get('access_token', 'Chamilo\Libraries\Protocol\Microsoft\Graph');
+        $accessTokenData = $this->getUserSettingService()->getSettingForUser(
+            $this->getUser(), 'Chamilo\Libraries\Protocol\Microsoft\Graph', 'access_token'
+        );
 
         if (empty($accessTokenData))
         {
@@ -58,14 +49,9 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
         return new AccessToken(json_decode($accessTokenData, true));
     }
 
-    /**
-     * Returns the delegated access token
-     *
-     * @return AccessToken
-     */
-    public function getDelegatedAccessToken()
+    public function getDelegatedAccessToken(): ?AccessToken
     {
-        $accessTokenData = $this->sessionUtilities->get('graph_delegated_access_token');
+        $accessTokenData = $this->getSessionUtilities()->get('graph_delegated_access_token');
 
         if (empty($accessTokenData))
         {
@@ -75,15 +61,34 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
         return new AccessToken(json_decode($accessTokenData, true));
     }
 
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return $this->sessionUtilities;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function getUserSettingService(): UserSettingService
+    {
+        return $this->userSettingService;
+    }
+
+    public function getUserservice(): UserService
+    {
+        return $this->userservice;
+    }
+
     /**
-     * Stores the application access token
-     *
-     * @param \League\OAuth2\Client\Token\AccessToken $accessToken
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function storeApplicationAccessToken(AccessToken $accessToken)
     {
-        $this->localSetting->create(
-            'access_token', json_encode($accessToken->jsonSerialize()), 'Chamilo\Libraries\Protocol\Microsoft\Graph'
+        $this->getUserservice()->createUserSettingForSettingAndUser(
+            'Chamilo\Libraries\Protocol\Microsoft\Graph', 'access_token', $this->getUser(),
+            json_encode($accessToken->jsonSerialize())
         );
     }
 

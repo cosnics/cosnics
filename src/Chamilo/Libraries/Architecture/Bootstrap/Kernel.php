@@ -435,7 +435,7 @@ class Kernel
                     $this->getRequest()->query->get(Application::PARAM_ACTION) != 'LeaveComponent')
                 {
                     Event::trigger(
-                        'Enter', Manager::context(), [
+                        'Enter', Manager::CONTEXT, [
                             Visit::PROPERTY_LOCATION => $_SERVER['REQUEST_URI'],
                             Visit::PROPERTY_USER_ID => $this->getUser()->getId()
                         ]
