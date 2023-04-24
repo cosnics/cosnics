@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Repository\Service;
 
 use Chamilo\Core\Repository\Storage\Repository\TemplateRegistrationRepository;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;
-use Chamilo\Libraries\Cache\Traits\SimpleCacheDataLoaderTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheDataPreLoaderTrait;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -14,10 +14,10 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class TemplateRegistrationCacheDataLoader implements CacheDataLoaderInterface
+class TemplateRegistrationCacheDataPreLoader implements CacheDataPreLoaderInterface
 {
     use SimpleCacheAdapterHandlerTrait;
-    use SimpleCacheDataLoaderTrait;
+    use SimpleCacheDataPreLoaderTrait;
 
     public const REGISTRATION_DEFAULT = 2;
     public const REGISTRATION_ID = 1;

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Service\Consulter;
 
-use Chamilo\Configuration\Service\DataLoader\LanguageCacheDataLoader;
+use Chamilo\Configuration\Service\DataLoader\LanguageCacheDataPreLoader;
 
 /**
  * @package Chamilo\Configuration\Service\Consulter
@@ -10,16 +10,16 @@ use Chamilo\Configuration\Service\DataLoader\LanguageCacheDataLoader;
  */
 class LanguageConsulter
 {
-    protected LanguageCacheDataLoader $languageCacheDataLoader;
+    protected LanguageCacheDataPreLoader $languageCacheDataPreLoader;
 
-    public function __construct(LanguageCacheDataLoader $languageCacheDataLoader)
+    public function __construct(LanguageCacheDataPreLoader $languageCacheDataPreLoader)
     {
-        $this->languageCacheDataLoader = $languageCacheDataLoader;
+        $this->languageCacheDataPreLoader = $languageCacheDataPreLoader;
     }
 
-    public function getLanguageCacheDataLoader(): LanguageCacheDataLoader
+    public function getLanguageCacheDataPreLoader(): LanguageCacheDataPreLoader
     {
-        return $this->languageCacheDataLoader;
+        return $this->languageCacheDataPreLoader;
     }
 
     public function getLanguageNameFromIsocode(string $isocode): string
@@ -34,7 +34,7 @@ class LanguageConsulter
      */
     public function getLanguages(): array
     {
-        return $this->getLanguageCacheDataLoader()->getLanguages();
+        return $this->getLanguageCacheDataPreLoader()->getLanguages();
     }
 
     /**

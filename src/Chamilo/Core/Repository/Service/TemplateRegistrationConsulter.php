@@ -13,13 +13,13 @@ class TemplateRegistrationConsulter
 {
     protected StringUtilities $stringUtilities;
 
-    protected TemplateRegistrationCacheDataLoader $templateRegistrationCacheDataLoader;
+    protected TemplateRegistrationCacheDataPreLoader $templateRegistrationCacheDataPreLoader;
 
     public function __construct(
-        TemplateRegistrationCacheDataLoader $templateRegistrationCacheDataLoader, StringUtilities $stringUtilities
+        TemplateRegistrationCacheDataPreLoader $templateRegistrationCacheDataPreLoader, StringUtilities $stringUtilities
     )
     {
-        $this->templateRegistrationCacheDataLoader = $templateRegistrationCacheDataLoader;
+        $this->templateRegistrationCacheDataPreLoader = $templateRegistrationCacheDataPreLoader;
         $this->stringUtilities = $stringUtilities;
     }
 
@@ -33,12 +33,12 @@ class TemplateRegistrationConsulter
      */
     public function getTemplateRegistrationByIdentifier(int $identifier): ?TemplateRegistration
     {
-        return $this->getTemplateRegistrations()[TemplateRegistrationCacheDataLoader::REGISTRATION_ID][$identifier];
+        return $this->getTemplateRegistrations()[TemplateRegistrationCacheDataPreLoader::REGISTRATION_ID][$identifier];
     }
 
-    public function getTemplateRegistrationCacheDataLoader(): TemplateRegistrationCacheDataLoader
+    public function getTemplateRegistrationCacheDataPreLoader(): TemplateRegistrationCacheDataPreLoader
     {
-        return $this->templateRegistrationCacheDataLoader;
+        return $this->templateRegistrationCacheDataPreLoader;
     }
 
     /**
@@ -46,7 +46,7 @@ class TemplateRegistrationConsulter
      */
     public function getTemplateRegistrationDefaultByType(string $type): ?TemplateRegistration
     {
-        return $this->getTemplateRegistrations()[TemplateRegistrationCacheDataLoader::REGISTRATION_DEFAULT][$type];
+        return $this->getTemplateRegistrations()[TemplateRegistrationCacheDataPreLoader::REGISTRATION_DEFAULT][$type];
     }
 
     /**
@@ -55,7 +55,7 @@ class TemplateRegistrationConsulter
      */
     public function getTemplateRegistrations(): array
     {
-        return $this->getTemplateRegistrationCacheDataLoader()->getTemplateRegistrations();
+        return $this->getTemplateRegistrationCacheDataPreLoader()->getTemplateRegistrations();
     }
 
     /**
@@ -71,7 +71,7 @@ class TemplateRegistrationConsulter
         foreach ($types as $type)
         {
             $commonTemplateRegistrations =
-                (array) $templateRegistrations[TemplateRegistrationCacheDataLoader::REGISTRATION_USER_ID][0][$type];
+                (array) $templateRegistrations[TemplateRegistrationCacheDataPreLoader::REGISTRATION_USER_ID][0][$type];
 
             if (count($commonTemplateRegistrations) > 0)
             {
@@ -82,7 +82,7 @@ class TemplateRegistrationConsulter
             if ($user_id)
             {
                 $userTemplateRegistrations =
-                    (array) $templateRegistrations[TemplateRegistrationCacheDataLoader::REGISTRATION_USER_ID][$user_id][$type];
+                    (array) $templateRegistrations[TemplateRegistrationCacheDataPreLoader::REGISTRATION_USER_ID][$user_id][$type];
 
                 if (count($userTemplateRegistrations) > 0)
                 {

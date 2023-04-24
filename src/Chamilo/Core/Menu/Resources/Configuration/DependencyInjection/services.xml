@@ -11,12 +11,9 @@
         <service id="Chamilo\Core\Menu\Factory\ItemRendererFactory"/>
 
         <service id="Chamilo\Core\Menu\Service\ItemService">
-            <argument key="$cacheAdapter"
-                      type="service"
-                      id="Chamilo\Core\Menu\Cache\ItemCacheProvider"/>
             <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>
         </service>
-        <service id="Chamilo\Core\Menu\Service\ItemCacheService">
+        <service id="Chamilo\Core\Menu\Service\CachedItemService">
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Core\Menu\Cache\ItemCacheProvider"/>

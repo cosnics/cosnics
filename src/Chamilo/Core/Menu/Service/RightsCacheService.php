@@ -3,8 +3,7 @@ namespace Chamilo\Core\Menu\Service;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Exception;
-use Psr\Cache\InvalidArgumentException;
+use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
@@ -13,8 +12,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  */
 class RightsCacheService
 {
-
-    private AdapterInterface $cacheAdapter;
+    use CacheAdapterHandlerTrait;
 
     private ItemService $itemService;
 
@@ -27,6 +25,9 @@ class RightsCacheService
         $this->cacheAdapter = $cacheAdapter;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function canUserViewItem(User $user, Item $item): bool
     {
         if (!$item->isIdentified())
@@ -34,36 +35,14 @@ class RightsCacheService
             return true;
         }
 
-        $cacheAdapter = $this->getCacheAdapter();
+        $userRights = $this->getUserRightsForAllItems($user);
 
-        try
-        {
-            $cacheItem = $cacheAdapter->getItem($user->getId());
-
-            if (!$cacheItem->isHit())
-            {
-                $cacheItem->set($this->getUserRightsForAllItems($user));
-                $cacheAdapter->save($cacheItem);
-            }
-
-            $userRights = $cacheItem->get();
-
-            return $userRights[$item->getId()];
-        }
-        catch (Exception|InvalidArgumentException $exception)
-        {
-            return false;
-        }
+        return $userRights[$item->getId()];
     }
 
     public function clear(): bool
     {
-        return $this->getCacheAdapter()->clear();
-    }
-
-    public function getCacheAdapter(): AdapterInterface
-    {
-        return $this->cacheAdapter;
+        return $this->clearAllCacheData();
     }
 
     public function getItemService(): ItemService
@@ -78,19 +57,27 @@ class RightsCacheService
 
     /**
      * @return bool[]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Exception
      */
     protected function getUserRightsForAllItems(User $user): array
     {
-        $items = $this->getItemService()->findItems();
-        $itemRights = [];
+        $cacheIdentifier = $this->getCacheKeyForParts([__CLASS__, __METHOD__, $user->getId()]);
 
-        foreach ($items as $item)
+        if (!$this->hasCacheDataForKey($cacheIdentifier))
         {
-            $itemRights[$item->getId()] = $this->getRightsService()->canUserViewItem($user, $item);
+            $items = $this->getItemService()->findItems();
+            $itemRights = [];
+
+            foreach ($items as $item)
+            {
+                $itemRights[$item->getId()] = $this->getRightsService()->canUserViewItem($user, $item);
+            }
+
+            $this->saveCacheDataForKey($cacheIdentifier, $itemRights);
         }
 
-        return $itemRights;
+        return $this->readCacheDataForKey($cacheIdentifier);
     }
 
     public function setCacheAdapter(AdapterInterface $cacheAdapter): void

@@ -6,7 +6,6 @@ use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
 use Google_Service_Calendar_Events;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
@@ -41,42 +40,32 @@ class EventsCacheService
         return $this->calendarRepository;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function getEventsForCalendarIdentifierAndBetweenDates(string $calendarIdentifier, $fromDate, $toDate
     ): Google_Service_Calendar_Events
     {
-        $cacheAdapter = $this->getCacheAdapter();
         $calendarRepository = $this->getCalendarRepository();
 
-        $cacheIdentifier = md5(
-            serialize([$calendarRepository->getAccessToken(), __METHOD__, $calendarIdentifier, $fromDate, $toDate])
+        $cacheIdentifier = $this->getCacheKeyForParts(
+            [$calendarRepository->getAccessToken(), __METHOD__, $calendarIdentifier, $fromDate, $toDate]
         );
 
-        try
+        if (!$this->hasCacheDataForKey($cacheIdentifier))
         {
-            $cacheItem = $cacheAdapter->getItem($cacheIdentifier);
+            $lifetimeInMinutes = $this->getUserSettingService()->getSettingForUser(
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'refresh_external'
+            );
 
-            if (!$cacheItem->isHit())
-            {
-                $lifetimeInMinutes = $this->getUserSettingService()->getSettingForUser(
-                    $this->getUser(), 'Chamilo\Libraries\Calendar', 'refresh_external'
-                );
-
-                $cacheItem->set(
-                    $calendarRepository->findEventsForCalendarIdentifierAndBetweenDates(
-                        $calendarIdentifier, $fromDate, $toDate
-                    )
-                );
-
-                $cacheItem->expiresAfter($lifetimeInMinutes * 60);
-                $cacheAdapter->save($cacheItem);
-            }
-
-            return $cacheItem->get();
+            $this->saveCacheDataForKey(
+                $cacheIdentifier, $calendarRepository->findEventsForCalendarIdentifierAndBetweenDates(
+                $calendarIdentifier, $fromDate, $toDate
+            ), $lifetimeInMinutes * 60
+            );
         }
-        catch (InvalidArgumentException $e)
-        {
-            return new Google_Service_Calendar_Events();
-        }
+
+        return $this->readCacheDataForKey($cacheIdentifier);
     }
 
     public function getUser(): User

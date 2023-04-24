@@ -3,9 +3,9 @@ namespace Chamilo\Configuration\Service\DataLoader;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;
-use Chamilo\Libraries\Cache\Traits\SimpleCacheDataLoaderTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheDataPreLoaderTrait;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -14,10 +14,10 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class RegistrationCacheDataLoader implements CacheDataLoaderInterface
+class RegistrationCacheDataPreLoader implements CacheDataPreLoaderInterface
 {
     use SimpleCacheAdapterHandlerTrait;
-    use SimpleCacheDataLoaderTrait;
+    use SimpleCacheDataPreLoaderTrait;
 
     public const REGISTRATION_CONTEXT = 1;
     public const REGISTRATION_INTEGRATION = 3;

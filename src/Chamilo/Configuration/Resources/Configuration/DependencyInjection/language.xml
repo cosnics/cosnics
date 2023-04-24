@@ -21,12 +21,12 @@
         </service>
 
         <service id="Chamilo\Configuration\Service\Consulter\LanguageConsulter">
-            <argument key="$dataReader"
+            <argument key="$languageCacheDataPreLoader"
                       type="service"
-                      id="Chamilo\Configuration\Service\DataLoader\LanguageCacheDataLoader"/>
+                      id="Chamilo\Configuration\Service\DataLoader\LanguageCacheDataPreLoader"/>
         </service>
 
-        <service id="Chamilo\Configuration\Service\DataLoader\LanguageCacheDataLoader">
+        <service id="Chamilo\Configuration\Service\DataLoader\LanguageCacheDataPreLoader">
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Configuration\Service\DataLoader\LanguageCacheAdapter"/>

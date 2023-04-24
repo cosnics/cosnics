@@ -5,7 +5,6 @@ use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
@@ -42,37 +41,26 @@ class OwnedCalendarsCacheService
 
     /**
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getOwnedCalendars(): array
     {
-        $cacheAdapter = $this->getCacheAdapter();
         $calendarRepository = $this->getCalendarRepository();
 
-        $cacheIdentifier = md5(
-            serialize([$calendarRepository->getAccessToken(), __METHOD__])
-        );
+        $cacheIdentifier = $this->getCacheKeyForParts([$calendarRepository->getAccessToken(), __METHOD__]);
 
-        try
+        if (!$this->hasCacheDataForKey($cacheIdentifier))
         {
-            $cacheItem = $cacheAdapter->getItem($cacheIdentifier);
+            $lifetimeInMinutes = $this->getUserSettingService()->getSettingForUser(
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'refresh_external'
+            );
 
-            if (!$cacheItem->isHit())
-            {
-                $lifetimeInMinutes = $this->getUserSettingService()->getSettingForUser(
-                    $this->getUser(), 'Chamilo\Libraries\Calendar', 'refresh_external'
-                );
-
-                $cacheItem->set($this->getCalendarRepository()->findOwnedCalendars());
-                $cacheItem->expiresAfter($lifetimeInMinutes * 60);
-                $cacheAdapter->save($cacheItem);
-            }
-
-            return $cacheItem->get();
+            $this->saveCacheDataForKey(
+                $cacheIdentifier, $this->getCalendarRepository()->findOwnedCalendars(), $lifetimeInMinutes * 60
+            );
         }
-        catch (InvalidArgumentException $e)
-        {
-            return [];
-        }
+
+        return $this->readCacheDataForKey($cacheIdentifier);
     }
 
     public function getUser(): User

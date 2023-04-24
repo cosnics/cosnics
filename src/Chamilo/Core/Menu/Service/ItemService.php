@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Service;
 
+use Chamilo\Core\Menu\Architecture\Interfaces\ItemServiceInterface;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
@@ -9,7 +10,6 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -18,7 +18,7 @@ use Symfony\Component\Translation\Translator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ItemService
+class ItemService implements ItemServiceInterface
 {
     public const PARAM_DIRECTION_DOWN = 2;
     public const PARAM_DIRECTION_UP = 1;
@@ -27,8 +27,6 @@ class ItemService
      * @var string[]
      */
     protected array $fallbackIsoCodes;
-
-    private AdapterInterface $cacheAdapter;
 
     private DisplayOrderHandler $displayOrderHandler;
 
@@ -45,7 +43,7 @@ class ItemService
     public function __construct(
         ItemRepository $itemRepository, RightsService $rightsService, StringUtilities $stringUtilities,
         PropertyMapper $propertyMapper, Translator $translator, DisplayOrderHandler $displayOrderHandler,
-        AdapterInterface $cacheAdapter, array $fallbackIsoCodes
+        array $fallbackIsoCodes
     )
     {
         $this->itemRepository = $itemRepository;
@@ -54,7 +52,6 @@ class ItemService
         $this->propertyMapper = $propertyMapper;
         $this->translator = $translator;
         $this->displayOrderHandler = $displayOrderHandler;
-        $this->cacheAdapter = $cacheAdapter;
         $this->fallbackIsoCodes = $fallbackIsoCodes;
     }
 
@@ -83,8 +80,6 @@ class ItemService
         {
             return false;
         }
-
-        $this->getCacheAdapter()->delete(ItemCacheService::KEY_ITEMS);
 
         return true;
     }
@@ -136,8 +131,6 @@ class ItemService
         {
             return false;
         }
-
-        $this->getCacheAdapter()->delete(ItemCacheService::KEY_ITEM_TITLES);
 
         return true;
     }
@@ -233,8 +226,6 @@ class ItemService
             return false;
         }
 
-        $this->getCacheAdapter()->delete(ItemCacheService::KEY_ITEMS);
-
         return true;
     }
 
@@ -265,8 +256,6 @@ class ItemService
             return false;
         }
 
-        $this->getCacheAdapter()->delete(ItemCacheService::KEY_ITEM_TITLES);
-
         return true;
     }
 
@@ -276,8 +265,6 @@ class ItemService
         {
             return false;
         }
-
-        $this->getCacheAdapter()->delete(ItemCacheService::KEY_ITEM_TITLES);
 
         return true;
     }
@@ -357,6 +344,38 @@ class ItemService
     }
 
     /**
+     * @return \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][][]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findItemTitlesGroupedByItemIdentifierAndIsocode(): array
+    {
+        $itemTitles = $this->findItemTitles();
+        $groupedItemTitles = [];
+
+        /**
+         * @var \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[][] $itemTitlesGroupedByIdentifiers
+         */
+        $itemTitlesGroupedByIdentifiers =
+            $this->getPropertyMapper()->groupDataClassByProperty($itemTitles, ItemTitle::PROPERTY_ITEM_ID);
+
+        foreach ($itemTitlesGroupedByIdentifiers as $itemIdentifier => $itemTitlesGroupedByIdentifier)
+        {
+            foreach ($itemTitlesGroupedByIdentifier as $itemTitle)
+
+            {
+                if (!array_key_exists($itemIdentifier, $groupedItemTitles))
+                {
+                    $groupedItemTitles[$itemIdentifier] = [];
+                }
+
+                $groupedItemTitles[$itemIdentifier][$itemTitle->getIsocode()] = $itemTitle;
+            }
+        }
+
+        return $groupedItemTitles;
+    }
+
+    /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
@@ -395,6 +414,17 @@ class ItemService
     }
 
     /**
+     * @return \Chamilo\Core\Menu\Storage\DataClass\Item[][]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function findItemsGroupedByParentIdentifier(): array
+    {
+        return $this->getPropertyMapper()->groupDataClassByProperty(
+            $this->findItems(), Item::PROPERTY_PARENT
+        );
+    }
+
+    /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\CategoryItem>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
@@ -410,11 +440,6 @@ class ItemService
     public function findRootItems(): ArrayCollection
     {
         return $this->findItemsByParentIdentifier('0');
-    }
-
-    public function getCacheAdapter(): AdapterInterface
-    {
-        return $this->cacheAdapter;
     }
 
     /**
@@ -462,17 +487,13 @@ class ItemService
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item
-     */
-
-    /**
      * @template getItemTypeInstance
      *
      * @param class-string<getItemTypeInstance> $itemType
      *
      * @return ?getItemTypeInstance
      */
-    public function getItemTypeInstance(string $itemType)
+    protected function getItemTypeInstance(string $itemType)
     {
         return new $itemType();
     }
@@ -645,8 +666,6 @@ class ItemService
             return false;
         }
 
-        $this->getCacheAdapter()->delete(ItemCacheService::KEY_ITEMS);
-
         return true;
     }
 
@@ -659,8 +678,6 @@ class ItemService
         {
             return false;
         }
-
-        $this->getCacheAdapter()->delete(ItemCacheService::KEY_ITEM_TITLES);
 
         return true;
     }

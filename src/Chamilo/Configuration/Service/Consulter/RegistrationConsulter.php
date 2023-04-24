@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Service\Consulter;
 
-use Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataLoader;
+use Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataPreLoader;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -13,15 +13,15 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class RegistrationConsulter
 {
 
-    protected RegistrationCacheDataLoader $registrationCacheDataLoader;
+    protected RegistrationCacheDataPreLoader $registrationCacheDataPreLoader;
 
     protected StringUtilities $stringUtilities;
 
     public function __construct(
-        RegistrationCacheDataLoader $registrationCacheDataLoader, StringUtilities $stringUtilities
+        RegistrationCacheDataPreLoader $registrationCacheDataPreLoader, StringUtilities $stringUtilities
     )
     {
-        $this->registrationCacheDataLoader = $registrationCacheDataLoader;
+        $this->registrationCacheDataPreLoader = $registrationCacheDataPreLoader;
         $this->stringUtilities = $stringUtilities;
     }
 
@@ -52,7 +52,8 @@ class RegistrationConsulter
     public function getIntegrationRegistrations(string $integration, ?string $root = null): array
     {
         $registrations = $this->getRegistrations();
-        $integrationRegistrations = $registrations[RegistrationCacheDataLoader::REGISTRATION_INTEGRATION][$integration];
+        $integrationRegistrations =
+            $registrations[RegistrationCacheDataPreLoader::REGISTRATION_INTEGRATION][$integration];
 
         if ($root)
         {
@@ -76,9 +77,9 @@ class RegistrationConsulter
         }
     }
 
-    public function getRegistrationCacheDataLoader(): RegistrationCacheDataLoader
+    public function getRegistrationCacheDataPreLoader(): RegistrationCacheDataPreLoader
     {
-        return $this->registrationCacheDataLoader;
+        return $this->registrationCacheDataPreLoader;
     }
 
     /**
@@ -89,7 +90,7 @@ class RegistrationConsulter
     {
         $registrations = $this->getRegistrations();
 
-        return array_keys($registrations[RegistrationCacheDataLoader::REGISTRATION_CONTEXT]);
+        return array_keys($registrations[RegistrationCacheDataPreLoader::REGISTRATION_CONTEXT]);
     }
 
     /**
@@ -100,7 +101,7 @@ class RegistrationConsulter
     {
         $registrations = $this->getRegistrations();
 
-        return $registrations[RegistrationCacheDataLoader::REGISTRATION_CONTEXT][$context];
+        return $registrations[RegistrationCacheDataPreLoader::REGISTRATION_CONTEXT][$context];
     }
 
     /**
@@ -109,7 +110,7 @@ class RegistrationConsulter
      */
     public function getRegistrations(): array
     {
-        return $this->getRegistrationCacheDataLoader()->readCacheData();
+        return $this->getRegistrationCacheDataPreLoader()->getRegistrations();
     }
 
     /**
@@ -120,7 +121,7 @@ class RegistrationConsulter
     {
         $registrations = $this->getRegistrations();
 
-        return $registrations[RegistrationCacheDataLoader::REGISTRATION_TYPE][$type];
+        return $registrations[RegistrationCacheDataPreLoader::REGISTRATION_TYPE][$type];
     }
 
     public function getStringUtilities(): StringUtilities

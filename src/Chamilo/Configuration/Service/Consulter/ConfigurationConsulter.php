@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Service\Consulter;
 
-use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
 use Exception;
 
 /**
@@ -11,16 +11,16 @@ use Exception;
  */
 class ConfigurationConsulter
 {
-    protected CacheDataLoaderInterface $dataLoader;
+    protected CacheDataPreLoaderInterface $dataPreLoader;
 
-    public function __construct(CacheDataLoaderInterface $dataLoader)
+    public function __construct(CacheDataPreLoaderInterface $dataPreLoader)
     {
-        $this->dataLoader = $dataLoader;
+        $this->dataPreLoader = $dataPreLoader;
     }
 
-    public function getDataLoader(): CacheDataLoaderInterface
+    public function getDataPreLoader(): CacheDataPreLoaderInterface
     {
-        return $this->dataLoader;
+        return $this->dataPreLoader;
     }
 
     /**
@@ -66,7 +66,7 @@ class ConfigurationConsulter
      */
     public function getSettings(): array
     {
-        return $this->getDataLoader()->loadCachedData();
+        return $this->getDataPreLoader()->preLoadCachedData();
     }
 
     /**

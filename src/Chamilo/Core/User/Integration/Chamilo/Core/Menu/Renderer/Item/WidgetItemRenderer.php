@@ -3,7 +3,7 @@ namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
-use Chamilo\Core\Menu\Service\ItemCacheService;
+use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Manager;
@@ -36,14 +36,14 @@ class WidgetItemRenderer extends ItemRenderer
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
+     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
      * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Core\User\Picture\UserPictureProviderInterface $userPictureProvider ;
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, CachedItemService $itemCacheService,
         ThemePathBuilder $themePathBuilder, ChamiloRequest $request, ConfigurationConsulter $configurationConsulter,
         UserPictureProviderInterface $userPictureProvider
     )

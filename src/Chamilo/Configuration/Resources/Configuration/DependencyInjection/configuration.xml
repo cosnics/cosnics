@@ -8,20 +8,20 @@
                   public="true"/>
         <service id="Chamilo\Configuration\Service\Consulter\ConfigurationConsulter">
             <argument type="service"
-                      id="Chamilo\Configuration\Service\DataLoader\ConfigurationCacheLoader"/>
+                      id="Chamilo\Configuration\Service\DataLoader\ConfigurationCachePreLoader"/>
         </service>
 
-        <service id="Chamilo\Configuration\Service\DataLoader\ConfigurationCacheLoader"
-                 class="Chamilo\Configuration\Service\DataLoader\AggregatedCacheDataLoader">
+        <service id="Chamilo\Configuration\Service\DataLoader\ConfigurationCachePreLoader"
+                 class="Chamilo\Configuration\Service\DataLoader\AggregatedCacheDataPreLoader">
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Configuration\Service\ConfigurationCacheAdapter"/>
-            <argument key="$dataReaders"
+            <argument key="$dataPreLoaders"
                       type="collection">
                 <argument type="service"
-                          id="Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataLoader"></argument>
+                          id="Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataPreLoader"></argument>
                 <argument type="service"
-                          id="Chamilo\Configuration\Service\DataLoader\StorageConfigurationCacheDataLoader"></argument>
+                          id="Chamilo\Configuration\Service\DataLoader\StorageConfigurationCacheDataPreLoader"></argument>
             </argument>
         </service>
 
@@ -32,7 +32,7 @@
             <argument key="$namespace">Chamilo\Configuration\Service\Configuration</argument>
         </service>
 
-        <service id="Chamilo\Configuration\Service\DataLoader\StorageConfigurationCacheDataLoader">
+        <service id="Chamilo\Configuration\Service\DataLoader\StorageConfigurationCacheDataPreLoader">
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Configuration\Service\DataLoader\StorageConfigurationCacheAdapter"/>
@@ -50,12 +50,12 @@
 
         <service id="Chamilo\Configuration\Service\Consulter\FileConfigurationConsulter"
                  class="Chamilo\Configuration\Service\Consulter\ConfigurationConsulter">
-            <argument key="$dataReader"
+            <argument key="$dataPreLoader"
                       type="service"
-                      id="Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataLoader"/>
+                      id="Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataPreLoader"/>
         </service>
 
-        <service id="Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataLoader">
+        <service id="Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataPreLoader">
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheAdapter"/>

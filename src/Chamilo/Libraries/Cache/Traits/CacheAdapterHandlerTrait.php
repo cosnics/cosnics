@@ -13,6 +13,11 @@ trait CacheAdapterHandlerTrait
 {
     protected AdapterInterface $cacheAdapter;
 
+    public function clearAllCacheData(): bool
+    {
+        return $this->getCacheAdapter()->clear();
+    }
+
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
@@ -26,6 +31,16 @@ trait CacheAdapterHandlerTrait
         {
             throw new CacheException('Could not clear cache in ' . static::class . 'for key ' . $cacheKey);
         }
+    }
+
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    public function clearCacheDataForKeyParts(array $cacheKeyParts): bool
+    {
+        return $this->clearCacheDataForKey(
+            $this->getCacheKeyForParts($cacheKeyParts)
+        );
     }
 
     public function getCacheAdapter(): AdapterInterface

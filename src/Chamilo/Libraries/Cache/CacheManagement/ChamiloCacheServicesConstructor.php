@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Cache\CacheManagement;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Repository\Service\TemplateRegistrationCacheDataLoader;
+use Chamilo\Core\Repository\Service\TemplateRegistrationCacheDataPreLoader;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Format\Twig\TwigCacheService;
@@ -38,19 +38,19 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
 
         $cacheManager->addCacheService(
             'chamilo_configuration', $this->container->get(
-            'Chamilo\Configuration\Service\DataLoader\StorageConfigurationCacheDataLoader'
+            'Chamilo\Configuration\Service\DataLoader\StorageConfigurationCacheDataPreLoader'
         )
         );
 
         $cacheManager->addCacheService(
             'chamilo_registration', $this->container->get(
-            'Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataLoader'
+            'Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataPreLoader'
         )
         );
 
         $cacheManager->addCacheService(
             'chamilo_language', $this->container->get(
-            'Chamilo\Configuration\Service\DataLoader\LanguageCacheDataLoader'
+            'Chamilo\Configuration\Service\DataLoader\LanguageCacheDataPreLoader'
         )
         );
 
@@ -150,8 +150,8 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         return $this->container->get(StringUtilities::class);
     }
 
-    protected function getTemplateRegistrationLoader(): TemplateRegistrationCacheDataLoader
+    protected function getTemplateRegistrationLoader(): TemplateRegistrationCacheDataPreLoader
     {
-        return $this->container->get(TemplateRegistrationCacheDataLoader::class);
+        return $this->container->get(TemplateRegistrationCacheDataPreLoader::class);
     }
 }

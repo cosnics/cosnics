@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service;
 
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
-use Psr\Cache\InvalidArgumentException;
 use Sabre\VObject;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -24,47 +23,39 @@ class ExternalCalendarCacheService
         $this->cacheAdapter = $cacheAdapter;
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function getCalendarForPath(string $path): VObject\Component\VCalendar
     {
-        $cacheAdapter = $this->getCacheAdapter();
-        $cacheIdentifier = md5(serialize([$path]));
+        $cacheIdentifier = $this->getCacheKeyForParts([__CLASS__, __METHOD__, $path]);
 
-        try
+        if (!$this->hasCacheDataForKey($cacheIdentifier))
         {
-            $cacheItem = $cacheAdapter->getItem($cacheIdentifier);
+            $calendarData = '';
 
-            if (!$cacheItem->isHit())
+            if (!file_exists($path))
             {
-                $calendarData = '';
-
-                if (!file_exists($path))
+                if ($f = fopen($path, 'r'))
                 {
-                    if ($f = fopen($path, 'r'))
+
+                    while (!feof($f))
                     {
-
-                        while (!feof($f))
-                        {
-                            $calendarData .= fgets($f, 4096);
-                        }
-                        fclose($f);
+                        $calendarData .= fgets($f, 4096);
                     }
+                    fclose($f);
                 }
-                else
-                {
-                    $calendarData = file_get_contents($path);
-                }
-
-                $calendar = VObject\Reader::read($calendarData, VObject\Reader::OPTION_FORGIVING);
-
-                $cacheItem->set($calendar);
-                $cacheAdapter->save($cacheItem);
+            }
+            else
+            {
+                $calendarData = file_get_contents($path);
             }
 
-            return $cacheItem->get();
+            $calendar = VObject\Reader::read($calendarData, VObject\Reader::OPTION_FORGIVING);
+
+            $this->saveCacheDataForKey($cacheIdentifier, $calendar);
         }
-        catch (InvalidArgumentException $e)
-        {
-            return new VObject\Component\VCalendar();
-        }
+
+        return $this->readCacheDataForKey($cacheIdentifier);
     }
 }

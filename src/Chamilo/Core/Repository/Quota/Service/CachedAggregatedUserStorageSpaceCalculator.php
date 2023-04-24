@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Service;
 
-use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;
-use Chamilo\Libraries\Cache\Traits\SimpleCacheDataLoaderTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheDataPreLoaderTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Exception\CacheException;
 
@@ -14,10 +14,10 @@ use Symfony\Component\Cache\Exception\CacheException;
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class CachedAggregatedUserStorageSpaceCalculator
-    implements CacheDataLoaderInterface, AggregatedUserStorageSpaceCalculatorInterface
+    implements CacheDataPreLoaderInterface, AggregatedUserStorageSpaceCalculatorInterface
 {
     use SimpleCacheAdapterHandlerTrait;
-    use SimpleCacheDataLoaderTrait;
+    use SimpleCacheDataPreLoaderTrait;
 
     protected AggregatedUserStorageSpaceCalculator $aggregatedUserStorageSpaceCalculator;
 

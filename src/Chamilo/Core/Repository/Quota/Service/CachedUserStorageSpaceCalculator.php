@@ -48,11 +48,6 @@ class CachedUserStorageSpaceCalculator implements UserStorageSpaceCalculatorInte
         }
     }
 
-    public function getUserStorageSpaceCalculator(): UserStorageSpaceCalculator
-    {
-        return $this->userStorageSpaceCalculator;
-    }
-
     public function getAvailableStorageSpaceForUser(User $user): int
     {
         $availableStorageSpace = $this->getAllowedStorageSpaceForUser($user) - $this->getUsedStorageSpaceForUser($user);
@@ -84,6 +79,11 @@ class CachedUserStorageSpaceCalculator implements UserStorageSpaceCalculatorInte
         {
             return 0;
         }
+    }
+
+    public function getUserStorageSpaceCalculator(): UserStorageSpaceCalculator
+    {
+        return $this->userStorageSpaceCalculator;
     }
 
     public function isQuotumDefinedForUser(User $user): bool

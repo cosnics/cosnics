@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Renderer;
 
-use Chamilo\Core\Menu\Service\ItemCacheService;
+use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -27,7 +27,7 @@ abstract class ItemRenderer
     private $translator;
 
     /**
-     * @var \Chamilo\Core\Menu\Service\ItemCacheService
+     * @var \Chamilo\Core\Menu\Service\CachedItemService
      */
     private $itemCacheService;
 
@@ -44,12 +44,12 @@ abstract class ItemRenderer
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
+     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
      * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, CachedItemService $itemCacheService,
         ThemePathBuilder $themePathBuilder, ChamiloRequest $request
     )
     {
@@ -101,17 +101,17 @@ abstract class ItemRenderer
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Service\ItemCacheService
+     * @return \Chamilo\Core\Menu\Service\CachedItemService
      */
-    public function getItemCacheService(): ItemCacheService
+    public function getItemCacheService(): CachedItemService
     {
         return $this->itemCacheService;
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
+     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
      */
-    public function setItemCacheService(ItemCacheService $itemCacheService): void
+    public function setItemCacheService(CachedItemService $itemCacheService): void
     {
         $this->itemCacheService = $itemCacheService;
     }

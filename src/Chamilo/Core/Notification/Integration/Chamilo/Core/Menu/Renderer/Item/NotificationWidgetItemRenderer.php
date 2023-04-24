@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Notification\Integration\Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Core\Menu\Renderer\Item\PriorityItemRenderer;
-use Chamilo\Core\Menu\Service\ItemCacheService;
+use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Notification\Manager;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
@@ -29,13 +29,13 @@ class NotificationWidgetItemRenderer extends PriorityItemRenderer
     /**
      * @param \Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface $authorizationChecker
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Core\Menu\Service\ItemCacheService $itemCacheService
+     * @param \Chamilo\Core\Menu\Service\CachedItemService $itemCacheService
      * @param \Chamilo\Libraries\Format\Theme\ThemePathBuilder $themePathBuilder
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Twig_Environment $twig
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, CachedItemService $itemCacheService,
         ThemePathBuilder $themePathBuilder, ChamiloRequest $request, Twig_Environment $twig
     )
     {

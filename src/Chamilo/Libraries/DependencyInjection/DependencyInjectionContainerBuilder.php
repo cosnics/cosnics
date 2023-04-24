@@ -4,8 +4,8 @@ namespace Chamilo\Libraries\DependencyInjection;
 use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
-use Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataLoader;
-use Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataLoader;
+use Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataPreLoader;
+use Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataPreLoader;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -203,7 +203,7 @@ class DependencyInjectionContainerBuilder
         if (!isset($this->fileConfigurationConsulter))
         {
             $this->fileConfigurationConsulter = new ConfigurationConsulter(
-                new FileConfigurationCacheDataLoader(new ArrayAdapter(), $this->getFileConfigurationLocator())
+                new FileConfigurationCacheDataPreLoader(new ArrayAdapter(), $this->getFileConfigurationLocator())
             );
         }
 
@@ -334,7 +334,7 @@ class DependencyInjectionContainerBuilder
             );
 
             $this->registrationConsulter = new RegistrationConsulter(
-                new RegistrationCacheDataLoader(
+                new RegistrationCacheDataPreLoader(
                     new PhpFilesAdapter(
                         md5('Chamilo\Configuration\Service\Registration'), 0,
                         $this->getConfigurablePathBuilder()->getConfiguredCachePath()

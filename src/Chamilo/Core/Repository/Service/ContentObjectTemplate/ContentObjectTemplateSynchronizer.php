@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Repository\Service\ContentObjectTemplate;
 
-use Chamilo\Core\Repository\Service\TemplateRegistrationCacheDataLoader;
+use Chamilo\Core\Repository\Service\TemplateRegistrationCacheDataPreLoader;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Core\Repository\Storage\Repository\ContentObjectTemplateRepository;
 use RuntimeException;
@@ -23,7 +23,7 @@ class ContentObjectTemplateSynchronizer
     protected $contentObjectTemplateRepository;
 
     /**
-     * @var \Chamilo\Core\Repository\Service\TemplateRegistrationCacheDataLoader
+     * @var \Chamilo\Core\Repository\Service\TemplateRegistrationCacheDataPreLoader
      */
     protected $templateRegistrationLoader;
 
@@ -32,12 +32,12 @@ class ContentObjectTemplateSynchronizer
      *
      * @param ContentObjectTemplateLoader $contentObjectTemplateLoader
      * @param ContentObjectTemplateRepository $contentObjectTemplateRepository
-     * @param TemplateRegistrationCacheDataLoader $templateRegistrationLoader
+     * @param TemplateRegistrationCacheDataPreLoader $templateRegistrationLoader
      */
     public function __construct(
         ContentObjectTemplateLoader $contentObjectTemplateLoader,
         ContentObjectTemplateRepository $contentObjectTemplateRepository,
-        TemplateRegistrationCacheDataLoader $templateRegistrationLoader
+        TemplateRegistrationCacheDataPreLoader $templateRegistrationLoader
     )
     {
         $this->contentObjectTemplateLoader = $contentObjectTemplateLoader;

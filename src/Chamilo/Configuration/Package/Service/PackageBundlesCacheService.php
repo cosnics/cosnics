@@ -3,7 +3,7 @@ namespace Chamilo\Configuration\Package\Service;
 
 use Chamilo\Configuration\Package\Finder\PackageBundles;
 use Chamilo\Configuration\Package\PackageList;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataLoaderInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Exception\CacheException;
@@ -14,7 +14,7 @@ use Symfony\Component\Cache\Exception\CacheException;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PackageBundlesCacheService implements CacheDataLoaderInterface
+class PackageBundlesCacheService implements CacheDataPreLoaderInterface
 {
     use CacheAdapterHandlerTrait;
 
@@ -99,7 +99,7 @@ class PackageBundlesCacheService implements CacheDataLoaderInterface
         return $packageList;
     }
 
-    public function loadCachedData()
+    public function preLoadCachedData()
     {
         foreach ($this->getCacheIdentifiers() as $cacheIdentifier)
         {

@@ -8,12 +8,12 @@
                   public="true"/>
 
         <service id="Chamilo\Configuration\Service\Consulter\RegistrationConsulter">
-            <argument key="$dataReader"
+            <argument key="$registrationCacheDataPreLoader"
                       type="service"
-                      id="Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataLoader"/>
+                      id="Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataPreLoader"/>
         </service>
 
-        <service id="Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataLoader">
+        <service id="Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataPreLoader">
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Configuration\Service\DataLoader\RegistrationCacheAdapter"/>

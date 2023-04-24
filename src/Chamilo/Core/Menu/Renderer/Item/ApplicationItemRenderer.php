@@ -3,7 +3,7 @@ namespace Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Menu\Renderer\ItemRenderer;
-use Chamilo\Core\Menu\Service\ItemCacheService;
+use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
@@ -28,7 +28,7 @@ class ApplicationItemRenderer extends ItemRenderer
     private UrlGenerator $urlGenerator;
 
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, ItemCacheService $itemCacheService,
+        AuthorizationCheckerInterface $authorizationChecker, Translator $translator, CachedItemService $itemCacheService,
         ThemePathBuilder $themePathBuilder, ChamiloRequest $request, RegistrationConsulter $registrationConsulter,
         UrlGenerator $urlGenerator
     )

@@ -5,7 +5,7 @@ namespace Chamilo\Libraries\Cache\Traits;
  * @package Chamilo\Libraries\Cache\Traits
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-trait SimpleCacheDataLoaderTrait
+trait SimpleCacheDataPreLoaderTrait
 {
     abstract public function loadCacheData();
 
@@ -13,7 +13,7 @@ trait SimpleCacheDataLoaderTrait
      * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function loadCachedData()
+    public function preLoadCachedData()
     {
         return $this->loadCacheData();
     }
