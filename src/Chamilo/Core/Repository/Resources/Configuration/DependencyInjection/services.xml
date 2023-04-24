@@ -56,7 +56,7 @@
         <service id="Chamilo\Core\Repository\Quota\Service\AggregatedUserStorageSpaceCalculator">
             <argument key="$userStorageSpaceCalculator"
                       type="service"
-                      id="Chamilo\Core\Repository\Quota\Service\CachedUserStorageSpaceCalculator"/>
+                      id="Chamilo\Core\Repository\Quota\Service\UserStorageSpaceCalculator"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Quota\Service\CachedAggregatedUserStorageSpaceCalculator">

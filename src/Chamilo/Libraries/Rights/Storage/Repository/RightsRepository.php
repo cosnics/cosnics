@@ -597,7 +597,7 @@ abstract class RightsRepository
     public function findRightsLocationByParameters(
         int $identifier = 0, int $type = RightsService::TYPE_ROOT, int $treeIdentifier = 0,
         int $treeType = RightsService::TREE_TYPE_ROOT
-    )
+    ): ?RightsLocation
     {
         $rightsLocationClassName = $this->getRightsLocationClassName();
 

@@ -643,7 +643,7 @@ abstract class RightsService
     protected function findRightsLocationByParameters(
         int $identifier = 0, int $type = RightsService::TYPE_ROOT, int $treeIdentifier = 0,
         int $treeType = RightsService::TREE_TYPE_ROOT
-    )
+    ): ?RightsLocation
     {
         return $this->getRightsRepository()->findRightsLocationByParameters(
             $identifier, $type, $treeIdentifier, $treeType
@@ -982,16 +982,15 @@ abstract class RightsService
      * @param integer $treeType
      * @param integer $treeIdentifier
      *
-     * @return \Chamilo\Libraries\Rights\Domain\RightsLocation|boolean
      * @see RightsUtil::get_root()
      */
-    protected function getRootLocation(int $treeType = self::TREE_TYPE_ROOT, int $treeIdentifier = 0)
+    protected function getRootLocation(int $treeType = self::TREE_TYPE_ROOT, int $treeIdentifier = 0): ?RightsLocation
     {
         $rootLocation = $this->getRightsRepository()->findRootLocation($treeType, $treeIdentifier);
 
         if (!$rootLocation instanceof RightsLocation)
         {
-            return false;
+            return null;
         }
 
         return $rootLocation;
@@ -1096,13 +1095,13 @@ abstract class RightsService
     }
 
     /**
-     * @param integer[] $rights
+     * @param int[] $rights
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      *
-     * @return integer[][][]
+     * @return int[][][]
      * @throws \Exception
      */
-    protected function getTargetEntitiesForRightsAndLocation(array $rights, RightsLocation $location)
+    protected function getTargetEntitiesForRightsAndLocation(array $rights, RightsLocation $location): array
     {
         $rightsTargetEntities = [];
 
@@ -1217,9 +1216,9 @@ abstract class RightsService
     /**
      * @param \Chamilo\Libraries\Rights\Domain\RightsLocation $location
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param integer[][] $values
+     * @param int[][] $values
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
     protected function saveRightsConfigurationForRightsLocationAndUserFromValues(
