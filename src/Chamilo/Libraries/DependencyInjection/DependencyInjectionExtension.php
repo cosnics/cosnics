@@ -2,7 +2,8 @@
 namespace Chamilo\Libraries\DependencyInjection;
 
 use Chamilo\Libraries\DependencyInjection\CompilerPass\AuthenticationCompilerPass;
-use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheServicesConstructorCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheAdapterCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheDataPreLoaderCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\DoctrineEventListenerCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\FormTypeCompilerPass;
@@ -14,8 +15,8 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Libraries\DependencyInjection
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     implements ExtensionInterface, ICompilerPassExtension
@@ -78,7 +79,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
             if (array_key_exists('mappings', $ormConfig))
             {
                 $mappingDriverDef = $container->getDefinition('Doctrine\ORM\MappingDriver');
-                $mappingDriverDef->setArguments(array($ormConfig['mappings']));
+                $mappingDriverDef->setArguments([$ormConfig['mappings']]);
             }
 
             if (array_key_exists('resolve_target_entities', $ormConfig))
@@ -90,12 +91,12 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 foreach ($ormConfig['resolve_target_entities'] as $name => $implementation)
                 {
                     $resolveTargetEntityListenerDef->addMethodCall(
-                        'addResolveTargetEntity', array($name, $implementation, [])
+                        'addResolveTargetEntity', [$name, $implementation, []]
                     );
                 }
 
                 $resolveTargetEntityListenerDef->addTag(
-                    'doctrine.orm.event_listener', array('event' => 'loadClassMetadata')
+                    'doctrine.orm.event_listener', ['event' => 'loadClassMetadata']
                 );
             }
         }
@@ -104,7 +105,8 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     public function registerCompilerPasses(ContainerBuilder $container)
     {
         $container->addCompilerPass(new ConsoleCompilerPass());
-        $container->addCompilerPass(new CacheServicesConstructorCompilerPass());
+        $container->addCompilerPass(new CacheDataPreLoaderCompilerPass());
+        $container->addCompilerPass(new CacheAdapterCompilerPass());
         $container->addCompilerPass(new DoctrineEventListenerCompilerPass());
         $container->addCompilerPass(new FormTypeCompilerPass());
         $container->addCompilerPass(new AuthenticationCompilerPass());

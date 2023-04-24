@@ -18,6 +18,16 @@ class UserStorageSpaceCalculator implements UserStorageSpaceCalculatorInterface
     protected ContentObjectService $contentObjectService;
 
     protected GroupsTreeTraverser $groupsTreeTraverser;
+    
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter, ContentObjectService $contentObjectService,
+        GroupsTreeTraverser $groupsTreeTraverser
+    )
+    {
+        $this->configurationConsulter = $configurationConsulter;
+        $this->contentObjectService = $contentObjectService;
+        $this->groupsTreeTraverser = $groupsTreeTraverser;
+    }
 
     public function getAllowedStorageSpaceForUser(User $user): int
     {

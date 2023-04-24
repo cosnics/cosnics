@@ -10,11 +10,11 @@ class Author
 
     private ?string $company;
 
-    private string $email;
+    private ?string $email;
 
     private string $name;
 
-    public function __construct(string $name, string $email, ?string $company = null)
+    public function __construct(string $name, ?string $email, ?string $company = null)
     {
         $this->set_name($name);
         $this->set_email($email);
@@ -26,7 +26,7 @@ class Author
         return $this->company;
     }
 
-    public function get_email(): string
+    public function get_email(): ?string
     {
         return $this->email;
     }
@@ -41,7 +41,7 @@ class Author
         $this->company = $company;
     }
 
-    public function set_email(string $email)
+    public function set_email(?string $email)
     {
         $this->email = $email;
     }

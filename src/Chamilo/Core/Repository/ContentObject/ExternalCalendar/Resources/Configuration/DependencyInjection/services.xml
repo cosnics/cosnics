@@ -15,6 +15,7 @@
 
         <service id="Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\ExternalCalendarCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\Ical</argument>
@@ -23,6 +24,7 @@
 
         <service id="Chamilo\Core\Repository\ContentObject\ExternalCalendar\OccurencesCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Core\Repository\ContentObject\ExternalCalendar\Occurences</argument>

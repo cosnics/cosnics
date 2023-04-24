@@ -60,6 +60,7 @@
         </service>
 
         <service id="Chamilo\Core\Repository\Quota\Service\CachedAggregatedUserStorageSpaceCalculator">
+            <!--<tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>-->
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Core\Repository\Quota\Service\CachedAggregatedUserStorageSpaceCacheAdapter"/>
@@ -67,6 +68,7 @@
 
         <service id="Chamilo\Core\Repository\Quota\Service\CachedAggregatedUserStorageSpaceCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createPhpFilesAdapter"/>
             <argument key="$namespace">Chamilo\Core\Repository\Quota\Calculator</argument>
@@ -80,6 +82,7 @@
 
         <service id="Chamilo\Core\Repository\Quota\Service\CachedUserStorageSpaceCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createPhpFilesAdapter"/>
             <argument key="$namespace">Chamilo\Core\Repository\Quota\Calculator</argument>

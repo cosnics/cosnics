@@ -11,37 +11,22 @@ use Chamilo\Configuration\Package\Storage\DataClass\Package;
  */
 class PackageList
 {
-    // A constant to represent the root namespace
-    const MODE_ALL = 1;
+    public const MODE_ALL = 1;
+    public const MODE_AVAILABLE = 3;
+    public const MODE_INSTALLED = 2;
 
-    // Different modes of interpreting a PackageList's available packages
+    public const ROOT = '__ROOT__';
 
-    const MODE_AVAILABLE = 3;
-
-    const MODE_INSTALLED = 2;
-
-    const ROOT = '__ROOT__';
+    private $all_packages;
 
     /**
-     * The type of the PackageList
+     * The list of PackageList objects for the sub-types of this type
      *
-     * @var string
+     * @var \Chamilo\Configuration\Package\PackageList[]
      */
-    private $type;
+    private $children;
 
-    /**
-     * The type name of the PackageList
-     *
-     * @var string
-     */
-    private $type_name;
-
-    /**
-     * The type icon of the PackageList
-     *
-     * @var string
-     */
-    private $type_icon;
+    private $list;
 
     /**
      * The packages of this specific type
@@ -51,22 +36,32 @@ class PackageList
     private $packages;
 
     /**
-     * The list of PackageList objects for the sub-types of this type
+     * The type of the PackageList
      *
-     * @var \Chamilo\Configuration\Package\PackageList[]
+     * @var string
      */
-    private $children;
+    private $type;
+
+    /**
+     * The type icon of the PackageList
+     *
+     * @var string
+     */
+    private $type_icon;
+
+    /**
+     * The type name of the PackageList
+     *
+     * @var string
+     */
+    private $type_name;
 
     /**
      * Property to cache the available types
      *
-     * @var boolean[]:string
+     * @var bool:string
      */
     private $types;
-
-    private $list;
-
-    private $all_packages;
 
     /**
      * @param string $type
@@ -104,6 +99,21 @@ class PackageList
     public function add_package(Package $package)
     {
         $this->packages[$package->get_context()] = $package;
+    }
+
+    /**
+     * Get the type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function getTypeName()
+    {
+        return $this->type_name;
     }
 
     public function get_all_packages($recursive = true)
@@ -150,16 +160,6 @@ class PackageList
     public function get_children()
     {
         return $this->children;
-    }
-
-    /**
-     * Set the list of PackageList objects for the sub-types of this type
-     *
-     * @param $children \Chamilo\Configuration\Package\PackageList[]
-     */
-    public function set_children($children)
-    {
-        $this->children = $children;
     }
 
     /**
@@ -214,16 +214,6 @@ class PackageList
     }
 
     /**
-     * Set the type packages
-     *
-     * @param $packages string[]
-     */
-    public function set_packages($packages)
-    {
-        $this->packages = $packages;
-    }
-
-    /**
      * Get the type
      *
      * @deprecated Use PackageList::getType() now
@@ -231,26 +221,6 @@ class PackageList
     public function get_type()
     {
         return $this->getType();
-    }
-
-    /**
-     * Get the type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * Set the type
-     *
-     * @param $type string
-     */
-    public function set_type($type)
-    {
-        $this->type = $type;
     }
 
     /**
@@ -264,16 +234,6 @@ class PackageList
     }
 
     /**
-     * Set the type icon
-     *
-     * @param $type_icon string
-     */
-    public function set_type_icon($type_icon)
-    {
-        $this->type_icon = $type_icon;
-    }
-
-    /**
      * @deprecated Use PackageList::getTypeName() now
      */
     public function get_type_name()
@@ -281,25 +241,10 @@ class PackageList
         return $this->getTypeName();
     }
 
-    public function getTypeName()
-    {
-        return $this->type_name;
-    }
-
-    /**
-     * Set the type name
-     *
-     * @param $type_name string
-     */
-    public function set_type_name($type_name)
-    {
-        $this->type_name = $type_name;
-    }
-
     /**
      * Get all distinct types defined in the PackageList and - if requested - it's children
      *
-     * @param $recursive boolean
+     * @param $recursive bool
      */
     public function get_types($recursive = true)
     {
@@ -329,10 +274,9 @@ class PackageList
     }
 
     /**
-     *
      * @param string $child
      *
-     * @return boolean
+     * @return bool
      */
     public function has_child($child)
     {
@@ -342,7 +286,7 @@ class PackageList
     /**
      * Returns whether the type has children
      *
-     * @return boolean
+     * @return bool
      */
     public function has_children()
     {
@@ -350,10 +294,9 @@ class PackageList
     }
 
     /**
-     *
      * @param string $package
      *
-     * @return boolean
+     * @return bool
      */
     public function has_package($package)
     {
@@ -363,10 +306,60 @@ class PackageList
     /**
      * Returns whether the type has packages
      *
-     * @return boolean
+     * @return bool
      */
     public function has_packages()
     {
         return count($this->get_packages()) > 0;
+    }
+
+    /**
+     * Set the list of PackageList objects for the sub-types of this type
+     *
+     * @param $children \Chamilo\Configuration\Package\PackageList[]
+     */
+    public function set_children($children)
+    {
+        $this->children = $children;
+    }
+
+    /**
+     * Set the type packages
+     *
+     * @param $packages string[]
+     */
+    public function set_packages($packages)
+    {
+        $this->packages = $packages;
+    }
+
+    /**
+     * Set the type
+     *
+     * @param $type string
+     */
+    public function set_type($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * Set the type icon
+     *
+     * @param $type_icon string
+     */
+    public function set_type_icon($type_icon)
+    {
+        $this->type_icon = $type_icon;
+    }
+
+    /**
+     * Set the type name
+     *
+     * @param $type_name string
+     */
+    public function set_type_name($type_name)
+    {
+        $this->type_name = $type_name;
     }
 }

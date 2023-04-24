@@ -8,6 +8,7 @@
                   public="true"/>
 
         <service id="Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheService">
+            <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheAdapter"/>
@@ -15,6 +16,7 @@
 
         <service id="Chamilo\Configuration\Package\Service\InternationalizationBundlesCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Configuration\Package\InternationalizationBundles</argument>
@@ -27,6 +29,7 @@
         </service>
 
         <service id="Chamilo\Configuration\Service\DataLoader\LanguageCacheDataPreLoader">
+            <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Configuration\Service\DataLoader\LanguageCacheAdapter"/>
@@ -34,6 +37,7 @@
 
         <service id="Chamilo\Configuration\Service\DataLoader\LanguageCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createPhpFilesAdapter"/>
             <argument key="$namespace">Chamilo\Configuration\Service\Language</argument>

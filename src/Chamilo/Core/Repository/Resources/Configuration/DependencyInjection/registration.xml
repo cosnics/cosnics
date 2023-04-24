@@ -14,6 +14,7 @@
         </service>
 
         <service id="Chamilo\Core\Repository\Service\TemplateRegistrationCacheDataPreLoader">
+            <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Core\Repository\Service\TemplateRegistrationCacheAdapter"/>
@@ -21,6 +22,7 @@
 
         <service id="Chamilo\Core\Repository\Service\TemplateRegistrationCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Core\Repository</argument>
@@ -28,6 +30,7 @@
 
         <service id="Chamilo\Core\Repository\Service\TypeSelectorCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Core\Repository\Selector</argument>

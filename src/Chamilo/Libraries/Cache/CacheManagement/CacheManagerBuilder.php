@@ -34,11 +34,11 @@ class CacheManagerBuilder
     /**
      * Builds the cache director and adds the chamilo cache services through code
      *
-     * @return \Chamilo\Libraries\Cache\CacheManagement\CacheManager
+     * @return \Chamilo\Libraries\Cache\CacheManagement\CacheDataPreLoaderManager
      */
     public function buildCacheManager()
     {
-        $cacheManager = new CacheManager();
+        $cacheManager = new CacheDataPreLoaderManager();
 
         foreach ($this->cacheServicesConstructors as $cacheServicesConstructor)
         {

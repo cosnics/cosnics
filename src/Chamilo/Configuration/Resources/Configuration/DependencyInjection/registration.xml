@@ -14,6 +14,7 @@
         </service>
 
         <service id="Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataPreLoader">
+            <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Configuration\Service\DataLoader\RegistrationCacheAdapter"/>
@@ -21,6 +22,7 @@
 
         <service id="Chamilo\Configuration\Service\DataLoader\RegistrationCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createPhpFilesAdapter"/>
             <argument key="$namespace">Chamilo\Configuration\Service\Registration</argument>

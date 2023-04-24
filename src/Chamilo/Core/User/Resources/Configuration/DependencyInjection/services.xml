@@ -23,6 +23,7 @@
 
         <service id="Chamilo\Core\User\Service\UserSettingCacheService"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Core\User\UserSetting</argument>

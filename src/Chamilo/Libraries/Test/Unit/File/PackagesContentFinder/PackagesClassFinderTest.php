@@ -48,7 +48,7 @@ class PackagesClassFinderTest extends ChamiloTestCase
             'Console/Command/ClearCacheCommand.php', 'Console\Command\ClearCacheCommand'
         );
 
-        $this->assertEquals('Chamilo\Libraries\Console\Command\ClearCacheCommand', $classes['Chamilo\Libraries']);
+        $this->assertEquals('Chamilo\Libraries\Console\Command\PreLoadCacheCommand', $classes['Chamilo\Libraries']);
     }
 
     /**

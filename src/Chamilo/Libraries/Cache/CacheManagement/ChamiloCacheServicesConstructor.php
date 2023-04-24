@@ -30,7 +30,7 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         $this->container = $container;
     }
 
-    protected function addGeneralCacheServices(CacheManager $cacheManager)
+    protected function addGeneralCacheServices(CacheDataPreLoaderManager $cacheManager)
     {
         $cacheManager->addCacheService(
             'chamilo_dependency_injection', new DependencyInjectionCacheService($this->getConfigurationConsulter())
@@ -92,7 +92,7 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         );
     }
 
-    protected function addUserCacheServices(CacheManager $cacheManager)
+    protected function addUserCacheServices(CacheDataPreLoaderManager $cacheManager)
     {
         $cacheManager->addCacheService(
             'chamilo_google_events',
@@ -109,7 +109,7 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
         );
     }
 
-    public function createCacheServices(CacheManager $cacheManager)
+    public function createCacheServices(CacheDataPreLoaderManager $cacheManager)
     {
         $this->addGeneralCacheServices($cacheManager);
         $this->addUserCacheServices($cacheManager);

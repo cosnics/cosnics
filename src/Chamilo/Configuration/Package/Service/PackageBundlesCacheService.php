@@ -31,7 +31,7 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
      */
     public function getAllPackages(): PackageList
     {
-        if (!$this->loadCacheDataForIdentifier((string) PackageList::MODE_ALL))
+        if (!$this->loadCacheDataForIdentifier(PackageList::MODE_ALL))
         {
             throw new CacheException(
                 'Could not load cache for ' . __CLASS__ . ' with key ' . PackageList::MODE_ALL
@@ -46,7 +46,7 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
      */
     public function getAvailablePackages(): PackageList
     {
-        if (!$this->loadCacheDataForIdentifier((string) PackageList::MODE_AVAILABLE))
+        if (!$this->loadCacheDataForIdentifier(PackageList::MODE_AVAILABLE))
         {
             throw new CacheException(
                 'Could not load cache for ' . __CLASS__ . ' with key ' . PackageList::MODE_AVAILABLE
@@ -69,7 +69,7 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
      */
     public function getInstalledPackages(): PackageList
     {
-        if (!$this->loadCacheDataForIdentifier((string) PackageList::MODE_INSTALLED))
+        if (!$this->loadCacheDataForIdentifier(PackageList::MODE_INSTALLED))
         {
             throw new CacheException(
                 'Could not load cache for ' . __CLASS__ . ' with key ' . PackageList::MODE_INSTALLED
@@ -84,7 +84,7 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
         return $this->packageFactory;
     }
 
-    public function getPackageListForMode(string $mode): PackageList
+    public function getPackageListForMode(int $mode): PackageList
     {
         $packageFactory = $this->getPackageFactory();
         $packageListBuilder = new PackageBundles(PackageList::ROOT, $mode, $packageFactory);
@@ -99,20 +99,7 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
         return $packageList;
     }
 
-    public function preLoadCachedData()
-    {
-        foreach ($this->getCacheIdentifiers() as $cacheIdentifier)
-        {
-            if (!$this->loadCacheDataForIdentifier((string) $cacheIdentifier))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public function loadCacheDataForIdentifier(string $cacheIdentifier): bool
+    public function loadCacheDataForIdentifier(int $cacheIdentifier): bool
     {
         $cacheKey = $this->getCacheKeyForParts([$cacheIdentifier]);
 
@@ -126,6 +113,19 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
                 }
             }
             catch (CacheException $e)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function preLoadCachedData()
+    {
+        foreach ($this->getCacheIdentifiers() as $cacheIdentifier)
+        {
+            if (!$this->loadCacheDataForIdentifier($cacheIdentifier))
             {
                 return false;
             }

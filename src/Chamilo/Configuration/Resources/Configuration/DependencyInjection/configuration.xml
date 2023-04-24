@@ -13,6 +13,7 @@
 
         <service id="Chamilo\Configuration\Service\DataLoader\ConfigurationCachePreLoader"
                  class="Chamilo\Configuration\Service\DataLoader\AggregatedCacheDataPreLoader">
+            <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Configuration\Service\ConfigurationCacheAdapter"/>
@@ -27,12 +28,14 @@
 
         <service id="Chamilo\Configuration\Service\ConfigurationCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createPhpFilesAdapter"/>
             <argument key="$namespace">Chamilo\Configuration\Service\Configuration</argument>
         </service>
 
         <service id="Chamilo\Configuration\Service\DataLoader\StorageConfigurationCacheDataPreLoader">
+            <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Configuration\Service\DataLoader\StorageConfigurationCacheAdapter"/>
@@ -40,6 +43,7 @@
 
         <service id="Chamilo\Configuration\Service\DataLoader\StorageConfigurationCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\PhpFilesAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createPhpFilesAdapter"/>
             <argument key="$namespace">Chamilo\Configuration\Service\Configuration\Storage</argument>
@@ -56,13 +60,16 @@
         </service>
 
         <service id="Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataPreLoader">
+            <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheAdapter"/>
         </service>
 
         <service id="Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheAdapter"
-                 class="Symfony\Component\Cache\Adapter\ArrayAdapter"/>
+                 class="Symfony\Component\Cache\Adapter\ArrayAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
+        </service>
 
         <service id="Chamilo\Configuration\Service\FileConfigurationLocator"/>
 
@@ -70,6 +77,7 @@
         <service id="Chamilo\Configuration\Package\PlatformPackageBundles"/>
 
         <service id="Chamilo\Configuration\Package\Service\PackageBundlesCacheService">
+            <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Configuration\Package\Service\PackageBundlesCacheAdapter"/>
@@ -77,6 +85,7 @@
 
         <service id="Chamilo\Configuration\Package\Service\PackageBundlesCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Configuration\Package\PlatformPackageBundles</argument>

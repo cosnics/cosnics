@@ -9,6 +9,7 @@
 
         <service id="Chamilo\Application\Calendar\Extension\Office365\CacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Application\Calendar\Extension\Office365</argument>

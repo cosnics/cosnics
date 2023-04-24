@@ -13,7 +13,7 @@ interface CacheServicesConstructorInterface
     /**
      * Creates and adds the cache services to the given cache manager
      *
-     * @param \Chamilo\Libraries\Cache\CacheManagement\CacheManager $cacheManager
+     * @param \Chamilo\Libraries\Cache\CacheManagement\CacheDataPreLoaderManager $cacheManager
      */
-    public function createCacheServices(CacheManager $cacheManager);
+    public function createCacheServices(CacheDataPreLoaderManager $cacheManager);
 }

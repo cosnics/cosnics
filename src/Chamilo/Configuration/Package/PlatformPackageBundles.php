@@ -3,47 +3,35 @@ namespace Chamilo\Configuration\Package;
 
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
 
 /**
- *
  * @package Chamilo\Configuration\Package
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class PlatformPackageBundles
 {
-    const MODE_ALL = 1;
-    const MODE_AVAILABLE = 3;
-    const MODE_INSTALLED = 2;
+    public const MODE_ALL = 1;
+    public const MODE_AVAILABLE = 3;
+    public const MODE_INSTALLED = 2;
 
     /**
-     *
      * @var \Chamilo\Configuration\Package\PlatformPackageBundles
      */
     private static $instance;
 
     /**
-     *
      * @var int
      */
     private $mode;
 
     /**
-     *
      * @var PackageList
      */
     private $package_list;
 
     /**
-     *
-     * @var string[]
-     */
-    private $types;
-
-    /**
-     *
      * @var string[]
      */
     private $packages;
@@ -56,7 +44,11 @@ class PlatformPackageBundles
     private $type_packages;
 
     /**
-     *
+     * @var string[]
+     */
+    private $types;
+
+    /**
      * @param int $mode
      */
     public function __construct($mode = self::MODE_ALL)
@@ -66,7 +58,6 @@ class PlatformPackageBundles
     }
 
     /**
-     *
      * @param int $mode
      *
      * @return \Chamilo\Configuration\Package\PlatformPackageBundles
@@ -81,22 +72,20 @@ class PlatformPackageBundles
         return self::$instance[$mode];
     }
 
-    private function getPackageBundlesCacheService()
+    private function getPackageBundlesCacheService(): PackageBundlesCacheService
     {
         if (!isset($this->packageBundlesCacheService))
         {
-            $configurablePathBuilder = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-                ConfigurablePathBuilder::class
-            );
-
-            $this->packageBundlesCacheService = new PackageBundlesCacheService($configurablePathBuilder);
+            $this->packageBundlesCacheService =
+                DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+                    PackageBundlesCacheService::class
+                );
         }
 
         return $this->packageBundlesCacheService;
     }
 
     /**
-     *
      * @return int
      */
     public function get_mode()
@@ -105,16 +94,14 @@ class PlatformPackageBundles
     }
 
     /**
-     *
      * @return int[]
      */
     public static function get_modes()
     {
-        return array(self::MODE_ALL, self::MODE_AVAILABLE, self::MODE_INSTALLED);
+        return [self::MODE_ALL, self::MODE_AVAILABLE, self::MODE_INSTALLED];
     }
 
     /**
-     *
      * @return PackageList
      */
     public function get_package_list()
@@ -138,8 +125,7 @@ class PlatformPackageBundles
     }
 
     /**
-     *
-     * @param boolean $recursive
+     * @param bool $recursive
      */
     public function get_type_packages()
     {
@@ -162,15 +148,14 @@ class PlatformPackageBundles
     }
 
     /**
-     *
-     * @param boolean $include_installed
-     * @param boolean $reset
+     * @param bool $include_installed
+     * @param bool $reset
      *
      * @return \Chamilo\Configuration\Package\PackageList
      */
     public function initialize()
     {
-        $this->package_list = $this->getPackageBundlesCacheService()->getForIdentifier($this->mode);
+        $this->package_list = $this->getPackageBundlesCacheService()->getPackageListForMode($this->mode);
 
         return $this->package_list;
     }

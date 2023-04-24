@@ -15,6 +15,7 @@
 
         <service id="Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Application\Calendar\Extension\Google\OwnedCalendars</argument>
@@ -28,6 +29,7 @@
 
         <service id="Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheAdapter"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Application\Calendar\Extension\Google\Events</argument>

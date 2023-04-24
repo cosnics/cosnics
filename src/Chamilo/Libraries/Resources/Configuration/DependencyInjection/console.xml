@@ -30,6 +30,10 @@
                  alias="em"/>
         </service>
 
+        <service id="Chamilo\Libraries\Console\Command\PreLoadCacheCommand">
+            <tag name="Chamilo\Libraries\Console\Command"/>
+        </service>
+
         <service id="Chamilo\Libraries\Console\Command\ClearCacheCommand">
             <tag name="Chamilo\Libraries\Console\Command"/>
         </service>

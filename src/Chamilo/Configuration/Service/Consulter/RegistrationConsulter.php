@@ -101,7 +101,7 @@ class RegistrationConsulter
     {
         $registrations = $this->getRegistrations();
 
-        return $registrations[RegistrationCacheDataPreLoader::REGISTRATION_CONTEXT][$context];
+        return (array) $registrations[RegistrationCacheDataPreLoader::REGISTRATION_CONTEXT][$context];
     }
 
     /**
@@ -110,7 +110,7 @@ class RegistrationConsulter
      */
     public function getRegistrations(): array
     {
-        return $this->getRegistrationCacheDataPreLoader()->getRegistrations();
+        return (array) $this->getRegistrationCacheDataPreLoader()->getRegistrations();
     }
 
     /**
@@ -121,7 +121,7 @@ class RegistrationConsulter
     {
         $registrations = $this->getRegistrations();
 
-        return $registrations[RegistrationCacheDataPreLoader::REGISTRATION_TYPE][$type];
+        return (array) $registrations[RegistrationCacheDataPreLoader::REGISTRATION_TYPE][$type];
     }
 
     public function getStringUtilities(): StringUtilities

@@ -14,6 +14,7 @@
             <argument key="$fallbackIsoCodes">%chamilo.configuration.general.language.fallback%</argument>
         </service>
         <service id="Chamilo\Core\Menu\Service\CachedItemService">
+            <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Core\Menu\Cache\ItemCacheProvider"/>
@@ -34,6 +35,7 @@
 
         <service id="Chamilo\Core\Menu\Cache\RightsCacheProvider"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Core\Menu\Rights</argument>
@@ -41,6 +43,7 @@
 
         <service id="Chamilo\Core\Menu\Cache\ItemCacheProvider"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
             <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Core\Menu\Item</argument>
