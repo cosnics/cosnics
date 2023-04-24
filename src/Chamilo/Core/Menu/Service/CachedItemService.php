@@ -326,7 +326,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         return $this->propertyMapper;
     }
 
-    public function preLoadCachedData()
+    public function preLoadCacheData()
     {
         $this->findItemTitlesGroupedByItemIdentifierAndIsocode();
         $this->findItemsGroupedByParentIdentifier();

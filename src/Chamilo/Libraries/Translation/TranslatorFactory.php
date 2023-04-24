@@ -41,7 +41,7 @@ class TranslatorFactory
     {
         $packageNamespaces = $this->getInternationalizationBundlesCacheService()->getPackageNamespaces();
 
-        $translationCachePath = $this->getConfigurablePathBuilder()->getCachePath(__NAMESPACE__);
+        $translationCachePath = $this->getTranslationCachePath();
 
         if (!is_dir($translationCachePath))
         {
@@ -88,5 +88,10 @@ class TranslatorFactory
     public function getInternationalizationBundlesCacheService(): InternationalizationBundlesCacheService
     {
         return $this->internationalizationBundlesCacheService;
+    }
+
+    public function getTranslationCachePath(): string
+    {
+        return $this->getConfigurablePathBuilder()->getCachePath(__NAMESPACE__);
     }
 }

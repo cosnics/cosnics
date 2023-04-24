@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
 
 use Chamilo\Libraries\Cache\FileBasedCacheService;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Doctrine\ORM\EntityManager;
 use RuntimeException;
@@ -10,26 +11,35 @@ use RuntimeException;
  * Manages the cache for the doctrine ORM proxies
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ORM
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class DoctrineProxyCacheService extends FileBasedCacheService
 {
 
     private EntityManager $entityManager;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, ConfigurablePathBuilder $configurablePathBuilder)
     {
+        parent::__construct($configurablePathBuilder);
+
         $this->entityManager = $entityManager;
     }
 
     public function getCachePath(): string
     {
-        return $this->entityManager->getConfiguration()->getProxyDir();
+        return $this->getEntityManager()->getConfiguration()->getProxyDir();
     }
 
-    public function warmUp()
+    public function getEntityManager(): EntityManager
     {
-        if (!is_dir($proxyCacheDir = $this->entityManager->getConfiguration()->getProxyDir()))
+        return $this->entityManager;
+    }
+
+    public function preLoadCacheData()
+    {
+        $entityManager = $this->getEntityManager();
+
+        if (!is_dir($proxyCacheDir = $entityManager->getConfiguration()->getProxyDir()))
         {
             if (!Filesystem::create_dir($proxyCacheDir))
             {
@@ -47,12 +57,12 @@ class DoctrineProxyCacheService extends FileBasedCacheService
             );
         }
 
-        if ($this->entityManager->getConfiguration()->getAutoGenerateProxyClasses())
+        if ($entityManager->getConfiguration()->getAutoGenerateProxyClasses())
         {
             return;
         }
 
-        $classes = $this->entityManager->getMetadataFactory()->getAllMetadata();
-        $this->entityManager->getProxyFactory()->generateProxyClasses($classes);
+        $classes = $entityManager->getMetadataFactory()->getAllMetadata();
+        $entityManager->getProxyFactory()->generateProxyClasses($classes);
     }
 }

@@ -9,64 +9,40 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
  * Manages the cache for the symfony dependency injection
  *
  * @package Chamilo\Libraries\DependencyInjection
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyInjectionCacheService extends FileBasedCacheService
 {
 
-    /**
-     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
-     */
-    private $fileConfigurationConsulter;
+    protected ConfigurationConsulter $fileConfigurationConsulter;
 
-    /**
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $fileConfigurationConsulter
-     */
-    public function __construct(ConfigurationConsulter $fileConfigurationConsulter)
+    public function __construct(
+        ConfigurationConsulter $fileConfigurationConsulter, ConfigurablePathBuilder $configurablePathBuilder
+    )
     {
+        parent::__construct($configurablePathBuilder);
+
         $this->fileConfigurationConsulter = $fileConfigurationConsulter;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\FileBasedCacheService::getCachePath()
-     */
-    function getCachePath()
+    public function getCachePath(): string
     {
-        $configurablePathBuilder = new ConfigurablePathBuilder(
-            $this->getFileConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'storage'))
-        );
-
-        return $configurablePathBuilder->getCachePath(__NAMESPACE__);
+        return $this->getConfigurablePathBuilder()->getCachePath(__NAMESPACE__);
     }
 
-    /**
-     * @return \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
-     */
-    public function getFileConfigurationConsulter()
+    public function getFileConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->fileConfigurationConsulter;
     }
 
     /**
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $fileConfigurationConsulter
+     * @throws \Exception
      */
-    public function setFileConfigurationConsulter(ConfigurationConsulter $fileConfigurationConsulter)
-    {
-        $this->fileConfigurationConsulter = $fileConfigurationConsulter;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\FileBasedCacheService::warmUp()
-     */
-    public function warmUp()
+    public function preLoadCacheData()
     {
         $dependencyInjectionContainerBuilder = DependencyInjectionContainerBuilder::getInstance();
         $dependencyInjectionContainerBuilder->clearContainerInstance();
         $dependencyInjectionContainerBuilder->createContainer();
-
-        return $this;
     }
 }

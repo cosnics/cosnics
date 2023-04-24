@@ -1,12 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Format\Twig;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Libraries\Cache\FileBasedCacheService;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
-use Symfony\Component\Form\FormFactoryInterface;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -14,48 +13,67 @@ use Twig\Loader\FilesystemLoader;
  * Manages the cache for the twig templates
  *
  * @package Chamilo\Libraries\Format\Twig
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class TwigCacheService extends FileBasedCacheService
 {
 
+    protected PathBuilder $pathBuilder;
+
+    protected RegistrationConsulter $registrationConsulter;
+
     protected Environment $twig;
 
-    public function __construct(Environment $twig, FormFactoryInterface $formFactory)
+    public function __construct(
+        ConfigurablePathBuilder $configurablePathBuilder, Environment $twig, PathBuilder $pathBuilder,
+        RegistrationConsulter $registrationConsulter
+    )
     {
+        parent::__construct($configurablePathBuilder);
+
         $this->twig = $twig;
+        $this->pathBuilder = $pathBuilder;
+        $this->registrationConsulter = $registrationConsulter;
     }
 
-    public function clearAndWarmUp()
+    public function getCachePath(): string
     {
-        return $this->clear()->warmUp();
+        return $this->getConfigurablePathBuilder()->getCachePath(__NAMESPACE__);
     }
 
-    public function getCachePath()
+    public function getPathBuilder(): PathBuilder
     {
-        return Path::getInstance()->getCachePath(__NAMESPACE__);
+        return $this->pathBuilder;
     }
 
-    public function warmUp()
+    public function getRegistrationConsulter(): RegistrationConsulter
+    {
+        return $this->registrationConsulter;
+    }
+
+    public function getTwig(): Environment
+    {
+        return $this->twig;
+    }
+
+    public function preLoadCacheData()
     {
         $packagesFilesFinder = new PackagesFilesFinder(
-            PathBuilder::getInstance(), Configuration::getInstance()->get_registration_contexts()
+            $this->getPathBuilder(), $this->getRegistrationConsulter()->getRegistrationContexts()
         );
 
         $templatesPerPackage = $packagesFilesFinder->findFiles('Resources/Templates', '*.html.twig');
 
-        $basePath = Path::getInstance()->getBasePath();
-        $this->twig->getLoader()->addLoader(new FilesystemLoader(array($basePath)));
+        $basePath = $this->getPathBuilder()->getBasePath();
+        $this->getTwig()->getLoader()->addLoader(new FilesystemLoader([$basePath]));
 
         foreach ($templatesPerPackage as $package => $templates)
         {
             foreach ($templates as $template)
             {
                 $template = str_replace($basePath, '', $template);
-                $this->twig->loadTemplate($template);
+                $this->getTwig()->loadTemplate($template);
             }
         }
-
-        return $this;
     }
 }

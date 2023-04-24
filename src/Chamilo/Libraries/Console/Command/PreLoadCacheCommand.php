@@ -25,9 +25,9 @@ class PreLoadCacheCommand extends ChamiloCommand
 
     protected CacheDataPreLoaderManager $cacheDataPreLoaderManager;
 
-    public function __construct(Translator $translator, CacheDataPreLoaderManager $cacheDataPreLoaderManager)
+    public function __construct(Translator $translator, CacheDataPreLoaderManager $symfonyCacheAdapterManager)
     {
-        $this->cacheDataPreLoaderManager = $cacheDataPreLoaderManager;
+        $this->cacheDataPreLoaderManager = $symfonyCacheAdapterManager;
         parent::__construct($translator);
     }
 

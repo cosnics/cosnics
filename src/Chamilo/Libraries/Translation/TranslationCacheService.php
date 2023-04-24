@@ -13,18 +13,18 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
  */
 class TranslationCacheService extends FileBasedCacheService
 {
-    protected ConfigurablePathBuilder $configurablePathBuilder;
-
     protected TranslatorFactory $translatorFactory;
 
-    public function __construct(TranslatorFactory $translatorFactory)
+    public function __construct(ConfigurablePathBuilder $configurablePathBuilder, TranslatorFactory $translatorFactory)
     {
+        parent::__construct($configurablePathBuilder);
+
         $this->translatorFactory = $translatorFactory;
     }
 
     public function getCachePath(): string
     {
-        return $this->configurablePathBuilder->getCachePath(__NAMESPACE__);
+        return $this->getTranslatorFactory()->getTranslationCachePath();
     }
 
     public function getTranslatorFactory(): TranslatorFactory
@@ -32,13 +32,8 @@ class TranslationCacheService extends FileBasedCacheService
         return $this->translatorFactory;
     }
 
-    /**
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    public function warmUp(): bool
+    public function preLoadCacheData()
     {
         $this->getTranslatorFactory()->createTranslator('en_EN');
-
-        return true;
     }
 }

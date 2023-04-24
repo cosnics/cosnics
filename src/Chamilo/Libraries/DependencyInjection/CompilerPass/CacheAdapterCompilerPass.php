@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection\CompilerPass;
 
-use Chamilo\Libraries\Cache\CacheManagement\CacheAdapterManager;
+use Chamilo\Libraries\Cache\CacheManagement\SymfonyCacheAdapterManager;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -16,11 +16,11 @@ class CacheAdapterCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
-        if ($container->hasDefinition(CacheAdapterManager::class))
+        if ($container->hasDefinition(SymfonyCacheAdapterManager::class))
         {
             $taggedServices = $container->findTaggedServiceIds('Symfony\Component\Cache\Adapter');
 
-            $definition = $container->getDefinition(CacheAdapterManager::class);
+            $definition = $container->getDefinition(SymfonyCacheAdapterManager::class);
 
             foreach ($taggedServices as $taggedServiceId => $tags)
             {

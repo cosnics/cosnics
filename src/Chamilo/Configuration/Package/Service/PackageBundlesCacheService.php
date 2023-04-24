@@ -121,7 +121,7 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
         return true;
     }
 
-    public function preLoadCachedData()
+    public function preLoadCacheData()
     {
         foreach ($this->getCacheIdentifiers() as $cacheIdentifier)
         {

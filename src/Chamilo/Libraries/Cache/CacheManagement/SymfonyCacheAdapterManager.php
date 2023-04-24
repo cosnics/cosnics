@@ -10,7 +10,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CacheAdapterManager
+class SymfonyCacheAdapterManager
 {
     /**
      * @var \Symfony\Component\Cache\Adapter\AdapterInterface[]

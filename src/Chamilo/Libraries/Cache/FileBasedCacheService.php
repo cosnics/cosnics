@@ -1,7 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Cache;
 
-use Chamilo\Libraries\Cache\Interfaces\CacheInterface;
+use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use RuntimeException;
 
@@ -11,25 +12,26 @@ use RuntimeException;
  * @package Chamilo\Libraries\Cache
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
-abstract class FileBasedCacheService implements CacheInterface
+abstract class FileBasedCacheService implements CacheDataPreLoaderInterface
 {
+    protected ConfigurablePathBuilder $configurablePathBuilder;
+
+    public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
+    {
+        $this->configurablePathBuilder = $configurablePathBuilder;
+    }
 
     public function clear(): bool
     {
         return $this->removeCachePath($this->getCachePath());
     }
 
-    public function clearAndWarmUp(): bool
-    {
-        if (!$this->clear())
-        {
-            return false;
-        }
-
-        return $this->warmUp();
-    }
-
     abstract public function getCachePath(): string;
+
+    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
+    {
+        return $this->configurablePathBuilder;
+    }
 
     protected function removeCachePath(string $cachePath): bool
     {

@@ -39,7 +39,7 @@ class AggregatedCacheDataPreLoader implements CacheDataPreLoaderInterface
 
         foreach ($this->getDataPreLoaders() as $dataPreLoader)
         {
-            $data = array_merge_recursive($data, $dataPreLoader->preLoadCachedData());
+            $data = array_merge_recursive($data, $dataPreLoader->preLoadCacheData());
         }
 
         return $data;

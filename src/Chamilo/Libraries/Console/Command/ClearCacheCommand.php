@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Console\Command;
 
-use Chamilo\Libraries\Cache\CacheManagement\CacheAdapterManager;
+use Chamilo\Libraries\Cache\CacheManagement\SymfonyCacheAdapterManager;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -22,17 +22,17 @@ class ClearCacheCommand extends ChamiloCommand
     public const OPT_LIST = 'list';
     public const OPT_LIST_SHORT = 'l';
 
-    protected CacheAdapterManager $cacheAdapterManager;
+    protected SymfonyCacheAdapterManager $symfonyCacheAdapterManager;
 
-    public function __construct(Translator $translator, CacheAdapterManager $cacheDataPreLoaderManager)
+    public function __construct(Translator $translator, SymfonyCacheAdapterManager $symfonyCacheAdapterManager)
     {
-        $this->cacheAdapterManager = $cacheDataPreLoaderManager;
+        $this->symfonyCacheAdapterManager = $symfonyCacheAdapterManager;
         parent::__construct($translator);
     }
 
     protected function clear(InputInterface $input, OutputInterface $output)
     {
-        $this->cacheAdapterManager->clear($this->getSelectedCacheDataPreLoadServices($input));
+        $this->symfonyCacheAdapterManager->clear($this->getSelectedCacheDataPreLoadServices($input));
         $output->writeln($this->translator->trans('CacheCleared', [], 'Chamilo\Libraries'));
     }
 
@@ -86,7 +86,7 @@ class ClearCacheCommand extends ChamiloCommand
             );
             $output->writeln('');
 
-            foreach ($this->cacheAdapterManager->getCacheAdapterAliases() as $adapterAlias)
+            foreach ($this->symfonyCacheAdapterManager->getCacheAdapterAliases() as $adapterAlias)
             {
                 $output->writeln('<info>' . $adapterAlias . '</info>');
             }

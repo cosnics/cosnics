@@ -91,7 +91,7 @@ class CacheDataPreLoaderManager
 
         foreach ($cacheDataPreLoaderServices as $cacheService)
         {
-            $cacheService->preLoadCachedData();
+            $cacheService->preLoadCacheData();
         }
     }
 }

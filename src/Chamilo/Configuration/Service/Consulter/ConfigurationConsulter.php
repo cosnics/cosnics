@@ -66,7 +66,7 @@ class ConfigurationConsulter
      */
     public function getSettings(): array
     {
-        return $this->getDataPreLoader()->preLoadCachedData();
+        return $this->getDataPreLoader()->preLoadCacheData();
     }
 
     /**
