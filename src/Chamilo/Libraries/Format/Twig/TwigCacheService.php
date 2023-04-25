@@ -14,6 +14,7 @@ use Twig\Loader\FilesystemLoader;
  *
  * @package Chamilo\Libraries\Format\Twig
  * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TwigCacheService extends FileBasedCacheService
 {

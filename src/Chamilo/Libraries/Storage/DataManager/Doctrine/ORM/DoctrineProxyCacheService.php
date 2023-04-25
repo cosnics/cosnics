@@ -12,6 +12,7 @@ use RuntimeException;
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ORM
  * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DoctrineProxyCacheService extends FileBasedCacheService
 {

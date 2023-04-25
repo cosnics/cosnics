@@ -11,6 +11,7 @@ use RuntimeException;
  *
  * @package Chamilo\Libraries\Cache
  * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class FileBasedCacheService implements CacheDataPreLoaderInterface
 {
