@@ -6,7 +6,6 @@ use Chamilo\Core\Install\Manager;
 use Chamilo\Core\Install\Observer\InstallerObserver;
 use Chamilo\Core\Install\StepResult;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
@@ -17,10 +16,9 @@ use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
- *
  * @package Chamilo\Core\Install\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class InstallerComponent extends Manager implements NoAuthenticationSupport, InstallerObserver
 {
@@ -63,12 +61,11 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterFilesystemPrepared()
      */
     public function afterFilesystemPrepared(StepResult $result)
     {
-        $glyph = new FontAwesomeGlyph('folder', array('fa-lg', 'fa-fw'), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', ['fa-lg', 'fa-fw'], null, 'fas');
 
         return $this->renderResult(
             Translation::get('Folders'), $result->get_success(), implode('<br />' . PHP_EOL, $result->get_messages()),
@@ -77,20 +74,18 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterInstallation()
      */
     public function afterInstallation()
     {
-        $message = '<a href="' . Path::getInstance()->getBasePath(true) . '">' .
+        $message = '<a href="' . $this->getWebPathBuilder()->getBasePath() . '">' .
             Translation::get('GoToYourNewlyCreatedPortal') . '</a>';
-        $glyph = new FontAwesomeGlyph('grin-beam', array('fa-lg', 'fa-fw'), null, 'fas');
+        $glyph = new FontAwesomeGlyph('grin-beam', ['fa-lg', 'fa-fw'], null, 'fas');
 
         return $this->renderResult(Translation::get('InstallationFinished'), true, $message, $glyph);
     }
 
     /**
-     *
      * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPackageInstallation()
      */
     public function afterPackageInstallation(StepResult $result)
@@ -98,8 +93,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         $title = Translation::get('TypeName', null, $result->get_context()) . ' (' . $result->get_context() . ')';
 
         $glyph = new NamespaceIdentGlyph(
-            $result->get_context(), true, false, false,
-            IdentGlyph::SIZE_SMALL, array('fa-fw')
+            $result->get_context(), true, false, false, IdentGlyph::SIZE_SMALL, ['fa-fw']
         );
 
         return $this->renderResult(
@@ -108,7 +102,6 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPackagesInstallation()
      */
     public function afterPackagesInstallation()
@@ -117,7 +110,6 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPreProduction()
      */
     public function afterPreProduction()
@@ -126,12 +118,11 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPreProductionConfigurationFileWritten()
      */
     public function afterPreProductionConfigurationFileWritten(StepResult $result)
     {
-        $glyph = new FontAwesomeGlyph('cog', array('fa-lg', 'fa-fw'), null, 'fas');
+        $glyph = new FontAwesomeGlyph('cog', ['fa-lg', 'fa-fw'], null, 'fas');
 
         return $this->renderResult(
             Translation::get('Configuration'), $result->get_success(),
@@ -140,12 +131,11 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPreProductionDatabaseCreated()
      */
     public function afterPreProductionDatabaseCreated(StepResult $result)
     {
-        $glyph = new FontAwesomeGlyph('database', array('fa-lg', 'fa-fw'), null, 'fas');
+        $glyph = new FontAwesomeGlyph('database', ['fa-lg', 'fa-fw'], null, 'fas');
 
         return $this->renderResult(
             Translation::get('Database'), $result->get_success(), implode('<br />' . PHP_EOL, $result->get_messages()),
@@ -154,7 +144,6 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforeFilesystemPrepared()
      */
     public function beforeFilesystemPrepared()
@@ -162,7 +151,6 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforeInstallation()
      */
     public function beforeInstallation()
@@ -170,7 +158,6 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforePackageInstallation()
      */
     public function beforePackageInstallation($context)
@@ -178,7 +165,6 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforePackagesInstallation()
      */
     public function beforePackagesInstallation()
@@ -187,7 +173,6 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforePreProduction()
      */
     public function beforePreProduction()
@@ -196,7 +181,6 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @return \Chamilo\Core\Install\PlatformInstaller
      */
     public function getInstaller(InstallerObserver $installerObserver)
@@ -218,7 +202,6 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @param string $title
      * @param string $result
      * @param string $message
@@ -238,7 +221,6 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @return string
      */
     public function renderResultFooter()
@@ -252,7 +234,6 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @param string $title
      * @param string $result
      * @param string $image
@@ -283,7 +264,6 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     }
 
     /**
-     *
      * @see \Chamilo\Core\Install\Manager::render_header()
      */
     public function render_header(string $pageTitle = ''): string
@@ -293,7 +273,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         $html[] = parent::render_header($pageTitle);
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Install', true) . 'InstallProcess.js'
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Install') . 'InstallProcess.js'
         );
 
         return implode(PHP_EOL, $html);

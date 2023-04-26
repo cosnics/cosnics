@@ -3,7 +3,6 @@ namespace Chamilo\Core\Install\Component;
 
 use Chamilo\Core\Install\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
@@ -16,18 +15,16 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Install\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class RequirementsComponent extends Manager implements NoAuthenticationSupport
 {
 
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     private $fatal = false;
 
@@ -57,7 +54,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
         $buttonToolBar->addItem(
             new Button(
                 Translation::get('Previous', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-left'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_INTRODUCTION))
+                $this->get_url([self::PARAM_ACTION => self::ACTION_INTRODUCTION])
             )
         );
 
@@ -65,10 +62,10 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
             new Button(
                 Translation::get('Refresh', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('sync'),
                 $this->get_url(
-                    array(
+                    [
                         self::PARAM_ACTION => self::ACTION_REQUIREMENTS,
                         self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE)
-                    )
+                    ]
                 )
             )
         );
@@ -77,10 +74,10 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
             new Button(
                 Translation::get('Next', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-right'),
                 $this->get_url(
-                    array(
+                    [
                         self::PARAM_ACTION => self::ACTION_LICENSE,
                         self::PARAM_LANGUAGE => Session::retrieve(self::PARAM_LANGUAGE)
-                    )
+                    ]
                 ), Button::DISPLAY_ICON_AND_LABEL, null, ['btn-primary']
             )
         );
@@ -91,14 +88,13 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
     }
 
     /**
-     *
      * @return string[]
      */
     public function get_data()
     {
         $array = [];
         $diagnoser = new Diagnoser();
-        $files_folder = Path::getInstance()->getStoragePath();
+        $files_folder = $this->getSystemPathBuilder()->getStoragePath();
 
         if (!file_exists($files_folder))
         {
@@ -152,7 +148,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
             'on_off', Translation::get('MagicQuotesGpcInfo', null, StringUtilities::LIBRARIES)
         );
 
-        $extensions = array(
+        $extensions = [
             'gd' => 'http://www.php.net/gd',
             'pcre' => 'http://www.php.net/pcre',
             'session' => 'http://www.php.net/session',
@@ -163,7 +159,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
             'fileinfo' => 'http://www.php.net/fileinfo',
             'curl' => 'http://www.php.net/curl',
             'mcrypt' => 'http://www.php.net/mcrypt' /* 'openssl' => 'http://www.php.net/openssl' */
-        );
+        ];
 
         foreach ($extensions as $extension => $url)
         {

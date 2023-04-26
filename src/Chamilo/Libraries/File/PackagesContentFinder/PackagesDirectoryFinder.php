@@ -6,7 +6,7 @@ namespace Chamilo\Libraries\File\PackagesContentFinder;
  * Uses a PHP-based caching system.
  *
  * @package Chamilo\Libraries\File\PackagesContentFinder
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class PackagesDirectoryFinder extends PackagesContentFinder
 {
@@ -41,7 +41,7 @@ class PackagesDirectoryFinder extends PackagesContentFinder
      *
      * @return string[]
      */
-    function handlePackage($package)
+    public function handlePackage($package)
     {
         $directories = [];
 

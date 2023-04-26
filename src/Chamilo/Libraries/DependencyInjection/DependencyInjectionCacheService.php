@@ -39,7 +39,7 @@ class DependencyInjectionCacheService extends FileBasedCacheService
     /**
      * @throws \Exception
      */
-    public function preLoadCacheData()
+    public function initializeCache()
     {
         $dependencyInjectionContainerBuilder = DependencyInjectionContainerBuilder::getInstance();
         $dependencyInjectionContainerBuilder->clearContainerInstance();

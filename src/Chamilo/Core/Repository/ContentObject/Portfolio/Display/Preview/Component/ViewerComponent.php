@@ -9,20 +9,19 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\DummyNotific
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\PreviewStorage;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\File\Path;
 use Exception;
 
 /**
  * Container to enable previews of a portfolio in the context of the repository
  *
  * @package repository\content_object\portfolio\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\Manager
     implements PortfolioDisplaySupport
 {
 
-    function run()
+    public function run()
     {
         return $this->getApplicationFactory()->getApplication(
             Manager::context(), new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
@@ -30,10 +29,9 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::count_portfolio_feedbacks()
      */
-    function count_portfolio_feedbacks(ComplexContentObjectPathNode $node)
+    public function count_portfolio_feedbacks(ComplexContentObjectPathNode $node)
     {
         return $this->retrieve_portfolio_feedbacks($node)->count();
     }
@@ -44,7 +42,6 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_feedback()
      */
     public function get_portfolio_feedback()
@@ -56,7 +53,6 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_notification()
      */
     public function get_portfolio_notification()
@@ -68,12 +64,11 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_tree_menu_url()
      */
-    function get_portfolio_tree_menu_url()
+    public function get_portfolio_tree_menu_url()
     {
-        return Path::getInstance()->getBasePath(true) . 'index.php?' . Application::PARAM_CONTEXT . '=' .
+        return $this->getWebPathBuilder()->getBasePath() . 'index.php?' . Application::PARAM_CONTEXT . '=' .
             \Chamilo\Core\Repository\Preview\Manager::context() . '&' . Application::PARAM_ACTION . '=' .
             \Chamilo\Core\Repository\Preview\Manager::ACTION_DISPLAY . '&' .
             \Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID . '=' .
@@ -121,7 +116,6 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
      */
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::is_own_portfolio()
      */
     public function is_own_portfolio()
@@ -130,7 +124,6 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     }
 
     /**
-     *
      * @param ComplexContentObjectPathNode $node
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
@@ -144,7 +137,6 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::retrieve_portfolio_feedback()
      */
     public function retrieve_portfolio_feedback($feedback_id)
@@ -160,16 +152,14 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     }
 
     /**
-     *
      * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode $node
      * @param int $count
      * @param int $offset
      *
      * @return \ArrayIterator
      * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::retrieve_portfolio_feedbacks()
-     *
      */
-    function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count = null, $offset = null)
+    public function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count = null, $offset = null)
     {
         return PreviewStorage::getInstance()->retrieve_feedbacks(
             $this->get_root_content_object()->get_id(),
@@ -178,10 +168,9 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     }
 
     /**
-     *
      * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::retrieve_portfolio_notification()
      */
-    function retrieve_portfolio_notification(ComplexContentObjectPathNode $node)
+    public function retrieve_portfolio_notification(ComplexContentObjectPathNode $node)
     {
         return PreviewStorage::getInstance()->retrieve_notification(
             $this->get_root_content_object()->get_id(),

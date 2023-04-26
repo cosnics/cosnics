@@ -4,10 +4,8 @@ namespace Chamilo\Configuration\Package\Storage\DataClass;
 use Chamilo\Configuration\Package\Properties\Authors\Author;
 use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\PathBuilder;
-use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
@@ -54,8 +52,7 @@ class Package extends DataClass
     public static function exists($context)
     {
         $packageFactory = new PackageFactory(
-            new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals()),
-            Translation::getInstance()
+            new SystemPathBuilder(ClassnameUtilities::getInstance())
         );
 
         return $packageFactory->packageExists($context);
@@ -71,8 +68,7 @@ class Package extends DataClass
     public static function get($context)
     {
         $packageFactory = new PackageFactory(
-            new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals()),
-            Translation::getInstance()
+            new SystemPathBuilder(ClassnameUtilities::getInstance())
         );
 
         return $packageFactory->getPackage($context);

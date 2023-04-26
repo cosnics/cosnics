@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\VersionTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
@@ -101,7 +100,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
 
                 $html[] = $versionTableRenderer->render($tableParameterValues, $contentObjects);
                 $html[] = ResourceManager::getInstance()->getResourceHtml(
-                    Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'VersionTable.js'
+                    $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository') . 'VersionTable.js'
                 );
             }
 

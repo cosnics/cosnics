@@ -5,17 +5,17 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class BreadcrumbTrail
 {
@@ -28,7 +28,6 @@ class BreadcrumbTrail
     private array $breadcrumbs;
 
     /**
-     *
      * @var string
      */
     private string $containerMode;
@@ -43,9 +42,11 @@ class BreadcrumbTrail
 
         if ($includeMainIndex)
         {
-            $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()), ChamiloRequest::createFromGlobals());
+            $classnameUtilities = new ClassnameUtilities(new StringUtilities());
+            $webPathBuilder = new WebPathBuilder($classnameUtilities, ChamiloRequest::createFromGlobals());
+            $systemPathBuilder = new SystemPathBuilder($classnameUtilities);
 
-            $fileConfigurationLocator = new FileConfigurationLocator($pathBuilder);
+            $fileConfigurationLocator = new FileConfigurationLocator($systemPathBuilder);
 
             // TODO: Can this be fixed more elegantly?
             if ($fileConfigurationLocator->isAvailable())
@@ -57,7 +58,7 @@ class BreadcrumbTrail
                 $siteName = 'Chamilo';
             }
 
-            $this->add(new Breadcrumb($pathBuilder->getBasePath(true), $siteName, new FontAwesomeGlyph('home')));
+            $this->add(new Breadcrumb($webPathBuilder->getBasePath(true), $siteName, new FontAwesomeGlyph('home')));
         }
     }
 
@@ -67,17 +68,19 @@ class BreadcrumbTrail
     }
 
     /**
-     *
+     * @return \Chamilo\Libraries\Format\Structure\Breadcrumb[]
+     */
+    public function getBreadcrumbs(): array
+    {
+        return $this->breadcrumbs;
+    }
+
+    /**
      * @return string
      */
     public function getContainerMode(): string
     {
         return $this->containerMode;
-    }
-
-    public function setContainerMode(string $containerMode)
-    {
-        $this->containerMode = $containerMode;
     }
 
     public static function getInstance(): BreadcrumbTrail
@@ -97,23 +100,6 @@ class BreadcrumbTrail
     public function get_breadcrumbs(): array
     {
         return $this->getBreadcrumbs();
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\Breadcrumb[]
-     */
-    public function getBreadcrumbs(): array
-    {
-        return $this->breadcrumbs;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\Breadcrumb[] $breadcrumbs
-     */
-    public function setBreadcrumbs(array $breadcrumbs)
-    {
-        $this->breadcrumbs = $breadcrumbs;
     }
 
     /**
@@ -139,7 +125,7 @@ class BreadcrumbTrail
 
     public function get_setting(string $variable, string $application): string
     {
-        return Configuration::getInstance()->get_setting(array($application, $variable));
+        return Configuration::getInstance()->get_setting([$application, $variable]);
     }
 
     public function merge(BreadcrumbTrail $trail)
@@ -164,6 +150,19 @@ class BreadcrumbTrail
     public function set(array $breadcrumbs)
     {
         $this->breadcrumbs = $breadcrumbs;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Structure\Breadcrumb[] $breadcrumbs
+     */
+    public function setBreadcrumbs(array $breadcrumbs)
+    {
+        $this->breadcrumbs = $breadcrumbs;
+    }
+
+    public function setContainerMode(string $containerMode)
+    {
+        $this->containerMode = $containerMode;
     }
 
     /**

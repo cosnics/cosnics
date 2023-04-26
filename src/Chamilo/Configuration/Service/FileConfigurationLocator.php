@@ -1,59 +1,65 @@
 <?php
 namespace Chamilo\Configuration\Service;
 
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 
 /**
- *
  * @package Chamilo\Configuration\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class FileConfigurationLocator
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\File\PathBuilder
-     */
-    private $pathBuilder;
+    private SystemPathBuilder $pathBuilder;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
-     */
-    public function __construct(PathBuilder $pathBuilder)
+    public function __construct(SystemPathBuilder $pathBuilder)
     {
         $this->pathBuilder = $pathBuilder;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\File\PathBuilder
-     */
-    public function getPathBuilder()
+    public function getDefaultFileName(): string
+    {
+        return 'configuration.default.xml';
+    }
+
+    public function getDefaultFilePath(): string
+    {
+        return $this->getPathBuilder()->getConfigurationPath();
+    }
+
+    public function getDefaultFilePathName(): string
+    {
+        return $this->getDefaultFilePath() . DIRECTORY_SEPARATOR . $this->getDefaultFileName();
+    }
+
+    public function getFileName(): string
+    {
+        return 'configuration.xml';
+    }
+
+    public function getFilePath(): string
+    {
+        return $this->getPathBuilder()->getStoragePath() . 'configuration';
+    }
+
+    public function getFilePathName(): string
+    {
+        return $this->getFilePath() . DIRECTORY_SEPARATOR . $this->getFileName();
+    }
+
+    public function getPathBuilder(): SystemPathBuilder
     {
         return $this->pathBuilder;
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\File\Path $pathBuilder
-     */
-    public function setPathBuilder(PathBuilder $pathBuilder)
-    {
-        $this->pathBuilder = $pathBuilder;
-    }
-
-    /**
-     *
      * @throws \Exception
-     * @return boolean
      */
-    public function isAvailable()
+    public function isAvailable(): bool
     {
         $file = $this->getFilePathName();
-        
+
         if (is_file($file) && is_readable($file))
         {
             return true;
@@ -62,59 +68,5 @@ class FileConfigurationLocator
         {
             return false;
         }
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getFilePath()
-    {
-        return $this->getPathBuilder()->getStoragePath() . 'configuration';
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getFileName()
-    {
-        return 'configuration.xml';
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getFilePathName()
-    {
-        return $this->getFilePath() . DIRECTORY_SEPARATOR . $this->getFileName();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getDefaultFilePath()
-    {
-        return $this->getPathBuilder()->getConfigurationPath();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getDefaultFileName()
-    {
-        return 'configuration.default.xml';
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getDefaultFilePathName()
-    {
-        return $this->getDefaultFilePath() . DIRECTORY_SEPARATOR . $this->getDefaultFileName();
     }
 }

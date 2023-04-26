@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\File;
 
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 
 /**
@@ -10,6 +11,13 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 class WebPathBuilder extends AbstractPathBuilder
 {
     protected ChamiloRequest $request;
+
+    public function __construct(ClassnameUtilities $classnameUtilities, ChamiloRequest $request)
+    {
+        parent::__construct($classnameUtilities);
+
+        $this->request = $request;
+    }
 
     public function getBasePath(): string
     {

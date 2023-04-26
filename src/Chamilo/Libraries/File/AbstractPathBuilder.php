@@ -107,14 +107,6 @@ abstract class AbstractPathBuilder
             $this->namespaceToFullPath($namespace) . 'Resources' . $this->getDirectorySeparator();
     }
 
-    public function getStoragePath(?string $namespace = null): string
-    {
-        $basePath = realpath($this->getBasePath() . '../files/');
-
-        return $this->cache[self::STORAGE][(string) $namespace] = $basePath . DIRECTORY_SEPARATOR .
-            ($namespace ? $this->getClassnameUtilities()->namespaceToPath($namespace) . DIRECTORY_SEPARATOR : '');
-    }
-
     public function getTemplatesPath(string $namespace = 'Chamilo\Configuration'): string
     {
         return $this->cache[self::TEMPLATES][$namespace] =

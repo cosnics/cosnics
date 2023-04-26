@@ -5,7 +5,6 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Admin\Core\BreadcrumbGenerator;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -15,7 +14,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
 
 /**
- *
  * @package admin.lib.admin_manager.component
  */
 
@@ -48,7 +46,7 @@ class LogViewerComponent extends Manager
         {
             $type = 'chamilo';
 
-            $dir = Path::getInstance()->getLogPath();
+            $dir = $this->getConfigurablePathBuilder()->getLogPath();
             $content = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES, false);
 
             $chamilo_type = $content[0];
@@ -67,9 +65,9 @@ class LogViewerComponent extends Manager
         $renderer = &$form->defaultRenderer();
         $renderer->setElementTemplate(' {element} ');
 
-        $types = array('server' => Translation::get('ServerLogs'));
+        $types = ['server' => Translation::get('ServerLogs')];
 
-        $file = Path::getInstance()->getLogPath();
+        $file = $this->getConfigurablePathBuilder()->getLogPath();
         $scan_list = scandir($file);
 
         foreach ($scan_list as $i => $item)
@@ -85,14 +83,14 @@ class LogViewerComponent extends Manager
             $types['chamilo'] = Translation::get('ChamiloLogs');
         }
 
-        $lines = array(
+        $lines = [
             '10' => '10 ' . Translation::get('Lines'),
             '20' => '20 ' . Translation::get('Lines'),
             '50' => '50 ' . Translation::get('Lines'),
             'all' => Translation::get('AllLines')
-        );
+        ];
 
-        $dir = Path::getInstance()->getLogPath();
+        $dir = $this->getConfigurablePathBuilder()->getLogPath();
         $content = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES, false);
         foreach ($content as $file)
         {
@@ -104,25 +102,24 @@ class LogViewerComponent extends Manager
             $files[$file] = $file;
         }
 
-        $server_types = array(
+        $server_types = [
             'php' => Translation::get('PHPErrorLog'),
             'httpd' => Translation::get('HTTPDErrorLog'),
             'mysql' => Translation::get('MYSQLErrorLog')
-        );
+        ];
 
-        $form->addElement('select', 'type', '', $types, array('id' => 'type'));
-        $form->addElement('select', 'chamilo_type', '', $files, array('id' => 'chamilo_type'));
+        $form->addElement('select', 'type', '', $types, ['id' => 'type']);
+        $form->addElement('select', 'chamilo_type', '', $files, ['id' => 'chamilo_type']);
 
-        $form->addElement('select', 'server_type', '', $server_types, array('id' => 'server_type'));
+        $form->addElement('select', 'server_type', '', $server_types, ['id' => 'server_type']);
         $form->addElement('select', 'lines', '', $lines);
 
         $form->addElement(
-            'submit', 'submit', Translation::get('Ok', [], StringUtilities::LIBRARIES),
-            array('class' => 'positive finish')
+            'submit', 'submit', Translation::get('Ok', [], StringUtilities::LIBRARIES), ['class' => 'positive finish']
         );
         $form->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Core\Admin', true) . 'LogViewer.js'
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Admin') . 'LogViewer.js'
         )
         );
 
@@ -133,13 +130,13 @@ class LogViewerComponent extends Manager
     {
         if ($type == 'chamilo')
         {
-            $file = Path::getInstance()->getLogPath() . $chamilo_type;
+            $file = $this->getConfigurablePathBuilder()->getLogPath() . $chamilo_type;
             $message = Translation::get('NoLogfilesFound');
         }
         else
         {
             $file = Configuration::getInstance()->get_setting(
-                array('Chamilo\Core\Admin', $server_type . '_error_location')
+                ['Chamilo\Core\Admin', $server_type . '_error_location']
             );
             $message = Translation::get('ServerLogfileLocationNotDefined');
         }
@@ -149,7 +146,7 @@ class LogViewerComponent extends Manager
             return '<div class="warning-message">' . $message . '</div>';
         }
 
-        $table = new HTML_Table(array('style' => 'background-color: lightblue; width: 100%;', 'cellspacing' => 0));
+        $table = new HTML_Table(['style' => 'background-color: lightblue; width: 100%;', 'cellspacing' => 0]);
         $this->read_file($file, $table, $count);
 
         return $table->toHtml();
@@ -202,7 +199,7 @@ class LogViewerComponent extends Manager
             }
 
             $table->setCellContents($row, 0, $line);
-            $table->setCellAttributes($row, 0, array('style' => "$border $color padding: 5px;"));
+            $table->setCellAttributes($row, 0, ['style' => "$border $color padding: 5px;"]);
             $row ++;
         }
 

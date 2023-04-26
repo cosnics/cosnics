@@ -1,12 +1,10 @@
 <?php
-
 namespace Chamilo\Libraries\DependencyInjection\Traits;
 
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-
 
 trait IConfigurableExtensionTrait
 {
@@ -15,7 +13,7 @@ trait IConfigurableExtensionTrait
      */
     abstract public function getContainerConfigurationFiles(): array;
 
-    abstract public function getPathBuilder(): PathBuilder;
+    abstract public function getPathBuilder(): SystemPathBuilder;
 
     public function loadContainerConfiguration(ContainerBuilder $container)
     {

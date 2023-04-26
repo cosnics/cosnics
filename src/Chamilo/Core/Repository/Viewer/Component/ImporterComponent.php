@@ -16,7 +16,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -54,7 +53,7 @@ class ImporterComponent extends Manager implements DelegateComponent
         if ($type)
         {
             $importFormParameters = new ImportFormParameters(
-                $type, $this->getWorkspace(), $this, $this->get_url(array(self::PARAM_IMPORT_TYPE => $type)),
+                $type, $this->getWorkspace(), $this, $this->get_url([self::PARAM_IMPORT_TYPE => $type]),
                 FormValidator::FORM_METHOD_POST, true, $this->get_maximum_select()
             );
 
@@ -126,7 +125,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                             Session::register(Application::PARAM_MESSAGES, $messages);
                         }
 
-                        $this->redirect(array(self::PARAM_ID => $filtered_content_object_ids[0]));
+                        $this->redirect([self::PARAM_ID => $filtered_content_object_ids[0]]);
                     }
                     elseif (count($filtered_content_object_ids) == 0)
                     {
@@ -144,7 +143,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                     }
                     else
                     {
-                        $this->redirect(array(self::PARAM_ID => $content_object_ids));
+                        $this->redirect([self::PARAM_ID => $content_object_ids]);
                     }
                 }
                 else
@@ -163,12 +162,12 @@ class ImporterComponent extends Manager implements DelegateComponent
                 BreadcrumbTrail::getInstance()->add(
                     new Breadcrumb(
                         $this->get_url(), Translation::get(
-                        'ImportType', array(
+                        'ImportType', [
                         'TYPE' => Translation::get(
                             'ImportType' . StringUtilities::getInstance()->createString($type)->upperCamelize(), null,
                             \Chamilo\Core\Repository\Manager::context()
                         )
-                    ), \Chamilo\Core\Repository\Manager::context()
+                    ], \Chamilo\Core\Repository\Manager::context()
                     )
                     )
                 );
@@ -201,7 +200,6 @@ class ImporterComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @param \Chamilo\Core\Repository\Form\ContentObjectImportForm $importForm
      */
     public function addPublishButtonToImportForm($importForm)
@@ -211,14 +209,14 @@ class ImporterComponent extends Manager implements DelegateComponent
         $buttonElements = $buttons->getElements();
         $buttonElements[] = $importForm->createElement(
             'style_submit_button', 'publish', Translation::get('Publish', null, StringUtilities::LIBRARIES),
-            array('id' => 'publish-button', 'class' => 'hidden'), null, new FontAwesomeGlyph('plus')
+            ['id' => 'publish-button', 'class' => 'hidden'], null, new FontAwesomeGlyph('plus')
         );
 
         $buttons->setElements($buttonElements);
 
         $importForm->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(self::package(), true) . 'ImporterComponent.js'
+            $this->getWebPathBuilder()->getJavascriptPath(self::package()) . 'ImporterComponent.js'
         )
         );
     }
@@ -236,7 +234,7 @@ class ImporterComponent extends Manager implements DelegateComponent
 
         $parameters = new DataClassDistinctParameters(
             $condition, new RetrieveProperties(
-                array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))
+                [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
             )
         );
 

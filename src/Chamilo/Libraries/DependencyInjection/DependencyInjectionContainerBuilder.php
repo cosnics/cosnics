@@ -19,6 +19,8 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
@@ -71,6 +73,10 @@ class DependencyInjectionContainerBuilder
 
     private static ?DependencyInjectionContainerBuilder $instance = null;
 
+    protected SystemPathBuilder $systemPathBuilder;
+
+    protected WebPathBuilder $webPathBuilder;
+
     private ?ContainerBuilder $builder;
 
     private ?string $cacheClass;
@@ -86,8 +92,6 @@ class DependencyInjectionContainerBuilder
     private ConfigurationConsulter $fileConfigurationConsulter;
 
     private FileConfigurationLocator $fileConfigurationLocator;
-
-    private PathBuilder $pathBuilder;
 
     private RegistrationConsulter $registrationConsulter;
 
@@ -191,7 +195,7 @@ class DependencyInjectionContainerBuilder
             $packageNamespaces = $this->getPackageNamespaces();
 
             $this->containerExtensionFinder = new PackagesContainerExtensionFinder(
-                new PackagesClassFinder($this->getPathBuilder(), $packageNamespaces)
+                new PackagesClassFinder($this->getSystemPathBuilder(), $packageNamespaces)
             );
         }
 
@@ -214,7 +218,7 @@ class DependencyInjectionContainerBuilder
     {
         if (!isset($this->fileConfigurationLocator))
         {
-            $this->fileConfigurationLocator = new FileConfigurationLocator($this->getPathBuilder());
+            $this->fileConfigurationLocator = new FileConfigurationLocator($this->getSystemPathBuilder());
         }
 
         return $this->fileConfigurationLocator;
@@ -265,18 +269,6 @@ class DependencyInjectionContainerBuilder
         return array_keys($platformPackageBundles->get_packages());
     }
 
-    protected function getPathBuilder(): PathBuilder
-    {
-        if (!isset($this->pathBuilder))
-        {
-            $this->pathBuilder = new PathBuilder(
-                new ClassnameUtilities($this->getStringUtilities()), $this->getRequest()
-            );
-        }
-
-        return $this->pathBuilder;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
      * @throws \Exception
@@ -320,7 +312,7 @@ class DependencyInjectionContainerBuilder
                 $this->getFileConfigurationConsulter()->getSetting(
                     ['Chamilo\Configuration', 'general', 'security_key']
                 )
-            ), new UrlGenerator($this->getRequest(), $this->getPathBuilder())
+            ), new UrlGenerator($this->getRequest(), $this->getWebPathBuilder())
             );
 
             $dataClassRepositoryCache = new DataClassRepositoryCache();
@@ -364,6 +356,30 @@ class DependencyInjectionContainerBuilder
         }
 
         return $this->stringUtilities;
+    }
+
+    protected function getSystemPathBuilder(): SystemPathBuilder
+    {
+        if (!isset($this->systemPathBuilder))
+        {
+            $this->systemPathBuilder = new SystemPathBuilder(
+                new ClassnameUtilities($this->getStringUtilities())
+            );
+        }
+
+        return $this->systemPathBuilder;
+    }
+
+    protected function getWebPathBuilder(): WebPathBuilder
+    {
+        if (!isset($this->webPathBuilder))
+        {
+            $this->webPathBuilder = new WebPathBuilder(
+                new ClassnameUtilities($this->getStringUtilities()), $this->getRequest()
+            );
+        }
+
+        return $this->webPathBuilder;
     }
 
     /**

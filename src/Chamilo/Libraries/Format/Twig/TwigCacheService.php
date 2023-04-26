@@ -5,7 +5,7 @@ use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Libraries\Cache\FileBasedCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -19,14 +19,14 @@ use Twig\Loader\FilesystemLoader;
 class TwigCacheService extends FileBasedCacheService
 {
 
-    protected PathBuilder $pathBuilder;
+    protected SystemPathBuilder $pathBuilder;
 
     protected RegistrationConsulter $registrationConsulter;
 
     protected Environment $twig;
 
     public function __construct(
-        ConfigurablePathBuilder $configurablePathBuilder, Environment $twig, PathBuilder $pathBuilder,
+        ConfigurablePathBuilder $configurablePathBuilder, Environment $twig, SystemPathBuilder $pathBuilder,
         RegistrationConsulter $registrationConsulter
     )
     {
@@ -42,7 +42,7 @@ class TwigCacheService extends FileBasedCacheService
         return $this->getConfigurablePathBuilder()->getCachePath(__NAMESPACE__);
     }
 
-    public function getPathBuilder(): PathBuilder
+    public function getPathBuilder(): SystemPathBuilder
     {
         return $this->pathBuilder;
     }
@@ -57,7 +57,14 @@ class TwigCacheService extends FileBasedCacheService
         return $this->twig;
     }
 
-    public function preLoadCacheData()
+    /**
+     * @throws \Twig\Error\SyntaxError
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\LoaderError
+     * @throws \Exception
+     */
+    public function initializeCache()
     {
         $packagesFilesFinder = new PackagesFilesFinder(
             $this->getPathBuilder(), $this->getRegistrationConsulter()->getRegistrationContexts()
@@ -66,14 +73,15 @@ class TwigCacheService extends FileBasedCacheService
         $templatesPerPackage = $packagesFilesFinder->findFiles('Resources/Templates', '*.html.twig');
 
         $basePath = $this->getPathBuilder()->getBasePath();
+
         $this->getTwig()->getLoader()->addLoader(new FilesystemLoader([$basePath]));
 
-        foreach ($templatesPerPackage as $package => $templates)
+        foreach ($templatesPerPackage as $templates)
         {
             foreach ($templates as $template)
             {
                 $template = str_replace($basePath, '', $template);
-                $this->getTwig()->loadTemplate($template);
+                $this->getTwig()->load($template);
             }
         }
     }

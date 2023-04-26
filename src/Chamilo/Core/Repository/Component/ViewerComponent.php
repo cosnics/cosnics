@@ -17,7 +17,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -668,7 +667,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
             $versionTabContent[] = $versionTableRenderer->render($tableParameterValues, $contentObjects);
             $versionTabContent[] = ResourceManager::getInstance()->getResourceHtml(
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'VersionTable.js'
+                $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Repository') . 'VersionTable.js'
             );
 
             $tabs->add(

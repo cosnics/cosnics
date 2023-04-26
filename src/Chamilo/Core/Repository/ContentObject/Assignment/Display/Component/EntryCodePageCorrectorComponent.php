@@ -2,14 +2,13 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\CodePageCorrectorFormType;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -23,7 +22,7 @@ class EntryCodePageCorrectorComponent extends Manager
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
-        }
+    }
 
     /**
      * @return string
@@ -42,16 +41,18 @@ class EntryCodePageCorrectorComponent extends Manager
 
         $correctionPage = new Page();
         //todo checks on filetype
-        $content = file_get_contents(Path::getInstance()->getRepositoryPath() . $this->getEntry()->getContentObject()->get_path());
+        $content = file_get_contents(
+            $this->getConfigurablePathBuilder()->getRepositoryPath() . $this->getEntry()->getContentObject()->get_path()
+        );
         $correctionPage->set_description($content);
 
         $form = $formFactory->create(CodePageCorrectorFormType::class, [
-            ContentObject::PROPERTY_DESCRIPTION => '<pre><code>' . $content . '</code></pre>']
-        );
+                ContentObject::PROPERTY_DESCRIPTION => '<pre><code>' . $content . '</code></pre>'
+            ]);
 
         $form->handleRequest($this->getRequest());
 
-        if($form->isValid())
+        if ($form->isValid())
         {
             $formData = $form->getData();
             $page = new Page();
@@ -67,25 +68,36 @@ class EntryCodePageCorrectorComponent extends Manager
             $this->redirectWithMessage(
                 $this->getTranslator()->trans(
                     $success ? 'ObjectCreated' : 'ObjectNotCreated',
-                    array('OBJECT' => $this->getTranslator()->trans('Page', [], 'Chamilo\Core\Repository\Page')),
-                    'Chamilo\Libraries'),
-                ! $success,
-                [
+                    ['OBJECT' => $this->getTranslator()->trans('Page', [], 'Chamilo\Core\Repository\Page')],
+                    'Chamilo\Libraries'
+                ), !$success, [
                     self::PARAM_ACTION => self::ACTION_ENTRY
-                ]);
+                ]
+            );
         }
 
         $formView = $form->createView();
 
-        return $this->getTwig()
-            ->render(
-                Manager::context() . ':EntryCodePageCorrector.html.twig',
-                [
+        return $this->getTwig()->render(
+                Manager::context() . ':EntryCodePageCorrector.html.twig', [
                     'HEADER' => $this->render_header(),
                     'FOOTER' => $this->render_footer(),
                     'form' => $formView
                 ]
             );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
+    protected function checkAccessRights()
+    {
+        if ($this->getDataProvider()->canEditAssignment())
+        {
+            return;
+        }
+
+        throw new NotAllowedException();
     }
 
     /**
@@ -102,18 +114,5 @@ class EntryCodePageCorrectorComponent extends Manager
                 Translation::getInstance()->getTranslation('ViewerComponent', null, Manager::context())
             );
         }
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     */
-    protected function checkAccessRights()
-    {
-        if($this->getDataProvider()->canEditAssignment())
-        {
-            return;
-        }
-
-        throw new NotAllowedException();
     }
 }

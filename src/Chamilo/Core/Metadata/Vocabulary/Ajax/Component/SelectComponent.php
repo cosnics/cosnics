@@ -6,7 +6,6 @@ use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\Metadata\Vocabulary\Ajax\Manager;
 use Chamilo\Core\Metadata\Vocabulary\Table\SelectTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
@@ -129,7 +128,7 @@ class SelectComponent extends Manager
 
             $resource_manager = ResourceManager::getInstance();
             $plugin_path =
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) . 'Plugin/Bootstrap/Tagsinput/';
+                $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Metadata') . 'Plugin/Bootstrap/Tagsinput/';
 
             $html[] = '<script>';
             $html[] = 'var selectedVocabularyItems = ' . json_encode($vocabularyItemValues) . ';';
@@ -142,7 +141,7 @@ class SelectComponent extends Manager
             $html[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-typeahead.js');
             $html[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-tagsinput.js');
             $html[] = $resource_manager->getResourceHtml(
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) . 'Selection.js'
+                $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Metadata') . 'Selection.js'
             );
         }
         else

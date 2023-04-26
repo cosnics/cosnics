@@ -1,8 +1,7 @@
 <?php
-
 namespace Chamilo\Libraries\DependencyInjection\Traits;
 
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -14,7 +13,7 @@ trait ExtensionTrait
      */
     abstract public function getConfigurationFiles(): array;
 
-    abstract public function getPathBuilder(): PathBuilder;
+    abstract public function getPathBuilder(): SystemPathBuilder;
 
     public function load(array $configs, ContainerBuilder $container)
     {

@@ -10,6 +10,7 @@ use Chamilo\Libraries\DependencyInjection\ExtensionFinder\PackagesContainerExten
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -209,7 +210,7 @@ class PlatformInstaller
 
     private function writeConfigurationFile()
     {
-        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals());
+        $pathBuilder = new SystemPathBuilder(ClassnameUtilities::getInstance());
 
         try
         {
@@ -234,7 +235,7 @@ class PlatformInstaller
         $packages = array_keys($platformPackageBundles->get_packages());
 
         $containerExtensionFinder = new PackagesContainerExtensionFinder(
-            new PackagesClassFinder(new PathBuilder(new ClassnameUtilities(new StringUtilities()), ChamiloRequest::createFromGlobals()), $packages));
+            new PackagesClassFinder(new SystemPathBuilder(new ClassnameUtilities(new StringUtilities())), $packages));
 
         $dependencyInjectionContainerBuilder = DependencyInjectionContainerBuilder::getInstance();
         $dependencyInjectionContainerBuilder->rebuildContainer(null, $containerExtensionFinder);

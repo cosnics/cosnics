@@ -20,7 +20,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -488,7 +487,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         }
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'CourseVisit.js'
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'CourseVisit.js'
         );
 
         return implode(PHP_EOL, $html);

@@ -36,7 +36,7 @@ class DoctrineProxyCacheService extends FileBasedCacheService
         return $this->entityManager;
     }
 
-    public function preLoadCacheData()
+    public function initializeCache()
     {
         $entityManager = $this->getEntityManager();
 

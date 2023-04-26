@@ -30,6 +30,10 @@
                       id="Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator"/>
         </service>
 
+        <service id="Chamilo\Libraries\Format\Twig\TwigCacheService">
+            <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
+        </service>
+
         <service id="Symfony\Component\Form\FormFactory">
             <factory method="buildFormFactory"
                      service="Chamilo\Libraries\Format\Form\SymfonyFormFactoryBuilder"/>

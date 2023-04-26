@@ -9,7 +9,6 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
@@ -26,7 +25,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package user.lib.user_manager.component
  */
 
@@ -38,7 +36,7 @@ use Exception;
  */
 class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
 {
-    const PARAM_RESET_KEY = 'key';
+    public const PARAM_RESET_KEY = 'key';
 
     /**
      * Runs this component and displays its output.
@@ -47,7 +45,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
     {
         $user_id = Session::get_user_id();
         $allow_password_retrieval = Configuration::getInstance()->get_setting(
-            array(Manager::context(), 'allow_password_retrieval')
+            [Manager::context(), 'allow_password_retrieval']
         );
 
         if (!$allow_password_retrieval)
@@ -77,7 +75,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                 $this->create_new_password($user);
                 Event::trigger(
                     'ResetPassword', Manager::context(),
-                    array('target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id())
+                    ['target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id()]
                 );
                 $html[] = Display::normal_message(
                     Translation::getInstance()->getTranslation(
@@ -181,7 +179,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
      *
      * @param User $user
      *
-     * @return boolean True if successfull.
+     * @return bool True if successfull.
      */
     private function create_new_password($user)
     {
@@ -190,27 +188,26 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
         $user->update();
         $mail_subject = Translation::get('LoginRequest');
         $mail_body[] = '<div style="font-family:arial, sans-serif">';
-        $mail_body[] =
-            '<p>' . Translation::get('MailResetPasswordDear', array('USER' => $user->get_fullname())) . '</p>';
+        $mail_body[] = '<p>' . Translation::get('MailResetPasswordDear', ['USER' => $user->get_fullname()]) . '</p>';
         $mail_body[] = '<p>' . Translation::get('MailResetPasswordDoneBody') . '</p>';
         $mail_body[] = '<p>' . Translation::get('UserName') . ': ' . $user->get_username() . '<br/>';
         $mail_body[] = Translation::get('MailResetPasswordNew') . ': ' . $password . '</p>';
         $mail_body[] = '<p>' . Translation::get(
-                'MailResetPasswordLogIn', array(
-                    'LOGINLINK' => '<a href="' . Path::getInstance()->getBasePath(true) . '">' .
-                        Path::getInstance()->getBasePath(true) . '</a>'
-                )
+                'MailResetPasswordLogIn', [
+                    'LOGINLINK' => '<a href="' . $this->getWebPathBuilder()->getBasePath() . '">' .
+                        $this->getWebPathBuilder()->getBasePath() . '</a>'
+                ]
             ) . '</p>';
         $mail_body[] = '<p>' . Translation::get('MailResetPasswordCloser') . '<br/>';
         $mail_body[] = Translation::get(
-                'MailResetPasswordSender', array(
+                'MailResetPasswordSender', [
                     'ADMINFIRSTNAME' => Configuration::getInstance()->get_setting(
-                        array('Chamilo\Core\Admin', 'administrator_firstname')
+                        ['Chamilo\Core\Admin', 'administrator_firstname']
                     ),
                     'ADMINLASTNAME' => Configuration::getInstance()->get_setting(
-                        array('Chamilo\Core\Admin', 'administrator_surname')
+                        ['Chamilo\Core\Admin', 'administrator_surname']
                     )
-                )
+                ]
             ) . '</p>';
         $mail_body[] = '</div>';
         $mail_body = implode(PHP_EOL, $mail_body);
@@ -233,7 +230,6 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Hashing\HashingUtilities
      */
     public function getHashingUtilities()
@@ -265,7 +261,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
      *
      * @param User $user
      *
-     * @return boolean True if successfull.
+     * @return bool True if successfull.
      */
     private function send_reset_link($user)
     {
@@ -275,22 +271,21 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
 
         $mail_subject = Translation::get('LoginRequest');
         $mail_body[] = '<div style="font-family:arial, sans-serif">';
-        $mail_body[] =
-            '<p>' . Translation::get('MailResetPasswordDear', array('USER' => $user->get_fullname())) . '</p>';
+        $mail_body[] = '<p>' . Translation::get('MailResetPasswordDear', ['USER' => $user->get_fullname()]) . '</p>';
         $mail_body[] = '<p>' . Translation::get('MailResetPasswordAskBody') . '</p>';
         $mail_body[] = '<p>' . Translation::get('UserName') . ': ' . $user->get_username() . '<br/>';
         $mail_body[] =
             Translation::get('MailResetPasswordLink') . ': <a href="' . $reset_link . '">' . $reset_link . '</a></p>';
         $mail_body[] = '<p>' . Translation::get('MailResetPasswordCloser') . '<br/>';
         $mail_body[] = Translation::get(
-                'MailResetPasswordSender', array(
+                'MailResetPasswordSender', [
                     'ADMINFIRSTNAME' => Configuration::getInstance()->get_setting(
-                        array('Chamilo\Core\Admin', 'administrator_firstname')
+                        ['Chamilo\Core\Admin', 'administrator_firstname']
                     ),
                     'ADMINLASTNAME' => Configuration::getInstance()->get_setting(
-                        array('Chamilo\Core\Admin', 'administrator_surname')
+                        ['Chamilo\Core\Admin', 'administrator_surname']
                     )
-                )
+                ]
             ) . '</p>';
         $mail_body[] = '</div>';
         $mail_body = implode(PHP_EOL, $mail_body);

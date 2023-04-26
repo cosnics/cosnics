@@ -30,6 +30,14 @@ class SystemPathBuilder extends AbstractPathBuilder
         );
     }
 
+    public function getStoragePath(?string $namespace = null): string
+    {
+        $basePath = realpath($this->getBasePath() . '../files/');
+
+        return $this->cache[self::STORAGE][(string) $namespace] = $basePath . DIRECTORY_SEPARATOR .
+            ($namespace ? $this->getClassnameUtilities()->namespaceToPath($namespace) . DIRECTORY_SEPARATOR : '');
+    }
+
     public function getVendorPath(): string
     {
         return $this->cache[self::VENDOR] =

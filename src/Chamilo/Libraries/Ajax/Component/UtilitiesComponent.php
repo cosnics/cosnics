@@ -3,28 +3,26 @@ namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\File\Path;
 use Exception;
 
 /**
- *
  * @package Chamilo\Libraries\Ajax\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class UtilitiesComponent extends Manager
 {
-    const PARAM_ACTION = 'action';
-    const PARAM_CONTEXT = 'context';
-    const PARAM_PARAMETERS = 'parameters';
-    const PARAM_PATH = 'path';
-    const PARAM_STRING = 'string';
-    const PARAM_TYPE = 'type';
-    const PARAM_VALUE = 'value';
-    const PARAM_VARIABLE = 'variable';
+    public const PARAM_ACTION = 'action';
+    public const PARAM_CONTEXT = 'context';
+    public const PARAM_PARAMETERS = 'parameters';
+    public const PARAM_PATH = 'path';
+    public const PARAM_STRING = 'string';
+    public const PARAM_TYPE = 'type';
+    public const PARAM_VALUE = 'value';
+    public const PARAM_VARIABLE = 'variable';
 
-    const PROPERTY_RESULT = 'result';
+    public const PROPERTY_RESULT = 'result';
 
     /**
      * @throws \Exception
@@ -45,7 +43,7 @@ class UtilitiesComponent extends Manager
                     throw new Exception('Invalid Path parameter: ' . $request->request->get(self::PARAM_PATH));
                 }
 
-                $properties[self::PROPERTY_RESULT] = Path::getInstance()->getBasePath(true);
+                $properties[self::PROPERTY_RESULT] = $this->getWebPathBuilder()->getBasePath();
                 break;
 
             // Retrieve the current theme
@@ -87,10 +85,10 @@ class UtilitiesComponent extends Manager
                 break;
             case 'platform_setting' :
                 $properties[self::PROPERTY_RESULT] = $this->getConfigurationConsulter()->getSetting(
-                    array(
+                    [
                         $request->request->get(self::PARAM_CONTEXT),
                         $request->request->get(self::PARAM_VARIABLE)
-                    )
+                    ]
                 );
                 break;
         }
@@ -101,11 +99,10 @@ class UtilitiesComponent extends Manager
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Architecture\AjaxManager::getRequiredPostParameters()
      */
     public function getRequiredPostParameters(): array
     {
-        return array(self::PARAM_TYPE);
+        return [self::PARAM_TYPE];
     }
 }

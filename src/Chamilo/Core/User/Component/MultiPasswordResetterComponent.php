@@ -73,7 +73,7 @@ class MultiPasswordResetterComponent extends Manager
                     $mail_body = [];
 
                     $mail_body[] = $user->get_fullname() . ',';
-                    $mail_body[] = Translation::get('YourAccountParam') . ' ' . Path::getInstance()->getBasePath(true);
+                    $mail_body[] = Translation::get('YourAccountParam') . ' ' . $this->getWebPathBuilder()->getBasePath();
                     $mail_body[] = Translation::get('UserName') . ' :' . $user->get_username();
                     $mail_body[] = Translation::get('Password') . ' :' . $password;
 

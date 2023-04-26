@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\File\PackagesContentFinder;
 
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Exception;
 
 /**
@@ -11,17 +11,10 @@ use Exception;
  * For example: scan for directories with a given path, scan for files with a given path, scan for classes
  *
  * @package Chamilo\Libraries\File\PackagesContentFinder
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class PackagesContentFinder
 {
-
-    /**
-     * The packages in which the system must be searching
-     *
-     * @var string[]
-     */
-    private $packages;
 
     /**
      * The location of the cache file
@@ -31,20 +24,22 @@ abstract class PackagesContentFinder
     private $cacheFile;
 
     /**
-     * The path generator class
+     * The packages in which the system must be searching
      *
-     * @var \Chamilo\Libraries\File\PathBuilder
+     * @var string[]
      */
-    private $pathBuilder;
+    private $packages;
+
+    private SystemPathBuilder $pathBuilder;
 
     /**
      * Constructor
      *
-     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
+     * @param \Chamilo\Libraries\File\SystemPathBuilder $pathBuilder
      * @param string[] $packages
      * @param string $cacheFile
      */
-    public function __construct(PathBuilder $pathBuilder, array $packages = [], $cacheFile = null)
+    public function __construct(SystemPathBuilder $pathBuilder, array $packages = [], $cacheFile = null)
     {
         $this->packages = $packages;
         $this->cacheFile = $cacheFile;
@@ -107,5 +102,5 @@ abstract class PackagesContentFinder
      *
      * @return string[]
      */
-    abstract function handlePackage($package);
+    public abstract function handlePackage($package);
 }

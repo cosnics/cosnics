@@ -3,21 +3,18 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Component;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Manager;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.geolocation.component
  */
 class BrowserComponent extends Manager
 {
 
     /**
-     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
@@ -42,8 +39,9 @@ class BrowserComponent extends Manager
             $html[] = '<br /><br /><h3>' . Translation::get('LocationsSummary') . '</h3>';
             $html[] = '<script src="http://maps.google.com/maps/api/js?sensor=false"></script>';
             $html[] = ResourceManager::getInstance()->getResourceHtml(
-                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\PhysicalLocation', true) .
-                'Plugin\GoogleMaps.js'
+                $this->getWebPathBuilder()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\PhysicalLocation'
+                ) . 'Plugin\GoogleMaps.js'
             );
             $html[] = '<div id="map_canvas" style="border: 1px solid black; height:500px"></div>';
             $html[] = '<script>';

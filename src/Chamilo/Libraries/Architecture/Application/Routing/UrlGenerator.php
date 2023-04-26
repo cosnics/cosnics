@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Architecture\Application\Routing;
 
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -10,17 +10,17 @@ use Symfony\Component\HttpFoundation\ParameterBag;
  * This service will be used to generate urls using the current url as a base
  *
  * @package Chamilo\Libraries\Architecture\Application\Routing
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UrlGenerator
 {
 
-    private PathBuilder $pathBuilder;
+    private WebPathBuilder $pathBuilder;
 
     private ChamiloRequest $request;
 
-    public function __construct(ChamiloRequest $request, PathBuilder $pathBuilder)
+    public function __construct(ChamiloRequest $request, WebPathBuilder $pathBuilder)
     {
         $this->request = $request;
         $this->pathBuilder = $pathBuilder;
@@ -72,7 +72,7 @@ class UrlGenerator
 
         $urlParts = [];
 
-        $urlParts[] = $this->getPathBuilder()->getBasePath(true);
+        $urlParts[] = $this->getPathBuilder()->getBasePath();
 
         if ($parameterBag->count())
         {
@@ -87,7 +87,7 @@ class UrlGenerator
         return implode('', $urlParts);
     }
 
-    public function getPathBuilder(): PathBuilder
+    public function getPathBuilder(): WebPathBuilder
     {
         return $this->pathBuilder;
     }

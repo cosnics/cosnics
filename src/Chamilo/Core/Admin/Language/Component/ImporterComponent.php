@@ -3,19 +3,18 @@ namespace Chamilo\Core\Admin\Language\Component;
 
 use Chamilo\Core\Admin\Language\Manager;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\ArrayCollectionTableRenderer;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ImporterComponent extends Manager
 {
-    const PARAM_SOURCE_FILE = 'source_file';
+    public const PARAM_SOURCE_FILE = 'source_file';
 
-    private static $repository_map = array(
+    private static $repository_map = [
         'chamilo-adaptive-assessment-dev' => 'core\repository\content_object\adaptive_assessment',
         'chamilo-adaptive-assessment-item-dev' => 'core\repository\content_object\adaptive_assessment_item',
         'chamilo-admin-dev' => 'core\admin',
@@ -191,7 +190,7 @@ class ImporterComponent extends Manager
         'chamilo-wiki-dev' => 'core\repository\content_object\wiki',
         'chamilo-wiki-page-dev' => 'core\repository\content_object\wiki_page',
         'chamilo-youtube-dev' => 'core\repository\content_object\youtube'
-    );
+    ];
 
     /**
      * Runs this component and displays its output.
@@ -202,7 +201,7 @@ class ImporterComponent extends Manager
         $form->addElement('file', self::PARAM_SOURCE_FILE, Translation::get('SourceFile'));
         $form->addElement(
             'style_submit_button', 'import_button', Translation::get('Import', null, StringUtilities::LIBRARIES),
-            array('id' => 'import_button'), null, new FontAwesomeGlyph('import')
+            ['id' => 'import_button'], null, new FontAwesomeGlyph('import')
         );
 
         if ($form->validate())
@@ -287,7 +286,8 @@ class ImporterComponent extends Manager
             foreach ($languages as $language => $variables)
             {
                 $language_path =
-                    Path::getInstance()->namespaceToFullPath($package) . 'resources/i18n/' . $language . '.i18n';
+                    $this->getSystemPathBuilder()->namespaceToFullPath($package) . 'resources/i18n/' . $language .
+                    '.i18n';
 
                 if (file_exists($language_path))
                 {

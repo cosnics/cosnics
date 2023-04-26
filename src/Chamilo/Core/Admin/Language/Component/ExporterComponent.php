@@ -5,7 +5,6 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Core\Admin\Language\Manager;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
 
 class ExporterComponent extends Manager
 {
@@ -15,32 +14,32 @@ class ExporterComponent extends Manager
      */
     public function run()
     {
-        ini_set("memory_limit", "-1");
+        ini_set('memory_limit', '-1');
         set_time_limit(0);
 
-        $translations_file = Path::getInstance()->getTemporaryPath(__NAMESPACE__) . 'translations.csv';
+        $translations_file = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__) . 'translations.csv';
         Filesystem::create_dir(dirname($translations_file));
 
         $time_start = microtime(true);
 
         $file_handle = fopen($translations_file, 'w');
 
-        $base_language = Configuration::getInstance()->get_setting(array(__NAMESPACE__, 'base_language'));
-        $source_language = Configuration::getInstance()->get_setting(array(__NAMESPACE__, 'source_language'));
-        $target_languages = Configuration::getInstance()->get_setting(array(__NAMESPACE__, 'target_languages'));
+        $base_language = Configuration::getInstance()->get_setting([__NAMESPACE__, 'base_language']);
+        $source_language = Configuration::getInstance()->get_setting([__NAMESPACE__, 'source_language']);
+        $target_languages = Configuration::getInstance()->get_setting([__NAMESPACE__, 'target_languages']);
 
         $this->write_line(
-            $file_handle, array('Package', 'Variable', 'Base language', 'Source language', 'Target Languages')
+            $file_handle, ['Package', 'Variable', 'Base language', 'Source language', 'Target Languages']
         );
 
-        $language_values = array('', '', $base_language, $source_language);
+        $language_values = ['', '', $base_language, $source_language];
         $target_languages = explode(',', $target_languages);
         foreach ($target_languages as $target_language)
         {
             $language_values[] = $target_language;
         }
 
-        $languages = array_merge($target_languages, array($base_language, $source_language));
+        $languages = array_merge($target_languages, [$base_language, $source_language]);
 
         $this->write_line($file_handle, $language_values);
 
@@ -51,7 +50,7 @@ class ExporterComponent extends Manager
             foreach ($packages as $package)
             {
                 $translations = [];
-                $language_path = Path::getInstance()->namespaceToFullPath($package) . 'resources/i18n/';
+                $language_path = $this->getSystemPathBuilder()->namespaceToFullPath($package) . 'resources/i18n/';
 
                 foreach (array_unique($languages) as $language)
                 {

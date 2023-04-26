@@ -6,8 +6,9 @@
         <defaults autowire="true"
                   autoconfigure="true"
                   public="true"/>
-        <service id="Chamilo\Libraries\Cache\CacheManagement\CacheDataPreLoaderManager"/>
-        <service id="Chamilo\Libraries\Cache\CacheManagement\SymfonyCacheAdapterManager"/>
-        <service id="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"/>
+
+        <service id="Chamilo\Libraries\DependencyInjection\DependencyInjectionCacheService">
+            <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
+        </service>
     </services>
 </container>

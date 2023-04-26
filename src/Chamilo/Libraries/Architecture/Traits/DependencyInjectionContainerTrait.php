@@ -15,6 +15,8 @@ use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
 use Chamilo\Libraries\Format\Structure\FooterRenderer;
@@ -148,6 +150,16 @@ trait DependencyInjectionContainerTrait
     public function getPathBuilder(): PathBuilder
     {
         return $this->getService(PathBuilder::class);
+    }
+
+    public function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return $this->getService(SystemPathBuilder::class);
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->getService(WebPathBuilder::class);
     }
 
     public function getRegistrationConsulter(): RegistrationConsulter

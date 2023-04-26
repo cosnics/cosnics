@@ -7,6 +7,7 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
 use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Loader\IniFileLoader;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
@@ -51,7 +52,7 @@ class TranslatorFactory
         $translationResourcesOptimizer = new TranslationResourcesOptimizer(
             ['xliff' => new XliffFileLoader(), 'ini' => new IniFileLoader()], new PackagesTranslationResourcesFinder(
             new PackagesFilesFinder(
-                new PathBuilder(ClassnameUtilities::getInstance(), ChamiloRequest::createFromGlobals()),
+                new SystemPathBuilder(ClassnameUtilities::getInstance()),
                 $packageNamespaces
             )
         ), $translationCachePath

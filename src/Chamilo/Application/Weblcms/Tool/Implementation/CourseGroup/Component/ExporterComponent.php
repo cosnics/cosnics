@@ -105,7 +105,7 @@ class ExporterComponent extends Manager
 
         $objWriter = IOFactory::createWriter($excel, 'Xlsx');
 
-        $temp_dir = Path::getInstance()->getTemporaryPath() . 'excel/';
+        $temp_dir = $this->getConfigurablePathBuilder()->getTemporaryPath() . 'excel/';
 
         if (!is_dir($temp_dir))
         {

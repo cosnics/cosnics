@@ -22,7 +22,7 @@ abstract class FileBasedCacheService implements CacheDataPreLoaderInterface
         $this->configurablePathBuilder = $configurablePathBuilder;
     }
 
-    public function clear(): bool
+    public function clearCacheData(): bool
     {
         return $this->removeCachePath($this->getCachePath());
     }
@@ -32,6 +32,16 @@ abstract class FileBasedCacheService implements CacheDataPreLoaderInterface
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
         return $this->configurablePathBuilder;
+    }
+
+    abstract public function initializeCache();
+
+    public function preLoadCacheData()
+    {
+        if ($this->clearCacheData())
+        {
+            $this->initializeCache();
+        }
     }
 
     protected function removeCachePath(string $cachePath): bool
