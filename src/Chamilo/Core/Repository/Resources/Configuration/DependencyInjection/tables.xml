@@ -81,5 +81,11 @@
                       id="Chamilo\Core\Repository\Workspace"/>
         </service>
 
+        <service id="Chamilo\Core\Repository\Viewer\Table\ContentObjectTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
+
     </services>
 </container>

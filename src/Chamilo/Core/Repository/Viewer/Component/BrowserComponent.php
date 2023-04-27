@@ -4,36 +4,33 @@ namespace Chamilo\Core\Repository\Viewer\Component;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Viewer\Filter\FilterData;
+use Chamilo\Core\Repository\Viewer\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Viewer\Menu\RepositoryCategoryMenu;
-use Chamilo\Core\Repository\Viewer\Table\ContentObject\ContentObjectTable;
+use Chamilo\Core\Repository\Viewer\Table\ContentObjectTableRenderer;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceContentObjectService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Toolbar;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserComponent extends Manager implements TableSupport
 {
     public const PROPERTY_CATEGORY = 'category';
 
     public const SHARED_BROWSER = 'shared';
-
     public const SHARED_BROWSER_ALLOWED = 'allow_shared_browser';
 
     /**
@@ -81,15 +78,13 @@ class BrowserComponent extends Manager implements TableSupport
             $html[] = '</div>';
         }
 
-        $table = $this->get_object_table();
-
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12 col-md-4 col-lg-3">';
         $html[] = $this->get_menu();
         $html[] = '</div>';
 
         $html[] = '<div class="col-xs-12 col-md-8 col-lg-9">';
-        $html[] = $table->as_html();
+        $html[] = $this->renderTable();
         $html[] = '</div>';
         $html[] = '</div>';
 
@@ -167,6 +162,11 @@ class BrowserComponent extends Manager implements TableSupport
         return $categoryId ?: 0;
     }
 
+    public function getContentObjectTableRenderer(): ContentObjectTableRenderer
+    {
+        return $this->getService(ContentObjectTableRenderer::class);
+    }
+
     /**
      * Returns the previously setup filterdata
      *
@@ -175,6 +175,11 @@ class BrowserComponent extends Manager implements TableSupport
     public function getFilterData()
     {
         return $this->filterData;
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
     public function getRightsService(): RightsService
@@ -221,6 +226,11 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->workspace;
     }
 
+    public function getWorkspaceContentObjectService(): WorkspaceContentObjectService
+    {
+        return $this->getService(WorkspaceContentObjectService::class);
+    }
+
     public function getWorkspaceService(): WorkspaceService
     {
         return $this->getService(WorkspaceService::class);
@@ -238,6 +248,10 @@ class BrowserComponent extends Manager implements TableSupport
         );
     }
 
+    /*
+     * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
+     */
+
     /**
      * @param int $category_id
      *
@@ -246,80 +260,6 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_category_url($category_id)
     {
         return $this->get_url([self::PROPERTY_CATEGORY => $category_id], [self::PARAM_QUERY]);
-    }
-
-    /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
-     *
-     * @return \Chamilo\Libraries\Format\Structure\Toolbar
-     */
-    public function get_default_browser_actions($content_object)
-    {
-        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
-        $rightsService = $this->getRightsService();
-
-        if ($rightsService->canUseContentObject($this->get_user(), $content_object))
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('Publish', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('share-square'),
-                    $this->get_url(
-                        array_merge($this->get_parameters(), [self::PARAM_ID => $content_object->get_id()]), false
-                    ), ToolbarItem::DISPLAY_ICON
-                )
-            );
-        }
-
-        if ($rightsService->canViewContentObject($this->get_user(), $content_object))
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('Preview'), new FontAwesomeGlyph('desktop'), $this->get_url(
-                    array_merge(
-                        $this->get_parameters(), [
-                            self::PARAM_TAB => self::TAB_VIEWER,
-                            self::PARAM_ACTION => self::ACTION_VIEWER,
-                            self::PARAM_VIEW_ID => $content_object->get_id()
-                        ]
-                    ), false
-                ), ToolbarItem::DISPLAY_ICON
-                )
-            );
-        }
-
-        if ($rightsService->canEditContentObject($this->get_user(), $content_object) &&
-            $rightsService->canUseContentObject($this->get_user(), $content_object))
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('EditAndPublish'), new FontAwesomeGlyph('edit'), $this->get_url(
-                    array_merge(
-                        $this->get_parameters(), [
-                            self::PARAM_TAB => self::TAB_CREATOR,
-                            self::PARAM_ACTION => self::ACTION_CREATOR,
-                            self::PARAM_EDIT_ID => $content_object->get_id()
-                        ]
-                    ), false
-                ), ToolbarItem::DISPLAY_ICON
-                )
-            );
-        }
-
-        if ($content_object instanceof ComplexContentObjectSupport &&
-            $rightsService->canViewContentObject($this->get_user(), $content_object))
-        {
-
-            $preview_url = \Chamilo\Core\Repository\Manager::get_preview_content_object_url($content_object);
-            $onclick = '" onclick="javascript:openPopup(\'' . addslashes($preview_url) . '\'); return false;';
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation::get('Preview', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('desktop'),
-                    $preview_url, ToolbarItem::DISPLAY_ICON, false, $onclick, '_blank'
-                )
-            );
-        }
-
-        return $toolbar;
     }
 
     /**
@@ -341,24 +281,12 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Viewer\Table\ContentObject\ContentObjectTable
-     */
-    protected function get_object_table()
-    {
-        return new ContentObjectTable($this);
-    }
-
-    /**
      * @return string NULL
      */
     protected function get_query()
     {
         return $this->getButtonToolbarRenderer()->getSearchForm()->getQuery();
     }
-
-    /*
-     * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
-     */
 
     public function get_table_condition($table_class_name)
     {
@@ -379,6 +307,42 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $query = $this->get_query();
         $this->set_parameter(self::PARAM_QUERY, $query);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderTable(): string
+    {
+        $contentObjectService = $this->getWorkspaceContentObjectService();
+        $filterData = $this->getFilterData();
+        $workspace = $this->getWorkspace();
+
+        $totalNumberOfItems = $contentObjectService->countContentObjectsByTypeForWorkspace(
+            $filterData->getTypeDataClass(), $workspace, new ConditionFilterRenderer(
+                $filterData, $workspace
+            )
+        );
+
+        $contentObjectTableRenderer = $this->getContentObjectTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $contentObjectTableRenderer->getParameterNames(), $contentObjectTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $contentObjects = $contentObjectService->getContentObjectsByTypeForWorkspace(
+            $filterData->getTypeDataClass(), $workspace, new ConditionFilterRenderer(
+            $filterData, $workspace
+        ), $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
+            $contentObjectTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $contentObjectTableRenderer->render($tableParameterValues, $contentObjects);
     }
 
     /**

@@ -37,11 +37,10 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('Preview', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('desktop'),
-                $this->get_content_object_preview_url($object), ToolbarItem::DISPLAY_ICON, false, null, null, null,
-                array(
-                    'onclick' => 'javascript:openPopup(\'' . addslashes($this->get_content_object_preview_url($object)) .
-                        '\');return false;'
-                )
+                $this->get_content_object_preview_url($object), ToolbarItem::DISPLAY_ICON, false, null, null, null, [
+                    'onclick' => 'javascript:openPopup(\'' .
+                        addslashes($this->get_content_object_preview_url($object)) . '\');return false;'
+                ]
             )
         );
 
@@ -58,11 +57,11 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
     public function get_content_object_preview_url($content_object)
     {
         return $this->get_component()->get_url(
-            array(
+            [
                 Manager::PARAM_ACTION => Manager::ACTION_VIEW_CONTENT_OBJECTS,
                 Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
                 Manager::PARAM_CATEGORY_ID => $content_object->get_parent_id()
-            )
+            ]
         );
     }
 
@@ -97,7 +96,7 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
     {
         if (!DataManager::content_object_deletion_allowed($content_object))
         {
-            $glyph = new FontAwesomeGlyph('exclamation-circle', array('text-warning'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('exclamation-circle', ['text-warning'], null, 'fas');
 
             return $glyph->render() . ' ' .
                 Translation::getInstance()->getTranslation('PublicationsFound', [], Manager::context());
@@ -106,10 +105,10 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
         {
             if ($this->getPublicationAggregator()->canContentObjectBeUnlinked($content_object))
             {
-                $glyph = new FontAwesomeGlyph('check-circle', array('text-success'), null, 'fas');
+                $glyph = new FontAwesomeGlyph('check-circle', ['text-success'], null, 'fas');
             }
 
-            $glyph = new FontAwesomeGlyph('minus-circle', array('text-danger'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('minus-circle', ['text-danger'], null, 'fas');
 
             return $glyph->render();
         }

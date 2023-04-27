@@ -163,7 +163,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
                 return $user->get_active() ? $trueGlyph->render() : $falseGlyph->render();
         }
 
-        return parent::renderCell($column, $resultPosition, $user, $resultPosition);
+        return parent::renderCell($column, $resultPosition, $user);
     }
 
     /**
