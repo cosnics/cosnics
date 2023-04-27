@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Table\Link\LinkTable;
+use Chamilo\Core\Repository\Table\Link\LinkTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -60,23 +60,23 @@ class LinkDeleterComponent extends Manager
         {
             switch ($linkType)
             {
-                case LinkTable::TYPE_PUBLICATIONS :
+                case LinkTableRenderer::TYPE_PUBLICATIONS :
                     [$message, $is_error_message] = $this->delete_publication(
                         $contentObjectIdentifier, $linkIdentifiers
                     );
                     break;
-                case LinkTable::TYPE_PARENTS :
+                case LinkTableRenderer::TYPE_PARENTS :
                     [$message, $is_error_message] = $this->delete_complex_wrapper($linkIdentifiers);
                     break;
-                case LinkTable::TYPE_CHILDREN :
+                case LinkTableRenderer::TYPE_CHILDREN :
                     [$message, $is_error_message] = $this->delete_complex_wrapper($linkIdentifiers);
                     break;
-                case LinkTable::TYPE_ATTACHED_TO :
+                case LinkTableRenderer::TYPE_ATTACHED_TO :
                     [$message, $is_error_message] = $this->delete_attacher(
                         $contentObjectIdentifier, $linkIdentifiers
                     );
                     break;
-                case LinkTable::TYPE_ATTACHES :
+                case LinkTableRenderer::TYPE_ATTACHES :
                     [$message, $is_error_message] = $this->delete_attachment(
                         $contentObjectIdentifier, $linkIdentifiers
                     );
