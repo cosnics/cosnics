@@ -34,5 +34,52 @@
 
         <service id="Chamilo\Core\Repository\Table\RecycleBinTableRenderer"/>
 
+        <service id="Chamilo\Core\Repository\Table\Link\LinkPublicationsTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+            <argument key="$workspace"
+                      type="service"
+                      id="Chamilo\Core\Repository\Workspace"/>
+        </service>
+
+        <service id="Chamilo\Core\Repository\Table\Link\LinkAttachedToTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+            <argument key="$workspace"
+                      type="service"
+                      id="Chamilo\Core\Repository\Workspace"/>
+        </service>
+
+        <service id="Chamilo\Core\Repository\Table\Link\LinkAttachesTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+            <argument key="$workspace"
+                      type="service"
+                      id="Chamilo\Core\Repository\Workspace"/>
+        </service>
+
+        <service id="Chamilo\Core\Repository\Table\Link\LinkChildrenTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+            <argument key="$workspace"
+                      type="service"
+                      id="Chamilo\Core\Repository\Workspace"/>
+        </service>
+
+        <service id="Chamilo\Core\Repository\Table\Link\LinkIncludeTableRenderer"/>
+
+        <service id="Chamilo\Core\Repository\Table\Link\LinkParentsTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+            <argument key="$workspace"
+                      type="service"
+                      id="Chamilo\Core\Repository\Workspace"/>
+        </service>
+
     </services>
 </container>

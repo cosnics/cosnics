@@ -1,24 +1,43 @@
 <?php
 namespace Chamilo\Core\Repository\Table\Link;
 
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Toolbar;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Repository\Table
+ * @package Chamilo\Core\Repository\Table\Link
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LinkPublicationsTableRenderer extends LinkTableRenderer implements TableRowActionsSupport
 {
+    use LinkRowActionTableRendererTrait;
+
+    public function __construct(
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        PublicationAggregatorInterface $publicationAggregator, RightsService $rightsService, User $user,
+        Workspace $workspace
+    )
+    {
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+
+        $this->publicationAggregator = $publicationAggregator;
+        $this->rightsService = $rightsService;
+        $this->user = $user;
+        $this->workspace = $workspace;
+    }
 
     protected function initializeColumns()
     {
@@ -60,26 +79,13 @@ class LinkPublicationsTableRenderer extends LinkTableRenderer implements TableRo
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, $attributes): string
     {
-        $translator = $this->getTranslator();
-        $toolbar = new Toolbar();
-
         $contentObject = DataManager::retrieve_by_id(ContentObject::class, $attributes->get_content_object_id());
 
-        if ($this->isAllowedToModify($contentObject))
-        {
-            $linkIdentifier = $attributes->get_application() . '|' . $this->renderIdentifierCell($attributes) . '|' .
-                $attributes->getPublicationContext();
+        $linkIdentifier = $attributes->get_application() . '|' . $this->renderIdentifierCell($attributes) . '|' .
+            $attributes->getPublicationContext();
 
-            $toolbar->add_item(
-                new ToolbarItem(
-                    $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                    $this->getDeleteLinkUrl(
-                        self::TYPE_PUBLICATIONS, (string) $attributes->get_content_object_id(), $linkIdentifier
-                    ), ToolbarItem::DISPLAY_ICON, true
-                )
-            );
-        }
-
-        return $toolbar->render();
+        return $this->renderLinkTableRowAction(
+            $contentObject, self::TYPE_PUBLICATIONS, (string) $attributes->get_content_object_id(), $linkIdentifier
+        );
     }
 }

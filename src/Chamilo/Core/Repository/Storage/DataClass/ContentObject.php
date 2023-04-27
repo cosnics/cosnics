@@ -1016,8 +1016,6 @@ class ContentObject extends CompositeDataClass
      * @param $order_by
      * @param null $offset
      * @param null $count
-     *
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function get_attachments(
         $type = self::ATTACHMENT_NORMAL, $order_by = null, $offset = null, $count = null
@@ -1251,8 +1249,6 @@ class ContentObject extends CompositeDataClass
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      * @param null $offset
      * @param null $count
-     *
-     * @return ContentObject[]
      */
     public function get_includes($order_by = null, $offset = null, $count = null)
     {

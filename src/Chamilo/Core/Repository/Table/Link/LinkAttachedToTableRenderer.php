@@ -1,19 +1,18 @@
 <?php
 namespace Chamilo\Core\Repository\Table\Link;
 
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Service\ContentObjectUrlGenerator;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -21,19 +20,19 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Repository\Table\Link
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class LinkParentsTableRenderer extends LinkTableRenderer implements TableRowActionsSupport
+class LinkAttachedToTableRenderer extends LinkTableRenderer implements TableRowActionsSupport
 {
-    use LinkContentObjectTableRendererTrait
-    {
-        renderCell as renderContentObjectCell;
-    }
+
+    use LinkContentObjectTableRendererTrait;
     use LinkRowActionTableRendererTrait;
+
+    protected ChamiloRequest $request;
 
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
         ContentObjectUrlGenerator $contentObjectUrlGenerator, StringUtilities $stringUtilities,
         PublicationAggregatorInterface $publicationAggregator, RightsService $rightsService, User $user,
-        Workspace $workspace
+        Workspace $workspace, ChamiloRequest $request
     )
     {
         parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
@@ -44,35 +43,25 @@ class LinkParentsTableRenderer extends LinkTableRenderer implements TableRowActi
         $this->rightsService = $rightsService;
         $this->user = $user;
         $this->workspace = $workspace;
+        $this->request = $request;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem $complexContentObjectItem
-     *
-     * @throws \Exception
+     * @todo Temporary solution until a more appropriate data-transfer-object has been implemented for attached objects
      */
-    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $complexContentObjectItem
-    ): string
+    public function getRequest(): ChamiloRequest
     {
-        $contentObject = DataManager::retrieve_by_id(
-            ContentObject::class, $complexContentObjectItem->get_parent()
-        );
-
-        return $this->renderContentObjectCell($column, $resultPosition, $contentObject);
+        return $this->request;
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem $complexContentObjectItem
-     *
-     * @throws \ReflectionException
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      */
-    public function renderTableRowActions(TableResultPosition $resultPosition, $complexContentObjectItem): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $contentObject): string
     {
-        $contentObject = DataManager::retrieve_by_id(ContentObject::class, $complexContentObjectItem->get_parent());
-
         return $this->renderLinkTableRowAction(
-            $contentObject, self::TYPE_PARENTS, $complexContentObjectItem->get_ref(),
-            $this->renderIdentifierCell($complexContentObjectItem)
+            $contentObject, self::TYPE_ATTACHED_TO, $this->getRequest()->query->get(Manager::PARAM_CONTENT_OBJECT_ID),
+            $this->renderIdentifierCell($contentObject)
         );
     }
 }

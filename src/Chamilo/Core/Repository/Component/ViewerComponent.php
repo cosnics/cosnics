@@ -6,17 +6,26 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExportImplementation;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Table\Link\LinkTable;
+use Chamilo\Core\Repository\Table\Link\LinkAttachedToTableRenderer;
+use Chamilo\Core\Repository\Table\Link\LinkAttachesTableRenderer;
+use Chamilo\Core\Repository\Table\Link\LinkChildrenTableRenderer;
+use Chamilo\Core\Repository\Table\Link\LinkIncludeTableRenderer;
+use Chamilo\Core\Repository\Table\Link\LinkParentsTableRenderer;
+use Chamilo\Core\Repository\Table\Link\LinkPublicationsTableRenderer;
+use Chamilo\Core\Repository\Table\Link\LinkTableRenderer;
 use Chamilo\Core\Repository\Table\VersionTableRenderer;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Table\SharedInTableRenderer;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -28,7 +37,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
-use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -36,7 +44,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use InvalidArgumentException;
 
@@ -53,7 +60,7 @@ class ViewerComponent extends Manager implements DelegateComponent
     /**
      * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
-    private $contentObject;
+    private ContentObject $contentObject;
 
     /**
      * @return string
@@ -80,7 +87,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $translator = $this->getTranslator();
 
         $display = ContentObjectRenditionImplementation::factory(
-            $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL, $this
+            $contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL
         );
         $trail = BreadcrumbTrail::getInstance();
 
@@ -121,21 +128,14 @@ class ViewerComponent extends Manager implements DelegateComponent
         $contentObject = $this->getContentObject();
         $translator = $this->getTranslator();
 
-        $parameters = [
-            self::PARAM_CONTEXT => self::context(),
-            self::PARAM_CONTENT_OBJECT_ID => $contentObject->getId(),
-            self::PARAM_ACTION => self::ACTION_VIEW_CONTENT_OBJECTS
-        ];
-
         // LINKS | PUBLICATIONS
         if ($contentObject->has_publications())
         {
-            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_PUBLICATIONS;
-            $browser = new LinkTable($this, LinkTable::TYPE_PUBLICATIONS);
             $tabs->add(
                 new ContentTab(
-                    LinkTable::TYPE_PUBLICATIONS, $translator->trans('Publications', [], self::package()),
-                    $browser->render(), new FontAwesomeGlyph('share-square', ['fa-lg'], null, 'fas')
+                    (string) LinkTableRenderer::TYPE_PUBLICATIONS,
+                    $translator->trans('Publications', [], self::package()), $this->renderLinkPublicationsTable(),
+                    new FontAwesomeGlyph('share-square', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -148,8 +148,6 @@ class ViewerComponent extends Manager implements DelegateComponent
             if ($totalNumberOfItems > 0)
             {
                 $tabName = 'shared_in';
-
-                $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = $tabName;
 
                 $sharedInTableRenderer = $this->getSharedInTableRenderer();
 
@@ -178,12 +176,10 @@ class ViewerComponent extends Manager implements DelegateComponent
         // LINKS | PARENTS
         if ($contentObject->has_parents())
         {
-            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_PARENTS;
-            $browser = new LinkTable($this, LinkTable::TYPE_PARENTS);
             $tabs->add(
                 new ContentTab(
-                    LinkTable::TYPE_PARENTS, $translator->trans('UsedIn', [], self::package()), $browser->render(),
-                    new FontAwesomeGlyph('arrow-up', ['fa-lg'], null, 'fas')
+                    (string) LinkTableRenderer::TYPE_PARENTS, $translator->trans('UsedIn', [], self::package()),
+                    $this->renderLinkParentsTable(), new FontAwesomeGlyph('arrow-up', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -191,12 +187,10 @@ class ViewerComponent extends Manager implements DelegateComponent
         // LINKS | CHILDREN
         if ($contentObject->has_children())
         {
-            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_CHILDREN;
-            $browser = new LinkTable($this, LinkTable::TYPE_CHILDREN);
             $tabs->add(
                 new ContentTab(
-                    LinkTable::TYPE_CHILDREN, $translator->trans('Uses', [], self::package()), $browser->render(),
-                    new FontAwesomeGlyph('arrow-down', ['fa-lg'], null, 'fas')
+                    (string) LinkTableRenderer::TYPE_CHILDREN, $translator->trans('Uses', [], self::package()),
+                    $this->renderLinkChildrenTable(), new FontAwesomeGlyph('arrow-down', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -204,12 +198,10 @@ class ViewerComponent extends Manager implements DelegateComponent
         // LINKS | ATTACHED TO
         if ($contentObject->has_attachers())
         {
-            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_ATTACHED_TO;
-            $browser = new LinkTable($this, LinkTable::TYPE_ATTACHED_TO);
             $tabs->add(
                 new ContentTab(
-                    LinkTable::TYPE_ATTACHED_TO, $translator->trans('AttachedTo', [], self::package()),
-                    $browser->render(), new FontAwesomeGlyph('bookmark', ['fa-lg'], null, 'fas')
+                    (string) LinkTableRenderer::TYPE_ATTACHED_TO, $translator->trans('AttachedTo', [], self::package()),
+                    $this->renderLinkAttachedtoTable(), new FontAwesomeGlyph('bookmark', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -217,12 +209,10 @@ class ViewerComponent extends Manager implements DelegateComponent
         // LINKS | ATTACHES
         if ($contentObject->has_attachments())
         {
-            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_ATTACHES;
-            $browser = new LinkTable($this, LinkTable::TYPE_ATTACHES);
             $tabs->add(
                 new ContentTab(
-                    LinkTable::TYPE_ATTACHES, $translator->trans('Attaches', [], self::package()), $browser->render(),
-                    new FontAwesomeGlyph('paperclip', ['fa-lg'], null, 'fas')
+                    (string) LinkTableRenderer::TYPE_ATTACHES, $translator->trans('Attaches', [], self::package()),
+                    $this->renderLinkAttachesTable(), new FontAwesomeGlyph('paperclip', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -230,12 +220,11 @@ class ViewerComponent extends Manager implements DelegateComponent
         // LINKS | INCLUDED IN
         if ($contentObject->has_includers())
         {
-            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_INCLUDED_IN;
-            $browser = new LinkTable($this, LinkTable::TYPE_INCLUDED_IN);
             $tabs->add(
                 new ContentTab(
-                    LinkTable::TYPE_INCLUDED_IN, $translator->trans('IncludedIn', [], self::package()),
-                    $browser->render(), new FontAwesomeGlyph('expand-arrows-alt', ['fa-lg'], null, 'fas')
+                    (string) LinkTableRenderer::TYPE_INCLUDED_IN, $translator->trans('IncludedIn', [], self::package()),
+                    $this->renderLinkIncludedInTable(),
+                    new FontAwesomeGlyph('expand-arrows-alt', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -243,11 +232,10 @@ class ViewerComponent extends Manager implements DelegateComponent
         // LINKS | INCLUDES
         if ($contentObject->has_includes())
         {
-            $parameters[GenericTabsRenderer::PARAM_SELECTED_TAB] = LinkTable::TYPE_INCLUDES;
-            $browser = new LinkTable($this, LinkTable::TYPE_INCLUDES);
             $tabs->add(
                 new ContentTab(
-                    LinkTable::TYPE_INCLUDES, $translator->trans('Includes', [], self::package()), $browser->render(),
+                    (string) LinkTableRenderer::TYPE_INCLUDES, $translator->trans('Includes', [], self::package()),
+                    $this->renderLinkIncludesTable(),
                     new FontAwesomeGlyph('compress-arrows-alt', ['fa-lg'], null, 'fas')
                 )
             );
@@ -259,7 +247,7 @@ class ViewerComponent extends Manager implements DelegateComponent
      *
      * @return bool
      */
-    public function canDestroyContentObject(ContentObject $contentObject)
+    public function canDestroyContentObject(ContentObject $contentObject): bool
     {
         if (!$this->getWorkspaceRightsService()->canDestroyContentObject(
             $this->getUser(), $contentObject, $this->getWorkspace()
@@ -273,8 +261,9 @@ class ViewerComponent extends Manager implements DelegateComponent
 
     /**
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
+     * @throws \ReflectionException
      */
-    private function getButtonToolbarRenderer()
+    private function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         $contentObject = $this->getContentObject();
 
@@ -302,7 +291,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                     $stateActions->addButton(
                         new Button(
                             $translator->trans('Remove', [], StringUtilities::LIBRARIES),
-                            new FontAwesomeGlyph('trash-alt'), $recycle_url, Button::DISPLAY_ICON_AND_LABEL
+                            new FontAwesomeGlyph('trash-alt'), $recycle_url, AbstractButton::DISPLAY_ICON_AND_LABEL
                         )
                     );
                 }
@@ -314,7 +303,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                     $stateActions->addButton(
                         new Button(
                             $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                            $delete_url, Button::DISPLAY_ICON_AND_LABEL,
+                            $delete_url, AbstractButton::DISPLAY_ICON_AND_LABEL,
                             $translator->trans('ConfirmDelete', [], StringUtilities::LIBRARIES)
                         )
                     );
@@ -334,8 +323,8 @@ class ViewerComponent extends Manager implements DelegateComponent
                         new Button(
                             $translator->trans('Unlink', [], StringUtilities::LIBRARIES),
                             new FontAwesomeGlyph('unlink', [], null, 'fas'), $unlink_url,
-                            Button::DISPLAY_ICON_AND_LABEL,
-                            Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
+                            AbstractButton::DISPLAY_ICON_AND_LABEL,
+                            $translator->trans('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                         )
                     );
                 }
@@ -347,8 +336,8 @@ class ViewerComponent extends Manager implements DelegateComponent
                     $stateActions->addButton(
                         new Button(
                             $translator->trans('Restore', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('undo'),
-                            $restore_url, Button::DISPLAY_ICON_AND_LABEL,
-                            Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
+                            $restore_url, AbstractButton::DISPLAY_ICON_AND_LABEL,
+                            $translator->trans('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
                         )
                     );
                 }
@@ -365,7 +354,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                         $baseActions->addButton(
                             new Button(
                                 $translator->trans('Edit', [], StringUtilities::LIBRARIES),
-                                new FontAwesomeGlyph('pencil-alt'), $edit_url, Button::DISPLAY_ICON_AND_LABEL
+                                new FontAwesomeGlyph('pencil-alt'), $edit_url, AbstractButton::DISPLAY_ICON_AND_LABEL
                             )
                         );
                     }
@@ -377,31 +366,31 @@ class ViewerComponent extends Manager implements DelegateComponent
                         $baseActions->addButton(
                             new Button(
                                 $translator->trans('Move', [], StringUtilities::LIBRARIES),
-                                new FontAwesomeGlyph('folder-open'), $move_url, Button::DISPLAY_ICON_AND_LABEL
+                                new FontAwesomeGlyph('folder-open'), $move_url, AbstractButton::DISPLAY_ICON_AND_LABEL
                             )
                         );
                     }
 
-                    if (\Chamilo\Core\Repository\Builder\Manager::exists($contentObject->package()))
+                    if (\Chamilo\Core\Repository\Builder\Manager::exists($contentObject::package()))
                     {
                         $baseActions->addButton(
                             new Button(
                                 $translator->trans('BuildComplexObject', [], StringUtilities::LIBRARIES),
                                 new FontAwesomeGlyph('cubes'),
                                 $this->get_browse_complex_content_object_url($contentObject),
-                                Button::DISPLAY_ICON_AND_LABEL
+                                AbstractButton::DISPLAY_ICON_AND_LABEL
                             )
                         );
 
-                        $preview_url = $this->get_preview_content_object_url($contentObject);
+                        $preview_url = self::get_preview_content_object_url($contentObject);
                         $onclick =
                             '" onclick="javascript:openPopup(\'' . addslashes($preview_url) . '\'); return false;';
 
                         $baseActions->addButton(
                             new Button(
                                 $translator->trans('Preview', [], StringUtilities::LIBRARIES),
-                                new FontAwesomeGlyph('desktop'), $preview_url, Button::DISPLAY_ICON_AND_LABEL, null,
-                                [$onclick], '_blank'
+                                new FontAwesomeGlyph('desktop'), $preview_url, AbstractButton::DISPLAY_ICON_AND_LABEL,
+                                null, [$onclick], '_blank'
                             )
                         );
                     }
@@ -417,14 +406,14 @@ class ViewerComponent extends Manager implements DelegateComponent
                             $image = new FontAwesomeGlyph('desktop');
                             $variable = 'Preview';
                         }
-                        $preview_url = $this->get_preview_content_object_url($contentObject);
+                        $preview_url = $this::get_preview_content_object_url($contentObject);
                         $onclick =
                             '" onclick="javascript:openPopup(\'' . addslashes($preview_url) . '\'); return false;';
 
                         $baseActions->addButton(
                             new Button(
                                 $translator->trans($variable, [], StringUtilities::LIBRARIES), $image, $preview_url,
-                                Button::DISPLAY_ICON_AND_LABEL, null, [$onclick], '_blank'
+                                AbstractButton::DISPLAY_ICON_AND_LABEL, null, [$onclick], '_blank'
                             )
                         );
                     }
@@ -461,7 +450,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                         $translator->trans('Share', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
                         $this->get_url(
                             [
-                                Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
+                                Application::PARAM_ACTION => Manager::ACTION_WORKSPACE,
                                 Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId(),
                                 \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_SHARE
                             ]
@@ -469,26 +458,23 @@ class ViewerComponent extends Manager implements DelegateComponent
                     )
                 );
             }
-            else
+            elseif ($rightsService->canDeleteContentObject($this->getUser(), $contentObject, $this->getWorkspace()))
             {
-                if ($rightsService->canDeleteContentObject($this->getUser(), $contentObject, $this->getWorkspace()))
-                {
-                    $url = $this->get_url(
-                        [
-                            Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
-                            \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_UNSHARE,
-                            Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId()
-                        ]
-                    );
+                $url = $this->get_url(
+                    [
+                        Application::PARAM_ACTION => Manager::ACTION_WORKSPACE,
+                        \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_UNSHARE,
+                        Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId()
+                    ]
+                );
 
-                    $stateActions->addButton(
-                        new Button(
-                            $translator->trans('Unshare', [], StringUtilities::LIBRARIES),
-                            new FontAwesomeGlyph('unlock'), $url, Button::DISPLAY_ICON_AND_LABEL,
-                            Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
-                        )
-                    );
-                }
+                $stateActions->addButton(
+                    new Button(
+                        $translator->trans('Unshare', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('unlock'),
+                        $url, AbstractButton::DISPLAY_ICON_AND_LABEL,
+                        $this->getTranslator()->trans('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
+                    )
+                );
             }
         }
         else
@@ -500,7 +486,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                 $stateActions->addButton(
                     new Button(
                         $translator->trans('Revert', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('undo'),
-                        $revert_url, Button::DISPLAY_ICON_AND_LABEL
+                        $revert_url, AbstractButton::DISPLAY_ICON_AND_LABEL
                     )
                 );
             }
@@ -512,7 +498,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                 $stateActions->addButton(
                     new Button(
                         $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                        $deleteUrl, Button::DISPLAY_ICON_AND_LABEL
+                        $deleteUrl, AbstractButton::DISPLAY_ICON_AND_LABEL
                     )
                 );
             }
@@ -527,9 +513,9 @@ class ViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
+     * @throws \ReflectionException
      */
-    public function getContentObject()
+    public function getContentObject(): ?ContentObject
     {
         if (!isset($this->contentObject))
         {
@@ -540,10 +526,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         return $this->contentObject;
     }
 
-    /**
-     * @return int
-     */
-    public function getContentObjectIdentifier()
+    public function getContentObjectIdentifier(): int
     {
         $contentObjectIdentifier = $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID);
 
@@ -568,11 +551,12 @@ class ViewerComponent extends Manager implements DelegateComponent
 
     /**
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\Button|\Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton
+     * @throws \ReflectionException
      */
     public function getExportButton()
     {
         $contentObject = $this->getContentObject();
-        $types = ContentObjectExportImplementation::get_types_for_object($contentObject->package());
+        $types = ContentObjectExportImplementation::get_types_for_object($contentObject::package());
 
         if (count($types) > 1)
         {
@@ -605,17 +589,15 @@ class ViewerComponent extends Manager implements DelegateComponent
     }
 
     /**
-     * @param string $type
-     *
-     * @return string
+     * @throws \ReflectionException
      */
-    private function getExportTypeLabel($type)
+    private function getExportTypeLabel(string $type): string
     {
         $translator = $this->getTranslator();
 
         $translationVariable =
             'ExportType' . StringUtilities::getInstance()->createString($type)->upperCamelize()->__toString();
-        $translation = $translator->trans($translationVariable, [], $this->getContentObject()->package());
+        $translation = $translator->trans($translationVariable, [], $this->getContentObject()::package());
 
         if ($translation == $translationVariable)
         {
@@ -623,6 +605,36 @@ class ViewerComponent extends Manager implements DelegateComponent
         }
 
         return $translation;
+    }
+
+    protected function getLinkAttachedToTableRenderer(): LinkAttachedToTableRenderer
+    {
+        return $this->getService(LinkAttachedToTableRenderer::class);
+    }
+
+    protected function getLinkAttachesTableRenderer(): LinkAttachesTableRenderer
+    {
+        return $this->getService(LinkAttachesTableRenderer::class);
+    }
+
+    protected function getLinkChildrenTableRenderer(): LinkChildrenTableRenderer
+    {
+        return $this->getService(LinkChildrenTableRenderer::class);
+    }
+
+    protected function getLinkIncludeTableRenderer(): LinkIncludeTableRenderer
+    {
+        return $this->getService(LinkIncludeTableRenderer::class);
+    }
+
+    protected function getLinkParentsTableRenderer(): LinkParentsTableRenderer
+    {
+        return $this->getService(LinkParentsTableRenderer::class);
+    }
+
+    protected function getLinkPublicationsTableRenderer(): LinkPublicationsTableRenderer
+    {
+        return $this->getService(LinkPublicationsTableRenderer::class);
     }
 
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
@@ -683,6 +695,9 @@ class ViewerComponent extends Manager implements DelegateComponent
         return $tabs;
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function getVersionTableCondition(): EqualityCondition
     {
         return new EqualityCondition(
@@ -698,13 +713,185 @@ class ViewerComponent extends Manager implements DelegateComponent
 
     /**
      * @return bool
+     * @throws \ReflectionException
      */
-    public function isAllowedToModify()
+    public function isAllowedToModify(): bool
     {
         $contentObject = $this->getContentObject();
 
         return $this->getWorkspaceRightsService()->canEditContentObject(
                 $this->getUser(), $contentObject, $this->getWorkspace()
-            ) && $this->getPublicationAggregator()->canContentObjectBeEdited($contentObject->getId());
+            ) && $this->getPublicationAggregator()->canContentObjectBeEdited((int) $contentObject->getId());
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderLinkAttachedtoTable(): string
+    {
+        $totalNumberOfItems = $this->getContentObject()->count_attachers();
+        $attachedToTableRenderer = $this->getLinkAttachedToTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $attachedToTableRenderer->getParameterNames(), $attachedToTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $attachers = $this->getContentObject()->get_attachers(
+            $attachedToTableRenderer->determineOrderBy($tableParameterValues), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage()
+        );
+
+        return $attachedToTableRenderer->render($tableParameterValues, $attachers);
+    }
+
+    /**
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderLinkAttachesTable(): string
+    {
+        $totalNumberOfItems = $this->getContentObject()->count_attachments();
+        $attachesTableRenderer = $this->getLinkAttachesTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $attachesTableRenderer->getParameterNames(), $attachesTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $attachments = $this->getContentObject()->get_attachments(
+            ContentObject::ATTACHMENT_NORMAL, $attachesTableRenderer->determineOrderBy($tableParameterValues),
+            $tableParameterValues->getOffset(), $tableParameterValues->getNumberOfItemsPerPage()
+        );
+
+        return $attachesTableRenderer->render($tableParameterValues, $attachments);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderLinkChildrenTable(): string
+    {
+        $totalNumberOfItems = $this->getContentObject()->count_children();
+        $childrenTableRenderer = $this->getLinkChildrenTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $childrenTableRenderer->getParameterNames(), $childrenTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $children = $this->getContentObject()->get_children(
+            $childrenTableRenderer->determineOrderBy($tableParameterValues), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage()
+        );
+
+        return $childrenTableRenderer->render($tableParameterValues, $children);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderLinkIncludedInTable(): string
+    {
+        $totalNumberOfItems = $this->getContentObject()->count_includers();
+        $includeTableRenderer = $this->getLinkIncludeTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $includeTableRenderer->getParameterNames(), $includeTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $includers = $this->getContentObject()->get_includers(
+            $includeTableRenderer->determineOrderBy($tableParameterValues), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage()
+        );
+
+        return $includeTableRenderer->render($tableParameterValues, $includers);
+    }
+
+    /**
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderLinkIncludesTable(): string
+    {
+        $totalNumberOfItems = $this->getContentObject()->count_includes();
+        $includeTableRenderer = $this->getLinkIncludeTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $includeTableRenderer->getParameterNames(), $includeTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $includes = $this->getContentObject()->get_includes(
+            $includeTableRenderer->determineOrderBy($tableParameterValues), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage()
+        );
+
+        return $includeTableRenderer->render($tableParameterValues, $includes);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderLinkParentsTable(): string
+    {
+        $totalNumberOfItems = $this->getContentObject()->count_parents();
+        $parentsTableRenderer = $this->getLinkParentsTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $parentsTableRenderer->getParameterNames(), $parentsTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $parents = $this->getContentObject()->get_parents(
+            $parentsTableRenderer->determineOrderBy($tableParameterValues), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage()
+        );
+
+        return $parentsTableRenderer->render($tableParameterValues, $parents);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderLinkPublicationsTable(): string
+    {
+        $totalNumberOfItems = $this->getPublicationAggregator()->countPublicationAttributes(
+            PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, $this->getContentObjectIdentifier()
+        );
+        $publicationsTableRenderer = $this->getLinkPublicationsTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $publicationsTableRenderer->getParameterNames(), $publicationsTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $publications = $this->getPublicationAggregator()->getContentObjectPublicationsAttributes(
+            PublicationAggregatorInterface::ATTRIBUTES_TYPE_OBJECT, $this->getContentObjectIdentifier(), null,
+            $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
+            $publicationsTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $publicationsTableRenderer->render($tableParameterValues, $publications);
     }
 }

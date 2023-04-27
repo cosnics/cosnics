@@ -707,7 +707,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         if (!isset(self::$helper_types))
         {
-
             self::$helper_types = [
                 'Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem'
             ];

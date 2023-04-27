@@ -21,8 +21,9 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Repository\Table\Link
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class LinkParentsTableRenderer extends LinkTableRenderer implements TableRowActionsSupport
+class LinkChildrenTableRenderer extends LinkTableRenderer implements TableRowActionsSupport
 {
+
     use LinkContentObjectTableRendererTrait
     {
         renderCell as renderContentObjectCell;
@@ -58,6 +59,13 @@ class LinkParentsTableRenderer extends LinkTableRenderer implements TableRowActi
             ContentObject::class, $complexContentObjectItem->get_parent()
         );
 
+        if (in_array($contentObject->getType(), DataManager::get_active_helper_types()))
+        {
+            $contentObject = DataManager::retrieve_by_id(
+                ContentObject::class, $contentObject->get_reference()
+            );
+        }
+
         return $this->renderContentObjectCell($column, $resultPosition, $contentObject);
     }
 
@@ -68,10 +76,10 @@ class LinkParentsTableRenderer extends LinkTableRenderer implements TableRowActi
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, $complexContentObjectItem): string
     {
-        $contentObject = DataManager::retrieve_by_id(ContentObject::class, $complexContentObjectItem->get_parent());
+        $contentObject = DataManager::retrieve_by_id(ContentObject::class, $complexContentObjectItem->get_ref());
 
         return $this->renderLinkTableRowAction(
-            $contentObject, self::TYPE_PARENTS, $complexContentObjectItem->get_ref(),
+            $contentObject, self::TYPE_CHILDREN, $complexContentObjectItem->get_parent(),
             $this->renderIdentifierCell($complexContentObjectItem)
         );
     }
