@@ -7,12 +7,13 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Table\ImpactView\ImpactViewTable;
+use Chamilo\Core\Repository\Table\ImpactViewTableRenderer;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
@@ -20,12 +21,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
- * @package repository.lib.repository_manager.component
- */
-
-/**
- * Weblcms component allows the user to manage course categories
+ * @package Chamilo\Core\Repository\Component
  */
 class CategoryManagerComponent extends Manager implements ImpactViewSupport, TableSupport, CategorySupport
 {
@@ -63,7 +59,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
      *
      * @param int $category_id
      *
-     * @return boolean
+     * @return bool
      */
     public function allowed_to_delete_category($category_id)
     {
@@ -87,7 +83,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
     /**
      * Counts the categories for a given condition
      *
-     * @param Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return int
      */
@@ -153,11 +149,21 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         return $category;
     }
 
+    public function getImpactViewTableRenderer(): ImpactViewTableRenderer
+    {
+        return $this->getService(ImpactViewTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
     /**
      * Helper function that recursivly builds the categories condition
      *
      * @param int $category_id
-     * @param Condition[] $conditions
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition[] $conditions
      */
     private function get_categories_condition($category_id, &$conditions = [])
     {
@@ -179,10 +185,18 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         }
     }
 
+    /*
+     * (non-PHPdoc) @see \configuration\category\CategorySupport::allowed_to_edit_category()
+     */
+
     public function get_category_parameters()
     {
         return [];
     }
+
+    /*
+     * (non-PHPdoc) @see \configuration\category\CategorySupport::allowed_to_change_category_visibility()
+     */
 
     /**
      * Returns the next display order for a given parent
@@ -198,10 +212,6 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         );
     }
 
-    /*
-     * (non-PHPdoc) @see \configuration\category\CategorySupport::allowed_to_edit_category()
-     */
-
     public function get_parameters(bool $include_search = false): array
     {
         $extra_parameters = [];
@@ -216,16 +226,12 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         return array_merge($extra_parameters, parent::get_parameters($include_search));
     }
 
-    /*
-     * (non-PHPdoc) @see \configuration\category\CategorySupport::allowed_to_change_category_visibility()
-     */
-
     /**
      * Returns the condition for a table
      *
      * @param string $class_name
      *
-     * @return Condition
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_table_condition($class_name)
     {
@@ -251,10 +257,13 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         }
 
         $condition = new AndCondition(
-            [new OrCondition($conditions), new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
-                new StaticConditionVariable(ContentObject::STATE_NORMAL)
-            )]
+            [
+                new OrCondition($conditions),
+                new EqualityCondition(
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
+                    new StaticConditionVariable(ContentObject::STATE_NORMAL)
+                )
+            ]
         );
 
         $parameters = new DataClassCountParameters($condition);
@@ -263,11 +272,13 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
     }
 
     /**
-     * Renders the impact view
-     *
-     * @param int[] $selected_category_ids - [OPTIONAL] default: array
+     * @param int[] $selected_category_ids
      *
      * @return string
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
     public function render_impact_view($selected_category_ids = [])
     {
@@ -289,16 +300,31 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
             ]
         );
 
-        $this->impact_view_table_condition = $condition;
-        $impact_view_table = new ImpactViewTable($this);
+        $totalNumberOfItems = DataManager::count_active_content_objects(
+            ContentObject::class, new DataClassCountParameters($condition)
+        );
 
-        return $impact_view_table->as_html();
+        $impactViewTableRenderer = $this->getImpactViewTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $impactViewTableRenderer->getParameterNames(), $impactViewTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $contentObjects = DataManager::retrieve_active_content_objects(
+            ContentObject::class, new DataClassRetrievesParameters(
+                $condition, $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
+                $impactViewTableRenderer->determineOrderBy($tableParameterValues)
+            )
+        );
+
+        return $impactViewTableRenderer->render($tableParameterValues, $contentObjects);
     }
 
     /**
      * Retrieves the categories for a given condition
      *
-     * @param Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $count
      * @param int $order_property

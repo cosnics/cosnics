@@ -699,7 +699,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return int
+     * @return int[]
      * @throws \Exception
      */
     public function getTargetUsersForUser(User $user)

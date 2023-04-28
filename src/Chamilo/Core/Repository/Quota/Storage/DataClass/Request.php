@@ -211,7 +211,7 @@ class Request extends DataClass
     /**
      * Get the user of this request
      *
-     * @return \core\user\User
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function get_user()
     {

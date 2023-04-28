@@ -1,16 +1,17 @@
 <?php
 namespace Chamilo\Core\Repository\Table;
 
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Table\ImpactView\ImpactViewTableColumnModel;
-use Chamilo\Core\Repository\Viewer\Manager;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
@@ -19,11 +20,11 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\User\Table
+ * @package Chamilo\Core\Repository\Table
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ImpactViewTableRenderer extends DataClassListTableRenderer implements TableRowActionsSupport
@@ -41,6 +42,17 @@ class ImpactViewTableRenderer extends DataClassListTableRenderer implements Tabl
         parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
 
         $this->publicationAggregator = $publicationAggregator;
+    }
+
+    public function getContentObjectPreviewUrl(ContentObject $contentObject): string
+    {
+        return $this->getUrlGenerator()->fromRequest(
+            [
+                Application::PARAM_ACTION => Manager::ACTION_VIEW_CONTENT_OBJECTS,
+                Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId(),
+                Manager::PARAM_CATEGORY_ID => $contentObject->get_parent_id()
+            ]
+        );
     }
 
     public function getPublicationAggregator(): PublicationAggregator
@@ -62,15 +74,13 @@ class ImpactViewTableRenderer extends DataClassListTableRenderer implements Tabl
 
         $this->addColumn(
             new StaticTableColumn(
-                self::COLUMN_CATEGORY,
-                $translator->trans('Category', [], \Chamilo\Core\Repository\Manager::CONTEXT)
+                self::COLUMN_CATEGORY, $translator->trans('Category', [], Manager::CONTEXT)
             )
         );
 
         $this->addColumn(
             new StaticTableColumn(
-                self::COLUMN_SAFE_DELETE,
-                $translator->trans('SafeDelete', [], Manager::CONTEXT)
+                self::COLUMN_SAFE_DELETE, $translator->trans('SafeDelete', [], Manager::CONTEXT)
             )
         );
     }
@@ -79,6 +89,7 @@ class ImpactViewTableRenderer extends DataClassListTableRenderer implements Tabl
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \ReflectionException
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $contentObject): string
     {
@@ -88,7 +99,7 @@ class ImpactViewTableRenderer extends DataClassListTableRenderer implements Tabl
         {
             case ContentObject::PROPERTY_TYPE :
                 return $contentObject->get_icon_image(IdentGlyph::SIZE_MINI);
-            case ImpactViewTableColumnModel::COLUMN_CATEGORY :
+            case self::COLUMN_CATEGORY :
                 if ($contentObject->get_parent_id() != 0)
                 {
                     $category = DataManager::retrieve_by_id(
@@ -99,10 +110,10 @@ class ImpactViewTableRenderer extends DataClassListTableRenderer implements Tabl
                 }
                 else
                 {
-                    return $translator->trans('MyRepository', [], \Chamilo\Core\Repository\Manager::CONTEXT);
+                    return $translator->trans('MyRepository', [], Manager::CONTEXT);
                 }
 
-            case ImpactViewTableColumnModel::COLUMN_SAFE_DELETE :
+            case self::COLUMN_SAFE_DELETE :
                 return $this->render_is_linked_column($contentObject);
         }
 
@@ -114,10 +125,19 @@ class ImpactViewTableRenderer extends DataClassListTableRenderer implements Tabl
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, $contentObject): string
     {
-        $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();
 
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
+
+        $toolbar->add_item(
+            new ToolbarItem(
+                $translator->trans('Preview', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('desktop'),
+                $this->getContentObjectPreviewUrl($contentObject), ToolbarItem::DISPLAY_ICON, false, null, null, null, [
+                    'onclick' => 'javascript:openPopup(\'' .
+                        addslashes($this->getContentObjectPreviewUrl($contentObject)) . '\');return false;'
+                ]
+            )
+        );
 
         return $toolbar->render();
     }
@@ -128,8 +148,7 @@ class ImpactViewTableRenderer extends DataClassListTableRenderer implements Tabl
         {
             $glyph = new FontAwesomeGlyph('exclamation-circle', ['text-warning'], null, 'fas');
 
-            return $glyph->render() . ' ' .
-                $this->getTranslator()->trans('PublicationsFound', [], \Chamilo\Core\Repository\Manager::CONTEXT);
+            return $glyph->render() . ' ' . $this->getTranslator()->trans('PublicationsFound', [], Manager::CONTEXT);
         }
         else
         {

@@ -13,21 +13,21 @@ use Symfony\Component\Translation\Translator;
 
 class RequestTable extends DataClassListTableRenderer implements TableActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager::PARAM_REQUEST_ID;
-    const TYPE_PERSONAL = 1;
-    const TYPE_PENDING = 2;
-    const TYPE_GRANTED = 3;
-    const TYPE_DENIED = 4;
-
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
+    public const TABLE_IDENTIFIER = Manager::PARAM_REQUEST_ID;
+    public const TYPE_DENIED = 4;
+    public const TYPE_GRANTED = 3;
+    public const TYPE_PENDING = 2;
+    public const TYPE_PERSONAL = 1;
 
     /**
      * @var \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
      */
     private $rightsService;
+
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
 
     /**
      * @param $component
@@ -55,27 +55,44 @@ class RequestTable extends DataClassListTableRenderer implements TableActionsSup
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
+     * @return \Chamilo\Libraries\Format\Table\FormAction\TableActions
      */
-    public function setRightsService(RightsService $rightsService): void
+    public function getTableActions(): TableActions
     {
-        $this->rightsService = $rightsService;
-    }
+        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
+        if ($this->getRightsService()->canUserViewAllQuotaRequests($this->get_component()->getUser()))
+        {
+            if ($this->get_component()->get_table_type() == self::TYPE_PENDING ||
+                $this->get_component()->get_table_type() == self::TYPE_DENIED)
+            {
+                $actions->addAction(
+                    new TableAction(
+                        $this->get_component()->get_url([Manager::PARAM_ACTION => Manager::ACTION_GRANT]),
+                        Translation::get('GrantSelected', null, StringUtilities::LIBRARIES)
+                    )
+                );
+            }
 
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
+            if ($this->get_component()->get_table_type() == self::TYPE_PENDING)
+            {
+                $actions->addAction(
+                    new TableAction(
+                        $this->get_component()->get_url([Manager::PARAM_ACTION => Manager::ACTION_DENY]),
+                        Translation::get('DenySelected', null, StringUtilities::LIBRARIES)
+                    )
+                );
+            }
+        }
+
+        $actions->addAction(
+            new TableAction(
+                $this->get_component()->get_url([Manager::PARAM_ACTION => Manager::ACTION_DELETE]),
+                Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES)
+            )
+        );
+
+        return $actions;
     }
 
     /**
@@ -94,43 +111,26 @@ class RequestTable extends DataClassListTableRenderer implements TableActionsSup
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Table\FormAction\TableActions
+     * @return \Symfony\Component\Translation\Translator
      */
-    public function getTableActions(): TableActions
+    public function getTranslator(): Translator
     {
-        $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        return $this->translator;
+    }
 
-        if ($this->getRightsService()->canUserViewAllQuotaRequests($this->get_component()->getUser()))
-        {
-            if ($this->get_component()->get_table_type() == self::TYPE_PENDING ||
-                $this->get_component()->get_table_type() == self::TYPE_DENIED)
-            {
-                $actions->addAction(
-                    new TableAction(
-                        $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_GRANT)),
-                        Translation::get('GrantSelected', null, StringUtilities::LIBRARIES)
-                    )
-                );
-            }
+    /**
+     * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
+    }
 
-            if ($this->get_component()->get_table_type() == self::TYPE_PENDING)
-            {
-                $actions->addAction(
-                    new TableAction(
-                        $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DENY)),
-                        Translation::get('DenySelected', null, StringUtilities::LIBRARIES)
-                    )
-                );
-            }
-        }
-
-        $actions->addAction(
-            new TableAction(
-                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)),
-                Translation::get('RemoveSelected', null, StringUtilities::LIBRARIES)
-            )
-        );
-
-        return $actions;
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 }

@@ -57,12 +57,11 @@ class ArrayCollectionTableRenderer
         );
     }
 
-    protected function determineOffset(TableParameterValues $parameterValues): int
+    protected function determineOffset(int $pageNumber, int $numberOfItemsPerPage, int $totalNumberOfItems): int
     {
         try
         {
-            return $this->getPager()->getCurrentRangeOffset($parameterValues->getPageNumber(), $parameterValues->getNumberOfItemsPerPage(),
-                $parameterValues->getTotalNumberOfItems());
+            return $this->getPager()->getCurrentRangeOffset($pageNumber, $numberOfItemsPerPage, $totalNumberOfItems);
         }
         catch (InvalidPageNumberException $exception)
         {
@@ -119,8 +118,18 @@ class ArrayCollectionTableRenderer
         int $defaultNumberOfRowsPerPage = 20, string $tableName = 'arrayTable'
     ): TableParameterValues
     {
+        $pageNumber = $this->determinePageNumber($tableName);
         $numberOfRowsPerPage = $this->determineNumberOfRowsPerPage($tableName, $defaultNumberOfRowsPerPage);
         $totalNumberOfItems = $tableData->count();
+
+        if ($numberOfRowsPerPage == Pager::DISPLAY_ALL)
+        {
+            $numberOfItemsPerPage = $totalNumberOfItems;
+        }
+        else
+        {
+            $numberOfItemsPerPage = $numberOfRowsPerPage;
+        }
 
         $tableParameterValues = new TableParameterValues();
 
@@ -129,12 +138,16 @@ class ArrayCollectionTableRenderer
             $numberOfRowsPerPage == Pager::DISPLAY_ALL ? $totalNumberOfItems : $numberOfRowsPerPage
         );
         $tableParameterValues->setNumberOfColumnsPerPage(1);
-        $tableParameterValues->setPageNumber($this->determinePageNumber($tableName));
+        $tableParameterValues->setNumberOfItemsPerPage($numberOfItemsPerPage);
+        $tableParameterValues->setPageNumber($pageNumber);
         $tableParameterValues->setOrderColumnIndex(
             $this->determineOrderColumnIndex($tableName, $defaultOrderColumnIndex)
         );
         $tableParameterValues->setOrderColumnDirection(
             $this->determineOrderColumnDirection($tableName, $defaultOrderColumnDirection)
+        );
+        $tableParameterValues->setOffset(
+            $this->determineOffset($pageNumber, $numberOfItemsPerPage, $totalNumberOfItems)
         );
 
         return $tableParameterValues;
@@ -155,7 +168,7 @@ class ArrayCollectionTableRenderer
         }
 
         return new ArrayCollection(
-            $tableData->slice($this->determineOffset($parameterValues), $parameterValues->getNumberOfRowsPerPage())
+            $tableData->slice($parameterValues->getOffset(), $parameterValues->getNumberOfRowsPerPage())
         );
     }
 

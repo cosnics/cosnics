@@ -17,29 +17,30 @@ class RequestTableColumnModel extends DataClassTableColumnModel implements Table
     public function initializeColumns()
     {
         $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_CREATION_DATE));
-        
+
         if ($this->get_component()->get_table_type() != RequestTable::TYPE_PERSONAL)
         {
             $this->addColumn(new StaticTableColumn(Translation::get('User')));
         }
-        
+
         $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_QUOTA));
         $this->addColumn(new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_MOTIVATION));
-        
+
         if ($this->get_component()->get_table_type() == RequestTable::TYPE_PENDING)
         {
             $this->addColumn(new StaticTableColumn(Translation::get('CurrentlyUsedDiskSpace')));
         }
-        
+
         if ($this->get_component()->get_table_type() != RequestTable::TYPE_PERSONAL)
         {
             $this->addColumn(new StaticTableColumn(Translation::get('MaximumUsedDiskSpace')));
         }
-        
+
         if ($this->get_component()->get_table_type() == RequestTable::TYPE_PERSONAL)
         {
             $this->addColumn(
-                new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_DECISION, false));
+                new DataClassPropertyTableColumn(Request::class, Request::PROPERTY_DECISION, false)
+            );
         }
     }
 }

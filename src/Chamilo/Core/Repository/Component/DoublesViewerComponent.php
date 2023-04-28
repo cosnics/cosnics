@@ -5,13 +5,14 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Table\Doubles\DoublesTable;
+use Chamilo\Core\Repository\Table\DoublesDetailsTableRenderer;
+use Chamilo\Core\Repository\Table\DoublesTableRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -19,24 +20,22 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
- * @package repository.lib.repository_manager.component
+ * @package Chamilo\Core\Repository\Component
  */
-
-/**
- * Repository manager component which can be used to view doubles in the repository
- */
-class DoublesViewerComponent extends Manager implements TableSupport
+class DoublesViewerComponent extends Manager
 {
 
-    private $content_object;
+    private ?ContentObject $contentObject = null;
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
     public function run()
     {
-        $id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
+        $id = $this->getRequest()->query->get(self::PARAM_CONTENT_OBJECT_ID);
         $trail = BreadcrumbTrail::getInstance();
 
         $html = [];
@@ -45,95 +44,138 @@ class DoublesViewerComponent extends Manager implements TableSupport
 
         if (isset($id))
         {
-            $this->content_object = $content_object = DataManager::retrieve_by_id(ContentObject::class, $id);
-            $html[] = ContentObjectRenditionImplementation::launch(
-                $content_object,
-                ContentObjectRendition::FORMAT_HTML,
-                ContentObjectRendition::VIEW_FULL,
-                $this);
-            $html[] = '<br />';
-            $html[] = $this->get_detail_table_html();
+            $this->contentObject = DataManager::retrieve_by_id(ContentObject::class, $id);
 
-            $params = array(self::PARAM_CONTENT_OBJECT_ID => $this->content_object->get_id());
-            $trail->add(new Breadcrumb($this->get_url($params), $this->content_object->get_title()));
+            $html[] = ContentObjectRenditionImplementation::launch(
+                $this->contentObject, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL
+            );
+
+            $html[] = '<br />';
+            $html[] = $this->renderDoublesDetailsTable();
+
+            $params = [self::PARAM_CONTENT_OBJECT_ID => $this->contentObject->getId()];
+            $trail->add(new Breadcrumb($this->get_url($params), $this->contentObject->get_title()));
         }
         else
         {
-            $html[] = $this->get_full_table_html();
+            $html[] = $this->renderDoublesTable();
         }
 
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
-    }
-
-    private function get_full_table_html()
-    {
-        $condition = $this->get_full_condition();
-        $parameters = $this->get_parameters(true);
-        $table = new DoublesTable($this);
-        return $table->as_html();
-    }
-
-    public function get_full_condition()
-    {
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($this->get_user_id()));
-        $conditions[] = new NotCondition(
-            new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
-                new StaticConditionVariable(ContentObject::STATE_RECYCLED)));
-        return new AndCondition($conditions);
-    }
-
-    public function get_detail_table_html()
-    {
-        $condition = $this->get_detail_condition();
-        $parameters = $this->get_parameters(true);
-        $parameters[self::PARAM_CONTENT_OBJECT_ID] = $this->content_object->get_id();
-        $table = new DoublesTable($this, true);
-        return $table->as_html();
-    }
-
-    public function get_detail_condition()
-    {
-        $conditions = [];
-        $conditions[] = $this->get_full_condition();
-        $conditions[] = new NotCondition(
-            new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                new StaticConditionVariable($this->content_object->get_id())));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH),
-            new StaticConditionVariable($this->content_object->get_content_hash()));
-
-        return new AndCondition($conditions);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
-                Translation::get('BrowserComponent')));
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS]),
+                $this->getTranslator()->trans('BrowserComponent', [], Manager::CONTEXT)
+            )
+        );
     }
 
-    public function get_table_condition($table_class_name)
+    public function getDoublesCondition(): AndCondition
     {
         $conditions = [];
-        if (isset($this->content_object))
-        {
-            $conditions[true] = $this->get_detail_condition();
-        }
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
+            new StaticConditionVariable($this->getUser()->getId())
+        );
+        $conditions[] = new NotCondition(
+            new EqualityCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
+                new StaticConditionVariable(ContentObject::STATE_RECYCLED)
+            )
+        );
 
-        $conditions[false] = $this->get_full_condition();
-        return $conditions;
+        return new AndCondition($conditions);
     }
 
-    public function get_repository_browser()
+    public function getDoublesDetailsCondition(): AndCondition
     {
-        return $this;
+        $conditions = [];
+        $conditions[] = $this->getDoublesCondition();
+        $conditions[] = new NotCondition(
+            new EqualityCondition(
+                new PropertyConditionVariable(ContentObject::class, DataClass::PROPERTY_ID),
+                new StaticConditionVariable($this->contentObject->getId())
+            )
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH),
+            new StaticConditionVariable($this->contentObject->get_content_hash())
+        );
+
+        return new AndCondition($conditions);
+    }
+
+    public function getDoublesDetailsTableRenderer(): DoublesDetailsTableRenderer
+    {
+        return $this->getService(DoublesDetailsTableRenderer::class);
+    }
+
+    public function getDoublesTableRenderer(): DoublesTableRenderer
+    {
+        return $this->getService(DoublesTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    public function renderDoublesDetailsTable(): string
+    {
+        $totalNumberOfItems = \Chamilo\Core\Repository\Storage\DataManager::count_active_content_objects(
+            $this->getDoublesDetailsCondition()
+        );
+        $doublesTableRenderer = $this->getDoublesTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $doublesTableRenderer->getParameterNames(), $doublesTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $contentObjects = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
+            ContentObject::class, new DataClassRetrievesParameters(
+                $this->getDoublesDetailsCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+                $tableParameterValues->getOffset(), $doublesTableRenderer->determineOrderBy($tableParameterValues)
+            )
+        );
+
+        return $doublesTableRenderer->render($tableParameterValues, $contentObjects);
+    }
+
+    /**
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderDoublesTable(): string
+    {
+        $totalNumberOfItems =
+            \Chamilo\Core\Repository\Storage\DataManager::count_doubles_in_repository($this->getDoublesCondition());
+        $doublesTableRenderer = $this->getDoublesTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $doublesTableRenderer->getParameterNames(), $doublesTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $contentObjects = \Chamilo\Core\Repository\Storage\DataManager::retrieve_doubles_in_repository(
+            $this->getDoublesCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+            $tableParameterValues->getOffset(), $doublesTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $doublesTableRenderer->render($tableParameterValues, $contentObjects);
     }
 }

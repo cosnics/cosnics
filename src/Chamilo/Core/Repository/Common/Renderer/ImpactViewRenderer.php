@@ -4,163 +4,135 @@ namespace Chamilo\Core\Repository\Common\Renderer;
 use Chamilo\Configuration\Category\Form\ImpactViewForm;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Table\ImpactView\ImpactViewTable;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Table\ImpactViewTableRenderer;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Renderer to render the impact viewer
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ImpactViewRenderer implements TableSupport
+class ImpactViewRenderer
 {
+    use DependencyInjectionContainerTrait;
 
     /**
-     *
-     * @var Condition
+     * @var string[]
      */
-    private $impact_view_table_condition;
+    private array $co_ids;
+
+    private ImpactViewForm $form;
+
+    private bool $has_impact;
+
+    private Manager $parent;
 
     /**
-     *
-     * @var ImpactViewForm
+     * @throws \Exception
      */
-    private $form;
-
-    /**
-     *
-     * @var array
-     */
-    private $co_ids;
-
-    /**
-     *
-     * @var \Chamilo\Core\Repository\Manager
-     */
-    private $parent;
-
-    private $has_impact;
-
-    public function validated()
-    {
-        return $this->form->validate();
-    }
-
-    /**
-     * Constructs the impact view (form).
-     */
-    public function __construct(Manager $parent, array $co_ids, $has_impact)
+    public function __construct(Manager $parent, array $co_ids, bool $has_impact)
     {
         $this->parent = $parent;
         $this->co_ids = $co_ids;
         $this->has_impact = $has_impact;
-        
+
+        $this->initializeContainer();
+
         $this->form = new ImpactViewForm(
             $this->parent->get_url(
-                array(Manager::PARAM_CONTENT_OBJECT_ID => $co_ids)),
-            $has_impact);
+                [Manager::PARAM_CONTENT_OBJECT_ID => $co_ids]
+            )
+        );
     }
 
     /**
-     * Renders the impact view using the specified condition for content objects.
-     * 
-     * @param Condition $co_condition
-     *
-     * @return string
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
-    public function render(Condition $co_condition)
+    public function render(Condition $co_condition): string
     {
         if ($this->has_impact)
         {
-            $view = $this->render_impact_view($co_condition);
+            $view = $this->renderImpactView($co_condition);
         }
         else
         {
-            $view = '<div class="normal-message">' . Translation::get('NoImpact', [], 'Chamilo\Core\Repository') .
-                 '</div>';
+            $view = '<div class="normal-message">' .
+                $this->getTranslator()->trans('NoImpact', [], 'Chamilo\Core\Repository') . '</div>';
         }
-        
+
         $html = [];
-        
+
         $html[] = $this->parent->render_header();
         $html[] = $view;
-        $html[] = $this->form->toHtml();
-        $html[] = $this->parent->render_footer();
-        
+        $html[] = $this->form->render();
+        $html[] = $this->parent->renderFooter();
+
         return implode(PHP_EOL, $html);
     }
 
-    public function get_parameters()
+    public function getImpactViewTableRenderer(): ImpactViewTableRenderer
+    {
+        return $this->getService(ImpactViewTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    public function get_parameters(): array
     {
         return $this->parent->get_parameters();
     }
 
-    public function get_url($parameters = [], $filter = [], $encode_entities = false)
+    public function get_url($parameters = [], $filter = []): string
     {
-        return $this->parent->get_url($parameters, $filter, $encode_entities);
+        return $this->parent->get_url($parameters, $filter);
     }
 
     /**
-     * **************************************************************************************************************
-     * Inherited
-     * **************************************************************************************************************
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
-    
-    /**
-     * Get the condition for the impact view table.
-     * 
-     * @param $class_name
-     * @return Condition
-     */
-    public function get_table_condition($class_name)
+    private function renderImpactView(Condition $condition): string
     {
-        return $this->impact_view_table_condition;
+        $totalNumberOfItems = DataManager::count_active_content_objects(
+            ContentObject::class, new DataClassCountParameters($condition)
+        );
+
+        $impactViewTableRenderer = $this->getImpactViewTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $impactViewTableRenderer->getParameterNames(), $impactViewTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $contentObjects = DataManager::retrieve_active_content_objects(
+            ContentObject::class, new DataClassRetrievesParameters(
+                $condition, $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
+                $impactViewTableRenderer->determineOrderBy($tableParameterValues)
+            )
+        );
+
+        return $impactViewTableRenderer->render($tableParameterValues, $contentObjects);
     }
 
     /**
-     * Renders the impact view table.
-     * 
-     * @param $condition
-     * @return string
+     * @throws \QuickformException
      */
-    private function render_impact_view(Condition $condition)
+    public function validated(): bool
     {
-        $this->impact_view_table_condition = $condition;
-        $impact_view_table = new ImpactViewTable($this);
-        
-        return $impact_view_table->as_html();
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Impact view table requirements (not in interface)
-     * **************************************************************************************************************
-     */
-    
-    /**
-     * Returns the url to the content object preview.
-     * 
-     * @param ContentObject $content_object
-     *
-     * @return string
-     */
-    public function get_content_object_preview_url(ContentObject $content_object)
-    {
-        return $this->parent->get_url(
-            array(
-                Manager::PARAM_ACTION => Manager::ACTION_VIEW_CONTENT_OBJECTS,
-                Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
-                Manager::PARAM_CATEGORY_ID => $content_object->get_parent_id()));
-    }
-
-    /**
-     * @return \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface
-     */
-    public function getPublicationAggregator()
-    {
-        return $this->parent->getPublicationAggregator();
+        return $this->form->validate();
     }
 }
 

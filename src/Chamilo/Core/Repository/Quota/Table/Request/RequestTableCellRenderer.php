@@ -20,14 +20,14 @@ use Symfony\Component\Translation\Translator;
 class RequestTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
     /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
-
-    /**
      * @var \Chamilo\Core\Repository\Quota\Rights\Service\RightsService
      */
     private $rightsService;
+
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
 
     /**
      * @param $table
@@ -53,27 +53,11 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
-     */
-    public function setRightsService(RightsService $rightsService): void
-    {
-        $this->rightsService = $rightsService;
-    }
-
-    /**
      * @return \Symfony\Component\Translation\Translator
      */
     public function getTranslator(): Translator
     {
         return $this->translator;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
     }
 
     public function get_actions($object)
@@ -89,12 +73,12 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Grant'), new FontAwesomeGlyph('play', array('text-success'), null, 'fas'),
+                        Translation::get('Grant'), new FontAwesomeGlyph('play', ['text-success'], null, 'fas'),
                         $this->get_component()->get_url(
-                            array(
+                            [
                                 Manager::PARAM_ACTION => Manager::ACTION_GRANT,
                                 Manager::PARAM_REQUEST_ID => $object->get_id()
-                            )
+                            ]
                         ), ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -106,12 +90,12 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Deny'), new FontAwesomeGlyph('stop', array('text-danger'), null, 'fas'),
+                        Translation::get('Deny'), new FontAwesomeGlyph('stop', ['text-danger'], null, 'fas'),
                         $this->get_component()->get_url(
-                            array(
+                            [
                                 Manager::PARAM_ACTION => Manager::ACTION_DENY,
                                 Manager::PARAM_REQUEST_ID => $object->get_id()
-                            )
+                            ]
                         ), ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -125,10 +109,10 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 new ToolbarItem(
                     Translation::get('Delete', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_component()->get_url(
-                        array(
+                        [
                             Manager::PARAM_ACTION => Manager::ACTION_DELETE,
                             Manager::PARAM_REQUEST_ID => $object->get_id()
-                        )
+                        ]
                     ), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -160,5 +144,21 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
         }
 
         return parent::renderCell($column, $object);
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Quota\Rights\Service\RightsService $rightsService
+     */
+    public function setRightsService(RightsService $rightsService): void
+    {
+        $this->rightsService = $rightsService;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 }

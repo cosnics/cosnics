@@ -47,6 +47,7 @@ use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -1196,9 +1197,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return DataManager::retrieve_active_content_objects(ContentObject::class, $condition);
     }
 
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
+     */
     public static function retrieve_doubles_in_repository(
         $condition = null, $count = null, $offset = null, $order_property = null
-    )
+    ): ArrayCollection
     {
         $double_counts = self::determine_doubles_in_repository($condition);
 
@@ -1255,7 +1259,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         // Return the requested subset
-        return new ArrayIterator(array_splice($content_objects, $offset, $count));
+        return new ArrayCollection(array_splice($content_objects, $offset, $count));
     }
 
     public static function retrieve_most_recent_content_object_version($object)

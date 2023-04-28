@@ -174,7 +174,7 @@ class ContentObjectRepository
             $contentObjectType, new RecordRetrieveParameters($retrieveProperties, $condition, null, $joins)
         );
 
-        return $usedStorageSpaceRecord[ContentObjectRepository::PROPERTY_USED_STORAGE_SPACE];
+        return (int) $usedStorageSpaceRecord[ContentObjectRepository::PROPERTY_USED_STORAGE_SPACE];
     }
 
     public function getUsedStorageSpaceForContentObjectTypeAndUser(string $contentObjectType, User $user): int
