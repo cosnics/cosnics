@@ -111,7 +111,7 @@ class AssessmentViewerForm extends FormValidator
         $this->get_total_pages();
         
         // Add submit button if there is at least one question
-        if (count($this->questions) > 0)
+        if (is_array($this->questions) && count($this->questions) > 0)
         {
             $submit_button = $this->createElement(
                 'style_submit_button', 
@@ -164,7 +164,7 @@ class AssessmentViewerForm extends FormValidator
             $buttons[] = $submit_button;
         }
         
-        if (count($buttons) > 0)
+        if (is_array($buttons) && count($buttons) > 0)
         {
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }

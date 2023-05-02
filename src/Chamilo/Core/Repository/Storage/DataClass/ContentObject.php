@@ -272,7 +272,7 @@ class ContentObject extends CompositeDataClass
     {
         $description = $this->get_description();
 
-        $isEmpty = ($description == '<p>&#160;</p>' || count($description) == 0);
+        $isEmpty = ($description == '<p>&#160;</p>' || strlen($description) == 0);
         $isBlank = StringUtilities::getInstance()->createString($description)->isBlank();
 
         return !$isEmpty && !$isBlank;

@@ -264,7 +264,7 @@ class SimpleRightsEditorForm extends FormValidator
             
             foreach ($this->available_rights as $right_id)
             {
-                if (count($selected_entities_per_right[$right_id]) >= 1)
+                if (is_array($selected_entities_per_right[$right_id]) && count($selected_entities_per_right[$right_id]) >= 1)
                 {
                     $selected_entity = $selected_entities_per_right[$right_id][0];
                     if ($selected_entity->get_entity_type() == 0 && $selected_entity->get_entity_id() == 0)
@@ -274,7 +274,7 @@ class SimpleRightsEditorForm extends FormValidator
                     }
                 }
                 
-                if (count($selected_entities_per_right[$right_id]) == 1)
+                if (is_array($selected_entities_per_right[$right_id]) && count($selected_entities_per_right[$right_id]) == 1)
                 {
                     $selected_entity = $selected_entities_per_right[$right_id][0];
                     

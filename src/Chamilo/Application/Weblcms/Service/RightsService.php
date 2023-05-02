@@ -57,7 +57,7 @@ class RightsService implements RightsServiceInterface
      *
      * @var bool[]
      */
-    private $rightsCache;
+    private $rightsCache = [];
 
     /**
      * Boolean to determine whether or not we use the rights system in the "view as user" due to alternative rights

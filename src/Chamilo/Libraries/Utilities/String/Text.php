@@ -256,7 +256,7 @@ class Text
      * @param string[] $styles
      * @return string
      */
-    public function create_link($url, $text, $new_page = false, $class = null, $styles = array())
+    public static function create_link($url, $text, $new_page = false, $class = null, $styles = array())
     {
         $link = '<a href="' . $url . '" ';
 

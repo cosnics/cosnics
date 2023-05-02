@@ -41,7 +41,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      *
      * @var int[]
      */
-    protected $checkedPublications;
+    protected $checkedPublications = [];
 
     /**
      *

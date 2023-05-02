@@ -85,7 +85,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
 
         $progress = $trackingService->getLearningPathProgress(
             $learningPath, $user,
-                $this->get_component()->get_tool_browser()->get_parent()->getCurrentTreeNodeForLearningPath($learningPath)
+                $this->get_component()->get_tool_browser()->get_parent()->getCurrentTreeNode($learningPath)
         );
 
         if (!is_null($progress))

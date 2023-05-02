@@ -30,12 +30,12 @@ class AttemptService
     /**
      * @var TreeNodeAttempt[]
      */
-    protected $activeTreeNodeAttemptCache;
+    protected $activeTreeNodeAttemptCache = [];
 
     /**
      * @var TreeNodeAttempt[][][]
      */
-    protected $treeNodeAttemptCache;
+    protected $treeNodeAttemptCache = [];
 
     /**
      * TrackingService constructor.

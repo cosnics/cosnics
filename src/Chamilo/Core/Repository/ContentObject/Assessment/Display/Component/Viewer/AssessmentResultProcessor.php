@@ -55,10 +55,12 @@ class AssessmentResultProcessor
         }
         
         $values = $_POST;
-        
+
+        $security = new Security();
+
         foreach ($values as $key => $value)
         {
-            $value = Security::remove_XSS($value);
+            $value = $security->remove_XSS($value);
             
             if (! is_array($value))
             {

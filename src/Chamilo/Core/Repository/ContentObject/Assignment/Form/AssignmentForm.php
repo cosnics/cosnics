@@ -80,9 +80,9 @@ class AssignmentForm extends ContentObjectForm
             $active = $this->getElement(Assignment::PROPERTY_SELECT_ATTACHMENT);
             if ($active)
             {
-                if ($active->_elements[0])
+                if ($active->getElements[0])
                 {
-                    $active->_elements[0]->setValue(serialize($defaults[Assignment::PROPERTY_SELECT_ATTACHMENT]));
+                    $active->getElements[0]->setValue(serialize($defaults[Assignment::PROPERTY_SELECT_ATTACHMENT]));
                 }
             }
 

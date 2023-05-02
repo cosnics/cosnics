@@ -770,7 +770,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         if (is_null($this->pager))
         {
             $this->pager = new Pager(
-                $this->getNumberOfItemsPerPage(),
+                $this->getNumberOfItemsPerPage() == 'all' ? $this->getNumberOfItems() : $this->getNumberOfItemsPerPage(),
                 1,
                 $this->getNumberOfItems(),
                 $this->getCurrentPageNumber());

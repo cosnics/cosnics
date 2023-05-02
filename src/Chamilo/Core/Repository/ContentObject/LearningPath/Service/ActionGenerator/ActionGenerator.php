@@ -26,7 +26,7 @@ abstract class ActionGenerator
     /**
      * @var string[]
      */
-    protected $urlCache;
+    protected $urlCache = [];
 
     /**
      * NodeActionGenerator constructor.

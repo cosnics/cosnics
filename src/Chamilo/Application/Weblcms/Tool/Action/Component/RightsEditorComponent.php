@@ -224,7 +224,7 @@ class RightsEditorComponent extends Manager
         return $this->get_url(
             array(
                 \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => \Chamilo\Application\Weblcms\Tool\Manager::class_to_type(
-                    RightsTool),
+                    'RightsTool'),
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
                 \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => null));
     }

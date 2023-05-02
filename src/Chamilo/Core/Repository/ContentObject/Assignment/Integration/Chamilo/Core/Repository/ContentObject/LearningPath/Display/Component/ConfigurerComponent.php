@@ -67,7 +67,7 @@ class ConfigurerComponent extends Manager implements DelegateComponent
     {
         /** @var AssignmentConfiguration $configuration */
         $configuration = $treeNode->getConfiguration(new AssignmentConfiguration());
-        $configuration->setEntityType($exportValues[ConfigurationFormBuilder::FORM_PROPERTY_ENTITY_TYPE]);
+        $configuration->setEntityType($exportValues[ConfigurationFormBuilder::FORM_PROPERTY_ENTITY_TYPE][ConfigurationFormBuilder::FORM_PROPERTY_ENTITY_TYPE]);
         $configuration->setCheckForPlagiarism($exportValues[ConfigurationFormBuilder::FORM_PROPERTY_CHECK_FOR_PLAGIARISM] == 1);
 
         $treeNode->setConfiguration($configuration);

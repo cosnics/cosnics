@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": ">=7.0.0",
-        "imsglobal/lti": "3.0.2"
+        "izumi-kun/lti": "1.2.0"
     },
     "extra": {
         "cosnics": {
