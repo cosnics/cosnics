@@ -1,24 +1,22 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Component;
 
-use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator;
 use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Core\Repository\Quota\Storage\DataManager;
 use Chamilo\Core\Repository\Quota\Table\ManagementRequestTableRenderer;
-use Chamilo\Core\Repository\Quota\Table\Request\RequestTable;
 use Chamilo\Core\Repository\Quota\Table\RequestTableRenderer;
 use Chamilo\Core\Repository\Quota\Table\UserRequestTableRenderer;
+use Chamilo\Core\Repository\Service\ContentObjectUrlGenerator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Format\Table\PropertiesTableRenderer;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
@@ -31,7 +29,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -39,34 +36,24 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
  * @package Chamilo\Core\Repository\Quota\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class BrowserComponent extends Manager implements TableSupport
+class BrowserComponent extends Manager
 {
 
-    /**
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
-
-    private $calculator;
-
-    private $table_type;
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
      * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
      * @throws \QuickformException
+     * @throws \Exception
      */
     public function run()
     {
         $rightsService = $this->getRightsService();
         $this->handleCache();
 
-        $this->calculator = new Calculator($this->get_user());
-
         $storageSpaceCalculator = $this->getStorageSpaceCalculator();
         $translator = $this->getTranslator();
-
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
         $html = [];
 
@@ -74,7 +61,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         if ($storageSpaceCalculator->isStorageQuotumEnabled() || $this->getUser()->is_platform_admin())
         {
-            $html[] = $this->buttonToolbarRenderer->render();
+            $html[] = $this->getButtonToolbarRenderer()->render();
         }
 
         $condition = new EqualityCondition(
@@ -98,12 +85,30 @@ class BrowserComponent extends Manager implements TableSupport
             {
                 if ($user_requests > 0)
                 {
-                    $this->table_type = RequestTable::TYPE_PERSONAL;
-                    $table = new RequestTable($this, $this->getTranslator(), $rightsService);
+                    $totalNumberOfItems = DataManager::count(
+                        Request::class,
+                        new DataClassCountParameters($this->getRequestCondition(RequestTableRenderer::TYPE_PERSONAL))
+                    );
+                    $requestTableRenderer = $this->getUserRequestTableRenderer();
+
+                    $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+                        $requestTableRenderer->getParameterNames(), $requestTableRenderer->getDefaultParameterValues(),
+                        $totalNumberOfItems
+                    );
+
+                    $requests = DataManager::retrieves(
+                        Request::class, new DataClassRetrievesParameters(
+                            $this->getRequestCondition(RequestTableRenderer::TYPE_PERSONAL),
+                            $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
+                            $requestTableRenderer->determineOrderBy($tableParameterValues)
+                        )
+                    );
+
                     $tabs->add(
                         new ContentTab(
                             'personal_request', $translator->trans('YourRequests', [], Manager::CONTEXT),
-                            $table->as_html(), new FontAwesomeGlyph('inbox', ['fa-lg'], null, 'fas')
+                            $requestTableRenderer->render($tableParameterValues, $requests),
+                            new FontAwesomeGlyph('inbox', ['fa-lg'], null, 'fas')
                         )
                     );
                 }
@@ -113,11 +118,13 @@ class BrowserComponent extends Manager implements TableSupport
             {
                 if ($this->getUser()->is_platform_admin())
                 {
+                    $progressBarRenderer = $this->getProgressBarRenderer();
+
                     $platform_quota = [];
                     $platform_quota[] =
                         '<h3>' . htmlentities($translator->trans('AggregatedUserDiskQuotas', [], Manager::CONTEXT)) .
                         '</h3>';
-                    $platform_quota[] = Calculator::getBar(
+                    $platform_quota[] = $progressBarRenderer->render(
                         $storageSpaceCalculator->getAggregatedUserStorageSpacePercentage(),
                         Filesystem::format_file_size($storageSpaceCalculator->getUsedAggregatedUserStorageSpace()) .
                         ' / ' . Filesystem::format_file_size(
@@ -128,7 +135,7 @@ class BrowserComponent extends Manager implements TableSupport
 
                     $platform_quota[] =
                         '<h3>' . htmlentities($translator->trans('ReservedDiskSpace', [], Manager::CONTEXT)) . '</h3>';
-                    $platform_quota[] = Calculator::getBar(
+                    $platform_quota[] = $progressBarRenderer->render(
                         $storageSpaceCalculator->getReservedStorageSpacePercentage(),
                         Filesystem::format_file_size($storageSpaceCalculator->getMaximumAggregatedUserStorageSpace()) .
                         ' / ' . Filesystem::format_file_size(
@@ -139,7 +146,7 @@ class BrowserComponent extends Manager implements TableSupport
 
                     $platform_quota[] =
                         '<h3>' . htmlentities($translator->trans('AllocatedDiskSpace', [], Manager::CONTEXT)) . '</h3>';
-                    $platform_quota[] = Calculator::getBar(
+                    $platform_quota[] = $progressBarRenderer->render(
                         $storageSpaceCalculator->getAllocatedStorageSpacePercentage(),
                         Filesystem::format_file_size($storageSpaceCalculator->getUsedAggregatedUserStorageSpace()) .
                         ' / ' . Filesystem::format_file_size(
@@ -189,12 +196,11 @@ class BrowserComponent extends Manager implements TableSupport
 
                     if (DataManager::count(Request::class, new DataClassCountParameters($condition)) > 0)
                     {
-                        $this->table_type = RequestTableRenderer::TYPE_PENDING;
-                        $table = new RequestTable($this, $this->getTranslator(), $rightsService);
                         $tabs->add(
                             new ContentTab(
                                 (string) RequestTableRenderer::TYPE_PENDING,
-                                $translator->trans('PendingRequests', [], Manager::CONTEXT), $table->as_html(),
+                                $translator->trans('PendingRequests', [], Manager::CONTEXT),
+                                $this->renderManagementRequestTable(RequestTableRenderer::TYPE_PENDING),
                                 new FontAwesomeGlyph('hourglass-half', ['fa-lg'], null, 'fas')
                             )
                         );
@@ -215,12 +221,11 @@ class BrowserComponent extends Manager implements TableSupport
 
                     if (DataManager::count(Request::class, new DataClassCountParameters($condition)) > 0)
                     {
-                        $this->table_type = RequestTableRenderer::TYPE_GRANTED;
-                        $table = new RequestTable($this, $this->getTranslator(), $rightsService);
                         $tabs->add(
                             new ContentTab(
                                 (string) RequestTableRenderer::TYPE_GRANTED,
-                                $translator->trans('GrantedRequests', [], Manager::CONTEXT), $table->as_html(),
+                                $translator->trans('GrantedRequests', [], Manager::CONTEXT),
+                                $this->renderManagementRequestTable(RequestTableRenderer::TYPE_GRANTED),
                                 new FontAwesomeGlyph('check-square', ['fa-lg'], null, 'fas')
                             )
                         );
@@ -241,12 +246,11 @@ class BrowserComponent extends Manager implements TableSupport
 
                     if (DataManager::count(Request::class, new DataClassCountParameters($condition)) > 0)
                     {
-                        $this->table_type = RequestTableRenderer::TYPE_DENIED;
-                        $table = new RequestTable($this, $this->getTranslator(), $rightsService);
                         $tabs->add(
                             new ContentTab(
                                 (string) RequestTableRenderer::TYPE_DENIED,
-                                $translator->trans('DeniedRequests', [], Manager::CONTEXT), $table->as_html(),
+                                $translator->trans('DeniedRequests', [], Manager::CONTEXT),
+                                $this->renderManagementRequestTable(RequestTableRenderer::TYPE_DENIED),
                                 new FontAwesomeGlyph('times-circle', ['fa-lg'], null, 'fas')
                             )
                         );
@@ -271,6 +275,9 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->getService('Chamilo\Core\Repository\Quota\Service\CachedAggregatedUserStorageSpaceCacheAdapter');
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
+     */
     public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
@@ -281,7 +288,7 @@ class BrowserComponent extends Manager implements TableSupport
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
 
-            if ($this->calculator->upgradeAllowed())
+            if ($this->getRightsService()->canUserUpgradeStorageSpace($this->getUser()))
             {
                 $commonActions->addButton(
                     new Button(
@@ -292,7 +299,7 @@ class BrowserComponent extends Manager implements TableSupport
                 );
             }
 
-            if ($this->calculator->requestAllowed())
+            if ($this->getRightsService()->canUserRequestAdditionalStorageSpace($this->getUser()))
             {
                 $commonActions->addButton(
                     new Button(
@@ -305,7 +312,7 @@ class BrowserComponent extends Manager implements TableSupport
 
             if ($this->getUser()->is_platform_admin())
             {
-                if ($this->calculator->isEnabled())
+                if ($this->getStorageSpaceCalculator()->isStorageQuotumEnabled())
                 {
                     $toolActions->addButton(
                         new Button(
@@ -333,9 +340,24 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
+    protected function getContentObjectUrlGenerator(): ContentObjectUrlGenerator
+    {
+        return $this->getService(ContentObjectUrlGenerator::class);
+    }
+
+    protected function getDatetimeUtilities(): DatetimeUtilities
+    {
+        return $this->getService(DatetimeUtilities::class);
+    }
+
     public function getManagementRequestTableRenderer(): ManagementRequestTableRenderer
     {
         return $this->getService(ManagementRequestTableRenderer::class);
+    }
+
+    protected function getProgressBarRenderer(): ProgressBarRenderer
+    {
+        return $this->getService(ProgressBarRenderer::class);
     }
 
     protected function getPropertiesTableRenderer(): PropertiesTableRenderer
@@ -343,166 +365,36 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->getService(PropertiesTableRenderer::class);
     }
 
-    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
-    {
-        return $this->getService(RequestTableParameterValuesCompiler::class);
-    }
-
-    protected function getStorageSpaceCalculator(): StorageSpaceCalculator
-    {
-        return $this->getService(StorageSpaceCalculator::class);
-    }
-
-    protected function getTabsRenderer(): TabsRenderer
-    {
-        return $this->getService(TabsRenderer::class);
-    }
-
-    public function getUserQuota(): string
-    {
-        $user_quota = [];
-        $storageSpaceCalculator = $this->getStorageSpaceCalculator();
-
-        if ($storageSpaceCalculator->isStorageQuotumEnabled())
-        {
-            $user_quota[] =
-                '<h3>' . htmlentities($this->getTranslator()->trans('UsedDiskSpace', [], Manager::CONTEXT)) . '</h3>';
-            $user_quota[] = Calculator::getBar(
-                $storageSpaceCalculator->getStorageSpacePercentageForUser($this->getUser()),
-                Filesystem::format_file_size($storageSpaceCalculator->getUsedStorageSpaceForUser($this->getUser())) .
-                ' / ' . Filesystem::format_file_size(
-                    $storageSpaceCalculator->getAllowedStorageSpaceForUser($this->getUser())
-                )
-            );
-            $user_quota[] = '<div style="clear: both;">&nbsp;</div>';
-        }
-
-        $user_quota[] = $this->get_statistics();
-        $user_quota[] = '<div style="clear: both;">&nbsp;</div>';
-
-        return implode(PHP_EOL, $user_quota);
-    }
-
-    public function getUserRequestTableRenderer(): UserRequestTableRenderer
-    {
-        return $this->getService(UserRequestTableRenderer::class);
-    }
-
-    protected function getUserStorageSpaceCacheAdapter(): AdapterInterface
-    {
-        return $this->getService('Chamilo\Core\Repository\Quota\Service\CachedUserStorageSpaceCacheAdapter');
-    }
-
-    public function get_statistics()
-    {
-        $html = [];
-        $html[] = '<h3>' . htmlentities(Translation::get('RepositoryStatistics')) . '</h3>';
-
-        $properties = [];
-        //TODO: Make this a normal count
-        $properties[Translation::get('NumberOfContentObjects')] = $this->calculator->getUsedDatabaseQuota();
-
-        $type_counts = [];
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($this->get_user_id())
-        );
-        $most_used = null;
-
-        foreach (\Chamilo\Core\Repository\Storage\DataManager::get_registered_types() as $type)
-        {
-            $type_counts[$type] = \Chamilo\Core\Repository\Storage\DataManager::count_active_content_objects(
-                $type, new DataClassCountParameters($condition)
-            );
-            if ($type_counts[$type] > $type_counts[$most_used])
-            {
-                $most_used = $type;
-            }
-        }
-
-        arsort($type_counts);
-
-        if ($most_used)
-        {
-            $properties[Translation::get('MostUsedContentObjectType')] = Translation::get(
-                    'TypeName', null, ClassnameUtilities::getInstance()->getNamespaceFromClassname($most_used)
-                ) . ' (' . $type_counts[$most_used] . ')';
-        }
-
-        $reference_count = $type_counts[$most_used] / 2;
-
-        unset($type_counts[$most_used]);
-
-        $frequent = [];
-
-        foreach ($type_counts as $type => $count)
-        {
-            if ($count >= $reference_count && $count > 0)
-            {
-                $frequent[] = Translation::get(
-                        'TypeName', null, ClassnameUtilities::getInstance()->getNamespaceFromClassname($type)
-                    ) . ' (' . $count . ')';
-            }
-        }
-
-        $properties[Translation::get('OtherFrequentlyUsedContentObjectTypes')] = implode('<br />', $frequent);
-
-        $properties[Translation::get('AvailableDiskSpace')] = Filesystem::format_file_size(
-            $this->calculator->getAvailableUserDiskQuota()
-        );
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($this->get_user_id())
-        );
-        $oldest_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
-            ContentObject::class, new DataClassRetrievesParameters($condition)
-        )->current();
-
-        if ($oldest_object instanceof ContentObject)
-        {
-            $properties[Translation::get('OldestContentObject')] =
-                '<a href="' . $this->get_parent()->get_content_object_viewing_url($oldest_object) . '">' .
-                $oldest_object->get_title() . '</a> - ' .
-                DatetimeUtilities::getInstance()->formatLocaleDate(null, $oldest_object->get_creation_date());
-        }
-
-        $html[] = '<div class="quota_statistics">';
-        $html[] = $this->getPropertiesTableRenderer()->render($properties);
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
     /**
-     * @see @see common\libraries.NewObjectTableSupport::get_object_table_condition()
+     * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
+     * @throws \Exception
      */
-    public function get_table_condition($object_table_class_name)
+    public function getRequestCondition(int $requestType): AndCondition
     {
         $rightsService = $this->getRightsService();
         $conditions = [];
 
-        switch ($this->table_type)
+        switch ($requestType)
         {
-            case RequestTable::TYPE_PENDING :
+            case RequestTableRenderer::TYPE_PENDING :
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_PENDING)
                 );
                 break;
-            case RequestTable::TYPE_PERSONAL :
+            case RequestTableRenderer::TYPE_PERSONAL :
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_USER_ID),
-                    new StaticConditionVariable($this->get_user_id())
+                    new StaticConditionVariable($this->getUser()->getId())
                 );
                 break;
-            case RequestTable::TYPE_GRANTED :
+            case RequestTableRenderer::TYPE_GRANTED :
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_GRANTED)
                 );
                 break;
-            case RequestTable::TYPE_DENIED :
+            case RequestTableRenderer::TYPE_DENIED :
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_DENIED)
@@ -511,7 +403,7 @@ class BrowserComponent extends Manager implements TableSupport
         }
 
         if (!$this->getUser()->is_platform_admin() && $rightsService->canUserViewQuotaRequests($this->getUser()) &&
-            $this->table_type != RequestTable::TYPE_PERSONAL)
+            $requestType != RequestTableRenderer::TYPE_PERSONAL)
         {
             $target_users = $rightsService->getTargetUsersForUser($this->getUser());
 
@@ -533,9 +425,58 @@ class BrowserComponent extends Manager implements TableSupport
         return new AndCondition($conditions);
     }
 
-    public function get_table_type()
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        return $this->table_type;
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    protected function getStorageSpaceCalculator(): StorageSpaceCalculator
+    {
+        return $this->getService(StorageSpaceCalculator::class);
+    }
+
+    protected function getTabsRenderer(): TabsRenderer
+    {
+        return $this->getService(TabsRenderer::class);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
+    public function getUserQuota(): string
+    {
+        $user_quota = [];
+        $storageSpaceCalculator = $this->getStorageSpaceCalculator();
+
+        if ($storageSpaceCalculator->isStorageQuotumEnabled())
+        {
+            $user_quota[] =
+                '<h3>' . htmlentities($this->getTranslator()->trans('UsedDiskSpace', [], Manager::CONTEXT)) . '</h3>';
+            $user_quota[] = $this->getProgressBarRenderer()->render(
+                $storageSpaceCalculator->getStorageSpacePercentageForUser($this->getUser()),
+                Filesystem::format_file_size($storageSpaceCalculator->getUsedStorageSpaceForUser($this->getUser())) .
+                ' / ' . Filesystem::format_file_size(
+                    $storageSpaceCalculator->getAllowedStorageSpaceForUser($this->getUser())
+                )
+            );
+            $user_quota[] = '<div style="clear: both;">&nbsp;</div>';
+        }
+
+        $user_quota[] = $this->renderStatistics();
+        $user_quota[] = '<div style="clear: both;">&nbsp;</div>';
+
+        return implode(PHP_EOL, $user_quota);
+    }
+
+    protected function getUserRequestTableRenderer(): UserRequestTableRenderer
+    {
+        return $this->getService(UserRequestTableRenderer::class);
+    }
+
+    protected function getUserStorageSpaceCacheAdapter(): AdapterInterface
+    {
+        return $this->getService('Chamilo\Core\Repository\Quota\Service\CachedUserStorageSpaceCacheAdapter');
     }
 
     protected function handleCache()
@@ -547,5 +488,129 @@ class BrowserComponent extends Manager implements TableSupport
             $this->getUserStorageSpaceCacheAdapter()->clear();
             $this->getAggregatedUserStorageSpaceCacheAdapter()->clear();
         }
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Exception
+     */
+    protected function renderManagementRequestTable(int $requestType): string
+    {
+        $totalNumberOfItems = DataManager::count(
+            Request::class, new DataClassCountParameters($this->getRequestCondition($requestType))
+        );
+        $requestTableRenderer = $this->getUserRequestTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $requestTableRenderer->getParameterNames(), $requestTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $requests = DataManager::retrieves(
+            Request::class, new DataClassRetrievesParameters(
+                $this->getRequestCondition($requestType), $tableParameterValues->getNumberOfItemsPerPage(),
+                $tableParameterValues->getOffset(), $requestTableRenderer->determineOrderBy($tableParameterValues)
+            )
+        );
+
+        return $requestTableRenderer->render($tableParameterValues, $requests);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
+    public function renderStatistics(): string
+    {
+        $translator = $this->getTranslator();
+        $storageSpaceCalculator = $this->getStorageSpaceCalculator();
+
+        $html = [];
+        $html[] = '<h3>' . htmlentities($translator->trans('RepositoryStatistics', [], Manager::CONTEXT)) . '</h3>';
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
+            new StaticConditionVariable($this->getUser()->getId())
+        );
+
+        $properties = [];
+        $properties[$translator->trans('NumberOfContentObjects', [], Manager::CONTEXT)] =
+            \Chamilo\Core\Repository\Storage\DataManager::count_active_content_objects(
+                ContentObject::class, new DataClassCountParameters($condition)
+            );
+
+        $type_counts = [];
+
+        $most_used = null;
+
+        foreach (\Chamilo\Core\Repository\Storage\DataManager::get_registered_types() as $type)
+        {
+            $type_counts[$type] = \Chamilo\Core\Repository\Storage\DataManager::count_active_content_objects(
+                $type, new DataClassCountParameters($condition)
+            );
+            if ($type_counts[$type] > $type_counts[$most_used])
+            {
+                $most_used = $type;
+            }
+        }
+
+        arsort($type_counts);
+
+        if ($most_used)
+        {
+            $properties[$translator->trans('MostUsedContentObjectType', [], Manager::CONTEXT)] = $translator->trans(
+                    'TypeName', [], $this->getClassnameUtilities()->getNamespaceFromClassname($most_used)
+                ) . ' (' . $type_counts[$most_used] . ')';
+        }
+
+        $reference_count = $type_counts[$most_used] / 2;
+
+        unset($type_counts[$most_used]);
+
+        $frequent = [];
+
+        foreach ($type_counts as $type => $count)
+        {
+            if ($count >= $reference_count && $count > 0)
+            {
+                $frequent[] = $translator->trans(
+                        'TypeName', [], $this->getClassnameUtilities()->getNamespaceFromClassname($type)
+                    ) . ' (' . $count . ')';
+            }
+        }
+
+        $properties[$translator->trans('OtherFrequentlyUsedContentObjectTypes', [], Manager::CONTEXT)] =
+            implode('<br />', $frequent);
+
+        $properties[$translator->trans('AvailableDiskSpace', [], Manager::CONTEXT)] = Filesystem::format_file_size(
+            $storageSpaceCalculator->getAvailableStorageSpaceForUser($this->getUser())
+        );
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
+            new StaticConditionVariable($this->getUser()->getId())
+        );
+        $oldest_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
+            ContentObject::class, new DataClassRetrievesParameters($condition)
+        )->current();
+
+        if ($oldest_object instanceof ContentObject)
+        {
+            $properties[$translator->trans('OldestContentObject', [], Manager::CONTEXT)] =
+                '<a href="' . $this->getContentObjectUrlGenerator()->getViewUrl($oldest_object) . '">' .
+                $oldest_object->get_title() . '</a> - ' .
+                $this->getDatetimeUtilities()->formatLocaleDate(null, $oldest_object->get_creation_date());
+        }
+
+        $html[] = '<div class="quota_statistics">';
+        $html[] = $this->getPropertiesTableRenderer()->render($properties);
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 }

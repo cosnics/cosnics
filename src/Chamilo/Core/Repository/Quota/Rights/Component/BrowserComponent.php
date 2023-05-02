@@ -2,11 +2,12 @@
 namespace Chamilo\Core\Repository\Quota\Rights\Component;
 
 use Chamilo\Core\Repository\Quota\Rights\Manager;
-use Chamilo\Core\Repository\Quota\Rights\Table\Entity\EntityTable;
+use Chamilo\Core\Repository\Quota\Rights\Table\EntityTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Doctrine\Common\Collections\ArrayCollection;
 
-class BrowserComponent extends Manager implements TableSupport
+class BrowserComponent extends Manager
 {
 
     /**
@@ -21,22 +22,46 @@ class BrowserComponent extends Manager implements TableSupport
             throw new NotAllowedException();
         }
 
-        $table = new EntityTable($this, $this->getTranslator(), $this->getRightsService());
-
         $html = [];
 
-        $html[] = $this->render_header();
-        $html[] = $this->getLinkTabsRenderer()->render($this->get_tabs(self::ACTION_BROWSE), $table->render());
-        $html[] = $this->render_footer();
+        $html[] = $this->renderHeader();
+        $html[] = $this->getLinkTabsRenderer()->render($this->get_tabs(self::ACTION_BROWSE), $this->renderTable());
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    /*
-     * (non-PHPdoc) @see common\libraries.NewObjectTableSupport::get_object_table_condition()
-     */
-    public function get_table_condition($object_table_class_name)
+    public function getEntityTableRenderer(): EntityTableRenderer
     {
-        // TODO Auto-generated method stub
+        return $this->getService(EntityTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Exception
+     */
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems = $this->getRightsService()->countAllRightsLocationEntityRightGroups();
+        $entityTableRenderer = $this->getEntityTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $entityTableRenderer->getParameterNames(), $entityTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $entities = $this->getRightsService()->getRightsLocationEntityRightGroupsWithEntityAndGroup(
+            $tableParameterValues->getOffset(), $tableParameterValues->getNumberOfItemsPerPage(),
+            $entityTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $entityTableRenderer->render($tableParameterValues, new ArrayCollection($entities));
     }
 }

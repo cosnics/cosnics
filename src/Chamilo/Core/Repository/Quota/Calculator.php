@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Quota;
 
+use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -137,7 +138,7 @@ class Calculator
      */
     public function getGroupHighest(): int
     {
-        return $this->getStorageSpaceCalculator()->getHighestGroupQuotumForUser($this->getUser());
+        return $this->getGroupsTreeTraverser()->getHighestGroupQuotumForUser($this->getUser());
     }
 
     /**
@@ -145,7 +146,12 @@ class Calculator
      */
     public function getGroupLowest(): int
     {
-        return $this->getStorageSpaceCalculator()->getLowestGroupQuotumForUser($this->getUser());
+        return $this->getGroupsTreeTraverser()->getLowestGroupQuotumForUser($this->getUser());
+    }
+
+    protected function getGroupsTreeTraverser(): GroupsTreeTraverser
+    {
+        return $this->getService(GroupsTreeTraverser::class);
     }
 
     /**
