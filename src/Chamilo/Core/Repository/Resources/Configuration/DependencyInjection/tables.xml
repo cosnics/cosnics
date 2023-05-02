@@ -9,6 +9,7 @@
                   public="true"/>
 
         <service id="Chamilo\Core\Repository\Table\ContentObjectTableRenderer">
+            <tag name="Chamilo\Core\Repository\Table\ContentObjectTableRenderer" />
             <argument key="$user"
                       type="service"
                       id="Chamilo\Core\User\User"/>
@@ -82,6 +83,12 @@
         </service>
 
         <service id="Chamilo\Core\Repository\Viewer\Table\ContentObjectTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
+
+        <service id="Chamilo\Core\Repository\Quota\Rights\Table\EntityTableRenderer">
             <argument key="$user"
                       type="service"
                       id="Chamilo\Core\User\User"/>

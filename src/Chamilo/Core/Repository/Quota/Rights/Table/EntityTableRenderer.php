@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Quota\Rights\Table;
 use Chamilo\Core\Repository\Manager as RepositoryManager;
 use Chamilo\Core\Repository\Quota\Manager as QuotaManager;
 use Chamilo\Core\Repository\Quota\Rights\Manager;
-use Chamilo\Core\Repository\Quota\Rights\Table\Entity\EntityTableColumnModel;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -127,7 +126,7 @@ class EntityTableRenderer extends RecordListTableRenderer implements TableRowAct
             /**
              * @var \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $glyph ;
              */
-            $glyph = $record[EntityTableColumnModel::PROPERTY_ENTITY_GLYPH];
+            $glyph = $record[self::PROPERTY_ENTITY_GLYPH];
 
             return $glyph->render();
         }

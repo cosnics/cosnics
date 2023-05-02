@@ -53,8 +53,6 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer
 
     public function renderCell(TableColumn $column, $glossary_item): string
     {
-        $component = $this->get_component()->get_component();
-
         if (!$this->glossary_item || $this->glossary_item->get_id() != $glossary_item->get_ref())
         {
             $this->glossary_item = DataManager::retrieve_by_id(
