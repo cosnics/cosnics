@@ -175,7 +175,6 @@ class ViewerComponent extends Manager implements TableSupport
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Format\Table\Interfaces\TableSupport::get_table_condition()
      */
     public function get_table_condition($tableClassName)
