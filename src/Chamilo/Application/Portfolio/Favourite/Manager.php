@@ -5,7 +5,6 @@ use Chamilo\Application\Portfolio\Favourite\Service\FavouriteService;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
- *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class Manager extends Application
@@ -13,6 +12,8 @@ abstract class Manager extends Application
     public const ACTION_BROWSE = 'Browser';
     public const ACTION_CREATE = 'Creator';
     public const ACTION_DELETE = 'Deleter';
+
+    public const CONTEXT = __NAMESPACE__;
 
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
@@ -25,7 +26,6 @@ abstract class Manager extends Application
     public const SOURCE_USER_BROWSER = 'user_browser';
 
     /**
-     *
      * @return \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService
      */
     public function getFavouriteService()

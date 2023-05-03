@@ -6,9 +6,8 @@ use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
- *
  * @package Chamilo\Application\Portfolio\DependencyInjection
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
 {
@@ -21,6 +20,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Application\Portfolio' => ['services.xml']];
+        return ['Chamilo\Application\Portfolio' => ['services.xml', 'tables.xml']];
     }
 }

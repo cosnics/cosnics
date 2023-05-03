@@ -11,9 +11,8 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
- *
  * @package Chamilo\Application\Portfolio
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends Application
 {
@@ -21,12 +20,13 @@ abstract class Manager extends Application
     public const ACTION_BROWSE_FAVOURITES = 'Favourites';
     public const ACTION_HOME = 'Home';
 
+    public const CONTEXT = __NAMESPACE__;
+
     public const DEFAULT_ACTION = self::ACTION_HOME;
 
     public const PARAM_USER_ID = 'user_id';
 
     /**
-     *
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
@@ -59,7 +59,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return \Chamilo\Application\Portfolio\Favourite\Service\FavouriteService
      */
     public function getFavouriteService()
@@ -68,7 +67,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return \Chamilo\Application\Portfolio\Service\FeedbackService
      */
     public function getFeedbackService()
@@ -77,7 +75,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return \Chamilo\Application\Portfolio\Service\NotificationService
      */
     public function getNotificationService()
@@ -86,7 +83,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return \Chamilo\Application\Portfolio\Service\PublicationService
      */
     public function getPublicationService()
@@ -95,7 +91,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return \Chamilo\Application\Portfolio\Service\RightsService
      */
     public function getRightsService()
@@ -104,7 +99,6 @@ abstract class Manager extends Application
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\Workspace\Service\RightsService
      */
     public function getWorkspaceRightsService()

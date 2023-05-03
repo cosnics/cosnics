@@ -2,50 +2,68 @@
 namespace Chamilo\Application\Portfolio\Favourite\Component;
 
 use Chamilo\Application\Portfolio\Favourite\Manager;
-use Chamilo\Application\Portfolio\Favourite\Table\Favourite\FavouriteTable;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Application\Portfolio\Favourite\Table\FavouriteTableRenderer;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 
 /**
  * Browser for the favourites of the current user
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Application\Portfolio\Favourite\Component
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class BrowserComponent extends Manager implements TableSupport
+class BrowserComponent extends Manager
 {
 
     /**
-     * Executes this component
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
-    function run()
+    public function run()
     {
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->renderTable();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Returns the condition
-     *
-     * @param string $table_class_name
-     *
-     * @return Condition
-     */
-    public function get_table_condition($table_class_name)
+    public function getFavouriteTableRenderer(): FavouriteTableRenderer
     {
+        return $this->getService(FavouriteTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
     /**
-     * Renders the favourite users table
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
-    protected function renderTable()
+    protected function renderTable(): string
     {
-        $table = new FavouriteTable($this);
+        $totalNumberOfItems = $this->getFavouriteService()->countFavouriteUsers($this->getUser());
+        $favouriteTableRenderer = $this->getFavouriteTableRenderer();
 
-        return $table->render();
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $favouriteTableRenderer->getParameterNames(), $favouriteTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $users = $this->getFavouriteService()->findFavouriteUsers(
+            $this->getUser(), null, $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $favouriteTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $favouriteTableRenderer->render($tableParameterValues, $users);
     }
 }
