@@ -13,12 +13,10 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\Assessment\Builder\Table\AnswerFeedbackType
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer
     implements TableCellRendererActionsColumnSupport
@@ -34,7 +32,7 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer
     {
         $toolbar = new Toolbar();
 
-        $types = array(
+        $types = [
             Configuration::ANSWER_FEEDBACK_TYPE_NONE,
             Configuration::ANSWER_FEEDBACK_TYPE_GIVEN,
             Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT,
@@ -42,7 +40,7 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer
             Configuration::ANSWER_FEEDBACK_TYPE_CORRECT,
             Configuration::ANSWER_FEEDBACK_TYPE_WRONG,
             Configuration::ANSWER_FEEDBACK_TYPE_ALL
-        );
+        ];
 
         foreach ($types as $type)
         {
@@ -52,10 +50,10 @@ class AnswerFeedbackTypeTableCellRenderer extends DataClassTableCellRenderer
                     new ToolbarItem(
                         Configuration::answer_feedback_string($type), Configuration::answerFeedbackGlyph($type),
                         $this->get_component()->get_url(
-                            array(
+                            [
                                 Manager::PARAM_ANSWER_FEEDBACK_TYPE => $type,
                                 Manager::PARAM_COMPLEX_QUESTION_ID => $complex_content_object_item->getId()
-                            )
+                            ]
                         ), ToolbarItem::DISPLAY_ICON
                     )
                 );

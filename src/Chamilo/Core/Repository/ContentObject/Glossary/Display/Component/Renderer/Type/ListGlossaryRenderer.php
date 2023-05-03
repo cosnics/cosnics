@@ -73,8 +73,7 @@ class ListGlossaryRenderer extends GlossaryRenderer
         $html[] = '<div class="description">';
 
         $html[] = ContentObjectRenditionImplementation::launch(
-            $content_object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION,
-            $this->get_component()
+            $content_object, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION
         );
 
         $html[] = '</div><br />';

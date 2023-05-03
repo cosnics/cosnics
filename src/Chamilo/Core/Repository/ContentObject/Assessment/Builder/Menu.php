@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\Builder;
+namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder;
 
 use Chamilo\Core\Repository\Component\BuilderComponent;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
@@ -23,7 +23,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package repository.lib.complex_builder
  */
 
@@ -34,40 +33,41 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Menu extends HtmlMenu
 {
-    const TREE_NAME = __CLASS__;
-
-    private $cloi;
-
-    private $root;
-
-    /**
-     * The string passed to sprintf() to format category URLs
-     */
-    private $urlFmt;
+    public const TREE_NAME = __CLASS__;
 
     /**
      * The array renderer used to determine the breadcrumbs.
      */
     private $array_renderer;
 
+    private $cloi;
+
+    private $root;
+
+    private $show_url;
+
+    /**
+     * The string passed to sprintf() to format category URLs
+     */
+    private $urlFmt;
+
+    /*
+     * Boolean to determine wheter the url should be added or not @var Bool
+     */
+
     /**
      * Boolean to determine wheter the nodes of the tree which are not complex are shown in the tree or not
      */
     private $view_entire_structure;
 
-    /*
-     * Boolean to determine wheter the url should be added or not @var Bool
-     */
-    private $show_url;
-
     /**
      * Creates a new category navigation menu.
      *
-     * @param $owner int The ID of the owner of the categories to provide in this menu.
+     * @param $owner            int The ID of the owner of the categories to provide in this menu.
      * @param $current_category int The ID of the current category in the menu.
-     * @param $url_format string The format to use for the URL of a category. Passed to sprintf(). Defaults to the
-     *        string "?category=%s".
-     * @param $extra_items array An array of extra tree items, added to the root.
+     * @param $url_format       string The format to use for the URL of a category. Passed to sprintf(). Defaults to the
+     *                          string "?category=%s".
+     * @param $extra_items      array An array of extra tree items, added to the root.
      */
     public function __construct(
         $root, $cloi, $url_format = '?application=repository&go=build_complex&builder_action=browse',
@@ -76,7 +76,7 @@ class Menu extends HtmlMenu
     {
         $url_format .= '&cloi=__CLOI__';
         $this->view_entire_structure = $view_entire_structure;
-        $extra = array('publish');
+        $extra = ['publish'];
 
         foreach ($extra as $item)
         {
@@ -182,7 +182,7 @@ class Menu extends HtmlMenu
             ComplexContentObjectItem::class, $parameters
         );
 
-        foreach($clois as $cloi)
+        foreach ($clois as $cloi)
         {
             $lo = DataManager::retrieve_by_id(
                 ContentObject::class, $cloi->get_ref()

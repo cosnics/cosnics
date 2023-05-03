@@ -371,7 +371,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                         );
                     }
 
-                    if (\Chamilo\Core\Repository\Builder\Manager::exists($contentObject::package()))
+                    if ($contentObject::package() == 'Chamilo\Core\Repository\ContentObject\Assessment')
                     {
                         $baseActions->addButton(
                             new Button(

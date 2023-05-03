@@ -34,8 +34,6 @@ abstract class Manager extends Application
     public const PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID = 'selected_cloi';
     public const PARAM_TYPE = 'type';
 
-    protected $menu;
-
     /**
      * The current item in treemenu to determine where we are in the structure
      *
@@ -99,14 +97,6 @@ abstract class Manager extends Application
         }
     }
 
-    protected function build_complex_content_object_menu()
-    {
-        $this->menu = new \Chamilo\Core\Repository\Builder\Menu(
-            $this->get_root_content_object(), $this->get_complex_content_object_item(),
-            $this->get_url([self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT])
-        );
-    }
-
     /**
      * Checks if a complex content object path node can be editted
      *
@@ -132,16 +122,6 @@ abstract class Manager extends Application
             StringUtilities::getInstance()->createString($type)->upperCamelize() . '\Display\Manager';
 
         return new $class_name($application);
-    }
-
-    public function get_complex_content_object_breadcrumbs()
-    {
-        if (is_null($this->menu))
-        {
-            $this->build_complex_content_object_menu();
-        }
-
-        return $this->menu->get_breadcrumbs();
     }
 
     /**
@@ -199,16 +179,6 @@ abstract class Manager extends Application
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
             ]
         );
-    }
-
-    public function get_complex_content_object_menu()
-    {
-        if (is_null($this->menu))
-        {
-            $this->build_complex_content_object_menu();
-        }
-
-        return $this->menu->render_as_tree();
     }
 
     // Common Code

@@ -11,7 +11,7 @@ use Chamilo\Libraries\Translation\Translation;
 
 class ObjectTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
-    const PROPERTY_TYPE = 'type';
+    public const PROPERTY_TYPE = 'type';
 
     public function initializeColumns()
     {

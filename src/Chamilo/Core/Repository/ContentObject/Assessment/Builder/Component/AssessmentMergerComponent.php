@@ -27,14 +27,12 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package repository.lib.complex_builder.assessment.component
  */
 class AssessmentMergerComponent extends Manager implements ViewerInterface, TableSupport
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -44,7 +42,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
         $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE]),
                 $this->get_root_content_object()->get_title()
             )
         );
@@ -84,11 +82,11 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
             $html[] = $this->buttonToolbarRenderer->render();
             $html[] = '<h3>' . Translation::get('SelectQuestions') . '</h3>';
 
-            $params = array(
+            $params = [
                 \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID => Request::get(
                     \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID
                 )
-            );
+            ];
             $table = new ObjectTable($this);
 
             $html[] = $table->as_html();
@@ -120,7 +118,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
 
     public function get_allowed_content_object_types()
     {
-        return array(Assessment::class);
+        return [Assessment::class];
     }
 
     public function get_condition($selected_assessment)
@@ -144,14 +142,14 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
     public function get_question_selector_url($question_id, $assessment_id)
     {
         return $this->get_url(
-            array(
+            [
                 self::PARAM_ACTION => self::ACTION_SELECT_QUESTIONS,
                 self::PARAM_QUESTION_ID => $question_id,
                 self::PARAM_ASSESSMENT_ID => $assessment_id,
                 \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID => Request::get(
                     \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID
                 )
-            )
+            ]
         );
     }
 

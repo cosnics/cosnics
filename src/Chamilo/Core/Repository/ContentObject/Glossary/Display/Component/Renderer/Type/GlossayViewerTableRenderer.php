@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Glossary\Display\Component\Rende
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplayContextProviderInterface;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\GlossaryItem\Storage\DataClass\GlossaryItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -29,11 +30,14 @@ class GlossayViewerTableRenderer extends DataClassListTableRenderer implements T
 {
     public const TABLE_IDENTIFIER = Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID;
 
+    protected GlossaryDisplayContextProviderInterface $glossaryDisplayContextProvider;
+
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+        GlossaryDisplayContextProviderInterface $glossaryDisplayContextProvider, Translator $translator,
+        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
     )
     {
-
+        $this->glossaryDisplayContextProvider = $glossaryDisplayContextProvider;
 
         parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
     }
@@ -88,25 +92,34 @@ class GlossayViewerTableRenderer extends DataClassListTableRenderer implements T
         {
             $updateUrl = $urlGenerator->fromRequest([
                 \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Display\Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                \Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item->get_id(),
-                \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
+                \Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complexGlossary->getId(
+                ),
+                \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $component->get_complex_content_object_item_id(
+                )
             ]);
 
             $toolbar->add_item(
                 new ToolbarItem(
                     $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                    $component->get_complex_content_object_item_update_url($complexGlossary), ToolbarItem::DISPLAY_ICON
+                    $updateUrl, ToolbarItem::DISPLAY_ICON
                 )
             );
         }
 
         if ($component->is_allowed_to_delete_child())
         {
+            $deleteUrl = $urlGenerator->fromRequest([
+                \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Display\Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
+                \Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complexGlossary->getId(
+                ),
+                \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $component->get_complex_content_object_item_id(
+                )
+            ]);
+
             $toolbar->add_item(
                 new ToolbarItem(
                     $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                    $component->get_complex_content_object_item_delete_url($complexGlossary), ToolbarItem::DISPLAY_ICON,
-                    true
+                    $deleteUrl, ToolbarItem::DISPLAY_ICON, true
                 )
             );
         }

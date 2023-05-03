@@ -270,7 +270,7 @@ abstract class ContentObjectPublicationListRenderer
 
             if ($content_object instanceof ComplexContentObjectSupport)
             {
-                if (\Chamilo\Core\Repository\Builder\Manager::exists($content_object->package()))
+                if ($content_object::package() == 'Chamilo\Core\Repository\ContentObject\Assessment')
                 {
                     $toolbar->add_item(
                         new ToolbarItem(

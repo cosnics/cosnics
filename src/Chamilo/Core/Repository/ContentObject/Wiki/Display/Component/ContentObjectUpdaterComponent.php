@@ -15,7 +15,7 @@ class ContentObjectUpdaterComponent extends Manager
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\Builder\Action\Manager::context(),
+            \Chamilo\Core\Repository\Display\Action\Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         )->run();
     }

@@ -11,7 +11,7 @@ use Chamilo\Libraries\Translation\Translation;
 
 class ObjectTable extends DataClassListTableRenderer implements TableActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager::PARAM_QUESTION_ID;
+    public const TABLE_IDENTIFIER = Manager::PARAM_QUESTION_ID;
 
     public function getTableActions(): TableActions
     {
@@ -19,13 +19,16 @@ class ObjectTable extends DataClassListTableRenderer implements TableActionsSupp
         $actions->addAction(
             new TableAction(
                 $this->get_component()->get_url(
-                    array(
-                        Manager::PARAM_ACTION => Manager::ACTION_SELECT_QUESTIONS, 
+                    [
+                        Manager::PARAM_ACTION => Manager::ACTION_SELECT_QUESTIONS,
                         \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID => Request::get(
-                            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID))), 
-                Translation::get('AddSelectedQuestions'), 
-                false));
-        
+                            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID
+                        )
+                    ]
+                ), Translation::get('AddSelectedQuestions'), false
+            )
+        );
+
         return $actions;
     }
 }

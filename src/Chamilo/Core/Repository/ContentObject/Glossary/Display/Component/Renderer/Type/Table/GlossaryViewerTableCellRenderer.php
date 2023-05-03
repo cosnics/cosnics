@@ -67,8 +67,7 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer
             case ContentObject::PROPERTY_DESCRIPTION :
 
                 return ContentObjectRenditionImplementation::launch(
-                    $this->glossary_item, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION,
-                    $this->get_component()
+                    $this->glossary_item, ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION
                 );
         }
 

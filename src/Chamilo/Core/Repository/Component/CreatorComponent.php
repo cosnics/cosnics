@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Selector\Renderer\BasicTypeSelectorRenderer;
-use Chamilo\Core\Repository\Selector\TabsTypeSelectorSupport;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Service\ContentObjectSaver;
@@ -22,7 +21,6 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
-use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -35,7 +33,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * When no type is passed to this component, the user will see a dropdown list in which a content object type can be
  * selected. Afterwards, the form to create the actual content object will be displayed.
  */
-class CreatorComponent extends Manager implements TabsTypeSelectorSupport
+class CreatorComponent extends Manager
 {
 
     /**
@@ -199,11 +197,6 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
     private function getInstanceService()
     {
         return $this->getService(InstanceService::class);
-    }
-
-    public function getTabsRenderer(): TabsRenderer
-    {
-        return $this->getService(TabsRenderer::class);
     }
 
     /**

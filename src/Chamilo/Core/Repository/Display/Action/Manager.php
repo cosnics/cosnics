@@ -41,11 +41,6 @@ abstract class Manager extends Application
         return $this->get_parent()->getButtonToolBarRenderer($content_object);
     }
 
-    public function get_complex_content_object_breadcrumbs()
-    {
-        return $this->get_parent()->get_complex_content_object_breadcrumbs();
-    }
-
     public function get_complex_content_object_item()
     {
         return $this->get_parent()->get_complex_content_object_item();
@@ -54,11 +49,6 @@ abstract class Manager extends Application
     public function get_complex_content_object_item_id()
     {
         return $this->get_parent()->get_complex_content_object_item_id();
-    }
-
-    public function get_complex_content_object_menu()
-    {
-        return $this->get_parent()->get_complex_content_object_menu();
     }
 
     public function get_complex_content_object_table_condition()

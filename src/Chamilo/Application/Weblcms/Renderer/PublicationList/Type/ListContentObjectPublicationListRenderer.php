@@ -584,7 +584,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             if ($content_object instanceof ComplexContentObjectSupport &&
                 ($content_object->get_owner_id() == $this->get_tool_browser()->get_user_id()))
             {
-                if (\Chamilo\Core\Repository\Builder\Manager::exists($content_object->package()))
+                if ($content_object::package() == 'Chamilo\Core\Repository\ContentObject\Assessment')
                 {
                     $dropdownButton->addSubButton(
                         new SubButton(

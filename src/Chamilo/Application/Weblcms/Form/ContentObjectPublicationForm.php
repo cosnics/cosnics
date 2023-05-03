@@ -331,7 +331,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             {
                 if ($contentObject instanceof ComplexContentObjectSupport && !$first_publication->isIdentified())
                 {
-                    if (\Chamilo\Core\Repository\Builder\Manager::exists($contentObject->package()) &&
+                    if ($contentObject::package() == 'Chamilo\Core\Repository\ContentObject\Assessment' &&
                         ($canEditContentObject || $canEditPublicationContentObject))
                     {
                         $buttons[] = $this->createElement(

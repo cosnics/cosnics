@@ -13,11 +13,10 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- *
  * @package core\repository\content_object\assessment\builder
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AnswerFeedbackTypeTableDataProvider extends DataClassTableDataProvider
 {

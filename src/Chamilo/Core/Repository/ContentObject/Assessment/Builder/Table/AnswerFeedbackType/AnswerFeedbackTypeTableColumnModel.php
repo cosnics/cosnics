@@ -10,18 +10,16 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package core\repository\content_object\assessment\builder
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AnswerFeedbackTypeTableColumnModel extends DataClassTableColumnModel
     implements TableColumnModelActionsColumnSupport
 {
-    const PROPERTY_FEEDBACK_TYPE = 'FeedbackType';
-
-    const PROPERTY_TYPE = 'Type';
+    public const PROPERTY_FEEDBACK_TYPE = 'FeedbackType';
+    public const PROPERTY_TYPE = 'Type';
 
     /**
      */

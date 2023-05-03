@@ -32,7 +32,7 @@ class RandomizerComponent extends Manager
             )
         );
 
-        $supported_types = array(
+        $supported_types = [
             ComplexFillInBlanksQuestion::class,
             ComplexHotspotQuestion::class,
             ComplexAssessmentMatchingQuestion::class,
@@ -40,7 +40,7 @@ class RandomizerComponent extends Manager
             ComplexAssessmentMultipleChoiceQuestion::class,
             ComplexOrderingQuestion::class,
             ComplexAssessmentSelectQuestion::class
-        );
+        ];
 
         $failures = 0;
         $questions = 0;
@@ -94,10 +94,10 @@ class RandomizerComponent extends Manager
         }
 
         $this->redirectWithMessage(
-            Translation::get($message), false, array(
+            Translation::get($message), false, [
                 self::PARAM_ACTION => self::ACTION_BROWSE,
                 self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
-            )
+            ]
         );
     }
 }
