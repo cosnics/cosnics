@@ -188,7 +188,12 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
      */
     protected function count_courses_for_course_type_user_category($course_type_user_category = null)
     {
-        return count($this->get_courses_for_course_type_user_category($course_type_user_category));
+        $courses = $this->get_courses_for_course_type_user_category($course_type_user_category);
+        if (is_array($courses))
+        {
+            return count($courses);
+        }
+        return 0;
     }
 
     /**
