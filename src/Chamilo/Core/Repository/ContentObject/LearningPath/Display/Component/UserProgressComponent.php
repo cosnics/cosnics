@@ -1,7 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TargetUserProgress\TargetUserProgressTable;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserProgressTableRenderer;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -14,9 +15,11 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\PanelRenderer;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -24,27 +27,33 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UserProgressComponent extends BaseReportingComponent implements TableSupport
+class UserProgressComponent extends BaseReportingComponent
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     protected $buttonToolbarRenderer;
 
-    /**
-     * Adds the breadcrumbs for this component
-     *
-     * @param Translation $translator
-     */
-    protected function addBreadcrumbs(Translation $translator)
+    protected function addBreadcrumbs()
     {
         $trail = BreadcrumbTrail::getInstance();
-        $trail->add(new Breadcrumb($this->get_url(), $translator->getTranslation('UserProgressComponent')));
+        $trail->add(
+            new Breadcrumb(
+                $this->get_url(), $this->getTranslator()->trans('UserProgressComponent', [], Manager::CONTEXT)
+            )
+        );
     }
 
-    function build()
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
+    public function build()
     {
         if (!$this->canEditCurrentTreeNode())
         {
@@ -52,9 +61,8 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         }
 
         $panelRenderer = new PanelRenderer();
-        $translator = Translation::getInstance();
 
-        $this->addBreadcrumbs($translator);
+        $this->addBreadcrumbs();
 
         $html = [];
         $html[] = $this->render_header();
@@ -67,22 +75,20 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         $html[] = '<div class="col-lg-8 col-md-12">';
 
         $html[] = $this->renderInformationPanel(
-            $this->getCurrentTreeNode(), $this->getAutomaticNumberingService(), $translator, $panelRenderer
+            $this->getCurrentTreeNode(), $this->getAutomaticNumberingService(), $panelRenderer
         );
 
         $html[] = '</div>';
         $html[] = '<div class="col-lg-4 col-md-12">';
 
-        $html[] = $this->renderTargetStatistics($panelRenderer, $translator);
+        $html[] = $this->renderTargetStatistics($panelRenderer);
 
         $html[] = '</div>';
         $html[] = '</div>';
-
-        $table = new TargetUserProgressTable($this);
 
         $html[] = $panelRenderer->render(
-            $translator->getTranslation('UserProgress'),
-            $this->getSearchButtonToolbarRenderer()->render() . $table->as_html()
+            $this->getTranslator()->trans('UserProgress', [], Manager::CONTEXT),
+            $this->getSearchButtonToolbarRenderer()->render() . $this->renderTable()
         );
 
         $html[] = $this->render_footer();
@@ -90,9 +96,37 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         return implode(PHP_EOL, $html);
     }
 
-    protected function getButtonToolbar(Translation $translator)
+    protected function cleanupOrderBy(?OrderBy $orderBy = null): ?OrderBy
     {
-        $toolbar = parent::getButtonToolbar($translator);
+        if ($orderBy instanceof OrderBy)
+        {
+            $firstOrderProperty = $orderBy->getFirst();
+
+            if ($firstOrderProperty->getConditionVariable() instanceof StaticConditionVariable)
+            {
+                $value = $firstOrderProperty->getConditionVariable()->getValue();
+
+                if (in_array($value, ['progress', 'completed', 'started']))
+                {
+                    $firstOrderProperty->getConditionVariable()->setValue('nodes_completed');
+                    $firstOrderProperty->setDirection(
+                        $value == 'started' ? $firstOrderProperty->getDirection() :
+                            ($firstOrderProperty->getDirection() == SORT_ASC ? SORT_DESC : SORT_ASC)
+                    );
+                }
+            }
+        }
+
+        return $orderBy;
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
+     */
+    protected function getButtonToolbar()
+    {
+        $toolbar = parent::getButtonToolbar();
+        $translator = $this->getTranslator();
 
         $buttonGroup = new ButtonGroup();
 
@@ -101,9 +135,10 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
         $buttonGroup->addButton(
             new Button(
-                $translator->getTranslation($translationVariable), new FontAwesomeGlyph('envelope'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_MAIL_USERS_WITH_INCOMPLETE_PROGRESS)),
-                Button::DISPLAY_ICON_AND_LABEL, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
+                $translator->trans($translationVariable, [], Manager::CONTEXT), new FontAwesomeGlyph('envelope'),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_MAIL_USERS_WITH_INCOMPLETE_PROGRESS]),
+                Button::DISPLAY_ICON_AND_LABEL,
+                $translator->trans('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
             )
         );
 
@@ -112,8 +147,12 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         return $toolbar;
     }
 
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
     /**
-     *
      * @return ButtonToolBarRenderer
      */
     protected function getSearchButtonToolbarRenderer()
@@ -124,7 +163,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
             $buttonToolbar->addItem(
                 new Button(
-                    Translation::getInstance()->getTranslation('Export', null, StringUtilities::LIBRARIES),
+                    $this->getTranslator()->trans('Export', [], StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('download'), $this->get_url(
                     [
                         self::PARAM_ACTION => self::ACTION_EXPORT_REPORTING,
@@ -141,21 +180,22 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
     }
 
     /**
-     * Returns the condition
-     *
-     * @param string $table_class_name
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @throws \Exception
      */
-    public function get_table_condition($table_class_name)
+    public function getUserProgressCondition(): ?AndCondition
     {
         return $this->getSearchButtonToolbarRenderer()->getConditions(
-            array(
+            [
                 new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
                 new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME),
                 new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL)
-            )
+            ]
         );
+    }
+
+    public function getUserProgressTableRenderer(): UserProgressTableRenderer
+    {
+        return $this->getService(UserProgressTableRenderer::class);
     }
 
     /**
@@ -163,55 +203,83 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
      *
      * @param TreeNode $currentTreeNode
      * @param AutomaticNumberingService $automaticNumberingService
-     * @param Translation $translator
      * @param PanelRenderer $panelRenderer
      *
      * @return string
      */
     protected function renderInformationPanel(
-        TreeNode $currentTreeNode, AutomaticNumberingService $automaticNumberingService, Translation $translator,
-        PanelRenderer $panelRenderer
-    )
+        TreeNode $currentTreeNode, AutomaticNumberingService $automaticNumberingService, PanelRenderer $panelRenderer
+    ): string
     {
+        $translator = $this->getTranslator();
+
         $parentTitles = [];
         foreach ($currentTreeNode->getParentNodes() as $parentNode)
         {
-            $url = $this->get_url(array(self::PARAM_CHILD_ID => $parentNode->getId()));
+            $url = $this->get_url([self::PARAM_CHILD_ID => $parentNode->getId()]);
             $title = $automaticNumberingService->getAutomaticNumberedTitleForTreeNode($parentNode);
             $parentTitles[] = '<a href="' . $url . '">' . $title . '</a>';
         }
 
         $informationValues = [];
 
-        $informationValues[$translator->getTranslation('Title')] =
+        $informationValues[$translator->trans('Title', [], Manager::CONTEXT)] =
             $automaticNumberingService->getAutomaticNumberedTitleForTreeNode(
                 $currentTreeNode
             );
 
         if (!$currentTreeNode->isRootNode())
         {
-            $informationValues[$translator->getTranslation('Parents')] = implode(' >> ', $parentTitles);
+            $informationValues[$translator->trans('Parents', [], Manager::CONTEXT)] = implode(' >> ', $parentTitles);
         }
 
-        return $panelRenderer->renderTablePanel($translator->getTranslation('Information'), $informationValues);
+        return $panelRenderer->renderTablePanel(
+            $informationValues, $translator->trans('Information', [], Manager::CONTEXT)
+        );
     }
 
     /**
-     * Renders the statistics for the target users
-     *
-     * @param PanelRenderer $panelRenderer
-     * @param Translation $translator
-     *
-     * @return string
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Exception
      */
-    protected function renderTargetStatistics(PanelRenderer $panelRenderer, Translation $translator)
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems = $this->getTrackingService()->countLearningPathAttemptsWithUsers(
+            $this->get_root_content_object(), $this->getCurrentTreeNode(), $this->getUserProgressCondition()
+        );
+
+        $userProgressTableRenderer = $this->getUserProgressTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $userProgressTableRenderer->getParameterNames(), $userProgressTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $attempts = $this->getTrackingService()->getLearningPathAttemptsWithUser(
+            $this->get_root_content_object(), $this->getCurrentTreeNode(), $this->getUserProgressCondition(),
+            $tableParameterValues->getOffset(), $tableParameterValues->getNumberOfItemsPerPage(),
+            $this->cleanupOrderBy($userProgressTableRenderer->determineOrderBy($tableParameterValues))
+        );
+
+        return $userProgressTableRenderer->legacyRender($this, $tableParameterValues, $attempts);
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
+     */
+    protected function renderTargetStatistics(PanelRenderer $panelRenderer): string
     {
         $trackingService = $this->getTrackingService();
+        $translator = $this->getTranslator();
 
         $labels = [
-            $translator->getTranslation('TargetUsersWithFullAttempts'),
-            $translator->getTranslation('TargetUsersWithPartialAttempts'),
-            $translator->getTranslation('TargetUsersWithoutAttempts')
+            $translator->trans('TargetUsersWithFullAttempts', [], Manager::CONTEXT),
+            $translator->trans('TargetUsersWithPartialAttempts', [], Manager::CONTEXT),
+            $translator->trans('TargetUsersWithoutAttempts', [], Manager::CONTEXT)
         ];
 
         $data = [
@@ -261,7 +329,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
         $panelHtml[] = '</script>';
 
         return $panelRenderer->render(
-            $translator->getTranslation('OverviewUserProgress'), implode(PHP_EOL, $panelHtml)
+            $translator->trans('OverviewUserProgress', [], Manager::CONTEXT), implode(PHP_EOL, $panelHtml)
         );
     }
 

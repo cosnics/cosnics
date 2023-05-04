@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar\Renderer;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -82,7 +83,7 @@ class ButtonToolBarRenderer
      *
      * @throws \Exception
      */
-    public function getConditions(array $properties = []): ?Condition
+    public function getConditions(array $properties = []): ?AndCondition
     {
         // check input parameter
         if (!is_array($properties))

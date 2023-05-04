@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -18,89 +19,33 @@ use Chamilo\Libraries\Translation\Translation;
 abstract class BaseReportingComponent extends BaseHtmlTreeComponent
 {
     /**
-     * Renders common functionality
+     * @return array
      */
-    function renderCommonFunctionality()
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
-        $translator = Translation::getInstance();
+        $additionalParameters[] = self::PARAM_REPORTING_USER_ID;
 
-        $html = [];
-
-        $buttonToolbarRenderer = $this->getButtonToolbarRenderer($translator);
-        $html[] = $buttonToolbarRenderer->render();
-
-        if ($this->getUser() !== $this->getReportingUser())
-        {
-            $html[] = $this->renderViewAsMessage($translator, $this->getReportingUser());
-        }
-
-        return implode(PHP_EOL, $html);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
-    /**
-     * @param Translation $translator
-     *
-     * @return ButtonToolBarRenderer
-     */
-    protected function getButtonToolbarRenderer(Translation $translator)
-    {
-        return new ButtonToolBarRenderer($this->getButtonToolbar($translator));
-    }
-
-    /**
-     * Builds and returns the button toolbar
-     *
-     * @param Translation $translator
-     *
-     * @return ButtonToolBar
-     */
-    protected function getButtonToolbar(Translation $translator)
+    protected function getButtonToolbar()
     {
         $buttonToolbar = new ButtonToolBar();
 
         $buttonToolbar->addItem(
             new Button(
-                $translator->getTranslation('ReturnToLearningPath'),
+                $this->getTranslator()->trans('ReturnToLearningPath', [], Manager::CONTEXT),
                 new FontAwesomeGlyph('file'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT))
+                $this->get_url([self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT])
             )
         );
 
         return $buttonToolbar;
     }
 
-    /**
-     * Renders a message when viewing this component as another user
-     *
-     * @param Translation $translator
-     * @param User $user
-     *
-     * @return string
-     */
-    protected function renderViewAsMessage(Translation $translator, User $user)
+    protected function getButtonToolbarRenderer()
     {
-        $returnToUserListUrl = $this->get_url(
-            array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS), array(self::PARAM_REPORTING_USER_ID)
-        );
-
-        $returnToUserListTranslation = $translator->getTranslation('ReturnToUserList');
-
-        $html = [];
-
-        $html[] = '<div class="alert alert-info">';
-        $html[] = '<div class="pull-left" style="margin-top: 6px;">';
-        $html[] = $translator->getTranslation('ViewReportingAsUser', array('USER' => $user->get_fullname()));
-        $html[] = '</div>';
-        $html[] = '<div class="pull-right">';
-        $html[] = '<a href="' . $returnToUserListUrl . '" class="btn btn-default">';
-        $html[] = '<span class="inline-glyph fas fa-chart-bar"></span>';
-        $html[] = $returnToUserListTranslation;
-        $html[] = '</a>';
-        $html[] = '</div>';
-        $html[] = '<div class="clearfix"></div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return new ButtonToolBarRenderer($this->getButtonToolbar());
     }
 
     /**
@@ -132,16 +77,6 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
     }
 
     /**
-     * @return array
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_REPORTING_USER_ID;
-
-        return parent::getAdditionalParameters($additionalParameters);
-    }
-
-    /**
      * Returns the user that is used to calculate and render the progress in the tree
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
@@ -149,6 +84,60 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
     protected function getTreeUser()
     {
         return $this->getReportingUser();
+    }
+
+    /**
+     * Renders common functionality
+     */
+    public function renderCommonFunctionality()
+    {
+        $translator = Translation::getInstance();
+
+        $html = [];
+
+        $buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        $html[] = $buttonToolbarRenderer->render();
+
+        if ($this->getUser() !== $this->getReportingUser())
+        {
+            $html[] = $this->renderViewAsMessage($translator, $this->getReportingUser());
+        }
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Renders a message when viewing this component as another user
+     *
+     * @param Translation $translator
+     * @param User $user
+     *
+     * @return string
+     */
+    protected function renderViewAsMessage(Translation $translator, User $user)
+    {
+        $returnToUserListUrl = $this->get_url(
+            [self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS], [self::PARAM_REPORTING_USER_ID]
+        );
+
+        $returnToUserListTranslation = $translator->getTranslation('ReturnToUserList');
+
+        $html = [];
+
+        $html[] = '<div class="alert alert-info">';
+        $html[] = '<div class="pull-left" style="margin-top: 6px;">';
+        $html[] = $translator->getTranslation('ViewReportingAsUser', ['USER' => $user->get_fullname()]);
+        $html[] = '</div>';
+        $html[] = '<div class="pull-right">';
+        $html[] = '<a href="' . $returnToUserListUrl . '" class="btn btn-default">';
+        $html[] = '<span class="inline-glyph fas fa-chart-bar"></span>';
+        $html[] = $returnToUserListTranslation;
+        $html[] = '</a>';
+        $html[] = '</div>';
+        $html[] = '<div class="clearfix"></div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
 }

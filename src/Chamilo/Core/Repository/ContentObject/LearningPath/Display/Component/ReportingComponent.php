@@ -3,8 +3,8 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeAttempt\TreeNodeAttemptTableRenderer;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeProgress\TreeNodeProgressTableRenderer;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeAttemptTableRenderer;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeNodeProgressTableRenderer;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AutomaticNumberingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
@@ -18,56 +18,57 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\PanelRenderer;
 use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Shows the progress of a user in the learning path
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ReportingComponent extends BaseReportingComponent implements TableSupport
+class ReportingComponent extends BaseReportingComponent
 {
 
-    /**
-     * Adds the breadcrumbs for this component
-     *
-     * @param Translation $translator
-     */
-    protected function addBreadcrumbs(Translation $translator)
+    protected function addBreadcrumbs()
     {
+        $translator = $this->getTranslator();
+
         $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
                 $this->get_url(
                     [self::PARAM_ACTION => $this->get_action()], [self::PARAM_REPORTING_USER_ID]
-                ), $translator->getTranslation('UserProgressComponent')
+                ), $translator->trans('UserProgressComponent', [], Manager::CONTEXT)
             )
         );
         $trail->add(
             new Breadcrumb(
-                $this->get_url(), $translator->getTranslation(
-                'ReportingComponent', ['USER' => $this->getReportingUser()->get_fullname()]
+                $this->get_url(), $translator->trans(
+                'ReportingComponent', ['USER' => $this->getReportingUser()->get_fullname()], Manager::CONTEXT
             )
             )
         );
     }
 
     /**
-     * @return string
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
     public function build()
     {
-        $translator = Translation::getInstance();
         $trackingService = $this->getTrackingService();
         $currentTreeNode = $this->getCurrentTreeNode();
         $automaticNumberingService = $this->getAutomaticNumberingService();
         $panelRenderer = new PanelRenderer();
+        $translator = $this->getTranslator();
 
-        $this->addBreadcrumbs($translator);
+        $this->addBreadcrumbs();
 
         $html = [parent::render_header()];
         $html[] = $this->renderCommonFunctionality();
@@ -82,7 +83,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         $html[] = '<div class="' . $class . ' col-md-12">';
 
         $html[] = $this->renderInformationPanel(
-            $currentTreeNode, $automaticNumberingService, $translator, $trackingService, $panelRenderer
+            $currentTreeNode, $automaticNumberingService, $trackingService, $panelRenderer
         );
 
         $html[] = '</div>';
@@ -90,7 +91,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         if ($currentTreeNode->hasChildNodes())
         {
             $html[] = '<div class="col-lg-4 col-md-12">';
-            $html[] = $this->renderProgress($translator, $trackingService, $currentTreeNode, $panelRenderer);
+            $html[] = $this->renderProgress($trackingService, $currentTreeNode, $panelRenderer);
             $html[] = '</div>';
         }
 
@@ -98,28 +99,28 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
         if ($this->getCurrentTreeNode()->hasChildNodes())
         {
-            $table = new TreeNodeProgressTableRenderer($this);
             $panelHtml = [];
 
-            $panelHtml[] = $this->getTreeNodeProgressButtonToolbar($translator)->render();
-            $panelHtml[] = $table->as_html();
+            $panelHtml[] = $this->getTreeNodeProgressButtonToolbar()->render();
+            $panelHtml[] = $this->renderTreeNodeProgressTable();
 
-            $html[] = $panelRenderer->render($translator->getTranslation('Children'), implode(PHP_EOL, $panelHtml));
+            $html[] = $panelRenderer->render(
+                $translator->trans('Children', [], Manager::CONTEXT), implode(PHP_EOL, $panelHtml)
+            );
         }
 
-        $table = new TreeNodeAttemptTableRenderer($this);
         $panelHtml = [];
 
-        $panelHtml[] = $this->getTreeNodeAttemptsButtonToolbar($translator)->render();
-        $panelHtml[] = $table->as_html();
+        $panelHtml[] = $this->getTreeNodeAttemptsButtonToolbar()->render();
+        $panelHtml[] = $this->renderTreeNodeAttemptTable();
 
-        $html[] = $panelRenderer->render($translator->getTranslation('Attempts'), implode(PHP_EOL, $panelHtml));
+        $html[] =
+            $panelRenderer->render($translator->trans('Attempts', [], Manager::CONTEXT), implode(PHP_EOL, $panelHtml));
 
         if ($currentTreeNode->supportsScore())
         {
             $html[] = $this->renderScoreChart(
-                $trackingService, $translator, $panelRenderer, $this->learningPath, $this->getReportingUser(),
-                $currentTreeNode
+                $trackingService, $panelRenderer, $this->learningPath, $this->getReportingUser(), $currentTreeNode
             );
         }
 
@@ -132,20 +133,28 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Returns the button toolbar for the TreeNodeProgressTable block
-     *
-     * @param Translation $translator
-     *
-     * @return ButtonToolBarRenderer
-     */
-    protected function getTreeNodeAttemptsButtonToolbar(Translation $translator)
+    protected function getDatetimeUtilities(): DatetimeUtilities
+    {
+        return $this->getService(DatetimeUtilities::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    public function getTreeNodeAttemptTableRenderer(): TreeNodeAttemptTableRenderer
+    {
+        return $this->getService(TreeNodeProgressTableRenderer::class);
+    }
+
+    protected function getTreeNodeAttemptsButtonToolbar(): ButtonToolBarRenderer
     {
         $buttonToolbar = new ButtonToolBar();
 
         $buttonToolbar->addItem(
             new Button(
-                $translator->getTranslation('Export', null, StringUtilities::LIBRARIES),
+                $this->getTranslator()->trans('Export', [], StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('download'), $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_EXPORT_REPORTING,
@@ -158,20 +167,13 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         return new ButtonToolBarRenderer($buttonToolbar);
     }
 
-    /**
-     * Returns the button toolbar for the TreeNodeProgressTable block
-     *
-     * @param Translation $translator
-     *
-     * @return ButtonToolBarRenderer
-     */
-    protected function getTreeNodeProgressButtonToolbar(Translation $translator)
+    protected function getTreeNodeProgressButtonToolbar(): ButtonToolBarRenderer
     {
         $buttonToolbar = new ButtonToolBar();
 
         $buttonToolbar->addItem(
             new Button(
-                $translator->getTranslation('Export', null, StringUtilities::LIBRARIES),
+                $this->getTranslator()->trans('Export', [], StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('download'), $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_EXPORT_REPORTING,
@@ -184,34 +186,46 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         return new ButtonToolBarRenderer($buttonToolbar);
     }
 
-    /**
-     * Returns the condition
-     *
-     * @param string $table_class_name
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_table_condition($table_class_name)
+    public function getTreeNodeProgressTableRenderer(): TreeNodeProgressTableRenderer
     {
-        return null;
+        return $this->getService(TreeNodeProgressTableRenderer::class);
     }
 
-    /**
-     * Renders the information panel
-     *
-     * @param TreeNode $currentTreeNode
-     * @param AutomaticNumberingService $automaticNumberingService
-     * @param Translation $translator
-     * @param TrackingService $trackingService
-     * @param PanelRenderer $panelRenderer
-     *
-     * @return string
-     */
+    // /**
+    // * Builds and returns the button toolbar for this component
+    // *
+    // * @param Translation $translator
+    // *
+    // * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
+    // */
+    // public function getButtonToolbar()
+    // {
+    // $toolbar = parent::getButtonToolbar();
+    //
+    // if ($this->canEditCurrentTreeNode())
+    // {
+    // $toolbar->prependItem(
+    // new Button(
+    // $translator->getTranslation('ReturnToUserList'),
+    // new FontAwesomeGlyph('chart-bar'),
+    // $this->get_url(
+    // array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS),
+    // array(self::PARAM_REPORTING_USER_ID)
+    // )
+    // )
+    // );
+    // }
+    //
+    // return $toolbar;
+    // }
+
     protected function renderInformationPanel(
-        TreeNode $currentTreeNode, AutomaticNumberingService $automaticNumberingService, Translation $translator,
+        TreeNode $currentTreeNode, AutomaticNumberingService $automaticNumberingService,
         TrackingService $trackingService, PanelRenderer $panelRenderer
-    )
+    ): string
     {
+        $translator = $this->getTranslator();
+
         $parentTitles = [];
         foreach ($currentTreeNode->getParentNodes() as $parentNode)
         {
@@ -222,20 +236,21 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
         $informationValues = [];
 
-        $informationValues[$translator->getTranslation('Title')] =
+        $informationValues[$translator->trans('Title', [], Manager::CONTEXT)] =
             $automaticNumberingService->getAutomaticNumberedTitleForTreeNode(
                 $currentTreeNode
             );
 
         if (!$currentTreeNode->isRootNode())
         {
-            $informationValues[$translator->getTranslation('Parents')] = implode(' >> ', $parentTitles);
+            $informationValues[$translator->trans('Parents', [], Manager::CONTEXT)] = implode(' >> ', $parentTitles);
         }
 
-        $informationValues[$translator->getTranslation('User')] = $this->getReportingUser()->get_fullname();
+        $informationValues[$translator->trans('User', [], Manager::CONTEXT)] =
+            $this->getReportingUser()->get_fullname();
 
-        $informationValues[$translator->getTranslation('TotalTime')] =
-            DatetimeUtilities::getInstance()->formatSecondsToHours(
+        $informationValues[$translator->trans('TotalTime', [], Manager::CONTEXT)] =
+            $this->getDatetimeUtilities()->formatSecondsToHours(
                 $trackingService->getTotalTimeSpentInTreeNode(
                     $this->learningPath, $this->getReportingUser(), $currentTreeNode
                 )
@@ -245,51 +260,44 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         {
             $progressBarRenderer = new ProgressBarRenderer();
 
-            $informationValues[$translator->getTranslation('AverageScore')] = $progressBarRenderer->render(
+            $informationValues[$translator->trans('AverageScore', [], Manager::CONTEXT)] = $progressBarRenderer->render(
                 (int) $trackingService->getAverageScoreInTreeNode(
                     $this->learningPath, $this->getReportingUser(), $currentTreeNode
                 )
             );
 
-            $informationValues[$translator->getTranslation('MaximumScore')] = $progressBarRenderer->render(
+            $informationValues[$translator->trans('MaximumScore', [], Manager::CONTEXT)] = $progressBarRenderer->render(
                 $trackingService->getMaximumScoreInTreeNode(
                     $this->learningPath, $this->getReportingUser(), $currentTreeNode
                 )
             );
 
-            $informationValues[$translator->getTranslation('MinimumScore')] = $progressBarRenderer->render(
+            $informationValues[$translator->trans('MinimumScore', [], Manager::CONTEXT)] = $progressBarRenderer->render(
                 $trackingService->getMinimumScoreInTreeNode(
                     $this->learningPath, $this->getReportingUser(), $currentTreeNode
                 )
             );
 
-            $informationValues[$translator->getTranslation('LastScore')] = $progressBarRenderer->render(
-                $trackingService->getLastAttemptScoreForTreeNode(
+            $informationValues[$translator->trans('LastScore', [], Manager::CONTEXT)] = $progressBarRenderer->render(
+                (int) $trackingService->getLastAttemptScoreForTreeNode(
                     $this->learningPath, $this->getReportingUser(), $currentTreeNode
                 )
             );
         }
 
-        return $panelRenderer->renderTablePanel($translator->getTranslation('Information'), $informationValues);
+        return $panelRenderer->renderTablePanel(
+            $informationValues, $translator->trans('Information', [], Manager::CONTEXT)
+        );
     }
 
-    /**
-     * Renders the progress doughnut chart
-     *
-     * @param Translation $translator
-     * @param TrackingService $trackingService
-     * @param TreeNode $currentTreeNode
-     * @param PanelRenderer $panelRenderer
-     *
-     * @return string
-     */
     protected function renderProgress(
-        Translation $translator, TrackingService $trackingService, TreeNode $currentTreeNode,
-        PanelRenderer $panelRenderer
-    )
+        TrackingService $trackingService, TreeNode $currentTreeNode, PanelRenderer $panelRenderer
+    ): string
     {
-        $completedLabel = $translator->getTranslation('Completed');
-        $notCompletedLabel = $translator->getTranslation('NotCompleted');
+        $translator = $this->getTranslator();
+
+        $completedLabel = $translator->trans('Completed', [], Manager::CONTEXT);
+        $notCompletedLabel = $translator->trans('NotCompleted', [], Manager::CONTEXT);
 
         $progress = $trackingService->getLearningPathProgress(
             $this->learningPath, $this->getReportingUser(), $currentTreeNode
@@ -338,42 +346,15 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         $panelHtml[] = '});';
         $panelHtml[] = '</script>';
 
-        return $panelRenderer->render($translator->getTranslation('Progress'), implode(PHP_EOL, $panelHtml));
+        return $panelRenderer->render(
+            $translator->trans('Progress', [], Manager::CONTEXT), implode(PHP_EOL, $panelHtml)
+        );
     }
-
-    // /**
-    // * Builds and returns the button toolbar for this component
-    // *
-    // * @param Translation $translator
-    // *
-    // * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
-    // */
-    // public function getButtonToolbar(Translation $translator)
-    // {
-    // $toolbar = parent::getButtonToolbar($translator);
-    //
-    // if ($this->canEditCurrentTreeNode())
-    // {
-    // $toolbar->prependItem(
-    // new Button(
-    // $translator->getTranslation('ReturnToUserList'),
-    // new FontAwesomeGlyph('chart-bar'),
-    // $this->get_url(
-    // array(self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS),
-    // array(self::PARAM_REPORTING_USER_ID)
-    // )
-    // )
-    // );
-    // }
-    //
-    // return $toolbar;
-    // }
 
     /**
      * Renders the scores for every attempt in a chart
      *
      * @param TrackingService $trackingService
-     * @param Translation $translator
      * @param PanelRenderer $panelRenderer
      * @param LearningPath $learningPath
      * @param User $user
@@ -382,10 +363,12 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
      * @return string
      */
     protected function renderScoreChart(
-        TrackingService $trackingService, Translation $translator, PanelRenderer $panelRenderer,
-        LearningPath $learningPath, User $user, TreeNode $treeNode
-    )
+        TrackingService $trackingService, PanelRenderer $panelRenderer, LearningPath $learningPath, User $user,
+        TreeNode $treeNode
+    ): string
     {
+        $translator = $this->getTranslator();
+
         $labels = $scores = [];
 
         $treeNodeAttempts = $trackingService->getTreeNodeAttempts($learningPath, $user, $treeNode);
@@ -397,7 +380,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
                 continue;
             }
 
-            $labels[] = DatetimeUtilities::getInstance()->formatLocaleDate(null, $treeNodeAttempt->get_start_time());
+            $labels[] = $this->getDatetimeUtilities()->formatLocaleDate(null, $treeNodeAttempt->get_start_time());
             $scores[] = (int) $treeNodeAttempt->get_score();
         }
 
@@ -414,7 +397,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         $html[] = '            data: [' . implode(', ', $scores) . '],';
         $html[] = '            backgroundColor: "rgba(75,192,192,0.4)",';
         $html[] = '            borderColor: "rgba(75,192,192,1)",';
-        $html[] = '            label: "' . $translator->getTranslation('Scores') . '",';
+        $html[] = '            label: "' . $translator->trans('Scores', [], Manager::CONTEXT) . '",';
         $html[] = '            pointRadius: 5,';
         $html[] = '            fill: false';
         $html[] = '        }]';
@@ -436,6 +419,65 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         $html[] = '});';
         $html[] = '</script>';
 
-        return $panelRenderer->render($translator->getTranslation('Scores'), implode(PHP_EOL, $html));
+        return $panelRenderer->render($translator->trans('Scores', [], Manager::CONTEXT), implode(PHP_EOL, $html));
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderTreeNodeAttemptTable(): string
+    {
+        $treeNodeAttempts = $this->getTrackingService()->getTreeNodeAttempts(
+            $this->get_root_content_object(), $this->getReportingUser(), $this->getCurrentTreeNode()
+        );
+
+        $totalNumberOfItems = count($treeNodeAttempts);
+
+        $treeNodeAttemptTableRenderer = $this->getTreeNodeAttemptTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $treeNodeAttemptTableRenderer->getParameterNames(),
+            $treeNodeAttemptTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $treeNodeAttempts = new ArrayCollection(
+            array_slice(
+                $treeNodeAttempts, $tableParameterValues->getOffset(), $tableParameterValues->getNumberOfItemsPerPage()
+            )
+        );
+
+        return $treeNodeAttemptTableRenderer->legacyRender($this, $tableParameterValues, $treeNodeAttempts);
+    }
+
+    /**
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderTreeNodeProgressTable(): string
+    {
+        $totalNumberOfItems = count($this->getCurrentTreeNode()->getChildNodes());
+
+        $treeNodeProgressTableRenderer = $this->getTreeNodeProgressTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $treeNodeProgressTableRenderer->getParameterNames(),
+            $treeNodeProgressTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $treeNodes = new ArrayCollection(
+            array_slice(
+                $this->getCurrentTreeNode()->getChildNodes(), $tableParameterValues->getOffset(),
+                $tableParameterValues->getNumberOfItemsPerPage()
+            )
+        );
+
+        return $treeNodeProgressTableRenderer->legacyRender($this, $tableParameterValues, $treeNodes);
     }
 }
