@@ -2,15 +2,19 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
-use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Table\AnswerFeedbackType\AnswerFeedbackTypeTable;
+use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Table\AnswerFeedbackTypeTableRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -31,13 +35,11 @@ class AnswerFeedbackTypeComponent extends Manager implements TableSupport
 
         if (is_null($complex_question_id) || is_null($answer_feedback_type))
         {
-            $table = new AnswerFeedbackTypeTable($this);
-
             $html = [];
 
-            $html[] = $this->render_header();
-            $html[] = $table->as_html();
-            $html[] = $this->render_footer();
+            $html[] = $this->renderHeader();
+            $html[] = $this->renderTable();
+            $html[] = $this->renderFooter();
 
             return implode(PHP_EOL, $html);
         }
@@ -49,10 +51,10 @@ class AnswerFeedbackTypeComponent extends Manager implements TableSupport
             }
 
             $conditions = [];
-            $conditions[] = $this->get_table_condition();
+            $conditions[] = $this->getAnswerFeedbackTypeCondition();
             $conditions[] = new InCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ID
+                    ComplexContentObjectItem::class, DataClass::PROPERTY_ID
                 ), $complex_question_id
             );
             $condition = new AndCondition($conditions);
@@ -110,15 +112,64 @@ class AnswerFeedbackTypeComponent extends Manager implements TableSupport
         }
     }
 
-    /**
-     * @see \core\repository\builder\Manager::get_table_condition()
-     */
-    public function get_table_condition($table_class_name)
+    public function getAnswerFeedbackTypeCondition(): EqualityCondition
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($this->get_parent_content_object_id())
         );
+    }
+
+    public function getAnswerFeedbackTypeTableRenderer(): AnswerFeedbackTypeTableRenderer
+    {
+        return $this->getService(AnswerFeedbackTypeTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems = DataManager::count(
+            ComplexContentObjectItem::class, new DataClassCountParameters($this->getAnswerFeedbackTypeCondition())
+        );
+
+        $answerFeedbackTypeTableRenderer = $this->getAnswerFeedbackTypeTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $answerFeedbackTypeTableRenderer->getParameterNames(),
+            $answerFeedbackTypeTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $orderBy = $answerFeedbackTypeTableRenderer->determineOrderBy($tableParameterValues);
+
+        $orderBy->add(
+            new OrderProperty(
+                new PropertyConditionVariable(
+                    ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
+                )
+            )
+        );
+
+        $parameters = new DataClassRetrievesParameters(
+            $this->getAnswerFeedbackTypeCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+            $tableParameterValues->getOffset(), $orderBy
+        );
+
+        $complexContentObjectItems = DataManager::retrieves(
+            ComplexContentObjectItem::class, $parameters
+        );
+
+        return $answerFeedbackTypeTableRenderer->render($tableParameterValues, $complexContentObjectItems);
     }
 }

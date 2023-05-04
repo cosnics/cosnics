@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder;
 
+use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Table\ComplexTableRenderer;
 use Chamilo\Core\Repository\Selector\Renderer\BasicTypeSelectorRenderer;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
@@ -12,8 +13,12 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -156,6 +161,21 @@ abstract class Manager extends Application implements TableSupport
         return '';
     }
 
+    public function getComplexCondition()
+    {
+        return $this->get_complex_content_object_table_condition();
+    }
+
+    public function getComplexTableRenderer(): ComplexTableRenderer
+    {
+        return $this->getService(ComplexTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
     /**
      * @return LinkTypeSelectorOption[]
      */
@@ -241,6 +261,8 @@ abstract class Manager extends Application implements TableSupport
         );
     }
 
+    // url building
+
     public function get_complex_content_object_item_edit_url($selected_content_object_item_id)
     {
         return $this->get_url(
@@ -271,8 +293,6 @@ abstract class Manager extends Application implements TableSupport
             ]
         );
     }
-
-    // url building
 
     public function get_complex_content_object_item_view_url($selected_content_object_item_id)
     {
@@ -331,20 +351,35 @@ abstract class Manager extends Application implements TableSupport
      */
     public function get_complex_content_object_table_html()
     {
-        $name_space = $this->get_root_content_object()->package();
+        $totalNumberOfItems = DataManager::count_complex_content_object_items(
+            ComplexContentObjectItem::class, new DataClassCountParameters($this->getComplexCondition())
+        );
 
-        $class = $name_space . '\Builder\Component\Browser\ComplexTable';
+        $complexTableRenderer = $this->getComplexTableRenderer();
 
-        if (class_exists($class))
-        {
-            $table = new $class($this);
-        }
-        else
-        {
-            $table = new ComplexTable($this);
-        }
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $complexTableRenderer->getParameterNames(), $complexTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
 
-        return $table->as_html();
+        $orderBy = $complexTableRenderer->determineOrderBy($tableParameterValues);
+
+        $orderBy->add(
+            new OrderProperty(
+                new PropertyConditionVariable(
+                    ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
+                )
+            )
+        );
+        $parameters = new DataClassRetrievesParameters(
+            $this->getComplexCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+            $tableParameterValues->getOffset(), $orderBy
+        );
+
+        $complexContentObjectItems =
+            DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class, $parameters);
+
+        return $complexTableRenderer->legacyRender($this, $tableParameterValues, $complexContentObjectItems);
     }
 
     public function get_content_object_display_attachment_url($attachment)
@@ -453,11 +488,6 @@ abstract class Manager extends Application implements TableSupport
         {
             return $this->selected_complex_content_object_item->get_id();
         }
-    }
-
-    public function get_table_condition($table_class_name)
-    {
-        return $this->get_complex_content_object_table_condition();
     }
 
     public function redirect_away_from_complex_builder($message, $error_message)

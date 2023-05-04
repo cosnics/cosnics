@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component\AssessmentMerger\ObjectTable;
 use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
+use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Table\ObjectTableRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -18,8 +18,10 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -29,7 +31,7 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * @package repository.lib.complex_builder.assessment.component
  */
-class AssessmentMergerComponent extends Manager implements ViewerInterface, TableSupport
+class AssessmentMergerComponent extends Manager implements ViewerInterface
 {
 
     /**
@@ -47,9 +49,8 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
             )
         );
         $trail->add(new Breadcrumb($this->get_url([]), Translation::get('MergeAssessment')));
-        $assessment = $this->get_root_content_object();
 
-        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!\Chamilo\Core\Repository\Viewer\Manager::any_object_selected())
         {
             $component = $this->getApplicationFactory()->getApplication(
                 \Chamilo\Core\Repository\Viewer\Manager::context(),
@@ -76,21 +77,14 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
 
             $html = [];
 
-            $html[] = $this->render_header();
+            $html[] = $this->renderHeader();
             $html[] = $display;
             $html[] = '<br />';
             $html[] = $this->buttonToolbarRenderer->render();
             $html[] = '<h3>' . Translation::get('SelectQuestions') . '</h3>';
 
-            $params = [
-                \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID => Request::get(
-                    \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID
-                )
-            ];
-            $table = new ObjectTable($this);
-
-            $html[] = $table->as_html();
-            $html[] = $this->render_footer();
+            $html[] = $this->renderTable();
+            $html[] = $this->renderFooter();
 
             return implode(PHP_EOL, $html);
         }
@@ -116,6 +110,25 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
         return $this->buttonToolbarRenderer;
     }
 
+    public function getObjectCondition()
+    {
+        $selected_assessment = DataManager::retrieve_by_id(
+            Assessment::class, \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
+        );
+
+        return $this->get_condition($selected_assessment);
+    }
+
+    public function getObjectTableRenderer(): ObjectTableRenderer
+    {
+        return $this->getService(ObjectTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
     public function get_allowed_content_object_types()
     {
         return [Assessment::class];
@@ -128,15 +141,14 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($selected_assessment->get_id())
         );
-        $condition = new SubselectCondition(
+
+        return new SubselectCondition(
 
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
             ), $sub_condition
         );
-
-        return $condition;
     }
 
     public function get_question_selector_url($question_id, $assessment_id)
@@ -153,12 +165,32 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
         );
     }
 
-    public function get_table_condition($table_class_name)
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
+    protected function renderTable(): string
     {
-        $selected_assessment = DataManager::retrieve_by_id(
-            Assessment::class, \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects()
+        $totalNumberOfItems = DataManager::count_active_content_objects(
+            ContentObject::class, new DataClassCountParameters($this->getObjectCondition())
         );
 
-        return $this->get_condition($selected_assessment);
+        $objectTableRenderer = $this->getObjectTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $objectTableRenderer->getParameterNames(), $objectTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $objects = DataManager::retrieve_active_content_objects(
+            ContentObject::class, new DataClassRetrievesParameters(
+                $this->getObjectCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+                $tableParameterValues->getOffset(), $objectTableRenderer->determineOrderBy($tableParameterValues)
+            )
+        );
+
+        return $objectTableRenderer->legacyRender($this, $tableParameterValues, $objects);
     }
 }
