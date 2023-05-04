@@ -8,5 +8,10 @@
                   public="true"/>
 
         <service id="Chamilo\Application\Portfolio\Favourite\Table\FavouriteTableRenderer"/>
+        <service id="Chamilo\Application\Portfolio\Table\UserTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
     </services>
 </container>
