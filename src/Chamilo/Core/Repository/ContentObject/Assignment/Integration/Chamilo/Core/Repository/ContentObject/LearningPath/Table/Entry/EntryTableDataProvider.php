@@ -8,11 +8,10 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class EntryTableDataProvider
     extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableDataProvider

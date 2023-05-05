@@ -9,14 +9,18 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNod
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class EntryTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
 {
+    /**
+     * @var \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication
+     */
+    protected $contentObjectPublication;
+
     /**
      * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService
      */
@@ -26,11 +30,6 @@ class EntryTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Displ
      * @var TreeNodeData
      */
     protected $treeNodeData;
-
-    /**
-     * @var \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication
-     */
-    protected $contentObjectPublication;
 
     /**
      * EntityTable constructor.
@@ -56,19 +55,19 @@ class EntryTable extends \Chamilo\Core\Repository\ContentObject\Assignment\Displ
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService
-     */
-    public function getLearningPathAssignmentService()
-    {
-        return $this->learningPathAssignmentService;
-    }
-
-    /**
      * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication
      */
     public function getContentObjectPublication()
     {
         return $this->contentObjectPublication;
+    }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\LearningPathAssignmentService
+     */
+    public function getLearningPathAssignmentService()
+    {
+        return $this->learningPathAssignmentService;
     }
 
     /**
