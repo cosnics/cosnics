@@ -112,6 +112,17 @@ abstract class EntityTableRenderer extends RecordListTableRenderer
         return $this->datetimeUtilities;
     }
 
+    protected function getEntityUrl($entity): string
+    {
+        return $this->getUrlGenerator()->fromRequest(
+            [
+                Manager::PARAM_ACTION => Manager::ACTION_ENTRY,
+                Manager::PARAM_ENTITY_TYPE => $entity[Entry::PROPERTY_ENTITY_TYPE],
+                Manager::PARAM_ENTITY_ID => $entity[Entry::PROPERTY_ENTITY_ID]
+            ]
+        );
+    }
+
     protected function getRightsService(): RightsService
     {
         return $this->rightsService;
@@ -172,7 +183,7 @@ abstract class EntityTableRenderer extends RecordListTableRenderer
         );
     }
 
-    abstract protected function isEntity($entityId, $userId);
+    abstract protected function isEntity($entityId, $userId): bool;
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException

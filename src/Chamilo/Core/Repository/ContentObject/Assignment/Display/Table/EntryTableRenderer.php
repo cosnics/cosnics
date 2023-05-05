@@ -5,10 +5,10 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -20,12 +20,15 @@ use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
+use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\TableParameterValues;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Table
@@ -50,11 +53,23 @@ abstract class EntryTableRenderer extends RecordListTableRenderer implements Tab
 
     protected DatetimeUtilities $datetimeUtilities;
 
-    protected RightsService $rightsService;
-
     protected StringUtilities $stringUtilities;
 
     protected User $user;
+
+    public function __construct(
+        AssignmentDataProvider $assignmentDataProvider, DatetimeUtilities $datetimeUtilities,
+        StringUtilities $stringUtilities, User $user, Translator $translator, UrlGenerator $urlGenerator,
+        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager
+    )
+    {
+        $this->assignmentDataProvider = $assignmentDataProvider;
+        $this->datetimeUtilities = $datetimeUtilities;
+        $this->stringUtilities = $stringUtilities;
+        $this->user = $user;
+
+        parent::__construct($translator, $urlGenerator, $htmlTableRenderer, $pager);
+    }
 
     protected function formatDate($date): string
     {
@@ -81,11 +96,6 @@ abstract class EntryTableRenderer extends RecordListTableRenderer implements Tab
     }
 
     abstract public function getEntryClassName();
-
-    protected function getRightsService(): RightsService
-    {
-        return $this->rightsService;
-    }
 
     abstract public function getScoreClassName();
 
@@ -150,8 +160,6 @@ abstract class EntryTableRenderer extends RecordListTableRenderer implements Tab
             )
         );
     }
-
-    abstract protected function isEntity($entityId, $userId);
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
