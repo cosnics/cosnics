@@ -8,8 +8,7 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\DependencyInjection
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
 {
@@ -22,7 +21,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Core\Repository\ContentObject\Assignment\Display' => ['services.xml']];
+        return ['Chamilo\Core\Repository\ContentObject\Assignment\Display' => ['services.xml', 'tables.xml']];
     }
 
 }
