@@ -4,13 +4,11 @@ namespace Chamilo\Application\Weblcms\Component;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Menu\RequestsTreeRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\CommonRequest;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Application\Weblcms\Table\AdminRequest\AdminRequestTable;
+use Chamilo\Application\Weblcms\Table\AdminRequestTableRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -19,110 +17,144 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.weblcms_manager.component
  */
 
 /**
  * Weblcms component which allows the the platform admin to browse the request
  */
-class AdminRequestBrowserComponent extends Manager implements TableSupport
+class AdminRequestBrowserComponent extends Manager
 {
-    const ALLOWED_REQUEST_VIEW = 'allowed_request_view';
+    public const ALLOWED_REQUEST_VIEW = 'allowed_request_view';
+    public const DENIED_REQUEST_VIEW = 'denied_request_view';
+    public const PENDING_REQUEST_VIEW = 'pending_request_view';
 
-    const DENIED_REQUEST_VIEW = 'denied_request_view';
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
-    const PENDING_REQUEST_VIEW = 'pending_request_view';
+    private $requestType;
 
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
-
-    private $request_type;
-
-    private $request_view;
+    private $requestView;
 
     /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageCourses');
-
-        $this->request_type = Request::get(self::PARAM_REQUEST_TYPE);
-        $this->request_view = Request::get(self::PARAM_REQUEST_VIEW);
-
-        if (is_null($this->request_type))
-        {
-            $this->request_type = CommonRequest::SUBSCRIPTION_REQUEST;
-        }
-        if (is_null($this->request_view))
-        {
-            $this->request_view = self::PENDING_REQUEST_VIEW;
-        }
-
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageCourses');
 
         $html = [];
 
-        $html[] = $this->render_header();
-        $html[] = $this->get_request_html();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderHeader();
+        $html[] = $this->renderComponent();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        if ($this->get_user()->is_platform_admin())
+        if ($this->getUser()->is_platform_admin())
         {
-            $redirect = new Redirect(
-                array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
-                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
-                )
+            $urlGenerator = $this->getUrlGenerator();
+            $translator = $this->getTranslator();
+
+            $browseUrl = $urlGenerator->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
+                    Application::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
+                ]
             );
 
             $breadcrumbtrail->add(
-                new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin'))
+                new Breadcrumb($browseUrl, $translator->trans('TypeName', [], 'Chamilo\Core\Admin'))
             );
 
-            $redirect = new Redirect(
-                array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
-                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
+            $browseTabUrl = $urlGenerator->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
+                    Application::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
                     GenericTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
-                        self::package()
+                        Manager::CONTEXT
                     )
-                )
+                ]
             );
 
-            $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Courses')));
-        }
-
-        if ($this->category)
-        {
-            $category = DataManager::retrieve_by_id(CourseCategory::class, $this->category);
-            $breadcrumbtrail->add(new Breadcrumb($this->get_url(), $category->get_name()));
+            $breadcrumbtrail->add(new Breadcrumb($browseTabUrl, $translator->trans('Courses', [], Manager::CONTEXT)));
         }
     }
 
-    public function getButtonToolbarRenderer()
+    /**
+     * @throws \QuickformException
+     */
+    public function getAdminRequestCondition(): AndCondition
+    {
+        $query = $this->getButtonToolbarRenderer()->getSearchForm()->getQuery();
+
+        $conditions = [];
+
+        if (isset($query) && $query != '')
+        {
+            $searchConditions = [];
+
+            $searchConditions[] = new ContainsCondition(
+                new PropertyConditionVariable(CourseRequest::class, CommonRequest::PROPERTY_MOTIVATION), $query
+            );
+            $searchConditions[] = new ContainsCondition(
+                new PropertyConditionVariable(CourseRequest::class, CommonRequest::PROPERTY_SUBJECT), $query
+            );
+
+            $conditions[] = new OrCondition($searchConditions);
+        }
+
+        switch ($this->getRequestView())
+        {
+            case self::PENDING_REQUEST_VIEW :
+                $conditions[] = new EqualityCondition(
+                    new PropertyConditionVariable(CourseRequest::class, CommonRequest::PROPERTY_DECISION),
+                    new StaticConditionVariable(CommonRequest::NO_DECISION)
+                );
+                break;
+            case self::ALLOWED_REQUEST_VIEW :
+                $conditions[] = new EqualityCondition(
+                    new PropertyConditionVariable(CourseRequest::class, CommonRequest::PROPERTY_DECISION),
+                    new StaticConditionVariable(CommonRequest::ALLOWED_DECISION)
+                );
+                break;
+            case self::DENIED_REQUEST_VIEW :
+                $conditions[] = new EqualityCondition(
+                    new PropertyConditionVariable(CourseRequest::class, CommonRequest::PROPERTY_DECISION),
+                    new StaticConditionVariable(CommonRequest::DENIED_DECISION)
+                );
+                break;
+        }
+
+        return new AndCondition($conditions);
+    }
+
+    public function getAdminRequestTableRenderer(): AdminRequestTableRenderer
+    {
+        return $this->getService(AdminRequestTableRenderer::class);
+    }
+
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
@@ -131,8 +163,8 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
-                    $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $this->getTranslator()->trans('ShowAll', [], StringUtilities::LIBRARIES),
+                    new FontAwesomeGlyph('folder'), $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
             $buttonToolbar->addButtonGroup($commonActions);
@@ -143,117 +175,90 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    public function get_condition()
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-
-        $conditions = [];
-        $search_conditions = null;
-
-        if (isset($query) && $query != '')
-        {
-            $conditions = [];
-            $conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_MOTIVATION), $query
-            );
-            $conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_SUBJECT), $query
-            );
-
-            $search_conditions = new OrCondition($conditions);
-        }
-
-        if (count($search_conditions))
-        {
-            $conditions[] = $search_conditions;
-        }
-
-        switch ($this->request_view)
-        {
-            case self::PENDING_REQUEST_VIEW :
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_DECISION),
-                    new StaticConditionVariable(CourseRequest::NO_DECISION)
-                );
-                break;
-            case self::ALLOWED_REQUEST_VIEW :
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_DECISION),
-                    new StaticConditionVariable(CourseRequest::ALLOWED_DECISION)
-                );
-                break;
-            case self::DENIED_REQUEST_VIEW :
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_DECISION),
-                    new StaticConditionVariable(CourseRequest::DENIED_DECISION)
-                );
-                break;
-        }
-
-        $condition = null;
-        if (count($conditions) > 1)
-        {
-            $condition = new AndCondition($conditions);
-        }
-        else
-        {
-            if (count($conditions) == 1)
-            {
-                $condition = $conditions[0];
-            }
-        }
-
-        return $condition;
+        return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
-    public function get_request_html()
+    public function getRequestType()
     {
-        $html = [];
+        if (!isset($this->requestType))
+        {
+            $this->requestType =
+                $this->getRequest()->query->get(self::PARAM_REQUEST_TYPE, CommonRequest::SUBSCRIPTION_REQUEST);
+        }
+
+        return $this->requestType;
+    }
+
+    public function getRequestView()
+    {
+        if (!isset($this->requestView))
+        {
+            $this->requestView = $this->getRequest()->query->get(self::PARAM_REQUEST_VIEW, self::PENDING_REQUEST_VIEW);
+        }
+
+        return $this->requestView;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    public function renderComponent(): string
+    {
         $menu = new RequestsTreeRenderer($this);
-        $html[] = '<div style="clear: both;"></div>';
-        $html[] = $this->buttonToolbarRenderer->render() . '<br />';
-        $html[] = '<div style="float: left; padding-right: 20px; width: 18%; overflow: auto; height: 100%;">' .
-            $menu->render_as_tree() . '</div>';
-        $html[] = '<div style="float: right; width: 80%;">';
-        if ($this->request_view && $this->request_type)
-        {
-            $html[] = $this->get_table_html();
-        }
-        $html[] = '</div>';
-        $html[] = '<div style="clear: both;"></div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    public function get_request_type()
-    {
-        return $this->request_type;
-    }
-
-    public function get_request_view()
-    {
-        return $this->request_view;
-    }
-
-    public function get_table_condition($table_class_name)
-    {
-        return $this->get_condition();
-    }
-
-    public function get_table_html()
-    {
-        $parameters = [];
-        $parameters[self::PARAM_CONTEXT] = self::context();
-        $parameters[self::PARAM_ACTION] = self::ACTION_ADMIN_REQUEST_BROWSER;
-        $parameters[self::PARAM_REQUEST_TYPE] = $this->request_type;
-
-        $table = new AdminRequestTable($this);
 
         $html = [];
-        $html[] = $table->as_html();
+
+        $html[] = '<div style="clear: both;"></div>';
+        $html[] = $this->getButtonToolbarRenderer()->render();
+        $html[] = '<br />';
+
+        $html[] = '<div style="float: left; padding-right: 20px; width: 18%; overflow: auto; height: 100%;">';
+        $html[] = $menu->render_as_tree();
+        $html[] = '</div>';
+
+        $html[] = '<div style="float: right; width: 80%;">';
+        $html[] = $this->renderTable();
+        $html[] = '</div>';
+
+        $html[] = '<div style="clear: both;"></div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Exception
+     */
+    public function renderTable(): string
+    {
+        $totalNumberOfItems =
+            DataManager::count(CourseRequest::class, new DataClassCountParameters($this->getAdminRequestCondition()));
+        $adminRequestTableRenderer = $this->getAdminRequestTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $adminRequestTableRenderer->getParameterNames(), $adminRequestTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $requests = DataManager::retrieves(
+            CourseRequest::class, new DataClassRetrievesParameters(
+                $this->getAdminRequestCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+                $tableParameterValues->getOffset(), $adminRequestTableRenderer->determineOrderBy($tableParameterValues)
+            )
+        );
+
+        return $adminRequestTableRenderer->render($tableParameterValues, $requests);
     }
 }

@@ -39,5 +39,7 @@
         </service>
 
         <service id="Chamilo\Application\Weblcms\Course\Table\CourseTableRenderer"/>
+
+        <service id="Chamilo\Application\Weblcms\Table\AdminRequestTableRenderer"/>
     </services>
 </container>
