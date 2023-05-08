@@ -14,6 +14,8 @@ abstract class Manager extends Application
     public const ACTION_GRANT = 'Granter';
     public const ACTION_RIGHTS = 'Rights';
 
+    public const CONTEXT = __NAMESPACE__;
+
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public const PARAM_ACTION = 'request_action';

@@ -1,13 +1,12 @@
 <?php
-namespace Chamilo\Application\Weblcms\Course\OpenCourse\DependencyInjection;
+namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\DependencyInjection;
 
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
- * @package Chamilo\Libraries\DependencyInjection
- * @author  Sven Vanpoucke - Hogeschool Gent
+ * @package Chamilo\Application\Weblcms\Admin\Extension\Platform\DependencyInjection
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension implements ExtensionInterface
@@ -16,11 +15,11 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
 
     public function getAlias()
     {
-        return 'chamilo.application.weblcms.course.open_course';
+        return 'chamilo.application.weblcms.admin.extension.platform';
     }
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Application\Weblcms\Course\OpenCourse' => ['repository.xml', 'services.xml', 'tables.xml']];
+        return ['Chamilo\Application\Weblcms\Admin\Extension\Platform' => ['tables.xml']];
     }
 }

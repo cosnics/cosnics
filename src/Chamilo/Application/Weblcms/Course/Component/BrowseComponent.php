@@ -3,7 +3,8 @@ namespace Chamilo\Application\Weblcms\Course\Component;
 
 use Chamilo\Application\Weblcms\Course\Manager;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Application\Weblcms\Course\Table\CourseTable\CourseTable;
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
+use Chamilo\Application\Weblcms\Course\Table\CourseTableRenderer;
 use Chamilo\Application\Weblcms\Menu\CourseCategoryMenu;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -12,43 +13,32 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class describes a browser for the courses
  *
  * @package \application\weblcms\course
- * @author Yannick & Tristan
- * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
+ * @author  Yannick & Tristan
+ * @author  Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
-class BrowseComponent extends Manager implements TableSupport
+class BrowseComponent extends Manager
 {
-    /**
-     * The category id
-     */
-    const PARAM_CATEGORY_ID = 'category_id';
+    public const PARAM_CATEGORY_ID = 'category_id';
+
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
-
-    /**
-     * **************************************************************************************************************
-     * Inherited Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Runs this component and displays its output.
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
     public function run()
     {
@@ -56,46 +46,39 @@ class BrowseComponent extends Manager implements TableSupport
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->get_html();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
     /**
-     * Checkes whether or not the current user can view this component
-     *
-     * @return boolean
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     protected function checkComponentAuthorization()
     {
-        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses');
+        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::CONTEXT, 'ManageCourses');
     }
 
-    /**
-     * **************************************************************************************************************
-     * Helper Functionality *
-     * **************************************************************************************************************
-     */
-
-    protected function getButtonToolbarRenderer()
+    protected function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
+            $translator = $this->getTranslator();
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
+                    $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
                     $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('Add', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
+                    $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                     $this->get_create_course_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -109,78 +92,14 @@ class BrowseComponent extends Manager implements TableSupport
     }
 
     /**
-     * Returns the course table for this component
-     *
-     * @return CourseTable
+     * @throws \Exception
      */
-    protected function get_course_table()
-    {
-        return new CourseTable($this);
-    }
-
-    /**
-     * Returns the html for this component
-     *
-     * @return String
-     */
-    protected function get_html()
-    {
-        $html = [];
-
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
-        $html[] = '<div style="clear: both;"></div>';
-        $html[] = $this->buttonToolbarRenderer->render() . '<br />';
-
-        $temp_replacement = '__CATEGORY_ID__';
-
-        $url_format = $this->get_url(array(self::PARAM_CATEGORY_ID => $temp_replacement));
-
-        $category_menu = new CourseCategoryMenu(Request::get(self::PARAM_CATEGORY_ID), $url_format);
-
-        $html[] = '<div style="float: left; padding-right: 20px; width: 18%; overflow: auto; height: 100%;">';
-        $html[] = $category_menu->render_as_tree();
-        $html[] = '</div>';
-
-        $course_table = $this->get_course_table();
-
-        $html[] = '<div style="float: right; width: 80%;">';
-        $html[] = $course_table->as_html();
-        $html[] = '</div>';
-
-        $html[] = '<div style="clear: both;"></div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    public function get_parameters(): array
-    {
-        $parameters = parent::get_parameters();
-        $parameters[self::PARAM_CATEGORY_ID] = Request::get(self::PARAM_CATEGORY_ID);
-
-        if (isset($this->buttonToolbarRenderer))
-        {
-            $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
-                $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        }
-
-        return $parameters;
-    }
-
-    /**
-     * Returns the condition for the table
-     *
-     * @param string $object_table_class_name
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_table_condition($object_table_class_name)
+    public function getCourseCondition(): ?AndCondition
     {
         $conditions = [];
 
-        $category_id = Request::get(self::PARAM_CATEGORY_ID);
+        $category_id = $this->getRequest()->query->get(self::PARAM_CATEGORY_ID);
+
         if ($category_id)
         {
             $conditions[] = new EqualityCondition(
@@ -189,11 +108,11 @@ class BrowseComponent extends Manager implements TableSupport
             );
         }
 
-        $search_condition = $this->buttonToolbarRenderer->getConditions(
-            array(
+        $search_condition = $this->getButtonToolbarRenderer()->getConditions(
+            [
                 new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE),
                 new PropertyConditionVariable(Course::class, Course::PROPERTY_VISUAL_CODE)
-            )
+            ]
         );
 
         if ($search_condition)
@@ -205,5 +124,94 @@ class BrowseComponent extends Manager implements TableSupport
         {
             return new AndCondition($conditions);
         }
+
+        return null;
+    }
+
+    public function getCourseTableRenderer(): CourseTableRenderer
+    {
+        return $this->getService(CourseTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
+    protected function get_html(): string
+    {
+        $html = [];
+
+        $html[] = '<div style="clear: both;"></div>';
+        $html[] = $this->getButtonToolbarRenderer()->render() . '<br />';
+
+        $temp_replacement = '__CATEGORY_ID__';
+
+        $url_format = $this->get_url([self::PARAM_CATEGORY_ID => $temp_replacement]);
+
+        $category_menu = new CourseCategoryMenu($this->getRequest()->query->get(self::PARAM_CATEGORY_ID), $url_format);
+
+        $html[] = '<div style="float: left; padding-right: 20px; width: 18%; overflow: auto; height: 100%;">';
+        $html[] = $category_menu->render_as_tree();
+        $html[] = '</div>';
+
+        $html[] = '<div style="float: right; width: 80%;">';
+        $html[] = $this->renderTable();
+        $html[] = '</div>';
+
+        $html[] = '<div style="clear: both;"></div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function get_parameters(): array
+    {
+        $parameters = parent::get_parameters();
+        $parameters[self::PARAM_CATEGORY_ID] = $this->getRequest()->query->get(self::PARAM_CATEGORY_ID);
+
+        if (isset($this->buttonToolbarRenderer))
+        {
+            $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
+                $this->getButtonToolbarRenderer()->getSearchForm()->getQuery();
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Exception
+     */
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems = DataManager::count_courses_with_course_type($this->getCourseCondition());
+        $courseTableRenderer = $this->getCourseTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $courseTableRenderer->getParameterNames(), $courseTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $courses = DataManager::retrieve_courses_with_course_type(
+            $this->getCourseCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $courseTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $courseTableRenderer->render($tableParameterValues, $courses);
     }
 }

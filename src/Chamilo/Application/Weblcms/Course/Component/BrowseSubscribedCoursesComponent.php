@@ -1,32 +1,46 @@
 <?php
 namespace Chamilo\Application\Weblcms\Course\Component;
 
-use Chamilo\Application\Weblcms\Course\Table\SubscribedCourse\SubscribedCourseTable;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
+use Chamilo\Application\Weblcms\Course\Table\SubscribedCourseTableRenderer;
 
 /**
  * This class describes a browser for the subscribed courses
- * 
+ *
  * @package \application\weblcms\course
- * @author Yannick & Tristan
- * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
+ * @author  Yannick & Tristan
+ * @author  Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
-class BrowseSubscribedCoursesComponent extends BrowseSubscriptionCoursesComponent implements TableSupport
+class BrowseSubscribedCoursesComponent extends BrowseSubscriptionCoursesComponent
 {
+    public function getSubscribedCourseTableRenderer(): SubscribedCourseTableRenderer
+    {
+        return $this->getService(SubscribedCourseTableRenderer::class);
+    }
 
     /**
-     * **************************************************************************************************************
-     * Inherited Functionality *
-     * **************************************************************************************************************
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Exception
      */
-    
-    /**
-     * Returns the course table for this component
-     * 
-     * @return CourseTable
-     */
-    protected function get_course_table()
+    protected function renderTable(): string
     {
-        return new SubscribedCourseTable($this);
+        $totalNumberOfItems = DataManager::count_user_courses($this->getUser(), $this->getCourseCondition());
+        $subscribedCourseTableRenderer = $this->getSubscribedCourseTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $subscribedCourseTableRenderer->getParameterNames(),
+            $subscribedCourseTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $courses = DataManager::retrieve_users_courses_with_course_type(
+            $this->getUser(), $this->getCourseCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $subscribedCourseTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $subscribedCourseTableRenderer->render($tableParameterValues, $courses);
     }
 }

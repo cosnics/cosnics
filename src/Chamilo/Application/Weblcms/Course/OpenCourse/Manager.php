@@ -19,6 +19,8 @@ abstract class Manager extends Application
     public const ACTION_DELETE = 'Delete';
     public const ACTION_UPDATE = 'Update';
 
+    public const CONTEXT = __NAMESPACE__;
+
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public const PARAM_ACTION = 'open_course_action';
@@ -28,7 +30,6 @@ abstract class Manager extends Application
      * Returns the course ids from the request
      *
      * @return int[]
-     *
      * @throws NoObjectSelectedException
      */
     public function getCourseIdsFromRequest()
@@ -43,7 +44,7 @@ abstract class Manager extends Application
 
         if (!is_array($courseIds))
         {
-            $courseIds = array($courseIds);
+            $courseIds = [$courseIds];
         }
 
         return $courseIds;
@@ -56,7 +57,7 @@ abstract class Manager extends Application
      */
     public function getCreateOpenCourseUrl()
     {
-        $parameters = array(self::PARAM_ACTION => self::ACTION_CREATE);
+        $parameters = [self::PARAM_ACTION => self::ACTION_CREATE];
 
         return $this->get_url($parameters);
     }
@@ -70,13 +71,12 @@ abstract class Manager extends Application
      */
     public function getDeleteOpenCourseUrl($courseId)
     {
-        $parameters = array(self::PARAM_ACTION => self::ACTION_DELETE, self::PARAM_COURSE_ID => $courseId);
+        $parameters = [self::PARAM_ACTION => self::ACTION_DELETE, self::PARAM_COURSE_ID => $courseId];
 
         return $this->get_url($parameters);
     }
 
     /**
-     *
      * @return OpenCourseService
      */
     public function getOpenCourseService()
@@ -93,7 +93,7 @@ abstract class Manager extends Application
      */
     public function getUpdateOpenCourseUrl($courseId)
     {
-        $parameters = array(self::PARAM_ACTION => self::ACTION_UPDATE, self::PARAM_COURSE_ID => $courseId);
+        $parameters = [self::PARAM_ACTION => self::ACTION_UPDATE, self::PARAM_COURSE_ID => $courseId];
 
         return $this->get_url($parameters);
     }
@@ -107,11 +107,11 @@ abstract class Manager extends Application
      */
     public function getViewCourseUrl($courseId)
     {
-        $parameters = array(
+        $parameters = [
             Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(),
             Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
             \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $courseId
-        );
+        ];
 
         $redirect = new Redirect($parameters);
 

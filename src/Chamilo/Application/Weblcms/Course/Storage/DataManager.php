@@ -744,7 +744,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * Checks if a given user is subscribed to a course directly or through (sub)groups
      *
      * @param Course $course
-     * @param \core\user\storage\data_class\User $user
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return bool
      */

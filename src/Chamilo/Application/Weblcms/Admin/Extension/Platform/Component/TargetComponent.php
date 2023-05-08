@@ -6,46 +6,50 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\CourseEntity;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager;
-use Chamilo\Application\Weblcms\Admin\Extension\Platform\Table\Target\TargetTable;
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Table\TargetTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
-use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
-class TargetComponent extends Manager implements TableSupport
+class TargetComponent extends Manager
 {
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
     public function run()
     {
-        if (!$this->get_user()->is_platform_admin())
+        if (!$this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
 
         $html = [];
 
-        $html[] = $this->render_header();
-        $html[] = $this->getLinkTabsRenderer()->render($this->get_tabs(self::ACTION_TARGET),$this->get_target_tabs());
-        $html[] = $this->render_footer();
+        $html[] = $this->renderHeader();
+        $html[] = $this->getLinkTabsRenderer()->render($this->get_tabs(self::ACTION_TARGET), $this->get_target_tabs());
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function getLinkTabsRenderer(): LinkTabsRenderer
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        return $this->getService(LinkTabsRenderer::class);
+        return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
-    public function get_table_condition($table_class_name)
+    public function getTargetCondition(): AndCondition
     {
         $conditions = [];
 
@@ -62,17 +66,23 @@ class TargetComponent extends Manager implements TableSupport
             new StaticConditionVariable($this->get_selected_target_type())
         );
 
-        $condition = new AndCondition($conditions);
-
-        return $condition;
+        return new AndCondition($conditions);
     }
 
-    public function get_target_tabs()
+    public function getTargetTableRenderer(): TargetTableRenderer
     {
-        $current_tab = null;
+        return $this->getService(TargetTableRenderer::class);
+    }
 
-        $table = new TargetTable($this);
-
+    /**
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Exception
+     */
+    public function get_target_tabs(): string
+    {
         $tabs = new TabsCollection();
 
         foreach ($this->get_target_types() as $target_type)
@@ -113,22 +123,48 @@ class TargetComponent extends Manager implements TableSupport
             {
                 $tabs->add(
                     new LinkTab(
-                        $target_type::ENTITY_TYPE, Translation::get(
-                        StringUtilities::getInstance()->createString($target_type::ENTITY_NAME)->upperCamelize()
+                        $target_type::ENTITY_TYPE, $this->getTranslator()->trans(
+                        $this->getStringUtilities()->createString($target_type::ENTITY_NAME)->upperCamelize()
                             ->__toString()
                     ), $glyph, $this->get_url(
-                        array(
+                        [
                             self::PARAM_ACTION => self::ACTION_TARGET,
                             self::PARAM_ENTITY_ID => $this->get_selected_entity_id(),
                             self::PARAM_ENTITY_TYPE => $this->get_selected_entity_type(),
                             self::PARAM_TARGET_TYPE => $target_type::ENTITY_TYPE
-                        )
+                        ]
                     ), $this->get_selected_target_type() == $target_type::ENTITY_TYPE
                     )
                 );
             }
         }
 
-        return $this->getLinkTabsRenderer()->render($tabs);
+        return $this->getLinkTabsRenderer()->render($tabs, $this->renderTable());
+    }
+
+    /**
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderTable(): string
+    {
+        $helperClass = $this->get_selected_target_class(true);
+
+        $totalNumberOfItems = $helperClass::count_table_data($this->getTargetCondition());
+        $targetTableRenderer = $this->getTargetTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $targetTableRenderer->getParameterNames(), $targetTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $entities = $helperClass::retrieve_table_data(
+            $this->getTargetCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+            $tableParameterValues->getOffset(), $targetTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $targetTableRenderer->legacyRender($this, $tableParameterValues, $entities);
     }
 }

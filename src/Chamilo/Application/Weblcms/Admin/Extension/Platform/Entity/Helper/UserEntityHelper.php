@@ -22,84 +22,14 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 class UserEntityHelper
 {
 
-    public static function get_table_columns()
-    {
-        $columns = [];
-        $columns[] = new DataClassPropertyTableColumn(
-            User::class,
-            User::PROPERTY_LASTNAME);
-        $columns[] = new DataClassPropertyTableColumn(
-            User::class,
-            User::PROPERTY_FIRSTNAME);
-        $columns[] = new DataClassPropertyTableColumn(
-            User::class,
-            User::PROPERTY_EMAIL);
-        return $columns;
-    }
-
-    public static function render_table_cell($renderer, $column, $result)
-    {
-        switch ($column->get_name())
-        {
-            case User::PROPERTY_FIRSTNAME :
-                $url = self::get_target_url($renderer, $result);
-                return '<a href="' . $url . '">' . $result[User::PROPERTY_FIRSTNAME] .
-                     '</a>';
-                break;
-            case User::PROPERTY_LASTNAME :
-                $url = self::get_target_url($renderer, $result);
-                return '<a href="' . $url . '">' . $result[User::PROPERTY_LASTNAME] .
-                     '</a>';
-                break;
-            default :
-                return null;
-        }
-
-        return null;
-    }
-
-    public static function get_target_url($renderer, $result)
-    {
-        return $renderer->get_component()->get_url(
-            array(
-                Manager::PARAM_ACTION => Manager::ACTION_TARGET,
-                Manager::PARAM_ENTITY_TYPE => $renderer->get_component()->get_selected_entity_type(),
-                Manager::PARAM_ENTITY_ID => $result[DataClass::PROPERTY_ID]));
-    }
-
     /**
-     * Returns the data as a resultset
+     * Get the fully qualified class name of the object
      *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param $condition
-     * @param int $offset
-     * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return string
      */
-    public static function retrieve_table_data($condition, $count, $offset, $order_property)
+    public static function class_name()
     {
-        $join = new Join(
-            Admin::class,
-            new EqualityCondition(
-                new PropertyConditionVariable(
-                    User::class,
-                    User::PROPERTY_ID),
-                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID)));
-        $joins = new Joins(array($join));
-
-        $properties = new RetrieveProperties();
-        $properties->add(
-            new FunctionConditionVariable(
-                FunctionConditionVariable::DISTINCT,
-                new PropertiesConditionVariable(User::class)));
-
-        $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $order_property, $joins);
-
-        return DataManager::records(
-            User::class,
-            $parameters);
+        return get_called_class();
     }
 
     /**
@@ -112,28 +42,29 @@ class UserEntityHelper
     public static function count_table_data($condition)
     {
         $join = new Join(
-            Admin::class,
-            new EqualityCondition(
+            Admin::class, new EqualityCondition(
                 new PropertyConditionVariable(
-                    User::class,
-                    User::PROPERTY_ID),
-                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID)));
-        $joins = new Joins(array($join));
+                    User::class, User::PROPERTY_ID
+                ), new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID)
+            )
+        );
+        $joins = new Joins([$join]);
 
         $parameters = new DataClassCountParameters(
-            $condition,
-            $joins,
-            new RetrieveProperties(
-                array(
+            $condition, $joins, new RetrieveProperties(
+                [
                     new FunctionConditionVariable(
-                        FunctionConditionVariable::DISTINCT,
-                        new PropertyConditionVariable(
-                            User::class,
-                            User::PROPERTY_ID)))));
+                        FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
+                            User::class, User::PROPERTY_ID
+                        )
+                    )
+                ]
+            )
+        );
 
         return DataManager::count(
-            User::class,
-            $parameters);
+            User::class, $parameters
+        );
     }
 
     public static function expand($entity_id)
@@ -141,8 +72,8 @@ class UserEntityHelper
         $entities = [];
 
         $user = DataManager::retrieve_by_id(
-            User::class,
-            $entity_id);
+            User::class, $entity_id
+        );
 
         if ($user instanceof User)
         {
@@ -159,13 +90,87 @@ class UserEntityHelper
         return $entities;
     }
 
-    /**
-     * Get the fully qualified class name of the object
-     *
-     * @return string
-     */
-    public static function class_name()
+    public static function get_table_columns()
     {
-        return get_called_class();
+        $columns = [];
+        $columns[] = new DataClassPropertyTableColumn(
+            User::class, User::PROPERTY_LASTNAME
+        );
+        $columns[] = new DataClassPropertyTableColumn(
+            User::class, User::PROPERTY_FIRSTNAME
+        );
+        $columns[] = new DataClassPropertyTableColumn(
+            User::class, User::PROPERTY_EMAIL
+        );
+
+        return $columns;
+    }
+
+    public static function get_target_url($renderer, $result)
+    {
+        return $renderer->getUrlGenerator()->fromRequest(
+            [
+                Manager::PARAM_ACTION => Manager::ACTION_TARGET,
+                Manager::PARAM_ENTITY_TYPE => $renderer->get_component()->get_selected_entity_type(),
+                Manager::PARAM_ENTITY_ID => $result[DataClass::PROPERTY_ID]
+            ]
+        );
+    }
+
+    public static function render_table_cell($renderer, $column, $result)
+    {
+        switch ($column->get_name())
+        {
+            case User::PROPERTY_FIRSTNAME :
+                $url = self::get_target_url($renderer, $result);
+
+                return '<a href="' . $url . '">' . $result[User::PROPERTY_FIRSTNAME] . '</a>';
+                break;
+            case User::PROPERTY_LASTNAME :
+                $url = self::get_target_url($renderer, $result);
+
+                return '<a href="' . $url . '">' . $result[User::PROPERTY_LASTNAME] . '</a>';
+                break;
+            default :
+                return null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the data as a resultset
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param $condition
+     * @param int $offset
+     * @param int $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public static function retrieve_table_data($condition, $count, $offset, $order_property)
+    {
+        $join = new Join(
+            Admin::class, new EqualityCondition(
+                new PropertyConditionVariable(
+                    User::class, User::PROPERTY_ID
+                ), new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID)
+            )
+        );
+        $joins = new Joins([$join]);
+
+        $properties = new RetrieveProperties();
+        $properties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::DISTINCT, new PropertiesConditionVariable(User::class)
+            )
+        );
+
+        $parameters = new RecordRetrievesParameters($properties, $condition, $count, $offset, $order_property, $joins);
+
+        return DataManager::records(
+            User::class, $parameters
+        );
     }
 }

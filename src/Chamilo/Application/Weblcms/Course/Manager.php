@@ -18,7 +18,7 @@ use Exception;
  * This class describes the submanager for course management
  *
  * @package \application\weblcms\course
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class Manager extends Application
 {
@@ -33,13 +33,14 @@ abstract class Manager extends Application
     public const ACTION_UNSUBSCRIBE = 'Unsubscribe';
     public const ACTION_UPDATE = 'Update';
 
+    public const CONTEXT = __NAMESPACE__;
+
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public const PARAM_ACTION = 'course_action';
     public const PARAM_COURSE_ID = 'course_id';
 
     /**
-     *
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Libraries\Architecture\Application\Application $parent
@@ -67,7 +68,7 @@ abstract class Manager extends Application
     /**
      * Returns a url for a given action
      *
-     * @param $action string
+     * @param $action     string
      * @param $parameters string[] - Optional parameters
      *
      * @return string
@@ -118,8 +119,8 @@ abstract class Manager extends Application
     /**
      * Returns a url for an action based on 1 specific course
      *
-     * @param $action string
-     * @param $course_id int
+     * @param $action     string
+     * @param $course_id  int
      * @param $parameters string[] - Optional parameters
      *
      * @return string
@@ -140,7 +141,7 @@ abstract class Manager extends Application
      */
     public function get_create_course_url()
     {
-        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE));
+        return $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE]);
     }
 
     /**
@@ -181,7 +182,7 @@ abstract class Manager extends Application
 
         if (!is_array($course_ids))
         {
-            $course_ids = array($course_ids);
+            $course_ids = [$course_ids];
         }
 
         return $course_ids;
@@ -259,10 +260,10 @@ abstract class Manager extends Application
     public function get_view_course_home_url($course_id)
     {
         return $this->get_url(
-            array(
+            [
                 \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
                 \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course_id
-            ), array(self::PARAM_ACTION)
+            ], [self::PARAM_ACTION]
         );
     }
 }

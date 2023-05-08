@@ -21,81 +21,18 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 class CourseEntityHelper
 {
-    const PROPERTY_PATH = 'path';
-    const PROPERTY_COURSE_ID = 'course_id';
+    public const PROPERTY_COURSE_ID = 'course_id';
 
-    public static function get_table_columns()
-    {
-        $columns = [];
-        $columns[] = new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_TITLE);
-        $columns[] = new StaticTableColumn(self::PROPERTY_PATH);
-        $columns[] = new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_VISUAL_CODE);
-        return $columns;
-    }
-
-    public static function render_table_cell($renderer, $column, $result)
-    {
-        switch ($column->get_name())
-        {
-            case Course::PROPERTY_TITLE :
-                $url = self::get_target_url($renderer, $result);
-                return '<a href="' . $url . '">' . $result[Course::PROPERTY_TITLE] . '</a>';
-                break;
-            case self::PROPERTY_PATH :
-                $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
-                    Course::class,
-                    $result[self::PROPERTY_COURSE_ID]);
-                return $course->get_fully_qualified_name();
-            default :
-                return null;
-        }
-
-        return null;
-    }
-
-    public static function get_target_url($renderer, $result)
-    {
-        return $renderer->get_component()->get_url(
-            array(
-                \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
-                \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $result[self::PROPERTY_COURSE_ID]),
-            array(
-                Manager::PARAM_ACTION,
-                Manager::PARAM_TARGET_TYPE,
-                Manager::PARAM_ENTITY_TYPE,
-                Manager::PARAM_ENTITY_ID));
-    }
+    public const PROPERTY_PATH = 'path';
 
     /**
-     * Returns the data as a resultset
+     * Get the fully qualified class name of the object
      *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param $condition
-     * @param int $offset
-     * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return string
      */
-    public static function retrieve_table_data($condition, $count, $offset, $order_property)
+    public static function class_name()
     {
-        $properties = new RetrieveProperties();
-        $properties->add(new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ID));
-        $properties->add(new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ORIGIN));
-        $properties->add(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
-        $properties->add(new PropertyConditionVariable(Course::class, Course::PROPERTY_VISUAL_CODE));
-        $properties->add(
-            new PropertyConditionVariable(Course::class, Course::PROPERTY_ID, self::PROPERTY_COURSE_ID));
-
-        $parameters = new RecordRetrievesParameters(
-            $properties,
-            $condition,
-            $count,
-            $offset,
-            $order_property,
-            self::get_joins());
-
-        return DataManager::records(Admin::class, $parameters);
+        return get_called_class();
     }
 
     /**
@@ -108,25 +45,17 @@ class CourseEntityHelper
     public static function count_table_data($condition)
     {
         $parameters = new DataClassCountParameters(
-            $condition,
-            self::get_joins(),
-            new RetrieveProperties(
-                array(
+            $condition, self::get_joins(), new RetrieveProperties(
+                [
                     new FunctionConditionVariable(
                         FunctionConditionVariable::DISTINCT,
-                        new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ID)))));
+                        new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ID)
+                    )
+                ]
+            )
+        );
 
         return DataManager::count(Admin::class, $parameters);
-    }
-
-    private static function get_joins()
-    {
-        $join = new Join(
-            Course::class,
-            new EqualityCondition(
-                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_TARGET_ID),
-                new PropertyConditionVariable(Course::class, Course::PROPERTY_ID)));
-        return new Joins(array($join));
     }
 
     public static function expand($entity_id)
@@ -134,8 +63,8 @@ class CourseEntityHelper
         $entities = [];
 
         $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
-            Course::class,
-            $entity_id);
+            Course::class, $entity_id
+        );
 
         if ($course instanceof Course)
         {
@@ -161,16 +90,94 @@ class CourseEntityHelper
 
     public static function get_course_ids($entity_id)
     {
-        return array($entity_id);
+        return [$entity_id];
+    }
+
+    private static function get_joins()
+    {
+        $join = new Join(
+            Course::class, new EqualityCondition(
+                new PropertyConditionVariable(Admin::class, Admin::PROPERTY_TARGET_ID),
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_ID)
+            )
+        );
+
+        return new Joins([$join]);
+    }
+
+    public static function get_table_columns()
+    {
+        $columns = [];
+        $columns[] = new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_TITLE);
+        $columns[] = new StaticTableColumn(self::PROPERTY_PATH);
+        $columns[] = new DataClassPropertyTableColumn(Course::class, Course::PROPERTY_VISUAL_CODE);
+
+        return $columns;
+    }
+
+    public static function get_target_url($renderer, $result)
+    {
+        return $renderer->getUrlGenerator()->fromRequest(
+            [
+                \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
+                \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $result[self::PROPERTY_COURSE_ID]
+            ], [
+                Manager::PARAM_ACTION,
+                Manager::PARAM_TARGET_TYPE,
+                Manager::PARAM_ENTITY_TYPE,
+                Manager::PARAM_ENTITY_ID
+            ]
+        );
+    }
+
+    public static function render_table_cell($renderer, $column, $result)
+    {
+        switch ($column->get_name())
+        {
+            case Course::PROPERTY_TITLE :
+                $url = self::get_target_url($renderer, $result);
+
+                return '<a href="' . $url . '">' . $result[Course::PROPERTY_TITLE] . '</a>';
+                break;
+            case self::PROPERTY_PATH :
+                $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
+                    Course::class, $result[self::PROPERTY_COURSE_ID]
+                );
+
+                return $course->get_fully_qualified_name();
+            default :
+                return null;
+        }
+
+        return null;
     }
 
     /**
-     * Get the fully qualified class name of the object
+     * Returns the data as a resultset
      *
-     * @return string
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param $condition
+     * @param int $offset
+     * @param int $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public static function class_name()
+    public static function retrieve_table_data($condition, $count, $offset, $order_property)
     {
-        return get_called_class();
+        $properties = new RetrieveProperties();
+        $properties->add(new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ORIGIN));
+        $properties->add(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
+        $properties->add(new PropertyConditionVariable(Course::class, Course::PROPERTY_VISUAL_CODE));
+        $properties->add(
+            new PropertyConditionVariable(Course::class, Course::PROPERTY_ID, self::PROPERTY_COURSE_ID)
+        );
+
+        $parameters = new RecordRetrievesParameters(
+            $properties, $condition, $count, $offset, $order_property, self::get_joins()
+        );
+
+        return DataManager::records(Admin::class, $parameters);
     }
 }

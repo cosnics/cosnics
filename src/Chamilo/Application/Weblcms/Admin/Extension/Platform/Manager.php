@@ -32,6 +32,8 @@ abstract class Manager extends Application
     public const ACTION_ENTITY = 'Entity';
     public const ACTION_TARGET = 'Target';
 
+    public const CONTEXT = __NAMESPACE__;
+
     public const DEFAULT_ACTION = self::ACTION_CREATE;
 
     public const PARAM_ADMIN_ID = 'admin_id';
@@ -168,8 +170,8 @@ abstract class Manager extends Application
         $tabs->add(
             new LinkTab(
                 self::ACTION_CREATE, Translation::get(self::ACTION_CREATE . 'Component'),
-                new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)), $current_tab == self::ACTION_CREATE
+                new FontAwesomeGlyph('plus', ['fa-lg'], null, 'fas'),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE]), $current_tab == self::ACTION_CREATE
             )
         );
 
@@ -180,9 +182,8 @@ abstract class Manager extends Application
             $tabs->add(
                 new LinkTab(
                     self::ACTION_ENTITY, Translation::get(self::ACTION_ENTITY . 'Component'),
-                    new FontAwesomeGlyph('chess-pawn', array('fa-lg'), null, 'fas'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_ENTITY)),
-                    $current_tab == self::ACTION_ENTITY
+                    new FontAwesomeGlyph('chess-pawn', ['fa-lg'], null, 'fas'),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_ENTITY]), $current_tab == self::ACTION_ENTITY
                 )
             );
         }
@@ -192,9 +193,8 @@ abstract class Manager extends Application
             $tabs->add(
                 new LinkTab(
                     self::ACTION_TARGET, Translation::get(self::ACTION_TARGET . 'Component'),
-                    new FontAwesomeGlyph('bullseye', array('fa-lg'), null, 'fas'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_TARGET)),
-                    $current_tab == self::ACTION_TARGET
+                    new FontAwesomeGlyph('bullseye', ['fa-lg'], null, 'fas'),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_TARGET]), $current_tab == self::ACTION_TARGET
                 )
             );
         }

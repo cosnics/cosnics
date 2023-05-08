@@ -5,37 +5,49 @@ use Chamilo\Application\Weblcms\Request\Manager;
 use Chamilo\Application\Weblcms\Request\Rights\Rights;
 use Chamilo\Application\Weblcms\Request\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Request\Storage\DataManager;
+use Chamilo\Application\Weblcms\Request\Table\ManagementRequestTableRenderer;
 use Chamilo\Application\Weblcms\Request\Table\Request\RequestTable;
+use Chamilo\Application\Weblcms\Request\Table\UserRequestTableRenderer;
+use Chamilo\Core\Repository\Quota\Table\RequestTableRenderer;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 
-class BrowserComponent extends Manager implements TableSupport, DelegateComponent
+class BrowserComponent extends Manager implements DelegateComponent
 {
 
-    private $buttonToolbarRenderer;
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
-    private $table_type;
-
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Chamilo\Libraries\Rights\Exception\RightsLocationNotFoundException
+     * @throws \TableException
+     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     public function run()
     {
+        $translator = $this->getTranslator();
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Request::class, Request::PROPERTY_USER_ID),
-            new StaticConditionVariable($this->get_user_id())
+            new StaticConditionVariable($this->getUser()->getId())
         );
         $user_requests = DataManager::count(Request::class, new DataClassCountParameters($condition));
 
@@ -46,12 +58,30 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
             if ($user_requests > 0)
             {
-                $this->table_type = RequestTable::TYPE_PERSONAL;
-                $table = new RequestTable($this);
+                $totalNumberOfItems = \Chamilo\Core\Repository\Quota\Storage\DataManager::count(
+                    \Chamilo\Core\Repository\Quota\Storage\DataClass\Request::class,
+                    new DataClassCountParameters($this->getRequestCondition(RequestTableRenderer::TYPE_PERSONAL))
+                );
+                $requestTableRenderer = $this->getUserRequestTableRenderer();
+
+                $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+                    $requestTableRenderer->getParameterNames(), $requestTableRenderer->getDefaultParameterValues(),
+                    $totalNumberOfItems
+                );
+
+                $requests = DataManager::retrieves(
+                    Request::class, new DataClassRetrievesParameters(
+                        $this->getRequestCondition(RequestTableRenderer::TYPE_PERSONAL),
+                        $tableParameterValues->getNumberOfItemsPerPage(), $tableParameterValues->getOffset(),
+                        $requestTableRenderer->determineOrderBy($tableParameterValues)
+                    )
+                );
+
                 $tabs->add(
                     new ContentTab(
-                        'personal_request', Translation::get('YourRequests'), $table->as_html(),
-                        new FontAwesomeGlyph('inbox', array('fa-lg'), null, 'fas')
+                        'personal_request', $translator->trans('YourRequests', [], Manager::CONTEXT),
+                        $requestTableRenderer->render($tableParameterValues, $requests),
+                        new FontAwesomeGlyph('inbox', ['fa-lg'], null, 'fas')
                     )
                 );
             }
@@ -59,7 +89,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             if (Rights::getInstance()->request_is_allowed())
             {
                 $target_users = Rights::getInstance()->get_target_users(
-                    $this->get_user()
+                    $this->getUser()
                 );
 
                 if (count($target_users) > 0)
@@ -81,7 +111,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_PENDING)
                 );
-                if (!$this->get_user()->is_platform_admin())
+                if (!$this->getUser()->is_platform_admin())
                 {
                     $conditions[] = $target_condition;
                 }
@@ -89,12 +119,12 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
                 if (DataManager::count(Request::class, new DataClassCountParameters($condition)) > 0)
                 {
-                    $this->table_type = RequestTable::TYPE_PENDING;
-                    $table = new RequestTable($this);
                     $tabs->add(
                         new ContentTab(
-                            RequestTable::TYPE_PENDING, Translation::get('PendingRequests'), $table->as_html(),
-                            new FontAwesomeGlyph('pause-circle', array('fa-lg'), null, 'fas')
+                            (string) RequestTableRenderer::TYPE_PENDING,
+                            $translator->trans('PendingRequests', [], Manager::CONTEXT),
+                            $this->renderManagementRequestTable(RequestTableRenderer::TYPE_PENDING),
+                            new FontAwesomeGlyph('pause-circle', ['fa-lg'], null, 'fas')
                         )
                     );
                 }
@@ -104,7 +134,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_GRANTED)
                 );
-                if (!$this->get_user()->is_platform_admin())
+                if (!$this->getUser()->is_platform_admin())
                 {
                     $conditions[] = $target_condition;
                 }
@@ -112,12 +142,12 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
                 if (DataManager::count(Request::class, new DataClassCountParameters($condition)) > 0)
                 {
-                    $this->table_type = RequestTable::TYPE_GRANTED;
-                    $table = new RequestTable($this);
                     $tabs->add(
                         new ContentTab(
-                            RequestTable::TYPE_GRANTED, Translation::get('GrantedRequests'), $table->as_html(),
-                            new FontAwesomeGlyph('check-circle', array('fa-lg', 'text-success'), null, 'fas')
+                            (string) RequestTableRenderer::TYPE_GRANTED,
+                            $translator->trans('GrantedRequests', [], Manager::CONTEXT),
+                            $this->renderManagementRequestTable(RequestTableRenderer::TYPE_GRANTED),
+                            new FontAwesomeGlyph('check-circle', ['fa-lg', 'text-success'], null, 'fas')
                         )
                     );
                 }
@@ -127,7 +157,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_DENIED)
                 );
-                if (!$this->get_user()->is_platform_admin())
+                if (!$this->getUser()->is_platform_admin())
                 {
                     $conditions[] = $target_condition;
                 }
@@ -135,12 +165,12 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
                 if (DataManager::count(Request::class, new DataClassCountParameters($condition)) > 0)
                 {
-                    $this->table_type = RequestTable::TYPE_DENIED;
-                    $table = new RequestTable($this);
                     $tabs->add(
                         new ContentTab(
-                            RequestTable::TYPE_DENIED, Translation::get('DeniedRequests'), $table->as_html(),
-                            new FontAwesomeGlyph('minus-square', array('fa-lg', 'text-danger'), null, 'fas')
+                            (string) RequestTableRenderer::TYPE_DENIED,
+                            $translator->trans('DeniedRequests', [], Manager::CONTEXT),
+                            $this->renderManagementRequestTable(RequestTableRenderer::TYPE_DENIED),
+                            new FontAwesomeGlyph('minus-square', ['fa-lg', 'text-danger'], null, 'fas')
                         )
                     );
                 }
@@ -148,49 +178,53 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         }
 
         if ($user_requests > 0 || (Rights::getInstance()->request_is_allowed() && $tabs->count() > 0) ||
-            $this->get_user()->is_platform_admin())
+            $this->getUser()->is_platform_admin())
         {
             $html = [];
 
             $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-            $html[] = $this->render_header();
+            $html[] = $this->renderHeader();
             $html[] = $this->buttonToolbarRenderer->render();
             $html[] = $this->getTabsRenderer()->render('request', $tabs);
-            $html[] = $this->render_footer();
+            $html[] = $this->renderFooter();
 
             return implode(PHP_EOL, $html);
         }
         else
         {
             $this->redirectWithMessage(
-                Translation::get('NoRequestsFormDirectly'), null, array(self::PARAM_ACTION => self::ACTION_CREATE)
+                $translator->trans('NoRequestsFormDirectly'), false, [self::PARAM_ACTION => self::ACTION_CREATE]
             );
         }
     }
 
-    public function getButtonToolbarRenderer()
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
+            $translator = $this->getTranslator();
+
             if ($this->request_allowed())
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('RequestCourse'), new FontAwesomeGlyph('question-circle', [], null, 'fas'),
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))
+                        $translator->trans('RequestCourse', [], Manager::CONTEXT),
+                        new FontAwesomeGlyph('question-circle', [], null, 'fas'),
+                        $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE])
                     )
                 );
             }
 
-            if ($this->get_user()->is_platform_admin())
+            if ($this->getUser()->is_platform_admin())
             {
                 $toolActions->addButton(
                     new Button(
-                        Translation::get('ConfigureManagementRights'), new FontAwesomeGlyph('lock', [], null, 'fas'),
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS))
+                        $translator->trans('ConfigureManagementRights', [], Manager::CONTEXT),
+                        new FontAwesomeGlyph('lock', [], null, 'fas'),
+                        $this->get_url([self::PARAM_ACTION => self::ACTION_RIGHTS])
                     )
                 );
             }
@@ -204,20 +238,16 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         return $this->buttonToolbarRenderer;
     }
 
-    protected function getTabsRenderer(): TabsRenderer
+    public function getManagementRequestTableRenderer(): ManagementRequestTableRenderer
     {
-        return $this->getService(TabsRenderer::class);
+        return $this->getService(ManagementRequestTableRenderer::class);
     }
 
-    /**
-     *
-     * @see @see common\libraries.NewObjectTableSupport::get_object_table_condition()
-     */
-    public function get_table_condition($object_table_class_name)
+    public function getRequestCondition(int $requestType): AndCondition
     {
         $conditions = [];
 
-        switch ($this->table_type)
+        switch ($requestType)
         {
             case RequestTable::TYPE_PENDING :
                 $conditions[] = new EqualityCondition(
@@ -228,7 +258,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             case RequestTable::TYPE_PERSONAL :
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_USER_ID),
-                    new StaticConditionVariable($this->get_user_id())
+                    new StaticConditionVariable($this->getUser()->getId())
                 );
                 break;
             case RequestTable::TYPE_GRANTED :
@@ -245,11 +275,11 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 break;
         }
 
-        if (!$this->get_user()->is_platform_admin() && Rights::getInstance()->request_is_allowed() &&
-            $this->table_type != RequestTable::TYPE_PERSONAL)
+        if (!$this->getUser()->is_platform_admin() && Rights::getInstance()->request_is_allowed() &&
+            $requestType != RequestTable::TYPE_PERSONAL)
         {
             $target_users = Rights::getInstance()->get_target_users(
-                $this->get_user()
+                $this->getUser()
             );
 
             if (count($target_users) > 0)
@@ -270,8 +300,49 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         return new AndCondition($conditions);
     }
 
-    public function get_table_type()
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        return $this->table_type;
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    protected function getTabsRenderer(): TabsRenderer
+    {
+        return $this->getService(TabsRenderer::class);
+    }
+
+    protected function getUserRequestTableRenderer(): UserRequestTableRenderer
+    {
+        return $this->getService(UserRequestTableRenderer::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Exception
+     */
+    protected function renderManagementRequestTable(int $requestType): string
+    {
+        $totalNumberOfItems = \Chamilo\Core\Repository\Quota\Storage\DataManager::count(
+            \Chamilo\Core\Repository\Quota\Storage\DataClass\Request::class,
+            new DataClassCountParameters($this->getRequestCondition($requestType))
+        );
+        $requestTableRenderer = $this->getUserRequestTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $requestTableRenderer->getParameterNames(), $requestTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $requests = DataManager::retrieves(
+            Request::class, new DataClassRetrievesParameters(
+                $this->getRequestCondition($requestType), $tableParameterValues->getNumberOfItemsPerPage(),
+                $tableParameterValues->getOffset(), $requestTableRenderer->determineOrderBy($tableParameterValues)
+            )
+        );
+
+        return $requestTableRenderer->render($tableParameterValues, $requests);
     }
 }
