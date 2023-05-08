@@ -5,14 +5,18 @@ use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
+use Chamilo\Libraries\Format\Table\FormAction\TableAction;
+use Chamilo\Libraries\Format\Table\FormAction\TableActions;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -43,6 +47,34 @@ class ManagementRequestTableRenderer extends RequestTableRenderer
     public function getStorageSpaceCalculator(): StorageSpaceCalculator
     {
         return $this->storageSpaceCalculator;
+    }
+
+    public function getTableActions(): TableActions
+    {
+        $tableActions = parent::getTableActions();
+        $translator = $this->getTranslator();
+        $urlGenerator = $this->getUrlGenerator();
+
+        if ($this->getUser()->is_platform_admin())
+        {
+            $tableActions->addAction(
+                new TableAction(
+                    $urlGenerator->fromParameters(
+                        [Application::PARAM_CONTEXT => Manager::CONTEXT, Manager::PARAM_ACTION => Manager::ACTION_GRANT]
+                    ), $translator->trans('GrantSelected', [], StringUtilities::LIBRARIES)
+                )
+            );
+
+            $tableActions->addAction(
+                new TableAction(
+                    $urlGenerator->fromParameters(
+                        [Application::PARAM_CONTEXT => Manager::CONTEXT, Manager::PARAM_ACTION => Manager::ACTION_DENY]
+                    ), $translator->trans('DenySelected', [], StringUtilities::LIBRARIES)
+                )
+            );
+        }
+
+        return $tableActions;
     }
 
     protected function initializeColumns()
