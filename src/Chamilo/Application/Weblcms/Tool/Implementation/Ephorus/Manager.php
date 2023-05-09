@@ -20,22 +20,23 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements IntroductionTextSupportInterface
 {
-    const ACTION_PUBLISH_DOCUMENT = 'DocumentPublisher';
-    const ACTION_EPHORUS_REQUEST = 'EphorusRequest';
-    const ACTION_INDEX_VISIBILITY_CHANGER = 'IndexVisibilityChanger';
-    const ACTION_CREATE = 'Creator';
-    const ACTION_VIEW_RESULT = 'ResultViewer';
-    const ACTION_EXPORT_RESULT = 'ResultExporter';
+    public const ACTION_CREATE = 'Creator';
+    public const ACTION_EPHORUS_REQUEST = 'EphorusRequest';
+    public const ACTION_EXPORT_RESULT = 'ResultExporter';
+    public const ACTION_INDEX_VISIBILITY_CHANGER = 'IndexVisibilityChanger';
+    public const ACTION_PUBLISH_DOCUMENT = 'DocumentPublisher';
+    public const ACTION_VIEW_RESULT = 'ResultViewer';
 
-    const PARAM_CONTENT_OBJECT_IDS = 'co_ids';
-    const PARAM_REQUEST_IDS = 'req_ids';
-    const PARAM_TREE_NODE_ID = 'tree_node_id';
+    public const CONTEXT = __NAMESPACE__;
 
-    const DEFAULT_ACTION = self::ACTION_BROWSE;
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
+
+    public const PARAM_CONTENT_OBJECT_IDS = 'co_ids';
+    public const PARAM_REQUEST_IDS = 'req_ids';
+    public const PARAM_TREE_NODE_ID = 'tree_node_id';
 
     /**
      * @return bool
-     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
@@ -45,22 +46,17 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @return \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository
      */
-    public function validateAccess()
+    public function getContentObjectRepository()
     {
-        if (!$this->canUseEphorus())
-        {
-            throw new NotAllowedException();
-        }
+        return $this->getService(ContentObjectRepository::class);
     }
 
     /**
      * Returns the request guids whose visibilities should be changed
      *
      * @return Request[]
-     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
@@ -77,7 +73,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
         if (!is_array($ids))
         {
-            $ids = array($ids);
+            $ids = [$ids];
         }
 
         $ids = (array) $ids;
@@ -99,14 +95,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager
-     */
-    public function getRequestManager()
-    {
-        return $this->getService(RequestManager::class);
-    }
-
-    /**
      * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Renderer\ReportRenderer
      */
     public function getReportRenderer()
@@ -115,10 +103,22 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Service\RequestManager
      */
-    public function getContentObjectRepository()
+    public function getRequestManager()
     {
-        return $this->getService(ContentObjectRepository::class);
+        return $this->getService(RequestManager::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function validateAccess()
+    {
+        if (!$this->canUseEphorus())
+        {
+            throw new NotAllowedException();
+        }
     }
 }

@@ -78,7 +78,7 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
             $unsubscribedGroupTableRenderer->determineOrderBy($tableParameterValues)
         );
 
-        $html[] = $unsubscribedGroupTableRenderer->render($tableParameterValues, $groups);
+        $html[] = $unsubscribedGroupTableRenderer->legacyRender($this, $tableParameterValues, $groups);
 
         return implode(PHP_EOL, $html);
     }

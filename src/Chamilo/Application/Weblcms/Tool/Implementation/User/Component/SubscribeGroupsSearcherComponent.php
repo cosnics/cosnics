@@ -108,6 +108,6 @@ class SubscribeGroupsSearcherComponent extends Manager
             $unsubscribedGroupTableRenderer->determineOrderBy($tableParameterValues)
         );
 
-        return $unsubscribedGroupTableRenderer->render($tableParameterValues, $groups);
+        return $unsubscribedGroupTableRenderer->legacyRender($this, $tableParameterValues, $groups);
     }
 }
