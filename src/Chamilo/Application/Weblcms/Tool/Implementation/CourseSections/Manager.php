@@ -12,19 +12,21 @@ use Chamilo\Libraries\Translation\Translation;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
-    const ACTION_CHANGE_COURSE_SECTION_VISIBILITY = 'VisibilityChanger';
-    const ACTION_CREATE_COURSE_SECTION = 'Creator';
-    const ACTION_MOVE_COURSE_SECTION = 'Mover';
-    const ACTION_REMOVE_COURSE_SECTION = 'Deleter';
-    const ACTION_SELECT_TOOLS_COURSE_SECTION = 'ToolSelector';
-    const ACTION_UPDATE_COURSE_SECTION = 'Updater';
-    const ACTION_VIEW_COURSE_SECTIONS = 'Viewer';
+    public const ACTION_CHANGE_COURSE_SECTION_VISIBILITY = 'VisibilityChanger';
+    public const ACTION_CREATE_COURSE_SECTION = 'Creator';
+    public const ACTION_MOVE_COURSE_SECTION = 'Mover';
+    public const ACTION_REMOVE_COURSE_SECTION = 'Deleter';
+    public const ACTION_SELECT_TOOLS_COURSE_SECTION = 'ToolSelector';
+    public const ACTION_UPDATE_COURSE_SECTION = 'Updater';
+    public const ACTION_VIEW_COURSE_SECTIONS = 'Viewer';
 
-    const DEFAULT_ACTION = self::ACTION_VIEW_COURSE_SECTIONS;
+    public const CONTEXT = __NAMESPACE__;
 
-    const PARAM_COURSE_SECTION_ID = 'course_section_id';
-    const PARAM_DIRECTION = 'direction';
-    const PARAM_REMOVE_SELECTED = 'remove_selected';
+    public const DEFAULT_ACTION = self::ACTION_VIEW_COURSE_SECTIONS;
+
+    public const PARAM_COURSE_SECTION_ID = 'course_section_id';
+    public const PARAM_DIRECTION = 'direction';
+    public const PARAM_REMOVE_SELECTED = 'remove_selected';
 
     /**
      * Adds a breadcrumb to the browser component
@@ -35,7 +37,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     {
         $breadcrumbTrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS)),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS]),
                 Translation::getInstance()->getTranslation('ViewerComponent', [], __NAMESPACE__)
             )
         );

@@ -2,45 +2,107 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
-use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\GroupUsers\GroupUsersTable;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\GroupUsersTableRenderer;
+use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
- *
- * @package application.lib.weblcms.tool.user.component
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\User\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
 {
 
-    /**
-     * Renders the content for the tab
-     *
-     * @return string
-     */
-    protected function renderTabContent()
+    protected function getGroupButtonToolbarRenderer(Group $group): ButtonToolBarRenderer
     {
-        $html = [];
+        $buttonToolbar = new ButtonToolBar();
 
-        $html[] = $this->renderGroupDetails();
-        $html[] = $this->renderGroupUsersTable();
+        $courseManagementRights = CourseManagementRights::getInstance();
 
-        return implode(PHP_EOL, $html);
+        $isAllowed = $courseManagementRights->is_allowed_for_platform_group(
+            CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT, $group->getId(), $this->get_course_id()
+        );
+
+        if (!$this->isGroupSubscribed($group->getId()) && ($this->getUser()->is_platform_admin() || $isAllowed))
+        {
+            $buttonToolbar->addItem(
+                new Button(
+                    $this->getTranslation('SubscribeGroup'), null, $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS,
+                        self::PARAM_OBJECTS => $group->getId()
+                    ]
+                ), ToolbarItem::DISPLAY_ICON_AND_LABEL, null, ['btn-success']
+                )
+            );
+        }
+
+        return new ButtonToolBarRenderer($buttonToolbar);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getGroupUsersCondition(): AndCondition
+    {
+        $group = $this->getCurrentGroup();
+        $subscribedUserIds = $this->getGroupsTreeTraverser()->findUserIdentifiersForGroup($group);
+
+        $conditions = [];
+
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $subscribedUserIds
+        );
+
+        $conditionProperties = [];
+        $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME);
+        $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME);
+        $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME);
+        $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL);
+
+        $searchCondition = $this->tabButtonToolbarRenderer->getConditions($conditionProperties);
+
+        if ($searchCondition)
+        {
+            $conditions[] = $searchCondition;
+        }
+
+        return new AndCondition($conditions);
+    }
+
+    public function getGroupUsersTableRenderer(): GroupUsersTableRenderer
+    {
+        return $this->getService(GroupUsersTableRenderer::class);
+    }
+
+    protected function getGroupsTreeTraverser(): GroupsTreeTraverser
+    {
+        return $this->getService(GroupsTreeTraverser::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
     /**
      * Renders the details for the currently selected group
+     *
+     * @throws \Exception
      */
-    protected function renderGroupDetails()
+    protected function renderGroupDetails(): string
     {
+        $groupsTreeTraverser = $this->getGroupsTreeTraverser();
         $group = $this->getCurrentGroup();
 
         $html = [];
@@ -48,9 +110,12 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
         $html[] = '<div class="row">';
         $html[] = '<div class="col-sm-12">';
         $html[] = '<b>' . $this->getTranslation('Code') . ':</b> ' . $group->get_code();
-        $html[] = '<br /><b>' . $this->getTranslation('Description') . ':</b> ' . $group->get_fully_qualified_name();
-        $html[] = '<br /><b>' . $this->getTranslation('NumberOfUsers') . ':</b> ' . $group->count_users();
-        $html[] = '<br /><b>' . $this->getTranslation('NumberOfSubgroups') . ':</b> ' . $group->count_subgroups(true);
+        $html[] = '<br /><b>' . $this->getTranslation('Description') . ':</b> ' .
+            $groupsTreeTraverser->getFullyQualifiedNameForGroup($group);
+        $html[] = '<br /><b>' . $this->getTranslation('NumberOfUsers') . ':</b> ' .
+            $groupsTreeTraverser->countUsersForGroup($group);
+        $html[] = '<br /><b>' . $this->getTranslation('NumberOfSubgroups') . ':</b> ' .
+            $groupsTreeTraverser->countSubGroupsForGroup($group, true);
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<div class="row">';
@@ -65,88 +130,56 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
     }
 
     /**
-     * Renders the table of subgroups
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Exception
      */
-    protected function renderGroupUsersTable()
+    protected function renderGroupUsersTable(): string
     {
-        $table = new GroupUsersTable($this);
-
         $html = [];
         $html[] = '<div class="tab-content-header">';
         $html[] = '<h5>' . $this->getTranslation('Users') . '</h5>';
         $html[] = '</div>';
 
         $html[] = '<div>' . $this->tabButtonToolbarRenderer->render() . '</div>';
-        $html[] = $table->as_html();
+
+        $totalNumberOfItems = $this->getUserService()->countUsers($this->getGroupUsersCondition());
+        $groupUsersTableRenderer = $this->getGroupUsersTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $groupUsersTableRenderer->getParameterNames(), $groupUsersTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $users = $this->getUserService()->findUsers(
+            $this->getGroupUsersCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $groupUsersTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        $html[] = $groupUsersTableRenderer->render($tableParameterValues, $users);
 
         return implode(PHP_EOL, $html);
     }
 
     /**
-     * Builds the group button toolbar for the management of a single group
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Exception
      */
-    protected function getGroupButtonToolbarRenderer(Group $group)
+    protected function renderTabContent(): string
     {
-        $buttonToolbar = new ButtonToolBar();
+        $html = [];
 
-        $courseManagementRights = CourseManagementRights::getInstance();
+        $html[] = $this->renderGroupDetails();
+        $html[] = $this->renderGroupUsersTable();
 
-        $isAllowed = $courseManagementRights->is_allowed_for_platform_group(
-            CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT,
-            $group->getId(),
-            $this->get_course_id());
-
-        if (! $this->isGroupSubscribed($group->getId()) && ($this->getUser()->is_platform_admin() || $isAllowed))
-        {
-            $buttonToolbar->addItem(
-                new Button(
-                    $this->getTranslation('SubscribeGroup'),
-                    null,
-                    $this->get_url(
-                        array(
-                            self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS,
-                            self::PARAM_OBJECTS => $group->getId())),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL,
-                    null,
-                    ['btn-success']));
-        }
-
-        return new ButtonToolBarRenderer($buttonToolbar);
-    }
-
-    /**
-     * Returns the condition for the table
-     *
-     * @param string $table_class_name
-     *
-     * @return Condition
-     */
-    public function get_table_condition($table_class_name)
-    {
-        $group = $this->getCurrentGroup();
-        $subscribedUserIds = $group->get_users();
-
-        $conditions = [];
-
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(User::class, User::PROPERTY_ID),
-            $subscribedUserIds);
-
-        $conditionProperties = [];
-        $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME);
-        $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME);
-        $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME);
-        $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL);
-
-        $searchCondition = $this->tabButtonToolbarRenderer->getConditions($conditionProperties);
-        if ($searchCondition)
-        {
-            $conditions[] = $searchCondition;
-        }
-
-        if (count($conditions))
-        {
-            return new AndCondition($conditions);
-        }
+        return implode(PHP_EOL, $html);
     }
 }

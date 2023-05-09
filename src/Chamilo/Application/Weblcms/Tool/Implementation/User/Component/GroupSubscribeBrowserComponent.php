@@ -3,9 +3,10 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
-use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\UnsubscribedGroup\UnsubscribedGroupTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\PlatformgroupMenuRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\UnsubscribedGroupTableRenderer;
+use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -15,11 +16,11 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -27,56 +28,33 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
- * @package application.lib.weblcms.tool.user.component
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\User\Component
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class GroupSubscribeBrowserComponent extends Manager implements TableSupport
+class GroupSubscribeBrowserComponent extends Manager
 {
 
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
+
+    private string $groupId;
+
+    private ?Group $rootGroup;
 
     /**
-     * The currently selected group id
-     *
-     * @var int
-     */
-    private $groupId;
-
-    /**
-     * The root group
-     *
-     * @var Group
-     */
-    private $rootGroup;
-
-    /**
-     * The subscribed group ids
-     *
      * @var int[]
      */
-    private $subscribedGroups;
+    private array $subscribedGroups;
 
     /**
-     * The translator service
-     *
-     * @var Translation
-     */
-    private $translator;
-
-    /**
-     * Runs this component
-     *
-     * @return string
-     *
-     * @throws NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
     public function run()
     {
@@ -85,14 +63,12 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
             throw new NotAllowedException();
         }
 
-        $this->translator = Translation::getInstance();
-
         $this->subscribedGroups = $this->get_subscribed_platformgroup_ids($this->get_course_id());
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->buttonToolbarRenderer->render();
 
         $html[] = $this->renderInformationMessage();
@@ -102,17 +78,20 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         $html[] = $this->renderCurrentGroup();
         $html[] = '</div>';
 
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Builds and returns the toolbar renderer
-     *
-     * @return ButtonToolBarRenderer
-     */
-    protected function getButtonToolbarRenderer()
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_TAB;
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
+    protected function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
@@ -121,8 +100,8 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ViewSubscribedUsers'), new FontAwesomeGlyph('folder'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER)),
+                    $this->getTranslator()->trans('ViewSubscribedUsers'), new FontAwesomeGlyph('folder'),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -136,29 +115,21 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Retrieves the currently selected group
-     *
-     * @return Group
+     * @throws \ReflectionException
      */
-    protected function getCurrentGroup()
+    protected function getCurrentGroup(): ?Group
     {
         $groupId = $this->getGroupId();
-        if (!$groupId)
+
+        if ($groupId)
         {
-            return null;
+            return DataManager::retrieve_by_id(Group::class, (int) $groupId);
         }
 
-        return DataManager::retrieve_by_id(Group::class, $groupId);
+        return null;
     }
 
-    /**
-     * Builds the group button toolbar for the management of a single group
-     *
-     * @param Group $group
-     *
-     * @return ButtonToolBarRenderer
-     */
-    protected function getGroupButtonToolbarRenderer(Group $group)
+    protected function getGroupButtonToolbarRenderer(Group $group): ButtonToolBarRenderer
     {
         $buttonToolbar = new ButtonToolBar();
 
@@ -172,11 +143,11 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         {
             $buttonToolbar->addItem(
                 new Button(
-                    $this->getTranslation('SubscribeGroup'), null, $this->get_url(
-                    array(
+                    $this->getTranslator()->trans('SubscribeGroup', [], Manager::CONTEXT), null, $this->get_url(
+                    [
                         self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS,
                         self::PARAM_OBJECTS => $group->getId()
-                    )
+                    ]
                 ), ToolbarItem::DISPLAY_ICON_AND_LABEL, null, ['btn-success']
                 )
             );
@@ -186,85 +157,58 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Returns the id of the currently selected group, or the root group
-     *
-     * @return int
+     * @throws \ReflectionException
      */
-    protected function getGroupId()
+    protected function getGroupId(): string
     {
         if (!$this->groupId)
         {
-            $this->groupId = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
-
-            if (!$this->groupId)
-            {
-                $this->groupId = $this->getRootGroup()->get_id();
-            }
+            $this->groupId = $this->getRequest()->query->get(
+                \Chamilo\Application\Weblcms\Manager::PARAM_GROUP, $this->getRootGroup()->getId()
+            );
         }
 
         return $this->groupId;
     }
 
+    protected function getGroupsTreeTraverser(): GroupsTreeTraverser
+    {
+        return $this->getService(GroupsTreeTraverser::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
     /**
-     * Retrieves the root group
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @throws \ReflectionException
      */
-    public function getRootGroup()
+    public function getRootGroup(): ?Group
     {
         if (!$this->rootGroup)
         {
-            $group = DataManager::retrieve(
+            $this->rootGroup = DataManager::retrieve(
                 Group::class, new DataClassRetrieveParameters(
                     new EqualityCondition(
-                        new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+                        new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
                         new StaticConditionVariable(0)
                     )
                 )
             );
-            $this->rootGroup = $group;
         }
 
         return $this->rootGroup;
     }
 
     /**
-     * Helper function to get translations in the current context
-     *
-     * @param $variable
-     * @param array $parameters
-     *
-     * @return string
+     * @throws \QuickformException
+     * @throws \ReflectionException
      */
-    protected function getTranslation($variable, $parameters = [])
-    {
-        return $this->translator->getTranslation($variable, $parameters, Manager::context());
-    }
-
-    /**
-     * Returns additional parameters that need to be registered
-     *
-     * @return array
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_TAB;
-        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
-
-        return parent::getAdditionalParameters($additionalParameters);
-    }
-
-    /**
-     * Returns the condition for the table
-     *
-     * @param string $table_class_name
-     *
-     * @return Condition
-     */
-    public function get_table_condition($table_class_name)
+    public function getUnsubscribedGroupCondition(): AndCondition
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->getGroupId())
         );
 
@@ -273,7 +217,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         {
             $conditions[] = new NotCondition(
                 new InCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $this->subscribedGroups
+                    new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID), $this->subscribedGroups
                 )
             );
         }
@@ -293,12 +237,18 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         return new AndCondition($conditions);
     }
 
+    public function getUnsubscribedGroupTableRenderer(): UnsubscribedGroupTableRenderer
+    {
+        return $this->getService(UnsubscribedGroupTableRenderer::class);
+    }
+
     /**
-     * Renders the currently selected group
-     *
-     * @return string
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
-    protected function renderCurrentGroup()
+    protected function renderCurrentGroup(): string
     {
         $html = [];
 
@@ -312,10 +262,15 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Renders the details for the currently selected group
+     * @throws \ReflectionException
+     * @throws \QuickformException
+     * @throws \Exception
      */
-    protected function renderGroupDetails()
+    protected function renderGroupDetails(): string
     {
+        $translator = $this->getTranslator();
+        $groupsTreeTraverser = $this->getGroupsTreeTraverser();
+
         $group = $this->getCurrentGroup();
 
         $html = [];
@@ -327,10 +282,13 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         $html[] = '<div class="panel-body">';
         $html[] = '<div class="row">';
         $html[] = '<div class="col-sm-12">';
-        $html[] = '<b>' . $this->getTranslation('Code') . ':</b> ' . $group->get_code();
-        $html[] = '<br /><b>' . $this->getTranslation('Description') . ':</b> ' . $group->get_fully_qualified_name();
-        $html[] = '<br /><b>' . $this->getTranslation('NumberOfUsers') . ':</b> ' . $group->count_users();
-        $html[] = '<br /><b>' . $this->getTranslation('NumberOfSubgroups') . ':</b> ' . $group->count_subgroups(true);
+        $html[] = '<b>' . $translator->trans('Code', [], Manager::CONTEXT) . ':</b> ' . $group->get_code();
+        $html[] = '<br /><b>' . $translator->trans('Description', [], Manager::CONTEXT) . ':</b> ' .
+            $groupsTreeTraverser->getFullyQualifiedNameForGroup($group);
+        $html[] = '<br /><b>' . $translator->trans('NumberOfUsers', [], Manager::CONTEXT) . ':</b> ' .
+            $groupsTreeTraverser->countUsersForGroup($group);
+        $html[] = '<br /><b>' . $translator->trans('NumberOfSubgroups', [], Manager::CONTEXT) . ':</b> ' .
+            $groupsTreeTraverser->countSubGroupsForGroup($group, true);
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<div class="row">';
@@ -347,13 +305,11 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Renders the group menu
-     *
-     * @return string
+     * @throws \ReflectionException
      */
-    protected function renderGroupMenu()
+    protected function renderGroupMenu(): string
     {
-        $tree = new PlatformgroupMenuRenderer($this, array($this->getRootGroup()->get_id()));
+        $tree = new PlatformgroupMenuRenderer($this, [$this->getRootGroup()->getId()]);
 
         $html = [];
         $html[] = '<div class="col-sm-2">';
@@ -364,26 +320,28 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Renders the table of subgroups
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
-    protected function renderGroupSubgroupTable()
+    protected function renderGroupSubgroupTable(): string
     {
-        $table = new UnsubscribedGroupTable($this, $this->get_parameters(), $this->get_table_condition(''));
-
         $html = [];
         $html[] = '<div class="panel panel-default">';
         $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title">' . $this->getTranslation('Subgroups') . '</h3>';
+        $html[] =
+            '<h3 class="panel-title">' . $this->getTranslator()->trans('Subgroups', [], Manager::CONTEXT) . '</h3>';
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
-        $html[] = $table->as_html();
+        $html[] = $this->renderTable();
         $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
 
-    protected function renderInformationMessage()
+    protected function renderInformationMessage(): string
     {
         $html = [];
 
@@ -391,12 +349,38 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         $html[] = '<div class="col-sm-12">';
 
         $html[] = '<div class="alert alert-info">';
-        $html[] = $this->getTranslation('SubscribeGroupsInformationMessage');
+        $html[] = $this->getTranslator()->trans('SubscribeGroupsInformationMessage', [], Manager::CONTEXT);
         $html[] = '</div>';
 
         $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Exception
+     */
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems = $this->getGroupService()->countGroups($this->getUnsubscribedGroupCondition());
+        $unsubscribedGroupTableRenderer = $this->getUnsubscribedGroupTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $unsubscribedGroupTableRenderer->getParameterNames(),
+            $unsubscribedGroupTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $groups = $this->getGroupService()->findGroups(
+            $this->getUnsubscribedGroupCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $unsubscribedGroupTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $unsubscribedGroupTableRenderer->render($tableParameterValues, $groups);
     }
 }

@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
@@ -23,10 +22,9 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.user.component
  */
-abstract class SubscribeGroupsTabComponent extends Manager implements TableSupport
+abstract class SubscribeGroupsTabComponent extends Manager
 {
 
     /**
@@ -44,7 +42,6 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
     protected $groupId;
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     protected $rootButtonToolbarRenderer;
@@ -64,7 +61,6 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
     protected $subscribedGroups;
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     protected $tabButtonToolbarRenderer;
@@ -80,7 +76,6 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
      * Runs this component
      *
      * @return string
-     *
      * @throws NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
@@ -193,7 +188,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
                     Translation::getInstance()->getTranslation(
                         'SubscribeGroupsSearcherComponent', null, Manager::context()
                     ), new FontAwesomeGlyph('search'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS_SEARCHER)),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS_SEARCHER]),
                     Button::DISPLAY_ICON_AND_LABEL, null, ['pull-right']
                 )
             );
@@ -263,7 +258,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
      */
     protected function renderGroupMenu()
     {
-        $tree = new PlatformgroupMenuRenderer($this, array($this->getRootGroup()->get_id()));
+        $tree = new PlatformgroupMenuRenderer($this, [$this->getRootGroup()->get_id()]);
 
         return $tree->render_as_tree();
     }
@@ -290,7 +285,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
      *
      * @return string
      */
-    abstract protected function renderTabContent();
+    abstract protected function renderTabContent(): string;
 
     /**
      * Renders the tabs as HTML
@@ -304,7 +299,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
         $tabs->add(
             new LinkTab(
                 'view_details', $this->getCurrentGroup()->get_name(), new FontAwesomeGlyph('info-circle'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS)),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS]),
                 get_class($this) == SubscribeGroupsDetailsComponent::class
             )
         );
@@ -312,7 +307,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
         $tabs->add(
             new LinkTab(
                 'view_subgroups', $this->getTranslation('BrowseChildren'), new FontAwesomeGlyph('folder'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_SUBGROUP_BROWSER)),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_SUBGROUP_BROWSER]),
                 get_class($this) == SubscribeGroupsBrowseSubgroupsComponent::class
             )
         );

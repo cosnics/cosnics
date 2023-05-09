@@ -1,16 +1,15 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\UnsubscribedGroup\UnsubscribedGroupTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\UnsubscribedGroupTableRenderer;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
@@ -18,40 +17,41 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class SubscribeGroupsSearcherComponent extends Manager implements TableSupport
+class SubscribeGroupsSearcherComponent extends Manager
 {
-    /**
-     * @var ButtonToolBarRenderer
-     */
-    protected $buttonToolbarRenderer;
+    protected ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * Renders the component
-     *
-     * @return string
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
     public function run()
     {
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
-        $table = new UnsubscribedGroupTable($this);
-
         $html = [];
 
-        $html[] = $this->render_header();
-        $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = $table->as_html();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderHeader();
+        $html[] = $this->getButtonToolbarRenderer()->render();
+        $html[] = $this->renderTable();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Builds and returns the toolbar renderer
-     *
-     * @return ButtonToolBarRenderer
-     */
-    protected function getButtonToolbarRenderer()
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
+
+        $breadcrumbtrail->add(
+            new Breadcrumb(
+                $this->get_url([self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS]),
+                $this->getTranslator()->trans('SubscribeGroupsDetailsComponent', [], Manager::CONTEXT)
+            )
+        );
+    }
+
+    protected function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
@@ -62,41 +62,52 @@ class SubscribeGroupsSearcherComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    /**
-     * Returns the condition for the table
-     *
-     * @param string $table_class_name
-     *
-     * @return Condition
-     */
-    public function get_table_condition($table_class_name)
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        $properties = array(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME),
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION)
-        );
-
-        $searchCondition = $this->buttonToolbarRenderer->getConditions($properties);
-        if ($searchCondition)
-        {
-            return $searchCondition;
-        }
-
-        return null;
+        return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
     /**
-     * @param BreadcrumbTrail $breadcrumbtrail
+     * @throws \Exception
      */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    public function getUnsubscribedGroupCondition(): ?AndCondition
     {
-        $this->addBrowserBreadcrumb($breadcrumbtrail);
+        $properties = [
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION)
+        ];
 
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS)),
-                Translation::getInstance()->getTranslation('SubscribeGroupsDetailsComponent', null, Manager::context())
-            )
+        return $this->getButtonToolbarRenderer()->getConditions($properties);
+    }
+
+    public function getUnsubscribedGroupTableRenderer(): UnsubscribedGroupTableRenderer
+    {
+        return $this->getService(UnsubscribedGroupTableRenderer::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Exception
+     */
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems = $this->getGroupService()->countGroups($this->getUnsubscribedGroupCondition());
+        $unsubscribedGroupTableRenderer = $this->getUnsubscribedGroupTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $unsubscribedGroupTableRenderer->getParameterNames(),
+            $unsubscribedGroupTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
         );
+
+        $groups = $this->getGroupService()->findGroups(
+            $this->getUnsubscribedGroupCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $unsubscribedGroupTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $unsubscribedGroupTableRenderer->render($tableParameterValues, $groups);
     }
 }
