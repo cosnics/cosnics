@@ -2,11 +2,13 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Component;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Table\AsessmentAttempt\AssessmentAttemptTable;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Table\AssessmentAttemptTableRenderer;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractAttempt;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -20,13 +22,11 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -34,25 +34,23 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ResultsViewerComponent extends Manager implements TableSupport
+class ResultsViewerComponent extends Manager
 {
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
+
+    private ContentObjectPublication $publication;
 
     /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
-
-    private $publication;
-
-    /**
-     * Runs this component
-     *
-     * @throws \libraries\architecture\exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
     public function run()
     {
-        $pid = Request::get(self::PARAM_ASSESSMENT);
+        $pid = $this->getRequest()->query->get(self::PARAM_ASSESSMENT);
 
         $this->set_parameter(self::PARAM_ASSESSMENT, $pid);
         $this->publication = DataManager::retrieve_by_id(
@@ -70,13 +68,8 @@ class ResultsViewerComponent extends Manager implements TableSupport
 
         $html = [];
 
-        $html[] = $this->render_header();
-
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($assessment);
-        if ($this->buttonToolbarRenderer)
-        {
-            $html[] = $this->buttonToolbarRenderer->render();
-        }
+        $html[] = $this->renderHeader();
+        $html[] = $this->getButtonToolbarRenderer($assessment)->render();
 
         $html[] = '<div class="panel panel-default">';
 
@@ -97,144 +90,53 @@ class ResultsViewerComponent extends Manager implements TableSupport
 
         $html[] = '</div>';
 
-        $table = new AssessmentAttemptTable($this);
-
-        $html[] = $table->as_html();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderTable();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     *
-     * @param BreadcrumbTrail $breadcrumbtrail
-     */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 
-    /**
-     * Add a breadcrumb with the title of the assessment
-     *
-     * @param $assessment Assessment
-     */
-    protected function add_assessment_title_breadcrumb($assessment)
+    protected function add_assessment_title_breadcrumb(Assessment $assessment)
     {
         $breadcrumb_trail = BreadcrumbTrail::getInstance();
-        $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
+        $breadcrumbs = $breadcrumb_trail->getBreadcrumbs();
 
         $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(
-            $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_RESULTS)),
-            Translation::get('ViewResultsForAssessment', array('TITLE' => $assessment->get_title()))
+            $this->get_url([self::PARAM_ACTION => self::ACTION_VIEW_RESULTS]),
+            $this->getTranslator()->trans('ViewResultsForAssessment', ['TITLE' => $assessment->get_title()])
         );
 
-        $breadcrumb_trail->set_breadcrumbtrail($breadcrumbs);
+        $breadcrumb_trail->set($breadcrumbs);
     }
 
     /**
-     * @param null $assessment
-     *
-     * @return ButtonToolBarRenderer
-     * @throws NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Exception
      */
-    public function getButtonToolbarRenderer($assessment = null)
-    {
-        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
-        {
-            if (!isset($this->buttonToolbarRenderer))
-            {
-                $aid = Request::get(self::PARAM_ASSESSMENT);
-
-                $buttonToolbar = new ButtonToolBar($this->get_url());
-                $commonActions = new ButtonGroup();
-
-                $commonActions->addButton(
-                    new Button(
-                        Translation::get('ShowAll', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
-                        $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                    )
-                );
-
-                $commonActions->addButton(
-                    new Button(
-                        Translation::get('DeleteAllResults'), new FontAwesomeGlyph('times'), $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DELETE_RESULTS,
-                            self::PARAM_ASSESSMENT => $aid
-                        )
-                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL,
-                        Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
-                    )
-                );
-
-                if ($assessment instanceof Assessment)
-                {
-                    $commonActions->addButton(
-                        new Button(
-                            Translation::get('DownloadDocuments'), new FontAwesomeGlyph('download'), $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SAVE_DOCUMENTS,
-                                self::PARAM_ASSESSMENT => $aid
-                            )
-                        ), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                        )
-                    );
-
-                    $commonActions->addButton(
-                        new Button(
-                            Translation::get('RawExportResults'), new FontAwesomeGlyph('download'), $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_RAW_EXPORT_RESULTS,
-                                self::PARAM_ASSESSMENT => Request::get(self::PARAM_ASSESSMENT)
-                            )
-                        ), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                        )
-                    );
-                }
-
-                $buttonToolbar->addButtonGroup($commonActions);
-
-                $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-            }
-        }
-
-        return $this->buttonToolbarRenderer;
-    }
-
-    public function get_publication()
-    {
-        return $this->publication;
-    }
-
-    /**
-     * Returns the condition
-     *
-     * @param string $table_class_name
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_table_condition($table_class_name)
+    public function getAssessmentAttemptCondition(): AndCondition
     {
         $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
-            new StaticConditionVariable(Request::get(self::PARAM_ASSESSMENT))
+            new StaticConditionVariable($this->getRequest()->query->get(self::PARAM_ASSESSMENT))
         );
 
         if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID),
+                new PropertyConditionVariable(AssessmentAttempt::class, AbstractAttempt::PROPERTY_USER_ID),
                 new StaticConditionVariable($this->get_user_id())
             );
         }
 
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
-        if ($this->buttonToolbarRenderer)
+        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $search_properties = [];
 
@@ -242,7 +144,8 @@ class ResultsViewerComponent extends Manager implements TableSupport
             $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME);
             $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE);
 
-            $search_conditions = $this->buttonToolbarRenderer->getConditions($search_properties);
+            $search_conditions = $this->getButtonToolbarRenderer()->getConditions($search_properties);
+
             if ($search_conditions)
             {
                 $conditions[] = $search_conditions;
@@ -250,5 +153,120 @@ class ResultsViewerComponent extends Manager implements TableSupport
         }
 
         return new AndCondition($conditions);
+    }
+
+    public function getAssessmentAttemptTableRenderer(): AssessmentAttemptTableRenderer
+    {
+        return $this->getService(AssessmentAttemptTableRenderer::class);
+    }
+
+    /**
+     * @throws NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function getButtonToolbarRenderer(?Assessment $assessment = null): ButtonToolBarRenderer
+    {
+        if (!isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar($this->get_url());
+            $translator = $this->getTranslator();
+
+            if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+            {
+                $aid = $this->getRequest()->query->get(self::PARAM_ASSESSMENT);
+
+                $commonActions = new ButtonGroup();
+
+                $commonActions->addButton(
+                    new Button(
+                        $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
+                        $this->get_url(), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
+
+                $commonActions->addButton(
+                    new Button(
+                        $translator->trans('DeleteAllResults', [], Manager::CONTEXT), new FontAwesomeGlyph('times'),
+                        $this->get_url(
+                            [
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DELETE_RESULTS,
+                                self::PARAM_ASSESSMENT => $aid
+                            ]
+                        ), ToolbarItem::DISPLAY_ICON_AND_LABEL,
+                        $translator->trans('ConfirmChosenAction', [], StringUtilities::LIBRARIES)
+                    )
+                );
+
+                if ($assessment instanceof Assessment)
+                {
+                    $commonActions->addButton(
+                        new Button(
+                            $translator->trans('DownloadDocuments', [], Manager::CONTEXT),
+                            new FontAwesomeGlyph('download'), $this->get_url(
+                            [
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SAVE_DOCUMENTS,
+                                self::PARAM_ASSESSMENT => $aid
+                            ]
+                        ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
+
+                    $commonActions->addButton(
+                        new Button(
+                            $translator->trans('RawExportResults', [], Manager::CONTEXT),
+                            new FontAwesomeGlyph('download'), $this->get_url(
+                            [
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_RAW_EXPORT_RESULTS,
+                                self::PARAM_ASSESSMENT => $this->getRequest()->query->get(self::PARAM_ASSESSMENT)
+                            ]
+                        ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
+                }
+
+                $buttonToolbar->addButtonGroup($commonActions);
+            }
+
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+
+        return $this->buttonToolbarRenderer;
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    public function get_publication(): ContentObjectPublication
+    {
+        return $this->publication;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Exception
+     */
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems =
+            WeblcmsTrackingDataManager::count_assessment_attempts_with_user($this->getAssessmentAttemptCondition());
+        $assessmentAttemptTableRenderer = $this->getAssessmentAttemptTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $assessmentAttemptTableRenderer->getParameterNames(),
+            $assessmentAttemptTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $assessmentAttempts = WeblcmsTrackingDataManager::retrieve_assessment_attempts_with_user(
+            $this->getAssessmentAttemptCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $assessmentAttemptTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $assessmentAttemptTableRenderer->legacyRender($this, $tableParameterValues, $assessmentAttempts);
     }
 }

@@ -24,7 +24,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.assessment
  */
 
@@ -34,29 +33,21 @@ use Chamilo\Libraries\Translation\Translation;
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     implements Categorizable, IntroductionTextSupportInterface
 {
-    const ACTION_ATTEMPT_RESULT_VIEWER = 'AttemptResultViewer';
+    public const ACTION_ATTEMPT_RESULT_VIEWER = 'AttemptResultViewer';
+    public const ACTION_DELETE_RESULTS = 'ResultsDeleter';
+    public const ACTION_RAW_EXPORT_RESULTS = 'RawExportResults';
+    public const ACTION_SAVE_DOCUMENTS = 'DocumentSaver';
+    public const ACTION_TAKE_ASSESSMENT = 'ComplexDisplay';
+    public const ACTION_VIEW_RESULTS = 'ResultsViewer';
 
-    const ACTION_DELETE_RESULTS = 'ResultsDeleter';
+    public const CONTEXT = __NAMESPACE__;
 
-    const ACTION_RAW_EXPORT_RESULTS = 'RawExportResults';
-
-    const ACTION_SAVE_DOCUMENTS = 'DocumentSaver';
-
-    const ACTION_TAKE_ASSESSMENT = 'ComplexDisplay';
-
-    const ACTION_VIEW_RESULTS = 'ResultsViewer';
-
-    const PARAM_ANONYMOUS = 'anonymous';
-
-    const PARAM_ASSESSMENT = 'aid';
-
-    const PARAM_INVITATION_ID = 'invitation_id';
-
-    const PARAM_PUBLICATION_ACTION = 'publication_action';
-
-    const PARAM_QUESTION_ATTEMPT = 'qaid';
-
-    const PARAM_USER_ASSESSMENT = 'uaid';
+    public const PARAM_ANONYMOUS = 'anonymous';
+    public const PARAM_ASSESSMENT = 'aid';
+    public const PARAM_INVITATION_ID = 'invitation_id';
+    public const PARAM_PUBLICATION_ACTION = 'publication_action';
+    public const PARAM_QUESTION_ATTEMPT = 'qaid';
+    public const PARAM_USER_ASSESSMENT = 'uaid';
 
     private static $checked_publications = [];
 
@@ -76,10 +67,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         $dropdownButton->prependSubButton(
             new SubButton(
                 Translation::get('ManageAttempts'), new FontAwesomeGlyph('file-signature', [], 'fas'), $this->get_url(
-                array(
+                [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS,
                     self::PARAM_ASSESSMENT => $publication_id
-                )
+                ]
             ), SubButton::DISPLAY_LABEL
             )
         );
@@ -109,10 +100,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('ManageAttempts'), new FontAwesomeGlyph('file-signature', [], 'fas'), $this->get_url(
-                array(
+                [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS,
                     self::PARAM_ASSESSMENT => $publication_id
-                )
+                ]
             ), ToolbarItem::DISPLAY_ICON
             )
         );
@@ -120,7 +111,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     public static function get_allowed_types()
     {
-        return array(Assessment::class, Hotpotatoes::class);
+        return [Assessment::class, Hotpotatoes::class];
     }
 
     public function get_available_browser_types()
@@ -148,7 +139,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
                     AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID
                 ), new StaticConditionVariable($this->get_user_id())
             );
-            $condition = new AndCondition(array($condition_t, $condition_u));
+            $condition = new AndCondition([$condition_t, $condition_u]);
 
             $trackers = DataManager::retrieves(
                 AssessmentAttempt::class, new DataClassRetrievesParameters($condition)
