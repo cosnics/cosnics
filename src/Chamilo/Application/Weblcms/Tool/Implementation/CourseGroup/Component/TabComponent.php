@@ -32,7 +32,6 @@ abstract class TabComponent extends Manager
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     protected $buttonToolbarRenderer;
@@ -102,7 +101,6 @@ abstract class TabComponent extends Manager
     }
 
     /**
-     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
@@ -113,7 +111,6 @@ abstract class TabComponent extends Manager
      * Builds the ButtonToolbar and returns the renderer
      *
      * @return ButtonToolBarRenderer
-     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     protected function getButtonToolbarRenderer()
@@ -146,7 +143,7 @@ abstract class TabComponent extends Manager
             {
                 $label = Translation::get('PublishIntroductionText', null, StringUtilities::LIBRARIES);
                 $glyph = new FontAwesomeGlyph('info-circle');
-                $allowedContentObjectTypes = array(Introduction::class);
+                $allowedContentObjectTypes = [Introduction::class];
 
                 $parameters = $this->get_parameters();
                 $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
@@ -164,7 +161,7 @@ abstract class TabComponent extends Manager
                 $commonActions->addButton(
                     new Button(
                         Translation::get('ViewSubscriptions'), new FontAwesomeGlyph('th-list'), $this->get_url(
-                        $param_subscriptions_overview, array(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP)
+                        $param_subscriptions_overview, [\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP]
                     ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -256,12 +253,7 @@ abstract class TabComponent extends Manager
         return $group_menu->render_as_tree();
     }
 
-    /**
-     * Renders the content for the tab
-     *
-     * @return string
-     */
-    abstract protected function renderTabContent();
+    abstract protected function renderTabContent(): string;
 
     /**
      * Renders the tabs as HTML
@@ -279,7 +271,7 @@ abstract class TabComponent extends Manager
             $tabs->add(
                 new LinkTab(
                     'view_details', $this->getCurrentGroupName(), new FontAwesomeGlyph('info-circle'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS)),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_GROUP_DETAILS]),
                     get_class($this) == DetailsComponent::class
                 )
             );
@@ -288,7 +280,7 @@ abstract class TabComponent extends Manager
         $tabs->add(
             new LinkTab(
                 'view_details', $translator->getTranslation('BrowseChildren', null, Manager::context()),
-                new FontAwesomeGlyph('folder'), $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
+                new FontAwesomeGlyph('folder'), $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE]),
                 get_class($this) == BrowserComponent::class
             )
         );
@@ -299,7 +291,7 @@ abstract class TabComponent extends Manager
                 new LinkTab(
                     'view_details', $translator->getTranslation('EditGroup', null, Manager::context()),
                     new FontAwesomeGlyph('pencil-alt'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_EDIT_COURSE_GROUP)),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_EDIT_COURSE_GROUP]),
                     get_class($this) == EditorComponent::class
                 )
             );
@@ -308,7 +300,7 @@ abstract class TabComponent extends Manager
                 new LinkTab(
                     'view_details', $translator->getTranslation('ManageSubscriptions', null, Manager::context()),
                     new FontAwesomeGlyph('plus-circle'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_MANAGE_SUBSCRIPTIONS)),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_MANAGE_SUBSCRIPTIONS]),
                     get_class($this) == ManageSubscriptionsComponent::class
                 )
             );

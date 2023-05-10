@@ -11,7 +11,6 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- *
  * @package application.lib.weblcms.tool.course_group.component.user_table
  */
 class CourseGroupTableDataProvider extends DataClassTableDataProvider

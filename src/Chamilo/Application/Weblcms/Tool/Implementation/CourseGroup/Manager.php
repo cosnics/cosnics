@@ -8,7 +8,6 @@ use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
- *
  * @package application.lib.weblcms.tool.course_group
  */
 
@@ -17,43 +16,36 @@ use Chamilo\Libraries\Platform\Session\Request;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements IntroductionTextSupportInterface
 {
-    const ACTION_ADD_COURSE_GROUP = 'Creator';
+    public const ACTION_ADD_COURSE_GROUP = 'Creator';
+    public const ACTION_DELETE_COURSE_GROUP = 'Deleter';
+    public const ACTION_EDIT_COURSE_GROUP = 'Editor';
+    public const ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW = 'Exporter';
+    public const ACTION_GROUP_DETAILS = 'Details';
+    public const ACTION_LAUNCH_INTEGRATION = 'IntegrationLauncher';
+    public const ACTION_MANAGE_SUBSCRIPTIONS = 'ManageSubscriptions';
+    public const ACTION_SUBSCRIBE = 'SubscribeBrowser';
+    public const ACTION_SUBSCRIPTIONS_OVERVIEW = 'SubscriptionsOverviewer';
+    public const ACTION_UNSUBSCRIBE = 'UnsubscribeBrowser';
+    public const ACTION_USER_SELF_SUBSCRIBE = 'SelfSubscriber';
+    public const ACTION_USER_SELF_UNSUBSCRIBE = 'SelfUnsubscriber';
+    public const ACTION_VIEW_GROUPS = 'Browser';
 
-    const ACTION_DELETE_COURSE_GROUP = 'Deleter';
+    public const CONTEXT = __NAMESPACE__;
 
-    const ACTION_EDIT_COURSE_GROUP = 'Editor';
+    public const PARAM_COURSE_GROUP = 'course_group';
+    public const PARAM_COURSE_GROUP_ACTION = 'tool_action';
+    public const PARAM_DELETE_COURSE_GROUPS = 'delete_course_groups';
+    public const PARAM_TAB = 'tab';
+    public const PARAM_UNSUBSCRIBE_USERS = 'unsubscribe_users';
 
-    const ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW = 'Exporter';
+    public const TOOL_NAME = 'course_group';
 
-    const ACTION_GROUP_DETAILS = 'Details';
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_COURSE_GROUP;
 
-    const ACTION_LAUNCH_INTEGRATION = 'IntegrationLauncher';
-
-    const ACTION_MANAGE_SUBSCRIPTIONS = 'ManageSubscriptions';
-
-    const ACTION_SUBSCRIBE = 'SubscribeBrowser';
-
-    const ACTION_SUBSCRIPTIONS_OVERVIEW = 'SubscriptionsOverviewer';
-
-    const ACTION_UNSUBSCRIBE = 'UnsubscribeBrowser';
-
-    const ACTION_USER_SELF_SUBSCRIBE = 'SelfSubscriber';
-
-    const ACTION_USER_SELF_UNSUBSCRIBE = 'SelfUnsubscriber';
-
-    const ACTION_VIEW_GROUPS = 'Browser';
-
-    const PARAM_COURSE_GROUP = 'course_group';
-
-    const PARAM_COURSE_GROUP_ACTION = 'tool_action';
-
-    const PARAM_DELETE_COURSE_GROUPS = 'delete_course_groups';
-
-    const PARAM_TAB = 'tab';
-
-    const PARAM_UNSUBSCRIBE_USERS = 'unsubscribe_users';
-
-    const TOOL_NAME = 'course_group';
+        return parent::getAdditionalParameters($additionalParameters);
+    }
 
     /**
      * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager
@@ -61,13 +53,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     protected function getCourseGroupDecoratorsManager()
     {
         return $this->getService(CourseGroupDecoratorsManager::class);
-    }
-
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_COURSE_GROUP;
-
-        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**

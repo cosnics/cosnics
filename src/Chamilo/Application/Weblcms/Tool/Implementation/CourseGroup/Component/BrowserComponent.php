@@ -2,77 +2,54 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\CourseGroup\CourseGroupTable;
-use Chamilo\Application\Weblcms\Tool\Manager;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\CourseGroupTableRenderer;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\Storage\DataClass\NestedSet;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package application.lib.weblcms.tool.course_group.component
  */
-class BrowserComponent extends TabComponent implements TableSupport
+class BrowserComponent extends TabComponent
 {
 
     /**
-     * Renders the content of the current tab
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Exception
      */
-    public function renderTabContent()
-    {
-        $html = [];
-
-        $html[] = $this->getTableHtml();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * Renders the table as html
-     *
-     * @return string
-     */
-    protected function getTableHtml()
-    {
-        $parameters = $this->get_parameters();
-        $parameters[Manager::PARAM_ACTION] = self::ACTION_BROWSE;
-
-        $course_group_table = new CourseGroupTable($this);
-
-        return $course_group_table->as_html();
-    }
-
-    /*
-     * Returns the condition needed for the table
-     * @return Condition
-     */
-    public function get_table_condition($table_class_name)
+    public function getCourseGroupCondition(): ?AndCondition
     {
         $conditions = [];
 
         $properties = [];
         $properties[] = new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME);
         $properties[] = new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_DESCRIPTION);
-        $query_condition = $this->buttonToolbarRenderer->getConditions($properties);
+        $query_condition = $this->getButtonToolbarRenderer()->getConditions($properties);
 
         $root_course_group = $this->rootCourseGroup;
 
         $course_group_id = $this->get_group_id();
 
-        if (! $course_group_id || ($root_course_group->get_id() == $course_group_id))
+        if (!$course_group_id || ($root_course_group->get_id() == $course_group_id))
         {
             $root_course_group_id = $root_course_group->get_id();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
-                new StaticConditionVariable($root_course_group_id));
+                new PropertyConditionVariable(CourseGroup::class, NestedSet::PROPERTY_PARENT_ID),
+                new StaticConditionVariable($root_course_group_id)
+            );
         }
         else
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_PARENT_ID),
-                new StaticConditionVariable($course_group_id));
+                new PropertyConditionVariable(CourseGroup::class, NestedSet::PROPERTY_PARENT_ID),
+                new StaticConditionVariable($course_group_id)
+            );
         }
 
         if ($query_condition)
@@ -86,5 +63,44 @@ class BrowserComponent extends TabComponent implements TableSupport
         }
 
         return null;
+    }
+
+    public function getCourseGroupTableRenderer(): CourseGroupTableRenderer
+    {
+        return $this->getService(CourseGroupTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
+    protected function renderTabContent(): string
+    {
+        $totalNumberOfItems =
+            DataManager::count(CourseGroup::class, new DataClassCountParameters($this->getCourseGroupCondition()));
+        $courseGroupTableRenderer = $this->getCourseGroupTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $courseGroupTableRenderer->getParameterNames(), $courseGroupTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $courseGroups = DataManager::retrieves(
+            CourseGroup::class, new DataClassRetrievesParameters(
+                $this->getCourseGroupCondition(), $tableParameterValues->getNumberOfItemsPerPage(),
+                $tableParameterValues->getOffset(), $courseGroupTableRenderer->determineOrderBy($tableParameterValues)
+            )
+        );
+
+        return $courseGroupTableRenderer->legacyRender($this, $tableParameterValues, $courseGroups);
     }
 }

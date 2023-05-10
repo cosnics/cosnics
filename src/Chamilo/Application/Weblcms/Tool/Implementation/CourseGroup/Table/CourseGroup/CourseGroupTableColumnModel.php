@@ -10,12 +10,11 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.course_group.component.user_table
  */
 class CourseGroupTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
-    const COLUMN_NUMBER_OF_MEMBERS = 'number_of_members';
+    public const COLUMN_NUMBER_OF_MEMBERS = 'number_of_members';
 
     /**
      * The tables modification column
@@ -29,14 +28,18 @@ class CourseGroupTableColumnModel extends DataClassTableColumnModel implements T
     {
         $this->addColumn(new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME));
         $this->addColumn(
-            new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_DESCRIPTION));
+            new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_DESCRIPTION)
+        );
 
         $this->addColumn(
             new StaticTableColumn(
                 self::COLUMN_NUMBER_OF_MEMBERS,
-                Translation::getInstance()->getTranslation('NumberOfMembers', [], Manager::context())));
+                Translation::getInstance()->getTranslation('NumberOfMembers', [], Manager::context())
+            )
+        );
 
         $this->addColumn(
-            new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS));
+            new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS)
+        );
     }
 }

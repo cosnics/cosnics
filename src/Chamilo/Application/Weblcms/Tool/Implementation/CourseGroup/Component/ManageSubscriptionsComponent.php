@@ -9,13 +9,12 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.tool.course_group.component
  */
 class ManageSubscriptionsComponent extends TabComponent
 {
 
-    public function renderTabContent()
+    protected function renderTabContent(): string
     {
         if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
@@ -34,20 +33,16 @@ class ManageSubscriptionsComponent extends TabComponent
             if ($succes)
             {
                 $message = Translation::get(
-                        'CourseGroupSubscriptionsUpdated',
-                        array('OBJECT' => Translation::get('CourseGroup'))
-                    ) . '<br />' .
-                    implode('<br />', $courseGroup->getErrors());
+                        'CourseGroupSubscriptionsUpdated', ['OBJECT' => Translation::get('CourseGroup')]
+                    ) . '<br />' . implode('<br />', $courseGroup->getErrors());
             }
             else
             {
                 $message = Translation::get(
-                        'ObjectNotUpdated',
-                        array('OBJECT' => Translation::get('CourseGroup')),
-                        StringUtilities::LIBRARIES
+                        'ObjectNotUpdated', ['OBJECT' => Translation::get('CourseGroup')], StringUtilities::LIBRARIES
                     ) . '<br />' . implode('<br />', $courseGroup->getErrors());
             }
-            $this->redirectWithMessage($message, !$succes, array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
+            $this->redirectWithMessage($message, !$succes, [self::PARAM_ACTION => self::ACTION_GROUP_DETAILS]);
         }
 
         return $form->toHtml();

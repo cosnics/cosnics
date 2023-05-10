@@ -10,12 +10,11 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.course_group.component.user_table
  */
 class CourseGroupTable extends DataClassListTableRenderer implements TableActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager::PARAM_COURSE_GROUP;
+    public const TABLE_IDENTIFIER = Manager::PARAM_COURSE_GROUP;
 
     public function getTableActions(): TableActions
     {
@@ -24,8 +23,10 @@ class CourseGroupTable extends DataClassListTableRenderer implements TableAction
         {
             $actions->addAction(
                 new TableAction(
-                    $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COURSE_GROUP)),
-                    Translation::get('RemoveSelectedCourseGroups')));
+                    $this->get_component()->get_url([Manager::PARAM_ACTION => Manager::ACTION_DELETE_COURSE_GROUP]),
+                    Translation::get('RemoveSelectedCourseGroups')
+                )
+            );
         }
 
         return $actions;

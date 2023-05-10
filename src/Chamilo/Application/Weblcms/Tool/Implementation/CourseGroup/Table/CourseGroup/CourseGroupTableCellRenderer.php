@@ -15,7 +15,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.tool.course_group.component.user_table
  */
 class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
@@ -46,14 +45,14 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
             $delete_url = $this->get_component()->get_url($parameters);
 
             $confirm_messages = [];
-            $confirm_messages[] = Translation::get('DeleteConfirm', array('NAME' => $course_group->geT_name())); // TODO
+            $confirm_messages[] = Translation::get('DeleteConfirm', ['NAME' => $course_group->geT_name()]); // TODO
             // ::
             // Better
             if ($course_group->has_children())
             {
                 $confirm_messages[] = Translation::get('DeleteConfirmChildren');
             }
-            $confirm_message = implode(" ", $confirm_messages);
+            $confirm_message = implode(' ', $confirm_messages);
 
             $toolbar->add_item(
                 new ToolbarItem(
@@ -121,7 +120,6 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
     }
 
     /**
-     *
      * @param TableColumn $column
      * @param CourseGroup $course_group
      *
@@ -137,10 +135,10 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
                     $course_group->is_member($this->get_component()->get_user()))
                 {
                     $url = $this->get_component()->get_url(
-                        array(
+                        [
                             Manager::PARAM_ACTION => Manager::ACTION_GROUP_DETAILS,
                             \Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP => $course_group->get_id()
-                        )
+                        ]
                     );
 
                     return '<a href="' . $url . '">' . $course_group->get_name() . '</a>';

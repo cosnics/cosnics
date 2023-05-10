@@ -15,13 +15,12 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.tool.course_group.component
  */
 class EditorComponent extends TabComponent
 {
 
-    public function renderTabContent()
+    protected function renderTabContent(): string
     {
         if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
@@ -36,22 +35,17 @@ class EditorComponent extends TabComponent
 
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
-                $this->get_url(),
-                Translation::get('EditorComponent', array('GROUPNAME' => $course_group->get_name()))
+                $this->get_url(), Translation::get('EditorComponent', ['GROUPNAME' => $course_group->get_name()])
             )
         );
 
         $form = new CourseGroupForm(
-            $this->getCourseGroupDecoratorsManager(),
-            CourseGroupForm::TYPE_EDIT,
-            $course_group,
-            $this->get_url(
-                array(
-                    Manager::PARAM_ACTION => self::ACTION_EDIT_COURSE_GROUP,
-                    self::PARAM_COURSE_GROUP => $course_group_id
-                )
-            ),
-            $this->getUser()
+            $this->getCourseGroupDecoratorsManager(), CourseGroupForm::TYPE_EDIT, $course_group, $this->get_url(
+            [
+                Manager::PARAM_ACTION => self::ACTION_EDIT_COURSE_GROUP,
+                self::PARAM_COURSE_GROUP => $course_group_id
+            ]
+        ), $this->getUser()
         );
 
         if ($form->validate())
@@ -61,21 +55,17 @@ class EditorComponent extends TabComponent
             if ($succes)
             {
                 $message = Translation::get(
-                    'ObjectUpdated',
-                    array('OBJECT' => Translation::get('CourseGroup')),
-                    StringUtilities::LIBRARIES
+                    'ObjectUpdated', ['OBJECT' => Translation::get('CourseGroup')], StringUtilities::LIBRARIES
                 );
             }
             else
             {
                 $message = Translation::get(
-                        'ObjectNotUpdated',
-                        array('OBJECT' => Translation::get('CourseGroup')),
-                        StringUtilities::LIBRARIES
+                        'ObjectNotUpdated', ['OBJECT' => Translation::get('CourseGroup')], StringUtilities::LIBRARIES
                     ) . '<br />' . implode('<br />', $course_group->getErrors());
             }
 
-            $this->redirectWithMessage($message, !$succes, array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
+            $this->redirectWithMessage($message, !$succes, [self::PARAM_ACTION => self::ACTION_GROUP_DETAILS]);
         }
 
         return $form->toHtml();

@@ -24,7 +24,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.tool.course_group.component
  */
 class DetailsComponent extends TabComponent implements TableSupport
@@ -47,7 +46,7 @@ class DetailsComponent extends TabComponent implements TableSupport
             $buttonToolbar->addItem(
                 new Button(
                     $translator->getTranslation('SubscribeToGroup', [], Manager::context()), null,
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_SELF_SUBSCRIBE)),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_USER_SELF_SUBSCRIBE]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, null, ['btn-success']
                 )
             );
@@ -58,7 +57,7 @@ class DetailsComponent extends TabComponent implements TableSupport
             $buttonToolbar->addItem(
                 new Button(
                     $translator->getTranslation('UnSubscribeFromGroup', [], Manager::context()), null,
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_SELF_UNSUBSCRIBE)),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_USER_SELF_UNSUBSCRIBE]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, null, ['btn-danger']
                 )
             );
@@ -70,7 +69,7 @@ class DetailsComponent extends TabComponent implements TableSupport
                 new Button(
                     $translator->getTranslation('Export', null, StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('download'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW)),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -79,9 +78,9 @@ class DetailsComponent extends TabComponent implements TableSupport
                 new Button(
                     $translator->getTranslation('Delete', [], StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('times'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_DELETE_COURSE_GROUP)),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_DELETE_COURSE_GROUP]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, $translator->getTranslation(
-                    'DeleteConfirm', array('NAME' => $courseGroup->get_name()), Manager::context()
+                    'DeleteConfirm', ['NAME' => $courseGroup->get_name()], Manager::context()
                 )
                 )
             );
@@ -145,7 +144,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         {
             if (!is_array($users))
             {
-                $users = array($users);
+                $users = [$users];
             }
 
             foreach ($users as $user)
@@ -159,10 +158,10 @@ class DetailsComponent extends TabComponent implements TableSupport
 
             $message = Translation::get(count($users) > 1 ? 'UsersUnsubscribed' : 'UserUnsubscribed');
             $this->redirectWithMessage(
-                $message, false, array(
+                $message, false, [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_GROUP_DETAILS,
                     self::PARAM_COURSE_GROUP => $course_group->get_id()
-                )
+                ]
             );
         }
     }
@@ -255,14 +254,13 @@ class DetailsComponent extends TabComponent implements TableSupport
      * Renders the content for the tab
      *
      * @return string
-     *
      * @throws ObjectNotExistException
      */
-    protected function renderTabContent()
+    protected function renderTabContent(): string
     {
         if ($this->isCurrentGroupRoot())
         {
-            return null;
+            return '';
         }
 
         $currentCourseGroup = $this->getCurrentCourseGroup();
