@@ -311,7 +311,7 @@ class DetailsComponent extends TabComponent
             $adminUserTableRenderer->determineOrderBy($tableParameterValues)
         );
 
-        return $adminUserTableRenderer->render($tableParameterValues, $users);
+        return $adminUserTableRenderer->legacyRender($this, $tableParameterValues, $users);
     }
 
     /**

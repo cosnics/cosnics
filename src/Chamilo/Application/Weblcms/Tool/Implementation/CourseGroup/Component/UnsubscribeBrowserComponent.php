@@ -323,6 +323,6 @@ class UnsubscribeBrowserComponent extends Manager implements DelegateComponent
             $adminUserTableRenderer->determineOrderBy($tableParameterValues)
         );
 
-        return $adminUserTableRenderer->render($tableParameterValues, $users);
+        return $adminUserTableRenderer->legacyRender($this, $tableParameterValues, $users);
     }
 }

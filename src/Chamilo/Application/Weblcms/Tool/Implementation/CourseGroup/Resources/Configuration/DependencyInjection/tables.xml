@@ -19,5 +19,8 @@
                       id="Chamilo\Core\User\User"/>
         </service>
 
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\CourseGroupUserTableRenderer"/>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\CourseUsersTableRenderer"/>
+
     </services>
 </container>

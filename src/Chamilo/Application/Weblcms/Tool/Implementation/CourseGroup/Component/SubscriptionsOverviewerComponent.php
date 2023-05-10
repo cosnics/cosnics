@@ -6,8 +6,8 @@ use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Overview\CourseUser\CourseUsersTable;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Overview\GroupUser\CourseGroupUserTable;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\CourseGroupUserTableRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\CourseUsersTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -17,41 +17,40 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class SubscriptionsOverviewerComponent extends Manager implements TableSupport
+class SubscriptionsOverviewerComponent extends Manager
 {
     public const PLATFORM_GROUP_ROOT_ID = 0;
 
     public const TAB_COURSE_GROUPS = 2;
     public const TAB_USERS = 1;
 
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
-    private $current_tab;
+    private string $current_tab;
+
+    private string $table_course_group_id;
 
     /**
-     * Temporary variable for condition building
-     *
-     * @var int
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
-    private $table_course_group_id;
-
     public function run()
     {
         if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
@@ -59,15 +58,11 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
             throw new NotAllowedException();
         }
 
-        $this->current_tab = self::TAB_COURSE_GROUPS;
-        if (Request::get(self::PARAM_TAB))
-        {
-            $this->current_tab = Request::get(self::PARAM_TAB);
-        }
+        $this->current_tab = $this->getRequest()->query->get(self::PARAM_TAB, (string) self::TAB_COURSE_GROUPS);
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
 
         $course_settings_controller = CourseSettingsController::getInstance();
 
@@ -78,18 +73,12 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
             $html[] = $this->display_introduction_text($this->get_introduction_text());
         }
 
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
-        $html[] = $this->buttonToolbarRenderer->render();
+        $html[] = $this->getButtonToolbarRenderer()->render();
         $html[] = $this->get_tabs();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
-
-    // **************************************************************************
-    // TABS FUNCTIONS
-    // **************************************************************************
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
@@ -104,7 +93,11 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         return parent::getAdditionalParameters($additionalParameters);
     }
 
-    public function getButtonToolbarRenderer()
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
@@ -117,14 +110,13 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
                 self::ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW;
             $param_export_subscriptions_overview[self::PARAM_TAB] = $this->current_tab;
 
-            // $show_all_url = $this->get_url();
-
             if ($this->is_allowed(WeblcmsRights::VIEW_RIGHT))
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Export', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('download'),
-                        $this->get_url($param_export_subscriptions_overview), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        $this->getTranslator()->trans('Export', [], StringUtilities::LIBRARIES),
+                        new FontAwesomeGlyph('download'), $this->get_url($param_export_subscriptions_overview),
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
             }
@@ -137,12 +129,30 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
+    public function getCourseGroupUserTableRenderer(): CourseGroupUserTableRenderer
+    {
+        return $this->getService(CourseGroupUserTableRenderer::class);
+    }
+
+    public function getCourseUsersTableRenderer(): CourseUsersTableRenderer
+    {
+        return $this->getService(CourseUsersTableRenderer::class);
+    }
+
     public function getLinkTabsRenderer(): LinkTabsRenderer
     {
         return $this->getService(LinkTabsRenderer::class);
     }
 
-    public function get_condition()
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function get_condition(): ?AndCondition
     {
         $conditions = [];
         $search_condition = $this->get_search_condition();
@@ -160,11 +170,13 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
     }
 
     /**
-     * Handles the content for the course groups tab
-     *
-     * @return string
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
-    private function get_course_groups_tab()
+    private function get_course_groups_tab(): string
     {
         $courseGroupRoot = DataManager::retrieve_course_group_root($this->get_course_id());
         $course_groups = $courseGroupRoot->get_children();
@@ -174,16 +186,15 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
 
     public function get_group()
     {
-        $group = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
-        if (!$group)
-        {
-            return self::PLATFORM_GROUP_ROOT_ID;
-        }
-
-        return $group;
+        return $this->getRequest()->query->get(
+            \Chamilo\Application\Weblcms\Manager::PARAM_GROUP, self::PLATFORM_GROUP_ROOT_ID
+        );
     }
 
-    public function get_search_condition()
+    /**
+     * @throws \QuickformException
+     */
+    public function get_search_condition(): ?OrCondition
     {
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
@@ -216,49 +227,41 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         return null;
     }
 
-    /**
-     * Returns the condition
-     *
-     * @param string $table_class_name
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_table_condition($table_class_name)
-    {
-        return $this->get_search_condition();
-    }
-
-    public function get_table_course_group_id()
+    public function get_table_course_group_id(): string
     {
         return $this->table_course_group_id;
     }
 
     /**
-     * Creates the tab structure.
-     *
-     * @return String HTML of the tab(s)
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
-    private function get_tabs()
+    private function get_tabs(): string
     {
+        $translator = $this->getTranslator();
         $tabs = new TabsCollection();
 
         // all tab
-        $link = $this->get_url(array(self::PARAM_TAB => self::TAB_USERS));
-        $tab_name = Translation::get('User');
+        $link = $this->get_url([self::PARAM_TAB => self::TAB_USERS]);
+        $tab_name = $translator->trans('User', [], Manager::CONTEXT);
         $tabs->add(
             new LinkTab(
-                self::TAB_USERS, $tab_name, new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas'), $link,
+                (string) self::TAB_USERS, $tab_name, new FontAwesomeGlyph('users', ['fa-lg'], null, 'fas'), $link,
                 $this->current_tab == self::TAB_USERS
             )
         );
 
         // users tab
-        $link = $this->get_url(array(self::PARAM_TAB => self::TAB_COURSE_GROUPS));
-        $tab_name = Translation::get('CourseGroup');
+        $link = $this->get_url([self::PARAM_TAB => self::TAB_COURSE_GROUPS]);
+        $tab_name = $translator->trans('CourseGroup', [], Manager::CONTEXT);
         $tabs->add(
             new LinkTab(
-                self::TAB_COURSE_GROUPS, $tab_name, new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $link,
-                $this->current_tab == self::TAB_COURSE_GROUPS
+                (string) self::TAB_COURSE_GROUPS, $tab_name, new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas'),
+                $link, $this->current_tab == self::TAB_COURSE_GROUPS
             )
         );
 
@@ -266,38 +269,62 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
     }
 
     /**
-     * Creates the content of the selected tab.
-     *
-     * @return String HTML of the content
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
-    private function get_tabs_content()
+    private function get_tabs_content(): string
     {
         switch ($this->current_tab)
         {
             case self::TAB_USERS :
                 return $this->get_users_tab();
-                break;
             case self::TAB_COURSE_GROUPS :
                 return $this->get_course_groups_tab();
-                break;
+            default:
+                return '';
         }
     }
 
-    private function get_users_tab()
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \TableException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \Doctrine\DBAL\Exception
+     */
+    private function get_users_tab(): string
     {
-        $table = new CourseUsersTable($this);
+        $totalNumberOfItems = \Chamilo\Application\Weblcms\Course\Storage\DataManager::count_all_course_users(
+            $this->get_course_id(), $this->get_search_condition()
+        );
+        $courseUsersTableRenderer = $this->getCourseUsersTableRenderer();
 
-        return $table->as_html();
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $courseUsersTableRenderer->getParameterNames(), $courseUsersTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $users = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_course_users(
+            $this->get_course_id(), $this->get_search_condition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $courseUsersTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $courseUsersTableRenderer->legacyRender($this, $tableParameterValues, $users);
     }
 
     /**
-     * Handles a resultset of course groups and their children
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $course_groups
-     *
-     * @return string
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
-    protected function handle_course_groups(ArrayCollection $course_groups)
+    protected function handle_course_groups(ArrayCollection $course_groups): string
     {
         $html = [];
 
@@ -305,13 +332,38 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         {
             $this->table_course_group_id = $course_group->get_id();
 
-            $table = new CourseGroupUserTable($this);
-            $html[] = '<h4>' . $course_group->get_name() . '</h4>' . $table->as_html();
+            $html[] = '<h4>' . $course_group->get_name() . '</h4>' . $this->renderCourseGroupUserTable();
 
             $children = $course_group->get_children();
             $html[] = $this->handle_course_groups($children);
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    protected function renderCourseGroupUserTable(): string
+    {
+        $totalNumberOfItems =
+            DataManager::count_course_group_users($this->get_table_course_group_id(), $this->get_search_condition());
+        $courseGroupUserTableRenderer = $this->getCourseGroupUserTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $courseGroupUserTableRenderer->getParameterNames(),
+            $courseGroupUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $users = DataManager::retrieve_course_group_users_with_subscription_time(
+            $this->get_table_course_group_id(), $this->get_search_condition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $courseGroupUserTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $courseGroupUserTableRenderer->render($tableParameterValues, $users);
     }
 }
