@@ -275,7 +275,7 @@ abstract class Application
     }
 
     /**
-     * @deprecated User get_application() now
+     * @deprecated Use get_application() now
      */
     public function get_parent(): ?Application
     {

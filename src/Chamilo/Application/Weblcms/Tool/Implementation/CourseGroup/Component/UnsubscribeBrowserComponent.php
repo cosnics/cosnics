@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Subscribed\SubscribedUserTable;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -16,64 +16,66 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package application.lib.weblcms.tool.course_group.component
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UnsubscribeBrowserComponent extends Manager implements TableSupport, DelegateComponent
+class UnsubscribeBrowserComponent extends Manager implements DelegateComponent
 {
 
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
+
+    private CourseGroup $course_group;
+
     /**
-     *
-     * @var ButtonToolBarRenderer
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
-    private $buttonToolbarRenderer;
-
-    private $course_group;
-
     public function run()
     {
-        $course_group_id = Request::get(self::PARAM_COURSE_GROUP);
+        $translator = $this->getTranslator();
+        $course_group_id = $this->getRequest()->query->get(self::PARAM_COURSE_GROUP);
         $this->set_parameter(self::PARAM_COURSE_GROUP, $course_group_id);
 
-        /** @var CourseGroup $course_group */
         $course_group = DataManager::retrieve_by_id(CourseGroup::class, $course_group_id);
+
         if (!$course_group)
         {
-            throw new ObjectNotExistException(Translation::get('CourseGroup'), $course_group_id);
+            throw new ObjectNotExistException(
+                $translator->trans('CourseGroup', [], Manager::CONTEXT), $course_group_id
+            );
         }
 
         $this->course_group = $course_group;
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 $this->get_url(),
-                Translation::get('UnsubscribeBrowserComponent', array('GROUPNAME' => $course_group->get_name()))
+                $translator->trans('UnsubscribeBrowserComponent', ['GROUPNAME' => $course_group->get_name()],
+                    Manager::CONTEXT)
             )
         );
 
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = '<div style="clear: both;">&nbsp;</div>';
 
-        $users = $this->getRequest()->get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
+        $users = $this->getRequest()->getFromPostOrUrl(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
 
         if ($users)
         {
             if (!is_array($users))
             {
-                $users = array($users);
+                $users = [$users];
             }
 
             foreach ($users as $user)
@@ -85,23 +87,23 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
                 $this->getCourseGroupDecoratorsManager()->unsubscribeUser($course_group, $userObject);
             }
 
-            $message = Translation::get(count($users) > 1 ? 'UsersUnsubscribed' : 'UserUnsubscribed');
+            $message =
+                $translator->trans(count($users) > 1 ? 'UsersUnsubscribed' : 'UserUnsubscribed', [], Manager::CONTEXT);
             $this->redirectWithMessage(
-                $message, false, array(
+                $message, false, [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE,
                     self::PARAM_COURSE_GROUP => $course_group_id
-                )
+                ]
             );
         }
 
-        $table = new SubscribedUserTable($this);
-        $html[] = $this->buttonToolbarRenderer->render();
+        $html[] = $this->getButtonToolbarRenderer()->render();
 
         // Details
 
         $html[] = '<div class="panel panel-default">';
 
-        $glyph = new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas');
+        $glyph = new FontAwesomeGlyph('info-circle', ['fa-lg'], null, 'fas');
 
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">';
@@ -113,21 +115,27 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         $html[] = $course_group->get_description();
         $html[] = '<div class="clearfix"></div>';
 
-        $html[] = '<b>' . Translation::get('NumberOfMembers') . ':</b> ' . $course_group->count_members();
-        $html[] =
-            '<br /><b>' . Translation::get('MaximumMembers') . ':</b> ' . $course_group->get_max_number_of_members();
-        $html[] = '<br /><b>' . Translation::get('SelfRegistrationAllowed') . ':</b> ' .
-            ($course_group->is_self_registration_allowed() ? Translation::get(
-                'ConfirmYes', null, StringUtilities::LIBRARIES
-            ) : Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES));
-        $html[] = '<br /><b>' . Translation::get('SelfUnRegistrationAllowed') . ':</b> ' .
-            ($course_group->is_self_unregistration_allowed() ? Translation::get(
-                'ConfirmYes', null, StringUtilities::LIBRARIES
-            ) : Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES));
-        $html[] = '<br /><b>' . Translation::get('RandomlySubscribed') . ':</b> ' .
-            ($course_group->is_random_registration_done() ? Translation::get(
-                'ConfirmYes', null, StringUtilities::LIBRARIES
-            ) : Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES));
+        $html[] = '<b>' . $translator->trans('NumberOfMembers', [], Manager::CONTEXT) . ':</b> ';
+        $html[] = $course_group->count_members();
+        $html[] = '<br />';
+
+        $html[] = '<b>' . $translator->trans('MaximumMembers', [], Manager::CONTEXT) . ':</b> ';
+        $html[] = $course_group->get_max_number_of_members();
+        $html[] = '<br />';
+
+        $html[] = '<b>' . $translator->trans('SelfRegistrationAllowed', [], Manager::CONTEXT) . ':</b> ';
+        $html[] = $translator->trans($course_group->is_self_registration_allowed() ? 'ConfirmYes' : 'ConfirmNo', [],
+            StringUtilities::LIBRARIES);
+        $html[] = '<br />';
+
+        $html[] = '<b>' . $translator->trans('SelfUnRegistrationAllowed', [], Manager::CONTEXT) . ':</b> ';
+        $html[] = $translator->trans($course_group->is_self_unregistration_allowed() ? 'ConfirmYes' : 'ConfirmNo', [],
+            StringUtilities::LIBRARIES);
+        $html[] = '<br />';
+
+        $html[] = '<b>' . $translator->trans('RandomlySubscribed', [], Manager::CONTEXT) . ':</b> ';
+        $html[] = $translator->trans($course_group->is_random_registration_done() ? 'ConfirmYes' : 'ConfirmNo', [],
+            StringUtilities::LIBRARIES);
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -136,31 +144,33 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
         $html[] = '<div class="panel panel-default">';
 
-        $glyph = new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas');
+        $glyph = new FontAwesomeGlyph('users', ['fa-lg'], null, 'fas');
 
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">';
-        $html[] = $glyph->render() . ' ' . Translation::get('Users', null, \Chamilo\Core\User\Manager::context());
+        $html[] = $glyph->render() . ' ' . $translator->trans('Users', [], \Chamilo\Core\User\Manager::CONTEXT);
         $html[] = '</h3>';
         $html[] = '</div>';
 
         $html[] = '<div class="panel-body">';
-        $html[] = $table->as_html();
+        $html[] = $this->renderTable();
         $html[] = '</div>';
 
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function getButtonToolbarRenderer()
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
-        $course_group = $this->course_group;
         if (!isset($this->buttonToolbarRenderer))
         {
+            $course_group = $this->course_group;
+            $translator = $this->getTranslator();
+
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
@@ -169,17 +179,14 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ShowAll', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
+                    $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
                     $this->get_url($parameters), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
-            $user = $this->get_parent()->get_user();
+            $user = $this->get_application()->get_user();
 
-            $parameters = [];
-            $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
-
-            if (!$this->get_parent()->is_teacher())
+            if (!$this->get_application()->is_teacher())
             {
                 if ($course_group->is_self_registration_allowed() && !$course_group->is_member($user))
                 {
@@ -190,8 +197,8 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
                     $commonActions->addButton(
                         new Button(
-                            Translation::get('SubscribeToGroup'), new FontAwesomeGlyph('plus-circle'), $subscribe_url,
-                            ToolbarItem::DISPLAY_ICON_AND_LABEL
+                            $translator->trans('SubscribeToGroup', [], Manager::CONTEXT),
+                            new FontAwesomeGlyph('plus-circle'), $subscribe_url, ToolbarItem::DISPLAY_ICON_AND_LABEL
                         )
                     );
                 }
@@ -205,8 +212,8 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
                     $commonActions->addButton(
                         new Button(
-                            Translation::get('UnSubscribeFromGroup'), new FontAwesomeGlyph('minus-square'),
-                            $unsubscribe_url, ToolbarItem::DISPLAY_ICON_AND_LABEL
+                            $translator->trans('UnSubscribeFromGroup', [], Manager::CONTEXT),
+                            new FontAwesomeGlyph('minus-square'), $unsubscribe_url, ToolbarItem::DISPLAY_ICON_AND_LABEL
                         )
                     );
                 }
@@ -220,8 +227,8 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('SubscribeUsers'), new FontAwesomeGlyph('plus-circle'), $subscribe_url,
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        $translator->trans('SubscribeUsers', [], Manager::CONTEXT), new FontAwesomeGlyph('plus-circle'),
+                        $subscribe_url, ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
 
@@ -232,7 +239,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
                 $parameters_export_subscriptions_overview[self::PARAM_COURSE_GROUP] = $course_group->get_id();
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Export', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('download'),
+                        $translator->trans('Export', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('download'),
                         $this->get_url($parameters_export_subscriptions_overview), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -247,14 +254,22 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         return $this->buttonToolbarRenderer;
     }
 
-    public function getCurrentCourseGroup()
+    public function getCurrentCourseGroup(): CourseGroup
     {
         return $this->course_group;
     }
 
-    public function get_condition()
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function getSubscribedUserCondition(): ?OrCondition
+    {
+        $query = $this->getButtonToolbarRenderer()->getSearchForm()->getQuery();
 
         if (isset($query) && $query != '')
         {
@@ -270,15 +285,44 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
             return new OrCondition($conditions);
         }
+
+        return null;
     }
 
-    public function get_course_group()
+    public function getSubscribedUserTableRenderer(): SubscribedUserTableRenderer
+    {
+        return $this->getService(SubscribedUserTableRenderer::class);
+    }
+
+    public function get_course_group(): CourseGroup
     {
         return $this->course_group;
     }
 
-    public function get_table_condition($table_class_name)
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
+    protected function renderTable(): string
     {
-        return $this->get_condition();
+        $totalNumberOfItems = DataManager::count_course_group_users(
+            $this->getCurrentCourseGroup()->get_id(), $this->getSubscribedUserCondition()
+        );
+        $adminUserTableRenderer = $this->getSubscribedUserTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $adminUserTableRenderer->getParameterNames(), $adminUserTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $users = DataManager::retrieve_course_group_users_with_subscription_time(
+            $this->getCurrentCourseGroup()->get_id(), $this->getSubscribedUserCondition(),
+            $tableParameterValues->getOffset(), $tableParameterValues->getNumberOfItemsPerPage(),
+            $adminUserTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $adminUserTableRenderer->render($tableParameterValues, $users);
     }
 }

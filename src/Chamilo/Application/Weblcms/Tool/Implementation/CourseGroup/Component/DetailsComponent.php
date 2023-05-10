@@ -5,9 +5,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Subscribed\SubscribedUserTable;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -15,26 +15,26 @@ use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * @package application.lib.weblcms.tool.course_group.component
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DetailsComponent extends TabComponent implements TableSupport
+class DetailsComponent extends TabComponent
 {
 
     /**
-     * Builds the group button toolbar for the management of a single group
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    protected function getGroupButtonToolbarRenderer()
+    protected function getGroupButtonToolbarRenderer(): ButtonToolBarRenderer
     {
-        $translator = Translation::getInstance();
+        $translator = $this->getTranslator();
 
         $courseGroup = $this->getCurrentCourseGroup();
 
@@ -45,7 +45,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         {
             $buttonToolbar->addItem(
                 new Button(
-                    $translator->getTranslation('SubscribeToGroup', [], Manager::context()), null,
+                    $translator->trans('SubscribeToGroup', [], Manager::CONTEXT), null,
                     $this->get_url([self::PARAM_ACTION => self::ACTION_USER_SELF_SUBSCRIBE]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, null, ['btn-success']
                 )
@@ -56,7 +56,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         {
             $buttonToolbar->addItem(
                 new Button(
-                    $translator->getTranslation('UnSubscribeFromGroup', [], Manager::context()), null,
+                    $translator->trans('UnSubscribeFromGroup', [], Manager::CONTEXT), null,
                     $this->get_url([self::PARAM_ACTION => self::ACTION_USER_SELF_UNSUBSCRIBE]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, null, ['btn-danger']
                 )
@@ -67,8 +67,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         {
             $managementButtonGroup->addButton(
                 new Button(
-                    $translator->getTranslation('Export', null, StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('download'),
+                    $translator->trans('Export', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('download'),
                     $this->get_url([self::PARAM_ACTION => self::ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
@@ -76,11 +75,10 @@ class DetailsComponent extends TabComponent implements TableSupport
 
             $managementButtonGroup->addButton(
                 new Button(
-                    $translator->getTranslation('Delete', [], StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('times'),
+                    $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_url([self::PARAM_ACTION => self::ACTION_DELETE_COURSE_GROUP]),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL, $translator->getTranslation(
-                    'DeleteConfirm', ['NAME' => $courseGroup->get_name()], Manager::context()
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL, $translator->trans(
+                    'DeleteConfirm', ['NAME' => $courseGroup->get_name()], Manager::CONTEXT
                 )
                 )
             );
@@ -91,7 +89,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         if ($courseGroup->is_member($this->getUser()) || $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $navigateToOptions = new DropdownButton(
-                $translator->getTranslation('NavigateTo', [], Manager::context())
+                $translator->trans('NavigateTo', [], Manager::CONTEXT)
             );
 
             if ($navigateToOptions->hasButtons())
@@ -103,16 +101,18 @@ class DetailsComponent extends TabComponent implements TableSupport
         return new ButtonToolBarRenderer($buttonToolbar);
     }
 
-    /**
-     * Returns the table condition
-     *
-     * @param string $table_class_name
-     *
-     * @return Condition
-     */
-    public function get_table_condition($table_class_name)
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \QuickformException
+     */
+    public function getSubscribedUserCondition(): ?OrCondition
+    {
+        $query = $this->getButtonToolbarRenderer()->getSearchForm()->getQuery();
 
         if (isset($query) && $query != '')
         {
@@ -131,14 +131,14 @@ class DetailsComponent extends TabComponent implements TableSupport
         return null;
     }
 
-    /**
-     * Handles the unsubscribe action
-     *
-     * @param CourseGroup $course_group
-     */
-    protected function handleUnsubscribeAction($course_group)
+    public function getSubscribedUserTableRenderer(): SubscribedUserTableRenderer
     {
-        $users = $this->getRequest()->get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
+        return $this->getService(SubscribedUserTableRenderer::class);
+    }
+
+    protected function handleUnsubscribeAction(CourseGroup $courseGroup)
+    {
+        $users = $this->getRequest()->getFromPostOrUrl(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
 
         if ($users)
         {
@@ -149,32 +149,34 @@ class DetailsComponent extends TabComponent implements TableSupport
 
             foreach ($users as $user)
             {
-                $course_group->unsubscribe_users($user);
+                $courseGroup->unsubscribe_users($user);
 
                 $userObject = new User();
                 $userObject->setId($user);
-                $this->getCourseGroupDecoratorsManager()->unsubscribeUser($course_group, $userObject);
+                $this->getCourseGroupDecoratorsManager()->unsubscribeUser($courseGroup, $userObject);
             }
 
-            $message = Translation::get(count($users) > 1 ? 'UsersUnsubscribed' : 'UserUnsubscribed');
+            $message = $this->getTranslator()->trans(count($users) > 1 ? 'UsersUnsubscribed' : 'UserUnsubscribed', [],
+                Manager::CONTEXT);
             $this->redirectWithMessage(
                 $message, false, [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_GROUP_DETAILS,
-                    self::PARAM_COURSE_GROUP => $course_group->get_id()
+                    self::PARAM_COURSE_GROUP => $courseGroup->get_id()
                 ]
             );
         }
     }
 
     /**
-     * Renders the details of the course group
-     *
-     * @param CourseGroup $currentCourseGroup
-     *
-     * @return array
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \QuickformException
      */
-    protected function renderDetails($currentCourseGroup)
+    protected function renderDetails(CourseGroup $currentCourseGroup): string
     {
+        $translator = $this->getTranslator();
+
         $html = [];
 
         $html[] = '<div class="container-fluid">';
@@ -188,21 +190,30 @@ class DetailsComponent extends TabComponent implements TableSupport
         $html[] = '<div class="row">';
         $html[] = '<div class="col-sm-12">';
 
-        $html[] = '<b>' . Translation::get('NumberOfMembers') . ':</b> ' . $currentCourseGroup->count_members();
-        $html[] = '<br /><b>' . Translation::get('MaximumMembers') . ':</b> ' .
-            $currentCourseGroup->get_max_number_of_members();
-        $html[] = '<br /><b>' . Translation::get('SelfRegistrationAllowed') . ':</b> ' .
-            ($currentCourseGroup->is_self_registration_allowed() ? Translation::get(
-                'ConfirmYes', null, StringUtilities::LIBRARIES
-            ) : Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES));
-        $html[] = '<br /><b>' . Translation::get('SelfUnRegistrationAllowed') . ':</b> ' .
-            ($currentCourseGroup->is_self_unregistration_allowed() ? Translation::get(
-                'ConfirmYes', null, StringUtilities::LIBRARIES
-            ) : Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES));
-        $html[] = '<br /><b>' . Translation::get('RandomlySubscribed') . ':</b> ' .
-            ($currentCourseGroup->is_random_registration_done() ? Translation::get(
-                'ConfirmYes', null, StringUtilities::LIBRARIES
-            ) : Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES));
+        $html[] = '<b>' . $translator->trans('NumberOfMembers', [], Manager::CONTEXT) . ':</b> ';
+        $html[] = $currentCourseGroup->count_members();
+        $html[] = '<br />';
+
+        $html[] = '<b>' . $translator->trans('MaximumMembers', [], Manager::CONTEXT) . ':</b> ';
+        $html[] = $currentCourseGroup->get_max_number_of_members();
+        $html[] = '<br />';
+
+        $html[] = '<b>' . $translator->trans('SelfRegistrationAllowed', [], Manager::CONTEXT) . ':</b> ';
+        $html[] =
+            $translator->trans($currentCourseGroup->is_self_registration_allowed() ? 'ConfirmYes' : 'ConfirmNo', [],
+                StringUtilities::LIBRARIES);
+        $html[] = '<br />';
+
+        $html[] = '<b>' . $translator->trans('SelfUnRegistrationAllowed', [], Manager::CONTEXT) . ':</b> ';
+        $html[] =
+            $translator->trans($currentCourseGroup->is_self_unregistration_allowed() ? 'ConfirmYes' : 'ConfirmNo', [],
+                StringUtilities::LIBRARIES);
+        $html[] = '<br />';
+
+        $html[] = '<b>' . $translator->trans('RandomlySubscribed', [], Manager::CONTEXT) . ':</b> ';
+        $html[] =
+            $translator->trans($currentCourseGroup->is_random_registration_done() ? 'ConfirmYes' : 'ConfirmNo', [],
+                StringUtilities::LIBRARIES);
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -221,13 +232,12 @@ class DetailsComponent extends TabComponent implements TableSupport
     }
 
     /**
-     * Renders the integration actions for a given
-     *
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
-     *
-     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \QuickformException
      */
-    protected function renderIntegrations(CourseGroup $courseGroup)
+    protected function renderIntegrations(CourseGroup $courseGroup): string
     {
         $html = [];
 
@@ -241,8 +251,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         if ($integrationLinksButtonToolbar->hasItems())
         {
             $html[] = '<div class="tab-content-header">';
-            $html[] =
-                '<h5>' . Translation::getInstance()->getTranslation('Integrations', null, Manager::context()) . '</h5>';
+            $html[] = '<h5>' . $this->getTranslator()->trans('Integrations', [], Manager::CONTEXT) . '</h5>';
             $html[] = '</div>';
             $html[] = $renderer->render();
         }
@@ -251,10 +260,12 @@ class DetailsComponent extends TabComponent implements TableSupport
     }
 
     /**
-     * Renders the content for the tab
-     *
-     * @return string
-     * @throws ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
     protected function renderTabContent(): string
     {
@@ -276,26 +287,56 @@ class DetailsComponent extends TabComponent implements TableSupport
     }
 
     /**
-     * Renders the users table
-     *
-     * @return string
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
-    protected function renderUsersTable()
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems = DataManager::count_course_group_users(
+            $this->getCurrentCourseGroup()->get_id(), $this->getSubscribedUserCondition()
+        );
+        $adminUserTableRenderer = $this->getSubscribedUserTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $adminUserTableRenderer->getParameterNames(), $adminUserTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $users = DataManager::retrieve_course_group_users_with_subscription_time(
+            $this->getCurrentCourseGroup()->get_id(), $this->getSubscribedUserCondition(),
+            $tableParameterValues->getOffset(), $tableParameterValues->getNumberOfItemsPerPage(),
+            $adminUserTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $adminUserTableRenderer->render($tableParameterValues, $users);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
+    protected function renderUsersTable(): string
     {
         $courseGroup = $this->getCurrentCourseGroup();
+
         if (!$courseGroup->is_member($this->getUser()) && !$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
-            return null;
+            return '';
         }
-
-        $table = new SubscribedUserTable($this);
 
         $html = [];
 
         $html[] = '<div class="tab-content-header">';
-        $html[] = '<h5>' . Translation::getInstance()->getTranslation('Users', null, Manager::context()) . '</h5>';
+        $html[] = '<h5>' . $this->getTranslator()->trans('Users', [], Manager::CONTEXT) . '</h5>';
         $html[] = '</div>';
-        $html[] = $table->as_html();
+        $html[] = $this->renderTable();
 
         return implode(PHP_EOL, $html);
     }

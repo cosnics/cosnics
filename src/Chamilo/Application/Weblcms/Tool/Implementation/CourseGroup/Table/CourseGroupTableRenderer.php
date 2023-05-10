@@ -5,7 +5,6 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\CourseGroup\CourseGroupTableColumnModel;
 use Chamilo\Application\Weblcms\Tool\Manager as ToolManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -140,7 +139,7 @@ class CourseGroupTableRenderer extends DataClassListTableRenderer implements Tab
                 }
             case CourseGroup::PROPERTY_DESCRIPTION :
                 return strip_tags($courseGroup->get_description());
-            case CourseGroupTableColumnModel::COLUMN_NUMBER_OF_MEMBERS :
+            case self::PROPERTY_NUMBER_OF_MEMBERS :
                 return (string) $courseGroup->count_members();
         }
 
