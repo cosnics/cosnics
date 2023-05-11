@@ -95,6 +95,11 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
         $this->assignmentPublication = $assignmentPublication;
     }
 
+    public function getContentObjectPublication(): ContentObjectPublication
+    {
+        return $this->contentObjectPublication;
+    }
+
     /**
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject | Assignment
      */
