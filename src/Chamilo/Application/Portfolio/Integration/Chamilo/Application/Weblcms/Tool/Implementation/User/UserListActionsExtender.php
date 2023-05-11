@@ -8,7 +8,6 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\TableCellRenderer;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -19,18 +18,11 @@ use Chamilo\Libraries\Translation\Translation;
 class UserListActionsExtender implements UserListActionsExtenderInterface
 {
 
-    /**
-     * Adds actions to the given toolbar for the user list table
-     *
-     * @param Toolbar $toolbar
-     * @param TableCellRenderer $tableCellRenderer
-     * @param int $currentUserId
-     */
-    public function getActions(Toolbar $toolbar, TableCellRenderer $tableCellRenderer, $currentUserId)
+    public function getActions(Toolbar $toolbar, string $currentUserId)
     {
         $parameters = [];
 
-        $parameters[Application::PARAM_CONTEXT] = Manager::context();
+        $parameters[Application::PARAM_CONTEXT] = Manager::CONTEXT;
         $parameters[Application::PARAM_ACTION] = Manager::ACTION_HOME;
         $parameters[Manager::PARAM_USER_ID] = $currentUserId;
 

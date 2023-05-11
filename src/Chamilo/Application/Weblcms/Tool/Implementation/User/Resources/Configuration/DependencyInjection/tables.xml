@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
+
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\AllSubscribedUserTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\DirectSubscribedPlatformGroupTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\GroupUsersTableRenderer"/>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\PlatformGroupRelUserTableRenderer"/>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\SubscribedUserTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\SubSubscribedPlatformGroupTableRenderer"/>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\UnsubscribedGroupTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\UnsubscribedUserTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
+    </services>
+</container>

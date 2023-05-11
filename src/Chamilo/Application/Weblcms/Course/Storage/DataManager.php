@@ -1357,8 +1357,6 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param int $offset
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
-     *
-     * @return bool
      */
     public static function retrieve_groups_directly_subscribed_to_course(
         $condition = null, $offset = null, $count = null, $order_property = null

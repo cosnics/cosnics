@@ -1,34 +1,38 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
-use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Unsubscribed\UnsubscribedUserTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\UnsubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package application.lib.weblcms.tool.user.component
  */
-class SubscribeBrowserComponent extends Manager implements TableSupport
+class SubscribeBrowserComponent extends Manager
 {
 
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
     public function run()
     {
         if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
@@ -36,17 +40,16 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
             throw new NotAllowedException();
         }
 
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $this->set_parameter(
-            ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $this->buttonToolbarRenderer->getSearchForm()->getQuery()
+            ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $this->getButtonToolbarRenderer()->getSearchForm()->getQuery()
         );
 
         $html = [];
 
-        $html[] = $this->render_header();
-        $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = $this->get_user_subscribe_html();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderHeader();
+        $html[] = $this->getButtonToolbarRenderer()->render();
+        $html[] = $this->renderTable();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
@@ -56,7 +59,15 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
         $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 
-    public function getButtonToolbarRenderer()
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_TAB;
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
@@ -68,15 +79,21 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    public function getAdditionalParameters(array $additionalParameters = []): array
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        $additionalParameters[] = self::PARAM_TAB;
-        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
-
-        return parent::getAdditionalParameters($additionalParameters);
+        return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
-    public function get_condition()
+    public function getUnsubscribedUserTableRenderer(): UnsubscribedUserTableRenderer
+    {
+        return $this->getService(UnsubscribedUserTableRenderer::class);
+    }
+
+    /**
+     * @throws \QuickformException
+     * @throws \Exception
+     */
+    public function get_condition(): AndCondition
     {
         $conditions = [];
 
@@ -88,30 +105,42 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
         if (isset($query) && $query != '')
         {
             $conditions[] = $this->buttonToolbarRenderer->getConditions(
-                array(
+                [
                     new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE),
                     new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME)
-                )
+                ]
             );
         }
 
         return new AndCondition($conditions);
     }
 
-    public function get_table_condition($object_table_class_name)
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Exception
+     */
+    protected function renderTable(): string
     {
-        return $this->get_condition();
-    }
+        $totalNumberOfItems =
+            DataManager::count_users_not_subscribed_to_course($this->get_course_id(), $this->get_condition());
+        $unsubscribedUserTableRenderer = $this->getUnsubscribedUserTableRenderer();
 
-    public function get_user_subscribe_html()
-    {
-        $table = new UnsubscribedUserTable($this);
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $unsubscribedUserTableRenderer->getParameterNames(),
+            $unsubscribedUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
 
-        $html = [];
-        $html[] = $table->as_html();
+        $users = DataManager::retrieve_users_not_subscribed_to_course(
+            $this->get_course_id(), $this->get_condition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $unsubscribedUserTableRenderer->determineOrderBy($tableParameterValues)
+        );
 
-        return implode(PHP_EOL, $html);
+        return $unsubscribedUserTableRenderer->legacyRender($this, $tableParameterValues, $users);
     }
 }

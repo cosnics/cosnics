@@ -1,15 +1,16 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
-use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\AllSubscribed\AllSubscribedUserTable;
-use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\DirectSubscribedGroup\DirectSubscribedPlatformGroupTable;
-use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Group\PlatformGroupRelUserTable;
-use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Subscribed\SubscribedUserTable;
-use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\SubSubscribedGroup\SubSubscribedPlatformGroupTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\SubscribedPlatformGroupMenuRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\AllSubscribedUserTableRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\DirectSubscribedPlatformGroupTableRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\PlatformGroupRelUserTableRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\SubscribedUserTableRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Table\SubSubscribedPlatformGroupTableRenderer;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -18,29 +19,29 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\DataClass\NestedSet;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @author Stijn Van Hoecke
- * @package application.lib.weblcms.tool.user.component
+ * @package Chamilo\Application\Weblcms\Tool\Implementation\User\Component
+ * @author  Stijn Van Hoecke
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UnsubscribeBrowserComponent extends Manager implements TableSupport
+class UnsubscribeBrowserComponent extends Manager
 {
     public const PLATFORM_GROUP_ROOT_ID = 0;
 
@@ -49,27 +50,24 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
     public const TAB_PLATFORM_GROUPS_USERS = 3;
     public const TAB_USERS = 2;
 
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
-    private $current_tab;
+    private string $current_tab;
 
     /**
-     * @var LinkTabsRenderer
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
-    private $tabs;
-
     public function run()
     {
         // default all tab, unless specified
-        $this->current_tab = self::TAB_ALL;
-        if (Request::get(self::PARAM_TAB))
-        {
-            $this->current_tab = Request::get(self::PARAM_TAB);
-        }
+        $this->current_tab = $this->getRequest()->query->get(self::PARAM_TAB, self::TAB_ALL);
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
@@ -79,27 +77,19 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
 
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $this->get_tabs();
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
-
-    // **************************************************************************
-    // TABS FUNCTIONS
-    // **************************************************************************
 
     public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_TAB;
 
-        $current_tab = self::TAB_ALL;
-        if (Request::get(self::PARAM_TAB))
-        {
-            $current_tab = Request::get(self::PARAM_TAB);
-        }
+        $current_tab = $this->getRequest()->query->get(self::PARAM_TAB, self::TAB_ALL);
 
         if ($current_tab != self::TAB_ALL && $current_tab != self::TAB_USERS)
         {
@@ -109,14 +99,24 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         return parent::getAdditionalParameters($additionalParameters);
     }
 
-    public function getButtonToolbarRenderer()
+    public function getAllSubscribedUserTableRenderer(): AllSubscribedUserTableRenderer
+    {
+        return $this->getService(AllSubscribedUserTableRenderer::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
         {
-
             $parameters = [];
 
-            $group_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
+            $translator = $this->getTranslator();
+
+            $group_id = $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
             if (isset($group_id))
             {
                 $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_GROUP] = $group_id;
@@ -130,16 +130,16 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('SubscribeUsers'), new FontAwesomeGlyph('user'),
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER)),
+                        $translator->trans('SubscribeUsers', [], Manager::CONTEXT), new FontAwesomeGlyph('user'),
+                        $this->get_url([self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER]),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('SubscribeGroups'), new FontAwesomeGlyph('users'),
-                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS)),
+                        $translator->trans('SubscribeGroups', [], Manager::CONTEXT), new FontAwesomeGlyph('users'),
+                        $this->get_url([self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS]),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -151,13 +151,11 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
 
                 $toolActions->addButton(
                     new Button(
-                        Translation::get('ExportUserList'), new FontAwesomeGlyph('download'),
+                        $translator->trans('ExportUserList', [], Manager::CONTEXT), new FontAwesomeGlyph('download'),
                         $this->get_url($param_export_subscriptions_overview), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
             }
-
-            $show_all_url = $this->get_url();
 
             $buttonToolbar->addButtonGroup($commonActions);
             $buttonToolbar->addButtonGroup($toolActions);
@@ -168,19 +166,69 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
+    public function getDirectSubscribedPlatformGroupTableRenderer(): DirectSubscribedPlatformGroupTableRenderer
+    {
+        return $this->getService(DirectSubscribedPlatformGroupTableRenderer::class);
+    }
+
     public function getLinkTabsRenderer(): LinkTabsRenderer
     {
         return $this->getService(LinkTabsRenderer::class);
     }
 
-    private function get_all_users_tab()
+    public function getPlatformGroupRelUserTableRenderer(): PlatformGroupRelUserTableRenderer
     {
-        $table = new AllSubscribedUserTable($this);
-
-        return $table->as_html();
+        return $this->getService(PlatformGroupRelUserTableRenderer::class);
     }
 
-    public function get_condition()
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    protected function getSubSubscribedPlatformGroupTableRenderer(): SubSubscribedPlatformGroupTableRenderer
+    {
+        return $this->getService(SubSubscribedPlatformGroupTableRenderer::class);
+    }
+
+    protected function getSubscribedUserTableRenderer(): SubscribedUserTableRenderer
+    {
+        return $this->getService(SubscribedUserTableRenderer::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
+    private function get_all_users_tab(): string
+    {
+        $totalNumberOfItems = DataManager::count_all_course_users(
+            $this->get_course_id(), $this->get_condition()
+        );
+        $allSubscribedUserTableRenderer = $this->getAllSubscribedUserTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $allSubscribedUserTableRenderer->getParameterNames(),
+            $allSubscribedUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $users = DataManager::retrieve_all_course_users(
+            $this->get_course_id(), $this->get_condition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $allSubscribedUserTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $allSubscribedUserTableRenderer->legacyRender($this, $tableParameterValues, $users);
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function get_condition(): ?AndCondition
     {
         $conditions = [];
         $search_condition = $this->get_search_condition();
@@ -215,8 +263,10 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             else
             {
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable(Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP))
+                    new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
+                    new StaticConditionVariable(
+                        $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP)
+                    )
                 );
             }
         }
@@ -224,7 +274,9 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-                new StaticConditionVariable(Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP))
+                new StaticConditionVariable(
+                    $this->getRequest()->query->get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP)
+                )
             );
         }
         if ($conditions)
@@ -235,31 +287,45 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         return null;
     }
 
-    private function get_direct_users_tab()
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Exception
+     */
+    private function get_direct_users_tab(): string
     {
-        $table = new SubscribedUserTable($this);
+        $totalNumberOfItems = DataManager::count_users_directly_subscribed_to_course(
+            $this->get_condition()
+        );
+        $subscribedUserTableRenderer = $this->getSubscribedUserTableRenderer();
 
-        return $table->as_html();
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $subscribedUserTableRenderer->getParameterNames(),
+            $subscribedUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $users = DataManager::retrieve_users_directly_subscribed_to_course(
+            $this->get_condition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $subscribedUserTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $subscribedUserTableRenderer->legacyRender($this, $tableParameterValues, $users);
     }
-
-    // **************************************************************************
-    // PLATFORMGROUP TABS FUNCTIONS
-    // **************************************************************************
 
     public function get_group()
     {
-        $group = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
-        if (!$group)
-        {
-            return self::PLATFORM_GROUP_ROOT_ID;
-        }
-
-        return $group;
+        return $this->getRequest()->query->get(
+            \Chamilo\Application\Weblcms\Manager::PARAM_GROUP, self::PLATFORM_GROUP_ROOT_ID
+        );
     }
 
-    public function get_menu_tree()
+    public function get_menu_tree(): ?SubscribedPlatformGroupMenuRenderer
     {
         $root_ids = $this->get_subscribed_platformgroup_ids($this->get_course_id());
+
         if (count($root_ids) > 0)
         {
             return new SubscribedPlatformGroupMenuRenderer($this, $root_ids, true);
@@ -269,56 +335,55 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Creates the tab structure.
-     *
-     * @return String HTML of the tab(s)
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
      */
-    private function get_platformgroup_tabs()
+    private function get_platformgroup_tabs(): string
     {
         $html = [];
 
         $tabs = new TabsCollection();
+        $translator = $this->getTranslator();
 
         // no users tab if the root is selected
         if ($this->get_group() != self::PLATFORM_GROUP_ROOT_ID)
         {
             // users tab
-            $link = $this->get_url(array(self::PARAM_TAB => self::TAB_PLATFORM_GROUPS_USERS));
-            $tab_name = Translation::get('Users', null, StringUtilities::LIBRARIES);
+            $link = $this->get_url([self::PARAM_TAB => self::TAB_PLATFORM_GROUPS_USERS]);
+            $tab_name = $translator->trans('Users', [], StringUtilities::LIBRARIES);
 
             $tabs->add(
                 new LinkTab(
-                    self::TAB_PLATFORM_GROUPS_USERS, $tab_name,
-                    new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $link,
+                    (string) self::TAB_PLATFORM_GROUPS_USERS, $tab_name,
+                    new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas'), $link,
                     $this->current_tab == self::TAB_PLATFORM_GROUPS_USERS
                 )
             );
         }
-        else
+        elseif ($this->current_tab == self::TAB_PLATFORM_GROUPS_USERS)
         {
-            // reset tab (users tab doesn't exists)
-            if ($this->current_tab == self::TAB_PLATFORM_GROUPS_USERS)
-            {
-                $this->current_tab = self::TAB_PLATFORM_GROUPS_SUBGROUPS;
-            }
+            $this->current_tab = (string) self::TAB_PLATFORM_GROUPS_SUBGROUPS;
         }
 
         // subgroups tab
-        $link = $this->get_url(array(self::PARAM_TAB => self::TAB_PLATFORM_GROUPS_SUBGROUPS));
+        $link = $this->get_url([self::PARAM_TAB => self::TAB_PLATFORM_GROUPS_SUBGROUPS]);
         if ($this->get_group() != self::PLATFORM_GROUP_ROOT_ID)
         {
-            $tab_name = Translation::get('Subgroups', null, Manager::context());
+            $tab_name = $translator->trans('Subgroups', [], Manager::CONTEXT);
             $tab_selected = $this->current_tab == self::TAB_PLATFORM_GROUPS_SUBGROUPS;
         }
         else
         {
-            $tab_name = Translation::get('SubscribedGroups');
+            $tab_name = $translator->trans('SubscribedGroups', [], Manager::CONTEXT);
             $tab_selected = true;
         }
         $tabs->add(
             new LinkTab(
-                self::TAB_PLATFORM_GROUPS_SUBGROUPS, $tab_name,
-                new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas'), $link, $tab_selected
+                (string) self::TAB_PLATFORM_GROUPS_SUBGROUPS, $tab_name,
+                new FontAwesomeGlyph('users', ['fa-lg'], null, 'fas'), $link, $tab_selected
             )
         );
 
@@ -328,11 +393,13 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Creates the content of the selected tab.
-     *
-     * @return String HTML of the content
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
-    private function get_platformgroup_tabs_content()
+    private function get_platformgroup_tabs_content(): string
     {
         switch ($this->current_tab)
         {
@@ -340,42 +407,37 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
                 return $this->get_platformgroups_subgroups_tab();
             case self::TAB_PLATFORM_GROUPS_USERS :
                 return $this->get_platformgroups_users_tab();
+            default:
+                return '';
         }
     }
 
     /**
-     * Creates the footer for the tabs.
-     *
-     * @return String HTML of the footer
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
      */
-    private function get_platformgroup_tabs_footer()
+    private function get_platformgroups_subgroups_tab(): string
     {
-        $html = [];
-        $html[] = $this->getLinkTabsRenderer()->renderFooter();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    private function get_platformgroups_subgroups_tab()
-    {
-        // build table
-        $parameters = $this->get_parameters();
-        $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
-            $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-
         if ($this->get_group() != self::PLATFORM_GROUP_ROOT_ID)
         {
-            $table = new SubSubscribedPlatformGroupTable($this);
+            return $this->renderSubSubscribedPlatformGroupTable();
         }
         else
         {
-            $table = new DirectSubscribedPlatformGroupTable($this);
+            return $this->renderDirectSubscribedPlatformGroupTable();
         }
-
-        return $table->as_html();
     }
 
-    private function get_platformgroups_tab()
+    /**
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    private function get_platformgroups_tab(): string
     {
         $menu_tree = $this->get_menu_tree();
         $html = [];
@@ -392,20 +454,48 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         }
         else
         {
-            $html[] = Translation::get('NoGroupsSubscribed');
+            $html[] = $this->getTranslator()->trans('NoGroupsSubscribed', [], Manager::CONTEXT);
         }
 
         return implode(PHP_EOL, $html);
     }
 
-    private function get_platformgroups_users_tab()
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Exception
+     */
+    private function get_platformgroups_users_tab(): string
     {
-        $table = new PlatformGroupRelUserTable($this);
+        $totalNumberOfItems = \Chamilo\Core\Group\Storage\DataManager::count(
+            GroupRelUser::class, new DataClassCountParameters($this->get_condition())
+        );
+        $platformGroupRelUserTableRenderer = $this->getPlatformGroupRelUserTableRenderer();
 
-        return $table->as_html();
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $platformGroupRelUserTableRenderer->getParameterNames(),
+            $platformGroupRelUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $groupUserRelations = \Chamilo\Core\Group\Storage\DataManager::retrieves(
+            GroupRelUser::class, new DataClassRetrievesParameters(
+                $this->get_condition(), $tableParameterValues->getNumberOfItemsPerPage(),
+                $tableParameterValues->getOffset(),
+                $platformGroupRelUserTableRenderer->determineOrderBy($tableParameterValues)
+            )
+        );
+
+        return $platformGroupRelUserTableRenderer->legacyRender($this, $tableParameterValues, $groupUserRelations);
     }
 
-    public function get_search_condition()
+    /**
+     * @throws \QuickformException
+     * @throws \Exception
+     */
+    public function get_search_condition(): ?OrCondition
     {
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
@@ -416,13 +506,13 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
                 case self::TAB_ALL :
                 case self::TAB_USERS :
                     $conditions[] = $this->buttonToolbarRenderer->getConditions(
-                        array(
+                        [
                             new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE),
                             new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME),
                             new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
                             new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
                             new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL)
-                        )
+                        ]
                     );
                     break;
                 case self::TAB_PLATFORM_GROUPS_SUBGROUPS :
@@ -446,17 +536,15 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         return null;
     }
 
-    public function get_table_condition($object_table_class_name)
-    {
-        return $this->get_condition();
-    }
-
     /**
-     * Creates the tab structure.
-     *
-     * @return String HTML of the tab(s)
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \QuickformException
      */
-    private function get_tabs()
+    private function get_tabs(): string
     {
         $html = [];
 
@@ -468,11 +556,14 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Creates the content of the selected tab.
-     *
-     * @return String HTML of the content
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \ReflectionException
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \QuickformException
      */
-    private function get_tabs_content()
+    private function get_tabs_content(): string
     {
         switch ($this->current_tab)
         {
@@ -483,79 +574,119 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             case self::TAB_PLATFORM_GROUPS_SUBGROUPS :
             case self::TAB_PLATFORM_GROUPS_USERS :
                 return $this->get_platformgroups_tab();
+            default:
+                return '';
         }
     }
 
-    /**
-     * Creates the footer for the tabs.
-     *
-     * @return String HTML of the footer
-     */
-    private function get_tabs_footer()
+    private function get_tabs_footer(): string
     {
-        $html = [];
-        $html[] = $this->getLinkTabsRenderer()->renderFooter();
-
-        return implode(PHP_EOL, $html);
+        return $this->getLinkTabsRenderer()->renderFooter();
     }
 
-    /**
-     * Creates the header for the tabs.
-     *
-     * @return String HTML of the header
-     */
-    private function get_tabs_header()
+    private function get_tabs_header(): string
     {
         $html = [];
 
-        $this->tabs = new TabsCollection();
+        $tabs = new TabsCollection();
+        $translator = $this->getTranslator();
 
         // all tab
         $link = $this->get_url(
-            array(self::PARAM_TAB => self::TAB_ALL), array(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP)
+            [self::PARAM_TAB => self::TAB_ALL], [\Chamilo\Application\Weblcms\Manager::PARAM_GROUP]
         );
-        $tab_name = Translation::get('AllSubscriptions');
+        $tab_name = $translator->trans('AllSubscriptions', [], Manager::CONTEXT);
 
-        $this->tabs->add(
+        $tabs->add(
             new LinkTab(
-                self::TAB_ALL, $tab_name, new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $link,
+                (string) self::TAB_ALL, $tab_name, new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas'), $link,
                 $this->current_tab == self::TAB_ALL
             )
         );
 
         // users tab
         $link = $this->get_url(
-            array(self::PARAM_TAB => self::TAB_USERS), array(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP)
+            [self::PARAM_TAB => self::TAB_USERS], [\Chamilo\Application\Weblcms\Manager::PARAM_GROUP]
         );
-        $tab_name = Translation::get('DirectSubscriptions');
+        $tab_name = $translator->trans('DirectSubscriptions', [], Manager::CONTEXT);
 
-        $this->tabs->add(
+        $tabs->add(
             new LinkTab(
-                self::TAB_USERS, $tab_name, new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $link,
+                (string) self::TAB_USERS, $tab_name, new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas'), $link,
                 $this->current_tab == self::TAB_USERS
             )
         );
 
         // groups tab
-        $link = $this->get_url(array(self::PARAM_TAB => self::TAB_PLATFORM_GROUPS_SUBGROUPS));
-        $tab_name = Translation::get('GroupSubscriptions');
+        $link = $this->get_url([self::PARAM_TAB => self::TAB_PLATFORM_GROUPS_SUBGROUPS]);
+        $tab_name = $translator->trans('GroupSubscriptions', [], Manager::CONTEXT);
         $selected = $this->current_tab == self::TAB_PLATFORM_GROUPS_SUBGROUPS ||
             $this->current_tab == self::TAB_PLATFORM_GROUPS_USERS;
 
-        $this->tabs->add(
+        $tabs->add(
             new LinkTab(
-                self::TAB_PLATFORM_GROUPS_SUBGROUPS, $tab_name,
-                new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas'), $link, $selected
+                (string) self::TAB_PLATFORM_GROUPS_SUBGROUPS, $tab_name,
+                new FontAwesomeGlyph('users', ['fa-lg'], null, 'fas'), $link, $selected
             )
         );
 
-        $html[] = $this->getLinkTabsRenderer()->renderHeader($this->tabs);
+        $html[] = $this->getLinkTabsRenderer()->renderHeader($tabs);
 
         return implode(PHP_EOL, $html);
     }
 
-    public function is_course_admin($user)
+    public function is_course_admin($user): bool
     {
         return $this->get_course()->is_course_admin($user);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
+    protected function renderDirectSubscribedPlatformGroupTable(): string
+    {
+        $totalNumberOfItems = DataManager::count_groups_directly_subscribed_to_course($this->get_condition());
+        $directSubscribedPlatformGroupTableRenderer = $this->getDirectSubscribedPlatformGroupTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $directSubscribedPlatformGroupTableRenderer->getParameterNames(),
+            $directSubscribedPlatformGroupTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $groups = DataManager::retrieve_groups_directly_subscribed_to_course(
+            $this->get_condition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $directSubscribedPlatformGroupTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $directSubscribedPlatformGroupTableRenderer->legacyRender($this, $tableParameterValues, $groups);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     */
+    protected function renderSubSubscribedPlatformGroupTable(): string
+    {
+        $totalNumberOfItems = $this->getGroupService()->countGroups($this->get_condition());
+        $subSubscribedPlatformGroupTableRenderer = $this->getSubSubscribedPlatformGroupTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $subSubscribedPlatformGroupTableRenderer->getParameterNames(),
+            $subSubscribedPlatformGroupTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $groups = $this->getGroupService()->findGroups(
+            $this->get_condition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $subSubscribedPlatformGroupTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $subSubscribedPlatformGroupTableRenderer->render($tableParameterValues, $groups);
     }
 }
