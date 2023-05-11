@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\ImpactViewTableRenderer;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -23,7 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * @package Chamilo\Core\Repository\Component
  */
-class CategoryManagerComponent extends Manager implements ImpactViewSupport, TableSupport, CategorySupport
+class CategoryManagerComponent extends Manager implements ImpactViewSupport, CategorySupport
 {
 
     protected $impact_view_selected_categories;
@@ -224,18 +223,6 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         }
 
         return array_merge($extra_parameters, parent::get_parameters($include_search));
-    }
-
-    /**
-     * Returns the condition for a table
-     *
-     * @param string $class_name
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_table_condition($class_name)
-    {
-        return $this->impact_view_table_condition;
     }
 
     /**

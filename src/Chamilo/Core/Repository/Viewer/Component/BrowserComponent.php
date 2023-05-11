@@ -19,14 +19,13 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
-class BrowserComponent extends Manager implements TableSupport
+class BrowserComponent extends Manager
 {
     public const PROPERTY_CATEGORY = 'category';
 
@@ -286,10 +285,6 @@ class BrowserComponent extends Manager implements TableSupport
     protected function get_query()
     {
         return $this->getButtonToolbarRenderer()->getSearchForm()->getQuery();
-    }
-
-    public function get_table_condition($table_class_name)
-    {
     }
 
     /**

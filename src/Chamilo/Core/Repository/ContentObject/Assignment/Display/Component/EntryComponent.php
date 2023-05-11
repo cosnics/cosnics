@@ -32,7 +32,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -42,13 +41,12 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EntryComponent extends Manager implements FeedbackSupport, TableSupport
+class EntryComponent extends Manager implements FeedbackSupport
 {
 
     /**
@@ -67,7 +65,6 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
     protected $scoreService;
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -138,12 +135,20 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::count_feedbacks()
      */
     public function count_feedbacks()
     {
         return $this->getDataProvider()->countFeedbackByEntry($this->getEntry());
+    }
+
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_ENTRY_ID;
+        $additionalParameters[] = self::PARAM_ENTITY_ID;
+        $additionalParameters[] = self::PARAM_ENTITY_TYPE;
+
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**
@@ -180,7 +185,9 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
                     'id' => $contentObject->getId(),
                     'title' => $contentObject->get_title(),
                     'user' => $owner,
-                    'date' => DatetimeUtilities::getInstance()->formatLocaleDate(null, $contentObject->get_creation_date())
+                    'date' => DatetimeUtilities::getInstance()->formatLocaleDate(
+                        null, $contentObject->get_creation_date()
+                    )
                 ]
             ];
         }
@@ -280,7 +287,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
             {
                 $buttonToolBar->addButtonGroup(
                     new ButtonGroup(
-                        array(
+                        [
                             new Button(
                                 Translation::get(
                                     'BrowseEntities', [
@@ -294,7 +301,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
                                 ], [self::PARAM_ENTRY_ID]
                             )
                             )
-                        )
+                        ]
                     )
                 );
             }
@@ -398,7 +405,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
                 else
                 {
                     $url = $this->get_url(
-                        array(self::PARAM_ENTITY_ID => $entity->getId()), array(self::PARAM_ENTRY_ID)
+                        [self::PARAM_ENTITY_ID => $entity->getId()], [self::PARAM_ENTRY_ID]
                     );
 
                     $isActive = false;
@@ -460,7 +467,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
         }
 
         return $this->get_url(
-            array(self::PARAM_ENTITY_ID => $nextEntity->getId()), array(self::PARAM_ENTRY_ID)
+            [self::PARAM_ENTITY_ID => $nextEntity->getId()], [self::PARAM_ENTRY_ID]
         );
     }
 
@@ -478,7 +485,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
             return null;
         }
 
-        return $this->get_url(array(self::PARAM_ENTRY_ID => $nextEntry->getId()));
+        return $this->get_url([self::PARAM_ENTRY_ID => $nextEntry->getId()]);
     }
 
     /**
@@ -496,7 +503,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
         }
 
         return $this->get_url(
-            array(self::PARAM_ENTITY_ID => $previousEntity->getId()), array(self::PARAM_ENTRY_ID)
+            [self::PARAM_ENTITY_ID => $previousEntity->getId()], [self::PARAM_ENTRY_ID]
         );
     }
 
@@ -514,7 +521,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
             return null;
         }
 
-        return $this->get_url(array(self::PARAM_ENTRY_ID => $previousEntry->getId()));
+        return $this->get_url([self::PARAM_ENTRY_ID => $previousEntry->getId()]);
     }
 
     /**
@@ -605,7 +612,8 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
         }
 
         $dateFormat = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
-        $submittedDate = DatetimeUtilities::getInstance()->formatLocaleDate($dateFormat, $this->getEntry()->getSubmitted());
+        $submittedDate =
+            DatetimeUtilities::getInstance()->formatLocaleDate($dateFormat, $this->getEntry()->getSubmitted());
 
         $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
         $configuration->set(\Chamilo\Core\Repository\Feedback\Manager::CONFIGURATION_SHOW_FEEDBACK_HEADER, false);
@@ -613,7 +621,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
         $this->buildBridgeServices();
 
         $feedbackManager = $this->getApplicationFactory()->getApplication(
-            "Chamilo\Core\Repository\Feedback", $configuration, \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE
+            'Chamilo\Core\Repository\Feedback', $configuration, \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE
         );
 
         $feedbackManagerHtml = $feedbackManager->run();
@@ -677,17 +685,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
         return $this->getService(UserService::class);
     }
 
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_ENTRY_ID;
-        $additionalParameters[] = self::PARAM_ENTITY_ID;
-        $additionalParameters[] = self::PARAM_ENTITY_TYPE;
-
-        return parent::getAdditionalParameters($additionalParameters);
-    }
-
     /**
-     *
      * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::get_feedback()
      */
     public function get_feedback()
@@ -696,18 +694,6 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
         $feedback->setEntryId($this->getEntry()->getId());
 
         return $feedback;
-    }
-
-    /**
-     * Returns the condition
-     *
-     * @param string $tableClassname
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_table_condition($tableClassname)
-    {
-        // TODO: Implement get_table_condition() method.
     }
 
     /**
@@ -735,7 +721,6 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_create_feedback()
      */
     public function is_allowed_to_create_feedback()
@@ -744,7 +729,6 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_delete_feedback()
      */
     public function is_allowed_to_delete_feedback($feedback)
@@ -763,7 +747,6 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_view_feedback()
      */
     public function is_allowed_to_view_feedback()
@@ -800,7 +783,6 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
     }
 
     /**
-     *
      * @return string
      */
     protected function renderAssignment()
@@ -815,7 +797,6 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
     }
 
     /**
-     *
      * @return string
      */
     protected function renderContentObject()
@@ -830,7 +811,6 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
     }
 
     /**
-     *
      * @return string
      */
     protected function renderEntryTable()
@@ -848,7 +828,6 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedback()
      */
     public function retrieve_feedback($feedbackIdentifier)
@@ -857,7 +836,6 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
     }
 
     /**
-     *
      * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedbacks()
      */
     public function retrieve_feedbacks($count, $offset)

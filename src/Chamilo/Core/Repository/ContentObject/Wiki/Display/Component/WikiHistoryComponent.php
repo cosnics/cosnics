@@ -9,7 +9,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\VersionTableRenderer;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -24,7 +23,7 @@ use Chamilo\Libraries\Translation\Translation;
  * @package Chamilo\Core\Repository\ContentObject\Wiki\Display\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class WikiHistoryComponent extends Manager implements TableSupport
+class WikiHistoryComponent extends Manager
 {
 
     private $complex_wiki_page_id;

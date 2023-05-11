@@ -27,7 +27,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 /**
  * @package repository.lib.complex_builder.assessment
  */
-abstract class Manager extends Application implements TableSupport
+abstract class Manager extends Application
 {
     public const ACTION_ANSWER_FEEDBACK_TYPE = 'AnswerFeedbackType';
     public const ACTION_BROWSE = 'Browser';

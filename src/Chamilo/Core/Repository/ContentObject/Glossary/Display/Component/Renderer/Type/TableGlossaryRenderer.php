@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Glossary\Display\Component\Renderer\Type;
 
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\Component\Renderer\GlossaryRenderer;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 
 /**
@@ -11,7 +10,7 @@ use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
  * @package repository\content_object\glossary
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
-class TableGlossaryRenderer extends GlossaryRenderer implements TableSupport
+class TableGlossaryRenderer extends GlossaryRenderer
 {
     /**
      * @return string
@@ -55,13 +54,5 @@ class TableGlossaryRenderer extends GlossaryRenderer implements TableSupport
     public function get_parameters()
     {
         return $this->get_component()->get_parameters();
-    }
-
-    /*
-     * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
-     */
-    public function get_table_condition($table_class_name)
-    {
-        return null;
     }
 }

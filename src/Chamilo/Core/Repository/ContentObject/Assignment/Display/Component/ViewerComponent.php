@@ -16,30 +16,26 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ViewerComponent extends Manager implements TableSupport
+class ViewerComponent extends Manager
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
 
     /**
      * @return string
-     *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
@@ -72,12 +68,12 @@ class ViewerComponent extends Manager implements TableSupport
             $buttonToolBar = new ButtonToolBar();
             $buttonToolBar->addButtonGroup(
                 new ButtonGroup(
-                    array(
+                    [
                         new Button(
                             Translation::get('DownloadAll'), new FontAwesomeGlyph('download'),
                             $this->get_url([self::PARAM_ACTION => self::ACTION_DOWNLOAD])
                         ),
-                    )
+                    ]
                 )
             );
 
@@ -85,14 +81,14 @@ class ViewerComponent extends Manager implements TableSupport
             {
                 $buttonToolBar->addButtonGroup(
                     new ButtonGroup(
-                        array(
+                        [
                             new Button(
                                 Translation::get('EphorusComponent'), new NamespaceIdentGlyph(
                                 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus', true, false, false,
                                 IdentGlyph::SIZE_MINI
                             ), $this->get_url([self::PARAM_ACTION => self::ACTION_EPHORUS])
                             )
-                        )
+                        ]
                     )
                 );
             }
@@ -104,7 +100,6 @@ class ViewerComponent extends Manager implements TableSupport
     }
 
     /**
-     *
      * @return string[]
      */
     protected function getTemplateProperties()
@@ -175,15 +170,6 @@ class ViewerComponent extends Manager implements TableSupport
     }
 
     /**
-     * @see \Chamilo\Libraries\Format\Table\Interfaces\TableSupport::get_table_condition()
-     */
-    public function get_table_condition($tableClassName)
-    {
-        // TODO Auto-generated method stub
-    }
-
-    /**
-     *
      * @return string
      */
     protected function renderContentObject()
@@ -197,7 +183,6 @@ class ViewerComponent extends Manager implements TableSupport
     }
 
     /**
-     *
      * @return string
      */
     protected function renderEntityTable()

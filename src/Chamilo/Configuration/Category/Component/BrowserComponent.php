@@ -5,33 +5,32 @@ use Chamilo\Configuration\Category\Interfaces\CategoryVisibilitySupported;
 use Chamilo\Configuration\Category\Manager;
 use Chamilo\Configuration\Category\Menu\CategoryMenu;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
-use Chamilo\Configuration\Category\Table\Browser\CategoryTable;
+use Chamilo\Configuration\Category\Table\CategoryTableRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.common.category_manager.component
  */
-class BrowserComponent extends Manager implements TableSupport
+class BrowserComponent extends Manager
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -76,7 +75,7 @@ class BrowserComponent extends Manager implements TableSupport
         if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar(
-                $this->get_url(array(self::PARAM_CATEGORY_ID => $this->get_category_id()))
+                $this->get_url([self::PARAM_CATEGORY_ID => $this->get_category_id()])
             );
             $commonActions = new ButtonGroup();
 
@@ -98,6 +97,16 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
+    public function getCategoryTableRenderer(): CategoryTableRenderer
+    {
+        return $this->getService(CategoryTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
     public function get_category()
     {
         return $this->get_category_id();
@@ -114,6 +123,10 @@ class BrowserComponent extends Manager implements TableSupport
 
         return $category_id;
     }
+
+    /*
+     * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
+     */
 
     public function get_condition()
     {
@@ -149,32 +162,55 @@ class BrowserComponent extends Manager implements TableSupport
         return $this->get_condition();
     }
 
-    /*
-     * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
-     */
-
     public function get_user_html()
     {
         $parameters = array_merge(
-            $this->get_parameters(), array(
+            $this->get_parameters(), [
                 self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES,
                 self::PARAM_CATEGORY_ID => $this->get_category_id()
-            )
+            ]
         );
-        $table = new CategoryTable($this);
         $html = [];
 
         if ($this->get_subcategories_allowed())
         {
             $html[] = '<div style="float: right; width: 80%;">';
-            $html[] = $table->as_html();
+            $html[] = $this->renderTable();
             $html[] = '</div>';
         }
         else
         {
-            $html[] = $table->as_html();
+            $html[] = $this->renderTable();
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    protected function renderTable(): string
+    {
+        $totalNumberOfItems = $this->get_application()->count_categories($this->get_condition());
+        $categoryTableRenderer = $this->getCategoryTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $categoryTableRenderer->getParameterNames(), $categoryTableRenderer->getDefaultParameterValues(),
+            $totalNumberOfItems
+        );
+
+        $category_class_name = get_class($this->get_application()->getCategory());
+        $orderBy = $categoryTableRenderer->determineOrderBy($tableParameterValues);
+        $orderBy->add(
+            new OrderProperty(
+                new PropertyConditionVariable(
+                    $category_class_name, $category_class_name::PROPERTY_DISPLAY_ORDER
+                )
+            )
+        );
+
+        $categories = $this->get_application()->retrieve_categories(
+            $this->get_condition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(), $orderBy
+        );
+
+        return $categoryTableRenderer->legacyRender($this, $tableParameterValues, $categories);
     }
 }

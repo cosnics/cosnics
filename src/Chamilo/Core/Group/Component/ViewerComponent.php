@@ -2,9 +2,10 @@
 namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
+use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
-use Chamilo\Core\Group\Table\GroupRelUser\GroupRelUserTable;
+use Chamilo\Core\Group\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -17,8 +18,9 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
@@ -29,20 +31,19 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
-/**
- *
- * @package group.lib.group_manager.component
- */
-class ViewerComponent extends Manager implements TableSupport
+class ViewerComponent extends Manager
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
 
     private $group;
+
+    private $groupIdentifier;
+
+    private $rootGroup;
 
     private $root_group;
 
@@ -80,7 +81,7 @@ class ViewerComponent extends Manager implements TableSupport
             // Details
             $html[] = '<div class="panel panel-default">';
 
-            $glyph = new FontAwesomeGlyph('info-circle', array('fa-lg'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('info-circle', ['fa-lg'], null, 'fas');
 
             $html[] = '<div class="panel-heading">';
             $html[] = '<h3 class="panel-title">' . $glyph->render() . ' ' . Translation::get('Details') . '</h3>';
@@ -97,7 +98,7 @@ class ViewerComponent extends Manager implements TableSupport
             // Users
             $html[] = '<div class="panel panel-default">';
 
-            $glyph = new FontAwesomeGlyph('users', array('fa-lg'), null, 'fas');
+            $glyph = new FontAwesomeGlyph('users', ['fa-lg'], null, 'fas');
 
             $html[] = '<div class="panel-heading">';
             $html[] = '<h3 class="panel-title">' . $glyph->render() . ' ' .
@@ -107,7 +108,7 @@ class ViewerComponent extends Manager implements TableSupport
             $html[] = '<div class="panel-body">';
 
             $table = new GroupRelUserTable($this);
-            $html[] = $table->as_html();
+            $html[] = $this->renderTable();
             $html[] = '</div>';
             $html[] = '</div>';
 
@@ -127,7 +128,7 @@ class ViewerComponent extends Manager implements TableSupport
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)),
+                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
                 Translation::get('BrowserComponent')
             )
         );
@@ -138,14 +139,14 @@ class ViewerComponent extends Manager implements TableSupport
         $group = $this->group;
         if (!isset($this->buttonToolbarRenderer))
         {
-            $buttonToolbar = new ButtonToolBar($this->get_url(array(self::PARAM_GROUP_ID => $group->get_id())));
+            $buttonToolbar = new ButtonToolBar($this->get_url([self::PARAM_GROUP_ID => $group->get_id()]));
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
 
             $commonActions->addButton(
                 new Button(
                     Translation::get('ShowAll', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
-                    $this->get_url(array(self::PARAM_GROUP_ID => $group->get_id())), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $this->get_url([self::PARAM_GROUP_ID => $group->get_id()]), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
@@ -194,7 +195,7 @@ class ViewerComponent extends Manager implements TableSupport
             {
                 $toolActions->addButton(
                     new Button(
-                        Translation::get('TruncateNA'), new FontAwesomeGlyph('trash-alt', array('text-muted')), null,
+                        Translation::get('TruncateNA'), new FontAwesomeGlyph('trash-alt', ['text-muted']), null,
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -202,9 +203,8 @@ class ViewerComponent extends Manager implements TableSupport
 
             $toolActions->addButton(
                 new Button(
-                    Translation::get('Metadata', null, StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('info-circle'), $this->get_group_metadata_url($group),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    Translation::get('Metadata', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('info-circle'),
+                    $this->get_group_metadata_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
@@ -217,7 +217,51 @@ class ViewerComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    public function get_condition()
+    public function getGroupIdentifier(): int
+    {
+        if (!$this->groupIdentifier)
+        {
+            $this->groupIdentifier =
+                $this->getRequest()->query->get(self::PARAM_GROUP_ID, $this->getRootGroup()->getId());
+        }
+
+        return $this->groupIdentifier;
+    }
+
+    protected function getGroupMembershipService(): GroupMembershipService
+    {
+        return $this->getService(GroupMembershipService::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group
+     */
+    public function getRootGroup(): Group
+    {
+        if (!$this->rootGroup)
+        {
+            $this->rootGroup = $this->retrieve_groups(
+                new EqualityCondition(
+                    new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
+                    new StaticConditionVariable(0)
+                )
+            )->current();
+        }
+
+        return $this->rootGroup;
+    }
+
+    public function getSubscribedUserTableRenderer(): SubscribedUserTableRenderer
+    {
+        return $this->getService(SubscribedUserTableRenderer::class);
+    }
+
+    public function getSubscribedUsersCondition()
     {
         $conditions = [];
 
@@ -271,12 +315,25 @@ class ViewerComponent extends Manager implements TableSupport
         return $condition;
     }
 
-    /*
-     * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
-     */
-
-    public function get_table_condition($table_class_name)
+    protected function renderTable(): string
     {
-        return $this->get_condition();
+        $totalNumberOfItems = $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifier(
+            $this->getGroupIdentifier(), $this->getSubscribedUsersCondition()
+        );
+        $subscribedUserTableRenderer = $this->getSubscribedUserTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $subscribedUserTableRenderer->getParameterNames(),
+            $subscribedUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $users = $this->getGroupMembershipService()->findSubscribedUsersForGroupIdentifier(
+            $this->getGroupIdentifier(), $this->getSubscribedUsersCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
+            $subscribedUserTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $subscribedUserTableRenderer->render($tableParameterValues, $users);
     }
+
 }
