@@ -20,16 +20,19 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
 /**
@@ -91,6 +94,30 @@ abstract class ContentObjectPublicationListRenderer
      */
     abstract public function as_html();
 
+    protected function countContentObjectPublications(): int
+    {
+        $tool_browser = $this->get_tool_browser();
+        $type = $tool_browser->get_publication_type();
+
+        switch ($type)
+        {
+            case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME :
+                return DataManager::count_my_publications(
+                    $tool_browser->get_location(), $tool_browser->get_entities(), $this->get_publication_conditions(),
+                    $tool_browser->get_user_id()
+                );
+            case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL :
+                return DataManager::count_content_object_publications(
+                    $this->get_publication_conditions()
+                );
+            default :
+                return DataManager::count_content_object_publications_with_view_right_granted_in_category_location(
+                    $tool_browser->get_location(), $tool_browser->get_entities(), $this->get_publication_conditions(),
+                    $tool_browser->get_user_id()
+                );
+        }
+    }
+
     public static function factory($type, $tool_browser)
     {
         $class = __NAMESPACE__ . '\Type\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
@@ -118,6 +145,11 @@ abstract class ContentObjectPublicationListRenderer
         $date_format = Translation::get('DateTimeFormatLong', null, StringUtilities::LIBRARIES);
 
         return DatetimeUtilities::getInstance()->formatLocaleDate($date_format, $date);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
     protected function getWorkspaceRightsService(): RightsService
@@ -914,6 +946,36 @@ abstract class ContentObjectPublicationListRenderer
         $visibility_link = '<a href="' . $visibility_url . '">' . $glyph->render() . '</a>';
 
         return $visibility_link;
+    }
+
+    protected function retrieveContentObjectPublications(int $offset, int $count, OrderBy $orderBy): ArrayCollection
+    {
+        $tool_browser = $this->get_tool_browser();
+
+        if ($orderBy->count() == 0)
+        {
+            $orderBy = $tool_browser->getDefaultOrderBy();
+        }
+
+        $type = $tool_browser->get_publication_type();
+
+        switch ($type)
+        {
+            case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME :
+                return DataManager::retrieve_my_publications(
+                    $tool_browser->get_location(), $tool_browser->get_entities(), $this->get_publication_conditions(),
+                    $orderBy, $offset, $count, $tool_browser->get_user_id()
+                );
+            case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL :
+                return DataManager::retrieve_content_object_publications(
+                    $this->get_publication_conditions(), $orderBy, $offset, $count
+                );
+            default :
+                return DataManager::retrieve_content_object_publications_with_view_right_granted_in_category_location(
+                    $tool_browser->get_location(), $tool_browser->get_entities(), $this->get_publication_conditions(),
+                    $orderBy, $offset, $count, $tool_browser->get_user_id()
+                );
+        }
     }
 
     public function set_actions($actions)

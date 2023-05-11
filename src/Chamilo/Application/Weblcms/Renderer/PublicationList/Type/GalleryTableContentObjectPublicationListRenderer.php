@@ -2,11 +2,10 @@
 namespace Chamilo\Application\Weblcms\Renderer\PublicationList\Type;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
-use Chamilo\Application\Weblcms\Table\Publication\Gallery\ObjectPublicationGalleryTable;
+use Chamilo\Application\Weblcms\Table\ObjectPublicationGalleryTableRenderer;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -16,7 +15,6 @@ use Chamilo\Libraries\Translation\Translation;
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPublicationListRenderer
-    implements TableSupport
 {
 
     public function __construct($tool_browser, $parameters = [])
@@ -39,16 +37,7 @@ class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPubl
      */
     public function as_html()
     {
-        if (method_exists($this->get_tool_browser()->get_parent(), 'get_content_object_publication_gallery_table'))
-        {
-            $table = $this->get_tool_browser()->get_parent()->get_content_object_publication_gallery_table($this);
-        }
-        else
-        {
-            $table = new ObjectPublicationGalleryTable($this);
-        }
-
-        return $table->as_html();
+        return $this->renderTable();
     }
 
     protected function getNotificationMessageManager(): NotificationMessageManager
@@ -56,6 +45,11 @@ class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPubl
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
             NotificationMessageManager::class
         );
+    }
+
+    public function getObjectPublicationGalleryTableRenderer(): ObjectPublicationGalleryTableRenderer
+    {
+        return $this->getService(ObjectPublicationGalleryTableRenderer::class);
     }
 
     /**
@@ -68,15 +62,23 @@ class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPubl
         return $this->get_tool_browser()->get_parameters();
     }
 
-    /**
-     * Returns the condition
-     *
-     * @param string $table_class_name
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_table_condition($table_class_name)
+    protected function renderTable(): string
     {
-        return $this->get_publication_conditions();
+        $totalNumberOfItems = $this->countContentObjectPublications();
+        $objectPublicationGalleryTableRenderer = $this->getObjectPublicationGalleryTableRenderer();
+
+        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+            $objectPublicationGalleryTableRenderer->getParameterNames(),
+            $objectPublicationGalleryTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        );
+
+        $contentObjectPublications = $this->retrieveContentObjectPublications(
+            $tableParameterValues->getOffset(), $tableParameterValues->getNumberOfItemsPerPage(),
+            $objectPublicationGalleryTableRenderer->determineOrderBy($tableParameterValues)
+        );
+
+        return $objectPublicationGalleryTableRenderer->legacyRender(
+            $this, $tableParameterValues, $contentObjectPublications
+        );
     }
 }
