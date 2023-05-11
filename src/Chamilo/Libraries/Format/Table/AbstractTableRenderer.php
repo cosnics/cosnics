@@ -250,6 +250,8 @@ abstract class AbstractTableRenderer
                 $parameterValues->getNumberOfItemsPerPage(), $parameterValues->getTotalNumberOfItems()
             )
         );
+        $tableResultPosition->setOrderColumnIndex($parameterValues->getOrderColumnIndex());
+        $tableResultPosition->setOrderColumnDirection($parameterValues->getOrderColumnDirection());
 
         return $tableResultPosition;
     }

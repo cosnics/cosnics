@@ -7,7 +7,6 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Table\AssessmentAttemptTableRenderer"/>
-        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Table\ObjectPublicationTableRenderer"/>
+        <service id="Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Table\ObjectPublicationTableRenderer"/>
     </services>
 </container>

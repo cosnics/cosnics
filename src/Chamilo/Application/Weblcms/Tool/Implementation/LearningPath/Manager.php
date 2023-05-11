@@ -22,7 +22,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.learning_path
  */
 
@@ -32,16 +31,15 @@ use Chamilo\Libraries\Translation\Translation;
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     implements Categorizable, IntroductionTextSupportInterface
 {
-    const ACTION_EXPORT_RAW_RESULTS = 'AssessmentRawResultsExporter';
+    public const ACTION_EXPORT_RAW_RESULTS = 'AssessmentRawResultsExporter';
+    public const CONTEXT = __NAMESPACE__;
 
     /**
-     *
      * @var int[]
      */
     protected $checkedPublications;
 
     /**
-     *
      * @param array $publication
      * @param ButtonGroup $buttonGroup
      * @param DropdownButton $dropdownButton
@@ -59,11 +57,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
                 $dropdownButton->prependSubButton(
                     new SubButton(
                         Translation::get('Statistics'), new FontAwesomeGlyph('chart-bar'), $this->get_url(
-                        array(
+                        [
                             Manager::PARAM_ACTION => Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
-                        )
+                        ]
                     ), SubButton::DISPLAY_LABEL
                     )
                 );
@@ -71,10 +69,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
                 $dropdownButton->prependSubButton(
                     new SubButton(
                         Translation::get('ExportRawResults'), new FontAwesomeGlyph('download'), $this->get_url(
-                        array(
+                        [
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_EXPORT_RAW_RESULTS,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-                        )
+                        ]
                     ), SubButton::DISPLAY_LABEL
                     )
                 );
@@ -83,7 +81,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     }
 
     /**
-     *
      * @param Toolbar $toolbar
      * @param array $publication
      */
@@ -98,11 +95,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation::get('Statistics'), new FontAwesomeGlyph('chart-bar'), $this->get_url(
-                        array(
+                        [
                             Manager::PARAM_ACTION => Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
-                        )
+                        ]
                     ), ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -110,10 +107,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
                 $toolbar->add_item(
                     new ToolbarItem(
                         Translation::get('ExportRawResults'), new FontAwesomeGlyph('download'), $this->get_url(
-                        array(
+                        [
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_EXPORT_RAW_RESULTS,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-                        )
+                        ]
                     ), ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -125,7 +122,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('StatisticsNA'), new FontAwesomeGlyph('chart-bar', array('text-muted')), null,
+                        Translation::get('StatisticsNA'), new FontAwesomeGlyph('chart-bar', ['text-muted']), null,
                         ToolbarItem::DISPLAY_ICON
                     )
                 );
@@ -149,6 +146,18 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     }
 
     /**
+     * Returns the currently selected learning path child id from the request
+     *
+     * @return int
+     */
+    public function getCurrentTreeNodeDataId()
+    {
+        return (int) $this->getRequest()->get(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID, 0
+        );
+    }
+
+    /**
      * Returns the TreeNode for the current step
      *
      * @param LearningPath $learningPath
@@ -163,19 +172,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     }
 
     /**
-     * Returns the currently selected learning path child id from the request
-     *
-     * @return int
-     */
-    public function getCurrentTreeNodeDataId()
-    {
-        return (int) $this->getRequest()->get(
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID, 0
-        );
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      */
     protected function getDataClassRepository()
@@ -212,7 +208,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     }
 
     /**
-     *
      * @return TrackingServiceBuilder | object
      */
     protected function getTrackingServiceBuilder()
@@ -243,16 +238,14 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     }
 
     /**
-     *
      * @return array
      */
     public static function get_allowed_types()
     {
-        return array(LearningPath::class);
+        return [LearningPath::class];
     }
 
     /**
-     *
      * @return array
      */
     public function get_available_browser_types()
@@ -265,7 +258,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     }
 
     /**
-     *
      * @param $publication
      *
      * @return int

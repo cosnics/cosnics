@@ -26,31 +26,27 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.weblcms.tool.assignment.php This tool allows a user to publish assignments in his or her course
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
- * @author Bert De Clercq (Hogeschool Gent)
- * @author Anthony Hurst (Hogeschool Gent)
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
+ * @author  Bert De Clercq (Hogeschool Gent)
+ * @author  Anthony Hurst (Hogeschool Gent)
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     implements Categorizable, IntroductionTextSupportInterface
 {
-    const ACTION_DISPLAY = 'Display';
+    public const ACTION_DISPLAY = 'Display';
+    public const ACTION_DOWNLOAD_ENTRIES = 'EntriesDownloader';
 
-    // Parameters
+    public const CONTEXT = __NAMESPACE__;
 
-    const ACTION_DOWNLOAD_ENTRIES = 'EntriesDownloader';
-
-    const PARAM_SUBMISSION = 'submission';
-
-    const PARAM_SUBMITTER_TYPE = 'submitter_type';
-
-    const PARAM_TARGET_ID = 'target_id';
+    public const PARAM_SUBMISSION = 'submission';
+    public const PARAM_SUBMITTER_TYPE = 'submitter_type';
+    public const PARAM_TARGET_ID = 'target_id';
 
     // Properties
 
-    const PROPERTY_NUMBER_OF_SUBMISSIONS = 'NumberOfSubmissions';
+    public const PROPERTY_NUMBER_OF_SUBMISSIONS = 'NumberOfSubmissions';
 
     public function addContentObjectPublicationButtons(
         $publication, ButtonGroup $buttonGroup, DropdownButton $dropdownButton
@@ -59,10 +55,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         $buttonGroup->prependButton(
             new Button(
                 Translation::get('BrowseSubmitters'), new FontAwesomeGlyph('folder-open'), $this->get_url(
-                array(
+                [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-                )
+                ]
             ), Button::DISPLAY_ICON, null, ['btn-link']
             )
         );
@@ -70,11 +66,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         $buttonGroup->prependButton(
             new Button(
                 Translation::get('SubmissionSubmit'), new FontAwesomeGlyph('plus'), $this->get_url(
-                array(
+                [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
-                )
+                ]
             ), Button::DISPLAY_ICON, null, ['btn-link']
             )
         );
@@ -89,11 +85,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             $buttonGroup->prependButton(
                 new Button(
                     Translation::get('EphorusOverview'), $glyph, $this->get_url(
-                    array(
+                    [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                         \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_EPHORUS
-                    )
+                    ]
                 ), Button::DISPLAY_ICON, null, [], '_blank'
                 )
             );
@@ -103,7 +99,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     /**
      * Adds extra actions to the toolbar in different components
      *
-     * @param $toolbar Toolbar
+     * @param $toolbar     Toolbar
      * @param $publication Publication
      *
      * @return Toolbar
@@ -113,10 +109,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         $toolbar->insert_item(
             new ToolbarItem(
                 Translation::get('BrowseSubmitters'), new FontAwesomeGlyph('folder'), $this->get_url(
-                array(
+                [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-                )
+                ]
             ), ToolbarItem::DISPLAY_ICON
             ), 0
         );
@@ -124,11 +120,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         $toolbar->insert_item(
             new ToolbarItem(
                 Translation::get('SubmissionSubmit'), new FontAwesomeGlyph('plus'), $this->get_url(
-                array(
+                [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                     \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
-                )
+                ]
             ), ToolbarItem::DISPLAY_ICON
             ), 1
         );
@@ -136,12 +132,12 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         $toolbar->insert_item(
             new ToolbarItem(
                 Translation::get('Reporting'), new FontAwesomeGlyph('chart-pie'), $this->get_url(
-                array(
+                [
                     \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Reporting',
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                     \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => AssignmentEntitiesTemplate::class
-                )
+                ]
             ), ToolbarItem::DISPLAY_ICON, false, null, '_blank'
             ), 2
         );
@@ -156,11 +152,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             $toolbar->insert_item(
                 new ToolbarItem(
                     Translation::get('EphorusOverview'), $glyph, $this->get_url(
-                    array(
+                    [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
                         \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_EPHORUS
-                    )
+                    ]
                 ), ToolbarItem::DISPLAY_ICON, false, null, '_blank'
                 ), 3
             );
@@ -205,7 +201,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     public static function get_allowed_types()
     {
-        return array(Assignment::class);
+        return [Assignment::class];
     }
 
     public function get_available_browser_types()
