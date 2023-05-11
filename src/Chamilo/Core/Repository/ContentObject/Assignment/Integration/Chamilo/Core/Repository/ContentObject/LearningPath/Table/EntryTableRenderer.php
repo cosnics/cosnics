@@ -33,7 +33,7 @@ class EntryTableRenderer extends \Chamilo\Core\Repository\ContentObject\Assignme
         );
     }
 
-    public function getEntryClassName()
+    public function getEntryClassName(): string
     {
         return $this->getLearningPathAssignmentService()->getEntryClassName();
     }
@@ -43,7 +43,7 @@ class EntryTableRenderer extends \Chamilo\Core\Repository\ContentObject\Assignme
         return $this->learningPathAssignmentService;
     }
 
-    public function getScoreClassName()
+    public function getScoreClassName(): string
     {
         return $this->getLearningPathAssignmentService()->getScoreClassName();
     }

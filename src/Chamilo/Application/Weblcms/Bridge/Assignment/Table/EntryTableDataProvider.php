@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entry;
+namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table;
 
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;

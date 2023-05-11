@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity;
+namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
@@ -10,18 +10,18 @@ use Chamilo\Libraries\Format\Table\TableResultPosition;
  * @package Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class CourseGroupEntityTableRenderer extends EntityTableRenderer
+abstract class PlatformGroupEntityTableRenderer extends EntityTableRenderer
 {
     protected function initializeColumns()
     {
-        $this->addColumn(new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_NAME));
+        $this->addColumn(new DataClassPropertyTableColumn(Group::class, Group::PROPERTY_NAME));
 
         parent::initializeColumns();
     }
 
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $entity): string
     {
-        if ($column->get_name() == CourseGroup::PROPERTY_NAME)
+        if ($column->get_name() == Group::PROPERTY_NAME)
         {
             if ($this->canViewEntity($entity))
             {

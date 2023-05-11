@@ -46,15 +46,15 @@ abstract class LearningPathAssignmentService extends AssignmentService
     /**
      * @return string
      */
-    abstract public function getEntryClassName();
+    abstract public function getEntryClassName(): string;
 
     /**
      * @return string
      */
-    abstract public function getScoreClassName();
+    abstract public function getScoreClassName(): string;
 
     /**
      * @return string
      */
-    abstract public function getFeedbackClassName();
+    abstract public function getFeedbackClassName(): string;
 }

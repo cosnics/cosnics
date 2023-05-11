@@ -35,10 +35,10 @@ abstract class AssignmentService extends \Chamilo\Core\Repository\ContentObject\
     /**
      * @return string
      */
-    abstract public function getEntryClassName();
+    abstract public function getEntryClassName(): string;
 
     /**
      * @return string
      */
-    abstract public function getScoreClassName();
+    abstract public function getScoreClassName(): string;
 }

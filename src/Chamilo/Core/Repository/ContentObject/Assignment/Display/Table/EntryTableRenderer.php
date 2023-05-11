@@ -95,9 +95,9 @@ abstract class EntryTableRenderer extends RecordListTableRenderer implements Tab
         return $this->datetimeUtilities;
     }
 
-    abstract public function getEntryClassName();
+    abstract public function getEntryClassName(): string;
 
-    abstract public function getScoreClassName();
+    abstract public function getScoreClassName(): string;
 
     public function getStringUtilities(): StringUtilities
     {

@@ -538,7 +538,7 @@ class LearningPathAssignmentService extends
     /**
      * @return string
      */
-    public function getEntryClassName()
+    public function getEntryClassName(): string
     {
         return Entry::class;
     }
@@ -546,7 +546,7 @@ class LearningPathAssignmentService extends
     /**
      * @return string
      */
-    public function getFeedbackClassName()
+    public function getFeedbackClassName(): string
     {
         return Feedback::class;
     }
@@ -571,7 +571,7 @@ class LearningPathAssignmentService extends
     /**
      * @return string
      */
-    public function getScoreClassName()
+    public function getScoreClassName(): string
     {
         return Score::class;
     }

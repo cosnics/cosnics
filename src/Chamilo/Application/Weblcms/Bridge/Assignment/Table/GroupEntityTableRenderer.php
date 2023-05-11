@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity;
+namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table;
 
 use Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity\Group\EntityTableColumnModel;
 use Chamilo\Application\Weblcms\Manager;
