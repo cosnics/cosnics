@@ -34,7 +34,7 @@ class AssessmentOverviewBlock extends ToolBlock
         $reporting_data->set_rows(
             array(
                 Translation::get('Name'), 
-                Translation::get('OfficialCode', null, Manager::context()),
+                Translation::get('OfficialCode', null, Manager::CONTEXT),
                 Translation::get('Title'), 
                 Translation::get('Date'), 
                 Translation::get('Score')));
@@ -99,7 +99,7 @@ class AssessmentOverviewBlock extends ToolBlock
                 
                 $reporting_data->add_data_category_row(
                     $count, 
-                    Translation::get('OfficialCode', null, Manager::context()),
+                    Translation::get('OfficialCode', null, Manager::CONTEXT),
                     $user->get_official_code());
                 
                 $reporting_data->add_data_category_row(

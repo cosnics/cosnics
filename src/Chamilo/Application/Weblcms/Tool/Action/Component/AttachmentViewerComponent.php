@@ -91,7 +91,7 @@ class AttachmentViewerComponent extends Manager implements DelegateComponent
             $trail->add(
                 new Breadcrumb(
                     $this->get_url(array('object' => $object_id)),
-                    Translation::get('ViewAttachment', null, \Chamilo\Core\Repository\Manager::context())));
+                    Translation::get('ViewAttachment', null, \Chamilo\Core\Repository\Manager::CONTEXT)));
 
             $object = DataManager::retrieve_by_id(
                 ContentObject::class,

@@ -9,10 +9,10 @@ class RequestComponent extends Manager
 
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'RequestCourses');
+        $this->checkAuthorization(Manager::CONTEXT, 'RequestCourses');
 
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Application\Weblcms\Request\Manager::context(),
+            \Chamilo\Application\Weblcms\Request\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 }

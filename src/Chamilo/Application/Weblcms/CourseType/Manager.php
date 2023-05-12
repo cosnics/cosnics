@@ -29,6 +29,8 @@ abstract class Manager extends Application
     public const ACTION_UPDATE = 'Update';
     public const ACTION_VIEW = 'View';
 
+    public const CONTEXT = __NAMESPACE__;
+
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public const MOVE_DIRECTION_DOWN = 2;

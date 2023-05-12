@@ -78,7 +78,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication) && $this->isEphorusEnabled())
         {
             $glyph = new NamespaceIdentGlyph(
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::context(), false, false, false,
+                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::CONTEXT, false, false, false,
                 IdentGlyph::SIZE_MINI
             );
 
@@ -145,7 +145,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication) && $this->isEphorusEnabled())
         {
             $glyph = new NamespaceIdentGlyph(
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::context(), false, false, false,
+                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::CONTEXT, false, false, false,
                 IdentGlyph::SIZE_MINI
             );
 

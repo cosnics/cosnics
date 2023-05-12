@@ -41,7 +41,7 @@ class VisitPlannerComponent extends Manager
         catch(Exception $ex)
         {
             $this->getExceptionLogger()->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
-            throw new UserException($this->getTranslator()->trans('CouldNotVisitPlaner', null, Manager::context()));
+            throw new UserException($this->getTranslator()->trans('CouldNotVisitPlaner', null, Manager::CONTEXT));
         }
 
         return new RedirectResponse($plannerUrl);

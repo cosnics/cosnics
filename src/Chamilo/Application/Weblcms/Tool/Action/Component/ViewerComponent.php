@@ -91,7 +91,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         if ($this->feedback_allowed)
         {
             $result = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Feedback\Manager::context(),
+                \Chamilo\Core\Repository\Feedback\Manager::CONTEXT,
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
             )->run();
         }

@@ -367,7 +367,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         try
         {
             return WeblcmsRights::getInstance()->get_target_entities(
-                WeblcmsRights::VIEW_RIGHT, Manager::context(), $this->get_id(), WeblcmsRights::TYPE_PUBLICATION,
+                WeblcmsRights::VIEW_RIGHT, Manager::CONTEXT, $this->get_id(), WeblcmsRights::TYPE_PUBLICATION,
                 $this->get_course_id(), WeblcmsRights::TREE_TYPE_COURSE
             );
         }

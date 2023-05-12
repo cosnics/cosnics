@@ -53,7 +53,7 @@ class CreateComponent extends CourseFormActionComponent
             $countDirect ++;
         }
 
-        if (!$this->isAuthorized(Manager::context(), 'ManageCourses') &&
+        if (!$this->isAuthorized(Manager::CONTEXT, 'ManageCourses') &&
             $countDirect == 0
         )
         {

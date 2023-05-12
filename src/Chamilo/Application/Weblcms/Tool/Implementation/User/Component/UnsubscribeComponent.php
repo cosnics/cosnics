@@ -72,7 +72,7 @@ class UnsubscribeComponent extends Manager
                         $parameters[UserStatusChange::PROPERTY_NEW_STATUS] = 0;
                         $parameters[UserStatusChange::PROPERTY_COURSE_ID] = $course->get_id();
                         $parameters[UserStatusChange::PROPERTY_DATE] = time();
-                        Event::trigger('UserStatusChange', \Chamilo\Application\Weblcms\Manager::context(), $parameters);
+                        Event::trigger('UserStatusChange', \Chamilo\Application\Weblcms\Manager::CONTEXT, $parameters);
                     }
 
                     if ($failures == 0)

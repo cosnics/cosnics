@@ -45,10 +45,9 @@ class BrowserComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $contentObjectPublicationsCount =
-            DataManager::count_course_content_object_publications(
-                $course_id
-            );
+        $contentObjectPublicationsCount = DataManager::count_course_content_object_publications(
+            $course_id
+        );
 
         $courseGroupsCount = $courseGroupService->countCourseGroupsInCourse($course_id);
 
@@ -71,10 +70,9 @@ class BrowserComponent extends Manager
             $course_id
         );
 
-        $courses =
-            DataManager::retrieve_courses_from_user_where_user_is_teacher(
-                $this->get_parent()->get_user()
-            );
+        $courses = DataManager::retrieve_courses_from_user_where_user_is_teacher(
+            $this->get_parent()->get_user()
+        );
 
         $this->course_copier_form = new CourseCopierForm($this, $publications, $categories, $courses);
         $this->course_copier_form->buildForm();
@@ -87,8 +85,7 @@ class BrowserComponent extends Manager
             foreach ($course_ids as $course_id)
             {
                 $course = DataManager::retrieve_by_id(
-                    Course::class,
-                    $course_id
+                    Course::class, $course_id
                 );
                 if (!$course->is_course_admin($this->get_user()))
                 {
@@ -96,7 +93,7 @@ class BrowserComponent extends Manager
                 }
             }
 
-            if (isset($values['publications']) || isset($values["course_sections"]) ||
+            if (isset($values['publications']) || isset($values['course_sections']) ||
                 $values['content_object_categories'] == 0 || $values['course_groups'] == 1)
             {
                 $publications_ids = array_keys($values['publications']);
@@ -107,21 +104,14 @@ class BrowserComponent extends Manager
                 $courseCopier = new CourseCopier(new CourseCopierRepository());
 
                 $courseCopier->copyCourse(
-                    $this->getUser(),
-                    $this->get_course(),
-                    $course_ids,
-                    $publications_ids,
-                    $categories_ids,
-                    $ignore_categories,
-                    $copyCourseGroups
+                    $this->getUser(), $this->get_course(), $course_ids, $publications_ids, $categories_ids,
+                    $ignore_categories, $copyCourseGroups
                 );
 
                 $this->redirectWithMessage(
-                    Translation::get('CopySucceeded'),
-                    false,
-                    array(
+                    Translation::get('CopySucceeded'), false, [
                         \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_WEBLCMS_HOME
-                    )
+                    ]
                 );
             }
             else
@@ -143,7 +133,7 @@ class BrowserComponent extends Manager
             $html[] = $this->render_header();
 
             $html[] = '<div class="alert alert-warning">' .
-                Translation::getInstance()->getTranslation('CopyNotification', [], Manager::context()) . '</div>';
+                Translation::getInstance()->getTranslation('CopyNotification', [], Manager::CONTEXT) . '</div>';
 
             $html[] = $this->course_copier_form->toHtml();
             $html[] = $this->render_footer();
@@ -153,7 +143,6 @@ class BrowserComponent extends Manager
     }
 
     /**
-     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

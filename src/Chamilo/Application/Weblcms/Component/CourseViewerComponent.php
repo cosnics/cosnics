@@ -127,7 +127,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         if (!class_exists($managerClass) || !is_subclass_of($managerClass, IgnoreToolTrackingInterface::class))
         {
             Event::trigger(
-                'VisitCourse', Manager::context(), [
+                'VisitCourse', Manager::CONTEXT, [
                     CourseVisit::PROPERTY_USER_ID => $this->get_user_id(),
                     CourseVisit::PROPERTY_COURSE_ID => $this->get_course_id(),
                     CourseVisit::PROPERTY_TOOL_ID => $this->course_tool_registration->get_id(),
@@ -220,7 +220,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             if (!$course_id)
             {
                 throw new NoObjectSelectedException(
-                    Translation::getInstance()->getTranslation('Course', null, Manager::context())
+                    Translation::getInstance()->getTranslation('Course', null, Manager::CONTEXT)
                 );
             }
 
@@ -229,7 +229,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             if (empty($this->course))
             {
                 throw new ObjectNotExistException(
-                    Translation::getInstance()->getTranslation('Course', null, Manager::context()), $course_id
+                    Translation::getInstance()->getTranslation('Course', null, Manager::CONTEXT), $course_id
                 );
             }
         }

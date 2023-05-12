@@ -56,8 +56,7 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
 
         $redirect = new Redirect(
             [
-                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Ajax\Manager::context(
-                ),
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Ajax\Manager::CONTEXT,
                 Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Ajax\Manager::ACTION_GET_ASSIGNMENT_NOTIFICATIONS,
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Ajax\Manager::PARAM_COURSE_TYPE_ID => $this->courseTypeId,
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Ajax\Manager::PARAM_USER_COURSE_CATEGORY_ID => $this->userCourseCategoryId
@@ -68,7 +67,7 @@ class AssignmentNotifications extends Block implements ConfigurableInterface, St
 
         $redirect = new Redirect(
             [
-                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_VIEW_NOTIFICATION,
                 Manager::PROPERTY_NOTIFICATION_ID => '__NOTIFICATION_ID__'
             ]

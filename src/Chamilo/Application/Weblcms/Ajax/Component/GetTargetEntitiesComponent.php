@@ -159,7 +159,7 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
     protected function getTargetEntitiesFromRightsSystem($identifier, $type)
     {
         return WeblcmsRights::getInstance()->get_target_entities(
-            $this->getRight(), Manager::context(), $identifier, $type, $this->getCourseId(),
+            $this->getRight(), Manager::CONTEXT, $identifier, $type, $this->getCourseId(),
             WeblcmsRights::TREE_TYPE_COURSE
         );
     }

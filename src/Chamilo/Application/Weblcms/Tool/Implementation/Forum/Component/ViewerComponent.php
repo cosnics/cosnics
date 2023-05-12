@@ -122,7 +122,7 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
         $parameters[ForumTopicView::PROPERTY_PUBLICATION_ID] = $this->publication_id;
         $parameters[ForumTopicView::PROPERTY_FORUM_TOPIC_ID] = $complex_topic_id;
 
-        Event::trigger('ViewForumTopic', \Chamilo\Application\Weblcms\Manager::context(), $parameters);
+        Event::trigger('ViewForumTopic', \Chamilo\Application\Weblcms\Manager::CONTEXT, $parameters);
     }
 
     public function getAdditionalParameters(array $additionalParameters = []): array

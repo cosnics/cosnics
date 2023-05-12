@@ -38,7 +38,7 @@ abstract class Manager extends Application
         if (empty($courseIds))
         {
             throw new NoObjectSelectedException(
-                Translation::getInstance()->getTranslation('Course', null, self::context())
+                Translation::getInstance()->getTranslation('Course', null, Manager::CONTEXT)
             );
         }
 
@@ -108,7 +108,7 @@ abstract class Manager extends Application
     public function getViewCourseUrl($courseId)
     {
         $parameters = [
-            Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(),
+            Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::CONTEXT,
             Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
             \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $courseId
         ];

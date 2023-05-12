@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
  * This class represents a component that runs the course type submanager
  *
  * @package \application\weblcms\course_type
- * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
+ * @author  Sven Vanpoucke - Hogeschool Gent - Refactoring
  */
 class CourseTypeManagerComponent extends Manager implements DelegateComponent
 {
@@ -22,10 +22,10 @@ class CourseTypeManagerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageCourses');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageCourses');
 
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Application\Weblcms\CourseType\Manager::context(),
+            \Chamilo\Application\Weblcms\CourseType\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         )->run();
     }

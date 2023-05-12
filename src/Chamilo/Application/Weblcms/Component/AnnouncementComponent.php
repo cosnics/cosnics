@@ -42,7 +42,7 @@ class AnnouncementComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ViewPersonalCourses');
+        $this->checkAuthorization(Manager::CONTEXT, 'ViewPersonalCourses');
 
         $html = [];
 
@@ -126,7 +126,7 @@ class AnnouncementComponent extends Manager
     {
         $id = $publication[ContentObjectPublication::PROPERTY_ID];
 
-        $parameters[Manager::PARAM_CONTEXT] = Manager::context();
+        $parameters[Manager::PARAM_CONTEXT] = Manager::CONTEXT;
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
         $parameters[Manager::PARAM_COURSE] = $course->get_id();
         $parameters[Manager::PARAM_TOOL] = self::TOOL_ANNOUNCEMENT;

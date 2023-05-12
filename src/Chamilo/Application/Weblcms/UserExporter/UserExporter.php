@@ -99,37 +99,37 @@ class UserExporter
         $user_export_headers[User::PROPERTY_OFFICIAL_CODE] = Translation::get(
             'OfficialCode',
             null,
-            \Chamilo\Core\User\Manager::context()
+            \Chamilo\Core\User\Manager::CONTEXT
         );
 
         $user_export_headers[User::PROPERTY_USERNAME] = Translation::get(
             'Username',
             null,
-            \Chamilo\Core\User\Manager::context()
+            \Chamilo\Core\User\Manager::CONTEXT
         );
 
         $user_export_headers[User::PROPERTY_LASTNAME] = Translation::get(
             'Lastname',
             null,
-            \Chamilo\Core\User\Manager::context()
+            \Chamilo\Core\User\Manager::CONTEXT
         );
 
         $user_export_headers[User::PROPERTY_FIRSTNAME] = Translation::get(
             'Firstname',
             null,
-            \Chamilo\Core\User\Manager::context()
+            \Chamilo\Core\User\Manager::CONTEXT
         );
 
         $user_export_headers[self::PROPERTY_SORT_NAME] = Translation::get(
             'SortName',
             null,
-            Manager::context()
+            Manager::CONTEXT
         );
 
         $user_export_headers[User::PROPERTY_EMAIL] = Translation::get(
             'Email',
             null,
-            \Chamilo\Core\User\Manager::context()
+            \Chamilo\Core\User\Manager::CONTEXT
         );
 
         $this->add_additional_headers($user_export_headers);

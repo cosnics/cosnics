@@ -28,7 +28,7 @@ class CourseImporterComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageCourses');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageCourses');
 
         $form = new CourseImportForm(CourseImportForm::TYPE_IMPORT, $this->get_url());
 
@@ -60,7 +60,7 @@ class CourseImporterComponent extends Manager
         {
             $redirect = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
                 )
             );
@@ -70,7 +70,7 @@ class CourseImporterComponent extends Manager
 
             $redirect = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
                     GenericTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
                         self::package()

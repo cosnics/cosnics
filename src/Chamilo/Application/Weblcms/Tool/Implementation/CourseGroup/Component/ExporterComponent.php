@@ -252,17 +252,17 @@ class ExporterComponent extends Manager
     {
         $table = [];
         $table[0][User::PROPERTY_OFFICIAL_CODE] = Translation::get(
-            'OfficialCode', null, \Chamilo\Core\User\Manager::context()
+            'OfficialCode', null, \Chamilo\Core\User\Manager::CONTEXT
         );
-        $table[0][User::PROPERTY_USERNAME] = Translation::get('Username', null, \Chamilo\Core\User\Manager::context());
-        $table[0][User::PROPERTY_LASTNAME] = Translation::get('Lastname', null, \Chamilo\Core\User\Manager::context());
+        $table[0][User::PROPERTY_USERNAME] = Translation::get('Username', null, \Chamilo\Core\User\Manager::CONTEXT);
+        $table[0][User::PROPERTY_LASTNAME] = Translation::get('Lastname', null, \Chamilo\Core\User\Manager::CONTEXT);
         $table[0][self::PROPERTY_SORT_NAME] =
-            Translation::get('SortName', null, \Chamilo\Application\Weblcms\Manager::context());
+            Translation::get('SortName', null, \Chamilo\Application\Weblcms\Manager::CONTEXT);
         $table[0][User::PROPERTY_FIRSTNAME] = Translation::get(
-            'Firstname', null, \Chamilo\Core\User\Manager::context()
+            'Firstname', null, \Chamilo\Core\User\Manager::CONTEXT
         );
 
-        $table[0][User::PROPERTY_EMAIL] = Translation::get('Email', null, \Chamilo\Core\User\Manager::context());
+        $table[0][User::PROPERTY_EMAIL] = Translation::get('Email', null, \Chamilo\Core\User\Manager::CONTEXT);
         $table[0][CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME] = Translation::get('SubscriptionTime');
         $table[0]['Course Groups'] = Translation::get('CourseGroups');
 
@@ -308,7 +308,7 @@ class ExporterComponent extends Manager
 
             $table[$index][User::PROPERTY_EMAIL] = $block_data[User::PROPERTY_EMAIL];
             $table[$index][CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME] = DatetimeUtilities::getInstance()->formatLocaleDate(
-                Translation::getInstance()->getTranslation('SubscriptionTimeFormat', null, Manager::context()),
+                Translation::getInstance()->getTranslation('SubscriptionTimeFormat', null, Manager::CONTEXT),
                 $block_data[CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME]
             );
 

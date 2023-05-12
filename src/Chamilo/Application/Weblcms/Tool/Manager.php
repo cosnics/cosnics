@@ -138,7 +138,7 @@ abstract class Manager extends Application
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            Action\Manager::context(), new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            Action\Manager::CONTEXT, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         )->run();
     }
 

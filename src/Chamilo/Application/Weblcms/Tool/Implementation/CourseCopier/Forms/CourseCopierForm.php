@@ -170,7 +170,7 @@ class CourseCopierForm extends FormValidator
     {
         if (is_null($context))
         {
-            $context = Manager::context();
+            $context = Manager::CONTEXT;
         }
 
         return Translation::getInstance()->getTranslation($variable, $parameters, $context);

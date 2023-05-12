@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Chat\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Chat\Manager;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Symfony\Component\HttpFoundation\Response;
 
 class ViewerComponent extends Manager
@@ -15,7 +14,7 @@ class ViewerComponent extends Manager
 
         $html[] = $this->render_header();
         $html[] = '<div class="alert alert-warning">' .
-            $this->getTranslator()->trans('NoLongerSupported', [], Manager::context()) . '</div>';
+            $this->getTranslator()->trans('NoLongerSupported', [], Manager::CONTEXT) . '</div>';
         $html[] = $this->render_footer();
 
         return new Response(implode(PHP_EOL, $html));

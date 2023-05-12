@@ -18,7 +18,7 @@ class DeleteComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageOpenCourses');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageOpenCourses');
         
         $courseIds = $this->getCourseIdsFromRequest();
         
@@ -35,7 +35,7 @@ class DeleteComponent extends Manager
         }
         
         $this->redirectWithMessage(
-            Translation::getInstance()->getTranslation($redirectMessageVariable, null, Manager::context()), 
+            Translation::getInstance()->getTranslation($redirectMessageVariable, null, Manager::CONTEXT),
             ! $success, 
             array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }

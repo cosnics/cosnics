@@ -87,7 +87,7 @@ class EndingAssignments extends Block
             {
                 $parameters = array(
                     \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $publication->get_course_id(),
-                    Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(),
+                    Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::CONTEXT,
                     Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
                     \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => NewBlock::TOOL_ASSIGNMENT,
                     \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY,

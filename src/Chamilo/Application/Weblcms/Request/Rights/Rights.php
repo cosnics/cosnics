@@ -31,7 +31,7 @@ class Rights extends RightsUtil
 
     function create_request_root()
     {
-        return parent::create_location(Manager::context());
+        return parent::create_location(Manager::CONTEXT);
     }
 
     /**
@@ -95,7 +95,7 @@ class Rights extends RightsUtil
                     ), $location_entity_right_ids
                 );
                 $location_entity_rights = \Chamilo\Core\Rights\Storage\DataManager::retrieve_rights_location_rights(
-                    Manager::context(), $condition
+                    Manager::CONTEXT, $condition
                 );
 
                 foreach ($location_entity_rights as $location_entity_right)
@@ -178,29 +178,29 @@ class Rights extends RightsUtil
     function get_request_location_entity_right($entity_id, $entity_type)
     {
         return \Chamilo\Core\Rights\Storage\DataManager::retrieve_rights_location_entity_right(
-            Manager::context(), self::VIEW_RIGHT, $entity_id, $entity_type, $this->get_request_root_id()
+            Manager::CONTEXT, self::VIEW_RIGHT, $entity_id, $entity_type, $this->get_request_root_id()
         );
     }
 
     function get_request_root()
     {
-        return parent::get_root(Manager::context());
+        return parent::get_root(Manager::CONTEXT);
     }
 
     function get_request_root_id()
     {
-        return parent::get_root_id(Manager::context());
+        return parent::get_root_id(Manager::CONTEXT);
     }
 
     function get_request_targets_entities()
     {
-        return parent::get_target_entities(self::VIEW_RIGHT, Manager::context());
+        return parent::get_target_entities(self::VIEW_RIGHT, Manager::CONTEXT);
     }
 
     function get_request_view_rights_location_entity_right($entity_id, $entity_type)
     {
         return parent::get_rights_location_entity_right(
-            Manager::context(), self::VIEW_RIGHT, $entity_id, $entity_type, self::get_request_root_id()
+            Manager::CONTEXT, self::VIEW_RIGHT, $entity_id, $entity_type, self::get_request_root_id()
         );
     }
 
@@ -300,7 +300,7 @@ class Rights extends RightsUtil
     function invert_request_location_entity_right($right_id, $entity_id, $entity_type)
     {
         return parent::invert_location_entity_right(
-            Manager::context(), $right_id, $entity_id, $entity_type, self::get_request_root_id()
+            Manager::CONTEXT, $right_id, $entity_id, $entity_type, self::get_request_root_id()
         );
     }
 
@@ -316,7 +316,7 @@ class Rights extends RightsUtil
         $entities[PlatformGroupEntity::ENTITY_TYPE] = new PlatformGroupEntity();
 
         return parent::is_allowed(
-            self::VIEW_RIGHT, Manager::context(), null, $entities, 0, self::TYPE_ROOT, 0, self::TREE_TYPE_ROOT
+            self::VIEW_RIGHT, Manager::CONTEXT, null, $entities, 0, self::TYPE_ROOT, 0, self::TREE_TYPE_ROOT
         );
     }
 }

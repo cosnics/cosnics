@@ -127,7 +127,7 @@ class CourseRequestForm extends FormValidator
                     $users[$user->get_id()] = $user_name;
                 }
                 $this->addElement(
-                    'select', CommonRequest::PROPERTY_USER_ID, Translation::get('User', null, Manager::context()),
+                    'select', CommonRequest::PROPERTY_USER_ID, Translation::get('User', null, Manager::CONTEXT),
                     $users
                 );
             }
@@ -137,7 +137,7 @@ class CourseRequestForm extends FormValidator
                     User::class, (int) $this->request_user_id
                 )->get_fullname();
                 $this->addElement(
-                    'static', 'user', Translation::get('User', null, Manager::context()), $user_name
+                    'static', 'user', Translation::get('User', null, Manager::CONTEXT), $user_name
                 );
             }
 
@@ -162,7 +162,7 @@ class CourseRequestForm extends FormValidator
                 User::class, (int) $this->request->get_user_id()
             )->get_fullname();
             $this->addElement(
-                'static', 'request', Translation::get('User', null, Manager::context()), $name_user
+                'static', 'request', Translation::get('User', null, Manager::CONTEXT), $name_user
             );
 
             $request_name =

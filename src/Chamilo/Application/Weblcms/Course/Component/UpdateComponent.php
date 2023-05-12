@@ -31,7 +31,7 @@ class UpdateComponent extends CourseFormActionComponent
      */
     protected function checkComponentAuthorization(Course $course)
     {
-        if (!$this->isAuthorized(Manager::context(), 'ManageCourses') &&
+        if (!$this->isAuthorized(Manager::CONTEXT, 'ManageCourses') &&
             !$course->is_course_admin($this->getUser())
         )
         {

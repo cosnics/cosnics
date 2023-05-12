@@ -194,7 +194,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
     {
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->namespaceToFullPath(Manager::context(), true) .
+            Path::getInstance()->namespaceToFullPath(Manager::CONTEXT, true) .
             'Resources/Javascript/ContentObjectPublicationForm.js'
         )
         );
@@ -378,7 +378,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $html[] = '<div class="target-entities-container clearfix" data-course-id="' . $this->get_course_id() .
             '" data-tool="' . $this->get_tool() . '">';
 
-        // $html[] = '<h5>' . $translator->getTranslation('EntitiesHaveViewRight', null, Manager::context()) .
+        // $html[] = '<h5>' . $translator->getTranslation('EntitiesHaveViewRight', null, Manager::CONTEXT) .
         // ':</h5>';
         $html[] = '<div class="panel panel-default target-entities-list">';
         $html[] = '<div class="panel-heading">';
@@ -387,10 +387,10 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $html[] = '<div class="panel-body">';
         $html[] = '<ul class="list-group target-entities-user-list">';
         $html[] = '<li class="list-group-item target-entities-default target-entities-nobody">';
-        $html[] = $translator->getTranslation('NoUsers', null, Manager::context());
+        $html[] = $translator->getTranslation('NoUsers', null, Manager::CONTEXT);
         $html[] = '</li>';
         $html[] = '<li class="list-group-item target-entities-default target-entities-everyone">';
-        $html[] = $translator->getTranslation('AllUsers', null, Manager::context());
+        $html[] = $translator->getTranslation('AllUsers', null, Manager::CONTEXT);
         $html[] = '</li>';
         $html[] = '</ul>';
         $html[] = '</div>';
@@ -403,10 +403,10 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $html[] = '<div class="panel-body">';
         $html[] = '<ul class="list-group target-entities-platform-groups-list">';
         $html[] = '<li class="list-group-item target-entities-default target-entities-nobody">';
-        $html[] = $translator->getTranslation('NoPlatformGroups', null, Manager::context());
+        $html[] = $translator->getTranslation('NoPlatformGroups', null, Manager::CONTEXT);
         $html[] = '</li>';
         $html[] = '<li class="list-group-item target-entities-default target-entities-everyone">';
-        $html[] = $translator->getTranslation('AllPlatformGroups', null, Manager::context());
+        $html[] = $translator->getTranslation('AllPlatformGroups', null, Manager::CONTEXT);
         $html[] = '</li>';
         $html[] = '</ul>';
         $html[] = '</div>';
@@ -414,15 +414,15 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $html[] = '<div class="panel panel-default target-entities-list">';
         $html[] = '<div class="panel-heading">';
-        $html[] = $translator->getTranslation('CourseGroups', null, Manager::context());
+        $html[] = $translator->getTranslation('CourseGroups', null, Manager::CONTEXT);
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
         $html[] = '<ul class="list-group target-entities-course-groups-list">';
         $html[] = '<li class="list-group-item target-entities-default target-entities-nobody">';
-        $html[] = $translator->getTranslation('NoCourseGroups', null, Manager::context());
+        $html[] = $translator->getTranslation('NoCourseGroups', null, Manager::CONTEXT);
         $html[] = '</li>';
         $html[] = '<li class="list-group-item target-entities-default target-entities-everyone">';
-        $html[] = $translator->getTranslation('AllCourseGroups', null, Manager::context());
+        $html[] = $translator->getTranslation('AllCourseGroups', null, Manager::CONTEXT);
         $html[] = '</li>';
         $html[] = '</ul>';
         $html[] = '</div>';
@@ -447,7 +447,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $this->addElement('html', '<div class="right">');
 
         $this->addGroup(
-            $group, self::PROPERTY_RIGHTS_SELECTOR, $translator->getTranslation('PublishFor', null, Manager::context()),
+            $group, self::PROPERTY_RIGHTS_SELECTOR, $translator->getTranslation('PublishFor', null, Manager::CONTEXT),
             ''
         );
 
@@ -464,7 +464,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $this->addElement(
             'static', '', '', '<div class="alert alert-info" style="margin-top: 10px;">' .
-            Translation::getInstance()->getTranslation('RightsInformationMessage', null, Manager::context()) . '</div>'
+            Translation::getInstance()->getTranslation('RightsInformationMessage', null, Manager::CONTEXT) . '</div>'
         );
 
         $this->addElement('html', '</div></div><div style="margin-bottom: 20px;"></div>');
@@ -941,7 +941,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             {
                 case self::RIGHTS_FOR_ALL :
                     if (!$weblcms_rights->invert_location_entity_right(
-                        Manager::context(), WeblcmsRights::VIEW_RIGHT, 0, 0, $location_id
+                        Manager::CONTEXT, WeblcmsRights::VIEW_RIGHT, 0, 0, $location_id
                     ))
                     {
                         return false;
@@ -949,7 +949,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
                     break;
                 case self::RIGHTS_FOR_ME :
                     if (!$weblcms_rights->invert_location_entity_right(
-                        Manager::context(), WeblcmsRights::VIEW_RIGHT, Session::get_user_id(),
+                        Manager::CONTEXT, WeblcmsRights::VIEW_RIGHT, Session::get_user_id(),
                         CourseUserEntity::ENTITY_TYPE, $location_id
                     ))
                     {
@@ -962,7 +962,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
                         foreach ($target_ids as $target_id)
                         {
                             if (!$weblcms_rights->invert_location_entity_right(
-                                Manager::context(), WeblcmsRights::VIEW_RIGHT, $target_id, $entity_type, $location_id
+                                Manager::CONTEXT, WeblcmsRights::VIEW_RIGHT, $target_id, $entity_type, $location_id
                             ))
                             {
                                 return false;

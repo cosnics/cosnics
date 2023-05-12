@@ -64,7 +64,7 @@ abstract class StatusChangerComponent extends Manager
                 \Chamilo\Application\Weblcms\Manager::PARAM_COURSE
             );
             $parameters[UserStatusChange::PROPERTY_DATE] = time();
-            Event::trigger('UserStatusChange', \Chamilo\Application\Weblcms\Manager::context(), $parameters);
+            Event::trigger('UserStatusChange', \Chamilo\Application\Weblcms\Manager::CONTEXT, $parameters);
         }
 
         $message = $this->get_general_result(

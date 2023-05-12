@@ -35,7 +35,7 @@ class UpdaterComponent extends Manager implements CourseSubManagerSupport
             $this->get_course_id());
 
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Application\Weblcms\Course\Manager::context(),
+            \Chamilo\Application\Weblcms\Course\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 

@@ -138,7 +138,7 @@ class BrowserComponent extends Manager
         if (!isset($this->defaultComponent))
         {
             $this->defaultComponent = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Application\Weblcms\Tool\Action\Manager::context(),
+                \Chamilo\Application\Weblcms\Tool\Action\Manager::CONTEXT,
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
             );
         }

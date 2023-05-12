@@ -60,7 +60,7 @@ class ShortcutToolListRenderer extends ToolListRenderer
             $title = $translator->getTranslation('TypeName', null, $tool->getContext());
 
             $params = array(
-                Application::PARAM_CONTEXT => Manager::context(), Manager::PARAM_COURSE => $course->get_id(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT, Manager::PARAM_COURSE => $course->get_id(),
                 Application::PARAM_ACTION => Manager::ACTION_VIEW_COURSE, Manager::PARAM_TOOL => $tool->get_name()
             );
 

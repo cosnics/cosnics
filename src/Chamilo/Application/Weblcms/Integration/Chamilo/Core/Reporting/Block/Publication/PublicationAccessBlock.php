@@ -23,8 +23,8 @@ class PublicationAccessBlock extends ToolBlock
 
         $reporting_data->set_rows(
             array(
-                Translation::get('User', null, Manager::context()),
-                Translation::get('OfficialCode', null, Manager::context())
+                Translation::get('User', null, Manager::CONTEXT),
+                Translation::get('OfficialCode', null, Manager::CONTEXT)
             )
         );
 
@@ -52,11 +52,11 @@ class PublicationAccessBlock extends ToolBlock
             }
 
             $reporting_data->add_data_category_row(
-                $counter, Translation::get('User', null, Manager::context()), $name
+                $counter, Translation::get('User', null, Manager::CONTEXT), $name
             );
 
             $reporting_data->add_data_category_row(
-                $counter, Translation::get('OfficialCode', null, Manager::context()), $officialCode
+                $counter, Translation::get('OfficialCode', null, Manager::CONTEXT), $officialCode
             );
 
             $this->add_reporting_data_from_course_visit_as_row($counter, $reporting_data, $course_visit);

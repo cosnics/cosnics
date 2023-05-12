@@ -20,6 +20,8 @@ abstract class Manager extends Application
     public const ACTION_VISIT_PLANNER = 'VisitPlanner';
     public const ACTION_VISIT_TEAM = 'VisitTeam';
 
+    public const CONTEXT = __NAMESPACE__;
+
     public const DEFAULT_ACTION = self::ACTION_VISIT_GROUP;
     public const PARAM_ACTION = 'Office365CourseGroupAction';
 

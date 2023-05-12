@@ -71,7 +71,7 @@ class AssessmentUserScoresBlock extends ToolBlock
         $publications = [];
         $headings = [];
         $headings[] = Translation::get('Name');
-        $headings[] = Translation::get('OfficialCode', null, Manager::context());
+        $headings[] = Translation::get('OfficialCode', null, Manager::CONTEXT);
         foreach ($publication_resultset as $publication)
         {
             $publications[] = $publication;
@@ -104,7 +104,7 @@ class AssessmentUserScoresBlock extends ToolBlock
             );
 
             $reporting_data->add_data_category_row(
-                $key, Translation::get('OfficialCode', null, Manager::context()), $user[User::PROPERTY_OFFICIAL_CODE]
+                $key, Translation::get('OfficialCode', null, Manager::CONTEXT), $user[User::PROPERTY_OFFICIAL_CODE]
             );
 
             foreach ($publications as $publication)

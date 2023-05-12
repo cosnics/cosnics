@@ -29,10 +29,10 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageCourses');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageCourses');
 
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Configuration\Category\Manager::context(),
+            \Chamilo\Configuration\Category\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         )->run();
     }
@@ -42,23 +42,23 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
         if ($this->get_user()->is_platform_admin())
         {
             $redirect = new Redirect(
-                array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                [
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
-                )
+                ]
             );
             $breadcrumbtrail->add(
                 new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin'))
             );
 
             $redirect = new Redirect(
-                array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                [
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
                     GenericTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
                         self::package()
                     )
-                )
+                ]
             );
             $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Courses')));
         }

@@ -31,7 +31,7 @@ class ViewerComponent extends Manager
         if (! isset($template_id))
         {
             $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Reporting\Viewer\Manager::context(),
+                \Chamilo\Core\Reporting\Viewer\Manager::CONTEXT,
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component->set_template_by_name(
                 CourseStudentTrackerTemplate::class);
@@ -47,7 +47,7 @@ class ViewerComponent extends Manager
             $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID, $template_id);
 
             $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Reporting\Viewer\Manager::context(),
+                \Chamilo\Core\Reporting\Viewer\Manager::CONTEXT,
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component->set_template_by_name($template_id);
             return $component->run();

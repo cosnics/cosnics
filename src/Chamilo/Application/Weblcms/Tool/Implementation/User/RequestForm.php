@@ -111,7 +111,7 @@ class RequestForm extends FormValidator
                 }
                 $this->addElement(
                     'select', CommonRequest::PROPERTY_USER_ID,
-                    Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $users
+                    Translation::get('User', null, \Chamilo\Core\User\Manager::CONTEXT), $users
                 );
             }
             else
@@ -120,7 +120,7 @@ class RequestForm extends FormValidator
                     User::class, $this->user_id
                 )->get_fullname();
                 $this->addElement(
-                    'static', 'user', Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $user_name
+                    'static', 'user', Translation::get('User', null, \Chamilo\Core\User\Manager::CONTEXT), $user_name
                 );
             }
 
@@ -145,7 +145,7 @@ class RequestForm extends FormValidator
                 User::class, $this->request->get_user_id()
             )->get_fullname();
             $this->addElement(
-                'static', 'request', Translation::get('User', null, \Chamilo\Core\User\Manager::context()), $name_user
+                'static', 'request', Translation::get('User', null, \Chamilo\Core\User\Manager::CONTEXT), $name_user
             );
 
             $request_name = DataManager::retrieve_by_id(

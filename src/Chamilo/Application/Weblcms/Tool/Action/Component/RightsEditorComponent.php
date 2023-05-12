@@ -51,7 +51,7 @@ class RightsEditorComponent extends Manager
         }
 
         $component = $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Rights\Editor\Manager::context(),
+            \Chamilo\Core\Rights\Editor\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         );
         $component->set_locations($locations);
@@ -91,7 +91,7 @@ class RightsEditorComponent extends Manager
 
         $info = [];
 
-        $translation_context = \Chamilo\Core\Rights\Manager::context();
+        $translation_context = \Chamilo\Core\Rights\Manager::CONTEXT;
 
         $info[] = Translation::get(
             "YouAreEditingRightsFor", array("TYPE" => Translation::get($type, null, $translation_context)),

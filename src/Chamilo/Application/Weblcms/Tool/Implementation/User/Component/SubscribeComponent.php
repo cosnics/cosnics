@@ -128,7 +128,7 @@ class SubscribeComponent extends Manager
             else
             {
                 throw new NoObjectSelectedException(
-                    Translation::getInstance()->getTranslation('Users', null, Manager::context())
+                    Translation::getInstance()->getTranslation('Users', null, Manager::CONTEXT)
                 );
             }
         }
@@ -137,7 +137,7 @@ class SubscribeComponent extends Manager
 
             throw new NoObjectSelectedException(
                 Translation::getInstance()->getTranslation(
-                    'Course', null, \Chamilo\Application\Weblcms\Manager::context()
+                    'Course', null, \Chamilo\Application\Weblcms\Manager::CONTEXT
                 )
             );
         }
@@ -180,12 +180,12 @@ class SubscribeComponent extends Manager
 
         $additionalItems = array(
             '<a href="' . $requestUrl . '">' . '<button type="button" class="btn btn-default pull-right">' .
-            $translator->getTranslation('RequestUsers', null, Manager::context()) .
+            $translator->getTranslation('RequestUsers', null, Manager::CONTEXT) .
             '</button><div class="clearfix"></div></a>'
         );
 
         return $this->renderUserList(
-            'panel-warning', $translator->getTranslation('FailedUsersCanOnlyBeRequested', null, Manager::context()),
+            'panel-warning', $translator->getTranslation('FailedUsersCanOnlyBeRequested', null, Manager::CONTEXT),
             $requestUsers, $additionalItems
         );
     }
@@ -206,12 +206,12 @@ class SubscribeComponent extends Manager
         $html[] = $this->render_header();
 
         $html[] = $this->renderUserList(
-            'panel-info', $translator->getTranslation('SubscribedUsers', null, Manager::context()),
+            'panel-info', $translator->getTranslation('SubscribedUsers', null, Manager::CONTEXT),
             $usersStatus[self::STATUS_SUCCESS]
         );
 
         $html[] = $this->renderUserList(
-            'panel-danger', $translator->getTranslation('FailedUsersNotAllowed', null, Manager::context()),
+            'panel-danger', $translator->getTranslation('FailedUsersNotAllowed', null, Manager::CONTEXT),
             $usersStatus[self::STATUS_FAILED_NOT_ALLOWED]
         );
 

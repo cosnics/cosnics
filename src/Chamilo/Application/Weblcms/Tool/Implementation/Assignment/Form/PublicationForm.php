@@ -79,7 +79,7 @@ class PublicationForm extends ContentObjectPublicationForm
      */
     public function build_basic_create_form()
     {
-        $this->addElement('category', $this->translator->trans('DefaultProperties', [], Manager::context()));
+        $this->addElement('category', $this->translator->trans('DefaultProperties', [], Manager::CONTEXT));
         parent::build_basic_create_form();
         $this->addAssignmentProperties();
     }
@@ -92,7 +92,7 @@ class PublicationForm extends ContentObjectPublicationForm
      */
     public function build_basic_update_form()
     {
-        $this->addElement('category', $this->translator->trans('DefaultProperties', [], Manager::context()));
+        $this->addElement('category', $this->translator->trans('DefaultProperties', [], Manager::CONTEXT));
         parent::build_basic_update_form();
         $this->addAssignmentProperties();
     }
@@ -103,13 +103,13 @@ class PublicationForm extends ContentObjectPublicationForm
      */
     protected function addAssignmentProperties()
     {
-        $this->addElement('category', $this->translator->trans('AssignmentProperties', [], Manager::context()));
+        $this->addElement('category', $this->translator->trans('AssignmentProperties', [], Manager::CONTEXT));
 
         $group[] = $this->createElement(
             'radio',
             null,
             null,
-            $this->translator->trans('TypeUsersEntity', [], Manager::context()),
+            $this->translator->trans('TypeUsersEntity', [], Manager::CONTEXT),
             Entry::ENTITY_TYPE_USER
         );
 
@@ -117,7 +117,7 @@ class PublicationForm extends ContentObjectPublicationForm
             'radio',
             null,
             null,
-            $this->translator->trans('TypeCourseGroupsEntity', [], Manager::context()),
+            $this->translator->trans('TypeCourseGroupsEntity', [], Manager::CONTEXT),
             Entry::ENTITY_TYPE_COURSE_GROUP
         );
 
@@ -125,14 +125,14 @@ class PublicationForm extends ContentObjectPublicationForm
             'radio',
             null,
             null,
-            $this->translator->trans('TypePlatformGroupsEntity', [], Manager::context()),
+            $this->translator->trans('TypePlatformGroupsEntity', [], Manager::CONTEXT),
             Entry::ENTITY_TYPE_PLATFORM_GROUP
         );
 
         $this->addGroup(
             $group,
             Publication::PROPERTY_ENTITY_TYPE,
-            $this->translator->trans('PublishAssignmentForEntity', [], Manager::context()),
+            $this->translator->trans('PublishAssignmentForEntity', [], Manager::CONTEXT),
             ''
         );
     }

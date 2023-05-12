@@ -62,7 +62,7 @@ class NewAssignments extends NewBlock
         $parameters = array(
             \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course->get_id(),
             Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
-            Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(),
+            Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::CONTEXT,
             \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => NewBlock::TOOL_ASSIGNMENT,
             \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY,
             Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]

@@ -112,7 +112,7 @@ class BrowserComponent extends Manager
             $html[] = '<div class="alert alert-info" style="display: flex">';
             $html[]= '<div class="fas fa-info" style="font-size: 20px;"></div>';
             $html[]= '<div style="margin-left: 10px;">';
-            $html[] = $this->getTranslator()->trans('AssignmentChangesWarning', [], Manager::context());
+            $html[] = $this->getTranslator()->trans('AssignmentChangesWarning', [], Manager::CONTEXT);
             $html[] = '</div>';
             $html[] = '</div>';
         }

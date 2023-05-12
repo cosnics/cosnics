@@ -19,7 +19,7 @@ class CourseUserSubscriptionRequestGranterComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageCourses');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageCourses');
         
         $requestIds = $this->getRequest()->getFromRequestOrQuery(Manager::PARAM_REQUEST);
         

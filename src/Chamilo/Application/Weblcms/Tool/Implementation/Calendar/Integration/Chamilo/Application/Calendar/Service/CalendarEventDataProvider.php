@@ -48,7 +48,7 @@ class CalendarEventDataProvider extends \Chamilo\Application\Weblcms\Integration
      */
     function getCalendarContext()
     {
-        return Manager::context();
+        return Manager::CONTEXT;
     }
 
     /**

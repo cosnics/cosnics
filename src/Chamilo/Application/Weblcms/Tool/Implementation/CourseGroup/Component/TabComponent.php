@@ -279,7 +279,7 @@ abstract class TabComponent extends Manager
 
         $tabs->add(
             new LinkTab(
-                'view_details', $translator->getTranslation('BrowseChildren', null, Manager::context()),
+                'view_details', $translator->getTranslation('BrowseChildren', null, Manager::CONTEXT),
                 new FontAwesomeGlyph('folder'), $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE]),
                 get_class($this) == BrowserComponent::class
             )
@@ -289,7 +289,7 @@ abstract class TabComponent extends Manager
         {
             $tabs->add(
                 new LinkTab(
-                    'view_details', $translator->getTranslation('EditGroup', null, Manager::context()),
+                    'view_details', $translator->getTranslation('EditGroup', null, Manager::CONTEXT),
                     new FontAwesomeGlyph('pencil-alt'),
                     $this->get_url([self::PARAM_ACTION => self::ACTION_EDIT_COURSE_GROUP]),
                     get_class($this) == EditorComponent::class
@@ -298,7 +298,7 @@ abstract class TabComponent extends Manager
 
             $tabs->add(
                 new LinkTab(
-                    'view_details', $translator->getTranslation('ManageSubscriptions', null, Manager::context()),
+                    'view_details', $translator->getTranslation('ManageSubscriptions', null, Manager::CONTEXT),
                     new FontAwesomeGlyph('plus-circle'),
                     $this->get_url([self::PARAM_ACTION => self::ACTION_MANAGE_SUBSCRIPTIONS]),
                     get_class($this) == ManageSubscriptionsComponent::class

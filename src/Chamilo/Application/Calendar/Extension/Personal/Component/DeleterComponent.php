@@ -10,9 +10,8 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application\calendar
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DeleterComponent extends Manager
 {
@@ -29,7 +28,7 @@ class DeleterComponent extends Manager
         {
             if (!is_array($ids))
             {
-                $ids = array($ids);
+                $ids = [$ids];
             }
 
             foreach ($ids as $id)
@@ -52,15 +51,13 @@ class DeleterComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = Translation::get(
-                        'ObjectNotDeleted', array('OBJECT' => Translation::get('Publication')),
-                        StringUtilities::LIBRARIES
+                        'ObjectNotDeleted', ['OBJECT' => Translation::get('Publication')], StringUtilities::LIBRARIES
                     );
                 }
                 else
                 {
                     $message = Translation::get(
-                        'ObjectsNotDeleted', array('OBJECT' => Translation::get('Publications')),
-                        StringUtilities::LIBRARIES
+                        'ObjectsNotDeleted', ['OBJECT' => Translation::get('Publications')], StringUtilities::LIBRARIES
                     );
                 }
             }
@@ -69,24 +66,22 @@ class DeleterComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = Translation::get(
-                        'ObjectDeleted', array('OBJECT' => Translation::get('Publication')), StringUtilities::LIBRARIES
+                        'ObjectDeleted', ['OBJECT' => Translation::get('Publication')], StringUtilities::LIBRARIES
                     );
                 }
                 else
                 {
                     $message = Translation::get(
-                        'ObjectsDeleted', array('OBJECT' => Translation::get('Publications')),
-                        StringUtilities::LIBRARIES
+                        'ObjectsDeleted', ['OBJECT' => Translation::get('Publications')], StringUtilities::LIBRARIES
                     );
                 }
             }
 
             $this->redirectWithMessage(
-                $message, (bool) $failures, array(
-                    \Chamilo\Application\Calendar\Manager::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(
-                    ),
+                $message, (bool) $failures, [
+                    \Chamilo\Application\Calendar\Manager::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
                     \Chamilo\Application\Calendar\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Manager::ACTION_BROWSE
-                )
+                ]
             );
         }
         else

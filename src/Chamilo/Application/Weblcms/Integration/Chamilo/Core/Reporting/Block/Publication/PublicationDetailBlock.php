@@ -47,7 +47,7 @@ class PublicationDetailBlock extends ToolBlock
         
         $params = [];
         $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::CONTEXT;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_id;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $tool;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $id;

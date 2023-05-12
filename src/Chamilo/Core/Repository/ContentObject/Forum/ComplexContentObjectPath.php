@@ -8,4 +8,5 @@ namespace Chamilo\Core\Repository\ContentObject\Forum;
  */
 class ComplexContentObjectPath extends \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath
 {
+    public const CONTEXT = __NAMESPACE__;
 }

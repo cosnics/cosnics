@@ -16,7 +16,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- *
  * @package user.lib.user_manager.component
  */
 class RegisterComponent extends Manager implements NoAuthenticationSupport
@@ -27,7 +26,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
-        $allow_registration = Configuration::getInstance()->get_setting(array(self::context(), 'allow_registration'));
+        $allow_registration = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_registration']);
         if (!$allow_registration)
         {
             throw new NotAllowedException();
@@ -47,7 +46,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
             {
                 $parameters = [];
 
-                if (Configuration::getInstance()->get_setting(array(self::context(), 'allow_registration')) == 2)
+                if (Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_registration']) == 2)
                 {
                     $parameters['message'] = Translation::get('UserAwaitingApproval');
                 }
@@ -80,7 +79,6 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
             return implode(PHP_EOL, $html);
         }
     }
-
 
     public function get_breadcrumb_generator(): BreadcrumbGeneratorInterface
     {

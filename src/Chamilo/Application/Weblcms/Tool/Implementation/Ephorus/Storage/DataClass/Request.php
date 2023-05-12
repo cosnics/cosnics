@@ -1,11 +1,10 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -16,48 +15,48 @@ use InvalidArgumentException;
  * This class defines a request for the ephorus tool
  *
  * @package application\weblcms\tool\ephorus;
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class Request extends EphorusDataClass
 {
 
-    const FOREIGN_PROPERTY_AUTHOR = 'author';
-    const FOREIGN_PROPERTY_CONTENT_OBJECT = 'content_object';
+    public const FOREIGN_PROPERTY_AUTHOR = 'author';
+    public const FOREIGN_PROPERTY_CONTENT_OBJECT = 'content_object';
 
-    const PROCESS_TYPE_CHECK_AND_INVISIBLE = 3;
-    const PROCESS_TYPE_CHECK_AND_VISIBLE = 1;
-    const PROCESS_TYPE_NO_CHECK_AND_VISIBLE = 2;
-    const PROPERTY_AUTHOR_ID = 'author_id';
-    const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
-    const PROPERTY_COURSE_ID = 'course_id';
-    const PROPERTY_DUPLICATE_ORIGINAL_GUID = 'duplicate_original_guid';
-    const PROPERTY_DUPLICATE_STUDENT_NAME = 'duplicate_student_name';
-    const PROPERTY_DUPLICATE_STUDENT_NUMBER = 'duplicate_student_number';
-    const PROPERTY_GUID = 'guid';
-    const PROPERTY_PERCENTAGE = 'percentage';
-    const PROPERTY_PROCESS_TYPE = 'process_type';
-    const PROPERTY_REQUEST_ID = 'request_id';
-    const PROPERTY_REQUEST_TIME = 'request_time';
-    const PROPERTY_REQUEST_USER_ID = 'request_user_id';
-    const PROPERTY_STATUS = 'status';
-    const PROPERTY_STATUS_DESCRIPTION = 'status_description';
-    const PROPERTY_SUMMARY = 'summary';
-    const PROPERTY_VISIBLE_IN_INDEX = 'visible_in_index';
+    public const PROCESS_TYPE_CHECK_AND_INVISIBLE = 3;
+    public const PROCESS_TYPE_CHECK_AND_VISIBLE = 1;
+    public const PROCESS_TYPE_NO_CHECK_AND_VISIBLE = 2;
+    public const PROPERTY_AUTHOR_ID = 'author_id';
+    public const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
+    public const PROPERTY_COURSE_ID = 'course_id';
+    public const PROPERTY_DUPLICATE_ORIGINAL_GUID = 'duplicate_original_guid';
+    public const PROPERTY_DUPLICATE_STUDENT_NAME = 'duplicate_student_name';
+    public const PROPERTY_DUPLICATE_STUDENT_NUMBER = 'duplicate_student_number';
+    public const PROPERTY_GUID = 'guid';
+    public const PROPERTY_PERCENTAGE = 'percentage';
+    public const PROPERTY_PROCESS_TYPE = 'process_type';
+    public const PROPERTY_REQUEST_ID = 'request_id';
+    public const PROPERTY_REQUEST_TIME = 'request_time';
+    public const PROPERTY_REQUEST_USER_ID = 'request_user_id';
+    public const PROPERTY_STATUS = 'status';
+    public const PROPERTY_STATUS_DESCRIPTION = 'status_description';
+    public const PROPERTY_SUMMARY = 'summary';
+    public const PROPERTY_VISIBLE_IN_INDEX = 'visible_in_index';
 
-    const STATUS_DUPLICATE = 2;
-    const STATUS_IN_PROGRESS = 7;
-    const STATUS_NOT_ENOUGH_TEXT = 4;
-    const STATUS_NO_TEXT = 5;
-    const STATUS_OK = 1;
-    const STATUS_OTHER = 6;
-    const STATUS_PROTECTED = 3;
+    public const STATUS_DUPLICATE = 2;
+    public const STATUS_IN_PROGRESS = 7;
+    public const STATUS_NOT_ENOUGH_TEXT = 4;
+    public const STATUS_NO_TEXT = 5;
+    public const STATUS_OK = 1;
+    public const STATUS_OTHER = 6;
+    public const STATUS_PROTECTED = 3;
 
     /**
      * The supported extensions
      *
      * @var string[]
      */
-    private $supported_extensions = array('doc', 'txt', 'rtf', 'sxw', 'odt', 'pdf', 'html', 'htm', 'docx', 'wpd');
+    private $supported_extensions = ['doc', 'txt', 'rtf', 'sxw', 'odt', 'pdf', 'html', 'htm', 'docx', 'wpd'];
 
     /**
      * **************************************************************************************************************
@@ -68,7 +67,7 @@ class Request extends EphorusDataClass
     /**
      * Checks this dataclass integrity before saving it to the database
      *
-     * @return boolean
+     * @return bool
      */
     protected function checkBeforeSave(): bool
     {
@@ -95,16 +94,14 @@ class Request extends EphorusDataClass
         if ($string_utilities_class::getInstance()->isNullOrEmpty($this->get_request_user_id()))
         {
             $this->addError(
-                Translation::get('RequestUserIdIsRequired', [],
-                    $this::context())
+                Translation::get('RequestUserIdIsRequired', [], Manager::CONTEXT)
             );
         }
 
         if ($string_utilities_class::getInstance()->isNullOrEmpty($this->get_guid()))
         {
             $this->addError(
-                Translation::get('GuidIsRequired', [],
-                    $this::context())
+                Translation::get('GuidIsRequired', [], Manager::CONTEXT)
             );
         }
 
@@ -114,7 +111,7 @@ class Request extends EphorusDataClass
     /**
      * Creates this object in the database
      *
-     * @return boolean
+     * @return bool
      */
     public function create(): bool
     {
@@ -126,7 +123,7 @@ class Request extends EphorusDataClass
     /**
      * Deletes this object in the database
      *
-     * @return boolean
+     * @return bool
      */
     public function delete(): bool
     {
@@ -137,108 +134,6 @@ class Request extends EphorusDataClass
 
         return parent::delete();
     }
-
-    /**
-     * Returns the author for this class
-     *
-     * @return user\User
-     */
-    public function get_author()
-    {
-        return \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            User::class, (int) $this->get_author_id()
-        );
-    }
-
-    /**
-     * Returns the author_id property of this object
-     *
-     * @return string
-     */
-    public function get_author_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_AUTHOR_ID);
-    }
-
-    /**
-     * **************************************************************************************************************
-     * CRUD functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Returns the list with the available process types
-     *
-     * @return int[]
-     */
-    public function get_available_process_types()
-    {
-        return array(
-            self::PROCESS_TYPE_CHECK_AND_VISIBLE,
-            self::PROCESS_TYPE_NO_CHECK_AND_VISIBLE,
-            self::PROCESS_TYPE_CHECK_AND_INVISIBLE
-        );
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Validation functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Returns the list with the available statusses
-     *
-     * @return int[]
-     */
-    public function get_available_statusses()
-    {
-        return array(
-            self::STATUS_IN_PROGRESS,
-            self::STATUS_OK,
-            self::STATUS_DUPLICATE,
-            self::STATUS_PROTECTED,
-            self::STATUS_NOT_ENOUGH_TEXT,
-            self::STATUS_NO_TEXT,
-            self::STATUS_OTHER
-        );
-    }
-
-    /**
-     * Returns the content object for this class
-     *
-     * @return repository\ContentObject
-     */
-    public function get_content_object()
-    {
-        return $this->getForeignProperty(self::FOREIGN_PROPERTY_CONTENT_OBJECT, ContentObject::class);
-    }
-
-    /**
-     * Returns the content_object_id property of this object
-     *
-     * @return string
-     */
-    public function get_content_object_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
-    }
-
-    /**
-     * Returns the course_id property of this object
-     *
-     * @return string
-     */
-    public function get_course_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_COURSE_ID);
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Helper functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Returns the default properties of this dataclass
@@ -267,6 +162,116 @@ class Request extends EphorusDataClass
     }
 
     /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'weblcms_ephorus_request';
+    }
+
+    /**
+     * **************************************************************************************************************
+     * CRUD functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Returns the author for this class
+     *
+     * @return user\User
+     */
+    public function get_author()
+    {
+        return \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+            User::class, (int) $this->get_author_id()
+        );
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Validation functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Returns the author_id property of this object
+     *
+     * @return string
+     */
+    public function get_author_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_AUTHOR_ID);
+    }
+
+    /**
+     * Returns the list with the available process types
+     *
+     * @return int[]
+     */
+    public function get_available_process_types()
+    {
+        return [
+            self::PROCESS_TYPE_CHECK_AND_VISIBLE,
+            self::PROCESS_TYPE_NO_CHECK_AND_VISIBLE,
+            self::PROCESS_TYPE_CHECK_AND_INVISIBLE
+        ];
+    }
+
+    /**
+     * Returns the list with the available statusses
+     *
+     * @return int[]
+     */
+    public function get_available_statusses()
+    {
+        return [
+            self::STATUS_IN_PROGRESS,
+            self::STATUS_OK,
+            self::STATUS_DUPLICATE,
+            self::STATUS_PROTECTED,
+            self::STATUS_NOT_ENOUGH_TEXT,
+            self::STATUS_NO_TEXT,
+            self::STATUS_OTHER
+        ];
+    }
+
+    /**
+     * Returns the content object for this class
+     *
+     * @return repository\ContentObject
+     */
+    public function get_content_object()
+    {
+        return $this->getForeignProperty(self::FOREIGN_PROPERTY_CONTENT_OBJECT, ContentObject::class);
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Helper functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Returns the content_object_id property of this object
+     *
+     * @return string
+     */
+    public function get_content_object_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
+    }
+
+    /**
+     * Returns the course_id property of this object
+     *
+     * @return string
+     */
+    public function get_course_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_ID);
+    }
+
+    /**
      * Returns the duplicate_original_guid property of this object
      *
      * @return int
@@ -274,16 +279,6 @@ class Request extends EphorusDataClass
     public function get_duplicate_original_guid()
     {
         return $this->getDefaultProperty(self::PROPERTY_DUPLICATE_ORIGINAL_GUID);
-    }
-
-    /**
-     * Returns the duplicate_student_name property of this object
-     *
-     * @return int
-     */
-    public function get_duplicate_student_name()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DUPLICATE_STUDENT_NAME);
     }
 
     /**
@@ -295,6 +290,16 @@ class Request extends EphorusDataClass
      * Getters & Setters *
      * **************************************************************************************************************
      */
+
+    /**
+     * Returns the duplicate_student_name property of this object
+     *
+     * @return int
+     */
+    public function get_duplicate_student_name()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_DUPLICATE_STUDENT_NAME);
+    }
 
     /**
      * Returns the duplicate_student_number property of this object
@@ -405,17 +410,9 @@ class Request extends EphorusDataClass
     }
 
     /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'weblcms_ephorus_request';
-    }
-
-    /**
      * Checks whether or not the given author is valid
      *
-     * @return boolean
+     * @return bool
      */
     protected function is_author_valid()
     {
@@ -444,7 +441,7 @@ class Request extends EphorusDataClass
     /**
      * Checks whether or not the given content object is valid
      *
-     * @return boolean
+     * @return bool
      */
     public function is_content_object_valid()
     {
@@ -498,7 +495,7 @@ class Request extends EphorusDataClass
     /**
      * Checks whether or not the process type is valid
      *
-     * @return boolean
+     * @return bool
      */
     protected function is_process_type_valid()
     {
@@ -508,7 +505,7 @@ class Request extends EphorusDataClass
     /**
      * Checks whether or not the given status is valid
      *
-     * @return boolean
+     * @return bool
      */
     protected function is_status_valid()
     {
@@ -518,7 +515,7 @@ class Request extends EphorusDataClass
     /**
      * Gets the visibility in the ephorus index
      *
-     * @return boolean
+     * @return bool
      */
     public function is_visible_in_index()
     {
@@ -710,7 +707,7 @@ class Request extends EphorusDataClass
     /**
      * Truncates the results for this request
      *
-     * @return boolean
+     * @return bool
      */
     public function truncate_results()
     {

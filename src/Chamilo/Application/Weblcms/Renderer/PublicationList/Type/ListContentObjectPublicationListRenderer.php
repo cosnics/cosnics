@@ -383,7 +383,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $html[] = '<input type="submit" name="Submit" value="Submit" class="hidden" />';
             $html[] = '</form>';
             $html[] = ResourceManager::getInstance()->getResourceHtml(
-                Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'list.view.selector.js'
+                Path::getInstance()->getJavascriptPath(Manager::CONTEXT, true) . 'list.view.selector.js'
             );
         }
 
@@ -505,7 +505,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         );
         $dropdownButton->addSubButton(
             new SubButton(
-                Translation::get('ViewDetails', null, Manager::context()), null, $details_url, SubButton::DISPLAY_LABEL
+                Translation::get('ViewDetails', null, Manager::CONTEXT), null, $details_url, SubButton::DISPLAY_LABEL
             )
         );
 
@@ -665,11 +665,11 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
             if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
             {
-                $visibilityTranslation = Translation::get('MakeVisible', null, Manager::context());
+                $visibilityTranslation = Translation::get('MakeVisible', null, Manager::CONTEXT);
             }
             else
             {
-                $visibilityTranslation = Translation::get('MakeInvisible', null, Manager::context());
+                $visibilityTranslation = Translation::get('MakeInvisible', null, Manager::CONTEXT);
             }
 
             $dropdownButton->addSubButton(
@@ -684,7 +684,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             {
                 $dropdownButton->addSubButton(
                     new SubButton(
-                        Translation::get('MoveToCategory', null, Manager::context()), null, $this->get_url(
+                        Translation::get('MoveToCategory', null, Manager::CONTEXT), null, $this->get_url(
                         [
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_TO_CATEGORY,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id

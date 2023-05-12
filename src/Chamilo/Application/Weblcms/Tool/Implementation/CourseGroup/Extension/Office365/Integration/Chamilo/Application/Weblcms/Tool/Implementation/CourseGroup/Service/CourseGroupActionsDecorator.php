@@ -80,7 +80,7 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
             ]
         );
 
-        $visitGroupLabel = $this->translator->trans('VisitGroup', [], Manager::context());
+        $visitGroupLabel = $this->translator->trans('VisitGroup', [], Manager::CONTEXT);
 
         $visitPlannerUrl = $this->urlGenerator->fromRequest(
             [
@@ -95,7 +95,7 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
         $groupReference = $this->courseGroupOffice365ReferenceService->getCourseGroupReference($courseGroup);
 
         if ($groupReference->hasTeam()) {
-            $visitTeamLabel = $this->translator->trans('VisitTeam', [], Manager::context());
+            $visitTeamLabel = $this->translator->trans('VisitTeam', [], Manager::CONTEXT);
 
             $visitTeamUrl = $this->urlGenerator->fromRequest(
                 [
@@ -108,7 +108,7 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
             );
         }
 
-        $visitPlannerLabel = $this->translator->trans('VisitPlanner', [], Manager::context());
+        $visitPlannerLabel = $this->translator->trans('VisitPlanner', [], Manager::CONTEXT);
 
         $synchronizePlannerUrl = $this->urlGenerator->fromRequest(
             [
@@ -120,7 +120,7 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
             ]
         );
 
-        $synchronizePlannerLabel = $this->translator->trans('SynchronizeUsersToPlanner', [], Manager::context());
+        $synchronizePlannerLabel = $this->translator->trans('SynchronizeUsersToPlanner', [], Manager::CONTEXT);
 
         $visitGroupButton = new SplitDropdownButton(
             $visitGroupLabel, null, $visitGroupUrl,

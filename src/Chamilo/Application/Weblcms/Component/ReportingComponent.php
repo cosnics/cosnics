@@ -19,7 +19,7 @@ class ReportingComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageCourses');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageCourses');
 
         $template_id = Request::get(self::PARAM_TEMPLATE_ID);
 
@@ -30,7 +30,7 @@ class ReportingComponent extends Manager implements DelegateComponent
                 CourseDataTemplate::class);
 
             $application = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Reporting\Viewer\Manager::context(),
+                \Chamilo\Core\Reporting\Viewer\Manager::CONTEXT,
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $application->set_template_by_name(
                 CourseDataTemplate::class);
@@ -41,7 +41,7 @@ class ReportingComponent extends Manager implements DelegateComponent
             $this->set_parameter(self::PARAM_TEMPLATE_ID, $template_id);
 
             $application = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Reporting\Viewer\Manager::context(),
+                \Chamilo\Core\Reporting\Viewer\Manager::CONTEXT,
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $application->set_template_by_name($template_id);
             return $application->run();

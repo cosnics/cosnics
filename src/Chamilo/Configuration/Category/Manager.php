@@ -21,6 +21,8 @@ abstract class Manager extends Application
     public const ACTION_TOGGLE_CATEGORY_VISIBILITY = 'VisibilityToggler';
     public const ACTION_UPDATE_CATEGORY = 'Updater';
 
+    public const CONTEXT = __NAMESPACE__;
+
     public const DEFAULT_ACTION = self::ACTION_BROWSE_CATEGORIES;
 
     public const PARAM_ACTION = 'category_action';

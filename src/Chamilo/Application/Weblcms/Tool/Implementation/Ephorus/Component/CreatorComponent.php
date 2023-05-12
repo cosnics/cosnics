@@ -57,7 +57,7 @@ class CreatorComponent extends Manager
         $content_object_translation = Translation::get(
             'ContentObject',
             null,
-            \Chamilo\Core\Repository\Manager::context()
+            \Chamilo\Core\Repository\Manager::CONTEXT
         );
 
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_CONTENT_OBJECT_IDS);

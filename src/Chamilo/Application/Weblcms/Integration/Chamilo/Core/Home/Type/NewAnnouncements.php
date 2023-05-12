@@ -54,7 +54,7 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
      */
     public function getCourseViewerLink(Course $course, $publication)
     {
-        $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+        $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::CONTEXT;
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course->get_id();
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = self::TOOL_ANNOUNCEMENT;

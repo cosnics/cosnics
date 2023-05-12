@@ -20,7 +20,7 @@ class UpdateComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageOpenCourses');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageOpenCourses');
 
         $courseIds = $this->getCourseIdsFromRequest();
 
@@ -50,7 +50,7 @@ class UpdateComponent extends Manager
             }
 
             $this->redirectWithMessage(
-                Translation::getInstance()->getTranslation($messageVariable, null, Manager::context()),
+                Translation::getInstance()->getTranslation($messageVariable, null, Manager::CONTEXT),
                 !$success,
                 array(self::PARAM_ACTION => self::ACTION_BROWSE)
             );

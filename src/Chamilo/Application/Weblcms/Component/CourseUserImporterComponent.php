@@ -33,7 +33,7 @@ class CourseUserImporterComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageCourses');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageCourses');
 
         $form = new CourseEntityImportForm($this->get_url());
 
@@ -90,7 +90,7 @@ class CourseUserImporterComponent extends Manager
         {
             $redirect = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
                 )
             );

@@ -152,7 +152,7 @@ abstract class AssessmentBlock extends ToolBlock
 
         $params = [];
 
-        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::CONTEXT;
         $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->getCourseId();
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
@@ -188,7 +188,7 @@ abstract class AssessmentBlock extends ToolBlock
 
         $params = [];
         $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
-        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+        $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::CONTEXT;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $assessment_publication->get_course_id();
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = $assessment_publication->get_tool();
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $assessment_publication->get_id();

@@ -18,25 +18,23 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class OpenCourseForm extends FormValidator
 {
-    const ELEMENT_COURSES = 'courses';
+    public const ELEMENT_COURSES = 'courses';
 
-    const ELEMENT_ROLES = 'roles';
+    public const ELEMENT_ROLES = 'roles';
 
-    const FORM_TYPE_ADD = 1;
+    public const FORM_TYPE_ADD = 1;
 
-    const FORM_TYPE_EDIT = 2;
-
-    /**
-     *
-     * @var Translation
-     */
-    protected $translator;
+    public const FORM_TYPE_EDIT = 2;
 
     /**
-     *
      * @var int
      */
     protected $formType;
+
+    /**
+     * @var Translation
+     */
+    protected $translator;
 
     /**
      * OpenCourseForm constructor.
@@ -62,8 +60,7 @@ class OpenCourseForm extends FormValidator
         $buttons = [];
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit',
-            $this->translator->getTranslation('Save', null, StringUtilities::LIBRARIES)
+            'style_submit_button', 'submit', $this->translator->getTranslation('Save', null, StringUtilities::LIBRARIES)
         );
 
         $buttons[] = $this->createElement(
@@ -81,14 +78,14 @@ class OpenCourseForm extends FormValidator
         $advancedElementFinderTypes = new AdvancedElementFinderElementTypes();
         $advancedElementFinderTypes->add_element_type(
             new AdvancedElementFinderElementType(
-                'courses', $this->translator->getTranslation('Courses', null, Manager::context()),
+                'courses', $this->translator->getTranslation('Courses', null, Manager::CONTEXT),
                 'Chamilo\Application\Weblcms\Course\OpenCourse\Ajax', 'GetCoursesForElementFinder'
             )
         );
 
         $this->addElement(
             'advanced_element_finder', self::ELEMENT_COURSES,
-            $this->translator->getTranslation('SelectCourses', null, Manager::context()), $advancedElementFinderTypes
+            $this->translator->getTranslation('SelectCourses', null, Manager::CONTEXT), $advancedElementFinderTypes
         );
     }
 
@@ -100,14 +97,14 @@ class OpenCourseForm extends FormValidator
         $advancedElementFinderTypes = new AdvancedElementFinderElementTypes();
         $advancedElementFinderTypes->add_element_type(
             new AdvancedElementFinderElementType(
-                'roles', $this->translator->getTranslation('Roles', null, Manager::context()),
+                'roles', $this->translator->getTranslation('Roles', null, Manager::CONTEXT),
                 'Chamilo\Core\User\Roles\Ajax', 'GetRolesForElementFinder'
             )
         );
 
         $this->addElement(
             'advanced_element_finder', self::ELEMENT_ROLES,
-            $this->translator->getTranslation('SelectRoles', null, Manager::context()), $advancedElementFinderTypes
+            $this->translator->getTranslation('SelectRoles', null, Manager::CONTEXT), $advancedElementFinderTypes
         );
     }
 

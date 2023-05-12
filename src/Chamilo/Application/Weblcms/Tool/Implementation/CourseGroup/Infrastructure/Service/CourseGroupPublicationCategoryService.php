@@ -220,7 +220,7 @@ class CourseGroupPublicationCategoryService
         foreach ($rights as $right)
         {
             if (!$this->weblcmsRights->set_location_entity_right(
-                Manager::context(),
+                Manager::CONTEXT,
                 $right,
                 $courseGroup->getId(),
                 CourseGroupEntity::ENTITY_TYPE,
@@ -255,7 +255,7 @@ class CourseGroupPublicationCategoryService
         foreach ($rights as $right)
         {
             if (!$this->weblcmsRights->unset_location_entity_right(
-                Manager::context(),
+                Manager::CONTEXT,
                 $right,
                 $courseGroup->getId(),
                 CourseGroupEntity::ENTITY_TYPE,

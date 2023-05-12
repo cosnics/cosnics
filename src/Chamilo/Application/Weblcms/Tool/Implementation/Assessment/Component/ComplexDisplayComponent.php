@@ -140,7 +140,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
             $redirect = new Redirect(
                 array(
-                    \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::context(),
+                    \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::CONTEXT,
                     \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_SAVE_HOTPOTATOES_SCORE));
 
             $path = $this->assessment->add_javascript(

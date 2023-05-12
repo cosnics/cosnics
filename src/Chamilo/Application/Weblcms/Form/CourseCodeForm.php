@@ -42,7 +42,7 @@ class CourseCodeForm extends FormValidator
 
         $user_name = $this->user->get_fullname();
         $this->addElement(
-            'static', 'user', Translation::get('User', null, Manager::context()), $user_name
+            'static', 'user', Translation::get('User', null, Manager::CONTEXT), $user_name
         );
 
         $this->add_textfield(self::TEMP_CODE, Translation::get('Code'));

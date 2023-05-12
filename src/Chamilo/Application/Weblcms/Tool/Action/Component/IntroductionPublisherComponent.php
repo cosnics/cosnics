@@ -33,7 +33,7 @@ class IntroductionPublisherComponent extends Manager implements ViewerInterface,
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
 
             $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Viewer\Manager::context(),
+                \Chamilo\Core\Repository\Viewer\Manager::CONTEXT,
                 $applicationConfiguration);
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
             $component->set_parameter(

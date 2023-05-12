@@ -47,7 +47,7 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
         $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
 
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\Publication\Publisher\Manager::context(),
+            \Chamilo\Core\Repository\Publication\Publisher\Manager::CONTEXT,
             $applicationConfiguration)->run();
     }
 

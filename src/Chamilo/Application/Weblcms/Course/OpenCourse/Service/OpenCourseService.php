@@ -68,7 +68,7 @@ class OpenCourseService implements OpenCourseServiceInterface
      */
     public function attachRolesToCoursesByIds(User $user, $courseIds = [], $roleIds = [])
     {
-        $this->authorizationChecker->checkAuthorization($user, Manager::context(), 'ManageOpenCourses');
+        $this->authorizationChecker->checkAuthorization($user, Manager::CONTEXT, 'ManageOpenCourses');
 
         if (empty($roleIds) || empty($courseIds))
         {
@@ -116,7 +116,7 @@ class OpenCourseService implements OpenCourseServiceInterface
      */
     public function countOpenCourses(User $user, Condition $condition = null)
     {
-        if ($this->authorizationChecker->isAuthorized($user, Manager::context(), 'ManageOpenCourses'))
+        if ($this->authorizationChecker->isAuthorized($user, Manager::CONTEXT, 'ManageOpenCourses'))
         {
             return $this->openCourseRepository->countAllOpenCourses($condition);
         }
@@ -156,7 +156,7 @@ class OpenCourseService implements OpenCourseServiceInterface
         User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = null
     )
     {
-        if ($this->authorizationChecker->isAuthorized($user, Manager::context(), 'ManageOpenCourses'))
+        if ($this->authorizationChecker->isAuthorized($user, Manager::CONTEXT, 'ManageOpenCourses'))
         {
             return $this->openCourseRepository->findAllOpenCourses($condition, $offset, $count, $orderBy);
         }
@@ -203,7 +203,7 @@ class OpenCourseService implements OpenCourseServiceInterface
      */
     public function removeCoursesAsOpenCourse(User $user, $courseIds)
     {
-        $this->authorizationChecker->checkAuthorization($user, Manager::context(), 'ManageOpenCourses');
+        $this->authorizationChecker->checkAuthorization($user, Manager::CONTEXT, 'ManageOpenCourses');
 
         if (!$this->openCourseRepository->removeCoursesAsOpenCourse($courseIds))
         {

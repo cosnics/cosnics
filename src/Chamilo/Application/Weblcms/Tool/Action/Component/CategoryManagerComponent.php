@@ -53,7 +53,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         }
 
         $component = $this->getApplicationFactory()->getApplication(
-            \Chamilo\Configuration\Category\Manager::context(),
+            \Chamilo\Configuration\Category\Manager::CONTEXT,
             new ApplicationConfiguration($request, $this->get_user(), $this)
         );
         $component->set_subcategories_allowed(true);

@@ -53,7 +53,7 @@ class SorterComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManagePersonalCourses');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManagePersonalCourses');
 
         $this->set_parameter(
             CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE,
@@ -168,7 +168,7 @@ class SorterComponent extends Manager
         if (!$course_type_user_category_rel_course)
         {
             throw new NoObjectSelectedException(
-                Translation::getInstance()->getTranslation('CourseUserCategory', null, Manager::context())
+                Translation::getInstance()->getTranslation('CourseUserCategory', null, Manager::CONTEXT)
             );
         }
 

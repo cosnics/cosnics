@@ -3,7 +3,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -14,13 +13,11 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class ResultViewerComponent extends Manager
 {
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -45,6 +42,16 @@ class ResultViewerComponent extends Manager
     }
 
     /**
+     * @return array|string[]
+     */
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_REQUEST_IDS;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
+    /**
      * Returns the actionbar
      *
      * @return ButtonToolBarRenderer
@@ -59,7 +66,7 @@ class ResultViewerComponent extends Manager
             $commonActions->addButton(
                 new Button(
                     Translation::get(
-                        'PrintReport', [], $this::context()
+                        'PrintReport', [], Manager::CONTEXT
                     ), new FontAwesomeGlyph('item'), '#', ToolbarItem::DISPLAY_ICON_AND_LABEL, null, ['print_button']
                 )
             );
@@ -67,9 +74,9 @@ class ResultViewerComponent extends Manager
             $commonActions->addButton(
                 new Button(
                     Translation::get(
-                        'ExportReport', [], $this::context()
+                        'ExportReport', [], Manager::CONTEXT
                     ), new FontAwesomeGlyph('download'),
-                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT_RESULT)),
+                    $this->get_url([self::PARAM_ACTION => self::ACTION_EXPORT_RESULT]),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -80,15 +87,5 @@ class ResultViewerComponent extends Manager
         }
 
         return $this->buttonToolbarRenderer;
-    }
-
-    /**
-     * @return array|string[]
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_REQUEST_IDS;
-
-        return parent::getAdditionalParameters($additionalParameters);
     }
 }

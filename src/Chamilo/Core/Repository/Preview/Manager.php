@@ -247,7 +247,7 @@ abstract class Manager extends Application
 
         $redirect = new Redirect(
             [
-                self::PARAM_CONTEXT => self::context(),
+                self::PARAM_CONTEXT => self::CONTEXT,
                 self::PARAM_ACTION => $action,
                 self::PARAM_CONTENT_OBJECT_ID => $contentObject->get_id()
             ]

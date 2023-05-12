@@ -469,12 +469,12 @@ abstract class ContentObjectPublicationListRenderer
             if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
             {
                 $glyph = new FontAwesomeGlyph('eye', ['text-muted']);
-                $visibilityTranslation = Translation::get('MakeVisible', null, Manager::context());
+                $visibilityTranslation = Translation::get('MakeVisible', null, Manager::CONTEXT);
             }
             else
             {
                 $glyph = new FontAwesomeGlyph('eye');
-                $visibilityTranslation = Translation::get('MakeInvisible', null, Manager::context());
+                $visibilityTranslation = Translation::get('MakeInvisible', null, Manager::CONTEXT);
             }
 
             $toolbar->add_item(
@@ -489,7 +489,7 @@ abstract class ContentObjectPublicationListRenderer
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('MoveToCategory', null, Manager::context()),
+                        Translation::get('MoveToCategory', null, Manager::CONTEXT),
                         new FontAwesomeGlyph('window-restore', ['fa-flip-horizontal'], null, 'fas'), $this->get_url(
                         [
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_TO_CATEGORY,
@@ -865,7 +865,7 @@ abstract class ContentObjectPublicationListRenderer
         try
         {
             $target_entities = WeblcmsRights::getInstance()->get_target_entities(
-                WeblcmsRights::VIEW_RIGHT, Manager::context(), $publication[ContentObjectPublication::PROPERTY_ID],
+                WeblcmsRights::VIEW_RIGHT, Manager::CONTEXT, $publication[ContentObjectPublication::PROPERTY_ID],
                 WeblcmsRights::TYPE_PUBLICATION, $this->get_course_id(), WeblcmsRights::TREE_TYPE_COURSE
             );
         }

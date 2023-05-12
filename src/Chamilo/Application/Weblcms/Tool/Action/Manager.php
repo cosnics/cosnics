@@ -10,7 +10,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package application.lib.weblcms.tool
  */
 
@@ -31,6 +30,8 @@ abstract class Manager extends Application implements NoContextComponent
     public const ACTION_UPDATE_CONTENT_OBJECT = 'ContentObjectUpdater';
     public const ACTION_UPDATE_PUBLICATION = 'PublicationUpdater';
     public const ACTION_VIEW = 'Viewer';
+
+    public const CONTEXT = __NAMESPACE__;
 
     public const BUILD_COMPLEX_CONTENT_OBJECT_COMPONENT = 'ComplexBuilder';
 
@@ -61,7 +62,7 @@ abstract class Manager extends Application implements NoContextComponent
 
         if (!class_exists($class))
         {
-            throw new Exception(Translation::get('ToolComponentTypeDoesNotExist', array('type' => $type)));
+            throw new Exception(Translation::get('ToolComponentTypeDoesNotExist', ['type' => $type]));
         }
 
         return new $class($tool_component);
@@ -116,7 +117,6 @@ abstract class Manager extends Application implements NoContextComponent
     }
 
     /**
-     *
      * @return Course
      */
     public function get_course()
@@ -140,7 +140,6 @@ abstract class Manager extends Application implements NoContextComponent
     }
 
     /**
-     *
      * @see WeblcmsManager::get_last_visit_date()
      */
     public function get_last_visit_date()
@@ -173,7 +172,6 @@ abstract class Manager extends Application implements NoContextComponent
      *
      * @param $right int
      * @param ContentObjectPublication $publication
-     *
      * @param null $category_id
      *
      * @return bool True if the current user has the right

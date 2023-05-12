@@ -40,7 +40,7 @@ class Manager implements UserInterface
         {
             $redirect = new Redirect(
                 array(
-                    \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(), 
+                    \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::CONTEXT,
                     \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE, 
                     \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course->get_id()));
             $url = $redirect->getUrl();

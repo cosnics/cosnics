@@ -34,7 +34,7 @@ class ReportingViewerComponent extends Manager implements DelegateComponent
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_TEMPLATE_NAME, $classname);
 
         $component = $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Reporting\Viewer\Manager::context(),
+            \Chamilo\Core\Reporting\Viewer\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $component->set_template_by_name($classname);
         return $component->run();

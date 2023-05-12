@@ -25,7 +25,7 @@ class RightsEditorComponent extends Manager implements DelegateComponent
         );
 
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Application\Weblcms\Tool\Action\Manager::context(),
+            \Chamilo\Application\Weblcms\Tool\Action\Manager::CONTEXT,
             new ApplicationConfiguration($request, $this->getUser(), $this)
         )->run();
     }

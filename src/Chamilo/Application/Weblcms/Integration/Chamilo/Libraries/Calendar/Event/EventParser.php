@@ -124,7 +124,7 @@ class EventParser
         foreach ($events as $parsedEvent)
         {
             $parameters = [];
-            $parameters[Application::PARAM_CONTEXT] = Manager::context();
+            $parameters[Application::PARAM_CONTEXT] = Manager::CONTEXT;
             $parameters[Application::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
             $parameters[Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
             $parameters[Manager::PARAM_COURSE] = $this->getPublication()->get_course_id();
@@ -136,10 +136,10 @@ class EventParser
             
             $parsedEvent->setUrl($link);
             $parsedEvent->setSource(
-                Translation::get('Course', null, Manager::context()) . ' - ' .
+                Translation::get('Course', null, Manager::CONTEXT) . ' - ' .
                      $course->get_title());
             $parsedEvent->setId($this->getPublication()->get_id());
-            $parsedEvent->setContext(Manager::context());
+            $parsedEvent->setContext(Manager::CONTEXT);
             $parsedEvent->setCourseId($this->getPublication()->get_course_id());
             
             $result[] = $parsedEvent;

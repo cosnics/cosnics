@@ -276,7 +276,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
     {
         $this->add_settings_from_xml(
             Path::getInstance()->namespaceToFullPath('Chamilo\Application\Weblcms') .
-            join(DIRECTORY_SEPARATOR, array('Resources', 'Settings', 'course_settings.xml')), Manager::context(),
+            join(DIRECTORY_SEPARATOR, array('Resources', 'Settings', 'course_settings.xml')), Manager::CONTEXT,
             new CourseSettingsConnector(), CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS
         );
     }

@@ -30,7 +30,7 @@ class SubscribeComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManagePersonalCourses');
+        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::CONTEXT, 'ManagePersonalCourses');
         
         $failures = 0;
         

@@ -87,7 +87,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
 
         $params = [];
         $params[Application::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
-        $params[Application::PARAM_CONTEXT] = Manager::context();
+        $params[Application::PARAM_CONTEXT] = Manager::CONTEXT;
         $params[Manager::PARAM_COURSE] = $course_id;
         $params[Manager::PARAM_TOOL] = Assessment::getTypeName();
         $params[Manager::PARAM_TOOL_ACTION] =

@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosure;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupport;
-use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -20,34 +19,27 @@ use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @package repository
  */
 abstract class ComplexContentObjectPath
 {
-    use ClassContext;
-
     /**
-     *
      * @var \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode[]
      */
     private $children;
 
     /**
-     *
      * @var \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode[]
      */
     private $nodes = [];
 
     /**
-     *
      * @var \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode[]
      */
     private $parents;
 
     /**
-     *
      * @param ContentObject $content_object
      */
     public function __construct(ContentObject $content_object)
@@ -56,7 +48,6 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @param int $parent_id
      * @param int $previous_id
      * @param ComplexContentObjectItem $complex_content_object_item
@@ -74,7 +65,7 @@ abstract class ComplexContentObjectPath
 
         $node_id = $this->get_next_id();
         $node = ComplexContentObjectPathNode::factory(
-            self::context(), $this, $node_id, $parent_id, $previous_sibling_node_id, null, $complex_content_object_item,
+            static::CONTEXT, $this, $node_id, $parent_id, $previous_sibling_node_id, null, $complex_content_object_item,
             $content_object, $properties
         );
 
@@ -84,7 +75,6 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @param int $parent_id
      * @param ContentObject $root_content_object
      */
@@ -102,7 +92,7 @@ abstract class ComplexContentObjectPath
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
                 ), SORT_ASC
             );
-            $parameters = new DataClassRetrievesParameters($condition, null, null, new OrderBy(array($order)));
+            $parameters = new DataClassRetrievesParameters($condition, null, null, new OrderBy([$order]));
 
             $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
                 ComplexContentObjectItem::class, $parameters
@@ -153,7 +143,6 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @return int
      */
     public function count_nodes()
@@ -162,7 +151,6 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @param string $type
      * @param ContentObject $content_object
      *
@@ -178,7 +166,7 @@ abstract class ComplexContentObjectPath
     /**
      * Follow a route through the ComplexContentObjectPath based on a set a sequential content object ids
      *
-     * @param integer[] $content_object_ids
+     * @param int $content_object_ids
      *
      * @return ComplexContentObjectPathNode
      */
@@ -239,7 +227,6 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @param int $node_id
      */
     public function get_children_by_id($node_id)
@@ -253,7 +240,6 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @return int
      */
     public function get_next_id()
@@ -262,7 +248,6 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @param int $id
      *
      * @return NULL ComplexContentObjectPathNode
@@ -280,7 +265,6 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @param int $node_id
      *
      * @return ComplexContentObjectPathNode
@@ -297,7 +281,6 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @return ComplexContentObjectPathNode[]
      */
     public function get_nodes()
@@ -306,9 +289,8 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @param int $node_id
-     * @param boolean $include_self
+     * @param bool $include_self
      *
      * @return array<ComplexContentObjectPathNode>
      */
@@ -325,7 +307,6 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @param int $id
      *
      * @return NULL ComplexContentObjectPathNode
@@ -343,7 +324,6 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @param int $parent_id
      * @param ComplexContentObjectItem $complex_content_object_item
      * @param ContentObject $content_object
@@ -354,7 +334,6 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @return ComplexContentObjectPathNode
      * @throws Exception
      */
@@ -372,7 +351,6 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @param ContentObject $content_object
      */
     public function initialize(ContentObject $content_object)
@@ -389,12 +367,11 @@ abstract class ComplexContentObjectPath
     }
 
     /**
-     *
      * @return string
      */
     public static function package()
     {
-        return static::context();
+        return static::CONTEXT;
     }
 
     public function reset()

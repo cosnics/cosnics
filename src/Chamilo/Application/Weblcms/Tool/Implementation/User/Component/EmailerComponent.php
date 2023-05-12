@@ -37,7 +37,7 @@ class EmailerComponent extends Manager
             }
 
             $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\User\Email\Manager::context(),
+                \Chamilo\Core\User\Email\Manager::CONTEXT,
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component->set_target_users($users);
             $component->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, $ids);

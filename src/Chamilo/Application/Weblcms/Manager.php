@@ -362,7 +362,7 @@ abstract class Manager extends Application
     public function get_reporting_url($params)
     {
         $array = array(
-            Application::PARAM_CONTEXT => self::context(),
+            Application::PARAM_CONTEXT => Manager::CONTEXT,
             self::PARAM_TOOL => null,
             self::PARAM_ACTION => self::ACTION_REPORTING
         );

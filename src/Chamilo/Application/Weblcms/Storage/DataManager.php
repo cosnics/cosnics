@@ -428,7 +428,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $entities[] = CoursePlatformGroupEntity::getInstance(null);
 
         $publication_ids_with_right_view = $weblcms_rights->filter_location_identifiers_by_granted_right(
-            Manager::context(), $user, $entities, WeblcmsRights::VIEW_RIGHT, $identifiers,
+            Manager::CONTEXT, $user, $entities, WeblcmsRights::VIEW_RIGHT, $identifiers,
             WeblcmsRights::TYPE_PUBLICATION
         );
 
@@ -588,7 +588,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         try
         {
             $target_entities = WeblcmsRights::getInstance()->get_target_entities(
-                WeblcmsRights::VIEW_RIGHT, Manager::context(), $publication_id, WeblcmsRights::TYPE_PUBLICATION,
+                WeblcmsRights::VIEW_RIGHT, Manager::CONTEXT, $publication_id, WeblcmsRights::TYPE_PUBLICATION,
                 $course_id, WeblcmsRights::TREE_TYPE_COURSE
             );
         }
@@ -944,7 +944,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $conditions = [];
 
         $granted_location_ids = WeblcmsRights::getInstance()->get_identifiers_with_right_granted(
-            $right, Manager::context(), $parent_location, WeblcmsRights::TYPE_PUBLICATION, $user_id, $entities
+            $right, Manager::CONTEXT, $parent_location, WeblcmsRights::TYPE_PUBLICATION, $user_id, $entities
         );
 
         $conditions[] = new InCondition(
@@ -978,7 +978,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             // get the entities
             $target_entities = WeblcmsRights::getInstance()->get_target_entities(
-                WeblcmsRights::VIEW_RIGHT, Manager::context(), $publication_id, WeblcmsRights::TYPE_PUBLICATION,
+                WeblcmsRights::VIEW_RIGHT, Manager::CONTEXT, $publication_id, WeblcmsRights::TYPE_PUBLICATION,
                 $course_id, WeblcmsRights::TREE_TYPE_COURSE
             );
         }
@@ -1219,7 +1219,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         try
         {
             $target_entities = WeblcmsRights::getInstance()->get_target_entities(
-                WeblcmsRights::VIEW_RIGHT, Manager::context(), $publication_id, WeblcmsRights::TYPE_PUBLICATION,
+                WeblcmsRights::VIEW_RIGHT, Manager::CONTEXT, $publication_id, WeblcmsRights::TYPE_PUBLICATION,
                 $course_id, WeblcmsRights::TREE_TYPE_COURSE
             );
         }
@@ -2285,7 +2285,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         try
         {
             $target_entities = WeblcmsRights::getInstance()->get_target_entities(
-                WeblcmsRights::VIEW_RIGHT, Manager::context(), $publication_id, WeblcmsRights::TYPE_PUBLICATION,
+                WeblcmsRights::VIEW_RIGHT, Manager::CONTEXT, $publication_id, WeblcmsRights::TYPE_PUBLICATION,
                 $course_id, WeblcmsRights::TREE_TYPE_COURSE
             );
         }
@@ -2327,7 +2327,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         try
         {
             $target_entities = WeblcmsRights::getInstance()->get_target_entities(
-                WeblcmsRights::VIEW_RIGHT, Manager::context(), $publication_id, WeblcmsRights::TYPE_PUBLICATION,
+                WeblcmsRights::VIEW_RIGHT, Manager::CONTEXT, $publication_id, WeblcmsRights::TYPE_PUBLICATION,
                 $course_id, WeblcmsRights::TREE_TYPE_COURSE
             );
         }
@@ -2383,7 +2383,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         try
         {
             $target_entities = WeblcmsRights::getInstance()->get_target_entities(
-                WeblcmsRights::VIEW_RIGHT, Manager::context(), $publication_id, WeblcmsRights::TYPE_PUBLICATION,
+                WeblcmsRights::VIEW_RIGHT, Manager::CONTEXT, $publication_id, WeblcmsRights::TYPE_PUBLICATION,
                 $course_id, WeblcmsRights::TREE_TYPE_COURSE
             );
         }
@@ -2425,7 +2425,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         try
         {
             $target_entities = WeblcmsRights::getInstance()->get_target_entities(
-                WeblcmsRights::VIEW_RIGHT, Manager::context(), $publication_id, WeblcmsRights::TYPE_PUBLICATION,
+                WeblcmsRights::VIEW_RIGHT, Manager::CONTEXT, $publication_id, WeblcmsRights::TYPE_PUBLICATION,
                 $course_id, WeblcmsRights::TREE_TYPE_COURSE
             );
         }
@@ -2485,7 +2485,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         try
         {
             $target_entities = WeblcmsRights::getInstance()->get_target_entities(
-                WeblcmsRights::VIEW_RIGHT, Manager::context(), $publication_id, WeblcmsRights::TYPE_PUBLICATION,
+                WeblcmsRights::VIEW_RIGHT, Manager::CONTEXT, $publication_id, WeblcmsRights::TYPE_PUBLICATION,
                 $course_id, WeblcmsRights::TREE_TYPE_COURSE
             );
         }

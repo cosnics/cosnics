@@ -421,7 +421,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                     if (!$course_visible)
                     {
                         $html[] = '<p class="list-group-item-text"><span class="label label-warning">' .
-                            Translation::getInstance()->getTranslation('Invisible', null, Manager::context()) .
+                            Translation::getInstance()->getTranslation('Invisible', null, Manager::CONTEXT) .
                             '</span></p>';
                     }
 

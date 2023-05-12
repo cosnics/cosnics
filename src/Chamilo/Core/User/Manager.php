@@ -74,7 +74,7 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             [
-                self::PARAM_CONTEXT => self::context(),
+                self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => self::ACTION_USER_APPROVER,
                 self::PARAM_USER_USER_ID => $user->get_id(),
                 self::PARAM_CHOICE => UserApproverComponent::CHOICE_APPROVE
@@ -102,7 +102,7 @@ abstract class Manager extends Application
     public static function get_date_terms_and_conditions_last_modified()
     {
         $platform_setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
-            'date_terms_and_conditions_update', self::context()
+            'date_terms_and_conditions_update', Manager::CONTEXT
         );
 
         return $platform_setting->get_value();
@@ -112,7 +112,7 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             [
-                self::PARAM_CONTEXT => self::context(),
+                self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => self::ACTION_USER_APPROVER,
                 self::PARAM_USER_USER_ID => $user->get_id(),
                 self::PARAM_CHOICE => UserApproverComponent::CHOICE_DENY
@@ -209,7 +209,7 @@ abstract class Manager extends Application
         $success &= fwrite($fh, $stringData);
 
         $platform_setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
-            'date_terms_and_conditions_update', self::context()
+            'date_terms_and_conditions_update', Manager::CONTEXT
         );
 
         $platform_setting->set_value(time());

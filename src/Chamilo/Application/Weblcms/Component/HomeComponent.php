@@ -21,11 +21,11 @@ class HomeComponent extends Manager implements DelegateComponent
     public function run()
     {
         $component =
-            $this->isAuthorized(Manager::context(), 'ViewPersonalCourses') ? 'CourseList' : 'OpenCoursesBrowser';
+            $this->isAuthorized(Manager::CONTEXT, 'ViewPersonalCourses') ? 'CourseList' : 'OpenCoursesBrowser';
 
         return new RedirectResponse(
             $this->getUrlGenerator()->fromParameters(
-                [self::PARAM_CONTEXT => Manager::context(), self::PARAM_ACTION => $component]
+                [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => $component]
             )
         );
     }

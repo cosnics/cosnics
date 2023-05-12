@@ -126,7 +126,7 @@ class CourseManagementRights extends WeblcmsRights
         
         return RightsUtil::is_allowed(
             $right_id, 
-            Manager::context(), 
+            Manager::CONTEXT,
             $user_id, 
             $entities, 
             $identifier, 
@@ -301,10 +301,10 @@ class CourseManagementRights extends WeblcmsRights
             switch ($option)
             {
                 case self::RIGHT_OPTION_ALL :
-                    $succes &= $this->invert_location_entity_right(Manager::context(),$right_id, 0, 0, $location_id);
+                    $succes &= $this->invert_location_entity_right(Manager::CONTEXT,$right_id, 0, 0, $location_id);
                     break;
                 case self::RIGHT_OTPION_ME :
-                    $succes &= $this->invert_location_entity_right(Manager::context(),$right_id, Session::get_user_id(), 1, $location_id);
+                    $succes &= $this->invert_location_entity_right(Manager::CONTEXT,$right_id, Session::get_user_id(), 1, $location_id);
                     break;
                 case self::RIGHT_OPTION_SELECT :
                     if (! array_key_exists(self::PARAM_RIGHT_TARGETS, $values) ||
@@ -318,7 +318,7 @@ class CourseManagementRights extends WeblcmsRights
                         foreach ($target_ids as $target_id)
                         {
                             $succes &= $this->invert_location_entity_right(
-                                Manager::context(),
+                                Manager::CONTEXT,
                                 $right_id, 
                                 $target_id, 
                                 $entity_type, 
@@ -425,7 +425,7 @@ class CourseManagementRights extends WeblcmsRights
     public function retrieve_rights_location_rights_for_location(RightsLocation $location, $available_rights = [])
     {
         return \Chamilo\Core\Rights\Storage\DataManager::retrieve_rights_location_rights_for_location(
-            Manager::context(), 
+            Manager::CONTEXT,
             $location->get_id(), 
             $available_rights);
     }

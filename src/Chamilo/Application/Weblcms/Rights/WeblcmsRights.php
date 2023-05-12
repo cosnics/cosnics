@@ -71,24 +71,24 @@ class WeblcmsRights extends RightsUtil
             Translation::get('AddRight') => self::ADD_RIGHT,
             Translation::get('EditRight') => self::EDIT_RIGHT,
             Translation::get('DeleteRight') => self::DELETE_RIGHT,
-            Translation::getInstance()->getTranslation('ManageCategoriesRight', null, Manager::context()) => self::MANAGE_CATEGORIES_RIGHT);
+            Translation::getInstance()->getTranslation('ManageCategoriesRight', null, Manager::CONTEXT) => self::MANAGE_CATEGORIES_RIGHT);
     }
 
     public function get_weblcms_location_by_identifier($type, $identifier)
     {
-        return parent::get_location_by_identifier(Manager::context(), $type, $identifier);
+        return parent::get_location_by_identifier(Manager::CONTEXT, $type, $identifier);
     }
 
     public function get_weblcms_location_id_by_identifier($type, $identifier)
     {
-        return parent::get_location_id_by_identifier(Manager::context(), $type, $identifier);
+        return parent::get_location_id_by_identifier(Manager::CONTEXT, $type, $identifier);
     }
 
     public function create_location_in_courses_subtree($type, $identifier, $parent, $tree_identifier = 0,
         $create_in_batch = false, $inherit = 1)
     {
         return parent::create_location(
-            Manager::context(),
+            Manager::CONTEXT,
             $type,
             $identifier,
             $inherit,
@@ -102,28 +102,28 @@ class WeblcmsRights extends RightsUtil
 
     public function get_weblcms_root_id()
     {
-        return parent::get_root_id(Manager::context());
+        return parent::get_root_id(Manager::CONTEXT);
     }
 
     public function get_weblcms_root()
     {
-        return parent::get_root(Manager::context());
+        return parent::get_root(Manager::CONTEXT);
     }
 
     public function get_courses_subtree_root($tree_identifier = 0)
     {
-        return parent::get_root(Manager::context(), WeblcmsRights::TREE_TYPE_COURSE, $tree_identifier);
+        return parent::get_root(Manager::CONTEXT, WeblcmsRights::TREE_TYPE_COURSE, $tree_identifier);
     }
 
     public function get_courses_subtree_root_id($tree_identifier = 0)
     {
-        return parent::get_root_id(Manager::context(), WeblcmsRights::TREE_TYPE_COURSE, $tree_identifier);
+        return parent::get_root_id(Manager::CONTEXT, WeblcmsRights::TREE_TYPE_COURSE, $tree_identifier);
     }
 
     public function get_weblcms_location_id_by_identifier_from_courses_subtree($type, $identifier, $course_id = 0)
     {
         return parent::get_location_id_by_identifier(
-            Manager::context(),
+            Manager::CONTEXT,
             $type,
             $identifier,
             $course_id,
@@ -133,7 +133,7 @@ class WeblcmsRights extends RightsUtil
     public function get_weblcms_location_by_identifier_from_courses_subtree($type, $identifier, $course_id = 0)
     {
         return parent::get_location_by_identifier(
-            Manager::context(),
+            Manager::CONTEXT,
             $type,
             $identifier,
             $course_id,
@@ -155,7 +155,7 @@ class WeblcmsRights extends RightsUtil
 
         return parent::is_allowed(
             $right,
-            Manager::context(),
+            Manager::CONTEXT,
             $user_id,
             $entities,
             $identifier,
@@ -254,7 +254,7 @@ class WeblcmsRights extends RightsUtil
 
         return $this->get_identifiers_with_right_granted(
             $right,
-            Manager::context(),
+            Manager::CONTEXT,
             $parent_location,
             WeblcmsRights::TYPE_PUBLICATION,
             $user->getId(),

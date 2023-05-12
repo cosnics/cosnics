@@ -23,8 +23,8 @@ class PublicationUserAccessBlock extends ToolBlock
         
         $reporting_data->set_categories(
             array(
-                Translation::get('User', null, Manager::context()),
-                Translation::get('OfficialCode', null, Manager::context())));
+                Translation::get('User', null, Manager::CONTEXT),
+                Translation::get('OfficialCode', null, Manager::CONTEXT)));
         
         $this->add_reporting_data_categories_for_course_visit_data($reporting_data);
         
@@ -33,12 +33,12 @@ class PublicationUserAccessBlock extends ToolBlock
         $user = DataManager::retrieve_by_id(User::class, $this->get_user_id());
         
         $reporting_data->add_data_category_row(
-            Translation::get('User', null, Manager::context()),
+            Translation::get('User', null, Manager::CONTEXT),
             Translation::get('count'), 
             $user->get_fullname());
         
         $reporting_data->add_data_category_row(
-            Translation::get('OfficialCode', null, Manager::context()),
+            Translation::get('OfficialCode', null, Manager::CONTEXT),
             Translation::get('count'), 
             $user->get_official_code());
         

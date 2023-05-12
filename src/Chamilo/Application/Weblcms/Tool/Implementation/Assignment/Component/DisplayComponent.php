@@ -69,7 +69,7 @@ class DisplayComponent extends Manager implements DelegateComponent
         $applicationFactory->setAssignmentDataProvider($assignmentDataProvider);
 
         return $applicationFactory->getApplication(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::context(), $configuration
+            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::CONTEXT, $configuration
         )->run();
     }
 
@@ -130,7 +130,7 @@ class DisplayComponent extends Manager implements DelegateComponent
             $this->getRequest()->getFromQuery(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
         $contentObjectPublicationTranslation =
-            $this->getTranslator()->trans('ContentObjectPublication', [], Manager::context());
+            $this->getTranslator()->trans('ContentObjectPublication', [], Manager::CONTEXT);
 
         if (empty($contentObjectPublicationId))
         {

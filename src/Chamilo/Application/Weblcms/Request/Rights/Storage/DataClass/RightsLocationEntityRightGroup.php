@@ -67,7 +67,7 @@ class RightsLocationEntityRightGroup extends DataClass
         {
             $this->location_entity_right =
                 \Chamilo\Core\Rights\Storage\DataManager::retrieve_rights_location_entity_right_by_id(
-                    Manager::context(), $this->get_location_entity_right_id()
+                    Manager::CONTEXT, $this->get_location_entity_right_id()
                 );
         }
 

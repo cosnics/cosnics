@@ -10,7 +10,7 @@ class RightsComponent extends Manager
     function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Application\Weblcms\Request\Rights\Manager::context(),
+            \Chamilo\Application\Weblcms\Request\Rights\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 }

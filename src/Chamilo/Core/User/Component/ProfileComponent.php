@@ -18,11 +18,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Core\User\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class ProfileComponent extends Manager implements NoContextComponent
 {
@@ -37,8 +36,8 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
 
         $tabs[] = new LinkTab(
             self::ACTION_VIEW_ACCOUNT, htmlentities(Translation::get(self::ACTION_VIEW_ACCOUNT . 'Title')),
-            new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'),
-            $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT)),
+            new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas'),
+            $this->get_url([self::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT]),
             self::ACTION_VIEW_ACCOUNT == $this->get_action()
         );
 
@@ -46,24 +45,24 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
         {
             $tabs[] = new LinkTab(
                 self::ACTION_CHANGE_PICTURE, htmlentities(Translation::get(self::ACTION_CHANGE_PICTURE . 'Title')),
-                new FontAwesomeGlyph('image', array('fa-lg'), null, 'fas'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CHANGE_PICTURE)),
+                new FontAwesomeGlyph('image', ['fa-lg'], null, 'fas'),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_CHANGE_PICTURE]),
                 self::ACTION_CHANGE_PICTURE == $this->get_action()
             );
         }
 
         $tabs[] = new LinkTab(
             self::ACTION_USER_SETTINGS, htmlentities(Translation::get(self::ACTION_USER_SETTINGS . 'Title')),
-            new FontAwesomeGlyph('cog', array('fa-lg'), null, 'fas'),
-            $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_SETTINGS)),
+            new FontAwesomeGlyph('cog', ['fa-lg'], null, 'fas'),
+            $this->get_url([self::PARAM_ACTION => self::ACTION_USER_SETTINGS]),
             self::ACTION_USER_SETTINGS == $this->get_action()
         );
 
         $conditions = [];
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_APPLICATION),
-            new StaticConditionVariable(self::context())
-        );
+            new PropertyConditionVariable(Instance::class, Instance::PROPERTY_APPLICATION), new StaticConditionVariable(
+                Manager::CONTEXT
+            );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_NAME),
             new StaticConditionVariable('account_fields')
@@ -79,8 +78,8 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
             $tabs[] = new LinkTab(
                 self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION,
                 htmlentities(Translation::get(self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION . 'Title')),
-                new FontAwesomeGlyph('lightbulb', array('fa-lg'), null, 'fas'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION)),
+                new FontAwesomeGlyph('lightbulb', ['fa-lg'], null, 'fas'),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION]),
                 self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION == $this->get_action()
             );
         }

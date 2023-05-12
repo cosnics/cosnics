@@ -254,7 +254,7 @@ class ComplexDisplayComponent extends Manager
         $parameters[ForumTopicView::PROPERTY_PUBLICATION_ID] = $this->get_publication()->getId();
         $parameters[ForumTopicView::PROPERTY_FORUM_TOPIC_ID] = $complex_topic_id;
 
-        Event::trigger('ViewForumTopic', \Chamilo\Application\Weblcms\Manager::context(), $parameters);
+        Event::trigger('ViewForumTopic', \Chamilo\Application\Weblcms\Manager::CONTEXT, $parameters);
     }
 
     public function getAdditionalParameters(array $additionalParameters = []): array
@@ -409,7 +409,7 @@ class ComplexDisplayComponent extends Manager
     {
         $parameters = [];
 
-        $parameters[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+        $parameters[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::CONTEXT;
         $parameters[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = Request::get('course');
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =

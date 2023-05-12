@@ -62,7 +62,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function getEphorusRequestsFromRequest()
     {
-        $requestTranslation = $this->getTranslator()->trans('Request', [], \Chamilo\Core\Repository\Manager::context());
+        $requestTranslation = $this->getTranslator()->trans('Request', [], \Chamilo\Core\Repository\Manager::CONTEXT);
 
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_REQUEST_IDS);
 

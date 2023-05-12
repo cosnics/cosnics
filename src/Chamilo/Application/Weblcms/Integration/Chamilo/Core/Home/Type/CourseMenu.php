@@ -72,7 +72,7 @@ class CourseMenu extends Block
 
     public function getCourseActionUrl($action, $params = [])
     {
-        $params[Manager::PARAM_CONTEXT] = Manager::context();
+        $params[Manager::PARAM_CONTEXT] = Manager::CONTEXT;
         $params[Manager::PARAM_ACTION] = $action;
 
         $redirect = new Redirect($params);
@@ -139,7 +139,7 @@ class CourseMenu extends Block
         {
             $HREF = $this->getUrl(
                 array(
-                    Application::PARAM_CONTEXT => Manager::context(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => Manager::ACTION_REQUEST,
                     \Chamilo\Application\Weblcms\Request\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Request\Manager::ACTION_CREATE
                 )
@@ -205,14 +205,14 @@ class CourseMenu extends Block
 
         $HREF = $this->getCourseActionUrl(Manager::ACTION_ADMIN_REQUEST_BROWSER);
         $TEXT = htmlspecialchars(
-            Translation::get('UserRequestList', null, Manager::context())
+            Translation::get('UserRequestList', null, Manager::CONTEXT)
         );
         $glyph = new FontAwesomeGlyph('folder');
         $GLYPH_RENDER = $glyph->render();
         $result[] = compact('HREF', 'TEXT', 'GLYPH_RENDER');
 
         $HREF = $this->getCourseActionUrl(Manager::ACTION_REQUEST);
-        $TEXT = htmlspecialchars(Translation::get('RequestList', null, Manager::context()));
+        $TEXT = htmlspecialchars(Translation::get('RequestList', null, Manager::CONTEXT));
         $glyph = new FontAwesomeGlyph('folder');
         $GLYPH_RENDER = $glyph->render();
         $result[] = compact('HREF', 'TEXT', 'GLYPH_RENDER');

@@ -105,7 +105,7 @@ class AssignmentSubmissions extends Block
             $item['title'] = $object->get_title();
 
             $parameters = array(
-                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Manager::PARAM_COURSE => $publication->get_course_id(),
                 Application::PARAM_ACTION => Manager::ACTION_VIEW_COURSE,
                 Manager::PARAM_TOOL => 'Assignment',

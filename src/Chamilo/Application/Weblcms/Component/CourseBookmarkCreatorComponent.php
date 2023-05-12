@@ -28,7 +28,7 @@ class CourseBookmarkCreatorComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManagePersonalCourses');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManagePersonalCourses');
 
         $course_id = Request::get(self::PARAM_COURSE);
 
@@ -44,7 +44,7 @@ class CourseBookmarkCreatorComponent extends Manager
 
         // set url
         $params_bookmark = [];
-        $params_bookmark[Application::PARAM_CONTEXT] = self::context();
+        $params_bookmark[Application::PARAM_CONTEXT] = Manager::CONTEXT;
         $params_bookmark[Application::PARAM_ACTION] = self::ACTION_VIEW_COURSE;
         $params_bookmark[self::PARAM_COURSE] = $course_id;
 
@@ -52,7 +52,7 @@ class CourseBookmarkCreatorComponent extends Manager
         $content_object->set_url($url_bookmark);
 
         $params_form = [];
-        $params_form[Application::PARAM_CONTEXT] = self::context();
+        $params_form[Application::PARAM_CONTEXT] = Manager::CONTEXT;
         $params_form[self::PARAM_ACTION] = self::ACTION_CREATE_BOOKMARK;
         $params_form[self::PARAM_COURSE] = $course_id;
 
@@ -105,7 +105,7 @@ class CourseBookmarkCreatorComponent extends Manager
 
             // set url
             $params_bookmark = [];
-            $params_bookmark[Application::PARAM_CONTEXT] = self::context();
+            $params_bookmark[Application::PARAM_CONTEXT] = Manager::CONTEXT;
             $params_bookmark[Application::PARAM_ACTION] = self::ACTION_VIEW_COURSE;
             $params_bookmark[self::PARAM_COURSE] = $course_id;
 
@@ -113,7 +113,7 @@ class CourseBookmarkCreatorComponent extends Manager
             $content_object->set_url($url_bookmark);
 
             $params_form = [];
-            $params_form[Application::PARAM_CONTEXT] = self::context();
+            $params_form[Application::PARAM_CONTEXT] = Manager::CONTEXT;
             $params_form[self::PARAM_ACTION] = self::ACTION_CREATE_BOOKMARK;
             $params_form[self::PARAM_COURSE] = $course_id;
 

@@ -19,7 +19,7 @@ class OpenCoursesBrowserComponent extends Manager implements DelegateComponent
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Application\Weblcms\Course\OpenCourse\Manager::context(),
+            \Chamilo\Application\Weblcms\Course\OpenCourse\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this))->run();
     }
 }

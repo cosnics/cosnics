@@ -190,7 +190,7 @@ class CourseListRenderer
     public function get_course_url(Course $course)
     {
         $parameters = [];
-        $parameters[Manager::PARAM_CONTEXT] = Manager::context();
+        $parameters[Manager::PARAM_CONTEXT] = Manager::CONTEXT;
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
         $parameters[Manager::PARAM_COURSE] = $course->get_id();
 
@@ -252,7 +252,7 @@ class CourseListRenderer
     public function get_tool_url($tool, Course $course)
     {
         $parameters = [];
-        $parameters[Manager::PARAM_CONTEXT] = Manager::context();
+        $parameters[Manager::PARAM_CONTEXT] = Manager::CONTEXT;
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
         $parameters[Manager::PARAM_COURSE] = $course->get_id();
         $parameters[Manager::PARAM_TOOL] = $tool;

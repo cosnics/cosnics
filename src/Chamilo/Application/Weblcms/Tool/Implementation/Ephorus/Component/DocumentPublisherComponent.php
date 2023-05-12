@@ -27,7 +27,7 @@ class DocumentPublisherComponent extends Manager implements ViewerInterface
         if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Viewer\Manager::context(),
+                \Chamilo\Core\Repository\Viewer\Manager::CONTEXT,
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
             );
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);

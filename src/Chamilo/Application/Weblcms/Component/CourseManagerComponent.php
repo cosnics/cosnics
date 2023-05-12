@@ -20,10 +20,10 @@ class CourseManagerComponent extends Manager implements DelegateComponent, Cours
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManagePersonalCourses');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManagePersonalCourses');
 
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Application\Weblcms\Course\Manager::context(),
+            \Chamilo\Application\Weblcms\Course\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
