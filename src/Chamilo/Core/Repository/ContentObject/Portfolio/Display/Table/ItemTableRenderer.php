@@ -41,7 +41,6 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     /**
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
-     * @var ?\Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component\ManagerComponent
      */
     protected ?ManagerComponent $managerComponent = null;
 

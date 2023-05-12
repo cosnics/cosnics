@@ -47,6 +47,9 @@ class ObjectPublicationTableRenderer extends RecordListTableRenderer
 
     public const TABLE_IDENTIFIER = Manager::PARAM_PUBLICATION_ID;
 
+    /**
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
+     */
     protected ContentObjectPublicationListRenderer $contentObjectPublicationListRenderer;
 
     protected DatetimeUtilities $datetimeUtilities;
@@ -144,10 +147,11 @@ class ObjectPublicationTableRenderer extends RecordListTableRenderer
     }
 
     /**
-     * @throws \TableException
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
     public function legacyRender(
         ContentObjectPublicationListRenderer $contentObjectPublicationListRenderer,

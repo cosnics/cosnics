@@ -27,6 +27,9 @@ class TargetTableRenderer extends DataClassListTableRenderer implements TableRow
 {
     public const TABLE_IDENTIFIER = Manager::PARAM_ENTITY_ID;
 
+    /**
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
+     */
     public Application $application;
 
     public function getTableActions(): TableActions
@@ -65,6 +68,7 @@ class TargetTableRenderer extends DataClassListTableRenderer implements TableRow
      * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
     public function legacyRender(
         Application $application, TableParameterValues $parameterValues, ArrayCollection $tableData,

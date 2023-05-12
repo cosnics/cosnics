@@ -44,6 +44,9 @@ class AllSubscribedUserTableRenderer extends RecordListTableRenderer implements 
     public const PROPERTY_SUBSCRIPTION_STATUS = 'subscription_status';
     public const PROPERTY_SUBSCRIPTION_TYPE = 'subscription_type';
 
+    /**
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
+     */
     protected Application $application;
 
     protected ConfigurationConsulter $configurationConsulter;
@@ -150,6 +153,7 @@ class AllSubscribedUserTableRenderer extends RecordListTableRenderer implements 
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
     public function legacyRender(
         Application $application, TableParameterValues $parameterValues, ArrayCollection $tableData,

@@ -29,6 +29,9 @@ class CategoryTableRenderer extends DataClassListTableRenderer implements TableR
 
     public const TABLE_IDENTIFIER = Manager::PARAM_CATEGORY_ID;
 
+    /**
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
+     */
     protected CategoryManagerImplementerInterface $categoryManagerImplementer;
 
     protected function initializeColumns()
@@ -51,6 +54,13 @@ class CategoryTableRenderer extends DataClassListTableRenderer implements TableR
         }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
+     */
     public function legacyRender(
         CategoryManagerImplementerInterface $categoryManagerImplementer, TableParameterValues $parameterValues,
         ArrayCollection $tableData, ?string $tableName = null

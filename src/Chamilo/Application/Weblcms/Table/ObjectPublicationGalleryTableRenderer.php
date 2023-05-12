@@ -25,6 +25,9 @@ class ObjectPublicationGalleryTableRenderer extends DataClassGalleryTableRendere
 {
     public const TABLE_IDENTIFIER = Manager::PARAM_PUBLICATION_ID;
 
+    /**
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
+     */
     protected ContentObjectPublicationListRenderer $contentObjectPublicationListRenderer;
 
     public function getTableActions(): TableActions
@@ -43,6 +46,13 @@ class ObjectPublicationGalleryTableRenderer extends DataClassGalleryTableRendere
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
+     */
     public function legacyRender(
         ContentObjectPublicationListRenderer $contentObjectPublicationListRenderer,
         TableParameterValues $parameterValues, ArrayCollection $tableData, ?string $tableName = null

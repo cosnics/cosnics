@@ -43,6 +43,9 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
 
     public const TABLE_IDENTIFIER = Manager::PARAM_REQUEST_IDS;
 
+    /**
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
+     */
     protected Application $application;
 
     protected DatetimeUtilities $datetimeUtilities;
@@ -118,6 +121,7 @@ class RequestTableRenderer extends DataClassListTableRenderer implements TableRo
      * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
     public function legacyRender(
         Application $application, TableParameterValues $parameterValues, ArrayCollection $tableData,

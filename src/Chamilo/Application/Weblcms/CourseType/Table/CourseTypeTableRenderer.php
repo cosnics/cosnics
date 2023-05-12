@@ -30,6 +30,9 @@ class CourseTypeTableRenderer extends DataClassListTableRenderer implements Tabl
 
     public const TABLE_IDENTIFIER = Manager::PARAM_COURSE_TYPE_ID;
 
+    /**
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
+     */
     protected Application $application;
 
     public function getTableActions(): TableActions
@@ -84,6 +87,7 @@ class CourseTypeTableRenderer extends DataClassListTableRenderer implements Tabl
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
     public function legacyRender(
         Application $application, TableParameterValues $parameterValues, ArrayCollection $tableData,

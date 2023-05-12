@@ -42,6 +42,9 @@ class AssessmentAttemptTableRenderer extends RecordListTableRenderer implements 
 {
     public const DEFAULT_ORDER_COLUMN_INDEX = 1;
 
+    /**
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
+     */
     protected Application $application;
 
     protected DatetimeUtilities $datetimeUtilities;
@@ -107,10 +110,11 @@ class AssessmentAttemptTableRenderer extends RecordListTableRenderer implements 
     }
 
     /**
-     * @throws \ReflectionException
-     * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @throws \ReflectionException
+     * @throws \TableException
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
     public function legacyRender(
         Application $application, TableParameterValues $parameterValues, ArrayCollection $tableData,

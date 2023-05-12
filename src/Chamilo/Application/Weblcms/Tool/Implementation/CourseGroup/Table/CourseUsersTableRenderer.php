@@ -29,6 +29,9 @@ class CourseUsersTableRenderer extends RecordListTableRenderer
 
     public const PROPERTY_COURSE_GROUPS = 'course_groups';
 
+    /**
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
+     */
     protected Application $application;
 
     protected ConfigurationConsulter $configurationConsulter;
@@ -70,16 +73,11 @@ class CourseUsersTableRenderer extends RecordListTableRenderer
     }
 
     /**
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param \Chamilo\Libraries\Format\Table\TableParameterValues $parameterValues
-     * @param \Doctrine\Common\Collections\ArrayCollection $tableData
-     * @param string|null $tableName
-     *
-     * @return string
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \ReflectionException
      * @throws \TableException
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
     public function legacyRender(
         Application $application, TableParameterValues $parameterValues, ArrayCollection $tableData,

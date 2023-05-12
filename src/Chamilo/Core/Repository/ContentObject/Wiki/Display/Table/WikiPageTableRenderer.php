@@ -45,7 +45,6 @@ class WikiPageTableRenderer extends DataClassListTableRenderer implements TableR
 
     /**
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
-     * @var ?\Chamilo\Core\Repository\ContentObject\Wiki\Display\Component\WikiBrowserComponent
      */
     protected ?WikiBrowserComponent $wikiBrowserComponent = null;
 

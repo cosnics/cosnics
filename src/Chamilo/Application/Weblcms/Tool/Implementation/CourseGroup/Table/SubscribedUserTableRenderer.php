@@ -36,6 +36,9 @@ class SubscribedUserTableRenderer extends RecordListTableRenderer implements Tab
 {
     public const TABLE_IDENTIFIER = \Chamilo\Application\Weblcms\Manager::PARAM_USERS;
 
+    /**
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
+     */
     protected Application $application;
 
     protected ConfigurationConsulter $configurationConsulter;
@@ -127,6 +130,7 @@ class SubscribedUserTableRenderer extends RecordListTableRenderer implements Tab
      * @throws \QuickformException
      * @throws \ReflectionException
      * @throws \TableException
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
     public function legacyRender(
         Application $application, TableParameterValues $parameterValues, ArrayCollection $tableData,

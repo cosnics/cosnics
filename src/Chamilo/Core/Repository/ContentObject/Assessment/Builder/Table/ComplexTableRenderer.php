@@ -38,7 +38,6 @@ class ComplexTableRenderer extends DataClassListTableRenderer implements TableRo
 
     /**
      * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
-     * @var ?\Chamilo\Libraries\Architecture\Application\Application
      */
     protected ?Application $application = null;
 

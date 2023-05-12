@@ -38,6 +38,9 @@ class CourseGroupTableRenderer extends DataClassListTableRenderer implements Tab
 
     public const TABLE_IDENTIFIER = Manager::PARAM_COURSE_GROUP;
 
+    /**
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
+     */
     protected Application $application;
 
     protected User $user;
@@ -100,6 +103,7 @@ class CourseGroupTableRenderer extends DataClassListTableRenderer implements Tab
      * @throws \QuickformException
      * @throws \ReflectionException
      * @throws \TableException
+     * @deprecated Temporary solution to allow rendering of DI-based tables in a non-DI context
      */
     public function legacyRender(
         Application $application, TableParameterValues $parameterValues, ArrayCollection $tableData,
