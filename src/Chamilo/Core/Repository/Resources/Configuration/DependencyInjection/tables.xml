@@ -12,25 +12,25 @@
             <tag name="Chamilo\Core\Repository\Table\ContentObjectTableRenderer" />
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
             <argument key="$workspace"
                       type="service"
-                      id="Chamilo\Core\Repository\Workspace"/>
+                      id="Chamilo\Core\Repository\CurrentWorkspace"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Table\ContentObjectGalleryTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
             <argument key="$workspace"
                       type="service"
-                      id="Chamilo\Core\Repository\Workspace"/>
+                      id="Chamilo\Core\Repository\CurrentWorkspace"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Table\VersionTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Table\RecycleBinTableRenderer"/>
@@ -38,37 +38,37 @@
         <service id="Chamilo\Core\Repository\Table\Link\LinkPublicationsTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
             <argument key="$workspace"
                       type="service"
-                      id="Chamilo\Core\Repository\Workspace"/>
+                      id="Chamilo\Core\Repository\CurrentWorkspace"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Table\Link\LinkAttachedToTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
             <argument key="$workspace"
                       type="service"
-                      id="Chamilo\Core\Repository\Workspace"/>
+                      id="Chamilo\Core\Repository\CurrentWorkspace"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Table\Link\LinkAttachesTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
             <argument key="$workspace"
                       type="service"
-                      id="Chamilo\Core\Repository\Workspace"/>
+                      id="Chamilo\Core\Repository\CurrentWorkspace"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Table\Link\LinkChildrenTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
             <argument key="$workspace"
                       type="service"
-                      id="Chamilo\Core\Repository\Workspace"/>
+                      id="Chamilo\Core\Repository\CurrentWorkspace"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Table\Link\LinkIncludeTableRenderer"/>
@@ -76,22 +76,22 @@
         <service id="Chamilo\Core\Repository\Table\Link\LinkParentsTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
             <argument key="$workspace"
                       type="service"
-                      id="Chamilo\Core\Repository\Workspace"/>
+                      id="Chamilo\Core\Repository\CurrentWorkspace"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Viewer\Table\ContentObjectTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Quota\Rights\Table\EntityTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Table\ImpactViewTableRenderer"/>

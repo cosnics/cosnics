@@ -10,10 +10,10 @@
         <service id="Chamilo\Core\Repository\Service\ContentObjectActionRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
             <argument key="$workspace"
                       type="service"
-                      id="Chamilo\Core\Repository\Workspace"/>
+                      id="Chamilo\Core\Repository\CurrentWorkspace"/>
         </service>
         <service id="Chamilo\Core\Repository\Service\ContentObjectUrlGenerator"/>
         <service id="Chamilo\Core\Repository\Service\WorkspaceExtensionManager"/>
@@ -23,17 +23,17 @@
         <service id="Chamilo\Core\Repository\Common\Renderer\Type\GalleryTableContentObjectRenderer">
             <argument key="$workspace"
                       type="service"
-                      id="Chamilo\Core\Repository\Workspace"/>
+                      id="Chamilo\Core\Repository\CurrentWorkspace"/>
         </service>
         <service id="Chamilo\Core\Repository\Common\Renderer\Type\SlideshowContentObjectRenderer">
             <argument key="$workspace"
                       type="service"
-                      id="Chamilo\Core\Repository\Workspace"/>
+                      id="Chamilo\Core\Repository\CurrentWorkspace"/>
         </service>
         <service id="Chamilo\Core\Repository\Common\Renderer\Type\TableContentObjectRenderer">
             <argument key="$workspace"
                       type="service"
-                      id="Chamilo\Core\Repository\Workspace"/>
+                      id="Chamilo\Core\Repository\CurrentWorkspace"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Quota\Rights\Service\RightsService">

@@ -10,13 +10,13 @@
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\SubscribedUserTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\CourseGroupTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\CourseGroupUserTableRenderer"/>

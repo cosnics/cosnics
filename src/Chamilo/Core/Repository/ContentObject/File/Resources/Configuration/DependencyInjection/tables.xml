@@ -12,10 +12,10 @@
             <tag name="Chamilo\Core\Repository\Table\ContentObjectTableRenderer" />
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
             <argument key="$workspace"
                       type="service"
-                      id="Chamilo\Core\Repository\Workspace"/>
+                      id="Chamilo\Core\Repository\CurrentWorkspace"/>
         </service>
     </services>
 </container>

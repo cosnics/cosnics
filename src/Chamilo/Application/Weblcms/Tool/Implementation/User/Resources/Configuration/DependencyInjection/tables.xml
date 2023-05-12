@@ -10,30 +10,30 @@
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\AllSubscribedUserTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\DirectSubscribedPlatformGroupTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\GroupUsersTableRenderer"/>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\PlatformGroupRelUserTableRenderer"/>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\SubscribedUserTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\SubSubscribedPlatformGroupTableRenderer"/>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\UnsubscribedGroupTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
         <service id="Chamilo\Application\Weblcms\Tool\Implementation\User\Table\UnsubscribedUserTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
     </services>
 </container>

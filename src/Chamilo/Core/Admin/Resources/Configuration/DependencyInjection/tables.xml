@@ -10,13 +10,13 @@
         <service id="Chamilo\Core\Admin\Table\WhoIsOnlineTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Core\Admin\Announcement\Table\PublicationTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
     </services>
 </container>

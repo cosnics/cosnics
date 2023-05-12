@@ -11,31 +11,31 @@
         <service id="Chamilo\Application\Weblcms\Request\Rights\Table\EntityTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Application\Weblcms\Request\Table\UserRequestTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Application\Weblcms\Request\Table\ManagementRequestTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Application\Weblcms\Course\Table\UnsubscribedCourseTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Application\Weblcms\Course\Table\SubscribedCourseTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Application\Weblcms\Course\Table\CourseTableRenderer"/>

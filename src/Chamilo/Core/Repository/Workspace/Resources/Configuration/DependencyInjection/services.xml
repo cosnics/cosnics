@@ -8,7 +8,7 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Core\Repository\Workspace"
+        <service id="Chamilo\Core\Repository\CurrentWorkspace"
                  class="Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace">
             <factory service="Chamilo\Core\Repository\Workspace\Service\WorkspaceFactory"
                      method="getWorkspace"/>
@@ -22,7 +22,7 @@
         <service id="Chamilo\Core\Repository\Workspace\Service\WorkspaceFactory">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
         <service id="Chamilo\Core\Repository\Workspace\Service\WorkspaceService"/>
         <service id="Chamilo\Core\Repository\Workspace\Service\WorkspaceUserService"/>

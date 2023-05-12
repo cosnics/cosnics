@@ -11,7 +11,7 @@
         <service id="Chamilo\Core\Repository\Workspace\Table\WorkspaceTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Workspace\Table\SharedInTableRenderer"/>

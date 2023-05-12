@@ -16,7 +16,7 @@
         <service id="Chamilo\Libraries\Architecture\Bootstrap\Kernel">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Libraries\Architecture\Factory\ApplicationFactory"/>

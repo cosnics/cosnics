@@ -19,22 +19,22 @@
         <service id="Chamilo\Libraries\Calendar\Service\View\TableBuilder\DayCalendarTableBuilder">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
         <service id="Chamilo\Libraries\Calendar\Service\View\TableBuilder\MiniMonthCalendarTableBuilder">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
         <service id="Chamilo\Libraries\Calendar\Service\View\TableBuilder\MonthCalendarTableBuilder">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
         <service id="Chamilo\Libraries\Calendar\Service\View\TableBuilder\WeekCalendarTableBuilder">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Libraries\Calendar\Service\View\DayCalendarRenderer"/>

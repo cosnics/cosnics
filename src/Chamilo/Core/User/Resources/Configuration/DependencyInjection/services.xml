@@ -7,7 +7,7 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Core\User\User"
+        <service id="Chamilo\Core\User\CurrentUser"
                  class="Chamilo\Core\User\Storage\DataClass\User">
             <factory service="Chamilo\Core\User\Factory\UserFactory"
                      method="getUser"/>

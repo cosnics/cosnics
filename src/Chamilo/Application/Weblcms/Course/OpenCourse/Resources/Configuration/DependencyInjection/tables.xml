@@ -10,7 +10,7 @@
         <service id="Chamilo\Application\Weblcms\Course\OpenCourse\Table\OpenCourseTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
     </services>
 </container>

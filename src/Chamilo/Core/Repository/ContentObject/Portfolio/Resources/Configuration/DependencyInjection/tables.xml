@@ -12,7 +12,7 @@
         <service id="Chamilo\Core\Repository\ContentObject\Portfolio\Display\Table\ItemTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
     </services>
 </container>

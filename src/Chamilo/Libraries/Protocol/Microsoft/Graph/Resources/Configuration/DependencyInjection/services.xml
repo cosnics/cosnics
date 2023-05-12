@@ -10,7 +10,7 @@
         <service id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepository">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
         <service id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepositoryFactory">
             <argument key="$accessTokenRepository"

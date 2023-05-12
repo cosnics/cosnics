@@ -11,7 +11,7 @@
         <service id="Chamilo\Application\Portfolio\Table\UserTableRenderer">
             <argument key="$user"
                       type="service"
-                      id="Chamilo\Core\User\User"/>
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
     </services>
 </container>

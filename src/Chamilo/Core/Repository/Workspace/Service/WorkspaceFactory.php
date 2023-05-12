@@ -19,7 +19,7 @@ class WorkspaceFactory
     protected User $user;
 
     protected WorkspaceService $workspaceService;
-    
+
     public function __construct(
         ChamiloRequest $request, RightsService $rightsService, User $user, WorkspaceService $workspaceService
     )
