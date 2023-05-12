@@ -30,7 +30,7 @@ abstract class UserApproverComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
         if (! $this->get_user()->is_platform_admin())
         {
@@ -66,7 +66,7 @@ abstract class UserApproverComponent extends Manager
                     {
                         Event::trigger(
                             'Update',
-                            Manager::context(),
+                            Manager::CONTEXT,
                             array(
                                 ChangesTracker::PROPERTY_REFERENCE_ID => $user->get_id(),
                                 ChangesTracker::PROPERTY_USER_ID => $this->get_user()->get_id()));
@@ -87,7 +87,7 @@ abstract class UserApproverComponent extends Manager
                     {
                         Event::trigger(
                             'Delete',
-                            Manager::context(),
+                            Manager::CONTEXT,
                             array('target_user_id' => $user->get_id(), 'action_user_id' => $this->get_user()->get_id()));
                     }
                     else

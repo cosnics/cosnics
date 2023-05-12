@@ -57,11 +57,11 @@ class Office365WorkspaceExtension implements WorkspaceExtensionInterface
 
         $workspaceExtensionActions->addButton(
             new Button(
-                $this->translator->trans($translation, [], Manager::context()), new FontAwesomeGlyph('users'),
+                $this->translator->trans($translation, [], Manager::CONTEXT), new FontAwesomeGlyph('users'),
                 $workspaceComponent->get_url(
                     [
                         Application::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_EXTENSION_LAUNCHER,
-                        ExtensionLauncherComponent::PARAM_EXTENSION_CONTEXT => Manager::context()
+                        ExtensionLauncherComponent::PARAM_EXTENSION_CONTEXT => Manager::CONTEXT
                     ]
                 ), Button::DISPLAY_ICON_AND_LABEL, null, [], '_blank'
             )
@@ -71,11 +71,11 @@ class Office365WorkspaceExtension implements WorkspaceExtensionInterface
         {
             $workspaceExtensionActions->addButton(
                 new Button(
-                    $this->translator->trans('SyncOffice365Group', [], Manager::context()),
+                    $this->translator->trans('SyncOffice365Group', [], Manager::CONTEXT),
                     new FontAwesomeGlyph('sync'), $workspaceComponent->get_url(
                     [
                         Application::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_EXTENSION_LAUNCHER,
-                        ExtensionLauncherComponent::PARAM_EXTENSION_CONTEXT => Manager::context(),
+                        ExtensionLauncherComponent::PARAM_EXTENSION_CONTEXT => Manager::CONTEXT,
                         Manager::PARAM_ACTION => Manager::ACTION_SYNC_GROUP
                     ]
                 ), Button::DISPLAY_ICON_AND_LABEL

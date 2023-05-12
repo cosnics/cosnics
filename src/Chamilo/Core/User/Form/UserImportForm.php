@@ -291,7 +291,7 @@ class UserImportForm extends FormValidator
                     }
 
                     Event::trigger(
-                        'Import', Manager::context(),
+                        'Import', Manager::CONTEXT,
                         ['target_user_id' => $user->get_id(), 'action_user_id' => $this->form_user->get_id()]
                     );
                 }
@@ -453,7 +453,7 @@ class UserImportForm extends FormValidator
 
         $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
 
-        $body = Configuration::getInstance()->get_setting([Manager::context(), 'email_template']);
+        $body = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'email_template']);
         foreach ($options as $option => $value)
         {
             $body = str_replace('[' . $option . ']', $value, $body);
@@ -564,7 +564,7 @@ class UserImportForm extends FormValidator
             );
         }
 
-        if ($action == 'C' && Configuration::getInstance()->get_setting([Manager::context(), 'require_email']) &&
+        if ($action == 'C' && Configuration::getInstance()->get_setting([Manager::CONTEXT, 'require_email']) &&
             (!$email || $email == ''))
         {
             $failures ++;

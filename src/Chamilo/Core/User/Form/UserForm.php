@@ -90,7 +90,7 @@ class UserForm extends FormValidator
         );
         // Email
         $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), array('size' => '50'));
-        if (Configuration::getInstance()->get_setting(array(Manager::context(), 'require_email')))
+        if (Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'require_email')))
         {
             $this->addRule(
                 User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
@@ -147,8 +147,8 @@ class UserForm extends FormValidator
             'text', User::PROPERTY_OFFICIAL_CODE, Translation::get('OfficialCode'), array('size' => '50')
         );
         // put restrictions on the official code
-        if (Configuration::getInstance()->get_setting(array(Manager::context(), 'require_official_code')) &&
-            Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_change_official_code')) == 1)
+        if (Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'require_official_code')) &&
+            Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_change_official_code')) == 1)
         {
             $this->addRule(
                 User::PROPERTY_OFFICIAL_CODE,
@@ -368,7 +368,7 @@ class UserForm extends FormValidator
             if ($value)
             {
                 Event::trigger(
-                    'Create', Manager::context(),
+                    'Create', Manager::CONTEXT,
                     array('target_user_id' => $user->get_id(), 'action_user_id' => $this->form_user->get_id())
                 );
             }
@@ -425,7 +425,7 @@ class UserForm extends FormValidator
 
         $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
 
-        $body = Configuration::getInstance()->get_setting(array(Manager::context(), 'email_template'));
+        $body = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'email_template'));
         foreach ($options as $option => $value)
         {
             $body = str_replace('[' . $option . ']', $value, $body);
@@ -480,7 +480,7 @@ class UserForm extends FormValidator
             $defaults[self::PROPERTY_TIME_PERIOD_FOREVER] = 1;
 
             $defaults[User::PROPERTY_EXPIRATION_DATE] = strtotime(
-                '+ ' . intval(Configuration::getInstance()->get_setting(array(Manager::context(), 'days_valid'))) .
+                '+ ' . intval(Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'days_valid'))) .
                 'Days', time()
             );
             $defaults['pw']['pass'] = $user->get_password();
@@ -571,7 +571,7 @@ class UserForm extends FormValidator
         if ($value)
         {
             Event::trigger(
-                'Update', Manager::context(), array(
+                'Update', Manager::CONTEXT, array(
                     ChangesTracker::PROPERTY_REFERENCE_ID => $user->get_id(),
                     ChangesTracker::PROPERTY_USER_ID => $this->form_user->get_id()
                 )

@@ -126,7 +126,7 @@ class ImpactViewRecyclerComponent extends Manager
             $message = $count == 1 ? $succes_message_single : $succes_message_multiple;
         }
 
-        return Translation::getInstance()->getTranslation($message, [], Manager::context());
+        return Translation::getInstance()->getTranslation($message, [], Manager::CONTEXT);
     }
 
     protected function get_selected_co_ids()
@@ -195,7 +195,7 @@ class ImpactViewRecyclerComponent extends Manager
                 else
                 {
                     Event::trigger(
-                        'Activity', Manager::context(), array(
+                        'Activity', Manager::CONTEXT, array(
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_RECYCLE,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),

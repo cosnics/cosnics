@@ -104,7 +104,7 @@ class InvitationRegistrationForm extends FormValidator
         // $this->addRule(User::PROPERTY_EMAIL, Translation::get('WrongEmail'), 'email');
         $this->freeze(User::PROPERTY_EMAIL);
 
-        if (Configuration::getInstance()->get_setting(array(Manager::context(), 'enable_terms_and_conditions')))
+        if (Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'enable_terms_and_conditions')))
         {
             $this->addElement('category', Translation::get('Information'));
             $this->addElement(
@@ -154,10 +154,10 @@ class InvitationRegistrationForm extends FormValidator
 
             Session::register('_uid', intval($user->get_id()));
             Event::trigger(
-                'Register', Manager::context(),
+                'Register', Manager::CONTEXT,
                 array('target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id())
             );
-            Event::trigger('Login', Manager::context(), array('server' => $_SERVER, 'user' => $user));
+            Event::trigger('Login', Manager::CONTEXT, array('server' => $_SERVER, 'user' => $user));
 
             return true;
         }
@@ -203,7 +203,7 @@ class InvitationRegistrationForm extends FormValidator
 
         $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
 
-        $body = Configuration::getInstance()->get_setting(array(Manager::context(), 'email_template'));
+        $body = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'email_template'));
         foreach ($options as $option => $value)
         {
             $body = str_replace('[' . $option . ']', $value, $body);

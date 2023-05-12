@@ -49,7 +49,7 @@ class FileContentObjectImportForm extends ContentObjectImportForm
 
         $uploadUrl = new Redirect(
             [
-                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
+                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
             ]
         );
@@ -72,7 +72,7 @@ class FileContentObjectImportForm extends ContentObjectImportForm
 
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Plugin/jquery.file.upload.import.js'
+            Path::getInstance()->getJavascriptPath(Manager::CONTEXT, true) . 'Plugin/jquery.file.upload.import.js'
         )
         );
 
@@ -80,7 +80,7 @@ class FileContentObjectImportForm extends ContentObjectImportForm
 
         $this->addElement(
             'radio', self::PARAM_DOCUMENT_TYPE, null,
-            Translation::getInstance()->getTranslation('ImportFromLink', null, Manager::context()), self::DOCUMENT_LINK
+            Translation::getInstance()->getTranslation('ImportFromLink', null, Manager::CONTEXT), self::DOCUMENT_LINK
         );
 
         $this->addElement('html', '<div style="padding-left: 25px; display: block;" id="document_link">');

@@ -122,7 +122,7 @@ class UserEntityProvider implements RightsEntityProvider
     public function getEntityElementFinderType()
     {
         return new AdvancedElementFinderElementType(
-            'users', $this->getTranslator()->trans('Users', [], 'Chamilo\Core\User'), Manager::context(),
+            'users', $this->getTranslator()->trans('Users', [], 'Chamilo\Core\User'), Manager::CONTEXT,
             'UserEntityFeed', []
         );
     }

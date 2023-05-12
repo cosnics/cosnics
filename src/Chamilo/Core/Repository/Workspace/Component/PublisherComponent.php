@@ -54,7 +54,7 @@ class PublisherComponent extends Manager
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
 
             $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Viewer\Manager::context(), $applicationConfiguration
+                \Chamilo\Core\Repository\Viewer\Manager::CONTEXT, $applicationConfiguration
             );
             $component->set_excluded_objects($this->getExcludedObjects());
             $component->set_actions([\Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER]);

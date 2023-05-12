@@ -32,7 +32,7 @@ abstract class ActiveChangerComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID);
         $this->set_parameter(self::PARAM_USER_USER_ID, $ids);
@@ -66,7 +66,7 @@ abstract class ActiveChangerComponent extends Manager
                 {
                     Event::trigger(
                         'Update',
-                        Manager::context(),
+                        Manager::CONTEXT,
                         array(
                             ChangesTracker::PROPERTY_REFERENCE_ID => $user->get_id(),
                             ChangesTracker::PROPERTY_USER_ID => $this->get_user()->get_id()));

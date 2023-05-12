@@ -31,7 +31,7 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
     public function run()
     {
         $component = $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Metadata\Relation\Instance\Manager::context(),
+            \Chamilo\Core\Metadata\Relation\Instance\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
         );
 

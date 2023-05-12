@@ -20,7 +20,7 @@ class AdditionalAccountInformationComponent extends ProfileComponent
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageAccount');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageAccount');
         
         return $this->renderPage();
     }

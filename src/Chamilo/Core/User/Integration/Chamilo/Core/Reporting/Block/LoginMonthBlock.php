@@ -38,7 +38,7 @@ class LoginMonthBlock extends Block
         
         $data = Tracker::get_data(
             LoginLogout::class,
-            Manager::context(),
+            Manager::CONTEXT,
             $condition);
         
         $months_names = array(

@@ -18,7 +18,7 @@ class ReportingComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
         $this->set_parameter(self::PARAM_USER_USER_ID, $this->getRequest()->query->get(self::PARAM_USER_USER_ID));
 
@@ -28,7 +28,7 @@ class ReportingComponent extends Manager implements DelegateComponent
         }
 
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager::context(),
+            \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this))->run();
     }
 }

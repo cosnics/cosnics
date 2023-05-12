@@ -27,7 +27,7 @@ class ExporterComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
         if (!$this->get_user()->is_platform_admin())
         {
@@ -55,7 +55,7 @@ class ExporterComponent extends Manager
                 }
 
                 Event::trigger(
-                    'Export', Manager::context(),
+                    'Export', Manager::CONTEXT,
                     ['target_user_id' => $user->get_id(), 'action_user_id' => $this->get_user()->get_id()]
                 );
                 $data[] = $user_array;

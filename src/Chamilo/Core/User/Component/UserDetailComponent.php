@@ -42,7 +42,7 @@ class UserDetailComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
         if (!$this->get_user()->is_platform_admin())
         {

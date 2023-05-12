@@ -45,7 +45,7 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
             $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_BREADCRUMBS_DISABLED, true);
 
             return $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Viewer\Manager::context(), $applicationConfiguration
+                \Chamilo\Core\Repository\Viewer\Manager::CONTEXT, $applicationConfiguration
             )->run();
         }
 
@@ -159,6 +159,6 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
      */
     protected function getTranslation($variable, $parameters = [])
     {
-        return Translation::getInstance()->get($variable, $parameters, Manager::context());
+        return Translation::getInstance()->get($variable, $parameters, Manager::CONTEXT);
     }
 }

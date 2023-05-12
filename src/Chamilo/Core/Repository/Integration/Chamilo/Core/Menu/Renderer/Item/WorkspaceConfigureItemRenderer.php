@@ -27,7 +27,7 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
     {
         $selected = $this->isSelected($item);
 
-        $urlRenderer = new Redirect(array(Application::PARAM_CONTEXT => Manager::context()));
+        $urlRenderer = new Redirect(array(Application::PARAM_CONTEXT => Manager::CONTEXT));
 
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = '<a href="' . $urlRenderer->getUrl() . '">';

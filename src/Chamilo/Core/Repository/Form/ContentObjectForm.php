@@ -267,7 +267,7 @@ abstract class ContentObjectForm extends FormValidator
 
             $uploadUrl = new Redirect(
                 [
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::CONTEXT,
                     \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
                 ]
             );
@@ -289,7 +289,7 @@ abstract class ContentObjectForm extends FormValidator
 
             $this->addElement(
                 'html', ResourceManager::getInstance()->getResourceHtml(
-                Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Plugin/jquery.file.upload.import.js'
+                Path::getInstance()->getJavascriptPath(Manager::CONTEXT, true) . 'Plugin/jquery.file.upload.import.js'
             )
             );
 
@@ -430,7 +430,7 @@ abstract class ContentObjectForm extends FormValidator
             $this->addGroup($category_group, 'category_form_group', null, ' ', false);
         }
 
-        $value = Configuration::getInstance()->get_setting([Manager::context(), 'description_required']);
+        $value = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'description_required']);
         $required = $value == 1;
         $name = Translation::get('Description', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this));
         $this->add_html_editor(ContentObject::PROPERTY_DESCRIPTION, $name, $required, $htmleditor_options);

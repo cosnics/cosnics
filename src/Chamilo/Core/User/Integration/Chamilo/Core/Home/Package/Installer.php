@@ -51,10 +51,10 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             $block = new Block();
             
             $block->setParentId($column->getId());
-            $block->setContext(Manager::context());
+            $block->setContext(Manager::CONTEXT);
             $block->setBlockType('Login');
             $block->setVisibility(true);
-            $block->setTitle(Translation::get('User', null, Manager::context()));
+            $block->setTitle(Translation::get('User', null, Manager::CONTEXT));
             $block->setUserId(0);
             
             if (! $block->create())

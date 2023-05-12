@@ -38,7 +38,7 @@ class RightsComponent extends TabComponent implements DelegateComponent
     public function build()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\Workspace\Rights\Manager::context(),
+            \Chamilo\Core\Repository\Workspace\Rights\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         )->run();
     }

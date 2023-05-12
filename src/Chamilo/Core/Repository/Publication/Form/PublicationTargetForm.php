@@ -154,7 +154,7 @@ class PublicationTargetForm extends FormValidator
         $header = [];
         $header[] = new StaticTableColumn('category', $glyph->render(), 'cell-stat-x2');
         $header[] = new StaticTableColumn(
-            Translation::get('Title', null, Manager::context())
+            Translation::get('Title', null, Manager::CONTEXT)
         );
 
         $table = new ArrayCollectionTableRenderer(

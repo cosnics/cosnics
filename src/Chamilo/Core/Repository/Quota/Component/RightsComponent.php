@@ -10,7 +10,7 @@ class RightsComponent extends Manager
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\Quota\Rights\Manager::context(),
+            \Chamilo\Core\Repository\Quota\Rights\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 }

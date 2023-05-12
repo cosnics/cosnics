@@ -110,7 +110,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $html[] = '<div style="display:flex;">';
                     $profilePhotoUrl = new Redirect(
                         array(
-                            Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
+                            Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::CONTEXT,
                             Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
                             \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $feedback->get_user()->get_id()
                         )

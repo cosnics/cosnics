@@ -35,7 +35,7 @@ class Login extends BlockRenderer
             $html[] = $this->displayLoginForm();
 
             if (!Configuration::getInstance()->get_setting(
-                array(Manager::context(), 'allow_registration')
+                array(Manager::CONTEXT, 'allow_registration')
             ))
             {
                 // add custom info here if you do not allow registration (if you use LDAP...)
@@ -48,19 +48,19 @@ class Login extends BlockRenderer
 
             $profilePhotoUrl = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
+                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::CONTEXT,
                     Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
                     Manager::PARAM_USER_USER_ID => $user->get_id()
                 )
             );
 
             $maximumHeight = Configuration::getInstance()->get_setting(
-                array(Manager::context(), 'restrict_picture_height')
+                array(Manager::CONTEXT, 'restrict_picture_height')
             ) ? 'max-height:100px' : null;
 
             $redirect = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => Manager::context(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => Manager::ACTION_LOGOUT
                 )
             );
@@ -103,18 +103,18 @@ class Login extends BlockRenderer
         );
 
         if (Configuration::getInstance()->get_setting(
-                array(Manager::context(), 'allow_registration')
+                array(Manager::CONTEXT, 'allow_registration')
             ) || Configuration::getInstance()->get_setting(
-                array(Manager::context(), 'allow_password_retrieval')
+                array(Manager::CONTEXT, 'allow_password_retrieval')
             ))
         {
             if (Configuration::getInstance()->get_setting(
-                array(Manager::context(), 'allow_registration')
+                array(Manager::CONTEXT, 'allow_registration')
             ))
             {
                 $redirect = new Redirect(
                     array(
-                        Application::PARAM_CONTEXT => Manager::context(),
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => Manager::ACTION_REGISTER_USER
                     )
                 );
@@ -131,12 +131,12 @@ class Login extends BlockRenderer
                 );
             }
             if (Configuration::getInstance()->get_setting(
-                array(Manager::context(), 'allow_password_retrieval')
+                array(Manager::CONTEXT, 'allow_password_retrieval')
             ))
             {
                 $redirect = new Redirect(
                     array(
-                        Application::PARAM_CONTEXT => Manager::context(),
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD
                     )
                 );

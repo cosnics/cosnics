@@ -66,7 +66,7 @@ abstract class ContentObjectPropertyProvider implements PropertyProviderInterfac
                     return $author->get_fullname();
                 }
                 
-                return Translation::get('UserUnknown', null, Manager::context());
+                return Translation::get('UserUnknown', null, Manager::CONTEXT);
             case self::PROPERTY_CREATION_DATE :
                 return DatetimeUtilities::getInstance()->formatLocaleDate(null, $contentObject->get_creation_date());
             case self::PROPERTY_MODIFICATION_DATE :

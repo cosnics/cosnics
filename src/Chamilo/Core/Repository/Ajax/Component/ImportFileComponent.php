@@ -84,7 +84,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
             $viewButton[] = $glyph->render() . ' <span>';
 
             $viewButton[] = Translation::getInstance()->getTranslation(
-                'ViewImportedObject', null, Manager::context()
+                'ViewImportedObject', null, Manager::CONTEXT
             );
 
             $viewButton[] = '</span>';
@@ -93,7 +93,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
             $uploadedMessage = [];
             $uploadedMessage[] = '<div class="alert alert-success alert-import-success">';
             $uploadedMessage[] = Translation::getInstance()->getTranslation(
-                'FileImported', ['CATEGORY' => $this->getCategoryTitle($categoryId)], Manager::context()
+                'FileImported', ['CATEGORY' => $this->getCategoryTitle($categoryId)], Manager::CONTEXT
             );
             $uploadedMessage[] = '</div>';
 
@@ -129,7 +129,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
     {
         if (!$categoryId)
         {
-            return Translation::getInstance()->getTranslation('MyRepository', null, Manager::context());
+            return Translation::getInstance()->getTranslation('MyRepository', null, Manager::CONTEXT);
         }
 
         $category = DataManager::retrieve_by_id(

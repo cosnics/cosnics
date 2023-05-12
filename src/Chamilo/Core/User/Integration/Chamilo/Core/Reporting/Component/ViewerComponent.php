@@ -34,9 +34,6 @@ class ViewerComponent extends Manager
 
         switch ($template_id)
         {
-            case LoginTemplate::TEMPLATE_ID :
-                $class_name = LoginTemplate::class;
-                break;
             case UserTemplate::TEMPLATE_ID :
                 $class_name = UserTemplate::class;
                 break;
@@ -46,7 +43,7 @@ class ViewerComponent extends Manager
         }
 
         $application = $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Reporting\Viewer\Manager::context(),
+            \Chamilo\Core\Reporting\Viewer\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         );
         $application->set_template_by_name($class_name);
@@ -59,7 +56,7 @@ class ViewerComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(\Chamilo\Core\User\Manager::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_BROWSE_USERS)
+                    [\Chamilo\Core\User\Manager::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_BROWSE_USERS]
                 ), Translation::get('AdminUserBrowserComponent')
             )
         );

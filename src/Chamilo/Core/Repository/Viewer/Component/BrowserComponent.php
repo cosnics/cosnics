@@ -43,7 +43,7 @@ class BrowserComponent extends Manager
 
     public function run()
     {
-        $this->checkAuthorization(\Chamilo\Core\Repository\Manager::context());
+        $this->checkAuthorization(\Chamilo\Core\Repository\Manager::CONTEXT);
 
         $this->setupFilterData();
 
@@ -107,7 +107,7 @@ class BrowserComponent extends Manager
             if ($this->isInWorkspaces())
             {
                 $translator = Translation::getInstance();
-                $translationContext = Manager::context();
+                $translationContext = Manager::CONTEXT;
 
                 $button = new DropdownButton(
                     $translator->getTranslation(

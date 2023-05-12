@@ -111,7 +111,7 @@ class CreatorComponent extends Manager
                 else
                 {
                     Event::trigger(
-                        'Activity', Manager::context(), [
+                        'Activity', Manager::CONTEXT, [
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_CREATED,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),

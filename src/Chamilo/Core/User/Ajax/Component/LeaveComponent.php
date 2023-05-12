@@ -25,7 +25,7 @@ class LeaveComponent extends \Chamilo\Core\User\Ajax\Manager
         
         Event::trigger(
             'Leave', 
-            Manager::context(), 
+            Manager::CONTEXT,
             array(
                 Visit::PROPERTY_ID => $tracker, 
                 Visit::PROPERTY_LOCATION => null, 

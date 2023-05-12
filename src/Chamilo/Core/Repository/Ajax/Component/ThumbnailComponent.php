@@ -29,7 +29,7 @@ class ThumbnailComponent extends \Chamilo\Core\Repository\Ajax\Manager
         if ($contentObject instanceof File)
         {
             $thumbnail_folder_path = $this->getConfigurablePathBuilder()->getTemporaryPath(
-                Manager::context() . '\Thumbnail'
+                Manager::CONTEXT . '\Thumbnail'
             );
             $thumbnail_file_path = $thumbnail_folder_path . md5($contentObject->get_full_path());
 

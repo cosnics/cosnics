@@ -45,7 +45,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
     {
         $user_id = Session::get_user_id();
         $allow_password_retrieval = Configuration::getInstance()->get_setting(
-            [Manager::context(), 'allow_password_retrieval']
+            [Manager::CONTEXT, 'allow_password_retrieval']
         );
 
         if (!$allow_password_retrieval)
@@ -74,12 +74,12 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
             {
                 $this->create_new_password($user);
                 Event::trigger(
-                    'ResetPassword', Manager::context(),
+                    'ResetPassword', Manager::CONTEXT,
                     ['target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id()]
                 );
                 $html[] = Display::normal_message(
                     Translation::getInstance()->getTranslation(
-                        'YourNewPasswordHasBeenMailedToYou', null, Manager::context()
+                        'YourNewPasswordHasBeenMailedToYou', null, Manager::CONTEXT
                     )
                 );
             }

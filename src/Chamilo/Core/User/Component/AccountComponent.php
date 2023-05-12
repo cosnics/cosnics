@@ -28,7 +28,7 @@ class AccountComponent extends ProfileComponent
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageAccount');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageAccount');
 
         $user = $this->get_user();
 

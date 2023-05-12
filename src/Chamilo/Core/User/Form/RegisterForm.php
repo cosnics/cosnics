@@ -77,7 +77,7 @@ class RegisterForm extends FormValidator
         // Email
         $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), array('size' => '50'));
 
-        if (Configuration::getInstance()->get_setting(array(Manager::context(), 'require_email')))
+        if (Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'require_email')))
         {
             $this->addRule(
                 User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, StringUtilities::LIBRARIES),
@@ -106,7 +106,7 @@ class RegisterForm extends FormValidator
             'text', User::PROPERTY_OFFICIAL_CODE, Translation::get('OfficialCode'), array('size' => '50')
         );
 
-        if (Configuration::getInstance()->get_setting(array(Manager::context(), 'require_official_code')))
+        if (Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'require_official_code')))
         {
             $this->addRule(
                 User::PROPERTY_OFFICIAL_CODE,
@@ -115,7 +115,7 @@ class RegisterForm extends FormValidator
         }
 
         // Picture URI
-        if (Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_change_user_picture')))
+        if (Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_change_user_picture')))
         {
             $this->addElement('file', User::PROPERTY_PICTURE_URI, Translation::get('AddPicture'));
         }
@@ -127,7 +127,7 @@ class RegisterForm extends FormValidator
         $this->addElement('text', User::PROPERTY_PHONE, Translation::get('PhoneNumber'), array('size' => '50'));
 
         // Status
-        if (Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_teacher_registration')))
+        if (Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_teacher_registration')))
         {
             $status = [];
             $status[5] = Translation::get('Student');
@@ -136,17 +136,17 @@ class RegisterForm extends FormValidator
         }
         // Send email
         $group = [];
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio', 'send_mail', null, Translation::get('ConfirmYes', null, StringUtilities::LIBRARIES), 1
         );
-        $group[] = &$this->createElement(
+        $group[] = $this->createElement(
             'radio', 'send_mail', null, Translation::get('ConfirmNo', null, StringUtilities::LIBRARIES), 0
         );
         $this->addGroup($group, 'mail', Translation::get('SendMailToNewUser'), '&nbsp;');
         // Submit button
         // $this->addElement('submit', 'user_settings', 'OK');
 
-        if (Configuration::getInstance()->get_setting(array(Manager::context(), 'enable_terms_and_conditions')))
+        if (Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'enable_terms_and_conditions')))
         {
             $this->addElement('category', Translation::get('Information'));
             $this->addElement(
@@ -202,7 +202,7 @@ class RegisterForm extends FormValidator
             $user->set_official_code($values[User::PROPERTY_OFFICIAL_CODE]);
             $user->set_phone($values[User::PROPERTY_PHONE]);
 
-            if (!Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_teacher_registration')))
+            if (!Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_teacher_registration')))
             {
                 $values[User::PROPERTY_STATUS] = User::STATUS_STUDENT;
             }
@@ -229,7 +229,7 @@ class RegisterForm extends FormValidator
                 $this->send_email($user);
             }
 
-            if (Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_registration')) == 2)
+            if (Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_registration')) == 2)
             {
                 $user->set_approved(0);
                 $user->set_active(0);
@@ -241,7 +241,7 @@ class RegisterForm extends FormValidator
             {
                 Session::register('_uid', intval($user->get_id()));
                 Event::trigger(
-                    'Register', Manager::context(),
+                    'Register', Manager::CONTEXT,
                     array('target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id())
                 );
 
@@ -318,7 +318,7 @@ class RegisterForm extends FormValidator
 
         $subject = Translation::get('YourRegistrationOn') . ' ' . $options['site_name'];
 
-        $body = Configuration::getInstance()->get_setting(array(Manager::context(), 'email_template'));
+        $body = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'email_template'));
         foreach ($options as $option => $value)
         {
             $body = str_replace('[' . $option . ']', $value, $body);

@@ -47,7 +47,7 @@ class SyncGroupComponent extends Manager
         }
 
         $this->redirectWithMessage(
-            $this->getTranslator()->trans($message, [], Manager::context()), !$success,
+            $this->getTranslator()->trans($message, [], Manager::CONTEXT), !$success,
             [
                 \Chamilo\Core\Repository\Manager::PARAM_ACTION =>
                     \Chamilo\Core\Repository\Manager::ACTION_BROWSE_CONTENT_OBJECTS

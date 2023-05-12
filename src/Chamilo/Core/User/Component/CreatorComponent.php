@@ -23,7 +23,7 @@ class CreatorComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
         $user = $this->get_user();
         $user_id = $user->get_id();

@@ -21,7 +21,7 @@ class UserViewComponent extends Manager implements ApplicationSupport
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\UserView\Manager::context(),
+            \Chamilo\Core\Repository\UserView\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 }

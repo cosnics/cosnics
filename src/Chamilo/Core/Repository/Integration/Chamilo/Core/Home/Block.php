@@ -161,7 +161,7 @@ class Block extends BlockRenderer
      */
     public function displayEmpty()
     {
-        return Translation::get('ConfigureBlockFirst', null, \Chamilo\Core\Home\Manager::context());
+        return Translation::get('ConfigureBlockFirst', null, \Chamilo\Core\Home\Manager::CONTEXT);
     }
 
     /**
@@ -247,7 +247,7 @@ class Block extends BlockRenderer
         
         return $this->getUrl(
             array(
-                \Chamilo\Core\Home\Manager::PARAM_CONTEXT => \Chamilo\Core\Home\Manager::context(), 
+                \Chamilo\Core\Home\Manager::PARAM_CONTEXT => \Chamilo\Core\Home\Manager::CONTEXT,
                 \Chamilo\Core\Home\Manager::PARAM_ACTION => \Chamilo\Core\Home\Manager::ACTION_VIEW_ATTACHMENT, 
                 \Chamilo\Core\Home\Manager::PARAM_PARENT_ID => $this->getObject()->get_id(), 
                 \Chamilo\Core\Home\Manager::PARAM_OBJECT_ID => $attachment->get_id()));

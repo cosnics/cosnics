@@ -93,7 +93,7 @@ class BrowserV2Component extends Manager implements DelegateComponent
 
         return $this->getTwig()
             ->render(
-                Manager::context() . ':add_feedback.html.twig',
+                Manager::CONTEXT . ':add_feedback.html.twig',
                 [
                     'form' => $formView,
                     'createRight' => $canCreateFeedback,
@@ -117,7 +117,7 @@ class BrowserV2Component extends Manager implements DelegateComponent
             $feedbackDTO = [];
             $profilePhotoUrl = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
+                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::CONTEXT,
                     Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
                     \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $feedbackItem->get_user()->getId()
                 )

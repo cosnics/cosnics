@@ -42,7 +42,7 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
         if (empty($userIdentifier))
         {
             throw new NoObjectSelectedException(
-                $translator->trans('User', [], Manager::context())
+                $translator->trans('User', [], Manager::CONTEXT)
             );
         }
 
@@ -51,7 +51,7 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
         if (empty($user))
         {
             throw new ObjectNotExistException(
-                $translator->trans('User', [], Manager::context()), $userIdentifier
+                $translator->trans('User', [], Manager::CONTEXT), $userIdentifier
             );
         }
 

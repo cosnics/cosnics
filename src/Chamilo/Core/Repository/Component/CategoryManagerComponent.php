@@ -34,7 +34,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Cat
     public function run()
     {
         $component = $this->getApplicationFactory()->getApplication(
-            \Chamilo\Configuration\Category\Manager::context(),
+            \Chamilo\Configuration\Category\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         );
         $component->set_subcategories_allowed(true);

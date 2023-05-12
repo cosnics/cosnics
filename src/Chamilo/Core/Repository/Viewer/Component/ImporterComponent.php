@@ -40,7 +40,7 @@ class ImporterComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $this->checkAuthorization(\Chamilo\Core\Repository\Manager::context());
+        $this->checkAuthorization(\Chamilo\Core\Repository\Manager::CONTEXT);
 
         if ($this->get_maximum_select() == 1)
         {
@@ -164,9 +164,9 @@ class ImporterComponent extends Manager implements DelegateComponent
                         'ImportType', [
                         'TYPE' => Translation::get(
                             'ImportType' . StringUtilities::getInstance()->createString($type)->upperCamelize(), null,
-                            \Chamilo\Core\Repository\Manager::context()
+                            \Chamilo\Core\Repository\Manager::CONTEXT
                         )
-                    ], \Chamilo\Core\Repository\Manager::context()
+                    ], \Chamilo\Core\Repository\Manager::CONTEXT
                     )
                     )
                 );
@@ -257,7 +257,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                     $import_types[$object_import_type] = Translation::get(
                         'ImportType' .
                         (string) StringUtilities::getInstance()->createString($object_import_type)->upperCamelize(),
-                        null, \Chamilo\Core\Repository\Manager::context()
+                        null, \Chamilo\Core\Repository\Manager::CONTEXT
                     );
                 }
             }

@@ -113,7 +113,7 @@ class ActionSelector
         }
 
         // Browser + Shared objects
-        if ($this->getApplication()->isAuthorized(\Chamilo\Core\Repository\Manager::context()))
+        if ($this->getApplication()->isAuthorized(\Chamilo\Core\Repository\Manager::CONTEXT))
         {
             if ($typeSelector->count_options() > 1)
             {

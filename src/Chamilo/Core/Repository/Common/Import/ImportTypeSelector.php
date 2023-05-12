@@ -94,7 +94,7 @@ class ImportTypeSelector
                     {
                         $importTypes[$objectImportType] = array(
                             'label' => Translation::get(
-                                'ImportType' . $importTypeName, null, Manager::context()
+                                'ImportType' . $importTypeName, null, Manager::CONTEXT
                             ),
                             'namespace' => 'Chamilo\Core\Repository\Import\\' . $importTypeName
                         );

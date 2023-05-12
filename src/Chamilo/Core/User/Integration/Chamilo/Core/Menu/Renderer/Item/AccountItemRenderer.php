@@ -29,7 +29,7 @@ class AccountItemRenderer extends MenuItemRenderer
     {
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_VIEW_ACCOUNT
             )
         );

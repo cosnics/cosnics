@@ -37,7 +37,7 @@ class LoginHourBlock extends Block
         
         $data = Tracker::get_data(
             LoginLogout::class,
-            Manager::context(),
+            Manager::CONTEXT,
             $condition);
         
         $hours = Block::getDateArray($data, 'G');

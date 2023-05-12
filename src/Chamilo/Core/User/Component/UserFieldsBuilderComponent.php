@@ -18,7 +18,7 @@ class UserFieldsBuilderComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageUserFields');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageUserFields');
 
         if (! $this->get_user()->is_platform_admin())
         {
@@ -26,7 +26,7 @@ class UserFieldsBuilderComponent extends Manager
         }
 
         $application = $this->getApplicationFactory()->getApplication(
-            \Chamilo\Configuration\Form\Manager::context(),
+            \Chamilo\Configuration\Form\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $application->set_form_by_name('account_fields');
 

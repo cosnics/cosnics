@@ -37,7 +37,7 @@ class LoginBlock extends Block
         
         $count = Tracker::count_data(
             LoginLogout::class,
-            Manager::context(),
+            Manager::CONTEXT,
             $condition);
         
         $reporting_data->set_categories(array(Translation::get('Logins')));

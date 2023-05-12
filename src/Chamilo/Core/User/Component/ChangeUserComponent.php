@@ -23,7 +23,7 @@ class ChangeUserComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
         if (!$this->getUser()->is_platform_admin())
         {

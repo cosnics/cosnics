@@ -41,7 +41,7 @@ class CreatorComponent extends Manager implements DelegateComponent
                 if (!in_array($type_selection, $all_types))
                 {
                     throw new NoObjectSelectedException(
-                        Translation::get('ContentObject', \Chamilo\Core\Repository\Manager::context())
+                        Translation::get('ContentObject', [], \Chamilo\Core\Repository\Manager::CONTEXT)
                     );
                 }
 
@@ -160,7 +160,7 @@ class CreatorComponent extends Manager implements DelegateComponent
                 null, Translation::get(
                 'UpdateContentType', [
                 'OBJECTTYPE' => strtolower(Translation::get('TypeName', null, $content_object->getType()))
-            ], \Chamilo\Core\Repository\Manager::context()
+            ], \Chamilo\Core\Repository\Manager::CONTEXT
             )
             )
         );

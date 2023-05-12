@@ -36,7 +36,7 @@ class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\Breadcrumb
             );
 
             $parameters = [];
-            $parameters[Application::PARAM_CONTEXT] = Manager::context();
+            $parameters[Application::PARAM_CONTEXT] = Manager::CONTEXT;
 
             if ($workspace instanceof Workspace)
             {

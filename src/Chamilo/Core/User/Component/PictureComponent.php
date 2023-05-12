@@ -28,7 +28,7 @@ class PictureComponent extends ProfileComponent implements NoContextComponent
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageAccount');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageAccount');
         
         $this->form = new PictureForm($this->get_user(), $this->get_url());
         

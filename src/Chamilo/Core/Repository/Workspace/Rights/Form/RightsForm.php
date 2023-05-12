@@ -167,7 +167,7 @@ class RightsForm extends FormValidator
             $buttons[] = $this->createElement(
                 'style_submit_button', 
                 'submit', 
-                Translation::get('SaveAndAddNew', null, Manager::context()), 
+                Translation::get('SaveAndAddNew', [], Manager::CONTEXT),
                 array('class' => 'positive'));
         }
         

@@ -51,7 +51,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
             catch (Exception $ex)
             {
                 $errorMessage =
-                    Translation::getInstance()->getTranslation('UseCaptchaToProceed', null, Manager::context());
+                    Translation::getInstance()->getTranslation('UseCaptchaToProceed', null, Manager::CONTEXT);
             }
         }
 
@@ -71,7 +71,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
         $html[] = '</h1>';
 
         $html[] = '<div class="anonymous-welcome-message">';
-        $html[] = Translation::getInstance()->getTranslation('AnonymousWelcomeMessage', null, Manager::context());
+        $html[] = Translation::getInstance()->getTranslation('AnonymousWelcomeMessage', null, Manager::CONTEXT);
         $html[] = '</div>';
 
         $html[] = '<div class="anonymous-form-container">';

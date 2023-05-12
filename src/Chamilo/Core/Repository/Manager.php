@@ -172,7 +172,7 @@ abstract class Manager extends Application
 
         if ($this->getUser() && $this->getRequest()->getFromRequestOrQuery(self::PARAM_ACTION) != self::ACTION_DOWNLOAD_DOCUMENT)
         {
-            $this->checkAuthorization(Manager::context());
+            $this->checkAuthorization(Manager::CONTEXT);
         }
 
         $this->set_optional_parameters();
@@ -594,7 +594,7 @@ abstract class Manager extends Application
 
         $tabs->add(
             new ContentTab(
-                self::TAB_CATEGORY, $translator->getTranslation('ViewCategoriesTab', null, Manager::context()),
+                self::TAB_CATEGORY, $translator->getTranslation('ViewCategoriesTab', null, Manager::CONTEXT),
                 $this->get_category_menu()->render_as_tree(), new FontAwesomeGlyph('folder', ['fa-lg'], null, 'fas'),
                 ContentTab::DISPLAY_ICON
             )
@@ -612,7 +612,7 @@ abstract class Manager extends Application
 
         $tabs->add(
             new ContentTab(
-                self::TAB_SEARCH, $translator->getTranslation('SearchTab', null, Manager::context()),
+                self::TAB_SEARCH, $translator->getTranslation('SearchTab', null, Manager::CONTEXT),
                 $filter_form->render(), new FontAwesomeGlyph('search', ['fa-lg'], null, 'fas'), ContentTab::DISPLAY_ICON
             )
         );
@@ -638,7 +638,7 @@ abstract class Manager extends Application
 
         $tabs->add(
             new ContentTab(
-                self::TAB_OBJECT_TYPE, $translator->getTranslation('TypeTab', null, Manager::context()),
+                self::TAB_OBJECT_TYPE, $translator->getTranslation('TypeTab', null, Manager::CONTEXT),
                 $object_type->render_as_tree(), new FontAwesomeGlyph('filter', ['fa-lg'], null, 'fas'),
                 ContentTab::DISPLAY_ICON
             )
@@ -655,7 +655,7 @@ abstract class Manager extends Application
         );
         $tabs->add(
             new ContentTab(
-                self::TAB_USERVIEW, $translator->getTranslation('UserViewTab', null, Manager::context()),
+                self::TAB_USERVIEW, $translator->getTranslation('UserViewTab', null, Manager::CONTEXT),
                 $user_view->render_as_tree(), new FontAwesomeGlyph('object-group', ['fa-lg'], null, 'far'),
                 ContentTab::DISPLAY_ICON
             )

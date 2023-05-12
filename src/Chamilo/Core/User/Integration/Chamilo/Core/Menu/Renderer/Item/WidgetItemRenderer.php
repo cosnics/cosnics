@@ -105,7 +105,7 @@ class WidgetItemRenderer extends ItemRenderer
 
         // Change user profile picture
         if ($this->getConfigurationConsulter()->getSetting(
-            array(Manager::context(), 'allow_change_user_picture')
+            array(Manager::CONTEXT, 'allow_change_user_picture')
         ))
         {
             $html[] = '<li>';
@@ -227,7 +227,7 @@ class WidgetItemRenderer extends ItemRenderer
     public function getUserUrl($action)
     {
         $redirect = new Redirect(
-            array(Application::PARAM_CONTEXT => Manager::context(), Application::PARAM_ACTION => $action)
+            array(Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => $action)
         );
 
         return $redirect->getUrl();

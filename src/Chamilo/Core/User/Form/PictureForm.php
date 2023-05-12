@@ -128,7 +128,7 @@ class PictureForm extends FormValidator
         if ($value)
         {
             Event::trigger(
-                'Update', Manager::context(), array(
+                'Update', Manager::CONTEXT, array(
                     ChangesTracker::PROPERTY_REFERENCE_ID => $user->get_id(),
                     ChangesTracker::PROPERTY_USER_ID => $user->get_id()
                 )

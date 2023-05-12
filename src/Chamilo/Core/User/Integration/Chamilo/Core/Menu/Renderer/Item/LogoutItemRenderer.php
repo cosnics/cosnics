@@ -28,7 +28,7 @@ class LogoutItemRenderer extends MenuItemRenderer
     public function getUrl()
     {
         $redirect = new Redirect(
-            array(Application::PARAM_CONTEXT => Manager::context(), Application::PARAM_ACTION => Manager::ACTION_LOGOUT)
+            array(Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_LOGOUT)
         );
 
         return $redirect->getUrl();

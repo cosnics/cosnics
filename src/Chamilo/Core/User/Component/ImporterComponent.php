@@ -25,7 +25,7 @@ class ImporterComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
         if (!$this->getUser()->is_platform_admin())
         {
@@ -52,7 +52,7 @@ class ImporterComponent extends Manager
         }
         else
         {
-            $emailRequired = Configuration::getInstance()->get_setting(array(Manager::context(), 'require_email'));
+            $emailRequired = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'require_email'));
             $rendition = $this->getTwig()->render(
                 'Chamilo\Core\User:UserImporter.html.twig',
                 ['emailRequired' => $emailRequired, 'form' => $form->toHtml()]

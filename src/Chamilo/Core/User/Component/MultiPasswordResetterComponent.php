@@ -94,7 +94,7 @@ class MultiPasswordResetterComponent extends Manager
 
                     Event::trigger(
                         'Update',
-                        Manager::context(),
+                        Manager::CONTEXT,
                         array(
                             ChangesTracker::PROPERTY_REFERENCE_ID => $user->get_id(),
                             ChangesTracker::PROPERTY_USER_ID => $this->get_user()->get_id()));

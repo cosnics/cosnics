@@ -1333,7 +1333,7 @@ class ContentObject extends CompositeDataClass
             return $owner->get_fullname();
         }
 
-        return Translation::getInstance()->getTranslation('UserUnknown', null, Manager::context());
+        return Translation::getInstance()->getTranslation('UserUnknown', null, Manager::CONTEXT);
     }
 
     /**

@@ -21,7 +21,7 @@ class WorkspaceComponent extends Manager implements ApplicationSupport
      */
     public function run()
     {
-        $context = \Chamilo\Core\Repository\Workspace\Manager::context();
+        $context = \Chamilo\Core\Repository\Workspace\Manager::CONTEXT;
 
         return $this->getApplicationFactory()->getApplication(
             $context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)

@@ -22,7 +22,7 @@ class EmailerComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID);
         $this->set_parameter(self::PARAM_USER_USER_ID, $ids);
@@ -47,7 +47,7 @@ class EmailerComponent extends Manager
             }
 
             $application = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\User\Email\Manager::context(),
+                \Chamilo\Core\User\Email\Manager::CONTEXT,
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $application->set_target_users($users);
             $application->set_parameter(self::PARAM_USER_USER_ID, $ids);

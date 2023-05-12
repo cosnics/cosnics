@@ -58,7 +58,7 @@ class AnonymousUserForm extends FormValidator
 
         $this->addElement(
             'style_submit_button', 'submit',
-            Translation::getInstance()->getTranslation('ViewAnonymously', null, Manager::context()),
+            Translation::getInstance()->getTranslation('ViewAnonymously', null, Manager::CONTEXT),
             array('class' => 'anonymous-view-button'), null, new FontAwesomeGlyph('user')
         );
 

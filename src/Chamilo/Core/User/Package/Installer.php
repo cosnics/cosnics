@@ -125,7 +125,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     {
         $values = $this->get_form_values();
 
-        $settings[] = [Manager::context(), 'allow_registration', $values['self_reg']];
+        $settings[] = [Manager::CONTEXT, 'allow_registration', $values['self_reg']];
 
         foreach ($settings as $setting)
         {

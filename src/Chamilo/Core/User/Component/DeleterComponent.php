@@ -24,7 +24,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
         if (! $this->get_user()->is_platform_admin())
         {
@@ -59,7 +59,7 @@ class DeleterComponent extends Manager
                 {
                     Event::trigger(
                         'Delete',
-                        Manager::context(),
+                        Manager::CONTEXT,
                         array('target_user_id' => $user->get_id(), 'action_user_id' => $this->get_user()->get_id()));
                 }
                 else

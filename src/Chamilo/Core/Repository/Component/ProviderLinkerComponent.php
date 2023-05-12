@@ -26,7 +26,7 @@ class ProviderLinkerComponent extends Manager implements ApplicationSupport
     public function run()
     {
         $component = $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Metadata\Provider\Manager::context(),
+            \Chamilo\Core\Metadata\Provider\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
         );
         $component->setEntities($this->getEntities());

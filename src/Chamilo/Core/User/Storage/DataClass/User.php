@@ -112,7 +112,7 @@ class User extends DataClass
      */
     public static function fullname($first_name, $last_name)
     {
-        $format = Configuration::getInstance()->get_setting([Manager::context(), 'fullname_format']);
+        $format = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'fullname_format']);
 
         switch ($format)
         {

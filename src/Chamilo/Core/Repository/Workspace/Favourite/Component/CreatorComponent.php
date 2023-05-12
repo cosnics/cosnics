@@ -51,7 +51,7 @@ class CreatorComponent extends Manager
                 {
                     throw new RuntimeException(
                         Translation::getInstance()->getTranslation(
-                            'CouldNotCreateWorkspaceFavorite', $workspaceIdentifier, null, Manager::context()
+                            'CouldNotCreateWorkspaceFavorite', $workspaceIdentifier, null, Manager::CONTEXT
                         )
                     );
                 }
