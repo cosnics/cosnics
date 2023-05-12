@@ -21,7 +21,7 @@ class PrinterComponent extends BrowserComponent implements DelegateComponent
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context());
+        $this->checkAuthorization(Manager::CONTEXT);
 
         $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
         $this->getPageConfiguration()->addCssFile(

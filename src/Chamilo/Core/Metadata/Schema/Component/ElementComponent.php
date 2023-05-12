@@ -23,7 +23,7 @@ class ElementComponent extends Manager implements DelegateComponent
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Metadata\Element\Manager::context(),
+            \Chamilo\Core\Metadata\Element\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 }

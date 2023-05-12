@@ -54,7 +54,7 @@ class ExporterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $contentObjectIdentifiers = $this->getRequest()->getFromPostOrUrl(self::PARAM_CONTENT_OBJECT_ID, []);
+        $contentObjectIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_CONTENT_OBJECT_ID, []);
         $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $contentObjectIdentifiers);
 
         $categoryIdentifiers = $this->getRequest()->query->get(FilterData::FILTER_CATEGORY, []);

@@ -31,7 +31,7 @@ class ExtensionLauncherComponent extends Manager implements DelegateComponent
             throw new NotAllowedException();
         }
 
-        $extensionContext = $this->getRequest()->getFromUrl(self::PARAM_EXTENSION_CONTEXT);
+        $extensionContext = $this->getRequest()->getFromQuery(self::PARAM_EXTENSION_CONTEXT);
         if (empty($extensionContext))
         {
             throw new NoObjectSelectedException($this->getTranslator()->trans('Context', [], Manager::class));

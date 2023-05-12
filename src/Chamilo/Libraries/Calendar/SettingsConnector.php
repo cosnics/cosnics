@@ -36,7 +36,7 @@ class SettingsConnector
     public static function is_allowed_to_change_platform_timezone(): bool
     {
         return Configuration::getInstance()->get_setting(
-                [Manager::context(), 'allow_user_change_platform_timezone']
+                [Manager::CONTEXT, 'allow_user_change_platform_timezone']
             ) == 1;
     }
 }

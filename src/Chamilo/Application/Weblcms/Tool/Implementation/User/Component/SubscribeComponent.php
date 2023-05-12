@@ -42,7 +42,7 @@ class SubscribeComponent extends Manager
         }
 
         $course_id = $this->get_course_id();
-        $userIds = $this->getRequest()->get(self::PARAM_OBJECTS);
+        $userIds = $this->getRequest()->getFromRequestOrQuery(self::PARAM_OBJECTS);
         if (isset($userIds) && !is_array($userIds))
         {
             $userIds = array($userIds);

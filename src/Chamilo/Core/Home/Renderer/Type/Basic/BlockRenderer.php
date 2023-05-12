@@ -93,7 +93,7 @@ class BlockRenderer
     {
         $html = [];
 
-        $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
+        $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_user_home'));
         $generalMode = $this->isInGeneralMode();
         $isIdentifiedUser = $this->getUser() && !$this->getUser()->is_anonymous_user();
 

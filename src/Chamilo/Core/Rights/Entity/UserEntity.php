@@ -75,7 +75,7 @@ class UserEntity implements RightsEntity
     public static function getElementFinderTypeInstance()
     {
         return new AdvancedElementFinderElementType(
-            'users', Translation::get('Users'), Manager::context() . '\Ajax', 'user_entity_feed', []
+            'users', Translation::get('Users'), Manager::CONTEXT . '\Ajax', 'user_entity_feed', []
         );
     }
 

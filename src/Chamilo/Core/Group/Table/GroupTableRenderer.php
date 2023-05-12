@@ -148,7 +148,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
                 $viewUrl = $urlGenerator->fromParameters(
                     [
-                        Application::PARAM_CONTEXT => Manager::context(),
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => Manager::ACTION_VIEW_GROUP,
                         Manager::PARAM_GROUP_ID => $group->getId()
                     ]

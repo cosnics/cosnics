@@ -115,7 +115,7 @@ abstract class Chart extends Html
     {
         $graphUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_GRAPH,
                 Manager::PARAM_GRAPHMD5 => $md5
             )

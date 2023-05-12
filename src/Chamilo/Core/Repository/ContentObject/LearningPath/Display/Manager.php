@@ -186,7 +186,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function getCurrentTreeNodeDataId()
     {
-        return (int) $this->getRequest()->get(self::PARAM_CHILD_ID, 0);
+        return (int) $this->getRequest()->getFromRequestOrQuery(self::PARAM_CHILD_ID, 0);
     }
 
     /**
@@ -282,7 +282,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function isCurrentTreeNodeDataIdSet()
     {
-        $currentTreeNodeDataId = $this->getRequest()->get(self::PARAM_CHILD_ID);
+        $currentTreeNodeDataId = $this->getRequest()->getFromRequestOrQuery(self::PARAM_CHILD_ID);
 
         return !is_null($currentTreeNodeDataId);
     }

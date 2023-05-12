@@ -13,7 +13,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageChamilo');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageChamilo');
 
         $ids = $this->getRequest()->query->get(self::PARAM_SYSTEM_ANNOUNCEMENT_ID);
         $this->set_parameter(self::PARAM_SYSTEM_ANNOUNCEMENT_ID, $ids);

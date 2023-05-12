@@ -428,11 +428,11 @@ class ComplexDisplayComponent extends Manager
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
         );
 
-        $requestedAction = $this->getRequest()->get(
+        $requestedAction = $this->getRequest()->getFromRequestOrQuery(
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION
         );
 
-        if (in_array($requestedAction, $reportingActions) || $this->getRequest()->get(
+        if (in_array($requestedAction, $reportingActions) || $this->getRequest()->getFromRequestOrQuery(
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_MODE
             ))
         {
@@ -442,7 +442,7 @@ class ComplexDisplayComponent extends Manager
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING;
 
             $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_USER_ID] =
-                $this->getRequest()->get(
+                $this->getRequest()->getFromRequestOrQuery(
                     \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_USER_ID
                 );
         }

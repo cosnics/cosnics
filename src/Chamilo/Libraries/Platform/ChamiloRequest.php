@@ -4,9 +4,8 @@ namespace Chamilo\Libraries\Platform;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- *
  * @package Chamilo\Libraries\Platform
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class ChamiloRequest extends Request
 {
@@ -14,12 +13,12 @@ class ChamiloRequest extends Request
     /**
      * Returns a parameter from the POST BODY and if it does not exist fallback on the URL QUERY.
      *
-     * @deprecated Use ChamiloRequest::getFromUrl() or ChamiloRequest::getFromPost() or
-     *     ChamiloRequest::getFromPostOrUrl()
+     * @deprecated Use ChamiloRequest::getFromQuery() or ChamiloRequest::getFromRequest() or
+     *     ChamiloRequest::getFromRequestOrQuery()
      */
     public function get(string $key, $default = null)
     {
-        return $this->getFromPostOrUrl($key, $default);
+        return $this->getFromRequestOrQuery($key, $default);
     }
 
     public function getContainerMode(): string
@@ -28,9 +27,22 @@ class ChamiloRequest extends Request
     }
 
     /**
+     * Returns a parameter from the url (query) or fallback to the default value
+     */
+    public function getFromQuery(string $key, $default = null)
+    {
+        if ($this !== $result = $this->query->get($key, $this))
+        {
+            return $result;
+        }
+
+        return $default;
+    }
+
+    /**
      * Returns a parameter from the post body (request) or fallback to the default value
      */
-    public function getFromPost(string $key, $default = null)
+    public function getFromRequest(string $key, $default = null)
     {
         if ($this !== $result = $this->request->get($key, $this))
         {
@@ -43,27 +55,14 @@ class ChamiloRequest extends Request
     /**
      * Returns a parameter from the POST BODY and if it does not exist fallback on the URL QUERY.
      */
-    public function getFromPostOrUrl(string $key, $default = null)
+    public function getFromRequestOrQuery(string $key, $default = null)
     {
-        if (null !== $result = $this->getFromPost($key))
+        if (null !== $result = $this->getFromRequest($key))
         {
             return $result;
         }
 
-        if (null != $result = $this->getFromUrl($key))
-        {
-            return $result;
-        }
-
-        return $default;
-    }
-
-    /**
-     * Returns a parameter from the url (query) or fallback to the default value
-     */
-    public function getFromUrl(string $key, $default = null)
-    {
-        if ($this !== $result = $this->query->get($key, $this))
+        if (null != $result = $this->getFromQuery($key))
         {
             return $result;
         }

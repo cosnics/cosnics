@@ -44,10 +44,10 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             $block = new Block();
             
             $block->setParentId($column->getId());
-            $block->setContext(Manager::context());
+            $block->setContext(Manager::CONTEXT);
             $block->setBlockType('PortalHome');
             $block->setVisibility(true);
-            $block->setTitle(Translation::get('PortalHome', null, Manager::context()));
+            $block->setTitle(Translation::get('PortalHome', null, Manager::CONTEXT));
             $block->setUserId(0);
             
             if (! $block->create())

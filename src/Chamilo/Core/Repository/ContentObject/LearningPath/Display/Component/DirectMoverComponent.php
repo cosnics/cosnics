@@ -29,8 +29,8 @@ class DirectMoverComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $parentId = $this->getRequest()->get(self::PARAM_PARENT_ID);
-        $displayOrder = $this->getRequest()->get(self::PARAM_DISPLAY_ORDER);
+        $parentId = $this->getRequest()->getFromRequestOrQuery(self::PARAM_PARENT_ID);
+        $displayOrder = $this->getRequest()->getFromRequestOrQuery(self::PARAM_DISPLAY_ORDER);
 
         if (!isset($parentId) || !isset($displayOrder))
         {

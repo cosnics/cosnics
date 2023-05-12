@@ -187,7 +187,7 @@ class EntityFormService
 
                     $urlRenderer = new Redirect(
                         array(
-                            Application::PARAM_CONTEXT => \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager::context(),
+                            Application::PARAM_CONTEXT => \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager::CONTEXT,
                             Application::PARAM_ACTION => \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager::ACTION_SELECT,
                             \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager::PARAM_ELEMENT_IDENTIFIER => $uniqueIdentifier,
                             Manager::PARAM_ELEMENT_ID => $element->get_id()

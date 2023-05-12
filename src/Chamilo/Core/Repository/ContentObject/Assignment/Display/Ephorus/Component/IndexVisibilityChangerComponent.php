@@ -42,7 +42,7 @@ class IndexVisibilityChangerComponent extends Manager
      */
     protected function getRequestsFromSelectedEntries()
     {
-        $entryIds = $this->getRequest()->getFromPostOrUrl(self::PARAM_ENTRY_ID);
+        $entryIds = $this->getRequest()->getFromRequestOrQuery(self::PARAM_ENTRY_ID);
         if (empty($entryIds))
         {
             throw new NoObjectSelectedException($this->getTranslator()->trans('Entry', [], Manager::context()));

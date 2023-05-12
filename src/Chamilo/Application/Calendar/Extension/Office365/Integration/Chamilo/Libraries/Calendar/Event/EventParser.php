@@ -11,41 +11,35 @@ use Exception;
 use Microsoft\Graph\Model\PatternedRecurrence;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Libraries\Calendar\Event
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class EventParser
 {
 
     /**
-     *
      * @var \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar
      */
     private $availableCalendar;
 
     /**
-     *
      * @var int
      */
     private $fromDate;
 
     /**
-     *
      * @var \Microsoft\Graph\Model\Event
      */
     private $office365CalendarEvent;
 
     /**
-     *
      * @var int
      */
     private $toDate;
 
     /**
-     *
      * @param \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar $availableCalendar
      * @param \Microsoft\Graph\Model\Event $office365CalendarEvent
      * @param int $fromDate
@@ -62,7 +56,6 @@ class EventParser
     }
 
     /**
-     *
      * @param string $eventTimeZone
      * @param bool $isAllDay
      *
@@ -88,7 +81,6 @@ class EventParser
     }
 
     /**
-     *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar
      */
     public function getAvailableCalendar()
@@ -97,18 +89,6 @@ class EventParser
     }
 
     /**
-     *
-     * @param \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar $availableCalendar
-     */
-    public function setAvailableCalendar(
-        AvailableCalendar $availableCalendar
-    )
-    {
-        $this->availableCalendar = $availableCalendar;
-    }
-
-    /**
-     *
      * @param string[] $daysOfWeek
      *
      * @return string[]
@@ -128,7 +108,6 @@ class EventParser
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function getEvents()
@@ -145,18 +124,18 @@ class EventParser
             $office365CalendarEvent->getEnd()->getDateTime(), $office365CalendarEvent->getEnd()->getTimeZone(),
             $office365CalendarEvent->getIsAllDay()
         ), $this->getRecurrence($office365CalendarEvent->getRecurrence()), $url, $office365CalendarEvent->getSubject(),
-            strip_tags($office365CalendarEvent->getBody()->getContent(), '<br>'), $office365CalendarEvent->getLocation()->getDisplayName(),
-            $this->getSource($this->getAvailableCalendar()->getName()), Manager::context()
+            strip_tags($office365CalendarEvent->getBody()->getContent(), '<br>'),
+            $office365CalendarEvent->getLocation()->getDisplayName(),
+            $this->getSource($this->getAvailableCalendar()->getName()), Manager::CONTEXT
         );
 
         // Trying to keep the objects a bit smaller
         //$event->setOffice365CalendarEvent($office365CalendarEvent);
 
-        return array($event);
+        return [$event];
     }
 
     /**
-     *
      * @param string $frequencyType
      *
      * @return int
@@ -185,7 +164,6 @@ class EventParser
     }
 
     /**
-     *
      * @return int
      */
     public function getFromDate()
@@ -194,16 +172,6 @@ class EventParser
     }
 
     /**
-     *
-     * @param int $fromDate
-     */
-    public function setFromDate($fromDate)
-    {
-        $this->fromDate = $fromDate;
-    }
-
-    /**
-     *
      * @param string $patternType
      * @param $patternIndex
      *
@@ -211,7 +179,7 @@ class EventParser
      */
     private function getNumericIndex($patternType, $patternIndex)
     {
-        if (!in_array($patternType, array('RelativeMonthly', 'RelativeYearly')))
+        if (!in_array($patternType, ['RelativeMonthly', 'RelativeYearly']))
         {
             return '';
         }
@@ -239,7 +207,6 @@ class EventParser
     }
 
     /**
-     *
      * @return \Microsoft\Graph\Model\Event
      */
     public function getOffice365CalendarEvent()
@@ -248,16 +215,6 @@ class EventParser
     }
 
     /**
-     *
-     * @param \Microsoft\Graph\Model\Event $office365CalendarEvent
-     */
-    public function setOffice365CalendarEvent(\Microsoft\Graph\Model\Event $office365CalendarEvent)
-    {
-        $this->office365CalendarEvent = $office365CalendarEvent;
-    }
-
-    /**
-     *
      * @param \Microsoft\Graph\Model\PatternedRecurrence $recurrence
      *
      * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules
@@ -309,7 +266,6 @@ class EventParser
     }
 
     /**
-     *
      * @param string $calendarName
      *
      * @return string
@@ -317,12 +273,11 @@ class EventParser
     private function getSource($calendarName)
     {
         return Translation::get(
-            'SourceName', array('CALENDAR' => $calendarName), Manager::context()
+            'SourceName', ['CALENDAR' => $calendarName], Manager::CONTEXT
         );
     }
 
     /**
-     *
      * @param string $eventDateTime
      * @param string $eventTimeZone
      */
@@ -339,7 +294,6 @@ class EventParser
     }
 
     /**
-     *
      * @return int
      */
     public function getToDate()
@@ -348,7 +302,32 @@ class EventParser
     }
 
     /**
-     *
+     * @param \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar $availableCalendar
+     */
+    public function setAvailableCalendar(
+        AvailableCalendar $availableCalendar
+    )
+    {
+        $this->availableCalendar = $availableCalendar;
+    }
+
+    /**
+     * @param int $fromDate
+     */
+    public function setFromDate($fromDate)
+    {
+        $this->fromDate = $fromDate;
+    }
+
+    /**
+     * @param \Microsoft\Graph\Model\Event $office365CalendarEvent
+     */
+    public function setOffice365CalendarEvent(\Microsoft\Graph\Model\Event $office365CalendarEvent)
+    {
+        $this->office365CalendarEvent = $office365CalendarEvent;
+    }
+
+    /**
      * @param int $toDate
      */
     public function setToDate($toDate)

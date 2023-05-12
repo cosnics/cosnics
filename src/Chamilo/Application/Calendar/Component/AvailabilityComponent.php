@@ -8,18 +8,17 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AvailabilityComponent extends Manager
 {
 
     public function run()
     {
-        $this->checkAuthorization(Manager::context());
+        $this->checkAuthorization(Manager::CONTEXT);
 
         $availabilityService = $this->getAvailabilityService();
         $form = $this->getAvailabilityForm($availabilityService);
@@ -33,7 +32,7 @@ class AvailabilityComponent extends Manager
 
             return new RedirectResponse(
                 $this->getUrlGenerator()->fromParameters(
-                    [Application::PARAM_CONTEXT => Manager::context()]
+                    [Application::PARAM_CONTEXT => Manager::CONTEXT]
                 )
             );
         }
@@ -50,16 +49,6 @@ class AvailabilityComponent extends Manager
     }
 
     /**
-     *
-     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
-     */
-    protected function getAvailabilityService()
-    {
-        return $this->getService(AvailabilityService::class);
-    }
-
-    /**
-     *
      * @param \Chamilo\Application\Calendar\Service\AvailabilityService $availabilityService
      *
      * @return \Chamilo\Application\Calendar\Form\AvailabilityForm
@@ -67,5 +56,13 @@ class AvailabilityComponent extends Manager
     public function getAvailabilityForm(AvailabilityService $availabilityService): AvailabilityForm
     {
         return new AvailabilityForm($this->get_url(), $this->getUser(), $availabilityService);
+    }
+
+    /**
+     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
+     */
+    protected function getAvailabilityService()
+    {
+        return $this->getService(AvailabilityService::class);
     }
 }

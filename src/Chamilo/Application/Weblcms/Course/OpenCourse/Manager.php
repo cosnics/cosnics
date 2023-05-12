@@ -34,7 +34,7 @@ abstract class Manager extends Application
      */
     public function getCourseIdsFromRequest()
     {
-        $courseIds = $this->getRequest()->get(self::PARAM_COURSE_ID);
+        $courseIds = $this->getRequest()->getFromRequestOrQuery(self::PARAM_COURSE_ID);
         if (empty($courseIds))
         {
             throw new NoObjectSelectedException(

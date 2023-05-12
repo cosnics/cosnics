@@ -20,7 +20,7 @@ class DeleterComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $publication_ids = $this->getRequest()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $publication_ids = $this->getRequest()->getFromRequestOrQuery(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
         if (! isset($publication_ids))
         {

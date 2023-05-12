@@ -50,7 +50,7 @@ abstract class Manager extends Application
 
         if ($this->getUser() instanceof User)
         {
-            $this->checkAuthorization(Manager::context());
+            $this->checkAuthorization(Manager::CONTEXT);
         }
     }
 }

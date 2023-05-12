@@ -21,7 +21,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $ids = $this->getRequest()->get(self::PARAM_USER_VIEW_ID);
+        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_VIEW_ID);
         $this->set_parameter(self::PARAM_USER_VIEW_ID, $ids);
         
         $failures = 0;

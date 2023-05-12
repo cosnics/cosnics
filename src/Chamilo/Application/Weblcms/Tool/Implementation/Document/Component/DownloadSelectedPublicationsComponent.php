@@ -27,7 +27,7 @@ class DownloadSelectedPublicationsComponent extends Manager
 
     public function run()
     {
-        $publications_ids = $this->getRequest()->get(self::PARAM_PUBLICATION_ID);
+        $publications_ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_PUBLICATION_ID);
 
         if (!isset($publications_ids))
         {

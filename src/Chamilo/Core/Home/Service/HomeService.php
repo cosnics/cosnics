@@ -202,7 +202,7 @@ class HomeService
         if (! isset($this->elements))
         {
             $homeUserIdentifier = $this->determineHomeUserIdentifier($user);
-            $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
+            $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_user_home'));
             
             if ($userHomeAllowed && $user instanceof User)
             {
@@ -239,7 +239,7 @@ class HomeService
     {
         if (! isset($this->homeUserIdentifier))
         {
-            $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
+            $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_user_home'));
             $generalMode = Session::retrieve('Chamilo\Core\Home\General');
             
             // Get user id
@@ -276,7 +276,7 @@ class HomeService
      */
     public function isUserHomeAllowed()
     {
-        return (boolean) Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
+        return (boolean) Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_user_home'));
     }
 
     /**

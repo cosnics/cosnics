@@ -98,7 +98,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     {
         $actions = [];
 
-        if ($event->getContext() == \Chamilo\Application\Calendar\Extension\Personal\Manager::context())
+        if ($event->getContext() == \Chamilo\Application\Calendar\Extension\Personal\Manager::CONTEXT)
         {
             $actions[] = new ToolbarItem(
                 Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
@@ -124,7 +124,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     {
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager::context(),
+                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager::CONTEXT,
                 \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_DELETE,
                 \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID => $eventIdentifier
             )
@@ -143,7 +143,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     {
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager::context(),
+                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager::CONTEXT,
                 \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_EDIT,
                 \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID => $eventIdentifier
             )

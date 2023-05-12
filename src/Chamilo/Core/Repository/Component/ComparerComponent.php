@@ -129,7 +129,7 @@ class ComparerComponent extends Manager
      */
     protected function getBaseContentObject()
     {
-        $baseContentObjectId = $this->getRequest()->get(self::PARAM_BASE_CONTENT_OBJECT_ID);
+        $baseContentObjectId = $this->getRequest()->getFromRequestOrQuery(self::PARAM_BASE_CONTENT_OBJECT_ID);
 
         $contentObjectTranslation = Translation::getInstance()->getTranslation('ContentObject');
 

@@ -51,7 +51,7 @@ class BlockTypeTargetEntitiesForm extends TargetEntitiesForm
         $this->addElement(
             'static', 
             self::PROPERTY_BLOCK_TYPE, 
-            Translation::getInstance()->getTranslation('BlockType', null, Manager::context()), 
+            Translation::getInstance()->getTranslation('BlockType', null, Manager::CONTEXT),
             $this->blockType);
         
         parent::buildForm();

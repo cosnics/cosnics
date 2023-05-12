@@ -129,7 +129,7 @@ class GroupEntityProvider implements RightsEntityProvider
     public function getEntityElementFinderType()
     {
         return new AdvancedElementFinderElementType(
-            'groups', $this->getTranslator()->trans('PlatformGroups', [], 'Chamilo\Core\Group'), Manager::context(),
+            'groups', $this->getTranslator()->trans('PlatformGroups', [], 'Chamilo\Core\Group'), Manager::CONTEXT,
             'GroupEntityFeed', []
         );
     }

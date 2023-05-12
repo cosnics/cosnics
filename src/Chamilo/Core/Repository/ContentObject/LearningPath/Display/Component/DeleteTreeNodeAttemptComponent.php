@@ -36,7 +36,7 @@ class DeleteTreeNodeAttemptComponent extends BaseReportingComponent
         $parameters[self::PARAM_ACTION] = self::ACTION_REPORTING;
         $parameters[self::PARAM_CHILD_ID] = $this->getCurrentTreeNodeDataId();
 
-        $item_attempt_id = $this->getRequest()->get(self::PARAM_ITEM_ATTEMPT_ID);
+        $item_attempt_id = $this->getRequest()->getFromRequestOrQuery(self::PARAM_ITEM_ATTEMPT_ID);
         if (empty($item_attempt_id))
         {
             throw new NoObjectSelectedException(Translation::getInstance()->getTranslation('Attempt'));

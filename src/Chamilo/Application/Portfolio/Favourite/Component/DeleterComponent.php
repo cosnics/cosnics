@@ -19,13 +19,13 @@ class DeleterComponent extends Manager
     function run()
     {
         $favouriteService = $this->getFavouriteService();
-        $userFavouriteIds = $this->getRequest()->get(self::PARAM_FAVOURITE_ID);
+        $userFavouriteIds = $this->getRequest()->getFromRequestOrQuery(self::PARAM_FAVOURITE_ID);
 
         try
         {
             $favouriteService->deleteUserFavouritesById($userFavouriteIds);
 
-            $objectTranslation = $this->getTranslator()->trans('UserFavourite', [], Manager::context());
+            $objectTranslation = $this->getTranslator()->trans('UserFavourite', [], Manager::CONTEXT);
 
             $success = true;
             $message = $this->getTranslator()->trans(
@@ -39,7 +39,7 @@ class DeleterComponent extends Manager
             $message = $ex->getMessage();
         }
 
-        $source = $this->getRequest()->get(self::PARAM_SOURCE);
+        $source = $this->getRequest()->getFromRequestOrQuery(self::PARAM_SOURCE);
         if (! $source || $source == self::SOURCE_FAVOURITES_BROWSER)
         {
             $returnParameters = array(self::PARAM_ACTION => self::ACTION_BROWSE);

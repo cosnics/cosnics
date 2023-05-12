@@ -58,7 +58,7 @@ class DeleterComponent extends Manager
      */
     protected function initializeEntryIdentifiers()
     {
-        $entryIdentifiers = $this->getRequest()->getFromPostOrUrl(self::PARAM_ENTRY_ID);
+        $entryIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_ENTRY_ID);
 
         if (empty($entryIdentifiers))
         {

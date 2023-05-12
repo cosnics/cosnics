@@ -13,7 +13,7 @@ class AnnouncerComponent extends Manager
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Admin\Announcement\Manager::context(),
+            \Chamilo\Core\Admin\Announcement\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 }

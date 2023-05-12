@@ -31,7 +31,7 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
         
-        $providerLinkIds = $this->getRequest()->get(self::PARAM_PROVIDER_LINK_ID);
+        $providerLinkIds = $this->getRequest()->getFromRequestOrQuery(self::PARAM_PROVIDER_LINK_ID);
         
         try
         {

@@ -33,7 +33,7 @@ class UnsubscriberComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $ids = $this->getRequest()->get(self::PARAM_GROUP_REL_USER_ID);
+        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_REL_USER_ID);
         $this->set_parameter(self::PARAM_GROUP_ID, $ids);
 
         $failures = 0;
@@ -62,7 +62,7 @@ class UnsubscriberComponent extends Manager
                 {
                     Event::trigger(
                         'UnsubscribeUser',
-                        Manager::context(),
+                        Manager::CONTEXT,
                         array(
                             Change::PROPERTY_REFERENCE_ID => $groupreluser->get_group_id(),
                             Change::PROPERTY_TARGET_USER_ID => $groupreluser->get_user_id(),
@@ -97,7 +97,7 @@ class UnsubscriberComponent extends Manager
                 Translation::get($message), (bool) $failures,
                 array(
                     Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                    self::PARAM_GROUP_ID => $this->getRequest()->get(self::PARAM_GROUP_ID)));
+                    self::PARAM_GROUP_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID)));
         }
         else
         {

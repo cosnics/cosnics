@@ -24,7 +24,7 @@ class DenierComponent extends Manager
             throw new NotAllowedException();
         }
         
-        $ids = $this->getRequest()->get(self::PARAM_REQUEST_ID);
+        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_REQUEST_ID);
         
         if (! empty($ids))
         {

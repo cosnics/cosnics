@@ -11,7 +11,7 @@ use Chamilo\Libraries\Translation\Translation;
  * Simple connector class to facilitate rendering settings forms by preprocessing data from the datamanagers to a simple
  * array format.
  *
- * @author Hans De Bisschop
+ * @author  Hans De Bisschop
  * @package admin.settings
  */
 class SettingsConnector
@@ -74,7 +74,7 @@ class SettingsConnector
     public static function is_allowed_quick_change_platform_language()
     {
         return self::is_allowed_to_change_platform_language() && Configuration::getInstance()->get_setting(
-                array(\Chamilo\Core\User\Manager::context(), 'allow_user_quick_change_platform_language')
+                [\Chamilo\Core\User\Manager::CONTEXT, 'allow_user_quick_change_platform_language']
             ) == 1;
     }
 
@@ -83,21 +83,21 @@ class SettingsConnector
     public static function is_allowed_to_change_platform_language()
     {
         return Configuration::getInstance()->get_setting(
-                array(\Chamilo\Core\User\Manager::context(), 'allow_user_change_platform_language')
+                [\Chamilo\Core\User\Manager::CONTEXT, 'allow_user_change_platform_language']
             ) == 1;
     }
 
     public static function is_allowed_to_change_platform_timezone()
     {
         return Configuration::getInstance()->get_setting(
-                array(\Chamilo\Core\User\Manager::context(), 'allow_user_change_platform_timezone')
+                [\Chamilo\Core\User\Manager::CONTEXT, 'allow_user_change_platform_timezone']
             ) == 1;
     }
 
     public static function is_allowed_to_change_theme()
     {
         return Configuration::getInstance()->get_setting(
-                array(\Chamilo\Core\User\Manager::context(), 'allow_user_theme_selection')
+                [\Chamilo\Core\User\Manager::CONTEXT, 'allow_user_theme_selection']
             ) == 1;
     }
 }

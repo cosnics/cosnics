@@ -26,7 +26,7 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
         
-        $vocabulary_ids = $this->getRequest()->get(self::PARAM_VOCABULARY_ID);
+        $vocabulary_ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_VOCABULARY_ID);
         
         try
         {

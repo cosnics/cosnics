@@ -61,7 +61,7 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
             return $this->getUser();
         }
 
-        $userId = $this->getRequest()->get(self::PARAM_REPORTING_USER_ID);
+        $userId = $this->getRequest()->getFromRequestOrQuery(self::PARAM_REPORTING_USER_ID);
         if (empty($userId))
         {
             return $this->getUser();

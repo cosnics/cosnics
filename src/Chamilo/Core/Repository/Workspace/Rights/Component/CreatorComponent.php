@@ -56,7 +56,7 @@ class CreatorComponent extends Manager
             else
             {
                 $filters[] = self::PARAM_ACTION;
-                $parameters[\Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION] = $this->getRequest()->get(
+                $parameters[\Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION] = $this->getRequest()->getFromRequestOrQuery(
                     \Chamilo\Core\Repository\Workspace\Manager::PARAM_BROWSER_SOURCE
                 );
             }

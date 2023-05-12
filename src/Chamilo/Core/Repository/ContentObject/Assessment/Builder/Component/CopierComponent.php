@@ -22,7 +22,7 @@ class CopierComponent extends Manager
 
     public function run()
     {
-        $complexContentObjectItemIdentifiers = $this->getRequest()->get(
+        $complexContentObjectItemIdentifiers = $this->getRequest()->getFromRequestOrQuery(
             Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
         );
 

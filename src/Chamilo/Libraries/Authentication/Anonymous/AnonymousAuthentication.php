@@ -88,7 +88,7 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
 
         $redirect = new RedirectResponse(
             $this->urlGenerator->fromParameters([
-                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_ACCESS_ANONYMOUSLY
             ])
         );

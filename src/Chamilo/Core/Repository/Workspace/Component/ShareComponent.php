@@ -61,7 +61,7 @@ class ShareComponent extends Manager
 
         if (!empty($selectedWorkspaceIdentifiers))
         {
-            $selectedContentObjectIdentifiers = (array) $this->getRequest()->getFromPostOrUrl(
+            $selectedContentObjectIdentifiers = (array) $this->getRequest()->getFromRequestOrQuery(
                 \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID, []
             );
 
@@ -202,7 +202,7 @@ class ShareComponent extends Manager
     {
         if (!isset($this->selectedContentObjectIdentifiers))
         {
-            $this->selectedContentObjectIdentifiers = (array) $this->getRequest()->getFromPostOrUrl(
+            $this->selectedContentObjectIdentifiers = (array) $this->getRequest()->getFromRequestOrQuery(
                 \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID, []
             );
         }
@@ -217,7 +217,7 @@ class ShareComponent extends Manager
     {
         if (!isset($this->selectedWorkspaceIdentifiers))
         {
-            $this->selectedWorkspaceIdentifiers = (array) $this->getRequest()->getFromPostOrUrl(
+            $this->selectedWorkspaceIdentifiers = (array) $this->getRequest()->getFromRequestOrQuery(
                 Manager::PARAM_SELECTED_WORKSPACE_ID, []
             );
         }

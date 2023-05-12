@@ -19,6 +19,8 @@ abstract class Manager extends Application
     public const ACTION_VIEW = 'Viewer';
     public const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
 
+    public const CONTEXT = __NAMESPACE__;
+
     public const DEFAULT_ACTION = self::ACTION_VIEW;
 
     public const PARAM_ACTION = 'personal_action';

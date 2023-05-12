@@ -42,14 +42,14 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
             throw new NotAllowedException();
         }
 
-        $selectedContentObject = $this->getRequest()->getFromPost(self::PARAM_SELECTED_CONTENT_OBJECT);
-        $selectedWorkspace = $this->getRequest()->getFromPost(self::PARAM_SELECTED_WORKSPACE);
+        $selectedContentObject = $this->getRequest()->getFromRequest(self::PARAM_SELECTED_CONTENT_OBJECT);
+        $selectedWorkspace = $this->getRequest()->getFromRequest(self::PARAM_SELECTED_WORKSPACE);
 
         $selectedLearningPathNodes = json_decode(
-            $this->getRequest()->getFromPost(self::PARAM_SELECTED_LEARNING_PATH_NODES)
+            $this->getRequest()->getFromRequest(self::PARAM_SELECTED_LEARNING_PATH_NODES)
         );
 
-        $copyInsteadOfReuse = (bool) $this->getRequest()->getFromPost(self::PARAM_COPY_INSTEAD_OF_REUSE);
+        $copyInsteadOfReuse = (bool) $this->getRequest()->getFromRequest(self::PARAM_COPY_INSTEAD_OF_REUSE);
 
         $translator = Translation::getInstance();
 

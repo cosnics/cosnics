@@ -50,7 +50,7 @@ class SetBlockTypeTargetEntitiesComponent extends Manager
             }
             
             $this->redirectWithMessage(
-                Translation::getInstance()->getTranslation($message, null, Manager::context()), 
+                Translation::getInstance()->getTranslation($message, null, Manager::CONTEXT),
                 ! $success, 
                 array(self::PARAM_ACTION => self::ACTION_BROWSE_BLOCK_TYPE_TARGET_ENTITIES));
         }
@@ -71,12 +71,12 @@ class SetBlockTypeTargetEntitiesComponent extends Manager
      */
     protected function getBlockType()
     {
-        $blockType = $this->getRequest()->get(self::PARAM_BLOCK_TYPE);
+        $blockType = $this->getRequest()->getFromRequestOrQuery(self::PARAM_BLOCK_TYPE);
         
         if (! $blockType)
         {
             throw new NoObjectSelectedException(
-                Translation::getInstance()->getTranslation('BlockType', null, Manager::context()));
+                Translation::getInstance()->getTranslation('BlockType', null, Manager::CONTEXT));
         }
         
         return $blockType;

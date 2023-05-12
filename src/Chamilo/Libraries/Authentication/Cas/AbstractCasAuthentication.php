@@ -170,7 +170,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
             ['Chamilo\Core\Admin', 'enableExternalAuthentication']
         );
 
-        $bypassExternalAuthentication = (boolean) $this->request->getFromUrl('noExtAuth', false);
+        $bypassExternalAuthentication = (boolean) $this->request->getFromQuery('noExtAuth', false);
 
         if (!$externalAuthenticationEnabled || $bypassExternalAuthentication)
         {

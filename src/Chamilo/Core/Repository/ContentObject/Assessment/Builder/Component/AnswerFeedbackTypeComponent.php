@@ -29,8 +29,8 @@ class AnswerFeedbackTypeComponent extends Manager
 
     public function run()
     {
-        $answer_feedback_type = Request::get(self::PARAM_ANSWER_FEEDBACK_TYPE);
-        $complex_question_id = $this->getRequest()->get(self::PARAM_COMPLEX_QUESTION_ID);
+        $answer_feedback_type = $this->getRequest()->query->get(self::PARAM_ANSWER_FEEDBACK_TYPE);
+        $complex_question_id = $this->getRequest()->getFromRequestOrQuery(self::PARAM_COMPLEX_QUESTION_ID);
 
         if (is_null($complex_question_id) || is_null($answer_feedback_type))
         {

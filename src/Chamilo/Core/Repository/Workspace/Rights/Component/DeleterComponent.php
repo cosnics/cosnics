@@ -23,7 +23,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $entityRelationIdentifiers = $this->getRequest()->get(self::PARAM_ENTITY_RELATION_ID);
+        $entityRelationIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_ENTITY_RELATION_ID);
 
         try
         {

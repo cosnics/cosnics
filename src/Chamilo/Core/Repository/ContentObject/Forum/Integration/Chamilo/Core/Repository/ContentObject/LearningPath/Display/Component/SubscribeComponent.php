@@ -24,7 +24,7 @@ class SubscribeComponent extends Manager
      */
     function run()
     {
-        $forumId = $this->getRequest()->get(
+        $forumId = $this->getRequest()->getFromRequestOrQuery(
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID
         );
 

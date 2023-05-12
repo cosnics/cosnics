@@ -77,20 +77,20 @@ class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
             case User::PROPERTY_STATUS :
                 if ($user->get_platformadmin() == '1')
                 {
-                    return $translator->trans('PlatformAdministrator', [], Manager::context());
+                    return $translator->trans('PlatformAdministrator', [], Manager::CONTEXT);
                 }
                 if ($user->get_status() == '1')
                 {
-                    return $translator->trans('CourseAdmin', [], Manager::context());
+                    return $translator->trans('CourseAdmin', [], Manager::CONTEXT);
                 }
                 else
                 {
-                    return $translator->trans('Student', [], Manager::context());
+                    return $translator->trans('Student', [], Manager::CONTEXT);
                 }
             case User::PROPERTY_PLATFORMADMIN :
                 if ($user->get_platformadmin() == '1')
                 {
-                    return $translator->trans('PlatformAdministrator', [], Manager::context());
+                    return $translator->trans('PlatformAdministrator', [], Manager::CONTEXT);
                 }
                 else
                 {
@@ -101,21 +101,21 @@ class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
                 {
                     $profilePhotoUrl = $urlGenerator->fromParameters(
                         [
-                            Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
+                            Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::CONTEXT,
                             Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
                             Manager::PARAM_USER_USER_ID => $user->getId()
                         ]
                     );
 
                     $profileUrl = $this->getUrlGenerator()->fromParameters([
-                        Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                        Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                         Application::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_WHOIS_ONLINE,
                         \Chamilo\Core\Admin\Manager::PARAM_USER_ID => $user->getId()
                     ]);
 
                     return '<a href="' . $profileUrl . '">' .
                         '<img style="max-width: 100px; max-height: 100px;" src="' . $profilePhotoUrl . '" alt="' .
-                        $translator->trans('UserPicture', [], Manager::context()) . '" /></a>';
+                        $translator->trans('UserPicture', [], Manager::CONTEXT) . '" /></a>';
                 }
 
                 return '';

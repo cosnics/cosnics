@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\Bootstrap;
 
 use Chamilo\Configuration\Service\FileConfigurationLocator;
+use Chamilo\Core\Install\Manager as InstallationManager;
 use Chamilo\Core\User\Service\SessionHandler;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
@@ -9,10 +10,9 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
- *
- * @package Chamilo\Libraries\Architecture
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @package Chamilo\Libraries\Architecture\Bootstrap
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class Bootstrap
 {
@@ -42,14 +42,13 @@ class Bootstrap
         $this->showErrors = $showErrors;
     }
 
-    /**
-     * @throws \Exception
-     */
     protected function checkInstallation(): Bootstrap
     {
-        if (!$this->getFileConfigurationLocator()->isAvailable())
+        $context = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
+
+        if (!$this->getFileConfigurationLocator()->isAvailable() && $context != InstallationManager::CONTEXT)
         {
-            $this->getRequest()->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
+            $this->getRequest()->initialize([Application::PARAM_CONTEXT => InstallationManager::CONTEXT]);
         }
 
         return $this;
@@ -65,23 +64,9 @@ class Bootstrap
         return $this->fileConfigurationLocator;
     }
 
-    public function setFileConfigurationLocator(FileConfigurationLocator $fileConfigurationLocator): Bootstrap
-    {
-        $this->fileConfigurationLocator = $fileConfigurationLocator;
-
-        return $this;
-    }
-
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
-    }
-
-    public function setRequest(ChamiloRequest $request): Bootstrap
-    {
-        $this->request = $request;
-
-        return $this;
     }
 
     public function getSessionHandler(): ?SessionHandler
@@ -94,23 +79,9 @@ class Bootstrap
         return $this->sessionUtilities;
     }
 
-    public function setSessionUtilities(SessionUtilities $sessionUtilities): Bootstrap
-    {
-        $this->sessionUtilities = $sessionUtilities;
-
-        return $this;
-    }
-
     public function getShowErrors(): bool
     {
         return $this->showErrors;
-    }
-
-    public function setShowErrors(bool $showErrors): Bootstrap
-    {
-        $this->showErrors = $showErrors;
-
-        return $this;
     }
 
     protected function registerErrorHandlers(): Bootstrap
@@ -123,25 +94,11 @@ class Bootstrap
         return $this;
     }
 
-    public function setExceptionLogger(ErrorHandler $errorHandler): Bootstrap
-    {
-        $this->errorHandler = $errorHandler;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @throws \Exception
-     */
     public function setup(): void
     {
         $this->registerErrorHandlers()->checkInstallation()->startSession();
     }
 
-    /**
-     * @throws \Exception
-     */
     protected function startSession(): Bootstrap
     {
         if ($this->getSessionHandler() instanceof SessionHandler)

@@ -28,7 +28,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $ids = $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID);
+        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_CONTENT_OBJECT_ID);
 
         if (!empty($ids))
         {

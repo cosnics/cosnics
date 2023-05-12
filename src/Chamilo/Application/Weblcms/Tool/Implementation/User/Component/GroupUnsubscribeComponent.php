@@ -30,7 +30,7 @@ class GroupUnsubscribeComponent extends Manager
         }
 
         $course = $this->get_course();
-        $group_ids = $this->getRequest()->get(self::PARAM_OBJECTS);
+        $group_ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_OBJECTS);
         if (! is_array($group_ids))
         {
             $group_ids = array($group_ids);

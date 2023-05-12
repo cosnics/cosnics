@@ -91,7 +91,7 @@ abstract class TabComponent extends Manager
 
         if ($this->get_action() == self::ACTION_RIGHTS)
         {
-            if ($this->getRequest()->get(\Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION) ==
+            if ($this->getRequest()->getFromRequestOrQuery(\Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION) ==
                 \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_CREATE)
             {
                 $icon = new FontAwesomeGlyph('key', ['fa-lg'], null, 'fas');

@@ -106,7 +106,7 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
             throw new Exception($this->translator->trans('CheckLDAPConfiguration', [], 'Chamilo\Libraries'));
         }
 
-        $password = $this->request->getFromPost(self::PARAM_PASSWORD);
+        $password = $this->request->getFromRequest(self::PARAM_PASSWORD);
 
         $settings = $this->getConfiguration();
 

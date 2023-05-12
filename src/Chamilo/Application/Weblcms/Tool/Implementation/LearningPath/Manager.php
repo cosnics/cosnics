@@ -152,7 +152,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
      */
     public function getCurrentTreeNodeDataId()
     {
-        return (int) $this->getRequest()->get(
+        return (int) $this->getRequest()->getFromRequestOrQuery(
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID, 0
         );
     }
@@ -201,7 +201,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         if (empty($publicationId))
         {
             $publicationId =
-                $this->getRequest()->getFromUrl(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+                $this->getRequest()->getFromQuery(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         }
 
         return new TrackingParameters((int) $publicationId);

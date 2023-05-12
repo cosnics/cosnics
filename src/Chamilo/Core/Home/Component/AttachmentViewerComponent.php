@@ -78,7 +78,7 @@ class AttachmentViewerComponent extends Manager
             $trail->add(
                 new Breadcrumb(
                     $this->get_url(array('object' => $parent_id)),
-                    Translation::get('ViewAttachment', null, \Chamilo\Core\Repository\Manager::context())
+                    Translation::get('ViewAttachment', null, \Chamilo\Core\Repository\Manager::CONTEXT)
                 )
             );
 

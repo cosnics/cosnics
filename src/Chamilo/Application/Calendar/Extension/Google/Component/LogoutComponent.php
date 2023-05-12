@@ -31,7 +31,7 @@ class LogoutComponent extends Manager implements DelegateComponent
 
         return new RedirectResponse(
             $this->getUrlGenerator()->fromParameters(
-                [Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context()]
+                [Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT]
             )
         );
     }

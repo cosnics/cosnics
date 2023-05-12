@@ -34,7 +34,7 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
         
-        $schema_ids = $this->getRequest()->get(self::PARAM_SCHEMA_ID);
+        $schema_ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_SCHEMA_ID);
         $this->set_parameter(self::PARAM_SCHEMA_ID, $schema_ids);
         
         try

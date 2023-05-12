@@ -44,7 +44,7 @@ class MoverComponent extends Manager
      */
     public function run()
     {
-        $ids = $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID);
+        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_CONTENT_OBJECT_ID);
         $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $ids);
 
         if (!empty($ids))

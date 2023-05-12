@@ -100,10 +100,10 @@ class Manager
         $attributes->set_id($record[Publication::PROPERTY_ID]);
         $attributes->set_publisher_id($record[Publication::PROPERTY_PUBLISHER_ID]);
         $attributes->set_date($record[Publication::PROPERTY_PUBLISHED]);
-        $attributes->set_application(\Chamilo\Application\Portfolio\Manager::context());
+        $attributes->set_application(\Chamilo\Application\Portfolio\Manager::CONTEXT);
 
         $attributes->set_location(
-            Translation::get('TypeName', null, \Chamilo\Application\Portfolio\Manager::context())
+            Translation::get('TypeName', null, \Chamilo\Application\Portfolio\Manager::CONTEXT)
         );
 
         $url =

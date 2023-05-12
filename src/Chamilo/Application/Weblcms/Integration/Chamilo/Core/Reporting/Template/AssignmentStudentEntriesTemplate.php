@@ -138,7 +138,7 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
      */
     public function getEntityType()
     {
-        return $this->getRequest()->getFromUrl(
+        return $this->getRequest()->getFromQuery(
             Manager::PARAM_ENTITY_TYPE,
             Entry::ENTITY_TYPE_USER
         );
@@ -151,7 +151,7 @@ class AssignmentStudentEntriesTemplate extends ReportingTemplate
      */
     public function getEntityId()
     {
-        return $this->getRequest()->getFromUrl(
+        return $this->getRequest()->getFromQuery(
             Manager::PARAM_ENTITY_ID
         );
     }

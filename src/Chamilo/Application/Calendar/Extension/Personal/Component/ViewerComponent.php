@@ -255,7 +255,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
         if (!$this->getRightsService()->isPublicationSharedWithAnyone($publication))
         {
-            return htmlentities(Translation::get('Nobody', null, \Chamilo\Core\User\Manager::context()));
+            return htmlentities(Translation::get('Nobody', null, \Chamilo\Core\User\Manager::CONTEXT));
         }
         else
         {

@@ -139,7 +139,7 @@ class EventParser
             $this->getTimestamp($googleCalendarEvent->getEnd(), $this->getCalendarProperties()->getTimeZone()),
             $this->getRecurrence($googleCalendarEvent->getRecurrence()), $url, $googleCalendarEvent->getSummary(),
             $googleCalendarEvent->getDescription(), $googleCalendarEvent->getLocation(),
-            $this->getSource($this->getCalendarProperties()), Manager::context()
+            $this->getSource($this->getCalendarProperties()), Manager::CONTEXT
         );
 
         $event->setCalendarProperties($this->getCalendarProperties());
@@ -206,7 +206,7 @@ class EventParser
     private function getSource(CalendarProperties $calendarProperties)
     {
         return Translation::get(
-            'SourceName', array('CALENDAR' => $calendarProperties->getSummary()), Manager::context()
+            'SourceName', array('CALENDAR' => $calendarProperties->getSummary()), Manager::CONTEXT
         );
     }
 

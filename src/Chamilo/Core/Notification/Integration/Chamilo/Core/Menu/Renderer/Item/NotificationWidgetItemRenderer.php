@@ -62,14 +62,14 @@ class NotificationWidgetItemRenderer extends PriorityItemRenderer
 
         $viewerUrl = new Redirect(
             [
-                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_VIEW
             ]
         );
 
         $filterManagerUrl = new Redirect(
             [
-                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_MANAGE_FILTERS
             ]
         );

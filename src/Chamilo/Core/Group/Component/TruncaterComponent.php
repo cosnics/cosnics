@@ -31,7 +31,7 @@ class TruncaterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $ids = $this->getRequest()->get(self::PARAM_GROUP_ID);
+        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID);
         $this->set_parameter(self::PARAM_GROUP_ID, $ids);
 
         $failures = 0;
@@ -54,7 +54,7 @@ class TruncaterComponent extends Manager
                 {
                     Event::trigger(
                         'Truncate',
-                        Manager::context(),
+                        Manager::CONTEXT,
                         array(
                             Change::PROPERTY_REFERENCE_ID => $group->get_id(),
                             Change::PROPERTY_USER_ID => $user->get_id()));

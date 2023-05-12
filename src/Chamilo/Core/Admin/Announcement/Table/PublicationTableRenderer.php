@@ -162,7 +162,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
                 return '<a' . $style . ' href="' . htmlentities(
                         $urlGenerator->fromParameters(
                             [
-                                Application::PARAM_CONTEXT => Manager::context(),
+                                Application::PARAM_CONTEXT => Manager::CONTEXT,
                                 Manager::PARAM_ACTION => Manager::ACTION_VIEW,
                                 Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[DataClass::PROPERTY_ID]
                             ]
@@ -298,7 +298,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
                     $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $urlGenerator->fromParameters(
                         [
-                            Application::PARAM_CONTEXT => Manager::context(),
+                            Application::PARAM_CONTEXT => Manager::CONTEXT,
                             Manager::PARAM_ACTION => Manager::ACTION_EDIT,
                             Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[DataClass::PROPERTY_ID]
                         ]
@@ -311,7 +311,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
                     $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $urlGenerator->fromParameters(
                         [
-                            Application::PARAM_CONTEXT => Manager::context(),
+                            Application::PARAM_CONTEXT => Manager::CONTEXT,
                             Manager::PARAM_ACTION => Manager::ACTION_DELETE,
                             Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[DataClass::PROPERTY_ID]
                         ]
@@ -337,7 +337,7 @@ class PublicationTableRenderer extends RecordListTableRenderer implements TableR
                 new ToolbarItem(
                     $translator->trans('Hide', [], StringUtilities::LIBRARIES), $glyph, $urlGenerator->fromParameters(
                     [
-                        Application::PARAM_CONTEXT => Manager::context(),
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Manager::PARAM_ACTION => Manager::ACTION_HIDE,
                         Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[DataClass::PROPERTY_ID]
                     ]

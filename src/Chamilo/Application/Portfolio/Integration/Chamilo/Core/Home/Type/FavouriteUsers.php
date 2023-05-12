@@ -30,7 +30,7 @@ class FavouriteUsers extends BlockRenderer
             {
                 $redirect = new Redirect(
                     array(
-                        Manager::PARAM_CONTEXT => Manager::context(),
+                        Manager::PARAM_CONTEXT => Manager::CONTEXT,
                         Manager::PARAM_ACTION => Manager::ACTION_HOME,
                         Manager::PARAM_USER_ID => $favouriteUser[FavouriteRepository::PROPERTY_USER_ID]));
 

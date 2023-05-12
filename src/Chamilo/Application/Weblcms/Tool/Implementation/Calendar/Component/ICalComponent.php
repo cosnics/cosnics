@@ -60,7 +60,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
 
         $alreadyAuthenticated = $authenticationValidator->isAuthenticated();
 
-        $securityCode = $this->getRequest()->get(User::PROPERTY_SECURITY_TOKEN);
+        $securityCode = $this->getRequest()->getFromRequestOrQuery(User::PROPERTY_SECURITY_TOKEN);
         if (isset($securityCode))
         {
             $authentication = $this->getSecurityTokenAuthentication();
@@ -179,7 +179,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     public function get_course()
     {
         $course = new Course();
-        $course->setId($this->getRequest()->get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE));
+        $course->setId($this->getRequest()->getFromRequestOrQuery(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE));
 
         return $course;
     }

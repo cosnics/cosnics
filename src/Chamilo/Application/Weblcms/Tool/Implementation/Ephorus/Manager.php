@@ -64,7 +64,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         $requestTranslation = $this->getTranslator()->trans('Request', [], \Chamilo\Core\Repository\Manager::context());
 
-        $ids = $this->getRequest()->getFromPostOrUrl(self::PARAM_REQUEST_IDS);
+        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_REQUEST_IDS);
 
         if (!$ids)
         {

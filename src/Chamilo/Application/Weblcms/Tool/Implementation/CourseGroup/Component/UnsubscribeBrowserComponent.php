@@ -69,7 +69,7 @@ class UnsubscribeBrowserComponent extends Manager implements DelegateComponent
         $html[] = $this->renderHeader();
         $html[] = '<div style="clear: both;">&nbsp;</div>';
 
-        $users = $this->getRequest()->getFromPostOrUrl(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
+        $users = $this->getRequest()->getFromRequestOrQuery(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
 
         if ($users)
         {

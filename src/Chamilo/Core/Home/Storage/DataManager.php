@@ -38,7 +38,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             User::class, intval($current_user_id)
         );
 
-        $user_home_allowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
+        $user_home_allowed = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_user_home'));
         $generalMode = Session::retrieve('Chamilo\Core\Home\General');
 
         if ($current_user instanceof User)

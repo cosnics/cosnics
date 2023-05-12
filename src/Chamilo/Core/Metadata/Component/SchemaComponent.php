@@ -23,7 +23,7 @@ class SchemaComponent extends Manager implements DelegateComponent
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Metadata\Schema\Manager::context(),
+            \Chamilo\Core\Metadata\Schema\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 }

@@ -44,7 +44,7 @@ class WikiHistoryComponent extends Manager
             );
 
             $compareObjectIdentifiers =
-                $this->getRequest()->get(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID);
+                $this->getRequest()->getFromRequestOrQuery(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID);
 
             $html = [];
 

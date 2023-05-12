@@ -334,7 +334,7 @@ class CalendarRepository
 
         $redirect = new Redirect(
             [
-                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Manager::PARAM_ACTION => Manager::ACTION_LOGIN
             ]
         );

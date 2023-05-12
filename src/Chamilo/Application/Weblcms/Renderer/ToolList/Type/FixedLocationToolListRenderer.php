@@ -557,7 +557,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 continue;
             }
 
-            $selectedTab = $this->get_parent()->getRequest()->get(self::PARAM_SELECTED_TAB);
+            $selectedTab = $this->get_parent()->getRequest()->getFromRequestOrQuery(self::PARAM_SELECTED_TAB);
 
             if ((isset($selectedTab) && $section->getId() == $selectedTab) ||
                 (!isset($selectedTab) && $sections->key() === 0))

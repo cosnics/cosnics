@@ -34,7 +34,7 @@ class GroupSubscribeComponent extends Manager
         }
 
         $course = $this->get_course();
-        $group_ids = $this->getRequest()->get(self::PARAM_OBJECTS);
+        $group_ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_OBJECTS);
 
         if (isset($group_ids) && !is_array($group_ids))
         {
@@ -118,7 +118,7 @@ class GroupSubscribeComponent extends Manager
                     $message = 'PartialGroupsNotSubscribedToCourse';
                 }
 
-                $returnAction = $this->getRequest()->get(self::PARAM_RETURN_TO_COMPONENT);
+                $returnAction = $this->getRequest()->getFromRequestOrQuery(self::PARAM_RETURN_TO_COMPONENT);
                 $returnAction = !empty($returnAction) ? $returnAction : self::ACTION_SUBSCRIBE_GROUP_DETAILS;
 
                 $this->redirectWithMessage(

@@ -143,7 +143,7 @@ class GroupForm extends FormValidator
         if ($value)
         {
             Event::trigger(
-                'Update', Manager::context(), array(
+                'Update', Manager::CONTEXT, array(
                     Change::PROPERTY_REFERENCE_ID => $group->get_id(
                     ),
                     Change::PROPERTY_USER_ID => $this->user->get_id(
@@ -178,7 +178,7 @@ class GroupForm extends FormValidator
         if ($value)
         {
             Event::trigger(
-                'Create', Manager::context(), array(
+                'Create', Manager::CONTEXT, array(
                     Change::PROPERTY_REFERENCE_ID => $group->get_id(
                     ),
                     Change::PROPERTY_USER_ID => $this->user->get_id(

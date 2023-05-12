@@ -31,7 +31,7 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
         
-        $relationInstanceIds = $this->getRequest()->get(self::PARAM_RELATION_INSTANCE_ID);
+        $relationInstanceIds = $this->getRequest()->getFromRequestOrQuery(self::PARAM_RELATION_INSTANCE_ID);
         
         try
         {

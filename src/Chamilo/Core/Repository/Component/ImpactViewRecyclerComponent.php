@@ -95,7 +95,7 @@ class ImpactViewRecyclerComponent extends Manager
     public function get_parameters(bool $include_search = false): array
     {
         return array_merge(
-            array(self::PARAM_CATEGORY_ID => $this->getRequest()->get(self::PARAM_CATEGORY_ID)),
+            array(self::PARAM_CATEGORY_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_CATEGORY_ID)),
             parent::get_parameters($include_search)
         );
     }
@@ -131,7 +131,7 @@ class ImpactViewRecyclerComponent extends Manager
 
     protected function get_selected_co_ids()
     {
-        return $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID);
+        return $this->getRequest()->getFromRequestOrQuery(self::PARAM_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -215,7 +215,7 @@ class ImpactViewRecyclerComponent extends Manager
         $this->redirectWithMessage(
             $result, $failures > 0, array(
                 self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS,
-                self::PARAM_CATEGORY_ID => $this->getRequest()->get(self::PARAM_CATEGORY_ID)
+                self::PARAM_CATEGORY_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_CATEGORY_ID)
             )
         );
     }

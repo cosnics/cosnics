@@ -22,12 +22,11 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 class GetCoursesForElementFinderComponent extends Manager implements AjaxResultDataProviderInterface
 {
-    const PARAM_OFFSET = 'offset';
+    public const PARAM_OFFSET = 'offset';
 
-    const PARAM_SEARCH_QUERY = 'query';
+    public const PARAM_SEARCH_QUERY = 'query';
 
     /**
-     *
      * @var AjaxResultGenerator
      */
     protected $ajaxResultGenerator;
@@ -38,7 +37,8 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
     public function run()
     {
         $this->ajaxResultGenerator = new AjaxResultGenerator(
-            $this, $this->getRequest()->get(self::PARAM_SEARCH_QUERY), $this->getRequest()->get(self::PARAM_OFFSET)
+            $this, $this->getRequest()->getFromRequestOrQuery(self::PARAM_SEARCH_QUERY),
+            $this->getRequest()->getFromRequestOrQuery(self::PARAM_OFFSET)
         );
 
         $this->ajaxResultGenerator->generateAjaxResult()->display();
@@ -70,16 +70,15 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     protected function getCondition()
     {
         return $this->ajaxResultGenerator->getSearchCondition(
-            array(
+            [
                 new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE),
                 new PropertyConditionVariable(Course::class, Course::PROPERTY_VISUAL_CODE)
-            )
+            ]
         );
     }
 
@@ -92,7 +91,7 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
     {
         $parameters = new DataClassRetrievesParameters(
             $this->getCondition(), 100, $this->ajaxResultGenerator->getOffset(),
-            new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))))
+            new OrderBy([new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))])
         );
 
         return DataManager::retrieves(Course::class, $parameters);

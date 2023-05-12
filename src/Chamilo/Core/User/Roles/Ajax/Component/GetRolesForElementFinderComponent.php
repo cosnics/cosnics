@@ -37,7 +37,7 @@ class GetRolesForElementFinderComponent extends Manager implements AjaxResultDat
     public function run()
     {
         $this->ajaxResultGenerator = new AjaxResultGenerator(
-            $this, $this->getRequest()->get(self::PARAM_SEARCH_QUERY), $this->getRequest()->get(self::PARAM_OFFSET)
+            $this, $this->getRequest()->getFromRequestOrQuery(self::PARAM_SEARCH_QUERY), $this->getRequest()->getFromRequestOrQuery(self::PARAM_OFFSET)
         );
 
         $this->ajaxResultGenerator->generateAjaxResult()->display();

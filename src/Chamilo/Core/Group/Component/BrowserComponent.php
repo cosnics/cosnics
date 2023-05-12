@@ -409,7 +409,7 @@ class BrowserComponent extends Manager
 
         $tabs->add(
             new ContentTab(
-                self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::context()),
+                self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::CONTEXT),
                 $this->renderSubscribedUsertable(), new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas')
             )
         );

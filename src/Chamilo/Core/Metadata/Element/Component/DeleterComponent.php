@@ -28,7 +28,7 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
         
-        $element_ids = $this->getRequest()->get(self::PARAM_ELEMENT_ID);
+        $element_ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_ELEMENT_ID);
         $this->set_parameter(self::PARAM_ELEMENT_ID, $element_ids);
         
         try

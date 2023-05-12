@@ -25,7 +25,7 @@ class DeleterComponent extends Manager
              * $_POST['selected_cloi']; }
              */
             
-            $complex_content_object_item_ids = $this->getRequest()->get(
+            $complex_content_object_item_ids = $this->getRequest()->getFromRequestOrQuery(
                 \Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
             
             if (! is_array($complex_content_object_item_ids))

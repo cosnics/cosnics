@@ -43,13 +43,13 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
 
                 $html[] = $this->render_header();
                 $html[] = $this->display_error_message('CategoryFormCouldNotBeBuild');
-                $html[] = $this->render_footer();
+                $html[] = $this->renderFooter();
 
                 return implode(PHP_EOL, $html);
             }
 
             $publication_ids =
-                $this->getRequest()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+                $this->getRequest()->getFromRequestOrQuery(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
             if (!is_array($publication_ids))
             {
@@ -209,7 +209,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
 
     public function build_move_to_category_form()
     {
-        $publication_ids = $this->getRequest()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $publication_ids = $this->getRequest()->getFromRequestOrQuery(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
         if (!is_array($publication_ids))
         {

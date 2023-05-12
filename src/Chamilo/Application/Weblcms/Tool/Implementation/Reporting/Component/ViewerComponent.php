@@ -72,7 +72,7 @@ class ViewerComponent extends Manager
 
         foreach($parameters as $parameter)
         {
-            $this->set_parameter($parameter, $this->getRequest()->getFromUrl($parameter));
+            $this->set_parameter($parameter, $this->getRequest()->getFromQuery($parameter));
         }
     }
 }

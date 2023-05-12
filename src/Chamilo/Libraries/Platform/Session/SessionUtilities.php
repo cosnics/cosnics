@@ -2,10 +2,9 @@
 namespace Chamilo\Libraries\Platform\Session;
 
 /**
- *
  * @package Chamilo\Libraries\Platform\Session
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class SessionUtilities
 {
@@ -51,11 +50,6 @@ class SessionUtilities
         return $this->securityKey;
     }
 
-    public function setSecurityKey(?string $securityKey)
-    {
-        $this->securityKey = $securityKey;
-    }
-
     public function getUserId(): ?int
     {
         return $this->retrieve('_uid');
@@ -94,9 +88,11 @@ class SessionUtilities
         return null;
     }
 
-    /**
-     * @throws \Exception
-     */
+    public function setSecurityKey(?string $securityKey)
+    {
+        $this->securityKey = $securityKey;
+    }
+
     public function start()
     {
         /**

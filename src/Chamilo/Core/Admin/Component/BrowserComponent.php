@@ -20,7 +20,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageChamilo');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageChamilo');
 
         $html = [];
 

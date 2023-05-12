@@ -19,13 +19,13 @@ class CreatorComponent extends Manager
     function run()
     {
         $favouriteService = $this->getFavouriteService();
-        $favouriteUserIds = $this->getRequest()->get(self::PARAM_FAVOURITE_USER_ID);
+        $favouriteUserIds = $this->getRequest()->getFromRequestOrQuery(self::PARAM_FAVOURITE_USER_ID);
 
         try
         {
             $favouriteService->createUserFavouritesByUserIds($this->getUser(), $favouriteUserIds);
 
-            $objectTranslation = $this->getTranslator()->trans('UserFavourite', [], Manager::context());
+            $objectTranslation = $this->getTranslator()->trans('UserFavourite', [], Manager::CONTEXT);
 
             $success = true;
             $message = $this->getTranslator()->trans(

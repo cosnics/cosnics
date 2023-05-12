@@ -88,7 +88,7 @@ abstract class Manager extends Application
         parent::__construct($applicationConfiguration);
         $this->create_url = $this->get_url([self::PARAM_ACTION => self::ACTION_CREATE_GROUP]);
 
-        $this->checkAuthorization(Manager::context());
+        $this->checkAuthorization(Manager::CONTEXT);
     }
 
     public function count_group_rel_users($condition = null)

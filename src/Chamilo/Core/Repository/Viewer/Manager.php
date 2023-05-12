@@ -157,7 +157,7 @@ abstract class Manager extends Application
                     [
                         self::PARAM_TAB => self::TAB_VIEWER,
                         self::PARAM_ACTION => self::ACTION_VIEWER,
-                        self::PARAM_ID => $this->getRequest()->get(self::PARAM_ID)
+                        self::PARAM_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_ID)
                     ]
                 ),
                 'glyph' => new FontAwesomeGlyph('desktop', ['fa-lg'], null, 'fas')
@@ -223,7 +223,7 @@ abstract class Manager extends Application
 
     public function isReadyToBePublished()
     {
-        return $this->getRequest()->get(self::PARAM_ID);
+        return $this->getRequest()->getFromRequestOrQuery(self::PARAM_ID);
     }
 
     /**

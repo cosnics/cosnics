@@ -160,11 +160,11 @@ class EventParser
             }
 
             $parsedEvent->setId($this->getPublication()->get_id());
-            $parsedEvent->setContext(Manager::context());
+            $parsedEvent->setContext(Manager::CONTEXT);
 
             $parameters = [];
             $parameters[Application::PARAM_CONTEXT] =
-                Manager::context();
+                Manager::CONTEXT;
             $parameters[Manager::PARAM_ACTION] =
                 Manager::ACTION_VIEW;
             $parameters[Manager::PARAM_PUBLICATION_ID] =

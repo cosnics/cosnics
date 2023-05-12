@@ -23,7 +23,7 @@ class DiagnoserComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageChamilo');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageChamilo');
 
         $html = [];
 

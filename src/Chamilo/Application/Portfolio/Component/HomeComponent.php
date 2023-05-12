@@ -145,7 +145,7 @@ class HomeComponent extends Manager
     {
         return array(
             new Button(
-                $this->getTranslator()->trans('BrowserComponent', [], Manager::context()),
+                $this->getTranslator()->trans('BrowserComponent', [], Manager::CONTEXT),
                 new FontAwesomeGlyph('search'), $this->get_url(
                 array(self::PARAM_ACTION => self::ACTION_BROWSE), array(
                     self::PARAM_USER_ID, PortfolioDisplayManager::PARAM_ACTION, PortfolioDisplayManager::PARAM_STEP
@@ -166,12 +166,12 @@ class HomeComponent extends Manager
         $content_object = new Bookmark();
         $content_object->set_title(
             $this->getTranslator()->trans(
-                'BookmarkTitle', ['NAME' => $portfolioOwner->get_fullname()], Manager::context()
+                'BookmarkTitle', ['NAME' => $portfolioOwner->get_fullname()], Manager::CONTEXT
             )
         );
         $content_object->set_description(
             $this->getTranslator()->trans(
-                'BookmarkDescription', ['NAME' => $portfolioOwner->get_fullname()], Manager::context()
+                'BookmarkDescription', ['NAME' => $portfolioOwner->get_fullname()], Manager::CONTEXT
             )
         );
         $content_object->set_application(__NAMESPACE__);
@@ -214,7 +214,7 @@ class HomeComponent extends Manager
     {
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => Manager::context(), Application::PARAM_ACTION => Manager::ACTION_HOME,
+                Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_HOME,
                 Manager::PARAM_USER_ID => $this->getCurrentUserId(),
                 PortfolioDisplayManager::PARAM_ACTION => PortfolioDisplayManager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
                 PortfolioDisplayManager::PARAM_STEP => Menu::NODE_PLACEHOLDER

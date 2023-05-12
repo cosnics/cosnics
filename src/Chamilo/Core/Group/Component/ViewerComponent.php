@@ -102,7 +102,7 @@ class ViewerComponent extends Manager
 
             $html[] = '<div class="panel-heading">';
             $html[] = '<h3 class="panel-title">' . $glyph->render() . ' ' .
-                Translation::get('Users', null, \Chamilo\Core\User\Manager::context()) . '</h3>';
+                Translation::get('Users', null, \Chamilo\Core\User\Manager::CONTEXT) . '</h3>';
             $html[] = '</div>';
 
             $html[] = '<div class="panel-body">';
@@ -169,7 +169,7 @@ class ViewerComponent extends Manager
 
             $toolActions->addButton(
                 new Button(
-                    Translation::get('AddUsers', null, \Chamilo\Core\User\Manager::context()),
+                    Translation::get('AddUsers', null, \Chamilo\Core\User\Manager::CONTEXT),
                     new FontAwesomeGlyph('plus-circle'), $this->get_group_suscribe_user_browser_url($group),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )

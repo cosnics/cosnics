@@ -92,7 +92,7 @@ class BannerRenderer
         if (!is_null($sessionUtilities->get('_as_admin')))
         {
             $link = $this->getUrlGenerator()->fromParameters([
-                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_ADMIN_USER
             ]);
 

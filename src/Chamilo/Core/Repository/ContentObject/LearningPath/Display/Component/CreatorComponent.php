@@ -186,7 +186,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
      */
     public function isFolderCreateMode()
     {
-        return $this->getRequest()->get(self::PARAM_CREATE_MODE) == self::CREATE_MODE_FOLDER;
+        return $this->getRequest()->getFromRequestOrQuery(self::PARAM_CREATE_MODE) == self::CREATE_MODE_FOLDER;
     }
 
     /**

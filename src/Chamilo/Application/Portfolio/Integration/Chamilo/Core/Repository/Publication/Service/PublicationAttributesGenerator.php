@@ -44,15 +44,15 @@ class PublicationAttributesGenerator
         $attributes->setId($record[Publication::PROPERTY_ID]);
         $attributes->set_publisher_id($record[Publication::PROPERTY_PUBLISHER_ID]);
         $attributes->set_date($record[Publication::PROPERTY_PUBLISHED]);
-        $attributes->set_application(Manager::context());
+        $attributes->set_application(Manager::CONTEXT);
 
         $attributes->set_location(
-            $this->getTranslator()->trans('TypeName', [], Manager::context())
+            $this->getTranslator()->trans('TypeName', [], Manager::CONTEXT)
         );
 
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_HOME,
                 Manager::PARAM_USER_ID => $record[Publication::PROPERTY_PUBLISHER_ID]
             )

@@ -24,7 +24,7 @@ class IntegrationLauncherComponent extends Manager
      */
     public function run()
     {
-        $baseContext = $this->getRequest()->getFromUrl(self::PARAM_BASE_CONTEXT);
+        $baseContext = $this->getRequest()->getFromQuery(self::PARAM_BASE_CONTEXT);
         if (empty($baseContext))
         {
             throw new NoObjectSelectedException($this->getTranslator()->trans('BaseContext', [], Manager::class));

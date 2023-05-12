@@ -24,7 +24,7 @@ class DeleterComponent extends Manager
     {
         $id = Request::get(self::PARAM_PUBLICATION_ID);
         $application = Request::get(self::PARAM_PUBLICATION_APPLICATION);
-        $publicationContext = $this->getRequest()->getFromPostOrUrl(self::PARAM_PUBLICATION_CONTEXT);
+        $publicationContext = $this->getRequest()->getFromRequestOrQuery(self::PARAM_PUBLICATION_CONTEXT);
 
         $this->set_parameter(self::PARAM_PUBLICATION_ID, $id);
         $this->set_parameter(self::PARAM_PUBLICATION_APPLICATION, $application);

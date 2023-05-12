@@ -34,7 +34,7 @@ class DeleteAttemptsForTreeNodeComponent extends BaseReportingComponent
         $reportingUser = $this->getReportingUser();
         $treeNode = $this->getCurrentTreeNode();
 
-        $source = $this->getRequest()->get(self::PARAM_SOURCE);
+        $source = $this->getRequest()->getFromRequestOrQuery(self::PARAM_SOURCE);
 
         $action = self::ACTION_VIEW_USER_PROGRESS;
         $childId = $treeNode->getId();

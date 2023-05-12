@@ -43,7 +43,7 @@ class Day extends BlockRenderer implements ConfigurableInterface, StaticBlockTit
         if (!isset($this->calendarRenderer))
         {
             $dataProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(), $this->getUser(), [], Manager::context()
+                new CalendarRendererProviderRepository(), $this->getUser(), [], Manager::CONTEXT
             );
 
             $calendarLegend = new LegendRenderer($this->getNotificationMessageManager(), $dataProvider);

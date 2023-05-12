@@ -25,7 +25,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $workspaceIdentifiers = $this->getRequest()->getFromPostOrUrl(self::PARAM_WORKSPACE_ID);
+        $workspaceIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_WORKSPACE_ID);
         try
         {
             if (empty($workspaceIdentifiers))
@@ -74,7 +74,7 @@ class DeleterComponent extends Manager
             $message = $ex->getMessage();
         }
 
-        $source = $this->getRequest()->get(self::PARAM_BROWSER_SOURCE);
+        $source = $this->getRequest()->getFromRequestOrQuery(self::PARAM_BROWSER_SOURCE);
         $returnComponent = isset($source) ? $source : self::ACTION_BROWSE;
 
         $this->redirectWithMessage($message, ! $success, array(self::PARAM_ACTION => $returnComponent));

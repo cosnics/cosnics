@@ -38,9 +38,9 @@ class Month extends BlockRenderer implements StaticBlockTitleInterface
         {
             $dataProvider = new CalendarRendererProvider(
                 new CalendarRendererProviderRepository(), $this->getUser(), array(
-                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(),
+                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
                 MiniMonthCalendarRenderer::PARAM_TYPE => MiniMonthCalendarRenderer::TYPE_DAY
-            ), Manager::context()
+            ), Manager::CONTEXT
             );
 
             $calendarLegend = new LegendRenderer($this->getNotificationMessageManager(), $dataProvider);

@@ -11,8 +11,8 @@ use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Architecture\Factory
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 class ApplicationFactory
 {
@@ -79,7 +79,7 @@ class ApplicationFactory
 
         foreach ($parameters as $parameter)
         {
-            $application->set_parameter($parameter, $this->getRequest()->getFromPostOrUrl($parameter));
+            $application->set_parameter($parameter, $this->getRequest()->getFromRequestOrQuery($parameter));
         }
 
         return $application;
@@ -206,11 +206,6 @@ class ApplicationFactory
         return $this->request;
     }
 
-    public function setRequest(ChamiloRequest $request)
-    {
-        $this->request = $request;
-    }
-
     /**
      * @return string|string[]
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
@@ -246,18 +241,8 @@ class ApplicationFactory
         return $this->stringUtilities;
     }
 
-    public function setStringUtilities(StringUtilities $stringUtilities)
-    {
-        $this->stringUtilities = $stringUtilities;
-    }
-
     public function getTranslator(): Translator
     {
         return $this->translator;
-    }
-
-    public function setTranslator(Translator $translator)
-    {
-        $this->translator = $translator;
     }
 }

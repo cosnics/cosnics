@@ -68,7 +68,7 @@ class Basic extends Renderer
     {
         $user = $this->get_user();
 
-        $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
+        $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_user_home'));
         $generalMode = $this->isGeneralMode();
 
         $isEditable = ($user instanceof User && ($userHomeAllowed || ($user->is_platform_admin() && $generalMode)));
@@ -145,7 +145,7 @@ class Basic extends Renderer
     public function renderButtons()
     {
         $user = $this->get_user();
-        $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
+        $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_user_home'));
         $generalMode = $this->isGeneralMode();
         $homeUserIdentifier = $this->getHomeService()->determineHomeUserIdentifier($this->get_user());
 

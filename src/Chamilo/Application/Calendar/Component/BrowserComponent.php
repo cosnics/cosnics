@@ -41,7 +41,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context());
+        $this->checkAuthorization(Manager::CONTEXT);
         $this->checkLoggedInAs();
 
         $this->getPageConfiguration()->addCssFile(
@@ -92,7 +92,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $this->calendarDataProvider = new CalendarRendererProvider(
                 new CalendarRendererProviderRepository(), $this->get_user(), $displayParameters,
-                \Chamilo\Application\Calendar\Ajax\Manager::context()
+                \Chamilo\Application\Calendar\Ajax\Manager::CONTEXT
             );
         }
 
@@ -133,7 +133,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $settingsUrl = new Redirect(
             [
-                Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
+                Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::CONTEXT,
                 Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_USER_SETTINGS,
                 UserSettingsComponent::PARAM_CONTEXT => 'Chamilo\Libraries\Calendar'
             ]

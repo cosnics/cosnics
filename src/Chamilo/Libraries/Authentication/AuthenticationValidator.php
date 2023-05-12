@@ -117,7 +117,7 @@ class AuthenticationValidator
      */
     public function logout(User $user)
     {
-        Event::trigger('Logout', Manager::context(), ['server' => $_SERVER, 'user' => $user]);
+        Event::trigger('Logout', Manager::CONTEXT, ['server' => $_SERVER, 'user' => $user]);
         $this->sessionUtilities->destroy();
 
         foreach ($this->authentications as $authentication)
@@ -169,7 +169,7 @@ class AuthenticationValidator
      */
     protected function trackLogin(User $user)
     {
-        Event::trigger('Login', Manager::context(), ['server' => $_SERVER, 'user' => $user]);
+        Event::trigger('Login', Manager::CONTEXT, ['server' => $_SERVER, 'user' => $user]);
     }
 
     /**

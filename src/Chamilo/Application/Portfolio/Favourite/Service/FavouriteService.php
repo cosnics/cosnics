@@ -89,12 +89,12 @@ class FavouriteService
     {
         if (! $sourceUser instanceof User)
         {
-            throw new InvalidArgumentException($this->translator->trans('InvalidSourceUser', [], Manager::context()));
+            throw new InvalidArgumentException($this->translator->trans('InvalidSourceUser', [], Manager::CONTEXT));
         }
 
         if (! $favouriteUser instanceof User)
         {
-            throw new InvalidArgumentException($this->translator->trans('InvalidFavouriteUser', [], Manager::context()));
+            throw new InvalidArgumentException($this->translator->trans('InvalidFavouriteUser', [], Manager::CONTEXT));
         }
 
         $userFavourite = new UserFavourite();
@@ -226,6 +226,6 @@ class FavouriteService
      */
     protected function getObjectTranslation()
     {
-        return $this->translator->trans('UserFavourite', [], Manager::context());
+        return $this->translator->trans('UserFavourite', [], Manager::CONTEXT);
     }
 }

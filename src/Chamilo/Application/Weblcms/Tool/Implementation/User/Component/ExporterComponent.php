@@ -197,7 +197,7 @@ class ExporterComponent extends Manager
     {
         $groupTranslation = Translation::getInstance()->getTranslation('Group', null, 'Chamilo\Core\Group');
 
-        $groupId = $this->getRequest()->get(self::PARAM_GROUP);
+        $groupId = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP);
 
         if (empty($groupId))
         {
@@ -262,7 +262,7 @@ class ExporterComponent extends Manager
      */
     protected function getUserExportParameters()
     {
-        $tab = $this->getRequest()->get(self::PARAM_TAB);
+        $tab = $this->getRequest()->getFromRequestOrQuery(self::PARAM_TAB);
 
         switch ($tab)
         {

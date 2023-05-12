@@ -13,12 +13,12 @@ class DeleterComponent extends Manager
 
     function run()
     {
-        if (! $this->get_user()->is_platform_admin())
+        if (! $this->getUser()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
         
-        $ids = $this->getRequest()->get(self::PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID);
+        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_LOCATION_ENTITY_RIGHT_GROUP_ID);
         $failures = 0;
         
         if (! empty($ids))

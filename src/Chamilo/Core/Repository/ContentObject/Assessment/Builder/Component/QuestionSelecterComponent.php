@@ -40,7 +40,7 @@ class QuestionSelecterComponent extends Manager
         }
         else
         {
-            $question_ids = $this->getRequest()->get(self::PARAM_QUESTION_ID);
+            $question_ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_QUESTION_ID);
 
             if (!is_array($question_ids))
             {

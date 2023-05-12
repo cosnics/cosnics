@@ -15,7 +15,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Returns the entities that have a given right on a given publication, publication category or tool
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
@@ -23,15 +23,23 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
     /**
      * The parameters
      */
-    const PARAM_COURSE_ID = 'course_id';
-    const PARAM_TOOL_NAME = 'tool_name';
-    const PARAM_PUBLICATION_CATEGORY_ID = 'publication_category_id';
-    const PARAM_PUBLICATION_ID = 'publication_id';
-    const PARAM_RIGHT = 'right';
-    const TARGET_ENTITY_USERS = 'users';
-    const TARGET_ENTITY_PLATFORM_GROUPS = 'platform_groups';
-    const TARGET_ENTITY_COURSE_GROUPS = 'course_groups';
-    const TARGET_ENTITY_EVERYONE = 'everyone';
+    public const PARAM_COURSE_ID = 'course_id';
+
+    public const PARAM_PUBLICATION_CATEGORY_ID = 'publication_category_id';
+
+    public const PARAM_PUBLICATION_ID = 'publication_id';
+
+    public const PARAM_RIGHT = 'right';
+
+    public const PARAM_TOOL_NAME = 'tool_name';
+
+    public const TARGET_ENTITY_COURSE_GROUPS = 'course_groups';
+
+    public const TARGET_ENTITY_EVERYONE = 'everyone';
+
+    public const TARGET_ENTITY_PLATFORM_GROUPS = 'platform_groups';
+
+    public const TARGET_ENTITY_USERS = 'users';
 
     /**
      * Executes this component and returns it's result
@@ -40,14 +48,72 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
     {
         $targetEntities = $this->getTargetEntities();
         $namedTargetEntities = $this->getTargetEntityNames($targetEntities);
-        
+
         $result = new JsonAjaxResult(200, $namedTargetEntities);
         $result->display();
     }
 
     /**
+     * Returns the course id
+     *
+     * @return int
+     */
+    protected function getCourseId()
+    {
+        return $this->getRequest()->getFromRequestOrQuery(self::PARAM_COURSE_ID);
+    }
+
+    /**
+     * Returns the selected category id
+     *
+     * @return int
+     */
+    protected function getPublicationCategoryId()
+    {
+        return $this->getRequest()->getFromRequestOrQuery(self::PARAM_PUBLICATION_CATEGORY_ID);
+    }
+
+    /**
+     * Returns the selected publication id
+     *
+     * @return int
+     */
+    protected function getPublicationId()
+    {
+        return $this->getRequest()->getFromRequestOrQuery(self::PARAM_PUBLICATION_ID);
+    }
+
+    /**
+     * Returns the required post parameters.
+     * The course id is the only one that is really required,
+     * the others are optional.
+     *
+     * @return array
+     */
+    public function getRequiredPostParameters(): array
+    {
+        return [self::PARAM_COURSE_ID];
+    }
+
+    /**
+     * Returns the right that is selected
+     *
+     * @return int
+     */
+    protected function getRight()
+    {
+        $right = $this->getRequest()->getFromRequestOrQuery(self::PARAM_RIGHT);
+        if (!isset($right))
+        {
+            $right = WeblcmsRights::VIEW_RIGHT;
+        }
+
+        return $right;
+    }
+
+    /**
      * Retrieves the target entities
-     * 
+     *
      * @return array
      */
     protected function getTargetEntities()
@@ -55,34 +121,52 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
         $tool = $this->getToolName();
         $publicationId = $this->getPublicationId();
         $publicationCategoryId = $this->getPublicationCategoryId();
-        
-        if (isset($publicationId) && ! empty($publicationId))
+
+        if (isset($publicationId) && !empty($publicationId))
         {
             return $this->getTargetEntitiesFromRightsSystem($publicationId, WeblcmsRights::TYPE_PUBLICATION);
         }
-        
-        if (isset($publicationCategoryId) && ! empty($publicationCategoryId))
+
+        if (isset($publicationCategoryId) && !empty($publicationCategoryId))
         {
-            return $this->getTargetEntitiesFromRightsSystem($publicationCategoryId, WeblcmsRights::TYPE_COURSE_CATEGORY);
+            return $this->getTargetEntitiesFromRightsSystem(
+                $publicationCategoryId, WeblcmsRights::TYPE_COURSE_CATEGORY
+            );
         }
-        
-        if (isset($tool) && ! empty($tool) && $tool != 'Home')
+
+        if (isset($tool) && !empty($tool) && $tool != 'Home')
         {
             $toolRegistration = DataManager::retrieve_course_tool_by_name($tool);
             if ($toolRegistration)
             {
                 return $this->getTargetEntitiesFromRightsSystem(
-                    $toolRegistration->getId(), 
-                    WeblcmsRights::TYPE_COURSE_MODULE);
+                    $toolRegistration->getId(), WeblcmsRights::TYPE_COURSE_MODULE
+                );
             }
         }
-        
+
         return $this->getTargetEntitiesFromRightsSystem(0, WeblcmsRights::TYPE_ROOT);
     }
 
     /**
+     * Helper function to retrieve the target entities from the rights system
+     *
+     * @param int $identifier
+     * @param int $type
+     *
+     * @return array
+     */
+    protected function getTargetEntitiesFromRightsSystem($identifier, $type)
+    {
+        return WeblcmsRights::getInstance()->get_target_entities(
+            $this->getRight(), Manager::context(), $identifier, $type, $this->getCourseId(),
+            WeblcmsRights::TREE_TYPE_COURSE
+        );
+    }
+
+    /**
      * Retrieves the visual names for the target entities
-     * 
+     *
      * @param array $targetEntities
      *
      * @return string
@@ -91,13 +175,12 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
     {
         $translator = Translation::getInstance();
         $targetEntityNames = [];
-        
+
         if (array_key_exists(0, $targetEntities[0]))
         {
             $targetEntityNames[self::TARGET_ENTITY_EVERYONE] = $translator->getTranslation(
-                'Everybody', 
-                null, 
-                StringUtilities::LIBRARIES);
+                'Everybody', null, StringUtilities::LIBRARIES
+            );
         }
         else
         {
@@ -109,8 +192,8 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
                         foreach ($entity_ids as $group_id)
                         {
                             $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
-                                Group::class, 
-                                $group_id);
+                                Group::class, $group_id
+                            );
                             if ($group)
                             {
                                 $targetEntityNames[self::TARGET_ENTITY_PLATFORM_GROUPS][] = $group->get_name();
@@ -120,121 +203,46 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
                     case CourseUserEntity::ENTITY_TYPE :
                         foreach ($entity_ids as $user_id)
                         {
-                            $targetEntityNames[self::TARGET_ENTITY_USERS][] = \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user(
-                                $user_id);
+                            $targetEntityNames[self::TARGET_ENTITY_USERS][] =
+                                \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user(
+                                    $user_id
+                                );
                         }
                         break;
                     case CourseGroupEntity::ENTITY_TYPE :
                         foreach ($entity_ids as $course_group_id)
                         {
-                            $course_group = \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager::retrieve_by_id(
-                                CourseGroup::class, 
-                                $course_group_id);
-                            
+                            $course_group =
+                                \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager::retrieve_by_id(
+                                    CourseGroup::class, $course_group_id
+                                );
+
                             if ($course_group)
                             {
                                 $targetEntityNames[self::TARGET_ENTITY_COURSE_GROUPS][] = $course_group->get_name();
                             }
                         }
                         break;
-                    
+
                     case 0 :
                         $targetEntityNames[self::TARGET_ENTITY_EVERYONE] = Translation::get(
-                            'Everybody', 
-                            null, 
-                            StringUtilities::LIBRARIES);
+                            'Everybody', null, StringUtilities::LIBRARIES
+                        );
                         break;
                 }
             }
         }
-        
+
         return $targetEntityNames;
     }
 
     /**
-     * Helper function to retrieve the target entities from the rights system
-     * 
-     * @param int $identifier
-     * @param int $type
-     *
-     * @return array
-     */
-    protected function getTargetEntitiesFromRightsSystem($identifier, $type)
-    {
-        return WeblcmsRights::getInstance()->get_target_entities(
-            $this->getRight(), 
-            Manager::context(),
-            $identifier, 
-            $type, 
-            $this->getCourseId(), 
-            WeblcmsRights::TREE_TYPE_COURSE);
-    }
-
-    /**
-     * Returns the required post parameters.
-     * The course id is the only one that is really required,
-     * the others are optional.
-     * 
-     * @return array
-     */
-    public function getRequiredPostParameters(): array
-    {
-        return array(self::PARAM_COURSE_ID);
-    }
-
-    /**
-     * Returns the course id
-     * 
-     * @return int
-     */
-    protected function getCourseId()
-    {
-        return $this->getRequest()->get(self::PARAM_COURSE_ID);
-    }
-
-    /**
      * Returns the name of the tool
-     * 
+     *
      * @return string
      */
     protected function getToolName()
     {
-        return $this->getRequest()->get(self::PARAM_TOOL_NAME);
-    }
-
-    /**
-     * Returns the selected category id
-     * 
-     * @return int
-     */
-    protected function getPublicationCategoryId()
-    {
-        return $this->getRequest()->get(self::PARAM_PUBLICATION_CATEGORY_ID);
-    }
-
-    /**
-     * Returns the selected publication id
-     * 
-     * @return int
-     */
-    protected function getPublicationId()
-    {
-        return $this->getRequest()->get(self::PARAM_PUBLICATION_ID);
-    }
-
-    /**
-     * Returns the right that is selected
-     * 
-     * @return int
-     */
-    protected function getRight()
-    {
-        $right = $this->getRequest()->get(self::PARAM_RIGHT);
-        if (! isset($right))
-        {
-            $right = WeblcmsRights::VIEW_RIGHT;
-        }
-        
-        return $right;
+        return $this->getRequest()->getFromRequestOrQuery(self::PARAM_TOOL_NAME);
     }
 }

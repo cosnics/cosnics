@@ -96,7 +96,7 @@ class PlatformAuthentication extends Authentication
             return null;
         }
 
-        $password = $this->request->getFromPost(self::PARAM_PASSWORD);
+        $password = $this->request->getFromRequest(self::PARAM_PASSWORD);
 
         $passwordHash = $this->hashingUtilities->hashString($password);
 

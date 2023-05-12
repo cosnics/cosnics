@@ -12,7 +12,7 @@ class DeleterComponent extends Manager
 
     function run()
     {
-        $ids = $this->getRequest()->get(self::PARAM_REQUEST_ID);
+        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_REQUEST_ID);
         $failures = 0;
         
         if (! empty($ids))

@@ -76,7 +76,7 @@ class PlatformGroupEntity implements NestedRightsEntity
     public static function getElementFinderTypeInstance()
     {
         return new AdvancedElementFinderElementType(
-            'platform_groups', Translation::get('PlatformGroups'), Manager::context() . '\Ajax',
+            'platform_groups', Translation::get('PlatformGroups'), Manager::CONTEXT . '\Ajax',
             'platform_group_entity_feed', []
         );
     }

@@ -26,7 +26,7 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $ids = $this->getRequest()->get(self::PARAM_COURSE_SECTION_ID);
+        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_COURSE_SECTION_ID);
         $failures = 0;
 
         if (! empty($ids))

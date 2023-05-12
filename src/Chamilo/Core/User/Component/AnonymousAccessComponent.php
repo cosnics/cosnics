@@ -43,7 +43,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
         {
             try
             {
-                $this->validateCaptcha($this->getRequest()->get(AnonymousUserForm::CAPTCHA_RESPONS_VALUE));
+                $this->validateCaptcha($this->getRequest()->getFromRequestOrQuery(AnonymousUserForm::CAPTCHA_RESPONS_VALUE));
                 $anonymousUser = $this->createAnonymousUser();
                 $this->addAnonymousRoleToUser($anonymousUser);
                 $this->setAuthenticationCookieAndRedirect($anonymousUser);

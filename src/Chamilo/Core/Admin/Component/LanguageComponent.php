@@ -12,10 +12,10 @@ class LanguageComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ManageChamilo');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageChamilo');
 
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Admin\Language\Manager::context(),
+            \Chamilo\Core\Admin\Language\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 }

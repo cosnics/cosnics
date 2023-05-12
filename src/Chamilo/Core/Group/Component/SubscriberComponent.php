@@ -34,7 +34,7 @@ class SubscriberComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $users = $this->getRequest()->get(self::PARAM_USER_ID);
+        $users = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_ID);
 
         $failures = 0;
 
@@ -63,7 +63,7 @@ class SubscriberComponent extends Manager
                     {
                         Event::trigger(
                             'SubscribeUser',
-                            Manager::context(),
+                            Manager::CONTEXT,
                             array(
                                 Change::PROPERTY_REFERENCE_ID => $groupreluser->get_group_id(),
                                 Change::PROPERTY_TARGET_USER_ID => $groupreluser->get_user_id(),

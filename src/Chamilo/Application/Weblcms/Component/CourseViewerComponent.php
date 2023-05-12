@@ -112,7 +112,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         }
 
         $publicationId =
-            $this->getRequest()->getFromUrl(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+            $this->getRequest()->getFromQuery(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         if (!empty($publicationId) && !is_array($publicationId))
         {
             $publication = DataManager::retrieve_by_id(ContentObjectPublication::class, $publicationId);
@@ -308,7 +308,8 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     {
         if (Session::get('view_as_course_id') == $this->get_course_id())
         {
-            if ($this->getRequest()->get(self::PARAM_TOOL) == 'User' && $this->getRequest()->get(
+            if ($this->getRequest()->getFromRequestOrQuery(self::PARAM_TOOL) == 'User' &&
+                $this->getRequest()->getFromRequestOrQuery(
                     self::PARAM_TOOL_ACTION
                 ) == \Chamilo\Application\Weblcms\Tool\Implementation\User\Manager::ACTION_VIEW_AS)
             {

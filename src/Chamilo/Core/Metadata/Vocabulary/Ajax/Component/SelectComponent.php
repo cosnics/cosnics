@@ -221,7 +221,7 @@ class SelectComponent extends Manager
 
     public function getSelectedVocabularyId()
     {
-        return (array) $this->getRequest()->get(\Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_VOCABULARY_ID);
+        return (array) $this->getRequest()->getFromRequestOrQuery(\Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_VOCABULARY_ID);
     }
 
     /**

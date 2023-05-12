@@ -37,7 +37,7 @@ class PublisherComponent extends Manager implements DelegateComponent
         $publicationTargetForm = new PublicationTargetForm(
             $this, $this->get_url(
             [
-                \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID => $this->getRequest()->get(
+                \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID => $this->getRequest()->getFromRequestOrQuery(
                     \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID
                 )
             ]

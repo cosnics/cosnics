@@ -24,7 +24,7 @@ class UpdaterComponent extends Manager
     {
         $application = Request::get(self::PARAM_PUBLICATION_APPLICATION);
         $publication_id = Request::get(self::PARAM_PUBLICATION_ID);
-        $publicationContext = $this->getRequest()->getFromPostOrUrl(self::PARAM_PUBLICATION_CONTEXT);
+        $publicationContext = $this->getRequest()->getFromRequestOrQuery(self::PARAM_PUBLICATION_CONTEXT);
 
         $this->set_parameter(self::PARAM_PUBLICATION_ID, $publication_id);
         $this->set_parameter(self::PARAM_PUBLICATION_APPLICATION, $application);

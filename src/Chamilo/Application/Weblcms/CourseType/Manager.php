@@ -170,7 +170,7 @@ abstract class Manager extends Application
      */
     protected function get_selected_course_type_ids()
     {
-        $course_type_ids = $this->getRequest()->get(self::PARAM_COURSE_TYPE_ID);
+        $course_type_ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_COURSE_TYPE_ID);
 
         if (!isset($course_type_ids))
         {

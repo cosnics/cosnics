@@ -23,8 +23,8 @@ class FetchRssEntriesComponent extends Manager implements NoAuthenticationSuppor
      */
     public function run()
     {
-        $url = $this->getRequest()->get('rss_feed_url');
-        $number_entries = $this->getRequest()->get('number_of_entries');
+        $url = $this->getRequest()->getFromRequestOrQuery('rss_feed_url');
+        $number_entries = $this->getRequest()->getFromRequestOrQuery('number_of_entries');
 
         /**
          * WARNING! ONLY DO THIS WHEN YOU ARE SURE THAT YOU DON'T NEED TO WRITE TO THE SESSION ANYMORE.

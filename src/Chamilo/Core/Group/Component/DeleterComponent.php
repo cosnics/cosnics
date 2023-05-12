@@ -27,7 +27,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $ids = $this->getRequest()->getFromPostOrUrl(self::PARAM_GROUP_ID);
+        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID);
 
         $this->set_parameter(self::PARAM_GROUP_ID, $ids);
 
@@ -42,7 +42,7 @@ class DeleterComponent extends Manager
 
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                 \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
             )
         );
@@ -50,7 +50,7 @@ class DeleterComponent extends Manager
 
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                 \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
                 GenericTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
                     self::package()
@@ -88,7 +88,7 @@ class DeleterComponent extends Manager
                 else
                 {
                     Event::trigger(
-                        'Delete', Manager::context(), array(
+                        'Delete', Manager::CONTEXT, array(
                             Change::PROPERTY_REFERENCE_ID => $group->get_id(),
                             Change::PROPERTY_USER_ID => $user->get_id()
                         )

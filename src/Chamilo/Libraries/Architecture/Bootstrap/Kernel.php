@@ -4,9 +4,10 @@ namespace Chamilo\Libraries\Architecture\Bootstrap;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Service\WhoIsOnlineService;
+use Chamilo\Core\Home\Manager as HomeManager;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit;
-use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Manager as UserManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -118,7 +119,7 @@ class Kernel
 
         if ($applicationRequiresAuthentication)
         {
-            if (!$this->authenticationValidator->validate())
+            if (!$this->getAuthenticationValidator()->validate())
             {
                 throw new NotAuthenticatedException(true);
             }
@@ -132,9 +133,10 @@ class Kernel
      */
     protected function checkPlatformAvailability(): Kernel
     {
-        if ($this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'maintenance_block_access']))
+        if ($this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'maintenance_block_access']))
         {
-            $asAdmin = $this->sessionUtilities->get('_as_admin');
+            $asAdmin = $this->getSessionUtilities()->get('_as_admin');
+
             if ($this->getUser() instanceof User && !$this->getUser()->is_platform_admin() && !$asAdmin)
             {
                 throw new PlatformNotAvailableException('Platform temporarily unavailable due to maintenance.');
@@ -197,6 +199,11 @@ class Kernel
         return $this->applicationFactory;
     }
 
+    public function getAuthenticationValidator(): AuthenticationValidator
+    {
+        return $this->authenticationValidator;
+    }
+
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
@@ -204,6 +211,11 @@ class Kernel
 
     public function getContext(): ?string
     {
+        if (!isset($this->context))
+        {
+            $this->context = $this->getRequest()->getFromRequestOrQuery(Application::PARAM_CONTEXT, HomeManager::CONTEXT);
+        }
+
         return $this->context;
     }
 
@@ -237,6 +249,11 @@ class Kernel
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
+    }
+
+    public function getSessionUtilities(): SessionUtilities
+    {
+        return $this->sessionUtilities;
     }
 
     public function getUrlGenerator(): UrlGenerator
@@ -296,7 +313,9 @@ class Kernel
             $landingPageParameters[self::PARAM_SESSION_STATE] = $session_state;
         }
 
-        return new RedirectResponse($this->getUrlGenerator()->fromParameters($landingPageParameters));
+        $response = new RedirectResponse($this->getUrlGenerator()->fromParameters($landingPageParameters));
+        $response->send();
+        exit;
     }
 
     /**
@@ -306,15 +325,10 @@ class Kernel
     {
         try
         {
-            $this->configureTimezone()->configureContext();
+            $this->configureTimezone()->configureContext()->handleOAuth2();
 
-            $response = $this->handleOAuth2();
-
-            if (!$response instanceof RedirectResponse)
-            {
-                $response = $this->checkAuthentication()->checkPlatformAvailability()->buildApplication()->traceVisit()
-                    ->runApplication();
-            }
+            $response = $this->checkAuthentication()->checkPlatformAvailability()->buildApplication()->traceVisit()
+                ->runApplication();
         }
         catch (NotAuthenticatedException $exception)
         {
@@ -366,48 +380,9 @@ class Kernel
         $this->application = $application;
     }
 
-    public function setApplicationFactory(ApplicationFactory $applicationFactory)
-    {
-        $this->applicationFactory = $applicationFactory;
-    }
-
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
-    {
-        $this->configurationConsulter = $configurationConsulter;
-    }
-
     public function setContext(string $context)
     {
         $this->context = $context;
-    }
-
-    public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger)
-    {
-        $this->exceptionLogger = $exceptionLogger;
-    }
-
-    public function setRequest(ChamiloRequest $request)
-    {
-        $this->request = $request;
-    }
-
-    public function setUrlGenerator(UrlGenerator $urlGenerator): Kernel
-    {
-        $this->urlGenerator = $urlGenerator;
-
-        return $this;
-    }
-
-    public function setUser(User $user)
-    {
-        $this->user = $user;
-    }
-
-    public function setWhoIsOnlineService(WhoIsOnlineService $whoIsOnlineService): Kernel
-    {
-        $this->whoIsOnlineService = $whoIsOnlineService;
-
-        return $this;
     }
 
     /**
@@ -435,7 +410,7 @@ class Kernel
                     $this->getRequest()->query->get(Application::PARAM_ACTION) != 'LeaveComponent')
                 {
                     Event::trigger(
-                        'Enter', Manager::CONTEXT, [
+                        'Enter', UserManager::CONTEXT, [
                             Visit::PROPERTY_LOCATION => $_SERVER['REQUEST_URI'],
                             Visit::PROPERTY_USER_ID => $this->getUser()->getId()
                         ]

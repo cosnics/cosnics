@@ -228,7 +228,7 @@ abstract class TabComponent extends Manager
      */
     protected function get_group_id()
     {
-        return $this->getRequest()->get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP);
+        return $this->getRequest()->getFromRequestOrQuery(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP);
     }
 
     /**

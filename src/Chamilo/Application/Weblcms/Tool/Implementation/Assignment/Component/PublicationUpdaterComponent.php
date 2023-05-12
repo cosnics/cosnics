@@ -33,7 +33,7 @@ class PublicationUpdaterComponent extends Manager
      */
     public function run()
     {
-        $pid = $this->getRequest()->getFromPostOrUrl(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $pid = $this->getRequest()->getFromRequestOrQuery(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $pid);
 
         $publication = DataManager::retrieve_by_id(
@@ -80,7 +80,7 @@ class PublicationUpdaterComponent extends Manager
                 ), ENT_COMPAT | ENT_HTML401, 'UTF-8'
             );
 
-            $show_details = $this->getRequest()->getFromUrl('details');
+            $show_details = $this->getRequest()->getFromQuery('details');
 
             $params = [];
             if ($show_details == 1)

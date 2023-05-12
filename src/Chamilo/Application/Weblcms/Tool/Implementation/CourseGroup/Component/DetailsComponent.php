@@ -138,7 +138,7 @@ class DetailsComponent extends TabComponent
 
     protected function handleUnsubscribeAction(CourseGroup $courseGroup)
     {
-        $users = $this->getRequest()->getFromPostOrUrl(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
+        $users = $this->getRequest()->getFromRequestOrQuery(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
 
         if ($users)
         {

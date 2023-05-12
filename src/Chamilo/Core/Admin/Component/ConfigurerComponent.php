@@ -41,7 +41,7 @@ class ConfigurerComponent extends Manager
 
         $context = $this->get_context();
 
-        $this->checkAuthorization(Manager::context(), 'ManageChamilo');
+        $this->checkAuthorization(Manager::CONTEXT, 'ManageChamilo');
 
         $form = new ConfigurationForm(
             $this->get_context(), 'config', FormValidator::FORM_METHOD_POST,

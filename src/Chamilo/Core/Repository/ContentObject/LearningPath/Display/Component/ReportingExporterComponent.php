@@ -33,7 +33,7 @@ class ReportingExporterComponent extends BaseReportingComponent
 
         $exporter = new Exporter($this->getTrackingService());
 
-        $exportMode = $this->getRequest()->get(self::PARAM_EXPORT);
+        $exportMode = $this->getRequest()->getFromRequestOrQuery(self::PARAM_EXPORT);
         $this->validateExportMode($exportMode);
 
         $file = $temporaryDirectory . uniqid() . '.csv';

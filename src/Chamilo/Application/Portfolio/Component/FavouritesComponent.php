@@ -19,7 +19,7 @@ class FavouritesComponent extends TabComponent implements DelegateComponent
     public function build()
     {
         return $this->getApplicationFactory()->getApplication(
-            Manager::context(),
+            Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this))->run();
     }
 }

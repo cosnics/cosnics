@@ -29,7 +29,7 @@ abstract class TabComponent extends Manager
         $this->tabsCollection->add(
             new LinkTab(
                 self::ACTION_BROWSE,
-                $this->getTranslator()->trans(self::ACTION_BROWSE . 'Component', [], Manager::context()),
+                $this->getTranslator()->trans(self::ACTION_BROWSE . 'Component', [], Manager::CONTEXT),
                 new FontAwesomeGlyph('search', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
                 $this->get_action() == self::ACTION_BROWSE, false, LinkTab::POSITION_LEFT, LinkTab::DISPLAY_ICON_AND_TITLE
@@ -39,7 +39,7 @@ abstract class TabComponent extends Manager
         $this->tabsCollection->add(
             new LinkTab(
                 self::ACTION_BROWSE_FAVOURITES,
-                $this->getTranslator()->trans(self::ACTION_BROWSE_FAVOURITES . 'Component', [], Manager::context()),
+                $this->getTranslator()->trans(self::ACTION_BROWSE_FAVOURITES . 'Component', [], Manager::CONTEXT),
                 new FontAwesomeGlyph('star', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_FAVOURITES)),
                 $this->get_action() == self::ACTION_BROWSE_FAVOURITES, false, LinkTab::POSITION_LEFT,

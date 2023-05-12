@@ -108,7 +108,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
      */
     protected function getTreeNodeAttemptId()
     {
-        return (int) $this->getRequest()->get(self::PARAM_ITEM_ATTEMPT_ID);
+        return (int) $this->getRequest()->getFromRequestOrQuery(self::PARAM_ITEM_ATTEMPT_ID);
     }
 
     public function getAdditionalParameters(array $additionalParameters = []): array

@@ -39,7 +39,7 @@ class ResultViewerComponent extends Manager
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
 
-        $entryId = $this->getRequest()->getFromPostOrUrl(self::PARAM_ENTRY_ID);
+        $entryId = $this->getRequest()->getFromRequestOrQuery(self::PARAM_ENTRY_ID);
         $requests = $this->getDataProvider()->findEphorusRequestsForAssignmentEntries([$entryId]);
 
         if (empty($requests))

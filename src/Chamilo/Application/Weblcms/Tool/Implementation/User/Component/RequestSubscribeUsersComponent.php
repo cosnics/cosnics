@@ -207,7 +207,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
      */
     public function get_selected_user_ids()
     {
-        $user_ids = $this->getRequest()->get(self::PARAM_OBJECTS);
+        $user_ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_OBJECTS);
 
         if (!$user_ids)
         {

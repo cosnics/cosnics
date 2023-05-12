@@ -31,7 +31,7 @@ class LanguageItemRenderer extends ItemRenderer
 
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => Manager::context(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_QUICK_LANG, Manager::PARAM_CHOICE => $item->getIsocode(),
                 Manager::PARAM_REFER => $item->getCurrentUrl()
             )

@@ -14,7 +14,7 @@ class VocabularyComponent extends Manager
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Metadata\Vocabulary\Manager::context(),
+            \Chamilo\Core\Metadata\Vocabulary\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 }

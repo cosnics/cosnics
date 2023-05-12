@@ -152,7 +152,7 @@ class FooterRenderer extends AbstractFooterRenderer
             if ($whoisOnlineAuthorized)
             {
                 $whoIsOnlineUrl = $this->getUrlGenerator()->fromParameters([
-                    Application::PARAM_CONTEXT => Manager::context(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => Manager::ACTION_WHOIS_ONLINE
                 ]);
 

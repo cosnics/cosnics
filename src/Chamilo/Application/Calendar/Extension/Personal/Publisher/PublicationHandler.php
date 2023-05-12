@@ -101,7 +101,7 @@ class PublicationHandler implements PublicationHandlerInterface
         {
             $message = $translator->getTranslation(
                 'ObjectNotPublished',
-                array('OBJECT' => $translator->getTranslation('PersonalCalendar', null, Manager::context())),
+                array('OBJECT' => $translator->getTranslation('PersonalCalendar', null, Manager::CONTEXT)),
                 StringUtilities::LIBRARIES
             );
         }
@@ -109,14 +109,14 @@ class PublicationHandler implements PublicationHandlerInterface
         {
             $message = $translator->getTranslation(
                 'ObjectPublished',
-                array('OBJECT' => $translator->getTranslation('PersonalCalendar', null, Manager::context())),
+                array('OBJECT' => $translator->getTranslation('PersonalCalendar', null, Manager::CONTEXT)),
                 StringUtilities::LIBRARIES
             );
         }
 
         $this->parentComponent->redirectWithMessage(
             $message, !$publicationResult, array(
-                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(),
+                Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
                 Application::PARAM_ACTION => \Chamilo\Application\Calendar\Manager::ACTION_BROWSE
             )
         );

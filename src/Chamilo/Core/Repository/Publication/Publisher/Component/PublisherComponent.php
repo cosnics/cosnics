@@ -135,7 +135,7 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
      */
     protected function getWizardFirstStepTitle()
     {
-        $action = $this->getRequest()->get(\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION);
+        $action = $this->getRequest()->getFromRequestOrQuery(\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION);
         switch ($action)
         {
             case \Chamilo\Core\Repository\Viewer\Manager::ACTION_CREATOR :

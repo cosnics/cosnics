@@ -61,7 +61,7 @@ class PublicationTargetForm extends FormValidator
         $this->application = $application;
         parent::__construct('page_locations', self::FORM_METHOD_POST, $action);
 
-        $this->contentObjectIdentifiers = $this->getApplication()->getRequest()->get(
+        $this->contentObjectIdentifiers = $this->getApplication()->getRequest()->getFromRequestOrQuery(
             Manager::PARAM_CONTENT_OBJECT_ID
         );
 

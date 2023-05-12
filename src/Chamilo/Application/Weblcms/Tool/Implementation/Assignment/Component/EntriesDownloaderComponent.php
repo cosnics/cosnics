@@ -33,11 +33,11 @@ class EntriesDownloaderComponent extends Manager
         }
 
         $publicationIdentifiers =
-            $this->getRequest()->getFromPostOrUrl(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+            $this->getRequest()->getFromRequestOrQuery(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
 
         $factory = $this->getEntriesDownloaderFactory();
 
-        $strategy = $this->getRequest()->getFromUrl(
+        $strategy = $this->getRequest()->getFromQuery(
             self::PARAM_ENTRIES_DOWNLOAD_STRATEGY, EntriesDownloaderFactory::ENTRIES_DOWNLOADER_DEFAULT
         );
 

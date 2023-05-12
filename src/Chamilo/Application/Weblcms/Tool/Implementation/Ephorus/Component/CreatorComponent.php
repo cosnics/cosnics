@@ -60,7 +60,7 @@ class CreatorComponent extends Manager
             \Chamilo\Core\Repository\Manager::context()
         );
 
-        $ids = $this->getRequest()->getFromPostOrUrl(self::PARAM_CONTENT_OBJECT_IDS);
+        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_CONTENT_OBJECT_IDS);
 
         if (empty($ids))
         {

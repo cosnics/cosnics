@@ -52,10 +52,7 @@ class FileConfigurationLocator
     {
         return $this->pathBuilder;
     }
-
-    /**
-     * @throws \Exception
-     */
+    
     public function isAvailable(): bool
     {
         $file = $this->getFilePathName();

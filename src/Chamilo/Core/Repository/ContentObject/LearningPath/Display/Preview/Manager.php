@@ -75,7 +75,7 @@ abstract class Manager extends Preview implements PreviewResetSupport
      */
     public function getCurrentTreeNodeDataId()
     {
-        return (int) $this->getRequest()->get(
+        return (int) $this->getRequest()->getFromRequestOrQuery(
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID, 0
         );
     }

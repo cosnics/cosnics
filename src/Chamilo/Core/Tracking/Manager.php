@@ -22,6 +22,6 @@ abstract class Manager extends Application
     {
         parent::__construct($applicationConfiguration);
 
-        $this->checkAuthorization(Manager::context());
+        $this->checkAuthorization(Manager::CONTEXT);
     }
 }

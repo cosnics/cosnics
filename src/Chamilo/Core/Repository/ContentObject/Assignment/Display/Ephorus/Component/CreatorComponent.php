@@ -42,7 +42,7 @@ class CreatorComponent extends Manager
     {
         $translation = Translation::get('Entry');
 
-        $ids = $this->getRequest()->getFromPostOrUrl(self::PARAM_ENTRY_ID);
+        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_ENTRY_ID);
 
         if (!$ids)
         {

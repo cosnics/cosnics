@@ -24,7 +24,7 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $selected_steps = $this->getRequest()->get(self::PARAM_STEP);
+        $selected_steps = $this->getRequest()->getFromRequestOrQuery(self::PARAM_STEP);
         if (! is_array($selected_steps))
         {
             $selected_steps = array($selected_steps);

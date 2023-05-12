@@ -34,7 +34,7 @@ class WhoisOnlineComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'ViewWhoisOnline');
+        $this->checkAuthorization(Manager::CONTEXT, 'ViewWhoisOnline');
 
         if ($this->getUser() instanceof User)
         {

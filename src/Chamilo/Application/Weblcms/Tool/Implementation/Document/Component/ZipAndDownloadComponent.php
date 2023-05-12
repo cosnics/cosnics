@@ -67,7 +67,7 @@ class ZipAndDownloadComponent extends Manager
         $course_name = $this->get_course()->get_title();
         $this->zip_name = $course_name . ' - ' . Translation::get('Document');
 
-        $category_id = $this->getRequest()->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
+        $category_id = $this->getRequest()->getFromRequestOrQuery(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
         if (!isset($category_id) || $category_id == 0 || strlen($category_id) == 0)
         {
             $category_id = 0;
