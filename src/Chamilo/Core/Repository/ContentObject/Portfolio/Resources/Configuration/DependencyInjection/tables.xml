@@ -9,6 +9,10 @@
                   public="true"/>
 
         <service id="Chamilo\Core\Repository\ContentObject\Portfolio\Display\Table\UserTableRenderer"/>
-        <service id="Chamilo\Core\Repository\ContentObject\Portfolio\Display\Table\ItemTableRenderer"/>
+        <service id="Chamilo\Core\Repository\ContentObject\Portfolio\Display\Table\ItemTableRenderer">
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\User"/>
+        </service>
     </services>
 </container>
