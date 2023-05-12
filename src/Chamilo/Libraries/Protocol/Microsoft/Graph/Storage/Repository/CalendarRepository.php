@@ -42,7 +42,7 @@ class CalendarRepository
     )
     {
         $queryParameters = http_build_query(
-            ['$top' => 200, 'startDateTime' => date('c', $fromDate), 'endDateTime' => date('c', $toDate)]
+            ['$top' => 600, 'startDateTime' => date('c', $fromDate), 'endDateTime' => date('c', $toDate)]
         );
 
         $result = $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
