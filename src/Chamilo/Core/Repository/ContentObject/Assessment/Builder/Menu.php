@@ -119,7 +119,7 @@ class Menu extends HtmlMenu
     private function get_build_complex_url($object)
     {
         return Path::getInstance()->getBasePath(true) . 'index.php?' . Application::PARAM_CONTEXT . '=' .
-            \Chamilo\Core\Repository\Manager::context() . '&' . Application::PARAM_ACTION . '=' .
+            \Chamilo\Core\Repository\Manager::CONTEXT . '&' . Application::PARAM_ACTION . '=' .
             \Chamilo\Core\Repository\Manager::ACTION_BUILD_COMPLEX_CONTENT_OBJECT . '&' .
             \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID . '=' . $object->get_id() . '&' .
             BuilderComponent::PARAM_POPUP . '=1';

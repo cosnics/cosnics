@@ -15,8 +15,7 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Display extends QuestionDisplay
 {
@@ -42,24 +41,24 @@ class Display extends QuestionDisplay
         $group = [];
         $group[] = $formvalidator->createElement(
             'text', ($name_2 . '_title'), '',
-            array('class' => 'select_file_text', 'disabled' => 'disabled', 'style' => 'width: 200px; height: 20px')
+            ['class' => 'select_file_text', 'disabled' => 'disabled', 'style' => 'width: 200px; height: 20px']
         );
         $group[] = $formvalidator->createElement('hidden', $name_2);
 
         $link = new Redirect(
-            array(
-                Application::PARAM_CONTEXT                    => Manager::context(),
-                Application::PARAM_ACTION                     => Manager::ACTION_REPOSITORY_VIEWER,
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => Manager::ACTION_REPOSITORY_VIEWER,
                 RepositoryViewerComponent::PARAM_ELEMENT_NAME => $name_2
-            )
+            ]
         );
 
         $uploadGlyph = new FontAwesomeGlyph('upload', [], null, 'fas');
 
         $group[] = $formvalidator->createElement(
             'static', null, null,
-            '<a class="btn btn-default" onclick="openPopup(\'' . addslashes($link->getUrl()) . '\');">' . $uploadGlyph->render() .
-            ' ' . Translation::get('BrowseContentObjects') . '</a>'
+            '<a class="btn btn-default" onclick="openPopup(\'' . addslashes($link->getUrl()) . '\');">' .
+            $uploadGlyph->render() . ' ' . Translation::get('BrowseContentObjects') . '</a>'
         );
 
         $formvalidator->addGroup($group, '');

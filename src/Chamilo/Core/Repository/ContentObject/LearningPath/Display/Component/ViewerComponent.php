@@ -44,7 +44,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
     protected function addActivityButton(SplitDropdownButton $button, $translator)
     {
         $extraButton = new SubButton(
-            $translator->getTranslation('ActivityComponent', null, Manager::context()),
+            $translator->getTranslation('ActivityComponent', null, Manager::CONTEXT),
             new FontAwesomeGlyph('mouse-pointer'), $this->get_url(
             [
                 self::PARAM_ACTION => self::ACTION_ACTIVITY,
@@ -82,7 +82,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $icon = ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->isBlocked()) ? 'unlock' : 'ban';
 
             $blockNode = new SubButton(
-                $translator->getTranslation($translationVariable, null, Manager::context()),
+                $translator->getTranslation($translationVariable, null, Manager::CONTEXT),
                 new FontAwesomeGlyph($icon), $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_TOGGLE_BLOCKED_STATUS,
@@ -104,7 +104,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 'sitemap' : 'sitemap';
 
             $blockNode = new SubButton(
-                $translator->getTranslation($translationVariable, null, Manager::context()),
+                $translator->getTranslation($translationVariable, null, Manager::CONTEXT),
                 new FontAwesomeGlyph($icon), $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER,
@@ -140,7 +140,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
             $actionButton = $actionSelector->getActionButton(
                 $translator->getTranslation(
-                    'CreateItem', ['ITEM' => lcfirst($itemTranslation)], Manager::context()
+                    'CreateItem', ['ITEM' => lcfirst($itemTranslation)], Manager::CONTEXT
                 ), new FontAwesomeGlyph('plus')
             );
 
@@ -153,7 +153,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             );
 
             $folderButton = $folderSelector->getActionButton(
-                $translator->getTranslation('CreateFolder', null, Manager::context()), new FontAwesomeGlyph('plus')
+                $translator->getTranslation('CreateFolder', null, Manager::CONTEXT), new FontAwesomeGlyph('plus')
             );
 
             $folderButton->addSubButton(new SubButtonDivider());
@@ -181,7 +181,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         {
             $button->addSubButton(
                 new SubButton(
-                    $translator->getTranslation('DeleterComponent', null, Manager::context()),
+                    $translator->getTranslation('DeleterComponent', null, Manager::CONTEXT),
                     new FontAwesomeGlyph('times'), $this->get_url(
                     [
                         self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
@@ -213,7 +213,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
                 $button->addSubButton(
                     new SubButton(
-                        $translator->getTranslation('ManagerComponent', null, Manager::context()),
+                        $translator->getTranslation('ManagerComponent', null, Manager::CONTEXT),
                         new FontAwesomeGlyph('bars'), $this->get_url(
                         [
                             self::PARAM_ACTION => self::ACTION_MANAGE,
@@ -236,7 +236,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
     {
         if ($this->canEditCurrentTreeNode())
         {
-            $editTitle = $translator->getTranslation('UpdaterComponent', null, Manager::context());
+            $editTitle = $translator->getTranslation('UpdaterComponent', null, Manager::CONTEXT);
             $editImage = new FontAwesomeGlyph('pencil-alt');
             $editURL = $this->get_url(
                 [
@@ -272,7 +272,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         }
 
         $moveButton = new SubButton(
-            $translator->getTranslation('Move', null, Manager::context()), new FontAwesomeGlyph('random'), '#',
+            $translator->getTranslation('Move', null, Manager::CONTEXT), new FontAwesomeGlyph('random'), '#',
             Button::DISPLAY_ICON_AND_LABEL, null, ['mover-open']
         );
 
@@ -309,7 +309,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
      */
     protected function addReportingButtons($buttonGroup, $translator)
     {
-        $label = $translator->getTranslation('MyProgress', null, Manager::context());
+        $label = $translator->getTranslation('MyProgress', null, Manager::CONTEXT);
 
         $url = $this->get_url(
             [
@@ -327,7 +327,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         else
         {
             $splitDropDownButton = new SplitDropdownButton(
-                $translator->getTranslation('Reporting', null, Manager::context()), new FontAwesomeGlyph('chart-bar'),
+                $translator->getTranslation('Reporting', null, Manager::CONTEXT), new FontAwesomeGlyph('chart-bar'),
                 $this->get_url(
                     [
                         self::PARAM_ACTION => self::ACTION_VIEW_USER_PROGRESS,
@@ -353,7 +353,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
     protected function addStudentViewButton(SplitDropdownButton $button, $translator)
     {
         $extraButton = new SubButton(
-            $translator->getTranslation('ShowStudentView', null, Manager::context()), new FontAwesomeGlyph('user'),
+            $translator->getTranslation('ShowStudentView', null, Manager::CONTEXT), new FontAwesomeGlyph('user'),
             $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_SHOW_STUDENT_VIEW,
@@ -528,7 +528,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
         $html[] = '</a>';
         $html[] = '</div>';
-        $html[] = $translator->getTranslation('Move', null, Manager::context());
+        $html[] = $translator->getTranslation('Move', null, Manager::CONTEXT);
         $html[] = '</h3>';
         $html[] = '<div class="clearfix"></div>';
         $html[] = '</div>';

@@ -93,7 +93,7 @@ class EntryComponent extends Manager implements FeedbackSupport
         $this->processSubmittedData($scoreForm);
 
         return $this->getTwig()->render(
-            Manager::context() . ':EntryViewer.html.twig', $this->getTemplateProperties($scoreForm)
+            Manager::CONTEXT . ':EntryViewer.html.twig', $this->getTemplateProperties($scoreForm)
         );
     }
 
@@ -632,7 +632,7 @@ class EntryComponent extends Manager implements FeedbackSupport
             'HAS_ENTRY' => true,
             'CONTENT_OBJECT_TITLE' => $this->getEntry()->getContentObject() ?
                 $this->getEntry()->getContentObject()->get_title() :
-                Translation::getInstance()->getTranslation('SubmissionRemoved', null, Manager::context()),
+                Translation::getInstance()->getTranslation('SubmissionRemoved', null, Manager::CONTEXT),
             'CONTENT_OBJECT_RENDITION' => $this->getEntry()->getContentObject() ? $this->renderContentObject() : null,
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
             'FEEDBACK_COUNT' => $this->count_feedbacks(),
@@ -715,7 +715,7 @@ class EntryComponent extends Manager implements FeedbackSupport
         {
             $breadcrumbTrail = BreadcrumbTrail::getInstance();
             $breadcrumbTrail->get_last()->set_name(
-                Translation::getInstance()->getTranslation('ViewerComponent', null, Manager::context())
+                Translation::getInstance()->getTranslation('ViewerComponent', null, Manager::CONTEXT)
             );
         }
     }

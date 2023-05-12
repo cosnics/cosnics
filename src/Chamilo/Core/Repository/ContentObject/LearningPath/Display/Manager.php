@@ -315,7 +315,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         foreach ($javascriptFiles as $javascriptFile)
         {
             $html[] = ResourceManager::getInstance()->getResourceHtml(
-                $this->getPathBuilder()->getResourcesPath(Manager::context(), true) . 'Javascript/' . $javascriptFile
+                $this->getPathBuilder()->getResourcesPath(Manager::CONTEXT, true) . 'Javascript/' . $javascriptFile
             );
         }
 

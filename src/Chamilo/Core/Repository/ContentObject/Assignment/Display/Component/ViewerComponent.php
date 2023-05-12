@@ -46,7 +46,7 @@ class ViewerComponent extends Manager
         $this->checkAccessRights();
 
         return $this->getTwig()->render(
-            Manager::context() . ':EntityBrowser.html.twig', $this->getTemplateProperties()
+            Manager::CONTEXT . ':EntityBrowser.html.twig', $this->getTemplateProperties()
         );
     }
 
@@ -132,7 +132,7 @@ class ViewerComponent extends Manager
 
         $redirect = new Redirect(
             [
-                Application::PARAM_CONTEXT => \Chamilo\Core\Notification\Manager::context(),
+                Application::PARAM_CONTEXT => \Chamilo\Core\Notification\Manager::CONTEXT,
                 Application::PARAM_ACTION => \Chamilo\Core\Notification\Manager::ACTION_VIEW_NOTIFICATION,
                 \Chamilo\Core\Notification\Manager::PROPERTY_NOTIFICATION_ID => '__NOTIFICATION_ID__'
             ]

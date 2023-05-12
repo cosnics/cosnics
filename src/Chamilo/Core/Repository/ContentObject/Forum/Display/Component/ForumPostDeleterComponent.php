@@ -25,7 +25,7 @@ class ForumPostDeleterComponent extends Manager
         if (! $delete_post instanceof ForumPost)
         {
             throw new ObjectNotExistException(
-                Translation::getInstance()->getTranslation('ForumPost', null, Manager::context()),
+                Translation::getInstance()->getTranslation('ForumPost', null, Manager::CONTEXT),
                 $selected_post_id);
         }
 

@@ -32,7 +32,7 @@ class DeleteEntryAttachmentComponent extends Manager
             if (!$entryAttachment instanceof EntryAttachment)
             {
                 throw new ObjectNotExistException(
-                    $this->getTranslator()->trans('AttachmentNotFound', null, Manager::context())
+                    $this->getTranslator()->trans('AttachmentNotFound', [], Manager::CONTEXT)
                 );
             }
 

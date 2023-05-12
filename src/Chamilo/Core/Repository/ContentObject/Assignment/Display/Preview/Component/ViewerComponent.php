@@ -25,7 +25,7 @@ class ViewerComponent extends Manager
         );
 
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::context(),
+            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::CONTEXT,
             $configuration
         )->run();
     }

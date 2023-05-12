@@ -62,7 +62,7 @@ class MasteryComponent extends Manager
             $form->setDefaults(array('mastery_score' => $treeNodeData->getMasteryScore()));
         }
 
-        $form->addElement('html', $this->renderTemplate(Manager::context(), 'MasteryScoreSlider.html'));
+        $form->addElement('html', $this->renderTemplate(Manager::CONTEXT, 'MasteryScoreSlider.html'));
 
         $buttons[] = $form->createElement('style_submit_button', 'submit', Translation::get('SetMasteryScore'));
         $form->addGroup($buttons, 'buttons', null, '&nbsp;', false);

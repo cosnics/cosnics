@@ -174,7 +174,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
                 continue;
             }
 
-            if ($parentRegistration[Registration::PROPERTY_TYPE] == Manager::context() . '\ContentObject')
+            if ($parentRegistration[Registration::PROPERTY_TYPE] == Manager::CONTEXT . '\ContentObject')
             {
                 $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
                     $registration[Registration::PROPERTY_CONTEXT], 6

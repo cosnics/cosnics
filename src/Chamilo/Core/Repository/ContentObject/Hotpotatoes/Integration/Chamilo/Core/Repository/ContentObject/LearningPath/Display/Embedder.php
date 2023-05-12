@@ -30,7 +30,7 @@ class Embedder extends ContentObjectEmbedder
         $redirect = new Redirect(
             array(
                 \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT =>
-                    Manager::context(),
+                    Manager::CONTEXT,
                 \Chamilo\Application\Weblcms\Manager::PARAM_ACTION =>
                     Manager::ACTION_SAVE_LEARNING_PATH_HOTPOTATOES_SCORE
             )

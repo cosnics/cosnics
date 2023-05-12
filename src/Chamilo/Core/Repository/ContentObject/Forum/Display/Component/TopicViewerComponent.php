@@ -506,7 +506,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         if (count($forumPosts) == 0)
         {
             $html[] = '<div class="alert alert-info">';
-            $html[] = Translation::getInstance()->getTranslation('NoForumPostsFound', null, Manager::context());
+            $html[] = Translation::getInstance()->getTranslation('NoForumPostsFound', null, Manager::CONTEXT);
             $html[] = '</div>';
         }
         else

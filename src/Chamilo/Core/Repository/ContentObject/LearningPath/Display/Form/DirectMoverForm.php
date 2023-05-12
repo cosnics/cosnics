@@ -147,7 +147,7 @@ class DirectMoverForm extends FormValidator
         $this->addElement(
             'html',
             ResourceManager::getInstance()->getResourceHtml(
-                Path::getInstance()->namespaceToFullPath(Manager::context(), true) .
+                Path::getInstance()->namespaceToFullPath(Manager::CONTEXT, true) .
                 'Resources/Javascript/DirectMover.js'
             )
         );

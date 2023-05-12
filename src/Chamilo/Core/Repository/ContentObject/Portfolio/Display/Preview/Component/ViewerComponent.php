@@ -24,7 +24,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            Manager::context(), new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            Manager::CONTEXT, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         )->run();
     }
 
@@ -69,7 +69,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     public function get_portfolio_tree_menu_url()
     {
         return $this->getWebPathBuilder()->getBasePath() . 'index.php?' . Application::PARAM_CONTEXT . '=' .
-            \Chamilo\Core\Repository\Preview\Manager::context() . '&' . Application::PARAM_ACTION . '=' .
+            \Chamilo\Core\Repository\Preview\Manager::CONTEXT . '&' . Application::PARAM_ACTION . '=' .
             \Chamilo\Core\Repository\Preview\Manager::ACTION_DISPLAY . '&' .
             \Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID . '=' .
             $this->get_root_content_object()->get_id() . '&' . Manager::PARAM_STEP . '=%s';

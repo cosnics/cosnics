@@ -43,7 +43,7 @@ class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
 
             $thumbnailUrl = new Redirect(
                 [
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::CONTEXT,
                     \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_THUMBNAIL,
                     Manager::PARAM_CONTENT_OBJECT_ID => $object->getId(),
                     ThumbnailComponent::PARAM_WIDTH => $width,

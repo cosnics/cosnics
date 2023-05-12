@@ -585,7 +585,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
             $this->get_parent()->is_allowed_to_create_feedback($this->get_current_node()))
         {
             return $this->getApplicationFactory()->getApplication(
-                Manager::context(), new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+                Manager::CONTEXT, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
             )->run();
         }
     }

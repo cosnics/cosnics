@@ -26,7 +26,7 @@ class CreatorConfirmationComponent extends Manager
         $contentObjects = $assignment->getAutomaticFeedbackObjects();
 
         return $this->getTwig()->render(
-            Manager::context() . ':CreatorConfirmation.html.twig',
+            Manager::CONTEXT . ':CreatorConfirmation.html.twig',
             [
                 'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
                 'ASSIGNMENT_TITLE' => $assignment->get_title(), 'RETURN_URL' => $returnUrl,

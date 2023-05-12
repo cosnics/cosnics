@@ -28,7 +28,7 @@ class ReportingExporterComponent extends BaseReportingComponent
     public function run()
     {
         $pathBuilder = $this->getConfigurablePathBuilder();
-        $temporaryDirectory = $pathBuilder->getTemporaryPath(Manager::context());
+        $temporaryDirectory = $pathBuilder->getTemporaryPath(Manager::CONTEXT);
         Filesystem::create_dir($temporaryDirectory);
 
         $exporter = new Exporter($this->getTrackingService());

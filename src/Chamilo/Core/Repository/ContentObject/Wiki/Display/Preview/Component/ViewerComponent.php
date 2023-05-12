@@ -14,7 +14,7 @@ class ViewerComponent extends Preview implements WikiDisplaySupport
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            Manager::context(),
+            Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 

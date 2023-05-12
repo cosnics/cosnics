@@ -28,7 +28,7 @@ class FeedbackComponent extends ItemComponent implements FeedbackSupport, Feedba
         }
 
         $result = $this->getApplicationFactory()->getApplication(
-            Manager::context(),
+            Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
 
         $html = [];

@@ -68,7 +68,7 @@ class ScoreForm extends FormValidator
             ['id' => 'scoreSaveButton'], null, new FontAwesomeGlyph('floppy-save')
         );
 
-        $this->addElement('html', $this->twig->render(Manager::context() . ':ScoreSlider.html.twig'));
+        $this->addElement('html', $this->twig->render(Manager::CONTEXT . ':ScoreSlider.html.twig'));
     }
 
     protected function getScoreChoices()

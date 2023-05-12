@@ -53,7 +53,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                 if ($succes)
                 {
                     Event::trigger(
-                        'Activity', Manager::context(), [
+                        'Activity', Manager::CONTEXT, [
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_UPDATED,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),

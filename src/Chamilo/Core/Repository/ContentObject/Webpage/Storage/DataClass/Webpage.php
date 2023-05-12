@@ -76,7 +76,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         }
 
         $descriptionRequired = Configuration::getInstance()->get_setting(
-            array(Manager::context(), 'description_required')
+            array(Manager::CONTEXT, 'description_required')
         );
 
         // Description

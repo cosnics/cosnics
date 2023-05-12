@@ -41,7 +41,7 @@ class CreatorComponent extends Manager
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
 
             $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Viewer\Manager::context(), $applicationConfiguration
+                \Chamilo\Core\Repository\Viewer\Manager::CONTEXT, $applicationConfiguration
             );
 
             $component->set_parameter(
@@ -183,7 +183,7 @@ class CreatorComponent extends Manager
                     ClassnameUtilities::getInstance()->getNamespaceFromClassname($content_object->getType())
                 ),
                 'TITLE' => $content_object->get_title()
-            ], \Chamilo\Core\Repository\Manager::context()
+            ], \Chamilo\Core\Repository\Manager::CONTEXT
             );
             $html[] = '</h4><br />';
         }
@@ -197,7 +197,7 @@ class CreatorComponent extends Manager
                     ClassnameUtilities::getInstance()->getNamespaceFromClassname($content_object->getType())
                 ),
                 'TITLE' => $content_object->get_title()
-            ], \Chamilo\Core\Repository\Manager::context()
+            ], \Chamilo\Core\Repository\Manager::CONTEXT
             );
         }
 

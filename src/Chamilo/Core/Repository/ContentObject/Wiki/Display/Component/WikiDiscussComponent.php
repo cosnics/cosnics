@@ -63,7 +63,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
         $html[] = $this->render_header();
 
         $html[] = $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\Feedback\Manager::context(),
+            \Chamilo\Core\Repository\Feedback\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         )->run();
         $html[] = $this->render_footer();

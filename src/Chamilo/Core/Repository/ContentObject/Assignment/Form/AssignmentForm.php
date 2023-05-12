@@ -116,7 +116,7 @@ class AssignmentForm extends ContentObjectForm
 
         $uploadUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
+                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
             )
         );
@@ -134,7 +134,7 @@ class AssignmentForm extends ContentObjectForm
 
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Plugin/jquery.file.upload.import.js'
+            Path::getInstance()->getJavascriptPath(Manager::CONTEXT, true) . 'Plugin/jquery.file.upload.import.js'
         )
         );
 

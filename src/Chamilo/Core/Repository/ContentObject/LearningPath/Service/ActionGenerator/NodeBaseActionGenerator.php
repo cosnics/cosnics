@@ -167,7 +167,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
 
         $icon = ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->isBlocked()) ? 'unlock' : 'ban';
 
-        $title = $this->translator->getTranslation($translationVariable, null, Manager::context());
+        $title = $this->translator->getTranslation($translationVariable, null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_BLOCKED_STATUS), $treeNode->getId()
         );
@@ -227,7 +227,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      */
     protected function getDeleteNodeAction(TreeNode $treeNode)
     {
-        $title = $this->translator->getTranslation('DeleterComponent', null, Manager::context());
+        $title = $this->translator->getTranslation('DeleterComponent', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM), $treeNode->getId()
         );
@@ -286,7 +286,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      */
     protected function getManageNodesAction(TreeNode $treeNode)
     {
-        $title = $this->translator->getTranslation('ManagerComponent', null, Manager::context());
+        $title = $this->translator->getTranslation('ManagerComponent', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(array(Manager::PARAM_ACTION => Manager::ACTION_MANAGE), $treeNode->getId());
 
         return new Action('manage', $title, $url, 'fas fa-bars fa-fw');
@@ -301,7 +301,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      */
     protected function getMoveNodeAction(TreeNode $treeNode)
     {
-        $title = $this->translator->getTranslation('Move', null, Manager::context());
+        $title = $this->translator->getTranslation('Move', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(array(Manager::PARAM_ACTION => Manager::ACTION_MOVE), $treeNode->getId());
 
         return new Action('move', $title, $url, 'fas fa-random fa-fw');
@@ -316,7 +316,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      */
     protected function getMyProgressNodeAction(TreeNode $treeNode)
     {
-        $title = $this->translator->getTranslation('MyProgress', null, Manager::context());
+        $title = $this->translator->getTranslation('MyProgress', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(array(Manager::PARAM_ACTION => Manager::ACTION_REPORTING), $treeNode->getId());
 
         return new Action('progress', $title, $url, 'fas fa-chart-pie fa-fw');
@@ -331,7 +331,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      */
     protected function getNodeActivityAction(TreeNode $treeNode)
     {
-        $title = $this->translator->getTranslation('ActivityComponent', null, Manager::context());
+        $title = $this->translator->getTranslation('ActivityComponent', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(array(Manager::PARAM_ACTION => Manager::ACTION_ACTIVITY), $treeNode->getId());
 
         return new Action('activity', $title, $url, 'fas fa-mouse-pointer fa-fw');
@@ -346,7 +346,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      */
     protected function getNodeReportingAction(TreeNode $treeNode)
     {
-        $title = $this->translator->getTranslation('Reporting', null, Manager::context());
+        $title = $this->translator->getTranslation('Reporting', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_PROGRESS), $treeNode->getId()
         );
@@ -391,7 +391,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
         $icon = ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->enforcesDefaultTraversingOrder()) ?
             'sitemap' : 'sitemap';
 
-        $title = $this->translator->getTranslation($translationVariable, null, Manager::context());
+        $title = $this->translator->getTranslation($translationVariable, null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER), $treeNode->getId()
         );
@@ -408,7 +408,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      */
     protected function getUpdateNodeAction(TreeNode $treeNode)
     {
-        $title = $this->translator->getTranslation('UpdaterComponent', null, Manager::context());
+        $title = $this->translator->getTranslation('UpdaterComponent', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM), $treeNode->getId()
         );
@@ -425,7 +425,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      */
     protected function getViewNodeAction(TreeNode $treeNode)
     {
-        $title = $this->translator->getTranslation('ReturnToLearningPath', null, Manager::context());
+        $title = $this->translator->getTranslation('ReturnToLearningPath', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
             array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT), $treeNode->getId()
         );

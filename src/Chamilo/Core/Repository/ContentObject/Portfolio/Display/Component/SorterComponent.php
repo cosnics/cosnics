@@ -54,7 +54,7 @@ class SorterComponent extends Manager implements DelegateComponent
                     
                     Event::trigger(
                         'Activity', 
-                        \Chamilo\Core\Repository\Manager::context(), 
+                        \Chamilo\Core\Repository\Manager::CONTEXT,
                         array(
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_UPDATED, 
                             Activity::PROPERTY_USER_ID => $this->get_user_id(), 

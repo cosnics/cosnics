@@ -24,7 +24,7 @@ class ResultExporterComponent extends Manager
         if (empty($requests))
         {
             throw new UserException(
-                Translation::getInstance()->getTranslation('RequestNotFound', null, Manager::context())
+                Translation::getInstance()->getTranslation('RequestNotFound', null, Manager::CONTEXT)
             );
         }
 

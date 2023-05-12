@@ -38,7 +38,7 @@ class ReportingTemplateViewerComponent extends Manager implements DelegateCompon
         }
 
         $component = $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Reporting\Viewer\Manager::context(),
+            \Chamilo\Core\Reporting\Viewer\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         );
         $component->set_template_by_name($template);

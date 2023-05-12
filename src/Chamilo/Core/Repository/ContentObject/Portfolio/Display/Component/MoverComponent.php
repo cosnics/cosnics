@@ -163,7 +163,7 @@ class MoverComponent extends ItemComponent
                         }
 
                         Event::trigger(
-                            'Activity', Manager::context(), array(
+                            'Activity', Manager::CONTEXT, array(
                                 Activity::PROPERTY_TYPE => Activity::ACTIVITY_MOVE_ITEM,
                                 Activity::PROPERTY_USER_ID => $this->get_user_id(),
                                 Activity::PROPERTY_DATE => time(),

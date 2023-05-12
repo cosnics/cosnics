@@ -10,7 +10,7 @@ class AttachmentViewerComponent extends Manager
     public function run()
     {
         return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\Display\Action\Manager::context(),
+            \Chamilo\Core\Repository\Display\Action\Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 }

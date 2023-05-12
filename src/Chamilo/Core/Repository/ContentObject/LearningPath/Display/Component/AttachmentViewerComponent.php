@@ -10,7 +10,7 @@ class AttachmentViewerComponent extends BaseHtmlTreeComponent
     public function build()
     {
         return $this->getApplicationFactory()->getApplication(
-            Manager::context(),
+            Manager::CONTEXT,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 }

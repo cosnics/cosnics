@@ -89,7 +89,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         }
 
         $descriptionRequired = Configuration::getInstance()->get_setting(
-            [Manager::context(), 'description_required']
+            [Manager::CONTEXT, 'description_required']
         );
 
         // Description

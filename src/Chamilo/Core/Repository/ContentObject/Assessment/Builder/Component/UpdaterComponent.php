@@ -133,7 +133,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
                 new Breadcrumb(
                     null, Translation::get(
                     'EditContentObject', ['CONTENT_OBJECT' => $content_object->get_title()],
-                    \Chamilo\Core\Repository\Manager::context()
+                    \Chamilo\Core\Repository\Manager::CONTEXT
                 )
                 )
             );

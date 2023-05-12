@@ -185,6 +185,6 @@ class ConfigurationForm extends FormValidator
 
     static function getContextTranslation($variable, $parameters = [])
     {
-        return Translation::getInstance()->getTranslation($variable, $parameters, Manager::context());
+        return Translation::getInstance()->getTranslation($variable, $parameters, Manager::CONTEXT);
     }
 }

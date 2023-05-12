@@ -48,7 +48,7 @@ class NodeActionGenerator
      */
     protected function getBuildAssessmentAction(TreeNode $learningPathTreeNode)
     {
-        $title = $this->translator->getTranslation('BuilderComponent', null, Manager::context());
+        $title = $this->translator->getTranslation('BuilderComponent', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
             array(
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
@@ -72,7 +72,7 @@ class NodeActionGenerator
      */
     protected function getSetMasteryScoreAction(TreeNode $learningPathTreeNode)
     {
-        $title = $this->translator->getTranslation('SetMasteryScore', null, Manager::context());
+        $title = $this->translator->getTranslation('SetMasteryScore', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
             array(
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
@@ -96,7 +96,7 @@ class NodeActionGenerator
      */
     protected function getConfigureAssessmentAction(TreeNode $learningPathTreeNode)
     {
-        $title = $this->translator->getTranslation('ConfigureAssessment', null, Manager::context());
+        $title = $this->translator->getTranslation('ConfigureAssessment', null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
             array(
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>

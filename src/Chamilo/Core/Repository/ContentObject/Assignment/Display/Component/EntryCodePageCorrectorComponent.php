@@ -79,7 +79,7 @@ class EntryCodePageCorrectorComponent extends Manager
         $formView = $form->createView();
 
         return $this->getTwig()->render(
-                Manager::context() . ':EntryCodePageCorrector.html.twig', [
+                Manager::CONTEXT . ':EntryCodePageCorrector.html.twig', [
                     'HEADER' => $this->render_header(),
                     'FOOTER' => $this->render_footer(),
                     'form' => $formView
@@ -111,7 +111,7 @@ class EntryCodePageCorrectorComponent extends Manager
         {
             $breadcrumbTrail = BreadcrumbTrail::getInstance();
             $breadcrumbTrail->get_last()->set_name(
-                Translation::getInstance()->getTranslation('ViewerComponent', null, Manager::context())
+                Translation::getInstance()->getTranslation('ViewerComponent', null, Manager::CONTEXT)
             );
         }
     }

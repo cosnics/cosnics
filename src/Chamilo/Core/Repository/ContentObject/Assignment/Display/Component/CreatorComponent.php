@@ -30,7 +30,7 @@ class CreatorComponent extends Manager
     {
         if(empty($this->get_allowed_content_object_types()))
         {
-            throw new UserException($this->getTranslator()->trans('NoSubmissionPossible', [], Manager::context()));
+            throw new UserException($this->getTranslator()->trans('NoSubmissionPossible', [], Manager::CONTEXT));
         }
 
         $this->checkAccessRights();
@@ -80,7 +80,7 @@ class CreatorComponent extends Manager
         else
         {
             $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Viewer\Manager::context(),
+                \Chamilo\Core\Repository\Viewer\Manager::CONTEXT,
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
             );
             $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
@@ -118,7 +118,7 @@ class CreatorComponent extends Manager
         $parameters = $this->getAvailableEntitiesParameters($parameters);
 
         return $this->getTwig()->render(
-            Manager::context() . ':CreatorWizardHeader.html.twig', $parameters
+            Manager::CONTEXT . ':CreatorWizardHeader.html.twig', $parameters
         );
     }
 

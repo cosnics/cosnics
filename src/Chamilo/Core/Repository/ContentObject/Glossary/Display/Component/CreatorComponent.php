@@ -40,7 +40,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
                     $this->get_root_content_object()->get_title()));
 
             $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Viewer\Manager::context(),
+                \Chamilo\Core\Repository\Viewer\Manager::CONTEXT,
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component->set_parameter(self::PARAM_ACTION, self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM);
             $component->set_parameter(

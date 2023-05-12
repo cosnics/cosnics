@@ -59,7 +59,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
 
             $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Viewer\Manager::context(), $applicationConfiguration
+                \Chamilo\Core\Repository\Viewer\Manager::CONTEXT, $applicationConfiguration
             );
             $component->set_excluded_objects($exclude);
 
@@ -95,7 +95,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
                     $nextStep = $treeNodeData->getId();
 
                     Event::trigger(
-                        'Activity', Manager::context(), array(
+                        'Activity', Manager::CONTEXT, array(
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_ADD_ITEM,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),

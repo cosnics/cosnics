@@ -63,7 +63,7 @@ class NodeActionGenerator
             $action = Manager::ACTION_UNSUBSCRIBE;
         }
 
-        $title = $this->translator->getTranslation($titleVariable, null, Manager::context());
+        $title = $this->translator->getTranslation($titleVariable, null, Manager::CONTEXT);
         $url = $this->getUrlForNode(
             array(
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,

@@ -141,7 +141,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager implemen
 
         if (empty($this->entityIdentifier))
         {
-            throw new UserException($this->getTranslator()->trans('CanNotViewAssignment', [], Manager::context()));
+            throw new UserException($this->getTranslator()->trans('CanNotViewAssignment', [], Manager::CONTEXT;
         }
 
         return $this->entityIdentifier;

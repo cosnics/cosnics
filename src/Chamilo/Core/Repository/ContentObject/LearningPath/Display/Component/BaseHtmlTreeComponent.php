@@ -262,7 +262,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         foreach ($javascriptFiles as $javascriptFile)
         {
             $html[] = ResourceManager::getInstance()->getResourceHtml(
-                $this->getWebPathBuilder()->getResourcesPath(Manager::context()) . 'Javascript/' . $javascriptFile
+                $this->getWebPathBuilder()->getResourcesPath(Manager::CONTEXT) . 'Javascript/' . $javascriptFile
             );
         }
 
