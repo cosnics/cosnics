@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Extension\Personal\Form\PublicationForm;
 use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -17,13 +17,11 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application\calendar
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class EditorComponent extends Manager implements DelegateComponent
 {
-
     /**
      * Runs this component and displays its output.
      */
@@ -43,16 +41,16 @@ class EditorComponent extends Manager implements DelegateComponent
 
             $contentObject = $calendarEventPublication->get_publication_object();
             BreadcrumbTrail::getInstance()->add(
-                new Breadcrumb(null, Translation::get('Edit', array('TITLE' => $contentObject->get_title())))
+                new Breadcrumb(null, Translation::get('Edit', ['TITLE' => $contentObject->get_title()]))
             );
 
             $form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($user), $contentObject, 'edit',
+                ContentObjectForm::TYPE_EDIT, $this->getCurrentWorkspace(), $contentObject, 'edit',
                 FormValidator::FORM_METHOD_POST, $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_EDIT,
                     self::PARAM_PUBLICATION_ID => $calendarEventPublication->getId()
-                )
+                ]
             )
             );
 
@@ -71,7 +69,7 @@ class EditorComponent extends Manager implements DelegateComponent
 
                 $publicationForm = new PublicationForm(
                     $user, $this->get_url(
-                    array(Manager::PARAM_PUBLICATION_ID => $calendarEventPublication->getId(), 'validated' => 1)
+                    [Manager::PARAM_PUBLICATION_ID => $calendarEventPublication->getId(), 'validated' => 1]
                 )
                 );
 
@@ -95,18 +93,17 @@ class EditorComponent extends Manager implements DelegateComponent
                     );
 
                     $message = $success ? Translation::get(
-                        'ObjectUpdated', array('OBJECT' => Translation::get('PersonalCalendar')),
-                        StringUtilities::LIBRARIES
+                        'ObjectUpdated', ['OBJECT' => Translation::get('PersonalCalendar')], StringUtilities::LIBRARIES
                     ) : Translation::get(
-                        'ObjectNotUpdated', array('OBJECT' => Translation::get('PersonalCalendar')),
+                        'ObjectNotUpdated', ['OBJECT' => Translation::get('PersonalCalendar')],
                         StringUtilities::LIBRARIES
                     );
 
                     $this->redirectWithMessage(
-                        $message, !$success, array(
+                        $message, !$success, [
                             self::PARAM_ACTION => Manager::ACTION_VIEW,
                             self::PARAM_PUBLICATION_ID => $calendarEventPublication->getId()
-                        )
+                        ]
                     );
                 }
                 else
@@ -137,5 +134,10 @@ class EditorComponent extends Manager implements DelegateComponent
                 htmlentities(Translation::get('NoObjectsSelected', null, StringUtilities::LIBRARIES))
             );
         }
+    }
+
+    protected function getCurrentWorkspace(): Workspace
+    {
+        return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
     }
 }

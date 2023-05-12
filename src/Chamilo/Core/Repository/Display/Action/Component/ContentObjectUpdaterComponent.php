@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Display\Action\Manager;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -13,13 +13,11 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @author Original author unknown
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ContentObjectUpdaterComponent extends Manager
 {
-
     public function run()
     {
         if ($this->get_parent()->get_parent()->is_allowed_to_edit_content_object())
@@ -33,12 +31,12 @@ class ContentObjectUpdaterComponent extends Manager
             $content_object->setDefaultProperty(ContentObject::PROPERTY_OWNER_ID, $this->get_user_id());
 
             $form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit',
+                ContentObjectForm::TYPE_EDIT, $this->getCurrentWorkspace(), $content_object, 'edit',
                 FormValidator::FORM_METHOD_POST, $this->get_url(
-                array(
+                [
                     \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Display\Manager::ACTION_UPDATE_CONTENT_OBJECT,
                     'pid' => $pid
-                )
+                ]
             )
             );
 
@@ -49,7 +47,7 @@ class ContentObjectUpdaterComponent extends Manager
                 $message = htmlentities(
                     Translation::get(
                         ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                        array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
+                        ['OBJECT' => Translation::get('ContentObject')], StringUtilities::LIBRARIES
                     )
                 );
 
@@ -75,5 +73,10 @@ class ContentObjectUpdaterComponent extends Manager
         {
             throw new NotAllowedException();
         }
+    }
+
+    protected function getCurrentWorkspace(): Workspace
+    {
+        return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
     }
 }

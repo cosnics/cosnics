@@ -2,9 +2,7 @@
 namespace Chamilo\Core\Repository\Workspace\Service;
 
 use Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Manager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceUserDefault;
@@ -170,7 +168,7 @@ class WorkspaceService
         return $this->getWorkspaceRepository()->deleteWorkspace($workspace);
     }
 
-    public function determineWorkspaceForUserByIdentifier(User $user, ?string $identifier = null): ?WorkspaceInterface
+    public function determineWorkspaceForUserByIdentifier(User $user, ?string $identifier = null): ?Workspace
     {
         if (!empty($identifier))
         {
@@ -183,7 +181,7 @@ class WorkspaceService
         }
         else
         {
-            return $this->getPersonalWorkspaceForUser($user);
+            return $this->findDefaultWorkspaceForUserIdentifier($user->getId());
         }
     }
 
@@ -251,11 +249,6 @@ class WorkspaceService
         return $this->entityService;
     }
 
-    public function getPersonalWorkspaceForUser(User $user): PersonalWorkspace
-    {
-        return new PersonalWorkspace($user);
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
@@ -281,20 +274,6 @@ class WorkspaceService
     public function getWorkspaceByIdentifier(string $identifier): ?Workspace
     {
         return $this->getWorkspaceRepository()->findWorkspaceByIdentifier($identifier);
-    }
-
-    public function getWorkspaceByTypeAndTypeIdentifier(int $type, string $typeIdentifier): ?WorkspaceInterface
-    {
-        if ($type == self::TYPE_PERSONAL)
-        {
-            $user = $this->getUserService()->findUserByIdentifier($typeIdentifier);
-
-            return $this->getPersonalWorkspaceForUser($user);
-        }
-        else
-        {
-            return $this->getWorkspaceByIdentifier($typeIdentifier);
-        }
     }
 
     /**

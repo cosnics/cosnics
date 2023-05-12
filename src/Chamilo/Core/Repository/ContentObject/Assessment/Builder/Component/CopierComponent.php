@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -61,8 +61,8 @@ class CopierComponent extends Manager
                 }
 
                 $contentObjectCopier = new ContentObjectCopier(
-                    $this->get_user(), [$contentObject->get_id()], new PersonalWorkspace($contentObject->get_owner()),
-                    $contentObject->get_owner_id(), new PersonalWorkspace($this->get_user()), $this->get_user_id()
+                    $this->getUser(), [$contentObject->get_id()], $this->getCurrentWorkspace(),
+                    $contentObject->get_owner_id(), $this->getCurrentWorkspace(), $this->getUser()->getId()
                 );
 
                 $copiedContentObjectIdentifiers = $contentObjectCopier->run();
@@ -162,5 +162,10 @@ class CopierComponent extends Manager
                 );
             }
         }
+    }
+
+    protected function getCurrentWorkspace(): Workspace
+    {
+        return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
     }
 }

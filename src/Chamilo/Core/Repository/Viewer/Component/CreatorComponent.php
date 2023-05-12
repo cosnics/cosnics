@@ -9,7 +9,6 @@ use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Viewer\Manager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -141,7 +140,7 @@ class CreatorComponent extends Manager implements DelegateComponent
         );
 
         $form = ContentObjectForm::factory(
-            ContentObjectForm::TYPE_CREATE, new PersonalWorkspace($this->get_user()), $object, 'create',
+            ContentObjectForm::TYPE_CREATE, $this->getCurrentWorkspace(), $object, 'create',
             FormValidator::FORM_METHOD_POST,
             $this->get_url(array_merge([TypeSelector::PARAM_SELECTION => $template_id], $this->get_parameters()))
         );
@@ -167,7 +166,7 @@ class CreatorComponent extends Manager implements DelegateComponent
         );
 
         $form = ContentObjectForm::factory(
-            ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit',
+            ContentObjectForm::TYPE_EDIT, $this->getCurrentWorkspace(), $content_object, 'edit',
             FormValidator::FORM_METHOD_POST,
             $this->get_url(array_merge($this->get_parameters(), [self::PARAM_EDIT_ID => $content_object_id]))
         );

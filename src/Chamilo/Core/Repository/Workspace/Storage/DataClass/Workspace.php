@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Storage\DataClass;
 
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -14,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Workspace extends DataClass implements WorkspaceInterface
+class Workspace extends DataClass
 {
     public const PROPERTY_CREATION_DATE = 'creation_date';
     public const PROPERTY_CREATOR_ID = 'creator_id';

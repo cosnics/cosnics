@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Core\Repository\ContentObject\Bookmark\Form\BookmarkForm;
 use Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass\Bookmark;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
@@ -57,7 +57,7 @@ class CourseBookmarkCreatorComponent extends Manager
         $params_form[self::PARAM_COURSE] = $course_id;
 
         $form = new BookmarkForm(
-            BookmarkForm::TYPE_CREATE, new PersonalWorkspace($this->getUser()), $content_object, '',
+            BookmarkForm::TYPE_CREATE, $this->getCurrentWorkspace(), $content_object, '',
             FormValidator::FORM_METHOD_POST, $this->get_url($params_form), null, null, false
         );
 
@@ -125,5 +125,10 @@ class CourseBookmarkCreatorComponent extends Manager
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    protected function getCurrentWorkspace(): Workspace
+    {
+        return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
     }
 }

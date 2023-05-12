@@ -3,9 +3,8 @@ namespace Chamilo\Core\Repository\Workspace\Service;
 
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -26,23 +25,14 @@ class WorkspaceContentObjectService
     }
 
     public function countContentObjectsByTypeForWorkspace(
-        string $contentObjectClassName, WorkspaceInterface $workspace, ConditionFilterRenderer $filterConditionRenderer
+        string $contentObjectClassName, Workspace $workspace, ConditionFilterRenderer $filterConditionRenderer
     ): int
     {
         $contentObjectClassName = empty($contentObjectClassName) ? ContentObject::class : $contentObjectClassName;
 
-        if ($workspace instanceof PersonalWorkspace)
-        {
-            return $this->getContentObjectRepository()->countAllInPersonalWorkspace(
-                $contentObjectClassName, $workspace, $filterConditionRenderer
-            );
-        }
-        else
-        {
-            return $this->getContentObjectRepository()->countAllInWorkspace(
-                $contentObjectClassName, $workspace, $filterConditionRenderer
-            );
-        }
+        return $this->getContentObjectRepository()->countAllInWorkspace(
+            $contentObjectClassName, $workspace, $filterConditionRenderer
+        );
     }
 
     public function getContentObjectRepository(): ContentObjectRepository
@@ -52,7 +42,6 @@ class WorkspaceContentObjectService
 
     /**
      * @param class-string<\Chamilo\Core\Repository\Storage\DataClass\ContentObject> $contentObjectClassName
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param \Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer $filterConditionRenderer
      * @param ?int $count
      * @param ?int $offset
@@ -61,23 +50,14 @@ class WorkspaceContentObjectService
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
     public function getContentObjectsByTypeForWorkspace(
-        string $contentObjectClassName, WorkspaceInterface $workspace, ConditionFilterRenderer $filterConditionRenderer,
+        string $contentObjectClassName, Workspace $workspace, ConditionFilterRenderer $filterConditionRenderer,
         ?int $count = null, ?int $offset = null, ?OrderBy $orderBy = null
     ): ArrayCollection
     {
         $contentObjectClassName = empty($contentObjectClassName) ? ContentObject::class : $contentObjectClassName;
 
-        if ($workspace instanceof PersonalWorkspace)
-        {
-            return $this->getContentObjectRepository()->findAllInPersonalWorkspace(
-                $contentObjectClassName, $workspace, $filterConditionRenderer, $count, $offset, $orderBy
-            );
-        }
-        else
-        {
-            return $this->getContentObjectRepository()->findAllInWorkspace(
-                $contentObjectClassName, $workspace, $filterConditionRenderer, $count, $offset, $orderBy
-            );
-        }
+        return $this->getContentObjectRepository()->findAllInWorkspace(
+            $contentObjectClassName, $workspace, $filterConditionRenderer, $count, $offset, $orderBy
+        );
     }
 }

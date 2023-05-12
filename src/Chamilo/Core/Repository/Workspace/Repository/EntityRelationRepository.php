@@ -2,7 +2,6 @@
 
 namespace Chamilo\Core\Repository\Workspace\Repository;
 
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
@@ -13,7 +12,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -63,8 +61,7 @@ class EntityRelationRepository
     /**
      * @param int[][] $entities
      */
-    public function findEntitiesWithRight(array $entities, int $right, WorkspaceInterface $workspaceImplementation
-    ): bool
+    public function findEntitiesWithRight(array $entities, int $right, Workspace $workspaceImplementation): bool
     {
         $entityRelationConditions = [];
 
@@ -131,7 +128,8 @@ class EntityRelationRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findEntityRelations(?Condition $condition = null, ?int $limit = null, ?int $offset = null): ArrayCollection
+    public function findEntityRelations(?Condition $condition = null, ?int $limit = null, ?int $offset = null
+    ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
             WorkspaceEntityRelation::class, new DataClassRetrievesParameters($condition, $limit, $offset)

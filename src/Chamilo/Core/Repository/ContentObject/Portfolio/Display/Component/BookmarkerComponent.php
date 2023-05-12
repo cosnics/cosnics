@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -14,11 +14,10 @@ use Chamilo\Libraries\Translation\Translation;
  * Component that allows the user to create bookmarks to specific portfolio item
  *
  * @package repository\content_object\portfolio\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BookmarkerComponent extends ItemComponent
 {
-
     /**
      * Executes this component
      */
@@ -40,7 +39,7 @@ class BookmarkerComponent extends ItemComponent
         BreadcrumbTrail::getInstance()->add(new Breadcrumb($this->get_url(), Translation::get('BookmarkerComponent')));
 
         $form = ContentObjectForm::factory(
-            ContentObjectForm::TYPE_CREATE, new PersonalWorkspace($this->get_user()),
+            ContentObjectForm::TYPE_CREATE, $this->getCurrentWorkspace(),
             $this->get_parent()->get_portfolio_bookmark($this->get_current_step()), 'create',
             FormValidator::FORM_METHOD_POST, $this->get_url()
         );
@@ -57,11 +56,10 @@ class BookmarkerComponent extends ItemComponent
             }
 
             $this->redirectWithMessage(
-                $success ? Translation::get('BookmarkCreated') : Translation::get('BookmarkNotCreated'), !$success,
-                array(
+                $success ? Translation::get('BookmarkCreated') : Translation::get('BookmarkNotCreated'), !$success, [
                     self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
                     self::PARAM_STEP => $this->get_current_step()
-                )
+                ]
             );
         }
         else
@@ -74,5 +72,10 @@ class BookmarkerComponent extends ItemComponent
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    protected function getCurrentWorkspace(): Workspace
+    {
+        return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
     }
 }

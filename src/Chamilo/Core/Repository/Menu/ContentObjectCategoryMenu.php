@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Menu;
 
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
@@ -19,7 +19,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package repository.lib
  */
 
@@ -30,31 +29,14 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class ContentObjectCategoryMenu extends HtmlMenu
 {
-    const TREE_NAME = __CLASS__;
-
-    /**
-     *
-     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    private $currentWorkspace;
-
-    /**
-     * The string passed to sprintf() to format category URLs
-     */
-    private $urlFmt;
+    public const TREE_NAME = __CLASS__;
 
     /**
      * The array renderer used to determine the breadcrumbs.
      */
     private $array_renderer;
 
-    /**
-     * Array to define the types on which the count on the categories should be filtered Leave empty if you want to
-     * count everything
-     *
-     * @var String[]
-     */
-    private $filter_count_on_types;
+    private Workspace $currentWorkspace;
 
     /**
      * Array to define the types on which the count on the categories should be excluded Leave empty if you want to
@@ -65,16 +47,28 @@ class ContentObjectCategoryMenu extends HtmlMenu
     private $exclude_types;
 
     /**
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $currentWorkspace
-     * @param integer $current_category
+     * Array to define the types on which the count on the categories should be filtered Leave empty if you want to
+     * count everything
+     *
+     * @var String[]
+     */
+    private $filter_count_on_types;
+
+    /**
+     * The string passed to sprintf() to format category URLs
+     */
+    private $urlFmt;
+
+    /**
+     * @param int $current_category
      * @param string $url_format
      * @param array $extra_items
      * @param array $filter_count_on_types
      * @param array $exclude_types
      */
     public function __construct(
-        WorkspaceInterface $currentWorkspace, $current_category = null, $url_format = '?category=%s',
-        $extra_items = [], $filter_count_on_types = [], $exclude_types = []
+        Workspace $currentWorkspace, $current_category = null, $url_format = '?category=%s', $extra_items = [],
+        $filter_count_on_types = [], $exclude_types = []
     )
     {
         $this->currentWorkspace = $currentWorkspace;
@@ -113,7 +107,7 @@ class ContentObjectCategoryMenu extends HtmlMenu
 
             $this->categories = [];
 
-            foreach($contentObjectCategories as $contentObjectCategory)
+            foreach ($contentObjectCategories as $contentObjectCategory)
             {
                 $this->categories[$contentObjectCategory->get_parent()][] = $contentObjectCategory;
             }
@@ -199,7 +193,7 @@ class ContentObjectCategoryMenu extends HtmlMenu
     }
 
     /**
-     * @param integer $parent
+     * @param int $parent
      *
      * @return string[][]
      */

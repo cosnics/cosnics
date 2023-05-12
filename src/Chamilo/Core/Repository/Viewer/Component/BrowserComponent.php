@@ -8,13 +8,10 @@ use Chamilo\Core\Repository\Viewer\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Viewer\Menu\RepositoryCategoryMenu;
 use Chamilo\Core\Repository\Viewer\Table\ContentObjectTableRenderer;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceContentObjectService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
-use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
@@ -42,10 +39,7 @@ class BrowserComponent extends Manager
      */
     protected $filterData;
 
-    /**
-     * @var WorkspaceInterface
-     */
-    protected $workspace;
+    protected Workspace $workspace;
 
     public function run()
     {
@@ -117,7 +111,8 @@ class BrowserComponent extends Manager
 
                 $button = new DropdownButton(
                     $translator->getTranslation(
-                        'CurrentWorkspace', ['WORKSPACE' => $this->getWorkspace()->getTitle()], $translationContext
+                        'CurrentWorkspace', ['WORKSPACE' => $this->getCurrentWorkspace()->getTitle()],
+                        $translationContext
                     )
                 );
 
@@ -125,7 +120,7 @@ class BrowserComponent extends Manager
 
                 foreach ($workspaces as $workspace)
                 {
-                    $isActive = $workspace->getId() == $this->getWorkspace()->getId();
+                    $isActive = $workspace->getId() == $this->getCurrentWorkspace()->getId();
 
                     $button->addSubButton(
                         new SubButton(
@@ -186,45 +181,6 @@ class BrowserComponent extends Manager
         return $this->getService(RightsService::class);
     }
 
-    /**
-     * @return WorkspaceInterface
-     */
-    public function getWorkspace()
-    {
-        if (!isset($this->workspace))
-        {
-            if ($this->isInWorkspaces())
-            {
-
-                $identifier = $this->getRequest()->query->get(self::PARAM_WORKSPACE_ID);
-                $workspace = $this->getWorkspaceService()->getWorkspaceByIdentifier($identifier);
-
-                if (!$workspace)
-                {
-                    $workspaces = $this->getWorkspacesForUser();
-                    $workspace = $workspaces->current();
-
-                    if (!$workspace)
-                    {
-                        throw new UserException(
-                            Translation::getInstance()->getTranslation(
-                                'NoValidWorkspacesForUser', null, Manager::context()
-                            )
-                        );
-                    }
-                }
-
-                $this->workspace = $workspace;
-            }
-            else
-            {
-                $this->workspace = new PersonalWorkspace($this->getUser());
-            }
-        }
-
-        return $this->workspace;
-    }
-
     public function getWorkspaceContentObjectService(): WorkspaceContentObjectService
     {
         return $this->getService(WorkspaceContentObjectService::class);
@@ -273,7 +229,8 @@ class BrowserComponent extends Manager
         $extra = [];
 
         $menu = new RepositoryCategoryMenu(
-            $this, $this->get_user_id(), $this->getWorkspace(), $this->getCategoryId(), $url, $extra, $this->get_types()
+            $this, $this->get_user_id(), $this->getCurrentWorkspace(), $this->getCategoryId(), $url, $extra,
+            $this->get_types()
         );
 
         return $menu->render_as_tree();
@@ -315,7 +272,7 @@ class BrowserComponent extends Manager
     {
         $contentObjectService = $this->getWorkspaceContentObjectService();
         $filterData = $this->getFilterData();
-        $workspace = $this->getWorkspace();
+        $workspace = $this->getCurrentWorkspace();
 
         $totalNumberOfItems = $contentObjectService->countContentObjectsByTypeForWorkspace(
             $filterData->getTypeDataClass(), $workspace, new ConditionFilterRenderer(
@@ -345,7 +302,7 @@ class BrowserComponent extends Manager
      */
     protected function setupFilterData()
     {
-        $filterData = new FilterData($this->getWorkspace());
+        $filterData = new FilterData($this->getCurrentWorkspace());
         $filterData->set_filter_property(FilterData::FILTER_TEXT, $this->get_query());
 
         $typeSelectorFactory = new TypeSelectorFactory($this->get_types(), $this->getUser()->getId());

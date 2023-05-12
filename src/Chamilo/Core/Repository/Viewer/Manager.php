@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Viewer;
 
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
@@ -94,6 +95,11 @@ abstract class Manager extends Application
     public static function any_object_selected()
     {
         return !is_null(self::get_selected_objects());
+    }
+
+    public function getCurrentWorkspace(): Workspace
+    {
+        return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
     }
 
     /**

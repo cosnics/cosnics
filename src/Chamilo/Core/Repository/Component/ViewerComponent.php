@@ -17,7 +17,6 @@ use Chamilo\Core\Repository\Table\Link\LinkParentsTableRenderer;
 use Chamilo\Core\Repository\Table\Link\LinkPublicationsTableRenderer;
 use Chamilo\Core\Repository\Table\Link\LinkTableRenderer;
 use Chamilo\Core\Repository\Table\VersionTableRenderer;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Table\SharedInTableRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -140,37 +139,34 @@ class ViewerComponent extends Manager implements DelegateComponent
             );
         }
 
-        if ($this->getWorkspace() instanceof PersonalWorkspace)
+        $totalNumberOfItems =
+            $this->getContentObjectRelationService()->countWorkspaceAndRelationForContentObject($contentObject);
+
+        if ($totalNumberOfItems > 0)
         {
-            $totalNumberOfItems =
-                $this->getContentObjectRelationService()->countWorkspaceAndRelationForContentObject($contentObject);
+            $tabName = 'shared_in';
 
-            if ($totalNumberOfItems > 0)
-            {
-                $tabName = 'shared_in';
+            $sharedInTableRenderer = $this->getSharedInTableRenderer();
 
-                $sharedInTableRenderer = $this->getSharedInTableRenderer();
+            $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
+                $sharedInTableRenderer->getParameterNames(), $sharedInTableRenderer->getDefaultParameterValues(),
+                $totalNumberOfItems
+            );
 
-                $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
-                    $sharedInTableRenderer->getParameterNames(), $sharedInTableRenderer->getDefaultParameterValues(),
-                    $totalNumberOfItems
+            $sharedInWorkspaceRelations =
+                $this->getContentObjectRelationService()->getWorkspaceAndRelationForContentObject(
+                    $contentObject, $tableParameterValues->getOffset(),
+                    $tableParameterValues->getNumberOfItemsPerPage(),
+                    $sharedInTableRenderer->determineOrderBy($tableParameterValues)
                 );
 
-                $sharedInWorkspaceRelations =
-                    $this->getContentObjectRelationService()->getWorkspaceAndRelationForContentObject(
-                        $contentObject, $tableParameterValues->getOffset(),
-                        $tableParameterValues->getNumberOfItemsPerPage(),
-                        $sharedInTableRenderer->determineOrderBy($tableParameterValues)
-                    );
-
-                $tabs->add(
-                    new ContentTab(
-                        $tabName, $translator->trans('SharedIn', [], self::package()),
-                        $sharedInTableRenderer->render($tableParameterValues, $sharedInWorkspaceRelations),
-                        new FontAwesomeGlyph('lock', ['fa-lg'], null, 'fas')
-                    )
-                );
-            }
+            $tabs->add(
+                new ContentTab(
+                    $tabName, $translator->trans('SharedIn', [], self::package()),
+                    $sharedInTableRenderer->render($tableParameterValues, $sharedInWorkspaceRelations),
+                    new FontAwesomeGlyph('lock', ['fa-lg'], null, 'fas')
+                )
+            );
         }
 
         // LINKS | PARENTS
@@ -443,22 +439,20 @@ class ViewerComponent extends Manager implements DelegateComponent
             }
 
             // Share
-            if ($this->getWorkspace() instanceof PersonalWorkspace)
-            {
-                $publishActions->addButton(
-                    new Button(
-                        $translator->trans('Share', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
-                        $this->get_url(
-                            [
-                                Application::PARAM_ACTION => Manager::ACTION_WORKSPACE,
-                                Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId(),
-                                \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_SHARE
-                            ]
-                        )
+            $publishActions->addButton(
+                new Button(
+                    $translator->trans('Share', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
+                    $this->get_url(
+                        [
+                            Application::PARAM_ACTION => Manager::ACTION_WORKSPACE,
+                            Manager::PARAM_CONTENT_OBJECT_ID => $contentObject->getId(),
+                            \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_SHARE
+                        ]
                     )
-                );
-            }
-            elseif ($rightsService->canDeleteContentObject($this->getUser(), $contentObject, $this->getWorkspace()))
+                )
+            );
+
+            if ($rightsService->canDeleteContentObject($this->getUser(), $contentObject, $this->getWorkspace()))
             {
                 $url = $this->get_url(
                     [

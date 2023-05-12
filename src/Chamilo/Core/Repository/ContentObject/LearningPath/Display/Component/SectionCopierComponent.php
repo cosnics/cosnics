@@ -4,10 +4,10 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeCopier;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -69,7 +69,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
                     $this->getUser(), $selectedWorkspace
                 );
 
-                if (!$workspace instanceof WorkspaceInterface)
+                if (!$workspace instanceof Workspace)
                 {
                     throw new ObjectNotExistException(
                         $translator->getTranslation('Workspace', null, 'Chamilo\Core\Repository'),
@@ -117,6 +117,11 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
     protected function getContentObjectRepository()
     {
         return $this->getService(ContentObjectRepository::class);
+    }
+
+    protected function getCurrentWorkspace(): Workspace
+    {
+        return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
     }
 
     protected function getRightsService(): RightsService

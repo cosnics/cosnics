@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Quota\Form\Rule\HTML_QuickForm_Rule_DiskQuota;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
@@ -27,8 +27,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class FileForm extends ContentObjectForm
 {
     public function __construct(
-        $form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = self::FORM_METHOD_POST,
-        $action = null, $extra = null, $additional_elements, $allow_new_version = true
+        $form_type, Workspace $workspace, $content_object, $form_name, $method = self::FORM_METHOD_POST, $action = null,
+        $extra = null, $additional_elements, $allow_new_version = true
     )
     {
         parent::__construct(

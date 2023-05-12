@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -94,40 +93,27 @@ class MoverComponent extends Manager
                             /** @var ContentObject $object */
                             $object = DataManager::retrieve_by_id(ContentObject::class, $version);
 
-                            if ($this->getWorkspace() instanceof PersonalWorkspace)
+                            $contentObjectRelationService = $this->getContentObjectRelationService();
+                            $contentObjectRelation =
+                                $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
+                                    $this->getWorkspace(), $object
+                                );
+
+                            if ($contentObjectRelation instanceof WorkspaceContentObjectRelation)
                             {
-                                if (!$object->move($destination))
+                                if (!$contentObjectRelationService->updateContentObjectRelationFromParameters(
+                                    $contentObjectRelation, $this->getWorkspace()->getId(),
+                                    $object->get_object_number(), $destination
+                                ))
                                 {
                                     $failures ++;
                                 }
                             }
-                            else
+                            elseif (!$contentObjectRelationService->createContentObjectRelationFromParameters(
+                                $this->getWorkspace()->getId(), $object->get_object_number(), $destination
+                            ))
                             {
-                                $contentObjectRelationService = $this->getContentObjectRelationService();
-                                $contentObjectRelation =
-                                    $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
-                                        $this->getWorkspace(), $object
-                                    );
-
-                                if ($contentObjectRelation instanceof WorkspaceContentObjectRelation)
-                                {
-                                    if (!$contentObjectRelationService->updateContentObjectRelationFromParameters(
-                                        $contentObjectRelation, $this->getWorkspace()->getId(),
-                                        $object->get_object_number(), $destination
-                                    ))
-                                    {
-                                        $failures ++;
-                                    }
-                                }
-                                else
-                                {
-                                    if (!$contentObjectRelationService->createContentObjectRelationFromParameters(
-                                        $this->getWorkspace()->getId(), $object->get_object_number(), $destination
-                                    ))
-                                    {
-                                        $failures ++;
-                                    }
-                                }
+                                $failures ++;
                             }
                         }
                     }

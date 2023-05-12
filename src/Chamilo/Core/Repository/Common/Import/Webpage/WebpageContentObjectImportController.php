@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -176,14 +175,7 @@ class WebpageContentObjectImportController extends ContentObjectImportController
      */
     public function determine_parent_id()
     {
-        if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
-        {
-            return $this->get_parameters()->get_category();
-        }
-        else
-        {
-            return 0;
-        }
+        return 0;
     }
 
     public static function is_available()

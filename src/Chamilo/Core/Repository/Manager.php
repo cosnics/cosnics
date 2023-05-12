@@ -16,7 +16,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Menu\UserViewMenu;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
@@ -153,10 +152,7 @@ abstract class Manager extends Application
 
     private $category_menu;
 
-    /**
-     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    private $currentWorkspace;
+    private Workspace $currentWorkspace;
 
     private $search_form;
 
@@ -225,21 +221,9 @@ abstract class Manager extends Application
         return $this->getService(TabsRenderer::class);
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    public function getWorkspace()
+    public function getWorkspace(): Workspace
     {
-        if (!isset($this->currentWorkspace))
-        {
-            $workspaceIdentifier = $this->getRequest()->query->get(self::PARAM_WORKSPACE_ID);
-
-            $this->currentWorkspace = $this->getWorkspaceService()->determineWorkspaceForUserByIdentifier(
-                $this->get_user(), $workspaceIdentifier
-            );
-        }
-
-        return $this->currentWorkspace;
+        return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
     }
 
     public function getWorkspaceExtensionManager(): WorkspaceExtensionManager
@@ -763,24 +747,21 @@ abstract class Manager extends Application
             return implode(PHP_EOL, $html);
         }
 
-        if (!$this->getWorkspace() instanceof PersonalWorkspace)
+        /** @var Workspace $workspace */
+        $workspace = $this->getWorkspace();
+
+        $html[] = '<div class="alert alert-warning" style="font-size: 12px; font-weight: bold;">';
+        $html[] = Translation::getInstance()->get(
+            'CurrentlyWorkingInWorkspace', ['TITLE' => $workspace->getTitle()]
+        );
+
+        if ($workspace->getDescription())
         {
-            /** @var Workspace $workspace */
-            $workspace = $this->getWorkspace();
-
-            $html[] = '<div class="alert alert-warning" style="font-size: 12px; font-weight: bold;">';
-            $html[] = Translation::getInstance()->get(
-                'CurrentlyWorkingInWorkspace', ['TITLE' => $workspace->getTitle()]
-            );
-
-            if ($workspace->getDescription())
-            {
-                $html[] = '<div style="font-weight: normal; margin-top: 15px; margin-bottom: -10px;">' .
-                    $workspace->getDescription() . '</div>';
-            }
-
-            $html[] = '</div>';
+            $html[] = '<div style="font-weight: normal; margin-top: 15px; margin-bottom: -10px;">' .
+                $workspace->getDescription() . '</div>';
         }
+
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }

@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -20,7 +20,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
  * @package repository.lib.complex_display.forum.component
  */
 class ForumSubforumEditorComponent extends Manager implements DelegateComponent
@@ -33,12 +32,12 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
             $selected_complex_content_object_item = $this->get_selected_complex_content_object_item();
 
             $url = $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_EDIT_SUBFORUM,
                     self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
                     self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item->get_id(
                     )
-                )
+                ]
             );
 
             $forum_object = DataManager::retrieve_by_id(
@@ -48,10 +47,10 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(
-                        array(
+                        [
                             self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
                             self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null
-                        )
+                        ]
                     ), $this->get_root_content_object()->get_title()
                 )
             );
@@ -73,10 +72,10 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                         BreadcrumbTrail::getInstance()->add(
                             new Breadcrumb(
                                 $this->get_url(
-                                    array(
+                                    [
                                         self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
                                         self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key
-                                    )
+                                    ]
                                 ), $value->get_title()
                             )
                         );
@@ -89,12 +88,11 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
             }
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
-                    $this->get_url(),
-                    Translation::get('SubforumEditor', array('SUBFORUM' => $forum_object->get_title()))
+                    $this->get_url(), Translation::get('SubforumEditor', ['SUBFORUM' => $forum_object->get_title()])
                 )
             );
             $form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $forum_object, 'edit',
+                ContentObjectForm::TYPE_EDIT, $this->getCurrentWorkspace(), $forum_object, 'edit',
                 FormValidator::FORM_METHOD_POST, $url
             );
 
@@ -115,7 +113,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                             ), new StaticConditionVariable($old_id), ComplexContentObjectItem::getStorageUnitName()
                         )
                     );
-                    foreach($children as $child)
+                    foreach ($children as $child)
                     {
                         $child->set_parent($new_id);
                         $child->update();
@@ -141,11 +139,16 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
         }
     }
 
+    protected function getCurrentWorkspace(): Workspace
+    {
+        return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
+    }
+
     private function my_redirect($success)
     {
         $message = htmlentities(
             Translation::get(
-                ($success ? 'ObjectUpdated' : 'ObjectNotUpdated'), array('OBJECT' => Translation::get('Subforum')),
+                ($success ? 'ObjectUpdated' : 'ObjectNotUpdated'), ['OBJECT' => Translation::get('Subforum')],
                 StringUtilities::LIBRARIES
             )
         );

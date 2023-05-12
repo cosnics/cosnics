@@ -24,7 +24,7 @@ class SyncGroupComponent extends Manager
     function run()
     {
         $parentComponent = $this->getExtensionLauncherComponent();
-        $workspace = $parentComponent->getWorkspace();
+        $workspace = $parentComponent->getCurrentWorkspace();
         if (!$workspace instanceof Workspace)
         {
             throw new Exception(

@@ -2,21 +2,20 @@
 namespace Chamilo\Core\Repository\Common\Import\Cpo;
 
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 
 class CpoImportParameters extends ImportParameters
 {
 
     private $file;
 
-    public function __construct($type, $user, WorkspaceInterface $workspace, $category, $file, $values)
+    public function __construct($type, $user, Workspace $workspace, $category, $file, $values)
     {
         parent::__construct($type, $user, $workspace, $category);
         $this->file = $file;
     }
 
     /**
-     *
      * @return the $file
      */
     public function get_file()
@@ -25,7 +24,6 @@ class CpoImportParameters extends ImportParameters
     }
 
     /**
-     *
      * @param $file field_type
      */
     public function set_file($file)

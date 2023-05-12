@@ -32,7 +32,7 @@ class ViewerComponent extends Manager
             );
 
             $canEditContentObject = $this->getWorkspaceRightsService()->canEditContentObject(
-                $this->get_user(), $content_object
+                $this->getUser(), $content_object
             );
             $canUseContentObject =
                 $this->getWorkspaceRightsService()->canUseContentObject($this->get_user(), $content_object);

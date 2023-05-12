@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Workspace\Component;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
@@ -83,12 +82,12 @@ class UnshareComponent extends Manager
     public function getCurrentWorkspace()
     {
         $selectedWorkspace = $this->getSelectedWorkspace();
-        if ($selectedWorkspace instanceof WorkspaceInterface)
+        if ($selectedWorkspace instanceof Workspace)
         {
             return $selectedWorkspace;
         }
 
-        return $this->get_application()->getWorkspace();
+        return $this->get_application()->getCurrentWorkspace();
     }
 
     /**
@@ -106,10 +105,7 @@ class UnshareComponent extends Manager
         return $this->selectedContentObjectIdentifiers;
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    public function getSelectedWorkspace()
+    public function getSelectedWorkspace(): ?Workspace
     {
         if (!isset($selectedWorkspace))
         {

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Storage;
 
-use ArrayIterator;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass\PortfolioItem;
@@ -12,9 +11,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
@@ -26,7 +24,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -35,8 +32,6 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
-use Chamilo\Libraries\Storage\Query\Join;
-use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
@@ -52,7 +47,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
     public const ACTION_COUNT = 1;
-
     public const ACTION_RETRIEVES = 2;
 
     public const PREFIX = 'repository_';
@@ -92,7 +86,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::updates(ContentObject::class, new UpdateProperties($properties), $condition);
     }
 
-    public static function check_category_name(WorkspaceInterface $workspace, $parent_id, $category_name)
+    public static function check_category_name(Workspace $workspace, $parent_id, $category_name)
     {
         $conditions = [];
         $conditions[] = new EqualityCondition(
@@ -416,7 +410,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return DataClass
      */
-    public static function create_unique_category_name(WorkspaceInterface $workspace, $parent_id, $category_name)
+    public static function create_unique_category_name(Workspace $workspace, $parent_id, $category_name)
     {
         $index = 0;
         $old_category_name = $category_name;
@@ -553,24 +547,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         return $success;
-    }
-
-    public static function delete_content_object_by_user($user_id)
-    {
-        $content_object = DataManager::retrieve_content_object_by_user($user_id);
-        foreach ($content_object as $object)
-        {
-            if (!self:: getPublicationAggregator()->deleteContentObjectPublications($object))
-            {
-                return false;
-            }
-            if (!$object->delete())
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     public static function delete_workspace_category_recursive($category, $fix_display_order = true)
@@ -716,23 +692,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::$helper_types;
     }
 
-    public static function get_number_of_categories($user_id)
-    {
-        if (!isset(self::$number_of_categories[$user_id]))
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
-                new StaticConditionVariable($user_id)
-            );
-
-            self::$number_of_categories[$user_id] = self::count(
-                RepositoryCategory::class, new DataClassCountParameters($condition)
-            );
-        }
-
-        return self::$number_of_categories[$user_id];
-    }
-
     public static function get_registered_types($show_active_only = true)
     {
         if (!(self::$registered_types))
@@ -757,143 +716,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         return self::$registered_types;
-    }
-
-    /**
-     * retrieve category if the category does not exist, create a new category return the id
-     */
-    public static function get_repository_category_by_name_or_create_new(
-        $user_id, $title, $parent_id = 0, $create_in_batch = false
-    )
-    {
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_NAME),
-            new StaticConditionVariable($title)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
-            new StaticConditionVariable($user_id)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT),
-            new StaticConditionVariable($parent_id)
-        );
-        $condition = new AndCondition($conditions);
-
-        $category = self::retrieve_categories($condition)->current();
-        if (!$category)
-        {
-            $category = new RepositoryCategory();
-            $category->set_type_id($user_id);
-            $category->set_name($title);
-            $category->set_parent($parent_id);
-            $category->setType(PersonalWorkspace::WORKSPACE_TYPE);
-
-            // Create category in database
-            $category->create($create_in_batch);
-        }
-
-        return $category->get_id();
-    }
-
-    public static function get_used_disk_space($owner = null)
-    {
-        $types = DataManager::get_registered_types();
-        $disk_space = 0;
-
-        foreach ($types as $index => $type)
-        {
-            $class = $type;
-            $properties = call_user_func([$class, 'get_disk_space_properties']);
-
-            if (is_null($properties))
-            {
-                continue;
-            }
-
-            if (!is_array($properties))
-            {
-                $properties = [$properties];
-            }
-
-            $sum = [];
-            if (count($properties) == 1)
-            {
-                $property = new FunctionConditionVariable(
-                    FunctionConditionVariable::SUM, new PropertyConditionVariable(get_class($class), $properties[0]),
-                    'disk_space'
-                );
-            }
-
-            elseif (count($properties) == 2)
-            {
-                $left = new PropertyConditionVariable(get_class($class), $properties[0]);
-                $right = new PropertyConditionVariable(get_class($class), $properties[1]);
-                $property = new FunctionConditionVariable(
-                    FunctionConditionVariable::SUM,
-                    new OperationConditionVariable($left, OperationConditionVariable::ADDITION, $right), 'disk_space'
-                );
-            }
-            else
-            {
-                $left = new PropertyConditionVariable(get_class($class), $properties[0]);
-                $i = 1;
-                while (count($properties) > $i)
-                {
-                    $right = new PropertyConditionVariable(get_class($class), $properties[$i]);
-                    $operation = new OperationConditionVariable($left, OperationConditionVariable::ADDITION, $right);
-                    $left = $operation;
-                    $i ++;
-                }
-                $property = new FunctionConditionVariable(FunctionConditionVariable::SUM, $operation, 'disk_space');
-            }
-            $parameters = new RecordRetrieveParameters(new RetrieveProperties([$property]));
-
-            if ($owner)
-            {
-                $condition_owner = new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-                    new StaticConditionVariable($owner)
-                );
-            }
-
-            if ($class::isExtended())
-            {
-                if (isset($condition_owner))
-                {
-                    $parameters->set_condition($condition_owner);
-                }
-                $condition = new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                    new PropertyConditionVariable(get_class($class), $class::PROPERTY_ID)
-                );
-                $join = new Join(ContentObject::class, $condition);
-
-                $parameters->set_joins(new Joins([$join]));
-            }
-            else
-            {
-                $match = new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
-                    new StaticConditionVariable($type)
-                );
-
-                if (isset($condition_owner))
-                {
-                    $parameters->set_condition(new AndCondition([$match, $condition_owner]));
-                }
-                else
-                {
-                    $parameters->set_condition($match);
-                }
-            }
-            $record = self::record(get_class($class), $parameters);
-
-            $disk_space += $record['disk_space'];
-        }
-
-        return $disk_space;
     }
 
     public static function get_version_ids($object)
@@ -1352,7 +1174,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
     }
 
-    public static function workspace_has_categories(WorkspaceInterface $workspaceImplemention)
+    public static function workspace_has_categories(Workspace $workspaceImplemention)
     {
         if (is_null(
             self::$workspace_has_categories[$workspaceImplemention->getWorkspaceType()][$workspaceImplemention->getId()]

@@ -7,7 +7,6 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Common\Import\ImportTypeSelector;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -78,75 +77,66 @@ class RepositoryMenu
             $importTypeSelector = new ImportTypeSelector($importParameters, $this->getImportTypes());
             $buttonGroup->addButton($importTypeSelector->getTypeSelectorDropdownButton());
 
-            if (!$repositoryManager->getWorkspace() instanceof PersonalWorkspace)
-            {
-                $buttonGroup->addButton(
-                    new Button(
-                        Translation::get('AddExisting'), new FontAwesomeGlyph('hdd', [], null, 'far'),
-                        $repositoryManager->get_url(
-                            [
+            $buttonGroup->addButton(
+                new Button(
+                    Translation::get('AddExisting'), new FontAwesomeGlyph('hdd', [], null, 'far'),
+                    $repositoryManager->get_url(
+                        [
 
-                                Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
-                                \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_PUBLISH,
-                                FilterData::FILTER_CATEGORY => FilterData::getInstance(
-                                    $repositoryManager->getWorkspace()
-                                )->get_category()
-                            ], [Manager::PARAM_IMPORT_TYPE]
-                        ), Button::DISPLAY_ICON_AND_LABEL
-                    )
-                );
-            }
+                            Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
+                            \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_PUBLISH,
+                            FilterData::FILTER_CATEGORY => FilterData::getInstance(
+                                $repositoryManager->getWorkspace()
+                            )->get_category()
+                        ], [Manager::PARAM_IMPORT_TYPE]
+                    ), Button::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
             $buttonToolBar->addButtonGroup($buttonGroup);
         }
 
         $buttonGroup = new ButtonGroup([], ['btn-group-vertical']);
 
-        if ($repositoryManager->getWorkspace() instanceof PersonalWorkspace)
-        {
-            $buttonGroup->addButton(
-                new Button(
-                    Translation::get('MyPublications'), new FontAwesomeGlyph('list'), $repositoryManager->get_url(
-                    [
-                        Manager::PARAM_ACTION => Manager::ACTION_PUBLICATION
-                    ], [\Chamilo\Core\Repository\Publication\Manager::PARAM_ACTION, Manager::PARAM_IMPORT_TYPE]
-                )
-                )
-            );
-        }
+        $buttonGroup->addButton(
+            new Button(
+                Translation::get('MyPublications'), new FontAwesomeGlyph('list'), $repositoryManager->get_url(
+                [
+                    Manager::PARAM_ACTION => Manager::ACTION_PUBLICATION
+                ], [\Chamilo\Core\Repository\Publication\Manager::PARAM_ACTION, Manager::PARAM_IMPORT_TYPE]
+            )
+            )
+        );
 
-        if ($repositoryManager->getWorkspace() instanceof PersonalWorkspace)
-        {
-            $buttonGroup->addButton(
-                new Button(
-                    Translation::get('Quota'), new FontAwesomeGlyph('chart-bar'), $repositoryManager->get_url(
-                    [
-                        Manager::PARAM_ACTION => Manager::ACTION_QUOTA,
-                        Manager::PARAM_CATEGORY_ID => null,
-                        \Chamilo\Core\Repository\Quota\Manager::PARAM_ACTION => null,
-                        GenericTabsRenderer::PARAM_SELECTED_TAB => null
-                    ], [Manager::PARAM_IMPORT_TYPE]
-                )
-                )
-            );
+        $buttonGroup->addButton(
+            new Button(
+                Translation::get('Quota'), new FontAwesomeGlyph('chart-bar'), $repositoryManager->get_url(
+                [
+                    Manager::PARAM_ACTION => Manager::ACTION_QUOTA,
+                    Manager::PARAM_CATEGORY_ID => null,
+                    \Chamilo\Core\Repository\Quota\Manager::PARAM_ACTION => null,
+                    GenericTabsRenderer::PARAM_SELECTED_TAB => null
+                ], [Manager::PARAM_IMPORT_TYPE]
+            )
+            )
+        );
 
-            $buttonGroup->addButton(
-                new Button(
-                    Translation::get('ViewDoubles'), new FontAwesomeGlyph('copy'), $repositoryManager->get_url(
-                    [
-                        Manager::PARAM_ACTION => Manager::ACTION_VIEW_DOUBLES
-                    ], [Manager::PARAM_IMPORT_TYPE]
-                )
-                )
-            );
+        $buttonGroup->addButton(
+            new Button(
+                Translation::get('ViewDoubles'), new FontAwesomeGlyph('copy'), $repositoryManager->get_url(
+                [
+                    Manager::PARAM_ACTION => Manager::ACTION_VIEW_DOUBLES
+                ], [Manager::PARAM_IMPORT_TYPE]
+            )
+            )
+        );
 
-            $buttonGroup->addButton(
-                new Button(
-                    Translation::get('RecycleBin'), new FontAwesomeGlyph('trash-alt'),
-                    $repositoryManager->get_recycle_bin_url()
-                )
-            );
-        }
+        $buttonGroup->addButton(
+            new Button(
+                Translation::get('RecycleBin'), new FontAwesomeGlyph('trash-alt'),
+                $repositoryManager->get_recycle_bin_url()
+            )
+        );
 
         $buttonToolBar->addButtonGroup($buttonGroup);
 

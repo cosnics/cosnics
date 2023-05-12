@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -22,77 +22,59 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package repository
- * @author Hans De Bisschop
+ * @author  Hans De Bisschop
  */
 class ContentObjectCopier
 {
-    const TYPE_CONFIRM = 3;
-
-    const TYPE_ERROR = 1;
-
-    const TYPE_NORMAL = 4;
-
-    const TYPE_WARNING = 2;
-
-    private $messages;
+    public const TYPE_CONFIRM = 3;
+    public const TYPE_ERROR = 1;
+    public const TYPE_NORMAL = 4;
+    public const TYPE_WARNING = 2;
 
     /**
-     *
-     * @var integer[]
+     * @var int
      */
     private $contentObjectIdentifiers;
 
     /**
-     *
-     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    private $sourceWorkspace;
-
-    /**
-     *
-     * @var integer
-     */
-    private $sourceUserIdentifier;
-
-    /**
-     *
-     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    private $targetWorkspace;
-
-    /**
-     *
-     * @var integer
-     */
-    private $targetUserIdentifier;
-
-    /**
-     *
-     * @var integer
-     */
-    private $targetCategory;
-
-    /**
-     *
      * @var \Chamilo\Core\User\Storage\DataClass\User
      */
     private $currentUser;
 
+    private $messages;
+
     /**
-     *
+     * @var int
+     */
+    private $sourceUserIdentifier;
+
+    private Workspace $sourceWorkspace;
+
+    /**
+     * @var int
+     */
+    private $targetCategory;
+
+    /**
+     * @var int
+     */
+    private $targetUserIdentifier;
+
+    private Workspace $targetWorkspace;
+
+    /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
-     * @param integer[] $contentObjectIdentifiers
-     * @param WorkspaceInterface $sourceWorkspace
-     * @param integer $sourceUserIdentifier
-     * @param WorkspaceInterface $targetWorkspace
-     * @param integer $targetUserIdentifier
-     * @param integer $targetCategory
+     * @param int $contentObjectIdentifiers
+     * @param Workspace $sourceWorkspace
+     * @param int $sourceUserIdentifier
+     * @param Workspace $targetWorkspace
+     * @param int $targetUserIdentifier
+     * @param int $targetCategory
      */
     public function __construct(
-        User $currentUser, $contentObjectIdentifiers, WorkspaceInterface $sourceWorkspace, $sourceUserIdentifier,
-        WorkspaceInterface $targetWorkspace, $targetUserIdentifier, $targetCategory = 0
+        User $currentUser, $contentObjectIdentifiers, Workspace $sourceWorkspace, $sourceUserIdentifier,
+        Workspace $targetWorkspace, $targetUserIdentifier, $targetCategory = 0
     )
     {
         $this->currentUser = $currentUser;
@@ -105,7 +87,6 @@ class ContentObjectCopier
     }
 
     /**
-     *
      * @return bool | array
      */
     public function run()
@@ -119,7 +100,7 @@ class ContentObjectCopier
 
         if (!is_array($this->contentObjectIdentifiers))
         {
-            $this->contentObjectIdentifiers = array($this->contentObjectIdentifiers);
+            $this->contentObjectIdentifiers = [$this->contentObjectIdentifiers];
         }
 
         $exportParameters = new ExportParameters(
@@ -165,7 +146,7 @@ class ContentObjectCopier
      * Adds a message to the message list
      *
      * @param string $message
-     * @param integer $type
+     * @param int $type
      */
     public function add_message($message, $type)
     {
@@ -256,7 +237,6 @@ class ContentObjectCopier
     }
 
     /**
-     *
      * @return string[]
      */
     public function get_messages_for_url()
@@ -273,13 +253,13 @@ class ContentObjectCopier
             }
         }
 
-        return array(Application::PARAM_MESSAGE => $messages, Application::PARAM_MESSAGE_TYPE => $message_types);
+        return [Application::PARAM_MESSAGE => $messages, Application::PARAM_MESSAGE_TYPE => $message_types];
     }
 
     /**
      * Checks wether the object has messages
      *
-     * @return boolean
+     * @return bool
      */
     public function has_messages($type)
     {

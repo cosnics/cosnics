@@ -3,7 +3,6 @@
 namespace Chamilo\Core\Repository\Workspace\Extension\Office365\Service;
 
 use Chamilo\Core\Repository\Component\ExtensionLauncherComponent;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Extension\Office365\Manager;
 use Chamilo\Core\Repository\Workspace\Interfaces\WorkspaceExtensionInterface;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
@@ -18,20 +17,19 @@ use Symfony\Component\Translation\Translator;
  * Extension to support office365 groups in workspaces
  *
  * @package Chamilo\Core\Repository\Workspace\Extension\Office365\Service
- *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class Office365WorkspaceExtension implements WorkspaceExtensionInterface
 {
     /**
-     * @var WorkspaceOffice365Connector
-     */
-    protected $workspaceOffice365Connector;
-
-    /**
      * @var \Symfony\Component\Translation\Translator
      */
     protected $translator;
+
+    /**
+     * @var WorkspaceOffice365Connector
+     */
+    protected $workspaceOffice365Connector;
 
     /**
      * Office365WorkspaceExtension constructor.
@@ -47,20 +45,13 @@ class Office365WorkspaceExtension implements WorkspaceExtensionInterface
 
     /**
      * @param \Chamilo\Libraries\Architecture\Application\Application $workspaceComponent
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup $workspaceExtensionActions
      */
     public function getWorkspaceActions(
-        Application $workspaceComponent, WorkspaceInterface $workspace, User $user,
-        ButtonGroup $workspaceExtensionActions
+        Application $workspaceComponent, Workspace $workspace, User $user, ButtonGroup $workspaceExtensionActions
     )
     {
-        if(!$workspace instanceof Workspace)
-        {
-            return;
-        }
-
         $translation = ($this->workspaceOffice365Connector->isOffice365GroupActiveForWorkspace($workspace)) ?
             'VisitOffice365Group' : 'CreateOffice365Group';
 
@@ -72,25 +63,22 @@ class Office365WorkspaceExtension implements WorkspaceExtensionInterface
                         Application::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_EXTENSION_LAUNCHER,
                         ExtensionLauncherComponent::PARAM_EXTENSION_CONTEXT => Manager::context()
                     ]
-                ),
-                Button::DISPLAY_ICON_AND_LABEL,
-                null, [], '_blank'
+                ), Button::DISPLAY_ICON_AND_LABEL, null, [], '_blank'
             )
         );
 
-        if($this->workspaceOffice365Connector->isOffice365GroupActiveForWorkspace($workspace))
+        if ($this->workspaceOffice365Connector->isOffice365GroupActiveForWorkspace($workspace))
         {
             $workspaceExtensionActions->addButton(
                 new Button(
-                    $this->translator->trans('SyncOffice365Group', [], Manager::context()), new FontAwesomeGlyph('sync'),
-                    $workspaceComponent->get_url(
-                        [
-                            Application::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_EXTENSION_LAUNCHER,
-                            ExtensionLauncherComponent::PARAM_EXTENSION_CONTEXT => Manager::context(),
-                            Manager::PARAM_ACTION => Manager::ACTION_SYNC_GROUP
-                        ]
-                    ),
-                    Button::DISPLAY_ICON_AND_LABEL
+                    $this->translator->trans('SyncOffice365Group', [], Manager::context()),
+                    new FontAwesomeGlyph('sync'), $workspaceComponent->get_url(
+                    [
+                        Application::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_EXTENSION_LAUNCHER,
+                        ExtensionLauncherComponent::PARAM_EXTENSION_CONTEXT => Manager::context(),
+                        Manager::PARAM_ACTION => Manager::ACTION_SYNC_GROUP
+                    ]
+                ), Button::DISPLAY_ICON_AND_LABEL
                 )
             );
         }

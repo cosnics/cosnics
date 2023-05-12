@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Workspace\Service;
 
 use Chamilo\Core\Repository\Service\ContentObjectService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
@@ -72,7 +71,7 @@ class ContentObjectRelationService
     }
 
     public function countContentObjectInWorkspace(
-        ContentObject $contentObject, WorkspaceInterface $workspaceImplementation
+        ContentObject $contentObject, Workspace $workspaceImplementation
     ): int
     {
         return $this->getContentObjectRelationRepository()->countContentObjectInWorkspace(
@@ -267,12 +266,10 @@ class ContentObjectRelationService
 
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
      *
      * @return bool
      */
-    public function isContentObjectInWorkspace(ContentObject $contentObject, WorkspaceInterface $workspaceImplementation
-    ): bool
+    public function isContentObjectInWorkspace(ContentObject $contentObject, Workspace $workspaceImplementation): bool
     {
         return $this->countContentObjectInWorkspace($contentObject, $workspaceImplementation) > 0;
     }

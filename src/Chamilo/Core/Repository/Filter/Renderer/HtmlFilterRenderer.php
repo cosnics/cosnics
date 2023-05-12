@@ -9,8 +9,7 @@ use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -19,12 +18,11 @@ use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HtmlFilterRenderer extends FilterRenderer
 {
-    const CLEAR_ALL = 'all';
+    public const CLEAR_ALL = 'all';
 
     public function render()
     {
@@ -41,7 +39,6 @@ class HtmlFilterRenderer extends FilterRenderer
     }
 
     /**
-     *
      * @return string
      */
     public function add_footer()
@@ -59,14 +56,13 @@ class HtmlFilterRenderer extends FilterRenderer
     }
 
     /**
-     *
      * @return string
      */
     public function add_header()
     {
         $html = [];
 
-        $workspaceId = $this->get_workspace() instanceof PersonalWorkspace ? null : $this->get_workspace()->getId();
+        $workspaceId = $this->get_workspace()->getId();
 
         $html[] =
             '<div class="panel panel-default" id="search-parameters" data-current-workspace-id="' . $workspaceId . '">';
@@ -74,7 +70,7 @@ class HtmlFilterRenderer extends FilterRenderer
         $html[] = '<h3 class="panel-title">';
 
         $html[] = '<span class="pull-right search-parameter" id="' . $this->get_parameter_name(self::CLEAR_ALL) . '">';
-        $glyph = new FontAwesomeGlyph('times', array('text-muted', 'fas-ci-va'));
+        $glyph = new FontAwesomeGlyph('times', ['text-muted', 'fas-ci-va']);
         $html[] = $glyph->render();
         $html[] = '</span>';
 
@@ -118,7 +114,7 @@ class HtmlFilterRenderer extends FilterRenderer
                 {
                     $html[] = $this->renderParameter(
                         $this->get_parameter_name(FilterData::FILTER_CATEGORY), Translation::get(
-                        'InCategoryAndChildren', array('CATEGORY' => $this->get_workspace()->getTitle())
+                        'InCategoryAndChildren', ['CATEGORY' => $this->get_workspace()->getTitle()]
                     )
                     );
                 }
@@ -130,7 +126,7 @@ class HtmlFilterRenderer extends FilterRenderer
                     {
                         $html[] = $this->renderParameter(
                             $this->get_parameter_name(FilterData::FILTER_CATEGORY),
-                            Translation::get('InCategoryAndChildren', array('CATEGORY' => $category->get_name()))
+                            Translation::get('InCategoryAndChildren', ['CATEGORY' => $category->get_name()])
                         );
                     }
                     else
@@ -145,7 +141,7 @@ class HtmlFilterRenderer extends FilterRenderer
                 {
                     $html[] = $this->renderParameter(
                         $this->get_parameter_name(FilterData::FILTER_CATEGORY),
-                        Translation::get('InCategory', array('CATEGORY' => $this->get_workspace()->getTitle()))
+                        Translation::get('InCategory', ['CATEGORY' => $this->get_workspace()->getTitle()])
                     );
                 }
                 else
@@ -156,7 +152,7 @@ class HtmlFilterRenderer extends FilterRenderer
                     {
                         $html[] = $this->renderParameter(
                             $this->get_parameter_name(FilterData::FILTER_CATEGORY),
-                            Translation::get('InCategory', array('CATEGORY' => $category->get_name()))
+                            Translation::get('InCategory', ['CATEGORY' => $category->get_name()])
                         );
                     }
                     else
@@ -172,10 +168,10 @@ class HtmlFilterRenderer extends FilterRenderer
         {
             $html[] = $this->renderParameter(
                 $this->get_parameter_name(FilterData::FILTER_CREATION_DATE), Translation::get(
-                'CreatedBetween', array(
+                'CreatedBetween', [
                     'FROM' => $filter_data->get_creation_date(FilterData::FILTER_FROM_DATE),
                     'TO' => $filter_data->get_creation_date(FilterData::FILTER_TO_DATE)
-                )
+                ]
             )
             );
         }
@@ -185,7 +181,7 @@ class HtmlFilterRenderer extends FilterRenderer
             {
                 $html[] = $this->renderParameter(
                     $this->get_parameter_name(FilterData::FILTER_CREATION_DATE), Translation::get(
-                    'CreatedAfter', array('FROM' => $filter_data->get_creation_date(FilterData::FILTER_FROM_DATE))
+                    'CreatedAfter', ['FROM' => $filter_data->get_creation_date(FilterData::FILTER_FROM_DATE)]
                 )
                 );
             }
@@ -193,7 +189,7 @@ class HtmlFilterRenderer extends FilterRenderer
             {
                 $html[] = $this->renderParameter(
                     $this->get_parameter_name(FilterData::FILTER_CREATION_DATE), Translation::get(
-                    'CreatedBefore', array('TO' => $filter_data->get_creation_date(FilterData::FILTER_TO_DATE))
+                    'CreatedBefore', ['TO' => $filter_data->get_creation_date(FilterData::FILTER_TO_DATE)]
                 )
                 );
             }
@@ -204,10 +200,10 @@ class HtmlFilterRenderer extends FilterRenderer
         {
             $html[] = $this->renderParameter(
                 $this->get_parameter_name(FilterData::FILTER_MODIFICATION_DATE), Translation::get(
-                'ModifiedBetween', array(
+                'ModifiedBetween', [
                     'FROM' => $filter_data->get_modification_date(FilterData::FILTER_FROM_DATE),
                     'TO' => $filter_data->get_modification_date(FilterData::FILTER_TO_DATE)
-                )
+                ]
             )
             );
         }
@@ -217,7 +213,7 @@ class HtmlFilterRenderer extends FilterRenderer
             {
                 $html[] = $this->renderParameter(
                     $this->get_parameter_name(FilterData::FILTER_MODIFICATION_DATE), Translation::get(
-                    'ModifiedAfter', array('FROM' => $filter_data->get_modification_date(FilterData::FILTER_FROM_DATE))
+                    'ModifiedAfter', ['FROM' => $filter_data->get_modification_date(FilterData::FILTER_FROM_DATE)]
                 )
                 );
             }
@@ -225,7 +221,7 @@ class HtmlFilterRenderer extends FilterRenderer
             {
                 $html[] = $this->renderParameter(
                     $this->get_parameter_name(FilterData::FILTER_MODIFICATION_DATE), Translation::get(
-                    'ModifiedBefore', array('TO' => $filter_data->get_modification_date(FilterData::FILTER_TO_DATE))
+                    'ModifiedBefore', ['TO' => $filter_data->get_modification_date(FilterData::FILTER_TO_DATE)]
                 )
                 );
             }
@@ -275,7 +271,7 @@ class HtmlFilterRenderer extends FilterRenderer
             {
                 $html[] = $this->renderParameter(
                     $this->get_parameter_name(FilterData::FILTER_USER_VIEW),
-                    Translation::get('UserViewFilter', array('VIEW' => $user_view->get_name()))
+                    Translation::get('UserViewFilter', ['VIEW' => $user_view->get_name()])
                 );
             }
         }
@@ -285,11 +281,10 @@ class HtmlFilterRenderer extends FilterRenderer
 
     /**
      * @param \Chamilo\Core\Repository\Filter\FilterData $filter_data
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      *
      * @return \Chamilo\Core\Repository\Filter\Renderer\HtmlFilterRenderer
      */
-    public static function factory(FilterData $filter_data, WorkspaceInterface $workspace)
+    public static function factory(FilterData $filter_data, Workspace $workspace)
     {
         $class_name = $filter_data->get_context() . '\Filter\Renderer\HtmlFilterRenderer';
 
@@ -328,7 +323,7 @@ class HtmlFilterRenderer extends FilterRenderer
         $html = [];
 
         $html[] = '<div class="list-group-item search-parameter" id="' . $parameterIdentifier . '">';
-        $glyph = new FontAwesomeGlyph('times', array('pull-right', 'text-muted', 'fas-ci-va'));
+        $glyph = new FontAwesomeGlyph('times', ['pull-right', 'text-muted', 'fas-ci-va']);
         $html[] = $glyph->render();
         $html[] = $parameterText;
         $html[] = '</div>';

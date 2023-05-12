@@ -7,8 +7,8 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -23,7 +23,6 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
 {
-
     public function run()
     {
         $pid = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID) ? Request::get(
@@ -79,7 +78,7 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
             );
 
             $form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit',
+                ContentObjectForm::TYPE_EDIT, $this->getCurrentWorkspace(), $content_object, 'edit',
                 FormValidator::FORM_METHOD_POST,
                 $this->get_url([\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $pid])
             );
@@ -136,6 +135,11 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
                 [\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => null, 'tool_action' => null]
             );
         }
+    }
+
+    protected function getCurrentWorkspace(): Workspace
+    {
+        return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
     }
 
     protected function getRightsService(): RightsService

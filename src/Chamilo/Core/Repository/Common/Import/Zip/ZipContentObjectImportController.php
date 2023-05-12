@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Filesystem;
@@ -197,14 +196,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
      */
     public function determine_parent_id($parent)
     {
-        if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
-        {
-            return $parent;
-        }
-        else
-        {
-            return 0;
-        }
+        return 0;
     }
 
     /**

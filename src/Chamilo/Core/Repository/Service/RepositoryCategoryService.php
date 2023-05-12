@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Service;
 
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -12,13 +12,11 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * @package Chamilo\Core\Repository\Service
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RepositoryCategoryService
 {
     /**
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param int $parentIdentifier
      * @param string $categoryName
      *
@@ -27,7 +25,7 @@ class RepositoryCategoryService
      * @throws \ReflectionException
      */
     public function createNewCategoryInWorkspace(
-        WorkspaceInterface $workspace, int $parentIdentifier, string $categoryName
+        Workspace $workspace, int $parentIdentifier, string $categoryName
     )
     {
         $existingCategory = $this->findCategoryFromParameters($workspace, $parentIdentifier, $categoryName);
@@ -56,7 +54,6 @@ class RepositoryCategoryService
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param int $parentIdentifier
      * @param string $categoryName
      *
@@ -65,7 +62,7 @@ class RepositoryCategoryService
      * @throws \ReflectionException
      */
     public function findCategoryFromParameters(
-        WorkspaceInterface $workspace, int $parentIdentifier, string $categoryName
+        Workspace $workspace, int $parentIdentifier, string $categoryName
     )
     {
         $conditions = [];

@@ -18,8 +18,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
@@ -111,14 +109,10 @@ abstract class ContentObjectForm extends FormValidator
      */
     private $tabsCollection;
 
-    /**
-     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    private $workspace;
+    private Workspace $workspace;
 
     /**
      * @param int $form_type
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
      * @param string $form_name
      * @param string $method
@@ -131,8 +125,8 @@ abstract class ContentObjectForm extends FormValidator
      * @throws \Exception
      */
     public function __construct(
-        $form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = self::FORM_METHOD_POST,
-        $action = null, $extra = null, $additional_elements, $allow_new_version = true
+        $form_type, Workspace $workspace, $content_object, $form_name, $method = self::FORM_METHOD_POST, $action = null,
+        $extra = null, $additional_elements, $allow_new_version = true
     )
     {
         parent::__construct($form_name, $method, $action);
@@ -567,11 +561,6 @@ abstract class ContentObjectForm extends FormValidator
         $desc = $values[ContentObject::PROPERTY_DESCRIPTION] ?: '';
         $object->set_description($desc);
 
-        if ($this->allows_category_selection() && $this->workspace instanceof PersonalWorkspace)
-        {
-            $this->set_category_from_values($object, $values);
-        }
-
         $object->create();
 
         if ($object->hasErrors())
@@ -658,7 +647,6 @@ abstract class ContentObjectForm extends FormValidator
 
     /**
      * @param int $form_type
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
      * @param string $form_name
      * @param string $method
@@ -671,8 +659,8 @@ abstract class ContentObjectForm extends FormValidator
      * @return mixed
      */
     public static function factory(
-        $form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = self::FORM_METHOD_POST,
-        $action = null, $extra = null, $additional_elements = [], $allow_new_version = true, $form_variant = null
+        $form_type, Workspace $workspace, $content_object, $form_name, $method = self::FORM_METHOD_POST, $action = null,
+        $extra = null, $additional_elements = [], $allow_new_version = true, $form_variant = null
     )
     {
         $contentObjectClassName =
@@ -862,10 +850,7 @@ abstract class ContentObjectForm extends FormValidator
         return $this->owner_id;
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    public function get_workspace()
+    public function get_workspace(): Workspace
     {
         return $this->workspace;
     }
@@ -892,17 +877,14 @@ abstract class ContentObjectForm extends FormValidator
         $defaults[ContentObject::PROPERTY_ID] = $content_object->get_id();
         $defaults[ContentObject::PROPERTY_MODIFICATION_DATE] = $content_object->get_modification_date();
 
-        if (!$this->workspace instanceof PersonalWorkspace)
-        {
-            $contentObjectRelation =
-                $this->getContentObjectRelationService()->getContentObjectRelationForWorkspaceAndContentObject(
-                    $this->workspace, $content_object
-                );
+        $contentObjectRelation =
+            $this->getContentObjectRelationService()->getContentObjectRelationForWorkspaceAndContentObject(
+                $this->workspace, $content_object
+            );
 
-            if ($contentObjectRelation)
-            {
-                $defaults[ContentObject::PROPERTY_PARENT_ID] = $contentObjectRelation->getCategoryId();
-            }
+        if ($contentObjectRelation)
+        {
+            $defaults[ContentObject::PROPERTY_PARENT_ID] = $contentObjectRelation->getCategoryId();
         }
 
         if (!array_key_exists(ContentObject::PROPERTY_PARENT_ID, $defaults))
@@ -976,30 +958,22 @@ abstract class ContentObjectForm extends FormValidator
             }
         }
 
-        if ($this->workspace instanceof PersonalWorkspace)
+        $contentObjectRelationService = $this->getContentObjectRelationService();
+        $contentObjectRelation = $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
+            $this->workspace, $object
+        );
+
+        if ($contentObjectRelation instanceof WorkspaceContentObjectRelation)
         {
-            $object->set_parent_id($parent_id);
+            $contentObjectRelationService->updateContentObjectRelationFromParameters(
+                $contentObjectRelation, $this->workspace->getId(), $object->get_object_number(), $parent_id
+            );
         }
         else
         {
-            $contentObjectRelationService = $this->getContentObjectRelationService();
-            $contentObjectRelation =
-                $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
-                    $this->workspace, $object
-                );
-
-            if ($contentObjectRelation instanceof WorkspaceContentObjectRelation)
-            {
-                $contentObjectRelationService->updateContentObjectRelationFromParameters(
-                    $contentObjectRelation, $this->workspace->getId(), $object->get_object_number(), $parent_id
-                );
-            }
-            else
-            {
-                $contentObjectRelationService->createContentObjectRelationFromParameters(
-                    $this->workspace->getId(), $object->get_object_number(), $parent_id
-                );
-            }
+            $contentObjectRelationService->createContentObjectRelationFromParameters(
+                $this->workspace->getId(), $object->get_object_number(), $parent_id
+            );
         }
     }
 

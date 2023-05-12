@@ -95,14 +95,14 @@ class PublisherComponent extends Manager
 
     public function getCurrentWorkspace()
     {
-        return $this->get_application()->getWorkspace();
+        return $this->get_application()->getCurrentWorkspace();
     }
 
     // TODO: This should return ALL ids of ALL content object ids attached to the object numbers
 
     public function getExcludedObjects()
     {
-        $workspace = $this->get_application()->getWorkspace();
+        $workspace = $this->get_application()->getCurrentWorkspace();
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(

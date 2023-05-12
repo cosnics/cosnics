@@ -1,40 +1,35 @@
 <?php
 namespace Chamilo\Core\Repository\Filter;
 
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 
 /**
  * Abstract FilterRenderer to facilitate the processing of FilterData for various purposes
- * 
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class FilterRenderer
 {
 
     /**
-     *
-     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    private $workspace;
-
-    /**
-     *
      * @var \core\repository\filter\FilterData
      */
     private $filter_data;
 
+    private Workspace $workspace;
+
     /**
-     *
      * @param \core\repository\filter\FilterData $filter_data
      */
-    public function __construct(FilterData $filter_data, WorkspaceInterface $workspace)
+    public function __construct(FilterData $filter_data, Workspace $workspace)
     {
         $this->filter_data = $filter_data;
         $this->workspace = $workspace;
     }
 
+    abstract public function render();
+
     /**
-     *
      * @return \core\repository\filter\FilterData
      */
     public function get_filter_data()
@@ -42,8 +37,12 @@ abstract class FilterRenderer
         return $this->filter_data;
     }
 
+    public function get_workspace(): Workspace
+    {
+        return $this->workspace;
+    }
+
     /**
-     *
      * @param \core\repository\filter\FilterData $filter_data
      */
     public function set_filter_data(FilterData $filter_data)
@@ -51,23 +50,8 @@ abstract class FilterRenderer
         $this->filter_data = $filter_data;
     }
 
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    public function get_workspace()
-    {
-        return $this->workspace;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
-     */
-    public function set_workspace($workspace)
+    public function set_workspace(Workspace $workspace)
     {
         $this->workspace = $workspace;
     }
-
-    abstract function render();
 }

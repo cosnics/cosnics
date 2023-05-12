@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\Calend
 use Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Translation\Translation;
@@ -94,14 +93,7 @@ class IcalContentObjectImportController extends ContentObjectImportController
      */
     public function determine_parent_id()
     {
-        if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
-        {
-            return $this->get_parameters()->get_category();
-        }
-        else
-        {
-            return 0;
-        }
+        return 0;
     }
 
     public static function get_allowed_extensions()

@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Workspace\Repository;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -38,7 +37,7 @@ class ContentObjectRelationRepository
     }
 
     public function countContentObjectInWorkspace(
-        ContentObject $contentObject, WorkspaceInterface $workspaceImplementation
+        ContentObject $contentObject, Workspace $workspaceImplementation
     ): int
     {
         $relationConditions = [];

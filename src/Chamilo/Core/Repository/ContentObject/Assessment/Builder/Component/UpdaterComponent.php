@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -73,7 +73,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
         }
 
         $content_object_form = ContentObjectForm::factory(
-            ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit',
+            ContentObjectForm::TYPE_EDIT, $this->getCurrentWorkspace(), $content_object, 'edit',
             FormValidator::FORM_METHOD_POST, $this->get_url($parameters), null, $elements
         );
         $content_object_form->setDefaults($defaults);
@@ -146,6 +146,11 @@ class UpdaterComponent extends Manager implements DelegateComponent
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    protected function getCurrentWorkspace(): Workspace
+    {
+        return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
     }
 
     /**

@@ -4,8 +4,7 @@ namespace Chamilo\Core\Repository\Common\Export;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -34,13 +33,10 @@ class ExportParameters
 
     private $user;
 
-    /**
-     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    private $workspace;
+    private Workspace $workspace;
 
     public function __construct(
-        WorkspaceInterface $workspace, $user, $format = ContentObjectExport::FORMAT_CPO, $content_object_ids = [],
+        Workspace $workspace, $user, $format = ContentObjectExport::FORMAT_CPO, $content_object_ids = [],
         $category_ids = [], $type = ContentObjectExport::TYPE_DEFAULT
     )
     {
@@ -65,10 +61,7 @@ class ExportParameters
         return $this->type;
     }
 
-    /**
-     * @return \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    public function getWorkspace()
+    public function getWorkspace(): Workspace
     {
         return $this->workspace;
     }
@@ -92,55 +85,31 @@ class ExportParameters
             {
                 if (in_array(0, $this->get_category_ids()))
                 {
-                    if ($this->getWorkspace() instanceof PersonalWorkspace)
-                    {
-                        $conditions = [];
-                        $conditions[] = new EqualityCondition(
-                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-                            new StaticConditionVariable($this->get_user())
-                        );
-                        $conditions[] = new EqualityCondition(
-                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
-                            new StaticConditionVariable(ContentObject::STATE_NORMAL)
-                        );
-
-                        $condition = new AndCondition($conditions);
-
-                        $parameters = new DataClassDistinctParameters(
-                            $condition, new RetrieveProperties(
-                                [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
-                            )
-                        );
-                    }
-                    else
-                    {
-                        $joins = new Joins();
-                        $joins->add(
-                            new Join(
-                                WorkspaceContentObjectRelation::class, new EqualityCondition(
-                                    new PropertyConditionVariable(
-                                        WorkspaceContentObjectRelation::class,
-                                        WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID
-                                    ), new PropertyConditionVariable(
-                                        ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER
-                                    )
+                    $joins = new Joins();
+                    $joins->add(
+                        new Join(
+                            WorkspaceContentObjectRelation::class, new EqualityCondition(
+                                new PropertyConditionVariable(
+                                    WorkspaceContentObjectRelation::class,
+                                    WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID
+                                ), new PropertyConditionVariable(
+                                    ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER
                                 )
                             )
-                        );
+                        )
+                    );
 
-                        $condition = new EqualityCondition(
-                            new PropertyConditionVariable(
-                                WorkspaceContentObjectRelation::class,
-                                WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID
-                            ), new StaticConditionVariable($this->getWorkspace()->getId())
-                        );
+                    $condition = new EqualityCondition(
+                        new PropertyConditionVariable(
+                            WorkspaceContentObjectRelation::class, WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID
+                        ), new StaticConditionVariable($this->getWorkspace()->getId())
+                    );
 
-                        $parameters = new DataClassDistinctParameters(
-                            $condition, new RetrieveProperties(
-                                [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
-                            ), $joins
-                        );
-                    }
+                    $parameters = new DataClassDistinctParameters(
+                        $condition, new RetrieveProperties(
+                        [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
+                    ), $joins
+                    );
                 }
                 else
                 {
@@ -154,70 +123,41 @@ class ExportParameters
                         $category_ids = array_merge($category_ids, $category->get_children_ids());
                     }
 
-                    if ($this->getWorkspace() instanceof PersonalWorkspace)
-                    {
-                        $conditions = [];
-                        $conditions[] = new EqualityCondition(
-                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-                            new StaticConditionVariable($this->get_user())
-                        );
-                        $conditions[] = new InCondition(
-                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_PARENT_ID),
-                            $category_ids
-                        );
-                        $conditions[] = new EqualityCondition(
-                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
-                            new StaticConditionVariable(ContentObject::STATE_NORMAL)
-                        );
-
-                        $condition = new AndCondition($conditions);
-
-                        $parameters = new DataClassDistinctParameters(
-                            $condition, new RetrieveProperties(
-                                [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
-                            )
-                        );
-                    }
-                    else
-                    {
-                        $joins = new Joins();
-                        $joins->add(
-                            new Join(
-                                WorkspaceContentObjectRelation::class, new EqualityCondition(
-                                    new PropertyConditionVariable(
-                                        WorkspaceContentObjectRelation::class,
-                                        WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID
-                                    ), new PropertyConditionVariable(
-                                        ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER
-                                    )
+                    $joins = new Joins();
+                    $joins->add(
+                        new Join(
+                            WorkspaceContentObjectRelation::class, new EqualityCondition(
+                                new PropertyConditionVariable(
+                                    WorkspaceContentObjectRelation::class,
+                                    WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID
+                                ), new PropertyConditionVariable(
+                                    ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER
                                 )
                             )
-                        );
+                        )
+                    );
 
-                        $conditions = [];
+                    $conditions = [];
 
-                        $conditions[] = new EqualityCondition(
-                            new PropertyConditionVariable(
-                                WorkspaceContentObjectRelation::class,
-                                WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID
-                            ), new StaticConditionVariable($this->getWorkspace()->getId())
-                        );
+                    $conditions[] = new EqualityCondition(
+                        new PropertyConditionVariable(
+                            WorkspaceContentObjectRelation::class, WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID
+                        ), new StaticConditionVariable($this->getWorkspace()->getId())
+                    );
 
-                        $conditions[] = new InCondition(
-                            new PropertyConditionVariable(
-                                WorkspaceContentObjectRelation::class,
-                                WorkspaceContentObjectRelation::PROPERTY_CATEGORY_ID
-                            ), $category_ids
-                        );
+                    $conditions[] = new InCondition(
+                        new PropertyConditionVariable(
+                            WorkspaceContentObjectRelation::class, WorkspaceContentObjectRelation::PROPERTY_CATEGORY_ID
+                        ), $category_ids
+                    );
 
-                        $condition = new AndCondition($conditions);
+                    $condition = new AndCondition($conditions);
 
-                        $parameters = new DataClassDistinctParameters(
-                            $condition, new RetrieveProperties(
-                                [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
-                            ), $joins
-                        );
-                    }
+                    $parameters = new DataClassDistinctParameters(
+                        $condition, new RetrieveProperties(
+                        [new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)]
+                    ), $joins
+                    );
                 }
 
                 $this->category_content_object_ids = DataManager::distinct(ContentObject::class, $parameters);
@@ -269,10 +209,7 @@ class ExportParameters
         return count($this->get_category_ids()) > 0;
     }
 
-    /**
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
-     */
-    public function setWorkspace($workspace)
+    public function setWorkspace(Workspace $workspace)
     {
         $this->workspace = $workspace;
     }

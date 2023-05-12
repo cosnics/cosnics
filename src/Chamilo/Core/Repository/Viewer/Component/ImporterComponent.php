@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Viewer\Manager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -53,7 +52,7 @@ class ImporterComponent extends Manager implements DelegateComponent
         if ($type)
         {
             $importFormParameters = new ImportFormParameters(
-                $type, $this->getWorkspace(), $this, $this->get_url([self::PARAM_IMPORT_TYPE => $type]),
+                $type, $this->getCurrentWorkspace(), $this, $this->get_url([self::PARAM_IMPORT_TYPE => $type]),
                 FormValidator::FORM_METHOD_POST, true, $this->get_maximum_select()
             );
 
@@ -72,8 +71,8 @@ class ImporterComponent extends Manager implements DelegateComponent
                     $new_category = new RepositoryCategory();
                     $new_category->set_name($new_category_name);
                     $new_category->set_parent($parent_id);
-                    $new_category->set_type_id($this->getWorkspace()->getId());
-                    $new_category->setType($this->getWorkspace()->getWorkspaceType());
+                    $new_category->set_type_id($this->getCurrentWorkspace()->getId());
+                    $new_category->setType($this->getCurrentWorkspace()->getWorkspaceType());
 
                     if (!$new_category->create())
                     {
@@ -100,7 +99,7 @@ class ImporterComponent extends Manager implements DelegateComponent
 
                 $parameters = ImportParameters::factory(
                     $importForm->exportValue(ContentObjectImportForm::PROPERTY_TYPE), $this->get_user_id(),
-                    $this->getWorkspace(), $category_id, $file, $values
+                    $this->getCurrentWorkspace(), $category_id, $file, $values
                 );
 
                 $controller = ContentObjectImportController::factory($parameters);
@@ -239,16 +238,6 @@ class ImporterComponent extends Manager implements DelegateComponent
         );
 
         return DataManager::distinct(ContentObject::class, $parameters);
-    }
-
-    public function getWorkspace()
-    {
-        if (!isset($this->currentWorkspace))
-        {
-            $this->currentWorkspace = new PersonalWorkspace($this->get_user());
-        }
-
-        return $this->currentWorkspace;
     }
 
     public function get_import_types()

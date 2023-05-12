@@ -7,9 +7,8 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -901,18 +900,11 @@ class ContentObject extends CompositeDataClass
     /**
      * Retrieves the virtual path of this content object in a given workspace
      *
-     * @param WorkspaceInterface $workspace
-     *
      * @return string
      * @throws \Exception
      */
-    public function getVirtualPathInWorkspace(WorkspaceInterface $workspace)
+    public function getVirtualPathInWorkspace(Workspace $workspace)
     {
-        if ($workspace instanceof PersonalWorkspace)
-        {
-            return $this->getVirtualPathByCategoryId($this->get_parent_id());
-        }
-
         $contentObjectRelation =
             $this->getContentObjectRelationService()->getContentObjectRelationForWorkspaceAndContentObject(
                 $workspace, $this

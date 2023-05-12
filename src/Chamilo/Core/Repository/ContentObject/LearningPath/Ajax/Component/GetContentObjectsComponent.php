@@ -7,9 +7,9 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Manager;
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceContentObjectService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,13 +22,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class GetContentObjectsComponent extends Manager
 {
-    const PARAM_CATEGORY_ID = 'category_id';
-    const PARAM_SEARCH_QUERY = 'search_query';
+    public const PARAM_CATEGORY_ID = 'category_id';
+    public const PARAM_SEARCH_QUERY = 'search_query';
 
     /**
      * @inheritdoc
      */
-    function run()
+    public function run()
     {
         $categoryId = $this->getRequest()->request->get(self::PARAM_CATEGORY_ID);
         $searchQuery = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
@@ -52,13 +52,12 @@ class GetContentObjectsComponent extends Manager
         $filterConditionRenderer = new ConditionFilterRenderer($filterData, $workspace);
 
         $contentObjects = $service->getContentObjectsByTypeForWorkspace(
-            ContentObject::class,
-            $workspace, $filterConditionRenderer
+            ContentObject::class, $workspace, $filterConditionRenderer
         );
 
         $contentObjectsArray = [];
 
-        foreach($contentObjects as $contentObject)
+        foreach ($contentObjects as $contentObject)
         {
             /**
              * @var ContentObject $contentObject
@@ -77,28 +76,16 @@ class GetContentObjectsComponent extends Manager
                 $type = ClassnameUtilities::getInstance()->getClassNameFromNamespace($contentObject->getType(), true);
             }
 
-            $contentObjectsArray[] = array(
+            $contentObjectsArray[] = [
                 'id' => $contentObject->getId(),
                 'title' => $contentObject->get_title(),
                 'icon' => $contentObject->getGlyph()->render(),
                 'securityCode' => $contentObject->calculate_security_code(),
                 'type' => $type
-            );
+            ];
         }
 
         return $contentObjectsArray;
-    }
-
-    /**
-     * Validates the given content object
-     *
-     * @param ContentObject $contentObject
-     *
-     * @return bool
-     */
-    protected function validateContentObject(ContentObject $contentObject)
-    {
-        return ($contentObject instanceOf Includeable);
     }
 
     /**
@@ -106,11 +93,10 @@ class GetContentObjectsComponent extends Manager
      *
      * @param int $categoryId
      * @param string $searchQuery
-     * @param WorkspaceInterface $workspace
      *
      * @return FilterData
      */
-    protected function getFilterData($categoryId = null, string $searchQuery, WorkspaceInterface $workspace): FilterData
+    protected function getFilterData($categoryId = null, string $searchQuery, Workspace $workspace): FilterData
     {
         $filterData = new FilterData($workspace);
         $filterData->clear(false);
@@ -123,5 +109,17 @@ class GetContentObjectsComponent extends Manager
         $filterData->set_filter_property(FilterData::FILTER_TEXT, $searchQuery);
 
         return $filterData;
+    }
+
+    /**
+     * Validates the given content object
+     *
+     * @param ContentObject $contentObject
+     *
+     * @return bool
+     */
+    protected function validateContentObject(ContentObject $contentObject)
+    {
+        return ($contentObject instanceof Includeable);
     }
 }

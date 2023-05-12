@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
@@ -9,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Service\ContentObjectCopierWrapper;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -18,6 +18,11 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 class TreeNodeCopier
 {
+    /**
+     * @var ContentObjectCopierWrapper
+     */
+    protected $contentObjectCopierWrapper;
+
     /**
      * @var ContentObjectRepository
      */
@@ -32,11 +37,6 @@ class TreeNodeCopier
      * @var TreeNodeDataService
      */
     protected $treeNodeDataService;
-
-    /**
-     * @var ContentObjectCopierWrapper
-     */
-    protected $contentObjectCopierWrapper;
 
     /**
      * LearningPathService constructor.
@@ -58,29 +58,23 @@ class TreeNodeCopier
     }
 
     /**
-     * Copies one or multiple nodes from a given LearningPath to a given TreeNode
+     * Copies a given content object
      *
-     * @param TreeNode $toNode
-     * @param LearningPath $fromLearningPath
+     * @param TreeNode $node
      * @param User $user
-     * @param array $selectedNodeIds
-     * @param bool $copyInsteadOfReuse
+     * @param int $categoryId
+     *
+     * @return Section|ContentObject
      */
-    public function copyNodesFromLearningPath(
-        TreeNode $toNode, LearningPath $fromLearningPath, User $user, $selectedNodeIds = [],
-        $copyInsteadOfReuse = false
-    )
+    protected function copyContentObjectFromNode(TreeNode $node, User $user, $categoryId)
     {
-        /** @var LearningPath $rootLearningPath */
-        $rootLearningPath = $toNode->getTree()->getRoot()->getContentObject();
+        $newContentObjectIdentifiers =
+            $this->contentObjectCopierWrapper->copyContentObject($node->getContentObject(), $user, $categoryId);
 
-        $fromTree = $this->treeBuilder->buildTree($fromLearningPath);
-        foreach ($selectedNodeIds as $selectedNodeId)
-        {
-            $selectedNode = $fromTree->getTreeNodeById((int) $selectedNodeId);
-            $this->copyNodeAndChildren($rootLearningPath, $toNode, $selectedNode, $user, $copyInsteadOfReuse);
-        }
+        return $this->contentObjectRepository->findById(array_pop($newContentObjectIdentifiers));
     }
+
+
 
     /**
      * Copies a given node and his children to the given learning path and tree node
@@ -92,8 +86,7 @@ class TreeNodeCopier
      * @param bool $copyInsteadOfReuse
      */
     protected function copyNodeAndChildren(
-        LearningPath $rootLearningPath, TreeNode $toNode, TreeNode $fromNode, User $user,
-        $copyInsteadOfReuse = false
+        LearningPath $rootLearningPath, TreeNode $toNode, TreeNode $fromNode, User $user, $copyInsteadOfReuse = false
     )
     {
         $contentObject = $this->prepareContentObjectForCopy(
@@ -112,11 +105,79 @@ class TreeNodeCopier
     }
 
     /**
-     * Prepares the content object for the copy action.
+     * Copies one or multiple nodes from a given LearningPath to a given TreeNode
      *
+     * @param TreeNode $toNode
+     * @param LearningPath $fromLearningPath
+     * @param User $user
+     * @param array $selectedNodeIds
+     * @param bool $copyInsteadOfReuse
+     */
+    public function copyNodesFromLearningPath(
+        TreeNode $toNode, LearningPath $fromLearningPath, User $user, $selectedNodeIds = [], $copyInsteadOfReuse = false
+    )
+    {
+        /** @var LearningPath $rootLearningPath */
+        $rootLearningPath = $toNode->getTree()->getRoot()->getContentObject();
+
+        $fromTree = $this->treeBuilder->buildTree($fromLearningPath);
+        foreach ($selectedNodeIds as $selectedNodeId)
+        {
+            $selectedNode = $fromTree->getTreeNodeById((int) $selectedNodeId);
+            $this->copyNodeAndChildren($rootLearningPath, $toNode, $selectedNode, $user, $copyInsteadOfReuse);
+        }
+    }
+
+    /**
+     * Copies a learning path child from a given node to a new node
+     *
+     * @param LearningPath $rootLearningPath
+     * @param TreeNode $toNode
+     * @param TreeNode $fromNode
+     * @param User $user
+     * @param ContentObject $contentObject
+     *
+     * @return TreeNodeData
+     */
+    protected function copyTreeNodeData(
+        LearningPath $rootLearningPath, TreeNode $toNode, TreeNode $fromNode, User $user, ContentObject $contentObject
+    ): TreeNodeData
+    {
+        $treeNodeData = $fromNode->getTreeNodeData();
+
+        $treeNodeData->setId(null);
+        $treeNodeData->setUserId((int) $user->getId());
+        $treeNodeData->setLearningPathId((int) $rootLearningPath->getId());
+        $treeNodeData->setParentTreeNodeDataId((int) $toNode->getId());
+        $treeNodeData->setContentObjectId((int) $contentObject->getId());
+        $treeNodeData->setAddedDate(time());
+
+        if ($fromNode->isRootNode())
+        {
+            /** @var LearningPath $learningPath */
+            $learningPath = $fromNode->getContentObject();
+            if ($learningPath->enforcesDefaultTraversingOrder() ||
+                $fromNode->getTreeNodeData()->enforcesDefaultTraversingOrder())
+            {
+                $treeNodeData->setEnforceDefaultTraversingOrder(true);
+            }
+        }
+        else
+        {
+            $treeNodeData->setEnforceDefaultTraversingOrder(
+                $fromNode->getTreeNodeData()->enforcesDefaultTraversingOrder()
+            );
+        }
+
+        $this->treeNodeDataService->createTreeNodeData($treeNodeData);
+
+        return $treeNodeData;
+    }
+
+    /**
+     * Prepares the content object for the copy action.
      * If the content object is a root node (e.g. a Learning Path) the
      * content object is always converted to a new Section.
-     *
      * If the copy flag is set, the content object will be physically copied
      *
      * @param TreeNode $fromNode
@@ -152,69 +213,5 @@ class TreeNodeCopier
         }
 
         return $fromNode->getContentObject();
-    }
-
-    /**
-     * Copies a given content object
-     *
-     * @param TreeNode $node
-     * @param User $user
-     * @param int $categoryId
-     *
-     * @return Section|ContentObject
-     */
-    protected function copyContentObjectFromNode(TreeNode $node, User $user, $categoryId)
-    {
-        $newContentObjectIdentifiers =
-            $this->contentObjectCopierWrapper->copyContentObject($node->getContentObject(), $user, $categoryId);
-
-        return $this->contentObjectRepository->findById(array_pop($newContentObjectIdentifiers));
-    }
-
-    /**
-     * Copies a learning path child from a given node to a new node
-     *
-     * @param LearningPath $rootLearningPath
-     * @param TreeNode $toNode
-     * @param TreeNode $fromNode
-     * @param User $user
-     * @param ContentObject $contentObject
-     *
-     * @return TreeNodeData
-     */
-    protected function copyTreeNodeData(
-        LearningPath $rootLearningPath, TreeNode $toNode, TreeNode $fromNode, User $user,
-        ContentObject $contentObject
-    ): TreeNodeData
-    {
-        $treeNodeData = $fromNode->getTreeNodeData();
-
-        $treeNodeData->setId(null);
-        $treeNodeData->setUserId((int) $user->getId());
-        $treeNodeData->setLearningPathId((int) $rootLearningPath->getId());
-        $treeNodeData->setParentTreeNodeDataId((int) $toNode->getId());
-        $treeNodeData->setContentObjectId((int) $contentObject->getId());
-        $treeNodeData->setAddedDate(time());
-
-        if ($fromNode->isRootNode())
-        {
-            /** @var LearningPath $learningPath */
-            $learningPath = $fromNode->getContentObject();
-            if ($learningPath->enforcesDefaultTraversingOrder() ||
-                $fromNode->getTreeNodeData()->enforcesDefaultTraversingOrder())
-            {
-                $treeNodeData->setEnforceDefaultTraversingOrder(true);
-            }
-        }
-        else
-        {
-            $treeNodeData->setEnforceDefaultTraversingOrder(
-                $fromNode->getTreeNodeData()->enforcesDefaultTraversingOrder()
-            );
-        }
-
-        $this->treeNodeDataService->createTreeNodeData($treeNodeData);
-
-        return $treeNodeData;
     }
 }

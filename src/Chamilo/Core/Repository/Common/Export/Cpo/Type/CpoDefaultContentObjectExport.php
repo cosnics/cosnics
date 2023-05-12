@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Common\Export\Cpo\Type;
 
 use Chamilo\Core\Repository\Common\Export\Cpo\CpoContentObjectExport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 class CpoDefaultContentObjectExport extends CpoContentObjectExport
 {
@@ -38,29 +37,21 @@ class CpoDefaultContentObjectExport extends CpoContentObjectExport
         }
 
         // Process the category
-        if ($this->get_export_implementation()->get_context()->get_parameters()->getWorkspace() instanceof
-            PersonalWorkspace)
+        $contentObjectRelation =
+            $this->getContentObjectRelationService()->getContentObjectRelationForWorkspaceAndContentObject(
+                $this->get_export_implementation()->get_context()->get_parameters()->getWorkspace(),
+                $this->get_export_implementation()->get_content_object()
+            );
+
+        if ($contentObjectRelation)
         {
-            $this->addGeneralProperty($document, $general, 'parent_id');
+            $this->addGeneralPropertyValue(
+                $document, $general, 'parent_id', $contentObjectRelation->getCategoryId()
+            );
         }
         else
         {
-            $contentObjectRelation =
-                $this->getContentObjectRelationService()->getContentObjectRelationForWorkspaceAndContentObject(
-                    $this->get_export_implementation()->get_context()->get_parameters()->getWorkspace(),
-                    $this->get_export_implementation()->get_content_object()
-                );
-
-            if ($contentObjectRelation)
-            {
-                $this->addGeneralPropertyValue(
-                    $document, $general, 'parent_id', $contentObjectRelation->getCategoryId()
-                );
-            }
-            else
-            {
-                $this->addGeneralProperty($document, $general, 'parent_id');
-            }
+            $this->addGeneralProperty($document, $general, 'parent_id');
         }
 
         if (!$this->get_export_implementation()->get_context()->get_parameters()->has_categories() ||

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Filter;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -17,46 +17,36 @@ use Chamilo\Libraries\Platform\Session\Session;
  */
 class FilterData
 {
-    const FILTER_CATEGORY = ContentObject::PROPERTY_PARENT_ID;
-    const FILTER_CATEGORY_RECURSIVE = 'category_recursive';
-    const FILTER_CREATION_DATE = ContentObject::PROPERTY_CREATION_DATE;
-    const FILTER_FROM_DATE = 'from';
-    const FILTER_MODIFICATION_DATE = ContentObject::PROPERTY_MODIFICATION_DATE;
-    const FILTER_TEXT = 'text';
-    const FILTER_TO_DATE = 'to';
-    const FILTER_TYPE = 'filter_type';
-    const FILTER_USER_VIEW = 'view';
+    public const FILTER_CATEGORY = ContentObject::PROPERTY_PARENT_ID;
+    public const FILTER_CATEGORY_RECURSIVE = 'category_recursive';
+    public const FILTER_CREATION_DATE = ContentObject::PROPERTY_CREATION_DATE;
+    public const FILTER_FROM_DATE = 'from';
+    public const FILTER_MODIFICATION_DATE = ContentObject::PROPERTY_MODIFICATION_DATE;
+    public const FILTER_TEXT = 'text';
+    public const FILTER_TO_DATE = 'to';
+    public const FILTER_TYPE = 'filter_type';
+    public const FILTER_USER_VIEW = 'view';
 
-    const STORAGE = 'filter';
+    public const STORAGE = 'filter';
 
     /**
-     *
      * @var \Chamilo\Core\Repository\Filter\FilterData
      */
     private static $instance;
 
     /**
-     *
      * @var string[]
      */
     protected $storage;
 
     /**
-     *
-     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    private $workspaceImplementation;
-
-    /**
-     *
      * @var string
      */
     private $context;
 
-    /**
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
-     */
-    public function __construct(WorkspaceInterface $workspaceImplementation)
+    private Workspace $workspaceImplementation;
+
+    public function __construct(Workspace $workspaceImplementation)
     {
         $this->workspaceImplementation = $workspaceImplementation;
         $this->initialize();
@@ -95,12 +85,11 @@ class FilterData
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
      * @param $url
      *
      * @return string
      */
-    public static function clean_url(WorkspaceInterface $workspaceImplementation, $url)
+    public static function clean_url(Workspace $workspaceImplementation, $url)
     {
         $filter_data = self::getInstance($workspaceImplementation);
         $url_parts = parse_url(urldecode($url));
@@ -123,7 +112,7 @@ class FilterData
     /**
      * Clear all filter parameters from the session
      *
-     * @param boolean $updateSession
+     * @param bool $updateSession
      */
     public function clear($updateSession = true)
     {
@@ -162,11 +151,9 @@ class FilterData
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspaceImplementation
-     *
      * @return \Chamilo\Core\Repository\Filter\FilterData
      */
-    public static function getInstance(WorkspaceInterface $workspaceImplementation)
+    public static function getInstance(Workspace $workspaceImplementation)
     {
         if (!isset(self::$instance))
         {
@@ -205,6 +192,24 @@ class FilterData
     }
 
     /**
+     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
+     * @throws \Exception
+     */
+    public function getTemplateRegistrationConsulter()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
+            TemplateRegistrationConsulter::class
+        );
+    }
+
+    public function getType()
+    {
+        $type = $this->get_filter_property(self::FILTER_TYPE);
+
+        return is_numeric($type) && !empty($type) ? $type : null;
+    }
+
+    /**
      * Returns the dataclass for the given type (if there is a filter on the type)
      */
     public function getTypeDataClass()
@@ -225,17 +230,6 @@ class FilterData
     public function get_category()
     {
         return $this->get_filter_property(self::FILTER_CATEGORY);
-    }
-
-    /**
-     * @return \Chamilo\Core\Repository\Service\TemplateRegistrationConsulter
-     * @throws \Exception
-     */
-    public function getTemplateRegistrationConsulter()
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            TemplateRegistrationConsulter::class
-        );
     }
 
     public function get_context()
@@ -261,7 +255,6 @@ class FilterData
     }
 
     /**
-     *
      * @param string $type
      *
      * @return int NULL
@@ -272,7 +265,6 @@ class FilterData
     }
 
     /**
-     *
      * @param string $date_type
      * @param string $part_type
      *
@@ -293,7 +285,6 @@ class FilterData
     }
 
     /**
-     *
      * @param string[] $filter_properties
      *
      * @return string[]
@@ -312,7 +303,6 @@ class FilterData
     }
 
     /**
-     *
      * @param string $property
      *
      * @return string
@@ -323,7 +313,6 @@ class FilterData
     }
 
     /**
-     *
      * @param string $type
      *
      * @return int NULL
@@ -334,19 +323,11 @@ class FilterData
     }
 
     /**
-     *
      * @return string[]
      */
     public function get_storage()
     {
         return $this->storage;
-    }
-
-    public function getType()
-    {
-        $type = $this->get_filter_property(self::FILTER_TYPE);
-
-        return is_numeric($type) && !empty($type) ? $type : null;
     }
 
     /**
@@ -370,8 +351,7 @@ class FilterData
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function has_creation_date()
     {
@@ -379,8 +359,7 @@ class FilterData
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function has_date($date_type = null)
     {
@@ -397,10 +376,9 @@ class FilterData
     }
 
     /**
-     *
      * @param string $property
      *
-     * @return boolean
+     * @return bool
      */
     public function has_filter_property($property)
     {
@@ -410,8 +388,7 @@ class FilterData
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function has_modification_date()
     {
@@ -439,7 +416,7 @@ class FilterData
     /**
      * Determine whether one or more of the basic parameters were set
      *
-     * @return boolean
+     * @return bool
      */
     public function is_set()
     {
@@ -456,7 +433,6 @@ class FilterData
     }
 
     /**
-     *
      * @param string $property
      * @param string $value
      */
@@ -467,7 +443,6 @@ class FilterData
     }
 
     /**
-     *
      * @param string[] $storage
      */
     private function set_storage($storage)

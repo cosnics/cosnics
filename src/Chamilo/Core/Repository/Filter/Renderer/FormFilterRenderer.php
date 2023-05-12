@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
@@ -23,48 +23,42 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package Chamilo\Core\Repository\Filter\Renderer
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class FormFilterRenderer extends FilterRenderer
 {
 
     /**
-     *
-     * @var int
-     */
-    private $user_id;
-
-    /**
-     *
      * @var string[]
      */
     private $content_object_types;
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Form\FormValidator
      */
     private $form_validator;
 
     /**
-     *
      * @var \HTML_QuickForm_Renderer_Default
      */
     private $renderer;
 
     /**
-     *
+     * @var int
+     */
+    private $user_id;
+
+    /**
      * @param \core\repository\filter\FilterData $filter_data
      * @param int $user_id
      * @param string[] $content_object_types
      * @param string $url ;
      */
     public function __construct(
-        FilterData $filter_data, WorkspaceInterface $workspace, $user_id, $content_object_types, $url
+        FilterData $filter_data, Workspace $workspace, $user_id, $content_object_types, $url
     )
     {
         parent::__construct($filter_data, $workspace);
@@ -86,7 +80,7 @@ class FormFilterRenderer extends FilterRenderer
         return $this->renderer->toHtml();
     }
 
-    function add_footer()
+    public function add_footer()
     {
         $this->form_validator->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
@@ -214,7 +208,6 @@ class FormFilterRenderer extends FilterRenderer
     }
 
     /**
-     *
      * @param \core\repository\filter\FilterData $filter_data
      * @param int $user_id
      * @param string[] $content_object_types
@@ -223,7 +216,7 @@ class FormFilterRenderer extends FilterRenderer
      * @return \core\repository\filter\renderer\FormFilterRenderer
      */
     public static function factory(
-        FilterData $filter_data, WorkspaceInterface $workspace, $user_id, $content_object_types, $url
+        FilterData $filter_data, Workspace $workspace, $user_id, $content_object_types, $url
     )
     {
         $class_name = $filter_data->get_context() . '\Filter\Renderer\FormFilterRenderer';
@@ -236,7 +229,6 @@ class FormFilterRenderer extends FilterRenderer
      */
 
     /**
-     *
      * @return string[]
      */
     private function get_categories()
@@ -245,11 +237,10 @@ class FormFilterRenderer extends FilterRenderer
         $renderer = new OptionsMenuRenderer();
         $menu->render($renderer, 'sitemap');
 
-        return array(- 1 => '-- ' . Translation::get('SelectACategory') . ' --') + $renderer->toArray();
+        return [- 1 => '-- ' . Translation::get('SelectACategory') . ' --'] + $renderer->toArray();
     }
 
     /**
-     *
      * @return string[]
      */
     public function get_content_object_types()
@@ -258,16 +249,6 @@ class FormFilterRenderer extends FilterRenderer
     }
 
     /**
-     *
-     * @param string[] $content_object_types
-     */
-    public function set_content_object_types($content_object_types)
-    {
-        $this->content_object_types = $content_object_types;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Format\Form\FormValidator
      */
     public function get_form_validitor()
@@ -276,7 +257,6 @@ class FormFilterRenderer extends FilterRenderer
     }
 
     /**
-     *
      * @return HTML_QuickForm_Renderer_Default
      */
     public function get_renderer()
@@ -285,7 +265,6 @@ class FormFilterRenderer extends FilterRenderer
     }
 
     /**
-     *
      * @return int
      */
     public function get_user_id()
@@ -294,16 +273,6 @@ class FormFilterRenderer extends FilterRenderer
     }
 
     /**
-     *
-     * @param int $user_id
-     */
-    public function set_user_id($user_id)
-    {
-        $this->user_id = $user_id;
-    }
-
-    /**
-     *
      * @return string[]
      */
     private function get_user_views()
@@ -318,12 +287,20 @@ class FormFilterRenderer extends FilterRenderer
         $user_view_options = [];
         $user_view_options[0] = '-- ' . Translation::get('SelectAView') . ' --';
 
-        foreach($user_views as $user_view)
+        foreach ($user_views as $user_view)
         {
             $user_view_options[$user_view->get_id()] = $user_view->get_name();
         }
 
         return $user_view_options;
+    }
+
+    /**
+     * @param string[] $content_object_types
+     */
+    public function set_content_object_types($content_object_types)
+    {
+        $this->content_object_types = $content_object_types;
     }
 
     public function set_defaults($defaults = [])
@@ -351,5 +328,13 @@ class FormFilterRenderer extends FilterRenderer
             $modification_date[FilterData::FILTER_TO_DATE];
 
         $this->form_validator->setDefaults($defaults);
+    }
+
+    /**
+     * @param int $user_id
+     */
+    public function set_user_id($user_id)
+    {
+        $this->user_id = $user_id;
     }
 }

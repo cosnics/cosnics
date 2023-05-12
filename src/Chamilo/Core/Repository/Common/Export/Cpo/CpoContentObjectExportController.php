@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObjectInclude;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\File\Compression\Filecompression;
@@ -390,31 +389,24 @@ class CpoContentObjectExportController extends ContentObjectExportController
         if ($this->get_parameters()->has_categories() &&
             $content_object->get_owner_id() == $this->get_parameters()->get_user())
         {
-            if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
+            $contentObjectRelation =
+                $this->getContentObjectRelationService()->getContentObjectRelationForWorkspaceAndContentObject(
+                    $this->get_parameters()->getWorkspace(), $content_object
+                );
+
+            if ($contentObjectRelation instanceof WorkspaceContentObjectRelation)
             {
-                $parent_id = $content_object->get_parent_id();
+                $parent_id = $contentObjectRelation->getCategoryId();
             }
             else
             {
-                $contentObjectRelation =
-                    $this->getContentObjectRelationService()->getContentObjectRelationForWorkspaceAndContentObject(
-                        $this->get_parameters()->getWorkspace(), $content_object
-                    );
-
-                if ($contentObjectRelation instanceof WorkspaceContentObjectRelation)
-                {
-                    $parent_id = $contentObjectRelation->getCategoryId();
-                }
-                else
-                {
-                    $parent_id = 0;
-                }
+                $parent_id = 0;
             }
+        }
 
-            if (!$this->in_category_id_cache($parent_id))
-            {
-                $this->process_category($parent_id);
-            }
+        if (!$this->in_category_id_cache($parent_id))
+        {
+            $this->process_category($parent_id);
         }
 
         if ($content_object->has_versions())

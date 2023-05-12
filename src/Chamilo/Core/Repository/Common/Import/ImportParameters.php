@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Import;
 
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -9,19 +9,15 @@ use Exception;
 abstract class ImportParameters
 {
 
-    /**
-     *
-     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    private $workspace;
-
     private $category;
 
     private $type;
 
     private $user;
 
-    public function __construct($type, $user, WorkspaceInterface $workspace, $category = 0)
+    private Workspace $workspace;
+
+    public function __construct($type, $user, Workspace $workspace, $category = 0)
     {
         $this->workspace = $workspace;
         $this->category = $category;
@@ -29,26 +25,35 @@ abstract class ImportParameters
         $this->user = $user;
     }
 
+    public static function factory(
+        $type, $user, Workspace $workspace, $category = 0, $file = null, $form_values = []
+    )
+    {
+        $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() . '\\' .
+            (string) StringUtilities::getInstance()->createString($type)->upperCamelize() . 'ImportParameters';
+
+        if (!class_exists($class))
+        {
+            throw new Exception(Translation::get('UnknownImportParametersType', ['TYPE' => $type]));
+        }
+
+        return new $class($type, $user, $workspace, $category, $file, $form_values);
+    }
+
     /**
-     *
-     * @return \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
+     * @return string
      */
-    public function getWorkspace()
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function getWorkspace(): Workspace
     {
         return $this->workspace;
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
-     */
-    public function setWorkspace($workspace)
-    {
-        $this->workspace = $workspace;
-    }
-
-    /**
-     *
      * @return the $category
      */
     public function get_category()
@@ -57,16 +62,6 @@ abstract class ImportParameters
     }
 
     /**
-     *
-     * @param $category field_type
-     */
-    public function set_category($category)
-    {
-        $this->category = $category;
-    }
-
-    /**
-     *
      * @deprecated Use ImportParameters::getType() now
      */
     public function get_type()
@@ -75,16 +70,27 @@ abstract class ImportParameters
     }
 
     /**
-     *
-     * @return string
+     * @return the $user
      */
-    public function getType()
+    public function get_user()
     {
-        return $this->type;
+        return $this->user;
+    }
+
+    public function setWorkspace(Workspace $workspace)
+    {
+        $this->workspace = $workspace;
     }
 
     /**
-     *
+     * @param $category field_type
+     */
+    public function set_category($category)
+    {
+        $this->category = $category;
+    }
+
+    /**
      * @param $type field_type
      */
     public function set_type($type)
@@ -93,34 +99,10 @@ abstract class ImportParameters
     }
 
     /**
-     *
-     * @return the $user
-     */
-    public function get_user()
-    {
-        return $this->user;
-    }
-
-    /**
-     *
      * @param $user field_type
      */
     public function set_user($user)
     {
         $this->user = $user;
-    }
-
-    public static function factory($type, $user, WorkspaceInterface $workspace, $category = 0, $file = null, 
-        $form_values = [])
-    {
-        $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() . '\\' .
-             (string) StringUtilities::getInstance()->createString($type)->upperCamelize() . 'ImportParameters';
-        
-        if (! class_exists($class))
-        {
-            throw new Exception(Translation::get('UnknownImportParametersType', array('TYPE' => $type)));
-        }
-        
-        return new $class($type, $user, $workspace, $category, $file, $form_values);
     }
 }

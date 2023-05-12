@@ -10,8 +10,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
@@ -279,7 +277,6 @@ class ContentObjectSaver
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param array $values
      *
@@ -288,16 +285,11 @@ class ContentObjectSaver
      * @throws \ReflectionException
      */
     public function createContentObjectFromInstanceAndValuesInWorkspace(
-        WorkspaceInterface $workspace, ContentObject $contentObject, array $values
+        Workspace $workspace, ContentObject $contentObject, array $values
     )
     {
         $contentObject->set_title($values[ContentObject::PROPERTY_TITLE]);
         $contentObject->set_description($values[ContentObject::PROPERTY_DESCRIPTION]);
-
-        if ($this->allowsCategorySelection($contentObject) && $workspace instanceof PersonalWorkspace)
-        {
-            $this->setCategoryFromValuesInPersonalWorkspace($workspace, $contentObject, $values);
-        }
 
         $this->createContentObject($contentObject);
 
@@ -424,14 +416,13 @@ class ContentObjectSaver
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param array $values
      *
      * @return int
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      * @throws \ReflectionException
      */
-    public function getCategoryIdentifierFromValuesInWorkspace(WorkspaceInterface $workspace, array $values)
+    public function getCategoryIdentifierFromValuesInWorkspace(Workspace $workspace, array $values)
     {
         $parentIdentifier = (int) $values[ContentObject::PROPERTY_PARENT_ID];
         $newCategoryName = $values[ContentObjectForm::NEW_CATEGORY];
@@ -641,23 +632,6 @@ class ContentObjectSaver
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Workspace\PersonalWorkspace $workspace
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @param array $values
-     *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \ReflectionException
-     */
-    public function setCategoryFromValuesInPersonalWorkspace(
-        PersonalWorkspace $workspace, ContentObject $contentObject, array $values
-    )
-    {
-        $categoryIdentifier = $this->getCategoryIdentifierFromValuesInWorkspace($workspace, $values);
-
-        $contentObject->set_parent_id($categoryIdentifier);
-    }
-
-    /**
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param array $values
@@ -830,7 +804,6 @@ class ContentObjectSaver
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param array $values
      *
@@ -840,16 +813,11 @@ class ContentObjectSaver
      * @throws \Exception
      */
     public function updateContentObjectFromInstanceAndValuesInWorkspace(
-        WorkspaceInterface $workspace, ContentObject $contentObject, array $values
+        Workspace $workspace, ContentObject $contentObject, array $values
     )
     {
         $contentObject->set_title($values[ContentObject::PROPERTY_TITLE]);
         $contentObject->set_description($values[ContentObject::PROPERTY_DESCRIPTION]);
-
-        if ($this->allowsCategorySelection($contentObject) && $workspace instanceof PersonalWorkspace)
-        {
-            $this->setCategoryFromValuesInPersonalWorkspace($workspace, $contentObject, $values);
-        }
 
         if (isset($values[ContentObjectForm::PROPERTY_VERSION]) && $values[ContentObjectForm::PROPERTY_VERSION] == 1)
         {

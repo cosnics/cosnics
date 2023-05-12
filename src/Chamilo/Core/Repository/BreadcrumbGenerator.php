@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository;
 
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -20,36 +19,35 @@ class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\Breadcrumb
         if ($this->getApplication()->get_user() instanceof User)
         {
             $breadcrumb_trail = $this->getBreadcrumbTrail();
-            
-            $workspace = $this->getApplication()->getWorkspace();
-            if (! $workspace instanceof PersonalWorkspace)
-            {
-                $parameters = [];
-                $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Core\Repository\Workspace';
-                
-                $redirect = new Redirect($parameters);
-                
-                $breadcrumb_trail->add(
-                    new Breadcrumb(
-                        $redirect->getUrl(), 
-                        Translation::getInstance()->getTranslation(
-                            'Workspaces', 
-                            null, 
-                            'Chamilo\Core\Repository\Workspace')));
-            }
-            
+
+            $workspace = $this->getApplication()->getCurrentWorkspace();
+
+            $parameters = [];
+            $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Core\Repository\Workspace';
+
+            $redirect = new Redirect($parameters);
+
+            $breadcrumb_trail->add(
+                new Breadcrumb(
+                    $redirect->getUrl(), Translation::getInstance()->getTranslation(
+                    'Workspaces', null, 'Chamilo\Core\Repository\Workspace'
+                )
+                )
+            );
+
             $parameters = [];
             $parameters[Application::PARAM_CONTEXT] = Manager::context();
-            
+
             if ($workspace instanceof Workspace)
             {
-                $parameters[Manager::PARAM_WORKSPACE_ID] = $this->getApplication()->getWorkspace()->getId();
+                $parameters[Manager::PARAM_WORKSPACE_ID] = $this->getApplication()->getCurrentWorkspace()->getId();
             }
-            
+
             $redirect = new Redirect($parameters);
-            
+
             $breadcrumb_trail->add(
-                new Breadcrumb($redirect->getUrl(), $this->getApplication()->getWorkspace()->getTitle()));
+                new Breadcrumb($redirect->getUrl(), $this->getApplication()->getCurrentWorkspace()->getTitle())
+            );
         }
     }
 }

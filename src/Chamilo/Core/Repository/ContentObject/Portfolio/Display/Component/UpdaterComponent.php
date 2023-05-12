@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -23,11 +23,10 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * Component that allows the user to update the content of a portfolio item or folder
  *
  * @package repository\content_object\portfolio\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UpdaterComponent extends ItemComponent
 {
-
     /**
      * Executes this component
      */
@@ -39,12 +38,12 @@ class UpdaterComponent extends ItemComponent
             $content_object = $this->get_current_content_object();
 
             $form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit',
+                ContentObjectForm::TYPE_EDIT, $this->getCurrentWorkspace(), $content_object, 'edit',
                 FormValidator::FORM_METHOD_POST, $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
                     self::PARAM_STEP => $this->get_current_step()
-                )
+                ]
             )
             );
 
@@ -55,13 +54,13 @@ class UpdaterComponent extends ItemComponent
                 if ($succes)
                 {
                     Event::trigger(
-                        'Activity', Manager::context(), array(
+                        'Activity', Manager::context(), [
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_UPDATED,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),
                             Activity::PROPERTY_CONTENT_OBJECT_ID => $content_object->get_id(),
                             Activity::PROPERTY_CONTENT => $content_object->get_title()
-                        )
+                        ]
                     );
                 }
 
@@ -100,7 +99,7 @@ class UpdaterComponent extends ItemComponent
                 $message = htmlentities(
                     Translation::get(
                         ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                        array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
+                        ['OBJECT' => Translation::get('ContentObject')], StringUtilities::LIBRARIES
                     )
                 );
 
@@ -123,7 +122,7 @@ class UpdaterComponent extends ItemComponent
 
                 $trail = BreadcrumbTrail::getInstance();
                 $trail->add(
-                    new Breadcrumb($this->get_url(array(self::PARAM_STEP => $this->get_current_step())), $title)
+                    new Breadcrumb($this->get_url([self::PARAM_STEP => $this->get_current_step()]), $title)
                 );
 
                 $html = [];
@@ -142,7 +141,6 @@ class UpdaterComponent extends ItemComponent
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Architecture\Application\Application::getAdditionalParameters()
      */
     public function getAdditionalParameters(array $additionalParameters = []): array
@@ -150,5 +148,10 @@ class UpdaterComponent extends ItemComponent
         $additionalParameters[] = self::PARAM_STEP;
 
         return parent::getAdditionalParameters($additionalParameters);
+    }
+
+    protected function getCurrentWorkspace(): Workspace
+    {
+        return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
     }
 }

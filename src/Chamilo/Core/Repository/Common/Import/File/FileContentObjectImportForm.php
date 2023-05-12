@@ -4,39 +4,38 @@ namespace Chamilo\Core\Repository\Common\Import\File;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\Form\ContentObjectImportForm;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Core\Repository\Quota\Calculator;
-use Chamilo\Core\Repository\Manager;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
 
 class FileContentObjectImportForm extends ContentObjectImportForm
 {
-    const PARAM_DOCUMENT_TYPE = 'document_type';
-    const PROPERTY_LINK = 'url';
-    const DOCUMENT_UPLOAD = 0;
-    const DOCUMENT_LINK = 1;
-    const PARAM_WORKSPACE_ID = 'workspace_id';
+    public const DOCUMENT_LINK = 1;
+
+    public const DOCUMENT_UPLOAD = 0;
+
+    public const PARAM_DOCUMENT_TYPE = 'document_type';
+
+    public const PARAM_WORKSPACE_ID = 'workspace_id';
+
+    public const PROPERTY_LINK = 'url';
 
     public function build_basic_form()
     {
         parent::build_basic_form();
 
         $this->addElement(
-            'radio',
-            self::PARAM_DOCUMENT_TYPE,
-            Translation::get('File'),
-            Translation::get('Upload'),
+            'radio', self::PARAM_DOCUMENT_TYPE, Translation::get('File'), Translation::get('Upload'),
             self::DOCUMENT_UPLOAD
         );
 
-        $workspaceId = $this->importFormParameters->getWorkspace() instanceof PersonalWorkspace ? 0 :
-            $this->importFormParameters->getWorkspace()->getId();
+        $workspaceId = $this->importFormParameters->getWorkspace()->getId();
 
         $this->addElement('hidden', self::PARAM_WORKSPACE_ID, $workspaceId, ['id' => 'workspace_id']);
 
@@ -44,26 +43,25 @@ class FileContentObjectImportForm extends ContentObjectImportForm
 
         $calculator = new Calculator(
             DataManager::retrieve_by_id(
-                User::class,
-                (int) $this->get_application()->get_user_id()
+                User::class, (int) $this->get_application()->get_user_id()
             )
         );
 
         $uploadUrl = new Redirect(
-            array(
+            [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE
-            )
+            ]
         );
 
-        $dropZoneParameters = array(
+        $dropZoneParameters = [
             'name' => self::IMPORT_FILE_NAME,
             'maxFilesize' => $calculator->getMaximumUploadSize(),
             'uploadUrl' => $uploadUrl->getUrl(),
             'successCallbackFunction' => 'chamilo.core.repository.import.processUploadedFile',
             'sendingCallbackFunction' => 'chamilo.core.repository.import.prepareRequest',
             'removedfileCallbackFunction' => 'chamilo.core.repository.import.deleteUploadedFile'
-        );
+        ];
 
         if (!$this->importFormParameters->canUploadMultipleFiles())
         {
@@ -73,20 +71,16 @@ class FileContentObjectImportForm extends ContentObjectImportForm
         $this->addFileDropzone(self::IMPORT_FILE_NAME, $dropZoneParameters, false);
 
         $this->addElement(
-            'html',
-            ResourceManager::getInstance()->getResourceHtml(
-                Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Plugin/jquery.file.upload.import.js'
-            )
+            'html', ResourceManager::getInstance()->getResourceHtml(
+            Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'Plugin/jquery.file.upload.import.js'
+        )
         );
 
         $this->addElement('html', '</div>');
 
         $this->addElement(
-            'radio',
-            self::PARAM_DOCUMENT_TYPE,
-            null,
-            Translation::getInstance()->getTranslation('ImportFromLink', null, Manager::context()),
-            self::DOCUMENT_LINK
+            'radio', self::PARAM_DOCUMENT_TYPE, null,
+            Translation::getInstance()->getTranslation('ImportFromLink', null, Manager::context()), self::DOCUMENT_LINK
         );
 
         $this->addElement('html', '<div style="padding-left: 25px; display: block;" id="document_link">');
@@ -94,22 +88,22 @@ class FileContentObjectImportForm extends ContentObjectImportForm
         $this->addElement('html', '</div>');
     }
 
-    public function setDefaults($defaults = [], $filter = null)
-    {
-        parent::setDefaults(
-            array(
-                self::PARAM_DOCUMENT_TYPE => self::DOCUMENT_UPLOAD,
-                self::PROPERTY_TYPE => ContentObjectImport::FORMAT_FILE,
-                self::PROPERTY_LINK => 'http://'
-            )
-        );
-    }
-
     /**
-     * @return boolean
+     * @return bool
      */
     protected function implementsDropZoneSupport()
     {
         return true;
+    }
+
+    public function setDefaults($defaults = [], $filter = null)
+    {
+        parent::setDefaults(
+            [
+                self::PARAM_DOCUMENT_TYPE => self::DOCUMENT_UPLOAD,
+                self::PROPERTY_TYPE => ContentObjectImport::FORMAT_FILE,
+                self::PROPERTY_LINK => 'http://'
+            ]
+        );
     }
 }

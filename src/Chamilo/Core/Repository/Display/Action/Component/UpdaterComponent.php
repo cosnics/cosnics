@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -20,13 +20,11 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @author Original author unknown
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UpdaterComponent extends Manager
 {
-
     public function run()
     {
         $selected_complex_content_object_item = $this->get_selected_complex_content_object_item();
@@ -46,15 +44,15 @@ class UpdaterComponent extends Manager
         if ($this->get_parent()->get_parent()->is_allowed_to_edit_content_object() || $isOwner)
         {
             $form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit',
+                ContentObjectForm::TYPE_EDIT, $this->getCurrentWorkspace(), $content_object, 'edit',
                 FormValidator::FORM_METHOD_POST, $this->get_url(
-                array(
+                [
                     \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Display\Manager::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
                     \Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_selected_complex_content_object_item_id(
                     ),
                     \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(
                     )
-                )
+                ]
             )
             );
 
@@ -77,7 +75,7 @@ class UpdaterComponent extends Manager
                         ComplexContentObjectItem::class, $parameters
                     );
                     $failures = 0;
-                    foreach($children as $child)
+                    foreach ($children as $child)
                     {
                         $child->set_parent($new_id);
                         if (!$child->update())
@@ -92,7 +90,7 @@ class UpdaterComponent extends Manager
                 $message = htmlentities(
                     Translation::get(
                         ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                        array('OBJECT' => Translation::get('ContentObject')), StringUtilities::LIBRARIES
+                        ['OBJECT' => Translation::get('ContentObject')], StringUtilities::LIBRARIES
                     )
                 );
 
@@ -110,12 +108,12 @@ class UpdaterComponent extends Manager
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(
-                            array(
+                            [
                                 \Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_selected_complex_content_object_item_id(
                                 ),
                                 \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(
                                 )
-                            )
+                            ]
                         ), Translation::get('Edit', null, StringUtilities::LIBRARIES)
                     )
                 );
@@ -133,5 +131,10 @@ class UpdaterComponent extends Manager
         {
             throw new NotAllowedException();
         }
+    }
+
+    protected function getCurrentWorkspace(): Workspace
+    {
+        return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
     }
 }

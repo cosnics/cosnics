@@ -11,7 +11,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObjectInclude;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -245,14 +244,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
      */
     public function determine_parent_id($parent_id)
     {
-        if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
-        {
-            return is_null($parent_id) ? 0 : $parent_id;
-        }
-        else
-        {
-            return 0;
-        }
+        return 0;
     }
 
     public static function get_allowed_extensions()

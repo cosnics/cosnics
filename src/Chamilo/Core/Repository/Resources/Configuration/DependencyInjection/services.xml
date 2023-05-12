@@ -17,7 +17,11 @@
         </service>
         <service id="Chamilo\Core\Repository\Service\ContentObjectUrlGenerator"/>
         <service id="Chamilo\Core\Repository\Service\WorkspaceExtensionManager"/>
-        <service id="Chamilo\Core\Repository\Service\ContentObjectCopierWrapper"/>
+        <service id="Chamilo\Core\Repository\Service\ContentObjectCopierWrapper">
+            <argument key="$workspace"
+                      type="service"
+                      id="Chamilo\Core\Repository\CurrentWorkspace"/>
+        </service>
         <service id="Chamilo\Core\Repository\Service\ContentObjectService"/>
 
         <service id="Chamilo\Core\Repository\Common\Renderer\Type\GalleryTableContentObjectRenderer">

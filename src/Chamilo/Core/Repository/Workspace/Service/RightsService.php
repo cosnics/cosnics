@@ -2,8 +2,7 @@
 namespace Chamilo\Core\Repository\Workspace\Service;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 
@@ -42,31 +41,31 @@ class RightsService
         $this->workspaceService = $workspaceService;
     }
 
-    public function canAddContentObjects(User $user, WorkspaceInterface $workspaceImplementation): bool
+    public function canAddContentObjects(User $user, Workspace $workspaceImplementation): bool
     {
         return $this->hasRightForWorkspace(self::RIGHT_ADD, $user, $workspaceImplementation);
     }
 
     public function canCopyContentObject(
-        User $user, ContentObject $contentObject, ?WorkspaceInterface $workspaceImplementation = null
+        User $user, ContentObject $contentObject, ?Workspace $workspaceImplementation = null
     ): bool
     {
         return $this->hasRightForContentObject(self::RIGHT_COPY, $user, $contentObject, $workspaceImplementation);
     }
 
-    public function canCopyContentObjects(User $user, WorkspaceInterface $workspaceImplementation): bool
+    public function canCopyContentObjects(User $user, Workspace $workspaceImplementation): bool
     {
         return $this->hasRightForWorkspace(self::RIGHT_COPY, $user, $workspaceImplementation);
     }
 
     public function canDeleteContentObject(
-        User $user, ContentObject $contentObject, ?WorkspaceInterface $workspaceImplementation = null
+        User $user, ContentObject $contentObject, ?Workspace $workspaceImplementation = null
     ): bool
     {
         return $this->hasRightForContentObject(self::RIGHT_DELETE, $user, $contentObject, $workspaceImplementation);
     }
 
-    public function canDeleteContentObjects(User $user, WorkspaceInterface $workspaceImplementation): bool
+    public function canDeleteContentObjects(User $user, Workspace $workspaceImplementation): bool
     {
         return $this->hasRightForWorkspace(self::RIGHT_DELETE, $user, $workspaceImplementation);
     }
@@ -79,56 +78,49 @@ class RightsService
      * links with other content objects (outside the context of a display or builder)
      */
     public function canDestroyContentObject(
-        User $user, ContentObject $contentObject, ?WorkspaceInterface $workspaceImplementation = null
+        User $user, ContentObject $contentObject, ?Workspace $workspaceImplementation = null
     ): bool
     {
-        if ($workspaceImplementation && !$workspaceImplementation instanceof PersonalWorkspace)
-        {
-            return false;
-        }
-        else
-        {
-            return $this->hasContentObjectOwnerRights($user, $contentObject);
-        }
+        return $this->hasContentObjectOwnerRights($user, $contentObject);
     }
 
     public function canEditContentObject(
-        User $user, ContentObject $contentObject, ?WorkspaceInterface $workspaceImplementation = null
+        User $user, ContentObject $contentObject, ?Workspace $workspaceImplementation = null
     ): bool
     {
         return $this->hasRightForContentObject(self::RIGHT_EDIT, $user, $contentObject, $workspaceImplementation);
     }
 
-    public function canEditContentObjects(User $user, WorkspaceInterface $workspaceImplementation): bool
+    public function canEditContentObjects(User $user, Workspace $workspaceImplementation): bool
     {
         return $this->hasRightForWorkspace(self::RIGHT_EDIT, $user, $workspaceImplementation);
     }
 
-    public function canManageWorkspace(User $user, WorkspaceInterface $workspaceImplementation): bool
+    public function canManageWorkspace(User $user, Workspace $workspaceImplementation): bool
     {
         return $this->hasRightForWorkspace(self::RIGHT_MANAGE, $user, $workspaceImplementation);
     }
 
     public function canUseContentObject(
-        User $user, ContentObject $contentObject, ?WorkspaceInterface $workspaceImplementation = null
+        User $user, ContentObject $contentObject, ?Workspace $workspaceImplementation = null
     ): bool
     {
         return $this->hasRightForContentObject(self::RIGHT_USE, $user, $contentObject, $workspaceImplementation);
     }
 
-    public function canUseContentObjects(User $user, WorkspaceInterface $workspaceImplementation): bool
+    public function canUseContentObjects(User $user, Workspace $workspaceImplementation): bool
     {
         return $this->hasRightForWorkspace(self::RIGHT_USE, $user, $workspaceImplementation);
     }
 
     public function canViewContentObject(
-        User $user, ContentObject $contentObject, ?WorkspaceInterface $workspaceImplementation = null
+        User $user, ContentObject $contentObject, ?Workspace $workspaceImplementation = null
     ): bool
     {
         return $this->hasRightForContentObject(self::RIGHT_VIEW, $user, $contentObject, $workspaceImplementation);
     }
 
-    public function canViewContentObjects(User $user, WorkspaceInterface $workspaceImplementation): bool
+    public function canViewContentObjects(User $user, Workspace $workspaceImplementation): bool
     {
         return $this->hasRightForWorkspace(self::RIGHT_VIEW, $user, $workspaceImplementation);
     }
@@ -193,7 +185,7 @@ class RightsService
     }
 
     private function hasRightForContentObject(
-        int $right, User $user, ContentObject $contentObject, ?WorkspaceInterface $workspaceImplementation = null
+        int $right, User $user, ContentObject $contentObject, ?Workspace $workspaceImplementation = null
     ): bool
     {
         if ($this->hasContentObjectOwnerRights($user, $contentObject))
@@ -202,7 +194,7 @@ class RightsService
         }
 
         // Check if there is actually a workspaceImplementation
-        if ($workspaceImplementation instanceof WorkspaceInterface)
+        if ($workspaceImplementation instanceof Workspace)
         {
             // Check if the content object is in the workspace
             if ($this->getContentObjectRelationService()->isContentObjectInWorkspace(
@@ -242,7 +234,7 @@ class RightsService
         }
     }
 
-    private function hasRightForWorkspace(int $right, User $user, WorkspaceInterface $workspaceImplementation): bool
+    private function hasRightForWorkspace(int $right, User $user, Workspace $workspaceImplementation): bool
     {
         if ($this->hasWorkspaceCreatorRights($user, $workspaceImplementation))
         {
@@ -254,7 +246,7 @@ class RightsService
         );
     }
 
-    public function hasWorkspaceCreatorRights(User $user, WorkspaceInterface $workspaceImplementation): bool
+    public function hasWorkspaceCreatorRights(User $user, Workspace $workspaceImplementation): bool
     {
         // Check if the user is a platform administrator
         if ($user->is_platform_admin())
@@ -277,7 +269,7 @@ class RightsService
         return $user->getId() == $contentObject->get_owner_id();
     }
 
-    public function isWorkspaceCreator(User $user, WorkspaceInterface $workspaceImplementation): bool
+    public function isWorkspaceCreator(User $user, Workspace $workspaceImplementation): bool
     {
         return $user->getId() == $workspaceImplementation->getCreatorId();
     }

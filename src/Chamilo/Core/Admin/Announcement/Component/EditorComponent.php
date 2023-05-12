@@ -4,15 +4,14 @@ namespace Chamilo\Core\Admin\Announcement\Component;
 use Chamilo\Core\Admin\Announcement\Form\PublicationForm;
 use Chamilo\Core\Admin\Announcement\Manager;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Admin\Announcement\Component
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class EditorComponent extends Manager
 {
@@ -34,12 +33,12 @@ class EditorComponent extends Manager
             $content_object = $publication->get_content_object();
 
             $form = ContentObjectForm::factory(
-                ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit',
+                ContentObjectForm::TYPE_EDIT, $this->getCurrentWorkspace(), $content_object, 'edit',
                 FormValidator::FORM_METHOD_POST, $this->get_url(
-                array(
+                [
                     self::PARAM_ACTION => self::ACTION_EDIT,
                     self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()
-                )
+                ]
             )
             );
 
@@ -54,7 +53,7 @@ class EditorComponent extends Manager
                 }
 
                 $publicationForm = new PublicationForm(
-                    PublicationForm::TYPE_UPDATE, $this->get_url(array('validated' => 1)),
+                    PublicationForm::TYPE_UPDATE, $this->get_url(['validated' => 1]),
                     $this->getRightsService()->getEntities()
                 );
 
@@ -74,9 +73,8 @@ class EditorComponent extends Manager
                     $this->redirectWithMessage(
                         Translation::get(
                             $success ? 'ObjectUpdated' : 'ObjectNotUpdated',
-                            array('OBJECT' => Translation::get('SystemAnnouncementPublication')),
-                            StringUtilities::LIBRARIES
-                        ), !$success, array(self::PARAM_ACTION => self::ACTION_BROWSE)
+                            ['OBJECT' => Translation::get('SystemAnnouncementPublication')], StringUtilities::LIBRARIES
+                        ), !$success, [self::PARAM_ACTION => self::ACTION_BROWSE]
                     );
                 }
                 else
@@ -106,11 +104,16 @@ class EditorComponent extends Manager
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected', array('OBJECT' => Translation::get('SystemAnnouncement')),
+                        'NoObjectSelected', ['OBJECT' => Translation::get('SystemAnnouncement')],
                         StringUtilities::LIBRARIES
                     )
                 )
             );
         }
+    }
+
+    protected function getCurrentWorkspace(): Workspace
+    {
+        return $this->getService('Chamilo\Core\Repository\CurrentWorkspace');
     }
 }

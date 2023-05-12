@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
@@ -26,31 +26,26 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class RepositoryCategoryTreeMenu extends GenericTree
 {
-    const CATEGORY_CLASS = 'category';
+    public const CATEGORY_CLASS = 'category';
 
-    const ROOT_NODE_CLASS = 'category';
+    public const ROOT_NODE_CLASS = 'category';
 
     private $additional_items;
 
     /**
-     *
      * @var \Chamilo\Core\Repository\Manager
      */
     private $parent;
 
-    /**
-     *
-     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    private $workspaceImplementation;
+    private Workspace $workspaceImplementation;
 
     /**
      * Creates a new category navigation menu.
      *
-     * @param $parent - the parent component
+     * @param $parent                 - the parent component
      * @param array $additional_items An array of extra tree items, added to the root.
      */
-    public function __construct(WorkspaceInterface $workspaceImplementation, $parent, $additional_items = [])
+    public function __construct(Workspace $workspaceImplementation, $parent, $additional_items = [])
     {
         $this->workspaceImplementation = $workspaceImplementation;
         $this->parent = $parent;
@@ -98,13 +93,13 @@ class RepositoryCategoryTreeMenu extends GenericTree
     public function get_node_children($parent_node_id)
     {
         return DataManager::retrieve_categories(
-            $this->get_retrieve_condition($parent_node_id), null, null, new OrderBy(array(
+            $this->get_retrieve_condition($parent_node_id), null, null, new OrderBy([
                 new OrderProperty(
                     new PropertyConditionVariable(
                         RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER
                     )
                 )
-            ))
+            ])
         );
     }
 
@@ -145,7 +140,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
     public function get_node_url($node_id)
     {
         $url_param[Manager::PARAM_ACTION] = Manager::ACTION_BROWSE_CONTENT_OBJECTS;
-        $url_param[GenericTabsRenderer::PARAM_SELECTED_TAB] = array(Manager::TABS_FILTER => Manager::TAB_CATEGORY);
+        $url_param[GenericTabsRenderer::PARAM_SELECTED_TAB] = [Manager::TABS_FILTER => Manager::TAB_CATEGORY];
         $url_param[FilterData::FILTER_CATEGORY] = null;
         $url_param[Manager::PARAM_IMPORT_TYPE] = null;
 
@@ -199,10 +194,10 @@ class RepositoryCategoryTreeMenu extends GenericTree
     public function get_search_url()
     {
         $redirect = new Redirect(
-            array(
+            [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::package(),
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_CATEGORY_MENU_FEED
-            )
+            ]
         );
 
         return $redirect->getUrl();

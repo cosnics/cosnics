@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Service\TemplateRegistrationConsulter;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 
 /**
  * Returns the available learning paths for the given user
@@ -21,11 +21,10 @@ class GetLearningPathsComponent extends GetContentObjectsComponent
      *
      * @param int $categoryId
      * @param string $searchQuery
-     * @param WorkspaceInterface $workspace
      *
      * @return FilterData
      */
-    protected function getFilterData($categoryId = null, string $searchQuery, WorkspaceInterface $workspace): FilterData
+    protected function getFilterData($categoryId = null, string $searchQuery, Workspace $workspace): FilterData
     {
         $templateRegistration = $this->getTemplateRegistrationConsulter()->getTemplateRegistrationDefaultByType(
             LearningPath::package()

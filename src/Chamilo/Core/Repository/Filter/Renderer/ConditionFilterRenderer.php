@@ -9,25 +9,22 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserViewRelContentObject;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Exception;
 use InvalidArgumentException;
 
 /**
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ConditionFilterRenderer extends FilterRenderer
@@ -93,18 +90,16 @@ class ConditionFilterRenderer extends FilterRenderer
                 foreach ($words as $word)
                 {
                     $text_conditions[] = new ContainsCondition(
-                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
-                        $word
+                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE), $word
                     );
                     $text_conditions[] = new ContainsCondition(
-                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-                        $word
+                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION), $word
                     );
 
                     foreach ($searchable_property_names as $searchable_property_name)
                     {
                         $text_conditions[] = new ContainsCondition(
-                            new PropertyConditionVariable($class_name, $searchable_property_name),  $word
+                            new PropertyConditionVariable($class_name, $searchable_property_name), $word
                         );
                     }
                 }
@@ -134,23 +129,12 @@ class ConditionFilterRenderer extends FilterRenderer
                         $category_ids = $category->get_children_ids();
                         $category_ids[] = $category_id;
 
-                        if ($this->get_workspace() instanceof PersonalWorkspace)
-                        {
-                            $conditions[] = new InCondition(
-                                new PropertyConditionVariable(
-                                    ContentObject::class, ContentObject::PROPERTY_PARENT_ID
-                                ), $category_ids
-                            );
-                        }
-                        else
-                        {
-                            $conditions[] = new InCondition(
-                                new PropertyConditionVariable(
-                                    WorkspaceContentObjectRelation::class,
-                                    WorkspaceContentObjectRelation::PROPERTY_CATEGORY_ID
-                                ), $category_ids
-                            );
-                        }
+                        $conditions[] = new InCondition(
+                            new PropertyConditionVariable(
+                                WorkspaceContentObjectRelation::class,
+                                WorkspaceContentObjectRelation::PROPERTY_CATEGORY_ID
+                            ), $category_ids
+                        );
                     }
                     else
                     {
@@ -162,23 +146,11 @@ class ConditionFilterRenderer extends FilterRenderer
             {
                 if ($category_id == 0)
                 {
-                    if ($this->get_workspace() instanceof PersonalWorkspace)
-                    {
-                        $conditions[] = new EqualityCondition(
-                            new PropertyConditionVariable(
-                                ContentObject::class, ContentObject::PROPERTY_PARENT_ID
-                            ), new StaticConditionVariable($category_id)
-                        );
-                    }
-                    else
-                    {
-                        $conditions[] = new EqualityCondition(
-                            new PropertyConditionVariable(
-                                WorkspaceContentObjectRelation::class,
-                                WorkspaceContentObjectRelation::PROPERTY_CATEGORY_ID
-                            ), new StaticConditionVariable($category_id)
-                        );
-                    }
+                    $conditions[] = new EqualityCondition(
+                        new PropertyConditionVariable(
+                            WorkspaceContentObjectRelation::class, WorkspaceContentObjectRelation::PROPERTY_CATEGORY_ID
+                        ), new StaticConditionVariable($category_id)
+                    );
                 }
                 else
                 {
@@ -186,23 +158,12 @@ class ConditionFilterRenderer extends FilterRenderer
 
                     if ($category instanceof RepositoryCategory || $category == 0)
                     {
-                        if ($this->get_workspace() instanceof PersonalWorkspace)
-                        {
-                            $conditions[] = new EqualityCondition(
-                                new PropertyConditionVariable(
-                                    ContentObject::class, ContentObject::PROPERTY_PARENT_ID
-                                ), new StaticConditionVariable($category_id)
-                            );
-                        }
-                        else
-                        {
-                            $conditions[] = new EqualityCondition(
-                                new PropertyConditionVariable(
-                                    WorkspaceContentObjectRelation::class,
-                                    WorkspaceContentObjectRelation::PROPERTY_CATEGORY_ID
-                                ), new StaticConditionVariable($category_id)
-                            );
-                        }
+                        $conditions[] = new EqualityCondition(
+                            new PropertyConditionVariable(
+                                WorkspaceContentObjectRelation::class,
+                                WorkspaceContentObjectRelation::PROPERTY_CATEGORY_ID
+                            ), new StaticConditionVariable($category_id)
+                        );
                     }
                     else
                     {
@@ -221,7 +182,7 @@ class ConditionFilterRenderer extends FilterRenderer
             {
                 if (!is_array($types) && is_numeric($types))
                 {
-                    $types = array($types);
+                    $types = [$types];
                 }
                 elseif (!is_array($types) && !is_string($types))
                 {
@@ -269,7 +230,7 @@ class ConditionFilterRenderer extends FilterRenderer
                 )
             );
 
-            foreach($user_view_rel_content_objects as $user_view_rel_content_object)
+            foreach ($user_view_rel_content_objects as $user_view_rel_content_object)
             {
                 $visible_template_ids[] = $user_view_rel_content_object->get_content_object_template_id();
             }
@@ -373,12 +334,11 @@ class ConditionFilterRenderer extends FilterRenderer
      */
 
     /**
-     *
      * @param FilterData $filter_data
      *
      * @return ConditionFilterRenderer
      */
-    public static function factory(FilterData $filter_data, WorkspaceInterface $workspace)
+    public static function factory(FilterData $filter_data, Workspace $workspace)
     {
         $class_name = $filter_data->get_context() . '\Filter\Renderer\ConditionFilterRenderer';
 

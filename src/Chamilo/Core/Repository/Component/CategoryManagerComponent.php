@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\ImpactViewTableRenderer;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -62,16 +61,8 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Cat
      */
     public function allowed_to_delete_category($category_id)
     {
-        if ($this->getWorkspace() instanceof PersonalWorkspace)
-        {
-            $object_count = $this->count_category_objects($category_id);
-            if ($object_count > 0)
-            {
-                return false;
-            }
-        }
-
-        return true;
+        // TODO: Implement some kind of new check here based on workspace categories instead of basic repository categories. Always false until this gets fixed
+        return false;
     }
 
     public function allowed_to_edit_category($category_id)

@@ -2,7 +2,6 @@
 
 namespace Chamilo\Core\Repository\Workspace\Interfaces;
 
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -17,13 +16,11 @@ interface WorkspaceExtensionInterface
 {
     /**
      * @param \Chamilo\Libraries\Architecture\Application\Application $workspaceComponent
-     * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup $workspaceExtensionActions
      */
     public function getWorkspaceActions(
-        Application $workspaceComponent, WorkspaceInterface $workspace, User $user,
-        ButtonGroup $workspaceExtensionActions
+        Application $workspaceComponent, Workspace $workspace, User $user, ButtonGroup $workspaceExtensionActions
     );
 
     /**

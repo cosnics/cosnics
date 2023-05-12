@@ -5,7 +5,6 @@ namespace Chamilo\Core\Repository\Common\Import\Hotpotatoes;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\File\Compression\Filecompression;
 use Chamilo\Libraries\File\Filesystem;
@@ -88,14 +87,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
      */
     public function determine_parent_id()
     {
-        if ($this->get_parameters()->getWorkspace() instanceof PersonalWorkspace)
-        {
-            return $this->get_parameters()->get_category();
-        }
-        else
-        {
-            return 0;
-        }
+        return 0;
     }
 
     /**
