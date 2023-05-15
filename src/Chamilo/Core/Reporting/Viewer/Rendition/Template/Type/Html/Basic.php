@@ -22,15 +22,13 @@ use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
- * @author Hans De Bisschop & Magali Gillard
+ * @author  Hans De Bisschop & Magali Gillard
  * @package reporting.viewer
  */
 class Basic extends Html
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -68,27 +66,6 @@ class Basic extends Html
         {
             return $available_views[0];
         }
-    }
-
-    /**
-     * Returns the correct namespace for a given block
-     *
-     * @param $block
-     *
-     * @return string
-     */
-    protected function getBlockNamespace($block)
-    {
-        $classNameUtilities = ClassnameUtilities::getInstance();
-        $namespace = $classNameUtilities->getNamespaceParent($block->context());
-
-        while (strrpos($namespace, 'Reporting') !== false &&
-            (strlen($namespace) - strrpos($namespace, 'Reporting')) != 9)
-        {
-            $namespace = $classNameUtilities->getNamespaceParent($namespace);
-        }
-
-        return $namespace;
     }
 
     public function getButtonToolbarRenderer()
@@ -182,10 +159,7 @@ class Basic extends Html
 
                 $html[] = '<h2>';
 
-                $glyph = new NamespaceIdentGlyph(
-                    $this->getBlockNamespace($block) . '\Block\\' .
-                    ClassnameUtilities::getInstance()->getClassnameFromObject($block)
-                );
+                $glyph = new NamespaceIdentGlyph(get_class($block));
 
                 $html[] = $glyph->render();
                 $html[] = $title;
@@ -214,7 +188,7 @@ class Basic extends Html
 
                 foreach ($this->get_template()->get_blocks() as $key => $block)
                 {
-                    $block_parameters = array_merge($context_parameters, array(Manager::PARAM_BLOCK_ID => $key));
+                    $block_parameters = array_merge($context_parameters, [Manager::PARAM_BLOCK_ID => $key]);
 
                     $is_current_block = $key == $this->determine_current_block_id();
 
@@ -225,10 +199,7 @@ class Basic extends Html
                         $trail->add(new Breadcrumb($this->get_context()->get_url($block_parameters), $title));
                     }
 
-                    $glyph = new NamespaceIdentGlyph(
-                        $this->getBlockNamespace($block) . '\Block\\' .
-                        ClassnameUtilities::getInstance()->getClassnameFromObject($block), true
-                    );
+                    $glyph = new NamespaceIdentGlyph(get_class($block), true);
 
                     $tabs->add(
                         new LinkTab(

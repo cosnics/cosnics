@@ -241,7 +241,7 @@ abstract class Application
             }
         }
 
-        return $this->getTranslator()->trans($message, $param, static::context());
+        return $this->getTranslator()->trans($message, $param, static::CONTEXT);
     }
 
     public function get_level(): int
@@ -309,7 +309,7 @@ abstract class Application
             $message = $succesMessageMultiple;
         }
 
-        return $this->getTranslator()->trans($message, [], $context ?: static::context());
+        return $this->getTranslator()->trans($message, [], $context ?: static::CONTEXT);
     }
 
     /**

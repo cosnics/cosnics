@@ -25,7 +25,7 @@ class EventParser extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries
         $event->setEndDate($object->get_due_date());
         $event->setTitle($object->get_title());
         $event->setContent($object->get_description());
-        $event->setSource(Translation::get('TypeName', null, $object->context()));
+        $event->setSource(Translation::get('TypeName', null, $object::CONTEXT));
         $event->setContentObject($object);
         
         $recurrenceRulesParser = new RecurrenceRulesParser($object);

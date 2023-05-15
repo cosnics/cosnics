@@ -84,7 +84,7 @@ abstract class Remover extends Action
             foreach ($xml as $name => $parameters)
             {
                 $setting = DataManager::retrieve_setting_from_variable_name(
-                    $name, static::context()
+                    $name, static::CONTEXT
                 );
 
                 if (!$setting instanceof Setting || !$setting->delete())
@@ -118,7 +118,7 @@ abstract class Remover extends Action
             $storage_unit_name . '</em>'
         );
 
-        $data_manager = static::context() . '\DataManager';
+        $data_manager = static::CONTEXT . '\DataManager';
 
         if (!$data_manager::drop_storage_unit($storage_unit_name))
         {
@@ -135,7 +135,7 @@ abstract class Remover extends Action
 
     public function deregister_package()
     {
-        $registration = DataManager::retrieveRegistrationByContext(self::context());
+        $registration = DataManager::retrieveRegistrationByContext(static::CONTEXT);
 
         if (!$registration->delete())
         {
@@ -242,7 +242,7 @@ abstract class Remover extends Action
      */
     public function verify_dependencies()
     {
-        $verifier = new DependencyVerifier(Package::get(static::context()));
+        $verifier = new DependencyVerifier(Package::get(static::CONTEXT));
         $success = $verifier->is_removable();
 
         $this->add_message(self::TYPE_NORMAL, $verifier->get_logger()->render());

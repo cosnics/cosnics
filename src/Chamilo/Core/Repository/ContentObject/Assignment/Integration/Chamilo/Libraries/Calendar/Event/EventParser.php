@@ -8,9 +8,9 @@ use Chamilo\Libraries\Translation\Translation;
  * Parser to covert CalendarEvent-instances to renderable calender events
  *
  * @package Chamilo\Core\Repository\ContentObject\CalendarEvent\Integration\Chamilo\Libraries\Calendar\Event
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class EventParser extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\EventParser
 {
@@ -24,9 +24,9 @@ class EventParser extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries
         $event->setEndDate($object->get_end_time());
         $event->setTitle($object->get_title());
         $event->setContent($object->get_description());
-        $event->setSource(Translation::get('TypeName', null, $object->context()));
+        $event->setSource(Translation::get('TypeName', null, $object::CONTEXT));
         $event->setContentObject($object);
 
-        return array($event);
+        return [$event];
     }
 }

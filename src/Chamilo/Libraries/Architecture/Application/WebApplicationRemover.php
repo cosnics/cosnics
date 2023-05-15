@@ -28,7 +28,7 @@ abstract class WebApplicationRemover extends Remover
      */
     public function extra()
     {
-        $context = $this->context();
+        $context = static::CONTEXT;
 
         if (!Configuration::getInstance()->isRegisteredAndActive('Chamilo\Core\Menu'))
         {
@@ -37,7 +37,7 @@ abstract class WebApplicationRemover extends Remover
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(ApplicationItem::class, ApplicationItem::PROPERTY_APPLICATION),
-            new StaticConditionVariable(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($context))
+            new StaticConditionVariable($context)
         );
 
         $menu_item = DataManager::retrieve(

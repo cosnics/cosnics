@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integrati
 use Chamilo\Libraries\Architecture\AjaxManager;
 
 /**
- *
  * @package
  *          Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Ajax
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -13,4 +12,5 @@ use Chamilo\Libraries\Architecture\AjaxManager;
  */
 abstract class Manager extends AjaxManager
 {
+    public const CONTEXT = __NAMESPACE__;
 }

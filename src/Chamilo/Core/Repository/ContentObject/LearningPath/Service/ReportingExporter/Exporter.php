@@ -122,7 +122,7 @@ class Exporter
             $treeNodeChildProgressExportObjects[] = new TreeNodeChildrenUserProgressExportFormat(
                 Translation::getInstance()->getTranslation(
                     'TypeName', null,
-                    ClassnameUtilities::getInstance()->getNamespaceParent($contentObject->context(), 2)
+                    ClassnameUtilities::getInstance()->getNamespaceParent($contentObject::CONTEXT, 2)
                 ),
                 $contentObject->get_title(),
                 $this->trackingService->isTreeNodeCompleted($learningPath, $user, $treeNodeChild),

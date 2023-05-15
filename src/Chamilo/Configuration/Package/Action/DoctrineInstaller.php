@@ -2,12 +2,12 @@
 namespace Chamilo\Configuration\Package\Action;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\DependencyInjection\ExtensionFinder\DirectoryContainerExtensionFinder;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\PackagesMappingDriverFactory;
 use Doctrine\ORM\EntityManager;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\DependencyInjection\ExtensionFinder\DirectoryContainerExtensionFinder;
 use Doctrine\ORM\Tools\SchemaTool;
 use Exception;
 
@@ -20,9 +20,19 @@ use Exception;
 abstract class DoctrineInstaller extends Installer
 {
     /**
+     * Returns an array of the excluded entity classes
+     *
+     * @return string[]
+     */
+    protected function getExcludedEntityClasses()
+    {
+        return [];
+    }
+
+    /**
      * Scans for the available storage units and creates them
      *
-     * @return boolean
+     * @return bool
      */
     public function install_storage_units()
     {
@@ -53,13 +63,10 @@ abstract class DoctrineInstaller extends Installer
 
         try
         {
-            $classNameUtilities = ClassnameUtilities::getInstance();
-            $package = $classNameUtilities->getNamespaceParent($this->context());
-
-            $packages = array(
-                $this->context() => Path::getInstance()->namespaceToFullPath($package) .
+            $packages = [
+                static::CONTEXT => Path::getInstance()->namespaceToFullPath(static::CONTEXT) .
                     'Resources/Configuration/Config.yml'
-            );
+            ];
 
             $mappingDriver = $packagesMappingDriverFactory->createMappingDriverForPackages($packages);
 
@@ -86,15 +93,5 @@ abstract class DoctrineInstaller extends Installer
         }
 
         return true;
-    }
-
-    /**
-     * Returns an array of the excluded entity classes
-     *
-     * @return string[]
-     */
-    protected function getExcludedEntityClasses()
-    {
-        return [];
     }
 }

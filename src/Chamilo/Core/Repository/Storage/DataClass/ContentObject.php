@@ -1078,7 +1078,7 @@ class ContentObject extends CompositeDataClass
     {
         if (!isset($this->complex_content_object_path))
         {
-            $this->complex_content_object_path = ComplexContentObjectPath::factory(self::context(), $this);
+            $this->complex_content_object_path = ComplexContentObjectPath::factory(static::CONTEXT, $this);
         }
 
         return $this->complex_content_object_path;
@@ -1453,7 +1453,7 @@ class ContentObject extends CompositeDataClass
             (string) StringUtilities::getInstance()->createString($template_registration->get_name())->upperCamelize() :
             null;
 
-        return static::type_string($this::context(), $type_string);
+        return static::type_string(static::CONTEXT, $type_string);
     }
 
     /**

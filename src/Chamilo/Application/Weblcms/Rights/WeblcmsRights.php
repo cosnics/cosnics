@@ -19,36 +19,60 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms
  */
 class WeblcmsRights extends RightsUtil
 {
+    public const ADD_RIGHT = '2';
+
     // Course Rights
-    const VIEW_RIGHT = '1';
-    const ADD_RIGHT = '2';
-    const EDIT_RIGHT = '3';
-    const DELETE_RIGHT = '4';
-    const MANAGE_CATEGORIES_RIGHT = 5;
-    const LOCATION_BROWSER = 1;
-    const LOCATION_HOME = 2;
-    const LOCATION_VIEWER = 3;
-    const TREE_TYPE_COURSE = 1;
-    const TYPE_COURSE_TYPE = 1;
-    const TYPE_COURSE = 2;
-    const TYPE_COURSE_MODULE = 3;
-    const TYPE_COURSE_CATEGORY = 4;
-    const TYPE_PUBLICATION = 5;
+
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const DELETE_RIGHT = '4';
+
+    public const EDIT_RIGHT = '3';
+
+    public const LOCATION_BROWSER = 1;
+
+    public const LOCATION_HOME = 2;
+
+    public const LOCATION_VIEWER = 3;
+
+    public const MANAGE_CATEGORIES_RIGHT = 5;
+
+    public const TREE_TYPE_COURSE = 1;
+
+    public const TYPE_COURSE = 2;
+
+    public const TYPE_COURSE_CATEGORY = 4;
+
+    public const TYPE_COURSE_MODULE = 3;
+
+    public const TYPE_COURSE_TYPE = 1;
+
+    public const TYPE_PUBLICATION = 5;
+
+    public const VIEW_RIGHT = '1';
 
     private static $instance;
 
+    public function create_location_in_courses_subtree(
+        $type, $identifier, $parent, $tree_identifier = 0, $create_in_batch = false, $inherit = 1
+    )
+    {
+        return parent::create_location(
+            Manager::CONTEXT, $type, $identifier, $inherit, $parent, 0, $tree_identifier,
+            WeblcmsRights::TREE_TYPE_COURSE, true, $create_in_batch
+        );
+    }
+
     /**
-     *
      * @return WeblcmsRights
      */
     public static function getInstance()
     {
-        if (! isset(self::$instance))
+        if (!isset(self::$instance))
         {
             self::$instance = new self();
         }
@@ -60,54 +84,22 @@ class WeblcmsRights extends RightsUtil
     {
         if ($location && $location->getType() == self::TYPE_PUBLICATION)
         {
-            return array(
+            return [
                 Translation::get('ViewRight') => self::VIEW_RIGHT,
                 Translation::get('EditRight') => self::EDIT_RIGHT,
-                Translation::get('DeleteRight') => self::DELETE_RIGHT);
+                Translation::get('DeleteRight') => self::DELETE_RIGHT
+            ];
         }
 
-        return array(
+        return [
             Translation::get('ViewRight') => self::VIEW_RIGHT,
             Translation::get('AddRight') => self::ADD_RIGHT,
             Translation::get('EditRight') => self::EDIT_RIGHT,
             Translation::get('DeleteRight') => self::DELETE_RIGHT,
-            Translation::getInstance()->getTranslation('ManageCategoriesRight', null, Manager::CONTEXT) => self::MANAGE_CATEGORIES_RIGHT);
-    }
-
-    public function get_weblcms_location_by_identifier($type, $identifier)
-    {
-        return parent::get_location_by_identifier(Manager::CONTEXT, $type, $identifier);
-    }
-
-    public function get_weblcms_location_id_by_identifier($type, $identifier)
-    {
-        return parent::get_location_id_by_identifier(Manager::CONTEXT, $type, $identifier);
-    }
-
-    public function create_location_in_courses_subtree($type, $identifier, $parent, $tree_identifier = 0,
-        $create_in_batch = false, $inherit = 1)
-    {
-        return parent::create_location(
-            Manager::CONTEXT,
-            $type,
-            $identifier,
-            $inherit,
-            $parent,
-            0,
-            $tree_identifier,
-            WeblcmsRights::TREE_TYPE_COURSE,
-            true,
-            $create_in_batch);
-    }
-
-    public function get_weblcms_root_id()
-    {
-        return parent::get_root_id(Manager::CONTEXT);
-    }
-
-    public function get_weblcms_root()
-    {
-        return parent::get_root(Manager::CONTEXT);
+            Translation::getInstance()->getTranslation(
+                'ManageCategoriesRight', null, Manager::CONTEXT
+            ) => self::MANAGE_CATEGORIES_RIGHT
+        ];
     }
 
     public function get_courses_subtree_root($tree_identifier = 0)
@@ -120,24 +112,62 @@ class WeblcmsRights extends RightsUtil
         return parent::get_root_id(Manager::CONTEXT, WeblcmsRights::TREE_TYPE_COURSE, $tree_identifier);
     }
 
-    public function get_weblcms_location_id_by_identifier_from_courses_subtree($type, $identifier, $course_id = 0)
+    /**
+     * Returns the publication identifiers on which a right has been granted for a given user in a given course
+     *
+     * @param int $right
+     * @param RightsLocation $parent_location
+     * @param Course $course
+     * @param User $user
+     *
+     * @return mixed
+     */
+    public function get_publication_identifiers_with_right_granted(
+        $right, RightsLocation $parent_location, Course $course, User $user
+    )
     {
-        return parent::get_location_id_by_identifier(
-            Manager::CONTEXT,
-            $type,
-            $identifier,
-            $course_id,
-            WeblcmsRights::TREE_TYPE_COURSE);
+        $entities = [];
+        $entities[] = CourseGroupEntity::getInstance($course->getId());
+        $entities[] = CourseUserEntity::getInstance();
+        $entities[] = CoursePlatformGroupEntity::getInstance($course->getId());
+
+        return $this->get_identifiers_with_right_granted(
+            $right, Manager::CONTEXT, $parent_location, WeblcmsRights::TYPE_PUBLICATION, $user->getId(), $entities
+        );
+    }
+
+    public function get_weblcms_location_by_identifier($type, $identifier)
+    {
+        return parent::get_location_by_identifier(Manager::CONTEXT, $type, $identifier);
     }
 
     public function get_weblcms_location_by_identifier_from_courses_subtree($type, $identifier, $course_id = 0)
     {
         return parent::get_location_by_identifier(
-            Manager::CONTEXT,
-            $type,
-            $identifier,
-            $course_id,
-            WeblcmsRights::TREE_TYPE_COURSE);
+            Manager::CONTEXT, $type, $identifier, $course_id, WeblcmsRights::TREE_TYPE_COURSE
+        );
+    }
+
+    public function get_weblcms_location_id_by_identifier($type, $identifier)
+    {
+        return parent::get_location_id_by_identifier(Manager::CONTEXT, $type, $identifier);
+    }
+
+    public function get_weblcms_location_id_by_identifier_from_courses_subtree($type, $identifier, $course_id = 0)
+    {
+        return parent::get_location_id_by_identifier(
+            Manager::CONTEXT, $type, $identifier, $course_id, WeblcmsRights::TREE_TYPE_COURSE
+        );
+    }
+
+    public function get_weblcms_root()
+    {
+        return parent::get_root(Manager::CONTEXT);
+    }
+
+    public function get_weblcms_root_id()
+    {
+        return parent::get_root_id(Manager::CONTEXT);
     }
 
     public function is_allowed_in_courses_subtree($right, $identifier, $type, $tree_identifier = 0, $user_id = null)
@@ -154,15 +184,8 @@ class WeblcmsRights extends RightsUtil
         $entities[] = CoursePlatformGroupEntity::getInstance($course_id);
 
         return parent::is_allowed(
-            $right,
-            Manager::CONTEXT,
-            $user_id,
-            $entities,
-            $identifier,
-            $type,
-            $tree_identifier,
-            WeblcmsRights::TREE_TYPE_COURSE,
-            true
+            $right, Manager::CONTEXT, $user_id, $entities, $identifier, $type, $tree_identifier,
+            WeblcmsRights::TREE_TYPE_COURSE, true
         );
     }
 
@@ -192,8 +215,8 @@ class WeblcmsRights extends RightsUtil
                         foreach ($entity_ids as $group_id)
                         {
                             $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
-                                Group::class,
-                                $group_id);
+                                Group::class, $group_id
+                            );
                             if ($group)
                             {
                                 $target_list[] = '<option>' . $group->get_name() . '</option>';
@@ -203,16 +226,15 @@ class WeblcmsRights extends RightsUtil
                     case CourseUserEntity::ENTITY_TYPE :
                         foreach ($entity_ids as $user_id)
                         {
-                            $target_list[] = '<option>' .
-                                 DataManager::get_fullname_from_user($user_id) . '</option>';
+                            $target_list[] = '<option>' . DataManager::get_fullname_from_user($user_id) . '</option>';
                         }
                         break;
                     case CourseGroupEntity::ENTITY_TYPE :
                         foreach ($entity_ids as $course_group_id)
                         {
                             $course_group = CourseGroupDataManager::retrieve_by_id(
-                                CourseGroup::class,
-                                $course_group_id);
+                                CourseGroup::class, $course_group_id
+                            );
 
                             if ($course_group)
                             {
@@ -222,8 +244,8 @@ class WeblcmsRights extends RightsUtil
                         break;
 
                     case 0 :
-                        $target_list[] = '<option>' . Translation::get('Everybody', null, StringUtilities::LIBRARIES) .
-                             '</option>';
+                        $target_list[] =
+                            '<option>' . Translation::get('Everybody', null, StringUtilities::LIBRARIES) . '</option>';
                         break;
                 }
             }
@@ -232,32 +254,5 @@ class WeblcmsRights extends RightsUtil
         }
 
         return implode(PHP_EOL, $target_list);
-    }
-
-    /**
-     * Returns the publication identifiers on which a right has been granted for a given user in a given course
-     *
-     * @param int $right
-     * @param RightsLocation $parent_location
-     * @param Course $course
-     * @param User $user
-     *
-     * @return mixed
-     */
-    public function get_publication_identifiers_with_right_granted($right, RightsLocation $parent_location,
-        Course $course, User $user)
-    {
-        $entities = [];
-        $entities[] = CourseGroupEntity::getInstance($course->getId());
-        $entities[] = CourseUserEntity::getInstance();
-        $entities[] = CoursePlatformGroupEntity::getInstance($course->getId());
-
-        return $this->get_identifiers_with_right_granted(
-            $right,
-            Manager::CONTEXT,
-            $parent_location,
-            WeblcmsRights::TYPE_PUBLICATION,
-            $user->getId(),
-            $entities);
     }
 }

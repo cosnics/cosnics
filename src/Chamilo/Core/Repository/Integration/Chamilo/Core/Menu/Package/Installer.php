@@ -31,11 +31,10 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
     {
         $item = new RepositoryApplicationItem();
 
-        $context = ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 5);
+        $context = ClassnameUtilities::getInstance()->getNamespaceParent(static::CONTEXT, 5);
+
         $item->set_application($context);
-
         $item->set_display($this->getItemDisplay());
-
         $item->set_use_translation(1);
 
         if (!$item->create())
@@ -44,7 +43,7 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
         }
 
         $item_title = new ItemTitle();
-        $item_title->set_title(Translation::get('TypeName', null, $this->context()));
+        $item_title->set_title(Translation::get('TypeName', null, static::CONTEXT));
         $item_title->set_isocode(Translation::getInstance()->getLanguageIsocode());
         $item_title->setItemId($item->getId());
 

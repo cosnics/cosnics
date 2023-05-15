@@ -94,7 +94,7 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
         $this->set_title($file_name);
         $this->set_description($file_name);
 
-        $hotpot_path = Path::getInstance()->getPublicStoragePath(Hotpotatoes::CONTEXT()) . Session::get_user_id() . '/';
+        $hotpot_path = Path::getInstance()->getPublicStoragePath(Hotpotatoes::CONTEXT) . Session::get_user_id() . '/';
         $full_path = $hotpot_path . dirname($path_to_zip) . '/';
 
         $filecompression = Filecompression::factory();

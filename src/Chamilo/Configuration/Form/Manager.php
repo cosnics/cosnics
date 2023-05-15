@@ -109,7 +109,7 @@ abstract class Manager extends Application
 
     public function set_form_by_name($name)
     {
-        $this->set_form($this->retrieve_form($this->get_application()->context(), $name));
+        $this->set_form($this->retrieve_form($this->get_application()::CONTEXT, $name));
     }
 
     public function set_target_user_id($target_user_id)

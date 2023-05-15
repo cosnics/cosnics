@@ -21,13 +21,13 @@ use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 
 class CourseTypeFeedComponent extends Manager
 {
-    const PARAM_EXCLUDE_COURSE_TYPE_IDS = 'exclude_course_type_ids';
-    const PARAM_FILTER = 'filter';
-    const PARAM_OFFSET = 'offset';
-    const PARAM_SEARCH_QUERY = 'query';
+    public const PARAM_EXCLUDE_COURSE_TYPE_IDS = 'exclude_course_type_ids';
+    public const PARAM_FILTER = 'filter';
+    public const PARAM_OFFSET = 'offset';
+    public const PARAM_SEARCH_QUERY = 'query';
 
-    const PROPERTY_ELEMENTS = 'elements';
-    const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
+    public const PROPERTY_ELEMENTS = 'elements';
+    public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     public function run()
     {
@@ -40,7 +40,7 @@ class CourseTypeFeedComponent extends Manager
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function countCourseTypes()
     {
@@ -60,7 +60,7 @@ class CourseTypeFeedComponent extends Manager
         if (!empty($searchQuery))
         {
             $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
-                $searchQuery, array(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_TITLE))
+                $searchQuery, [new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_TITLE)]
             );
         }
 
@@ -125,7 +125,7 @@ class CourseTypeFeedComponent extends Manager
     }
 
     /**
-     * @return integer
+     * @return int
      */
     protected function getOffset()
     {
@@ -155,7 +155,7 @@ class CourseTypeFeedComponent extends Manager
     {
         $parameters = new DataClassRetrievesParameters(
             $this->getCourseTypeConditions(), null, null, new OrderBy(
-                array(new OrderProperty(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_TITLE)))
+                [new OrderProperty(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_TITLE))]
             )
         );
 

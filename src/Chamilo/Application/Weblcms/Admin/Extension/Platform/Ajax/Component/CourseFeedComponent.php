@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Ajax\Component;
 
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Ajax\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\CourseEntity;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
@@ -23,18 +23,16 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * Feed to return course categories
  *
- * @author Sven Vanpoucke
+ * @author  Sven Vanpoucke
  * @package application.weblcms
  */
-class CourseFeedComponent extends AjaxManager
+class CourseFeedComponent extends Manager
 {
-    const PARAM_OFFSET = 'offset';
+    public const PARAM_OFFSET = 'offset';
+    public const PARAM_SEARCH_QUERY = 'query';
 
-    const PARAM_SEARCH_QUERY = 'query';
-
-    const PROPERTY_ELEMENTS = 'elements';
-
-    const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
+    public const PROPERTY_ELEMENTS = 'elements';
+    public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     private $course_count = 0;
 
@@ -150,10 +148,10 @@ class CourseFeedComponent extends AjaxManager
         if ($search_query && $search_query != '')
         {
             $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
-                $search_query, array(
+                $search_query, [
                     new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE),
                     new PropertyConditionVariable(Course::class, Course::PROPERTY_VISUAL_CODE)
-                )
+                ]
             );
         }
 
@@ -174,7 +172,7 @@ class CourseFeedComponent extends AjaxManager
         );
         $parameters = new DataClassRetrievesParameters(
             $condition, 100, $this->get_offset(),
-            new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))))
+            new OrderBy([new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))])
         );
 
         return DataManager::retrieves(Course::class, $parameters);

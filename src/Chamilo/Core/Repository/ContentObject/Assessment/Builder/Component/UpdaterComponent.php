@@ -63,7 +63,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
         }
 
         $complex_content_object_item_form = ComplexContentObjectItemForm::factory(
-            $content_object->context(), $complex_content_object_item, $this->get_url()
+            $content_object::CONTEXT, $complex_content_object_item, $this->get_url()
         );
 
         if ($complex_content_object_item_form instanceof ComplexContentObjectItemForm)

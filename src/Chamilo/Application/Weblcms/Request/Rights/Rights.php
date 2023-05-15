@@ -21,15 +21,17 @@ use Chamilo\Libraries\Translation\Translation;
 
 class Rights extends RightsUtil
 {
-    const VIEW_RIGHT = '1';
+    public const CONTEXT = Manager::CONTEXT;
+
+    public const VIEW_RIGHT = '1';
+
+    private static $authorized_users;
 
     private static $instance;
 
     private static $target_users;
 
-    private static $authorized_users;
-
-    function create_request_root()
+    public function create_request_root()
     {
         return parent::create_location(Manager::CONTEXT);
     }
@@ -45,10 +47,9 @@ class Rights extends RightsUtil
     }
 
     /**
-     *
      * @return \application\weblcms\request\rights\Rights
      */
-    static function getInstance()
+    public static function getInstance()
     {
         if (!isset(self::$instance))
         {
@@ -58,7 +59,7 @@ class Rights extends RightsUtil
         return self::$instance;
     }
 
-    function get_authorized_users(User $user)
+    public function get_authorized_users(User $user)
     {
         if (!isset(self::$authorized_users[$user->get_id()]))
         {
@@ -170,41 +171,41 @@ class Rights extends RightsUtil
         return self::$authorized_users[$user->get_id()];
     }
 
-    static function get_available_rights()
+    public static function get_available_rights()
     {
-        return array(Translation::get('ViewRight') => self::VIEW_RIGHT);
+        return [Translation::get('ViewRight') => self::VIEW_RIGHT];
     }
 
-    function get_request_location_entity_right($entity_id, $entity_type)
+    public function get_request_location_entity_right($entity_id, $entity_type)
     {
         return \Chamilo\Core\Rights\Storage\DataManager::retrieve_rights_location_entity_right(
             Manager::CONTEXT, self::VIEW_RIGHT, $entity_id, $entity_type, $this->get_request_root_id()
         );
     }
 
-    function get_request_root()
+    public function get_request_root()
     {
         return parent::get_root(Manager::CONTEXT);
     }
 
-    function get_request_root_id()
+    public function get_request_root_id()
     {
         return parent::get_root_id(Manager::CONTEXT);
     }
 
-    function get_request_targets_entities()
+    public function get_request_targets_entities()
     {
         return parent::get_target_entities(self::VIEW_RIGHT, Manager::CONTEXT);
     }
 
-    function get_request_view_rights_location_entity_right($entity_id, $entity_type)
+    public function get_request_view_rights_location_entity_right($entity_id, $entity_type)
     {
         return parent::get_rights_location_entity_right(
             Manager::CONTEXT, self::VIEW_RIGHT, $entity_id, $entity_type, self::get_request_root_id()
         );
     }
 
-    function get_target_users(User $user)
+    public function get_target_users(User $user)
     {
         if (!isset(self::$target_users[$user->get_id()]))
         {
@@ -297,19 +298,19 @@ class Rights extends RightsUtil
         return self::$target_users[$user->get_id()];
     }
 
-    function invert_request_location_entity_right($right_id, $entity_id, $entity_type)
+    public function invert_request_location_entity_right($right_id, $entity_id, $entity_type)
     {
         return parent::invert_location_entity_right(
             Manager::CONTEXT, $right_id, $entity_id, $entity_type, self::get_request_root_id()
         );
     }
 
-    function is_target_user(User $user, $target_user_id)
+    public function is_target_user(User $user, $target_user_id)
     {
         return in_array($target_user_id, $this->get_target_users($user));
     }
 
-    function request_is_allowed()
+    public function request_is_allowed()
     {
         $entities = [];
         $entities[UserEntity::ENTITY_TYPE] = new UserEntity();

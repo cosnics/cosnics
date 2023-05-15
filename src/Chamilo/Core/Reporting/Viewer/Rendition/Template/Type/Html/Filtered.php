@@ -43,10 +43,7 @@ class Filtered extends Basic
                     $html[] = $block->get_form($url)->toHtml();
                 }
 
-                $glyph = new NamespaceIdentGlyph(
-                    $this->getBlockNamespace($block) . '\Block\\' .
-                    ClassnameUtilities::getInstance()->getClassnameFromObject($block)
-                );
+                $glyph = new NamespaceIdentGlyph(get_class($block));
 
                 $html[] = '<h2>';
                 $html[] = $glyph->render();
@@ -103,8 +100,7 @@ class Filtered extends Basic
                     }
 
                     $glyph = new NamespaceIdentGlyph(
-                        $this->getBlockNamespace($block) . '\Block\\' .
-                        ClassnameUtilities::getInstance()->getClassnameFromObject($block), true
+                        get_class($block), true
                     );
 
                     $tabs->add(

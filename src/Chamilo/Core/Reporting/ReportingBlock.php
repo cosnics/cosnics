@@ -10,13 +10,13 @@ abstract class ReportingBlock
 {
     use ClassContext;
     use DependencyInjectionContainerTrait;
-    
-    // Constants
-    const PARAM_DISPLAY_MODE = "display_mode";
 
-    private $id;
+    // Constants
+    public const PARAM_DISPLAY_MODE = 'display_mode';
 
     private $data;
+
+    private $id;
 
     private $params;
 
@@ -31,80 +31,12 @@ abstract class ReportingBlock
         $this->initializeContainer();
     }
 
-    public function get_parent()
-    {
-        return $this->parent;
-    }
-
-    public function set_parent($parent)
-    {
-        $this->parent = $parent;
-    }
-
-    abstract public function count_data();
-
-    /**
-     *
-     * @return \Chamilo\Core\Reporting\ReportingData
-     */
-    abstract public function retrieve_data();
-
-    public function get_title()
-    {
-        return Translation::get(
-            ClassnameUtilities::getInstance()->getClassnameFromObject($this),
-            null,
-            ClassnameUtilities::getInstance()->getNamespaceFromObject($this));
-    }
-
-    public function get_id()
-    {
-        return $this->id;
-    }
-
-    public function set_id($id)
-    {
-        $this->id = $id;
-    }
-
-    public function get_name()
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(static::class);
-    }
-
-    abstract public function get_views();
-
-    /**
-     * Getters and setters
-     */
-    public function get_data()
-    {
-        if (! $this->data)
-        {
-            $this->data = $this->retrieve_data();
-        }
-        return $this->data;
-    }
-
     public function add_function_parameter($key, $value)
     {
         $this->params[$key] = $value;
     }
 
-    public function remove_function_parameter($key)
-    {
-        unset($this->params[$key]);
-    }
-
-    public function set_function_parameters($params)
-    {
-        $this->params = $params;
-    }
-
-    public function get_function_parameters()
-    {
-        return $this->params;
-    }
+    abstract public function count_data();
 
     /**
      * @brief Return block style containing properties such as title font size or title color.
@@ -115,5 +47,73 @@ abstract class ReportingBlock
     public function getStyle()
     {
         return new ReportingBlockStyle();
+    }
+
+    /**
+     * Getters and setters
+     */
+    public function get_data()
+    {
+        if (!$this->data)
+        {
+            $this->data = $this->retrieve_data();
+        }
+
+        return $this->data;
+    }
+
+    public function get_function_parameters()
+    {
+        return $this->params;
+    }
+
+    public function get_id()
+    {
+        return $this->id;
+    }
+
+    public function get_name()
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(static::class);
+    }
+
+    public function get_parent()
+    {
+        return $this->parent;
+    }
+
+    public function get_title()
+    {
+        return Translation::get(
+            ClassnameUtilities::getInstance()->getClassnameFromObject($this), null,
+            ClassnameUtilities::getInstance()->getNamespaceFromObject($this)
+        );
+    }
+
+    abstract public function get_views();
+
+    public function remove_function_parameter($key)
+    {
+        unset($this->params[$key]);
+    }
+
+    /**
+     * @return \Chamilo\Core\Reporting\ReportingData
+     */
+    abstract public function retrieve_data();
+
+    public function set_function_parameters($params)
+    {
+        $this->params = $params;
+    }
+
+    public function set_id($id)
+    {
+        $this->id = $id;
+    }
+
+    public function set_parent($parent)
+    {
+        $this->parent = $parent;
     }
 }

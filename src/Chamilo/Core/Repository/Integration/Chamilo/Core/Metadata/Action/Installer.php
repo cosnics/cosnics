@@ -37,7 +37,7 @@ abstract class Installer extends \Chamilo\Core\Metadata\Action\Installer
 
     public function getContentObjectType()
     {
-        $namespace = static::context();
+        $namespace = static::CONTEXT;
         $classNameUtilities = ClassnameUtilities::getInstance();
         $packageNamespace = $classNameUtilities->getNamespaceParent($namespace, 5);
         $packageName = $classNameUtilities->getPackageNameFromNamespace($packageNamespace);

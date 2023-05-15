@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Ajax\Component;
 
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Ajax\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\CourseCategoryEntity;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\CourseEntity;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
-use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
@@ -28,28 +28,24 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * Feed to return course categories
  *
- * @author Sven Vanpoucke
+ * @author  Sven Vanpoucke
  * @package application.weblcms
  */
-class CourseCategoryFeedComponent extends AjaxManager
+class CourseCategoryFeedComponent extends Manager
 {
     /**
      * The length for the filter prefix to remove
      */
-    const FILTER_PREFIX_LENGTH = 2;
+    public const FILTER_PREFIX_LENGTH = 2;
 
-    const PARAM_COURSE = 'course';
+    public const PARAM_COURSE = 'course';
+    public const PARAM_COURSE_CATEGORY = 'course_category';
+    public const PARAM_FILTER = 'filter';
+    public const PARAM_OFFSET = 'offset';
+    public const PARAM_SEARCH_QUERY = 'query';
 
-    const PARAM_COURSE_CATEGORY = 'course_category';
-
-    const PARAM_FILTER = 'filter';
-
-    const PARAM_OFFSET = 'offset';
-
-    const PARAM_SEARCH_QUERY = 'query';
-
-    const PROPERTY_ELEMENTS = 'elements';
-    const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
+    public const PROPERTY_ELEMENTS = 'elements';
+    public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     protected $course_count = 0;
 
@@ -244,11 +240,11 @@ class CourseCategoryFeedComponent extends AjaxManager
 
         return DataManager::retrieves(
             CourseCategory::class, new DataClassRetrievesParameters(
-                $condition, null, null, new OrderBy(array(
-                        new OrderProperty(
-                            new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME)
-                        )
-                    ))
+                $condition, null, null, new OrderBy([
+                    new OrderProperty(
+                        new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME)
+                    )
+                ])
             )
         );
     }
@@ -278,10 +274,10 @@ class CourseCategoryFeedComponent extends AjaxManager
         if ($search_query && $search_query != '')
         {
             $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
-                $search_query, array(
+                $search_query, [
                     new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE),
                     new PropertyConditionVariable(Course::class, Course::PROPERTY_VISUAL_CODE)
-                )
+                ]
             );
         }
 
@@ -304,7 +300,7 @@ class CourseCategoryFeedComponent extends AjaxManager
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
             Course::class, new DataClassRetrievesParameters(
                 $condition, 100, $this->get_offset(), new OrderBy(
-                    array(new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)))
+                    [new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))]
                 )
             )
         );

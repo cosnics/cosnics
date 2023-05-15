@@ -9,25 +9,15 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Exception;
 
 /**
- *
  * @package
  *          core\repository\content_object\learning_path\display\integration\core\repository\content_object\learning_path\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LeaveItemComponent extends
-    Manager
+class LeaveItemComponent extends Manager
 {
-    const PARAM_TRACKER_ID = 'tracker_id';
-
-    /**
-     * @return array
-     */
-    public function getRequiredPostParameters(): array
-    {
-        return array(self::PARAM_TRACKER_ID);
-    }
+    public const PARAM_TRACKER_ID = 'tracker_id';
 
     public function run()
     {
@@ -58,6 +48,14 @@ class LeaveItemComponent extends
         return $trackingServiceBuilder->buildTrackingService(
             new TrackingParameters(1)
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getRequiredPostParameters(): array
+    {
+        return [self::PARAM_TRACKER_ID];
     }
 
     /**

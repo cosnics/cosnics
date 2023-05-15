@@ -23,7 +23,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 class GetCoursesForElementFinderComponent extends Manager implements AjaxResultDataProviderInterface
 {
     public const PARAM_OFFSET = 'offset';
-
     public const PARAM_SEARCH_QUERY = 'query';
 
     /**

@@ -17,7 +17,7 @@ abstract class ContentObjectDeactivator extends Deactivator
             return false;
         }
         
-        $success = DataManager::deactivate_content_object_type(self::context());
+        $success = DataManager::deactivate_content_object_type(static::CONTEXT);
         
         if (! $success)
         {

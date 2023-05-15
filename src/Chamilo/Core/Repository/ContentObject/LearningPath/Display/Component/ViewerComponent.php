@@ -292,7 +292,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             try
             {
                 $application = $this->getApplicationFactory()->getApplication(
-                    $integration_class_name::context(),
+                    $integration_class_name::CONTEXT,
                     new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
                 );
                 $application->get_node_tabs($primaryActions, $secondaryActions, $this->getCurrentTreeNode());

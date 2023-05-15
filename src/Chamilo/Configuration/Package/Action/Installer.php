@@ -7,7 +7,6 @@ use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
@@ -100,7 +99,7 @@ abstract class Installer extends Action
             foreach ($xml as $name => $parameters)
             {
                 $setting = new Setting();
-                $setting->set_context(ClassnameUtilities::getInstance()->getNamespaceParent(static::context()));
+                $setting->set_context(static::CONTEXT);
                 $setting->set_variable($name);
                 $setting->set_value($parameters['default']);
 
@@ -145,8 +144,7 @@ abstract class Installer extends Action
             $storage_unit_info['name'] . '</em>'
         );
 
-        $context = ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
-        $data_manager = $context . '\Storage\DataManager';
+        $data_manager = static::CONTEXT . '\Storage\DataManager';
 
         $prefix = $data_manager::PREFIX;
         $table_name = $storage_unit_info['name'];
@@ -305,7 +303,7 @@ abstract class Installer extends Action
 
     public function register_package()
     {
-        $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
+        $namespace = static::CONTEXT;
 
         $this->add_message(self::TYPE_NORMAL, Translation::get('RegisteringPackage', null, 'Chamilo\Core\Install'));
 
@@ -344,9 +342,7 @@ abstract class Installer extends Action
      */
     public function verify_dependencies()
     {
-        $context = ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
-
-        $verifier = new DependencyVerifier(Package::get($context));
+        $verifier = new DependencyVerifier(Package::get(static::CONTEXT));
         $success = $verifier->is_installable();
 
         $this->add_message(self::TYPE_NORMAL, $verifier->get_logger()->render());

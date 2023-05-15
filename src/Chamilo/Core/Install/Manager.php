@@ -73,7 +73,7 @@ abstract class Manager extends Application implements NoContextComponent
             {
                 throw new Exception(
                     Translation::getInstance()->getTranslation(
-                        'InstallationBlockedByAdministrator', null, self::context()
+                        'InstallationBlockedByAdministrator', null, Manager::CONTEXT
                     )
                 );
             }
@@ -226,7 +226,7 @@ abstract class Manager extends Application implements NoContextComponent
         $page->setApplication($this);
         $page->setContainerMode('container');
         $page->setLanguageCode($this->getTranslator()->getLocale());
-        $page->setTitle($this->getTranslator()->trans('ChamiloInstallationTitle', [], self::context()));
+        $page->setTitle($this->getTranslator()->trans('ChamiloInstallationTitle', [], Manager::CONTEXT));
 
         $html = [];
 

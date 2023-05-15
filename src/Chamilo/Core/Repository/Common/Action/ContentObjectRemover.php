@@ -19,7 +19,7 @@ abstract class ContentObjectRemover extends Remover
      */
     public function extra()
     {
-        $context = self::context();
+        $context = static::CONTEXT;
         $class = $context . '\\' . ClassnameUtilities::getInstance()->getPackageNameFromNamespace($context, true);
 
         $content_objects = DataManager::retrieve_content_objects($class);

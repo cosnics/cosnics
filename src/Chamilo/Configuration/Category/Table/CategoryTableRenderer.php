@@ -40,7 +40,7 @@ class CategoryTableRenderer extends DataClassListTableRenderer implements TableR
         $categoryClassName = $this->categoryManagerImplementer->getCategoryClassName();
 
         $this->addColumn(
-            new StaticTableColumn(self::CATEGORY, $translator->trans(self::CATEGORY, [], $categoryClassName::context()))
+            new StaticTableColumn(self::CATEGORY, $translator->trans(self::CATEGORY, [], $categoryClassName::CONTEXT))
         );
         $this->addColumn(new DataClassPropertyTableColumn($categoryClassName, PlatformCategory::PROPERTY_NAME));
 
@@ -48,7 +48,7 @@ class CategoryTableRenderer extends DataClassListTableRenderer implements TableR
         {
             $this->addColumn(
                 new StaticTableColumn(
-                    self::SUBCATEGORIES, $translator->trans(self::SUBCATEGORIES, [], $categoryClassName::context())
+                    self::SUBCATEGORIES, $translator->trans(self::SUBCATEGORIES, [], $categoryClassName::CONTEXT)
                 )
             );
         }

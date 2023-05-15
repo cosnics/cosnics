@@ -17,7 +17,7 @@ abstract class ContentObjectActivator extends Activator
             return false;
         }
         
-        $success = DataManager::activate_content_object_type(self::context());
+        $success = DataManager::activate_content_object_type(static::CONTEXT);
         
         if (! $success)
         {

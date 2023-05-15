@@ -21,7 +21,7 @@ use Exception;
 /**
  * New version of rights utilities to work with entities and the application specific location tables
  *
- * @author Pieterjan Broekaert
+ * @author     Pieterjan Broekaert
  * @deprecated Use the \Chamilo\Libraries\Rights\Service\RightsService now to extend contextual implementations from now
  */
 class RightsUtil
@@ -29,8 +29,8 @@ class RightsUtil
     use ClassContext;
 
     // Types
-    const TREE_TYPE_ROOT = 0;
-    const TYPE_ROOT = 0;
+    public const TREE_TYPE_ROOT = 0;
+    public const TYPE_ROOT = 0;
 
     private static $instance;
 
@@ -116,7 +116,7 @@ class RightsUtil
         $rights_location_class = $context . '\Storage\DataClass\RightsLocation';
         if (!class_exists($rights_location_class))
         {
-            $rights_location_class = self::context() . '\Storage\DataClass\RightsLocation';
+            $rights_location_class = static::CONTEXT . '\Storage\DataClass\RightsLocation';
         }
 
         $location = new $rights_location_class();
@@ -154,7 +154,7 @@ class RightsUtil
      * @param int $entity_type
      * @param int $location_id
      *
-     * @return boolean
+     * @return bool
      */
     private function create_rights_location_entity_right($context, $right, $entity_id, $entity_type, $location_id)
     {
@@ -724,13 +724,12 @@ class RightsUtil
     }
 
     /**
-     *
-     * @param integer $right_id
+     * @param int $right_id
      * @param string $context
-     * @param integer $identifier
-     * @param integer $type
-     * @param integer $tree_identifier
-     * @param integer $tree_type
+     * @param int $identifier
+     * @param int $type
+     * @param int $tree_identifier
+     * @param int $tree_type
      *
      * @return \Chamilo\Core\Rights\Storage\<array>
      * @throws Exception
@@ -769,13 +768,13 @@ class RightsUtil
     /**
      * Returns whether given location or any of its ancestors is in array $location_ids_with_granted_right.
      *
-     * @param int $location_id location we check whether user has access rigth to.
-     * @param array $location_parent_ids mapping of child location ID's onto parent location ID's. @see
+     * @param int $location_id                       location we check whether user has access rigth to.
+     * @param array $location_parent_ids             mapping of child location ID's onto parent location ID's. @see
      *                                               get_location_parent_ids_recursive(...)
      * @param array $location_ids_with_granted_right All location ID's which user has access rigth to. Keys: location
      *                                               ID's Values: True.
      *
-     * @return boolean
+     * @return bool
      * @see DataManager::filter_location_identifiers_by_granted_right.
      */
     private function has_right_recursive($location_id, $location_parent_ids, $location_ids_with_granted_right)
@@ -960,7 +959,7 @@ class RightsUtil
      * @param int $entity_type
      * @param int $location_id
      *
-     * @return boolean
+     * @return bool
      */
     public function set_location_entity_right($context, $right, $entity_id, $entity_type, $location_id)
     {
