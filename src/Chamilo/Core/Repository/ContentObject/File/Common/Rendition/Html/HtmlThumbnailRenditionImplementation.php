@@ -35,11 +35,15 @@ class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
                  basename($object->get_full_path());
             $thumbnal_web_path = Path::getInstance()->getTemporaryPath(null, true) . md5($object->get_full_path()) .
                  basename($object->get_full_path());
+
             if (! is_file($thumbnail_path))
             {
-                $thumbnail_creator = ImageManipulation::factory($object->get_full_path());
-                $thumbnail_creator->scale($width, $height);
-                $thumbnail_creator->write_to_file($thumbnail_path);
+                if(file_exists($object->get_full_path()))
+                {
+                    $thumbnail_creator = ImageManipulation::factory($object->get_full_path());
+                    $thumbnail_creator->scale($width, $height);
+                    $thumbnail_creator->write_to_file($thumbnail_path);
+                }
             }
             
             $thumbnailUrl = new Redirect(

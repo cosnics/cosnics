@@ -308,7 +308,8 @@ class Manager implements PublicationInterface
         $applicationContext = \Chamilo\Application\Portfolio\Manager::context();
         
         $locations = new Locations(__NAMESPACE__);
-        $allowed_types = Portfolio::get_allowed_types();
+        $portfolio = new Portfolio();
+        $allowed_types = $portfolio->get_allowed_types();
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLISHER_ID), 

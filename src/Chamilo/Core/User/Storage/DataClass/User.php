@@ -738,7 +738,7 @@ class User extends DataClass
         }
     }
 
-    public function get_fullname_format_options()
+    public static function get_fullname_format_options()
     {
         $options = array();
         $options[self::NAME_FORMAT_FIRST] = Translation::get('FirstName') . ' ' . Translation::get('LastName');

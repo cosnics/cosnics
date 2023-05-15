@@ -33,7 +33,7 @@ class HTML_QuickForm_extended_checkbox extends \HTML_QuickForm_checkbox
      * @access public
      * @return void
      */
-    public function __construct($elementName = null, $elementLabel = null, ?string $text = '', $attributes = null, ?int $value = 1,
+    public function __construct($elementName = null, $elementLabel = null, ?string $text = '', $attributes = null, ?string $value = "1",
         ?string $return_value = null
     )
     {

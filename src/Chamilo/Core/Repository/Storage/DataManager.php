@@ -574,7 +574,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         // Sort the publication attributes
         if (count($order_property) > 0)
         {
-            $order_column = $order_property[0]->get_property();
+            $order_column = $order_property[0]->get_property()->get_property();
             $order_direction = $order_property[0]->get_direction();
             $ordering_values = array();
 

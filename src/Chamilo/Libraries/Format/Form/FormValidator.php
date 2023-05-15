@@ -1395,7 +1395,7 @@ EOT;
         );
         $this->addElement(
             'static',
-            null,
+            $name . '_preview',
             $label,
             '<div class="thumbnail" data-element="' . $name . '"><img class="image-uploader-preview" src="' .
             Theme::getInstance()->getImagePath('Chamilo\Configuration', 'ImagePlaceholder') . '" /></div>'

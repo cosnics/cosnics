@@ -348,6 +348,9 @@ class Calculator
      */
     public function getReservedDiskSpacePercentage()
     {
+        if($this->getMaximumReservedDiskSpace() == 0)
+            return 100;
+
         return 100 * $this->getUsedReservedDiskSpace() / $this->getMaximumReservedDiskSpace();
     }
 
@@ -387,6 +390,9 @@ class Calculator
      */
     public function getAllocatedDiskSpacePercentage()
     {
+        if($this->getMaximumAllocatedDiskSpace() == 0)
+            return 100;
+
         return 100 * $this->getUsedAllocatedDiskSpace() / $this->getMaximumAllocatedDiskSpace();
     }
 

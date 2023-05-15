@@ -40,7 +40,7 @@ class GraphComponent extends \Chamilo\Core\Reporting\Viewer\Ajax\Manager
      *
      * @return object | ConfigurablePathBuilder
      */
-    protected function getConfigurablePathBuilder()
+    public function getConfigurablePathBuilder()
     {
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
         return $container->get('chamilo.libraries.file.configurable_path_builder');

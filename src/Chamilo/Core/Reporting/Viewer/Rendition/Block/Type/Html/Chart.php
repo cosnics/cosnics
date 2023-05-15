@@ -136,7 +136,7 @@ abstract class Chart extends Html
      *
      * @return object | ConfigurablePathBuilder
      */
-    protected function getConfigurablePathBuilder()
+    public function getConfigurablePathBuilder()
     {
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
         return $container->get('chamilo.libraries.file.configurable_path_builder');

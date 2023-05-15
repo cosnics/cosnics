@@ -371,7 +371,6 @@ class GalleryHTMLTable extends HtmlTable
      */
     public function processContentAttributes()
     {
-        $this->altRowAttributes(0, array('class' => 'row'), array('class' => 'row'), true);
         $this->setAllAttributes(array('class' => 'col-xs-6 col-lg-3'));
     }
 

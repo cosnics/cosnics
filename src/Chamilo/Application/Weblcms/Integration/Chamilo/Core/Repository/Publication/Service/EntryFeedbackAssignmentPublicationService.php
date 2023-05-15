@@ -106,7 +106,13 @@ class EntryFeedbackAssignmentPublicationService extends AssignmentPublicationSer
      */
     public function getContentObjectPublicationAttributes($publicationId)
     {
-        return $this->getAttributesForEntryFeedback($this->feedbackService->findFeedbackByIdentifier($publicationId));
+        try {
+            return $this->getAttributesForEntryFeedback($this->feedbackService->findFeedbackByIdentifier($publicationId));
+        }
+        catch (\Exception $ex)
+        {
+            return null;
+        }
     }
 
     /**
@@ -135,10 +141,16 @@ class EntryFeedbackAssignmentPublicationService extends AssignmentPublicationSer
      */
     public function getContentObjectPublicationAttributesForUser($userId)
     {
-        $user = new User();
-        $user->setId($userId);
+        try {
+            $user = new User();
+            $user->setId($userId);
 
-        return $this->getAttributesForMultipleEntryFeedback($this->feedbackService->findFeedbackByUser($user));
+            return $this->getAttributesForMultipleEntryFeedback($this->feedbackService->findFeedbackByUser($user));
+        }
+        catch(\Exception $ex)
+        {
+            return [];
+        }
     }
 
     /**

@@ -10,7 +10,7 @@ use Chamilo\Libraries\Translation\Translation;
 class SettingsConnector
 {
 
-    public function get_renderers()
+    public static function get_renderers()
     {
         $translator = Translation::getInstance();
         

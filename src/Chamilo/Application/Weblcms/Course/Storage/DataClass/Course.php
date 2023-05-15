@@ -348,7 +348,7 @@ class Course extends DataClass
 
         if (! $parent)
         {
-            $parent = CourseManagementRights::get_courses_subtree_root(0);
+            $parent = CourseManagementRights::getInstance()->get_courses_subtree_root(0);
         }
 
         return $parent;

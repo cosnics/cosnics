@@ -109,7 +109,7 @@ abstract class GalleryTable extends Table
      */
     protected function handle_result(&$tableData, $result)
     {
-        if (count($this->current_row) >= $this->get_default_column_count())
+        if (is_array($this->current_row) && count($this->current_row) >= $this->get_default_column_count())
         {
             $tableData[] = $this->current_row;
             $this->current_row = array();
@@ -117,7 +117,7 @@ abstract class GalleryTable extends Table
 
         $this->current_row[] = array(
             $this->get_cell_renderer()->render_id_cell($result),
-            $this->get_cell_renderer()->render_cell($result));
+            $this->get_cell_renderer()->render_cell(null, $result));
     }
 
     /**

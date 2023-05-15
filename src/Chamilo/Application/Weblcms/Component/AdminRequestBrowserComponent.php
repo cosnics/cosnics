@@ -159,7 +159,7 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
             $search_conditions = new OrCondition($conditions);
         }
 
-        if (count($search_conditions))
+        if (is_array($search_conditions) && count($search_conditions))
         {
             $conditions[] = $search_conditions;
         }

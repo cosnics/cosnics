@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Reporting\Viewer\Chart;
 
-use CpChart\Classes\pImage;
+use \CpChart\Image;
 
 /**
  * Special wrapper class to catch a small fluke in the scale rendering of pChart in such cases where the passed on value
@@ -9,7 +9,7 @@ use CpChart\Classes\pImage;
  * 
  * @author Hans De Bisschop & Magali Gillard
  */
-class pChamiloImage extends pImage
+class pChamiloImage extends Image
 {
 
     /**

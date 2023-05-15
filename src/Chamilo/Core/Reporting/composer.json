@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": ">=7.0.0",
-        "szymach/c-pchart": "1.*"
+        "szymach/c-pchart": "3.0.16"
     },
     "extra": {
         "cosnics": {

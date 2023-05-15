@@ -138,8 +138,9 @@ class DynamicTabsRenderer
         {
             $selected_tab = $selected_tabs;
         }
-
-        $selected_tab = $selected_tabs[$this->get_name()];
+        else {
+            $selected_tab = $selected_tabs[$this->get_name()];
+        }
 
         if (! is_null($selected_tab))
         {
