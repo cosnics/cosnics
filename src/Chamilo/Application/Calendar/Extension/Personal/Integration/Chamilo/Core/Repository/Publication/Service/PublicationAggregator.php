@@ -119,13 +119,13 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
     /**
      * @return string[]
-     * @throws \ReflectionException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      * @todo Legacy code, should be replaced eventually
      */
     private function getAllowedContentObjectTypes(): array
     {
         $registrations = $this->getRegistrationConsulter()->getIntegrationRegistrations(
-            \Chamilo\Application\Calendar\Extension\Personal\Manager::package(), Manager::package() . '\ContentObject'
+            \Chamilo\Application\Calendar\Extension\Personal\Manager::CONTEXT, Manager::CONTEXT . '\ContentObject'
         );
 
         $types = [];

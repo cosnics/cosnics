@@ -4,31 +4,31 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
- *
- * @package repository.content_object.assignment.php This class represents an assignment
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
+ * @package Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
  */
 class Assignment extends ContentObject implements AttachmentSupport
 {
-    const PROPERTY_ALLOWED_TYPES = 'allowed_types';
-    const PROPERTY_ALLOW_LATE_SUBMISSIONS = 'allow_late_submissions';
-    const PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS = 'automatic_feedback_co_ids';
-    const PROPERTY_AUTOMATIC_FEEDBACK_TEXT = 'automatic_feedback_text';
-    const PROPERTY_END_TIME = 'end_time';
-    const PROPERTY_SELECT_ATTACHMENT = 'select_attachment';
-    const PROPERTY_START_TIME = 'start_time';
-    const PROPERTY_VISIBILITY_SUBMISSIONS = 'visibility_submissions';
-    const PROPERTY_VISIBILTY_FEEDBACK = 'visibility_feedback';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Assignment';
 
-    const VISIBILITY_FEEDBACK_AFTER_END_TIME = 0;
-    const VISIBILITY_FEEDBACK_AFTER_SUBMISSION = 1;
+    public const PROPERTY_ALLOWED_TYPES = 'allowed_types';
+    public const PROPERTY_ALLOW_LATE_SUBMISSIONS = 'allow_late_submissions';
+    public const PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS = 'automatic_feedback_co_ids';
+    public const PROPERTY_AUTOMATIC_FEEDBACK_TEXT = 'automatic_feedback_text';
+    public const PROPERTY_END_TIME = 'end_time';
+    public const PROPERTY_SELECT_ATTACHMENT = 'select_attachment';
+    public const PROPERTY_START_TIME = 'start_time';
+    public const PROPERTY_VISIBILITY_SUBMISSIONS = 'visibility_submissions';
+    public const PROPERTY_VISIBILTY_FEEDBACK = 'visibility_feedback';
+
+    public const VISIBILITY_FEEDBACK_AFTER_END_TIME = 0;
+    public const VISIBILITY_FEEDBACK_AFTER_SUBMISSION = 1;
 
     /**
      * @return bool
@@ -36,6 +36,20 @@ class Assignment extends ContentObject implements AttachmentSupport
     public function canSubmit()
     {
         return $this->isInProgress() || ($this->hasEndTimePassed() && $this->get_allow_late_submissions());
+    }
+
+    public static function getAdditionalPropertyNames(): array
+    {
+        return [
+            self::PROPERTY_START_TIME,
+            self::PROPERTY_END_TIME,
+            self::PROPERTY_VISIBILITY_SUBMISSIONS,
+            self::PROPERTY_ALLOW_LATE_SUBMISSIONS,
+            self::PROPERTY_AUTOMATIC_FEEDBACK_TEXT,
+            self::PROPERTY_VISIBILTY_FEEDBACK,
+            self::PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS,
+            self::PROPERTY_ALLOWED_TYPES
+        ];
     }
 
     /**
@@ -54,18 +68,12 @@ class Assignment extends ContentObject implements AttachmentSupport
         return $contentObjects;
     }
 
-    public static function getAdditionalPropertyNames(): array
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
     {
-        return array(
-            self::PROPERTY_START_TIME,
-            self::PROPERTY_END_TIME,
-            self::PROPERTY_VISIBILITY_SUBMISSIONS,
-            self::PROPERTY_ALLOW_LATE_SUBMISSIONS,
-            self::PROPERTY_AUTOMATIC_FEEDBACK_TEXT,
-            self::PROPERTY_VISIBILTY_FEEDBACK,
-            self::PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS,
-            self::PROPERTY_ALLOWED_TYPES
-        );
+        return 'repository_assignment';
     }
 
     public function get_allow_late_submissions()
@@ -96,19 +104,6 @@ class Assignment extends ContentObject implements AttachmentSupport
     public function get_start_time()
     {
         return $this->getAdditionalProperty(self::PROPERTY_START_TIME);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_assignment';
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function get_visibility_feedback()

@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface
 use Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataClass\Wiki;
 
 /**
- *
  * @package application.lib.weblcms.tool.wiki
  */
 
@@ -15,17 +14,19 @@ use Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataClass\Wiki;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements IntroductionTextSupportInterface
 {
+    public const CONTEXT = __NAMESPACE__;
+
+    public static function get_allowed_types()
+    {
+        return [Wiki::class];
+    }
 
     public function get_available_browser_types()
     {
         $browser_types = [];
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_TABLE;
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_LIST;
-        return $browser_types;
-    }
 
-    public static function get_allowed_types()
-    {
-        return array(Wiki::class);
+        return $browser_types;
     }
 }

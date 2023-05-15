@@ -22,10 +22,9 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package home.lib This is a skeleton for a data manager for the Home application.
- * @author Hans De Bisschop
- * @author Dieter De Neef
+ * @author  Hans De Bisschop
+ * @author  Dieter De Neef
  */
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -38,7 +37,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             User::class, intval($current_user_id)
         );
 
-        $user_home_allowed = Configuration::getInstance()->get_setting(array(Manager::CONTEXT, 'allow_user_home'));
+        $user_home_allowed = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'allow_user_home']);
         $generalMode = Session::retrieve('Chamilo\Core\Home\General');
 
         if ($current_user instanceof User)
@@ -64,7 +63,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function getPlatformBlocks()
     {
-        $homeIntegrations = Configuration::getInstance()->getIntegrationRegistrations(Manager::package());
+        $homeIntegrations = Configuration::getInstance()->getIntegrationRegistrations(Manager::CONTEXT);
         $blocks = [];
 
         foreach ($homeIntegrations as $homeIntegration)
@@ -82,7 +81,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 $packageId = $homeIntegration[Registration::PROPERTY_CONTEXT];
 
                 $packageGlyph = new NamespaceIdentGlyph(
-                    $parentNamespace, true, false, false, IdentGlyph::SIZE_MINI, array('fa-fw')
+                    $parentNamespace, true, false, false, IdentGlyph::SIZE_MINI, ['fa-fw']
                 );
 
                 $blocks[$packageId]['name'] = Translation::get('TypeName', null, $parentNamespace);
@@ -92,14 +91,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     $blockName = ClassnameUtilities::getInstance()->getClassnameFromNamespace($blockType);
 
                     $blockGlyph = new NamespaceIdentGlyph(
-                        $blockType, true, false, false, IdentGlyph::SIZE_MINI, array('fa-fw')
+                        $blockType, true, false, false, IdentGlyph::SIZE_MINI, ['fa-fw']
                     );
 
-                    $blocks[$packageId]['components'][] = array(
+                    $blocks[$packageId]['components'][] = [
                         BlockRenderer::BLOCK_PROPERTY_ID => $blockType,
                         BlockRenderer::BLOCK_PROPERTY_NAME => Translation::get($blockName, null, $packageId),
                         BlockRenderer::BLOCK_PROPERTY_IMAGE => $blockGlyph->render()
-                    );
+                    ];
                 }
             }
         }
@@ -117,7 +116,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $columnIdentifiers = self::distinct(
             Element::class, new DataClassDistinctParameters(
                 $columnCondition,
-                new RetrieveProperties(array(new PropertyConditionVariable(Element::class, Element::PROPERTY_ID)))
+                new RetrieveProperties([new PropertyConditionVariable(Element::class, Element::PROPERTY_ID)])
             )
         );
 
@@ -129,7 +128,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
-     *
      * @param int $userIdentifier
      *
      * @return bool

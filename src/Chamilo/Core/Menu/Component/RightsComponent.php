@@ -9,11 +9,10 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Rights\Form\RightsForm;
 
 /**
- *
  * @package Chamilo\Core\Menu\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class RightsComponent extends Manager implements DelegateComponent
 {
@@ -42,10 +41,11 @@ class RightsComponent extends Manager implements DelegateComponent
         $itemIdentifier = $this->getItemIdentifier();
 
         $postBackUrl = new Redirect(
-            array(
-                self::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => self::ACTION_RIGHTS,
+            [
+                self::PARAM_CONTEXT => Manager::CONTEXT,
+                self::PARAM_ACTION => self::ACTION_RIGHTS,
                 self::PARAM_ITEM => $itemIdentifier
-            )
+            ]
         );
 
         $rightsLocation = $rightsService->findRightsLocationForItemIdentifier($itemIdentifier);
@@ -68,15 +68,15 @@ class RightsComponent extends Manager implements DelegateComponent
 
             $message = $this->getTranslator()->trans(
                 $success ? 'RightsConfigured' : 'RightsNotConfigured',
-                array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')),
+                ['OBJECT' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')],
                 'Chamilo\Libraries\Rights'
             );
 
             $this->redirectWithMessage(
-                $message, !$success, array(
+                $message, !$success, [
                     Manager::PARAM_ACTION => Manager::ACTION_BROWSE,
                     Manager::PARAM_PARENT => $this->getItemParentIdentifier()
-                )
+                ]
             );
         }
 

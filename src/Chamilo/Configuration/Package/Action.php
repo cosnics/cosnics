@@ -3,18 +3,17 @@ namespace Chamilo\Configuration\Package;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 
 abstract class Action
 {
     use ClassContext;
-    
+
     // Types
-    const TYPE_NORMAL = '1';
-    const TYPE_CONFIRM = '2';
-    const TYPE_WARNING = '3';
-    const TYPE_ERROR = '4';
+    public const TYPE_CONFIRM = '2';
+    public const TYPE_ERROR = '4';
+    public const TYPE_NORMAL = '1';
+    public const TYPE_WARNING = '3';
 
     private $message;
 
@@ -27,9 +26,6 @@ abstract class Action
     {
         switch ($type)
         {
-            case self::TYPE_NORMAL :
-                $this->message[] = $message;
-                break;
             case self::TYPE_CONFIRM :
                 $this->message[] = '<span style="color: green; font-weight: bold;">' . $message . '</span>';
                 break;
@@ -45,45 +41,25 @@ abstract class Action
         }
     }
 
-    public function set_message($message)
-    {
-        $this->message = $message;
-    }
-
-    /**
-     *
-     * @return string[]
-     */
-    public function get_message()
-    {
-        return $this->message;
-    }
-
     public function failed($error_message)
     {
         $this->add_message(self::TYPE_ERROR, $error_message);
         $this->add_message(self::TYPE_ERROR, Translation::get($this->getType() . 'Failed'));
+
         return false;
-    }
-
-    public function successful()
-    {
-        $this->add_message(self::TYPE_CONFIRM, Translation::get($this->getType() . 'Successful'));
-        return true;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function retrieve_message()
-    {
-        return implode('<br />' . PHP_EOL, $this->get_message());
     }
 
     public function getType()
     {
         return ClassnameUtilities::getInstance()->getClassnameFromObject($this);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function get_message()
+    {
+        return $this->message;
     }
 
     /**
@@ -94,17 +70,23 @@ abstract class Action
         return $this->getType();
     }
 
-    public function get_path()
-    {
-        return Path::getInstance()->namespaceToFullPath(static::package());
-    }
-
     /**
-     *
      * @return string
      */
-    public static function package()
+    public function retrieve_message()
     {
-        return ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
+        return implode('<br />' . PHP_EOL, $this->get_message());
+    }
+
+    public function set_message($message)
+    {
+        $this->message = $message;
+    }
+
+    public function successful()
+    {
+        $this->add_message(self::TYPE_CONFIRM, Translation::get($this->getType() . 'Successful'));
+
+        return true;
     }
 }

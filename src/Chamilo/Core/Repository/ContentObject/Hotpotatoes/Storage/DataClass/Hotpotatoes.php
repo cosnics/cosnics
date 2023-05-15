@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\File\Compression\Filecompression;
 use Chamilo\Libraries\File\Filesystem;
@@ -12,20 +11,16 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 
 /**
- *
- * @package repository.lib.content_object.hotpotatoes
- */
-
-/**
- * This class represents an open question
+ * @package Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass
  */
 class Hotpotatoes extends ContentObject implements Versionable
 {
-    const PROPERTY_MAXIMUM_ATTEMPTS = 'max_attempts';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Hotpotatoes';
 
-    const PROPERTY_PATH = 'path';
+    public const PROPERTY_MAXIMUM_ATTEMPTS = 'max_attempts';
+    public const PROPERTY_PATH = 'path';
 
-    const TYPE_HOTPOTATOES = 3;
+    public const TYPE_HOTPOTATOES = 3;
 
     public function add_javascript($postback_url, $goback_url, $tracker_id)
     {
@@ -57,7 +52,7 @@ class Hotpotatoes extends ContentObject implements Versionable
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_PATH, self::PROPERTY_MAXIMUM_ATTEMPTS);
+        return [self::PROPERTY_PATH, self::PROPERTY_MAXIMUM_ATTEMPTS];
     }
 
     /**
@@ -80,13 +75,13 @@ class Hotpotatoes extends ContentObject implements Versionable
 
     public function get_full_path()
     {
-        return Path::getInstance()->getPublicStoragePath(Hotpotatoes::package()) . $this->get_owner_id() . '/' .
+        return Path::getInstance()->getPublicStoragePath(Hotpotatoes::CONTEXT) . $this->get_owner_id() . '/' .
             $this->get_path();
     }
 
     public function get_full_url()
     {
-        return Path::getInstance()->getPublicStoragePath(Hotpotatoes::package(), true) . $this->get_owner_id() . '/' .
+        return Path::getInstance()->getPublicStoragePath(Hotpotatoes::CONTEXT, true) . $this->get_owner_id() . '/' .
             $this->get_path();
     }
 
@@ -105,11 +100,6 @@ class Hotpotatoes extends ContentObject implements Versionable
         return $this->getAdditionalProperty(self::PROPERTY_PATH);
     }
 
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
-
     /**
      * This function 'loads' the hotpotatoes excercise.
      *
@@ -125,7 +115,7 @@ class Hotpotatoes extends ContentObject implements Versionable
         $this->set_title($file_name);
         $this->set_description($file_name);
 
-        $hotpot_path = Path::getInstance()->getPublicStoragePath(Hotpotatoes::package()) . Session::get_user_id() . '/';
+        $hotpot_path = Path::getInstance()->getPublicStoragePath(Hotpotatoes::CONTEXT) . Session::get_user_id() . '/';
         $full_path = $hotpot_path . dirname($path_to_zip) . '/';
 
         $filecompression = Filecompression::factory();
@@ -154,9 +144,9 @@ class Hotpotatoes extends ContentObject implements Versionable
 
         if (is_file($full_file_path))
         {
-            if (!($fp = fopen(urldecode($full_file_path), "r")))
+            if (!($fp = fopen(urldecode($full_file_path), 'r')))
             {
-                return "";
+                return '';
             }
             $contents = fread($fp, filesize($full_file_path));
             fclose($fp);
@@ -167,7 +157,7 @@ class Hotpotatoes extends ContentObject implements Versionable
 
     private function replace_javascript($content, $postback_url, $goback_url, $tracker_id)
     {
-        $mit = "function Finish(){";
+        $mit = 'function Finish(){';
         $js_content = "var SaveScoreVariable = 0; // This variable included by Chamilo System\n" .
             "function mySaveScore() // This function included by Chamilo System\n" . "{\n" .
             "   if (SaveScoreVariable==0)\n" . "		{\n" . "			SaveScoreVariable = 1;\n" .
@@ -184,10 +174,10 @@ class Hotpotatoes extends ContentObject implements Versionable
                 "				window.parent.location.href=\"" . $goback_url . "\"\n" . "			}\n";
         }
 
-        $js_content .= "		}\n" . " }\n" . "// Must be included \n" . "function Finish(){\n" . " mySaveScore();";
+        $js_content .= "		}\n" . " }\n" . "// Must be included \n" . "function Finish(){\n" . ' mySaveScore();';
         $newcontent = str_replace($mit, $js_content, $content);
-        $prehref = "<!-- BeginTopNavButtons -->";
-        $posthref = "<!-- BeginTopNavButtons --><!-- edited by Chamilo -->";
+        $prehref = '<!-- BeginTopNavButtons -->';
+        $posthref = '<!-- BeginTopNavButtons --><!-- edited by Chamilo -->';
         $newcontent = str_replace($prehref, $posthref, $newcontent);
 
         $jquery_content = "<head>\n<script src='" . Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
@@ -214,7 +204,7 @@ class Hotpotatoes extends ContentObject implements Versionable
         $full_web_path = $this->get_full_url() . '.t.htm';
         Filesystem::remove($full_file_path);
 
-        if (($fp = fopen(urldecode($full_file_path), "w")))
+        if (($fp = fopen(urldecode($full_file_path), 'w')))
         {
             fwrite($fp, $content);
             fclose($fp);

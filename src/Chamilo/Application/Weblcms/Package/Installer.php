@@ -11,59 +11,49 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package application.lib.weblcms.install
- */
-
-/**
- * This installer can be used to create the storage structure for the weblcms application.
+ * @package Chamilo\Application\Weblcms\Package
  */
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
+    public const CONTEXT = Manager::CONTEXT;
 
     /**
      * **************************************************************************************************************
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
-     * Runs the install-script.
+     * Installs the root location of the courses subtree and sets the default rights for everyone on root location so
+     * the rights are no issue when using no course type
+     *
+     * @return bool
      */
-    public function extra()
+    private function create_courses_subtree()
     {
-        if (! $this->create_courses_subtree())
+        $rights_utilities = CourseManagementRights::getInstance();
+
+        $location =
+            $rights_utilities->create_subtree_root_location(Manager::CONTEXT, 0, WeblcmsRights::TREE_TYPE_COURSE, true);
+
+        if (!$location)
         {
             return false;
         }
-        else
+
+        $specific_rights = $rights_utilities->get_specific_course_management_rights();
+
+        foreach ($specific_rights as $right_id)
         {
-            $this->add_message(
-                self::TYPE_NORMAL, 
-                Translation::get(
-                    'ObjectCreated', 
-                    array('OBJECT' => Translation::get('CoursesTree')), 
-                    StringUtilities::LIBRARIES));
+
+            if (!$rights_utilities->invert_location_entity_right(
+                Manager::CONTEXT, $right_id, 0, 0, $location->get_id()
+            ))
+            {
+                return false;
+            }
         }
-        if (! $this->create_default_categories_in_weblcms())
-        {
-            return false;
-        }
-        
-        if (! CourseSettingsController::install_course_settings($this))
-        {
-            return false;
-        }
-        
-        if (! Rights::getInstance()->create_request_root())
-        {
-            return false;
-        }
-        else
-        {
-            $this->add_message(self::TYPE_NORMAL, Translation::get('QuotaLocationCreated'));
-        }
-        
+
         return true;
     }
 
@@ -72,42 +62,11 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      * Helper Functionality *
      * **************************************************************************************************************
      */
-    
-    /**
-     * Installs the root location of the courses subtree and sets the default rights for everyone on root location so
-     * the rights are no issue when using no course type
-     * 
-     * @return boolean
-     */
-    private function create_courses_subtree()
-    {
-        $rights_utilities = CourseManagementRights::getInstance();
-        
-        $location = $rights_utilities->create_subtree_root_location(Manager::CONTEXT,0, WeblcmsRights::TREE_TYPE_COURSE, true);
-        
-        if (! $location)
-        {
-            return false;
-        }
-        
-        $specific_rights = $rights_utilities->get_specific_course_management_rights();
-        
-        foreach ($specific_rights as $right_id)
-        {
-            
-            if (! $rights_utilities->invert_location_entity_right(Manager::CONTEXT,$right_id, 0, 0, $location->get_id()))
-            {
-                return false;
-            }
-        }
-        
-        return true;
-    }
 
     /**
      * Installs example course categories
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     private function create_default_categories_in_weblcms()
     {
@@ -116,32 +75,71 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $cat->set_name('Language skills');
         $cat->set_parent('0');
         $cat->set_display_order(1);
-        
-        if (! $cat->create())
+
+        if (!$cat->create())
         {
             return false;
         }
-        
+
         // creating PC Skills
         $cat = new CourseCategory();
         $cat->set_name('PC skills');
         $cat->set_parent('0');
         $cat->set_display_order(1);
-        if (! $cat->create())
+        if (!$cat->create())
         {
             return false;
         }
-        
+
         // creating Projects
         $cat = new CourseCategory();
         $cat->set_name('Projects');
         $cat->set_parent('0');
         $cat->set_display_order(1);
-        if (! $cat->create())
+        if (!$cat->create())
         {
             return false;
         }
-        
+
+        return true;
+    }
+
+    /**
+     * Runs the install-script.
+     */
+    public function extra()
+    {
+        if (!$this->create_courses_subtree())
+        {
+            return false;
+        }
+        else
+        {
+            $this->add_message(
+                self::TYPE_NORMAL, Translation::get(
+                'ObjectCreated', ['OBJECT' => Translation::get('CoursesTree')], StringUtilities::LIBRARIES
+            )
+            );
+        }
+        if (!$this->create_default_categories_in_weblcms())
+        {
+            return false;
+        }
+
+        if (!CourseSettingsController::install_course_settings($this))
+        {
+            return false;
+        }
+
+        if (!Rights::getInstance()->create_request_root())
+        {
+            return false;
+        }
+        else
+        {
+            $this->add_message(self::TYPE_NORMAL, Translation::get('QuotaLocationCreated'));
+        }
+
         return true;
     }
 }

@@ -2,35 +2,39 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package repository.lib.content_object.rating_question
- */
-
-/**
- * This class represents an open question
+ * @package Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Storage\DataClass
  */
 class AssessmentRatingQuestion extends ContentObject implements Versionable
 {
-    const PROPERTY_CORRECT = 'correct';
-    const PROPERTY_FEEDBACK = 'feedback';
-    const PROPERTY_HIGH = 'high';
-    const PROPERTY_HINT = 'hint';
-    const PROPERTY_LOW = 'low';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion';
+
+    public const PROPERTY_CORRECT = 'correct';
+    public const PROPERTY_FEEDBACK = 'feedback';
+    public const PROPERTY_HIGH = 'high';
+    public const PROPERTY_HINT = 'hint';
+    public const PROPERTY_LOW = 'low';
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(
+        return [
             self::PROPERTY_LOW,
             self::PROPERTY_HIGH,
             self::PROPERTY_CORRECT,
             self::PROPERTY_FEEDBACK,
             self::PROPERTY_HINT
-        );
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_assessment_rating_question';
     }
 
     public function get_correct()
@@ -60,25 +64,12 @@ class AssessmentRatingQuestion extends ContentObject implements Versionable
      */
     public static function get_html_editors($html_editors = [])
     {
-        return parent::get_html_editors(array(self::PROPERTY_HINT, self::PROPERTY_FEEDBACK));
+        return parent::get_html_editors([self::PROPERTY_HINT, self::PROPERTY_FEEDBACK]);
     }
 
     public function get_low()
     {
         return $this->getAdditionalProperty(self::PROPERTY_LOW);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_assessment_rating_question';
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function has_hint()

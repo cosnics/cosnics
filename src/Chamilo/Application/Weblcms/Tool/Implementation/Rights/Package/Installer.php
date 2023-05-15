@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Rights\Package;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\Rights\Manager;
 use Chamilo\Application\Weblcms\Tool\ToolInstaller;
 
 /**
@@ -11,4 +12,5 @@ use Chamilo\Application\Weblcms\Tool\ToolInstaller;
  */
 class Installer extends ToolInstaller
 {
+    public const CONTEXT = Manager::CONTEXT;
 }

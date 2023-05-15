@@ -57,13 +57,11 @@ class ComplexDisplayComponent extends Manager
 {
 
     /**
-     *
      * @var TrackingService
      */
     protected $trackingService;
 
     /**
-     *
      * @var ContentObjectPublication
      */
     private $publication;
@@ -97,11 +95,10 @@ class ComplexDisplayComponent extends Manager
         if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
             $this->redirectWithMessage(
-                Translation::getInstance()->getTranslation('NotAllowed', null, StringUtilities::LIBRARIES), true, [],
-                array(
+                Translation::getInstance()->getTranslation('NotAllowed', null, StringUtilities::LIBRARIES), true, [], [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
-                )
+                ]
             );
         }
 
@@ -131,10 +128,9 @@ class ComplexDisplayComponent extends Manager
 
         try
         {
-            $context = $this->get_root_content_object()->package() . '\Display';
-
             return $this->getApplicationFactory()->getApplication(
-                $context, new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::CONTEXT,
+                new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
             )->run();
         }
         catch (TreeNodeNotFoundException $ex)
@@ -313,16 +309,16 @@ class ComplexDisplayComponent extends Manager
         $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID] =
             $this->getCurrentTreeNodeDataId();
 
-        return $this->get_url($parameters, array(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID));
+        return $this->get_url($parameters, [Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID]);
     }
 
     public function get_assessment_parameters()
     {
-        return array(
+        return [
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID,
             \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID
-        );
+        ];
     }
 
     public function get_assessment_question_attempt($complex_question_id)
@@ -341,7 +337,6 @@ class ComplexDisplayComponent extends Manager
     }
 
     /**
-     *
      * @return int
      */
     public function get_embedded_content_object_id()
@@ -352,13 +347,13 @@ class ComplexDisplayComponent extends Manager
     public function get_learning_path_content_object_assessment_result_url($complex_content_object_id, $details)
     {
         return $this->get_url(
-            array(
+            [
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->publication->getId(),
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_SHOW_PROGRESS => 'true',
                 \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_id,
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_DETAILS => $details
-            )
+            ]
         );
     }
 
@@ -414,7 +409,7 @@ class ComplexDisplayComponent extends Manager
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = Request::get('course');
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
             ClassnameUtilities::getInstance()->getPackageNameFromNamespace(
-                $this->package()
+                Manager::CONTEXT
             );
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
             \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
@@ -422,11 +417,11 @@ class ComplexDisplayComponent extends Manager
         $parameters[\Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID] =
             $this->get_root_content_object()->getId();
 
-        $reportingActions = array(
+        $reportingActions = [
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_REPORTING,
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT,
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
-        );
+        ];
 
         $requestedAction = $this->getRequest()->getFromRequestOrQuery(
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION
@@ -539,7 +534,6 @@ class ComplexDisplayComponent extends Manager
     }
 
     /**
-     *
      * @return bool
      */
     public function is_embedded()
@@ -574,7 +568,6 @@ class ComplexDisplayComponent extends Manager
     }
 
     /**
-     *
      * @param string $pageTitle
      *
      * @return string
@@ -594,7 +587,6 @@ class ComplexDisplayComponent extends Manager
     }
 
     /**
-     *
      * @param int $learning_path_item_attempt_id
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass

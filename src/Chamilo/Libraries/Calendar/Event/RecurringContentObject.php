@@ -2,14 +2,12 @@
 namespace Chamilo\Libraries\Calendar\Event;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
  * @package Chamilo\Libraries\Calendar\Event\Recurrence
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class RecurringContentObject extends ContentObject
 {
@@ -73,15 +71,6 @@ abstract class RecurringContentObject extends ContentObject
         $repeat_to = $this->get_until();
 
         return ($repeat_to == 0);
-    }
-
-    /**
-     * @return string
-     * @throws \ReflectionException
-     */
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassnameFromNamespace(static::class, true);
     }
 
     /**

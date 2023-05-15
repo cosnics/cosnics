@@ -16,7 +16,7 @@ use Chamilo\Libraries\Translation\Translation;
  * breadcrumb
  *
  * @package common\libraries
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\BreadcrumbGenerator
 {
@@ -30,24 +30,24 @@ class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\Breadcrumb
         $component = $this->getApplication();
 
         $redirect = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => Manager::package(),
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Manager::PARAM_ACTION => Manager::ACTION_ADMIN_BROWSER
-            )
+            ]
         );
         $breadcrumb_trail->add(new Breadcrumb($redirect->getUrl(), Translation::get('TypeName')));
 
-        $parentNamespace = ClassnameUtilities::getInstance()->getNamespaceParent($component->package());
+        $parentNamespace = ClassnameUtilities::getInstance()->getNamespaceParent($component::CONTEXT);
 
         $redirect = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => Manager::package(),
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Manager::PARAM_ACTION => Manager::ACTION_ADMIN_BROWSER,
                 BrowserComponent::PARAM_TAB => $parentNamespace
-            )
+            ]
         );
         $breadcrumb_trail->add(
-            new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, $component->package()))
+            new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, $component::CONTEXT))
         );
     }
 }

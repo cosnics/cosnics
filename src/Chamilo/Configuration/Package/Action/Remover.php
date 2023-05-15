@@ -8,15 +8,15 @@ use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
 
 /**
- *
  * @package Chamilo\Configuration\Package\Action
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class Remover extends Action
 {
@@ -24,7 +24,7 @@ abstract class Remover extends Action
     /**
      * Removes the package
      *
-     * @return boolean
+     * @return bool
      */
     public function run()
     {
@@ -75,7 +75,7 @@ abstract class Remover extends Action
 
     public function deconfigure_package()
     {
-        $settings_file = static::get_path() . 'php/settings/settings.xml';
+        $settings_file = $this->get_path() . 'php/settings/settings.xml';
 
         if (file_exists($settings_file))
         {
@@ -148,7 +148,6 @@ abstract class Remover extends Action
     }
 
     /**
-     *
      * @param string $context
      *
      * @return \configuration\package\action\Remover
@@ -170,6 +169,11 @@ abstract class Remover extends Action
         return [];
     }
 
+    public function get_path()
+    {
+        return Path::getInstance()->namespaceToFullPath(static::CONTEXT);
+    }
+
     public function parse_application_settings($file)
     {
         $doc = new DOMDocument();
@@ -182,17 +186,16 @@ abstract class Remover extends Action
 
         foreach ($setting_elements as $index => $setting_element)
         {
-            $settings[$setting_element->getAttribute('name')] = array(
+            $settings[$setting_element->getAttribute('name')] = [
                 'default' => $setting_element->getAttribute('default'),
                 'user_setting' => $setting_element->getAttribute('user_setting')
-            );
+            ];
         }
 
         return $settings;
     }
 
     /**
-     *
      * @param string $file
      *
      * @return string
@@ -209,7 +212,7 @@ abstract class Remover extends Action
     /**
      * Scans for the available storage units and removes them
      *
-     * @return boolean
+     * @return bool
      */
     public function uninstall_storage_units()
     {
@@ -235,7 +238,7 @@ abstract class Remover extends Action
      *
      * @param $package_attributes
      *
-     * @return boolean
+     * @return bool
      */
     public function verify_dependencies()
     {

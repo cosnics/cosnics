@@ -195,7 +195,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
     {
         $redirect = new Redirect(
             [
-                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::package(),
+                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_CATEGORY_MENU_FEED
             ]
         );

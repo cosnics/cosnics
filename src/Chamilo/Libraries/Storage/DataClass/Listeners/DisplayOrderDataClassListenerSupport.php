@@ -26,11 +26,6 @@ interface DisplayOrderDataClassListenerSupport
     public function getDisplayOrderProperty(): PropertyConditionVariable;
 
     /**
-     * @throws \ReflectionException
-     */
-    public static function package(): string;
-
-    /**
      * @param mixed $value
      *
      * @throws \Exception

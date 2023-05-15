@@ -10,8 +10,7 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Display extends QuestionDisplay
 {
@@ -61,14 +60,14 @@ class Display extends QuestionDisplay
         $element_template = implode(PHP_EOL, $element_template);
 
         $name = $clo_question->get_id() . '_0';
-        $formvalidator->addElement('textarea', $name, '', array('style' => $textarea_style));
+        $formvalidator->addElement('textarea', $name, '', ['style' => $textarea_style]);
         $renderer->setElementTemplate($element_template, $name);
 
         $formvalidator->addElement('html', '</div>');
 
         $formvalidator->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Assessment::package(), true) . 'GiveHint.js'
+            Path::getInstance()->getJavascriptPath(Assessment::CONTEXT, true) . 'GiveHint.js'
         )
         );
     }

@@ -125,7 +125,7 @@ class ReportingComponent extends BaseReportingComponent
         }
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath(Manager::package()) . 'KeyboardNavigation.js'
+            $this->getWebPathBuilder()->getJavascriptPath(Manager::CONTEXT) . 'KeyboardNavigation.js'
         );
 
         $html[] = $this->render_footer();

@@ -108,7 +108,7 @@ class PublicationModifier implements PublicationModifierInterface
 
             $publicationUrl = $this->getUrlGenerator()->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => PersonalCalendarManager::package(),
+                    Application::PARAM_CONTEXT => PersonalCalendarManager::CONTEXT,
                     Application::PARAM_ACTION => PersonalCalendarManager::ACTION_VIEW,
                     PersonalCalendarManager::PARAM_PUBLICATION_ID => $publication->getId()
                 ]

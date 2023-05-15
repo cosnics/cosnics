@@ -153,7 +153,7 @@ abstract class QuestionDisplay
         $type = $question->getType();
 
         $class = ClassnameUtilities::getInstance()->getNamespaceParent($type, 3) . '\Integration\\' .
-             Assessment::package() . '\Display\Display';
+             Assessment::CONTEXT . '\Display\Display';
         $question_display = new $class($formvalidator, $complex_content_object_question, $question_nr, $question);
         return $question_display;
     }

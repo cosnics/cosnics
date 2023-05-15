@@ -2,22 +2,13 @@
 namespace Chamilo\Core\Repository\ContentObject\Note\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- *
- * @package repository.lib.content_object.note
- */
-/**
- * This class represents an note
+ * @package Chamilo\Core\Repository\ContentObject\Note\Storage\DataClass
  */
 class Note extends ContentObject implements Versionable, AttachmentSupport
 {
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Note';
 }

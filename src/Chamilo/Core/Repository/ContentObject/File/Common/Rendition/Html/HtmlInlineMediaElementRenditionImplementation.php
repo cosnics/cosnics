@@ -35,7 +35,7 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
         );
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(File::package(), true) . 'MediaElementJS.js'
+            Path::getInstance()->getJavascriptPath(File::CONTEXT, true) . 'MediaElementJS.js'
         );
 
         $html[] = $this->getMediaElement($parameters);

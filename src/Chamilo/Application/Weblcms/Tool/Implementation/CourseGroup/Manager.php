@@ -38,7 +38,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     public const PARAM_TAB = 'tab';
     public const PARAM_UNSUBSCRIBE_USERS = 'unsubscribe_users';
 
-    public const TOOL_NAME = 'course_group';
+    public const TOOL_NAME = 'CourseGroup';
 
     public function getAdditionalParameters(array $additionalParameters = []): array
     {

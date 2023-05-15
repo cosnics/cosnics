@@ -77,7 +77,7 @@ class CourseGroupEntity implements NestedRightsEntity
     public static function getElementFinderTypeInstance()
     {
         return new AdvancedElementFinderElementType(
-            'course_groups', Translation::get('CourseGroups'), Manager::package(), 'course_groups_feed'
+            'course_groups', Translation::get('CourseGroups'), Manager::CONTEXT, 'course_groups_feed'
         );
     }
 

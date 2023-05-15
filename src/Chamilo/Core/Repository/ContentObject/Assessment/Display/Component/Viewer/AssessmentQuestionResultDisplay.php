@@ -8,29 +8,27 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc
  */
 abstract class AssessmentQuestionResultDisplay
 {
 
-    /**
-     *
-     * @var AssessmentResultProcessor
-     */
-    private $viewerApplication;
+    private $answers;
 
     private $complex_content_object_question;
+
+    private $hints;
 
     private $question;
 
     private $question_nr;
 
-    private $answers;
-
     private $score;
 
-    private $hints;
+    /**
+     * @var AssessmentResultProcessor
+     */
+    private $viewerApplication;
 
     public function __construct(
         Application $viewerApplication, $complex_content_object_question, $question_nr, $answers, $score, $hints
@@ -79,7 +77,7 @@ abstract class AssessmentQuestionResultDisplay
     )
     {
         $class =
-            $complex_content_object_question->get_ref_object()->package() . '\Integration\\' . Assessment::package() .
+            $complex_content_object_question->get_ref_object()::CONTEXT . '\Integration\\' . Assessment::CONTEXT .
             '\Display\ResultDisplay';
 
         $question_result_display = new $class(
@@ -169,7 +167,7 @@ abstract class AssessmentQuestionResultDisplay
         if ($this->hints > 0)
         {
             $variable = $this->hints == 1 ? 'HintUsed' : 'HintsUsed';
-            $label = Translation::get($variable, array('COUNT' => $this->hints));
+            $label = Translation::get($variable, ['COUNT' => $this->hints]);
 
             $glyph = new FontAwesomeGlyph('magic', [], $label, 'fas');
 

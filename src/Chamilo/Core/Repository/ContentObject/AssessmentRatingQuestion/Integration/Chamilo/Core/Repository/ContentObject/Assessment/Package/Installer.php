@@ -3,4 +3,5 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Integra
 
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment';
 }

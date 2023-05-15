@@ -84,7 +84,7 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
     public function get_allowed_content_object_types()
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
-            Manager::package(), \Chamilo\Core\Repository\Manager::package() . '\ContentObject'
+            Manager::CONTEXT, \Chamilo\Core\Repository\Manager::CONTEXT . '\ContentObject'
         );
         $types = [];
 

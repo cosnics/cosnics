@@ -13,7 +13,7 @@ abstract class ContentObjectImportImplementation extends AbstractContentObjectIm
         ContentObjectImportController $controller, $content_object_type, $content_object_import_parameters
     )
     {
-        $class = $content_object_type::package() . '\Common\Import\\' .
+        $class = $content_object_type::CONTEXT . '\Common\Import\\' .
             (string) StringUtilities::getInstance()->createString($controller::FORMAT)->upperCamelize() .
             'ImportImplementation';
 

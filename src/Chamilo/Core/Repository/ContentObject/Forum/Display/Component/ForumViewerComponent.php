@@ -324,7 +324,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             if ($isViewable)
             {
                 $fileFontAwesomeGlyph = new FontAwesomeGlyph(
-                    'file', [], Translation::get('ViewLastPost', null, Forum::package())
+                    'file', [], Translation::get('ViewLastPost', null, Forum::CONTEXT)
                 );
 
                 $html[] = '&nbsp;';
@@ -605,15 +605,15 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             $header->setCellAttributes(0, 0, array('class' => 'cell-stat'));
             $header->setHeaderContents(0, 1, '<h3>' . Translation::get('Subforums') . '</h3>');
 
-            $bootstrapGlyph = new FontAwesomeGlyph('comments', [], Translation::get("Topics", null, Forum::package()));
+            $bootstrapGlyph = new FontAwesomeGlyph('comments', [], Translation::get("Topics", null, Forum::CONTEXT));
             $header->setHeaderContents(0, 2, $bootstrapGlyph->render());
             $header->setCellAttributes(0, 2, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
 
-            $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get("Posts", null, Forum::package()));
+            $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get("Posts", null, Forum::CONTEXT));
             $header->setHeaderContents(0, 3, $bootstrapGlyph->render());
             $header->setCellAttributes(0, 3, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
 
-            $header->setHeaderContents(0, 4, Translation::get("LastPostForum", null, Forum::package()));
+            $header->setHeaderContents(0, 4, Translation::get("LastPostForum", null, Forum::CONTEXT));
             $header->setCellAttributes(0, 4, array('class' => 'cell-stat-2x hidden-xs hidden-sm'));
             $header->setHeaderContents(0, 5, '');
             $header->setCellAttributes(0, 5, array('class' => 'cell-stat-2x'));
@@ -770,7 +770,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $parameters[self::PARAM_ACTION] = self::ACTION_TOPIC_SUBSCRIBE;
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation::get('Subscribe', null, ForumTopic::package()), new FontAwesomeGlyph('envelope'),
+                        Translation::get('Subscribe', null, ForumTopic::CONTEXT), new FontAwesomeGlyph('envelope'),
                         $this->get_url($parameters), Button::DISPLAY_ICON,
                         Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
                     )
@@ -782,7 +782,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $parameters[self::PARAM_SUBSCRIBE_ID] = $topic->get_ref()->get_id();
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation::get('UnSubscribe', null, ForumTopic::package()),
+                        Translation::get('UnSubscribe', null, ForumTopic::CONTEXT),
                         new FontAwesomeGlyph('envelope', [], null, 'far'), $this->get_url($parameters),
                         Button::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES),
                         ['btn-link']
@@ -873,19 +873,19 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         $header->setCellAttributes(0, 0, array('class' => 'cell-stat'));
         $header->setHeaderContents(0, 1, '<h3>' . Translation::get('Topics') . '</h3>');
 
-        $bootstrapGlyph = new FontAwesomeGlyph('user', [], Translation::get("Author", null, Forum::package()));
+        $bootstrapGlyph = new FontAwesomeGlyph('user', [], Translation::get("Author", null, Forum::CONTEXT));
         $header->setHeaderContents(0, 2, $bootstrapGlyph->render());
         $header->setCellAttributes(0, 2, array('class' => 'cell-stat-2x text-center'));
 
-        $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get("Replies", null, Forum::package()));
+        $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get("Replies", null, Forum::CONTEXT));
         $header->setHeaderContents(0, 3, $bootstrapGlyph->render());
         $header->setCellAttributes(0, 3, array('class' => 'cell-stat text-center'));
 
-        $bootstrapGlyph = new FontAwesomeGlyph('eye', [], Translation::get("Views", null, Forum::package()));
+        $bootstrapGlyph = new FontAwesomeGlyph('eye', [], Translation::get("Views", null, Forum::CONTEXT));
         $header->setHeaderContents(0, 4, $bootstrapGlyph->render());
 
         $header->setCellAttributes(0, 4, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
-        $header->setHeaderContents(0, 5, Translation::get("LastPostForum", null, Forum::package()));
+        $header->setHeaderContents(0, 5, Translation::get("LastPostForum", null, Forum::CONTEXT));
         $header->setCellAttributes(0, 5, array('class' => 'cell-stat-2x hidden-xs hidden-sm'));
         $header->setHeaderContents(0, 6, '');
         $header->setCellAttributes(0, 6, array('class' => 'cell-stat-2x'));

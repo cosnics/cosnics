@@ -1,14 +1,12 @@
 <?php
 namespace Chamilo\Core\Rights\Package;
 
-/**
- *
- * @package rights.install
- */
+use Chamilo\Core\Rights\Manager;
 
 /**
- * This installer can be used to create the storage structure for the weblcms application.
+ * @package Chamilo\Core\Rights\Package
  */
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
+    public const CONTEXT = Manager::CONTEXT;
 }

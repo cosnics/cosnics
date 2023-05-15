@@ -17,7 +17,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.tool.wiki.component
  */
 class ComplexDisplayComponent extends Manager implements DelegateComponent, WikiDisplaySupport
@@ -31,38 +30,36 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Wiki
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $publication_id);
 
         $this->publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $publication_id);
-        if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
+            ContentObjectPublication::class, $publication_id
+        );
+        if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
             $this->redirectWithMessage(
-                Translation::get("NotAllowed", null, StringUtilities::LIBRARIES),
-                true,
-                [],
-                array(
+                Translation::get('NotAllowed', null, StringUtilities::LIBRARIES), true, [], [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+                ]
+            );
         }
 
         $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
             BreadcrumbTrail::getInstance(), $this, $this->publication
         );
 
-        $context = $this->publication->get_content_object()->package() . '\Display';
-
         return $this->getApplicationFactory()->getApplication(
-            $context,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
-    }
-
-    public function get_root_content_object()
-    {
-        return $this->publication->get_content_object();
+            \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager::CONTEXT,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
     }
 
     public function get_publication()
     {
         return $this->publication;
+    }
+
+    public function get_root_content_object()
+    {
+        return $this->publication->get_content_object();
     }
 
     public function get_wiki_page_statistics_reporting_template_name()
@@ -76,16 +73,6 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Wiki
     }
 
     // METHODS FOR COMPLEX DISPLAY RIGHTS
-    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
-    {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
-             $this->publication->get_allow_collaboration();
-    }
-
-    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
-    {
-        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
-    }
 
     public function is_allowed_to_add_child()
     {
@@ -102,8 +89,19 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Wiki
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
+            $this->publication->get_allow_collaboration();
+    }
+
     public function is_allowed_to_edit_feedback()
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+    }
+
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
+    {
+        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
     }
 }

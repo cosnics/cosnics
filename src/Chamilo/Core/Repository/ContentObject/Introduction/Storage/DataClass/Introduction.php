@@ -2,22 +2,12 @@
 namespace Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- *
- * @package repository.lib.content_object.introduction
- */
-
-/**
- * An Introduction
+ * @package Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass
  */
 class Introduction extends ContentObject implements Versionable
 {
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Introduction';
 }

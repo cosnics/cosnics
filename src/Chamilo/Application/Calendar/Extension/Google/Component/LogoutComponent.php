@@ -10,11 +10,10 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Extension\Google\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class LogoutComponent extends Manager implements DelegateComponent
 {
@@ -26,7 +25,7 @@ class LogoutComponent extends Manager implements DelegateComponent
 
         if ($isSuccessful)
         {
-            $this->getAvailabilityService()->deleteAvailabilityByCalendarType(self::package());
+            $this->getAvailabilityService()->deleteAvailabilityByCalendarType(Manager::CONTEXT);
         }
 
         return new RedirectResponse(
@@ -37,7 +36,6 @@ class LogoutComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
      * @return \Chamilo\Application\Calendar\Service\AvailabilityService
      */
     protected function getAvailabilityService()

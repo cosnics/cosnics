@@ -39,7 +39,7 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
         }
 
         $template =
-            $this->getTemplateRegistrationConsulter()->getTemplateRegistrationDefaultByType(Portfolio::package());
+            $this->getTemplateRegistrationConsulter()->getTemplateRegistrationDefaultByType(Portfolio::CONTEXT);
 
         $selected_template_id = TypeSelector::get_selection();
 
@@ -92,8 +92,8 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
                 {
                     $new_object = ContentObject::factory(PortfolioItem::class);
                     $new_object->set_owner_id($this->get_user_id());
-                    $new_object->set_title(PortfolioItem::getTypeName());
-                    $new_object->set_description(PortfolioItem::getTypeName());
+                    $new_object->set_title('portfolio_item');
+                    $new_object->set_description('portfolio_item');
                     $new_object->set_parent_id(0);
                     $new_object->set_reference($object_id);
                     $new_object->create();

@@ -44,7 +44,7 @@ class HomeComponent extends Manager
         $this->set_parameter(self::PARAM_USER_ID, $this->getCurrentUserId());
 
         return $this->getApplicationFactory()->getApplication(
-            Portfolio::package() . '\Display',
+            Portfolio::CONTEXT . '\Display',
             new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
         )->run();
     }

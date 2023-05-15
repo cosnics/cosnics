@@ -3,4 +3,5 @@ namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Ap
 
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
+    public const CONTEXT = 'Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar';
 }

@@ -16,13 +16,13 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * Base class for specific removal extensions of web applications
  *
  * @package Chamilo\Libraries\Architecture\Application
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class WebApplicationRemover extends Remover
+abstract class WebApplicationRemover extends Remover
 {
 
     /**
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      * @throws \ReflectionException
      */

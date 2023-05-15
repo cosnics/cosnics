@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Metadata\Package;
 
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
+use Chamilo\Core\Metadata\Manager;
 use Chamilo\Core\Metadata\Service\EntityTranslationService;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Core\Metadata\Storage\DataClass\Relation;
@@ -9,14 +10,14 @@ use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Core\Metadata\Package
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
+    public const CONTEXT = Manager::CONTEXT;
 
     public function extra()
     {
@@ -48,91 +49,91 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     public function installDefaultSchemas()
     {
         $schemaDefinition = [];
-        $schemaDefinition[Schema::class] = array(
+        $schemaDefinition[Schema::class] = [
             Schema::PROPERTY_NAMESPACE => 'dc',
             Schema::PROPERTY_NAME => 'Dublin Core',
             Schema::PROPERTY_DESCRIPTION => '',
             Schema::PROPERTY_URL => 'http://purl.org/dc/elements/1.1/',
             Schema::PROPERTY_FIXED => '1'
-        );
+        ];
 
-        $schemaDefinition[Element::class] = array(
-            'contributor' => array(
+        $schemaDefinition[Element::class] = [
+            'contributor' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            ),
-            'coverage' => array(
+            ],
+            'coverage' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            ),
-            'creator' => array(
+            ],
+            'creator' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            ),
-            'date' => array(
+            ],
+            'date' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            ),
-            'description' => array(
+            ],
+            'description' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_FREE,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            ),
-            'format' => array(
+            ],
+            'format' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            ),
-            'identifier' => array(
+            ],
+            'identifier' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            ),
-            'language' => array(
+            ],
+            'language' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_PREDEFINED,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            ),
-            'publisher' => array(
+            ],
+            'publisher' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            ),
-            'relation' => array(
+            ],
+            'relation' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            ),
-            'rights' => array(
+            ],
+            'rights' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            ),
-            'source' => array(
+            ],
+            'source' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            ),
-            'subject' => array(
+            ],
+            'subject' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            ),
-            'title' => array(
+            ],
+            'title' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_FREE,
                 Element::PROPERTY_VALUE_LIMIT => 1,
                 Element::PROPERTY_FIXED => 1
-            ),
-            'type' => array(
+            ],
+            'type' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            )
-        );
+            ]
+        ];
 
         $schemaInstaller = new \Chamilo\Core\Metadata\Schema\Action\Installer($schemaDefinition);
         if (!$schemaInstaller->run())
@@ -141,21 +142,21 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         }
 
         $schemaDefinition = [];
-        $schemaDefinition[Schema::class] = array(
+        $schemaDefinition[Schema::class] = [
             Schema::PROPERTY_NAMESPACE => 'ct',
             Schema::PROPERTY_NAME => 'Tags',
             Schema::PROPERTY_DESCRIPTION => '',
             Schema::PROPERTY_URL => 'http://www.chamilo.org/',
             Schema::PROPERTY_FIXED => '1'
-        );
+        ];
 
-        $schemaDefinition[Element::class] = array(
-            'tags' => array(
+        $schemaDefinition[Element::class] = [
+            'tags' => [
                 Element::PROPERTY_VALUE_TYPE => Element::VALUE_TYPE_VOCABULARY_USER,
                 Element::PROPERTY_VALUE_LIMIT => 0,
                 Element::PROPERTY_FIXED => 1
-            )
-        );
+            ]
+        ];
 
         $schemaInstaller = new \Chamilo\Core\Metadata\Schema\Action\Installer($schemaDefinition);
         if (!$schemaInstaller->run())

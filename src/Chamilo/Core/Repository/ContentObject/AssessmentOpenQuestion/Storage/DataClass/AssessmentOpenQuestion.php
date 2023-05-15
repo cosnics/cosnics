@@ -2,32 +2,36 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package repository.lib.content_object.assessment_open_question
- */
-
-/**
- * This class represents an open question
+ * @package Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataClass
  */
 class AssessmentOpenQuestion extends ContentObject implements Versionable
 {
-    const PROPERTY_FEEDBACK = 'feedback';
-    const PROPERTY_HINT = 'hint';
-    const PROPERTY_QUESTION_TYPE = 'question_type';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion';
 
-    const TYPE_DOCUMENT = 3;
-    const TYPE_OPEN = 1;
-    const TYPE_OPEN_WITH_DOCUMENT = 2;
+    public const PROPERTY_FEEDBACK = 'feedback';
+    public const PROPERTY_HINT = 'hint';
+    public const PROPERTY_QUESTION_TYPE = 'question_type';
+
+    public const TYPE_DOCUMENT = 3;
+    public const TYPE_OPEN = 1;
+    public const TYPE_OPEN_WITH_DOCUMENT = 2;
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_QUESTION_TYPE, self::PROPERTY_FEEDBACK, self::PROPERTY_HINT);
+        return [self::PROPERTY_QUESTION_TYPE, self::PROPERTY_FEEDBACK, self::PROPERTY_HINT];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_assessment_open_question';
     }
 
     public function get_default_weight()
@@ -52,25 +56,12 @@ class AssessmentOpenQuestion extends ContentObject implements Versionable
      */
     public static function get_html_editors($html_editors = [])
     {
-        return parent::get_html_editors(array(self::PROPERTY_HINT, self::PROPERTY_FEEDBACK));
+        return parent::get_html_editors([self::PROPERTY_HINT, self::PROPERTY_FEEDBACK]);
     }
 
     public function get_question_type()
     {
         return $this->getAdditionalProperty(self::PROPERTY_QUESTION_TYPE);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_assessment_open_question';
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public static function get_types()

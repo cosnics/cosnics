@@ -6,16 +6,19 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.reporting
- * @author Michael Kyndt
+ * @author  Michael Kyndt
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
-    const PARAM_REPORTING_TOOL = 'reporting_tool';
-    const PARAM_QUESTION = 'question';
-    const ACTION_VIEW_REPORT = 'Viewer';
-    const DEFAULT_ACTION = self::ACTION_VIEW_REPORT;
+    public const ACTION_VIEW_REPORT = 'Viewer';
+
+    public const CONTEXT = __NAMESPACE__;
+
+    public const DEFAULT_ACTION = self::ACTION_VIEW_REPORT;
+
+    public const PARAM_QUESTION = 'question';
+    public const PARAM_REPORTING_TOOL = 'reporting_tool';
 
     /**
      * Adds a breadcrumb to the browser component
@@ -32,7 +35,9 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
         $breadcrumbTrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_REPORT), $filter),
-                Translation::getInstance()->getTranslation('ViewerComponent', [], __NAMESPACE__)));
+                $this->get_url([self::PARAM_ACTION => self::ACTION_VIEW_REPORT], $filter),
+                Translation::getInstance()->getTranslation('ViewerComponent', [], __NAMESPACE__)
+            )
+        );
     }
 }

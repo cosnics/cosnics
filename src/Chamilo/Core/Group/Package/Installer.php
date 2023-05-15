@@ -1,30 +1,15 @@
 <?php
 namespace Chamilo\Core\Group\Package;
 
+use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 
 /**
- *
- * @package group.install
- */
-/**
- * This installer can be used to create the storage structure for the group application.
+ * @package Chamilo\Core\Group\Package
  */
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
-
-    /**
-     * Additional installation steps.
-     */
-    public function extra()
-    {
-        if (! $this->create_root_group())
-        {
-            return false;
-        }
-
-        return true;
-    }
+    public const CONTEXT = Manager::CONTEXT;
 
     public function create_root_group()
     {
@@ -35,6 +20,19 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $group->set_parent(0);
         $group->set_code(strtolower($values['organization_name']));
         $group->create();
+
+        return true;
+    }
+
+    /**
+     * Additional installation steps.
+     */
+    public function extra()
+    {
+        if (!$this->create_root_group())
+        {
+            return false;
+        }
 
         return true;
     }

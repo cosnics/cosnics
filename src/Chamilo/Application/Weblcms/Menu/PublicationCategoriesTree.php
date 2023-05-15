@@ -184,7 +184,7 @@ class PublicationCategoriesTree extends GenericTree
     {
         $searchUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::package(),
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::CONTEXT,
                 \Chamilo\Application\Weblcms\Ajax\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_XML_GROUP_MENU_FEED
             )
         );

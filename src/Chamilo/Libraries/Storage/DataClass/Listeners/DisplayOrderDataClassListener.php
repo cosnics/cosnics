@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataClass\Listeners;
 
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -11,7 +12,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * Dataclass listener which manipulates the crud methods to support common functionality for sort order logic
  *
  * @package Chamilo\Libraries\Storage\DataClass\Listeners
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class DisplayOrderDataClassListener extends DataClassListener
 {
@@ -61,14 +62,9 @@ class DisplayOrderDataClassListener extends DataClassListener
         $data_class = $this->dataClass;
         $display_order_property = $data_class->getDisplayOrderProperty()->getPropertyName();
 
-        /**
-         * @var \Chamilo\Libraries\Storage\DataManager\DataManager $data_manager
-         */
-        $data_manager = $data_class::package() . '\Storage\DataManager';
-
         if ($success)
         {
-            $success = $data_manager::move_display_orders(
+            $success = DataManager::move_display_orders(
                 $data_class->getDisplayOrderProperty()->getDataClassName(), $display_order_property,
                 $data_class->getDefaultProperty($display_order_property), null, $this->getDisplayOrderCondition()
             );
@@ -104,13 +100,8 @@ class DisplayOrderDataClassListener extends DataClassListener
     {
         $data_class = $this->dataClass;
 
-        /**
-         * @var \Chamilo\Libraries\Storage\DataManager\DataManager $data_manager
-         */
-        $data_manager = $data_class::package() . '\Storage\DataManager';
-
         $data_class->setDefaultProperty(
-            $data_class->getDisplayOrderProperty()->getPropertyName(), $data_manager::retrieve_next_value(
+            $data_class->getDisplayOrderProperty()->getPropertyName(), DataManager::retrieve_next_value(
             $data_class->getDisplayOrderProperty()->getDataClassName(),
             $data_class->getDisplayOrderProperty()->getPropertyName(), $this->getDisplayOrderCondition()
         )
@@ -178,16 +169,11 @@ class DisplayOrderDataClassListener extends DataClassListener
         $display_order_property = $data_class->getDisplayOrderProperty()->getPropertyName();
         $display_order_value = $data_class->getDefaultProperty($display_order_property);
 
-        /**
-         * @var \Chamilo\Libraries\Storage\DataManager\DataManager $data_manager
-         */
-        $data_manager = $data_class::package() . '\Storage\DataManager';
-
         if (isset($this->oldDisplayOrderCondition))
         {
             $original_value = $this->oldDisplayOrder ?: $display_order_value;
 
-            if (!$data_manager::move_display_orders(
+            if (!DataManager::move_display_orders(
                 $data_class->getDisplayOrderProperty()->getDataClassName(), $display_order_property, $original_value,
                 null, $this->oldDisplayOrderCondition
             ))
@@ -195,7 +181,7 @@ class DisplayOrderDataClassListener extends DataClassListener
                 return false;
             }
 
-            $next_display_order = $data_manager::retrieve_next_value(
+            $next_display_order = DataManager::retrieve_next_value(
                 $data_class->getDisplayOrderProperty()->getDataClassName(),
                 $data_class->getDisplayOrderProperty()->getPropertyName(), $this->getDisplayOrderCondition()
             );
@@ -214,7 +200,7 @@ class DisplayOrderDataClassListener extends DataClassListener
 
         if (isset($this->oldDisplayOrder) && !is_null($display_order_value))
         {
-            if (!$data_manager::move_display_orders(
+            if (!DataManager::move_display_orders(
                 $data_class->getDisplayOrderProperty()->getDataClassName(), $display_order_property,
                 $this->oldDisplayOrder, $display_order_value, $this->getDisplayOrderCondition()
             ))

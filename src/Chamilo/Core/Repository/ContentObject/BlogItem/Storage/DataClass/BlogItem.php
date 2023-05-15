@@ -2,24 +2,15 @@
 namespace Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- *
- * @package repository.lib.content_object.blog_item
- * @author Hans De Bisschop
- * @author Dieter De Neef
- */
-/**
- * This class represents an blog_item
+ * @package Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass
+ * @author  Dieter De Neef
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BlogItem extends ContentObject implements Versionable, AttachmentSupport
 {
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\BlogItem';
 }

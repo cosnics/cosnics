@@ -1,16 +1,15 @@
 <?php
-
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Package;
 
 use Chamilo\Core\Repository\Common\Action\ContentObjectInstaller;
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 
 /**
- *
- * @package repository.install
- *          Installer for the content object assignment
- * @author Joris Willems <joris.willems@gmail.com>
- * @author Alexander Van Paemel
+ * @package Chamilo\Core\Repository\ContentObject\Assignment\Package
+ * @author  Joris Willems <joris.willems@gmail.com>
+ * @author  Alexander Van Paemel
  */
 class Installer extends ContentObjectInstaller
 {
+    public const CONTEXT = Assignment::CONTEXT;
 }

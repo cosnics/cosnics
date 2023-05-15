@@ -20,24 +20,21 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Core\User\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class UserSettingsComponent extends ProfileComponent
 {
     public const PARAM_CONTEXT = 'context';
 
     /**
-     *
      * @var string
      */
     private $context;
 
     /**
-     *
      * @var \Chamilo\Core\User\Form\ConfigurationForm
      */
     private $form;
@@ -52,7 +49,7 @@ class UserSettingsComponent extends ProfileComponent
 
         if (!$this->context)
         {
-            $this->context = \Chamilo\Core\Admin\Manager::package();
+            $this->context = \Chamilo\Core\Admin\Manager::CONTEXT;
         }
 
         if (!$this->getRegistrationConsulter()->isContextRegisteredAndActive($this->context))
@@ -62,7 +59,7 @@ class UserSettingsComponent extends ProfileComponent
 
         $this->form = new ConfigurationForm(
             $this->context, 'config', FormValidator::FORM_METHOD_POST,
-            $this->get_url(array(self::PARAM_CONTEXT => $this->context)), true
+            $this->get_url([self::PARAM_CONTEXT => $this->context]), true
         );
 
         if ($this->form->validate())
@@ -70,7 +67,7 @@ class UserSettingsComponent extends ProfileComponent
             $success = $this->form->update_user_settings();
             $this->redirectWithMessage(
                 Translation::get($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'), !$success,
-                array(Application::PARAM_ACTION => self::ACTION_USER_SETTINGS, self::PARAM_CONTEXT => $this->context)
+                [Application::PARAM_ACTION => self::ACTION_USER_SETTINGS, self::PARAM_CONTEXT => $this->context]
             );
         }
         else
@@ -80,7 +77,6 @@ class UserSettingsComponent extends ProfileComponent
     }
 
     /**
-     *
      * @return string
      */
     public function getContent()
@@ -99,10 +95,10 @@ class UserSettingsComponent extends ProfileComponent
             if ($this->getRegistrationConsulter()->isContextRegisteredAndActive($setting_context))
             {
                 $package_url = $this->get_url(
-                    array(
+                    [
                         Application::PARAM_ACTION => self::ACTION_USER_SETTINGS,
                         \Chamilo\Core\Admin\Manager::PARAM_CONTEXT => $setting_context
-                    )
+                    ]
                 );
                 $is_current_tab = ($this->context === $setting_context);
                 $tab = new LinkTab(

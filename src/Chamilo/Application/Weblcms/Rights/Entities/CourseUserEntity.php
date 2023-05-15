@@ -72,7 +72,7 @@ class CourseUserEntity extends UserEntity
     public static function getElementFinderTypeInstance()
     {
         return new AdvancedElementFinderElementType(
-            'users', Translation::get('CourseUsers'), Manager::package(), 'course_users_feed'
+            'users', Translation::get('CourseUsers'), Manager::CONTEXT, 'course_users_feed'
         );
     }
 

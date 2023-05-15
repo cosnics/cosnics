@@ -3,4 +3,5 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo
 
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\LearningPath\Integration\Chamilo\Core\Repository';
 }

@@ -143,7 +143,7 @@ class PublicationService
     public function createRootPortfolioForUser(User $user)
     {
         $templateRegistration =
-            $this->getTemplateRegistrationConsulter()->getTemplateRegistrationDefaultByType(Portfolio::package());
+            $this->getTemplateRegistrationConsulter()->getTemplateRegistrationDefaultByType(Portfolio::CONTEXT);
 
         $portfolio = new Portfolio();
         $portfolio->set_title($user->get_fullname());

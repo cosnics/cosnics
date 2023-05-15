@@ -13,17 +13,16 @@ use Exception;
 
 /**
  * @package Chamilo\Libraries\Rights\Domain
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class RightsLocation extends NestedSet
 {
-    const PROPERTY_IDENTIFIER = 'identifier';
-    const PROPERTY_INHERIT = 'inherit';
-    const PROPERTY_LOCKED = 'locked';
-    const PROPERTY_TREE_IDENTIFIER = 'tree_identifier';
-    const PROPERTY_TREE_TYPE = 'tree_type';
-    const PROPERTY_TYPE = 'type';
+    public const PROPERTY_IDENTIFIER = 'identifier';
+    public const PROPERTY_INHERIT = 'inherit';
+    public const PROPERTY_LOCKED = 'locked';
+    public const PROPERTY_TREE_IDENTIFIER = 'tree_identifier';
+    public const PROPERTY_TREE_TYPE = 'tree_type';
+    public const PROPERTY_TYPE = 'type';
 
     /**
      * @throws \Exception
@@ -41,19 +40,19 @@ abstract class RightsLocation extends NestedSet
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
-            array(
+            [
                 self::PROPERTY_TYPE,
                 self::PROPERTY_IDENTIFIER,
                 self::PROPERTY_TREE_IDENTIFIER,
                 self::PROPERTY_TREE_TYPE,
                 self::PROPERTY_INHERIT,
                 self::PROPERTY_LOCKED
-            )
+            ]
         );
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_identifier()
     {
@@ -61,7 +60,7 @@ abstract class RightsLocation extends NestedSet
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function get_inherit()
     {
@@ -69,7 +68,7 @@ abstract class RightsLocation extends NestedSet
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function get_locked()
     {
@@ -89,7 +88,7 @@ abstract class RightsLocation extends NestedSet
     {
         $conditions = [];
 
-        $class_name = static::package() . '\Storage\DataClass\RightsLocationEntityRight';
+        $class_name = static::CONTEXT . '\Storage\DataClass\RightsLocationEntityRight';
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_LOCATION_ID),
@@ -118,7 +117,7 @@ abstract class RightsLocation extends NestedSet
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_tree_identifier()
     {
@@ -126,7 +125,7 @@ abstract class RightsLocation extends NestedSet
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_tree_type()
     {
@@ -134,7 +133,7 @@ abstract class RightsLocation extends NestedSet
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_type()
     {
@@ -150,7 +149,7 @@ abstract class RightsLocation extends NestedSet
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function inherits()
     {
@@ -158,7 +157,7 @@ abstract class RightsLocation extends NestedSet
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function is_locked()
     {
@@ -184,7 +183,17 @@ abstract class RightsLocation extends NestedSet
     }
 
     /**
-     * @param integer $identifier
+     * @param string $type
+     *
+     * @throws \Exception
+     */
+    public function setType($type)
+    {
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
+    }
+
+    /**
+     * @param int $identifier
      *
      * @throws \Exception
      */
@@ -194,7 +203,7 @@ abstract class RightsLocation extends NestedSet
     }
 
     /**
-     * @param integer $inherit
+     * @param int $inherit
      *
      * @throws \Exception
      */
@@ -204,7 +213,7 @@ abstract class RightsLocation extends NestedSet
     }
 
     /**
-     * @param integer $locked
+     * @param int $locked
      *
      * @throws \Exception
      */
@@ -214,7 +223,7 @@ abstract class RightsLocation extends NestedSet
     }
 
     /**
-     * @param integer $tree_identifier
+     * @param int $tree_identifier
      *
      * @throws \Exception
      */
@@ -224,23 +233,13 @@ abstract class RightsLocation extends NestedSet
     }
 
     /**
-     * @param integer $tree_type
+     * @param int $tree_type
      *
      * @throws \Exception
      */
     public function set_tree_type($tree_type)
     {
         $this->setDefaultProperty(self::PROPERTY_TREE_TYPE, $tree_type);
-    }
-
-    /**
-     * @param string $type
-     *
-     * @throws \Exception
-     */
-    public function setType($type)
-    {
-        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     /**

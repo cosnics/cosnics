@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Rights;
 
 /**
- *
  * @package application.lib.weblcms.tool.rights
  */
 
@@ -11,5 +10,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Rights;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
-    const DEFAULT_ACTION = self::ACTION_EDIT_RIGHTS;
+    public const CONTEXT = __NAMESPACE__;
+
+    public const DEFAULT_ACTION = self::ACTION_EDIT_RIGHTS;
 }

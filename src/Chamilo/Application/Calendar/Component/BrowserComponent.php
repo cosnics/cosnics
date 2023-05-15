@@ -45,7 +45,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $this->checkLoggedInAs();
 
         $this->getPageConfiguration()->addCssFile(
-            $this->getPathBuilder()->getCssPath(self::package(), true) . 'print.' .
+            $this->getPathBuilder()->getCssPath(Manager::CONTEXT, true) . 'print.' .
             $this->getThemePathBuilder()->getTheme() . '.min.css', 'print'
         );
 
@@ -84,7 +84,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         if (!isset($this->calendarDataProvider))
         {
             $displayParameters = [
-                self::PARAM_CONTEXT => self::package(),
+                self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => self::ACTION_BROWSE,
                 HtmlCalendarRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
                 HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
@@ -110,7 +110,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $printUrl = new Redirect(
             [
-                self::PARAM_CONTEXT => self::package(),
+                self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => self::ACTION_PRINT,
                 HtmlCalendarRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
                 HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
@@ -124,7 +124,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         $iCalUrl = new Redirect(
-            [Application::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => Manager::ACTION_ICAL]
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => Manager::ACTION_ICAL]
         );
 
         $buttonGroup->addButton(
@@ -145,7 +145,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         $availabilityUrl = new Redirect(
-            [Application::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => Manager::ACTION_AVAILABILITY]
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => Manager::ACTION_AVAILABILITY]
         );
 
         $splitDropdownButton->addSubButton(
@@ -165,7 +165,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $actions = [];
 
         $extensionRegistrations = Configuration::registrations_by_type(
-            Manager::package() . '\Extension'
+            Manager::CONTEXT . '\Extension'
         );
 
         $primaryExtensionActions = [];

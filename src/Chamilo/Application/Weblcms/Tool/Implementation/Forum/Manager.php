@@ -11,46 +11,49 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package application.lib.weblcms.tool.forum
  */
 
 /**
  * This tool allows a user to publish forums in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable,
-    IntroductionTextSupportInterface
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
+    implements Categorizable, IntroductionTextSupportInterface
 {
-    const ACTION_BROWSE_FORUMS = 'Browser';
-    const ACTION_VIEW_FORUM = 'Viewer';
-    const ACTION_PUBLISH_FORUM = 'Publisher';
-    const ACTION_MANAGE_CATEGORIES = 'CategoryManager';
-    const ACTION_CHANGE_LOCK = 'ChangeLock';
-    const ACTION_FORUM_SUBSCRIBE = 'ForumSubscribe';
-    const ACTION_FORUM_UNSUBSCRIBE = 'ForumUnsubscribe';
-    const PARAM_SUBSCRIBE_ID = 'subscribe';
-    const PARAM_FORUM_ID = 'forum_id';
+    public const ACTION_BROWSE_FORUMS = 'Browser';
+    public const ACTION_CHANGE_LOCK = 'ChangeLock';
+    public const ACTION_FORUM_SUBSCRIBE = 'ForumSubscribe';
+    public const ACTION_FORUM_UNSUBSCRIBE = 'ForumUnsubscribe';
+    public const ACTION_MANAGE_CATEGORIES = 'CategoryManager';
+    public const ACTION_PUBLISH_FORUM = 'Publisher';
+    public const ACTION_VIEW_FORUM = 'Viewer';
+
+    public const CONTEXT = __NAMESPACE__;
+
+    public const PARAM_FORUM_ID = 'forum_id';
+    public const PARAM_SUBSCRIBE_ID = 'subscribe';
 
     public static function get_allowed_types()
     {
-        return array(Forum::class);
+        return [Forum::class];
     }
 
     public static function get_subforum_parents($subforum_id)
     {
         $parent = DataManager::retrieve_by_id(
-            ComplexContentObjectItem::class,
-            $subforum_id);
+            ComplexContentObjectItem::class, $subforum_id
+        );
 
-        while (! empty($parent))
+        while (!empty($parent))
         {
             $parents[] = $parent;
             $parent = DataManager::retrieve_complex_content_object_items(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class,
-                        ComplexContentObjectItem::PROPERTY_REF),
-                    new StaticConditionVariable($parent->get_parent())));
+                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
+                    ), new StaticConditionVariable($parent->get_parent())
+                )
+            );
             $parent = $parent[0];
         }
         $parents = array_reverse($parents);

@@ -270,7 +270,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             Translation::get('Hidden', null, StringUtilities::LIBRARIES), null, ['class' => 'hidden_publication']
         );
 
-        $force_collaborate = Configuration::getInstance()->get_setting([Manager::package(), 'force_collaborate']) === 1;
+        $force_collaborate = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'force_collaborate']) === 1;
 
         // collaborate right for course admins if we are owner of each content
         // object to share
@@ -331,7 +331,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             {
                 if ($contentObject instanceof ComplexContentObjectSupport && !$first_publication->isIdentified())
                 {
-                    if ($contentObject::package() == 'Chamilo\Core\Repository\ContentObject\Assessment' &&
+                    if ($contentObject::CONTEXT == 'Chamilo\Core\Repository\ContentObject\Assessment' &&
                         ($canEditContentObject || $canEditPublicationContentObject))
                     {
                         $buttons[] = $this->createElement(
@@ -578,7 +578,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
     {
         $parameters = [];
 
-        $parameters[Manager::PARAM_CONTEXT] = Manager::package();
+        $parameters[Manager::PARAM_CONTEXT] = Manager::CONTEXT;
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
         $parameters[Manager::PARAM_COURSE] = $this->course->get_id();
         $parameters[Manager::PARAM_TOOL] = $publication->get_tool();
@@ -794,7 +794,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             $log .= " (unsuccessfull)\n";
         }
 
-        $logMails = Configuration::getInstance()->get_setting([Manager::package(), 'log_mails']);
+        $logMails = Configuration::getInstance()->get_setting([Manager::CONTEXT, 'log_mails']);
 
         if ($logMails)
         {
@@ -855,7 +855,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             }
 
             $force_collaborate = Configuration::getInstance()->get_setting(
-                    [Manager::package(), 'force_collaborate']
+                    [Manager::CONTEXT, 'force_collaborate']
                 ) === 1;
 
             if ($this->collaborate_possible && !$force_collaborate)

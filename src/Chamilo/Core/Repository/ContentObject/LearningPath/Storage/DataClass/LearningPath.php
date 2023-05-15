@@ -16,10 +16,12 @@ use Chamilo\Libraries\Platform\Session\Session;
 use InvalidArgumentException;
 
 /**
- * @package repository.lib.content_object.learning_path
+ * @package Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass
  */
 class LearningPath extends ContentObject implements ComplexContentObjectSupport, DisplayAndBuildSupport
 {
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\LearningPath';
+
     public const AUTOMATIC_NUMBERING_DIGITS = 'digits';
     public const AUTOMATIC_NUMBERING_NONE = 'none';
 
@@ -154,7 +156,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
         $classNameUtilities = ClassnameUtilities::getInstance();
         $configuration = Configuration::getInstance();
 
-        $registrations = $configuration->getIntegrationRegistrations(self::package());
+        $registrations = $configuration->getIntegrationRegistrations(LearningPath::CONTEXT);
         $types = [];
 
         usort(

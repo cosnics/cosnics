@@ -80,7 +80,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
         $removeUrl = $urlGenerator->fromParameters([
-            Application::PARAM_CONTEXT => Manager::package(),
+            Application::PARAM_CONTEXT => Manager::CONTEXT,
             Application::PARAM_ACTION => Manager::ACTION_TRUNCATE_GROUP
         ]);
 
@@ -91,7 +91,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         );
 
         $truncateUrl = $urlGenerator->fromParameters([
-            Application::PARAM_CONTEXT => Manager::package(),
+            Application::PARAM_CONTEXT => Manager::CONTEXT,
             Application::PARAM_ACTION => Manager::ACTION_TRUNCATE_GROUP
         ]);
 
@@ -188,7 +188,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         $toolbar = new Toolbar();
 
         $editUrl = $urlGenerator->fromParameters([
-            Application::PARAM_CONTEXT => Manager::package(),
+            Application::PARAM_CONTEXT => Manager::CONTEXT,
             Application::PARAM_ACTION => Manager::ACTION_EDIT_GROUP,
             Manager::PARAM_GROUP_ID => $group->getId()
         ]);
@@ -201,7 +201,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         );
 
         $subscribeUrl = $urlGenerator->fromParameters([
-            Application::PARAM_CONTEXT => Manager::package(),
+            Application::PARAM_CONTEXT => Manager::CONTEXT,
             Application::PARAM_ACTION => Manager::ACTION_SUBSCRIBE_USER_BROWSER,
             Manager::PARAM_GROUP_ID => $group->getId()
         ]);
@@ -218,7 +218,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         if ($visible)
         {
             $truncateUrl = $urlGenerator->fromParameters([
-                Application::PARAM_CONTEXT => Manager::package(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_TRUNCATE_GROUP,
                 Manager::PARAM_GROUP_ID => $group->getId()
             ]);
@@ -242,7 +242,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         }
 
         $deleteUrl = $urlGenerator->fromParameters([
-            Application::PARAM_CONTEXT => Manager::package(),
+            Application::PARAM_CONTEXT => Manager::CONTEXT,
             Application::PARAM_ACTION => Manager::ACTION_DELETE_GROUP,
             Manager::PARAM_GROUP_ID => $group->getId()
         ]);
@@ -255,7 +255,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         );
 
         $moveUrl = $urlGenerator->fromParameters([
-            Application::PARAM_CONTEXT => Manager::package(),
+            Application::PARAM_CONTEXT => Manager::CONTEXT,
             Application::PARAM_ACTION => Manager::ACTION_MOVE_GROUP,
             Manager::PARAM_GROUP_ID => $group->getId()
         ]);

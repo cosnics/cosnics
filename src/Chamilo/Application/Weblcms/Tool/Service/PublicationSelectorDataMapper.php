@@ -99,7 +99,7 @@ class PublicationSelectorDataMapper
                 $publication[ContentObjectPublicationCategory::PROPERTY_TOOL];
 
             $toolGlyph = new NamespaceIdentGlyph(
-                $publication[ContentObject::PROPERTY_TYPE]::package(), true, false, false, IdentGlyph::SIZE_MINI,
+                $publication[ContentObject::PROPERTY_TYPE]::CONTEXT, true, false, false, IdentGlyph::SIZE_MINI,
                 array('fa-fw')
             );
 

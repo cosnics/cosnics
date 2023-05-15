@@ -1,23 +1,26 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
- *
  * @package Chamilo\Core\Menu\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class LinkItem extends Item
 {
-    public const PROPERTY_URL = 'url';
     public const PROPERTY_TARGET = 'target';
+
+    public const PROPERTY_URL = 'url';
+
     public const TARGET_BLANK = 0;
-    public const TARGET_SELF = 1;
+
     public const TARGET_PARENT = 2;
+
+    public const TARGET_SELF = 1;
+
     public const TARGET_TOP = 3;
 
     /**
@@ -33,11 +36,77 @@ class LinkItem extends Item
     }
 
     /**
+     * @return string[]
+     */
+    public static function getAdditionalPropertyNames(): array
+    {
+        return [self::PROPERTY_URL, self::PROPERTY_TARGET];
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
+     */
+    public function getGlyph()
+    {
+        return new FontAwesomeGlyph('link', [], null, 'fas');
+    }
+
+    /**
      * @return string
      */
-    public static function getTypeName(): string
+    public static function getStorageUnitName(): string
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class);
+        return 'menu_link_item';
+    }
+
+    /**
+     * @return string
+     */
+    public function getTarget()
+    {
+        return $this->getAdditionalProperty(self::PROPERTY_TARGET);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTargetString()
+    {
+        return self::targetString($this->getTarget());
+    }
+
+    /**
+     * @param bool $typesOnly
+     *
+     * @return string[]
+     */
+    public static function getTargetTypes($typesOnly = false)
+    {
+        $types = [];
+
+        $types[self::TARGET_BLANK] = self::targetString(self::TARGET_BLANK);
+        $types[self::TARGET_SELF] = self::targetString(self::TARGET_SELF);
+        $types[self::TARGET_PARENT] = self::targetString(self::TARGET_PARENT);
+        $types[self::TARGET_TOP] = self::targetString(self::TARGET_TOP);
+
+        return ($typesOnly ? array_keys($types) : $types);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->getAdditionalProperty(self::PROPERTY_URL);
+    }
+
+    /**
+     * @return string
+     * @deprecated Use LinkApplicationItem::getTarget()
+     */
+    public function get_target()
+    {
+        return $this->getTarget();
     }
 
     /**
@@ -50,21 +119,11 @@ class LinkItem extends Item
     }
 
     /**
-     * @param string $url
-     *
-     * @deprecated Use LinkApplicationItem::setUrl()
+     * @param string $target
      */
-    public function set_url($url)
+    public function setTarget($target)
     {
-        return $this->setUrl($url);
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->getAdditionalProperty(self::PROPERTY_URL);
+        return $this->setAdditionalProperty(self::PROPERTY_TARGET, $target);
     }
 
     /**
@@ -73,15 +132,6 @@ class LinkItem extends Item
     public function setUrl($url)
     {
         return $this->setAdditionalProperty(self::PROPERTY_URL, $url);
-    }
-
-    /**
-     * @return string
-     * @deprecated Use LinkApplicationItem::getTarget()
-     */
-    public function get_target()
-    {
-        return $this->getTarget();
     }
 
     /**
@@ -95,36 +145,13 @@ class LinkItem extends Item
     }
 
     /**
-     * @return string
-     */
-    public function getTarget()
-    {
-        return $this->getAdditionalProperty(self::PROPERTY_TARGET);
-    }
-
-    /**
-     * @param string $target
-     */
-    public function setTarget($target)
-    {
-        return $this->setAdditionalProperty(self::PROPERTY_TARGET, $target);
-    }
-
-    /**
-     * @return string[]
-     */
-    public static function getAdditionalPropertyNames(): array
-    {
-        return array(self::PROPERTY_URL, self::PROPERTY_TARGET);
-    }
-
-    /**
+     * @param string $url
      *
-     * @return string
+     * @deprecated Use LinkApplicationItem::setUrl()
      */
-    public function getTargetString()
+    public function set_url($url)
     {
-        return self::targetString($this->getTarget());
+        return $this->setUrl($url);
     }
 
     /**
@@ -151,38 +178,5 @@ class LinkItem extends Item
             default:
                 return '_blank';
         }
-    }
-
-    /**
-     * @param bool $typesOnly
-     *
-     * @return string[]
-     */
-    public static function getTargetTypes($typesOnly = false)
-    {
-        $types = [];
-
-        $types[self::TARGET_BLANK] = self::targetString(self::TARGET_BLANK);
-        $types[self::TARGET_SELF] = self::targetString(self::TARGET_SELF);
-        $types[self::TARGET_PARENT] = self::targetString(self::TARGET_PARENT);
-        $types[self::TARGET_TOP] = self::targetString(self::TARGET_TOP);
-
-        return ($typesOnly ? array_keys($types) : $types);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
-     */
-    public function getGlyph()
-    {
-        return new FontAwesomeGlyph('link', [], null, 'fas');
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'menu_link_item';
     }
 }

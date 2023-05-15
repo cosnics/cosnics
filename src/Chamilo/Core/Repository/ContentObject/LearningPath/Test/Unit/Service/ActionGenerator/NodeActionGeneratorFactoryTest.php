@@ -94,7 +94,7 @@ class NodeActionGeneratorFactoryTest extends ChamiloTestCase
 
         $this->configurationMock->expects($this->once())
             ->method('getIntegrationRegistrations')
-            ->with(LearningPath::package())
+            ->with(LearningPath::CONTEXT)
             ->will($this->returnValue($integrationPackages));
 
         $nodeActionGenerator = $this->nodeActionGeneratorFactory->createNodeActionGenerator();

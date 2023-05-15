@@ -219,7 +219,7 @@ class PlatformGroupEntity implements NestedRightsEntity
     {
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\Group\Ajax\Manager::package(),
+                Application::PARAM_CONTEXT => \Chamilo\Core\Group\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Group\Ajax\Manager::PARAM_ACTION => 'xml_group_menu_feed'
             )
         );

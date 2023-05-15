@@ -2,28 +2,29 @@
 namespace Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Translation\Translation;
 
+/**
+ * @package Chamilo\Core\Repository\ContentObject\SystemAnnouncement\Storage\DataClass
+ */
 class SystemAnnouncement extends ContentObject implements Versionable
 {
-    const ICON_CONFIG = 6;
-    const ICON_CONFIRMATION = 1;
-    const ICON_ERROR = 2;
-    const ICON_QUESTION = 5;
-    const ICON_STOP = 4;
-    const ICON_WARNING = 3;
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\SystemAnnouncement';
 
-    const PROPERTY_ICON = 'icon';
+    public const ICON_CONFIG = 6;
+    public const ICON_CONFIRMATION = 1;
+    public const ICON_ERROR = 2;
+    public const ICON_QUESTION = 5;
+    public const ICON_STOP = 4;
+    public const ICON_WARNING = 3;
 
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
+    public const PROPERTY_ICON = 'icon';
+
+    public static function getAdditionalPropertyNames(): array
     {
-        return 'repository_system_announcement';
+        return [self::PROPERTY_ICON];
     }
 
     /**
@@ -31,12 +32,15 @@ class SystemAnnouncement extends ContentObject implements Versionable
      */
     public function getDefaultGlyphNamespace()
     {
-        return self::package() . '\Icon\\' . $this->get_icon();
+        return SystemAnnouncement::CONTEXT . '\Icon\\' . $this->get_icon();
     }
 
-    public static function getAdditionalPropertyNames(): array
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
     {
-        return array(self::PROPERTY_ICON);
+        return 'repository_system_announcement';
     }
 
     public function get_icon()
@@ -58,15 +62,10 @@ class SystemAnnouncement extends ContentObject implements Versionable
         return $icons;
     }
 
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
-
     public static function icon_name($icon, $size = IdentGlyph::SIZE_SMALL)
     {
         // if icon is empty: return size as icon apht, to prevent trailing underscore
-        if ($icon == "")
+        if ($icon == '')
         {
             return $size;
         }

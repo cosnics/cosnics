@@ -32,7 +32,7 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
         {
             $redirect = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::package(), 
+                    Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::CONTEXT,
                     \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_ANNOUNCEMENT));
             
             $html = [];

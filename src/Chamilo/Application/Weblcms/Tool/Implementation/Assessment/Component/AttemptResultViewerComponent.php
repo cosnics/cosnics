@@ -29,11 +29,11 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * This class displays the result of a single attempt
  *
  * @package application.weblcms.tool.assessmet
- * @author Sven Vanpoucke
+ * @author  Sven Vanpoucke
  */
 class AttemptResultViewerComponent extends Manager
 {
-    const PARAM_SHOW_FULL = 'show_full';
+    public const PARAM_SHOW_FULL = 'show_full';
 
     /**
      * The assessment object
@@ -84,10 +84,10 @@ class AttemptResultViewerComponent extends Manager
         if (!$this->assessment_attempt)
         {
             $this->redirectWithMessage(
-                Translation::get("NotAllowed", null, StringUtilities::LIBRARIES), true, [], array(
+                Translation::get('NotAllowed', null, StringUtilities::LIBRARIES), true, [], [
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
-                )
+                ]
             );
         }
 
@@ -133,10 +133,9 @@ class AttemptResultViewerComponent extends Manager
             \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT
         );
 
-        $context = $assessment->package() . '\Display';
-
         return $this->getApplicationFactory()->getApplication(
-            $context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager::CONTEXT,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         )->run();
     }
 
@@ -152,9 +151,8 @@ class AttemptResultViewerComponent extends Manager
 
         $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(
             $this->get_url(
-                array(self::PARAM_ACTION => self::ACTION_VIEW_RESULTS),
-                array(self::PARAM_USER_ASSESSMENT, self::PARAM_SHOW_FULL)
-            ), Translation::get('ViewResultsForAssessment', array('TITLE' => $assessment->get_title()))
+                [self::PARAM_ACTION => self::ACTION_VIEW_RESULTS], [self::PARAM_USER_ASSESSMENT, self::PARAM_SHOW_FULL]
+            ), Translation::get('ViewResultsForAssessment', ['TITLE' => $assessment->get_title()])
         );
 
         $breadcrumb_trail->set_breadcrumbtrail($breadcrumbs);
@@ -164,7 +162,7 @@ class AttemptResultViewerComponent extends Manager
         );
 
         $breadcrumb_trail->add(
-            new Breadcrumb($this->get_url(), Translation::get('ViewResultsForUser', array('USER' => $user_fullname)))
+            new Breadcrumb($this->get_url(), Translation::get('ViewResultsForUser', ['USER' => $user_fullname]))
         );
     }
 
@@ -364,12 +362,12 @@ class AttemptResultViewerComponent extends Manager
 
         foreach ($question_attempts as $question_attempt)
         {
-            $results[$question_attempt->get_question_complex_id()] = array(
+            $results[$question_attempt->get_question_complex_id()] = [
                 'answer' => $question_attempt->get_answer(),
                 'feedback' => $question_attempt->get_feedback(),
                 'score' => $question_attempt->get_score(),
                 'hint' => $question_attempt->get_hint()
-            );
+            ];
         }
 
         return $results;

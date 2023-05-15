@@ -16,12 +16,12 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * This class represents an assessment
- *
- * @package repository.lib.content_object.assessment
+ * @package Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass
  */
 class Assessment extends ContentObject implements ComplexContentObjectSupport, BuildSupport
 {
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Assessment';
+
     public const PROPERTY_AVERAGE_SCORE = 'average_score';
     public const PROPERTY_MAXIMUM_ATTEMPTS = 'max_attempts';
     public const PROPERTY_MAXIMUM_SCORE = 'maximum_score';
@@ -80,15 +80,10 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport, B
         return 'repository_assessment';
     }
 
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
-
     public function get_allowed_types(): array
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
-            self::package(), Manager::package() . '\ContentObject'
+            Assessment::CONTEXT, Manager::CONTEXT . '\ContentObject'
         );
         $types = [];
 
@@ -117,11 +112,11 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport, B
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
-            ), new StaticConditionVariable($this->get_id())
+            ), new StaticConditionVariable($this->getId())
         );
 
         $clo_questions = DataManager::retrieve_complex_content_object_items(
-            $this->getTypeName(), ComplexContentObjectItem::class, $condition
+            ComplexContentObjectItem::class, $condition
         );
 
         $maxscore = 0;
@@ -164,11 +159,6 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport, B
     public function get_random_questions()
     {
         return $this->getAdditionalProperty(self::PROPERTY_RANDOM_QUESTIONS);
-    }
-
-    public function get_table()
-    {
-        return self::getTypeName();
     }
 
     public function has_unlimited_attempts()

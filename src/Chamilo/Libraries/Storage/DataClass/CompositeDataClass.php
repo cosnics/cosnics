@@ -1,11 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataClass;
 
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+
 /**
- *
  * @package Chamilo\Libraries\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class CompositeDataClass extends DataClass
 {
@@ -37,13 +38,8 @@ abstract class CompositeDataClass extends DataClass
 
         if (empty($additionalProperties) && $this->isIdentified())
         {
-            /**
-             * @var \Chamilo\Libraries\Storage\DataManager\DataManager $dataManagerClassName
-             */
-            $dataManagerClassName = $this::package() . '\Storage\DataManager';
-
             $this->setAdditionalProperties(
-                $dataManagerClassName::retrieve_composite_data_class_additional_properties($this)
+                DataManager::retrieve_composite_data_class_additional_properties($this)
             );
         }
 
@@ -127,7 +123,6 @@ abstract class CompositeDataClass extends DataClass
     }
 
     /**
-     *
      * @return bool
      */
     public static function isExtended(): bool

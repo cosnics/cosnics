@@ -12,13 +12,12 @@ use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Action
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Installer extends \Chamilo\Core\Metadata\Action\Installer
+abstract class Installer extends \Chamilo\Core\Metadata\Action\Installer
 {
 
     public function extra()
@@ -30,7 +29,7 @@ class Installer extends \Chamilo\Core\Metadata\Action\Installer
 
         if (!$this->linkToSchemas())
         {
-            return $this->failed(Translation::get('ContentObjectSchemaLinkFailed', null, Manager::package()));
+            return $this->failed(Translation::get('ContentObjectSchemaLinkFailed', null, Manager::CONTEXT));
         }
 
         return true;
@@ -70,12 +69,11 @@ class Installer extends \Chamilo\Core\Metadata\Action\Installer
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function linkToSchemas()
     {
-        $schemaNamespaces = array('dc', 'ct');
+        $schemaNamespaces = ['dc', 'ct'];
         $this->getDataClassRepositoryCache()->truncate(Schema::class);
 
         $relationService = new RelationService();

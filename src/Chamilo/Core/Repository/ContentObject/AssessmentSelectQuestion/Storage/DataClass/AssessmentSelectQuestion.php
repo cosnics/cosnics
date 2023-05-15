@@ -2,29 +2,22 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package repository.lib.content_object.select_question
+ * @package Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Storage\DataClass
  */
 class AssessmentSelectQuestion extends ContentObject
 {
-    const ANSWER_TYPE_CHECKBOX = 'checkbox';
-    const ANSWER_TYPE_RADIO = 'radio';
+    public const ANSWER_TYPE_CHECKBOX = 'checkbox';
 
-    const PROPERTY_ANSWER_TYPE = 'answer_type';
-    const PROPERTY_HINT = 'hint';
-    const PROPERTY_OPTIONS = 'options';
+    public const ANSWER_TYPE_RADIO = 'radio';
 
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_assessment_select_question';
-    }
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion';
+
+    public const PROPERTY_ANSWER_TYPE = 'answer_type';
+    public const PROPERTY_HINT = 'hint';
+    public const PROPERTY_OPTIONS = 'options';
 
     public function add_option($option)
     {
@@ -36,7 +29,15 @@ class AssessmentSelectQuestion extends ContentObject
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_ANSWER_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT);
+        return [self::PROPERTY_ANSWER_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_assessment_select_question';
     }
 
     public function get_answer_type()
@@ -61,7 +62,7 @@ class AssessmentSelectQuestion extends ContentObject
      */
     public static function get_html_editors($html_editors = [])
     {
-        return parent::get_html_editors(array(self::PROPERTY_HINT));
+        return parent::get_html_editors([self::PROPERTY_HINT]);
     }
 
     /**
@@ -114,14 +115,8 @@ class AssessmentSelectQuestion extends ContentObject
         return [];
     }
 
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
-
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function has_feedback()
     {

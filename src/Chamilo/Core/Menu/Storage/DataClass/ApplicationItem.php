@@ -1,22 +1,23 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
- *
  * @package Chamilo\Core\Menu\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ApplicationItem extends Item
 {
-    public const PROPERTY_USE_TRANSLATION = 'use_translation';
     public const PROPERTY_APPLICATION = 'application';
+
     public const PROPERTY_COMPONENT = 'component';
+
     public const PROPERTY_EXTRA_PARAMETERS = 'extra_parameters';
+
+    public const PROPERTY_USE_TRANSLATION = 'use_translation';
 
     /**
      * @param string[] $defaultProperties
@@ -31,6 +32,43 @@ class ApplicationItem extends Item
     }
 
     /**
+     * @return string[]
+     */
+    public static function getAdditionalPropertyNames(): array
+    {
+        return [
+            self::PROPERTY_USE_TRANSLATION,
+            self::PROPERTY_APPLICATION,
+            self::PROPERTY_COMPONENT,
+            self::PROPERTY_EXTRA_PARAMETERS
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getApplication()
+    {
+        return $this->getAdditionalProperty(self::PROPERTY_APPLICATION);
+    }
+
+    /**
+     * @return string
+     */
+    public function getComponent()
+    {
+        return $this->getAdditionalProperty(self::PROPERTY_COMPONENT);
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtraParameters()
+    {
+        return $this->getAdditionalProperty(self::PROPERTY_EXTRA_PARAMETERS);
+    }
+
+    /**
      * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
      */
     public function getGlyph()
@@ -41,9 +79,26 @@ class ApplicationItem extends Item
     /**
      * @return string
      */
-    public static function getTypeName(): string
+    public static function getStorageUnitName(): string
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class);
+        return 'menu_application_item';
+    }
+
+    /**
+     * @return int
+     */
+    public function getUseTranslation()
+    {
+        return $this->getAdditionalProperty(self::PROPERTY_USE_TRANSLATION);
+    }
+
+    /**
+     * @return string
+     * @deprecated Use ApplicationItem::getApplication() now
+     */
+    public function get_application()
+    {
+        return $this->getApplication();
     }
 
     /**
@@ -56,21 +111,27 @@ class ApplicationItem extends Item
     }
 
     /**
-     * @param int $useTranslation
-     *
-     * @deprecated Use ApplicationItem::setUseTranslation() now
+     * @param string $application
      */
-    public function set_use_translation($useTranslation = 0)
+    public function setApplication($application)
     {
-        $this->setUseTranslation($useTranslation);
+        return $this->setAdditionalProperty(self::PROPERTY_APPLICATION, $application);
     }
 
     /**
-     * @return int
+     * @param string $component
      */
-    public function getUseTranslation()
+    public function setComponent($component)
     {
-        return $this->getAdditionalProperty(self::PROPERTY_USE_TRANSLATION);
+        $this->setAdditionalProperty(self::PROPERTY_COMPONENT, $component);
+    }
+
+    /**
+     * @param string $extraParameters
+     */
+    public function setExtraParameters($extraParameters)
+    {
+        $this->setAdditionalProperty(self::PROPERTY_EXTRA_PARAMETERS, $extraParameters);
     }
 
     /**
@@ -79,15 +140,6 @@ class ApplicationItem extends Item
     public function setUseTranslation($useTranslation = 0)
     {
         $this->setAdditionalProperty(self::PROPERTY_USE_TRANSLATION, $useTranslation);
-    }
-
-    /**
-     * @return string
-     * @deprecated Use ApplicationItem::getApplication() now
-     */
-    public function get_application()
-    {
-        return $this->getApplication();
     }
 
     /**
@@ -101,69 +153,12 @@ class ApplicationItem extends Item
     }
 
     /**
-     * @return string
+     * @param int $useTranslation
+     *
+     * @deprecated Use ApplicationItem::setUseTranslation() now
      */
-    public function getApplication()
+    public function set_use_translation($useTranslation = 0)
     {
-        return $this->getAdditionalProperty(self::PROPERTY_APPLICATION);
-    }
-
-    /**
-     * @param string $application
-     */
-    public function setApplication($application)
-    {
-        return $this->setAdditionalProperty(self::PROPERTY_APPLICATION, $application);
-    }
-
-    /**
-     * @return string
-     */
-    public function getComponent()
-    {
-        return $this->getAdditionalProperty(self::PROPERTY_COMPONENT);
-    }
-
-    /**
-     * @param string $component
-     */
-    public function setComponent($component)
-    {
-        $this->setAdditionalProperty(self::PROPERTY_COMPONENT, $component);
-    }
-
-    /**
-     * @return string
-     */
-    public function getExtraParameters()
-    {
-        return $this->getAdditionalProperty(self::PROPERTY_EXTRA_PARAMETERS);
-    }
-
-    /**
-     * @param string $extraParameters
-     */
-    public function setExtraParameters($extraParameters)
-    {
-        $this->setAdditionalProperty(self::PROPERTY_EXTRA_PARAMETERS, $extraParameters);
-    }
-
-    /**
-     * @return string[]
-     */
-    public static function getAdditionalPropertyNames(): array
-    {
-        return array(
-            self::PROPERTY_USE_TRANSLATION, self::PROPERTY_APPLICATION, self::PROPERTY_COMPONENT,
-            self::PROPERTY_EXTRA_PARAMETERS
-        );
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'menu_application_item';
+        $this->setUseTranslation($useTranslation);
     }
 }

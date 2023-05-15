@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
@@ -11,22 +10,23 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Dieter De Neef
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Dieter De Neef
  */
 class CalendarEvent extends RecurringContentObject implements Versionable, AttachmentSupport, Includeable
 {
-    const PROPERTY_END_DATE = 'end_date';
-    const PROPERTY_LOCATION = 'location';
-    const PROPERTY_START_DATE = 'start_date';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\CalendarEvent';
+
+    public const PROPERTY_END_DATE = 'end_date';
+    public const PROPERTY_LOCATION = 'location';
+    public const PROPERTY_START_DATE = 'start_date';
 
     /**
      * @return string[]
      */
     public static function getAdditionalPropertyNames(): array
     {
-        return array(
+        return [
             self::PROPERTY_LOCATION,
             self::PROPERTY_START_DATE,
             self::PROPERTY_END_DATE,
@@ -37,11 +37,19 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
             self::PROPERTY_BYDAY,
             self::PROPERTY_BYMONTH,
             self::PROPERTY_BYMONTHDAY
-        );
+        ];
     }
 
     /**
-     * @return integer
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_calendar_event';
+    }
+
+    /**
+     * @return int
      */
     public function get_end_date()
     {
@@ -57,27 +65,11 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_start_date()
     {
         return $this->getAdditionalProperty(self::PROPERTY_START_DATE);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_calendar_event';
-    }
-
-    /**
-     * @return string
-     */
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /**
@@ -104,7 +96,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
     }
 
     /**
-     * @param integer $end_date
+     * @param int $end_date
      */
     public function set_end_date($end_date)
     {
@@ -120,7 +112,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
     }
 
     /**
-     * @param integer $start_date
+     * @param int $start_date
      */
     public function set_start_date($start_date)
     {

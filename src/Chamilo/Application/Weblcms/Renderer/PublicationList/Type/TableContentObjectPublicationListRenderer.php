@@ -28,7 +28,8 @@ class TableContentObjectPublicationListRenderer extends ContentObjectPublication
 
     public function getObjectPublicationTableRenderer(): ObjectPublicationTableRenderer
     {
-        $context = $this->get_tool_browser()->get_parent()->package();
+        $application = $this->get_tool_browser()->get_parent();
+        $context = $application::CONTEXT;
         $publicationTableRendererName = $context . '\Table\ObjectPublicationTableRenderer';
 
         if (class_exists($publicationTableRendererName))

@@ -18,18 +18,16 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use ReflectionClass;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider
     implements VisibilitySupport, ActionSupport
 {
 
     /**
-     *
      * @var \Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository
      */
     private $dataProviderRepository;
@@ -40,13 +38,11 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     private $visibilities;
 
     /**
-     *
      * @var string
      */
     private $visibilityContext;
 
     /**
-     *
      * @param \Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository $dataProviderRepository
      * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
      * @param string[] $displayParameters ;
@@ -82,7 +78,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     }
 
     /**
-     *
      * @return \Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository
      */
     public function getCalendarRendererProviderRepository()
@@ -91,7 +86,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     }
 
     /**
-     *
      * @see \Chamilo\Libraries\Calendar\Architecture\Interfaces\ActionSupport::getEventActions()
      */
     public function getEventActions(Event $event): array
@@ -115,7 +109,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     }
 
     /**
-     *
      * @param int $eventIdentifier
      *
      * @return string
@@ -123,18 +116,17 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     private function getPublicationDeletingUrl($eventIdentifier)
     {
         $redirect = new Redirect(
-            array(
+            [
                 Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager::CONTEXT,
                 \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_DELETE,
                 \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID => $eventIdentifier
-            )
+            ]
         );
 
         return $redirect->getUrl();
     }
 
     /**
-     *
      * @param int $eventIdentifier
      *
      * @return string
@@ -142,11 +134,11 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     private function getPublicationEditingUrl($eventIdentifier)
     {
         $redirect = new Redirect(
-            array(
+            [
                 Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager::CONTEXT,
                 \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager::ACTION_EDIT,
                 \Chamilo\Application\Calendar\Extension\Personal\Manager::PARAM_PUBLICATION_ID => $eventIdentifier
-            )
+            ]
         );
 
         return $redirect->getUrl();
@@ -173,7 +165,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     public function getSources()
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
-            Manager::package()
+            Manager::CONTEXT
         );
 
         $sources = [];
@@ -228,15 +220,6 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
         return $this->visibilityContext;
     }
 
-    /**
-     *
-     * @param string $visibilityContext
-     */
-    public function setVisibilityContext($visibilityContext)
-    {
-        $this->visibilityContext = $visibilityContext;
-    }
-
     public function getVisibilityData(): array
     {
         return [];
@@ -253,11 +236,18 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     }
 
     /**
-     *
      * @param \Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository $dataProviderRepository
      */
     public function setCalendarRendererProviderRepository(CalendarRendererProviderRepository $dataProviderRepository)
     {
         $this->dataProviderRepository = $dataProviderRepository;
+    }
+
+    /**
+     * @param string $visibilityContext
+     */
+    public function setVisibilityContext($visibilityContext)
+    {
+        $this->visibilityContext = $visibilityContext;
     }
 }

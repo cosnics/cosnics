@@ -29,7 +29,7 @@ class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\Breadcrumb
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 $this->getApplication()->get_url(),
-                Translation::get($variable, null, $this->getApplication()->package())
+                Translation::get($variable, null, $this->getApplication()::CONTEXT
             )
         );
     }

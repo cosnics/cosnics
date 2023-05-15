@@ -224,13 +224,12 @@ class ContentObjectOwnerChanger
         $type = $co->getType();
         switch ($type)
         {
-            case File::getTypeName() :
+            case File::class :
+            case Webpage::class :
                 return $this->move_document_files($co);
-            case Webpage::getTypeName() :
-                return $this->move_document_files($co);
-            case Hotpotatoes::getTypeName() :
+            case Hotpotatoes::class :
                 return $this->move_hotpotatoes_files($co, $old_user_id);
-            case LearningPath::getTypeName() :
+            case LearningPath::class :
                 if ($co->get_version() == 'SCORM1.2' || $co->get_version() == 'SCORM2004')
                 {
                     return $this->move_scorm_files($co, $old_user_id);

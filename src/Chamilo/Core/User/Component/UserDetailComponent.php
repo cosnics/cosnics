@@ -25,14 +25,12 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
 
 /**
- *
  * @package user.lib.user_manager.component
  */
 class UserDetailComponent extends Manager
 {
 
     /**
-     *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
@@ -67,7 +65,7 @@ class UserDetailComponent extends Manager
             $html[] = $this->display_groups($user);
             $html[] = '<br />';
 
-            $registrations = Configuration::getInstance()->getIntegrationRegistrations(self::package());
+            $registrations = Configuration::getInstance()->getIntegrationRegistrations(Manager::CONTEXT);
 
             foreach ($registrations as $registration)
             {
@@ -92,7 +90,7 @@ class UserDetailComponent extends Manager
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected', array('OBJECT' => Translation::get('User')), StringUtilities::LIBRARIES
+                        'NoObjectSelected', ['OBJECT' => Translation::get('User')], StringUtilities::LIBRARIES
                     )
                 )
             );
@@ -103,7 +101,7 @@ class UserDetailComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_USERS)),
+                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
                 Translation::get('AdminUserBrowserComponent')
             )
         );
@@ -112,7 +110,7 @@ class UserDetailComponent extends Manager
     public function display_additional_information($user_id)
     {
         $form_viewer = new Viewer(
-            self::package(), 'account_fields', $user_id, Translation::get('AdditionalUserInformation')
+            Manager::CONTEXT, 'account_fields', $user_id, Translation::get('AdditionalUserInformation')
         );
 
         return $form_viewer->render();
@@ -127,13 +125,13 @@ class UserDetailComponent extends Manager
      */
     public function display_groups($user)
     {
-        $table = new HTML_Table(array('class' => 'table table-striped table-bordered table-hover table-responsive'));
+        $table = new HTML_Table(['class' => 'table table-striped table-bordered table-hover table-responsive']);
 
         $table->setHeaderContents(0, 0, Translation::get('Groups', null, 'group'));
-        $table->setCellAttributes(0, 0, array('colspan' => 2, 'style' => 'text-align: center;'));
+        $table->setCellAttributes(0, 0, ['colspan' => 2, 'style' => 'text-align: center;']);
 
         $table->setHeaderContents(1, 0, Translation::get('GroupCode'));
-        $table->setCellAttributes(1, 0, array('style' => 'width: 150px;'));
+        $table->setCellAttributes(1, 0, ['style' => 'width: 150px;']);
         $table->setHeaderContents(1, 1, Translation::get('GroupName'));
 
         $groups = $user->get_groups();
@@ -141,32 +139,32 @@ class UserDetailComponent extends Manager
         if (!$groups || $groups->count() == 0)
         {
             $table->setCellContents(2, 0, Translation::get('NoGroups'));
-            $table->setCellAttributes(2, 0, array('colspan' => 2, 'style' => 'text-align: center;'));
+            $table->setCellAttributes(2, 0, ['colspan' => 2, 'style' => 'text-align: center;']);
         }
         else
         {
             $i = 2;
 
-            foreach($groups as $group)
+            foreach ($groups as $group)
             {
                 $redirect = new Redirect(
-                    array(
-                        Application::PARAM_CONTEXT => \Chamilo\Core\Group\Manager::package(),
+                    [
+                        Application::PARAM_CONTEXT => \Chamilo\Core\Group\Manager::CONTEXT,
                         \Chamilo\Core\Group\Manager::PARAM_ACTION => \Chamilo\Core\Group\Manager::ACTION_VIEW_GROUP,
                         \Chamilo\Core\Group\Manager::PARAM_GROUP_ID => $group->get_id()
-                    )
+                    ]
                 );
 
                 $url = '<a href="' . $redirect->getUrl() . '">';
 
                 $table->setCellContents($i, 0, $url . $group->get_code() . '</a>');
-                $table->setCellAttributes($i, 0, array('style' => 'width: 150px;'));
+                $table->setCellAttributes($i, 0, ['style' => 'width: 150px;']);
                 $table->setCellContents($i, 1, $url . $group->get_name() . '</a>');
                 $i ++;
             }
         }
 
-        $table->altRowAttributes(1, array('class' => 'row_odd'), array('class' => 'row_even'), true);
+        $table->altRowAttributes(1, ['class' => 'row_odd'], ['class' => 'row_even'], true);
 
         return $table->toHtml();
     }
@@ -180,18 +178,18 @@ class UserDetailComponent extends Manager
      */
     public function display_user_info($user)
     {
-        $table = new HTML_Table(array('class' => 'table table-striped table-bordered table-hover table-responsive'));
+        $table = new HTML_Table(['class' => 'table table-striped table-bordered table-hover table-responsive']);
 
         $table->setHeaderContents(0, 0, Translation::get('UserInformation'));
-        $table->setCellAttributes(0, 0, array('colspan' => 3, 'style' => 'text-align: center;'));
+        $table->setCellAttributes(0, 0, ['colspan' => 3, 'style' => 'text-align: center;']);
 
         $userPictureProvider = $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
         $userPicture = $userPictureProvider->getUserPictureAsBase64String($user, $this->getUser());
 
         $table->setCellContents(1, 2, '<img class="img-thumbnail" src="' . $userPicture . '" />');
-        $table->setCellAttributes(1, 2, array('rowspan' => 4, 'style' => 'width: 120px; text-align: center;'));
+        $table->setCellAttributes(1, 2, ['rowspan' => 4, 'style' => 'width: 120px; text-align: center;']);
 
-        $attributes = array(
+        $attributes = [
             'username',
             'firstname',
             'lastname',
@@ -207,7 +205,7 @@ class UserDetailComponent extends Manager
             'disk_quota',
             'database_quota',
             'version_quota'
-        );
+        ];
 
         foreach ($attributes as $i => $attribute)
         {
@@ -215,7 +213,7 @@ class UserDetailComponent extends Manager
                 ($i + 1), 0,
                 Translation::get((string) StringUtilities::getInstance()->createString($attribute)->upperCamelize())
             );
-            $table->setCellAttributes(($i + 1), 0, array('style' => 'width: 150px;'));
+            $table->setCellAttributes(($i + 1), 0, ['style' => 'width: 150px;']);
 
             $value = $user->getDefaultProperty($attribute);
             $value = $this->format_property($attribute, $value);
@@ -224,11 +222,11 @@ class UserDetailComponent extends Manager
 
             if ($i >= 4)
             {
-                $table->setCellAttributes(($i + 1), 1, array('colspan' => 2));
+                $table->setCellAttributes(($i + 1), 1, ['colspan' => 2]);
             }
         }
 
-        $table->altRowAttributes(0, array('class' => 'row_odd'), array('class' => 'row_even'), true);
+        $table->altRowAttributes(0, ['class' => 'row_odd'], ['class' => 'row_even'], true);
 
         return $table->toHtml();
     }
@@ -243,7 +241,8 @@ class UserDetailComponent extends Manager
                 );
             case User::PROPERTY_ACTIVATION_DATE :
             case User::PROPERTY_EXPIRATION_DATE :
-                return $value == 0 ? Translation::get('Forever') : DatetimeUtilities::getInstance()->formatLocaleDate(null, $value);
+                return $value == 0 ? Translation::get('Forever') :
+                    DatetimeUtilities::getInstance()->formatLocaleDate(null, $value);
             case User:: PROPERTY_REGISTRATION_DATE :
                 return DatetimeUtilities::getInstance()->formatLocaleDate(null, $value);
             default :
@@ -276,7 +275,7 @@ class UserDetailComponent extends Manager
             $commonActions->addButton(
                 new Button(
                     Translation::get('ViewQuota'), new FontAwesomeGlyph('folder'), $this->get_url(
-                    array(self::PARAM_ACTION => self::ACTION_VIEW_QUOTA, 'user_id' => $user->get_id())
+                    [self::PARAM_ACTION => self::ACTION_VIEW_QUOTA, 'user_id' => $user->get_id()]
                 ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );

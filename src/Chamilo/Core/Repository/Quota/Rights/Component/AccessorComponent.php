@@ -31,7 +31,7 @@ class AccessorComponent extends Manager
         $rightsService = $this->getRightsService();
 
         $urlParameters = array(
-            RepositoryManager::PARAM_CONTEXT => RepositoryManager::package(),
+            RepositoryManager::PARAM_CONTEXT => RepositoryManager::CONTEXT,
             RepositoryManager::PARAM_ACTION => RepositoryManager::ACTION_QUOTA,
             QuotaManager::PARAM_ACTION => QuotaManager::ACTION_RIGHTS, Manager::PARAM_ACTION => Manager::ACTION_ACCESS
         );

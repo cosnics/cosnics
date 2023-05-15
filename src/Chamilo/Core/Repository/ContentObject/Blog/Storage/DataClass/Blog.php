@@ -3,27 +3,31 @@ namespace Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass;
 
 use Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\BlogItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
- * @package repository.lib.content_object.blog
- */
-
-/**
- * This class represents an blog
+ * @package Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass
  */
 class Blog extends ContentObject implements ComplexContentObjectSupport
 {
-    const PROPERTY_BLOG_LAYOUT = 'blog_layout';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Blog';
+
+    public const PROPERTY_BLOG_LAYOUT = 'blog_layout';
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_BLOG_LAYOUT);
+        return [self::PROPERTY_BLOG_LAYOUT];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_blog';
     }
 
     public function get_allowed_types(): array
@@ -38,7 +42,7 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
     {
         $blog_layouts = [];
 
-        $dir = Path::getInstance()->namespaceToFullPath(self::package() . '\Display\Component\Viewer\BlogLayout');
+        $dir = Path::getInstance()->namespaceToFullPath(Blog::CONTEXT . '\Display\Component\Viewer\BlogLayout');
         $files = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES, false);
 
         foreach ($files as $file)
@@ -55,19 +59,6 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
     public function get_blog_layout()
     {
         return $this->getAdditionalProperty(self::PROPERTY_BLOG_LAYOUT);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_blog';
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function set_blog_layout($blog_layout)

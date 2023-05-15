@@ -50,11 +50,10 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
         $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
             BreadcrumbTrail::getInstance(), $this, $this->publication
         );
-
-        $context = $this->publication->get_content_object()->package() . '\Display';
-
+        
         return $this->getApplicationFactory()->getApplication(
-            $context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            \Chamilo\Core\Repository\ContentObject\Glossary\Display\Manager::CONTEXT,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         )->run();
     }
 

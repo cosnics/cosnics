@@ -5,9 +5,10 @@ use Chamilo\Libraries\Architecture\Application\WebApplicationRemover;
 
 class Remover extends WebApplicationRemover
 {
+    public const CONTEXT = Installer::CONTEXT;
 
     public function get_additional_packages()
     {
-        return array('Chamilo\Application\Calendar\Extension\Personal');
+        return ['Chamilo\Application\Calendar\Extension\Personal'];
     }
 }

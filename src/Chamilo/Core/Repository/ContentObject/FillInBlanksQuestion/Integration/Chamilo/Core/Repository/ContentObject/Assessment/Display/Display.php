@@ -199,13 +199,13 @@ class Display extends QuestionDisplay
             {
                 $table_header[] = '<th class="cell-stat-x3"></th>';
                 $table_header[] = '<th>' . Translation::get(
-                        'Answers', null, ContentObject::get_content_object_type_namespace($question->getTypeName())
+                        'Answers', null, $question::CONTEXT
                     ) . '</th>';
             }
             else
             {
                 $table_header[] = '<th>' . Translation::get(
-                        'Answer', null, ContentObject::get_content_object_type_namespace($question->getTypeName())
+                        'Answer', null, $question::CONTEXT
                     ) . '</th>';
             }
 

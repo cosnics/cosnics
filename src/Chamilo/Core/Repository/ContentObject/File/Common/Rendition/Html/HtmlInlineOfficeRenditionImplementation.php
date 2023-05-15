@@ -71,7 +71,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
             $html[] = '</div>';
 
             $html[] = ResourceManager::getInstance()->getResourceHtml(
-                Path::getInstance()->getJavascriptPath(File::package(), true) . 'OfficeViewer.js'
+                Path::getInstance()->getJavascriptPath(File::CONTEXT, true) . 'OfficeViewer.js'
             );
             $html[] = ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getPluginPath(StringUtilities::LIBRARIES, true) .
@@ -208,7 +208,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
      */
     public function getViewerType()
     {
-        $viewerType = Configuration::getInstance()->get_setting(array(File::package(), 'office_viewer_type'));
+        $viewerType = Configuration::getInstance()->get_setting(array(File::CONTEXT, 'office_viewer_type'));
 
         if (is_null($viewerType))
         {

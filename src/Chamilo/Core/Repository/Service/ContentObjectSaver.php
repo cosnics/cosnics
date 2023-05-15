@@ -228,7 +228,7 @@ class ContentObjectSaver
         {
             $default_template_registration =
                 $this->getTemplateRegistrationConsulter()->getTemplateRegistrationDefaultByType(
-                    $contentObject->package()
+                    $contentObject::CONTEXT
                 );
 
             $contentObject->set_template_registration_id($default_template_registration->getId());

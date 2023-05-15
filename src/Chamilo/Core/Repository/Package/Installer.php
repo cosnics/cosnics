@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Package;
 
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocation;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
@@ -8,15 +9,11 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package repository.install
- */
-
-/**
- * This installer can be used to create the storage structure for the repository.
+ * @package Chamilo\Core\Repository\Package
  */
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
+    public const CONTEXT = Manager::CONTEXT;
 
     public function extra()
     {
@@ -30,7 +27,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         {
             $this->add_message(
                 self::TYPE_NORMAL, Translation::get(
-                'ObjectCreated', array('OBJECT' => Translation::get('RightsTree')), StringUtilities::LIBRARIES
+                'ObjectCreated', ['OBJECT' => Translation::get('RightsTree')], StringUtilities::LIBRARIES
             )
             );
         }

@@ -159,7 +159,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $urlFormat = new Redirect(
             [
-                self::PARAM_CONTEXT => self::package(),
+                self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => self::ACTION_BROWSE,
                 self::PARAM_PARENT => '__ITEM__'
             ]

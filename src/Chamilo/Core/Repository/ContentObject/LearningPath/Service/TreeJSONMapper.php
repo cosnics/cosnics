@@ -110,7 +110,7 @@ class TreeJSONMapper
     protected function getItemIcon(TreeNode $node)
     {
         $objectType = (string) StringUtilities::getInstance()->createString(
-            ClassnameUtilities::getInstance()->getPackageNameFromNamespace($node->getContentObject()->package())
+            ClassnameUtilities::getInstance()->getPackageNameFromNamespace($node->getContentObject()::CONTEXT)
         )->underscored();
 
         $extraClasses = array('fa-fw');
@@ -123,7 +123,7 @@ class TreeJSONMapper
         }
 
         $glyph = new NamespaceIdentGlyph(
-            $node->getContentObject()->package(), true, false, false,
+            $node->getContentObject()::CONTEXT, true, false, false,
             IdentGlyph::SIZE_MINI, $extraClasses
         );
 

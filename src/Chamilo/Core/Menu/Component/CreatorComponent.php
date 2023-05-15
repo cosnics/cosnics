@@ -43,7 +43,7 @@ class CreatorComponent extends Manager implements DelegateComponent
             new Breadcrumb(
                 null, $this->getTranslator()->trans(
                 'Add' . ClassnameUtilities::getInstance()->getPackageNameFromNamespace($itemType), [],
-                Manager::package()
+                Manager::CONTEXT
             )
             )
         );
@@ -64,7 +64,7 @@ class CreatorComponent extends Manager implements DelegateComponent
             {
                 $message = $this->getTranslator()->trans(
                     'ObjectCreated',
-                    array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], Manager::package())),
+                    array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)),
                     StringUtilities::LIBRARIES
                 );
             }
@@ -72,7 +72,7 @@ class CreatorComponent extends Manager implements DelegateComponent
             {
                 $message = $this->getTranslator()->trans(
                     'ObjectNotCreated',
-                    array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], Manager::package())),
+                    array('OBJECT' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)),
                     StringUtilities::LIBRARIES
                 );
             }

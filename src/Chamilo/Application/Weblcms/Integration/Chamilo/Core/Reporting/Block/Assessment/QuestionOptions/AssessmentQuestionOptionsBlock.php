@@ -9,26 +9,19 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Abstract class to show the options of an assessment question
  *
  * @package application.weblcms.integration.reporting
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
 {
-
-    /**
-     * The complex content object item for the question
-     *
-     * @var ComplexContentObjectItem
-     */
-    private $question_complex_content_object_item;
 
     /**
      * The Question
@@ -43,6 +36,13 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     private $question_attempts;
+
+    /**
+     * The complex content object item for the question
+     *
+     * @var ComplexContentObjectItem
+     */
+    private $question_complex_content_object_item;
 
     /**
      * Constructor
@@ -83,7 +83,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
         $reporting_data->add_data_category_row($row_count, Translation::get('Answer'), $option);
 
         $glyph = new FontAwesomeGlyph(
-            'check-circle', array('text-success'), null, 'fas'
+            'check-circle', ['text-success'], null, 'fas'
         );
 
         $reporting_data->add_data_category_row(
@@ -111,10 +111,12 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
     protected function add_option_headers($reporting_data)
     {
         $reporting_data->set_rows(
-            array(
-                Translation::get('Answer'), Translation::get('Correct'), Translation::get('TimesChosen'),
+            [
+                Translation::get('Answer'),
+                Translation::get('Correct'),
+                Translation::get('TimesChosen'),
                 Translation::get('DifficultyIndex')
-            )
+            ]
         );
     }
 
@@ -124,6 +126,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
      * @param mixed $parent
      *
      * @return self
+     * @throws \ReflectionException
      */
     public static function factory($parent)
     {
@@ -138,7 +141,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
             ContentObject::class, $question_complex_content_object_item->get_ref()
         );
 
-        $type = (string) StringUtilities::getInstance()->createString($question->getTypeName())->upperCamelize();
+        $type = ClassnameUtilities::getInstance()->getClassnameFromNamespace($question->getType());
         $class = __NAMESPACE__ . '\\' . $type . 'OptionsBlock';
 
         return new $class($question, $question_complex_content_object_item, $parent);
@@ -206,16 +209,6 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
     }
 
     /**
-     * Sets the question
-     *
-     * @param mixed $question
-     */
-    protected function set_question($question)
-    {
-        $this->question = $question;
-    }
-
-    /**
      * Returns the complex content object item for the question
      *
      * @return ComplexContentObjectItem
@@ -223,16 +216,6 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
     protected function get_question_complex_content_object_item()
     {
         return $this->question_complex_content_object_item;
-    }
-
-    /**
-     * Sets the complex content object item for the question
-     *
-     * @param ComplexContentObjectItem $question_complex_content_object_item
-     */
-    protected function set_question_complex_content_object_item($question_complex_content_object_item)
-    {
-        $this->question_complex_content_object_item = $question_complex_content_object_item;
     }
 
     /**
@@ -252,7 +235,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
      */
     public function get_views()
     {
-        return array(Html::VIEW_TABLE);
+        return [Html::VIEW_TABLE];
     }
 
     /**
@@ -263,5 +246,25 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
     public function retrieve_data()
     {
         return $this->count_data();
+    }
+
+    /**
+     * Sets the question
+     *
+     * @param mixed $question
+     */
+    protected function set_question($question)
+    {
+        $this->question = $question;
+    }
+
+    /**
+     * Sets the complex content object item for the question
+     *
+     * @param ComplexContentObjectItem $question_complex_content_object_item
+     */
+    protected function set_question_complex_content_object_item($question_complex_content_object_item)
+    {
+        $this->question_complex_content_object_item = $question_complex_content_object_item;
     }
 }

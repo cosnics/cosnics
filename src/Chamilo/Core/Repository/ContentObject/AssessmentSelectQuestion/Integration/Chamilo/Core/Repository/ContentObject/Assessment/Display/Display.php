@@ -11,8 +11,7 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Display extends QuestionDisplay
 {
@@ -83,18 +82,18 @@ class Display extends QuestionDisplay
         if ($type == AssessmentSelectQuestion::ANSWER_TYPE_CHECKBOX)
         {
             $advanced_select = $formvalidator->createElement(
-                'select', $question_name, '', $answers, array(
+                'select', $question_name, '', $answers, [
                     'multiple' => 'true',
-                    'class'    => 'advanced_select_question form-control',
-                    'size'     => (count($answers) > 10 ? 10 : count($answers))
-                )
+                    'class' => 'advanced_select_question form-control',
+                    'size' => (count($answers) > 10 ? 10 : count($answers))
+                ]
             );
             $formvalidator->addElement($advanced_select);
         }
         else
         {
             $formvalidator->addElement(
-                'select', $question_name, '', $answers, array('class' => 'select_question form-control')
+                'select', $question_name, '', $answers, ['class' => 'select_question form-control']
             );
         }
 
@@ -102,7 +101,7 @@ class Display extends QuestionDisplay
 
         $formvalidator->addElement(
             'html', ResourceManager:: getInstance()->getResourceHtml(
-            Path:: getInstance()->getJavascriptPath(Assessment:: package(), true) . 'GiveHint.js'
+            Path:: getInstance()->getJavascriptPath(Assessment::CONTEXT, true) . 'GiveHint.js'
         )
         );
 

@@ -159,7 +159,7 @@ class PlatformgroupMenuRenderer extends GenericTree
     {
         $searchUrl = new Redirect(
             array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\Group\Ajax\Manager::package(),
+                Application::PARAM_CONTEXT => \Chamilo\Core\Group\Ajax\Manager::CONTEXT,
                 \Chamilo\Core\Group\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Group\Ajax\Manager::ACTION_XML_GROUP_MENU_FEED
             )
         );

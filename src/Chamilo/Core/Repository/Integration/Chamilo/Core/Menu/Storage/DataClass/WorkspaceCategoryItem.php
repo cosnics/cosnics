@@ -2,15 +2,13 @@
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
- *
  * @package Chamilo\Core\User\Integration\Chamilo\Core\Menu\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class WorkspaceCategoryItem extends Item
 {
@@ -65,18 +63,13 @@ class WorkspaceCategoryItem extends Item
         return $this->children;
     }
 
-    public function set_children($children)
-    {
-        $this->children = $children;
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class);
-    }
-
     public function has_children()
     {
         return count($this->get_children()) > 0;
+    }
+
+    public function set_children($children)
+    {
+        $this->children = $children;
     }
 }

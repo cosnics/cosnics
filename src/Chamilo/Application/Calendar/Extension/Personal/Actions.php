@@ -49,8 +49,8 @@ class Actions implements ActionsInterface
     public function getAllowedContentObjectTypes()
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
-            Manager::package(),
-            \Chamilo\Core\Repository\Manager::package() . '\ContentObject');
+            Manager::CONTEXT,
+            \Chamilo\Core\Repository\Manager::CONTEXT . '\ContentObject');
         $types = [];
 
         foreach ($registrations as $registration)

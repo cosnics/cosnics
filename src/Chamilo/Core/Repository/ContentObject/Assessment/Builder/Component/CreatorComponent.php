@@ -116,8 +116,8 @@ class CreatorComponent extends Manager
 
     public function create_helper_object($helper_object, $content_object_id)
     {
-        $helper_object->set_title($helper_object->getTypeName());
-        $helper_object->set_description($helper_object->getTypeName());
+        $helper_object->set_title('helper_object');
+        $helper_object->set_description('helper_object');
         $helper_object->set_owner_id($this->get_user_id());
         $helper_object->set_reference($content_object_id);
         $helper_object->set_parent_id(0);

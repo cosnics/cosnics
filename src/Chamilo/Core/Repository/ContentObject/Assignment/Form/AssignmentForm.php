@@ -140,7 +140,7 @@ class AssignmentForm extends ContentObjectForm
 
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Assignment::package(), true) . 'UploadifyFeedback.js'
+            Path::getInstance()->getJavascriptPath(Assignment::CONTEXT, true) . 'UploadifyFeedback.js'
         )
         );
 

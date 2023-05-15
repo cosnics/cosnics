@@ -2,22 +2,22 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package repository.lib.content_object.multiple_choice_question
+ * @package Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass
  */
 class AssessmentMultipleChoiceQuestion extends ContentObject implements Versionable
 {
-    const ANSWER_TYPE_CHECKBOX = 2;
-    const ANSWER_TYPE_RADIO = 1;
+    public const ANSWER_TYPE_CHECKBOX = 2;
+    public const ANSWER_TYPE_RADIO = 1;
 
-    const PROPERTY_ANSWER_TYPE = 'answer_type';
-    const PROPERTY_HINT = 'hint';
-    const PROPERTY_OPTIONS = 'options';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion';
+
+    public const PROPERTY_ANSWER_TYPE = 'answer_type';
+    public const PROPERTY_HINT = 'hint';
+    public const PROPERTY_OPTIONS = 'options';
 
     public function add_option($option)
     {
@@ -29,7 +29,15 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_ANSWER_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT);
+        return [self::PROPERTY_ANSWER_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_assessment_multiple_choice_question';
     }
 
     public function get_answer_type()
@@ -54,7 +62,7 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
      */
     public static function get_html_editors($html_editors = [])
     {
-        return parent::get_html_editors(array(self::PROPERTY_HINT));
+        return parent::get_html_editors([self::PROPERTY_HINT]);
     }
 
     /**
@@ -95,7 +103,6 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
     }
 
     /**
-     *
      * @return AssessmentMultipleChoiceQuestionOption[]
      */
     public function get_options()
@@ -109,21 +116,7 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
     }
 
     /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_assessment_multiple_choice_question';
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
-
-    /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function has_feedback()
     {

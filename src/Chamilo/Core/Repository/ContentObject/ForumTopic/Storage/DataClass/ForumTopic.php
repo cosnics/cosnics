@@ -6,31 +6,26 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
- * @package repository.lib.content_object.forum_topic
- */
-
-/**
- * This class represents a topic in a discussion forum.
- *
- * @author Mattias De Pauw - Hogeschool Gent
- * @author Maarten Volckaert - Hogeschool Gent
+ * @package Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass
+ * @author  Mattias De Pauw - Hogeschool Gent
+ * @author  Maarten Volckaert - Hogeschool Gent
  */
 class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
 {
-    const PROPERTY_LAST_POST = 'last_post_id';
-    const PROPERTY_LOCKED = 'locked';
-    const PROPERTY_TOTAL_POSTS = 'total_posts';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\ForumTopic';
+
+    public const PROPERTY_LAST_POST = 'last_post_id';
+    public const PROPERTY_LOCKED = 'locked';
+    public const PROPERTY_TOTAL_POSTS = 'total_posts';
 
     /**
      * Variable that contains the first post of a forum topic.
@@ -77,7 +72,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
     /**
      * This function adds a number of posts to the property total posts of a topic.
      *
-     * @param int $posts Number of posts that needs to be added to a topic.
+     * @param int $posts        Number of posts that needs to be added to a topic.
      * @param int $last_post_id The id of the new last post.
      */
     public function add_post($posts, $last_post_id, $emailnotificator)
@@ -121,7 +116,6 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
         return $success;
     }
 
-
     public function create(): bool
     {
         $succes = parent::create();
@@ -153,7 +147,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      *
      * @param bool $only_version
      *
-     * @return boolean Returns whether the delete was succesfull.
+     * @return bool Returns whether the delete was succesfull.
      */
     public function delete($only_version = false): bool
     {
@@ -176,7 +170,15 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_LOCKED, self::PROPERTY_TOTAL_POSTS, self::PROPERTY_LAST_POST);
+        return [self::PROPERTY_LOCKED, self::PROPERTY_TOTAL_POSTS, self::PROPERTY_LAST_POST];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_forum_topic';
     }
 
     /**
@@ -186,14 +188,8 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      */
     public function get_allowed_types(): array
     {
-        return array(ForumPost::class);
+        return [ForumPost::class];
     }
-
-    /**
-     * **************************************************************************************************************
-     * Setters *
-     * **************************************************************************************************************
-     */
 
     /**
      * Gets the id of the last post in this topic.
@@ -203,24 +199,6 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
     public function get_last_post()
     {
         return $this->getAdditionalProperty(self::PROPERTY_LAST_POST);
-    }
-
-    /**
-     * Gets whether this object is locked.
-     *
-     * @return int
-     */
-    public function get_locked()
-    {
-        return $this->getAdditionalProperty(self::PROPERTY_LOCKED);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_forum_topic';
     }
 
     /**
@@ -237,6 +215,17 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      * This function creates a forum topic object and if succesfull the first post in this topic aswell. @return boolean
      * $succes Returns whether the create was succesfull or not.
      */
+
+    /**
+     * Gets whether this object is locked.
+     *
+     * @return int
+     */
+    public function get_locked()
+    {
+        return $this->getAdditionalProperty(self::PROPERTY_LOCKED);
+    }
+
     /**
      * Gets the total number of posts of this topic.
      *
@@ -245,16 +234,6 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
     public function get_total_posts()
     {
         return $this->getAdditionalProperty(self::PROPERTY_TOTAL_POSTS);
-    }
-
-    /**
-     * Gets the type name by using an utility namespace function.
-     *
-     * @return string
-     */
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /*
@@ -289,7 +268,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      *
      * @param ForumPost $object
      *
-     * @return boolean Returns true when a post is the first post of a topic.
+     * @return bool Returns true when a post is the first post of a topic.
      */
     public function is_first_post($object)
     {
@@ -483,11 +462,11 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
                 $email_notificator = new TopicEmailNotificator();
 
                 $text = Translation::get(
-                    "TopicEditedEmailTitle", null, ContentObject::get_content_object_type_namespace('forum')
+                    'TopicEditedEmailTitle', null, ContentObject::get_content_object_type_namespace('forum')
                 );
                 $email_notificator->set_action_title($text);
                 $text = Translation::get(
-                    "TopicEditedEmailBody", null, ContentObject::get_content_object_type_namespace('forum')
+                    'TopicEditedEmailBody', null, ContentObject::get_content_object_type_namespace('forum')
                 );
                 $email_notificator->set_action_body($text);
                 $email_notificator->set_action_user(

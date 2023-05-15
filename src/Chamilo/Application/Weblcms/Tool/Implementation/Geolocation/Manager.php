@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface
 use Chamilo\Core\Repository\ContentObject\PhysicalLocation\Storage\DataClass\PhysicalLocation;
 
 /**
- *
  * @package application.lib.weblcms.tool.geolocation
  */
 
@@ -15,14 +14,15 @@ use Chamilo\Core\Repository\ContentObject\PhysicalLocation\Storage\DataClass\Phy
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements IntroductionTextSupportInterface
 {
+    public const CONTEXT = __NAMESPACE__;
 
     public static function get_allowed_types()
     {
-        return array(PhysicalLocation::class);
+        return [PhysicalLocation::class];
     }
 
     public function get_available_browser_types()
     {
-        return array(ContentObjectPublicationListRenderer::TYPE_TABLE);
+        return [ContentObjectPublicationListRenderer::TYPE_TABLE];
     }
 }

@@ -21,6 +21,8 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
     use DependencyInjectionContainerTrait;
 
+    public const CONTEXT = Manager::CONTEXT;
+
     /**
      * Constructor
      */

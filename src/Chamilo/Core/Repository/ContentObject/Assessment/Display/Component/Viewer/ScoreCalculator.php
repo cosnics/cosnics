@@ -5,9 +5,9 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
- *
  * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc
  */
+
 /**
  * Abstract class so each question type can determine the correct score with the given answers
  */
@@ -26,6 +26,19 @@ abstract class ScoreCalculator
     }
 
     abstract public function calculate_score();
+
+    public static function factory($question, $answer, $weight)
+    {
+        $type = $question->getType();
+
+        $class =
+            ClassnameUtilities::getInstance()->getNamespaceParent($type, 3) . '\Integration\\' . Assessment::CONTEXT .
+            '\Display\ScoreCalculator';
+
+        $score_calculator = new $class($question, $answer, $weight);
+
+        return $score_calculator;
+    }
 
     public function get_answer()
     {
@@ -47,7 +60,9 @@ abstract class ScoreCalculator
         $relative_weight = $this->weight;
 
         if ($relative_weight == null)
+        {
             return $score;
+        }
 
         if ($total_weight <= 0)
         {
@@ -59,16 +74,5 @@ abstract class ScoreCalculator
         $new_score = round(($score / $factor) * 100) / 100;
 
         return $new_score;
-    }
-
-    public static function factory($question, $answer, $weight)
-    {
-        $type = $question->getType();
-
-        $class = ClassnameUtilities::getInstance()->getNamespaceParent($type, 3) . '\Integration\\' .
-             Assessment::package() . '\Display\ScoreCalculator';
-
-        $score_calculator = new $class($question, $answer, $weight);
-        return $score_calculator;
     }
 }

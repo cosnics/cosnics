@@ -83,8 +83,8 @@ class QuestionSelecterComponent extends Manager
                 ContentObject::class, $question_id
             );
 
-            $contentObjectClassName = $question->package() . '\Storage\DataClass\\' .
-                ClassnameUtilities::getInstance()->getPackageNameFromNamespace($question->package());
+            $contentObjectClassName = $question::CONTEXT . '\Storage\DataClass\\' .
+                ClassnameUtilities::getInstance()->getPackageNameFromNamespace($question::CONTEXT);
 
             $cloi = ComplexContentObjectItem::factory($contentObjectClassName);
 

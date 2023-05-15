@@ -116,13 +116,4 @@ abstract class ReportingBlock
     {
         return new ReportingBlockStyle();
     }
-
-    /**
-     *
-     * @return string
-     */
-    public static function package()
-    {
-        return static::context();
-    }
 }

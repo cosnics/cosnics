@@ -5,21 +5,18 @@ use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Configuration\Storage\DataManager;
 use Chamilo\Core\Admin\Announcement\Service\RightsService;
 use Chamilo\Core\Admin\Announcement\Storage\DataClass\RightsLocation;
+use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package admin.install
- */
-
-/**
- * This installer can be used to create the storage structure for the users application.
+ * @package Chamilo\Core\Admin\Package
  */
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
+    public const CONTEXT = Manager::CONTEXT;
 
     /**
      * Runs the install-script.
@@ -35,7 +32,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         {
             $this->add_message(
                 self::TYPE_NORMAL, Translation::get(
-                'ObjectsAdded', array('OBJECTS' => Translation::get('DefaultSettings')), StringUtilities::LIBRARIES
+                'ObjectsAdded', ['OBJECTS' => Translation::get('DefaultSettings')], StringUtilities::LIBRARIES
             )
             );
         }
@@ -50,7 +47,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         {
             $this->add_message(
                 self::TYPE_NORMAL, Translation::get(
-                'ObjectCreated', array('OBJECT' => Translation::get('RightsTree')), StringUtilities::LIBRARIES
+                'ObjectCreated', ['OBJECT' => Translation::get('RightsTree')], StringUtilities::LIBRARIES
             )
             );
         }
@@ -94,19 +91,19 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $values = $this->get_form_values();
 
         $settings = [];
-        $settings[] = array('Chamilo\Core\Admin', 'site_name', $values['site_name']);
-        $settings[] = array('Chamilo\Core\Admin', 'platform_language', $values['platform_language']);
-        $settings[] = array('Chamilo\Core\Admin', 'version', '1.0');
-        $settings[] = array('Chamilo\Core\Admin', 'theme', 'Aqua');
+        $settings[] = ['Chamilo\Core\Admin', 'site_name', $values['site_name']];
+        $settings[] = ['Chamilo\Core\Admin', 'platform_language', $values['platform_language']];
+        $settings[] = ['Chamilo\Core\Admin', 'version', '1.0'];
+        $settings[] = ['Chamilo\Core\Admin', 'theme', 'Aqua'];
 
-        $settings[] = array('Chamilo\Core\Admin', 'institution', $values['organization_name']);
-        $settings[] = array('Chamilo\Core\Admin', 'institution_url', $values['organization_url']);
+        $settings[] = ['Chamilo\Core\Admin', 'institution', $values['organization_name']];
+        $settings[] = ['Chamilo\Core\Admin', 'institution_url', $values['organization_url']];
 
-        $settings[] = array('Chamilo\Core\Admin', 'show_administrator_data', 'true');
-        $settings[] = array('Chamilo\Core\Admin', 'administrator_firstname', $values['admin_firstname']);
-        $settings[] = array('Chamilo\Core\Admin', 'administrator_surname', $values['admin_surname']);
-        $settings[] = array('Chamilo\Core\Admin', 'administrator_email', $values['admin_email']);
-        $settings[] = array('Chamilo\Core\Admin', 'administrator_telephone', $values['admin_phone']);
+        $settings[] = ['Chamilo\Core\Admin', 'show_administrator_data', 'true'];
+        $settings[] = ['Chamilo\Core\Admin', 'administrator_firstname', $values['admin_firstname']];
+        $settings[] = ['Chamilo\Core\Admin', 'administrator_surname', $values['admin_surname']];
+        $settings[] = ['Chamilo\Core\Admin', 'administrator_email', $values['admin_email']];
+        $settings[] = ['Chamilo\Core\Admin', 'administrator_telephone', $values['admin_phone']];
 
         $this->getDataClassRepositoryCache()->truncate(Setting::class);
 

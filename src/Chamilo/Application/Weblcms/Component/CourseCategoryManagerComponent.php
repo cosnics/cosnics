@@ -56,7 +56,7 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
                     Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
                     GenericTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
-                        self::package()
+                        Manager::CONTEXT
                     )
                 ]
             );

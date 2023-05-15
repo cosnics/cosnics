@@ -153,7 +153,7 @@ class Menu extends HtmlMenu
             $menu_item['sub'] = $sub_menu_items;
         }
 
-        $ident = new NamespaceIdentGlyph($lo->package());
+        $ident = new NamespaceIdentGlyph($lo::CONTEXT);
         $menu_item['class'] = $ident->getClassNamesString();
 
         $menu_item[OptionsMenuRenderer::KEY_ID] = 0;
@@ -220,7 +220,7 @@ class Menu extends HtmlMenu
                     $menu_item['sub'] = $sub_menu_items;
                 }
 
-                $ident = new NamespaceIdentGlyph($lo->package());
+                $ident = new NamespaceIdentGlyph($lo::CONTEXT);
                 $menu_item['class'] = $ident->getClassNamesString();
 
                 $menu_item[OptionsMenuRenderer::KEY_ID] = $cloi->get_id();

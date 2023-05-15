@@ -2,31 +2,18 @@
 namespace Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- *
- * @package repository.lib.content_object.bookmark
+ * @package Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass
  */
 class Bookmark extends ContentObject implements Versionable, Includeable
 {
-    const PROPERTY_URL = 'url';
-    const PROPERTY_APPLICATION = 'application';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Bookmark';
 
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_bookmark';
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
+    public const PROPERTY_APPLICATION = 'application';
+    public const PROPERTY_URL = 'url';
 
     /**
      * If the content object "accept" the properties passed as argument it returns a new instance of itself based on
@@ -34,6 +21,7 @@ class Bookmark extends ContentObject implements Versionable, Includeable
      * Otherwise returns false.
      *
      * @param array $properties
+     *
      * @return ContentObject | array | false
      */
     public static function accept($properties)
@@ -45,7 +33,8 @@ class Bookmark extends ContentObject implements Versionable, Includeable
             $result = new self();
             $result->set_url($url);
             $result->set_application($application);
-            $result = array(1000000 => $result);
+            $result = [1000000 => $result];
+
             return $result;
         }
         else
@@ -54,14 +43,17 @@ class Bookmark extends ContentObject implements Versionable, Includeable
         }
     }
 
-    public function get_url()
+    public static function getAdditionalPropertyNames(): array
     {
-        return $this->getAdditionalProperty(self::PROPERTY_URL);
+        return [self::PROPERTY_URL, self::PROPERTY_APPLICATION];
     }
 
-    public function set_url($url)
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
     {
-        return $this->setAdditionalProperty(self::PROPERTY_URL, $url);
+        return 'repository_bookmark';
     }
 
     public function get_application()
@@ -69,13 +61,18 @@ class Bookmark extends ContentObject implements Versionable, Includeable
         return $this->getAdditionalProperty(self::PROPERTY_APPLICATION);
     }
 
+    public function get_url()
+    {
+        return $this->getAdditionalProperty(self::PROPERTY_URL);
+    }
+
     public function set_application($application)
     {
         return $this->setAdditionalProperty(self::PROPERTY_APPLICATION, $application);
     }
 
-    public static function getAdditionalPropertyNames(): array
+    public function set_url($url)
     {
-        return array(self::PROPERTY_URL, self::PROPERTY_APPLICATION);
+        return $this->setAdditionalProperty(self::PROPERTY_URL, $url);
     }
 }

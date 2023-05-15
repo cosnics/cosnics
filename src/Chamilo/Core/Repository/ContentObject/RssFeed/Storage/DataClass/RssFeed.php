@@ -2,18 +2,23 @@
 namespace Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- *
- * @package repository.lib.content_object.rss_feed
+ * @package Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass
  */
 class RssFeed extends ContentObject implements Versionable, Includeable
 {
-    const PROPERTY_URL = 'url';
-    const PROPERTY_NUMBER_OF_ENTRIES = 'number_of_entries';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\RssFeed';
+
+    public const PROPERTY_NUMBER_OF_ENTRIES = 'number_of_entries';
+    public const PROPERTY_URL = 'url';
+
+    public static function getAdditionalPropertyNames(): array
+    {
+        return [self::PROPERTY_URL, self::PROPERTY_NUMBER_OF_ENTRIES];
+    }
 
     /**
      * @return string
@@ -23,9 +28,14 @@ class RssFeed extends ContentObject implements Versionable, Includeable
         return 'repository_rss_feed';
     }
 
-    public static function getTypeName(): string
+    public function get_number_of_entries()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
+        return $this->getAdditionalProperty(self::PROPERTY_NUMBER_OF_ENTRIES);
+    }
+
+    public static function get_searchable_property_names()
+    {
+        return [self::PROPERTY_URL];
     }
 
     public function get_url()
@@ -33,28 +43,13 @@ class RssFeed extends ContentObject implements Versionable, Includeable
         return $this->getAdditionalProperty(self::PROPERTY_URL);
     }
 
-    public function set_url($url)
-    {
-        return $this->setAdditionalProperty(self::PROPERTY_URL, $url);
-    }
-
-    public function get_number_of_entries()
-    {
-        return $this->getAdditionalProperty(self::PROPERTY_NUMBER_OF_ENTRIES);
-    }
-
     public function set_number_of_entries($numberOfEntries)
     {
         $this->setAdditionalProperty(self::PROPERTY_NUMBER_OF_ENTRIES, $numberOfEntries);
     }
 
-    public static function getAdditionalPropertyNames(): array
+    public function set_url($url)
     {
-        return array(self::PROPERTY_URL, self::PROPERTY_NUMBER_OF_ENTRIES);
-    }
-
-    public static function get_searchable_property_names()
-    {
-        return array(self::PROPERTY_URL);
+        return $this->setAdditionalProperty(self::PROPERTY_URL, $url);
     }
 }

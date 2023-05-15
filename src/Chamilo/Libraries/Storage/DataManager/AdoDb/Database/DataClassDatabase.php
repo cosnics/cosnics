@@ -312,14 +312,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
         $queryBuilder->from($preparedTableName, $this->getAlias($preparedTableName));
     }
 
-    /**
-     * @throws \ReflectionException
-     */
-    public static function package(): string
-    {
-        return ClassnameUtilities::getInstance()->getNamespaceParent(static::context(), 3);
-    }
-
     protected function prepareTableName(string $dataClassName): string
     {
         if (is_subclass_of($dataClassName, CompositeDataClass::class) &&

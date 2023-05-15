@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\I
 use Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider;
 
 /**
- *
  * @package
  *          Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Integration\Chamilo\Core\Metadata\Package
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -14,9 +13,10 @@ use Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Integra
  */
 class Installer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Action\Installer
 {
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Integration\Chamilo\Core\Metadata';
 
     public function getPropertyProviderTypes()
     {
-        return array(ContentObjectPropertyProvider::class);
+        return [ContentObjectPropertyProvider::class];
     }
 }

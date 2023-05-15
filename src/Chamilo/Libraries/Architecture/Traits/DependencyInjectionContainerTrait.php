@@ -40,10 +40,9 @@ use Symfony\Component\Translation\Translator;
 use Twig\Environment;
 
 /**
- *
  * @package Chamilo\Libraries\Architecture\Traits
- * @author Sven Vanpoucke - Hogeschool Gent
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Sven Vanpoucke - Hogeschool Gent
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 trait DependencyInjectionContainerTrait
 {
@@ -83,13 +82,6 @@ trait DependencyInjectionContainerTrait
     public function getContainer(): ContainerInterface
     {
         return $this->container;
-    }
-
-    public function setContainer(ContainerInterface $container)
-    {
-        $this->container = $container;
-
-        return $this;
     }
 
     protected function getDataClassRepository(): DataClassRepository
@@ -147,19 +139,12 @@ trait DependencyInjectionContainerTrait
         return $this->getService(PageConfiguration::class);
     }
 
+    /**
+     * @deprecated Use getSystemPathBuilder() or getWebPathBuilder() now
+     */
     public function getPathBuilder(): PathBuilder
     {
         return $this->getService(PathBuilder::class);
-    }
-
-    public function getSystemPathBuilder(): SystemPathBuilder
-    {
-        return $this->getService(SystemPathBuilder::class);
-    }
-
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->getService(WebPathBuilder::class);
     }
 
     public function getRegistrationConsulter(): RegistrationConsulter
@@ -204,6 +189,11 @@ trait DependencyInjectionContainerTrait
         return $this->getService(StringUtilities::class);
     }
 
+    public function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return $this->getService(SystemPathBuilder::class);
+    }
+
     public function getThemePathBuilder(): ThemePathBuilder
     {
         return $this->getService(ThemePathBuilder::class);
@@ -239,6 +229,11 @@ trait DependencyInjectionContainerTrait
         return $this->getService('Symfony\Component\Validator\Validator');
     }
 
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->getService(WebPathBuilder::class);
+    }
+
     /**
      * @throws \Exception
      */
@@ -248,5 +243,12 @@ trait DependencyInjectionContainerTrait
         {
             $this->container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
         }
+    }
+
+    public function setContainer(ContainerInterface $container)
+    {
+        $this->container = $container;
+
+        return $this;
     }
 }

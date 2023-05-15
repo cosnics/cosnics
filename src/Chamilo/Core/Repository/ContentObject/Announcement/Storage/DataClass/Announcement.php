@@ -2,23 +2,13 @@
 namespace Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- *
- * @package repository.lib.content_object.announcement
- */
-
-/**
- * This class represents an announcement
+ * @package Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass
  */
 class Announcement extends ContentObject implements Versionable, AttachmentSupport
 {
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Announcement';
 }

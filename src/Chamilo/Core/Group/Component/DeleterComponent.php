@@ -16,7 +16,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package group.lib.group_manager.component
  */
 class DeleterComponent extends Manager
@@ -41,28 +40,27 @@ class DeleterComponent extends Manager
         $trail = BreadcrumbTrail::getInstance();
 
         $redirect = new Redirect(
-            array(
+            [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                 \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
-            )
+            ]
         );
         $trail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Administration')));
 
         $redirect = new Redirect(
-            array(
+            [
                 Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                 \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
                 GenericTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
-                    self::package()
+                    Manager::CONTEXT
                 )
-            )
+            ]
         );
         $trail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Group')));
 
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)),
-                Translation::get('GroupList')
+                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]), Translation::get('GroupList')
             )
         );
 
@@ -74,7 +72,7 @@ class DeleterComponent extends Manager
         {
             if (!is_array($ids))
             {
-                $ids = array($ids);
+                $ids = [$ids];
             }
 
             foreach ($ids as $id)
@@ -88,10 +86,10 @@ class DeleterComponent extends Manager
                 else
                 {
                     Event::trigger(
-                        'Delete', Manager::CONTEXT, array(
+                        'Delete', Manager::CONTEXT, [
                             Change::PROPERTY_REFERENCE_ID => $group->get_id(),
                             Change::PROPERTY_USER_ID => $user->get_id()
-                        )
+                        ]
                     );
                 }
             }
@@ -101,14 +99,13 @@ class DeleterComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = Translation::get(
-                        'ObjectNotDeleted', array('OBJECT' => Translation::get('SelectedGroup')),
-                        StringUtilities::LIBRARIES
+                        'ObjectNotDeleted', ['OBJECT' => Translation::get('SelectedGroup')], StringUtilities::LIBRARIES
                     );
                 }
                 else
                 {
                     $message = Translation::get(
-                        'ObjectsNotDeleted', array('OBJECT' => Translation::get('SelectedGroups')),
+                        'ObjectsNotDeleted', ['OBJECT' => Translation::get('SelectedGroups')],
                         StringUtilities::LIBRARIES
                     );
                 }
@@ -118,22 +115,20 @@ class DeleterComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = Translation::get(
-                        'ObjectDeleted', array('OBJECT' => Translation::get('SelectedGroup')),
-                        StringUtilities::LIBRARIES
+                        'ObjectDeleted', ['OBJECT' => Translation::get('SelectedGroup')], StringUtilities::LIBRARIES
                     );
                 }
                 else
                 {
                     $message = Translation::get(
-                        'ObjectsDeleted', array('OBJECT' => Translation::get('SelectedGroups')),
-                        StringUtilities::LIBRARIES
+                        'ObjectsDeleted', ['OBJECT' => Translation::get('SelectedGroups')], StringUtilities::LIBRARIES
                     );
                 }
             }
 
             $this->redirectWithMessage(
-                $message, (bool) $failures, array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS),
-                array(self::PARAM_GROUP_ID)
+                $message, (bool) $failures, [Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS],
+                [self::PARAM_GROUP_ID]
             );
         }
         else
@@ -148,17 +143,17 @@ class DeleterComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)),
+                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
                 Translation::get('BrowserComponent')
             )
         );
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(
+                    [
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
                         self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID)
-                    )
+                    ]
                 ), Translation::get('ViewerComponent')
             )
         );

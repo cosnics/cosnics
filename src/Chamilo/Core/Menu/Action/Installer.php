@@ -11,29 +11,25 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
  * @package Chamilo\Core\Menu\Action
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Installer extends \Chamilo\Configuration\Package\Action\Installer
+abstract class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
 
     /**
-     *
      * @var int
      */
     private $itemDisplay;
 
     /**
-     *
      * @var bool
      */
     private $needsCategory;
 
     /**
-     *
      * @param string[] $formValues
      * @param int $itemDisplay
      * @param bool $needsCategory
@@ -42,42 +38,6 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     {
         parent::__construct($formValues);
         $this->itemDisplay = $itemDisplay;
-        $this->needsCategory = $needsCategory;
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function getItemDisplay()
-    {
-        return $this->itemDisplay;
-    }
-
-    /**
-     *
-     * @param int $itemDisplay
-     */
-    public function setItemDisplay($itemDisplay)
-    {
-        $this->itemDisplay = $itemDisplay;
-    }
-
-    /**
-     *
-     * @return bool
-     */
-    public function getNeedsCategory()
-    {
-        return $this->needsCategory;
-    }
-
-    /**
-     *
-     * @param bool $needsCategory
-     */
-    public function setNeedsCategory($needsCategory)
-    {
         $this->needsCategory = $needsCategory;
     }
 
@@ -120,6 +80,70 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     }
 
     /**
+     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
+     */
+    protected function getClassnameUtilities()
+    {
+        return $this->getContainer()->get(ClassnameUtilities::class);
+    }
+
+    /**
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected function getContainer()
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer();
+    }
+
+    /**
+     * @return int
+     */
+    public function getItemDisplay()
+    {
+        return $this->itemDisplay;
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Service\ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->getContainer()->get(ItemService::class);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getNeedsCategory()
+    {
+        return $this->needsCategory;
+    }
+
+    /**
+     * @return \Chamilo\Core\Menu\Service\RightsService
+     */
+    protected function getRightsService()
+    {
+        return $this->getContainer()->get(RightsService::class);
+    }
+
+    /**
+     * @return \Symfony\Component\Translation\Translator
+     */
+    protected function getTranslator()
+    {
+        return $this->getContainer()->get(Translator::class);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAvailableForEveryone()
+    {
+        return true;
+    }
+
+    /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      *
      * @return bool
@@ -141,51 +165,18 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     }
 
     /**
-     *
-     * @return bool
+     * @param int $itemDisplay
      */
-    public function isAvailableForEveryone()
+    public function setItemDisplay($itemDisplay)
     {
-        return true;
+        $this->itemDisplay = $itemDisplay;
     }
 
     /**
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     * @param bool $needsCategory
      */
-    protected function getContainer()
+    public function setNeedsCategory($needsCategory)
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer();
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Service\RightsService
-     */
-    protected function getRightsService()
-    {
-        return $this->getContainer()->get(RightsService::class);
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Service\ItemService
-     */
-    protected function getItemService()
-    {
-        return $this->getContainer()->get(ItemService::class);
-    }
-
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    protected function getTranslator()
-    {
-        return $this->getContainer()->get(Translator::class);
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    protected function getClassnameUtilities()
-    {
-        return $this->getContainer()->get(ClassnameUtilities::class);
+        $this->needsCategory = $needsCategory;
     }
 }

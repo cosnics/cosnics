@@ -13,6 +13,7 @@ abstract class Manager extends Application
     public const ACTION_BROWSE = 'Browser';
 
     public const CONTEXT = __NAMESPACE__;
+
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)

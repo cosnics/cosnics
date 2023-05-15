@@ -154,7 +154,7 @@ class CalendarRepository
         {
             $availableCalendar = new AvailableCalendar();
 
-            $availableCalendar->setType(Manager::package());
+            $availableCalendar->setType(Manager::CONTEXT);
             $availableCalendar->setIdentifier($calendarItem->id);
             $availableCalendar->setName($calendarItem->summary);
             $availableCalendar->setDescription($calendarItem->description);

@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
@@ -12,46 +11,46 @@ use Exception;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass
- *
- * @author Hans De Bisschop
- * @author Dieter De Neef
+ * @author  Hans De Bisschop
+ * @author  Dieter De Neef
  */
 class Task extends RecurringContentObject implements Versionable, AttachmentSupport, Includeable
 {
+    public const CATEGORY_ANNIVERSARY = 'Anniversary';
+    public const CATEGORY_BUSINESS = 'Business';
+    public const CATEGORY_CALL = 'Call';
+    public const CATEGORY_CLIENT = 'Client';
+    public const CATEGORY_COMPETITION = 'Competition';
+    public const CATEGORY_CONFERENCE = 'Conference';
+    public const CATEGORY_FAVORITE = 'Favorite';
+    public const CATEGORY_GIFT = 'Gift';
+    public const CATEGORY_HOLIDAY = 'Holiday';
+    public const CATEGORY_IDEAS = 'Ideas';
+    public const CATEGORY_MEETING = 'Meeting';
+    public const CATEGORY_MONITORING = 'Monitoring';
+    public const CATEGORY_PRIVATE = 'Private';
+    public const CATEGORY_PROBLEMS = 'Problems';
+    public const CATEGORY_PROFESSIONAL = 'Professional';
+    public const CATEGORY_PROJECTS = 'Projects';
+    public const CATEGORY_PUBLIC_HOLIDAY = 'PublicHoliday';
+    public const CATEGORY_SUPPLIER = 'Supplier';
+    public const CATEGORY_TRAVEL = 'Travel';
+    public const CATEGORY_VARIOUS = 'Various';
 
-    const CATEGORY_ANNIVERSARY = 'Anniversary';
-    const CATEGORY_BUSINESS = 'Business';
-    const CATEGORY_CALL = 'Call';
-    const CATEGORY_CLIENT = 'Client';
-    const CATEGORY_COMPETITION = 'Competition';
-    const CATEGORY_CONFERENCE = 'Conference';
-    const CATEGORY_FAVORITE = 'Favorite';
-    const CATEGORY_GIFT = 'Gift';
-    const CATEGORY_HOLIDAY = 'Holiday';
-    const CATEGORY_IDEAS = 'Ideas';
-    const CATEGORY_MEETING = 'Meeting';
-    const CATEGORY_MONITORING = 'Monitoring';
-    const CATEGORY_PRIVATE = 'Private';
-    const CATEGORY_PROBLEMS = 'Problems';
-    const CATEGORY_PROFESSIONAL = 'Professional';
-    const CATEGORY_PROJECTS = 'Projects';
-    const CATEGORY_PUBLIC_HOLIDAY = 'PublicHoliday';
-    const CATEGORY_SUPPLIER = 'Supplier';
-    const CATEGORY_TRAVEL = 'Travel';
-    const CATEGORY_VARIOUS = 'Various';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Task';
 
-    const PRIORITY_HIGH = 1;
-    const PRIORITY_LOW = 9;
-    const PRIORITY_NONE = 0;
-    const PRIORITY_NORMAL = 5;
-    const PROPERTY_BYDAY = 'byday';
-    const PROPERTY_BYMONTH = 'bymonth';
-    const PROPERTY_BYMONTHDAY = 'bymonthday';
+    public const PRIORITY_HIGH = 1;
+    public const PRIORITY_LOW = 9;
+    public const PRIORITY_NONE = 0;
+    public const PRIORITY_NORMAL = 5;
+    public const PROPERTY_BYDAY = 'byday';
+    public const PROPERTY_BYMONTH = 'bymonth';
+    public const PROPERTY_BYMONTHDAY = 'bymonthday';
 
-    const PROPERTY_CATEGORY = 'category';
-    const PROPERTY_DUE_DATE = 'due_date';
-    const PROPERTY_PRIORITY = 'priority';
-    const PROPERTY_START_DATE = 'start_date';
+    public const PROPERTY_CATEGORY = 'category';
+    public const PROPERTY_DUE_DATE = 'due_date';
+    public const PROPERTY_PRIORITY = 'priority';
+    public const PROPERTY_START_DATE = 'start_date';
 
     /**
      * @param string $type
@@ -135,7 +134,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
      */
     public static function getAdditionalPropertyNames(): array
     {
-        return array(
+        return [
             self::PROPERTY_START_DATE,
             self::PROPERTY_DUE_DATE,
             self::PROPERTY_UNTIL,
@@ -145,7 +144,15 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
             self::PROPERTY_BYDAY,
             self::PROPERTY_BYMONTH,
             self::PROPERTY_BYMONTHDAY
-        );
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_task';
     }
 
     /**
@@ -166,7 +173,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_due_date()
     {
@@ -174,7 +181,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_priority()
     {
@@ -206,27 +213,11 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_start_date()
     {
         return $this->getAdditionalProperty(self::PROPERTY_START_DATE);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_task';
-    }
-
-    /**
-     * @return string
-     */
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /**
@@ -285,7 +276,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
     }
 
     /**
-     * @param integer $priority
+     * @param int $priority
      *
      * @return string
      * @throws \Exception
@@ -319,7 +310,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
     }
 
     /**
-     * @param integer $due_date
+     * @param int $due_date
      */
     public function set_due_date($due_date)
     {
@@ -327,7 +318,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
     }
 
     /**
-     * @param integer $priority
+     * @param int $priority
      */
     public function set_priority($priority)
     {
@@ -335,7 +326,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
     }
 
     /**
-     * @param integer $start_date
+     * @param int $start_date
      */
     public function set_start_date($start_date)
     {

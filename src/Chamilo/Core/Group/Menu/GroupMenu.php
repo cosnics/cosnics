@@ -23,7 +23,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package group.lib
  */
 
@@ -34,7 +33,7 @@ use Chamilo\Libraries\Translation\Translation;
  */
 class GroupMenu extends HtmlMenu
 {
-    const TREE_NAME = __CLASS__;
+    public const TREE_NAME = __CLASS__;
 
     /**
      * The array renderer used to determine the breadcrumbs.
@@ -57,11 +56,11 @@ class GroupMenu extends HtmlMenu
     /**
      * Creates a new category navigation menu.
      *
-     * @param int $owner The ID of the owner of the categories to provide in this menu.
+     * @param int $owner            The ID of the owner of the categories to provide in this menu.
      * @param int $current_category The ID of the current category in the menu.
-     * @param string $url_format The format to use for the URL of a category. Passed to sprintf(). Defaults to the
-     *        string "?category=%s".
-     * @param array $extra_items An array of extra tree items, added to the root.
+     * @param string $url_format    The format to use for the URL of a category. Passed to sprintf(). Defaults to the
+     *                              string "?category=%s".
+     * @param array $extra_items    An array of extra tree items, added to the root.
      */
     public function __construct(
         $current_category, $url_format = '?application=group&go=browser&group_id=%s', $include_root = true,
@@ -80,7 +79,7 @@ class GroupMenu extends HtmlMenu
             $group = DataManager::retrieves(
                 Group::class, new DataClassRetrievesParameters(
                     $condition, 1, null, new OrderBy(
-                        array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
+                        [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
                     )
                 )
             )->current();
@@ -146,7 +145,7 @@ class GroupMenu extends HtmlMenu
         $group = DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters(
                 $condition, 1, null,
-                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
+                new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
             )
         )->current();
         if (!$include_root)
@@ -199,7 +198,7 @@ class GroupMenu extends HtmlMenu
         $groups = DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters(
                 $condition, null, null,
-                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
+                new OrderBy([new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))])
             )
         );
 
@@ -266,7 +265,7 @@ class GroupMenu extends HtmlMenu
     public function render_as_tree()
     {
         $redirect = new Redirect(
-            array(Application::PARAM_CONTEXT => Manager::package(), Manager::PARAM_ACTION => 'xml_group_menu_feed')
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, Manager::PARAM_ACTION => 'xml_group_menu_feed']
         );
 
         $renderer = new TreeMenuRenderer($this->get_tree_name(), $redirect->getUrl(), $this->urlFmt);

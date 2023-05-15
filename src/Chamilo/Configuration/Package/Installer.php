@@ -10,38 +10,15 @@ use DOMDocument;
 use DOMXPath;
 
 /**
- *
  * @package admin.install
  */
+
 /**
  * This installer can be used to create the storage structure for the users application.
  */
 class Installer extends Action\Installer
 {
-
-    /**
-     * Runs the install-script.
-     */
-    public function extra()
-    {
-
-        // Add the default language entries in the database
-        if (! $this->create_languages())
-        {
-            return false;
-        }
-        else
-        {
-            $this->add_message(
-                self::TYPE_NORMAL,
-                Translation::get(
-                    'ObjectsAdded',
-                    array('OBJECTS' => Translation::get('Languages')),
-                    StringUtilities::LIBRARIES));
-        }
-
-        return true;
-    }
+    public const CONTEXT = 'Chamilo\Configuration';
 
     public function create_languages()
     {
@@ -71,17 +48,39 @@ class Installer extends Action\Installer
                 if ($language->create())
                 {
                     $this->add_message(
-                        self::TYPE_NORMAL,
-                        Translation::get(
-                            'ObjectAdded',
-                            array('OBJECT' => Translation::get('Language')),
-                            StringUtilities::LIBRARIES) . ' ' . $language->get_english_name());
+                        self::TYPE_NORMAL, Translation::get(
+                            'ObjectAdded', ['OBJECT' => Translation::get('Language')], StringUtilities::LIBRARIES
+                        ) . ' ' . $language->get_english_name()
+                    );
                 }
                 else
                 {
                     return false;
                 }
             }
+        }
+
+        return true;
+    }
+
+    /**
+     * Runs the install-script.
+     */
+    public function extra()
+    {
+
+        // Add the default language entries in the database
+        if (!$this->create_languages())
+        {
+            return false;
+        }
+        else
+        {
+            $this->add_message(
+                self::TYPE_NORMAL, Translation::get(
+                'ObjectsAdded', ['OBJECTS' => Translation::get('Languages')], StringUtilities::LIBRARIES
+            )
+            );
         }
 
         return true;

@@ -72,7 +72,7 @@ class CreatorComponent extends Manager
                     'CreateContentType', [
                         'OBJECTTYPE' => strtolower(
                             Translation::get(
-                                $template->translate('TypeName'), null, $contentObject->package()
+                                $template->translate('TypeName'), null, $contentObject::CONTEXT
                             )
                         )
                     ]
@@ -141,12 +141,12 @@ class CreatorComponent extends Manager
                 if (is_array($contentObject))
                 {
                     $parent = $contentObject[0]->get_parent_id();
-                    $typeContext = $contentObject[0]->package();
+                    $typeContext = $contentObject[0]::CONTEXT;
                 }
                 else
                 {
                     $parent = $contentObject->get_parent_id();
-                    $typeContext = $contentObject->package();
+                    $typeContext = $contentObject::CONTEXT;
                 }
 
                 $parameters = [];

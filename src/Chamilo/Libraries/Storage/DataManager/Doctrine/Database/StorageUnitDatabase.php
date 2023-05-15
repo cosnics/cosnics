@@ -319,14 +319,6 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
     }
 
     /**
-     * @throws \ReflectionException
-     */
-    public static function package(): string
-    {
-        return ClassnameUtilities::getInstance()->getNamespaceParent(static::context(), 3);
-    }
-
-    /**
      *
      * @param string[] $attributes
      *

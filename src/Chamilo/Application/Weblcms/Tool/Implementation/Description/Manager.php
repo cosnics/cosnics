@@ -5,7 +5,6 @@ use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface
 use Chamilo\Core\Repository\ContentObject\Description\Storage\DataClass\Description;
 
 /**
- *
  * @package application.lib.weblcms.tool.description
  */
 
@@ -14,13 +13,12 @@ use Chamilo\Core\Repository\ContentObject\Description\Storage\DataClass\Descript
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements IntroductionTextSupportInterface
 {
-    const ACTION_VIEW_DESCRIPTIONS = 'Viewer';
+    public const ACTION_VIEW_DESCRIPTIONS = 'Viewer';
+
+    public const CONTEXT = __NAMESPACE__;
 
     public static function get_allowed_types()
     {
-        return array(Description::class /*
-                                                * , File::class, Page::class, Webpage::class
-                                                */
-);
+        return [Description::class];
     }
 }

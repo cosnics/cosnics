@@ -22,7 +22,6 @@ class IcalContentObjectExportController extends ContentObjectExportController
 {
 
     /**
-     *
      * @var \Sabre\VObject\Component\VCalendar
      */
     private $calendar;
@@ -146,7 +145,6 @@ class IcalContentObjectExportController extends ContentObjectExportController
     }
 
     /**
-     *
      * @return \Sabre\VObject\Component\VCalendar
      */
     public function get_calendar()
@@ -155,7 +153,6 @@ class IcalContentObjectExportController extends ContentObjectExportController
     }
 
     /**
-     *
      * @see \core\repository\ContentObjectExportController::get_filename()
      */
     public function get_filename()
@@ -178,7 +175,7 @@ class IcalContentObjectExportController extends ContentObjectExportController
 
     public function process($content_object)
     {
-        $export_types = ContentObjectExportImplementation::get_types_for_object($content_object->package());
+        $export_types = ContentObjectExportImplementation::get_types_for_object($content_object::CONTEXT);
 
         if (in_array(ContentObjectExport::FORMAT_ICAL, $export_types))
         {

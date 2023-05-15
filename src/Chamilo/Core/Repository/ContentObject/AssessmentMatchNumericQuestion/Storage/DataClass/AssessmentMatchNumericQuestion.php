@@ -7,17 +7,18 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package repository.lib.content_object.match_numeric_question
  */
 class AssessmentMatchNumericQuestion extends ContentObject implements Versionable
 {
-    const PROPERTY_HINT = 'hint';
-    const PROPERTY_OPTIONS = 'options';
-    const PROPERTY_TOLERANCE_TYPE = 'tolerance_type';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion';
 
-    const TOLERANCE_TYPE_ABSOLUTE = 'absolute';
-    const TOLERANCE_TYPE_RELATIVE = 'relative';
+    public const PROPERTY_HINT = 'hint';
+    public const PROPERTY_OPTIONS = 'options';
+    public const PROPERTY_TOLERANCE_TYPE = 'tolerance_type';
+
+    public const TOLERANCE_TYPE_ABSOLUTE = 'absolute';
+    public const TOLERANCE_TYPE_RELATIVE = 'relative';
 
     public function __construct($defaultProperties = [], $additionalProperties = [])
     {
@@ -38,7 +39,15 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_TOLERANCE_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT);
+        return [self::PROPERTY_TOLERANCE_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_assessment_match_numeric_question';
     }
 
     public function get_best_option()
@@ -75,7 +84,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
      */
     public static function get_html_editors($html_editors = [])
     {
-        return parent::get_html_editors(array(self::PROPERTY_HINT));
+        return parent::get_html_editors([self::PROPERTY_HINT]);
     }
 
     /**
@@ -124,27 +133,13 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
         return [];
     }
 
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_assessment_match_numeric_question';
-    }
-
     public function get_tolerance_type()
     {
         return $this->getAdditionalProperty(self::PROPERTY_TOLERANCE_TYPE);
     }
 
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
-
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function has_feedback()
     {

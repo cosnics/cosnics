@@ -201,7 +201,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $html[] = '<div class="clearfix"></div>';
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath(Manager::package()) . 'LearningPathMenu.js'
+            $this->getWebPathBuilder()->getJavascriptPath(Manager::CONTEXT) . 'LearningPathMenu.js'
         );
         $html[] = ResourceManager::getInstance()->getResourceHtml(
             $this->getWebPathBuilder()->getPluginPath(StringUtilities::LIBRARIES) . 'Jquery/jquery.fullscreen.min.js'

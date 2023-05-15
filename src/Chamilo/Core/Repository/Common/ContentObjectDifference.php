@@ -10,8 +10,7 @@ use Diff;
 
 /**
  * @package Chamilo\Core\Repository\Common
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class ContentObjectDifference
 {
@@ -41,11 +40,11 @@ abstract class ContentObjectDifference
      */
     public function compare()
     {
-        $defaultPropertyNames = array(
+        $defaultPropertyNames = [
             ContentObject::PROPERTY_TITLE,
             ContentObject::PROPERTY_DESCRIPTION,
             ContentObject::PROPERTY_MODIFICATION_DATE
-        );
+        ];
 
         $differences = [];
 
@@ -70,8 +69,8 @@ abstract class ContentObjectDifference
 
     public static function factory(ContentObject $object, ContentObject $version)
     {
-        $class = $object->package() . '\\Common\\' .
-            ClassnameUtilities::getInstance()->getPackageNameFromNamespace($object->package()) . 'Difference';
+        $class = $object::CONTEXT . '\\Common\\' .
+            ClassnameUtilities::getInstance()->getPackageNameFromNamespace($object::CONTEXT) . 'Difference';
 
         return new $class($object, $version);
     }

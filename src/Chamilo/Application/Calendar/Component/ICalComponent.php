@@ -17,17 +17,15 @@ use Chamilo\Libraries\Translation\Translation;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ICalComponent extends Manager implements NoAuthenticationSupport
 {
 
     /**
-     *
      * @var \Chamilo\Application\Calendar\Service\CalendarRendererProvider
      */
     private $calendarRendererProvider;
@@ -79,19 +77,19 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
             else
             {
                 $icalDownloadUrl = new Redirect(
-                    array(
-                        Application::PARAM_CONTEXT => self::package(),
+                    [
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         self::PARAM_ACTION => Manager::ACTION_ICAL,
                         self::PARAM_DOWNLOAD => 1
-                    )
+                    ]
                 );
 
                 $icalExternalUrl = new Redirect(
-                    array(
-                        Application::PARAM_CONTEXT => self::package(),
+                    [
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         self::PARAM_ACTION => Manager::ACTION_ICAL,
                         User::PROPERTY_SECURITY_TOKEN => $this->getUser()->get_security_token()
-                    )
+                    ]
                 );
 
                 $includedCalendars =
@@ -102,15 +100,15 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 $html[] = $this->render_header();
 
                 $html[] = Display::normal_message(
-                    Translation::get('ICalExternalMessage', array('URL' => $icalExternalUrl->getUrl()))
+                    Translation::get('ICalExternalMessage', ['URL' => $icalExternalUrl->getUrl()])
                 );
 
                 $html[] = Display::normal_message(
-                    Translation::get('ICalDownloadMessage', array('URL' => $icalDownloadUrl->getUrl()))
+                    Translation::get('ICalDownloadMessage', ['URL' => $icalDownloadUrl->getUrl()])
                 );
 
                 $html[] = Display::warning_message(
-                    Translation::get('ICalWarningMessage', array('INCLUDED_CALENDARS' => $includedCalendars))
+                    Translation::get('ICalWarningMessage', ['INCLUDED_CALENDARS' => $includedCalendars])
                 );
 
                 $html[] = $this->render_footer();
@@ -129,7 +127,6 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
     }
 
     /**
-     *
      * @param User $user
      *
      * @return CalendarRendererProvider
@@ -139,8 +136,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         if (!isset($this->calendarRendererProvider))
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                new CalendarRendererProviderRepository(), $user, [],
-                \Chamilo\Application\Calendar\Ajax\Manager::CONTEXT
+                new CalendarRendererProviderRepository(), $user, [], \Chamilo\Application\Calendar\Ajax\Manager::CONTEXT
             );
         }
 

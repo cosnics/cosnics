@@ -13,19 +13,19 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package Chamilo\Application\Portfolio\Integration\Chamilo\Core\Repository\ContentObject\Portfolio
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Manager implements PortfolioInterface
 {
+    public const CONTEXT = __NAMESPACE__;
 
     /**
      * Delete references to the given node ids
      *
      * @param int[] $node_ids
      *
-     * @return boolean
+     * @return bool
      */
     public static function delete_node_ids($node_ids)
     {
@@ -58,7 +58,7 @@ class Manager implements PortfolioInterface
      * @param int[] $old_node_ids
      * @param int[] $new_node_ids
      *
-     * @return boolean
+     * @return bool
      */
     public static function update_node_ids($old_node_ids, $new_node_ids)
     {

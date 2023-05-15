@@ -102,7 +102,7 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
         {
             $courseTypeLink = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => Manager::package(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE => $this->getCourseTypeId()));
             
             $html[] = '<div class="panel-footer">';

@@ -2,21 +2,21 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- *
- * @package repository.lib.content_object.matching_question
+ * @package Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\DataClass
  */
 class AssessmentMatchingQuestion extends ContentObject implements Versionable
 {
-    const DISPLAY_LIST = 1;
-    const DISPLAY_SELECT = 2;
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion';
 
-    const PROPERTY_DISPLAY = 'display';
-    const PROPERTY_MATCHES = 'matches';
-    const PROPERTY_OPTIONS = 'options';
+    public const DISPLAY_LIST = 1;
+    public const DISPLAY_SELECT = 2;
+
+    public const PROPERTY_DISPLAY = 'display';
+    public const PROPERTY_MATCHES = 'matches';
+    public const PROPERTY_OPTIONS = 'options';
 
     public function add_match($match)
     {
@@ -36,7 +36,15 @@ class AssessmentMatchingQuestion extends ContentObject implements Versionable
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_DISPLAY, self::PROPERTY_MATCHES, self::PROPERTY_OPTIONS);
+        return [self::PROPERTY_DISPLAY, self::PROPERTY_MATCHES, self::PROPERTY_OPTIONS];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_assessment_matching_question';
     }
 
     public function get_default_weight()
@@ -95,19 +103,6 @@ class AssessmentMatchingQuestion extends ContentObject implements Versionable
         }
 
         return [];
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_assessment_matching_question';
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function set_display($display)

@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Integ
 use Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\DataClass\AssessmentMatchingQuestion;
 
 /**
- *
  * @package
  *          Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Integration\Chamilo\Core\Metadata\PropertyProvider
  * @author Sven Vanpoucke - Hogeschool Gent
@@ -12,11 +11,11 @@ use Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\Dat
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
+class ContentObjectPropertyProvider
+    extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
 
     /**
-     *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()

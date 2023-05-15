@@ -2,21 +2,13 @@
 namespace Chamilo\Core\Repository\ContentObject\GlossaryItem\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- *
- * @package repository.lib.content_object.glossary_item
- */
-/**
- * This class represents an glossary_item
+ * @package Chamilo\Core\Repository\ContentObject\GlossaryItem\Storage\DataClass
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GlossaryItem extends ContentObject implements Versionable
 {
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\GlossaryItem';
 }

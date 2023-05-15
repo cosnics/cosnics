@@ -15,11 +15,10 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- *
  * @package Chamilo\Libraries\Architecture\Application
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class Application
 {
@@ -372,24 +371,6 @@ abstract class Application
         throw new NotAllowedException($showLoginForm);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
-    public static function package(): string
-    {
-        $classNameUtilities = ClassnameUtilities::getInstance();
-        $className = $classNameUtilities->getClassnameFromNamespace(get_called_class());
-
-        if ($className == 'Manager')
-        {
-            return static::context();
-        }
-        else
-        {
-            return $classNameUtilities->getNamespaceParent(static::context());
-        }
-    }
-
     public function redirect(array $parameters = [], array $filter = [])
     {
         $response = new RedirectResponse($this->getLink(array_merge($this->get_parameters(), $parameters), $filter));
@@ -546,7 +527,7 @@ abstract class Application
     {
         return $this->renderHeader($pageTitle);
     }
-    
+
     public function set_action(?string $action)
     {
         $this->set_parameter(static::PARAM_ACTION, $action);

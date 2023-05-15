@@ -80,14 +80,6 @@ class StorageUnitRepository
         return $this->getStorageUnitDatabase()->optimize($storageUnitName);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
-    public static function package(): string
-    {
-        return ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
-    }
-
     public function rename(string $oldStorageUnitName, string $newStorageUnitName): bool
     {
         return $this->getStorageUnitDatabase()->rename($oldStorageUnitName, $newStorageUnitName);

@@ -1,20 +1,19 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
- *
  * @package Chamilo\Core\Menu\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class LanguageItem extends Item
 {
-    public const PROPERTY_LANGUAGE = 'language';
     public const PROPERTY_ISOCODE = 'isocode';
+
+    public const PROPERTY_LANGUAGE = 'language';
 
     /**
      * @var string
@@ -34,11 +33,43 @@ class LanguageItem extends Item
     }
 
     /**
+     * @return string[]
+     */
+    public static function getAdditionalPropertyNames(): array
+    {
+        return [self::PROPERTY_LANGUAGE];
+    }
+
+    /**
      * @return string
      */
-    public static function getTypeName(): string
+    public function getCurrentUrl()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class);
+        return $this->currentUrl;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
+     */
+    public function getGlyph()
+    {
+        return new FontAwesomeGlyph('language', [], null, 'fas');
+    }
+
+    /**
+     * @return string
+     */
+    public function getIsocode()
+    {
+        return $this->getAdditionalProperty(self::PROPERTY_ISOCODE);
+    }
+
+    /**
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return $this->getAdditionalProperty(self::PROPERTY_LANGUAGE);
     }
 
     /**
@@ -51,37 +82,11 @@ class LanguageItem extends Item
     }
 
     /**
-     * @param string $language
-     *
-     * @deprecated Use LanguageItem::setLanguage() now
+     * @param string $currentUrl
      */
-    public function set_language($language)
+    public function setCurrentUrl(string $currentUrl)
     {
-        return $this->setLanguage($language);
-    }
-
-    /**
-     * @return string
-     */
-    public function getLanguage()
-    {
-        return $this->getAdditionalProperty(self::PROPERTY_LANGUAGE);
-    }
-
-    /**
-     * @param string $language
-     */
-    public function setLanguage($language)
-    {
-        return $this->setAdditionalProperty(self::PROPERTY_LANGUAGE, $language);
-    }
-
-    /**
-     * @return string
-     */
-    public function getIsocode()
-    {
-        return $this->getAdditionalProperty(self::PROPERTY_ISOCODE);
+        $this->currentUrl = $currentUrl;
     }
 
     /**
@@ -93,34 +98,20 @@ class LanguageItem extends Item
     }
 
     /**
-     * @return string[]
+     * @param string $language
      */
-    public static function getAdditionalPropertyNames(): array
+    public function setLanguage($language)
     {
-        return array(self::PROPERTY_LANGUAGE);
+        return $this->setAdditionalProperty(self::PROPERTY_LANGUAGE, $language);
     }
 
     /**
-     * @return string
+     * @param string $language
+     *
+     * @deprecated Use LanguageItem::setLanguage() now
      */
-    public function getCurrentUrl()
+    public function set_language($language)
     {
-        return $this->currentUrl;
-    }
-
-    /**
-     * @param string $currentUrl
-     */
-    public function setCurrentUrl(string $currentUrl)
-    {
-        $this->currentUrl = $currentUrl;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
-     */
-    public function getGlyph()
-    {
-        return new FontAwesomeGlyph('language', [], null, 'fas');
+        return $this->setLanguage($language);
     }
 }

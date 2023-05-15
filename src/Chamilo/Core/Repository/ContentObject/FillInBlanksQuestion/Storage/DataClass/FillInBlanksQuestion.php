@@ -3,43 +3,42 @@ namespace Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\Dat
 
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Form\FillInBlanksQuestionForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- *
- * @package repository.lib.question_types.fill_in_blanks_question
+ * @package Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass
  */
 class FillInBlanksQuestion extends ContentObject implements Versionable
 {
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion';
 
-    const DEFAULT_CASE_SENSITIVE = true;
-    const DEFAULT_INPUT_ANSWER_TEXT = '';
-    const DEFAULT_INPUT_TYPE = self::TYPE_SIZED_TEXT;
-    const DEFAULT_NEGATIVE_SCORE = 0;
-    const DEFAULT_POSITIVE_SCORE = 1;
-    const DEFAULT_SHOW_INLINE = true;
+    public const DEFAULT_CASE_SENSITIVE = true;
+    public const DEFAULT_INPUT_ANSWER_TEXT = '';
+    public const DEFAULT_INPUT_TYPE = self::TYPE_SIZED_TEXT;
+    public const DEFAULT_NEGATIVE_SCORE = 0;
+    public const DEFAULT_POSITIVE_SCORE = 1;
+    public const DEFAULT_SHOW_INLINE = true;
 
-    const HINT_ANSWER = 2;
-    const HINT_CHARACTER = 1;
+    public const HINT_ANSWER = 2;
+    public const HINT_CHARACTER = 1;
 
-    const MARK_CORRECT = 1;
-    const MARK_MAX = 2;
-    const MARK_WRONG = 0;
+    public const MARK_CORRECT = 1;
+    public const MARK_MAX = 2;
+    public const MARK_WRONG = 0;
 
-    const PROPERTY_ANSWER_TEXT = 'answer_text';
-    const PROPERTY_CASE_SENSITIVE = 'case_sensitive';
-    const PROPERTY_DEFAULT_NEGATIVE_SCORE = 'default_negative_score';
-    const PROPERTY_DEFAULT_POSITIVE_SCORE = 'default_positive_score';
-    const PROPERTY_FIELD_OPTION = 'field_option';
-    const PROPERTY_QUESTION_TYPE = 'question_type';
-    const PROPERTY_SHOW_INLINE = 'show_inline';
+    public const PROPERTY_ANSWER_TEXT = 'answer_text';
+    public const PROPERTY_CASE_SENSITIVE = 'case_sensitive';
+    public const PROPERTY_DEFAULT_NEGATIVE_SCORE = 'default_negative_score';
+    public const PROPERTY_DEFAULT_POSITIVE_SCORE = 'default_positive_score';
+    public const PROPERTY_FIELD_OPTION = 'field_option';
+    public const PROPERTY_QUESTION_TYPE = 'question_type';
+    public const PROPERTY_SHOW_INLINE = 'show_inline';
 
-    const TEXT_INPUT_FIELD_CSS_CLASS = 'fill_in_the_blanks_input_field';
+    public const TEXT_INPUT_FIELD_CSS_CLASS = 'fill_in_the_blanks_input_field';
 
-    const TYPE_SELECT = 2;
-    const TYPE_SIZED_TEXT = 0;
-    const TYPE_UNIFORM_TEXT = 1;
+    public const TYPE_SELECT = 2;
+    public const TYPE_SIZED_TEXT = 0;
+    public const TYPE_UNIFORM_TEXT = 1;
 
     // we need a special css class that sets the inputfield with a monospaced font, needed to make the *magic* of fixed
     // size fields work :-)
@@ -63,7 +62,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(
+        return [
             self::PROPERTY_ANSWER_TEXT,
             self::PROPERTY_CASE_SENSITIVE,
             self::PROPERTY_QUESTION_TYPE,
@@ -71,7 +70,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
             self::PROPERTY_DEFAULT_POSITIVE_SCORE,
             self::PROPERTY_DEFAULT_NEGATIVE_SCORE,
             self::PROPERTY_SHOW_INLINE
-        );
+        ];
     }
 
     /*
@@ -79,6 +78,14 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
      * $this->setAdditionalProperty(self::PROPERTY_ANSWERS, serialize($answers)); } public function
      * set_answers($answers) { return $this->setAdditionalProperty(self::PROPERTY_ANSWERS, serialize($answers)); }
      */
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_fill_in_blanks_question';
+    }
 
     public function get_answer_object($question_index, $answer)
     {
@@ -343,19 +350,6 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
     public function get_show_inline()
     {
         return $this->getAdditionalProperty(self::PROPERTY_SHOW_INLINE);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_fill_in_blanks_question';
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /**

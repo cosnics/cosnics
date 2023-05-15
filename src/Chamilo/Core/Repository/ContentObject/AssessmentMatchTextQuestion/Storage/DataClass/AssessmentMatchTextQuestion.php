@@ -2,20 +2,20 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
- * @package repository.lib.content_object.match_text_question
+ * @package Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Storage\DataClass
  */
 class AssessmentMatchTextQuestion extends ContentObject implements Versionable
 {
-    const PROPERTY_HINT = 'hint';
-    const PROPERTY_IGNORE_CASE = 'ignore_case';
-    const PROPERTY_OPTIONS = 'options';
-    const PROPERTY_USE_WILDCARDS = 'use_wildcards';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion';
+
+    public const PROPERTY_HINT = 'hint';
+    public const PROPERTY_IGNORE_CASE = 'ignore_case';
+    public const PROPERTY_OPTIONS = 'options';
+    public const PROPERTY_USE_WILDCARDS = 'use_wildcards';
 
     public function add_option($option)
     {
@@ -23,6 +23,16 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
         $options[] = $option;
 
         return $this->setAdditionalProperty(self::PROPERTY_OPTIONS, serialize($options));
+    }
+
+    public static function getAdditionalPropertyNames(): array
+    {
+        return [
+            self::PROPERTY_OPTIONS,
+            self::PROPERTY_USE_WILDCARDS,
+            self::PROPERTY_IGNORE_CASE,
+            self::PROPERTY_HINT
+        ];
     }
 
     public function getBestOptions()
@@ -42,14 +52,12 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
         return $bestOptions;
     }
 
-    public static function getAdditionalPropertyNames(): array
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
     {
-        return array(
-            self::PROPERTY_OPTIONS,
-            self::PROPERTY_USE_WILDCARDS,
-            self::PROPERTY_IGNORE_CASE,
-            self::PROPERTY_HINT
-        );
+        return 'repository_assessment_match_text_question';
     }
 
     public function get_best_option()
@@ -74,7 +82,7 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
      */
     public static function get_html_editors($html_editors = [])
     {
-        return parent::get_html_editors(array(self::PROPERTY_HINT));
+        return parent::get_html_editors([self::PROPERTY_HINT]);
     }
 
     public function get_ignore_case()
@@ -128,27 +136,13 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
         return [];
     }
 
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_assessment_match_text_question';
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
-
     public function get_use_wildcards()
     {
         return $this->getAdditionalProperty(self::PROPERTY_USE_WILDCARDS);
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function has_feedback()
     {

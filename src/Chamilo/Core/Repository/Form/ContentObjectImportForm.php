@@ -112,7 +112,7 @@ abstract class ContentObjectImportForm extends FormValidator
      */
     public static function factory(ImportFormParameters $importFormParameters)
     {
-        $class = Manager::package() . '\Common\Import\\' .
+        $class = Manager::CONTEXT . '\Common\Import\\' .
             StringUtilities::getInstance()->createString($importFormParameters->getImportFormType())->upperCamelize() .
             '\\' . (string) StringUtilities::getInstance()->createString($importFormParameters->getImportFormType())
                 ->upperCamelize() . 'ContentObjectImportForm';

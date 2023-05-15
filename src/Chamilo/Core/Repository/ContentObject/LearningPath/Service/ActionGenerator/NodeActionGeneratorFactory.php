@@ -77,7 +77,7 @@ class NodeActionGeneratorFactory
     {
         $nodeActionGenerators = [];
 
-        $integrationPackages = $this->configuration->getIntegrationRegistrations(LearningPath::package());
+        $integrationPackages = $this->configuration->getIntegrationRegistrations(LearningPath::CONTEXT);
 
         foreach ($integrationPackages as $integrationPackage)
         {

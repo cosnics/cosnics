@@ -445,7 +445,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $queryParameters[self::PARAM_PAGE_NUMBER] = $this->getCurrentPageNumber();
 
         $translationVariables = [];
-        $translationVariables[Application::PARAM_CONTEXT] = Manager::package();
+        $translationVariables[Application::PARAM_CONTEXT] = Manager::CONTEXT;
         $translationVariables[PagerRenderer::PAGE_SELECTOR_TRANSLATION_TITLE] = 'ShowNumberOfPublicationsPerPage';
         $translationVariables[PagerRenderer::PAGE_SELECTOR_TRANSLATION_ROW] = 'NumberOfPublicationsPerPage';
 
@@ -494,7 +494,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $publication_id = $publication[ContentObjectPublication::PROPERTY_ID];
         $publication_type = $this->get_publication_type();
-
+        
         $content_object = $this->get_content_object_from_publication($publication);
 
         $details_url = $this->get_url(
@@ -584,7 +584,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             if ($content_object instanceof ComplexContentObjectSupport &&
                 ($content_object->get_owner_id() == $this->get_tool_browser()->get_user_id()))
             {
-                if ($content_object::package() == 'Chamilo\Core\Repository\ContentObject\Assessment')
+                if ($content_object::CONTEXT == 'Chamilo\Core\Repository\ContentObject\Assessment')
                 {
                     $dropdownButton->addSubButton(
                         new SubButton(

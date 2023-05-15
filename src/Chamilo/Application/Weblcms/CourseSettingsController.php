@@ -633,7 +633,7 @@ class CourseSettingsController
     )
     {
         $settings_file =
-            Path::getInstance()->getResourcesPath($installer->package()) . 'Settings' . DIRECTORY_SEPARATOR .
+            Path::getInstance()->getResourcesPath($installer::CONTEXT) . 'Settings' . DIRECTORY_SEPARATOR .
             'course_settings.xml';
 
         if (self::create_course_settings_from_xml($settings_file, $tool_registration_id))

@@ -143,7 +143,7 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
 
         $currentContext = $request->query->get(Application::PARAM_CONTEXT);
 
-        if ($currentContext == WorkspaceManager::package())
+        if ($currentContext == WorkspaceManager::CONTEXT)
         {
             return true;
         }

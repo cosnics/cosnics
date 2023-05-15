@@ -2,11 +2,11 @@
 namespace Chamilo\Libraries\Package;
 
 /**
- *
  * @package Chamilo\Libraries\Package
  */
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
+    public const CONTEXT = 'Chamilo\Libraries';
 
     /**
      * Returns the list with extra installable packages that are connected to this package
@@ -18,6 +18,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $packages = [];
         $packages[] = 'Chamilo\Libraries\Calendar';
         $packages[] = 'Chamilo\Libraries\Rights';
+
         return $packages;
     }
 }

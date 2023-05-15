@@ -5,7 +5,6 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataManager;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
@@ -18,23 +17,24 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- *
- * @package repository.content_object.document
+ * @package Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass
  */
 class Webpage extends ContentObject implements Versionable, Includeable, FileStorageSupport
 {
-    const PROPERTY_EXTENSION = 'extension';
-    const PROPERTY_FILENAME = 'filename';
-    const PROPERTY_FILESIZE = 'filesize';
-    const PROPERTY_HASH = 'hash';
-    const PROPERTY_PATH = 'path';
-    const PROPERTY_STORAGE_PATH = 'storage_path';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Webpage';
 
-    const TYPE_AUDIO = 'audio';
-    const TYPE_FLASH = 'flash';
-    const TYPE_FLASH_VIDEO = 'flash_video';
-    const TYPE_IMAGE = 'image';
-    const TYPE_VIDEO = 'video';
+    public const PROPERTY_EXTENSION = 'extension';
+    public const PROPERTY_FILENAME = 'filename';
+    public const PROPERTY_FILESIZE = 'filesize';
+    public const PROPERTY_HASH = 'hash';
+    public const PROPERTY_PATH = 'path';
+    public const PROPERTY_STORAGE_PATH = 'storage_path';
+
+    public const TYPE_AUDIO = 'audio';
+    public const TYPE_FLASH = 'flash';
+    public const TYPE_FLASH_VIDEO = 'flash_video';
+    public const TYPE_IMAGE = 'image';
+    public const TYPE_VIDEO = 'video';
 
     private $contents;
 
@@ -47,6 +47,13 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
     private $in_memory_file;
 
     /**
+     * Indicates wether the Webpage must be saved as a new version when its save() or update() method is called
+     *
+     * @var bool
+     */
+    private $save_as_new_version = false;
+
+    /**
      * Temporary file path.
      * A path to a file that has to be moved and renamed when the Webpage is saved. Useful for
      * instance when a file is uploaded to the server.
@@ -54,13 +61,6 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
      * @var string
      */
     private $temporary_file_path;
-
-    /**
-     * Indicates wether the Webpage must be saved as a new version when its save() or update() method is called
-     *
-     * @var boolean
-     */
-    private $save_as_new_version = false;
 
     /**
      * (non-PHPdoc)
@@ -76,7 +76,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         }
 
         $descriptionRequired = Configuration::getInstance()->get_setting(
-            array(Manager::CONTEXT, 'description_required')
+            [Manager::CONTEXT, 'description_required']
         );
 
         // Description
@@ -205,7 +205,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
      * version of a Webpage, a new record is saved in the repository_document table, and the 'hash' field must be
      * unique.
      *
-     * @return boolean
+     * @return bool
      */
     private function duplicate_current_file()
     {
@@ -233,6 +233,17 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         }
     }
 
+    public static function getAdditionalPropertyNames(): array
+    {
+        return [
+            self::PROPERTY_FILENAME,
+            self::PROPERTY_FILESIZE,
+            self::PROPERTY_PATH,
+            self::PROPERTY_HASH,
+            self::PROPERTY_STORAGE_PATH
+        ];
+    }
+
     /**
      * @return string
      */
@@ -241,15 +252,12 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         return self::PROPERTY_FILESIZE;
     }
 
-    public static function getAdditionalPropertyNames(): array
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
     {
-        return array(
-            self::PROPERTY_FILENAME,
-            self::PROPERTY_FILESIZE,
-            self::PROPERTY_PATH,
-            self::PROPERTY_HASH,
-            self::PROPERTY_STORAGE_PATH
-        );
+        return 'repository_webpage';
     }
 
     /**
@@ -340,26 +348,6 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         return $this->in_memory_file;
     }
 
-    /**
-     * Set In memory file content.
-     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
-     *
-     * @return void
-     * @var $in_memory_file mixed
-     */
-    public function set_in_memory_file($in_memory_file)
-    {
-        if (StringUtilities::getInstance()->hasValue($in_memory_file))
-        {
-            if (StringUtilities::getInstance()->hasValue($this->get_temporary_file_path()))
-            {
-                throw new Exception('A Webpage can not have a temporary file path and in memory content');
-            }
-
-            $this->in_memory_file = $in_memory_file;
-        }
-    }
-
     public function get_mime_type()
     {
         return FileType::get_mimetype($this->get_extension());
@@ -374,31 +362,16 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
      * Get a value indicating wether the Webpage must be saved as a new version if its save() or update() method is
      * called
      *
-     * @return boolean
+     * @return bool
      */
     public function get_save_as_new_version()
     {
         return $this->save_as_new_version;
     }
 
-    /**
-     * Set a value indicating wether the Webpage must be saved as a new version if its save() or update() method is
-     * called
-     *
-     * @return void
-     * @var $save_as_new_version boolean
-     */
-    public function set_save_as_new_version($save_as_new_version)
-    {
-        if (is_bool($save_as_new_version))
-        {
-            $this->save_as_new_version = $save_as_new_version;
-        }
-    }
-
     public static function get_searchable_property_names()
     {
-        return array(self::PROPERTY_FILENAME);
+        return [self::PROPERTY_FILENAME];
     }
 
     public static function get_showable_types()
@@ -418,14 +391,6 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
     }
 
     /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_webpage';
-    }
-
-    /**
      * Get temporary file path.
      * A path to a file that has to be moved and renamed when the Webpage is saved
      *
@@ -436,34 +401,9 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         return $this->temporary_file_path;
     }
 
-    /**
-     * Set temporary file path.
-     * A path to a file that has to be moved and renamed when the Webpage is saved
-     *
-     * @return void
-     * @var $temporary_file_path string
-     */
-    public function set_temporary_file_path($temporary_file_path)
-    {
-        if (StringUtilities::getInstance()->hasValue($temporary_file_path))
-        {
-            if (StringUtilities::getInstance()->hasValue($this->get_in_memory_file()))
-            {
-                throw new Exception('A Webpage can not have a temporary file path and in memory content');
-            }
-
-            $this->temporary_file_path = $temporary_file_path;
-        }
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
-
     public function get_type_string(): string
     {
-        return Translation::get('TypeWebpage', array('EXTENSION' => strtoupper($this->get_extension())));
+        return Translation::get('TypeWebpage', ['EXTENSION' => strtoupper($this->get_extension())]);
     }
 
     public function get_url()
@@ -493,7 +433,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
     /**
      * Determines if this document is an audio file
      *
-     * @return boolean True if the document is an audio file
+     * @return bool True if the document is an audio file
      */
     public function is_audio()
     {
@@ -503,7 +443,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
     /**
      * Determines if this document is a flash movie
      *
-     * @return boolean True if the document is a flash movie
+     * @return bool True if the document is a flash movie
      */
     public function is_flash()
     {
@@ -513,7 +453,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
     /**
      * Determines if this document is an image
      *
-     * @return boolean True if the document is an image
+     * @return bool True if the document is an image
      */
     public function is_image()
     {
@@ -523,7 +463,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
     /**
      * Determines if this document is a video
      *
-     * @return boolean True if the document is a video
+     * @return bool True if the document is a video
      */
     public function is_video()
     {
@@ -557,7 +497,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
      * Save the in memory file or the temporary file to the current user disk space Return true if the file could be
      * saved
      *
-     * @return boolean
+     * @return bool
      */
     private function save_file()
     {
@@ -622,7 +562,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
                 {
                     Filesystem::chmod(
                         $path_to_save,
-                        Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'permissions_new_files'))
+                        Configuration::getInstance()->get_setting(['Chamilo\Core\Admin', 'permissions_new_files'])
                     );
 
                     $file_bytes = Filesystem::get_disk_space($path_to_save);
@@ -657,7 +597,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         header('Content-type: ' . $this->get_mime_type());
         // header('Content-Type: application/force-download');
         header('Content-length: ' . $this->get_filesize());
-        if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT']))
+        if (preg_match('/MSIE 5.5/', $_SERVER['HTTP_USER_AGENT']))
         {
             header('Content-Disposition: filename= "' . $filename . '"');
         }
@@ -699,14 +639,69 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         return $this->setAdditionalProperty(self::PROPERTY_HASH, $hash);
     }
 
+    /**
+     * Set In memory file content.
+     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new Webpage.
+     *
+     * @return void
+     * @var $in_memory_file mixed
+     */
+    public function set_in_memory_file($in_memory_file)
+    {
+        if (StringUtilities::getInstance()->hasValue($in_memory_file))
+        {
+            if (StringUtilities::getInstance()->hasValue($this->get_temporary_file_path()))
+            {
+                throw new Exception('A Webpage can not have a temporary file path and in memory content');
+            }
+
+            $this->in_memory_file = $in_memory_file;
+        }
+    }
+
     public function set_path($path)
     {
         return $this->setAdditionalProperty(self::PROPERTY_PATH, $path);
     }
 
+    /**
+     * Set a value indicating wether the Webpage must be saved as a new version if its save() or update() method is
+     * called
+     *
+     * @return void
+     * @var $save_as_new_version bool
+     */
+    public function set_save_as_new_version($save_as_new_version)
+    {
+        if (is_bool($save_as_new_version))
+        {
+            $this->save_as_new_version = $save_as_new_version;
+        }
+    }
+
     public function set_storage_path($storage_path)
     {
         return $this->setAdditionalProperty(self::PROPERTY_STORAGE_PATH, $storage_path);
+    }
+
+    /**
+     * Set temporary file path.
+     * A path to a file that has to be moved and renamed when the Webpage is saved
+     *
+     * @return void
+     * @var $temporary_file_path string
+     */
+    public function set_temporary_file_path($temporary_file_path)
+    {
+        if (StringUtilities::getInstance()->hasValue($temporary_file_path))
+        {
+            if (StringUtilities::getInstance()->hasValue($this->get_in_memory_file()))
+            {
+                throw new Exception('A Webpage can not have a temporary file path and in memory content');
+            }
+
+            $this->temporary_file_path = $temporary_file_path;
+        }
     }
 
     /**

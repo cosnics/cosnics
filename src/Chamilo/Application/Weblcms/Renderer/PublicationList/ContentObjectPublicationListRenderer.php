@@ -302,7 +302,7 @@ abstract class ContentObjectPublicationListRenderer
 
             if ($content_object instanceof ComplexContentObjectSupport)
             {
-                if ($content_object::package() == 'Chamilo\Core\Repository\ContentObject\Assessment')
+                if ($content_object::CONTEXT == 'Chamilo\Core\Repository\ContentObject\Assessment')
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
@@ -656,14 +656,6 @@ abstract class ContentObjectPublicationListRenderer
                 $publication[ContentObjectPublication::PROPERTY_TO_DATE] == 0) ||
             ($publication[ContentObjectPublication::PROPERTY_FROM_DATE] <= time() &&
                 $publication[ContentObjectPublication::PROPERTY_TO_DATE] >= time()));
-    }
-
-    /**
-     * @return string
-     */
-    public static function package()
-    {
-        return static::context();
     }
 
     /**

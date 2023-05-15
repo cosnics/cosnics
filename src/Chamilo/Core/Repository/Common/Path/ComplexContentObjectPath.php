@@ -158,7 +158,7 @@ abstract class ComplexContentObjectPath
      */
     public static function factory($type, ContentObject $content_object)
     {
-        $class = $content_object->package() . '\ComplexContentObjectPath';
+        $class = $content_object::CONTEXT . '\ComplexContentObjectPath';
 
         return new $class($content_object);
     }
@@ -364,14 +364,6 @@ abstract class ComplexContentObjectPath
         $dummy_complex_content_object_item->set_id(0);
         $root_node = $this->add(0, null, $dummy_complex_content_object_item, $content_object);
         $this->add_items($root_node, $content_object);
-    }
-
-    /**
-     * @return string
-     */
-    public static function package()
-    {
-        return static::CONTEXT;
     }
 
     public function reset()

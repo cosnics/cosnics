@@ -37,7 +37,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     {
         $this->buildTrackingService();
 
-        $className = $this->get_root_content_object()->package() . '\Display';
+        $className = $this->get_root_content_object()::CONTEXT . '\Display';
 
         return $this->getApplicationFactory()->getApplication(
             $className,

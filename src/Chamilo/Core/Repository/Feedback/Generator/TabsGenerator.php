@@ -47,7 +47,7 @@ class TabsGenerator extends NavigationGenerator
         $application = $this->getApplication();
         $baseParameters = $this->getBaseParameters();
 
-        $title = Translation::get('FeedbackComponent', null, $application::package());
+        $title = Translation::get('FeedbackComponent', null, $application::CONTEXT);
 
         if ($this->hasFeedback())
         {

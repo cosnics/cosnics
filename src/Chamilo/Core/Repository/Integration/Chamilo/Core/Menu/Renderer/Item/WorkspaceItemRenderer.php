@@ -36,7 +36,7 @@ class WorkspaceItemRenderer extends ItemRenderer
 
         $redirect = new Redirect(
             array(
-                Application::PARAM_CONTEXT  => Manager::package(),
+                Application::PARAM_CONTEXT  => Manager::CONTEXT,
                 Manager::PARAM_WORKSPACE_ID => $item->getWorkspaceId()
             )
         );
@@ -80,7 +80,7 @@ class WorkspaceItemRenderer extends ItemRenderer
         $currentContext = $request->query->get(Application::PARAM_CONTEXT);
         $currentWorkspace = $request->query->get(Manager::PARAM_WORKSPACE_ID);
 
-        return $currentContext == Manager::package() && $currentWorkspace == $item->getWorkspaceId();
+        return $currentContext == Manager::CONTEXT && $currentWorkspace == $item->getWorkspaceId();
     }
 
     /**

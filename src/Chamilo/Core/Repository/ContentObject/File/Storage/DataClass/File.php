@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Architecture\DownloadSupport;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataManager;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
@@ -26,6 +25,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class File extends ContentObject implements Versionable, Includeable, FileStorageSupport, DownloadSupport
 {
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\File';
 
     public const PROPERTY_EXTENSION = 'extension';
     public const PROPERTY_FILENAME = 'filename';
@@ -306,11 +306,6 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     public static function getStorageUnitName(): string
     {
         return 'repository_file';
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /**

@@ -3,4 +3,5 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\C
 
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
+    public const CONTEXT = 'Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo\Application\Calendar';
 }

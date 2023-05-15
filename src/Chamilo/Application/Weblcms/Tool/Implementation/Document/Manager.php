@@ -17,7 +17,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.document
  */
 
@@ -27,15 +26,13 @@ use Chamilo\Libraries\Translation\Translation;
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     implements Categorizable, IntroductionTextSupportInterface
 {
-    const ACTION_DOWNLOAD = 'Downloader';
+    public const ACTION_DOWNLOAD = 'Downloader';
+    public const ACTION_SLIDESHOW = 'Slideshow';
+    public const ACTION_SLIDESHOW_SETTINGS = 'SlideshowSettings';
+    public const ACTION_VIEW_DOCUMENTS = 'Viewer';
+    public const ACTION_ZIP_AND_DOWNLOAD = 'ZipAndDownload';
 
-    const ACTION_SLIDESHOW = 'Slideshow';
-
-    const ACTION_SLIDESHOW_SETTINGS = 'SlideshowSettings';
-
-    const ACTION_VIEW_DOCUMENTS = 'Viewer';
-
-    const ACTION_ZIP_AND_DOWNLOAD = 'ZipAndDownload';
+    public const CONTEXT = __NAMESPACE__;
 
     public function addContentObjectPublicationButtons(
         $publication, ButtonGroup $buttonGroup, DropdownButton $dropdownButton
@@ -50,10 +47,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             $buttonGroup->prependButton(
                 new Button(
                     Translation::get('Download'), new FontAwesomeGlyph('download'), $this->get_url(
-                    array(
+                    [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObject::PROPERTY_ID]
-                    )
+                    ]
                 ), Button::DISPLAY_ICON, null, ['btn-link']
                 )
             );
@@ -71,10 +68,10 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Download'), new FontAwesomeGlyph('download'), $this->get_url(
-                    array(
+                    [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObject::PROPERTY_ID]
-                    )
+                    ]
                 ), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -85,7 +82,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     {
         $allowed_types = [];
 
-        $optional_types = array(File::class, Webpage::class, Page::class);
+        $optional_types = [File::class, Webpage::class, Page::class];
 
         foreach ($optional_types as $optional_type)
         {
@@ -95,7 +92,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
             }
         }
 
-        $hogentTypes = array('Hogent\Core\Repository\ContentObject\Video\Storage\DataClass\Video');
+        $hogentTypes = ['Hogent\Core\Repository\ContentObject\Video\Storage\DataClass\Video'];
 
         foreach ($hogentTypes as $hogentType)
         {

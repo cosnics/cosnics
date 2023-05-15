@@ -3,9 +3,10 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Home;
 
 class Manager
 {
+    public const CONTEXT = __NAMESPACE__;
 
     public function getBlockTypes()
     {
-        return array('Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Type\Displayer');
+        return ['Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Type\Displayer'];
     }
 }

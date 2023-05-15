@@ -5,33 +5,32 @@ use Chamilo\Core\Repository\ContentObject\Forum\EmailNotification\PostEmailNotif
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Describes a Forum post.
  *
  * @package repository\forum_topic\dataclass;
- * @author Mattias De Pauw - Hogeschool Gent
- * @author Maarten Volckaert - Hogeschool Gent
+ * @author  Mattias De Pauw - Hogeschool Gent
+ * @author  Maarten Volckaert - Hogeschool Gent
  */
 class ForumPost extends DataClass implements AttachmentSupport
 {
-    const ATTACHMENT_ALL = 'all';
-    const ATTACHMENT_NORMAL = 'normal';
+    public const ATTACHMENT_ALL = 'all';
+    public const ATTACHMENT_NORMAL = 'normal';
 
-    const PROPERTIES_ADDITIONAL = 'additional_properties';
-    const PROPERTY_CONTENT = 'content';
-    const PROPERTY_CREATION_DATE = 'created';
-    const PROPERTY_FORUM_TOPIC_ID = 'forum_topic_id';
-    const PROPERTY_MODIFICATION_DATE = 'modified';
-    const PROPERTY_REPLY_ON_POST_ID = 'reply_on_post_id';
-    const PROPERTY_TITLE = 'title';
-    const PROPERTY_TYPE = 'type';
-    const PROPERTY_USER_ID = 'user_id';
+    public const PROPERTIES_ADDITIONAL = 'additional_properties';
+    public const PROPERTY_CONTENT = 'content';
+    public const PROPERTY_CREATION_DATE = 'created';
+    public const PROPERTY_FORUM_TOPIC_ID = 'forum_topic_id';
+    public const PROPERTY_MODIFICATION_DATE = 'modified';
+    public const PROPERTY_REPLY_ON_POST_ID = 'reply_on_post_id';
+    public const PROPERTY_TITLE = 'title';
+    public const PROPERTY_TYPE = 'type';
+    public const PROPERTY_USER_ID = 'user_id';
 
     /**
      * Learning objects attached to this learning object.
@@ -59,13 +58,13 @@ class ForumPost extends DataClass implements AttachmentSupport
      * @param type $ids array of ID's
      * @param type $type
      *
-     * @return boolean
+     * @return bool
      */
     public function attach_content_objects($ids = [], $type = self::ATTACHMENT_NORMAL)
     {
         if (!is_array($ids))
         {
-            $ids = array($ids);
+            $ids = [$ids];
         }
 
         foreach ($ids as $id)
@@ -83,9 +82,9 @@ class ForumPost extends DataClass implements AttachmentSupport
      * When making a new post set the creation date and modification date to current time, expect when it's the first
      * post.
      *
-     * @param boolean $first_post Boolean that indicates whether the post we want to create is the first post.
+     * @param bool $first_post Boolean that indicates whether the post we want to create is the first post.
      *
-     * @return boolean Returns whether the create was succesfull.
+     * @return bool Returns whether the create was succesfull.
      */
     public function create($first_post = false): bool
     {
@@ -103,10 +102,10 @@ class ForumPost extends DataClass implements AttachmentSupport
             $email_notificator->set_post($this);
 
             $text =
-                Translation::get("PostAddedEmailTitle", null, 'Chamilo\Core\Repository\ContentObject\Forum\Display');
+                Translation::get('PostAddedEmailTitle', null, 'Chamilo\Core\Repository\ContentObject\Forum\Display');
             $email_notificator->set_action_title($text);
 
-            $text = Translation::get("PostAddedEmailBody", null, 'Chamilo\Core\Repository\ContentObject\Forum\Display');
+            $text = Translation::get('PostAddedEmailBody', null, 'Chamilo\Core\Repository\ContentObject\Forum\Display');
             $email_notificator->set_action_body($text);
 
             $email_notificator->set_action_user(
@@ -127,9 +126,9 @@ class ForumPost extends DataClass implements AttachmentSupport
     /**
      * Delete 1 individual post and his attachements.
      *
-     * @param boolean $all_posts Boolean that indicated whether we want to delete all the posts or just one single post.
+     * @param bool $all_posts Boolean that indicated whether we want to delete all the posts or just one single post.
      *
-     * @return boolean
+     * @return bool
      */
     public function delete($all_posts = false): bool
     {
@@ -183,11 +182,39 @@ class ForumPost extends DataClass implements AttachmentSupport
      *
      * @param int $id The ID of the learning object to remove from the attachment list.
      *
-     * @return boolean True if the attachment was removed, false if it did not exist.
+     * @return bool True if the attachment was removed, false if it did not exist.
      */
     public function detach_content_object($id)
     {
         return DataManager::detach_content_object($this, $id);
+    }
+
+    /**
+     * Returns the default properties of this dataclass
+     *
+     * @return String[] - The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            [
+                self::PROPERTY_TITLE,
+                self::PROPERTY_FORUM_TOPIC_ID,
+                self::PROPERTY_CONTENT,
+                self::PROPERTY_USER_ID,
+                self::PROPERTY_REPLY_ON_POST_ID,
+                self::PROPERTY_CREATION_DATE,
+                self::PROPERTY_MODIFICATION_DATE
+            ]
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'respository_forum_post';
     }
 
     /**
@@ -225,26 +252,6 @@ class ForumPost extends DataClass implements AttachmentSupport
     }
 
     /**
-     * Returns the default properties of this dataclass
-     *
-     * @return String[] - The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_TITLE,
-                self::PROPERTY_FORUM_TOPIC_ID,
-                self::PROPERTY_CONTENT,
-                self::PROPERTY_USER_ID,
-                self::PROPERTY_REPLY_ON_POST_ID,
-                self::PROPERTY_CREATION_DATE,
-                self::PROPERTY_MODIFICATION_DATE
-            )
-        );
-    }
-
-    /**
      * Returns the numeric identifier of the object's parent.
      *
      * @return int The identifier.
@@ -253,6 +260,12 @@ class ForumPost extends DataClass implements AttachmentSupport
     {
         return $this->getDefaultProperty(self::PROPERTY_FORUM_TOPIC_ID);
     }
+
+    /**
+     * **************************************************************************************************************
+     * Setters *
+     * **************************************************************************************************************
+     */
 
     /**
      * Returns the date when this object was last modified, as returned by PHP's time() function.
@@ -265,12 +278,6 @@ class ForumPost extends DataClass implements AttachmentSupport
     }
 
     /**
-     * **************************************************************************************************************
-     * Setters *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Returns a integer representation if its a reply on another post.
      *
      * @return int The id of the post its a reply on.
@@ -281,14 +288,6 @@ class ForumPost extends DataClass implements AttachmentSupport
     }
 
     /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'respository_forum_post';
-    }
-
-    /**
      * Returns the title of this object
      *
      * @return string The title of the post
@@ -296,16 +295,6 @@ class ForumPost extends DataClass implements AttachmentSupport
     public function get_title()
     {
         return $this->getDefaultProperty(self::PROPERTY_TITLE);
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Getters *
-     * **************************************************************************************************************
-     */
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     /**
@@ -391,7 +380,6 @@ class ForumPost extends DataClass implements AttachmentSupport
      * Sets the ID of the reply on a post .
      *
      * @param int $forum_post_id
-     *
      */
     public function set_reply_on_post_id($forum_post_id)
     {
@@ -423,7 +411,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      *
      * @param bool $request_from_topic
      *
-     * @return boolean returns true when post is updated succesfull.
+     * @return bool returns true when post is updated succesfull.
      * @throws \Exception
      */
     public function update($request_from_topic = false): bool
@@ -459,17 +447,17 @@ class ForumPost extends DataClass implements AttachmentSupport
             if ($first_post)
             {
                 $email_notificator->set_first_post_text(
-                    Translation::get("PostFirstPostComment", null, 'Chamilo\Core\Repository\ContentObject\Forum')
+                    Translation::get('PostFirstPostComment', null, 'Chamilo\Core\Repository\ContentObject\Forum')
                 );
             }
 
             $text = Translation::get(
-                "PostEditedEmailTitle", null, 'Chamilo\Core\Repository\ContentObject\Forum'
+                'PostEditedEmailTitle', null, 'Chamilo\Core\Repository\ContentObject\Forum'
             );
             $email_notificator->set_action_title($text);
 
             $text = Translation::get(
-                "PostEditedEmailBody", null, 'Chamilo\Core\Repository\ContentObject\Forum'
+                'PostEditedEmailBody', null, 'Chamilo\Core\Repository\ContentObject\Forum'
             );
             $email_notificator->set_action_body($text);
 

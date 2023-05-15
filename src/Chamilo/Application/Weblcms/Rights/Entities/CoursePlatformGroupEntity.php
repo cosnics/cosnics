@@ -77,7 +77,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
     public static function getElementFinderTypeInstance()
     {
         return new AdvancedElementFinderElementType(
-            'platform_groups', Translation::get('PlatformGroups'), Manager::package(), 'platform_groups_feed'
+            'platform_groups', Translation::get('PlatformGroups'), Manager::CONTEXT, 'platform_groups_feed'
         );
     }
 

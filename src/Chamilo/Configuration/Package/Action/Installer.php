@@ -9,15 +9,15 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
 
 /**
- *
  * @package Chamilo\Configuration\Package\Action
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class Installer extends Action
 {
@@ -40,7 +40,7 @@ abstract class Installer extends Action
     /**
      * Installs and configures the package
      *
-     * @return boolean
+     * @return bool
      */
     public function run()
     {
@@ -175,7 +175,7 @@ abstract class Installer extends Action
      * Creates an application-specific installer.
      *
      * @param $context string The namespace of the package for which we want to start the installer.
-     * @param $values string The form values passed on by the wizard.
+     * @param $values  string The form values passed on by the wizard.
      */
     public static function factory($context, $values)
     {
@@ -199,15 +199,15 @@ abstract class Installer extends Action
         return $this->form_values;
     }
 
-    public function set_form_values($form_values)
+    public function get_path(): string
     {
-        $this->form_values = $form_values;
+        return Path::getInstance()->namespaceToFullPath(static::CONTEXT);
     }
 
     /**
      * Scans for the available storage units and creates them
      *
-     * @return boolean
+     * @return bool
      */
     public function install_storage_units()
     {
@@ -239,10 +239,10 @@ abstract class Installer extends Action
 
         foreach ($setting_elements as $setting_element)
         {
-            $settings[$setting_element->getAttribute('name')] = array(
+            $settings[$setting_element->getAttribute('name')] = [
                 'default' => $setting_element->getAttribute('default'),
                 'user_setting' => $setting_element->getAttribute('user_setting')
-            );
+            ];
         }
 
         return $settings;
@@ -268,7 +268,7 @@ abstract class Installer extends Action
         $object = $doc->getElementsByTagname('object')->item(0);
         $name = $object->getAttribute('name');
         $xml_properties = $doc->getElementsByTagname('property');
-        $attributes = array('type', 'length', 'unsigned', 'notnull', 'default', 'autoincrement', 'fixed');
+        $attributes = ['type', 'length', 'unsigned', 'notnull', 'default', 'autoincrement', 'fixed'];
         foreach ($xml_properties as $index => $property)
         {
             $property_info = [];
@@ -289,9 +289,9 @@ abstract class Installer extends Action
             $index_properties = $index->getElementsByTagname('indexproperty');
             foreach ($index_properties as $subkey => $index_property)
             {
-                $index_info['fields'][$index_property->getAttribute('name')] = array(
+                $index_info['fields'][$index_property->getAttribute('name')] = [
                     'length' => $index_property->getAttribute('length')
-                );
+                ];
             }
             $indexes[$index->getAttribute('name')] = $index_info;
         }
@@ -330,12 +330,17 @@ abstract class Installer extends Action
         }
     }
 
+    public function set_form_values($form_values)
+    {
+        $this->form_values = $form_values;
+    }
+
     /**
      * Verifies the package dependencies
      *
      * @param $package_attributes
      *
-     * @return boolean
+     * @return bool
      */
     public function verify_dependencies()
     {

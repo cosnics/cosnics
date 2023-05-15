@@ -86,7 +86,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     {
         $actions = [];
 
-        if ($event->getContext() == \Chamilo\Application\Weblcms\Manager::package())
+        if ($event->getContext() == \Chamilo\Application\Weblcms\Manager::CONTEXT)
         {
             $actions[] = new ToolbarItem(
                 Translation::get('Edit', null, StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),

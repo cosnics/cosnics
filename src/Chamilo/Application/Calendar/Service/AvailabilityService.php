@@ -12,28 +12,25 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use ReflectionClass;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Extension\Google\Service
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class AvailabilityService
 {
-    const PROPERTY_AVAILABLE = 'available';
+    public const PROPERTY_AVAILABLE = 'available';
 
-    const PROPERTY_CALENDAR = 'calendar';
+    public const PROPERTY_CALENDAR = 'calendar';
 
-    const PROPERTY_COLOUR = 'colour';
+    public const PROPERTY_COLOUR = 'colour';
 
     /**
-     *
      * @var \Chamilo\Application\Calendar\Repository\AvailabilityRepository
      */
     private $availabilityRepository;
 
     /**
-     *
      * @param \Chamilo\Application\Calendar\Repository\AvailabilityRepository $availabilityRepository
      */
     public function __construct(AvailabilityRepository $availabilityRepository)
@@ -42,11 +39,10 @@ class AvailabilityService
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      * @param string $calendarIdentifier
-     * @param boolean $isAvailable
+     * @param bool $isAvailable
      * @param string $colour
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
@@ -69,10 +65,9 @@ class AvailabilityService
     }
 
     /**
-     *
      * @param string $calendarType
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteAvailabilityByCalendarType($calendarType)
     {
@@ -80,7 +75,6 @@ class AvailabilityService
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      *
@@ -92,9 +86,8 @@ class AvailabilityService
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param boolean $isAvailable
+     * @param bool $isAvailable
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -104,10 +97,9 @@ class AvailabilityService
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
-     * @param boolean $isAvailable
+     * @param bool $isAvailable
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -119,7 +111,6 @@ class AvailabilityService
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      * @param string $calendarIdentifier
@@ -136,7 +127,6 @@ class AvailabilityService
     }
 
     /**
-     *
      * @return \Chamilo\Application\Calendar\Repository\AvailabilityRepository
      */
     public function getAvailabilityRepository()
@@ -145,16 +135,6 @@ class AvailabilityService
     }
 
     /**
-     *
-     * @param \Chamilo\Application\Calendar\Repository\AvailabilityRepository $availabilityRepository
-     */
-    public function setAvailabilityRepository(AvailabilityRepository $availabilityRepository)
-    {
-        $this->availabilityRepository = $availabilityRepository;
-    }
-
-    /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
@@ -164,7 +144,7 @@ class AvailabilityService
         $availableCalendars = [];
 
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
-            Manager::package()
+            Manager::CONTEXT
         );
 
         foreach ($registrations as $registration)
@@ -190,7 +170,6 @@ class AvailabilityService
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      *
@@ -202,12 +181,11 @@ class AvailabilityService
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      * @param string $calendarIdentifier
      *
-     * @return boolean
+     * @return bool
      */
     public function isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
         User $user, $calendarType, $calendarIdentifier
@@ -221,9 +199,8 @@ class AvailabilityService
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param integer[] $calendarAvailabilityTypes
+     * @param int $calendarAvailabilityTypes
      *
      * @return \Chamilo\Libraries\Architecture\ActionResult
      */
@@ -251,11 +228,10 @@ class AvailabilityService
     }
 
     /**
-     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      * @param string $calendarIdentifier
-     * @param boolean $isAvailable
+     * @param bool $isAvailable
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
      */
@@ -278,12 +254,11 @@ class AvailabilityService
     }
 
     /**
-     *
      * @param \Chamilo\Application\Calendar\Storage\DataClass\Availability $availability
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      * @param string $calendarIdentifier
-     * @param boolean $isAvailable
+     * @param bool $isAvailable
      * @param string $colour
      */
     private function setAvailabilityProperties(
@@ -298,12 +273,19 @@ class AvailabilityService
     }
 
     /**
-     *
+     * @param \Chamilo\Application\Calendar\Repository\AvailabilityRepository $availabilityRepository
+     */
+    public function setAvailabilityRepository(AvailabilityRepository $availabilityRepository)
+    {
+        $this->availabilityRepository = $availabilityRepository;
+    }
+
+    /**
      * @param \Chamilo\Application\Calendar\Storage\DataClass\Availability $availability
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      * @param string $calendarIdentifier
-     * @param boolean $isAvailable
+     * @param bool $isAvailable
      * @param string $colour
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability

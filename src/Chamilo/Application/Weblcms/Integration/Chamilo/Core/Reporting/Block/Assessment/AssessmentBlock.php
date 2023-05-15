@@ -157,7 +157,7 @@ abstract class AssessmentBlock extends ToolBlock
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $this->getCourseId();
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
             ClassnameUtilities::getInstance()->getPackageNameFromNamespace(
-                Assessment::package()
+                Assessment::CONTEXT
             );
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION] = Manager::ACTION_ATTEMPT_RESULT_VIEWER;
         $params[Manager::PARAM_USER_ASSESSMENT] = $assessment_attempt_id;

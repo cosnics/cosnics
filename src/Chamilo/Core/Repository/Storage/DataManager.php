@@ -697,7 +697,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         if (!(self::$registered_types))
         {
             $registrations = Configuration::registrations_by_type(
-                Manager::package() . '\\ContentObject'
+                Manager::CONTEXT . '\\ContentObject'
             );
             $types = [];
 

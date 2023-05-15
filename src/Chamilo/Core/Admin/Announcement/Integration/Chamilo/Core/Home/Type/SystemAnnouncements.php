@@ -66,7 +66,7 @@ class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
     public function getPublicationLink($publication)
     {
         $paremeters = [];
-        $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Admin\Manager::package();
+        $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Admin\Manager::CONTEXT;
         $parameters[\Chamilo\Core\Admin\Manager::PARAM_ACTION] =
             \Chamilo\Core\Admin\Manager::ACTION_SYSTEM_ANNOUNCEMENTS;
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW;

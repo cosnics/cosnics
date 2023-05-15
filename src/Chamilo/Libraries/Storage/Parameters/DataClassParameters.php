@@ -136,14 +136,6 @@ abstract class DataClassParameters implements Hashable
         return $this->joins;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
-    public static function package(): string
-    {
-        return static::context();
-    }
-
     public function setCondition(?Condition $condition = null)
     {
         $this->condition = $condition;

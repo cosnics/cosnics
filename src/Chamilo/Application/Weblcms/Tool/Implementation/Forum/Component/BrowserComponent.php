@@ -224,7 +224,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation::get('Subscribe', null, Forum::package()), new FontAwesomeGlyph('envelope'),
+                        Translation::get('Subscribe', null, Forum::CONTEXT), new FontAwesomeGlyph('envelope'),
                         $this->get_url($parameters), Button::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
                     )
                 );
@@ -239,7 +239,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation::get('UnSubscribe', null, Forum::package()),
+                        Translation::get('UnSubscribe', null, Forum::CONTEXT),
                         new FontAwesomeGlyph('envelope', [], null, 'far'), $this->get_url($parameters),
                         Button::DISPLAY_ICON, Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES), ['btn-link']
                     )
@@ -551,7 +551,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT) || !$forum->get_locked())
             {
                 $fileFontAwesomeGlyph = new FontAwesomeGlyph(
-                    'file', [], Translation::get('ViewLastPost', null, Forum::package())
+                    'file', [], Translation::get('ViewLastPost', null, Forum::CONTEXT)
                 );
 
                 $html[] = '&nbsp;';
@@ -621,15 +621,15 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $header->setHeaderContents(0, 1, implode(' ', $categoryTitle));
 
-        $bootstrapGlyph = new FontAwesomeGlyph('comments', [], Translation::get("Topics", null, Forum::package()));
+        $bootstrapGlyph = new FontAwesomeGlyph('comments', [], Translation::get("Topics", null, Forum::CONTEXT));
         $header->setHeaderContents(0, 2, $bootstrapGlyph->render());
         $header->setCellAttributes(0, 2, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
 
-        $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get("Posts", null, Forum::package()));
+        $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get("Posts", null, Forum::CONTEXT));
         $header->setHeaderContents(0, 3, $bootstrapGlyph->render());
         $header->setCellAttributes(0, 3, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
 
-        $header->setHeaderContents(0, 4, Translation::get("LastPostForum", null, Forum::package()));
+        $header->setHeaderContents(0, 4, Translation::get("LastPostForum", null, Forum::CONTEXT));
         $header->setCellAttributes(0, 4, array('class' => 'cell-stat-2x hidden-xs hidden-sm'));
         $header->setHeaderContents(0, 5, '');
         $header->setCellAttributes(0, 5, array('class' => 'cell-stat-2x'));

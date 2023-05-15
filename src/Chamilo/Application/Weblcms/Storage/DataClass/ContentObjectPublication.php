@@ -270,7 +270,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
     {
         $params = [];
 
-        $params[Manager::PARAM_CONTEXT] = Manager::package();
+        $params[Manager::PARAM_CONTEXT] = Manager::CONTEXT;
         $params[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
         $params[Manager::PARAM_COURSE] = $this->get_course_id();
         $params[Manager::PARAM_TOOL] = $this->get_tool();

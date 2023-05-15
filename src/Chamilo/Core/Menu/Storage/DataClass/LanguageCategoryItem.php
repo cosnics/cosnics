@@ -1,15 +1,13 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
- *
  * @package Chamilo\Core\Menu\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class LanguageCategoryItem extends Item
 {
@@ -24,14 +22,6 @@ class LanguageCategoryItem extends Item
     {
         parent::__construct($defaultProperties, $additionalProperties);
         $this->setType(__CLASS__);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class);
     }
 
     /**

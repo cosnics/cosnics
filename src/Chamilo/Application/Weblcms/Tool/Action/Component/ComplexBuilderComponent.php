@@ -12,7 +12,6 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package application.lib.weblcms.tool.component
  */
 class ComplexBuilderComponent extends Manager implements DelegateComponent
@@ -25,24 +24,26 @@ class ComplexBuilderComponent extends Manager implements DelegateComponent
         $pid = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
         $publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $pid);
+            ContentObjectPublication::class, $pid
+        );
 
         $content_object = $publication->get_content_object();
 
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 $this->get_url(),
-                Translation::get('ToolComplexBuilderComponent', array('TITLE' => $content_object->get_title()))));
+                Translation::get('ToolComplexBuilderComponent', ['TITLE' => $content_object->get_title()])
+            )
+        );
 
         $this->content_object = $publication->get_content_object();
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $pid);
 
-        $context = $this->content_object->package() . '\Builder';
+        $context = $this->content_object::CONTEXT . '\Builder';
 
         return $this->getApplicationFactory()->getApplication(
-            $context,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            $context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
     }
 
     public function get_root_content_object()

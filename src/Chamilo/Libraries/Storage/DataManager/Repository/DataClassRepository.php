@@ -589,14 +589,6 @@ class DataClassRepository
     }
 
     /**
-     * @throws \ReflectionException
-     */
-    public static function package(): string
-    {
-        return ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
-    }
-
-    /**
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
      *

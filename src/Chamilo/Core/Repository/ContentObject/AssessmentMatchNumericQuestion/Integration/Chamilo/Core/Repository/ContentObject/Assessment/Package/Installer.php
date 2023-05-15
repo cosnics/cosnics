@@ -3,4 +3,5 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\I
 
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment';
 }

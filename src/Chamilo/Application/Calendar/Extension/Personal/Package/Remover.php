@@ -5,4 +5,5 @@ use Chamilo\Libraries\Architecture\Application\WebApplicationRemover;
 
 class Remover extends WebApplicationRemover
 {
+    public const CONTEXT = Installer::CONTEXT;
 }

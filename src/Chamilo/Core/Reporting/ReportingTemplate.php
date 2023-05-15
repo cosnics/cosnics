@@ -171,13 +171,4 @@ abstract class ReportingTemplate
     {
         return new ReportingTemplateStyle();
     }
-
-    /**
-     *
-     * @return string
-     */
-    public static function package()
-    {
-        return static::context();
-    }
 }

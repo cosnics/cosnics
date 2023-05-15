@@ -52,10 +52,9 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
 
         BreadcrumbTrail::getInstance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
 
-        $context = $this->publication->get_content_object()->package() . '\Display';
-
         return $this->getApplicationFactory()->getApplication(
-            $context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            \Chamilo\Core\Repository\ContentObject\Blog\Display\Manager::CONTEXT,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
         )->run();
     }
 

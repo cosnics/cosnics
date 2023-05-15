@@ -507,7 +507,7 @@ class SettingsForm extends FormValidator
             $defaults['archive_path'] = Path::getInstance()->getStoragePath('archive');
             $defaults['cache_path'] = Path::getInstance()->getStoragePath('cache');
             $defaults['garbage_path'] = Path::getInstance()->getStoragePath('garbage');
-            $defaults['hotpotatoes_path'] = Path::getInstance()->getPublicStoragePath(Hotpotatoes::package());
+            $defaults['hotpotatoes_path'] = Path::getInstance()->getPublicStoragePath(Hotpotatoes::CONTEXT);
             $defaults['logs_path'] = Path::getInstance()->getStoragePath('logs');
             $defaults['repository_path'] = Path::getInstance()->getStoragePath('repository');
             $defaults['scorm_path'] = Path::getInstance()->getStoragePath('scorm');

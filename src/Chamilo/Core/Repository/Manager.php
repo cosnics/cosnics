@@ -170,7 +170,8 @@ abstract class Manager extends Application
     {
         parent::__construct($applicationConfiguration);
 
-        if ($this->getUser() && $this->getRequest()->getFromRequestOrQuery(self::PARAM_ACTION) != self::ACTION_DOWNLOAD_DOCUMENT)
+        if ($this->getUser() &&
+            $this->getRequest()->getFromRequestOrQuery(self::PARAM_ACTION) != self::ACTION_DOWNLOAD_DOCUMENT)
         {
             $this->checkAuthorization(Manager::CONTEXT);
         }
@@ -573,7 +574,7 @@ abstract class Manager extends Application
 
         $redirect = new Redirect(
             [
-                self::PARAM_CONTEXT => self::package(),
+                self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => self::ACTION_DOWNLOAD_DOCUMENT,
                 self::PARAM_CONTENT_OBJECT_ID => $documentId,
                 ContentObject::PARAM_SECURITY_CODE => $securityCode

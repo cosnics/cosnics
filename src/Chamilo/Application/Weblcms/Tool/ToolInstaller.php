@@ -62,7 +62,7 @@ abstract class ToolInstaller extends Installer
     public function extra()
     {
         // Set time and memory limit very low because this could be a lengthy process
-        ini_set('memory_limit', - 1);
+        ini_set('memory_limit', -1);
         set_time_limit(0);
 
         if (!$this->register_tool())
@@ -108,7 +108,7 @@ abstract class ToolInstaller extends Installer
      */
     private function register_tool()
     {
-        $toolNamespace = static::package();
+        $toolNamespace = static::CONTEXT;
         $tool_name = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($toolNamespace);
 
         $tool_object = new CourseTool();
@@ -148,7 +148,7 @@ abstract class ToolInstaller extends Installer
         $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
         $packageFactory = $container->get(PackageFactory::class);
 
-        $packageInformation = $packageFactory->getPackage(static::package());
+        $packageInformation = $packageFactory->getPackage(static::CONTEXT);
 
         $extra = (array) $packageInformation->get_extra();
 

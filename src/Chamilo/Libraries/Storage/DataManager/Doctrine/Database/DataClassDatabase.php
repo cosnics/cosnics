@@ -304,14 +304,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \ReflectionException
-     */
-    public static function package(): string
-    {
-        return ClassnameUtilities::getInstance()->getNamespaceParent(static::context(), 3);
-    }
-
-    /**
      * @template prepareTableNameDataClassName
      *
      * @param class-string<prepareTableNameDataClassName> $dataClassName

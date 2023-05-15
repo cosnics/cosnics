@@ -5,7 +5,6 @@ use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface
 use Chamilo\Core\Repository\ContentObject\Note\Storage\DataClass\Note;
 
 /**
- *
  * @package application.lib.weblcms.tool.note
  */
 
@@ -14,10 +13,12 @@ use Chamilo\Core\Repository\ContentObject\Note\Storage\DataClass\Note;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements IntroductionTextSupportInterface
 {
-    const ACTION_VIEW_NOTES = 'Viewer';
+    public const ACTION_VIEW_NOTES = 'Viewer';
+
+    public const CONTEXT = __NAMESPACE__;
 
     public static function get_allowed_types()
     {
-        return array(Note::class);
+        return [Note::class];
     }
 }

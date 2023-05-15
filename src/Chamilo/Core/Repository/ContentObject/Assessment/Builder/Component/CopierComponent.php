@@ -82,8 +82,8 @@ class CopierComponent extends Manager
 
                         if ($helperObject)
                         {
-                            $helperObject->set_title($helperObject->getTypeName());
-                            $helperObject->set_description($helperObject->getTypeName());
+                            $helperObject->set_title('helper_object');
+                            $helperObject->set_description('helper_object');
                             $helperObject->set_owner_id($this->getUser()->getId());
                             $helperObject->set_reference($copiedContentObjectId);
                             $helperObject->set_parent_id(0);

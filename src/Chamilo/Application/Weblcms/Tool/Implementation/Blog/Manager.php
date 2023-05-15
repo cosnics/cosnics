@@ -7,20 +7,20 @@ use Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass\Blog;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 
 /**
- *
  * @package application.lib.weblcms.tool.blog
  */
 
 /**
  * This tool allows a user to publish learning paths in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable,
-    IntroductionTextSupportInterface
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
+    implements Categorizable, IntroductionTextSupportInterface
 {
+    public const CONTEXT = __NAMESPACE__;
 
     public static function get_allowed_types()
     {
-        return array(Blog::class);
+        return [Blog::class];
     }
 
     public function get_available_browser_types()
@@ -28,6 +28,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $browser_types = [];
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_TABLE;
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_LIST;
+
         return $browser_types;
     }
 }

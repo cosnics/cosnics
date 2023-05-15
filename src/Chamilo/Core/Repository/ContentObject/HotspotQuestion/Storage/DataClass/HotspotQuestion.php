@@ -3,20 +3,30 @@ namespace Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClas
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- *
- * @package repository.lib.content_object.hotspot_question
- */
-/**
- * This class represents a hotspot question
+ * @package Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass
  */
 class HotspotQuestion extends ContentObject implements Versionable
 {
-    const PROPERTY_ANSWERS = 'answers';
-    const PROPERTY_IMAGE = 'image';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\HotspotQuestion';
+
+    public const PROPERTY_ANSWERS = 'answers';
+    public const PROPERTY_IMAGE = 'image';
+
+    public function add_answer($answer)
+    {
+        $answers = $this->get_answers();
+        $answers[] = $answer;
+
+        return $this->setAdditionalProperty(self::PROPERTY_ANSWERS, serialize($answers));
+    }
+
+    public static function getAdditionalPropertyNames(): array
+    {
+        return [self::PROPERTY_ANSWERS, self::PROPERTY_IMAGE];
+    }
 
     /**
      * @return string
@@ -24,23 +34,6 @@ class HotspotQuestion extends ContentObject implements Versionable
     public static function getStorageUnitName(): string
     {
         return 'repository_hotspot_question';
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
-
-    public function add_answer($answer)
-    {
-        $answers = $this->get_answers();
-        $answers[] = $answer;
-        return $this->setAdditionalProperty(self::PROPERTY_ANSWERS, serialize($answers));
-    }
-
-    public function set_answers($answers)
-    {
-        return $this->setAdditionalProperty(self::PROPERTY_ANSWERS, serialize($answers));
     }
 
     /**
@@ -52,27 +45,18 @@ class HotspotQuestion extends ContentObject implements Versionable
         {
             return $result;
         }
+
         return [];
     }
 
-    public function get_number_of_answers()
+    public function get_default_weight()
     {
-        return count($this->get_answers());
+        return $this->get_maximum_score();
     }
 
     public function get_image()
     {
         return $this->getAdditionalProperty(self::PROPERTY_IMAGE);
-    }
-
-    public function set_image($image)
-    {
-        $this->setAdditionalProperty(self::PROPERTY_IMAGE, $image);
-    }
-
-    public static function getAdditionalPropertyNames(): array
-    {
-        return array(self::PROPERTY_ANSWERS, self::PROPERTY_IMAGE);
     }
 
     public function get_image_object()
@@ -100,12 +84,24 @@ class HotspotQuestion extends ContentObject implements Versionable
         {
             $max += $answer->get_weight();
         }
+
         return $max;
     }
 
-    // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
-    public function get_default_weight()
+    public function get_number_of_answers()
     {
-        return $this->get_maximum_score();
+        return count($this->get_answers());
+    }
+
+    public function set_answers($answers)
+    {
+        return $this->setAdditionalProperty(self::PROPERTY_ANSWERS, serialize($answers));
+    }
+
+    // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
+
+    public function set_image($image)
+    {
+        $this->setAdditionalProperty(self::PROPERTY_IMAGE, $image);
     }
 }

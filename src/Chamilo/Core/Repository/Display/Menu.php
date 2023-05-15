@@ -82,7 +82,7 @@ abstract class Menu extends BootstrapTreeMenu
     protected function getItemIcon(ComplexContentObjectPathNode $node)
     {
         $glyph = new NamespaceIdentGlyph(
-            $node->get_content_object()->package(), false, false, false,
+            $node->get_content_object()::CONTEXT, false, false, false,
             IdentGlyph::SIZE_MINI, array('fa-fw')
         );
 

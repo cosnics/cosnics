@@ -27,7 +27,7 @@ class GetLearningPathsComponent extends GetContentObjectsComponent
     protected function getFilterData($categoryId = null, string $searchQuery, Workspace $workspace): FilterData
     {
         $templateRegistration = $this->getTemplateRegistrationConsulter()->getTemplateRegistrationDefaultByType(
-            LearningPath::package()
+            LearningPath::CONTEXT
         );
 
         $filterData = parent::getFilterData($categoryId, $searchQuery, $workspace);

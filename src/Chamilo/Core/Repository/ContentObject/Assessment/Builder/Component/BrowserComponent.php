@@ -108,13 +108,13 @@ class BrowserComponent extends Manager
         $links = [];
 
         $links[] = new LinkTypeSelectorOption(
-            self::package(), 'MergeAssessment', $this->get_url(
+            Manager::CONTEXT, 'MergeAssessment', $this->get_url(
             [Manager::PARAM_ACTION => self::ACTION_MERGE_ASSESSMENT]
         ), new FontAwesomeGlyph('object-ungroup', ['fas-ci-va', 'fa-2x', 'fa-fw'], null, 'fas')
         );
 
         $links[] = new LinkTypeSelectorOption(
-            self::package(), 'SelectQuestions', $this->get_url(
+            Manager::CONTEXT, 'SelectQuestions', $this->get_url(
             [
                 Manager::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
                 \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER
@@ -123,13 +123,13 @@ class BrowserComponent extends Manager
         );
 
         $links[] = new LinkTypeSelectorOption(
-            self::package(), 'RandomizeQuestionOptions',
+            Manager::CONTEXT, 'RandomizeQuestionOptions',
             $this->get_url([Manager::PARAM_ACTION => self::ACTION_RANDOMIZE]),
             new FontAwesomeGlyph('random', ['fas-ci-va', 'fa-2x', 'fa-fw'], null, 'fas')
         );
 
         $links[] = new LinkTypeSelectorOption(
-            self::package(), 'AnswerFeedbackType', $this->get_url(
+            Manager::CONTEXT, 'AnswerFeedbackType', $this->get_url(
             [Manager::PARAM_ACTION => self::ACTION_ANSWER_FEEDBACK_TYPE]
         ), new FontAwesomeGlyph('comments', ['fas-ci-va', 'fa-2x', 'fa-fw'], null, 'fas')
         );

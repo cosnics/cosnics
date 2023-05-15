@@ -89,7 +89,7 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
             $this->get_course_id(), $this->get_user_id(), $publication->get_tool(), $publication->get_category_id()
         );
 
-        $context = Forum::package() . '\Display';
+        $context = Forum::CONTEXT . '\Display';
 
         return $this->getApplicationFactory()->getApplication(
             $context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)

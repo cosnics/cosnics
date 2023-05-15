@@ -2,23 +2,14 @@
 namespace Chamilo\Core\Repository\ContentObject\Description\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- *
- * @package repository.lib.content_object.description
- * @author Hans De Bisschop
- * @author Dieter De Neef
- */
-/**
- * A Description
+ * @package Chamilo\Core\Repository\ContentObject\Description\Storage\DataClass
+ * @author  Dieter De Neef
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Description extends ContentObject implements Versionable
 {
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
-    }
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Description';
 }

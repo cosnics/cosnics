@@ -75,7 +75,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $searchUrl = $urlGenerator->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => self::package(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Manager::PARAM_ACTION => self:: ACTION_BROWSE
                 ]
             );
@@ -88,7 +88,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $createUrl = $urlGenerator->fromParameters(
                     [
-                        Application::PARAM_CONTEXT => self::package(),
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Manager::PARAM_ACTION => self:: ACTION_CREATE
                     ]
                 );
@@ -103,7 +103,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $browseUrl = $urlGenerator->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => self::package(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Manager::PARAM_ACTION => self:: ACTION_BROWSE
                 ]
             );
@@ -117,7 +117,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $browseTodayUrl = $urlGenerator->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => self::package(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Manager::PARAM_ACTION => self:: ACTION_BROWSE,
                     self::PARAM_FILTER => self::FILTER_TODAY
                 ]
@@ -133,7 +133,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $browseThisWeekUrl = $urlGenerator->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => self::package(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Manager::PARAM_ACTION => self:: ACTION_BROWSE,
                     self::PARAM_FILTER => self::FILTER_THIS_WEEK
                 ]
@@ -149,7 +149,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $browseThisMonthUrl = $urlGenerator->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => self::package(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Manager::PARAM_ACTION => self:: ACTION_BROWSE,
                     self::PARAM_FILTER => self::FILTER_THIS_MONTH
                 ]
@@ -308,7 +308,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $publicationLinkUrl = $urlGenerator->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => self::package(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Manager::PARAM_ACTION => self:: ACTION_BROWSE,
                     self::PARAM_PUBLICATION_TYPE => self::TYPE_ALL,
                     ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY => $searchQuery
@@ -317,7 +317,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $tabs->add(
                 new LinkTab(
-                    self::TYPE_ALL, $translator->trans('AllPublications', [], self::package()),
+                    self::TYPE_ALL, $translator->trans('AllPublications', [], Manager::CONTEXT),
                     new FontAwesomeGlyph('globe', ['fa-lg'], null, 'fas'), $publicationLinkUrl, $type == self::TYPE_ALL
                 )
             );
@@ -325,7 +325,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $publicationLinkUrl = $urlGenerator->fromParameters(
             [
-                Application::PARAM_CONTEXT => self::package(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Manager::PARAM_ACTION => self:: ACTION_BROWSE,
                 self::PARAM_PUBLICATION_TYPE => self::TYPE_FOR_ME,
                 ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY => $searchQuery
@@ -334,7 +334,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $tabs->add(
             new LinkTab(
-                self::TYPE_FROM_ME, $translator->trans('PublishedForMe', [], self::package()),
+                self::TYPE_FROM_ME, $translator->trans('PublishedForMe', [], Manager::CONTEXT),
                 new FontAwesomeGlyph('share-square', ['fa-lg'], null, 'fas'), $publicationLinkUrl,
                 $type == self::TYPE_FOR_ME
             )
@@ -342,7 +342,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $publicationLinkUrl = $urlGenerator->fromParameters(
             [
-                Application::PARAM_CONTEXT => self::package(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Manager::PARAM_ACTION => self:: ACTION_BROWSE,
                 self::PARAM_PUBLICATION_TYPE => self::TYPE_FROM_ME,
                 ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY => $searchQuery
@@ -351,7 +351,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $tabs->add(
             new LinkTab(
-                self::TYPE_FROM_ME, $translator->trans('MyPublications', [], self::package()),
+                self::TYPE_FROM_ME, $translator->trans('MyPublications', [], Manager::CONTEXT),
                 new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas'), $publicationLinkUrl, $type == self::TYPE_FROM_ME
             )
         );

@@ -222,7 +222,7 @@ class CourseCategoryEntity implements NestedRightsEntity
      */
     public function get_root_ids()
     {
-        return array(DataManager::get_root_group()->get_id());
+        return [DataManager::get_root_group()->get_id()];
     }
 
     /**
@@ -232,7 +232,7 @@ class CourseCategoryEntity implements NestedRightsEntity
      */
     public function get_search_properties()
     {
-        return array(CourseCategory::PROPERTY_NAME, CourseCategory::PROPERTY_CODE);
+        return [CourseCategory::PROPERTY_NAME, CourseCategory::PROPERTY_CODE];
     }
 
     /**
@@ -251,10 +251,10 @@ class CourseCategoryEntity implements NestedRightsEntity
     public function get_xml_feed()
     {
         $redirect = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => Manager::package(),
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Manager::PARAM_ACTION => 'course_category'
-            )
+            ]
         );
 
         return $redirect->getUrl();
@@ -272,7 +272,7 @@ class CourseCategoryEntity implements NestedRightsEntity
         if (is_null($this->course_category_cache[$user_id]))
         {
 
-            $this->course_category_cache[$user_id] = array($user_id);
+            $this->course_category_cache[$user_id] = [$user_id];
         }
 
         return $this->course_category_cache[$user_id];
@@ -281,9 +281,9 @@ class CourseCategoryEntity implements NestedRightsEntity
     /**
      * Retrieves the items for this entity
      *
-     * @param $condition Condition
-     * @param $offset int
-     * @param $count int
+     * @param $condition      Condition
+     * @param $offset         int
+     * @param $count          int
      * @param $order_property Array
      *
      * @return \Doctrine\Common\Collections\ArrayCollection

@@ -386,14 +386,6 @@ abstract class DataClass
         return true;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
-    public static function package(): string
-    {
-        return ClassnameUtilities::getInstance()->getNamespaceParent(static::context(), 2);
-    }
-
     public function removeListener(int $index): DataClass
     {
         unset($this->listeners[$index]);

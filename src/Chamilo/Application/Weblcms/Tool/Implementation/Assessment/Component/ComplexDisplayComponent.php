@@ -16,36 +16,27 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application\weblcms\tool\implementation\assessment
- * @author Previous Author Unknown
- * @author Sven Vanpoucke - Hogeschool Gent - Cleanup
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Previous Author Unknown
+ * @author  Sven Vanpoucke - Hogeschool Gent - Cleanup
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ComplexDisplayComponent extends Manager implements AssessmentDisplaySupport, DelegateComponent
 {
 
-    /**
-     *
-     * @var ContentObjectPublication
-     */
-    private $publication;
-
     private $assessment;
-
-    private $publication_id;
 
     /**
      * The assessmnet attempt
@@ -53,6 +44,13 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
      * @var AssessmentAttempt
      */
     private $assessment_attempt;
+
+    /**
+     * @var ContentObjectPublication
+     */
+    private $publication;
+
+    private $publication_id;
 
     /**
      * The question attempt
@@ -68,21 +66,22 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         {
             $this->publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
 
-            $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $this->publication_id);
+            $this->set_parameter(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $this->publication_id
+            );
 
             $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                ContentObjectPublication::class,
-                $this->publication_id);
+                ContentObjectPublication::class, $this->publication_id
+            );
 
-            if (! $this->publication || ! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
+            if (!$this->publication || !$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
             {
                 $this->redirectWithMessage(
-                    Translation::get("NotAllowed", null, StringUtilities::LIBRARIES),
-                    true,
-                    [],
-                    array(
+                    Translation::get('NotAllowed', null, StringUtilities::LIBRARIES), true, [], [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+                    ]
+                );
             }
 
             $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
@@ -90,7 +89,9 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
             );
 
             $this->assessment = $this->publication->get_content_object();
-            $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $this->publication_id);
+            $this->set_parameter(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $this->publication_id
+            );
         }
 
         // Checking statistics
@@ -98,19 +99,21 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         $track = new AssessmentAttempt();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
-            new StaticConditionVariable($this->publication_id));
+            new StaticConditionVariable($this->publication_id)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID),
-            new StaticConditionVariable($this->get_user_id()));
+            new StaticConditionVariable($this->get_user_id())
+        );
         $condition = new AndCondition($conditions);
 
         $trackers = DataManager::retrieves(
-            AssessmentAttempt::class,
-            new DataClassRetrievesParameters($condition));
+            AssessmentAttempt::class, new DataClassRetrievesParameters($condition)
+        );
 
         $count = $trackers->count();
 
-        foreach($trackers as $tracker)
+        foreach ($trackers as $tracker)
         {
             if ($tracker->get_status() == AssessmentAttempt::STATUS_NOT_COMPLETED)
             {
@@ -125,7 +128,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
             return $this->display_error_page(Translation::get('YouHaveReachedYourMaximumAttempts'));
         }
 
-        if (! $this->assessment_attempt)
+        if (!$this->assessment_attempt)
         {
             $this->assessment_attempt = $this->create_assessment_attempt();
         }
@@ -139,14 +142,15 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
             $html[] = $this->render_header();
 
             $redirect = new Redirect(
-                array(
+                [
                     \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::CONTEXT,
-                    \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_SAVE_HOTPOTATOES_SCORE));
+                    \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_SAVE_HOTPOTATOES_SCORE
+                ]
+            );
 
             $path = $this->assessment->add_javascript(
-                $redirect->getUrl(),
-                $this->get_assessment_back_url(),
-                $this->assessment_attempt->get_id());
+                $redirect->getUrl(), $this->get_assessment_back_url(), $this->assessment_attempt->get_id()
+            );
 
             $html[] = '<iframe src="' . $path . '" width="100%" height="600">
   				 <p>Your browser does not support iframes.</p>
@@ -161,30 +165,26 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
             if ($this->assessment->count_questions() == 0)
             {
                 $this->redirectWithMessage(
-                    Translation::get("EmptyAssessment"),
-                    true,
-                    [],
-                    array(
+                    Translation::get('EmptyAssessment'), true, [], [
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+                    ]
+                );
             }
 
-            $context = $this->assessment->package() . '\Display';
-
             return $this->getApplicationFactory()->getApplication(
-                $context,
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+                \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager::CONTEXT,
+                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            )->run();
         }
     }
 
     /**
-     * Returns the root content object for the complex display
-     *
-     * @return Assessment
+     * @param BreadcrumbTrail $breadcrumbtrail
      */
-    public function get_root_content_object()
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        return $this->assessment;
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 
     /**
@@ -211,6 +211,32 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         }
     }
 
+    public function get_assessment_back_url()
+    {
+        return $this->get_url(
+            [\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE],
+            [\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID]
+        );
+    }
+
+    public function get_assessment_configuration()
+    {
+        $parameters = new DataClassRetrieveParameters(
+            new EqualityCondition(
+                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
+                new StaticConditionVariable($this->publication->get_id())
+            )
+        );
+        $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
+
+        return $assessment_publication->get_configuration();
+    }
+
+    public function get_assessment_continue_url()
+    {
+        return null;
+    }
+
     /**
      * Returns the id of the current assessment attempt
      *
@@ -219,6 +245,154 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
     public function get_assessment_current_attempt_id()
     {
         return $this->assessment_attempt->get_id();
+    }
+
+    public function get_assessment_current_url()
+    {
+        return $this->get_url();
+    }
+
+    public function get_assessment_parameters()
+    {
+        return [];
+    }
+
+    /**
+     * Gets a single question attempt by a given question id
+     *
+     * @param int $complex_question_id
+     *
+     * @return QuestionAttempt
+     */
+    public function get_assessment_question_attempt($complex_question_id)
+    {
+        return $this->question_attempts[$complex_question_id];
+    }
+
+    /**
+     * Returns the assessment question attempts
+     *
+     * @return QuestionAttempt[]
+     */
+    public function get_assessment_question_attempts()
+    {
+        if (is_null($this->question_attempts))
+        {
+            $this->question_attempts = $this->retrieve_question_attempts();
+        }
+
+        return $this->question_attempts;
+    }
+
+    /**
+     * Returns the registered question ids
+     *
+     * @return int[] $question_ids
+     */
+    public function get_registered_question_ids()
+    {
+        $question_ids = [];
+
+        $question_attempts = $this->get_assessment_question_attempts();
+        foreach ($question_attempts as $question_attempt)
+        {
+            $question_ids[] = $question_attempt->get_question_complex_id();
+        }
+
+        return $question_ids;
+    }
+
+    /**
+     * Returns the root content object for the complex display
+     *
+     * @return Assessment
+     */
+    public function get_root_content_object()
+    {
+        return $this->assessment;
+    }
+
+    public function is_allowed_to_add_child()
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+    }
+
+    public function is_allowed_to_delete_child()
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+    }
+
+    public function is_allowed_to_delete_feedback($feedback)
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+    }
+
+    // METHODS FOR COMPLEX DISPLAY RIGHTS
+
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
+            $this->publication->get_allow_collaboration();
+    }
+
+    public function is_allowed_to_edit_feedback()
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+    }
+
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
+    {
+        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
+    }
+
+    /**
+     * Registers the question ids
+     *
+     * @param int[] $question_ids
+     */
+    public function register_question_ids($question_ids)
+    {
+        foreach ($question_ids as $complex_question_id)
+        {
+            $question_attempt = new QuestionAttempt();
+            $question_attempt->set_assessment_attempt_id($this->assessment_attempt->get_id());
+            $question_attempt->set_question_complex_id($complex_question_id);
+            $question_attempt->set_answer('');
+            $question_attempt->set_score(0);
+            $question_attempt->set_feedback('');
+            $question_attempt->set_hint(0);
+
+            if ($question_attempt->create())
+            {
+                $this->question_attempts[$complex_question_id] = $question_attempt;
+            }
+        }
+    }
+
+    /**
+     * Retrieves the question attempts for the selected assessment attempt
+     *
+     * @return QuestionAttempt[]
+     */
+    protected function retrieve_question_attempts()
+    {
+        $question_attempts = [];
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
+            new StaticConditionVariable($this->assessment_attempt->get_id())
+        );
+
+        $question_attempts_result_set = DataManager::retrieves(
+            QuestionAttempt::class, new DataClassRetrievesParameters($condition)
+        );
+
+        foreach ($question_attempts_result_set as $question_attempt)
+        {
+            $question_attempts[$question_attempt->get_question_complex_id()] = $question_attempt;
+        }
+
+        return $question_attempts;
     }
 
     /**
@@ -254,176 +428,9 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
         $assessment_attempt->set_total_time(
             $assessment_attempt->get_total_time() +
-                 ($assessment_attempt->get_end_time() - $assessment_attempt->get_start_time()));
+            ($assessment_attempt->get_end_time() - $assessment_attempt->get_start_time())
+        );
 
         $assessment_attempt->update();
-    }
-
-    /**
-     * Returns the assessment question attempts
-     *
-     * @return QuestionAttempt[]
-     */
-    public function get_assessment_question_attempts()
-    {
-        if (is_null($this->question_attempts))
-        {
-            $this->question_attempts = $this->retrieve_question_attempts();
-        }
-
-        return $this->question_attempts;
-    }
-
-    /**
-     * Retrieves the question attempts for the selected assessment attempt
-     *
-     * @return QuestionAttempt[]
-     */
-    protected function retrieve_question_attempts()
-    {
-        $question_attempts = [];
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
-            new StaticConditionVariable($this->assessment_attempt->get_id()));
-
-        $question_attempts_result_set = DataManager::retrieves(
-            QuestionAttempt::class,
-            new DataClassRetrievesParameters($condition));
-
-        foreach($question_attempts_result_set as $question_attempt)
-        {
-            $question_attempts[$question_attempt->get_question_complex_id()] = $question_attempt;
-        }
-
-        return $question_attempts;
-    }
-
-    /**
-     * Registers the question ids
-     *
-     * @param int[] $question_ids
-     */
-    public function register_question_ids($question_ids)
-    {
-        foreach ($question_ids as $complex_question_id)
-        {
-            $question_attempt = new QuestionAttempt();
-            $question_attempt->set_assessment_attempt_id($this->assessment_attempt->get_id());
-            $question_attempt->set_question_complex_id($complex_question_id);
-            $question_attempt->set_answer('');
-            $question_attempt->set_score(0);
-            $question_attempt->set_feedback('');
-            $question_attempt->set_hint(0);
-
-            if ($question_attempt->create())
-            {
-                $this->question_attempts[$complex_question_id] = $question_attempt;
-            }
-        }
-    }
-
-    /**
-     * Returns the registered question ids
-     *
-     * @return int[] $question_ids
-     */
-    public function get_registered_question_ids()
-    {
-        $question_ids = [];
-
-        $question_attempts = $this->get_assessment_question_attempts();
-        foreach ($question_attempts as $question_attempt)
-        {
-            $question_ids[] = $question_attempt->get_question_complex_id();
-        }
-
-        return $question_ids;
-    }
-
-    /**
-     * Gets a single question attempt by a given question id
-     *
-     * @param int $complex_question_id
-     *
-     * @return QuestionAttempt
-     */
-    public function get_assessment_question_attempt($complex_question_id)
-    {
-        return $this->question_attempts[$complex_question_id];
-    }
-
-    public function get_assessment_continue_url()
-    {
-        return null;
-    }
-
-    public function get_assessment_back_url()
-    {
-        return $this->get_url(
-            array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_BROWSE),
-            array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
-    }
-
-    public function get_assessment_configuration()
-    {
-        $parameters = new DataClassRetrieveParameters(
-            new EqualityCondition(
-                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
-                new StaticConditionVariable($this->publication->get_id())));
-        $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
-
-        return $assessment_publication->get_configuration();
-    }
-
-    public function get_assessment_parameters()
-    {
-        return [];
-    }
-
-    public function get_assessment_current_url()
-    {
-        return $this->get_url();
-    }
-
-    // METHODS FOR COMPLEX DISPLAY RIGHTS
-    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
-    {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
-             $this->publication->get_allow_collaboration();
-    }
-
-    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
-    {
-        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
-    }
-
-    public function is_allowed_to_add_child()
-    {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
-    }
-
-    public function is_allowed_to_delete_child()
-    {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
-    }
-
-    public function is_allowed_to_delete_feedback($feedback)
-    {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
-    }
-
-    public function is_allowed_to_edit_feedback()
-    {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
-    }
-
-    /**
-     *
-     * @param BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 }

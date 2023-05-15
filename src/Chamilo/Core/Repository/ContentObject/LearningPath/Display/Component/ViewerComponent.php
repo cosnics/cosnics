@@ -82,13 +82,13 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $icon = ($treeNode->getTreeNodeData() && $treeNode->getTreeNodeData()->isBlocked()) ? 'unlock' : 'ban';
 
             $blockNode = new SubButton(
-                $translator->getTranslation($translationVariable, null, Manager::CONTEXT),
-                new FontAwesomeGlyph($icon), $this->get_url(
-                [
-                    self::PARAM_ACTION => self::ACTION_TOGGLE_BLOCKED_STATUS,
-                    self::PARAM_CHILD_ID => $treeNode->getId()
-                ]
-            ), Button::DISPLAY_ICON_AND_LABEL
+                $translator->getTranslation($translationVariable, null, Manager::CONTEXT), new FontAwesomeGlyph($icon),
+                $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_TOGGLE_BLOCKED_STATUS,
+                        self::PARAM_CHILD_ID => $treeNode->getId()
+                    ]
+                ), Button::DISPLAY_ICON_AND_LABEL
             );
 
             $button->addSubButton($blockNode);
@@ -104,13 +104,13 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 'sitemap' : 'sitemap';
 
             $blockNode = new SubButton(
-                $translator->getTranslation($translationVariable, null, Manager::CONTEXT),
-                new FontAwesomeGlyph($icon), $this->get_url(
-                [
-                    self::PARAM_ACTION => self::ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER,
-                    self::PARAM_CHILD_ID => $treeNode->getId()
-                ]
-            ), Button::DISPLAY_ICON_AND_LABEL
+                $translator->getTranslation($translationVariable, null, Manager::CONTEXT), new FontAwesomeGlyph($icon),
+                $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER,
+                        self::PARAM_CHILD_ID => $treeNode->getId()
+                    ]
+                ), Button::DISPLAY_ICON_AND_LABEL
             );
 
             $button->addSubButton($blockNode);
@@ -284,8 +284,8 @@ class ViewerComponent extends BaseHtmlTreeComponent
      */
     public function addNodeSpecificButtons(ButtonGroup $primaryActions, ButtonGroup $secondaryActions)
     {
-        $object_namespace = $this->getCurrentTreeNode()->getContentObject()->package();
-        $integration_class_name = $object_namespace . '\Integration\\' . self::package() . '\Manager';
+        $object_namespace = $this->getCurrentTreeNode()->getContentObject()::CONTEXT;
+        $integration_class_name = $object_namespace . '\Integration\\' . Manager::CONTEXT . '\Manager';
 
         if (class_exists($integration_class_name))
         {
@@ -543,7 +543,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
     public function render_footer(): string
     {
         $html[] = ResourceManager::getInstance()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath(Manager::package()) . 'KeyboardNavigation.js'
+            $this->getWebPathBuilder()->getJavascriptPath(Manager::CONTEXT) . 'KeyboardNavigation.js'
         );
 
         $html[] = parent::render_footer();

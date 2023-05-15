@@ -65,14 +65,6 @@ abstract class TableColumn
     }
 
     /**
-     * @throws \ReflectionException
-     */
-    public static function package(): string
-    {
-        return static::context();
-    }
-
-    /**
      * @param string[][] $cssClasses
      */
     public function setCssClasses(?array $cssClasses)

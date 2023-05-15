@@ -10,8 +10,7 @@ use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Repository\Common
- *
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ContentObjectDifferenceRenderer
 {
@@ -58,12 +57,12 @@ class ContentObjectDifferenceRenderer
                 $propertyVariable =
                     StringUtilities::getInstance()->createString($propertyName)->upperCamelize()->__toString();
                 $propertyLabel = $translator->trans(
-                    $propertyVariable, [], $contentObjectDifference->getContentObject()->package()
+                    $propertyVariable, [], $contentObjectDifference->getContentObject()::CONTEXT
                 );
 
                 $html[] = '<div class="panel panel-default">';
                 $html[] = '<div class="panel-heading">' . $translator->trans(
-                        'DifferenceProperty', array('{PROPERTY}' => $propertyLabel), 'Chamilo\Core\Repository'
+                        'DifferenceProperty', ['{PROPERTY}' => $propertyLabel], 'Chamilo\Core\Repository'
                     ) . '</div>';
                 $html[] = $renderedDifference;
                 $html[] = '</div>';
@@ -81,16 +80,16 @@ class ContentObjectDifferenceRenderer
         return $this->translator;
     }
 
+    public function get_content_object_display_attachment_url($attachment)
+    {
+        return '';
+    }
+
     /**
      * @param \Symfony\Component\Translation\Translator $translator
      */
     public function setTranslator(Translator $translator): void
     {
         $this->translator = $translator;
-    }
-
-    public function get_content_object_display_attachment_url($attachment)
-    {
-        return '';
     }
 }

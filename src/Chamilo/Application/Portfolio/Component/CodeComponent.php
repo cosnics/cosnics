@@ -9,11 +9,10 @@ use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- *
  * @package Chamilo\Application\Portfolio\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class CodeComponent extends Manager
 {
@@ -33,7 +32,7 @@ class CodeComponent extends Manager
                     return new RedirectResponse(
                         $this->getUrlGenerator()->fromParameters(
                             [
-                                self::PARAM_CONTEXT => self::package(),
+                                self::PARAM_CONTEXT => Manager::CONTEXT,
                                 self::PARAM_ACTION => self::ACTION_HOME,
                                 self::PARAM_USER_ID => $user->get_id()
                             ]

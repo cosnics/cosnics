@@ -1,16 +1,16 @@
 <?php
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Package;
 
-use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\User\Integration\Chamilo\Core\Menu\Storage\DataClass\WidgetItem;
+use Chamilo\Libraries\Translation\Translation;
 
 class Installer extends \Chamilo\Core\Menu\Action\Installer
 {
+    public const CONTEXT = 'Chamilo\Core\User\Integration\Chamilo\Core\Menu';
 
     /**
-     *
      * @param string[] $formValues
      */
     public function __construct($formValues)
@@ -22,8 +22,8 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
     {
         $my_account = new WidgetItem();
         $my_account->set_display($this->getItemDisplay());
-        
-        if (! $my_account->create())
+
+        if (!$my_account->create())
         {
             return false;
         }
@@ -33,12 +33,12 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
             $item_title->set_title(Translation::get('MyAccount'));
             $item_title->set_isocode(Translation::getInstance()->getLanguageIsocode());
             $item_title->set_item_id($my_account->get_id());
-            if (! $item_title->create())
+            if (!$item_title->create())
             {
                 return false;
             }
         }
-        
+
         return true;
     }
 }

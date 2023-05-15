@@ -7,32 +7,26 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopi
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
- * @package repository.lib.content_object.forum
- */
-
-/**
- * This class represents a discussion forum.
+ * @package Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass
  */
 class Forum extends ContentObject implements ComplexContentObjectSupport
 {
-    const NAME_SPACE = __NAMESPACE__;
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\Forum';
+    public const NAME_SPACE = __NAMESPACE__;
 
-    const PROPERTY_LAST_POST = 'last_post_id';
-    const PROPERTY_LAST_TOPIC_CHANGED_CLOI = 'last_topic_changed_cloi';
-    const PROPERTY_LOCKED = 'locked';
-    const PROPERTY_TOTAL_POSTS = 'total_posts';
-    const PROPERTY_TOTAL_TOPICS = 'total_topics';
+    public const PROPERTY_LAST_POST = 'last_post_id';
+    public const PROPERTY_LAST_TOPIC_CHANGED_CLOI = 'last_topic_changed_cloi';
+    public const PROPERTY_LOCKED = 'locked';
+    public const PROPERTY_TOTAL_POSTS = 'total_posts';
+    public const PROPERTY_TOTAL_TOPICS = 'total_topics';
 
     /**
-     *
      * @param ForumPost $last_post
      */
     public function add_last_post($last_post)
@@ -167,7 +161,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
             'ComplexContentObjectItemDeleted', 'ComplexContentObjectItemsDeleted'
         );
 
-        return array($message, ($failures > 0));
+        return [$message, ($failures > 0)];
     }
 
     public function delete_links()
@@ -185,18 +179,26 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(
+        return [
             self::PROPERTY_LOCKED,
             self::PROPERTY_TOTAL_TOPICS,
             self::PROPERTY_TOTAL_POSTS,
             self::PROPERTY_LAST_POST,
             self::PROPERTY_LAST_TOPIC_CHANGED_CLOI
-        );
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_forum';
     }
 
     public function get_allowed_types(): array
     {
-        return array(Forum::class, ForumTopic::class);
+        return [Forum::class, ForumTopic::class];
     }
 
     public function get_last_post()
@@ -212,14 +214,6 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
     public function get_locked()
     {
         return $this->getAdditionalProperty(self::PROPERTY_LOCKED);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_forum';
     }
 
     /**
@@ -239,11 +233,6 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
     public function get_total_topics()
     {
         return $this->getAdditionalProperty(self::PROPERTY_TOTAL_TOPICS);
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function invert_locked()
@@ -325,7 +314,6 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
      * @param type $is_parent_forum
      * @param type $last_topic_changed_cloi
      * @param type $last_topic_changed_id
-     *
      */
     public function recalculate_last_post(
         $is_parent_forum = false, $last_topic_changed_cloi = null, $last_topic_changed_id = null

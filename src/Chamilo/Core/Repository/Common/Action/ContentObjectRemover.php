@@ -15,7 +15,7 @@ abstract class ContentObjectRemover extends Remover
     /**
      * Perform additional installation steps
      *
-     * @return boolean
+     * @return bool
      */
     public function extra()
     {

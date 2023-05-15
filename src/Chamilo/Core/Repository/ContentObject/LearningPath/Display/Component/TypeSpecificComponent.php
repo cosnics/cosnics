@@ -5,11 +5,10 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 
 /**
- *
  * @package core\repository\content_object\learning_path\display
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class TypeSpecificComponent extends BaseHtmlTreeComponent implements ApplicationSupport
 {
@@ -21,7 +20,7 @@ class TypeSpecificComponent extends BaseHtmlTreeComponent implements Application
     {
         $this->validateSelectedTreeNodeData();
 
-        $object_namespace = $this->getCurrentTreeNode()->getContentObject()->package();
+        $object_namespace = $this->getCurrentTreeNode()->getContentObject()::CONTEXT;
         $integration_namespace =
             $object_namespace . '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
 

@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClas
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataManager;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -13,11 +12,10 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- *
  * @package Chamilo\Core\User\Integration\Chamilo\Core\Menu\Storage\DataClass
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class RepositoryImplementationCategoryItem extends Item
 {
@@ -56,11 +54,6 @@ class RepositoryImplementationCategoryItem extends Item
         return new FontAwesomeGlyph('globe', [], null, 'fas');
     }
 
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class);
-    }
-
     public function get_children()
     {
         if (!isset($this->children))
@@ -71,7 +64,7 @@ class RepositoryImplementationCategoryItem extends Item
             );
             $parameters = new DataClassRetrievesParameters(
                 $condition, null, null,
-                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT))))
+                new OrderBy([new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT))])
             );
             $items = DataManager::retrieves(Item::class, $parameters);
             $this->children = $items;
@@ -80,13 +73,13 @@ class RepositoryImplementationCategoryItem extends Item
         return $this->children;
     }
 
-    public function set_children($children)
-    {
-        $this->children = $children;
-    }
-
     public function has_children()
     {
         return count($this->get_children()) > 0;
+    }
+
+    public function set_children($children)
+    {
+        $this->children = $children;
     }
 }

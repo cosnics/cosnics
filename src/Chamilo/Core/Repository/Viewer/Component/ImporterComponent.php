@@ -215,7 +215,7 @@ class ImporterComponent extends Manager implements DelegateComponent
 
         $importForm->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath(self::package()) . 'ImporterComponent.js'
+            $this->getWebPathBuilder()->getJavascriptPath(Manager::CONTEXT) . 'ImporterComponent.js'
         )
         );
     }

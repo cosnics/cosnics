@@ -1,39 +1,17 @@
 <?php
 namespace Chamilo\Core\Home\Package;
 
+use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
- * @package home.install
- */
-/**
- * This installer can be used to create the storage structure for the home application.
+ * @package Chamilo\Core\Home\Package
  */
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
-
-    /**
-     * Runs the install-script.
-     *
-     * @todo This function now uses the function of the RepositoryInstaller class. These shared functions should be
-     *       available in a common base class.
-     */
-    public function extra()
-    {
-        if (! $this->create_basic_home())
-        {
-            return false;
-        }
-        else
-        {
-            $this->add_message(self::TYPE_NORMAL, Translation::get('HomeCreated'));
-        }
-
-        return true;
-    }
+    public const CONTEXT = Manager::CONTEXT;
 
     public function create_basic_home()
     {
@@ -41,7 +19,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $tab->setTitle(Translation::get('Home'));
         $tab->setUserId(0);
 
-        if (! $tab->create())
+        if (!$tab->create())
         {
             return false;
         }
@@ -52,7 +30,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $columnNews->setWidth(66);
         $columnNews->setUserId(0);
 
-        if (! $columnNews->create())
+        if (!$columnNews->create())
         {
             return false;
         }
@@ -63,9 +41,29 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         $columnVarious->setWidth(33);
         $columnVarious->setUserId(0);
 
-        if (! $columnVarious->create())
+        if (!$columnVarious->create())
         {
             return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Runs the install-script.
+     *
+     * @todo This function now uses the function of the RepositoryInstaller class. These shared functions should be
+     *       available in a common base class.
+     */
+    public function extra()
+    {
+        if (!$this->create_basic_home())
+        {
+            return false;
+        }
+        else
+        {
+            $this->add_message(self::TYPE_NORMAL, Translation::get('HomeCreated'));
         }
 
         return true;

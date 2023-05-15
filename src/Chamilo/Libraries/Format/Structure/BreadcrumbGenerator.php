@@ -13,7 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
  * possibility to add additional breadcrumbs between the package breadcrumb and the component breadcrumb
  *
  * @package Chamilo\Libraries\Format\Structure
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
 {
@@ -58,7 +58,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
 
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
-                $application->get_url(), Translation::get($variable, null, $application->package())
+                $application->get_url(), Translation::get($variable, null, $application::CONTEXT)
             )
         );
     }
@@ -69,14 +69,13 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
     protected function generatePackageBreadcrumb()
     {
         $application = $this->getApplication();
-        $context = $application->package();
 
         $filter_parameters = $application->getAdditionalParameters();
         $filter_parameters[] = $application::PARAM_ACTION;
 
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
-                $application->get_url([], $filter_parameters), Translation::get('TypeName', null, $context)
+                $application->get_url([], $filter_parameters), Translation::get('TypeName', null, $application::CONTEXT)
             )
         );
     }
@@ -86,14 +85,14 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
         return $this->application;
     }
 
-    public function setApplication(Application $application)
-    {
-        $this->application = $application;
-    }
-
     public function getBreadcrumbTrail(): BreadcrumbTrail
     {
         return $this->breadcrumbTrail;
+    }
+
+    public function setApplication(Application $application)
+    {
+        $this->application = $application;
     }
 
     public function setBreadcrumbTrail(BreadcrumbTrail $breadcrumbTrail)

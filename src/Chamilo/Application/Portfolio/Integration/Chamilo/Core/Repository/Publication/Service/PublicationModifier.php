@@ -136,8 +136,8 @@ class PublicationModifier implements PublicationModifierInterface
                  */
                 $newObject = ContentObject::factory(PortfolioItem::class);
                 $newObject->set_owner_id($publicationTarget->getUserIdentifier());
-                $newObject->set_title(PortfolioItem::getTypeName());
-                $newObject->set_description(PortfolioItem::getTypeName());
+                $newObject->set_title('portfolio_item');
+                $newObject->set_description('portfolio_item');
                 $newObject->set_parent_id(0);
                 $newObject->set_reference($contentObject->getId());
                 $newObject->create();
@@ -199,7 +199,7 @@ class PublicationModifier implements PublicationModifierInterface
 
                 $publicationUrl = $this->getUrlGenerator()->fromParameters(
                     [
-                        Application::PARAM_CONTEXT => Manager::package(),
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         PortfolioDisplayManager::PARAM_STEP => $portfolioNode->get_id()
                     ]
                 );

@@ -152,12 +152,4 @@ class Event
     {
         $this->url = $url;
     }
-
-    /**
-     * @throws \ReflectionException
-     */
-    public static function package(): string
-    {
-        return static::context();
-    }
 }

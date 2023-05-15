@@ -95,7 +95,7 @@ abstract class Manager extends Application
 
             $isDisplayAction = $this->get_action() == self::ACTION_DISPLAY;
             $previewExists = \Chamilo\Core\Repository\Display\Manager::exists(
-                $this->get_content_object()->package() . '\Display\Preview'
+                $this->get_content_object()::CONTEXT . '\Display\Preview'
             );
 
             if ($previewExists)
@@ -177,7 +177,7 @@ abstract class Manager extends Application
      */
     public function getPreview()
     {
-        $package = $this->get_content_object()->package();
+        $package = $this->get_content_object()::CONTEXT;
         $context = $package . '\Display\Preview';
 
         return $this->getApplicationFactory()->getApplication(
@@ -193,7 +193,7 @@ abstract class Manager extends Application
         $translator = $this->getTranslator();
 
         $translation =
-            $translator->trans('PreviewModeWarning', [], $this->get_content_object()->package() . '\Display');
+            $translator->trans('PreviewModeWarning', [], $this->get_content_object()::CONTEXT . '\Display');
 
         if ($translation == 'PreviewModeWarning')
         {
@@ -236,7 +236,7 @@ abstract class Manager extends Application
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
 
-        if (\Chamilo\Core\Repository\Display\Manager::exists($contentObject->package() . '\Display\Preview'))
+        if (\Chamilo\Core\Repository\Display\Manager::exists($contentObject::CONTEXT . '\Display\Preview'))
         {
             $action = self::ACTION_DISPLAY;
         }

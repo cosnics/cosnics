@@ -6,8 +6,8 @@ use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
 use Chamilo\Core\Repository\Service\ContentObjectTemplate\ContentObjectTemplateSynchronizer;
-use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Filesystem;
@@ -22,9 +22,8 @@ use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
- * Extension of the generic installer for content objects
- *
- * @author Hans De Bisschop
+ * @package Chamilo\Core\Repository\Common\Action
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class ContentObjectInstaller extends Installer
 {
@@ -32,7 +31,7 @@ abstract class ContentObjectInstaller extends Installer
     /**
      * Perform additional installation steps
      *
-     * @return boolean
+     * @return bool
      */
     public function extra()
     {
@@ -63,7 +62,7 @@ abstract class ContentObjectInstaller extends Installer
     /**
      * Import a sample content object (if available)
      *
-     * @return boolean
+     * @return bool
      */
     public function import_content_object()
     {
@@ -77,7 +76,7 @@ abstract class ContentObjectInstaller extends Installer
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(User::class, User::PROPERTY_PLATFORMADMIN), new StaticConditionVariable(1)
             );
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieves(
+            $user = DataManager::retrieves(
                 User::class, new DataClassRetrievesParameters($condition)
             )->current();
 
@@ -111,7 +110,7 @@ abstract class ContentObjectInstaller extends Installer
     {
         try
         {
-            $this->getContentObjectTemplateSynchronizer()->synchronize(static::package());
+            $this->getContentObjectTemplateSynchronizer()->synchronize(static::CONTEXT);
 
             return true;
         }

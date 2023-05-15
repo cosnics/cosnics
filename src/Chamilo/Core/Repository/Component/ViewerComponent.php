@@ -93,7 +93,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 null, $translator->trans(
-                'ViewContentObject', ['{CONTENT_OBJECT}' => $contentObject->get_title()], self::package()
+                'ViewContentObject', ['{CONTENT_OBJECT}' => $contentObject->get_title()], Manager::CONTEXT
             )
             )
         );
@@ -101,7 +101,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         if ($contentObject->get_state() == ContentObject::STATE_RECYCLED)
         {
             $trail->add(
-                new Breadcrumb($this->get_recycle_bin_url(), $translator->trans('RecycleBin', [], self::package()))
+                new Breadcrumb($this->get_recycle_bin_url(), $translator->trans('RecycleBin', [], Manager::CONTEXT))
             );
             $this->force_menu_url($this->get_recycle_bin_url());
         }
@@ -133,7 +133,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             $tabs->add(
                 new ContentTab(
                     (string) LinkTableRenderer::TYPE_PUBLICATIONS,
-                    $translator->trans('Publications', [], self::package()), $this->renderLinkPublicationsTable(),
+                    $translator->trans('Publications', [], Manager::CONTEXT), $this->renderLinkPublicationsTable(),
                     new FontAwesomeGlyph('share-square', ['fa-lg'], null, 'fas')
                 )
             );
@@ -162,7 +162,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
             $tabs->add(
                 new ContentTab(
-                    $tabName, $translator->trans('SharedIn', [], self::package()),
+                    $tabName, $translator->trans('SharedIn', [], Manager::CONTEXT),
                     $sharedInTableRenderer->render($tableParameterValues, $sharedInWorkspaceRelations),
                     new FontAwesomeGlyph('lock', ['fa-lg'], null, 'fas')
                 )
@@ -174,7 +174,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         {
             $tabs->add(
                 new ContentTab(
-                    (string) LinkTableRenderer::TYPE_PARENTS, $translator->trans('UsedIn', [], self::package()),
+                    (string) LinkTableRenderer::TYPE_PARENTS, $translator->trans('UsedIn', [], Manager::CONTEXT),
                     $this->renderLinkParentsTable(), new FontAwesomeGlyph('arrow-up', ['fa-lg'], null, 'fas')
                 )
             );
@@ -185,7 +185,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         {
             $tabs->add(
                 new ContentTab(
-                    (string) LinkTableRenderer::TYPE_CHILDREN, $translator->trans('Uses', [], self::package()),
+                    (string) LinkTableRenderer::TYPE_CHILDREN, $translator->trans('Uses', [], Manager::CONTEXT),
                     $this->renderLinkChildrenTable(), new FontAwesomeGlyph('arrow-down', ['fa-lg'], null, 'fas')
                 )
             );
@@ -196,8 +196,9 @@ class ViewerComponent extends Manager implements DelegateComponent
         {
             $tabs->add(
                 new ContentTab(
-                    (string) LinkTableRenderer::TYPE_ATTACHED_TO, $translator->trans('AttachedTo', [], self::package()),
-                    $this->renderLinkAttachedtoTable(), new FontAwesomeGlyph('bookmark', ['fa-lg'], null, 'fas')
+                    (string) LinkTableRenderer::TYPE_ATTACHED_TO,
+                    $translator->trans('AttachedTo', [], Manager::CONTEXT), $this->renderLinkAttachedtoTable(),
+                    new FontAwesomeGlyph('bookmark', ['fa-lg'], null, 'fas')
                 )
             );
         }
@@ -207,7 +208,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         {
             $tabs->add(
                 new ContentTab(
-                    (string) LinkTableRenderer::TYPE_ATTACHES, $translator->trans('Attaches', [], self::package()),
+                    (string) LinkTableRenderer::TYPE_ATTACHES, $translator->trans('Attaches', [], Manager::CONTEXT),
                     $this->renderLinkAttachesTable(), new FontAwesomeGlyph('paperclip', ['fa-lg'], null, 'fas')
                 )
             );
@@ -218,8 +219,8 @@ class ViewerComponent extends Manager implements DelegateComponent
         {
             $tabs->add(
                 new ContentTab(
-                    (string) LinkTableRenderer::TYPE_INCLUDED_IN, $translator->trans('IncludedIn', [], self::package()),
-                    $this->renderLinkIncludedInTable(),
+                    (string) LinkTableRenderer::TYPE_INCLUDED_IN,
+                    $translator->trans('IncludedIn', [], Manager::CONTEXT), $this->renderLinkIncludedInTable(),
                     new FontAwesomeGlyph('expand-arrows-alt', ['fa-lg'], null, 'fas')
                 )
             );
@@ -230,7 +231,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         {
             $tabs->add(
                 new ContentTab(
-                    (string) LinkTableRenderer::TYPE_INCLUDES, $translator->trans('Includes', [], self::package()),
+                    (string) LinkTableRenderer::TYPE_INCLUDES, $translator->trans('Includes', [], Manager::CONTEXT),
                     $this->renderLinkIncludesTable(),
                     new FontAwesomeGlyph('compress-arrows-alt', ['fa-lg'], null, 'fas')
                 )
@@ -367,7 +368,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                         );
                     }
 
-                    if ($contentObject::package() == 'Chamilo\Core\Repository\ContentObject\Assessment')
+                    if ($contentObject::CONTEXT == 'Chamilo\Core\Repository\ContentObject\Assessment')
                     {
                         $baseActions->addButton(
                             new Button(
@@ -550,7 +551,7 @@ class ViewerComponent extends Manager implements DelegateComponent
     public function getExportButton()
     {
         $contentObject = $this->getContentObject();
-        $types = ContentObjectExportImplementation::get_types_for_object($contentObject::package());
+        $types = ContentObjectExportImplementation::get_types_for_object($contentObject::CONTEXT);
 
         if (count($types) > 1)
         {
@@ -591,7 +592,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
         $translationVariable =
             'ExportType' . StringUtilities::getInstance()->createString($type)->upperCamelize()->__toString();
-        $translation = $translator->trans($translationVariable, [], $this->getContentObject()::package());
+        $translation = $translator->trans($translationVariable, [], $this->getContentObject()::CONTEXT);
 
         if ($translation == $translationVariable)
         {
@@ -678,7 +679,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
             $tabs->add(
                 new ContentTab(
-                    'versions', $this->getTranslator()->trans('Versions', [], self::package()),
+                    'versions', $this->getTranslator()->trans('Versions', [], Manager::CONTEXT),
                     implode(PHP_EOL, $versionTabContent), new FontAwesomeGlyph('undo', ['fa-lg'], null, 'fas')
                 )
             );

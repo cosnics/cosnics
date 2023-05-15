@@ -4,27 +4,34 @@ namespace Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\HelperContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- *
- * @package repository.lib.content_object.portfolio_item
+ * @package Chamilo\Core\Repository\ContentObject\PortfolioItem\Storage\DataClass
  */
 class PortfolioItem extends ContentObject implements Versionable, HelperContentObjectSupport
 {
-    const PROPERTY_REFERENCE = 'reference_id';
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\PortfolioItem';
+
+    public const PROPERTY_REFERENCE = 'reference_id';
 
     /**
-     *
      * @var Portfolio
      */
     private $reference_object;
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_REFERENCE);
+        return [self::PROPERTY_REFERENCE];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_portfolio_item';
     }
 
     public function get_reference()
@@ -42,19 +49,6 @@ class PortfolioItem extends ContentObject implements Versionable, HelperContentO
         }
 
         return $this->reference_object;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_portfolio_item';
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function set_reference($reference)

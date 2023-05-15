@@ -72,7 +72,7 @@ class ContentObjectPublicationMailer
     {
         $parameters = [];
 
-        $parameters[Manager::PARAM_CONTEXT] = Manager::package();
+        $parameters[Manager::PARAM_CONTEXT] = Manager::CONTEXT;
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
         $parameters[Manager::PARAM_COURSE] = $contentObjectPublication->get_course_id();
         $parameters[Manager::PARAM_TOOL] = $contentObjectPublication->get_tool();

@@ -59,7 +59,7 @@ class WorkspaceConfigureItemRenderer extends ItemRenderer
     {
         $currentContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
 
-        return $currentContext == Manager::package();
+        return $currentContext == Manager::CONTEXT;
     }
 
     /**

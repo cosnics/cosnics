@@ -41,7 +41,7 @@ class LearningPathBlock extends CourseBlock
 
         $course_id = $this->getCourseId();
         $tool = ClassnameUtilities::getInstance()->getPackageNameFromNamespace(
-            \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager::package()
+            \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager::CONTEXT
         );
         $glyph = new FontAwesomeGlyph('chart-pie', [], Translation::get('Details'));
         $count = 1;

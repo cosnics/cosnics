@@ -34,7 +34,7 @@ class HintComponent extends Manager
             ComplexContentObjectItem::class,
             $identifiers[0]);
 
-        $context = $complex_content_object_item->get_ref_object()->package();
+        $context = $complex_content_object_item->get_ref_object()::CONTEXT;
 
         $this->getRequest()->query->set(self::PARAM_ACTION, 'Hint');
 

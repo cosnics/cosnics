@@ -111,7 +111,7 @@ class PublicationModifier implements PublicationModifierInterface
 
             $publicationUrl = $this->getUrlGenerator()->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::package(),
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                     Application::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_SYSTEM_ANNOUNCEMENTS,
                     Manager::PARAM_ACTION => Manager::ACTION_VIEW,
                     Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->getId()

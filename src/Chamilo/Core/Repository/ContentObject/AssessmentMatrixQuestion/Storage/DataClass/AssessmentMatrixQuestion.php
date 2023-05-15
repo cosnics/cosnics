@@ -2,21 +2,21 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataClass;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
- *
- * @package repository.lib.content_object.matrix_question
+ * @package Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataClass
  */
 class AssessmentMatrixQuestion extends ContentObject implements Versionable
 {
-    const MATRIX_TYPE_CHECKBOX = 2;
-    const MATRIX_TYPE_RADIO = 1;
+    public const CONTEXT = 'Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion';
 
-    const PROPERTY_MATCHES = 'matches';
-    const PROPERTY_MATRIX_TYPE = 'matrix_type';
-    const PROPERTY_OPTIONS = 'options';
+    public const MATRIX_TYPE_CHECKBOX = 2;
+    public const MATRIX_TYPE_RADIO = 1;
+
+    public const PROPERTY_MATCHES = 'matches';
+    public const PROPERTY_MATRIX_TYPE = 'matrix_type';
+    public const PROPERTY_OPTIONS = 'options';
 
     public function add_match($match)
     {
@@ -36,7 +36,15 @@ class AssessmentMatrixQuestion extends ContentObject implements Versionable
 
     public static function getAdditionalPropertyNames(): array
     {
-        return array(self::PROPERTY_MATCHES, self::PROPERTY_OPTIONS, self::PROPERTY_MATRIX_TYPE);
+        return [self::PROPERTY_MATCHES, self::PROPERTY_OPTIONS, self::PROPERTY_MATRIX_TYPE];
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStorageUnitName(): string
+    {
+        return 'repository_assessment_matrix_question';
     }
 
     public function get_default_weight()
@@ -95,19 +103,6 @@ class AssessmentMatrixQuestion extends ContentObject implements Versionable
         }
 
         return [];
-    }
-
-    /**
-     * @return string
-     */
-    public static function getStorageUnitName(): string
-    {
-        return 'repository_assessment_matrix_question';
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
 
     public function set_matches($matches)

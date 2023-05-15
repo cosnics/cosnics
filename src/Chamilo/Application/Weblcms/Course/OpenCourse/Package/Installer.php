@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Course\OpenCourse\Package;
 
+use Chamilo\Application\Weblcms\Course\OpenCourse\Manager;
+
 /**
- *
  * @package application.lib.weblcms.install
  */
 
@@ -11,4 +12,5 @@ namespace Chamilo\Application\Weblcms\Course\OpenCourse\Package;
  */
 class Installer extends \Chamilo\Configuration\Package\Action\Installer
 {
+    public const CONTEXT = Manager::CONTEXT;
 }

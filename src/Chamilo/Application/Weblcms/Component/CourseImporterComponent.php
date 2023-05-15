@@ -13,7 +13,6 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- *
  * @package application.lib.weblcms.weblcms_manager.component
  */
 
@@ -59,23 +58,23 @@ class CourseImporterComponent extends Manager
         if ($this->get_user()->is_platform_admin())
         {
             $redirect = new Redirect(
-                array(
+                [
                     Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
-                )
+                ]
             );
             $breadcrumbtrail->add(
                 new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin'))
             );
 
             $redirect = new Redirect(
-                array(
+                [
                     Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
                     \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
                     GenericTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
-                        self::package()
+                        Manager::CONTEXT
                     )
-                )
+                ]
             );
             $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Courses')));
         }

@@ -665,7 +665,7 @@ abstract class ContentObjectForm extends FormValidator
     {
         $contentObjectClassName =
             ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_class($content_object));
-        $base_class_name = $content_object->package() . '\Form\\' . $contentObjectClassName;
+        $base_class_name = $content_object::CONTEXT . '\Form\\' . $contentObjectClassName;
 
         if ($form_variant)
         {

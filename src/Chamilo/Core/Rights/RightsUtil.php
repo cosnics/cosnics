@@ -948,19 +948,6 @@ class RightsUtil
     }
 
     /*
-     * DONE
-     */
-
-    /**
-     *
-     * @return string
-     */
-    public static function package()
-    {
-        return static::context();
-    }
-
-    /*
      * todo: add caching
      */
 

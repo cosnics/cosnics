@@ -247,7 +247,7 @@ class FilterData
             }
             else
             {
-                $this->context = Manager::package();
+                $this->context = Manager::CONTEXT;
             }
         }
 

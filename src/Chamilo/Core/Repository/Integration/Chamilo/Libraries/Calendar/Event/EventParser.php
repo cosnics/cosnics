@@ -9,41 +9,36 @@ use Exception;
 
 /**
  * Abstract base-class for the parsing of content object to renderable calendar events
- * 
+ *
  * @package libraries\calendar\event
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class EventParser
 {
 
     /**
-     *
      * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
     private $contentObject;
 
     /**
-     *
-     * @var int
-     */
-    private $startDate;
-
-    /**
-     *
      * @var int
      */
     private $endDate;
 
     /**
-     *
      * @var string
      */
     private $eventClassName;
 
     /**
-     *
+     * @var int
+     */
+    private $startDate;
+
+    /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param int $startDate
      * @param int $endDate
@@ -58,19 +53,19 @@ abstract class EventParser
     }
 
     /**
-     *
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param int $startDate
      * @param int $endDate
      * @param string $eventClassName
+     *
      * @return EventParser
      */
     public static function factory($contentObject, $startDate = 0, $endDate = 0, $eventClassName)
     {
-        $type = $contentObject->package();
+        $type = $contentObject::CONTEXT;
         $class = $type . '\Integration\Chamilo\Libraries\Calendar\Event\EventParser';
-        
-        if (! class_exists($class))
+
+        if (!class_exists($class))
         {
             $message = [];
             $message[] = Translation::get('ComponentFailedToLoad') . '<br /><br />';
@@ -81,14 +76,14 @@ abstract class EventParser
             $message[] = '<li>' . Translation::get('EventParser') . '</li>';
             $message[] = '<li>' . Translation::get('TypeName', null, $type) . '</li>';
             $message[] = '</ul>';
-            
+
             throw new ClassNotExistException($class);
         }
+
         return new $class($contentObject, $startDate, $endDate, $eventClassName);
     }
 
     /**
-     *
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
      */
     public function getContentObject()
@@ -97,34 +92,6 @@ abstract class EventParser
     }
 
     /**
-     *
-     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     */
-    public function setContentObject(ContentObject $contentObject)
-    {
-        $this->contentObject = $contentObject;
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function getStartDate()
-    {
-        return $this->startDate;
-    }
-
-    /**
-     *
-     * @param int $startDate
-     */
-    public function setStartDate($startDate)
-    {
-        $this->startDate = $startDate;
-    }
-
-    /**
-     *
      * @return int
      */
     public function getEndDate()
@@ -133,16 +100,6 @@ abstract class EventParser
     }
 
     /**
-     *
-     * @param int $endDate
-     */
-    public function setEndDate($endDate)
-    {
-        $this->endDate = $endDate;
-    }
-
-    /**
-     *
      * @return string
      */
     public function getEventClassName()
@@ -151,37 +108,29 @@ abstract class EventParser
     }
 
     /**
-     *
-     * @param string $eventClassName
-     */
-    public function setEventClassName($eventClassName)
-    {
-        $this->eventClassName = $eventClassName;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Calendar\Event\Event
      */
     public function getEventInstance()
     {
         $eventClassName = $this->getEventClassName();
-        
-        if (! $eventClassName)
+
+        if (!$eventClassName)
         {
             throw new Exception(
                 'Please implement a local extension of the Event class in your context (' .
-                     ClassnameUtilities::getInstance()->getNamespaceFromClassname($eventClassName) . ')');
+                ClassnameUtilities::getInstance()->getNamespaceFromClassname($eventClassName) . ')'
+            );
         }
         else
         {
             $event = new $eventClassName();
-            
-            if (! $event instanceof ContentObjectSupport)
+
+            if (!$event instanceof ContentObjectSupport)
             {
                 throw new Exception(
                     'Your event class (' . $eventClassName .
-                         ') does not seem to support content objects, please implement the EventContentObjectSupport interface');
+                    ') does not seem to support content objects, please implement the EventContentObjectSupport interface'
+                );
             }
             else
             {
@@ -191,8 +140,47 @@ abstract class EventParser
     }
 
     /**
-     *
      * @return Event[]
      */
     abstract public function getEvents();
+
+    /**
+     * @return int
+     */
+    public function getStartDate()
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     */
+    public function setContentObject(ContentObject $contentObject)
+    {
+        $this->contentObject = $contentObject;
+    }
+
+    /**
+     * @param int $endDate
+     */
+    public function setEndDate($endDate)
+    {
+        $this->endDate = $endDate;
+    }
+
+    /**
+     * @param string $eventClassName
+     */
+    public function setEventClassName($eventClassName)
+    {
+        $this->eventClassName = $eventClassName;
+    }
+
+    /**
+     * @param int $startDate
+     */
+    public function setStartDate($startDate)
+    {
+        $this->startDate = $startDate;
+    }
 }

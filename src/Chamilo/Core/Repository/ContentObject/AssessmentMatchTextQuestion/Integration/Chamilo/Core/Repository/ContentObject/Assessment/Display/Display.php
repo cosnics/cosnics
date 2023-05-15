@@ -68,7 +68,7 @@ class Display extends QuestionDisplay
 
         $formvalidator->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
-            Path::getInstance()->getJavascriptPath(Assessment::package(), true) . 'GiveHint.js'
+            Path::getInstance()->getJavascriptPath(Assessment::CONTEXT, true) . 'GiveHint.js'
         )
         );
     }
