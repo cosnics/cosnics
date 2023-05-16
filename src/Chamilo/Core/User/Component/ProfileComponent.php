@@ -61,8 +61,9 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_APPLICATION), new StaticConditionVariable(
-                Manager::CONTEXT
-            );
+            Manager::CONTEXT
+        )
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_NAME),
             new StaticConditionVariable('account_fields')
