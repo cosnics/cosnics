@@ -13,7 +13,6 @@ use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 
 /**
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -29,92 +28,12 @@ abstract class CalendarEventDataProvider extends InternalCalendar
     }
 
     /**
-     *
      * @return \Chamilo\Application\Calendar\Service\AvailabilityService
      */
     protected function getAvailabilityService()
     {
         return $this->getService(AvailabilityService::class);
     }
-
-    /**
-     *
-     * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
-     *
-     * @param CalendarRendererProvider $calendarRendererProvider
-     * @param int $fromDate
-     * @param int $toDate
-     *
-     * @return array|\Chamilo\Libraries\Calendar\Event\Event[]
-     */
-    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate)
-    {
-        $rightsService = ServiceFactory::getInstance()->getRightsService();
-
-        $events = [];
-
-        $availabilityService = $this->getAvailabilityService();
-        $packageContext = $this->getCalendarContext();
-        $packageName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($packageContext);
-
-        if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
-            $calendarRendererProvider->getDataUser(),
-            $packageContext,
-            $packageName))
-        {
-            $publications = $this->getPublications($calendarRendererProvider->getDataUser(), $fromDate, $toDate);
-
-            foreach ($publications as $publication)
-            {
-                $course = new Course();
-                $course->setId($publication->get_course_id());
-
-                if (! $rightsService->canUserViewPublication(
-                    $calendarRendererProvider->getDataUser(),
-                    $publication,
-                    $course))
-                {
-                    continue;
-                }
-
-                $eventParser = new EventParser($publication, $fromDate, $toDate);
-                $events = array_merge($events, $eventParser->getEvents());
-            }
-        }
-
-        return $events;
-    }
-
-    /**
-     *
-     * @see \Chamilo\Application\Calendar\Architecture\CalendarInterface::getCalendars()
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User|null $user
-     *
-     * @return array|\Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
-     */
-    public function getCalendars(User $user = null)
-    {
-        $package = $this->getCalendarContext();
-
-        $calendar = new AvailableCalendar();
-        $calendar->setIdentifier(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($package));
-        $calendar->setType($package);
-        $calendar->setName($this->getCalendarName());
-
-        return array($calendar);
-    }
-
-    /**
-     * Retrieves the valid publications for the user
-     *
-     * @param User $user
-     * @param int $fromData
-     * @param int $toDate
-     *
-     * @return ContentObjectPublication[]
-     */
-    abstract protected function getPublications(User $user, $fromData, $toDate);
 
     /**
      * Returns the context for the calendar
@@ -129,4 +48,77 @@ abstract class CalendarEventDataProvider extends InternalCalendar
      * @return string
      */
     abstract protected function getCalendarName();
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User|null $user
+     *
+     * @return array|\Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     * @see \Chamilo\Application\Calendar\Architecture\CalendarInterface::getCalendars()
+     */
+    public function getCalendars(User $user = null): array
+    {
+        $package = $this->getCalendarContext();
+
+        $calendar = new AvailableCalendar();
+        $calendar->setIdentifier(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($package));
+        $calendar->setType($package);
+        $calendar->setName($this->getCalendarName());
+
+        return [$calendar];
+    }
+
+    /**
+     * @param CalendarRendererProvider $calendarRendererProvider
+     * @param int $fromDate
+     * @param int $toDate
+     *
+     * @return array|\Chamilo\Libraries\Calendar\Event\Event[]
+     * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
+     */
+    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate): array
+    {
+        $rightsService = ServiceFactory::getInstance()->getRightsService();
+
+        $events = [];
+
+        $availabilityService = $this->getAvailabilityService();
+        $packageContext = $this->getCalendarContext();
+        $packageName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($packageContext);
+
+        if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
+            $calendarRendererProvider->getDataUser(), $packageContext, $packageName
+        ))
+        {
+            $publications = $this->getPublications($calendarRendererProvider->getDataUser(), $fromDate, $toDate);
+
+            foreach ($publications as $publication)
+            {
+                $course = new Course();
+                $course->setId($publication->get_course_id());
+
+                if (!$rightsService->canUserViewPublication(
+                    $calendarRendererProvider->getDataUser(), $publication, $course
+                ))
+                {
+                    continue;
+                }
+
+                $eventParser = new EventParser($publication, $fromDate, $toDate);
+                $events = array_merge($events, $eventParser->getEvents());
+            }
+        }
+
+        return $events;
+    }
+
+    /**
+     * Retrieves the valid publications for the user
+     *
+     * @param User $user
+     * @param int $fromData
+     * @param int $toDate
+     *
+     * @return ContentObjectPublication[]
+     */
+    abstract protected function getPublications(User $user, $fromData, $toDate);
 }

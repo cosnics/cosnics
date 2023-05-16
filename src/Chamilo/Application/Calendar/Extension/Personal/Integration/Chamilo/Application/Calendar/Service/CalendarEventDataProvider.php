@@ -47,7 +47,7 @@ class CalendarEventDataProvider extends MixedCalendar
      * @return array|\Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      * @see \Chamilo\Application\Calendar\Architecture\CalendarInterface::getCalendars()
      */
-    public function getCalendars(User $user = null)
+    public function getCalendars(User $user = null): array
     {
         $calendars = [];
 
@@ -73,7 +73,7 @@ class CalendarEventDataProvider extends MixedCalendar
     /**
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
-    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate)
+    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate): array
     {
         $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 5);
         $availabilityService = $this->getAvailabilityService();

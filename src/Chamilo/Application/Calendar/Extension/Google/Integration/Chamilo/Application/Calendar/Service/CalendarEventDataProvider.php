@@ -12,11 +12,10 @@ use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class CalendarEventDataProvider extends ExternalCalendar
 {
@@ -28,7 +27,6 @@ class CalendarEventDataProvider extends ExternalCalendar
     }
 
     /**
-     *
      * @return \Chamilo\Application\Calendar\Service\AvailabilityService
      */
     protected function getAvailabilityService()
@@ -37,11 +35,10 @@ class CalendarEventDataProvider extends ExternalCalendar
     }
 
     /**
-     *
      * @param CalendarService $calendarService
      * @param string $calendarId
-     * @param integer $fromDate
-     * @param integer $toDate
+     * @param int $fromDate
+     * @param int $toDate
      *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
@@ -65,7 +62,6 @@ class CalendarEventDataProvider extends ExternalCalendar
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Calendar\Service\CalendarRendererProvider $calendarRendererProvider
      *
      * @return string[]
@@ -106,10 +102,9 @@ class CalendarEventDataProvider extends ExternalCalendar
     }
 
     /**
-     *
      * @see \Chamilo\Application\Calendar\Architecture\CalendarInterface::getCalendars()
      */
-    public function getCalendars(User $user = null)
+    public function getCalendars(User $user = null): array
     {
         $calendarService = new CalendarService(CalendarRepository::getInstance());
         $calendars = [];
@@ -123,12 +118,9 @@ class CalendarEventDataProvider extends ExternalCalendar
     }
 
     /**
-     *
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
      */
-    public function getEvents(
-        CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate
-    )
+    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate): array
     {
         $calendarService = new CalendarService(CalendarRepository::getInstance());
         $events = [];

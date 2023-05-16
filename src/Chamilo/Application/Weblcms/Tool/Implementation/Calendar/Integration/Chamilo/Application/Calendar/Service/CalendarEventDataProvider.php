@@ -10,57 +10,57 @@ use Chamilo\Libraries\Translation\Translation;
 
 /**
  * Calendar Event Data Provider for the assignment tool
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class CalendarEventDataProvider extends \Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar\Service\CalendarEventDataProvider
+class CalendarEventDataProvider
+    extends \Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar\Service\CalendarEventDataProvider
 {
 
     /**
-     * Retrieves the valid publications for the user
-     * 
-     * @param User $user
-     * @param int $fromDate
-     * @param int $toDate
-     *
-     * @return ContentObjectPublication[]
-     */
-    function getPublications(User $user, $fromDate, $toDate)
-    {
-        $courses = DataManager::retrieve_all_courses_from_user($user);
-        
-        return $this->getRepository()->getPublications($fromDate, $toDate, $courses);
-    }
-
-    /**
-     *
-     * @return CalendarEventDataProviderRepository
-     */
-    protected function getRepository()
-    {
-        return new CalendarEventDataProviderRepository(new PublicationRepository());
-    }
-
-    /**
      * Returns the context for the calendar
-     * 
+     *
      * @return string
      */
-    function getCalendarContext()
+    public function getCalendarContext()
     {
         return Manager::CONTEXT;
     }
 
     /**
      * Returns the name for the calendar
-     * 
+     *
      * @return string
      */
-    function getCalendarName()
+    public function getCalendarName()
     {
         return Translation::getInstance()->getTranslation(
-            'CoursesCalendarCalendar', 
-            null, 
-            'Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo\Application\Calendar');
+            'CoursesCalendarCalendar', null,
+            'Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo\Application\Calendar'
+        );
+    }
+
+    /**
+     * Retrieves the valid publications for the user
+     *
+     * @param User $user
+     * @param int $fromDate
+     * @param int $toDate
+     *
+     * @return ContentObjectPublication[]
+     */
+    public function getPublications(User $user, $fromDate, $toDate)
+    {
+        $courses = DataManager::retrieve_all_courses_from_user($user);
+
+        return $this->getRepository()->getPublications($fromDate, $toDate, $courses);
+    }
+
+    /**
+     * @return CalendarEventDataProviderRepository
+     */
+    protected function getRepository()
+    {
+        return new CalendarEventDataProviderRepository(new PublicationRepository());
     }
 }
